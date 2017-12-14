@@ -501,12 +501,14 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+        String timerNumber = timerSensor.getPort().getPortNumber();
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case GET_SAMPLE:
-                this.sb.append("hal.getTimerValue(" + timerSensor.getTimer() + ")");
+            case DEFAULT:
+            case VALUE:
+                this.sb.append("hal.getTimerValue(" + timerNumber + ")");
                 break;
             case RESET:
-                this.sb.append("hal.resetTimer(" + timerSensor.getTimer() + ")");
+                this.sb.append("hal.resetTimer(" + timerNumber + ")");
                 break;
             default:
                 throw new DbcException("Invalid Time Mode!");

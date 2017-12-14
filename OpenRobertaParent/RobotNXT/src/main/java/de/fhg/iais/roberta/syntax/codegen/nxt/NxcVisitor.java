@@ -828,7 +828,8 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
         ActorPort encoderMotorPort = (ActorPort) encoderSensor.getMotorPort();
-        switch ( (MotorTachoMode) encoderSensor.getMode() ) {
+        MotorTachoMode mode = (MotorTachoMode) encoderSensor.getMode();
+        switch ( mode ) {
             case RESET:
                 this.sb.append("ResetTachoCount(OUT_" + encoderMotorPort + ");");
                 break;
@@ -841,6 +842,9 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
             case DISTANCE:
                 this.sb.append("MotorTachoCount(OUT_" + encoderMotorPort + ") * PI / 360.0 * WHEELDIAMETER");
                 break;
+            default:
+                throw new DbcException("Invalide encoder sensor mode:" + mode + "!");
+
         }
         return null;
     }
@@ -857,12 +861,14 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+        String timerNumber = timerSensor.getPort().getPortNumber();
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case GET_SAMPLE:
-                this.sb.append("GetTimerValue(timer" + timerSensor.getTimer() + ")");
+            case DEFAULT:
+            case VALUE:
+                this.sb.append("GetTimerValue(timer" + timerNumber + ")");
                 break;
             case RESET:
-                this.sb.append("ResetTimerValue(timer" + timerSensor.getTimer() + ");");
+                this.sb.append("ResetTimerValue(timer" + timerNumber + ");");
                 break;
             default:
                 throw new DbcException("Invalid Time Mode!");

@@ -109,7 +109,12 @@ public class MbedGetSampleSensor<V> extends Sensor<V> {
                 this.sensor = AccelerometerOrientationSensor.make(AccelerometerOrientationSensor.Mode.valueOf(port), properties, comment);
                 break;
             case BlocklyConstants.TIME:
-                this.sensor = TimerSensor.make(factory.getTimerSensorMode("GET_SAMPLE"), Integer.valueOf(port), properties, comment);
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(BlocklyConstants.NO_PORT),
+                        factory.getTimerSensorMode("VALUE"),
+                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = TimerSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             default:
                 throw new DbcException("Invalid sensor " + sensorType.getSensorType() + "!");

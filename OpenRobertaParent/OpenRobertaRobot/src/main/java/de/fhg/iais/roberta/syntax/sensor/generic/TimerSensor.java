@@ -1,21 +1,15 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
-import java.util.List;
-
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
+import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
+import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
@@ -29,15 +23,10 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
  * <br>
  * To create an instance from this class use the method {@link #make(TimerSensorMode, int, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-public class TimerSensor<V> extends Sensor<V> {
-    private final ITimerSensorMode mode;
-    private final int timer;
+public class TimerSensor<V> extends ExternalSensor<V> {
 
-    private TimerSensor(ITimerSensorMode mode, int timer, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("TIMER_SENSING"), properties, comment);
-        Assert.isTrue(timer < 10);
-        this.mode = mode;
-        this.timer = timer;
+    private TimerSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("TIMER_SENSING"), properties, comment);
         setReadOnly();
     }
 
@@ -50,27 +39,8 @@ public class TimerSensor<V> extends Sensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link TimerSensor}
      */
-    static public <V> TimerSensor<V> make(ITimerSensorMode mode, int timer, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new TimerSensor<V>(mode, timer, properties, comment);
-    }
-
-    /**
-     * @return get the mode of sensor. See enum {@link TimerSensorMode} for all possible modes that the sensor have.
-     */
-    public ITimerSensorMode getMode() {
-        return this.mode;
-    }
-
-    /**
-     * @return number of the timer
-     */
-    public int getTimer() {
-        return this.timer;
-    }
-
-    @Override
-    public String toString() {
-        return "TimerSensor [mode=" + this.mode + ", timer=" + this.timer + "]";
+    static public <V> TimerSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new TimerSensor<V>(sensorMetaDataBean, properties, comment);
     }
 
     @Override
@@ -86,24 +56,8 @@ public class TimerSensor<V> extends Sensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        IRobotFactory factory = helper.getModeFactory();
-        List<Field> fields = helper.extractFields(block, (short) 1);
-        String portName = helper.extractField(fields, BlocklyConstants.SENSORNUM);
-        if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_TIMER_RESET) || block.getType().equals(BlocklyConstants.ROB_SENSORS_TIMER_RESET_CALLIOPE) ) {
-            return TimerSensor
-                .make(factory.getTimerSensorMode("RESET"), Integer.valueOf(portName), helper.extractBlockProperties(block), helper.extractComment(block));
-        }
-        return TimerSensor
-            .make(factory.getTimerSensorMode("GET_SAMPLE"), Integer.valueOf(portName), helper.extractBlockProperties(block), helper.extractComment(block));
+        SensorMetaDataBean sensorData = extractPortAndMode(block, helper, helper.getModeFactory()::getTimerSensorMode);
+        return TimerSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
-    @Override
-    public Block astToBlock() {
-        Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-
-        String fieldValue = String.valueOf(getTimer());
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORNUM, fieldValue);
-        return jaxbDestination;
-    }
 }

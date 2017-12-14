@@ -557,7 +557,8 @@ public abstract class ArduinoVisitor extends RobotCppVisitor {
     //@Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case GET_SAMPLE:
+            case DEFAULT:
+            case VALUE:
                 this.sb.append("(int) (millis() - __time)");
                 break;
             case RESET:

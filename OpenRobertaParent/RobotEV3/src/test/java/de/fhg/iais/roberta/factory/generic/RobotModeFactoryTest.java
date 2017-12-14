@@ -258,7 +258,7 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getTimerSensorModeFromString() {
-        Assert.assertEquals(this.factory.getTimerSensorMode("GET_SAMPLE"), TimerSensorMode.GET_SAMPLE);
+        Assert.assertEquals(this.factory.getTimerSensorMode("GET_SAMPLE"), TimerSensorMode.VALUE);
     }
 
     @Test(expected = DbcException.class)

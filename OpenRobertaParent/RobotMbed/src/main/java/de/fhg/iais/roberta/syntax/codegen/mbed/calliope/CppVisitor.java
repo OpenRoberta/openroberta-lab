@@ -131,11 +131,11 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     private CppVisitor(CalliopeConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
 
-        codePreprocess = new UsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
+        this.codePreprocess = new UsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
 
-        loopsLabels = codePreprocess.getloopsLabelContainer();
-        userDefinedMethods = codePreprocess.getUserDefinedMethods();
-        usedVars = codePreprocess.getVisitedVars();
+        this.loopsLabels = this.codePreprocess.getloopsLabelContainer();
+        this.userDefinedMethods = this.codePreprocess.getUserDefinedMethods();
+        this.usedVars = this.codePreprocess.getVisitedVars();
     }
 
     /**
@@ -155,9 +155,9 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
 
     @Override
     public Void visitStringConst(StringConst<Void> stringConst) {
-        sb.append("ManagedString(");
+        this.sb.append("ManagedString(");
         super.visitStringConst(stringConst);
-        sb.append(")");
+        this.sb.append(")");
         return null;
     }
 
@@ -165,22 +165,22 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     public Void visitMathConst(MathConst<Void> mathConst) {
         switch ( mathConst.getMathConst() ) {
             case PI:
-                sb.append("M_PI");
+                this.sb.append("M_PI");
                 break;
             case E:
-                sb.append("M_E");
+                this.sb.append("M_E");
                 break;
             case GOLDEN_RATIO:
-                sb.append("1.61803398875");
+                this.sb.append("1.61803398875");
                 break;
             case SQRT2:
-                sb.append("M_SQRT2");
+                this.sb.append("M_SQRT2");
                 break;
             case SQRT1_2:
-                sb.append("M_SQRT1_2");
+                this.sb.append("M_SQRT1_2");
                 break;
             case INFINITY:
-                sb.append("INFINITY");
+                this.sb.append("INFINITY");
                 break;
             default:
                 break;
@@ -191,31 +191,31 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         //TODO there must be a way to make this code simpler
-        sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar()));
+        this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar()));
         if ( var.getTypeVar().isArray() ) {
             if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
                 final ListCreate<Void> list = (ListCreate<Void>) var.getValue();
-                sb.append(list.getValue().get().size() + ">");
+                this.sb.append(list.getValue().get().size() + ">");
             } else {
-                sb.append("N>");
+                this.sb.append("N>");
             }
         }
-        sb.append(whitespace() + var.getName());
+        this.sb.append(whitespace() + var.getName());
         return null;
     }
 
     protected Void generateUsedVars() {
-        for ( final VarDeclaration<Void> var : usedVars ) {
+        for ( final VarDeclaration<Void> var : this.usedVars ) {
             nlIndent();
             if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
                 /*if ( var.getTypeVar().isArray() ) {
                     ListCreate<Void> list = (ListCreate<Void>) var.getValue();
                     this.sb.append(list.getValue().get().size() + ">");
                 }*/
-                sb.append(var.getName());
-                sb.append(whitespace() + "=" + whitespace());
+                this.sb.append(var.getName());
+                this.sb.append(whitespace() + "=" + whitespace());
                 var.getValue().visit(this);
-                sb.append(";");
+                this.sb.append(";");
             }
         }
         return null;
@@ -225,30 +225,30 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     public Void visitBinary(Binary<Void> binary) {
         final Op op = binary.getOp();
         if ( op == Op.MOD ) {
-            sb.append("(int) ");
+            this.sb.append("(int) ");
         }
-        generateSubExpr(sb, false, binary.getLeft(), binary);
+        generateSubExpr(this.sb, false, binary.getLeft(), binary);
 
         final String sym = getBinaryOperatorSymbol(op);
-        sb.append(whitespace() + sym + whitespace());
+        this.sb.append(whitespace() + sym + whitespace());
         switch ( op ) {
             case TEXT_APPEND:
-                sb.append("ManagedString(");
-                generateSubExpr(sb, false, binary.getRight(), binary);
-                sb.append(")");
+                this.sb.append("ManagedString(");
+                generateSubExpr(this.sb, false, binary.getRight(), binary);
+                this.sb.append(")");
                 break;
             case DIVIDE:
-                sb.append("((float) ");
-                generateSubExpr(sb, parenthesesCheck(binary), binary.getRight(), binary);
-                sb.append(")");
+                this.sb.append("((float) ");
+                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+                this.sb.append(")");
                 break;
             case MOD:
-                sb.append("((int) ");
-                generateSubExpr(sb, parenthesesCheck(binary), binary.getRight(), binary);
-                sb.append(")");
+                this.sb.append("((int) ");
+                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+                this.sb.append(")");
                 break;
             default:
-                generateSubExpr(sb, parenthesesCheck(binary), binary.getRight(), binary);
+                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
         }
 
         return null;
@@ -258,29 +258,29 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
         switch ( emptyExpr.getDefVal() ) {
             case STRING:
-                sb.append("\"\"");
+                this.sb.append("\"\"");
                 break;
             case BOOLEAN:
-                sb.append("true");
+                this.sb.append("true");
                 break;
             case NUMBER_INT:
-                sb.append("0");
+                this.sb.append("0");
                 break;
             case ARRAY:
                 break;
             case NULL:
                 break;
             case COLOR:
-                sb.append("MicroBitColor()");
+                this.sb.append("MicroBitColor()");
                 break;
             case PREDEFINED_IMAGE:
-                sb.append("MicroBitImage()");
+                this.sb.append("MicroBitImage()");
                 break;
             case IMAGE:
-                sb.append("MicroBitImage()");
+                this.sb.append("MicroBitImage()");
                 break;
             default:
-                sb.append("NULL");
+                this.sb.append("NULL");
                 break;
         }
         return null;
@@ -316,14 +316,14 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         if ( !isWaitStmt ) {
             addContinueLabelToLoop();
             nlIndent();
-            sb.append("uBit.sleep(1);");
+            this.sb.append("uBit.sleep(1);");
         } else {
             appendBreakStmt();
         }
 
         decrIndentation();
         nlIndent();
-        sb.append("}");
+        this.sb.append("}");
         addBreakLabelToLoop(isWaitStmt);
 
         return null;
@@ -331,22 +331,22 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
 
     @Override
     public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
-        sb.append("while (1) {");
+        this.sb.append("while (1) {");
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
         nlIndent();
-        sb.append("uBit.sleep(1);");
+        this.sb.append("uBit.sleep(1);");
         decrIndentation();
         nlIndent();
-        sb.append("}");
+        this.sb.append("}");
         return null;
     }
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
-        sb.append("uBit.sleep(");
+        this.sb.append("uBit.sleep(");
         waitTimeStmt.getTime().visit(this);
-        sb.append(");");
+        this.sb.append(");");
         return null;
     }
 
@@ -364,7 +364,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
         String ending = ")";
         final String varType = displayTextAction.getMsg().getVarType().toString();
-        sb.append("uBit.display.");
+        this.sb.append("uBit.display.");
         appendTextDisplayType(displayTextAction);
         if ( !varType.equals("STRING") ) {
             ending = wrapInManageStringToDisplay(displayTextAction, ending);
@@ -372,13 +372,13 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
             displayTextAction.getMsg().visit(this);
         }
 
-        sb.append(ending + ";");
+        this.sb.append(ending + ";");
         return null;
     }
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        sb.append("uBit.display.clear();");
+        this.sb.append("uBit.display.clear();");
         return null;
     }
 
@@ -405,7 +405,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
 
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        sb.append("uBit.rgb.off();");
+        this.sb.append("uBit.rgb.off();");
         return null;
     }
 
@@ -416,54 +416,54 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        sb.append("uBit.soundmotor.soundOn(");
+        this.sb.append("uBit.soundmotor.soundOn(");
         toneAction.getFrequency().visit(this);
-        sb.append("); ");
-        sb.append("uBit.sleep(");
+        this.sb.append("); ");
+        this.sb.append("uBit.sleep(");
         toneAction.getDuration().visit(this);
-        sb.append("); ");
-        sb.append("uBit.soundmotor.soundOff();");
+        this.sb.append("); ");
+        this.sb.append("uBit.soundmotor.soundOff();");
         return null;
     }
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-        sb.append("uBit.soundmotor.soundOn(");
-        sb.append(playNoteAction.getFrequency());
-        sb.append("); ");
-        sb.append("uBit.sleep(");
-        sb.append(playNoteAction.getDuration());
-        sb.append("); ");
-        sb.append("uBit.soundmotor.soundOff();");
+        this.sb.append("uBit.soundmotor.soundOn(");
+        this.sb.append(playNoteAction.getFrequency());
+        this.sb.append("); ");
+        this.sb.append("uBit.sleep(");
+        this.sb.append(playNoteAction.getDuration());
+        this.sb.append("); ");
+        this.sb.append("uBit.soundmotor.soundOff();");
         return null;
     }
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        sb.append("uBit.soundmotor.motor");
+        this.sb.append("uBit.soundmotor.motor");
         if ( motorOnAction.getPort() != ActorPort.AB ) {
-            sb.append(motorOnAction.getPort());
+            this.sb.append(motorOnAction.getPort());
         }
         // fix for IT Gipfel
         else {
-            sb.append("AOn(");
+            this.sb.append("AOn(");
             motorOnAction.getParam().getSpeed().visit(this);
-            sb.append(");");
+            this.sb.append(");");
             nlIndent();
-            sb.append("uBit.soundmotor.motorB");
+            this.sb.append("uBit.soundmotor.motorB");
         }
         // fix for IT Gipfel
-        sb.append("On(");
+        this.sb.append("On(");
         motorOnAction.getParam().getSpeed().visit(this);
-        sb.append(");");
+        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitSingleMotorOnAction(SingleMotorOnAction<Void> singleMotorOnAction) {
-        sb.append("uBit.soundmotor.motorOn(");
+        this.sb.append("uBit.soundmotor.motorOn(");
         singleMotorOnAction.getSpeed().visit(this);
-        sb.append(");");
+        this.sb.append(");");
         return null;
     }
 
@@ -479,30 +479,30 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        sb.append("uBit.soundmotor.motor");
+        this.sb.append("uBit.soundmotor.motor");
         if ( motorStopAction.getPort() == ActorPort.AB ) {
-            sb.append("AOff();");
+            this.sb.append("AOff();");
             nlIndent();
-            sb.append("uBit.soundmotor.motorB");
+            this.sb.append("uBit.soundmotor.motorB");
         } else {
-            sb.append(motorStopAction.getPort());
+            this.sb.append(motorStopAction.getPort());
         }
-        sb.append("Off();");
+        this.sb.append("Off();");
         return null;
     }
 
     @Override
     public Void visitSingleMotorStopAction(SingleMotorStopAction<Void> singleMotorStopAction) {
-        sb.append("uBit.soundmotor.motor");
+        this.sb.append("uBit.soundmotor.motor");
         switch ( (MotorStopMode) singleMotorStopAction.getMode() ) {
             case FLOAT:
-                sb.append("Coast();");
+                this.sb.append("Coast();");
                 break;
             case NONFLOAT:
-                sb.append("Break();");
+                this.sb.append("Break();");
                 break;
             case SLEEP:
-                sb.append("Sleep();");
+                this.sb.append("Sleep();");
                 break;
             default:
                 throw new DbcException("Invalide stop mode " + singleMotorStopAction.getMode());
@@ -535,7 +535,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        sb.append("uBit.display.readLightLevel()");
+        this.sb.append("uBit.display.readLightLevel()");
         return null;
     }
 
@@ -543,39 +543,39 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
         String key = brickSensor.getKey().toString();
         key = key.substring(key.length() - 1).toUpperCase();
-        sb.append("uBit.button" + key + ".isPressed()");
+        this.sb.append("uBit.button" + key + ".isPressed()");
         return null;
     }
 
     @Override
     public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
         final GestureMode gest = gestureSensor.getMode();
-        sb.append("(uBit.accelerometer.getGesture() == MICROBIT_ACCELEROMETER_EVT_");
+        this.sb.append("(uBit.accelerometer.getGesture() == MICROBIT_ACCELEROMETER_EVT_");
         if ( (gestureSensor.getMode() == GestureMode.UP)
             || (gestureSensor.getMode() == GestureMode.DOWN)
             || (gestureSensor.getMode() == GestureMode.LEFT)
             || (gestureSensor.getMode() == GestureMode.RIGHT) ) {
-            sb.append("TILT_");
+            this.sb.append("TILT_");
         }
-        sb.append(gest.toString() + ")");
+        this.sb.append(gest.toString() + ")");
         return null;
     }
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        sb.append("uBit.thermometer.getTemperature()");
+        this.sb.append("uBit.thermometer.getTemperature()");
         return null;
     }
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        sb.append("uBit.compass.heading()");
+        this.sb.append("uBit.compass.heading()");
         return null;
     }
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> microphoneSensor) {
-        sb.append("uBit.io.P21.getMicrophoneValue()");
+        this.sb.append("uBit.io.P21.getMicrophoneValue()");
         return null;
     }
 
@@ -602,11 +602,12 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case GET_SAMPLE:
-                sb.append("( uBit.systemTime() - initTime )");
+            case DEFAULT:
+            case VALUE:
+                this.sb.append("( uBit.systemTime() - initTime )");
                 break;
             case RESET:
-                sb.append("initTime = uBit.systemTime();");
+                this.sb.append("initTime = uBit.systemTime();");
                 break;
             default:
                 throw new DbcException("Invalid Time Mode!");
@@ -616,25 +617,25 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        sb.append("uBit.io." + pinTouchSensor.getPin().getCalliopeName() + ".isTouched()");
+        this.sb.append("uBit.io." + pinTouchSensor.getPin().getCalliopeName() + ".isTouched()");
         return null;
     }
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
-        sb.append("uBit.io." + pinValueSensor.getPin().getCalliopeName());
+        this.sb.append("uBit.io." + pinValueSensor.getPin().getCalliopeName());
         switch ( pinValueSensor.getValueType() ) {
             case DIGITAL:
-                sb.append(".getDigitalValue()");
+                this.sb.append(".getDigitalValue()");
                 break;
             case ANALOG:
-                sb.append(".getAnalogValue()");
+                this.sb.append(".getAnalogValue()");
                 break;
             case PULSEHIGH:
-                sb.append(".readPulseHigh()");
+                this.sb.append(".readPulseHigh()");
                 break;
             case PULSELOW:
-                sb.append(".readPulseLow()");
+                this.sb.append(".readPulseLow()");
                 break;
             default:
                 throw new DbcException("Valu type  " + pinValueSensor.getValueType() + " is not supported.");
@@ -648,9 +649,9 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         if ( pinWriteValueSensor.getValueType() == ValueType.DIGITAL ) {
             valueType = "DigitalValue(";
         }
-        sb.append("uBit.io." + pinWriteValueSensor.getPin().getCalliopeName() + ".set" + valueType);
+        this.sb.append("uBit.io." + pinWriteValueSensor.getPin().getCalliopeName() + ".set" + valueType);
         pinWriteValueSensor.getValue().visit(this);
-        sb.append(");");
+        this.sb.append(");");
         return null;
     }
 
@@ -667,27 +668,27 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         //        decrIndentation();
-        sb.append("int initTime = uBit.systemTime(); \n");
+        this.sb.append("int initTime = uBit.systemTime(); \n");
         mainTask.getVariables().visit(this);
 
-        sb.append("\n").append("int main() \n");
-        sb.append("{");
+        this.sb.append("\n").append("int main() \n");
+        this.sb.append("{");
         incrIndentation();
         nlIndent();
         // Initialise the micro:bit runtime.
-        sb.append("uBit.init();");
+        this.sb.append("uBit.init();");
         generateUsedVars();
         nlIndent();
-        if ( codePreprocess.isGreyScale() ) {
-            sb.append("uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);");
+        if ( this.codePreprocess.isGreyScale() ) {
+            this.sb.append("uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);");
         }
-        if ( codePreprocess.isRadioUsed() ) {
+        if ( this.codePreprocess.isRadioUsed() ) {
             nlIndent();
-            sb.append("uBit.radio.enable();");
+            this.sb.append("uBit.radio.enable();");
         }
-        if ( codePreprocess.isAccelerometerUsed() ) {
+        if ( this.codePreprocess.isAccelerometerUsed() ) {
             nlIndent();
-            sb.append("uBit.accelerometer.updateSample();");
+            this.sb.append("uBit.accelerometer.updateSample();");
         }
 
         return null;
@@ -702,39 +703,39 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
         if ( indexOfFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            sb.append("null");
+            this.sb.append("null");
             return null;
         }
         String methodName = "findFirstOccurrenceOfElementInArray(";
         if ( indexOfFunct.getLocation() != IndexLocation.FIRST ) {
             methodName = "findLastOccurrenceOfElementInArray(";
         }
-        sb.append(methodName);
+        this.sb.append(methodName);
         if ( indexOfFunct.getParam().get(1).getVarType() == BlocklyType.NUMBER ) {
-            sb.append("(double) ");
+            this.sb.append("(double) ");
         } else if ( indexOfFunct.getParam().get(1).getVarType() == BlocklyType.STRING ) {
-            sb.append("(ManagedString) ");
+            this.sb.append("(ManagedString) ");
         }
         indexOfFunct.getParam().get(1).visit(this);
-        sb.append(", ");
+        this.sb.append(", ");
         indexOfFunct.getParam().get(0).visit(this);
-        sb.append(")");
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
         if ( lengthOfIsEmptyFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            sb.append("null");
+            this.sb.append("null");
             return null;
         }
         if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
             lengthOfIsEmptyFunct.getParam().get(0).visit(this);
-            sb.append(".empty()");
+            this.sb.append(".empty()");
         } else {
-            sb.append("((int) ");
+            this.sb.append("((int) ");
             lengthOfIsEmptyFunct.getParam().get(0).visit(this);
-            sb.append(".size())");
+            this.sb.append(".size())");
         }
         return null;
     }
@@ -742,34 +743,34 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
         if ( listGetIndex.getParam().get(0).toString().contains("ListCreate ") ) {
-            sb.append("null");
+            this.sb.append("null");
             return null;
         }
         listGetIndex.getParam().get(0).visit(this);
-        sb.append("[");
+        this.sb.append("[");
         switch ( (IndexLocation) listGetIndex.getLocation() ) {
             case FROM_START:
                 listGetIndex.getParam().get(1).visit(this);
                 break;
             case FROM_END:
                 arrayLen((Var<Void>) listGetIndex.getParam().get(0));
-                sb.append(" - 1 - ");
+                this.sb.append(" - 1 - ");
                 listGetIndex.getParam().get(1).visit(this);
                 break;
             case FIRST:
-                sb.append("0");
+                this.sb.append("0");
                 break;
             case LAST:
                 arrayLen((Var<Void>) listGetIndex.getParam().get(0));
-                sb.append(" - 1");
+                this.sb.append(" - 1");
                 break;
             case RANDOM:
-                sb.append("uBit.random(");
+                this.sb.append("uBit.random(");
                 arrayLen((Var<Void>) listGetIndex.getParam().get(0));
-                sb.append(")");
+                this.sb.append(")");
                 break;
         }
-        sb.append("]");
+        this.sb.append("]");
         return null;
     }
 
@@ -779,45 +780,45 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
             return null;
         }
         listSetIndex.getParam().get(0).visit(this);
-        sb.append("[");
+        this.sb.append("[");
         switch ( (IndexLocation) listSetIndex.getLocation() ) {
             case FROM_START:
                 listSetIndex.getParam().get(2).visit(this);
                 break;
             case FROM_END:
                 arrayLen((Var<Void>) listSetIndex.getParam().get(0));
-                sb.append(" - 1 - ");
+                this.sb.append(" - 1 - ");
                 listSetIndex.getParam().get(2).visit(this);
                 break;
             case FIRST:
-                sb.append("0");
+                this.sb.append("0");
                 break;
             case LAST:
                 arrayLen((Var<Void>) listSetIndex.getParam().get(0));
-                sb.append(" - 1");
+                this.sb.append(" - 1");
                 break;
             case RANDOM:
-                sb.append("uBit.random(");
+                this.sb.append("uBit.random(");
                 arrayLen((Var<Void>) listSetIndex.getParam().get(0));
-                sb.append(")");
+                this.sb.append(")");
                 break;
         }
-        sb.append("]");
-        sb.append(" = ");
+        this.sb.append("]");
+        this.sb.append(" = ");
         listSetIndex.getParam().get(1).visit(this);
-        sb.append(";");
+        this.sb.append(";");
         return null;
     }
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        sb.append("min(max(");
+        this.sb.append("min(max(");
         mathConstrainFunct.getParam().get(0).visit(this);
-        sb.append(", ");
+        this.sb.append(", ");
         mathConstrainFunct.getParam().get(1).visit(this);
-        sb.append("), ");
+        this.sb.append("), ");
         mathConstrainFunct.getParam().get(2).visit(this);
-        sb.append(")");
+        this.sb.append(")");
         return null;
     }
 
@@ -825,14 +826,14 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
         switch ( mathNumPropFunct.getFunctName() ) {
             case EVEN:
-                sb.append("(fmod(");
+                this.sb.append("(fmod(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                sb.append(", 2) == 0");
+                this.sb.append(", 2) == 0");
                 break;
             case ODD:
-                sb.append("(fmod(");
+                this.sb.append("(fmod(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                sb.append(", 2) != 0");
+                this.sb.append(", 2) != 0");
                 break;
             case PRIME:
                 break;
@@ -840,26 +841,26 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
                 mathNumPropFunct.getParam().get(0).visit(this);
                 break;
             case POSITIVE:
-                sb.append("(");
+                this.sb.append("(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                sb.append(" > 0");
+                this.sb.append(" > 0");
                 break;
             case NEGATIVE:
-                sb.append("(");
+                this.sb.append("(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                sb.append(" < 0");
+                this.sb.append(" < 0");
                 break;
             case DIVISIBLE_BY:
-                sb.append("(fmod(");
+                this.sb.append("(fmod(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                sb.append(",");
+                this.sb.append(",");
                 mathNumPropFunct.getParam().get(1).visit(this);
-                sb.append(") == 0");
+                this.sb.append(") == 0");
                 break;
             default:
                 break;
         }
-        sb.append(")");
+        this.sb.append(")");
         return null;
     }
 
@@ -867,39 +868,39 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
         final FunctionNames functName = mathOnListFunct.getFunctName();
         if ( functName == FunctionNames.STD_DEV ) {
-            sb.append("standardDeviation(");
+            this.sb.append("standardDeviation(");
         } else if ( functName == FunctionNames.RANDOM ) {
-            sb.append("randomElement(");
+            this.sb.append("randomElement(");
         } else {
-            sb.append(functName.toString().toLowerCase());
+            this.sb.append(functName.toString().toLowerCase());
         }
         mathOnListFunct.getParam().get(0).visit(this);
-        sb.append(")");
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
-        sb.append("((double) rand() / (RAND_MAX))");
+        this.sb.append("((double) rand() / (RAND_MAX))");
         return null;
     }
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
-        sb.append("(uBit.random(");
+        this.sb.append("(uBit.random(");
         mathRandomIntFunct.getParam().get(1).visit(this);
-        sb.append(" - ");
+        this.sb.append(" - ");
         mathRandomIntFunct.getParam().get(0).visit(this);
-        sb.append(" + 1)");
-        sb.append(" + ");
+        this.sb.append(" + 1)");
+        this.sb.append(" + ");
         mathRandomIntFunct.getParam().get(0).visit(this);
-        sb.append(")");
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        sb.append("pow(");
+        this.sb.append("pow(");
         super.visitMathPowerFunct(mathPowerFunct);
         return null;
     }
@@ -909,11 +910,11 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         final List<Expr<Void>> parameters = textJoinFunct.getParam().get();
         final int numberOfParameters = parameters.size();
         for ( int i = 0; i < numberOfParameters; i++ ) {
-            sb.append("ManagedString(");
+            this.sb.append("ManagedString(");
             parameters.get(i).visit(this);
-            sb.append(")");
+            this.sb.append(")");
             if ( i < (numberOfParameters - 1) ) {
-                sb.append(" + ");
+                this.sb.append(" + ");
             }
         }
         return null;
@@ -938,50 +939,50 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     private void appendTemplateIfArrayParameter(List<Expr<Void>> parameters) {
         final boolean isContainedArrayParameter = parameters.stream().filter(p -> p.getVarType().isArray()).findFirst().isPresent();
         if ( isContainedArrayParameter ) {
-            sb.append("\ntemplate<size_t N>");
+            this.sb.append("\ntemplate<size_t N>");
         }
     }
 
     @Override
     public Void visitPredefinedImage(PredefinedImage<Void> predefinedImage) {
-        sb.append("MicroBitImage(\"" + predefinedImage.getImageName().getImageString() + "\")");
+        this.sb.append("MicroBitImage(\"" + predefinedImage.getImageName().getImageString() + "\")");
         return null;
     }
 
     @Override
     public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
         String end = ");";
-        sb.append("uBit.display.");
+        this.sb.append("uBit.display.");
         if ( displayImageAction.getDisplayImageMode().name().equals("ANIMATION") ) {
-            sb.append("animateImages(");
+            this.sb.append("animateImages(");
             end = ", 200);";
         } else {
-            sb.append("print(");
+            this.sb.append("print(");
         }
         displayImageAction.getValuesToDisplay().visit(this);
-        sb.append(end);
+        this.sb.append(end);
         return null;
     }
 
     @Override
     public Void visitImageShiftFunction(ImageShiftFunction<Void> imageShiftFunction) {
         imageShiftFunction.getImage().visit(this);
-        sb.append(".shiftImage" + capitalizeFirstLetter(imageShiftFunction.getShiftDirection().toString()) + "(");
+        this.sb.append(".shiftImage" + capitalizeFirstLetter(imageShiftFunction.getShiftDirection().toString()) + "(");
         imageShiftFunction.getPositions().visit(this);
-        sb.append(")");
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitImageInvertFunction(ImageInvertFunction<Void> imageInvertFunction) {
         imageInvertFunction.getImage().visit(this);
-        sb.append(".invert()");
+        this.sb.append(".invert()");
         return null;
     }
 
     @Override
     public Void visitImage(Image<Void> image) {
-        sb.append("MicroBitImage(\"");
+        this.sb.append("MicroBitImage(\"");
         for ( int i = 0; i < 5; i++ ) {
             for ( int j = 0; j < 5; j++ ) {
                 String pixel = image.getImage()[i][j].trim();
@@ -990,20 +991,20 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
                 } else if ( pixel.equals("") ) {
                     pixel = "0";
                 }
-                sb.append(map(Integer.parseInt(pixel), 0, 9, 0, 255));
+                this.sb.append(map(Integer.parseInt(pixel), 0, 9, 0, 255));
                 if ( j < 4 ) {
-                    sb.append(",");
+                    this.sb.append(",");
                 }
             }
-            sb.append("\\n");
+            this.sb.append("\\n");
         }
-        sb.append("\")");
+        this.sb.append("\")");
         return null;
     }
 
     @Override
     public Void visitLedColor(LedColor<Void> ledColor) {
-        sb.append(
+        this.sb.append(
             "MicroBitColor("
                 + ledColor.getRedChannel()
                 + ", "
@@ -1018,38 +1019,38 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        sb.append("uBit.rgb.setColour(");
+        this.sb.append("uBit.rgb.setColour(");
         ledOnAction.getLedColor().visit(this);
-        sb.append(");");
+        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
-        sb.append("uBit.radio.setTransmitPower(" + radioSendAction.getPower() + ");\n");
-        sb.append("uBit.radio.datagram.send(");
+        this.sb.append("uBit.radio.setTransmitPower(" + radioSendAction.getPower() + ");\n");
+        this.sb.append("uBit.radio.datagram.send(");
         radioSendAction.getMsg().visit(this);
-        sb.append(");");
+        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
-        sb.append("ManagedString(uBit.radio.datagram.recv())");
+        this.sb.append("ManagedString(uBit.radio.datagram.recv())");
         return null;
     };
 
     @Override
     public Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
-        sb.append("uBit.radio.setGroup(");
+        this.sb.append("uBit.radio.setGroup(");
         radioSetChannelAction.getChannel().visit(this);
-        sb.append(");\n");
+        this.sb.append(");\n");
         return null;
     }
 
     @Override
     public Void visitRadioRssiSensor(RadioRssiSensor<Void> radioRssiSensor) {
-        sb.append("uBit.radio.getRSSI()");
+        this.sb.append("uBit.radio.getRSSI()");
         return null;
     }
 
@@ -1062,66 +1063,66 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     @Override
     public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
         if ( accelerometerSensor.getAccelerationDirection() == Mode.STRENGTH ) {
-            sb.append("uBit.accelerometer.getStrength()");
+            this.sb.append("uBit.accelerometer.getStrength()");
         } else {
-            sb.append(String.format("uBit.accelerometer.get%s()", accelerometerSensor.getAccelerationDirection()));
+            this.sb.append(String.format("uBit.accelerometer.get%s()", accelerometerSensor.getAccelerationDirection()));
         }
         return null;
     }
 
     @Override
     public Void visitAccelerometerOrientationSensor(AccelerometerOrientationSensor<Void> accelerometerOrientationSensor) {
-        sb.append(String.format("uBit.accelerometer." + accelerometerOrientationSensor.getAccelerationOrientationMode().getCppCode()));
+        this.sb.append(String.format("uBit.accelerometer." + accelerometerOrientationSensor.getAccelerationOrientationMode().getCppCode()));
         return null;
     }
 
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
-        sb.append("MicroBitColor(");
+        this.sb.append("MicroBitColor(");
         rgbColor.getR().visit(this);
-        sb.append(", ");
+        this.sb.append(", ");
         rgbColor.getG().visit(this);
-        sb.append(", ");
+        this.sb.append(", ");
         rgbColor.getB().visit(this);
-        sb.append(", ");
+        this.sb.append(", ");
         rgbColor.getA().visit(this);
-        sb.append(")");
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Void> displaySetBrightnessAction) {
-        sb.append("uBit.display.setBrightness((");
+        this.sb.append("uBit.display.setBrightness((");
         displaySetBrightnessAction.getBrightness().visit(this);
-        sb.append(") * 255.0 / 9.0);");
+        this.sb.append(") * 255.0 / 9.0);");
         return null;
     }
 
     @Override
     public Void visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<Void> displayGetBrightnessAction) {
-        sb.append("round(uBit.display.getBrightness() * 9.0 / 255.0)");
+        this.sb.append("round(uBit.display.getBrightness() * 9.0 / 255.0)");
         return null;
     }
 
     @Override
     public Void visitDisplaySetPixelAction(DisplaySetPixelAction<Void> displaySetPixelAction) {
-        sb.append("uBit.display.image.setPixelValue(");
+        this.sb.append("uBit.display.image.setPixelValue(");
         displaySetPixelAction.getX().visit(this);
-        sb.append(", ");
+        this.sb.append(", ");
         displaySetPixelAction.getY().visit(this);
-        sb.append(", ");
+        this.sb.append(", ");
         displaySetPixelAction.getBrightness().visit(this);
-        sb.append(" * 255.0 / 9.0);");
+        this.sb.append(" * 255.0 / 9.0);");
         return null;
     }
 
     @Override
     public Void visitDisplayGetPixelAction(DisplayGetPixelAction<Void> displayGetPixelAction) {
-        sb.append("round(uBit.display.image.getPixelValue(");
+        this.sb.append("round(uBit.display.image.getPixelValue(");
         displayGetPixelAction.getX().visit(this);
-        sb.append(", ");
+        this.sb.append(", ");
         displayGetPixelAction.getY().visit(this);
-        sb.append(") * 9.0 / 255.0)");
+        this.sb.append(") * 9.0 / 255.0)");
         return null;
     }
 
@@ -1138,8 +1139,8 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     protected void generateProgramSuffix(boolean withWrapping) {
         if ( withWrapping ) {
             nlIndent();
-            sb.append("release_fiber();");
-            sb.append("\n}\n");
+            this.sb.append("release_fiber();");
+            this.sb.append("\n}\n");
             generateUserDefinedMethods();
         }
 
@@ -1198,19 +1199,19 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     }
 
     private void arrayLen(Var<Void> arr) {
-        sb.append(arr.getValue() + ".size()");
+        this.sb.append(arr.getValue() + ".size()");
     }
 
     private void appendTextDisplayType(DisplayTextAction<Void> displayTextAction) {
         if ( displayTextAction.getMode() == DisplayTextMode.TEXT ) {
-            sb.append("scroll(");
+            this.sb.append("scroll(");
         } else {
-            sb.append("print(");
+            this.sb.append("print(");
         }
     }
 
     private String wrapInManageStringToDisplay(DisplayTextAction<Void> displayTextAction, String ending) {
-        sb.append("ManagedString(");
+        this.sb.append("ManagedString(");
         displayTextAction.getMsg().visit(this);
         ending += ")";
         return ending;
@@ -1224,22 +1225,22 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     }
 
     private void addIncludes() {
-        sb.append("#define _GNU_SOURCE\n\n");
-        sb.append("#include \"MicroBit.h\" \n");
-        sb.append("#include <array>\n");
-        sb.append("#include <stdlib.h>\n");
-        sb.append("MicroBit uBit;\n\n");
+        this.sb.append("#define _GNU_SOURCE\n\n");
+        this.sb.append("#include \"MicroBit.h\" \n");
+        this.sb.append("#include <array>\n");
+        this.sb.append("#include <stdlib.h>\n");
+        this.sb.append("MicroBit uBit;\n\n");
     }
 
     @Override
     protected void generateSignaturesOfUserDefinedMethods() {
-        for ( final Method<Void> phrase : userDefinedMethods ) {
+        for ( final Method<Void> phrase : this.userDefinedMethods ) {
             appendTemplateIfArrayParameter(phrase.getParameters().get());
             nlIndent();
-            sb.append(getLanguageVarTypeFromBlocklyType(phrase.getReturnType()) + " ");
-            sb.append(phrase.getMethodName() + "(");
+            this.sb.append(getLanguageVarTypeFromBlocklyType(phrase.getReturnType()) + " ");
+            this.sb.append(phrase.getMethodName() + "(");
             phrase.getParameters().visit(this);
-            sb.append(");");
+            this.sb.append(");");
             nlIndent();
         }
     }

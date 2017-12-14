@@ -450,12 +450,13 @@ public abstract class RobotSimulationVisitor<V> implements AstLanguageVisitor<V>
     @Override
     public V visitTimerSensor(TimerSensor<V> timerSensor) {
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case GET_SAMPLE:
-                this.sb.append("createGetSample(CONST.TIMER, 'timer" + timerSensor.getTimer() + "')");
+            case DEFAULT:
+            case VALUE:
+                this.sb.append("createGetSample(CONST.TIMER, 'timer" + timerSensor.getPort() + "')");
                 break;
             case RESET:
                 String end = createClosingBracket();
-                this.sb.append("createResetTimer('timer" + timerSensor.getTimer() + "'");
+                this.sb.append("createResetTimer('timer" + timerSensor.getPort() + "'");
                 this.sb.append(end);
                 break;
             default:

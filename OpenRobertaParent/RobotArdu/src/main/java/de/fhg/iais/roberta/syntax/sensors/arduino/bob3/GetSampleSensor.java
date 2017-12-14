@@ -60,7 +60,12 @@ public class GetSampleSensor<V> extends Sensor<V> {
                 this.sensor = Bob3TouchSensor.make(armSide, armPart, properties, comment);
                 break;
             case BlocklyConstants.TIME:
-                this.sensor = TimerSensor.make(factory.getTimerSensorMode("GET_SAMPLE"), Integer.valueOf(port), properties, comment);
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(BlocklyConstants.NO_PORT),
+                        factory.getTimerSensorMode("VALUE"),
+                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = TimerSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.LIGHT_LEVEL:
                 sensorMetaDataBean =

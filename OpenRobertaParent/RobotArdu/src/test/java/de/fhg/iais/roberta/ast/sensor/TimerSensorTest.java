@@ -26,7 +26,7 @@ public class TimerSensorTest {
 
         TimerSensor<Void> cs = (TimerSensor<Void>) transformer.getTree().get(0).get(1);
 
-        Assert.assertEquals(1, cs.getTimer());
+        Assert.assertEquals(1, cs.getPort().getPortNumber());
     }
 
     @Test
