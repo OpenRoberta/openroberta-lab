@@ -156,20 +156,40 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot' ]
         volume : 0.5,
     }
     
-//    Ev3.prototype.sayText = {
-//        language : "en/en",
-//        say : function(text, lang, speed = 175, pitch = 50) {
-//            if (meSpeak.isVoiceLoaded(lang)) {
-//                meSpeak.speak(text, { voice : lang, pitch : pitch, speed : speed});
-//            } else {
-//                meSpeak.loadVoice("js/libs/mespeak/voices/" + lang + ".json", function(success, id) {
-//                    if (success) {
-//                        meSpeak.speak(text, { voice : lang, pitch : pitch, speed : speed});
-//                    }
-//                });
-//            }
-//        }
-//    }
+    var SpeechSynthesis = window.speechSynthesis;
+    
+    if (SpeechSynthesis) {
+        
+    } else {
+        var context = null;
+        console.log("Sorry, but the Speech Synthesis API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox");
+    }
+    Ev3.prototype.sayText = {
+        language : "en-US",
+        say : function(text, lang, speed, pitch) {
+            // IE apparently doesnt support default parameters, this prevents it from crashing the whole simulation
+            speed = (speed === undefined) ? 30 : speed;
+            pitch = (pitch === undefined) ? 50 : pitch;
+            // Clamp values
+            speed = Math.max(0, Math.min(100, speed));
+            pitch = Math.max(0, Math.min(100, pitch));
+            // Convert to SpeechSynthesis values
+            speed = speed * 0.03 + 0.1; // use range 0.1 - 3.1
+            pitch = pitch * 0.02; // use range 0.0 - 2.0
+            
+            var utterThis = new SpeechSynthesisUtterance(text);
+            var voices = SpeechSynthesis.getVoices();
+            for (i = 0; i < voices.length ; i++) {
+                if (voices[i].lang === lang) {
+                    utterThis.voice = voices[i];
+                    break;
+                }
+            }
+            utterThis.pitch = pitch;
+            utterThis.rate = speed;
+            SpeechSynthesis.speak(utterThis);
+        }
+    }
 
     Ev3.prototype.tone = {
         duration : 0,
@@ -479,15 +499,15 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot' ]
                 this.tone.file[actions.tone.file](this.webAudio);
             }
         }
-//        // update sayText
-//        if (actions.language && AudioContext) {
-//            this.sayText.language = actions.language;
-//        }
-//        if (actions.sayText && AudioContext) {
-//            if (actions.sayText.text) {
-//                this.sayText.say(actions.sayText.text, this.sayText.language, actions.sayText.speed, actions.sayText.pitch);
-//            }
-//        }
+        // update sayText
+        if (actions.language && SpeechSynthesis) {
+            this.sayText.language = actions.language;
+        }
+        if (actions.sayText && SpeechSynthesis) {
+            if (actions.sayText.text) {
+                this.sayText.say(actions.sayText.text, this.sayText.language, actions.sayText.speed, actions.sayText.pitch);
+            }
+        }
         // update timer
         if (actions.timer) {
             for (key in actions.timer) {

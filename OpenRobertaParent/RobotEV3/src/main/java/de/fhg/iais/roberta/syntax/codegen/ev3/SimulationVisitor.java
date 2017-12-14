@@ -200,33 +200,29 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
     private String getLanguageString(ILanguage language) {
         switch ( (Language) language ) {
             case GERMAN:
-                return "de";
+                return "de-DE";
             case ENGLISH:
-                return "en/en";
+                return "en-US";
             case FRENCH:
-                return "fr";
+                return "fr-FR";
             case SPANISH:
-                return "es";
+                return "es-ES";
             case ITALIAN:
-                return "it";
+                return "it-IT";
             case DUTCH:
-                return "nl";
-            case FINNISH:
-                return "fi";
+                return "nl-NL";
             case POLISH:
-                return "pl";
+                return "pl-PL";
             case RUSSIAN:
-                return "ru";
-            case TURKISH:
-                return "tu";
-            case CZECH:
-                return "cs";
+                return "ru-RU";
             case PORTUGUESE:
-                return "pt-pt";
-            case DANISH:
-                return "da";
+                return "pt-BR";
+            case JAPANESE:
+                return "ja-JP";
+            case CHINESE:
+                return "zh-CN";
             default:
-                return "en";
+                return "en-US";
         }
     }
 
@@ -245,7 +241,13 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
         this.sb.append(end);
         end = createClosingBracket();
         this.sb.append("createSayTextAction(");
-        sayTextAction.getMsg().visit(this);
+        if ( !sayTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
+            this.sb.append("String(");
+            sayTextAction.getMsg().visit(this);
+            this.sb.append(")");
+        } else {
+            sayTextAction.getMsg().visit(this);
+        }
         BlockType emptyBlock = BlockTypeContainer.getByName("EMPTY_EXPR");
         if ( !(sayTextAction.getSpeed().getKind().equals(emptyBlock) && sayTextAction.getShape().getKind().equals(emptyBlock)) ) {
             this.sb.append(",");

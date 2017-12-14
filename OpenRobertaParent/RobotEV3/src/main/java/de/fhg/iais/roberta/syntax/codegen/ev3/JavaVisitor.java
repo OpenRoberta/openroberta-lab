@@ -297,7 +297,13 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
         this.sb.append("hal.sayText(");
-        sayTextAction.getMsg().visit(this);
+        if ( !sayTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
+            this.sb.append("String.valueOf(");
+            sayTextAction.getMsg().visit(this);
+            this.sb.append(")");
+        } else {
+            sayTextAction.getMsg().visit(this);
+        }
         BlockType emptyBlock = BlockTypeContainer.getByName("EMPTY_EXPR");
         if ( !(sayTextAction.getSpeed().getKind().equals(emptyBlock) && sayTextAction.getShape().getKind().equals(emptyBlock)) ) {
             this.sb.append(",");

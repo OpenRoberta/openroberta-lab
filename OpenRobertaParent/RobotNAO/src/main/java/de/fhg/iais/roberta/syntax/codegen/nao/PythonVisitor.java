@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nao.Camera;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
@@ -103,7 +104,6 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     protected Set<UsedSensor> usedSensors;
 
     protected ILanguage language;
-    private final boolean isSayTextUsed;
 
     /**
      * initialize the Python code generator visitor.
@@ -120,7 +120,6 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
         this.usedGlobalVarInFunctions = checker.getMarkedVariablesAsGlobal();
         this.isProgramEmpty = checker.isProgramEmpty();
         this.loopsLabels = checker.getloopsLabelContainer();
-        this.isSayTextUsed = checker.isSayTextUsed();
 
         this.language = language;
     }
@@ -869,17 +868,18 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
         this.sb.append("h.say(");
-        sayTextAction.getMsg().visit(this);
-        this.sb.append(",");
-        if ( sayTextAction.getSpeed().getKind().equals(BlockTypeContainer.getByName("EMPTY_EXPR")) ) {
-            this.sb.append("100");
+        if ( !sayTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
+            this.sb.append("str(");
+            sayTextAction.getMsg().visit(this);
+            this.sb.append(")");
         } else {
-            sayTextAction.getSpeed().visit(this);
+            sayTextAction.getMsg().visit(this);
         }
-        this.sb.append(",");
-        if ( sayTextAction.getShape().getKind().equals(BlockTypeContainer.getByName("EMPTY_EXPR")) ) {
-            this.sb.append("100");
-        } else {
+        BlockType emptyBlock = BlockTypeContainer.getByName("EMPTY_EXPR");
+        if ( !(sayTextAction.getSpeed().getKind().equals(emptyBlock) && sayTextAction.getShape().getKind().equals(emptyBlock)) ) {
+            this.sb.append(",");
+            sayTextAction.getSpeed().visit(this);
+            this.sb.append(",");
             sayTextAction.getShape().visit(this);
         }
         this.sb.append(")");
@@ -1335,12 +1335,6 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
             nlIndent();
             this.sb.append("class BreakOutOfALoop(Exception): pass\n");
             this.sb.append("class ContinueLoop(Exception): pass\n\n");
-        }
-
-        if ( this.isSayTextUsed ) {
-            this.sb.append("\nh.setLanguage(\"");
-            this.sb.append(this.getLanguageString(this.language));
-            this.sb.append("\")");
         }
     }
 

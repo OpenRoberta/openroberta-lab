@@ -170,13 +170,11 @@ public abstract class RobotSimulationCheckVisitor extends RobotCommonCheckVisito
 
     @Override
     public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
-        setLanguageAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        sayTextAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 

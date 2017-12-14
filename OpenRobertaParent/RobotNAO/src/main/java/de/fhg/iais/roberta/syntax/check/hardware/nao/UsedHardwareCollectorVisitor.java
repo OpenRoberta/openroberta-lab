@@ -60,15 +60,9 @@ import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
  */
 public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisitor implements NaoAstVisitor<Void> {
 
-    private boolean isSayTextUsed;
-
     public UsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, Configuration configuration) {
         super(configuration);
         check(phrasesSet);
-    }
-
-    public boolean isSayTextUsed() {
-        return this.isSayTextUsed;
     }
 
     @Override
@@ -159,8 +153,6 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        sayTextAction.getMsg().visit(this);
-        this.isSayTextUsed = true;
         return null;
     }
 

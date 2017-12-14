@@ -320,6 +320,9 @@ public abstract class RobotUsedHardwareCollectorVisitor extends CheckVisitor imp
 
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
+        sayTextAction.getMsg().visit(this);
+        sayTextAction.getSpeed().visit(this);
+        sayTextAction.getShape().visit(this);
         return null;
     }
 

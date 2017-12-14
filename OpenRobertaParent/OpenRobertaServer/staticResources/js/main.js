@@ -19,7 +19,6 @@ require.config({
         'prettify' : 'code-prettify/prettify',
         'socket.io' : 'socket.io/socket.io',
         'volume-meter' : 'sound/volume-meter',
-//        'meSpeak' : 'mespeak/mespeak',
 
         'confDelete.controller' : '../app/roberta/controller/confDelete.controller',
         'configuration.controller' : '../app/roberta/controller/configuration.controller',
@@ -108,12 +107,6 @@ require.config({
                 };
             }
         },
-//        'meSpeak' : {
-//            init : function() {
-//                meSpeak.loadConfig("js/libs/mespeak/mespeak_config.json");
-//                meSpeak.loadVoice("js/libs/mespeak/voices/en/en.json");
-//            }
-//        },
         'jquery-validate' : {
             deps : [ 'jquery' ]
         },
