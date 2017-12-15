@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.mode.actors.arduino.botnroll;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 
 public enum ActorPort implements IActorPort {
-    NO_PORT( "NO_PORT" ), A( "MA" ), B( "MB" ), C( "MC" ), D( "MD" );
+    NO_PORT( "NO_PORT" ), A( "A", "MA" ), B( "B", "MB" ), C( "C", "MC" ), D( "D", "MD" );
 
     private final String[] values;
 
@@ -17,8 +17,7 @@ public enum ActorPort implements IActorPort {
     }
 
     @Override
-    public String getXmlName() {
+    public String getPortNumber() {
         return this.values[0];
     }
-
 }

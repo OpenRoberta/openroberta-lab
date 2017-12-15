@@ -110,10 +110,7 @@ public class MbedGetSampleSensor<V> extends Sensor<V> {
                 break;
             case BlocklyConstants.TIME:
                 sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        factory.getSensorPort(BlocklyConstants.NO_PORT),
-                        factory.getTimerSensorMode("VALUE"),
-                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                    new SensorMetaDataBean(factory.getSensorPort(port), factory.getTimerSensorMode("VALUE"), factory.getSlot(BlocklyConstants.NO_SLOT));
                 this.sensor = TimerSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             default:

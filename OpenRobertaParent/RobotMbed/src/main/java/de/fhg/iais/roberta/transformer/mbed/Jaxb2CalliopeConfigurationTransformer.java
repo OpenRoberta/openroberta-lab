@@ -66,7 +66,7 @@ public class Jaxb2CalliopeConfigurationTransformer {
             for ( IActorPort port : actors.keySet() ) {
                 Actor actor = actors.get(port);
                 Value hardwareComponent = new Value();
-                hardwareComponent.setName(port.getXmlName());
+                hardwareComponent.setName(port.getPortNumber());
                 Block actorBlock = mkBlock(idCount++);
                 hardwareComponent.setBlock(actorBlock);
                 actorBlock.setType(actor.getName().blocklyName());

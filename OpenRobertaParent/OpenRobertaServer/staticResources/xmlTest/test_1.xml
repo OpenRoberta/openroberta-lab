@@ -11,7 +11,7 @@
     </block>
     <block type="controls_if" id="55" inline="false">
       <value name="IF0">
-        <block type="robSensors_touch_isPressed" id="57">
+        <block type="robSensors_touch_getSample" id="57">
           <field name="SENSORPORT">1</field>
         </block>
       </value>

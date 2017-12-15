@@ -18,12 +18,12 @@ public class SampleSensorTest {
                 + "[Location [x=96, y=159], GetSampleSensor [sensor=ColorSensor [S3, RED, NO_SLOT]]], "
                 + "[Location [x=116, y=199], GetSampleSensor [sensor=ColorSensor [S3, AMBIENTLIGHT, NO_SLOT]]], "
                 + "[Location [x=136, y=239], GetSampleSensor [sensor=InfraredSensor [S4, DISTANCE, NO_SLOT]]], "
-                + "[Location [x=156, y=279], GetSampleSensor [sensor=DrehSensor [mode=ROTATION, motor=A]]], "
-                + "[Location [x=176, y=319], GetSampleSensor [sensor=DrehSensor [mode=DEGREE, motor=A]]], "
+                + "[Location [x=156, y=279], GetSampleSensor [sensor=EncoderSensor [A, ROTATION, NO_SLOT]]], "
+                + "[Location [x=176, y=319], GetSampleSensor [sensor=EncoderSensor [A, DEGREE, NO_SLOT]]], "
                 + "[Location [x=196, y=359], GetSampleSensor [sensor=BrickSensor [key=ENTER, mode=IS_PRESSED]]], "
                 + "[Location [x=216, y=399], GetSampleSensor [sensor=GyroSensor [S2, ANGLE, NO_SLOT]]], "
                 + "[Location [x=236, y=439], GetSampleSensor [sensor=GyroSensor [S2, RATE, NO_SLOT]]], "
-                + "[Location [x=256, y=479], GetSampleSensor [sensor=TimerSensor [mode=GET_SAMPLE, timer=1]]]]]";
+                + "[Location [x=256, y=479], GetSampleSensor [sensor=TimerSensor [S1, VALUE, NO_SLOT]]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_getSampleSensor.xml"));
     }

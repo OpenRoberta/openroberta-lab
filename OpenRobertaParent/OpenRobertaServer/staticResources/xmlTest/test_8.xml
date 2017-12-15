@@ -3,7 +3,7 @@
     <block type="robControls_start" id="726" deletable="false"></block>
     <block type="controls_if" id="731" inline="false">
       <value name="IF0">
-        <block type="robSensors_touch_isPressed" id="831">
+        <block type="robSensors_touch_getSample" id="831">
           <field name="SENSORPORT">1</field>
         </block>
       </value>
@@ -42,7 +42,7 @@
       <mutation else="1"></mutation>
       <repetitions>
         <value name="IF0">
-          <block type="robSensors_touch_isPressed" id="832">
+          <block type="robSensors_touch_getSample" id="832">
             <field name="SENSORPORT">1</field>
           </block>
         </value>

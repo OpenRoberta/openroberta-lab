@@ -71,7 +71,7 @@ public class GyroSensor<V> extends ExternalSensor<V> {
                 new SensorMetaDataBean(factory.getSensorPort(portName), factory.getGyroSensorMode("RESET"), factory.getSlot(BlocklyConstants.NO_SLOT));
             return GyroSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
         }
-        sensorMetaDataBean = extractPortAndMode(block, helper, helper.getModeFactory()::getGyroSensorMode);
+        sensorMetaDataBean = extractSensorPortAndMode(block, helper, helper.getModeFactory()::getGyroSensorMode);
         return GyroSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 

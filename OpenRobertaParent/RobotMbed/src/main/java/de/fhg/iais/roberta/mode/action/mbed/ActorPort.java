@@ -17,7 +17,7 @@ public enum ActorPort implements IActorPort {
     }
 
     @Override
-    public String getXmlName() {
+    public String getPortNumber() {
         return this.values[0];
     }
 

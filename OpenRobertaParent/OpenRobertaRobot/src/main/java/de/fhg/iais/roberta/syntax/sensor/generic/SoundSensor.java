@@ -56,7 +56,7 @@ public class SoundSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        SensorMetaDataBean sensorData = extractPortAndMode(block, helper, helper.getModeFactory()::getSoundSensorMode);
+        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getModeFactory()::getSoundSensorMode);
         return SoundSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 }

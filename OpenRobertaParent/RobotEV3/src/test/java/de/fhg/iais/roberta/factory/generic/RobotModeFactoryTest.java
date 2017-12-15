@@ -96,11 +96,6 @@ public class RobotModeFactoryTest {
         Assert.assertEquals(this.factory.getActorPort("MB"), ActorPort.B);
     }
 
-    @Test
-    public void getActorPortXmlName() {
-        Assert.assertEquals(ActorPort.B.getXmlName(), "MB");
-    }
-
     @Test(expected = DbcException.class)
     public void invalidActorPort() {
         this.factory.getActorPort("Q");
@@ -258,7 +253,7 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getTimerSensorModeFromString() {
-        Assert.assertEquals(this.factory.getTimerSensorMode("GET_SAMPLE"), TimerSensorMode.VALUE);
+        Assert.assertEquals(this.factory.getTimerSensorMode("VALUE"), TimerSensorMode.VALUE);
     }
 
     @Test(expected = DbcException.class)

@@ -50,7 +50,7 @@ public class TemperatureSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        SensorMetaDataBean sensorData = extractPortAndMode(block, helper, helper.getModeFactory()::getTemperatureSensorMode);
+        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getModeFactory()::getTemperatureSensorMode);
         return TemperatureSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
 
     }

@@ -53,7 +53,7 @@ public class CompassSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        SensorMetaDataBean sensorData = extractPortAndMode(block, helper, helper.getModeFactory()::getCompassSensorMode);
+        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getModeFactory()::getCompassSensorMode);
         return CompassSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 }

@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.check.program;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
@@ -65,7 +66,7 @@ public abstract class RobotSimulationCheckVisitor extends RobotCommonCheckVisito
 
     @Override
     protected void checkSensorPort(ExternalSensor<Void> sensor) {
-        Sensor usedSensor = this.brickConfiguration.getSensorOnPort(sensor.getPort());
+        Sensor usedSensor = this.brickConfiguration.getSensorOnPort((ISensorPort) sensor.getPort());
         if ( usedSensor == null ) {
             if ( sensor.getKind().hasName("INFRARED_SENSING") ) {
                 sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT"));

@@ -522,7 +522,7 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        IActorPort encoderMotorPort = encoderSensor.getMotorPort();
+        IActorPort encoderMotorPort = (IActorPort) encoderSensor.getPort();
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(encoderMotorPort);
         if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
             String methodName = isRegulated ? "hal.resetRegulatedMotorTacho(" : "hal.resetUnregulatedMotorTacho(";

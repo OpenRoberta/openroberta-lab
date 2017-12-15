@@ -795,14 +795,15 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        if ( this.brickConfiguration.getSensorOnPort(colorSensor.getPort()).getType().toString().contains("HT_COLOR") ) {
+        if ( this.brickConfiguration.getSensorOnPort((ISensorPort) colorSensor.getPort()).getType().toString().contains("HT_COLOR") ) {
             this.sb.append("SensorHtColor(");
         } else {
             this.sb.append("SensorColor(");
         }
         this.sb.append(colorSensor.getPort());
         this.sb.append(", ");
-        switch ( (ColorSensorMode) colorSensor.getMode() ) {
+        ColorSensorMode sensorMode = (ColorSensorMode) colorSensor.getMode();
+        switch ( sensorMode ) {
             case COLOUR:
                 this.sb.append("\"COLOR\"");
                 break;
@@ -812,6 +813,8 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
             case RED:
                 this.sb.append("\"LIGHT\"");
                 break;
+            default:
+                throw new DbcException("Invalide Color Sensor Mode: " + sensorMode + " !");
         }
         this.sb.append(")");
         return null;
@@ -827,7 +830,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        ActorPort encoderMotorPort = (ActorPort) encoderSensor.getMotorPort();
+        ActorPort encoderMotorPort = (ActorPort) encoderSensor.getPort();
         MotorTachoMode mode = (MotorTachoMode) encoderSensor.getMode();
         switch ( mode ) {
             case RESET:

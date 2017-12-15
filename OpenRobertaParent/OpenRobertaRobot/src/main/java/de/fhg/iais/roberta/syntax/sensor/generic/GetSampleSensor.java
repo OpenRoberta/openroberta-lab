@@ -76,7 +76,12 @@ public class GetSampleSensor<V> extends Sensor<V> {
                 this.sensor = InfraredSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.ENCODER:
-                this.sensor = EncoderSensor.make(factory.getMotorTachoMode(sensorType.getSensorMode()), factory.getActorPort(port), properties, comment);
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getActorPort(port),
+                        factory.getMotorTachoMode(sensorType.getSensorMode()),
+                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = EncoderSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.KEY_PRESSED:
                 this.sensor = BrickSensor.make(Mode.IS_PRESSED, factory.getBrickKey(port), properties, comment);

@@ -1,25 +1,25 @@
 package de.fhg.iais.roberta.syntax.sensor;
 
 import de.fhg.iais.roberta.inter.mode.general.IMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.inter.mode.sensor.IPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISlot;
 
 public class SensorMetaDataBean {
-    private ISensorPort port;
+    private IPort port;
     private IMode mode;
     private ISlot slot;
 
-    public SensorMetaDataBean(ISensorPort port, IMode mode, ISlot slot) {
+    public SensorMetaDataBean(IPort port, IMode mode, ISlot slot) {
         this.port = port;
         this.mode = mode;
         this.slot = slot;
     }
 
-    public ISensorPort getPort() {
+    public IPort getPort() {
         return this.port;
     }
 
-    public void setPort(ISensorPort port) {
+    public void setPort(IPort port) {
         this.port = port;
     }
 

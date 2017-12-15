@@ -462,7 +462,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        String encoderSensorPort = encoderSensor.getMotorPort().toString();
+        String encoderSensorPort = encoderSensor.getPort().toString();
         if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
             this.sb.append("hal.resetMotorTacho('" + encoderSensorPort + "')");
         } else {

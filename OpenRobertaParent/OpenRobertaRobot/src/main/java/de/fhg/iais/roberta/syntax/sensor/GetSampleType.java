@@ -9,12 +9,8 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * This enumeration contain all types of sensors that are used in <b>robSensors_getSample</b> Blockly block.
  */
 public enum GetSampleType {
-<<<<<<< 42890fecc915ea55defa5859baabc6d8d865693a
     TOUCH( "SENSORPORT", "TOUCH", "TOUCH" ),
     TOUCH_PRESSED( "SENSORPORT", "TOUCH", "PRESSED" ),
-=======
-    TOUCH( "SENSORPORT", "TOUCH", "TOUCH_PRESSED", "TOUCH" ),
->>>>>>> fix ev3 touch bug
     ULTRASONIC_DISTANCE( "SENSORPORT", "ULTRASONIC", "DISTANCE" ),
     ULTRASONIC_PRESENCE( "SENSORPORT", "ULTRASONIC", "PRESENCE" ),
     COLOUR_COLOUR( "SENSORPORT", "COLOUR", "COLOUR" ),
@@ -28,7 +24,7 @@ public enum GetSampleType {
     KEY_PRESSED( "SENSORPORT", "KEYS_PRESSED", "KEYS_PRESSED" ),
     GYRO_RATE( "SENSORPORT", "GYRO", "RATE" ),
     GYRO_ANGLE( "SENSORPORT", "GYRO", "ANGLE" ),
-    TIME( "SENSORNUM", "TIME", "TIME" ),
+    TIME( "SENSORPORT", "TIME", "VALUE" ),
     TIMER_VALUE( "SENSORPORT", "TIME", "TIME" ),
     SOUND( "SENSORPORT", "SOUND", "VALUE" ),
     SOUND_SOUND( "SENSORPORT", "SOUND", "SOUND" ),

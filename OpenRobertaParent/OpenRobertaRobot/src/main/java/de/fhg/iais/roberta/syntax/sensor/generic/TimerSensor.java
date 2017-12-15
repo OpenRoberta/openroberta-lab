@@ -1,15 +1,21 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
+import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
@@ -56,8 +62,32 @@ public class TimerSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        SensorMetaDataBean sensorData = extractPortAndMode(block, helper, helper.getModeFactory()::getTimerSensorMode);
-        return TimerSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
+        IRobotFactory factory = helper.getModeFactory();
+        SensorMetaDataBean sensorMetaDataBean;
+        //TODO This if statement should be removed when we have new implementation of reset sensor blockly block
+        if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_TIMER_RESET) || block.getType().equals(BlocklyConstants.ROB_SENSORS_TIMER_RESET_CALLIOPE) ) {
+            List<Field> fields = helper.extractFields(block, (short) 1);
+            String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
+            sensorMetaDataBean =
+                new SensorMetaDataBean(factory.getSensorPort(portName), factory.getTimerSensorMode("RESET"), factory.getSlot(BlocklyConstants.NO_SLOT));
+            return TimerSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
+        }
+        sensorMetaDataBean = extractSensorPortAndMode(block, helper, helper.getModeFactory()::getTimerSensorMode);
+        return TimerSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
+    }
+
+    @Override
+    public Block astToBlock() {
+        if ( getMode().toString().equals("RESET") ) {
+            Block jaxbDestination = new Block();
+            JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+            String fieldValue = getPort().getPortNumber();
+            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
+            return jaxbDestination;
+        } else {
+            return super.astToBlock();
+        }
+
     }
 
 }

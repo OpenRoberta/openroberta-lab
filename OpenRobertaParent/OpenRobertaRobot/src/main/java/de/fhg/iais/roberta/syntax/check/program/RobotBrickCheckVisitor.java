@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.check.program;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
@@ -26,7 +27,7 @@ public abstract class RobotBrickCheckVisitor extends RobotCommonCheckVisitor {
 
     @Override
     protected void checkSensorPort(ExternalSensor<Void> sensor) {
-        Sensor usedSensor = this.brickConfiguration.getSensorOnPort(sensor.getPort());
+        Sensor usedSensor = this.brickConfiguration.getSensorOnPort((ISensorPort) sensor.getPort());
         if ( usedSensor == null ) {
             sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
             this.errorCount++;

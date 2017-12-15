@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.mode.sensor.mbed;
 
 import java.util.Locale;
 
+import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
@@ -21,7 +22,7 @@ public enum GetSampleType {
     PIN_DIGITAL( "PIN", "PIN_DIGITAL", "DIGITAL" ),
     PIN_PULSEHIGH( "PIN", "PIN_PULSEHIGH", "PULSEHIGH" ),
     PIN_PULSELOW( "PIN", "PIN_PULSELOW", "PULSELOW" ),
-    TIME( "SENSORNUM", "TIME", "TIME" );
+    TIME( "SENSORPORT", "TIME", "TIME" );
 
     private final String portTypeName;
     private final String sensorType;
