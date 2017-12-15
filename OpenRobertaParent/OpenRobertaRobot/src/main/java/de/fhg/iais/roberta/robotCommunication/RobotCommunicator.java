@@ -166,8 +166,7 @@ public class RobotCommunicator {
         while ( true ) {
             try {
                 Thread.sleep(PUSH_TIMER_INTERVALL);
-            } catch ( InterruptedException e ) {
-                // OK
+            } catch ( InterruptedException e ) { //NOSONAR : repeat the loop forever
             }
             for ( RobotCommunicationData state : this.allStates.values() ) {
                 if ( state.getState() == State.ROBOT_WAITING_FOR_PUSH_FROM_SERVER && state.getElapsedMsecOfStartOfLastRequest() > PUSH_TIMEOUT_INTERVALL ) {

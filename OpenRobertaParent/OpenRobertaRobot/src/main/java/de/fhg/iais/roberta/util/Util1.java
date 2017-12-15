@@ -42,7 +42,7 @@ public class Util1 {
      * If the URI-parameters start with "classpath:" the properties are loaded as a resource from the classpath.
      *
      * @param propertyURI URI of the property file. May be null
-     * @return the properties. Returns null, if errors occur (file not found, ...)
+     * @return the properties. Never null, may be empty
      */
     public static Properties loadProperties(String propertyURI) {
         return loadProperties(true, propertyURI);
@@ -57,7 +57,7 @@ public class Util1 {
      * If the URI-parameters start with "classpath:" the properties are loaded as a resource from the classpath.
      *
      * @param propertyURI URI of the property file. May be null
-     * @return the properties. Returns null, if errors occur (file not found, ...)
+     * @return the properties. Never null, maybe empty
      */
     public static Properties loadAndMergeProperties(String propertyURI, List<String> defines) {
         Properties robertaProperties = loadProperties(true, propertyURI);
@@ -85,7 +85,7 @@ public class Util1 {
      *
      * @param doLogging if true: log debug info
      * @param propertyURI URI of the property file. May be null
-     * @return the properties. Returns null, if errors occur (file not found, ...)
+     * @return the properties. Never null, maybe empty
      */
     public static Properties loadProperties(boolean doLogging, String propertyURI) {
         Properties properties = new Properties();
@@ -109,13 +109,11 @@ public class Util1 {
                 properties.load(Util1.class.getClassLoader().getResourceAsStream(classPathName));
             } else {
                 Util1.LOG.error("Could not load properties. Invalid URI: " + propertyURI);
-                return null;
             }
-            return properties;
         } catch ( Exception e ) {
             Util1.LOG.error("Could not load properties. Inspect the stacktrace", e);
-            return null;
         }
+        return properties;
     }
 
     /**
