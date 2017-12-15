@@ -80,17 +80,6 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-		<repository>
-			<id>ORA-snapshots</id>
-			<name>Open Roberta snapshot repository</name>
-			<url>http://maven.iais.fraunhofer.de/artifactory/openroberta-snapshot-local</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
 	</repositories>
 	<dependencyManagement>
 		<dependencies>
