@@ -34,7 +34,6 @@ public class Factory extends AbstractRobotFactory {
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";
         }
-        //this.name = "ardu";
         this.botnrollProperties = Util1.loadProperties("classpath:botnroll.properties");
         this.name = this.botnrollProperties.getProperty("robot.name");
         this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);

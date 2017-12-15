@@ -65,7 +65,7 @@ public class RobotCommunicationData {
         this.runtimeversion = runtimeveriosn;
         // the robot variant, such as 'ev3dev' or 'lejos'
         this.firmwarename = firmwarename;
-        // inbformal robot firmware version details
+        // informal robot firmware version details
         this.firmwareversion = firmwareversion;
         this.sensorvalues = new JSONObject();
 
@@ -87,8 +87,7 @@ public class RobotCommunicationData {
         {
             try {
                 wait(TIMEOUT_UNTIL_TOKEN_EXPIRES_WHEN_USER_DOESNT_APPROVE);
-            } catch ( InterruptedException e ) {
-                // try again
+            } catch ( InterruptedException e ) { //NOSONAR : repeat the loop until timer elapses or another thread changed the state
             }
         }
         if ( this.state == State.WAIT_FOR_PUSH_CMD_FROM_ROBOT ) {
@@ -160,8 +159,7 @@ public class RobotCommunicationData {
             while ( this.state == State.ROBOT_WAITING_FOR_PUSH_FROM_SERVER ) {
                 try {
                     wait();
-                } catch ( InterruptedException e ) {
-                    // try again
+                } catch ( InterruptedException e ) { //NOSONAR : repeat the loop until another thread changed the state
                 }
             }
         }
@@ -213,21 +211,21 @@ public class RobotCommunicationData {
     }
 
     /**
-     * method called from a server thread. This method terminates immediately (if the brick waits for a push command) or after 1 sec (if we expect a push
-     * command in the very near future. It wakes up the thread, which runs on behalf of a push command request from the brick.
+     * method called from a server thread. This method terminates immediately (if the robot waits for a push command) or after 1 sec (if we expect a push
+     * command in the very near future. It wakes up the thread, which runs on behalf of a push command request from the robot.
      *
-     * @return the state of the brick
+     * @return the state of the robot
      */
     public synchronized boolean firmwareUpdate() {
         if ( !isRobotWaitingForPushCommand() ) {
-            LOG.error("UPDATE button pressed, but brick is not waiting. Bad luck!");
+            LOG.error("UPDATE button pressed, but the robot is not waiting. Bad luck!");
             return false;
         } else {
             LOG.debug("UPDATE button pressed. Wait state entered " + this.timerStartedByLastRequest.elapsedSecFormatted() + " ago");
             this.command = "update";
             this.timerStartedByLastRequest = Clock.start();
 
-            // brick is disconnected after firmware update
+            // the robot is disconnected after firmware update
             abortPush();
             return true;
         }
@@ -237,8 +235,7 @@ public class RobotCommunicationData {
         if ( this.state == State.WAIT_FOR_PUSH_CMD_FROM_ROBOT ) {
             try {
                 Thread.sleep(WAIT_FOR_A_ROBOT_PUSH_COMMAND);
-            } catch ( InterruptedException e ) {
-                // ok
+            } catch ( InterruptedException e ) { //NOSONAR : expect, that the robot is waiting for a server push
             }
         }
         return this.state == State.ROBOT_WAITING_FOR_PUSH_FROM_SERVER;
@@ -331,7 +328,7 @@ public class RobotCommunicationData {
     }
 
     /**
-     * the states of communication between the brick and the browser client.
+     * the states of communication between the robot and the browser client.
      */
     public enum State {
         WAIT_FOR_TOKENAPPROVAL_FROM_USER, WAIT_FOR_PUSH_CMD_FROM_ROBOT, ROBOT_WAITING_FOR_PUSH_FROM_SERVER, ROBOT_IS_BUSY, GARBAGE;

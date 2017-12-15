@@ -125,7 +125,7 @@ public class ServerStarter {
         // String versionTo = this.properties.getProperty("validversionrange.To", "?");
         // Assert.isTrue(new VersionChecker(versionFrom, versionTo).validateServerSide(), "invalid versions found - this should NEVER occur");
         Server server = new Server();
-        ServerConnector http = new ServerConnector(server);
+        ServerConnector http = new ServerConnector(server); //NOSONAR : no need to close. Active until program termination
         String host = RobertaProperties.getStringProperty("server.ip");
         int port = RobertaProperties.getIntProperty("server.port");
         http.setHost(host);

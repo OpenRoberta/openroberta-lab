@@ -91,12 +91,23 @@ public class NxtConfiguration extends Configuration {
     public String generateText(String name) {
         StringBuilder sb = new StringBuilder();
         sb.append("robot ev3 ").append(name).append(" {\n");
-        if ( (this.wheelDiameterCM != 0) || (this.trackWidthCM != 0) ) {
+        generateWheelData(sb);
+        generateSensors(sb);
+        generateActors(sb);
+        sb.append("}");
+        return sb.toString();
+    }
+
+    private void generateWheelData(StringBuilder sb) {
+        if ( this.wheelDiameterCM != 0.0 || this.trackWidthCM != 0.0 ) { //NOSONAR : 0.0 is safe here, as it is used as 'null' value
             sb.append("  size {\n");
             sb.append("    wheel diameter ").append(Formatter.d2s(this.wheelDiameterCM)).append(" cm;\n");
             sb.append("    track width    ").append(Formatter.d2s(this.trackWidthCM)).append(" cm;\n");
             sb.append("  }\n");
         }
+    }
+
+    private void generateSensors(StringBuilder sb) {
         if ( !this.sensors.isEmpty() ) {
             sb.append("  sensor port {\n");
             for ( ISensorPort port : this.sensors.keySet() ) {
@@ -106,6 +117,9 @@ public class NxtConfiguration extends Configuration {
             }
             sb.append("  }\n");
         }
+    }
+
+    private void generateActors(StringBuilder sb) {
         if ( !this.actors.isEmpty() ) {
             sb.append("  actor port {\n");
             for ( IActorPort port : this.actors.keySet() ) {
@@ -136,8 +150,6 @@ public class NxtConfiguration extends Configuration {
             }
             sb.append("  }\n");
         }
-        sb.append("}");
-        return sb.toString();
     }
 
     /**

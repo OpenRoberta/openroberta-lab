@@ -7,6 +7,7 @@ import java.util.TreeMap;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IMotorSide;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -241,14 +242,13 @@ public abstract class Configuration {
                 return entry.getKey();
             }
         }
-        //        throw new DbcException("No left motor defined!");
         return null;
     }
 
     /**
      * This class is a builder of {@link Configuration}
      */
-    public static abstract class Builder<T extends Builder<T>> {
+    public abstract static class Builder<T extends Builder<T>> {
         private final Map<IActorPort, Actor> actorMapping = new TreeMap<>();
         private final Map<ISensorPort, Sensor> sensorMapping = new TreeMap<>();
 

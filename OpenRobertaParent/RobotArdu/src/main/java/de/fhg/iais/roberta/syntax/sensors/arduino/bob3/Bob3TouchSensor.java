@@ -4,7 +4,6 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -17,10 +16,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitors.arduino.Bob3AstVisitor;
 
 /**
- * This class represents the <b>robSensors_touch_isPressed</b> blocks from Blockly into
- * the AST (abstract syntax
- * tree).
- * Object from this class will generate code for checking if the sensor is pressed.<br/>
+ * This class represents the <b>robSensors_touch_isPressed</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate
+ * code for checking if the sensor is pressed.<br/>
  * <br>
  * The client must provide the {@link SensorPort}.<br>
  * <br>
@@ -47,7 +44,7 @@ public class Bob3TouchSensor<V> extends Sensor<V> {
      * @return read only object of {@link Bob3TouchSensor}
      */
     public static <V> Bob3TouchSensor<V> make(String armSide, String armPart, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Bob3TouchSensor<V>(armSide, armPart, properties, comment);
+        return new Bob3TouchSensor<>(armSide, armPart, properties, comment);
     }
 
     public String getArmSide() {
@@ -76,7 +73,6 @@ public class Bob3TouchSensor<V> extends Sensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 2);
         String armSide = helper.extractField(fields, BlocklyConstants.ARMSIDE);
         String armPart = helper.extractField(fields, BlocklyConstants.ARMPART);

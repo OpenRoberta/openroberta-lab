@@ -91,6 +91,13 @@ public class MbotConfiguration extends Configuration {
     public String generateText(String name) {
         StringBuilder sb = new StringBuilder();
         sb.append("robot mbot ").append(name).append(" {\n");
+        generateSensors(sb);
+        generateActors(sb);
+        sb.append("}");
+        return sb.toString();
+    }
+
+    private void generateSensors(StringBuilder sb) {
         if ( !this.sensors.isEmpty() ) {
             sb.append("  sensor port {\n");
             for ( ISensorPort port : this.sensors.keySet() ) {
@@ -100,6 +107,9 @@ public class MbotConfiguration extends Configuration {
             }
             sb.append("  }\n");
         }
+    }
+
+    private void generateActors(StringBuilder sb) {
         if ( !this.actors.isEmpty() ) {
             sb.append("  actor port {\n");
             for ( IActorPort port : this.actors.keySet() ) {
@@ -126,8 +136,6 @@ public class MbotConfiguration extends Configuration {
             }
             sb.append("  }\n");
         }
-        sb.append("}");
-        return sb.toString();
     }
 
     /**

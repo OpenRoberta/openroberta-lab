@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.components;
 
 import de.fhg.iais.roberta.util.dbc.Assert;
 
-abstract public class HardwareComponent {
+public abstract class HardwareComponent {
     private String name;
 
     public HardwareComponent(String name) {

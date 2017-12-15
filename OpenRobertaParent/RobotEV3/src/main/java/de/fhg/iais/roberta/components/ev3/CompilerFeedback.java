@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
 
 public class CompilerFeedback {
     private static final Logger LOG = LoggerFactory.getLogger(CompilerFeedback.class);
-    final private boolean success;
-    final private List<CompilerMessage> messages = new ArrayList<>();
+    private final boolean success;
+    private final List<CompilerMessage> messages = new ArrayList<>();
 
     public CompilerFeedback(final Boolean success, final DiagnosticCollector<JavaFileObject> diagnostics) {
         this.success = success != null && success;
@@ -37,31 +37,29 @@ public class CompilerFeedback {
         final int iTop = this.messages.size();
         for ( int i = 0; i < iTop; i++ ) {
             sb.append("\n[MESSAGE ").append(i + 1).append(" OF ").append(iTop).append("]\n\n");
-            //            sb.append(this.messages.get(i).toString()).append("\n");
-            //            sb.append(messages.get(i).toStringForList()).append("\n");
             sb.append(this.messages.get(i).toStringForDebugging()).append("\n");
         }
         return sb.toString();
     }
 
-    final public static class CompilerMessage {
-        final public Diagnostic<? extends JavaFileObject> compilerInfo;
+    public final static class CompilerMessage {
+        public final Diagnostic<? extends JavaFileObject> compilerInfo;
 
-        final public String typeOfProblem;
-        final public String typeOfProblem_forDebugging;
+        public final String typeOfProblem;
+        public final String typeOfProblem_forDebugging;
 
-        final public String multiLineMessage;
+        public final String multiLineMessage;
 
-        final public int lineNumber;
-        final public int columnNumber;
+        public final int lineNumber;
+        public final int columnNumber;
 
-        final public int textHighlightPos_lineStart;
-        final public int textHighlightPos_problemStart;
-        final public int textHighlightPos_problemEnd;
+        public final int textHighlightPos_lineStart;
+        public final int textHighlightPos_problemStart;
+        public final int textHighlightPos_problemEnd;
 
-        final public String sourceCode;
-        final public String codeOfConcern;
-        final public String codeOfConcernLong;
+        public final String sourceCode;
+        public final String codeOfConcern;
+        public final String codeOfConcernLong;
 
         CompilerMessage(final Diagnostic<? extends JavaFileObject> diagnostic) {
 

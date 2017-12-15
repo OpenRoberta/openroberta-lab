@@ -153,29 +153,7 @@ public class User implements WithSurrogateId {
 
     @Override
     public String toString() {
-        return "User [id="
-            + this.id
-            + ", account="
-            + this.account
-            + ", userName="
-            + this.userName
-            + ", password="
-            + this.password
-            + ", email="
-            + this.email
-            + ", role="
-            + this.role
-            + ", created="
-            + this.created
-            + ", lastLogin="
-            + this.lastLogin
-            + ", tags="
-            + this.tags
-            + ", activated="
-            + this.activated
-            + ", youngerThen14="
-            + this.youngerThen14
-            + "]";
+        return "User [id=" + this.id + ", account=" + this.account + ", userName=" + this.userName + "]";
     }
 
 }

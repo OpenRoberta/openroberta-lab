@@ -24,11 +24,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
 /**
- * This class represents the <b>robSensors_getSample</b> block from Blockly
- * into
- * the AST (abstract syntax
- * tree).
- * Object from this class will generate code for setting the mode of the sensor or getting a sample from the sensor.<br/>
+ * This class represents the <b>robSensors_getSample</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * setting the mode of the sensor or getting a sample from the sensor.<br/>
  * <br>
  * The client must provide the {@link SensorType} and port. See enum {@link SensorType} for all possible type of sensors.<br>
  * <br>
@@ -41,7 +38,8 @@ public class GetSampleSensor<V> extends Sensor<V> {
 
     private GetSampleSensor(GetSampleType sensorType, String port, BlocklyBlockProperties properties, BlocklyComment comment, IRobotFactory factory) {
         super(BlockTypeContainer.getByName("SENSOR_GET_SAMPLE"), properties, comment);
-        Assert.isTrue(sensorType != null && port != "");
+        Assert.notNull(sensorType);
+        Assert.nonEmptyString(port);
         this.sensorPort = port;
         this.sensorType = sensorType;
         SensorMetaDataBean sensorMetaDataBean;
@@ -147,7 +145,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
         BlocklyBlockProperties properties,
         BlocklyComment comment,
         IRobotFactory factory) {
-        return new GetSampleSensor<V>(sensorType, port, properties, comment, factory);
+        return new GetSampleSensor<>(sensorType, port, properties, comment, factory);
     }
 
     /**

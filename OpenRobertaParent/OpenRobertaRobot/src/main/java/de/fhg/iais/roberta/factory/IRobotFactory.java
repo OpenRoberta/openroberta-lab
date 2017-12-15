@@ -125,8 +125,8 @@ public interface IRobotFactory {
     }
 
     /**
-     * Direction in space enumeration from {@link IDirection} given string parameter. It is possible for one direction to have multiple string
-     * mappings. Throws exception if the operator does not exists.
+     * Direction in space enumeration from {@link IDirection} given string parameter. It is possible for one direction to have multiple string mappings. Throws
+     * exception if the operator does not exists.
      *
      * @param direction of the function
      * @return direction location from the enum {@link IDirection}
@@ -181,7 +181,7 @@ public interface IRobotFactory {
      */
     default IBlinkMode getBlinkMode(String mode) {
         return IRobotFactory.getModeValue(mode, BlinkMode.class);
-    };
+    }
 
     /**
      * Get a {@link IBrickLedColor} enumeration given string parameter. It is possible for one mode to have multiple string mappings. Throws exception if the
@@ -192,7 +192,7 @@ public interface IRobotFactory {
      */
     default IBrickLedColor getBrickLedColor(String mode) {
         return IRobotFactory.getModeValue(mode, BrickLedColor.class);
-    };
+    }
 
     /**
      * Get a {@link ILightSensorMode} enumeration given string parameter. It is possible for one mode to have multiple string mappings. Throws exception if the
@@ -200,13 +200,13 @@ public interface IRobotFactory {
      */
     default ILightSensorMode getLightColor(String mode) {
         return IRobotFactory.getModeValue(mode, LightSensorMode.class);
-    };
+    }
 
     ILightSensorActionMode getLightActionColor(String mode);
 
     default IWorkingState getWorkingState(String mode) {
         return IRobotFactory.getModeValue(mode, WorkingState.class);
-    };
+    }
 
     /**
      * Get a {@link IShowPicture} enumeration given string parameter. It is possible for one picture to have multiple string mappings. Throws exception if the
@@ -292,7 +292,7 @@ public interface IRobotFactory {
      */
     default IBrickKey getBrickKey(String brickKey) {
         return IRobotFactory.getModeValue(brickKey, BrickKey.class);
-    };
+    }
 
     /**
      * Get a color sensor mode from {@link IColorSensorMode} given string parameter. It is possible for one color sensor mode to have multiple string mappings.
@@ -303,11 +303,11 @@ public interface IRobotFactory {
      */
     default IColorSensorMode getColorSensorMode(String mode) {
         return IRobotFactory.getModeValue(mode, ColorSensorMode.class);
-    };
+    }
 
     default IJoystickMode getJoystickMode(String mode) {
         return IRobotFactory.getModeValue(mode, Axis.class);
-    };
+    }
 
     default ILightSensorMode getLightSensorMode(String mode) {
         return IRobotFactory.getModeValue(mode, LightSensorMode.class);
@@ -401,8 +401,7 @@ public interface IRobotFactory {
 
     /**
      * Get a touch sensor mode from {@link IVoltageSensorMode} given string parameter. It is possible for one voltage sensor mode to have multiple string
-     * mappings.
-     * Throws exception if the voltage sensor mode does not exists.
+     * mappings. Throws exception if the voltage sensor mode does not exists.
      *
      * @param name of the voltage sensor mode
      * @return the volatage sensor mode from the enum {@link IVoltageSensorMode}
@@ -458,10 +457,7 @@ public interface IRobotFactory {
     }
 
     /**
-     * Get the file extension of the specific language for this robot. This is used when we want to download
-     * locally the source code into a file.
-     *
-     * @return
+     * Get the file extension of the specific language for this robot. This is used when we want to download locally the source code into a file.
      */
     String getFileExtension();
 
@@ -510,5 +506,4 @@ public interface IRobotFactory {
     default String getMenuVersion() {
         return null;
     }
-
 }

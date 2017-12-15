@@ -57,4 +57,13 @@ public class UtilTest {
         boolean browserVisibility = Boolean.parseBoolean(RobertaProperties.getStringProperty("does.not.exist"));
         assertEquals(false, browserVisibility);
     }
+
+    @Test
+    public void testPow() {
+        assertEquals(1, Util1.pow2(0));
+        assertEquals(2, Util1.pow2(1));
+        assertEquals(4, Util1.pow2(2));
+        assertEquals(16, Util1.pow2(4));
+        assertEquals(1024, Util1.pow2(10));
+    }
 }

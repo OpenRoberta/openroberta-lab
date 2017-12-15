@@ -11,8 +11,8 @@ public class Actor {
     private final IMotorSide motorSide;
 
     /**
-     * Creates hardware component of type {@link Category#ACTOR} that will be attached to the brick configuration.
-     * Client must provide valid {@link HardwareComponentType} from {@link Category#ACTOR} category.
+     * Creates hardware component of type {@link Category#ACTOR} that will be attached to the brick configuration. Client must provide valid
+     * {@link HardwareComponentType} from {@link Category#ACTOR} category.
      *
      * @param regulated
      * @param componentType of the motor
@@ -56,11 +56,11 @@ public class Actor {
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
-        result = prime * result + ((this.motorSide == null) ? 0 : this.motorSide.hashCode());
-        result = prime * result + (this.regulated ? 1231 : 1237);
-        result = prime * result + ((this.rotationDirection == null) ? 0 : this.rotationDirection.hashCode());
+        int result = 1;
+        result = prime * result + ((motorSide == null) ? 0 : motorSide.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + (regulated ? 1231 : 1237);
+        result = prime * result + ((rotationDirection == null) ? 0 : rotationDirection.hashCode());
         return result;
     }
 
@@ -69,21 +69,31 @@ public class Actor {
         if ( this == obj ) {
             return true;
         }
-
+        if ( obj == null ) {
+            return false;
+        }
         if ( getClass() != obj.getClass() ) {
             return false;
         }
         Actor other = (Actor) obj;
-        if ( this.motorSide != other.motorSide ) {
+        if ( motorSide == null ) {
+            if ( other.motorSide != null ) {
+                return false;
+            }
+        } else if ( !motorSide.equals(other.motorSide) ) {
             return false;
         }
-        if ( !this.name.equals(other.name) ) {
+        if ( name != other.name ) {
             return false;
         }
-        if ( this.regulated != other.regulated ) {
+        if ( regulated != other.regulated ) {
             return false;
         }
-        if ( this.rotationDirection != other.rotationDirection ) {
+        if ( rotationDirection == null ) {
+            if ( other.rotationDirection != null ) {
+                return false;
+            }
+        } else if ( !rotationDirection.equals(other.rotationDirection) ) {
             return false;
         }
         return true;

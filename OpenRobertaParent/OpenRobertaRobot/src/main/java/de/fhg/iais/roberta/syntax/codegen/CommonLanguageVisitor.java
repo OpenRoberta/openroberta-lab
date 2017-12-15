@@ -39,7 +39,7 @@ import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 public abstract class CommonLanguageVisitor implements AstLanguageVisitor<Void> {
     //TODO find more simple way of handling the loops
     protected int loopCounter = 0;
-    protected LinkedList<Integer> currenLoop = new LinkedList<Integer>();
+    protected LinkedList<Integer> currenLoop = new LinkedList<>();
     protected Map<Integer, Boolean> loopsLabels;
 
     protected final StringBuilder sb = new StringBuilder();
@@ -92,10 +92,8 @@ public abstract class CommonLanguageVisitor implements AstLanguageVisitor<Void> 
     }
 
     private void generateProgramMainBody() {
-        this.programPhrases
-            .stream()
-            .filter(phrase -> phrase.getKind().getCategory() != Category.METHOD || phrase.getKind().hasName("METHOD_CALL"))
-            .forEach(p -> {
+        this.programPhrases.stream().filter(phrase -> phrase.getKind().getCategory() != Category.METHOD || phrase.getKind().hasName("METHOD_CALL")).forEach(
+            p -> {
                 nlIndent();
                 p.visit(this);
             });
@@ -103,10 +101,8 @@ public abstract class CommonLanguageVisitor implements AstLanguageVisitor<Void> 
 
     protected void generateUserDefinedMethods() {
         this.incrIndentation();
-        this.programPhrases
-            .stream()
-            .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
-            .forEach(e -> {
+        this.programPhrases.stream().filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL")).forEach(
+            e -> {
                 e.visit(this);
                 this.sb.append("\n");
             });
@@ -286,7 +282,7 @@ public abstract class CommonLanguageVisitor implements AstLanguageVisitor<Void> 
 
     protected boolean isInteger(String str) {
         try {
-            Integer.parseInt(str);
+            Integer.parseInt(str); //NOSONAR : her it is checked if the string is a parseable Integer. Result is NOT used.
             return true;
         } catch ( NumberFormatException e ) {
             return false;

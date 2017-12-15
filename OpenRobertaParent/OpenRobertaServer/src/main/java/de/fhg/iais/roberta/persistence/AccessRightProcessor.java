@@ -107,16 +107,7 @@ public class AccessRightProcessor extends AbstractProcessor {
             }
         } catch ( Exception e ) {
             String msg =
-                "invalid share request. (owner,robot,program): ("
-                    + owner.getId()
-                    + ","
-                    + robotName
-                    + ","
-                    + programName
-                    + "), to share with: "
-                    + userToShare.getId()
-                    + ", access right: "
-                    + right;
+                "Invalid share request. Owner:" + owner + ", robot:" + robotName + ", program:" + programName + ", with:" + userToShare + ", right:" + right;
             AccessRightProcessor.LOG.error(msg);
             setError(Key.SERVER_ERROR);
         }

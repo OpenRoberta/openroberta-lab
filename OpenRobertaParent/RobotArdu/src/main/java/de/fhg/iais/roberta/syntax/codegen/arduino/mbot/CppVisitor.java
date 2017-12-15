@@ -60,14 +60,15 @@ import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.FlameSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.Joystick;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.PIRMotionSensor;
+import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitors.arduino.MbotAstVisitor;
 
 /**
- * This class is implementing {@link AstVisitor}. All methods are implemented and they append a hussentation of a phrase to a
- * StringBuilder. <b>This representation is correct C code for Arduino.</b> <br>
+ * This class is implementing {@link AstVisitor}. All methods are implemented and they append a hussentation of a phrase to a StringBuilder. <b>This
+ * representation is correct C code for Arduino.</b> <br>
  */
 public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
     private final MbotConfiguration brickConfiguration;
@@ -396,9 +397,6 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
         for ( final UsedSensor usedSensor : this.usedSensors ) {
             switch ( (SensorType) usedSensor.getType() ) {
                 case GYRO:
-                    nlIndent();
-                    this.sb.append("myGyro" + usedSensor.getPort().getPortNumber() + ".begin();");
-                    break;
                 case ACCELEROMETER:
                     nlIndent();
                     this.sb.append("myGyro" + usedSensor.getPort().getPortNumber() + ".begin();");
@@ -482,8 +480,6 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
                 case COMPASS:
                     break;
                 case GYRO:
-                    this.sb.append("MeGyro myGyro" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
-                    break;
                 case ACCELEROMETER:
                     this.sb.append("MeGyro myGyro" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
                     break;
@@ -681,7 +677,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
         for ( int i = 0; i < 16; i++ ) {
             for ( int j = 0; j < 8; j++ ) {
                 if ( imageCharacterMatrix[j][i] == '#' ) {
-                    imageBitmap[i] += Math.pow(2, 7 - j);
+                    imageBitmap[i] += Util1.pow2(7 - j);
                 }
             }
         }

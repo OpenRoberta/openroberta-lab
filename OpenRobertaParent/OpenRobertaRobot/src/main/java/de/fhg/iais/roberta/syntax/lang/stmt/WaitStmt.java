@@ -24,9 +24,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 /**
- * This class represents the <b>robControls_wait_for</b> and <b>robControls_wait</b> blocks from Blockly into the AST (abstract syntax
- * tree).
- * Object from this class will generate if statements nested into repeat statement.<br/>
+ * This class represents the <b>robControls_wait_for</b> and <b>robControls_wait</b> blocks from Blockly into the AST (abstract syntax tree). Object from this
+ * class will generate if statements nested into repeat statement.<br/>
  * <br>
  * See {@link #getMode()} for the kind of the repeat statements.
  */
@@ -87,8 +86,8 @@ public class WaitStmt<V> extends Stmt<V> {
             statementss = helper.extractStatements(block, (short) (mutat + 1));
         } else {
             List<Object> valAndStmt = block.getRepetitions().getValueAndStatement();
-            values = new ArrayList<Value>();
-            statementss = new ArrayList<Statement>();
+            values = new ArrayList<>();
+            statementss = new ArrayList<>();
             helper.convertStmtValList(values, statementss, valAndStmt);
         }
         for ( int i = 0; i <= mutat; i++ ) {
@@ -115,7 +114,7 @@ public class WaitStmt<V> extends Stmt<V> {
             return jaxbDestination;
         }
         mutation = new Mutation();
-        mutation.setWait(BigInteger.valueOf(numOfWait - 1));
+        mutation.setWait(BigInteger.valueOf(numOfWait - 1L));
         jaxbDestination.setMutation(mutation);
         Repetitions repetitions = new Repetitions();
         for ( int i = 0; i < numOfWait; i++ ) {

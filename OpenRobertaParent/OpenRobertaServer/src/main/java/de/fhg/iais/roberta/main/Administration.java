@@ -109,7 +109,7 @@ public class Administration {
         Session nativeSession = sessionFactoryWrapper.getNativeSession();
         nativeSession.beginTransaction();
         @SuppressWarnings("unchecked")
-        List<Object[]> resultSet = nativeSession.createSQLQuery(sqlQuery).list();
+        List<Object[]> resultSet = nativeSession.createSQLQuery(sqlQuery).list(); //NOSONAR : no sql injection possible here. Dangerous sql of course :-)
         Administration.LOG.info("result set has " + resultSet.size() + " rows");
         for ( Object[] object : resultSet ) {
             Administration.LOG.info("  " + Arrays.toString(object));

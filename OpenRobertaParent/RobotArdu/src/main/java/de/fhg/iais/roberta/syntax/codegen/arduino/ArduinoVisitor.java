@@ -50,10 +50,14 @@ public abstract class ArduinoVisitor extends RobotCppVisitor {
     protected void generateUsedVars() {
         for ( VarDeclaration<Void> var : this.usedVars ) {
             if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-                int size = 0;
                 if ( var.getTypeVar().isArray() && !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-                    ListCreate<Void> list = var.getValue().getKind().hasName("SENSOR_EXPR") ? null : (ListCreate<Void>) var.getValue();
-                    size = var.getValue().getKind().hasName("SENSOR_EXPR") ? 3 : list.getValue().get().size();
+                    int size = 0;
+                    if ( var.getValue().getKind().hasName("SENSOR_EXPR") ) {
+                        size = 3;
+                    } else {
+                        ListCreate<Void> list = (ListCreate<Void>) var.getValue();
+                        size = list.getValue().get().size();
+                    }
                     this.sb.append("__" + var.getName() + "Len = ").append(size).append(";");
                     nlIndent();
                     this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
@@ -112,8 +116,8 @@ public abstract class ArduinoVisitor extends RobotCppVisitor {
 
     @Override
     public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
-        int size = 0;
         if ( assignStmt.getExpr().getKind().hasName("LIST_CREATE") && !assignStmt.getExpr().getKind().hasName("EMPTY_EXPR") ) {
+            int size = 0;
             this.sb.append(getLanguageVarTypeFromBlocklyType(assignStmt.getExpr().getVarType())).append(" ");
             this.sb.append("__");
             assignStmt.getName().visit(this);
@@ -121,8 +125,12 @@ public abstract class ArduinoVisitor extends RobotCppVisitor {
             assignStmt.getExpr().visit(this);
             this.sb.append(";");
             nlIndent();
-            ListCreate<Void> list = assignStmt.getExpr().getKind().hasName("SENSOR_EXPR") ? null : (ListCreate<Void>) assignStmt.getExpr();
-            size = assignStmt.getExpr().getKind().hasName("SENSOR_EXPR") ? 3 : list.getValue().get().size();
+            if ( assignStmt.getExpr().getKind().hasName("SENSOR_EXPR") ) {
+                size = 3;
+            } else {
+                ListCreate<Void> list = (ListCreate<Void>) assignStmt.getExpr();
+                size = assignStmt.getExpr().getKind().hasName("SENSOR_EXPR") ? 3 : list.getValue().get().size();
+            }
             this.sb.append("__");
             assignStmt.getName().visit(this);
             this.sb.append("Len = ").append(size).append(";");

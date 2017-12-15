@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.persistence.util;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -7,7 +8,9 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
-public class HttpSessionState {
+public class HttpSessionState implements Serializable {
+    private static final long serialVersionUID = 5423413372044585392L;
+
     public final static int NO_USER = -1;
 
     private int userId = HttpSessionState.NO_USER;

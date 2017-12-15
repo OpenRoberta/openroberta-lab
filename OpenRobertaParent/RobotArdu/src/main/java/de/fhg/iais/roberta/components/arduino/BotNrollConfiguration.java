@@ -91,12 +91,13 @@ public class BotNrollConfiguration extends Configuration {
     public String generateText(String name) {
         StringBuilder sb = new StringBuilder();
         sb.append("robot ardu ").append(name).append(" {\n");
-        //        if ( this.wheelDiameterCM != 0.0 || this.trackWidthCM != 0.0 ) {
-        //            sb.append("  size {\n");
-        //                        sb.append("    wheel diameter ").append(Formatter.d2s(this.wheelDiameterCM)).append(" cm;\n");
-        //                        sb.append("    track width    ").append(Formatter.d2s(this.trackWidthCM)).append(" cm;\n");
-        //            sb.append("  }\n");
-        //        }
+        generateSensors(sb);
+        generateActors(sb);
+        sb.append("}");
+        return sb.toString();
+    }
+
+    private void generateSensors(StringBuilder sb) {
         if ( !this.sensors.isEmpty() ) {
             sb.append("  sensor port {\n");
             for ( ISensorPort port : this.sensors.keySet() ) {
@@ -106,6 +107,9 @@ public class BotNrollConfiguration extends Configuration {
             }
             sb.append("  }\n");
         }
+    }
+
+    private void generateActors(StringBuilder sb) {
         if ( !this.actors.isEmpty() ) {
             sb.append("  actor port {\n");
             for ( IActorPort port : this.actors.keySet() ) {
@@ -138,8 +142,6 @@ public class BotNrollConfiguration extends Configuration {
             }
             sb.append("  }\n");
         }
-        sb.append("}");
-        return sb.toString();
     }
 
     /**

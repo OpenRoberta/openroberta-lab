@@ -255,13 +255,14 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
         this.sb.append(var.getName());
         if ( var.getTypeVar().isArray() ) {
             this.sb.append("[");
-            ListCreate<Void> list = var.getValue().getKind().hasName("EMPTY_EXPR") ? null : (ListCreate<Void>) var.getValue();
-            this.sb.append(var.getValue().getKind().hasName("EMPTY_EXPR") ? "" : list.getValue().get().size());
+            if ( var.getValue().getKind().hasName("EMPTY_EXPR") ) {
+                // nothing to do
+            } else {
+                ListCreate<Void> list = (ListCreate<Void>) var.getValue();
+                this.sb.append(list.getValue().get().size());
+            }
             this.sb.append("]");
-        } // else if ( var.getTypeVar().toString().equals("ARRAY_STRING") ) {
-          //    this.sb.append("[] = ");
-          //    var.getValue().visit(this);
-          //}
+        }
         return null;
     }
 
