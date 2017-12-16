@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.sensor.BrickKeyPressMode;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
@@ -425,12 +426,12 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        switch ( brickSensor.getMode() ) {
-            case IS_PRESSED:
-                this.sb.append("hal.isKeyPressed(" + getEnumCode(brickSensor.getKey()) + ")");
+        switch ( (BrickKeyPressMode) brickSensor.getMode() ) {
+            case PRESSED:
+                this.sb.append("hal.isKeyPressed(" + getEnumCode(brickSensor.getPort()) + ")");
                 break;
             case WAIT_FOR_PRESS_AND_RELEASE:
-                this.sb.append("hal.isKeyPressedAndReleased(" + getEnumCode(brickSensor.getKey()) + ")");
+                this.sb.append("hal.isKeyPressedAndReleased(" + getEnumCode(brickSensor.getPort()) + ")");
                 break;
             default:
                 throw new DbcException("Invalide mode for BrickSensor!");

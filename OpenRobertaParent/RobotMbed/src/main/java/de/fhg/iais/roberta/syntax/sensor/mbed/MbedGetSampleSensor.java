@@ -19,7 +19,6 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor.Mode;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
@@ -56,7 +55,13 @@ public class MbedGetSampleSensor<V> extends Sensor<V> {
         SensorMetaDataBean sensorMetaDataBean;
         switch ( sensorType.getSensorType() ) {
             case BlocklyConstants.KEY_PRESSED:
-                this.sensor = BrickSensor.make(Mode.IS_PRESSED, factory.getBrickKey(port), properties, comment);
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getBrickKey(port),
+                        factory.getBrickKeyPressMode(sensorType.getSensorMode()),
+                        factory.getSlot(BlocklyConstants.NO_SLOT));
+
+                this.sensor = BrickSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.PIN_TOUCHED:
                 this.sensor = PinTouchSensor.make(MbedPins.findPin(port), properties, comment);

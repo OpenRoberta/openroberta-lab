@@ -16,4 +16,13 @@ public enum BrickKey implements IBrickKey {
         return this.values;
     }
 
+    @Override
+    public String getPortNumber() {
+        if ( this.values.length != 0 ) {
+            return this.values[0];
+        } else {
+            return this.toString();
+        }
+    }
+
 }

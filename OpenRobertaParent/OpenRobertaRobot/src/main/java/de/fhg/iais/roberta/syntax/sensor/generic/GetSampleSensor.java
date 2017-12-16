@@ -15,7 +15,6 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.GetSampleType;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor.Mode;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -82,7 +81,12 @@ public class GetSampleSensor<V> extends Sensor<V> {
                 this.sensor = EncoderSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.KEY_PRESSED:
-                this.sensor = BrickSensor.make(Mode.IS_PRESSED, factory.getBrickKey(port), properties, comment);
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getBrickKey(port),
+                        factory.getBrickKeyPressMode(sensorType.getSensorMode()),
+                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = BrickSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.GYRO:
                 sensorMetaDataBean =

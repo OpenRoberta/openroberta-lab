@@ -55,10 +55,12 @@ import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.mode.general.PickColor;
 import de.fhg.iais.roberta.mode.general.WorkingState;
 import de.fhg.iais.roberta.mode.sensor.Axis;
+import de.fhg.iais.roberta.mode.sensor.BrickKeyPressMode;
 import de.fhg.iais.roberta.mode.sensor.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
+import de.fhg.iais.roberta.mode.sensor.IBirckKeyPressMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
@@ -292,6 +294,17 @@ public interface IRobotFactory {
      */
     default IBrickKey getBrickKey(String brickKey) {
         return IRobotFactory.getModeValue(brickKey, BrickKey.class);
+    }
+
+    /**
+     * Get a robot key from {@link IBrickKey} given string parameter. It is possible for one robot key to have multiple string mappings. Throws exception if the
+     * robot key does not exists.
+     *
+     * @param name of the robot key
+     * @return the robot keys from the enum {@link IBrickKey}
+     */
+    default IBirckKeyPressMode getBrickKeyPressMode(String brickKey) {
+        return IRobotFactory.getModeValue(brickKey, BrickKeyPressMode.class);
     }
 
     /**

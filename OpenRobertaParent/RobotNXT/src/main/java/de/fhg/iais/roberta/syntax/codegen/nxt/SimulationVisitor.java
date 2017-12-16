@@ -253,7 +253,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements N
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        this.sb.append("createGetSample(CONST.BUTTONS, CONST." + brickSensor.getKey() + ")");
+        this.sb.append("createGetSample(CONST.BUTTONS, CONST." + brickSensor.getPort() + ")");
         return null;
     }
 

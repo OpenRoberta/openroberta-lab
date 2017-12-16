@@ -777,7 +777,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
         String button = null;
-        switch ( (BrickKey) brickSensor.getKey() ) {
+        switch ( (BrickKey) brickSensor.getPort() ) {
             case ENTER:
                 button = "BTNCENTER";
                 break;

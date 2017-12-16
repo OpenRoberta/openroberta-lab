@@ -1,20 +1,15 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
-import java.util.List;
-
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
+import de.fhg.iais.roberta.mode.sensor.BrickKey;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
+import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
@@ -27,15 +22,10 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
  * <br>
  * To create an instance from this class use the method {@link #make(Mode, BrickKey, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-public class BrickSensor<V> extends Sensor<V> {
-    private final IBrickKey key;
-    private final Mode mode;
+public class BrickSensor<V> extends ExternalSensor<V> {
 
-    private BrickSensor(Mode mode, IBrickKey key, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("BRICK_SENSING"), properties, comment);
-        Assert.isTrue(mode != null && key != null);
-        this.mode = mode;
-        this.key = key;
+    private BrickSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("BRICK_SENSING"), properties, comment);
         setReadOnly();
     }
 
@@ -48,34 +38,8 @@ public class BrickSensor<V> extends Sensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link BrickSensor}
      */
-    public static <V> BrickSensor<V> make(Mode mode, IBrickKey key, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new BrickSensor<V>(mode, key, properties, comment);
-    }
-
-    /**
-     * @return get the key. See enum {@link BrickKey} for all possible keys
-     */
-    public IBrickKey getKey() {
-        return this.key;
-    }
-
-    /**
-     * @return get the mode of sensor. See enum {@link Mode} for all possible modes that the sensor have
-     */
-    public Mode getMode() {
-        return this.mode;
-    }
-
-    @Override
-    public String toString() {
-        return "BrickSensor [key=" + this.key + ", mode=" + this.mode + "]";
-    }
-
-    /**
-     * Modes in which the sensor can operate.
-     */
-    public static enum Mode {
-        IS_PRESSED, WAIT_FOR_PRESS, WAIT_FOR_PRESS_AND_RELEASE;
+    public static <V> BrickSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new BrickSensor<V>(sensorMetaDataBean, properties, comment);
     }
 
     @Override
@@ -91,20 +55,9 @@ public class BrickSensor<V> extends Sensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        IRobotFactory factory = helper.getModeFactory();
-        List<Field> fields = helper.extractFields(block, (short) 3);
-        String portName = helper.extractField(fields, BlocklyConstants.KEY);
-        return BrickSensor.make(BrickSensor.Mode.IS_PRESSED, factory.getBrickKey(portName), helper.extractBlockProperties(block), helper.extractComment(block));
-    }
+        IRobotFactory modeFactory = helper.getModeFactory();
+        SensorMetaDataBean sensorData = extractPortAndMode(block, helper, modeFactory::getBrickKey, modeFactory::getBrickKeyPressMode);
 
-    @Override
-    public Block astToBlock() {
-        Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-
-        String fieldValue = getKey().toString();
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.KEY, fieldValue);
-
-        return jaxbDestination;
+        return BrickSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 }

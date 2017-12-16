@@ -415,7 +415,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
         String btnNumber;
-        switch ( (BrickKey) brickSensor.getKey() ) {
+        switch ( (BrickKey) brickSensor.getPort() ) {
             case ENTER:
                 btnNumber = "2";
                 break;
