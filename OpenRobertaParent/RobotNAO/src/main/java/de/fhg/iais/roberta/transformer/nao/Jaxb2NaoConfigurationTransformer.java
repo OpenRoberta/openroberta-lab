@@ -13,8 +13,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
- * JAXB to brick configuration. Client should provide a tree of jaxb objects.
- * Generates a BrickConfiguration object.
+ * JAXB to brick configuration. Client should provide a tree of jaxb objects. Generates a BrickConfiguration object.
  */
 public class Jaxb2NaoConfigurationTransformer {
     IRobotFactory factory;
@@ -36,7 +35,7 @@ public class Jaxb2NaoConfigurationTransformer {
         blockSet.getInstance().add(instance);
         instance.setX("20");
         instance.setY("20");
-        Block block = mkBlock(idCount++);
+        Block block = mkBlock(idCount); // Replace by idCount++ if more are needed to get unique ids
         block.setType("naoBrick_NAO-Brick");
         instance.getBlock().add(block);
         List<Field> fields = block.getField();

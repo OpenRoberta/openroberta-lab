@@ -107,8 +107,6 @@ public class ClientProgram {
 
             IRobotFactory robotFactory = httpSessionState.getRobotFactory();
 
-            ICompilerWorkflow robotCompilerWorkflow = robotFactory.getRobotCompilerWorkflow();
-
             if ( cmd.equals("saveP") || cmd.equals("saveAsP") ) {
                 String programName = request.getString("programName");
                 String programText = request.getString("programText");
@@ -140,21 +138,25 @@ public class ClientProgram {
                 String configName = request.optString("configuration", null);
                 String configurationText = request.optString("configurationText", null);
                 ILanguage language = Language.findByAbbr(request.optString("language"));
-
                 if ( configName != null ) {
                     configurationText = configurationProcessor.getConfigurationText(configName, userId, robot);
                 } else if ( configurationText == null ) {
                     configurationText = robotFactory.getConfigurationDefault();
                 }
 
-                String sourceCode = robotCompilerWorkflow.generateSourceCode(robotFactory, token, programName, programText, configurationText, language);
                 AbstractProcessor forMessages = new DummyProcessor();
-                if ( sourceCode == null ) {
-                    forMessages.setError(Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED);
+                BlocklyProgramAndConfigTransformer transformer = BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
+                if ( transformer.getErrorMessage() != null ) {
+                    forMessages.setError(transformer.getErrorMessage());
                 } else {
-                    response.put("sourceCode", sourceCode);
-                    response.put("fileExtension", robotFactory.getFileExtension());
-                    forMessages.setSuccess(Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS);
+                    String sourceCode = robotFactory.getRobotCompilerWorkflow().generateSourceCode(robotFactory, token, programName, transformer, language);
+                    if ( sourceCode == null ) {
+                        forMessages.setError(Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED);
+                    } else {
+                        response.put("sourceCode", sourceCode);
+                        response.put("fileExtension", robotFactory.getFileExtension());
+                        forMessages.setSuccess(Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS);
+                    }
                 }
                 Util.addResultInfo(response, forMessages);
 
@@ -377,39 +379,41 @@ public class ClientProgram {
 
             } else if ( cmd.equals("runP") ) {
                 boolean wasRobotWaiting = false;
-                Key messageKey = null;
+
                 String token = httpSessionState.getToken();
                 String programName = request.getString("name");
                 String programText = request.optString("programText");
                 String configName = request.optString("configuration", null);
                 String configurationText = request.optString("configurationText", null);
                 ILanguage language = Language.findByAbbr(request.optString("language"));
-
                 if ( configName != null ) {
                     configurationText = configurationProcessor.getConfigurationText(configName, userId, robot);
                 } else if ( configurationText == null ) {
                     configurationText = robotFactory.getConfigurationDefault();
                 }
 
-                //TODO: Add the checkers in workflow compiler and should be thoroughly revised
                 BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                     BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
-                messageKey = programAndConfigTransformer.getErrorMessage();
-                RobotBrickCheckVisitor programChecker = robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
-                messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer, programChecker);
+                Key messageKey = programAndConfigTransformer.getErrorMessage();
                 if ( messageKey == null ) {
-                    ClientProgram.LOG.info("compiler workflow started for program {}", programName);
-                    messageKey = robotCompilerWorkflow.execute(token, programName, programAndConfigTransformer, language);
-                    if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
-                        wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
-                    } else {
-                        if ( messageKey != null ) {
-                            LOG.info(messageKey.toString());
+                    RobotBrickCheckVisitor programChecker = robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
+                    messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer, programChecker);
+                    if ( messageKey == null ) {
+                        ClientProgram.LOG.info("compiler workflow started for program {}", programName);
+                        messageKey =
+                            robotFactory.getRobotCompilerWorkflow().generateSourceAndCompile(token, programName, programAndConfigTransformer, language);
+                        if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS && token != null && !token.equals(ClientAdmin.NO_CONNECT) ) {
+                            wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
+                        } else {
+                            if ( messageKey != null ) {
+                                LOG.info(messageKey.toString());
+                            }
+                            LOG.info("download command for the ev3 skipped, Keep going with push requests");
                         }
-                        LOG.info("download command for the ev3 skipped, Keep going with push requests");
                     }
                 }
                 handleRunProgramError(response, messageKey, token, wasRobotWaiting);
+
             } else if ( cmd.equals("runPBack") ) {
                 Key messageKey = null;
                 String token = httpSessionState.getToken();
@@ -418,7 +422,6 @@ public class ClientProgram {
                 String configName = request.optString("configuration", null);
                 String configurationText = request.optString("configurationText", null);
                 ILanguage language = Language.findByAbbr(request.optString("language"));
-
                 if ( configName != null ) {
                     configurationText = configurationProcessor.getConfigurationText(configName, userId, robot);
                 } else if ( configurationText == null ) {
@@ -428,11 +431,11 @@ public class ClientProgram {
                 BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                     BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
                 messageKey = programAndConfigTransformer.getErrorMessage();
-
                 if ( messageKey == null ) {
                     ClientProgram.LOG.info("compiler workflow started for program {}", programName);
 
-                    messageKey = robotCompilerWorkflow.execute(token, programName, programAndConfigTransformer, language);
+                    ICompilerWorkflow robotCompilerWorkflow = robotFactory.getRobotCompilerWorkflow();
+                    messageKey = robotCompilerWorkflow.generateSourceAndCompile(token, programName, programAndConfigTransformer, language);
                     if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
                         response.put("compiledCode", robotCompilerWorkflow.getCompiledCode());
                         response.put("rc", "ok");
@@ -450,38 +453,35 @@ public class ClientProgram {
             } else if ( cmd.equals("runPsim") ) {
                 boolean wasRobotWaiting = false;
 
-                Key messageKey = null;
                 String token = httpSessionState.getToken();
                 String programName = request.getString("name");
                 String programText = request.optString("programText");
                 String configName = request.optString("configuration", null);
                 String configurationText = request.optString("configurationText", null);
                 ILanguage language = Language.findByAbbr(request.optString("language"));
-
                 if ( configName != null ) {
                     configurationText = configurationProcessor.getConfigurationText(configName, userId, robot);
                 } else if ( configurationText == null ) {
                     configurationText = robotFactory.getConfigurationDefault();
                 }
 
-                BlocklyProgramAndConfigTransformer programAndConfigTransformer =
-                    BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
-                messageKey = programAndConfigTransformer.getErrorMessage();
-                //TODO program checks should be in compiler workflow and should be thoroughly revised
-                RobotSimulationCheckVisitor programChecker = robotFactory.getSimProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
-                messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer, programChecker);
-
-                if ( messageKey == null ) {
-                    ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
-                    String javaScriptCode =
-                        robotFactory.getSimCompilerWorkflow().generateSourceCode(robotFactory, token, programName, programText, configurationText, language);
-
-                    ClientProgram.LOG.info("JavaScriptCode \n{}", javaScriptCode);
-                    response.put("javaScriptProgram", javaScriptCode);
-                    wasRobotWaiting = true;
-                    messageKey = Key.COMPILERWORKFLOW_SUCCESS;
-
+                BlocklyProgramAndConfigTransformer transformer = BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
+                Key messageKey = transformer.getErrorMessage();
+                if ( messageKey != null ) {
+                    RobotSimulationCheckVisitor programChecker = robotFactory.getSimProgramCheckVisitor(transformer.getBrickConfiguration());
+                    messageKey = programConfigurationCompatibilityCheck(response, transformer, programChecker);
+                    Jaxb2AstTransformerData<Void> data = transformer.getProgramTransformer().getData();
+                    if ( messageKey == null ) {
+                        ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
+                        String javaScriptCode =
+                            robotFactory.getSimCompilerWorkflow().generateSourceCode(robotFactory, token, programName, transformer, language);
+                        ClientProgram.LOG.info("JavaScriptCode \n{}", javaScriptCode);
+                        response.put("javaScriptProgram", javaScriptCode);
+                        wasRobotWaiting = true;
+                        messageKey = Key.COMPILERWORKFLOW_SUCCESS;
+                    }
                 }
+                //TODO program checks should be in compiler workflow and should be thoroughly revised
                 handleRunProgramError(response, messageKey, token, wasRobotWaiting);
 
             } else {

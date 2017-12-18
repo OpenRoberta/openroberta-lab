@@ -33,6 +33,15 @@ import de.fhg.iais.roberta.util.Util1;
 @Path("/admin")
 public class ClientAdmin {
     private static final Logger LOG = LoggerFactory.getLogger(ClientAdmin.class);
+    /**
+     * simulate a connected robot. See also class {@link ClientProgram}
+     * <ul>
+     * <li>if set to "NOCONNCT", then no robot can be connected, but connection is simulated. This setting is NOT dangerous. If set and if a user enters
+     * "NOCONNCT" as token, he or she can work as usual, but generated code is NOT transferred to the robot. For debugging purposes.
+     * <li>if set to null, this debug feature is disabled
+     * </ul>
+     */
+    public static final String NO_CONNECT = "NOCONNCT";
 
     private final RobotCommunicator brickCommunicator;
 
@@ -82,30 +91,39 @@ public class ClientAdmin {
                 Util.addSuccessInfo(response, Key.INIT_SUCCESS);
             } else if ( cmd.equals("setToken") ) {
                 String token = request.getString("token");
-                Key tokenAgreement = this.brickCommunicator.aTokenAgreementWasSent(token, httpSessionState.getRobotName());
+                if ( NO_CONNECT != null && NO_CONNECT.equals(token) ) {
+                    LOG.info("debug token is presented by a user. Download to robots is disabled for this user. Debugging feature and not risky.");
+                    httpSessionState.setToken(token);
+                    addRobotUpdateInfo(response, null, null);
+                    Util.addSuccessInfo(response, Key.TOKEN_SET_SUCCESS);
+                    LOG.info("success: debug token is registered in the session");
+                } else {
+                    Key tokenAgreement = this.brickCommunicator.aTokenAgreementWasSent(token, httpSessionState.getRobotName());
 
-                switch ( tokenAgreement ) {
-                    case TOKEN_SET_SUCCESS:
-                        httpSessionState.setToken(token);
-                        String robotMenuVersion = this.brickCommunicator.getState(token).getMenuVersion();
-                        String serverMenuVersion = httpSessionState.getRobotFactory().getMenuVersion();
-                        addRobotUpdateInfo(response, robotMenuVersion, serverMenuVersion);
-                        Util.addSuccessInfo(response, Key.TOKEN_SET_SUCCESS);
-                        LOG.info("success: token " + token + " is registered in the session");
-                        break;
-                    case TOKEN_SET_ERROR_WRONG_ROBOTTYPE:
-                        Util.addErrorInfo(response, Key.TOKEN_SET_ERROR_WRONG_ROBOTTYPE);
-                        LOG.info("error: token " + token + " not registered in the session, wrong robot type");
-                        break;
-                    case TOKEN_SET_ERROR_NO_ROBOT_WAITING:
-                        Util.addErrorInfo(response, Key.TOKEN_SET_ERROR_NO_ROBOT_WAITING);
-                        LOG.info("error: token " + token + " not registered in the session");
-                        break;
-                    default:
-                        LOG.error("invalid response for token agreement: " + tokenAgreement);
-                        Util.addErrorInfo(response, Key.SERVER_ERROR);
-                        break;
+                    switch ( tokenAgreement ) {
+                        case TOKEN_SET_SUCCESS:
+                            httpSessionState.setToken(token);
+                            String robotMenuVersion = this.brickCommunicator.getState(token).getMenuVersion();
+                            String serverMenuVersion = httpSessionState.getRobotFactory().getMenuVersion();
+                            addRobotUpdateInfo(response, robotMenuVersion, serverMenuVersion);
+                            Util.addSuccessInfo(response, Key.TOKEN_SET_SUCCESS);
+                            LOG.info("success: token " + token + " is registered in the session");
+                            break;
+                        case TOKEN_SET_ERROR_WRONG_ROBOTTYPE:
+                            Util.addErrorInfo(response, Key.TOKEN_SET_ERROR_WRONG_ROBOTTYPE);
+                            LOG.info("error: token " + token + " not registered in the session, wrong robot type");
+                            break;
+                        case TOKEN_SET_ERROR_NO_ROBOT_WAITING:
+                            Util.addErrorInfo(response, Key.TOKEN_SET_ERROR_NO_ROBOT_WAITING);
+                            LOG.info("error: token " + token + " not registered in the session");
+                            break;
+                        default:
+                            LOG.error("invalid response for token agreement: " + tokenAgreement);
+                            Util.addErrorInfo(response, Key.SERVER_ERROR);
+                            break;
+                    }
                 }
+
             } else if ( cmd.equals("updateFirmware") ) {
                 // TODO: This should be moved to update server
                 String token = httpSessionState.getToken();

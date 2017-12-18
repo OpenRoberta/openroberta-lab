@@ -1,12 +1,9 @@
 package de.fhg.iais.roberta.factory.nxt;
 
-import java.io.File;
 import java.lang.ProcessBuilder.Redirect;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,17 +11,16 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
-import de.fhg.iais.roberta.factory.ICompilerWorkflow;
+import de.fhg.iais.roberta.factory.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.syntax.codegen.nxt.NxcVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.nxt.Jaxb2NxtConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
-public class CompilerWorkflow implements ICompilerWorkflow {
+public class CompilerWorkflow extends AbstractCompilerWorkflow {
 
     private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflow.class);
 
@@ -37,28 +33,12 @@ public class CompilerWorkflow implements ICompilerWorkflow {
 
     }
 
-    /**
-     * - load the program from the database<br>
-     * - generate the AST<br>
-     * - typecheck the AST, execute sanity checks, check a matching brick configuration<br>
-     * - generate Java code<br>
-     * - store the code in a token-specific (thus user-specific) directory<br>
-     * - compile the code and generate a jar in the token-specific directory (use a ant script, will be replaced later)<br>
-     * <b>Note:</b> the jar is prepared for upload, but not uploaded from here. After a handshake with the brick (the brick has to tell, that it is ready) the
-     * jar is uploaded to the brick from another thread and then started on the brick
-     *
-     * @param token the credential the end user (at the terminal) and the brick have both agreed to use
-     * @param programName name of the program
-     * @param programText source of the program
-     * @param configurationText the hardware configuration source that describes characteristic data of the robot
-     * @return a message key in case of an error; null otherwise
-     */
     @Override
-    public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
+    public Key generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
         String sourceCode = NxcVisitor.generate((NxtConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
 
         try {
-            storeGeneratedProgram(token, programName, sourceCode, ".nxc");
+            storeGeneratedProgram(token, programName, sourceCode, this.pathToCrosscompilerBaseDir, ".nxc");
         } catch ( Exception e ) {
             CompilerWorkflow.LOG.error("Storing the generated program into directory " + token + " failed", e);
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
@@ -73,40 +53,25 @@ public class CompilerWorkflow implements ICompilerWorkflow {
         return messageKey;
     }
 
-    /**
-     * - take the program given<br>
-     * - generate the AST<br>
-     * - typecheck the AST, execute sanity checks, check a matching brick configuration<br>
-     * - generate source code in the right language for the robot<br>
-     * - and return it
-     *
-     * @param token the credential the end user (at the terminal) and the brick have both agreed to use
-     * @param programName name of the program
-     * @param programText source of the program
-     * @param configurationText the hardware configuration source that describes characteristic data of the robot
-     * @return the generated source code; null in case of an error
-     */
     @Override
-    public String generateSourceCode(
-        IRobotFactory factory,
-        String token,
-        String programName,
-        String programText,
-        String configurationText,
-        ILanguage language) {
-        BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(factory, programText, configurationText);
+    public String generateSourceCode(IRobotFactory factory, String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) //
+    {
         if ( data.getErrorMessage() != null ) {
             return null;
         }
-
         return NxcVisitor.generate((NxtConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
     }
 
-    private void storeGeneratedProgram(String token, String programName, String sourceCode, String ext) throws Exception {
-        Assert.isTrue(token != null && programName != null && sourceCode != null);
-        File sourceFile = new File(this.pathToCrosscompilerBaseDir + token + "/src/" + programName + ext);
-        CompilerWorkflow.LOG.info("stored under: " + sourceFile.getPath());
-        FileUtils.writeStringToFile(sourceFile, sourceCode, StandardCharsets.UTF_8.displayName());
+    @Override
+    public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
+        BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
+        Jaxb2NxtConfigurationTransformer transformer = new Jaxb2NxtConfigurationTransformer(factory);
+        return transformer.transform(project);
+    }
+
+    @Override
+    public String getCompiledCode() {
+        return null;
     }
 
     /**
@@ -161,25 +126,5 @@ public class CompilerWorkflow implements ICompilerWorkflow {
             }
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         }
-    }
-
-    /**
-     * return the brick configuration for given XML configuration text.
-     *
-     * @param blocklyXml the configuration XML as String
-     * @return brick configuration
-     * @throws Exception
-     */
-    @Override
-    public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
-        BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2NxtConfigurationTransformer transformer = new Jaxb2NxtConfigurationTransformer(factory);
-        return transformer.transform(project);
-    }
-
-    @Override
-    public String getCompiledCode() {
-        // TODO Auto-generated method stub
-        return null;
     }
 }

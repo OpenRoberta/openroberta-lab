@@ -21,7 +21,7 @@ import de.fhg.iais.roberta.util.Util1;
 
 public abstract class AbstractFactory extends AbstractRobotFactory {
 
-    protected CompilerWorkflow compilerWorkflow;
+    protected ICompilerWorkflow compilerWorkflow;
     protected SimCompilerWorkflow calliopeSimCompilerWorkflow;
     protected Properties calliopeProperties;
     protected String name;

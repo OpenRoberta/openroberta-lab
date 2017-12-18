@@ -7,6 +7,7 @@ import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.fhg.iais.roberta.javaServer.restServices.all.ClientAdmin;
 import de.fhg.iais.roberta.persistence.AbstractProcessor;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData;
@@ -61,25 +62,29 @@ public class Util {
             if ( httpSessionState != null ) {
                 String token = httpSessionState.getToken();
                 if ( token != null ) {
-                    RobotCommunicationData state = brickCommunicator.getState(token);
-                    if ( state != null ) {
-                        response.put("robot.wait", state.getRobotConnectionTime());
-                        response.put("robot.battery", state.getBattery());
-                        response.put("robot.name", state.getRobotName());
-                        response.put("robot.version", state.getMenuVersion());
-                        response.put("robot.firmwareName", state.getFirmwareName());
-                        response.put("robot.sensorvalues", state.getSensorValues());
-                        response.put("robot.nepoexitvalue", state.getNepoExitValue());
-                        State communicationState = state.getState();
-                        String infoAboutState;
-                        if ( communicationState == State.ROBOT_IS_BUSY ) {
-                            infoAboutState = "busy";
-                        } else if ( state.isRobotProbablyDisconnected() || communicationState == State.GARBAGE ) {
-                            infoAboutState = "disconnected";
-                        } else {
-                            infoAboutState = "wait"; // is there a need to distinguish the communication state more detailed?
+                    if ( token.equals(ClientAdmin.NO_CONNECT) ) {
+                        response.put("robot.state", "wait");
+                    } else {
+                        RobotCommunicationData state = brickCommunicator.getState(token);
+                        if ( state != null ) {
+                            response.put("robot.wait", state.getRobotConnectionTime());
+                            response.put("robot.battery", state.getBattery());
+                            response.put("robot.name", state.getRobotName());
+                            response.put("robot.version", state.getMenuVersion());
+                            response.put("robot.firmwareName", state.getFirmwareName());
+                            response.put("robot.sensorvalues", state.getSensorValues());
+                            response.put("robot.nepoexitvalue", state.getNepoExitValue());
+                            State communicationState = state.getState();
+                            String infoAboutState;
+                            if ( communicationState == State.ROBOT_IS_BUSY ) {
+                                infoAboutState = "busy";
+                            } else if ( state.isRobotProbablyDisconnected() || communicationState == State.GARBAGE ) {
+                                infoAboutState = "disconnected";
+                            } else {
+                                infoAboutState = "wait"; // is there a need to distinguish the communication state more detailed?
+                            }
+                            response.put("robot.state", infoAboutState);
                         }
-                        response.put("robot.state", infoAboutState);
                     }
                 }
             }
@@ -94,9 +99,8 @@ public class Util {
      * @note It does not work if "1.10" is supposed to be equal to "1.10.0".
      * @param str1 a string of ordinal numbers separated by decimal points.
      * @param str2 a string of ordinal numbers separated by decimal points.
-     * @return The result is a negative integer if str1 is _numerically_ less than str2.
-     *         The result is a positive integer if str1 is _numerically_ greater than str2.
-     *         The result is zero if the strings are _numerically_ equal.
+     * @return The result is a negative integer if str1 is _numerically_ less than str2. The result is a positive integer if str1 is _numerically_ greater than
+     *         str2. The result is zero if the strings are _numerically_ equal.
      */
     public static int versionCompare(String str1, String str2) {
         String[] vals1 = str1.split("\\.");
