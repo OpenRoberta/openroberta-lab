@@ -1,11 +1,15 @@
 package de.fhg.iais.roberta.components.mbed;
 
+import java.util.HashMap;
+
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.Sensor;
+import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 
 public class MicrobitConfiguration extends Configuration {
 
     public MicrobitConfiguration() {
-        super(null, null, 0, 0);
+        super(null, new HashMap<ISensorPort, Sensor>(), 0, 0);
     }
 
     /**
