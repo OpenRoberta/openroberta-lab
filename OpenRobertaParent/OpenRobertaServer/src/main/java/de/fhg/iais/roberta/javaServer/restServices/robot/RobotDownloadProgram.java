@@ -62,6 +62,9 @@ public class RobotDownloadProgram {
                     filePath = pathToCrosscompilerBaseDir + token + "/target";
                     break;
                 case "Nao":
+                    fileName = programName + ".py";
+                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/src";
+                    break;
                 case "ev3dev":
                     fileName = programName + ".py";
                     filePath = pathToCrosscompilerBaseDir + token + "/" + programName + "/src";
