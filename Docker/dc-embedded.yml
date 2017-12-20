@@ -6,4 +6,4 @@ services:
      ports:
       - "7000:1999"
      volumes:
-      - "/home/rbudde/docker/db:/opt/db"
+      - "${DB_PARENTDIR}:/opt/db"

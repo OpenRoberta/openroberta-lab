@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+   openroberta_embedded_server:
+     image: rbudde/openrobertalab:2.4.0
+     ports:
+      - "7000:1999"
+   openroberta_server_dbserver:
+     image: rbudde/openrobertadbserver:2.4.0
+     volumes:
+      - "${DB_PARENTDIR}:/opt/db"

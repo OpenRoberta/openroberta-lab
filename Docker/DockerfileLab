@@ -11,4 +11,5 @@ ADD ["lib/","./lib/"]
 ADD ["OpenRobertaParent/","./OpenRobertaParent/"]
 RUN chmod -R ugo+rwx . 
 
-ENTRYPOINT ["/opt/openRoberta/start-ora-server-with-db-embedded.sh","-docker"]
+ENTRYPOINT ["/opt/openRoberta/startServer.sh"]
+CMD ["-d","database.mode=embedded","-d","database.parentdir=/opt/db"]

@@ -18,6 +18,6 @@ mvn clean install -DskipTests -DskipITs
 cd /opt/robertalab-develop
 rm -rf DockerInstallation/*
 ./ora.sh --export DockerInstallation
-cp Docker/DockerfileEmbedded DockerInstallation/Dockerfile
+cp Docker/DockerfileLab Docker/startServer.sh Docker/startDbServer.sh DockerInstallation
 cd /opt/robertalab-develop/DockerInstallation
-docker build -t rbudde/openrobertalab:$VERSION .
+docker build -t rbudde/openrobertalab:$VERSION -f DockerInstallation/DockerfileLab .

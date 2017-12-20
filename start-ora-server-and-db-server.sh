@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # start of the openroberta server and a separate database server
-# typical use case: large servers with the need to access the database with a sql client when the server is running.
+# typical use case: a large server with the need to access the database by a sql client when the server is running.
 # E.g. the official server
 # for parameter see: help message
 # if the server runs version x.y.z, the the database is expected in directory x.y.z
@@ -12,6 +12,7 @@
 # admin responsibilities:
 # - avoid log files to grow and grow ...
 # - remove old database directories after successful upgrade
+# - do not use this script with docker, see the docker directory for alternatives
 
 DBLOGFILE='./ora-db.log'
 SERVERLOGFILE='./ora-server.log'
@@ -42,5 +43,5 @@ serverVersion=$(java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter -v)
 database=db-${serverVersion}/openroberta-db
 echo "the database server will use database directory $database"
 $NOHUP java -cp lib/\* org.hsqldb.Server --database.0 file:$database --dbname.0 openroberta-db \$* >>$DBLOGFILE 2>&1 &
-sleep 5
+sleep 5 # time for the database to initialize
 $NOHUP java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter -d database.parentdir=. -d database.mode=server \$* >>$SERVERLOGFILE 2>&1 &

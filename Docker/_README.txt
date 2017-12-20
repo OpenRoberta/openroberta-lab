@@ -1,10 +1,15 @@
 HOW TO GET AN OPENROBERTALAB INSTALLATION WITHOUT MUCH SETUP
 ... assuming you have installed docker and docker-compose ...
 
-tl;dr: to generate an actual docker image "rbudde/openrobertalab:2.4.0" from the sources, run
+tl;dr: 1. to generate an actual docker image "rbudde/openrobertalab:2.4.0" from the sources, run
        docker run -v /var/run/docker.sock:/var/run/docker.sock rbudde/openroberta_gen:1
-	   to start the openrobertalab server generated, using port 7000 and DB-PARENT-DIR, run
-	   docker run -p 7000:1999 -v DB-PARENT-DIR:/opt/db rbudde/openrobertalab:2.4.0
+
+       Assuming that the environment variable DB_PARENTDIR holds the name of the directory, which
+       contains the datbase directories (e.g. the directory db-2.4.0), then ...
+	   2. to start the embedded openrobertalab server run
+	      docker-compose -f dc-embedded.yml up
+	   3. to start the openrobertalab server and a separate database server run
+	      docker-compose -f dc-server-db-server.yml up
 
 1. generate the "meta" image. This is documentation, you must NOT do this
 
@@ -41,19 +46,19 @@ docker push rbudde/openroberta_gen:1
 
 3. RUN THE "GEN" IMAGE TO CREATE AN ACTUAL VERSION OF THE OPENROBERTA-LAB
 
-If the "gen" image is run, it
+If the "gen" image runs, it
 - retrieves the develop branch of the openroberta-lab from github
 - executes a maven build to generate the openrobertalab artifacts
 - exports these artifacts into a installation directory
 - creates a docker image "openrobertalab" from the installation directory
 
-See the next section about how to use the image "openrobertalab".
+The next sections describes how to use the image "openrobertalab".
 When the "gen" image is run,
 - the first -v arguments makes the "real" docker demon available in the "gen" container.
   Do not change this parameter
 - the second -v is optional. If you want to get only a docker image, dismiss the 2 parts.
   If you want to access the installation directory (for testing, e.g.), then
-  set DISTR_DIR to an EMPTY EXISTING directory of your machine (the one running the docker demon)
+  set DISTR_DIR to an EMPTY EXISTING directory of your machine (running the docker demon)
   and you get the installation:
 
 DISTR_DIR=/tmp/distr
@@ -62,9 +67,9 @@ docker run -v /var/run/docker.sock:/var/run/docker.sock \
 	   rbudde/openroberta_gen:1
 docker push rbudde/openrobertalab:2.4.0 # done by the roberta maintainer; you should NOT do this
 
-4. RUN THE "OPENROBERTALAB" SERVER
+4. RUN THE EMBEDDED SERVER
 
-Assume that in $DOCKERDIR/db is a valid data base directory, e.g. db-2.4.0, then you can run the image 
+Assume that $DOCKERDIR/db contains a valid data base directory, e.g. db-2.4.0, then you can run the image 
 - with docker:
   docker run -p 7000:1999 -v $DOCKERDIR/db:/opt/db rbudde/openroberta_gen:2.4.0
 - with docker-compose:
