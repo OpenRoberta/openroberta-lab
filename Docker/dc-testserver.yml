@@ -10,9 +10,7 @@ services:
             - "openroberta_db"
         stop_signal: SIGINT
     openroberta_db:
-        image: rbudde/openrobertadb:${VERSION}
-        volumes:
-            - "${DB_PARENTDIR}:/opt/db"
+        image: rbudde/openrobertaemptydbfortest:${VERSION}
         ports:
             - "${DBSERVER_PORT_ON_HOST}:9001"
         stop_signal: SIGINT

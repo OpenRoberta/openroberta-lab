@@ -1,5 +1,7 @@
 FROM openjdk:8u151-jdk
 
+ARG LAST_RUN_OF_META=2017-12-20-17:30:00
+
 RUN apt-get update && apt-get -y upgrade && apt-get -y install apt-utils
 RUN apt-get install -y \
             apt-transport-https \
@@ -18,11 +20,11 @@ RUN apt-get update && apt-get install -y git maven && apt-get clean
 
 # run mvn once to install most all the artifacts needed in /root/.m2
 WORKDIR /opt
-RUN wget -q https://github.com/OpenRoberta/robertalab/archive/develop.zip && \
-    unzip develop.zip && \
-    rm develop.zip
+RUN git clone --depth=1 -b develop https://github.com/OpenRoberta/robertalab.git
 
-WORKDIR /opt/robertalab-develop/OpenRobertaParent
-RUN mvn clean install -DskipTests -DskipITs
+WORKDIR /opt/robertalab
+RUN cd OpenRobertaParent \
+    && mvn clean install -DskipTests -DskipITs \
+    && cd .. \
+    && rm -rf /opt/robertalab
 WORKDIR /opt
-RUN rm -rf /opt/robertalab-develop

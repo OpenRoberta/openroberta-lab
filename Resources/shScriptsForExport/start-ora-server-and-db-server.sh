@@ -12,7 +12,8 @@
 # admin responsibilities:
 # - avoid log files to grow and grow ...
 # - remove old database directories after successful upgrade
-# - do not use this script with docker, see the docker directory for alternatives
+
+# DO NOT use this script with DOCKER, see the docker directory for alternatives
 
 DBLOGFILE='./ora-db.log'
 SERVERLOGFILE='./ora-server.log'
@@ -30,18 +31,19 @@ do
 				  shift; shift ;;
 	  -logserver) SERVERLOGFILE=$2
 				  shift; shift ;;
-	  -nohup)	  NOHUP="nohup" ;;
+	  -nohup)	  NOHUP="nohup"
+                  shift ;;
 	  *)		  break ;;
 	esac
 done
 
-echo 'have a look whether a database update is needed'
-java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter -d database.parentdir=. -d database.mode=embedded --check-for-db-updates >>$SERVERLOGFILE 2>&1
+echo 'check for database upgrade'
+java -cp lib/\* de.fhg.iais.roberta.main.Administration upgrade . >>$SERVERLOGFILE 2>&1
 
 echo 'start the database server and the openroberta server as separate processes'
-serverVersionForDb=$(java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter --version-for-db)
+serverVersionForDb=$(java -cp lib/\* de.fhg.iais.roberta.main.Administration version-for-db)
 database=db-${serverVersionForDb}/openroberta-db
 echo "the database server will use database directory $database"
 $NOHUP java -cp lib/\* org.hsqldb.Server --database.0 file:$database --dbname.0 openroberta-db \$* >>$DBLOGFILE 2>&1 &
-sleep 5 # time for the database to initialize
+sleep 10 # time for the database to initialize
 $NOHUP java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter -d database.parentdir=. -d database.mode=server \$* >>$SERVERLOGFILE 2>&1 &

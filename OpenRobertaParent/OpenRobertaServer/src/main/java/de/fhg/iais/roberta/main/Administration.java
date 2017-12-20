@@ -1,5 +1,9 @@
 package de.fhg.iais.roberta.main;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
@@ -9,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -24,9 +29,11 @@ import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.persistence.util.DbExecutor;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
+import de.fhg.iais.roberta.persistence.util.Upgrader;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 /**
@@ -42,13 +49,6 @@ public class Administration {
     private final String[] args;
 
     /**
-     * create the administration object
-     */
-    public Administration(String[] args) {
-        this.args = args;
-    }
-
-    /**
      * startup and shutdown of the server. See {@link Administration}. Uses the first element of the args array. This contains the URI of a property file and
      * starts either with "file:" if a path of the file system should be used or "classpath:" if the properties should be loaded as a resource from the
      * classpath. May be <code>null</code>, if the default resource from the classpath should be loaded.
@@ -58,29 +58,53 @@ public class Administration {
      */
     public static void main(String[] args) throws Exception {
         Administration adminWork = new Administration(args);
-        Administration.LOG.info("*** administrative work is started ***");
-        adminWork.expectArgs(1);
+        adminWork.run();
+    }
+
+    /**
+     * create the administration object
+     */
+    private Administration(String[] args) {
+        this.args = args;
+    }
+
+    private void run() {
+        expectArgs(1);
         switch ( args[0] ) {
             case "createemptydb":
-                adminWork.createEmptyDatabase();
+                createEmptyDatabase();
                 break;
             case "sql":
-                adminWork.runSql();
+                runSql();
                 break;
             case "dbBackup":
-                adminWork.dbBackup();
+                dbBackup();
                 break;
             case "dbShutdown":
-                adminWork.dbShutdown();
+                dbShutdown();
                 break;
+            case "sqlclient":
+                sqlclient();
+                break;
+            case "upgrade":
+                upgrade();
+                break;
+            case "version":
+                System.out.println(version(false));
+                break;
+            case "version-for-db":
+                System.out.println(version(true));
+                break;
+
+            // old stuff for some old problematic upgrades of the database
             case "conf:xml2text":
-                // adminWork.confXml2text();
+                // confXml2text();
                 break;
             case "user:encryptpasswords":
-                // adminWork.encryptpasswords();
+                // encryptpasswords();
                 break;
             case "db:update":
-                // adminWork.update_db();
+                // update_db();
                 break;
             default:
                 Administration.LOG.error("invalid argument: " + args[0] + " - exit 4");
@@ -162,6 +186,68 @@ public class Administration {
             dbExecutor.ddl("SHUTDOWN COMPACT;");
         } finally {
             LOG.info("shutdown compact for a database with " + users + " registered users and " + programs + " stored programs");
+        }
+    }
+
+    /**
+     * upgrade the database. Needs as parameter from the main args the database parent directory<br>
+     * Accesses the database in embedded mode!
+     */
+    private void upgrade() {
+        Administration.LOG.info("*** upgrade ***");
+        expectArgs(2);
+        String versionForDb = version(true);
+        Upgrader.checkForUpgrade(versionForDb, new File(args[1]));
+    }
+
+    /**
+     * runs a sql client. Reads commands from a terminal and executes them.<br>
+     * Needs a second parameter from the main args, which has to be the database URI (e.g. "jdbc:hsqldb:hsql://localhost/openroberta-db")
+     */
+    private void sqlclient() {
+        Administration.LOG.info("*** sqlclient ***");
+        expectArgs(2);
+        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
+        Session nativeSession = sessionFactoryWrapper.getNativeSession();
+        DbExecutor dbExecutor = DbExecutor.make(nativeSession);
+        nativeSession.beginTransaction();
+
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            while ( true ) {
+                System.out.print("Enter sql command: ");
+                String sqlStmt = br.readLine().trim();
+                if ( "".equals(sqlStmt) ) {
+                    break;
+                }
+                if ( DbExecutor.isSelect(sqlStmt) ) {
+                    List<Object> resultset = dbExecutor.select(sqlStmt);
+                    for ( Object result : resultset ) {
+                        if ( result instanceof Object[] ) {
+                            System.out.println(Arrays.toString((Object[]) result));
+                        } else {
+                            System.out.println(result);
+                        }
+                    }
+                } else {
+                    // better not: dbExecutor.sqlStmt(sqlStmt);
+                    System.out.println("for safety reasons only SELECT statements are processed");
+                }
+            }
+        } catch ( IOException e ) {
+            // termination is OK
+        } finally {
+            LOG.info("sqlclient terminates");
+        }
+    }
+
+    private String version(boolean isForDatabase) {
+        Properties robertaProperties = Util1.loadProperties(false, null);
+        String version = robertaProperties.getProperty("openRobertaServer.version");
+        if ( isForDatabase ) {
+            return version.replace("-SNAPSHOT", "");
+        } else {
+            return version;
         }
     }
 

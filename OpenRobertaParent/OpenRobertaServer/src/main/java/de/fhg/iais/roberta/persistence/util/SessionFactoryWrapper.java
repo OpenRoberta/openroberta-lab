@@ -18,7 +18,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * - Retrieving sessions from the factory is thread-safe and cheap.<br>
  * - The generated sessions are not thread-safe.<br>
  * <br>
- * The class <b>should</b> be used as a singleton. Use <b>GUICE</b> to enforce that.
+ * The class <b>should</b> be used as a singleton. We use <b>GUICE</b> to enforce that.
  *
  * @author rbudde
  */
@@ -31,17 +31,26 @@ public final class SessionFactoryWrapper {
      */
     @Inject
     public SessionFactoryWrapper(@Named("hibernate.config.xml") String cfgXml, @Named("hibernate.connection.url") String databaseUrl) {
-        try {
-            Configuration configuration = new Configuration();
-            configuration.configure(cfgXml);
-            configuration.setProperty("hibernate.connection.url", databaseUrl);
-            ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder().applySettings(configuration.getProperties());
-            this.sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder.buildServiceRegistry());
-            LOG.info("created");
-        } catch ( Exception e ) {
-            LOG.error("Initial SessionFactory creation failed." + e.getMessage(), e);
-            throw new ExceptionInInitializerError(e);
+        for ( int retrycount = 0; retrycount < 3; retrycount++ ) {
+            try {
+                Configuration configuration = new Configuration();
+                configuration.configure(cfgXml);
+                configuration.setProperty("hibernate.connection.url", databaseUrl);
+                ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder().applySettings(configuration.getProperties());
+                this.sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder.buildServiceRegistry());
+                LOG.info("session factory successfully created");
+                return;
+            } catch ( Exception e ) {
+                LOG.error("session factory creation failed (" + retrycount + "). Trying again in 5 seconds", e);
+                try {
+                    Thread.sleep(5000);
+                } catch ( InterruptedException e1 ) {
+                    // retry
+                }
+            }
         }
+        LOG.error("session factory creation failed. Server cannot run ... .");
+        throw new ExceptionInInitializerError();
     }
 
     /**

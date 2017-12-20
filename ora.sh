@@ -86,8 +86,8 @@ function _exportApplication {
     mkAndCheckDir "$exportpath"
     exportpath=$(cd "$exportpath"; pwd)
     cd OpenRobertaParent
-	serverVersion=$(java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter --version)
-	serverVersionForDb=$(java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter --version-for-db)
+	serverVersion=$(java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.Administration version)
+	serverVersionForDb=$(java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.Administration version-for-db)
     echo "server version: ${serverVersion} - server version for db: ${serverVersionForDb}"
     echo "created the target directory \"$exportpath\""
 	
@@ -151,18 +151,18 @@ case "$cmd" in
 
 --start-from-git) java -cp OpenRobertaParent/OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter -d database.mode=embedded -d database.parentdir=OpenRobertaParent/OpenRobertaServer $* ;;
 
---sqlclient)      lib="OpenRobertaParent/OpenRobertaServer/target/resources"
+--gui-sql-client) lib="OpenRobertaParent/OpenRobertaServer/target/resources"
                   hsqldbVersion='2.3.3'
 				  hsqldbJar="${lib}/hsqldb-${hsqldbVersion}.jar"
 				  serverVersionForDb="$1"
 				  if [[ "$serverVersionForDb" == '' ]]
                   then
-					serverVersionForDb=$(java -cp ./${lib}/\* de.fhg.iais.roberta.main.ServerStarter --version-for-db)
+					serverVersionForDb=$(java -cp ./${lib}/\* de.fhg.iais.roberta.main.Administration version-for-db)
 				  fi
 				  databaseurl="jdbc:hsqldb:file:OpenRobertaParent/OpenRobertaServer/db-$serverVersionForDb/openroberta-db;ifexists=true"
                   java -jar "${hsqldbJar}" --driver org.hsqldb.jdbc.JDBCDriver --url "$databaseurl" --user orA --password Pid ;;
 
-''|--help|-h)     # Be careful when editing the file 'ora-help.txt'. Words starting with "--" are used by compgen for completion
+''|--help|-h)     # Be careful when editing the file 'ora-help.txt'. Words starting with "--" are used for completion by compgen
                   $0 --java
                   cat ora-help.txt ;;
 
@@ -186,7 +186,7 @@ case "$cmd" in
                   if [[ "$serverVersionForDb" == '' ]]
                   then
 				    lib="OpenRobertaParent/OpenRobertaServer/target/resources"
-					serverVersionForDb=$(java -cp ./${lib}/\* de.fhg.iais.roberta.main.ServerStarter --version-for-db)
+					serverVersionForDb=$(java -cp ./${lib}/\* de.fhg.iais.roberta.main.Administration version-for-db)
 				  fi
 				  databaseurl="jdbc:hsqldb:file:OpenRobertaParent/OpenRobertaServer/db-$serverVersionForDb/openroberta-db"
 				  echo -n "do you really want to create the db for version \"$serverVersionForDb\"? If it exists, it will NOT be damaged. 'yes', 'no') "

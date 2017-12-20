@@ -1,7 +1,7 @@
 FROM rbudde/openroberta_meta:1
 
 WORKDIR /opt
-ADD ["./ora_gen.sh","./"]
-RUN chmod +x ./ora_gen.sh
+COPY ["./genLab.sh","./"]
+RUN chmod +x ./genLab.sh
 
-CMD /opt/ora_gen.sh '2.4.0'
+ENTRYPOINT ["/opt/genLab.sh"]

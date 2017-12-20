@@ -1,0 +1,17 @@
+FROM openjdk:8u151-jdk
+
+RUN mkdir --parent /opt/openRoberta/lib
+WORKDIR /opt/openRoberta
+
+EXPOSE 9001
+
+COPY ["startDbServer.sh","./"]
+RUN chmod +x ./startDbServer.sh
+COPY ["lib/","./lib/"]
+
+ARG version
+
+VOLUME /opt/db
+
+ENV VERSION=${version}
+ENTRYPOINT ["/opt/openRoberta/startDbServer.sh"]

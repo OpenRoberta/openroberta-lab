@@ -5,7 +5,7 @@ serverVersionForDb=$(java -cp ./lib/\* de.fhg.iais.roberta.main.ServerStarter --
 hsqldbVersion='2.3.3'
 hsqldbJar="lib/hsqldb-${hsqldbVersion}.jar"
 
-echo 'start-sql-client.sh <DB-URL>'
+echo 'gui-sql-client.sh <DB-URL>'
 echo
 echo "the version number used for accessing the db directory is: $serverVersionForDb"
 echo '  - server mode: likely "jdbc:hsqldb:hsql://localhost/openroberta-db"'

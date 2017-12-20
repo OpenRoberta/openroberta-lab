@@ -148,15 +148,15 @@ public class DbExecutor {
         return result;
     }
 
-    private static boolean isSelect(String sqlStmt) {
+    public static boolean isSelect(String sqlStmt) {
         return DbExecutor.sW(sqlStmt, "select ");
     }
 
-    private static boolean isChange(String sqlStmt) {
+    public static boolean isChange(String sqlStmt) {
         return DbExecutor.sW(sqlStmt, "insert ") || DbExecutor.sW(sqlStmt, "update ") || DbExecutor.sW(sqlStmt, "delete ") || sqlStmt.trim().equals("commit");
     }
 
-    private static boolean isDDL(String sqlStmt) {
+    public static boolean isDDL(String sqlStmt) {
         return DbExecutor.sW(sqlStmt, "drop ") || DbExecutor.sW(sqlStmt, "create ") || DbExecutor.sW(sqlStmt, "alter ") || DbExecutor.sW(sqlStmt, "backup ");
     }
 

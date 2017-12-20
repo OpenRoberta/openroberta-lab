@@ -25,7 +25,7 @@ Commands of the ora.sh script:
 
   --dockerE                 create a docker image. As a first step the application is exported to DockerInstallation (this directory is rm -rf before)
                             Then docker is called to build the image OpenRobertaEmbedded. start-ora-server-with-db-embedded.sh is used when the container
-                            is started. The database is expected at VOLUME /opt/openRoberta/db-2.4.0 and has to be supplied at container startup.
+                            is started. The database is expected at VOLUME /opt/openRoberta/db-VERSION and has to be supplied at container startup.
 							It uses an embedded hsqldb. This image is thought for small systems (Raspberry Pi, for instance).
                             Have a look at the docker-compose file in directory docker to see how mounting the database can be done.
 
@@ -43,7 +43,7 @@ Commands of the ora.sh script:
                             Note, that running the server from an IDE as eclipse is PREFERRED.
                             You need a valid database. Running '--createEmptydb' provides an empty database.
 
-  --sqlclient [{VERSION}]   start a sql client from a Git working tree in embedded mode using the actual db version or the (optional) VERSION.
+  --gui-sql-client [{VERSION}] start a sql client from a Git working tree in embedded mode using the actual db version or the (optional) VERSION.
                             This command fails if an openroberta server is running in embedded mode. You have to terminate the server to get access.
                             The database URL is assumed to be "jdbc:hsqldb:file:OpenRobertaServer/db-<serverversion>/openroberta-db;ifexists=true"
 

@@ -3,16 +3,18 @@
 # start of the openroberta server with the database EMBEDDED.
 # typical use case: small standalone servers, e.g. Raspberry PI. When the server is running, the database cannot
 # be accessed by a sql client.
-# for parameter see: help message
 # if the server runs version x.y.z, the the database is expected in directory db-x.y.z
-# note: if the database version is lower than the server version, the server first updates the database
-# - by creating a new directory,
-# - copying the database content and
-# - running the update script supplied with the server
+# note: if the database version is lower than the server version, first the database is upgraded
 # admin responsibilities:
 # - avoid log files to grow and grow ...
 # - remove old database directories after successful upgrade
-# - do not use this script with docker, see the docker directory for alternatives
+
+# DO NOT use this script with DOCKER, see the docker directory for alternatives
+
+function propagateSignal() { 
+  echo "Caught signal. Propagate this to child process $child" 
+  kill -TERM "$child" 2>/dev/null
+}
 
 SERVERLOGFILE='./ora-server.log'
 START='plain'
@@ -32,9 +34,16 @@ do
 	esac
 done
 
+echo 'check for database upgrade'
+java -cp lib/\* de.fhg.iais.roberta.main.Administration upgrade . >>$SERVERLOGFILE 2>&1
+
+echo 'start the server with embedded database'
 case "$START" in
 nohup)  nohup java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
-	      -d database.parentdir=. -d database.mode=embedded \$* >>$SERVERLOGFILE 2>&1 & ;;
-*)      java  -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
-	      -d database.parentdir=. -d database.mode=embedded \$* >>$SERVERLOGFILE 2>&1 ;;
+	               -d database.parentdir=. -d database.mode=embedded \$* >>$SERVERLOGFILE 2>&1;;
+*)      trap propagateSignal SIGTERM SIGINT
+        java  -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
+	          -d database.parentdir=. -d database.mode=embedded \$* >>$SERVERLOGFILE 2>&1 &
+		child=$!
+		wait "$child" ;;
 esac

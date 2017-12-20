@@ -1,11 +1,14 @@
 package de.fhg.iais.roberta.persistence.util;
 
 import java.io.File;
+import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import de.fhg.iais.roberta.util.Util1;
 
 /**
  * assembles all actions to be done to upgrade the server version. This may include<br>
@@ -21,13 +24,34 @@ public class Upgrader {
     private final String[] previousServerVersions;
     private final String actualServerVersion;
 
-    public Upgrader(File databaseParentdir, String[] previousServerVersions, String actualServerVersion) {
+    public static void checkForUpgrade(String serverVersionForDbDirectory, File databaseParentdir) {
+        if ( !databaseParentdir.isDirectory() ) {
+            LOG.error("Abort: database parent directory is invalid: " + databaseParentdir.getAbsolutePath());
+            System.exit(2);
+        }
+        File databaseDir = new File(databaseParentdir, "db-" + serverVersionForDbDirectory);
+        if ( databaseDir.isDirectory() ) {
+            LOG.info("database version " + serverVersionForDbDirectory + " is uptodate");
+        } else {
+            // server version upgrade is necessary
+            Properties robertaProperties = Util1.loadProperties(false, null);
+            String[] previousServerVersions = robertaProperties.getProperty("openRobertaServer.history").split(",");
+            try {
+                new Upgrader(databaseParentdir, previousServerVersions, serverVersionForDbDirectory).upgrade();
+            } catch ( Exception e ) {
+                LOG.error("Abort: server version upgrade fails", e);
+                System.exit(2);
+            }
+        }
+    }
+
+    private Upgrader(File databaseParentdir, String[] previousServerVersions, String actualServerVersion) {
         this.databaseParentdir = databaseParentdir;
         this.previousServerVersions = previousServerVersions;
         this.actualServerVersion = actualServerVersion;
     }
 
-    public void upgrade() throws Exception {
+    private void upgrade() throws Exception {
         while ( true ) {
             for ( int previousIndex = 0; previousIndex < this.previousServerVersions.length; previousIndex++ ) {
                 String previousServerVersion = this.previousServerVersions[previousIndex];
@@ -64,7 +88,7 @@ public class Upgrader {
      * @param serverVersion the target version
      * @param pathToDatabaseDirectory path to the directory which contains the database files
      */
-    public static void to(String serverVersion, String pathToDatabaseDirectory) {
+    private static void to(String serverVersion, String pathToDatabaseDirectory) {
         if ( serverVersion == null ) {
             LOG.error("Abort: serverVersion to upgrade to is null");
             System.exit(2);

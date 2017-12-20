@@ -6,4 +6,6 @@ WORKDIR /opt/openRoberta
 COPY ["lib/","./lib/"]
 COPY ["OpenRobertaParent/","./OpenRobertaParent/"]
 
-ENTRYPOINT ["java", "-cp", "lib/*", "de.fhg.iais.roberta.main.ServerStarter", "-d", "database.mode=server"]
+VOLUME /opt/db
+ 
+ENTRYPOINT ["java", "-cp", "lib/*", "de.fhg.iais.roberta.main.ServerStarter", "-d", "database.mode=embedded", "-d", "database.parentdir=/opt/db"]
