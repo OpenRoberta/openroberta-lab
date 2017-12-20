@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.sensor.GestureSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.mbed.ValueType;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -84,6 +85,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
@@ -95,11 +97,9 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerOrientationSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor.Mode;
-import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor.GestureMode;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -549,15 +549,14 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
 
     @Override
     public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
-        final GestureMode gest = gestureSensor.getMode();
         this.sb.append("(uBit.accelerometer.getGesture() == MICROBIT_ACCELEROMETER_EVT_");
-        if ( (gestureSensor.getMode() == GestureMode.UP)
-            || (gestureSensor.getMode() == GestureMode.DOWN)
-            || (gestureSensor.getMode() == GestureMode.LEFT)
-            || (gestureSensor.getMode() == GestureMode.RIGHT) ) {
+        if ( (gestureSensor.getMode() == GestureSensorMode.UP)
+            || (gestureSensor.getMode() == GestureSensorMode.DOWN)
+            || (gestureSensor.getMode() == GestureSensorMode.LEFT)
+            || (gestureSensor.getMode() == GestureSensorMode.RIGHT) ) {
             this.sb.append("TILT_");
         }
-        this.sb.append(gest.toString() + ")");
+        this.sb.append(gestureSensor.getMode() + ")");
         return null;
     }
 
@@ -617,7 +616,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        this.sb.append("uBit.io." + pinTouchSensor.getPin().getCalliopeName() + ".isTouched()");
+        this.sb.append("uBit.io." + pinTouchSensor.getPort() + ".isTouched()");
         return null;
     }
 

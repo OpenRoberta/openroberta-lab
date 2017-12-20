@@ -5,10 +5,12 @@ import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
@@ -144,7 +146,24 @@ public interface AstSensorsVisitor<V> extends AstVisitor<V> {
     default V visitAccelerometer(AccelerometerSensor<V> accelerometerSensor) {
         throw new DbcException("AccelerometerSensor not implemented!");
     }
+    
+    /**
+     * visit a {@link PinTouchSensor}.
+     *
+     * @param pinTouchSensor to be visited
+     */
+    default V visitPinTouchSensor(PinTouchSensor<V> sensorGetSample) {
+        throw new DbcException("PinTouchSensor not implemented!");
+    }
 
+    /**
+     * visit a {@link GestureSensor}.
+     *
+     * @param pinTouchSensor to be visited
+     */
+    default V visitGestureSensor(GestureSensor<V> sensorGetSample) {
+        throw new DbcException("GestureSensor not implemented!");
+    }
     /**
      * visit a {@link GetSampleSensor}.
      *
@@ -154,5 +173,4 @@ public interface AstSensorsVisitor<V> extends AstVisitor<V> {
         sensorGetSample.getSensor().visit(this);
         return null;
     }
-
 }

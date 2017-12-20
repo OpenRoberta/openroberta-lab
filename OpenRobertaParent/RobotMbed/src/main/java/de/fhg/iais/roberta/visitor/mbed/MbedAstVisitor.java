@@ -19,13 +19,12 @@ import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
 import de.fhg.iais.roberta.syntax.expr.mbed.RgbColor;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
+import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerOrientationSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
@@ -131,13 +130,6 @@ public interface MbedAstVisitor<V> extends AstVisitor<V> {
      * @param rgbColor phrase to be visited
      */
     V visitRgbColor(RgbColor<V> rgbColor);
-
-    /**
-     * visit a {@link PinTouchSensor}.
-     *
-     * @param pinTouchSensor phrase to be visited
-     */
-    V visitPinTouchSensor(PinTouchSensor<V> pinTouchSensor);
 
     /**
      * visit a {@link PinGetValueSensor}.

@@ -46,6 +46,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
@@ -55,10 +56,9 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerOrientationSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
@@ -390,7 +390,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements M
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        this.sb.append("createPinTouchSensor(" + pinTouchSensor.getPin().getPinNumber() + ")");
+        this.sb.append("createPinTouchSensor(" + pinTouchSensor.getPort() + ")");
         return null;
     }
 

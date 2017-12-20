@@ -20,7 +20,9 @@ import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
@@ -63,18 +65,18 @@ public class MbedGetSampleSensor<V> extends Sensor<V> {
 
                 this.sensor = BrickSensor.make(sensorMetaDataBean, properties, comment);
                 break;
-            case BlocklyConstants.PIN_TOUCHED:
-                this.sensor = PinTouchSensor.make(MbedPins.findPin(port), properties, comment);
-                break;
+//            case BlocklyConstants.PIN_TOUCHED:
+//                this.sensor = PinTouchSensor.make(MbedPins.findPin(port), properties, comment);
+//                break;
             case BlocklyConstants.PIN_ANALOG:
             case BlocklyConstants.PIN_DIGITAL:
             case BlocklyConstants.PIN_PULSEHIGH:
             case BlocklyConstants.PIN_PULSELOW:
                 this.sensor = PinGetValueSensor.make(MbedPins.findPin(port), ValueType.get(sensorType.getSensorMode()), properties, comment);
                 break;
-            case BlocklyConstants.GESTURE_ACTIVE:
-                this.sensor = GestureSensor.make(GestureSensor.GestureMode.valueOf(port), properties, comment);
-                break;
+//            case BlocklyConstants.GESTURE_ACTIVE:
+//                this.sensor = GestureSensor.make(GestureSensor.GestureMode.valueOf(port), properties, comment);
+//                break;
             case BlocklyConstants.COMPASS:
                 sensorMetaDataBean =
                     new SensorMetaDataBean(

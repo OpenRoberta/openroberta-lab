@@ -107,7 +107,7 @@ public final class BlocklyConstants {
     public static final String ROB_SENSOR_TOUCH_IS_PRESSED = "robSensors_touch_isPressed";
     public static final String ROB_SENSOR_COMPASS_GET_SAMPLE = "robSensors_compass_getSample";
     public static final String ROB_SENSOR_MICROPHONE_GET_SAMPLE = "robSensors_microphone_getSample";
-    public static final String ROB_SENSOR_VOLTAGE_GET_SAMPLE = "robSensors_battery_voltage";
+    public static final String ROB_SENSOR_VOLTAGE_GET_SAMPLE = "robSensors_battery_getSample";
     public static final String ROB_SENSOR_ULTRASONIC_GET_SAMPLE = "robSensors_ultrasonic_getSample";
     public static final String ROB_SENSOR_INFRARED_GET_SAMPLE = "robSensors_infrared_getSample";
     public static final String ROB_SENSOR_ENCODER_GET_SAMPLE = "robSensors_encoder_getSample";

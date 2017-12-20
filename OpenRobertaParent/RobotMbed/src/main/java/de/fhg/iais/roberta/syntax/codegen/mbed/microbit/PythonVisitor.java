@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.components.mbed.MicrobitConfiguration;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.sensor.GestureSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.mbed.ValueType;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -76,6 +77,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
@@ -87,10 +89,9 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerOrientationSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor.Mode;
-import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -448,7 +449,7 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
 
     @Override
     public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
-        this.sb.append("\"" + gestureSensor.getMode().getPythonCode() + "\" == microbit.accelerometer.current_gesture()");
+        this.sb.append("\"" + gestureSensor.getMode() + "\" == microbit.accelerometer.current_gesture()");
         return null;
     }
 
@@ -725,7 +726,7 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        this.sb.append("microbit.pin" + pinTouchSensor.getPin().getPinNumber() + ".is_touched()");
+        this.sb.append("microbit.pin" + pinTouchSensor.getPort() + ".is_touched()");
         return null;
     }
 

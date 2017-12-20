@@ -422,7 +422,7 @@ public interface IRobotFactory {
     default IVoltageSensorMode getVoltageSensorMode(String mode) {
         return IRobotFactory.getModeValue(mode, VoltageSensorMode.class);
     }
-
+    
     /**
      * Get a sensor port from {@link ISensorPort} given string parameter. It is possible for one sensor port to have multiple string mappings. Throws exception
      * if the sensor port does not exists.

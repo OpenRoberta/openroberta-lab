@@ -65,11 +65,16 @@ public class TimerSensor<V> extends ExternalSensor<V> {
         IRobotFactory factory = helper.getModeFactory();
         SensorMetaDataBean sensorMetaDataBean;
         //TODO This if statement should be removed when we have new implementation of reset sensor blockly block
-        if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_TIMER_RESET) || block.getType().equals(BlocklyConstants.ROB_SENSORS_TIMER_RESET_CALLIOPE) ) {
+        if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_TIMER_RESET) ) {
             List<Field> fields = helper.extractFields(block, (short) 1);
             String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
             sensorMetaDataBean =
                 new SensorMetaDataBean(factory.getSensorPort(portName), factory.getTimerSensorMode("RESET"), factory.getSlot(BlocklyConstants.NO_SLOT));
+            return TimerSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
+        } else if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_TIMER_RESET_CALLIOPE) ) {
+            List<Field> fields = helper.extractFields(block, (short) 1);
+            sensorMetaDataBean =
+                new SensorMetaDataBean(factory.getSensorPort(BlocklyConstants.NO_PORT), factory.getTimerSensorMode("RESET"), factory.getSlot(BlocklyConstants.NO_SLOT));
             return TimerSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
         }
         sensorMetaDataBean = extractSensorPortAndMode(block, helper, helper.getModeFactory()::getTimerSensorMode);
