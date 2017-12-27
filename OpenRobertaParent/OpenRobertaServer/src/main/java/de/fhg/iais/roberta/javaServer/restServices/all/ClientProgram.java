@@ -467,7 +467,7 @@ public class ClientProgram {
 
                 BlocklyProgramAndConfigTransformer transformer = BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
                 Key messageKey = transformer.getErrorMessage();
-                if ( messageKey != null ) {
+                if ( messageKey == null ) {
                     RobotSimulationCheckVisitor programChecker = robotFactory.getSimProgramCheckVisitor(transformer.getBrickConfiguration());
                     messageKey = programConfigurationCompatibilityCheck(response, transformer, programChecker);
                     Jaxb2AstTransformerData<Void> data = transformer.getProgramTransformer().getData();
