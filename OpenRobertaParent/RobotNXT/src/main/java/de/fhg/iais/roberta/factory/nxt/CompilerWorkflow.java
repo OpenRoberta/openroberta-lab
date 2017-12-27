@@ -103,8 +103,8 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
                     new String[] {
                         nbcCompilerFileName,
                         "-q",
-                        this.pathToCrosscompilerBaseDir + token + "/src/" + mainFile + ".nxc",
-                        "-O=" + this.pathToCrosscompilerBaseDir + token + "/" + mainFile + ".rxe",
+                        this.pathToCrosscompilerBaseDir + token + "/" + mainFile + "/src/" + mainFile + ".nxc",
+                        "-O=" + this.pathToCrosscompilerBaseDir + token + "/" + mainFile + "/target/" + mainFile + ".rxe",
                         "-I=" + base.resolve(path).toAbsolutePath().normalize().toString()
                     });
             procBuilder.redirectInput(Redirect.INHERIT);

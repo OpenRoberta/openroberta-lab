@@ -68,7 +68,7 @@ public class RobotDownloadProgram {
                     break;
                 case "NXT":
                     fileName = programName + ".rxe";
-                    filePath = this.pathToCrosscompilerBaseDir + token;
+                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
                 case "Arduino":
                     fileName = programName + ".ino.hex";
