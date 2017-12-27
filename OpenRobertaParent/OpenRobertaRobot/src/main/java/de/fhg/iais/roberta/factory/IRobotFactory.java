@@ -27,6 +27,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ICompassSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ICoordinatesMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IGestureSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
@@ -59,6 +60,7 @@ import de.fhg.iais.roberta.mode.sensor.BrickKeyPressMode;
 import de.fhg.iais.roberta.mode.sensor.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
+import de.fhg.iais.roberta.mode.sensor.GestureSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.IBirckKeyPressMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
@@ -413,7 +415,7 @@ public interface IRobotFactory {
     }
 
     /**
-     * Get a touch sensor mode from {@link IVoltageSensorMode} given string parameter. It is possible for one voltage sensor mode to have multiple string
+     * Get a voltage sensor mode from {@link IVoltageSensorMode} given string parameter. It is possible for one voltage sensor mode to have multiple string
      * mappings. Throws exception if the voltage sensor mode does not exists.
      *
      * @param name of the voltage sensor mode
@@ -421,6 +423,17 @@ public interface IRobotFactory {
      */
     default IVoltageSensorMode getVoltageSensorMode(String mode) {
         return IRobotFactory.getModeValue(mode, VoltageSensorMode.class);
+    }
+    
+    /**
+     * Get a gesture sensor mode from {@link IGestureSensorMode} given string parameter. It is possible for one gesture sensor mode to have multiple string
+     * mappings. Throws exception if the gesture sensor mode does not exists.
+     *
+     * @param name of the gesture sensor mode
+     * @return the volatage sensor mode from the enum {@link IGestureSensorMode}
+     */
+    default IGestureSensorMode getGestureSensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, GestureSensorMode.class);
     }
     
     /**

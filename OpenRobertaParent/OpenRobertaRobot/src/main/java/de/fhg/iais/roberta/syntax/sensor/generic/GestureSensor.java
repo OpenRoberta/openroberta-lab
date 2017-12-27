@@ -40,8 +40,8 @@ public final class GestureSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getModeFactory()::getTouchSensorMode);
-        return PinTouchSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
+        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getModeFactory()::getGestureSensorMode);
+        return GestureSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     Phrase<V> getSensor() {

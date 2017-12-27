@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.mode.sensor;
 import de.fhg.iais.roberta.inter.mode.sensor.ITemperatureSensorMode;
 
 public enum TemperatureSensorMode implements ITemperatureSensorMode {
-    DEFAULT();
+    DEFAULT(), VALUE();
 
     private final String[] values;
 

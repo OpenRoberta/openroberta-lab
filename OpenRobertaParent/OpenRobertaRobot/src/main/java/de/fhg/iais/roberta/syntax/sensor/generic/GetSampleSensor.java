@@ -48,6 +48,11 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(factory.getSensorPort(port), factory.getTouchSensorMode("TOUCH"), factory.getSlot(BlocklyConstants.NO_SLOT));
                 this.sensor = TouchSensor.make(sensorMetaDataBean, properties, comment);
                 break;
+            case BlocklyConstants.PINTOUCH:
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(factory.getSensorPort(port), factory.getTouchSensorMode("PINTOUCH"), factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = PinTouchSensor.make(sensorMetaDataBean, properties, comment);
+                break;
             case BlocklyConstants.ULTRASONIC:
                 sensorMetaDataBean =
                     new SensorMetaDataBean(

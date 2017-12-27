@@ -1,8 +1,9 @@
 package de.fhg.iais.roberta.mode.sensor;
 
+import de.fhg.iais.roberta.inter.mode.sensor.IGestureSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
 
-public enum GestureSensorMode implements IGyroSensorMode {
+public enum GestureSensorMode implements IGestureSensorMode {
     VALUE,
     UP( "up" ),
     DOWN( "down" ),
