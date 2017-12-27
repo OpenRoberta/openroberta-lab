@@ -9,7 +9,7 @@ public class BrickSensorTest {
 
     @Test
     public void isPressed() throws Exception {
-        String a = "\nButtonPressed(BTNLEFT,false)";
+        String a = "\nButtonPressed(BTNCENTER,false)";
 
         this.h.assertCodeIsOk(a, "/ast/sensors/sensor_brick1.xml");
     }
