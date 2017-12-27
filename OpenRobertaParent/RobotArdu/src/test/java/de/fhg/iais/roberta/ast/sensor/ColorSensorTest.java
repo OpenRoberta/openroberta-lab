@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.SensorPort;
+import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
@@ -16,7 +16,7 @@ public class ColorSensorTest {
     public void sensorSetColor() throws Exception {
         final String a =
             "BlockAST [project=[[Location [x=-15, y=107], ColorSensor [S3, COLOUR, NO_SLOT]], "
-                + "[Location [x=-13, y=147], ColorSensor [S1, RED, NO_SLOT]], "
+                + "[Location [x=-13, y=147], ColorSensor [S1, LIGHT, NO_SLOT]], "
                 + "[Location [x=-11, y=187], ColorSensor [S2, RGB, NO_SLOT]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_setColor.xml"));

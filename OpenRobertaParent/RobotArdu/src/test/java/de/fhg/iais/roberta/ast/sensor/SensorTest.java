@@ -29,7 +29,7 @@ public class SensorTest {
                 + "if SensorExpr [TouchSensor [S1, DEFAULT, NO_SLOT]]\n"
                 + ",then\n"
                 + "Var [item] := SensorExpr [UltrasonicSensor [S4, DISTANCE, NO_SLOT]]\n\n"
-                + "Var [item] := SensorExpr [ColorSensor [S3, RGB, NO_SLOT]]\n\n"
+                + "Var [item] := SensorExpr [ColorSensor [S3, LIGHT, NO_SLOT]]\n\n"
                 + "Var [item] := SensorExpr [InfraredSensor [S4, OBSTACLE, NO_SLOT]]\n\n"
                 + "Var [item] := SensorExpr [EncoderSensor [A, ROTATION, NO_SLOT]]\n\n"
                 + "Var [item] := SensorExpr [GyroSensor [S2, ANGLE, NO_SLOT]]\n\n"

@@ -131,13 +131,13 @@ public abstract class Helper {
 
         BlockSet blockSet = astToJaxb(transformer);
 
-//        m.marshal(blockSet, System.out); // only needed for EXTREME debugging
+        //m.marshal(blockSet, System.out); // only needed for EXTREME debugging
         StringWriter writer = new StringWriter();
         m.marshal(blockSet, writer);
         String t = Resources.toString(Helper.class.getResource(fileName), Charsets.UTF_8);
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = XMLUnit.compareXML(writer.toString(), t);
-//        System.out.println(diff.toString()); // only needed for EXTREME debugging
+        //System.out.println(diff.toString()); // only needed for EXTREME debugging
         Assert.assertTrue(diff.identical());
     }
 

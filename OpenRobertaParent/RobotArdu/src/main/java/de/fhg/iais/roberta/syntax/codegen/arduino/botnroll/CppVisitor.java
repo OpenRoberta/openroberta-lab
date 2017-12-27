@@ -12,7 +12,6 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.actors.arduino.botnroll.ActorPort;
-import de.fhg.iais.roberta.mode.sensor.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -222,7 +221,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         final boolean reverse =
             (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD)
-                || (this.brickConfiguration.getActorOnPort(ActorPort.A).getRotationDirection() == DriveDirection.BACKWARD);
+            || (this.brickConfiguration.getActorOnPort(ActorPort.A).getRotationDirection() == DriveDirection.BACKWARD);
         String methodName;
         String port = null;
         final boolean isDuration = motorOnAction.getParam().getDuration() != null;
@@ -277,11 +276,11 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
         //this.sb.append(this.brickConfiguration.generateText("q") + "\n");
         final boolean isRegulatedDrive =
             this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated()
-                || this.brickConfiguration.getActorOnPort(ActorPort.A).isRegulated();
+            || this.brickConfiguration.getActorOnPort(ActorPort.A).isRegulated();
         final boolean isDuration = driveAction.getParam().getDuration() != null;
         final boolean reverse =
             (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD)
-                || (this.brickConfiguration.getActorOnPort(ActorPort.A).getRotationDirection() == DriveDirection.BACKWARD);
+            || (this.brickConfiguration.getActorOnPort(ActorPort.A).getRotationDirection() == DriveDirection.BACKWARD);
         final boolean localReverse = driveAction.getDirection() == DriveDirection.BACKWARD;
         String methodName;
         String sign = "";
@@ -315,11 +314,11 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
     public Void visitCurveAction(CurveAction<Void> curveAction) {
         final boolean isRegulatedDrive =
             this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated()
-                || this.brickConfiguration.getActorOnPort(ActorPort.A).isRegulated();
+            || this.brickConfiguration.getActorOnPort(ActorPort.A).isRegulated();
         final boolean isDuration = curveAction.getParamLeft().getDuration() != null;
         final boolean reverse =
             (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD)
-                || (this.brickConfiguration.getActorOnPort(ActorPort.A).getRotationDirection() == DriveDirection.BACKWARD);
+            || (this.brickConfiguration.getActorOnPort(ActorPort.A).getRotationDirection() == DriveDirection.BACKWARD);
         final boolean localReverse = curveAction.getDirection() == DriveDirection.BACKWARD;
         String methodName;
         String sign = "";
@@ -414,22 +413,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        String btnNumber;
-        switch ( (BrickKey) brickSensor.getPort() ) {
-            case ENTER:
-                btnNumber = "2";
-                break;
-            case LEFT:
-                btnNumber = "1";
-                break;
-            case RIGHT:
-                btnNumber = "3";
-                break;
-            default:
-                btnNumber = "123";
-                break;
-        }
-        this.sb.append("bnr.buttonIsPressed(" + btnNumber + ")");
+        this.sb.append("bnr.buttonIsPressed(" + brickSensor.getPort().getPortNumber() + ")");
         return null;
     }
 
@@ -455,12 +439,12 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                 this.sb.append(")[1], bnr.colorSensorRGB(" + colors + port);
                 this.sb.append(")[2]");
                 break;
-            case RED:
+            case LIGHT:
                 this.sb.append("bnr.colorSensorLight(" + colors + port);
                 this.sb.append(")");
                 break;
             default:
-                throw new DbcException("Unknown colour mode " + colorSensor.getMode());
+                throw new DbcException("Unknown colour mode: " + colorSensor.getMode());
         }
         return null;
     }
@@ -499,7 +483,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
             case OBSTACLE:
                 this.sb.append("bnr.infraredSensorObstacle(");
                 break;
-            case SEEK:
+            case PRESENCE:
                 this.sb.append("bnr.infraredSensorPresence(");
                 break;
             default:
@@ -605,16 +589,16 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
         for ( UsedSensor usedSensor : this.usedSensors ) {
             switch ( (SensorType) usedSensor.getType() ) {
                 case COLOR:
-                    nlIndent();
                     this.sb.append("brm.setRgbStatus(ENABLE);");
+                    nlIndent();
                     break;
                 case INFRARED:
-                    nlIndent();
                     this.sb.append("one.obstacleEmitters(ON);");
+                    nlIndent();
                     break;
                 case ULTRASONIC:
-                    nlIndent();
                     this.sb.append("brm.setSonarStatus(ENABLE);");
+                    nlIndent();
                     break;
                 case VOLTAGE:
                 case TIMER:
@@ -624,7 +608,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                 case TOUCH:
                     break;
                 default:
-                    throw new DbcException("Sensor is not supported!");
+                    throw new DbcException("Sensor is not supported: " + usedSensor.getType());
             }
         }
     }

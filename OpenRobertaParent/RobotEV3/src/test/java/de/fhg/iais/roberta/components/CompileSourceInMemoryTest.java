@@ -52,6 +52,8 @@ public class CompileSourceInMemoryTest {
     @Test
     public void testParsing() throws Exception {
         JavaSourceCompiler csm = new JavaSourceCompiler("NEPOprog", code, "");
+        System.out.println("***");
+        System.out.println(csm.compileAndPackage("a", "a"));
         csm.compileAndPackage("a", "a");
         Assert.assertEquals(false, csm.isSuccess());
     }

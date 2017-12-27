@@ -13,9 +13,7 @@ import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.actors.arduino.botnroll.ActorPort;
-import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
@@ -50,10 +48,6 @@ public class Factory extends AbstractRobotFactory {
         return IRobotFactory.getModeValue(port, ActorPort.class);
     }
 
-    @Override
-    public ISensorPort getSensorPort(String port) {
-        return IRobotFactory.getModeValue(port, SensorPort.class);
-    }
 
     @Override
     public IShowPicture getShowPicture(String picture) {
@@ -149,7 +143,7 @@ public class Factory extends AbstractRobotFactory {
     public String getGroup() {
         return RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group") != null
             ? RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group")
-            : this.name;
+                : this.name;
     }
 
     @Override

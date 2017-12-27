@@ -14,7 +14,7 @@ public class BrickSensorTest {
 
     @Test
     public void main() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-19, y=1], BrickSensor [ENTER, PRESSED, NO_SLOT]]]]";
+        String a = "BlockAST [project=[[Location [x=-19, y=1], BrickSensor [LEFT, PRESSED, NO_SLOT]]]]";
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_brick1.xml"));
     }
 
@@ -22,7 +22,7 @@ public class BrickSensorTest {
     public void getKey() throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_brick1.xml");
         BrickSensor<Void> bs = (BrickSensor<Void>) transformer.getTree().get(0).get(1);
-        Assert.assertEquals(BrickKey.ENTER, bs.getPort());
+        Assert.assertEquals(BrickKey.LEFT, bs.getPort());
     }
 
     @Test
@@ -38,7 +38,7 @@ public class BrickSensorTest {
             "BlockAST [project=[[Location [x=-96, y=73], \n"
                 + "if SensorExpr [TouchSensor [S1, DEFAULT, NO_SLOT]]\n"
                 + ",then\n"
-                + "Var [item] := SensorExpr [BrickSensor [ENTER, PRESSED, NO_SLOT]]\n\n"
+                + "Var [item] := SensorExpr [BrickSensor [LEFT, PRESSED, NO_SLOT]]\n\n"
                 + "]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_brick.xml"));
