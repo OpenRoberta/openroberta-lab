@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "oten-e l'ùltima litra";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "oten-e na litra a l'ancàpit";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "A smon la litra ant la posission ëspessificà.";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Gionté n'element al test.";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "gionze";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Gionté, gavé o riordiné le session për configuré torna ës blòch ëd test.";

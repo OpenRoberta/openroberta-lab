@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "lấy ký tự cuối cùng";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "lấy ký tự bất kỳ";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Hoàn trả ký tự ở vị trí đặt ra.";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "thêm vật mới vào văn bản.";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "kết nối";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Thêm, bỏ, hoặc sắp xếp lại các thành phần để tạo dựng mảnh văn bản này.";

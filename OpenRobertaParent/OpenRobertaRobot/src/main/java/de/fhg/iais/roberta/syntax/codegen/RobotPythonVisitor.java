@@ -30,6 +30,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -524,4 +525,9 @@ public abstract class RobotPythonVisitor extends CommonLanguageVisitor {
                 )
                 .collect(entriesToMap()));
     }
+    
+    public Void visitStmtTextComment(StmtTextComment<Void> stmtTextComment) {
+        this.sb.append("# " + stmtTextComment.getTextComment());
+        return null;
+    };
 }

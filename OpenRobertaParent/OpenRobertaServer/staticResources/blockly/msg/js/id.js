@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "ambil  huruf terakhir";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "ambil huruf secara acak";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Kembalikan karakter dari posisi tertentu.";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Tambahkan suatu item ke dalam teks.";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "join";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Tambah, ambil, atau susun ulang teks blok.";

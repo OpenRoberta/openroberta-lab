@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "에서, 마지막 문자 얻기";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "에서, 랜덤하게 한 문자 얻기";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "특정 번째 위치에서, 문자를 얻어내 돌려줍니다.";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "문장을 만들 조각 아이템";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "가입";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "이 문장 블럭의 구성을 추가, 삭제, 재구성 합니다.";

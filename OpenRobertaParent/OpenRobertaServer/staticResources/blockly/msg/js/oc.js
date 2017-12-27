@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "obténer la darrièra letra";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "obténer una letra a l'azard";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Renvia la letra a la posicion indicada.";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Add an item to the text.";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "join";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Add, remove, or reorder sections to reconfigure this text block.";  // untranslated

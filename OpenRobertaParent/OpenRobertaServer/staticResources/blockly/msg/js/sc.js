@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "piga s'urtima lìtera";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "piga una lìtera a brìtiu";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Torrat sa lìtera de su postu giau.";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Acciungi unu item a su testu.";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "auni a pari";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Aciungi, fùlia, o assenta is partis po torrai a sètiu custu brocu de testu.";

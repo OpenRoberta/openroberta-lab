@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "vrni zadnjo črko";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "vrni naključno črko";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Vrne črko na določenem mestu v besedilu.";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Doda element k besedilu.";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "združi";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Doda, odstrani ali spremeni vrstni red elementov tega besedila.";

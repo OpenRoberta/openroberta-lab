@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "hent den siste bokstaven";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "hent en tilfeldig bokstav";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Returnerer bokstaven på angitt plassering.";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Legg til et element til teksten.";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "føy sammen";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Legg til, fjern eller forandre rekkefølgen for å forandre på denne tekstblokken.";

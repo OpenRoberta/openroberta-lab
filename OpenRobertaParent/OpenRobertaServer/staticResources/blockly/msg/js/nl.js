@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "haal laatste letter op";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "haal willekeurige letter op";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Geeft de letter op de opgegeven positie terug.";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Voegt een item aan de tekst toe.";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "samenvoegen";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Toevoegen, verwijderen of volgorde wijzigen van secties om dit tekstblok opnieuw in te stellen.";

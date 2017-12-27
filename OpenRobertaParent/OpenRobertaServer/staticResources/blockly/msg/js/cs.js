@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "získat poslední písmeno";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "získat náhodné písmeno";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Získat písmeno na konkrétní pozici.";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Přidat položku do textu.";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "spojit";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Přidat, odebrat nebo změnit pořadí oddílů tohoto textového bloku.";

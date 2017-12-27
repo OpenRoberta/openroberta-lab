@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "obtenir la dernière lettre";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "obtenir une lettre au hasard";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Renvoie la lettre à la position indiquée.";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Ajouter un élément au texte.";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "joindre";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Ajouter, supprimer, ou réordonner des sections pour reconfigurer ce bloc de texte.";

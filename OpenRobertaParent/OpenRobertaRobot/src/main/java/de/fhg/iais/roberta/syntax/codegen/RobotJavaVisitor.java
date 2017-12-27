@@ -35,6 +35,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
@@ -246,6 +247,12 @@ public abstract class RobotJavaVisitor extends CommonLanguageVisitor {
         this.sb.append(")");
         return null;
     }
+    
+    @Override
+    public Void visitStmtTextComment(StmtTextComment<Void> stmtTextComment) {
+        this.sb.append("// " + stmtTextComment.getTextComment());
+        return null;
+    };
 
     @Override
     public Void visitEmptyList(EmptyList<Void> emptyList) {

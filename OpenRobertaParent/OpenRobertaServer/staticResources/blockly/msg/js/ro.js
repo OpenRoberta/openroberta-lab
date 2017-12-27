@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "obţine o litera oarecare";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "obtine o litera oarecare";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Returnează litera la poziția specificată.";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Adaugă un element în text.";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "alăturaţi-vă";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Adaugă, elimină sau reordonează secțiuni ca să reconfigureze blocul text.";

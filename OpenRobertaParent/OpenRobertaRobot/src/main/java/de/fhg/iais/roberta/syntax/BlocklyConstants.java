@@ -166,6 +166,7 @@ public final class BlocklyConstants {
     public static final String ROB_TEXT_JOIN = "robText_join";
     public static final String TEXT_JOIN = "text_join";
     public static final String TEXT_PRINT = "text_print";
+    public static final String TEXT_COMMENT = "text_comment";
 
     public static final String CONTROLS_IF = "controls_if";
     public static final String CONTROLS_FLOW_STATEMENT = "controls_flow_statements";

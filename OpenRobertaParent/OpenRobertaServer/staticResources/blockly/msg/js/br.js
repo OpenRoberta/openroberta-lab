@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "tapout al lizherenn ziwezhañ";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "Kaout ul lizherenn dre zegouezh";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Distreiñ al lizherenn d'al lec'h spisaet.";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Ouzhpennañ un elfenn d'an destenn.";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "stagañ";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Ouzhpennañ, lemel pe adurzhiañ ar rannoù evit kefluniañ ar bloc'h testenn-mañ.";

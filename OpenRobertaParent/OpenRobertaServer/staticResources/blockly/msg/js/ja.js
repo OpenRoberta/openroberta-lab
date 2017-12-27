@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "最後の文字を得る";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "ランダムな文字を得る";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "指定された位置に文字を返します。";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "テキスト をアイテム追加します。";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "結合";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "追加、削除、またはセクションを順序変更して、ブロックを再構成します。";

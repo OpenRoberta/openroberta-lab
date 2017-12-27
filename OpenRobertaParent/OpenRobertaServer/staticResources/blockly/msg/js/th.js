@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "ดึง ตัวอักษรตัวส�
 Blockly.Msg.TEXT_CHARAT_RANDOM = "ถึงตัวอักษรแบบสุ่ม";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "คืนค่าตัวอักษรจากตำแหน่งที่ระบุ";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "เพิ่มรายการเข้าไปในข้อความ";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "รวม";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "เพิ่ม ลบ หรือจัดเรียงบล็อกข้อความนี้ใหม่";

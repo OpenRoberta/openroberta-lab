@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "преузми последње слово";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "преузми случајно слово";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Враћа слово на одређени положај.";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Додајте ставку у текст.";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "спајањем";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Додај, уклони, или другачије поредај одјелке како би изнова поставили овај текст блок.";

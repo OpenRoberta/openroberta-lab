@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "взять последнюю букву";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "взять случайную букву";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Возвращает букву в указанной позиции.";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Добавить элемент к тексту.";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "соединить";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Добавьте, удалите, переставьте фрагменты для переделки текстового блока.";

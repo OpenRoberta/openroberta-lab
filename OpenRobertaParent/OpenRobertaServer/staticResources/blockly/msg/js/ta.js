@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "இறுதி எழுத்தைப் ப�
 Blockly.Msg.TEXT_CHARAT_RANDOM = "சமவாய்ப்புள்ள எழுத்தை எடு";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "கூறிய இடத்தில் உள்ள எழுத்தை எடு";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "உருபடியை உரையில் சேர்க்க.";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "சேர்க்க";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "தொகுப்பு உரை திருத்துதம் செய்";

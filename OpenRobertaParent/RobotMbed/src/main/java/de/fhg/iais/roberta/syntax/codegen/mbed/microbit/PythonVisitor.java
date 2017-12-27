@@ -71,6 +71,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
@@ -873,4 +874,10 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
     public Void visitRadioRssiSensor(RadioRssiSensor<Void> radioRssiSensor) {
         return null;
     }
+
+    @Override
+    public Void visitStmtTextComment(StmtTextComment<Void> stmtTextComment) {
+        this.sb.append("# " + stmtTextComment.getTextComment());
+        return null;
+    };
 }

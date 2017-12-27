@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "取最後一個字元";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "取隨機一個字元";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "返回位於指定位置的字元。";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "將一個項目加入到字串中。";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "加入";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "添加、 刪除或重新排列各區塊來此重新配置這個文字積木。";

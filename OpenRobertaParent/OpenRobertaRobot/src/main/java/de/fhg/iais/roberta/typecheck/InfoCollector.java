@@ -82,6 +82,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
@@ -692,6 +693,12 @@ public class InfoCollector<T> implements AstLanguageVisitor<T>, AstSensorsVisito
 
     @Override
     public T visitTemperatureSensor(TemperatureSensor<T> temperatureSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitStmtTextComment(StmtTextComment<T> stmtTextComment) {
         // TODO Auto-generated method stub
         return null;
     }

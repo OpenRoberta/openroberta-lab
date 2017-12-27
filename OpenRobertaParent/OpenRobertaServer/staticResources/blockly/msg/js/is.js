@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "sækja síðasta staf";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "sækja einhvern staf";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Skila staf á tilteknum stað.";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Bæta atriði við textann.";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "tengja";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Bæta við, fjarlægja eða umraða hlutum til að breyta skipan þessa textakubbs.";

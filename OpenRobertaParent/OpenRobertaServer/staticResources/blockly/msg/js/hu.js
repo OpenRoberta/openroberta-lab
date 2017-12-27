@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "utolsó";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "véletlen";
 Blockly.Msg.TEXT_CHARAT_TAIL = "karaktere";
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "A szöveg egy megadott karakterét adja eredményül.";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Elem hozzáfűzése a szöveghez.";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "fűzd össze";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Összefűzéssel, törléssel vagy rendezéssel kapcsolato sblokkok szöveg szerkesztéséhez.";

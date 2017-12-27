@@ -76,6 +76,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
@@ -520,6 +521,11 @@ public abstract class RobotSimulationVisitor<V> implements AstLanguageVisitor<V>
 
     @Override
     public V visitTextPrintFunct(TextPrintFunct<V> textPrintFunct) {
+        return null;
+    }
+    
+    @Override
+    public V visitStmtTextComment(StmtTextComment<V> textComment) {
         return null;
     }
 

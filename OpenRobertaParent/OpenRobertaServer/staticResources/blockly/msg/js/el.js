@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "πάρε το τελευταίο γράμμα";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "πάρε τυχαίο γράμμα";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Επιστρέφει το γράμμα στην καθορισμένη θέση.";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Προσθέτει ένα στοιχείο στο κείμενο.";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "ένωσε";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Προσθέτει, αφαιρεί ή αναδιατάσσει τους τομείς για να αναδιαμορφώσει αυτό το μπλοκ κειμένου.";

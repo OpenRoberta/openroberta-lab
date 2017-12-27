@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.util.test.GenericHelper;
 import de.fhg.iais.roberta.util.test.Helper;
@@ -26,7 +27,6 @@ public class LoopCounterVisitorTest {
             // TODO Auto-generated method stub
             return null;
         }
-
     }
 
     @Test

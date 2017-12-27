@@ -54,6 +54,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -436,5 +437,7 @@ public interface AstLanguageVisitor<V> extends AstVisitor<V> {
         functionExpr.getFunction().visit(this);
         return null;
     }
+
+    V visitStmtTextComment(StmtTextComment<V> stmtTextComment);
 
 }

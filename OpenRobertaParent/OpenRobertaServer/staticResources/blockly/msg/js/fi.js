@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "hae viimeinen kirjain";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "hae satunnainen kirjain";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Palauttaa annetussa kohdassa olevan kirjaimen.";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Lisää kohteen tekstiin.";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "liitä";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Lisää, poista tai uudelleen järjestä osioita tässä lohkossa.";

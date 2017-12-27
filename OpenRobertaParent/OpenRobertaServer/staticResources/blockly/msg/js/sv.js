@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "hämta sista bokstaven";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "hämta slumpad bokstav";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Ger tillbaka bokstaven på den specificerade positionen.";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code";  // untranslated
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Lägg till ett föremål till texten.";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "sammanfoga";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Lägg till, ta bort eller ändra ordningen för sektioner för att omkonfigurera detta textblock.";

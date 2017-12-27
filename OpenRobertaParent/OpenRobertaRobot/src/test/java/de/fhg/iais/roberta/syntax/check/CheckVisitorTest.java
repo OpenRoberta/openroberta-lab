@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.util.test.GenericHelper;
@@ -97,6 +98,13 @@ public class CheckVisitorTest {
         protected void checkSensorPort(ExternalSensor<Void> sensor) {
 
         }
+
+        @Override
+        public Void visitStmtTextComment(StmtTextComment<Void> stmtTextComment) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
     }
 
     @Test

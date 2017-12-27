@@ -1112,6 +1112,7 @@ Blockly.Msg.TEXT_CHARAT_LAST = "Nehme letzten Buchstaben";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "Nehme zufälligen Buchstaben";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Extrahiere einen Buchstaben von einer spezifizierten Position.";
+Blockly.Msg.TEXT_COMMENT_TOOLTIP = "Dokumentiere dein Programm mit diesem Block damit du und andere es später leichter haben, dein Programm zu verstehen. Dieser Kommentar wird auch im generierten Source Code zu sehen sein.";
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Ein Element zum Text hinzufügen.";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "verbinden";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Hinzufügen, entfernen und sortieren von Elementen.";

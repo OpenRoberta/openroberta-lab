@@ -51,6 +51,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -279,6 +280,11 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void> {
     @Override
     public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
         textPrintFunct.getParam().stream().forEach(expr -> expr.visit(this));
+        return null;
+    }
+    
+    @Override
+    public Void visitStmtTextComment(StmtTextComment<Void> textComment) {
         return null;
     }
 
