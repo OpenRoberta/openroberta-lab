@@ -32,28 +32,26 @@ public class StmtTextComment<V> extends Stmt<V> {
     }
 
     /**
-     * Create read only object of {@link StmtFlowCon}.
+     * Create read only object of {@link StmtTextComment}.
      *
-     * @param flow; must be <b>not</b> null; see enum {@link Flow} for all the possible kind of flow controls,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link StmtFlowCon}
+     * @return read only object of class {@link StmtTextComment}
      */
     public static <V> StmtTextComment<V> make(String textComment, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new StmtTextComment<V>(textComment, properties, comment);
     }
 
     /**
-     * @return the kind of control. See enum {@link Flow} for all the possible kind of flow controls
+     * @return the text comment
      */
     public String getTextComment() {
         return this.textComment;
     }
 
-    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        appendNewLine(sb, 0, "StmtFlowCon [" + this.textComment + "]");
+        appendNewLine(sb, 0, "StmtTextComment [" + this.textComment + "]");
         return sb.toString();
     }
 
