@@ -42,6 +42,7 @@ import de.fhg.iais.roberta.syntax.expr.mbed.RgbColor;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -50,15 +51,12 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerOrientationSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
@@ -371,12 +369,6 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements M
     }
 
     @Override
-    public Void visitMbedGetSampleSensor(MbedGetSampleSensor<Void> getSampleSensor) {
-        getSampleSensor.getSensor().visit(this);
-        return null;
-    }
-
-    @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
         this.sb.append("createRgbColor([");
         rgbColor.getR().visit(this);
@@ -390,22 +382,22 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements M
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        this.sb.append("createPinTouchSensor(" + pinTouchSensor.getPort() + ")");
+        this.sb.append("createPinTouchSensor(" + pinTouchSensor.getPort().getValues()[1] + ")");
         return null;
     }
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
-        this.sb.append("createPinGetValueSensor(CONST." + pinValueSensor.getValueType().toString());
-        this.sb.append(", " + pinValueSensor.getPin().getPinNumber() + ")");
+        this.sb.append("createPinGetValueSensor(CONST." + pinValueSensor.getMode());
+        this.sb.append(", " + pinValueSensor.getPort().getValues()[0] + ")");
         return null;
     }
 
     @Override
     public Void visitPinWriteValueSensor(PinWriteValue<Void> pinWriteValueSensor) {
         final String end = createClosingBracket();
-        this.sb.append("createPinWriteValueSensor(CONST." + pinWriteValueSensor.getValueType().toString());
-        this.sb.append(", " + pinWriteValueSensor.getPin().getPinNumber() + ", ");
+        this.sb.append("createPinWriteValueSensor(CONST." + pinWriteValueSensor.getMode());
+        this.sb.append(", " + pinWriteValueSensor.getPort().getValues()[0] + ", ");
         pinWriteValueSensor.getValue().visit(this);
         this.sb.append(end);
         return null;
@@ -450,13 +442,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements M
     }
 
     @Override
-    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
-        this.sb.append("0");
-        return null;
-    }
-
-    @Override
-    public Void visitAccelerometerOrientationSensor(AccelerometerOrientationSensor<Void> accelerometerOrientationSensor) {
+    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
         this.sb.append("0");
         return null;
     }

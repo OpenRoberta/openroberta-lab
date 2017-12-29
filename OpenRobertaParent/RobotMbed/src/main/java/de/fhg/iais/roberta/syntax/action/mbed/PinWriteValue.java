@@ -5,8 +5,11 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.mode.action.mbed.MbedPins;
-import de.fhg.iais.roberta.mode.sensor.mbed.ValueType;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.inter.mode.sensor.IPinValue;
+import de.fhg.iais.roberta.inter.mode.sensor.IPort;
+import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.mode.sensor.PinValue;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -30,17 +33,17 @@ import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
  * To create an instance from this class use the method {@link #make(BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class PinWriteValue<V> extends Action<V> {
-    private final ValueType valueType;
-    private final MbedPins pin;
+    private final IPinValue pinValue;
+    private final IPort port;
     private final Expr<V> value;
 
-    private PinWriteValue(MbedPins pin, ValueType valueType, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private PinWriteValue(IPinValue pinValue, ISensorPort port, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("PIN_WRITE_VALUE"), properties, comment);
+        Assert.notNull(pinValue);
+        Assert.notNull(port);
         Assert.notNull(value);
-        Assert.notNull(pin);
-        Assert.notNull(valueType);
-        this.pin = pin;
-        this.valueType = valueType;
+        this.pinValue = pinValue;
+        this.port = port;
         this.value = value;
         setReadOnly();
     }
@@ -49,21 +52,21 @@ public class PinWriteValue<V> extends Action<V> {
      * Create object of the class {@link PinWriteValue}.
      *
      * @param pin
-     * @param valueType see {@link ValueType}
+     * @param valueType see {@link PinValue}
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of {@link PinWriteValue}
      */
-    public static <V> PinWriteValue<V> make(MbedPins pin, ValueType valueType, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new PinWriteValue<V>(pin, valueType, value, properties, comment);
+    public static <V> PinWriteValue<V> make(IPinValue pinValue, ISensorPort port, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new PinWriteValue<>(pinValue, port, value, properties, comment);
     }
 
-    public ValueType getValueType() {
-        return this.valueType;
+    public IPinValue getMode() {
+        return this.pinValue;
     }
 
-    public MbedPins getPin() {
-        return this.pin;
+    public IPort getPort() {
+        return this.port;
     }
 
     public Expr<V> getValue() {
@@ -72,7 +75,7 @@ public class PinWriteValue<V> extends Action<V> {
 
     @Override
     public String toString() {
-        return "PinWriteValueSensor [" + this.pin.getPinNumber() + ", " + this.valueType + ", " + this.value + "]";
+        return "PinWriteValueSensor [" + this.pinValue + ", " + this.port + ", "+ this.value + "]";
     }
 
     @Override
@@ -88,28 +91,28 @@ public class PinWriteValue<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+        IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 2);
         List<Value> values = helper.extractValues(block, (short) 1);
-
-        String pinNumber = helper.extractField(fields, BlocklyConstants.PIN);
-        String valueType = helper.extractField(fields, BlocklyConstants.VALUETYPE);
+        String port = helper.extractField(fields, BlocklyConstants.PIN);
+        String pinvalue = helper.extractField(fields, BlocklyConstants.VALUETYPE);
         Phrase<V> value = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER_INT));
         return PinWriteValue.make(
-            MbedPins.findPin(pinNumber),
-            ValueType.get(valueType),
+            factory.getPinGetValueSensorMode(pinvalue),
+            factory.getSensorPort(port),
             helper.convertPhraseToExpr(value),
             helper.extractBlockProperties(block),
             helper.extractComment(block));
-
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
+        //TODO: add mutation, correct xml
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, this.value);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VALUETYPE, this.valueType.toString());
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PIN, String.valueOf(this.pin.getPinNumber()));
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VALUETYPE, this.pinValue.toString());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PIN, this.port.getPortNumber());
         return jaxbDestination;
     }
 }

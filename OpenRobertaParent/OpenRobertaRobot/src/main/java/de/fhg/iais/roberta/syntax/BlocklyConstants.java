@@ -239,6 +239,7 @@ public final class BlocklyConstants {
     public static final String TIME = "TIME";
     public static final String COLOR = "COLOR";
     public static final String LIGHT = "LIGHT";
+    public static final String LIGHT_VALUE = "LIGHT_VALUE";
     public static final String AMBIENTLIGHT = "AMBIENTLIGHT";
     public static final String SOUND = "SOUND";
     public static final String JOYSTICK = "JOYSTICK";
@@ -331,5 +332,7 @@ public final class BlocklyConstants {
     public static final String DEFAULT = "DEFAULT";
     public static final String NO_PORT = "NO_PORT";
     public static final String SLOT = "SLOT";
-    public static final String NO_SLOT = "NO_SLOT";   
+    public static final String NO_SLOT = "NO_SLOT";
+    public static final String PIN_PULSE_HIGH = "PIN_PULSE_HIGH";
+    public static final String PIN_PULSE_LOW = "PIN_PULSE_LOW";
 }

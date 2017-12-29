@@ -153,7 +153,7 @@ public class EV3ProgramUsedHardwareCheckTest {
 
         UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
         Assert.assertEquals(
-            "[UsedSensor [S3, COLOR, COLOUR], UsedSensor [S3, COLOR, AMBIENTLIGHT], UsedSensor [S4, COLOR, RED]]",
+            "[UsedSensor [S3, COLOR, COLOUR], UsedSensor [S3, COLOR, AMBIENTLIGHT], UsedSensor [S4, COLOR, LIGHT]]",
             checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[]", checkVisitor.getUsedActors().toString());
     }

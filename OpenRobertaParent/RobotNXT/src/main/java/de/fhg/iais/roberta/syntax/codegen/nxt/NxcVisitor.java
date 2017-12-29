@@ -811,7 +811,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
             case AMBIENTLIGHT:
                 this.sb.append("\"AMBIENTLIGHT\"");
                 break;
-            case RED:
+            case LIGHT:
                 this.sb.append("\"LIGHT\"");
                 break;
             default:

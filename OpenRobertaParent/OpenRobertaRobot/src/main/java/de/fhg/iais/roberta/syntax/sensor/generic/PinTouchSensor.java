@@ -44,9 +44,4 @@ public final class PinTouchSensor<V> extends ExternalSensor<V> {
         return PinTouchSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
-    Phrase<V> getSensor() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }

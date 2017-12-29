@@ -74,7 +74,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                 sensorMetaDataBean =
                     new SensorMetaDataBean(
                         factory.getSensorPort(port),
-                        factory.getAccelerometerSensorMode(sensorType.getMode()),
+                        factory.getAxis(sensorType.getMode()),
                         factory.getSlot(BlocklyConstants.NO_SLOT));
                 this.sensor = AccelerometerSensor.make(sensorMetaDataBean, properties, comment);
                 break;
@@ -82,7 +82,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                 sensorMetaDataBean =
                     new SensorMetaDataBean(
                         factory.getSensorPort(port),
-                        factory.getAccelerometerSensorMode(sensorType.getMode()),
+                        factory.getAxis(sensorType.getMode()),
                         factory.getSlot(BlocklyConstants.NO_SLOT));
                 this.sensor = TimerSensor.make(sensorMetaDataBean, properties, comment);
                 break;

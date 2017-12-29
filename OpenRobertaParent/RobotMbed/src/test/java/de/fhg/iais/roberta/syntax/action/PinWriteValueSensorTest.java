@@ -11,9 +11,9 @@ public class PinWriteValueSensorTest {
     @Test
     public void make_ByDefault_ReturnInstanceOfPinValueSensorClass() throws Exception {
         String expectedResult =
-            "BlockAST [project=[[Location [x=62, y=162], "
+            "BlockAST [project=[[Location [x=116, y=42], "
                 + "MainTask [], "
-                + "PinWriteValueSensor [0, ANALOG, NumConst [0]], PinWriteValueSensor [2, DIGITAL, NumConst [0]]]]]";
+                + "PinWriteValueSensor [ANALOG, S1, NumConst [1]], PinWriteValueSensor [DIGITAL, S0, NumConst [1]]]]]";
 
         String result = this.h.generateTransformerString("/action/write_value_to_pin.xml");
 

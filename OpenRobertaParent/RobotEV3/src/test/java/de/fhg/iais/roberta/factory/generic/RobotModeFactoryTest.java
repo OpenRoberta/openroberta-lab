@@ -243,7 +243,7 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getInfraredSensorModeByAlternativeName() {
-        Assert.assertEquals(this.factory.getInfraredSensorMode("Seek"), InfraredSensorMode.SEEK);
+        Assert.assertEquals(this.factory.getInfraredSensorMode("PRESENCE"), InfraredSensorMode.PRESENCE);
     }
 
     @Test(expected = DbcException.class)

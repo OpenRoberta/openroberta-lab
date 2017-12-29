@@ -30,7 +30,7 @@ import de.fhg.iais.roberta.visitors.arduino.Bob3AstVisitor;
  */
 public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisitor implements Bob3AstVisitor<Void> {
 
-    protected final Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
+    protected final Set<UsedSensor> usedSensors = new LinkedHashSet<>();
 
     public UsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         super(null);
@@ -45,8 +45,6 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     public Void visitBob3GetSampleSensor(GetSampleSensor<Void> bob3GetSampleSensor) {
         if ( bob3GetSampleSensor.getSensorType().toString().equals("TIME") ) {
             this.usedSensors.add(new UsedSensor(null, SensorType.TIMER, null));
-            System.out.println(this.usedSensors);
-            System.out.println(this.usedSensors.toString().contains("TIMER"));
         } else {
             this.usedSensors.add(new UsedSensor(null, SensorType.NONE, null));
         }

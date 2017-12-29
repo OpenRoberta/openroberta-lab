@@ -2,10 +2,13 @@ package de.fhg.iais.roberta.syntax.sensor.generic;
 
 import java.util.List;
 
+import org.slf4j.LoggerFactory;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.factory.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -34,12 +37,18 @@ public class GetSampleSensor<V> extends Sensor<V> {
     private final Sensor<V> sensor;
     private final String sensorPort;
     private final GetSampleType sensorType;
+    private static final ch.qos.logback.classic.Logger LOG = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(AbstractCompilerWorkflow.class);
 
     private GetSampleSensor(GetSampleType sensorType, String port, BlocklyBlockProperties properties, BlocklyComment comment, IRobotFactory factory) {
         super(BlockTypeContainer.getByName("SENSOR_GET_SAMPLE"), properties, comment);
+        LOG.setLevel(ch.qos.logback.classic.Level.TRACE);
         Assert.notNull(sensorType);
-        Assert.nonEmptyString(port);
+        Assert.notNull(port);
         this.sensorPort = port;
+        //TODO: reimplemnt it in a better way
+        if ( port.equals("") ) {
+            port = BlocklyConstants.NO_PORT;
+        }
         this.sensorType = sensorType;
         SensorMetaDataBean sensorMetaDataBean;
         switch ( sensorType.getSensorType() ) {
@@ -117,6 +126,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                         factory.getSlot(BlocklyConstants.NO_SLOT));
                 this.sensor = SoundSensor.make(sensorMetaDataBean, properties, comment);
                 break;
+            case BlocklyConstants.LIGHT_VALUE:
             case BlocklyConstants.LIGHT:
                 sensorMetaDataBean =
                     new SensorMetaDataBean(
@@ -132,6 +142,38 @@ public class GetSampleSensor<V> extends Sensor<V> {
                         factory.getCompassSensorMode(BlocklyConstants.DEFAULT),
                         factory.getSlot(BlocklyConstants.NO_SLOT));
                 this.sensor = CompassSensor.make(sensorMetaDataBean, properties, comment);
+                break;
+            case BlocklyConstants.TEMPERATURE:
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(port),
+                        factory.getTemperatureSensorMode(BlocklyConstants.DEFAULT),
+                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = TemperatureSensor.make(sensorMetaDataBean, properties, comment);
+                break;
+            case BlocklyConstants.PIN_ANALOG:
+            case BlocklyConstants.PIN_DIGITAL:
+            case BlocklyConstants.PIN_PULSE_HIGH:
+            case BlocklyConstants.PIN_PULSE_LOW:
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(port),
+                        factory.getPinGetValueSensorMode(sensorType.getSensorMode()),
+                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = PinGetValueSensor.make(sensorMetaDataBean, properties, comment);
+                break;
+            case BlocklyConstants.ACCELERATION:
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(factory.getSensorPort(port), factory.getAxis(BlocklyConstants.DEFAULT), factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = AccelerometerSensor.make(sensorMetaDataBean, properties, comment);
+                break;
+            case BlocklyConstants.GESTURE:
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(port),
+                        factory.getGestureSensorMode(sensorType.getSensorMode()),
+                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = GestureSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             default:
                 throw new DbcException("Invalid sensor " + sensorType.getSensorType() + "!");
@@ -199,6 +241,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
         List<Field> fields = helper.extractFields(block, (short) 3);
         String modeName = helper.extractField(fields, BlocklyConstants.SENSORTYPE);
         String portName = helper.extractField(fields, GetSampleType.get(modeName).getPortTypeName());
+        LOG.trace(modeName);
         return GetSampleSensor
             .make(GetSampleType.get(modeName), portName, helper.extractBlockProperties(block), helper.extractComment(block), helper.getModeFactory());
     }

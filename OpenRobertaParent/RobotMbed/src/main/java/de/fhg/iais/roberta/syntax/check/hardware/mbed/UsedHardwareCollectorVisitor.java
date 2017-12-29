@@ -27,14 +27,13 @@ import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
 import de.fhg.iais.roberta.syntax.expr.mbed.RgbColor;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerOrientationSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
 
@@ -55,15 +54,15 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     }
 
     public boolean isRadioUsed() {
-        return radioUsed;
+        return this.radioUsed;
     }
 
     public boolean isAccelerometerUsed() {
-        return accelerometerUsed;
+        return this.accelerometerUsed;
     }
 
     public boolean isGreyScale() {
-        return greyScale;
+        return this.greyScale;
     }
 
     @Override
@@ -81,38 +80,38 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     @Override
     public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
         radioSendAction.getMsg().visit(this);
-        radioUsed = true;
+        this.radioUsed = true;
         return null;
     }
 
     @Override
     public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
-        radioUsed = true;
+        this.radioUsed = true;
         return null;
     }
 
     @Override
     public Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
         radioSetChannelAction.getChannel().visit(this);
-        radioUsed = true;
+        this.radioUsed = true;
         return null;
     }
 
     @Override
     public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
-        accelerometerUsed = true;
+        this.accelerometerUsed = true;
         return null;
     }
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        accelerometerUsed = true;
+        this.accelerometerUsed = true;
         return null;
     }
 
     @Override
     public Void visitImage(Image<Void> image) {
-        greyScale = true;
+        this.greyScale = true;
         return null;
     }
 
@@ -142,19 +141,19 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Void> displaySetBrightnessAction) {
-        greyScale = true;
+        this.greyScale = true;
         return null;
     }
 
     @Override
     public Void visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<Void> displayGetBrightnessAction) {
-        greyScale = true;
+        this.greyScale = true;
         return null;
     }
 
     @Override
     public Void visitDisplaySetPixelAction(DisplaySetPixelAction<Void> displaySetPixelAction) {
-        greyScale = true;
+        this.greyScale = true;
         return null;
     }
 
@@ -164,20 +163,8 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     }
 
     @Override
-    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
-        accelerometerUsed = true;
-        return null;
-    }
-
-    @Override
-    public Void visitAccelerometerOrientationSensor(AccelerometerOrientationSensor<Void> accelerometerOrientationSensor) {
-        accelerometerUsed = true;
-        return null;
-    }
-
-    @Override
-    public Void visitMbedGetSampleSensor(MbedGetSampleSensor<Void> mbedGetSampleSensor) {
-        mbedGetSampleSensor.getSensor().visit(this);
+    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
+        this.accelerometerUsed = true;
         return null;
     }
 
@@ -243,7 +230,13 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitRadioRssiSensor(RadioRssiSensor<Void> radioRssiSensor) {
-        radioUsed = true;
+        this.radioUsed = true;
+        return null;
+    }
+
+    @Override
+    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+        this.accelerometerUsed = true;
         return null;
     }
 

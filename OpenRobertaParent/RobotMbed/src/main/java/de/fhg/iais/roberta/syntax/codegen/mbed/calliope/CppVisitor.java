@@ -9,8 +9,9 @@ import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.GestureSensorMode;
+import de.fhg.iais.roberta.mode.sensor.PinValue;
+import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
-import de.fhg.iais.roberta.mode.sensor.mbed.ValueType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
@@ -81,6 +82,7 @@ import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -89,17 +91,13 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerOrientationSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor.Mode;
-import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -117,7 +115,7 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
  * StringBuilder. <b>This representation is correct C++ code for Calliope systems.</b> <br>
  */
 public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>, AstSensorsVisitor<Void>, AstActorMotorVisitor<Void>,
-    AstActorDisplayVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
+AstActorDisplayVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
     private final UsedHardwareCollectorVisitor codePreprocess;
     ArrayList<VarDeclaration<Void>> usedVars;
 
@@ -590,6 +588,9 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+        this.sb.append("uBit.accelerometer.get");
+        this.sb.append(gyroSensor.getPort().getValues()[1]);
+        this.sb.append("()");
         return null;
     }
 
@@ -616,39 +617,36 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        this.sb.append("uBit.io." + pinTouchSensor.getPort() + ".isTouched()");
+        this.sb.append("uBit.io." + pinTouchSensor.getPort().getValues()[1] + ".isTouched()");
         return null;
     }
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
-        this.sb.append("uBit.io." + pinValueSensor.getPin().getCalliopeName());
-        switch ( pinValueSensor.getValueType() ) {
+        this.sb.append("uBit.io." + pinValueSensor.getPort().getValues()[1]);
+        switch ( (PinValue) pinValueSensor.getMode() ) {
             case DIGITAL:
-                this.sb.append(".getDigitalValue()");
-                break;
             case ANALOG:
-                this.sb.append(".getAnalogValue()");
+                this.sb.append(".get").append(pinValueSensor.getMode().getValues()[0]);
                 break;
-            case PULSEHIGH:
-                this.sb.append(".readPulseHigh()");
-                break;
-            case PULSELOW:
-                this.sb.append(".readPulseLow()");
+            case PULSE_HIGH:
+            case PULSE_LOW:
+                this.sb.append(".read").append(pinValueSensor.getMode().getValues()[0]);
                 break;
             default:
-                throw new DbcException("Valu type  " + pinValueSensor.getValueType() + " is not supported.");
+                throw new DbcException("Value type  " + pinValueSensor.getMode() + " is not supported.");
         }
+        this.sb.append("()");
         return null;
     }
 
     @Override
     public Void visitPinWriteValueSensor(PinWriteValue<Void> pinWriteValueSensor) {
         String valueType = "AnalogValue(";
-        if ( pinWriteValueSensor.getValueType() == ValueType.DIGITAL ) {
+        if ( pinWriteValueSensor.getMode() == PinValue.DIGITAL ) {
             valueType = "DigitalValue(";
         }
-        this.sb.append("uBit.io." + pinWriteValueSensor.getPin().getCalliopeName() + ".set" + valueType);
+        this.sb.append("uBit.io." + pinWriteValueSensor.getPort().getValues()[1] + ".set" + valueType);
         pinWriteValueSensor.getValue().visit(this);
         this.sb.append(");");
         return null;
@@ -1054,24 +1052,14 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     }
 
     @Override
-    public Void visitMbedGetSampleSensor(MbedGetSampleSensor<Void> getSampleSensor) {
-        getSampleSensor.getSensor().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
-        if ( accelerometerSensor.getAccelerationDirection() == Mode.STRENGTH ) {
-            this.sb.append("uBit.accelerometer.getStrength()");
+    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
+        this.sb.append("uBit.accelerometer.get");
+        if ( accelerometerSensor.getPort() == SensorPort.STRENGTH ) {
+            this.sb.append("Strength");
         } else {
-            this.sb.append(String.format("uBit.accelerometer.get%s()", accelerometerSensor.getAccelerationDirection()));
+            this.sb.append(accelerometerSensor.getPort());
         }
-        return null;
-    }
-
-    @Override
-    public Void visitAccelerometerOrientationSensor(AccelerometerOrientationSensor<Void> accelerometerOrientationSensor) {
-        this.sb.append(String.format("uBit.accelerometer." + accelerometerOrientationSensor.getAccelerationOrientationMode().getCppCode()));
+        this.sb.append("()");
         return null;
     }
 

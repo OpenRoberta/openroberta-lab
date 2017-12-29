@@ -11,13 +11,11 @@ public class WaitStmtTest {
     @Test
     public void make_ByDefault_ReturnInstanceOfGetSampleSensorClass() throws Exception {
         String expectedResult =
-            "BlockAST [project=[[Location [x=113, y=87], MainTask [], WaitStmt [\n"
-                + "(repeat [WAIT, Binary [EQ, SensorExpr [MbedGetSampleSensor [BrickSensor [BUTTON_A, PRESSED, NO_SLOT]]], BoolConst [true]]]\n"
-                + "AktionStmt [DisplayTextAction [TEXT, StringConst [Hallo]]]\n"
-                + ")\n"
-                + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [TemperatureSensor [NO_PORT, DEFAULT, NO_SLOT]]], NumConst [20]]]\n"
-                + "AktionStmt [DisplayTextAction [TEXT, StringConst [Hallo]]]\n"
-                + ")]]]]";
+            "BlockAST [project=[[Location [x=80, y=92], MainTask [], WaitStmt [\n" +
+                "(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [sensor=BrickSensor [BUTTON_A, PRESSED, NO_SLOT]]], BoolConst [true]]]\n" +
+                ")], DisplayTextAction [TEXT, StringConst [Hallo]], WaitStmt [\n" +
+                "(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [sensor=GyroSensor [X, ANGLE, NO_SLOT]]], NumConst [90]]]\n" +
+                ")], DisplayTextAction [TEXT, StringConst [Hallo]]]]]";
 
         String result = this.h.generateTransformerString("/sensor/wait_stmt_two_cases.xml");
 

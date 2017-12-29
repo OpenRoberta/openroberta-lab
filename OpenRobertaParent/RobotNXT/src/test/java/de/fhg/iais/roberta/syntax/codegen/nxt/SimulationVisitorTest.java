@@ -144,10 +144,10 @@ public class SimulationVisitorTest {
     @Test
     public void test11() throws Exception {
         String a =
-            "var stmt0 = createWaitStmt([createIfStmt([createBinaryExpr(CONST.LT, createGetSample(CONST.COLOR, CONST.RED), createConstant(CONST.NUM_CONST, 30))], [])]);\n"
+            "var stmt0 = createWaitStmt([createIfStmt([createBinaryExpr(CONST.LT, createGetSample(CONST.COLOR, CONST.LIGHT), createConstant(CONST.NUM_CONST, 30))], [])]);\n"
                 + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(CONST.EQ, createGetSample(CONST.COLOR, CONST.COLOUR), createConstant(CONST.COLOR_CONST, CONST.COLOR_ENUM.RED))], [])]);\n"
                 + "var stmt2 = createWaitStmt([createIfStmt([createBinaryExpr(CONST.EQ, createGetSample(CONST.COLOR, CONST.COLOUR), createConstant(CONST.COLOR_CONST, CONST.COLOR_ENUM.GREEN))], [])]);\n"
-                + "var stmt3 = createWaitStmt([createIfStmt([createBinaryExpr(CONST.LT, createGetSample(CONST.COLOR, CONST.RED), createConstant(CONST.NUM_CONST, 45))], [])]);\n"
+                + "var stmt3 = createWaitStmt([createIfStmt([createBinaryExpr(CONST.LT, createGetSample(CONST.COLOR, CONST.LIGHT), createConstant(CONST.NUM_CONST, 45))], [])]);\n"
                 + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator11.xml");
@@ -405,10 +405,9 @@ public class SimulationVisitorTest {
 
     @Test
     public void testLightSensor() throws Exception {
-        String a =
-            "var stmt0 = createVarDeclaration(CONST.NUMBER, \"Element\", createGetSample(CONST.LIGHT, CONST.RED));\n"
+        String a = "var stmt0 = createVarDeclaration(CONST.NUMBER, \"Element\", createGetSample(CONST.LIGHT, CONST.RED));\n"
 
-                + "var blocklyProgram = {'programStmts': [stmt0]};";
+            + "var blocklyProgram = {'programStmts': [stmt0]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator29.xml");
 

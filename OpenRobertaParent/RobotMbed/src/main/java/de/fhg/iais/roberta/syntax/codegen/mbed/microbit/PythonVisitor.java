@@ -8,9 +8,9 @@ import de.fhg.iais.roberta.components.mbed.MicrobitConfiguration;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.GestureSensorMode;
+import de.fhg.iais.roberta.mode.sensor.PinValue;
+import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
-import de.fhg.iais.roberta.mode.sensor.mbed.ValueType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
@@ -74,6 +74,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -82,17 +83,13 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerOrientationSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor.Mode;
-import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -425,19 +422,25 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
     }
 
     @Override
-    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
-        if ( accelerometerSensor.getAccelerationDirection() == Mode.STRENGTH ) {
+    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
+        if ( accelerometerSensor.getPort() == SensorPort.STRENGTH ) {
             this.sb.append("math.sqrt(microbit.accelerometer.get_x()**2 + microbit.accelerometer.get_y()**2 + microbit.accelerometer.get_z()**2)");
         } else {
-            this.sb.append(String.format("microbit.accelerometer.get_%s()", accelerometerSensor.getAccelerationDirection().toString().toLowerCase()));
+            this.sb.append("microbit.accelerometer.get_");
+            this.sb.append(accelerometerSensor.getPort().toString().toLowerCase());
+            this.sb.append("()");
         }
         return null;
     }
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
-        final String valueType = pinValueSensor.getValueType().toString().toLowerCase();
-        this.sb.append("microbit.pin" + pinValueSensor.getPin().getPinNumber() + ".read_" + valueType + "()");
+        final String valueType = pinValueSensor.getMode().toString().toLowerCase();
+        this.sb.append("microbit.pin");
+        this.sb.append(pinValueSensor.getPort().getValues()[0]);
+        this.sb.append(".read_");
+        this.sb.append(valueType);
+        this.sb.append("()");
         return null;
     }
 
@@ -727,7 +730,7 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        this.sb.append("microbit.pin" + pinTouchSensor.getPort() + ".is_touched()");
+        this.sb.append("microbit.pin" + pinTouchSensor.getPort().getPortNumber() + ".is_touched()");
         return null;
     }
 
@@ -766,41 +769,20 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
     }
 
     @Override
-    public Void visitMbedGetSampleSensor(MbedGetSampleSensor<Void> getSampleSensor) {
-        getSampleSensor.getSensor().visit(this);
-        return null;
-    }
-
-    @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
         return null;
     }
 
     @Override
     public Void visitPinWriteValueSensor(PinWriteValue<Void> pinWriteValueSensor) {
-        this.sb.append("microbit.pin" + pinWriteValueSensor.getPin().getPinNumber());
+        this.sb.append("microbit.pin" + pinWriteValueSensor.getPort().getValues()[0]);
         String valueType = "analog(";
-        if ( pinWriteValueSensor.getValueType() == ValueType.DIGITAL ) {
+        if ( pinWriteValueSensor.getMode() == PinValue.DIGITAL ) {
             valueType = "digital(";
         }
         this.sb.append(".write_" + valueType);
         pinWriteValueSensor.getValue().visit(this);
         this.sb.append(");");
-        return null;
-    }
-
-    @Override
-    public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Void> displaySetBrightnessAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<Void> displayGetBrightnessAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitAccelerometerOrientationSensor(AccelerometerOrientationSensor<Void> accelerometerOrientationSensor) {
         return null;
     }
 
@@ -878,6 +860,18 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
     @Override
     public Void visitStmtTextComment(StmtTextComment<Void> stmtTextComment) {
         this.sb.append("# " + stmtTextComment.getTextComment());
+        return null;
+    }
+
+    @Override
+    public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Void> displaySetBrightnessAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<Void> displayGetBrightnessAction) {
+        // TODO Auto-generated method stub
         return null;
     };
 }

@@ -16,7 +16,7 @@ public class InfraredSensorTest {
     public void sensorSetInfrared() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=-23, y=157], InfraredSensor [S4, OBSTACLE, NO_SLOT]], "
-                + "[Location [x=-19, y=199], InfraredSensor [S3, SEEK, NO_SLOT]]]]";
+                + "[Location [x=-19, y=199], InfraredSensor [S3, PRESENCE, NO_SLOT]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_setInfrared.xml"));
     }
@@ -29,7 +29,7 @@ public class InfraredSensorTest {
         InfraredSensor<Void> cs1 = (InfraredSensor<Void>) transformer.getTree().get(1).get(1);
 
         Assert.assertEquals(InfraredSensorMode.OBSTACLE, cs.getMode());
-        Assert.assertEquals(InfraredSensorMode.SEEK, cs1.getMode());
+        Assert.assertEquals(InfraredSensorMode.PRESENCE, cs1.getMode());
     }
 
     @Test

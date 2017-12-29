@@ -33,6 +33,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IPinValue;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISlot;
 import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
@@ -56,8 +57,8 @@ import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.mode.general.PickColor;
 import de.fhg.iais.roberta.mode.general.WorkingState;
 import de.fhg.iais.roberta.mode.sensor.Axis;
-import de.fhg.iais.roberta.mode.sensor.BrickKeyPressMode;
 import de.fhg.iais.roberta.mode.sensor.BrickKey;
+import de.fhg.iais.roberta.mode.sensor.BrickKeyPressMode;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GestureSensorMode;
@@ -66,6 +67,7 @@ import de.fhg.iais.roberta.mode.sensor.IBirckKeyPressMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.mode.sensor.PinValue;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.Slot;
 import de.fhg.iais.roberta.mode.sensor.SoundSensorMode;
@@ -332,11 +334,15 @@ public interface IRobotFactory {
         return IRobotFactory.getModeValue(mode, CompassSensorMode.class);
     }
 
+    default IPinValue getPinGetValueSensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, PinValue.class);
+    }
+
     default ITemperatureSensorMode getTemperatureSensorMode(String mode) {
         return IRobotFactory.getModeValue(mode, TemperatureSensorMode.class);
     }
 
-    default ICoordinatesMode getAccelerometerSensorMode(String mode) {
+    default ICoordinatesMode getAxis(String mode) {
         return IRobotFactory.getModeValue(mode, Axis.class);
     }
 
@@ -424,7 +430,7 @@ public interface IRobotFactory {
     default IVoltageSensorMode getVoltageSensorMode(String mode) {
         return IRobotFactory.getModeValue(mode, VoltageSensorMode.class);
     }
-    
+
     /**
      * Get a gesture sensor mode from {@link IGestureSensorMode} given string parameter. It is possible for one gesture sensor mode to have multiple string
      * mappings. Throws exception if the gesture sensor mode does not exists.
@@ -435,7 +441,7 @@ public interface IRobotFactory {
     default IGestureSensorMode getGestureSensorMode(String mode) {
         return IRobotFactory.getModeValue(mode, GestureSensorMode.class);
     }
-    
+
     /**
      * Get a sensor port from {@link ISensorPort} given string parameter. It is possible for one sensor port to have multiple string mappings. Throws exception
      * if the sensor port does not exists.

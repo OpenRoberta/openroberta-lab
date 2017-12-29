@@ -103,7 +103,7 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
     AstActorMotorVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
     protected final EV3Configuration brickConfiguration;
 
-    protected Map<String, String> predefinedImage = new HashMap<String, String>();
+    protected Map<String, String> predefinedImage = new HashMap<>();
     protected final Set<UsedSensor> usedSensors;
     protected final Set<String> usedImages;
 
@@ -515,7 +515,7 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
             case COLOUR:
                 this.sb.append("hal.getColorSensorColour(" + colorSensorPort + ")");
                 break;
-            case RED:
+            case LIGHT:
                 this.sb.append("hal.getColorSensorRed(" + colorSensorPort + ")");
                 break;
             case RGB:
@@ -567,11 +567,11 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
             case DISTANCE:
                 this.sb.append("hal.getInfraredSensorDistance(" + infraredSensorPort + ")");
                 break;
-            case SEEK:
+            case PRESENCE:
                 this.sb.append("hal.getInfraredSensorSeek(" + infraredSensorPort + ")");
                 break;
             default:
-                throw new DbcException("Invalid Infrared Sensor Mode!");
+                throw new DbcException("Invalid Infrared Sensor Mode: " + infraredSensor.getMode());
         }
         return null;
     }
@@ -643,14 +643,14 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
         this.sb.append(", ");
         IndexLocation where1 = (IndexLocation) getSubFunct.getStrParam().get(0);
         this.sb.append(getEnumCode(where1));
-        if ( where1 == IndexLocation.FROM_START || where1 == IndexLocation.FROM_END ) {
+        if ( (where1 == IndexLocation.FROM_START) || (where1 == IndexLocation.FROM_END) ) {
             this.sb.append(", ");
             getSubFunct.getParam().get(1).visit(this);
         }
         this.sb.append(", ");
         IndexLocation where2 = (IndexLocation) getSubFunct.getStrParam().get(1);
         this.sb.append(getEnumCode(where2));
-        if ( where2 == IndexLocation.FROM_START || where2 == IndexLocation.FROM_END ) {
+        if ( (where2 == IndexLocation.FROM_START) || (where2 == IndexLocation.FROM_END) ) {
             this.sb.append(", ");
             if ( getSubFunct.getParam().size() == 3 ) {
                 getSubFunct.getParam().get(2).visit(this);

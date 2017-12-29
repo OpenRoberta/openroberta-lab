@@ -14,12 +14,12 @@ public class PythonVisitorTest {
 
     private static final String IMPORTS =
         "" //
-            + "import microbit\n"
-            + "import random\n"
-            + "import math\n\n"
-            + "class BreakOutOfALoop(Exception): pass\n"
-            + "class ContinueLoop(Exception): pass\n\n"
-            + "timer1 = microbit.running_time()\n";
+        + "import microbit\n"
+        + "import random\n"
+        + "import math\n\n"
+        + "class BreakOutOfALoop(Exception): pass\n"
+        + "class ContinueLoop(Exception): pass\n\n"
+        + "timer1 = microbit.running_time()\n";
 
     private static Configuration brickConfiguration;
 
@@ -34,7 +34,7 @@ public class PythonVisitorTest {
     public void visitMainTask_ByDefault_ReturnsEmptyMicroPythonScript() throws Exception {
         String expectedResult =
             "" //
-                + IMPORTS;
+            + IMPORTS;
 
         assertCodeIsOk(expectedResult, "/task/main_task_no_variables_empty.xml");
     }
@@ -43,9 +43,9 @@ public class PythonVisitorTest {
     public void visitDisplayText_ShowHelloScript_ReturnsMicroPythonScriptWithShowTextCall() throws Exception {
         String expectedResult =
             "" //
-                + IMPORTS
-                + "\nmicrobit.display.scroll('Hallo')"
-                + "\nmicrobit.display.show('H')";
+            + IMPORTS
+            + "\nmicrobit.display.scroll('Hallo')"
+            + "\nmicrobit.display.show('H')";
 
         assertCodeIsOk(expectedResult, "/action/display_text_show_hello.xml");
     }
@@ -54,10 +54,10 @@ public class PythonVisitorTest {
     public void visitPredefinedImage_ScriptWithToImageVariables_ReturnsMicroPythonScriptWithTwoImageVariables() throws Exception {
         String expectedResult =
             "" //
-                + IMPORTS
-                + "\n"
-                + "Element = microbit.Image.HEART\n"
-                + "Element2 = microbit.Image.FABULOUS";
+            + IMPORTS
+            + "\n"
+            + "Element = microbit.Image.HEART\n"
+            + "Element2 = microbit.Image.FABULOUS";
 
         assertCodeIsOk(expectedResult, "/expr/image_get_image_defined_as_global_variables.xml");
     }
@@ -66,10 +66,10 @@ public class PythonVisitorTest {
     public void visitDisplayImageAction_ScriptWithDisplayImageAndAnimation_ReturnsMicroPythonScriptWithDisplayImageAndAnimation() throws Exception {
         String expectedResult =
             "" //
-                + IMPORTS
-                + "\n"
-                + "microbit.display.show(microbit.Image.HEART)\n"
-                + "microbit.display.show([microbit.Image.HEART_SMALL, microbit.Image.ASLEEP])";
+            + IMPORTS
+            + "\n"
+            + "microbit.display.show(microbit.Image.HEART)\n"
+            + "microbit.display.show([microbit.Image.HEART_SMALL, microbit.Image.ASLEEP])";
 
         assertCodeIsOk(expectedResult, "/action/display_image_show_imag_and_animation.xml");
     }
@@ -78,9 +78,9 @@ public class PythonVisitorTest {
     public void visitDisplayImageAction_ScriptWithMissinImageToDisplay_ReturnsMicroPythonScriptWithMissingImageToDisplay() throws Exception {
         String expectedResult =
             "" //
-                + IMPORTS
-                + "\n"
-                + "microbit.display.show(\"\")";
+            + IMPORTS
+            + "\n"
+            + "microbit.display.show(\"\")";
 
         assertCodeIsOk(expectedResult, "/action/display_image_missing_image_name.xml");
     }
@@ -89,9 +89,9 @@ public class PythonVisitorTest {
     public void visitClearDisplayAction_ScriptWithClearDisplay_ReturnsMicroPythonScriptClearDisplay() throws Exception {
         String expectedResult =
             "" //
-                + IMPORTS
-                + "\n"
-                + "microbit.display.clear()";
+            + IMPORTS
+            + "\n"
+            + "microbit.display.clear()";
 
         assertCodeIsOk(expectedResult, "/action/display_clear.xml");
     }
@@ -100,10 +100,10 @@ public class PythonVisitorTest {
     public void visitImageShiftFunction_ScriptWithShiftTwoImages_ReturnsMicroPythonScriptShiftTwoImages() throws Exception {
         String expectedResult =
             "" //
-                + IMPORTS
-                + "\n"
-                + "microbit.display.show(microbit.Image.SILLY.shift_up(1))\n"
-                + "microbit.display.show(microbit.Image.SILLY.shift_down(2))";
+            + IMPORTS
+            + "\n"
+            + "microbit.display.show(microbit.Image.SILLY.shift_up(1))\n"
+            + "microbit.display.show(microbit.Image.SILLY.shift_down(2))";
 
         assertCodeIsOk(expectedResult, "/function/image_shift_up_down.xml");
     }
@@ -112,9 +112,9 @@ public class PythonVisitorTest {
     public void visitImageShiftFunction_ScriptWithMissingPositionImage_ReturnsMicroPythonScriptMissingPositionImage() throws Exception {
         String expectedResult =
             "" //
-                + IMPORTS
-                + "\n"
-                + "microbit.display.show(microbit.Image.SILLY.shift_up(0))";
+            + IMPORTS
+            + "\n"
+            + "microbit.display.show(microbit.Image.SILLY.shift_up(0))";
 
         assertCodeIsOk(expectedResult, "/function/image_shift_missing_image_and_position.xml");
     }
@@ -123,9 +123,9 @@ public class PythonVisitorTest {
     public void visitImageInvertFunction_ScriptWithInvertHeartImage_ReturnsMicroPythonScriptInvertHeartImage() throws Exception {
         String expectedResult =
             "" //
-                + IMPORTS
-                + "\n"
-                + "microbit.display.show(microbit.Image.HEART.invert())";
+            + IMPORTS
+            + "\n"
+            + "microbit.display.show(microbit.Image.HEART.invert())";
 
         assertCodeIsOk(expectedResult, "/function/image_invert_heart_image.xml");
     }
@@ -134,9 +134,9 @@ public class PythonVisitorTest {
     public void visitImageInvertFunction_ScriptWithMissingImage_ReturnsMicroPythonScriptInvertDefaultImage() throws Exception {
         String expectedResult =
             "" //
-                + IMPORTS
-                + "\n"
-                + "microbit.display.show(microbit.Image.SILLY.invert())";
+            + IMPORTS
+            + "\n"
+            + "microbit.display.show(microbit.Image.SILLY.invert())";
 
         assertCodeIsOk(expectedResult, "/function/image_invert_missing_image.xml");
     }
@@ -145,9 +145,9 @@ public class PythonVisitorTest {
     public void visitBrickSensor_ScriptChecksKeyAStatus_ReturnsMicroPythonScript() throws Exception {
         String expectedResult =
             "" //
-                + IMPORTS
-                + "\n"
-                + "microbit.display.scroll(str(microbit.button_a.is_pressed()))";
+            + IMPORTS
+            + "\n"
+            + "microbit.display.scroll(str(microbit.button_a.is_pressed()))";
 
         assertCodeIsOk(expectedResult, "/sensor/check_if_key_A_is_pressed.xml");
     }
@@ -156,9 +156,9 @@ public class PythonVisitorTest {
     public void visitCompassSensor_ScriptDisplayCompassHeading_ReturnsMicroPythonScript() throws Exception {
         String expectedResult =
             "" //
-                + IMPORTS
-                + "\n"
-                + "microbit.display.scroll(str(microbit.compass.heading()))";
+            + IMPORTS
+            + "\n"
+            + "microbit.display.scroll(str(microbit.compass.heading()))";
 
         assertCodeIsOk(expectedResult, "/sensor/get_compass_orientation_value.xml");
     }
@@ -167,9 +167,9 @@ public class PythonVisitorTest {
     public void visitImage_ScriptCreatingImage_ReturnsMicroPythonScript() throws Exception {
         String expectedResult =
             "" //
-                + IMPORTS
-                + "\n"
-                + "microbit.display.show(microbit.Image('99000:00009:03000:00090:02000'))";
+            + IMPORTS
+            + "\n"
+            + "microbit.display.show(microbit.Image('99000:00009:03000:00090:02000'))";
 
         assertCodeIsOk(expectedResult, "/expr/image_create.xml");
     }
@@ -179,10 +179,10 @@ public class PythonVisitorTest {
     public void visitGestureSensor_ScriptGetCurrentGestureAndDisplay_ReturnsCoorectMicroPythonScript() throws Exception {
         String expectedResult =
             "" //
-                + IMPORTS
-                + "\n"
-                + "microbit.display.scroll(str(\"face down\" == microbit.accelerometer.current_gesture()))\n"
-                + "microbit.display.scroll(str(\"left\" == microbit.accelerometer.current_gesture()))";
+            + IMPORTS
+            + "\n"
+            + "microbit.display.scroll(str(\"face down\" == microbit.accelerometer.current_gesture()))\n"
+            + "microbit.display.scroll(str(\"left\" == microbit.accelerometer.current_gesture()))";
 
         assertCodeIsOk(expectedResult, "/sensor/check_gesture.xml");
     }
@@ -191,9 +191,9 @@ public class PythonVisitorTest {
     public void visitTemperatureSensor_ScriptGetCurrentTemperatureAndDisplay_ReturnsCorrectMicroPythonScript() throws Exception {
         String expectedResult =
             "" //
-                + IMPORTS
-                + "\n"
-                + "microbit.display.scroll(str(microbit.temperature()))";
+            + IMPORTS
+            + "\n"
+            + "microbit.display.scroll(str(microbit.temperature()))";
 
         assertCodeIsOk(expectedResult, "/sensor/get_temperature.xml");
     }
@@ -203,10 +203,10 @@ public class PythonVisitorTest {
     public void visitPinTouchSensor_ScriptDisplayPin0andPin2areTouched_ReturnsCorrectMicroPythonScript() throws Exception {
         String expectedResult =
             "" //
-                + IMPORTS
-                + "\n"
-                + "microbit.display.scroll(str(microbit.pin0.is_touched()))\n"
-                + "microbit.display.scroll(str(microbit.pin2.is_touched()))";
+            + IMPORTS
+            + "\n"
+            + "microbit.display.scroll(str(microbit.pin0.is_touched()))\n"
+            + "microbit.display.scroll(str(microbit.pin2.is_touched()))";
 
         assertCodeIsOk(expectedResult, "/sensor/pin_is_touched.xml");
     }
@@ -215,10 +215,10 @@ public class PythonVisitorTest {
     public void visitPinValueSensor_ScriptDisplayAnalogReadPin0andDigitalReadPin2_ReturnsCorrectMicroPythonScript() throws Exception {
         String expectedResult =
             "" //
-                + IMPORTS
-                + "\n"
-                + "microbit.display.scroll(str(microbit.pin0.read_analog()))\n"
-                + "microbit.display.scroll(str(microbit.pin2.read_digital()))";
+            + IMPORTS
+            + "\n"
+            + "microbit.display.scroll(str(microbit.pin1.read_analog()))\n"
+            + "microbit.display.scroll(str(microbit.pin0.read_digital()))";
 
         assertCodeIsOk(expectedResult, "/sensor/read_value_from_pin.xml");
     }
@@ -227,12 +227,12 @@ public class PythonVisitorTest {
     public void visitAccelerationSensor_DisplayTheAccelerationInEachDirection_ReturnsCorrectMicroPythonScript() throws Exception {
         String expectedResult =
             "" //
-                + IMPORTS
-                + "\n"
-                + "microbit.display.scroll(str(microbit.accelerometer.get_x()))\n"
-                + "microbit.display.scroll(str(microbit.accelerometer.get_y()))\n"
-                + "microbit.display.scroll(str(microbit.accelerometer.get_z()))\n"
-                + "microbit.display.scroll(str(math.sqrt(microbit.accelerometer.get_x()**2 + microbit.accelerometer.get_y()**2 + microbit.accelerometer.get_z()**2)))";
+            + IMPORTS
+            + "\n"
+            + "microbit.display.scroll(str(microbit.accelerometer.get_x()))\n"
+            + "microbit.display.scroll(str(microbit.accelerometer.get_y()))\n"
+            + "microbit.display.scroll(str(microbit.accelerometer.get_z()))\n"
+            + "microbit.display.scroll(str(math.sqrt(microbit.accelerometer.get_x()**2 + microbit.accelerometer.get_y()**2 + microbit.accelerometer.get_z()**2)))";
 
         assertCodeIsOk(expectedResult, "/sensor/acceleration_sensor.xml");
     }
@@ -242,12 +242,12 @@ public class PythonVisitorTest {
     public void check_noLoops_returnsNoLabeledLoops() throws Exception {
         String a =
             "" //
-                + IMPORTS
-                + "\n"
-                + "if 20 == 30:\n"
-                + "    while True:\n"
-                + "        if microbit.button_a.is_pressed() == True:\n"
-                + "            break";
+            + IMPORTS
+            + "\n"
+            + "if 20 == 30:\n"
+            + "    while True:\n"
+            + "        if microbit.button_a.is_pressed() == True:\n"
+            + "            break";
 
         assertCodeIsOk(a, "/stmts/no_loops.xml");
     }
@@ -257,15 +257,15 @@ public class PythonVisitorTest {
     public void check_nestedLoopsNoBreakorContinue_returnsNoLabeledLoops() throws Exception {
         String a =
             "" //
-                + IMPORTS
-                + "\n"
-                + "while True:\n"
-                + "    if 30 == 20:\n"
-                + "        while True:\n"
-                + "            if microbit.button_a.is_pressed() == True:\n"
-                + "                break\n"
-                + "    for i in range(1, 10, 1):\n"
-                + "        pass";
+            + IMPORTS
+            + "\n"
+            + "while True:\n"
+            + "    if 30 == 20:\n"
+            + "        while True:\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                break\n"
+            + "    for i in range(1, 10, 1):\n"
+            + "        pass";
 
         assertCodeIsOk(a, "/stmts/nested_loops.xml");
     }
@@ -275,21 +275,21 @@ public class PythonVisitorTest {
     public void check_loopWithBreakAndContinueInWait_returnsOneLabeledLoop() throws Exception {
         String a =
             "" //
-                + IMPORTS
-                + "\n"
-                + "while True:\n"
-                + "    try:\n"
-                + "        while True:\n"
-                + "            if microbit.button_a.is_pressed() == True:\n"
-                + "                raise BreakOutOfALoop\n"
-                + "                break\n"
-                + "            if microbit.button_a.is_pressed() == True:\n"
-                + "                raise ContinueLoop\n"
-                + "                break\n"
-                + "    except BreakOutOfALoop:\n"
-                + "        break\n"
-                + "    except ContinueLoop:\n"
-                + "        continue";
+            + IMPORTS
+            + "\n"
+            + "while True:\n"
+            + "    try:\n"
+            + "        while True:\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                raise BreakOutOfALoop\n"
+            + "                break\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                raise ContinueLoop\n"
+            + "                break\n"
+            + "    except BreakOutOfALoop:\n"
+            + "        break\n"
+            + "    except ContinueLoop:\n"
+            + "        continue";
 
         assertCodeIsOk(a, "/stmts/loop_with_break_and_continue_inside_wait.xml");
     }
@@ -298,24 +298,24 @@ public class PythonVisitorTest {
     public void check_loopsWithBreakAndContinueFitstInWaitSecondNot_returnsFirstLoopLabeled() throws Exception {
         String a =
             "" //
-                + IMPORTS
-                + "\n"
-                + "while True:\n"
-                + "    try:\n"
-                + "        while True:\n"
-                + "            if microbit.button_a.is_pressed() == True:\n"
-                + "                raise BreakOutOfALoop\n"
-                + "                break\n"
-                + "            if microbit.button_a.is_pressed() == True:\n"
-                + "                raise ContinueLoop\n"
-                + "                break\n"
-                + "    except BreakOutOfALoop:\n"
-                + "        break\n"
-                + "    except ContinueLoop:\n"
-                + "        continue\n"
-                + "for i in range(1, 10, 1):\n"
-                + "    if i < 10:\n"
-                + "        continue";
+            + IMPORTS
+            + "\n"
+            + "while True:\n"
+            + "    try:\n"
+            + "        while True:\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                raise BreakOutOfALoop\n"
+            + "                break\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                raise ContinueLoop\n"
+            + "                break\n"
+            + "    except BreakOutOfALoop:\n"
+            + "        break\n"
+            + "    except ContinueLoop:\n"
+            + "        continue\n"
+            + "for i in range(1, 10, 1):\n"
+            + "    if i < 10:\n"
+            + "        continue";
 
         assertCodeIsOk(a, "/stmts/two_loop_with_break_and_continue_one_inside_wait_another_not.xml");
     }
@@ -324,24 +324,24 @@ public class PythonVisitorTest {
     public void check_twoNestedloopsFirstWithBreakAndContinueInWaitSecondNot_returnsFirstLoopLabeled() throws Exception {
         String a =
             "" //
-                + IMPORTS
-                + "\n"
-                + "while True:\n"
-                + "    try:\n"
-                + "        while True:\n"
-                + "            if microbit.button_a.is_pressed() == True:\n"
-                + "                raise BreakOutOfALoop\n"
-                + "                break\n"
-                + "            if microbit.button_a.is_pressed() == True:\n"
-                + "                raise ContinueLoop\n"
-                + "                break\n"
-                + "        for i in range(1, 10, 1):\n"
-                + "            if i < 10:\n"
-                + "                continue\n"
-                + "    except BreakOutOfALoop:\n"
-                + "        break\n"
-                + "    except ContinueLoop:\n"
-                + "        continue";
+            + IMPORTS
+            + "\n"
+            + "while True:\n"
+            + "    try:\n"
+            + "        while True:\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                raise BreakOutOfALoop\n"
+            + "                break\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                raise ContinueLoop\n"
+            + "                break\n"
+            + "        for i in range(1, 10, 1):\n"
+            + "            if i < 10:\n"
+            + "                continue\n"
+            + "    except BreakOutOfALoop:\n"
+            + "        break\n"
+            + "    except ContinueLoop:\n"
+            + "        continue";
 
         assertCodeIsOk(a, "/stmts/two_nested_loops_first_with_break_in_wait_second_not.xml");
     }
@@ -350,27 +350,27 @@ public class PythonVisitorTest {
     public void check_loopWithNestedTwoLoopsInsideWait_returnsFirstLoopLabeled() throws Exception {
         String a =
             "" //
-                + IMPORTS
-                + "\n"
-                + "while True:\n"
-                + "    try:\n"
-                + "        while True:\n"
-                + "            if microbit.button_a.is_pressed() == True:\n"
-                + "                for i in range(1, 10, 1):\n"
-                + "                    if i < 10:\n"
-                + "                        continue\n"
-                + "                raise BreakOutOfALoop\n"
-                + "                break\n"
-                + "            if microbit.button_a.is_pressed() == True:\n"
-                + "                for j in range(1, 10, 1):\n"
-                + "                    if j < 10:\n"
-                + "                        continue\n"
-                + "                raise ContinueLoop\n"
-                + "                break\n"
-                + "    except BreakOutOfALoop:\n"
-                + "        break\n"
-                + "    except ContinueLoop:\n"
-                + "        continue";
+            + IMPORTS
+            + "\n"
+            + "while True:\n"
+            + "    try:\n"
+            + "        while True:\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                for i in range(1, 10, 1):\n"
+            + "                    if i < 10:\n"
+            + "                        continue\n"
+            + "                raise BreakOutOfALoop\n"
+            + "                break\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                for j in range(1, 10, 1):\n"
+            + "                    if j < 10:\n"
+            + "                        continue\n"
+            + "                raise ContinueLoop\n"
+            + "                break\n"
+            + "    except BreakOutOfALoop:\n"
+            + "        break\n"
+            + "    except ContinueLoop:\n"
+            + "        continue";
 
         assertCodeIsOk(a, "/stmts/loop_with_nested_two_loops_inside_wait.xml");
     }
@@ -379,37 +379,37 @@ public class PythonVisitorTest {
     public void check_loopWithNestedTwoLoopsInsideWaitSecondContainWait_returnsFirstAndThirdLoopLabeled() throws Exception {
         String a =
             "" //
-                + IMPORTS
-                + "\n"
-                + "while True:\n"
-                + "    try:\n"
-                + "        while True:\n"
-                + "            if microbit.button_a.is_pressed() == True:\n"
-                + "                for j in range(1, 10, 1):\n"
-                + "                    if j < 10:\n"
-                + "                        continue\n"
-                + "                raise ContinueLoop\n"
-                + "                break\n"
-                + "            if microbit.button_a.is_pressed() == True:\n"
-                + "                for i in range(1, 10, 1):\n"
-                + "                    try:\n"
-                + "                        while True:\n"
-                + "                            if microbit.button_a.is_pressed() == True:\n"
-                + "                                raise ContinueLoop\n"
-                + "                                break\n"
-                + "                            if microbit.button_a.is_pressed() == True:\n"
-                + "                                raise BreakOutOfALoop\n"
-                + "                                break\n"
-                + "                    except BreakOutOfALoop:\n"
-                + "                        break\n"
-                + "                    except ContinueLoop:\n"
-                + "                        continue\n"
-                + "                raise BreakOutOfALoop\n"
-                + "                break\n"
-                + "    except BreakOutOfALoop:\n"
-                + "        break\n"
-                + "    except ContinueLoop:\n"
-                + "        continue";
+            + IMPORTS
+            + "\n"
+            + "while True:\n"
+            + "    try:\n"
+            + "        while True:\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                for j in range(1, 10, 1):\n"
+            + "                    if j < 10:\n"
+            + "                        continue\n"
+            + "                raise ContinueLoop\n"
+            + "                break\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                for i in range(1, 10, 1):\n"
+            + "                    try:\n"
+            + "                        while True:\n"
+            + "                            if microbit.button_a.is_pressed() == True:\n"
+            + "                                raise ContinueLoop\n"
+            + "                                break\n"
+            + "                            if microbit.button_a.is_pressed() == True:\n"
+            + "                                raise BreakOutOfALoop\n"
+            + "                                break\n"
+            + "                    except BreakOutOfALoop:\n"
+            + "                        break\n"
+            + "                    except ContinueLoop:\n"
+            + "                        continue\n"
+            + "                raise BreakOutOfALoop\n"
+            + "                break\n"
+            + "    except BreakOutOfALoop:\n"
+            + "        break\n"
+            + "    except ContinueLoop:\n"
+            + "        continue";
 
         assertCodeIsOk(a, "/stmts/loop_with_nested_two_loops_inside_wait_second_contain_wait.xml");
     }
@@ -418,53 +418,53 @@ public class PythonVisitorTest {
     public void check_threeLoopsWithNestedTwoLoopsInsideWaitSecondContainWait_returnsFirstThirdAndFourthLoopLabeled() throws Exception {
         String a =
             "" //
-                + IMPORTS
-                + "\n"
-                + "while True:\n"
-                + "    try:\n"
-                + "        while True:\n"
-                + "            if microbit.button_a.is_pressed() == True:\n"
-                + "                for j in range(1, 10, 1):\n"
-                + "                    if j < 10:\n"
-                + "                        continue\n"
-                + "                raise ContinueLoop\n"
-                + "                break\n"
-                + "            if microbit.button_a.is_pressed() == True:\n"
-                + "                for i in range(1, 10, 1):\n"
-                + "                    try:\n"
-                + "                        while True:\n"
-                + "                            if microbit.button_a.is_pressed() == True:\n"
-                + "                                raise ContinueLoop\n"
-                + "                                break\n"
-                + "                            if microbit.button_a.is_pressed() == True:\n"
-                + "                                raise BreakOutOfALoop\n"
-                + "                                break\n"
-                + "                    except BreakOutOfALoop:\n"
-                + "                        break\n"
-                + "                    except ContinueLoop:\n"
-                + "                        continue\n"
-                + "                raise BreakOutOfALoop\n"
-                + "                break\n"
-                + "    except BreakOutOfALoop:\n"
-                + "        break\n"
-                + "    except ContinueLoop:\n"
-                + "        continue\n"
-                + "while True:\n"
-                + "    if 10 < 10:\n"
-                + "        continue\n"
-                + "while True:\n"
-                + "    try:\n"
-                + "        while True:\n"
-                + "            if microbit.button_a.is_pressed() == True:\n"
-                + "                raise ContinueLoop\n"
-                + "                break\n"
-                + "            if microbit.button_a.is_pressed() == True:\n"
-                + "                raise BreakOutOfALoop\n"
-                + "                break\n"
-                + "    except BreakOutOfALoop:\n"
-                + "        break\n"
-                + "    except ContinueLoop:\n"
-                + "        continue";
+            + IMPORTS
+            + "\n"
+            + "while True:\n"
+            + "    try:\n"
+            + "        while True:\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                for j in range(1, 10, 1):\n"
+            + "                    if j < 10:\n"
+            + "                        continue\n"
+            + "                raise ContinueLoop\n"
+            + "                break\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                for i in range(1, 10, 1):\n"
+            + "                    try:\n"
+            + "                        while True:\n"
+            + "                            if microbit.button_a.is_pressed() == True:\n"
+            + "                                raise ContinueLoop\n"
+            + "                                break\n"
+            + "                            if microbit.button_a.is_pressed() == True:\n"
+            + "                                raise BreakOutOfALoop\n"
+            + "                                break\n"
+            + "                    except BreakOutOfALoop:\n"
+            + "                        break\n"
+            + "                    except ContinueLoop:\n"
+            + "                        continue\n"
+            + "                raise BreakOutOfALoop\n"
+            + "                break\n"
+            + "    except BreakOutOfALoop:\n"
+            + "        break\n"
+            + "    except ContinueLoop:\n"
+            + "        continue\n"
+            + "while True:\n"
+            + "    if 10 < 10:\n"
+            + "        continue\n"
+            + "while True:\n"
+            + "    try:\n"
+            + "        while True:\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                raise ContinueLoop\n"
+            + "                break\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                raise BreakOutOfALoop\n"
+            + "                break\n"
+            + "    except BreakOutOfALoop:\n"
+            + "        break\n"
+            + "    except ContinueLoop:\n"
+            + "        continue";
         assertCodeIsOk(a, "/stmts/three_loops_with_nested_two_loops_inside_wait_second_contain_wait.xml");
     }
 

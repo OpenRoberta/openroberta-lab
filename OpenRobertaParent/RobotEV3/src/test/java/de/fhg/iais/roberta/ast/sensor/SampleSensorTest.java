@@ -15,7 +15,7 @@ public class SampleSensorTest {
                 + "[Location [x=36, y=39], GetSampleSensor [sensor=UltrasonicSensor [S4, DISTANCE, NO_SLOT]]], "
                 + "[Location [x=56, y=79], GetSampleSensor [sensor=UltrasonicSensor [S4, PRESENCE, NO_SLOT]]], "
                 + "[Location [x=76, y=119], GetSampleSensor [sensor=ColorSensor [S3, COLOUR, NO_SLOT]]], "
-                + "[Location [x=96, y=159], GetSampleSensor [sensor=ColorSensor [S3, RED, NO_SLOT]]], "
+                + "[Location [x=96, y=159], GetSampleSensor [sensor=ColorSensor [S3, LIGHT, NO_SLOT]]], "
                 + "[Location [x=116, y=199], GetSampleSensor [sensor=ColorSensor [S3, AMBIENTLIGHT, NO_SLOT]]], "
                 + "[Location [x=136, y=239], GetSampleSensor [sensor=InfraredSensor [S4, DISTANCE, NO_SLOT]]], "
                 + "[Location [x=156, y=279], GetSampleSensor [sensor=EncoderSensor [A, ROTATION, NO_SLOT]]], "

@@ -120,7 +120,6 @@ public class Jaxb2MakeBlockConfigurationTransformer {
     private void extractHardwareComponent(List<Value> values, List<Pair<ISensorPort, Sensor>> sensors, List<Pair<IActorPort, Actor>> actors) {
         List<Field> fields;
         for ( Value value : values ) {
-            //System.out.println(value.getName());
             if ( value.getName().startsWith("P") ) {
                 try {
                     // Extract sensor/actor on port

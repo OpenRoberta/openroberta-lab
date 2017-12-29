@@ -16,7 +16,7 @@ public class ColorSensorTest {
     public void sensorSetColor() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=-15, y=107], ColorSensor [S3, COLOUR, NO_SLOT]], "
-                + "[Location [x=-13, y=147], ColorSensor [S1, RED, NO_SLOT]], "
+                + "[Location [x=-13, y=147], ColorSensor [S1, LIGHT, NO_SLOT]], "
                 + "[Location [x=-11, y=187], ColorSensor [S2, RGB, NO_SLOT]], "
                 + "[Location [x=-11, y=224], ColorSensor [S4, AMBIENTLIGHT, NO_SLOT]]]]";
 
@@ -33,7 +33,7 @@ public class ColorSensorTest {
         ColorSensor<Void> cs3 = (ColorSensor<Void>) transformer.getTree().get(3).get(1);
 
         Assert.assertEquals(ColorSensorMode.COLOUR, cs.getMode());
-        Assert.assertEquals(ColorSensorMode.RED, cs1.getMode());
+        Assert.assertEquals(ColorSensorMode.LIGHT, cs1.getMode());
         Assert.assertEquals(ColorSensorMode.RGB, cs2.getMode());
         Assert.assertEquals(ColorSensorMode.AMBIENTLIGHT, cs3.getMode());
     }
