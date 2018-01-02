@@ -36,6 +36,7 @@ require.config({
         'progDelete.controller' : '../app/roberta/controller/progDelete.controller',
         'progHelp.controller' : '../app/roberta/controller/progHelp.controller',
         'progInfo.controller' : '../app/roberta/controller/progInfo.controller',
+        'progSim.controller' : '../app/roberta/controller/progSim.controller',
         'progRun.controller' : '../app/roberta/controller/progRun.controller',
         'progList.controller' : '../app/roberta/controller/progList.controller',
         'progList.model' : '../app/roberta/models/progList.model',
@@ -117,8 +118,10 @@ require.config({
 });
 
 require([ 'require', 'wrap', 'jquery', 'jquery-cookie', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
-        'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'cookieDisclaimer.controller', 'menu.controller', 'user.controller', 'robot.controller',
-        'program.controller', 'configuration.controller', 'language.controller', 'socket.controller', 'volume-meter', 'user.model' ], function(require) {
+        'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'cookieDisclaimer.controller', 'menu.controller', 'user.controller',
+        'robot.controller', 'program.controller', 'progSim.controller', 'progCode.controller', 'progDelete.controller', 'progHelp.controller',
+        'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller', 'volume-meter', 'user.model' ], function(
+        require) {
 
     $ = require('jquery', 'jquery-cookie');
     WRAP = require('wrap');
@@ -135,6 +138,11 @@ require([ 'require', 'wrap', 'jquery', 'jquery-cookie', 'guiState.controller', '
     progListController = require('progList.controller');
     galleryListController = require('galleryList.controller');
     programController = require('program.controller');
+    progHelpController = require('progHelp.controller');
+    progInfoController = require('progInfo.controller');
+    progCodeController = require('progCode.controller');
+    progSimController = require('progSim.controller');
+    progRunController = require('progRun.controller');
     progShareController = require('progShare.controller');
     robotController = require('robot.controller');
     userController = require('user.controller');
@@ -165,6 +173,11 @@ function init() {
         logListController.init();
         configurationController.init();
         programController.init();
+        progHelpController.init();
+        progInfoController.init();
+        progCodeController.init();
+        progSimController.init();
+        progRunController.init();
         menuController.init();
         cookieDisclaimer.init();
         $(".cover").fadeOut(100, function() {

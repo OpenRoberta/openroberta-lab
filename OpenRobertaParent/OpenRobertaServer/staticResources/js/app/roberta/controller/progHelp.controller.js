@@ -1,12 +1,12 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'blocks', 'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, COMM,
-        MSG, LOG, UTIL, GUISTATE_C, Blockly, $) {
+define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', 'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, MSG, LOG, UTIL,
+        GUISTATE_C, Blockly, $) {
 
     var blocklyWorkspace;
     /**
      * 
      */
-    function init(workspace) {
-        blocklyWorkspace = workspace;
+    function init() {
+        blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
         initView();
         initEvents();
         LOG.info('init help view');

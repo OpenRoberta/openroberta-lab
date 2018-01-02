@@ -1,6 +1,7 @@
-define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket.controller', 'user.controller', 'user.model', 'guiState.controller', 'cookieDisclaimer.controller',
-        'program.controller', 'configuration.controller', 'enjoyHint', 'tour.controller', 'simulation.simulation', 'jquery', 'blocks', 'slick' ], function(
-        exports, LOG, UTIL, MSG, COMM, ROBOT_C, SOCKET_C, USER_C, USER, GUISTATE_C, CookieDisclaimer, PROGRAM_C, CONFIGURATION_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
+define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket.controller', 'user.controller', 'user.model', 'guiState.controller',
+        'cookieDisclaimer.controller', 'program.controller', 'progRun.controller', 'configuration.controller', 'enjoyHint', 'tour.controller',
+        'simulation.simulation', 'jquery', 'blocks', 'slick' ], function(exports, LOG, UTIL, MSG, COMM, ROBOT_C, SOCKET_C, USER_C, USER, GUISTATE_C,
+        CookieDisclaimer, PROGRAM_C, RUN_C, CONFIGURATION_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
 
     function init() {
         initMenu();
@@ -47,7 +48,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                         centerPadding : '60px',
                         slidesToShow : 3,
                         index : 2,
-                        swipeToSlide: true,
+                        swipeToSlide : true,
                         setPosition : true,
                         prevArrow : "<button type='button' class='slick-prev slick-arrow typcn typcn-arrow-left-outline'></button>",
                         nextArrow : "<button type='button' class='slick-next slick-arrow typcn typcn-arrow-right-outline'></button>",
@@ -56,7 +57,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                             settings : {
                                 centerPadding : '5px',
                                 slidesToShow : 1,
-                                swipeToSlide: true,
+                                swipeToSlide : true,
                                 variableWidth : true
                             }
                         } ]
@@ -234,7 +235,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         $('#head-navigation-program-edit').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
             switch (event.target.id) {
             case 'menuRunProg':
-                PROGRAM_C.runOnBrick();
+                RUN_C.runOnBrick();
                 break;
             case 'menuRunSim':
                 $('#progSim').trigger('click');
@@ -534,23 +535,23 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                         ROBOT_C.switchRobot(choosenRobotType, true);
                     }
                 }
-                
+
                 var cookieName = "OpenRoberta_" + GUISTATE_C.getServerVersion();
-                
+
                 if ($('#checkbox_id').is(':checked')) {
-                    
+
                     var cookieSettings = {
-                            expires: 99,
-                            secure : GUISTATE_C.isPublicServerVersion(),
-                            domain : ''
-                        };
-                    
+                        expires : 99,
+                        secure : GUISTATE_C.isPublicServerVersion(),
+                        domain : ''
+                    };
+
                     CookieDisclaimer.saveCookie(cookieName, choosenRobotType, cookieSettings);
-                    
+
                 } else {
                     $.removeCookie(cookieName);
                 }
-                
+
                 $('#show-startup-message').modal('hide');
             }
         }, 'robot choosen in start popup');
@@ -605,7 +606,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
 //                }
 //            }
         });
-        
+
         var blocklyWidth = 0;
         $(window).on('resize', function(e) {
             Blockly.svgResize(GUISTATE_C.getBlocklyWorkspace());

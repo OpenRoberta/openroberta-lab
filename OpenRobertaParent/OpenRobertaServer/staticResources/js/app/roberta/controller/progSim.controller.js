@@ -1,12 +1,12 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'guiState.controller', 'program.model', 'blocks', 'jquery', 'jquery-validate',
-        'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, SIM, GUISTATE_C, PROGRAM, Blockly, $) {
+define([ 'exports', 'message', 'log', 'util', 'simulation.simulation', 'guiState.controller', 'program.controller', 'program.model', 'blocks', 'jquery',
+        'jquery-validate', 'blocks-msg' ], function(exports, MSG, LOG, UTIL, SIM, GUISTATE_C, PROG_C, PROGRAM, Blockly, $) {
 
     var blocklyWorkspace;
     /**
      * 
      */
-    function init(workspace) {
-        blocklyWorkspace = workspace;
+    function init() {
+        blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
         //initView();
         initEvents();
         // LOG.sim('init sim view');
@@ -32,7 +32,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                 var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
 
                 var language = GUISTATE_C.getLanguage();
-                
+
                 PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
                     if (result.rc == "ok") {
                         MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
@@ -45,7 +45,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                     } else {
                         MSG.displayInformation(result, "", result.message, "");
                     }
-                    reloadProgram(result);
+                    PROG_C.reloadProgram(result);
                 });
             } else {
                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
@@ -109,30 +109,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
         }, 'simResetPose clicked');
     }
 
-    function reloadProgram(opt_result) {
-        xml = GUISTATE_C.getProgramXML();
-        if (opt_result) {
-            xml = opt_result.data;
-        }
-        listenToBlocklyEvents = false;
-        Blockly.hideChaff();
-        blocklyWorkspace.clear();
-        var dom = Blockly.Xml.textToDom(xml, blocklyWorkspace);
-        Blockly.Xml.domToWorkspace(dom, blocklyWorkspace);
-        // update right panel if it is already open
-        if ($('.fromRight').hasClass('rightActive')) {
-            $('#infoContent').html(blocklyWorkspace.description);
-            //TODO this should be revised with Beate and Kostadin
-            var xmlConfiguration = GUISTATE_C.getConfigurationXML();
-            var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-            var xmlProgram = Blockly.Xml.domToText(dom);
-            var xmlConfiguration = GUISTATE_C.getConfigurationXML();
-        }
-        setTimeout(function() {
-            listenToBlocklyEvents = true;
-        }, 500);
-    }
-
     function toggleSim() {
         Blockly.hideChaff();
         if ($('#simDiv').hasClass('rightActive')) {
@@ -180,7 +156,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
 
             var language = GUISTATE_C.getLanguage();
-            
+
             PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
                 if (result.rc == "ok") {
                     //                    MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
@@ -227,7 +203,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                 } else {
                     MSG.displayInformation(result, "", result.message, "");
                 }
-                reloadProgram(result);
+                PROG_C.reloadProgram(result);
             });
         }
     }

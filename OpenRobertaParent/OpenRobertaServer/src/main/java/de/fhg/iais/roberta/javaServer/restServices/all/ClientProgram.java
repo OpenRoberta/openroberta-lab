@@ -445,11 +445,10 @@ public class ClientProgram {
                             handleRunProgramError(response, messageKey, token, true);
                         }
                     }
-                } else {
-                    handleRunProgramError(response, messageKey, token, true);
-                }
+                } // else {
                 response.put("data", programText);
-
+                handleRunProgramError(response, messageKey, token, true);
+                // }            
             } else if ( cmd.equals("runPsim") ) {
                 boolean wasRobotWaiting = false;
 

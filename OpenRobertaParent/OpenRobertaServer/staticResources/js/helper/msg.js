@@ -1,5 +1,7 @@
 define([ 'exports', 'log', 'jquery', 'blocks-msg' ], function(exports, LOG, $, Blockly) {
+    
     var toastMessages = [];
+    var toastDelay = 3000;
 
     /**
      * Display popup messages
@@ -21,9 +23,9 @@ define([ 'exports', 'log', 'jquery', 'blocks-msg' ], function(exports, LOG, $, B
      * Display toast messages
      */
     function displayToastMessages() {
-        $('#toastText').text(toastMessages[toastMessages.length - 1]);
+        $('#toastText').html(toastMessages[toastMessages.length - 1]);
         $('#toastContainer').delay(100).fadeIn("slow", function() {
-            $(this).delay(2000).fadeOut("slow", function() {
+            $(this).delay(toastDelay).fadeOut("slow", function() {
                 toastMessages.pop();
                 if (toastMessages.length > 0) {
                     displayToastMessages();

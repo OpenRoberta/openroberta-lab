@@ -1,9 +1,69 @@
-define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controller', 'guiState.controller', 'jquery' ], function(exports, UTIL, LOG, MSG,
-        GUISTATE, SOCKET_C, GUISTATE_C, $) {
+define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.model', 'socket.controller', 'guiState.controller', 'jquery' ], function(exports,
+        UTIL, LOG, MSG, PROG_C, PROGRAM, SOCKET_C, GUISTATE_C, $) {
 
-    function init() {
-
+    var blocklyWorkspace;
+    /**
+     * 
+     */
+    function init(workspace) {
+        blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
+        //initView();
+        initEvents();
     }
+    exports.init = init;
+
+    function initEvents() {
+        Blockly.bindEvent_(blocklyWorkspace.robControls.runOnBrick, 'mousedown', null, function(e) {
+            LOG.info('runOnBrick from blockly button');
+            runOnBrick();
+            return false;
+        });
+        if (GUISTATE_C.getConnection() == 'token') {
+            blocklyWorkspace.robControls.disable('runOnBrick');
+        }
+    }
+
+    /**
+     * Start the program on the brick
+     */
+    function runOnBrick() {
+        if (!GUISTATE_C.isRobotConnected()) {
+            MSG.displayMessage("POPUP_ROBOT_NOT_CONNECTED", "POPUP", "");
+            return;
+        } else if (GUISTATE_C.robotState === 'busy' && GUISTATE_C.getConnection() === 'token') {
+            MSG.displayMessage("POPUP_ROBOT_BUSY", "POPUP", "");
+            return;
+        }
+        GUISTATE_C.setConnectionBusy(true);
+        LOG.info('run ' + GUISTATE_C.getProgramName() + 'on brick');
+        var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+        var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
+
+        var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
+        var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
+        var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
+
+        var language = GUISTATE_C.getLanguage();
+
+        var connectionType = GUISTATE_C.getConnectionTypeEnum();
+        if (GUISTATE_C.getConnection() == connectionType.AUTO) {
+            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
+                runForAutoConnection(result);
+                PROG_C.reloadProgram(result);
+            });
+        } else if (GUISTATE_C.getConnection() == connectionType.AGENT || GUISTATE_C.getConnection() == connectionType.AGENTORTOKEN && GUISTATE_C.getIsAgent()) {
+            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
+                runForAgentConnection(result);
+                PROG_C.reloadProgram(result);
+            });
+        } else {
+            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
+                runForToken(result);
+                PROG_C.reloadProgram(result);
+            });
+        }
+    }
+    exports.runOnBrick = runOnBrick;
 
     function runForAutoConnection(result) {
         GUISTATE_C.setState(result);
@@ -11,7 +71,10 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             if (GUISTATE_C.isProgramToDownload() || navigator.userAgent.toLowerCase().match(/iPad|iPhone|android/i) != null) {
                 var filename = GUISTATE_C.getProgramName() + '.hex';
                 UTIL.download(filename, result.compiledCode);
-                GUISTATE_C.setAutoConnectedBusy(false);
+                setTimeout(function() {
+                    GUISTATE_C.setConnectionBusy(false);
+                }, 5000);
+                MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
             } else {
                 //create link with content
                 var programLink = "<div id='programLink' style='text-align: center;'><br><a style='font-size:36px; padding: 20px' download='"
@@ -32,7 +95,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
                     $('#trA').addClass('hidden');
                     var filename = GUISTATE_C.getProgramName() + '.hex';
                     UTIL.download(filename, result.compiledCode);
-                    GUISTATE_C.setAutoConnectedBusy(false);
+                    GUISTATE_C.setConnectionBusy(false);
                 }
 
                 rawSvg = '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'102\' height=\'77\' viewBox=\'0 0 77 102\'><rect x=\'0\' y=\'0\' width=\'102\' height=\'77\' fill=\'#dddddd\'/><text fill=\'#333333\' x=\'3\' y=\'40\' style=\'font-family:Arial;font-size:16px\'>'
@@ -87,66 +150,46 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
                     if (textH) {
                         $("#popupDownloadHeader").text(textH);
                     }
-                    GUISTATE_C.setAutoConnectedBusy(false);
+                    GUISTATE_C.setConnectionBusy(false);
+                    MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
                 });
-                var robotRealName;
-                var list = GUISTATE_C.getRobots();
-
-                for ( var robot in list) {
-                    if (!list.hasOwnProperty(robot)) {
-                        continue;
-                    }
-                    if (list[robot].name == GUISTATE_C.getGuiRobot()) {
-                        robotRealName = list[robot].realName;
-                    }
-                }
                 // fix header$(selector).attr(attribute)
                 textH = $("#popupDownloadHeader").text();
-                $("#popupDownloadHeader").text(textH.replace("$", $.trim(robotRealName)));
+                $("#popupDownloadHeader").text(textH.replace("$", $.trim(GUISTATE_C.getRobotRealName())));
                 textC = $("#download-instructions").find("tr").eq(2).find("td").eq(1).html();
                 $("#download-instructions").find("tr").eq(2).find("td").eq(1).html(textC.replace("$", usb));
                 $('#save-client-compiled-program').modal('show');
             }
         } else {
-            MSG.displayInformation(result, "", result.message, "");
-            GUISTATE_C.setAutoConnectedBusy(false);
+            GUISTATE_C.setConnectionBusy(false);
+            MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
         }
     }
 
-    exports.runForAutoConnection = runForAutoConnection;
-
     function runForAgentConnection(result) {
-        GUISTATE_C.setAutoConnectedBusy(true);
-        GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
         $('#menuRunProg').parent().addClass('disabled');
         $('#head-navi-icon-robot').addClass('busy');
         GUISTATE_C.setState(result);
         if (result.rc == "ok") {
-            MSG.displayMessage(Blockly.Msg["MESSAGE_EDIT_START"], 'TOAST', GUISTATE_C.getProgramName());
             SOCKET_C.uploadProgram(result.compiledCode, GUISTATE_C.getRobotPort());
-            GUISTATE_C.setAutoConnectedBusy(false);
-            $('#head-navi-icon-robot').removeClass('busy');
-            GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
-            $('#menuRunProg').parent().removeClass('disabled');
+            setTimeout(function() {
+                GUISTATE_C.setConnectionBusy(false);
+            }, 5000);
         } else {
-
-            //console.log("result not ok");
-            MSG.displayInformation(result, "", result.message, "");
-            GUISTATE_C.setAutoConnectedBusy(false);
-            $('#head-navi-icon-robot').removeClass('busy');
+            GUISTATE_C.setConnectionBusy(false);
         }
+        MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
     }
-
-    exports.runForAgentConnection = runForAgentConnection;
 
     function runForToken(result) {
         GUISTATE_C.setState(result);
+        MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
         if (result.rc == "ok") {
-            MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
+            if (Blockly.Msg['MENU_ROBOT_STOP_HINT_' + GUISTATE_C.getRobotGroup().toUpperCase()]) {
+                MSG.displayMessage('MENU_ROBOT_STOP_HINT_' + GUISTATE_C.getRobotGroup().toUpperCase(), 'TOAST');
+            }
         } else {
-            MSG.displayInformation(result, "", result.message, "");
+            GUISTATE_C.setConnectionBusy(false);
         }
     }
-
-    exports.runForToken = runForToken;
 });

@@ -8,7 +8,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         var ready = $.Deferred();
         $.when(GUISTATE.init()).then(function() {
             var cookieName = "OpenRoberta_" + GUISTATE.server.version;
-            
+
             if ($.cookie(cookieName)) {
                 GUISTATE.gui.cookie = $.cookie(cookieName);
             }
@@ -356,16 +356,18 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     }
     exports.findRobot = findRobot;
 
-    function setAutoConnectedBusy(busy) {
+    function setConnectionBusy(busy) {
         if (busy) {
+            $('#head-navi-icon-robot').addClass('busy');
             GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
             $('#menuRunProg').parent().addClass('disabled');
         } else {
+            $('#head-navi-icon-robot').removeClass('busy');
             GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
             $('#menuRunProg').parent().removeClass('disabled');
         }
     }
-    exports.setAutoConnectedBusy = setAutoConnectedBusy;
+    exports.setConnectionBusy = setConnectionBusy;
 
     function getRobot() {
         return GUISTATE.gui.robot;

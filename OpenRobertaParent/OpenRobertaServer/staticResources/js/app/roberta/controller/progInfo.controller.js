@@ -1,12 +1,12 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'blocks', 'jquery', 'jquery-validate', 'jquery-hotkeys', 'bootstrap-tagsinput',
-        'bootstrap.wysiwyg', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, Blockly, $) {
+define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', 'jquery', 'jquery-validate', 'jquery-hotkeys', 'bootstrap-tagsinput',
+        'bootstrap.wysiwyg', 'blocks-msg' ], function(exports, MSG, LOG, UTIL, GUISTATE_C, Blockly, $) {
 
     var blocklyWorkspace;
     /**
      * 
      */
-    function init(workspace) {
-        blocklyWorkspace = workspace;
+    function init() {
+        blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
         initView();
         initEvents();
         LOG.info('init info view');
@@ -42,14 +42,14 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
             e.preventDefault();
             var text = '';
             if (e.clipboardData || e.originalEvent.clipboardData) {
-              text = (e.originalEvent || e).clipboardData.getData('text/plain');
+                text = (e.originalEvent || e).clipboardData.getData('text/plain');
             } else if (window.clipboardData) {
-              text = window.clipboardData.getData('Text');
+                text = window.clipboardData.getData('Text');
             }
             if (document.queryCommandSupported('insertText')) {
-              document.execCommand('insertText', false, text);
+                document.execCommand('insertText', false, text);
             } else {
-              document.execCommand('paste', false, text);
+                document.execCommand('paste', false, text);
             }
         });
     }
@@ -84,7 +84,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
                     });
                     $('#infoContent').off('change');
                     $('#sliderDiv').hide();
-                    $('#progInfo').removeClass('shifted');                    
+                    $('#progInfo').removeClass('shifted');
                 }
             });
         } else {

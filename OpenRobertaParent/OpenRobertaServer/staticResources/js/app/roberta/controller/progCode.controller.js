@@ -1,12 +1,12 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'program.model', 'blocks', 'jquery', 'jquery-validate', 'jquery-hotkeys',
-        'bootstrap.wysiwyg', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, PROGRAM, Blockly, $) {
+define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.model', 'prettify', 'blocks', 'jquery', 'blocks-msg' ], function(exports, MSG,
+        LOG, UTIL, GUISTATE_C, PROGRAM, Prettify, Blockly, $) {
 
     var blocklyWorkspace;
     /**
      * 
      */
-    function init(workspace) {
-        blocklyWorkspace = workspace;
+    function init() {
+        blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
         initEvents();
     }
     exports.init = init;
@@ -32,7 +32,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
             var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
 
             var language = GUISTATE_C.getLanguage();
-            
+
             PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function(result) {
                 GUISTATE_C.setState(result);
                 $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.sourceCode.escapeHTML(), null, true) + '</pre>');
@@ -83,7 +83,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
             var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
 
             var language = GUISTATE_C.getLanguage();
-            
+
             PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function(result) {
                 GUISTATE_C.setState(result);
                 $('#blocklyDiv').addClass('rightActive');

@@ -1,7 +1,5 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'guiState.model', 'program.model', 'prettify', 'robot.controller',
-        'socket.controller', 'progHelp.controller', 'progRun.controller', 'progInfo.controller', 'progCode.controller', 'progSim.controller', 'blocks',
-        'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, GUISTATE, PROGRAM, Prettify, ROBOT_C, SOCKET_C,
-        HELP_C, RUN_C, INFO_C, CODE_C, SIM_C, Blockly, $) {
+define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'program.model', 'robot.controller', 'prettify', 'blocks', 'jquery',
+        'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, PROGRAM, ROBOT_C, Prettify, Blockly, $) {
 
     var $formSingleModal;
 
@@ -15,10 +13,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'gu
         initProgramEnvironment();
         initEvents();
         initProgramForms();
-        HELP_C.init(blocklyWorkspace);
-        INFO_C.init(blocklyWorkspace);
-        CODE_C.init(blocklyWorkspace);
-        SIM_C.init(blocklyWorkspace);
         LOG.info('init program view');
     }
     exports.init = init;
@@ -476,95 +470,19 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'gu
     }
     exports.exportXml = exportXml;
 
-    /**
-     * Start the program on the brick
-     */
-    function runOnBrick() {
-        if (!GUISTATE_C.isRobotConnected()) {
-            MSG.displayMessage("POPUP_ROBOT_NOT_CONNECTED", "POPUP", "");
-            return;
-        } else if (GUISTATE_C.robotState === 'busy' && GUISTATE_C.getConnection() === 'token') {
-            MSG.displayMessage("POPUP_ROBOT_BUSY", "POPUP", "");
-            return;
-        }
-        LOG.info('run ' + GUISTATE_C.getProgramName() + 'on brick');
-        var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-        var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
-
-        var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
-        var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
-        var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
-
-        var language = GUISTATE_C.getLanguage();
-        
-        var connectionType = GUISTATE_C.getConnectionTypeEnum();
-        switch (GUISTATE_C.getConnection()) {
-        case connectionType.TOKEN:
-            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
-                RUN_C.runForToken(result);
-                reloadProgram(result);
-            });
-            break;
-        case connectionType.AUTO:
-            GUISTATE_C.setAutoConnectedBusy(true);
-            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
-                RUN_C.runForAutoConnection(result);
-                reloadProgram(result);
-            });
-            break;
-        case connectionType.AGENT:
-            $('#menuRunProg').parent().addClass('disabled');
-            GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
-                RUN_C.runForAgentConnection(result);
-            });
-            break;
-        case connectionType.AGENTORTOKEN:
-            if (GUISTATE_C.getIsAgent() == true) {
-                PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
-                    RUN_C.runForAgentConnection(result);
-                });
-            } else {
-                PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
-                    RUN_C.runForToken(result);
-                    reloadProgram(result);
-                });
-            }
-            break;
-        default:
-            break;
-        }
-    }
-    exports.runOnBrick = runOnBrick;
-
     function getBlocklyWorkspace() {
         return blocklyWorkspace;
     }
 
     exports.getBlocklyWorkspace = getBlocklyWorkspace;
 
-    function updateRobControls() {
-        blocklyWorkspace.updateRobControls();
-        bindControl();
-
-    }
-    exports.updateRobControls = updateRobControls;
-
     function bindControl() {
-        Blockly.bindEvent_(blocklyWorkspace.robControls.runOnBrick, 'mousedown', null, function(e) {
-            LOG.info('runOnBrick from blockly button');
-            runOnBrick();
-            return false;
-        });
         Blockly.bindEvent_(blocklyWorkspace.robControls.saveProgram, 'mousedown', null, function(e) {
             LOG.info('saveProgram from blockly button');
             saveToServer();
             return false;
         });
         blocklyWorkspace.robControls.disable('saveProgram');
-        if (GUISTATE_C.getConnection() == 'token') {
-            blocklyWorkspace.robControls.disable('runOnBrick');
-        }
     }
 
     function reloadProgram(opt_result) {
@@ -640,9 +558,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'gu
             var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
             var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
             var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
-            
+
             var language = GUISTATE_C.getLanguage();
-            
+
             PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function(result) {
                 $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.sourceCode.escapeHTML(), null, true) + '</pre>');
             });

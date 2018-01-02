@@ -76,9 +76,9 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
         });
         $('#tabProgList').on('show.bs.tab', function(e) {
             guiStateController.setView('tabProgList');
-            
+
         });
-        
+
         $('#tabProgList').on('shown.bs.tab', function(e) {
             if ($('#tabProgList').data('type') === 'userProgram') {
                 PROGLIST.loadProgList(update);

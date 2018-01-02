@@ -287,22 +287,6 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
 
     exports.runInSim = runInSim;
 
-//    /**
-//     * Refresh program relations list
-//     * 
-//     * @param programName
-//     *            {String} - name of the program
-//     * 
-//     */
-//    function refreshProgramRelationsList(programName, successFn) {
-//        COMM.json("/program", {
-//            "cmd" : "loadPR",
-//            "name" : programName
-//        }, successFn, "refresh program relations list");
-//    }
-//
-//    exports.refreshProgramRelationsList = refreshProgramRelationsList;
-
     /**
      * Check program
      * 

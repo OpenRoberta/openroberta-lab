@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-12-28 20:04:56.242590",
+		"lastupdated": "2018-01-02 20:38:44.184197",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1248,5 +1248,7 @@
 	"MODE_DIGITAL": "digital",
 	"MODE_PULSE_LOW": "pulse time LOW",
 	"MODE_PULSE_HIGH": "pulse time HIGH",
-	"TEXT_COMMENT_TOOLTIP": "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code"
+	"TEXT_COMMENT_TOOLTIP": "Write a comment to your code here, to make it easier for you and others to read and understand your code. It will also generate an inline comment in the generated source code",
+	"MENU_ROBOT_STOP_HINT_EV3": "Press <span class='typcn typcn-media-stop'></span>+<span class='typcn typcn-arrow-sorted-down'></span>on the robot to abort the program!",
+	"MENU_ROBOT_STOP_HINT_NXT": "Press <span class='typcn typcn-media-cancel'></span>on the robot to abort the program!"
 }
