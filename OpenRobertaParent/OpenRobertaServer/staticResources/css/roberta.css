@@ -291,6 +291,10 @@ body.blocklyMinimalBody * {
     height: inherit;
     width: inherit;
 }
+#infoContent[data-placeholder]:before {
+    color: #555;
+    padding: 0 12px;
+}
 #infoToolbar {
     border: solid 10px #eee;
 }

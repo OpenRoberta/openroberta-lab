@@ -38,6 +38,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                 if (result.rc === "ok") {
                     GUISTATE_C.setRobotToken(token);
                     GUISTATE_C.setState(result);
+                    console.log(result.message);
                     MSG.displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, GUISTATE_C.getRobotName());
                     handleFirmwareConflict(result['robot.update']);
                 } else {
@@ -190,8 +191,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
             GUISTATE_C.setState(result);
             if (result.rc === "ok") {
                 MSG.displayMessage("MESSAGE_RESTART_ROBOT", "POPUP", "");
-//                guiState.robot.state = 'disconnected';
-//                guiState.robot.name = '';
             } else {
                 MSG.displayInformation(result, "", result.message, GUISTATE_C.getRobotFWName());
             }

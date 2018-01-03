@@ -2,6 +2,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
         GUISTATE_C, Blockly, $) {
 
     var blocklyWorkspace;
+    var currentHelp;
     /**
      * 
      */
@@ -24,10 +25,12 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
                         $('#progHelp').hide();
                     } else {
                         $('#progHelp').show();
+                        currentHelp = GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getLanguage().toLowerCase();
                     }
                 })
             } else {
                 $('#progHelp').show();
+                currentHelp = GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getLanguage().toLowerCase();
             }
         });
     }
@@ -69,6 +72,9 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
                 }
             });
         } else {
+            if (currentHelp != GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getLanguage().toLowerCase()) {
+                init();
+            }
             $('#blocklyDiv').addClass('rightActive');
             $('#helpDiv').addClass('rightActive');
             if (GUISTATE_C.getProgramToolboxLevel() === 'beginner') {

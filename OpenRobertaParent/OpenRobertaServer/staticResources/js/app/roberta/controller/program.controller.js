@@ -500,7 +500,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
             var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
             var xml = Blockly.Xml.domToText(dom);
             programToBlocklyWorkspace(xml);
-            INFO_C.init(blocklyWorkspace);
         }
         var toolbox = GUISTATE_C.getProgramToolbox();
         blocklyWorkspace.updateToolbox(toolbox);
@@ -515,8 +514,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         initProgramEnvironment();
         var toolbox = GUISTATE_C.getProgramToolbox();
         blocklyWorkspace.updateToolbox(toolbox);
-        HELP_C.init(blocklyWorkspace);
-        INFO_C.init(blocklyWorkspace);
     }
     exports.resetView = resetView;
 
@@ -550,6 +547,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
             $('#infoContent').html(blocklyWorkspace.description);
             var tmpTags = blocklyWorkspace.tags;
             $('#infoTags').tagsinput('removeAll');
+            $('.bootstrap-tagsinput input').attr('placeholder','Tags');
             $('#infoTags').tagsinput('add', tmpTags);
             var xmlConfiguration = GUISTATE_C.getConfigurationXML();
             var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);

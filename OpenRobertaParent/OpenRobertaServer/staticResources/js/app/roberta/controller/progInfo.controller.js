@@ -16,11 +16,8 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
     function initView() {
         $('#infoContent').wysiwyg();
         $('#infoTags').tagsinput('removeAll');
-        if (GUISTATE_C.getLanguage() == 'de') {
-            $('#infoContent').attr('data-placeholder', 'Beschreibe dein Programm hier ...');
-        } else {
-            $('#infoContent').attr('data-placeholder', 'Document your program here ...');
-        }
+        $('#infoContent').attr('data-placeholder', Blockly.Msg.INFO_DOCUMENTATION_HINT || 'Document your program here ...');
+        $('.bootstrap-tagsinput input').attr('placeholder', Blockly.Msg.INFO_TAGS || 'Tags');
     }
 
     function initEvents() {
@@ -89,6 +86,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
             });
         } else {
             $('#infoContent').html(blocklyWorkspace.description);
+            $('.bootstrap-tagsinput input').attr('placeholder', Blockly.Msg.INFO_TAGS || 'Tags');
             $('#infoTags').tagsinput('add', blocklyWorkspace.tags);
             $('#blocklyDiv').addClass('rightActive');
             $('#infoDiv').addClass('rightActive');

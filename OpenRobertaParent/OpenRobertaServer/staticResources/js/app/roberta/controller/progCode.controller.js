@@ -93,7 +93,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.mo
                 if (smallScreen) {
                     width = 52;
                 } else {
-                    width = $('#blocklyDiv').width() * 0.3;
+                    width = $('#blocklyDiv').width() * 0.5;
                 }
                 $('#progCode').animate({
                     right : $('#blocklyDiv').width() - width + 4,
