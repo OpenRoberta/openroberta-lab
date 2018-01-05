@@ -382,7 +382,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements M
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        this.sb.append("createPinTouchSensor(" + pinTouchSensor.getPort().getValues()[1] + ")");
+        this.sb.append("createPinTouchSensor(" + pinTouchSensor.getPort().getValues()[0] + ")");
         return null;
     }
 

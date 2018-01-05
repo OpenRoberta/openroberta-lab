@@ -18,7 +18,6 @@ import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.expressions.arduino.RgbColor;
-import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.Bob3TouchSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.GetSampleSensor;
 import de.fhg.iais.roberta.visitors.arduino.Bob3AstVisitor;
@@ -83,12 +82,6 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitTouchSensor(Bob3TouchSensor<Void> touchSensor) {
         // TODO Auto-generated method stub
         return null;
     }

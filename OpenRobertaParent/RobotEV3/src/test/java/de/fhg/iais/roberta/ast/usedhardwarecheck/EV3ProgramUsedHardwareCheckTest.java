@@ -114,7 +114,7 @@ public class EV3ProgramUsedHardwareCheckTest {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/ast/control/wait_stmt3.xml");
 
         UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
-        Assert.assertEquals("[UsedSensor [S4, INFRARED, DISTANCE]]", checkVisitor.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [S1, INFRARED, DISTANCE]]", checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[]", checkVisitor.getUsedActors().toString());
     }
 

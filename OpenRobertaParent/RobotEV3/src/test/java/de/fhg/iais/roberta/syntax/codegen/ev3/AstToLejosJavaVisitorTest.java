@@ -11,8 +11,8 @@ import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.util.test.ev3.Helper;
 
@@ -927,7 +927,7 @@ public class AstToLejosJavaVisitorTest {
             + "while ( true ) {"
             + "if ( hal.isPressed(SensorPort.S1) == true ) {"
             + "for (float j = 1; j<10; j+=1) {"
-            + "if (j < 10) {"
+            + "if (j < ((float)10)) {"
             + "continue;"
             + "}}"
             + "if (true) continue loop1;"
@@ -937,11 +937,11 @@ public class AstToLejosJavaVisitorTest {
             + "loop3:"
             + "for (float i = 1; i<10; i+=1) {"
             + "while (true) {"
-            + "if ( hal.isPressed(SensorPort.S1) == true ) {"
+            + "if ( hal.isPressed(SensorPort.S1) == false ) {"
             + "if (true) continue loop3;"
             + "break;"
             + "}"
-            + "if ( hal.isPressed(SensorPort.S1) == true ) {"
+            + "if ( hal.isPressed(SensorPort.S1) == false ) {"
             + "if (true) break loop3;"
             + "break;"
             + "}"

@@ -11,6 +11,7 @@ import javax.xml.bind.Marshaller;
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.Assert;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
@@ -18,6 +19,7 @@ import com.google.common.io.Resources;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.factory.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
@@ -32,10 +34,12 @@ import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 public abstract class Helper {
     protected IRobotFactory robotFactory;
     protected Configuration robotConfiguration;
+    private static final ch.qos.logback.classic.Logger LOG = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(AbstractCompilerWorkflow.class);
 
     public Helper() {
         Properties properties = Util1.loadProperties(null);
         RobertaProperties.setRobertaProperties(properties);
+        LOG.setLevel(ch.qos.logback.classic.Level.OFF);
     }
 
     public IRobotFactory getRobotFactory() {
@@ -131,13 +135,13 @@ public abstract class Helper {
 
         BlockSet blockSet = astToJaxb(transformer);
 
-        //m.marshal(blockSet, System.out); // only needed for EXTREME debugging
         StringWriter writer = new StringWriter();
         m.marshal(blockSet, writer);
+        LOG.trace(writer.toString());
         String t = Resources.toString(Helper.class.getResource(fileName), Charsets.UTF_8);
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = XMLUnit.compareXML(writer.toString(), t);
-        //System.out.println(diff.toString()); // only needed for EXTREME debugging
+        LOG.trace(diff.toString());
         Assert.assertTrue(diff.identical());
     }
 

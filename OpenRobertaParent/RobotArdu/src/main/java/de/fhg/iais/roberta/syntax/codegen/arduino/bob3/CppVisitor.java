@@ -38,18 +38,10 @@ import de.fhg.iais.roberta.syntax.codegen.arduino.ArduinoVisitor;
 import de.fhg.iais.roberta.syntax.expressions.arduino.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.Bob3TouchSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.GetSampleSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
@@ -155,16 +147,6 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
     }
 
     @Override
-    public Void visitTouchSensor(Bob3TouchSensor<Void> touchSensor) {
-        if ( touchSensor.getArmPart().equals("0") ) {
-            this.sb.append("( myBob.getArm(" + touchSensor.getArmSide() + ") > " + touchSensor.getArmPart() + ")");
-        } else {
-            this.sb.append("( myBob.getArm(" + touchSensor.getArmSide() + ") == " + touchSensor.getArmPart() + ")");
-        }
-        return null;
-    }
-
-    @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         decrIndentation();
         mainTask.getVariables().visit(this);
@@ -239,48 +221,6 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
     }
 
     @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
         this.sb.append("myBob.getIRSensor()");
         return null;
@@ -288,7 +228,11 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        // TODO Auto-generated method stub
+        if ( touchSensor.getSlot().getValues()[0].equals("0") ) {
+            this.sb.append("( myBob.getArm(" + touchSensor.getPort().getPortNumber() + ") > " + touchSensor.getSlot().getValues()[0] + ")");
+        } else {
+            this.sb.append("( myBob.getArm(" + touchSensor.getPort().getPortNumber() + ") == " + touchSensor.getSlot().getValues()[0] + ")");
+        }
         return null;
     }
 
@@ -423,7 +367,6 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
         this.sb.append(bodyLEDAction.getledState() + ");");
         return null;
     }
-
 
     @Override
     public Void visitBob3CodePadSensor(CodePadSensor<Void> codePadSensor) {

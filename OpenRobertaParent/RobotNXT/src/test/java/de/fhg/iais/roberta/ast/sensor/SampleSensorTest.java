@@ -11,7 +11,7 @@ public class SampleSensorTest {
     @Test
     public void sensorGetSample1() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=16, y=-1], GetSampleSensor [sensor=TouchSensor [S1, TOUCH, NO_SLOT]]], "
+            "BlockAST [project=[[Location [x=16, y=-1], GetSampleSensor [sensor=TouchSensor [S1, TOUCH, EMPTY_SLOT]]], "
                 + "[Location [x=36, y=39], GetSampleSensor [sensor=UltrasonicSensor [S4, DISTANCE, NO_SLOT]]], "
                 + "[Location [x=56, y=79], GetSampleSensor [sensor=UltrasonicSensor [S4, PRESENCE, NO_SLOT]]], "
                 + "[Location [x=76, y=119], GetSampleSensor [sensor=ColorSensor [S3, COLOUR, NO_SLOT]]], "

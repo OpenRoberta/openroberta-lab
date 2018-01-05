@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -37,33 +38,37 @@ import de.fhg.iais.roberta.visitors.arduino.Bob3AstVisitor;
  */
 public class GetSampleSensor<V> extends Sensor<V> {
     private final Sensor<V> sensor;
-    private final String armSide;
-    private final String armPart;
+    private final String port;
+    private final String slot;
     private final GetSampleType sensorType;
 
     private GetSampleSensor(
         GetSampleType sensorType,
-        String armSide,
-        String armPart,
+        String port,
+        String slot,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
         IRobotFactory factory) {
         super(BlockTypeContainer.getByName("SENSOR_GET_SAMPLE"), properties, comment);
         Assert.isTrue(sensorType != null);
-        this.armSide = armSide;
-        this.armPart = armPart;
-        String port = "1";
+        this.port = port;
+        this.slot = slot;
         this.sensorType = sensorType;
         SensorMetaDataBean sensorMetaDataBean;
         switch ( sensorType.getSensorType() ) {
             case BlocklyConstants.TOUCH:
-                this.sensor = Bob3TouchSensor.make(armSide, armPart, properties, comment);
+                System.out.println("port and slot");
+                System.out.println(port);
+                System.out.println(slot);
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(factory.getSensorPort(port), factory.getTimerSensorMode(BlocklyConstants.VALUE), factory.getSlot(slot));
+                this.sensor = TouchSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.TIME:
                 sensorMetaDataBean =
                     new SensorMetaDataBean(
                         factory.getSensorPort(BlocklyConstants.NO_PORT),
-                        factory.getTimerSensorMode("VALUE"),
+                        factory.getTimerSensorMode(BlocklyConstants.VALUE),
                         factory.getSlot(BlocklyConstants.NO_SLOT));
                 this.sensor = TimerSensor.make(sensorMetaDataBean, properties, comment);
                 break;
@@ -108,7 +113,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
         BlocklyBlockProperties properties,
         BlocklyComment comment,
         IRobotFactory factory) {
-        return new GetSampleSensor<V>(sensorType, armSide, armPart, properties, comment, factory);
+        return new GetSampleSensor<>(sensorType, armSide, armPart, properties, comment, factory);
     }
 
     /**
@@ -122,7 +127,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
      * @return arm side
      */
     public String getArmSide() {
-        return this.armSide;
+        return this.port;
     }
 
     public GetSampleType getSensorType() {
@@ -133,7 +138,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
      * @return arm part
      */
     public String getArmPart() {
-        return this.armPart;
+        return this.slot;
     }
 
     @Override

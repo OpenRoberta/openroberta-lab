@@ -103,9 +103,6 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().toString());
         }
         if ( !this.getPort().toString().equals(BlocklyConstants.NO_PORT) ) {
-            //TODO: fix this. As soon as fixed fix back the xmls, e.g. for accelerometer and
-            // gyro sensor of calliope. Change the sim so it would take the correct
-            // version of the port accordingly.
             String fieldValue = getPort().getPortNumber();
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
         }

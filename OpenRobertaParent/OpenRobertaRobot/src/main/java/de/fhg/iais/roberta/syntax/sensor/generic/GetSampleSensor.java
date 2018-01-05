@@ -36,15 +36,23 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 public class GetSampleSensor<V> extends Sensor<V> {
     private final Sensor<V> sensor;
     private final String sensorPort;
+    private final String slot;
     private final GetSampleType sensorType;
     private static final ch.qos.logback.classic.Logger LOG = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(AbstractCompilerWorkflow.class);
 
-    private GetSampleSensor(GetSampleType sensorType, String port, BlocklyBlockProperties properties, BlocklyComment comment, IRobotFactory factory) {
+    private GetSampleSensor(
+        GetSampleType sensorType,
+        String port,
+        String slot,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment,
+        IRobotFactory factory) {
         super(BlockTypeContainer.getByName("SENSOR_GET_SAMPLE"), properties, comment);
         LOG.setLevel(ch.qos.logback.classic.Level.TRACE);
         Assert.notNull(sensorType);
         Assert.notNull(port);
         this.sensorPort = port;
+        this.slot = slot;
         //TODO: reimplemnt it in a better way
         if ( port.equals("") ) {
             port = BlocklyConstants.NO_PORT;
@@ -53,8 +61,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
         SensorMetaDataBean sensorMetaDataBean;
         switch ( sensorType.getSensorType() ) {
             case BlocklyConstants.TOUCH:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(factory.getSensorPort(port), factory.getTouchSensorMode("TOUCH"), factory.getSlot(BlocklyConstants.NO_SLOT));
+                sensorMetaDataBean = new SensorMetaDataBean(factory.getSensorPort(port), factory.getTouchSensorMode("TOUCH"), factory.getSlot(slot));
                 this.sensor = TouchSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.PINTOUCH:
@@ -193,10 +200,11 @@ public class GetSampleSensor<V> extends Sensor<V> {
     public static <V> GetSampleSensor<V> make(
         GetSampleType sensorType,
         String port,
+        String slot,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
         IRobotFactory factory) {
-        return new GetSampleSensor<>(sensorType, port, properties, comment, factory);
+        return new GetSampleSensor<>(sensorType, port, slot, properties, comment, factory);
     }
 
     /**
@@ -241,9 +249,10 @@ public class GetSampleSensor<V> extends Sensor<V> {
         List<Field> fields = helper.extractFields(block, (short) 3);
         String modeName = helper.extractField(fields, BlocklyConstants.SENSORTYPE);
         String portName = helper.extractField(fields, GetSampleType.get(modeName).getPortTypeName());
+        String slot = helper.extractField(fields, GetSampleType.get(modeName).getValues()[0]);
         LOG.trace(modeName);
         return GetSampleSensor
-            .make(GetSampleType.get(modeName), portName, helper.extractBlockProperties(block), helper.extractComment(block), helper.getModeFactory());
+            .make(GetSampleType.get(modeName), portName, slot, helper.extractBlockProperties(block), helper.extractComment(block), helper.getModeFactory());
     }
 
     @Override

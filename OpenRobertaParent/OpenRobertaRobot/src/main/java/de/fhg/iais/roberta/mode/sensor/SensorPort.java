@@ -4,10 +4,10 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 
 public enum SensorPort implements ISensorPort {
     NO_PORT,
-    X( "x", "Pitch" ),
-    Y( "y", "Roll" ),
-    Z( "z", "Yaw" ),
-    STRENGTH( "Strength" ),
+    X( "X", "Pitch" ),
+    Y( "Y", "Roll" ),
+    Z( "Z", "Yaw" ),
+    STRENGTH( "STRENGTH" ),
     S0( "0", "P12" ),
     S1( "1", "P0" ),
     S2( "2", "P1" ),
@@ -20,7 +20,9 @@ public enum SensorPort implements ISensorPort {
     S9( "9" ),
     S10( "10" ),
     ANY( "3" ),
-    BOTH( "3" );
+    BOTH( "3" ),
+    MOTOR_LEFT( "2" ),
+    MOTOR_RIGHT( "1" );
 
     private final String[] values;
 
