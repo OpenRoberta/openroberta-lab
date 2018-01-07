@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-01-03 19:01:05.795656",
+		"lastupdated": "2018-01-07 21:36:17.375742",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1252,5 +1252,15 @@
 	"MENU_ROBOT_STOP_HINT_EV3": "Press <span class='typcn typcn-media-stop'></span>+<span class='typcn typcn-arrow-sorted-down'></span>on the robot to abort the program!",
 	"MENU_ROBOT_STOP_HINT_NXT": "Press <span class='typcn typcn-media-cancel'></span>on the robot to abort the program!",
 	"INFO_DOCUMENTATION_HINT": "Document your program here ...",
-	"INFO_TAGS": "Tags"
+	"INFO_TAGS": "Tags",
+	"SENSOR_RSSI": "signal strength",
+	"SENSOR_RSSI_VALUE_GETSAMPLE_TOOLTIP": "Gets the signal strength from the last received message.",
+	"SENSOR_GESTURE_UP_GETSAMPLE_TOOLTIP": "Returns »true« if the posture is upright.",
+	"SENSOR_GESTURE_DOWN_GETSAMPLE_TOOLTIP": "Returns »true« if the posture is down.",
+	"SENSOR_GESTURE_FACE_UP_GETSAMPLE_TOOLTIP": "Returns »true« if the posture is face up.",
+	"SENSOR_GESTURE_FACE_DOWN_GETSAMPLE_TOOLTIP": "Returns »true« if the posture is face down.",
+	"SENSOR_GESTURE_SHAKE_GETSAMPLE_TOOLTIP": "Returns »true« if it is shaken.",
+	"SENSOR_GESTURE_FREEFALL_GETSAMPLE_TOOLTIP": "Returns »true« if it is free falling.",
+	"RIGHT": "right",
+	"LEFT": "left"
 }

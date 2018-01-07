@@ -19,9 +19,9 @@ public final class GestureSensor<V> extends ExternalSensor<V> {
     }
 
     /**
-     * Creates instance of {@link PinTouch}. This instance is read only and can not be modified.
+     * Creates instance of {@link GestureSensor}. This instance is read only and can not be modified.
      *
-     * @return read only object of class {@link PinTouch}
+     * @return read only object of class {@link GestureSensor}
      */
     public static <V> GestureSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new GestureSensor<>(sensorMetaDataBean, properties, comment);

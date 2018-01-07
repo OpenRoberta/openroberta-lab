@@ -57,9 +57,6 @@ public class GetSampleSensor<V> extends Sensor<V> {
         SensorMetaDataBean sensorMetaDataBean;
         switch ( sensorType.getSensorType() ) {
             case BlocklyConstants.TOUCH:
-                System.out.println("port and slot");
-                System.out.println(port);
-                System.out.println(slot);
                 sensorMetaDataBean =
                     new SensorMetaDataBean(factory.getSensorPort(port), factory.getTimerSensorMode(BlocklyConstants.VALUE), factory.getSlot(slot));
                 this.sensor = TouchSensor.make(sensorMetaDataBean, properties, comment);
