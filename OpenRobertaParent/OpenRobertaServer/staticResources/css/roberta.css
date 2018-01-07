@@ -221,6 +221,7 @@ body.blocklyMinimalBody * {
     overflow: hidden;
     background: url(../css/img/ev3Background.jpg) repeat;
     background-size: 100%;
+    touch-action: none;
 }
 .log {
     overflow: auto;
