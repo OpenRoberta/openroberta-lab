@@ -163,6 +163,8 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
             case NUMBER_INT:
                 this.sb.append("0");
                 break;
+            case CAPTURED_TYPE:
+                this.sb.append("None");
             case ARRAY:
             case NULL:
                 break;
@@ -447,9 +449,37 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
+        this.usedGlobalVarInFunctions.clear();
+        this.usedGlobalVarInFunctions.add("timer1");
         final StmtList<Void> variables = mainTask.getVariables();
         variables.visit(this);
+        generateUserDefinedMethods();
+        this.sb.append("\n").append("def run():");
+        incrIndentation();
+        if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
+            nlIndent();
+            this.sb.append("global " + String.join(", ", this.usedGlobalVarInFunctions));
+        } else {
+            addPassIfProgramIsEmpty();
+        }
         return null;
+    }
+
+    @Override
+    protected void generateProgramSuffix(boolean withWrapping) {
+        if ( !withWrapping ) {
+            return;
+        }
+        this.sb.append("\n\n");
+        this.sb.append("def main():\n");
+        this.sb.append(INDENT).append("try:\n");
+        this.sb.append(INDENT).append(INDENT).append("run()\n");
+        this.sb.append(INDENT).append("except Exception as e:\n");
+        this.sb.append(INDENT).append(INDENT).append("raise\n");
+
+        this.sb.append("\n");
+        this.sb.append("if __name__ == \"__main__\":\n");
+        this.sb.append(INDENT).append("main()");
     }
 
     @Override
@@ -826,16 +856,9 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
         }
         this.sb.append("class BreakOutOfALoop(Exception): pass\n");
         this.sb.append("class ContinueLoop(Exception): pass\n\n");
+
         this.sb.append("timer1 = microbit.running_time()");
-        generateUserDefinedMethods();
 
-    }
-
-    @Override
-    protected void generateProgramSuffix(boolean withWrapping) {
-        if ( !withWrapping ) {
-            return;
-        }
     }
 
     @Override
