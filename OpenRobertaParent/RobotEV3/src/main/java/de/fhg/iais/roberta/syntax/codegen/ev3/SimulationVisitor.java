@@ -222,7 +222,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
             case CHINESE:
                 return "zh-CN";
             default:
-                return "en-US";
+                return "";
         }
     }
 

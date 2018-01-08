@@ -288,30 +288,34 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
 
     @Override
     public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
-        this.sb.append("hal.setLanguage(\"");
-        this.sb.append(this.getLanguageString(setLanguageAction.getLanguage()));
-        this.sb.append("\");");
+        if ( !this.brickConfiguration.getRobotName().equals("ev3lejos") ) {
+            this.sb.append("hal.setLanguage(\"");
+            this.sb.append(this.getLanguageString(setLanguageAction.getLanguage()));
+            this.sb.append("\");");
+        }
         return null;
     }
 
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        this.sb.append("hal.sayText(");
-        if ( !sayTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
-            this.sb.append("String.valueOf(");
-            sayTextAction.getMsg().visit(this);
-            this.sb.append(")");
-        } else {
-            sayTextAction.getMsg().visit(this);
+        if ( !this.brickConfiguration.getRobotName().equals("ev3lejos") ) {
+            this.sb.append("hal.sayText(");
+            if ( !sayTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
+                this.sb.append("String.valueOf(");
+                sayTextAction.getMsg().visit(this);
+                this.sb.append(")");
+            } else {
+                sayTextAction.getMsg().visit(this);
+            }
+            BlockType emptyBlock = BlockTypeContainer.getByName("EMPTY_EXPR");
+            if ( !(sayTextAction.getSpeed().getKind().equals(emptyBlock) && sayTextAction.getShape().getKind().equals(emptyBlock)) ) {
+                this.sb.append(",");
+                sayTextAction.getSpeed().visit(this);
+                this.sb.append(",");
+                sayTextAction.getShape().visit(this);
+            }
+            this.sb.append(");");
         }
-        BlockType emptyBlock = BlockTypeContainer.getByName("EMPTY_EXPR");
-        if ( !(sayTextAction.getSpeed().getKind().equals(emptyBlock) && sayTextAction.getShape().getKind().equals(emptyBlock)) ) {
-            this.sb.append(",");
-            sayTextAction.getSpeed().visit(this);
-            this.sb.append(",");
-            sayTextAction.getShape().visit(this);
-        }
-        this.sb.append(");");
         return null;
     }
 
@@ -627,7 +631,7 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
             //this.sb.append(INDENT).append(INDENT).append(INDENT).append("\nhal.startScreenLoggingThread();");
             this.isInDebugMode = true;
         }
-        if ( this.isSayTextUsed ) {
+        if ( this.isSayTextUsed && !this.brickConfiguration.getRobotName().equals("ev3lejos") ) {
             this.sb.append("\n");
             this.sb.append(INDENT).append(INDENT).append("hal.setLanguage(\"");
             this.sb.append(this.getLanguageString(this.language));
@@ -643,14 +647,14 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
         this.sb.append(", ");
         IndexLocation where1 = (IndexLocation) getSubFunct.getStrParam().get(0);
         this.sb.append(getEnumCode(where1));
-        if ( (where1 == IndexLocation.FROM_START) || (where1 == IndexLocation.FROM_END) ) {
+        if ( where1 == IndexLocation.FROM_START || where1 == IndexLocation.FROM_END ) {
             this.sb.append(", ");
             getSubFunct.getParam().get(1).visit(this);
         }
         this.sb.append(", ");
         IndexLocation where2 = (IndexLocation) getSubFunct.getStrParam().get(1);
         this.sb.append(getEnumCode(where2));
-        if ( (where2 == IndexLocation.FROM_START) || (where2 == IndexLocation.FROM_END) ) {
+        if ( where2 == IndexLocation.FROM_START || where2 == IndexLocation.FROM_END ) {
             this.sb.append(", ");
             if ( getSubFunct.getParam().size() == 3 ) {
                 getSubFunct.getParam().get(2).visit(this);

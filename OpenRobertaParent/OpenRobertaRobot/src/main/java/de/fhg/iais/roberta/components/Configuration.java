@@ -19,6 +19,8 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * The {@link Configuration} contains four sensor ports and four actor ports. Client cannot connect more than that.
  */
 public abstract class Configuration {
+    protected String robotName;
+
     protected final Map<IActorPort, Actor> actors;
     protected final Map<ISensorPort, Sensor> sensors;
 
@@ -37,10 +39,19 @@ public abstract class Configuration {
      */
     public Configuration(Map<IActorPort, Actor> actors, Map<ISensorPort, Sensor> sensors, double wheelDiameterCM, double trackWidthCM) {
         super();
+        this.robotName = "";
         this.actors = actors;
         this.sensors = sensors;
         this.wheelDiameterCM = wheelDiameterCM;
         this.trackWidthCM = trackWidthCM;
+    }
+
+    public void setRobotName(String robotName) {
+        this.robotName = robotName;
+    }
+
+    public String getRobotName() {
+        return this.robotName;
     }
 
     /**
@@ -176,13 +187,13 @@ public abstract class Configuration {
         // trackWidthCM and wheelDiameterCM restricted to 1 fraction digit
         final int prime = 31;
         int result = 1;
-        result = (prime * result) + ((this.actors == null) ? 0 : this.actors.hashCode());
-        result = (prime * result) + ((this.sensors == null) ? 0 : this.sensors.hashCode());
+        result = prime * result + (this.actors == null ? 0 : this.actors.hashCode());
+        result = prime * result + (this.sensors == null ? 0 : this.sensors.hashCode());
         long temp;
         temp = (long) (this.trackWidthCM * 10);
-        result = (prime * result) + (int) (temp ^ (temp >>> 32));
-        temp = (long) (this.wheelDiameterCM);
-        result = (prime * result) + (int) (temp ^ (temp >>> 32));
+        result = prime * result + (int) (temp ^ temp >>> 32);
+        temp = (long) this.wheelDiameterCM;
+        result = prime * result + (int) (temp ^ temp >>> 32);
         return result;
     }
 

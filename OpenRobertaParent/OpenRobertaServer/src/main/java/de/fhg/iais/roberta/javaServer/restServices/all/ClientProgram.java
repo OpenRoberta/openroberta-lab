@@ -146,6 +146,7 @@ public class ClientProgram {
 
                 AbstractProcessor forMessages = new DummyProcessor();
                 BlocklyProgramAndConfigTransformer transformer = BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
+                transformer.getBrickConfiguration().setRobotName(httpSessionState.getRobotName());
                 if ( transformer.getErrorMessage() != null ) {
                     forMessages.setError(transformer.getErrorMessage());
                 } else {
@@ -394,6 +395,7 @@ public class ClientProgram {
 
                 BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                     BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
+                programAndConfigTransformer.getBrickConfiguration().setRobotName(httpSessionState.getRobotName());
                 Key messageKey = programAndConfigTransformer.getErrorMessage();
                 if ( messageKey == null ) {
                     RobotBrickCheckVisitor programChecker = robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
@@ -430,6 +432,7 @@ public class ClientProgram {
 
                 BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                     BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
+                programAndConfigTransformer.getBrickConfiguration().setRobotName(httpSessionState.getRobotName());
                 messageKey = programAndConfigTransformer.getErrorMessage();
                 if ( messageKey == null ) {
                     ClientProgram.LOG.info("compiler workflow started for program {}", programName);
@@ -448,7 +451,7 @@ public class ClientProgram {
                 } // else {
                 response.put("data", programText);
                 handleRunProgramError(response, messageKey, token, true);
-                // }            
+                // }
             } else if ( cmd.equals("runPsim") ) {
                 boolean wasRobotWaiting = false;
 
@@ -465,6 +468,7 @@ public class ClientProgram {
                 }
 
                 BlocklyProgramAndConfigTransformer transformer = BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
+                transformer.getBrickConfiguration().setRobotName(httpSessionState.getRobotName());
                 Key messageKey = transformer.getErrorMessage();
                 if ( messageKey == null ) {
                     RobotSimulationCheckVisitor programChecker = robotFactory.getSimProgramCheckVisitor(transformer.getBrickConfiguration());

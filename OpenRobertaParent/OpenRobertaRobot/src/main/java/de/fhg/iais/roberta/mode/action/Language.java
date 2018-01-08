@@ -30,7 +30,8 @@ public enum Language implements ILanguage {
     BRAZILIAN( "pt" ),
     SWEDISH( "sv" ),
     NORWEGIAN( "no" ),
-    GREEK( "el" );
+    GREEK( "el" ),
+    NOTSUPPORTED( "" );
 
     private final String[] values;
 
@@ -49,6 +50,6 @@ public enum Language implements ILanguage {
                 return v;
             }
         }
-        return null;
+        return NOTSUPPORTED;
     }
 }

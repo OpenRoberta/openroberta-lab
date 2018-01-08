@@ -178,11 +178,18 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot' ]
             pitch = pitch * 0.02; // use range 0.0 - 2.0
             
             var utterThis = new SpeechSynthesisUtterance(text);
-            var voices = SpeechSynthesis.getVoices();
-            for (i = 0; i < voices.length ; i++) {
-                if (voices[i].lang === lang) {
-                    utterThis.voice = voices[i];
-                    break;
+            if (lang === "") {
+                console.log("Language is not supported!")
+            } else {
+                var voices = SpeechSynthesis.getVoices();
+                for (i = 0; i < voices.length ; i++) {
+                    if (voices[i].lang.indexOf(lang) !== -1 || voices[i].lang.indexOf(lang.substr(0,2)) !== -1) {
+                        utterThis.voice = voices[i];
+                        break;
+                    }
+                }
+                if (utterThis.voice === null) {
+                    console.log("Language \"" + lang + "\" could not be found. Try a different browser or for chromium add the command line flag \"--enable-speech-dispatcher\".");
                 }
             }
             utterThis.pitch = pitch;
@@ -500,7 +507,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot' ]
             }
         }
         // update sayText
-        if (actions.language && SpeechSynthesis) {
+        if (actions.language != null && SpeechSynthesis) {
             this.sayText.language = actions.language;
         }
         if (actions.sayText && SpeechSynthesis) {
