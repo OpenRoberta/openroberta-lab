@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 
 public class Util {
     private static final Logger LOG = LoggerFactory.getLogger(Util.class);
-    private static final String openRobertaVersion = RobertaProperties.getStringProperty("openRobertaServer.version");
+    private static final String SERVER_VERSION = RobertaProperties.getStringProperty("openRobertaServer.version");
 
     private Util() {
         // no objects
@@ -58,7 +58,7 @@ public class Util {
     public static void addFrontendInfo(JSONObject response, HttpSessionState httpSessionState, RobotCommunicator brickCommunicator) {
         try {
             response.put("serverTime", new Date());
-            response.put("server.version", Util.openRobertaVersion);
+            response.put("server.version", Util.SERVER_VERSION);
             if ( httpSessionState != null ) {
                 String token = httpSessionState.getToken();
                 if ( token != null ) {

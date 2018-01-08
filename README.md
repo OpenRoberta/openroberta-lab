@@ -48,11 +48,13 @@ Please also check our wiki for detailed installation instructions, development p
 
 #### Step 1: Clone the repository and compile
 
-    git clone git://github.com/OpenRoberta/robertalab.git
-    cd robertalab/OpenRobertaParent
-    mvn clean install
+    git clone git://github.com/OpenRoberta/robertalab.git # get the repository
+    cd robertalab        # cd into repository
+	cd OpenRobertaParent # cd to parent project
+    mvn clean install    # generate the server
+    cd ..                # return to the repository	
 
-Get a coffee! Might take a couple of minutes.
+Get a coffee! Might take some time.
 
 A successful build looks like:
 
@@ -60,44 +62,32 @@ A successful build looks like:
     [INFO] Reactor Summary:
     [INFO]
     [INFO] RobertaParent ...................................... SUCCESS [  2.479 s]
-    [INFO] Resources .......................................... SUCCESS [  0.045 s]
-    [INFO] OpenRobertaRobot ................................... SUCCESS [ 34.604 s]
-    [INFO] RobotEV3 ........................................... SUCCESS [ 21.642 s]
-    [INFO] RobotNXT ........................................... SUCCESS [ 17.104 s]
-    [INFO] RobotArdu .......................................... SUCCESS [ 17.522 s]
-    [INFO] RobotNAO ........................................... SUCCESS [  4.162 s]
-    [INFO] RobotMbed .......................................... SUCCESS [ 13.721 s]
-    [INFO] OpenRobertaServer .................................. SUCCESS [ 24.496 s]
-    [INFO] TestResources ...................................... SUCCESS [  0.761 s]
+    ...
     [INFO] ------------------------------------------------------------------------
     [INFO] BUILD SUCCESS
     [INFO] ------------------------------------------------------------------------
     [INFO] Total time: 02:16 min
-    [INFO] Finished at: 2017-07-14T21:11:10+02:00
+    [INFO] Finished at: 2018-01-07T13:05:00+02:00
     [INFO] Final Memory: 60M/540M
     [INFO] ------------------------------------------------------------------------
     
     
 #### Step 2: Make sure you have a database
-If you have a fresh clone of the server, make sure that the OpenRobertaServer folder has a subfolder **db-x.y.z** with the database inside, where x.y.z is the current version from the server You can either 
-* copy the folder **dbBase** (also in OpenRobertaServer) under the name **db-x.y.z**
-* or create an empty database with
+If you have a fresh clone of the server, make sure that the OpenRobertaServer folder has a subfolder **db-x.y.z** with the database inside, where x.y.z is the current version from the server. If you don't have a database, you can create an empty database with
 
-    ./ora.sh --createEmptydb OpenRobertaServer/db-x.y.z/openroberta-db (from the root folder)
+    ./ora.sh --createEmptydb x.y.z
     
-If you update the server with git pull, your database will not be changed. 
+If you update the server later with git pull, your database will not be changed. 
 
 #### Step 3: Starting your own server instance using a unix-like shell (on either lin* or win*).
 
-    cd .. # return to the root folder
-    ./ora.sh --start-from-git # start the server using default properties
+    ./ora.sh --start-from-git # start the server using the default properties
 
 You can also run `./ora.sh --help` for more options.
 
 #### Step 4: Accessing your programming environment
 
 Start your browser at: http://localhost:1999
-
 
 That's it!
 

@@ -88,7 +88,7 @@ public class RestInterfaceTest {
         this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-test-cfg.xml", this.connectionUrl);
         Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
         this.memoryDbSetup = new DbSetup(nativeSession);
-        this.memoryDbSetup.runDefaultRobertaSetup();
+        this.memoryDbSetup.createEmptyDatabase();
         this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.brickCommunicator);
         this.restConfiguration = new ClientConfiguration(this.sessionFactoryWrapper, this.brickCommunicator);
         Map<String, IRobotFactory> robotPlugins = new HashMap<>();

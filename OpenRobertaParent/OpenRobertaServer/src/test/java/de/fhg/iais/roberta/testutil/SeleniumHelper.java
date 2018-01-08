@@ -41,7 +41,7 @@ public class SeleniumHelper {
         this.serverStarter = new ServerStarter("classpath:openRoberta.properties", addr);
         this.server = this.serverStarter.start();
         Session session = this.serverStarter.getInjectorForTests().getInstance(SessionFactoryWrapper.class).getNativeSession();
-        new DbSetup(session).runDefaultRobertaSetup();
+        new DbSetup(session).createEmptyDatabase();
         this.driver = SeleniumHelper.runBrowser(this.browserVisibility);
         this.port = this.server.getURI().getPort();
         this.baseUrl = "http://localhost:" + this.port + "/" + baseUrl + "/";

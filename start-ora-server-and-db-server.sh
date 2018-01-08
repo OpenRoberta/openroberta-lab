@@ -39,8 +39,8 @@ echo 'have a look whether a database update is needed'
 java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter -d database.parentdir=. -d database.mode=embedded --check-for-db-updates >>$SERVERLOGFILE 2>&1
 
 echo 'start the database server and the openroberta server as separate processes'
-serverVersion=$(java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter -v)
-database=db-${serverVersion}/openroberta-db
+serverVersionForDb=$(java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter --version-for-db)
+database=db-${serverVersionForDb}/openroberta-db
 echo "the database server will use database directory $database"
 $NOHUP java -cp lib/\* org.hsqldb.Server --database.0 file:$database --dbname.0 openroberta-db \$* >>$DBLOGFILE 2>&1 &
 sleep 5 # time for the database to initialize

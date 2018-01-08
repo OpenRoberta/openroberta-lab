@@ -193,7 +193,7 @@ public class RoundTripTest {
         sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", connectionUrl);
         nativeSession = sessionFactoryWrapper.getNativeSession();
         memoryDbSetup = new DbSetup(nativeSession);
-        memoryDbSetup.runDefaultRobertaSetup();
+        memoryDbSetup.createEmptyDatabase();
         brickCommunicator = new RobotCommunicator();
 
         restUser = new ClientUser(brickCommunicator, null);

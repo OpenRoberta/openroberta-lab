@@ -79,28 +79,34 @@ public class ServerStarter {
         OptionSpec<String> propertiesOpt = parser.accepts("properties").withOptionalArg().ofType(String.class);
         OptionSpec<String> defineOpt = parser.accepts("d").withRequiredArg().ofType(String.class);
         OptionSpec<Void> versionOpt = parser.accepts("version");
+        OptionSpec<Void> versionForDbOpt = parser.accepts("version-for-db");
         OptionSpec<Void> updateOpt = parser.accepts("check-for-db-updates");
         OptionSet options = parser.parse(args);
         String propertyPath = propertiesOpt.value(options);
         List<String> defines = defineOpt.values(options);
 
-        if ( options.has(versionOpt) ) {
+        if ( options.has(versionOpt) || options.has(versionForDbOpt) ) {
             // print the server version and exit. Used to detect a new version. Ignores runtime arguments.
             Properties robertaProperties = Util1.loadProperties(false, propertyPath);
-            System.out.println(robertaProperties.get("openRobertaServer.version"));
-            System.exit(0);
-        } else {
-            ServerStarter serverStarter = new ServerStarter(propertyPath, defines);
-            checkForUpgrade();
-            if ( options.has(updateOpt) ) {
-                System.exit(0);
+            String version = robertaProperties.getProperty("openRobertaServer.version");
+            if ( options.has(versionOpt) ) {
+                System.out.println(version);
             }
-            Server server = serverStarter.start();
-            serverStarter.checkRobotPluginsDB();
-            serverStarter.logTheNumberOfStoredPrograms();
-            server.join();
+            if ( options.has(versionForDbOpt) ) {
+                System.out.println(version.replace("-SNAPSHOT", ""));
+            }
             System.exit(0);
         }
+
+        final ServerStarter serverStarter = new ServerStarter(propertyPath, defines);
+        checkForUpgrade();
+        if ( options.has(updateOpt) ) {
+            LOG.info("Server finished update process and terminates with exit(0). Server has to be started later again");
+            System.exit(0);
+        }
+        Server server = serverStarter.start();
+        server.join();
+        System.exit(0);
     }
 
     /**
@@ -198,21 +204,27 @@ public class ServerStarter {
         this.injector = robertaGuiceServletConfig.getCreatedInjector();
         Ev3SensorLoggingWS.setGuiceInjector(this.injector);
 
+        checkRobotPluginsDB();
+        logTheNumberOfStoredPrograms();
+        Runtime.getRuntime().addShutdownHook(new ShutdownHook("embedded".equals(RobertaProperties.getStringProperty("database.mode")), this.injector));
+        LOG.info("Shutdown hook added. If the server is gracefully stopped in the future, a shutdown message is logged");
+
         return server;
     }
 
     /**
-     * setup the hibernate.connection.url
+     * setup the hibernate.connection.url<br>
+     * <b>Note:</b> the "hibernate.connection.url" property is added to the properties!
      *
-     * @param properties for configuring OpenRoberta, merged from property file and runtime arguments
+     * @param properties for configuring OpenRoberta, merged from property file and runtime arguments.
      */
     private void setupPropertyForDatabaseConnection(Properties properties) {
-        String serverVersion = properties.getProperty("openRobertaServer.version");
+        String serverVersionForDbDirectory = properties.getProperty("openRobertaServer.version").replace("-SNAPSHOT", "");
         String databaseParentDir = properties.getProperty("database.parentdir");
         String databaseMode = properties.getProperty("database.mode");
         String dbUrl;
         if ( "embedded".equals(databaseMode) ) {
-            dbUrl = "jdbc:hsqldb:file:" + databaseParentDir + "/db-" + serverVersion + "/openroberta-db";
+            dbUrl = "jdbc:hsqldb:file:" + databaseParentDir + "/db-" + serverVersionForDbDirectory + "/openroberta-db;ifexists=true";
         } else if ( "server".equals(databaseMode) ) {
             dbUrl = "jdbc:hsqldb:hsql://localhost/openroberta-db";
         } else {
@@ -280,19 +292,19 @@ public class ServerStarter {
     }
 
     private static void checkForUpgrade() throws Exception {
-        String actualServerVersion = RobertaProperties.getStringProperty("openRobertaServer.version");
+        String serverVersionForDbDirectory = RobertaProperties.getStringProperty("openRobertaServer.version").replace("-SNAPSHOT", "");
         String databaseParentdirName = RobertaProperties.getStringProperty("database.parentdir");
         File databaseParentdir = new File(databaseParentdirName);
         if ( !databaseParentdir.isDirectory() ) {
             LOG.error("Abort: database parent directory is invalid: " + databaseParentdirName);
             System.exit(2);
         }
-        File databaseDir = new File(databaseParentdir, "db-" + actualServerVersion);
+        File databaseDir = new File(databaseParentdir, "db-" + serverVersionForDbDirectory);
         if ( !databaseDir.isDirectory() ) {
             // server version upgrade is necessary
             String[] previousServerVersions = RobertaProperties.getStringProperty("openRobertaServer.history").split(",");
             try {
-                new Upgrader(databaseParentdir, previousServerVersions, actualServerVersion).upgrade();
+                new Upgrader(databaseParentdir, previousServerVersions, serverVersionForDbDirectory).upgrade();
             } catch ( Exception e ) {
                 LOG.error("Abort: server version upgrade fails", e);
                 System.exit(2);

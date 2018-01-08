@@ -20,14 +20,10 @@
 	<url>http://www.open-roberta.org</url>
 	<inceptionYear>2014</inceptionYear>
 	<properties>
-	   <!-- the server version and the history of deployed versions.
-	        this version is used (among others) as SUFFIX of the data base directory. The data base upgrade facility depends on this.
-	        the server version history is a comma separated list of all versions BEFORE the actual version. Young to old (e.g. 2.1.0,2.0.0,1.9.9,1.9.7) -->
-	    <openRobertaServer.version>2.5.0</openRobertaServer.version>
+	   <!-- the server version history is a comma separated list of all versions BEFORE the actual version. New to old (e.g. 2.1.0,2.0.0,1.9.9,1.9.7) -->
 	    <openRobertaServer.history>2.4.1,2.4.0,2.3.4,2.3.3,2.3.2,2.3.1,2.3.0,2.2.7,2.2.6,2.2.5,2.2.4,2.2.3,2.2.2,2.2.1,2.2.0,2.1.0</openRobertaServer.history>
 
-		<!-- the server SHOULD be compatible between(including) the following two versions of software deployed on the ROBOT.
-		     UNUSED functionality -->
+		<!-- UNUSED functionality - the server SHOULD be compatible between(including) the following two versions of software deployed on the ROBOT -->
 		<validversionrange.From>1.4.0</validversionrange.From>
 		<validversionrange.To>2.5.0</validversionrange.To>
 

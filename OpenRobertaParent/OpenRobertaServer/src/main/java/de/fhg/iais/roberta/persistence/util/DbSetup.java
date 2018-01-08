@@ -25,14 +25,14 @@ public class DbSetup {
         this.dbExecutor = DbExecutor.make(session);
     }
 
-    public void runDefaultRobertaSetup() {
-        runDatabaseSetup(
+    public void createEmptyDatabase() {
+        createEmptyDatabase(
             DbSetup.DB_CREATE_TABLES_SQL,
             DbSetup.SQL_RETURNING_POSITIVENUMBER_IF_SQLFILE_ALREADY_LOADED,
             DbSetup.SQL_RETURNING_POSITIVENUMBER_IF_SETUP_WAS_SUCCESSFUL);
     }
 
-    public void runDatabaseSetup(String sqlResource, String sqlReturningPositiveIfSqlFileAlreadyLoaded, String sqlReturningPositiveIfSetupSuccessful) {
+    public void createEmptyDatabase(String sqlResource, String sqlReturningPositiveIfSqlFileAlreadyLoaded, String sqlReturningPositiveIfSetupSuccessful) {
         try {
             this.dbExecutor.sqlFile(sqlResource, sqlReturningPositiveIfSqlFileAlreadyLoaded, sqlReturningPositiveIfSetupSuccessful);
         } catch ( Exception e ) {

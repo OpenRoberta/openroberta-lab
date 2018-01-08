@@ -5,37 +5,29 @@ The OpenRoberta sources are contained in a git repository. First generate the so
 Top level in the git repository is a script 'ora.sh' to be used from the command line to configure the OpenRoberta application.
 Remark about the database:
 The database may be run in 'embedded' mode,
-- the DATABASEURL is "jdbc:hsqldb:file:<some-basedir>/db-<serverversion>/openroberta-db", for instance:
-  jdbc:hsqldb:file:OpenRobertaServer/db-2.2.7/openroberta-db
-- the database is locked by the process accessing the database. Thus no concurrent access is possible (with a sql client, for instance).
+- the DATABASEURL is "jdbc:hsqldb:file:<some-basedir>/db-<serverversion>/openroberta-db;ifexists=true"
+- the database is locked by the process accessing the database. Thus no concurrent access (with a sql client) is possible.
 The database may be run in 'server' mode,
 - the DATABASEURL is "jdbc:hsqldb:hsql://localhost/openroberta-db"
-- you can get access to the database used by the server with a sql client, for instance. Access is concurrent. Be careful and ...
-    - better set autocommit to off and DON'T terminate the database server with SHUTDOWN by mistake
+- you can get access to the database used by the server concurrently with a sql client, for instance. Be careful and ...
+    - better set autocommit to off and DON'T terminate the database server with SHUTDOWN erroneously
     - DON'T block the server (e.g. by issuing an insert/update without committing immediately afterwards)
-  Server mode is great, because ...
-    - you can inspect the database using the sql client
-    - Backup of a running server can be done with (read the manual about blocking/not blocking)
-      BACKUP DATABASE TO 'single-quoted-directory-path-terminated-with-/' {NOT} BLOCKING
-    - from time to time a CHECKPOINT statement may be issued to reduce resource usage and startup time.
 
 Commands of the ora.sh script:
   --export INSTALLATION-DIR create a self-contained installation. You are responsible to copy a usable database into directory 'db-<serverVersion>'. 
                             The installation dir must NOT exist. In the INSTALLATION-DIR there are two scripts for starting OpenRoberta:
                             - start-ora-server-with-db-embedded.sh   uses an embedded hsqldb. For small systems (Raspberry Pi, for instance)
                             - start-ora-server-and-db-server.sh      starts database and a server process. For large system (the official release, e.g.)
+							Further scripts (ONLY USABLE IN SERVER MODE!):
+							- dbBackup.sh                            to backup the database as tgz into directory backup
+							- dbShutdown.sh                          shutdown the database and terminate the VM running the database server
+							- start-sql-client.sh                    start a SQL client (embedded mode works, if the database is not blocked)
 
   --dockerE                 create a docker image. As a first step the application is exported to DockerInstallation (this directory is rm -rf before)
                             Then docker is called to build the image OpenRobertaEmbedded. start-ora-server-with-db-embedded.sh is used when the container
-                            is started. The database is expected at VOLUME /opt/openRoberta/db-2.4.0 and has to be supplied at container startup.							uses an embedded hsqldb. For small systems (Raspberry Pi, for instance)
-                            Have a look at the docker-compose file in directory docker to see how this can be done.
-
-  --sqlclient DATABASEURL   start a sql client.
-                            - this command fails if the openroberta server is running in embedded mode. You have to terminate the server to get access.
-                            - if the database is used by an openroberta server in server mode, the sql client and the server have access to the database.
-                              Be careful not to block the server.
-                            in server mode the database URL is like "jdbc:hsqldb:hsql://localhost/openroberta-db"'
-                            in embedded mode the database URL is like "jdbc:hsqldb:file:OpenRobertaServer/db-<serverversion>/openroberta-db"
+                            is started. The database is expected at VOLUME /opt/openRoberta/db-2.4.0 and has to be supplied at container startup.
+							It uses an embedded hsqldb. This image is thought for small systems (Raspberry Pi, for instance).
+                            Have a look at the docker-compose file in directory docker to see how mounting the database can be done.
 
   --help                    get help
   
@@ -47,26 +39,21 @@ Commands of the ora.sh script:
                            -q is the quiet mode: report crashes only
                            a usefull call, reporting to stdout, is e.g. ora.sh --alive localhost:1999 60 10
 
-  --start-from-git          FOR DEVELOPERS ONLY: if a developer wants to start the server from a Git working tree in embedded mode
-                            (that is fine for test), use this command.
+  --start-from-git          if a developer wants to start the server from a Git working tree in embedded mode (that is fine for test), use this command.
                             Note, that running the server from an IDE as eclipse is PREFERRED.
                             Note, that running '--reset-db' before starting may the server resets the database to a default state.
 
-  --update-lejos {SERVERURL} {LEJOSVERSION} FOR DEVELOPERS ONLY: update an ev3 robot running the lejos os. Its ip-address is expected in lejosipaddr.
+  --sqlclient [{VERSION}]   start a sql client from a Git working tree in embedded mode using the actual db version or the (optional) VERSION.
+                            This command fails if an openroberta server is running in embedded mode. You have to terminate the server to get access.
+                            The database URL is assumed to be "jdbc:hsqldb:file:OpenRobertaServer/db-<serverversion>/openroberta-db;ifexists=true"
+
+  --update-lejos {SERVERURL} {LEJOSVERSION} update an ev3 robot running the lejos os. Its ip-address is expected in lejosipaddr.
                             If a password is requested: it is "", thus simply hit 'return'
                             - scp the ev3menu.jar, which replaces the original lejos menu
                             - scp openroberta specific libraries needed by the user programs at runtime
                             - create a file on the lejos based robot with the address of the server
 
-  --reset-db                FOR DEVELOPERS ONLY: copies the "default" database from directory 'dbBase' to 'db-<VERSION>'. <VERSION> is
-                            the actual version of the server.
-                            Do this if you changed the db during testing and you want to undo your changes
-
-  --createEmptydb           FOR DEVELOPERS ONLY: create an empty database with all tables and initial rows as needed for the OpenRoberta server
-                            at path "OpenRobertaServer/dbEmpty".
+  --createEmptydb [{VERSION}] create an empty database with all tables initialized as needed at path "OpenRobertaServer/db-VERSION". If the optional
+                            parameter VERSION is missing, the VERSION is retrieved by calling the server. In this case, "mvn install" must have run before
                             - if the database exists, it is not recreated
                             - if a table "PROGRAM" is found, it is assumed, that the setup has already been done and nothing happens.
-
-  --resetDbBase             FOR DEVELOPERS ONLY: take the empty database OpenRobertaServer/dbEmpty and copy it to OpenRobertaServer/dbBase.
-                            Used only if the default database has to be resetted and filled with new default users, programs, etc. A rare case.
-							

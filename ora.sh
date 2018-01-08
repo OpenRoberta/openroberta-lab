@@ -16,13 +16,6 @@ function mkAndCheckDir {
 function _aliveFn {
   serverUrl="$1"
   shift
-  if [[ "$1" == '-q' ]]
-  then
-    quiet='true'
-    shift
-  else
-    quiet='false'
-  fi
   every="${1:-60}"
   timeout="${2:-30}"
   mail="${3:-no}"
@@ -35,25 +28,14 @@ function _aliveFn {
      echo "mail will be sent using the script \"$mail\" if a crash is detected"
   fi
   while :; do
-    if [[ "$quiet" == 'true' ]]
-    then
-       curl --max-time $timeout "http://$serverUrl/rest/alive" > /dev/null
-       rc=$?
-    else
-       curl --max-time $timeout "http://$serverUrl/rest/alive"
-       rc=$?
-       if [[ $rc == 0 ]]
-       then
-          echo "ok `date`"
-       fi
-    fi
+    curl --max-time $timeout "http://$serverUrl/rest/alive" > /dev/null
+    rc=$?if [[ "$quiet" == 'true' ]]
     if [[ $rc != 0 ]]
     then
-       echo "************************ server seems to be down `date` ************************"
-       if [[ "$mail" != 'no' ]]
-       then
-          sh $mail
-       fi
+       echo "***** server seems to be down at `date` ******"
+       [[ "$mail" != 'no' ]] && sh $mail
+    else
+	   echo "ok at `date`"
     fi
     sleep $every
   done
@@ -104,8 +86,9 @@ function _exportApplication {
     mkAndCheckDir "$exportpath"
     exportpath=$(cd "$exportpath"; pwd)
     cd OpenRobertaParent
-	  serverVersion=$(java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter -v)
-    echo "serverVersion: ${serverVersion}"
+	serverVersion=$(java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter --version)
+	serverVersionForDb=$(java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter --version-for-db)
+    echo "server version: ${serverVersion} - server version for db: ${serverVersionForDb}"
     echo "created the target directory \"$exportpath\""
     echo "copying all jars"
     mkAndCheckDir "${exportpath}/lib"
@@ -130,7 +113,7 @@ function _exportApplication {
     echo 'copy scripts'
     cp start-*.sh dbBackup.sh dbShutdown.sh ${exportpath}
     chmod ugo+rx ${exportpath}/*.sh
-	echo "You are responsible to supply a usable database in directory db-${serverVersion}"
+	echo "You are responsible to supply a usable database in directory db-${serverVersionForDb}"
 }
 
 function _updateLejos {
@@ -164,18 +147,21 @@ fi
 cmd="$1"
 shift
 
-# often used values
-DBEMPTY='OpenRobertaParent/OpenRobertaServer/dbEmpty'
-DBBASE='OpenRobertaParent/OpenRobertaServer/dbBase'
-
 case "$cmd" in
 --export)         _exportApplication $* ;;
 
 --start-from-git) java -cp OpenRobertaParent/OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter -d database.mode=embedded -d database.parentdir=OpenRobertaParent/OpenRobertaServer $* ;;
 
---sqlclient)      dir="OpenRobertaParent/OpenRobertaServer/target/resources"
-                  databaseurl="$1"
-                  java -jar "$dir/hsqldb-*.jar" --driver org.hsqldb.jdbc.JDBCDriver --url "$databaseurl" --user orA --password Pid ;;
+--sqlclient)      lib="OpenRobertaParent/OpenRobertaServer/target/resources"
+                  hsqldbVersion='2.3.3'
+				  hsqldbJar="${lib}/hsqldb-${hsqldbVersion}.jar"
+				  serverVersionForDb="$1"
+				  if [[ "$serverVersionForDb" == '' ]]
+                  then
+					serverVersionForDb=$(java -cp ./${lib}/\* de.fhg.iais.roberta.main.ServerStarter --version-for-db)
+				  fi
+				  databaseurl="jdbc:hsqldb:file:OpenRobertaParent/OpenRobertaServer/db-$serverVersionForDb/openroberta-db;ifexists=true"
+                  java -jar "${hsqldbJar}" --driver org.hsqldb.jdbc.JDBCDriver --url "$databaseurl" --user orA --password Pid ;;
 
 ''|--help|-h)     # Be careful when editing the file 'ora-help.txt'. Words starting with "--" are used by compgen for completion
                   $0 --java
@@ -192,44 +178,28 @@ case "$cmd" in
                     exit 1
                   elif [[ "$lejosVersion" == '' ]]
                   then
-                    echo "the lejos version (0 or 1) is missing missing. Exit 1"
+                    echo "the lejos version (0 or 1) is missing. Exit 1"
                     exit 1
                   fi
                   _updateLejos ;;
 
---reset-db)       echo -n "do you really want to reset the ACTUAL database to $DBBASE? The old content will be LOST. 'yes', 'no') "
+--createEmptydb)  serverVersionForDb="$1"
+                  if [[ "$serverVersionForDb" == '' ]]
+                  then
+				    lib="OpenRobertaParent/OpenRobertaServer/target/resources"
+					serverVersionForDb=$(java -cp ./${lib}/\* de.fhg.iais.roberta.main.ServerStarter --version-for-db)
+				  fi
+				  databaseurl="jdbc:hsqldb:file:OpenRobertaParent/OpenRobertaServer/db-$serverVersionForDb/openroberta-db"
+				  echo -n "do you really want to create the db for version \"$serverVersionForDb\"? If it exists, it will NOT be damaged. 'yes', 'no') "
                   read ANSWER
                   case "$ANSWER" in
                   yes) : ;;
                   *)   echo "nothing done"
                        exit 0 ;;
                   esac
-				  serverVersion=$(java -cp OpenRobertaParent/OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter -v)
-                  DB="OpenRobertaParent/OpenRobertaServer/db-${serverVersion}"
-				  echo "the database at $DB is resetted to $DBBASE"
-				  rm -rf "$DB"
-                  cp -a "$DBBASE" "$DB" ;;
-
---createEmptydb)  echo -n "do you really want to create $DBEMPTY? The old empty db will be LOST. 'yes', 'no') "
-                  read ANSWER
-                  case "$ANSWER" in
-                  yes) : ;;
-                  *)   echo "nothing done"
-                       exit 0 ;;
-                  esac
-                  rm -rf $DBEMPTY
+				  echo "creating an empty db using the url $databaseurl"
 				  main='de.fhg.iais.roberta.main.Administration'
-                  java -cp 'OpenRobertaParent/OpenRobertaServer/target/resources/*' "${main}" createemptydb "$DBEMPTY/openroberta-db" ;;
-
---resetDbBase)    echo -n "do you really want to make DBBASE equal to DBEMPTY? The old defaults will be LOST. 'yes', 'no') "
-                  read ANSWER
-                  case "$ANSWER" in
-                  yes) : ;;
-                  *)   echo "nothing done"
-                       exit 0 ;;
-                  esac
-				  rm -rf $DBBASE
-				  cp -r $DBEMPTY $DBBASE ;;
+                  java -cp 'OpenRobertaParent/OpenRobertaServer/target/resources/*' "${main}" createemptydb "$databaseurl" ;;
 
 --alive)          _aliveFn $* ;;
 

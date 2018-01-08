@@ -69,56 +69,65 @@ public class Upgrader {
             LOG.error("Abort: serverVersion to upgrade to is null");
             System.exit(2);
         }
-        String dbUrl = "jdbc:hsqldb:file:" + pathToDatabaseDirectory + "/openroberta-db";
+        String dbUrl = "jdbc:hsqldb:file:" + pathToDatabaseDirectory + "/openroberta-db;ifexists=true";
         SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", dbUrl);
-        LOG.info("upgrading to server version " + serverVersion);
         if ( serverVersion.equals("2.5.0") ) {
-            // do nothing
+            LOG.info("upgrade to 2.5.0 - do nothing");
         } else if ( serverVersion.equals("2.4.1") ) {
-            // do nothing
+            LOG.info("upgrade to 2.4.1 - do nothing");
         } else if ( serverVersion.equals("2.4.0") ) {
-            // do nothing
+            LOG.info("upgrade to 2.4.0 - do nothing");
         } else if ( serverVersion.equals("2.3.4") ) {
-            // do nothing
+            LOG.info("upgrade to 2.3.4 - do nothing");
         } else if ( serverVersion.equals("2.3.3") ) {
-            // do nothing
+            LOG.info("upgrade to 2.3.3 - do nothing");
         } else if ( serverVersion.equals("2.3.2") ) {
-            // do nothing
+            LOG.info("upgrade to 2.3.2 - do nothing");
         } else if ( serverVersion.equals("2.3.1") ) {
-            // do nothing
+            LOG.info("upgrade to 2.3.1 - do nothing");
         } else if ( serverVersion.equals("2.3.0") ) {
+            LOG.info("upgrade to 2.3.0");
             new Upgrader_2_3_0(sessionFactoryWrapper).run();
         } else if ( serverVersion.equals("2.2.7") ) {
+            LOG.info("upgrade to 2.2.7");
             Session nativeSession = sessionFactoryWrapper.getNativeSession();
             nativeSession.beginTransaction();
             DbSetup dbSetup = new DbSetup(nativeSession);
-            dbSetup.runDatabaseSetup(
+            dbSetup.createEmptyDatabase(
                 "/update-2-2-7.sql",
                 "select count(*) from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'PENDING_EMAIL_CONFIRMATIONS'",
                 "select count(*) from USER where ACCOUNT = 'Gallery'");
             nativeSession.createSQLQuery("shutdown").executeUpdate();
             nativeSession.close();
         } else if ( serverVersion.equals("2.2.6") ) {
-            // do nothing
+            LOG.info("upgrade to 2.2.6 - do nothing");
         } else if ( serverVersion.equals("2.2.5") ) {
-            // do nothing
+            LOG.info("upgrade to 2.2.5 - do nothing");
         } else if ( serverVersion.equals("2.2.4") ) {
-            // do nothing
+            LOG.info("upgrade to 2.2.4 - do nothing");
         } else if ( serverVersion.equals("2.2.3") ) {
-            // do nothing
+            LOG.info("upgrade to 2.2.3 - do nothing");
         } else if ( serverVersion.equals("2.2.2") ) {
-            // do nothing
+            LOG.info("upgrade to 2.2.2 - do nothing");
         } else if ( serverVersion.equals("2.2.1") ) {
-            // do nothing
+            LOG.info("upgrade to 2.2.1 - do nothing");
         } else if ( serverVersion.equals("2.2.0") ) {
-            // do nothing
+            LOG.info("upgrade to 2.2.0 - do nothing");
         } else if ( serverVersion.equals("2.1.0") ) {
-            // do nothing
+            LOG.info("upgrade to 2.1.0 - do nothing");
         } else if ( serverVersion.equals("1.9.0") ) {
-            // do nothing
+            LOG.info("upgrade to 1.9.0 - do nothing");
         } else {
             LOG.error("Abort: serverVersion to upgrade to not valid: " + serverVersion);
             System.exit(2);
+        }
+        Session nativeSession = sessionFactoryWrapper.getNativeSession();
+        DbExecutor dbExecutor = DbExecutor.make(nativeSession);
+        nativeSession.beginTransaction();
+        try {
+            dbExecutor.ddl("SHUTDOWN COMPACT;");
+        } finally {
+            LOG.info("shutdown compact succeeded for a database db-" + serverVersion);
         }
     }
 }

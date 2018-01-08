@@ -62,7 +62,7 @@ public class Administration {
         adminWork.expectArgs(1);
         switch ( args[0] ) {
             case "createemptydb":
-                adminWork.runDatabaseSetup();
+                adminWork.createEmptyDatabase();
                 break;
             case "sql":
                 adminWork.runSql();
@@ -89,14 +89,14 @@ public class Administration {
         }
     }
 
-    private void runDatabaseSetup() {
-        Administration.LOG.info("*** runDatabaseSetup started ***");
+    private void createEmptyDatabase() {
+        Administration.LOG.info("*** creating an empty database ***");
         expectArgs(2);
-        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", "jdbc:hsqldb:file:" + this.args[1]);
+        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
         Session nativeSession = sessionFactoryWrapper.getNativeSession();
         DbSetup dbSetup = new DbSetup(nativeSession);
         nativeSession.beginTransaction();
-        dbSetup.runDefaultRobertaSetup();
+        dbSetup.createEmptyDatabase();
         nativeSession.createSQLQuery("shutdown").executeUpdate();
         nativeSession.close();
     }

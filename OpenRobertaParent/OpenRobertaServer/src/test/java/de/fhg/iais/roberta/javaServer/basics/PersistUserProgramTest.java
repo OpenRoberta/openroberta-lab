@@ -35,7 +35,7 @@ public class PersistUserProgramTest {
         this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-test-cfg.xml", this.connectionUrl);
         Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
         this.memoryDbSetup = new DbSetup(nativeSession);
-        this.memoryDbSetup.runDefaultRobertaSetup();
+        this.memoryDbSetup.createEmptyDatabase();
     }
 
     @Test

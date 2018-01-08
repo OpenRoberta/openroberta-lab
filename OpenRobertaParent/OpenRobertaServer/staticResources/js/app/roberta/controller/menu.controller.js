@@ -351,7 +351,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 }
                 $("#show-startup-message").modal("show");
             } else if (domId === 'menuAbout') { // Submenu 'Help'
-                $("#version").text(GUISTATE_C.getServerVersion() + '-SNAPSHOT');
+                $("#version").text(GUISTATE_C.getServerVersion());
                 $("#show-about").modal("show");
             } else if (domId === 'menuLogging') { // Submenu 'Help'
                 $('#tabLogList').click();

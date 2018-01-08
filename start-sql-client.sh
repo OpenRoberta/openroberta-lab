@@ -1,19 +1,15 @@
 #!/bin/bash
+# start a SQL client after exporting.
 
-# start a SQL client.
-# First parameter: database URL
-# - server mode: likely "jdbc:hsqldb:hsql://localhost/openroberta-db"
-# - embedded mode: likely "jdbc:hsqldb:file:./db-<serverversion>/openroberta-db"
-
-serverVersion=$(java -cp ./lib/\* de.fhg.iais.roberta.main.ServerStarter -v)
+serverVersionForDb=$(java -cp ./lib/\* de.fhg.iais.roberta.main.ServerStarter --version-for-db)
 hsqldbVersion='2.3.3'
 hsqldbJar="lib/hsqldb-${hsqldbVersion}.jar"
 
 echo 'start-sql-client.sh <DB-URL>'
-echo '  - server mode: likely "jdbc:hsqldb:hsql://localhost/openroberta-db"'
-echo "  - embedded mode: likely \"jdbc:hsqldb:file:./db-$serverVersion/openroberta-db\""
 echo
-echo "the version of this installation is: $serverVersion"
+echo "the version number used for accessing the db directory is: $serverVersionForDb"
+echo '  - server mode: likely "jdbc:hsqldb:hsql://localhost/openroberta-db"'
+echo "  - embedded mode: likely \"jdbc:hsqldb:file:./db-$serverVersionForDb/openroberta-db;ifexists=true\""
 
 case "$1" in
   '') echo 'DB-URL is missing - exit 1'

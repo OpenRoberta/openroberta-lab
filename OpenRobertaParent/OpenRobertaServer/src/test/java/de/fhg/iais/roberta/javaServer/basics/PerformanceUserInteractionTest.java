@@ -73,7 +73,7 @@ public class PerformanceUserInteractionTest {
 
         this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-testConcurrent-cfg.xml", this.connectionUrl);
         this.memoryDbSetup = new DbSetup(this.sessionFactoryWrapper.getNativeSession());
-        this.memoryDbSetup.runDefaultRobertaSetup();
+        this.memoryDbSetup.createEmptyDatabase();
         this.brickCommunicator = new RobotCommunicator();
 
         this.restUser = new ClientUser(this.brickCommunicator, null);
