@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -59,22 +60,22 @@ public abstract class RobotPythonVisitor extends CommonLanguageVisitor {
         if ( isInteger(numConst.getValue()) ) {
             super.visitNumConst(numConst);
         } else {
-            this.sb.append("float(");
+            sb.append("float(");
             super.visitNumConst(numConst);
-            this.sb.append(")");
+            sb.append(")");
         }
         return null;
     }
 
     @Override
     public Void visitBoolConst(BoolConst<Void> boolConst) {
-        this.sb.append(boolConst.isValue() ? "True" : "False");
+        sb.append(boolConst.isValue() ? "True" : "False");
         return null;
     }
 
     @Override
     public Void visitNullConst(NullConst<Void> nullConst) {
-        this.sb.append("None");
+        sb.append("None");
         return null;
     }
 
@@ -82,22 +83,22 @@ public abstract class RobotPythonVisitor extends CommonLanguageVisitor {
     public Void visitMathConst(MathConst<Void> mathConst) {
         switch ( mathConst.getMathConst() ) {
             case PI:
-                this.sb.append("math.pi");
+                sb.append("math.pi");
                 break;
             case E:
-                this.sb.append("math.e");
+                sb.append("math.e");
                 break;
             case GOLDEN_RATIO:
-                this.sb.append("BlocklyMethods.GOLDEN_RATIO");
+                sb.append("BlocklyMethods.GOLDEN_RATIO");
                 break;
             case SQRT2:
-                this.sb.append("math.sqrt(2)");
+                sb.append("math.sqrt(2)");
                 break;
             case SQRT1_2:
-                this.sb.append("math.sqrt(1.0/2.0)");
+                sb.append("math.sqrt(1.0/2.0)");
                 break;
             case INFINITY:
-                this.sb.append("float('inf')");
+                sb.append("float('inf')");
                 break;
             default:
                 break;
@@ -107,9 +108,10 @@ public abstract class RobotPythonVisitor extends CommonLanguageVisitor {
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        this.sb.append(var.getName());
+        usedGlobalVarInFunctions.add(var.getName());
+        sb.append(var.getName());
         if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-            this.sb.append(" = ");
+            sb.append(" = ");
             if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
                 ExprList<Void> list = (ExprList<Void>) var.getValue();
                 if ( list.get().size() == 2 ) {
@@ -126,10 +128,10 @@ public abstract class RobotPythonVisitor extends CommonLanguageVisitor {
 
     @Override
     public Void visitBinary(Binary<Void> binary) {
-        generateSubExpr(this.sb, false, binary.getLeft(), binary);
+        generateSubExpr(sb, false, binary.getLeft(), binary);
         Binary.Op op = binary.getOp();
         String sym = getBinaryOperatorSymbol(op);
-        this.sb.append(' ').append(sym).append(' ');
+        sb.append(' ').append(sym).append(' ');
         generateCodeRightExpression(binary, op);
         return null;
     }
@@ -138,20 +140,20 @@ public abstract class RobotPythonVisitor extends CommonLanguageVisitor {
     public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
         switch ( emptyExpr.getDefVal() ) {
             case STRING:
-                this.sb.append("\"\"");
+                sb.append("\"\"");
                 break;
             case BOOLEAN:
-                this.sb.append("True");
+                sb.append("True");
                 break;
             case NUMBER_INT:
-                this.sb.append("0");
+                sb.append("0");
                 break;
             case ARRAY:
                 break;
             case NULL:
                 break;
             default:
-                this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
+                sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
                 break;
         }
         return null;
@@ -196,25 +198,25 @@ public abstract class RobotPythonVisitor extends CommonLanguageVisitor {
 
     @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
-        if ( this.loopsLabels.get(this.currenLoop.getLast()) != null ) {
-            if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
-                this.sb.append("raise " + (stmtFlowCon.getFlow() == Flow.BREAK ? "BreakOutOfALoop" : "ContinueLoop"));
+        if ( loopsLabels.get(currenLoop.getLast()) != null ) {
+            if ( loopsLabels.get(currenLoop.getLast()) ) {
+                sb.append("raise " + (stmtFlowCon.getFlow() == Flow.BREAK ? "BreakOutOfALoop" : "ContinueLoop"));
                 return null;
             }
         }
-        this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase());
+        sb.append(stmtFlowCon.getFlow().toString().toLowerCase());
         return null;
     }
 
     @Override
     public Void visitEmptyList(EmptyList<Void> emptyList) {
-        this.sb.append("[]");
+        sb.append("[]");
         return null;
     }
 
     @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        this.sb.append("math.pow(");
+        sb.append("math.pow(");
         super.visitMathPowerFunct(mathPowerFunct);
         return null;
     }
@@ -223,72 +225,76 @@ public abstract class RobotPythonVisitor extends CommonLanguageVisitor {
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
         switch ( mathSingleFunct.getFunctName() ) {
             case ROOT:
-                this.sb.append("math.sqrt(");
+                sb.append("math.sqrt(");
                 break;
             case ABS:
-                this.sb.append("math.fabs(");
+                sb.append("math.fabs(");
                 break;
             case LN:
-                this.sb.append("math.log(");
+                sb.append("math.log(");
                 break;
             case LOG10:
-                this.sb.append("math.log10(");
+                sb.append("math.log10(");
                 break;
             case EXP:
-                this.sb.append("math.exp(");
+                sb.append("math.exp(");
                 break;
             case POW10:
-                this.sb.append("math.pow(10, ");
+                sb.append("math.pow(10, ");
                 break;
             case SIN:
-                this.sb.append("math.sin(");
+                sb.append("math.sin(");
                 break;
             case COS:
-                this.sb.append("math.cos(");
+                sb.append("math.cos(");
                 break;
             case TAN:
-                this.sb.append("math.tan(");
+                sb.append("math.tan(");
                 break;
             case ASIN:
-                this.sb.append("math.asin(");
+                sb.append("math.asin(");
                 break;
             case ATAN:
-                this.sb.append("math.atan(");
+                sb.append("math.atan(");
                 break;
             case ACOS:
-                this.sb.append("math.acos(");
+                sb.append("math.acos(");
                 break;
             case ROUND:
-                this.sb.append("round(");
+                sb.append("round(");
                 break;
             case ROUNDUP:
-                this.sb.append("math.ceil(");
+                sb.append("math.ceil(");
                 break;
             case ROUNDDOWN:
-                this.sb.append("math.floor(");
+                sb.append("math.floor(");
                 break;
             default:
                 break;
         }
         mathSingleFunct.getParam().get(0).visit(this);
-        this.sb.append(")");
+        sb.append(")");
 
         return null;
     }
 
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        this.sb.append("\ndef ").append(methodVoid.getMethodName()).append('(');
-        methodVoid.getParameters().visit(this);
-        this.sb.append("):");
+        sb.append("\ndef ").append(methodVoid.getMethodName()).append('(');
+        List<String> paramList = new ArrayList<>();
+        for ( Expr<Void> l : methodVoid.getParameters().get() ) {
+            paramList.add(((VarDeclaration<Void>) l).getName());
+        }
+        sb.append(String.join(", ", paramList));
+        sb.append("):");
         boolean isMethodBodyEmpty = methodVoid.getBody().get().isEmpty();
         if ( isMethodBodyEmpty ) {
             nlIndent();
-            this.sb.append("pass");
+            sb.append("pass");
         } else {
-            if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
+            if ( !usedGlobalVarInFunctions.isEmpty() ) {
                 nlIndent();
-                this.sb.append("global " + String.join(", ", this.usedGlobalVarInFunctions));
+                sb.append("global " + String.join(", ", usedGlobalVarInFunctions));
             }
             methodVoid.getBody().visit(this);
         }
@@ -297,21 +303,25 @@ public abstract class RobotPythonVisitor extends CommonLanguageVisitor {
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        this.sb.append("\ndef ").append(methodReturn.getMethodName()).append('(');
-        methodReturn.getParameters().visit(this);
-        this.sb.append("):");
+        sb.append("\ndef ").append(methodReturn.getMethodName()).append('(');
+        List<String> paramList = new ArrayList<>();
+        for ( Expr<Void> l : methodReturn.getParameters().get() ) {
+            paramList.add(((VarDeclaration<Void>) l).getName());
+        }
+        sb.append(String.join(", ", paramList));
+        sb.append("):");
         boolean isMethodBodyEmpty = methodReturn.getBody().get().isEmpty();
         if ( isMethodBodyEmpty ) {
             nlIndent();
-            this.sb.append("pass");
+            sb.append("pass");
         } else {
-            if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
+            if ( !usedGlobalVarInFunctions.isEmpty() ) {
                 nlIndent();
-                this.sb.append("global " + String.join(", ", this.usedGlobalVarInFunctions));
+                sb.append("global " + String.join(", ", usedGlobalVarInFunctions));
             }
             methodReturn.getBody().visit(this);
-            this.nlIndent();
-            this.sb.append("return ");
+            nlIndent();
+            sb.append("return ");
             methodReturn.getReturnValue().visit(this);
         }
         return null;
@@ -319,13 +329,13 @@ public abstract class RobotPythonVisitor extends CommonLanguageVisitor {
 
     @Override
     public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
-        this.sb.append("if ");
+        sb.append("if ");
         methodIfReturn.getCondition().visit(this);
         if ( !methodIfReturn.getReturnValue().getKind().hasName("EMPTY_EXPR") ) {
-            this.sb.append(": return ");
+            sb.append(": return ");
             methodIfReturn.getReturnValue().visit(this);
         } else {
-            this.sb.append(": return None");
+            sb.append(": return None");
         }
         return null;
     }
@@ -338,9 +348,9 @@ public abstract class RobotPythonVisitor extends CommonLanguageVisitor {
     @Override
     protected void generateCodeFromTernary(IfStmt<Void> ifStmt) {
         ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
-        this.sb.append(whitespace() + "if" + whitespace() + "(" + whitespace());
+        sb.append(whitespace() + "if" + whitespace() + "(" + whitespace());
         ifStmt.getExpr().get(0).visit(this);
-        this.sb.append(whitespace() + ")" + whitespace() + "else" + whitespace());
+        sb.append(whitespace() + ")" + whitespace() + "else" + whitespace());
         ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
     }
 
@@ -358,7 +368,7 @@ public abstract class RobotPythonVisitor extends CommonLanguageVisitor {
             StmtList<Void> then = ifStmt.getThenList().get(i);
             if ( then.get().isEmpty() ) {
                 nlIndent();
-                this.sb.append("pass");
+                sb.append("pass");
             } else {
                 then.visit(this);
             }
@@ -370,7 +380,7 @@ public abstract class RobotPythonVisitor extends CommonLanguageVisitor {
     protected void generateCodeFromElse(IfStmt<Void> ifStmt) {
         if ( !ifStmt.getElseList().get().isEmpty() ) {
             nlIndent();
-            this.sb.append("else:");
+            sb.append("else:");
             incrIndentation();
             ifStmt.getElseList().visit(this);
             decrIndentation();
@@ -383,88 +393,88 @@ public abstract class RobotPythonVisitor extends CommonLanguageVisitor {
     }
 
     protected void addPassIfProgramIsEmpty() {
-        if ( this.isProgramEmpty ) {
+        if ( isProgramEmpty ) {
             nlIndent();
-            this.sb.append("pass");
+            sb.append("pass");
         }
     }
 
     private void generateCodeRightExpression(Binary<Void> binary, Binary.Op op) {
         switch ( op ) {
             case TEXT_APPEND:
-                this.sb.append("str(");
-                generateSubExpr(this.sb, false, binary.getRight(), binary);
-                this.sb.append(")");
+                sb.append("str(");
+                generateSubExpr(sb, false, binary.getRight(), binary);
+                sb.append(")");
                 break;
             case DIVIDE:
-                this.sb.append("float(");
-                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-                this.sb.append(")");
+                sb.append("float(");
+                generateSubExpr(sb, parenthesesCheck(binary), binary.getRight(), binary);
+                sb.append(")");
                 break;
             default:
-                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+                generateSubExpr(sb, parenthesesCheck(binary), binary.getRight(), binary);
                 break;
         }
     }
 
     private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
-        this.sb.append(stmtType).append(whitespace());
+        sb.append(stmtType).append(whitespace());
         expr.visit(this);
-        this.sb.append(":");
+        sb.append(":");
     }
 
     private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
-        this.sb.append(stmtType).append(whitespace());
+        sb.append(stmtType).append(whitespace());
         ExprList<Void> expressions = (ExprList<Void>) expr;
         expressions.get().get(0).visit(this);
-        this.sb.append(whitespace() + "in range(");
+        sb.append(whitespace() + "in range(");
         expressions.get().get(1).visit(this);
-        this.sb.append("," + whitespace());
+        sb.append("," + whitespace());
         expressions.get().get(2).visit(this);
-        this.sb.append("," + whitespace());
+        sb.append("," + whitespace());
         expressions.get().get(3).visit(this);
-        this.sb.append("):");
+        sb.append("):");
     }
 
     private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
         nlIndent();
-        this.sb.append("break");
+        sb.append("break");
     }
 
     private void appendTry() {
         increaseLoopCounter();
 
-        if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+        if ( loopsLabels.get(currenLoop.getLast()) ) {
             incrIndentation();
             nlIndent();
-            this.sb.append("try:");
+            sb.append("try:");
         }
     }
 
     private void appendExceptionHandling() {
-        if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+        if ( loopsLabels.get(currenLoop.getLast()) ) {
             decrIndentation();
             nlIndent();
-            this.sb.append("except BreakOutOfALoop:");
+            sb.append("except BreakOutOfALoop:");
             incrIndentation();
             nlIndent();
-            this.sb.append("break");
+            sb.append("break");
             decrIndentation();
             nlIndent();
-            this.sb.append("except ContinueLoop:");
+            sb.append("except ContinueLoop:");
             incrIndentation();
             nlIndent();
-            this.sb.append("continue");
+            sb.append("continue");
             decrIndentation();
         }
-        this.currenLoop.removeLast();
+        currenLoop.removeLast();
     }
 
     private void appendPassIfEmptyBody(RepeatStmt<Void> repeatStmt) {
         if ( repeatStmt.getList().get().isEmpty() ) {
             if ( repeatStmt.getMode() != RepeatStmt.Mode.WAIT ) {
                 nlIndent();
-                this.sb.append("pass");
+                sb.append("pass");
             }
         }
     }
@@ -525,9 +535,10 @@ public abstract class RobotPythonVisitor extends CommonLanguageVisitor {
                 )
                 .collect(entriesToMap()));
     }
-    
+
+    @Override
     public Void visitStmtTextComment(StmtTextComment<Void> stmtTextComment) {
-        this.sb.append("# " + stmtTextComment.getTextComment());
+        sb.append("# " + stmtTextComment.getTextComment());
         return null;
     };
 }

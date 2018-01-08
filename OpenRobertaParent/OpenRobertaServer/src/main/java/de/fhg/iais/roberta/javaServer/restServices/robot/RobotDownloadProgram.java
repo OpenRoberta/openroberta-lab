@@ -37,7 +37,7 @@ public class RobotDownloadProgram {
     @Inject
     public RobotDownloadProgram(RobotCommunicator brickCommunicator) {
         this.brickCommunicator = brickCommunicator;
-        this.pathToCrosscompilerBaseDir = RobertaProperties.getTempDirForUserProjects();
+        pathToCrosscompilerBaseDir = RobertaProperties.getTempDirForUserProjects();
     }
 
     @POST
@@ -48,7 +48,7 @@ public class RobotDownloadProgram {
         try {
             String token = requestEntity.getString("token");
             LOG.info("/download - request for token " + token);
-            RobotCommunicationData state = this.brickCommunicator.getState(token);
+            RobotCommunicationData state = brickCommunicator.getState(token);
             String programName = state.getProgramName();
 
             String fileName = null;
@@ -59,20 +59,20 @@ public class RobotDownloadProgram {
                 case "ev3lejosv1":
                 case "lejos":
                     fileName = programName + ".jar";
-                    filePath = this.pathToCrosscompilerBaseDir + token + "/target";
+                    filePath = pathToCrosscompilerBaseDir + token + "/target";
                     break;
                 case "Nao":
                 case "ev3dev":
                     fileName = programName + ".py";
-                    filePath = this.pathToCrosscompilerBaseDir + token + "/src";
+                    filePath = pathToCrosscompilerBaseDir + token + "/" + programName + "/src";
                     break;
                 case "NXT":
                     fileName = programName + ".rxe";
-                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
+                    filePath = pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
                 case "Arduino":
                     fileName = programName + ".ino.hex";
-                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
+                    filePath = pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
                 default:
                     LOG.error("unsupported firmware name " + state.getFirmwareName());
