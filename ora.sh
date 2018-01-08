@@ -110,7 +110,7 @@ function _exportApplication {
     done
     cd ..
     echo 'copy scripts'
-    cp start-*.sh dbBackup.sh dbShutdown.sh ${exportpath}
+    cp Resources/shScriptsForExport/*.sh ${exportpath}
     chmod ugo+rx ${exportpath}/*.sh
 	echo "You are responsible to supply a usable database in directory db-${serverVersionForDb}"
 }

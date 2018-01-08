@@ -148,7 +148,7 @@ public class Administration {
      * "jdbc:hsqldb:hsql://localhost/openroberta-db")
      */
     private void dbShutdown() {
-        Administration.LOG.info("*** dbShutdown. This makes sense in SERVER mode ONLY ***");
+        Administration.LOG.info("*** dbShutdown ***");
         expectArgs(2);
         SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
         Session nativeSession = sessionFactoryWrapper.getNativeSession();
@@ -161,7 +161,7 @@ public class Administration {
         try {
             dbExecutor.ddl("SHUTDOWN COMPACT;");
         } finally {
-            LOG.info("shutdown compact succeeded for a database with " + users + " users and " + programs + " programs");
+            LOG.info("shutdown compact for a database with " + users + " registered users and " + programs + " stored programs");
         }
     }
 

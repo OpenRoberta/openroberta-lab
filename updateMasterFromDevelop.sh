@@ -5,16 +5,16 @@
 # ASSUMPTIONS:
 # - maven project, may be hierarchical (parent + modules).
 #   mvn MUST be on the PATH!
-# - Deploying a new master is done by a single person, i.e. there are NO conflicts when pushing master to the remote.
-#   If this occurs, the conflicts have to be solved as usually.
-# - master and develop are clean. Develop is descendant of master.
+# - deploying a new master is done by a single person, i.e. there are NO conflicts when pushing master to the remote.
+#   If this occurs, the conflicts have to be solved manually (as usually).
+# - master and develop are clean. Develop is a descendant of master.
 # ACTIONS:
-# - Develop is merged into master.
-# - In master the version to be deployed is set in all poms. A tag is defined with the name of the deployment version.
-# - In develop the next SNAPSHOT version should is set in all poms. No merge commit should occur (:-).
+# - develop is merged into master.
+# - in master the version to be deployed is set in all poms. A tag is defined with the name of the deployment version.
+# - in develop the next SNAPSHOT version should is set in all poms. No merge commit should occur (:-).
 #   We keep a straight line of commits.
 # From the assumptions as much as possible is checked to avoid any hassle.
-# Everything is done locally, after the deploy script is run, pushing develop and master to the remote must be done QUICK :-)
+# Everything is done locally, after the deploy script is run, pushing develop and master to the remote should be done QUICK :-)
 # Running the script with the single parameter -push will do that
 #
 # For deployments, two parameters are mandatory (both WITHOUT SNAPSHOT)
@@ -68,6 +68,7 @@ fi
 echo
 echo 'parameter: <thisVersion> <nextVersion> [-p <directory with the (parent) pom>]'
 echo '           deploy a version in master and set the next version in develop'
+echo '           both versions WITHOUT "-SNAPSHOT"'
 echo 'parameter: -push'
 echo '           push develop and master to remote (small convenience script)'
 echo '==================================================================================================='
