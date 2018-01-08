@@ -41,7 +41,7 @@ Commands of the ora.sh script:
 
   --start-from-git          if a developer wants to start the server from a Git working tree in embedded mode (that is fine for test), use this command.
                             Note, that running the server from an IDE as eclipse is PREFERRED.
-                            Note, that running '--reset-db' before starting may the server resets the database to a default state.
+                            You need a valid database. Running '--createEmptydb' provides an empty database.
 
   --sqlclient [{VERSION}]   start a sql client from a Git working tree in embedded mode using the actual db version or the (optional) VERSION.
                             This command fails if an openroberta server is running in embedded mode. You have to terminate the server to get access.

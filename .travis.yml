@@ -3,8 +3,7 @@ jdk:
   - oraclejdk8
 
 before_script:
-- yes yes | ./ora.sh --reset-db
-- cd OpenRobertaParent
+  - cd OpenRobertaParent
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
