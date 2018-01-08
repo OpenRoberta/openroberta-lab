@@ -885,6 +885,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         if ( !withWrapping ) {
             return;
         }
+        this.usedGlobalVarInFunctions.clear();
         this.sb.append("#!/usr/bin/python\n\n");
         this.sb.append("from __future__ import absolute_import\n");
         this.sb.append("from roberta.ev3 import Hal\n");

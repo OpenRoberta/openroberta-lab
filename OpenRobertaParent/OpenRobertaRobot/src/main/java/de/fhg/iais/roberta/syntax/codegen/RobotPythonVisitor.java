@@ -137,7 +137,13 @@ public abstract class RobotPythonVisitor extends CommonLanguageVisitor {
 
     @Override
     public Void visitBinary(Binary<Void> binary) {
-        generateSubExpr(this.sb, false, binary.getLeft(), binary);
+        try {
+            VarDeclaration<Void> variablePart = (VarDeclaration<Void>) binary.getLeft();
+            this.sb.append(variablePart.getName());
+        } catch ( ClassCastException e ) {
+            generateSubExpr(this.sb, false, binary.getLeft(), binary);
+        }
+        //if ( variablePart.getValue().getClass().equals(EmptyExpr.class) ) {
         Binary.Op op = binary.getOp();
         String sym = getBinaryOperatorSymbol(op);
         this.sb.append(' ').append(sym).append(' ');

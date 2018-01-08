@@ -122,6 +122,7 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
 
         this.usedHardwareVisitor = new UsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
         this.loopsLabels = this.usedHardwareVisitor.getloopsLabelContainer();
+        this.usedGlobalVarInFunctions = this.usedHardwareVisitor.getMarkedVariablesAsGlobal();
     }
 
     /**

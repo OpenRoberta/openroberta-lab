@@ -226,7 +226,7 @@ public class AstToEv3PythonVisitorTest {
                 + "item2 = \"TTTT\"\n"
                 + "item3 = True\n"
                 + "def run():\n"
-                + "    global item3\n"
+                + "    global item, item2, item3\n"
                 + "    hal.drawText(str(item), 0, 0)\n"
                 + "    hal.drawText(str(item2), 0, 0)\n"
                 + "    hal.drawText(str(item3), 0, 0)\n"
@@ -248,6 +248,7 @@ public class AstToEv3PythonVisitorTest {
                 + make_globals(CFG_MOTORS, "")
                 + "variablenName = 0\n"
                 + "def run():\n"
+                + "    global variablenName\n"
                 + "    hal.regulatedDrive('A', 'B', False, 'foreward', 50)\n"
                 + "    hal.drawPicture(predefinedImages['OLDGLASSES'], 0, 0)\n\n"
                 + MAIN_METHOD;
@@ -267,7 +268,7 @@ public class AstToEv3PythonVisitorTest {
                 + "\nitem = 0\n"
                 + "item2 = \"cc\"\n"
                 + "def run():\n"
-                + "    pass\n"
+                + "    global item, item2\n"
                 + "\n"
                 + MAIN_METHOD;
 
@@ -387,10 +388,12 @@ public class AstToEv3PythonVisitorTest {
                 + GLOBALS
                 + "\nvariablenName = BlocklyMethods.createListWith(\"a\", \"b\", \"c\")\n"
                 + "def test():\n"
+                + "    global variablenName\n"
                 + "    if True: return 'red'\n"
                 + "    hal.drawText(str(variablenName), 0, 0)\n"
                 + "    return 'none'\n\n"
                 + "def run():\n"
+                + "    global variablenName\n"
                 + "    hal.drawText(str(test()), 0, 0)\n"
                 + "\n"
                 + MAIN_METHOD;
@@ -406,9 +409,11 @@ public class AstToEv3PythonVisitorTest {
                 + GLOBALS
                 + "\nvariablenName = BlocklyMethods.createListWith(\"a\", \"b\", \"c\")\n"
                 + "def test(x, x2):\n"
+                + "    global variablenName\n"
                 + "    hal.drawText(str(x2), x, 0)\n"
                 + "    return x\n\n"
                 + "def run():\n"
+                + "    global variablenName\n"
                 + "    hal.drawText(str(test(0, variablenName)), 0, 0)\n"
                 + "\n"
                 + MAIN_METHOD;
@@ -424,9 +429,11 @@ public class AstToEv3PythonVisitorTest {
                 + GLOBALS
                 + "\nvariablenName = BlocklyMethods.createListWith(\"a\", \"b\", \"c\")\n"
                 + "def test():\n"
+                + "    global variablenName\n"
                 + "    hal.drawText(str(variablenName), 0, 0)\n"
                 + "    return 'none'\n\n"
                 + "def run():\n"
+                + "    global variablenName\n"
                 + "    hal.drawText(str(test()), 0, 0)\n"
                 + "\n"
                 + MAIN_METHOD;
@@ -497,11 +504,14 @@ public class AstToEv3PythonVisitorTest {
                 + "\nvariablenName = 0\n"
                 + "variablenName2 = True\n"
                 + "def test1(x, x2):\n"
+                + "    global variablenName, variablenName2\n"
                 + "    hal.drawText(\"Hallo\", x, x2)\n\n"
                 + "def test2():\n"
+                + "    global variablenName, variablenName2\n"
                 + "    if variablenName2: return None\n"
                 + "    hal.ledOn('green', 'on')\n\n"
                 + "def run():\n"
+                + "    global variablenName, variablenName2\n"
                 + "    test1(0, 0)\n"
                 + "    test2()\n\n"
                 + MAIN_METHOD;
@@ -517,8 +527,10 @@ public class AstToEv3PythonVisitorTest {
                 + GLOBALS
                 + "\nvariablenName = hal.getColorSensorColour('3')\n"
                 + "def macheEtwas(x):\n"
+                + "    global variablenName\n"
                 + "    hal.drawText(str(hal.getUltraSonicSensorDistance('4')), 0, 0)\n\n"
                 + "def run():\n"
+                + "    global variablenName\n"
                 + "    macheEtwas(hal.getInfraredSensorDistance('4'))\n\n"
                 + MAIN_METHOD;
 
@@ -587,6 +599,7 @@ public class AstToEv3PythonVisitorTest {
                 + GLOBALS
                 + "\nvariablenName = BlocklyMethods.createListWith('none', 'red', 'blue')\n"
                 + "def run():\n"
+                + "    global variablenName\n"
                 + "    for variablenName2 in variablenName:\n"
                 + "        hal.drawText(str(variablenName2), 0, 0)\n\n"
                 + MAIN_METHOD;
@@ -692,6 +705,7 @@ public class AstToEv3PythonVisitorTest {
                 + GLOBALS
                 + "\nmessage = \"exit\"\n"
                 + "def run():\n"
+                + "    global message\n"
                 + "    if message == \"exit\":\n"
                 + "        hal.drawText(\"done\", 0, 0)\n\n"
                 + MAIN_METHOD;
@@ -746,10 +760,10 @@ public class AstToEv3PythonVisitorTest {
                 + "Element2 = 0\n"
                 + "Element3 = 'none'\n"
                 + "def macheEtwas(x):\n"
-                + "    global Element3\n"
+                + "    global Element, Element3, Element2\n"
                 + "    Element3 = 'none'\n\n"
                 + "def run():\n"
-                + "    global Element3\n"
+                + "    global Element, Element3, Element2\n"
                 + "\n"
                 + MAIN_METHOD;
 
@@ -766,14 +780,14 @@ public class AstToEv3PythonVisitorTest {
                 + "Element2 = 0\n"
                 + "Element3 = 'none'\n"
                 + "def macheEtwas(x):\n"
-                + "    global Element, Element3\n"
+                + "    global Element, Element3, Element2\n"
                 + "    Element3 = 'none'\n\n"
                 + "def macheEtwas2():\n"
-                + "    global Element, Element3\n"
+                + "    global Element, Element3, Element2\n"
                 + "    Element = 0\n"
                 + "    return Element2\n\n"
                 + "def run():\n"
-                + "    global Element, Element3\n"
+                + "    global Element, Element3, Element2\n"
                 + "\n"
                 + MAIN_METHOD;
 
