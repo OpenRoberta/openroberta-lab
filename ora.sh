@@ -90,11 +90,10 @@ function _exportApplication {
 	serverVersionForDb=$(java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter --version-for-db)
     echo "server version: ${serverVersion} - server version for db: ${serverVersionForDb}"
     echo "created the target directory \"$exportpath\""
+	
     echo "copying all jars"
     mkAndCheckDir "${exportpath}/lib"
     cp OpenRobertaServer/target/resources/*.jar "$exportpath/lib"
-    mkAndCheckDir "${exportpath}/dbBase"
-    cp OpenRobertaServer/dbBase/* "$exportpath/dbBase"
 
     echo 'copying resources for all robot plugins'
     set *
