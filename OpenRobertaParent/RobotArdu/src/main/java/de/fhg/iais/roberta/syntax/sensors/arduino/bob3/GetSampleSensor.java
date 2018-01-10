@@ -66,7 +66,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.getSensorPort(BlocklyConstants.NO_PORT),
                         factory.getTimerSensorMode(BlocklyConstants.VALUE),
-                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
                 this.sensor = TimerSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.LIGHT_LEVEL:
@@ -74,7 +74,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.getSensorPort(BlocklyConstants.NO_PORT),
                         factory.getLightSensorMode(BlocklyConstants.DEFAULT),
-                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
                 this.sensor = LightSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.TEMPERATURE:
@@ -82,7 +82,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.getSensorPort(port),
                         factory.getTemperatureSensorMode(BlocklyConstants.DEFAULT),
-                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
                 this.sensor = TemperatureSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.CODE:

@@ -48,7 +48,6 @@
 <script src="../blocks/robColour.js"></script>
 <script src="../blocks/robCommunication.js"></script>
 <script src="../blocks/robControls.js"></script>
-<script src="../blocks/robSensors.js"></script>
 <script src="../blocks/arduActions.js"></script>
 <script src="../blocks/arduSensors.js"></script>
 <script src="../blocks/makeblockSensors.js"></script>
@@ -58,8 +57,8 @@
 <script src="../blocks/bob3Sensors.js"></script>
 <script src="../blocks/bob3Actions.js"></script>
 <script src="../blocks/bob3Communication.js"></script>
-<script src="../blocks/simActions.js"></script>
-<script src="../blocks/simSensors.js"></script>
+<script src="../blocks/robSensors.js"></script>
+<script src="../blocks/robSensorDefinitions.js"></script>
 <link rel="stylesheet" type="text/css" href="typicons.css"></link>
 
 <script>
@@ -67,7 +66,7 @@
 // Depending on the URL argument, render as LTR or RTL.
 var rtl = (document.location.search == '?rtl');
 var workspace = null;
-var device = 'mbot'
+var device = 'ardu'
 
 function start() {
   var toolbox = document.getElementById('toolbox');
@@ -268,447 +267,293 @@ h1 {
 
   <div id="blocklyDiv"></div>
 
-<toolbox_set id='toolbox' style='display: none'>
-    <category name='TOOLBOX_ACTION' svg="true">
-        <category name='brick'>
-        <block type='makeblockActions_leds_on'></block>
-        <block type='makeblockActions_leds_off'></block>
-        <block type='robBrick_EV3-Brick'></block>
-        <block type='robBrick_ardu-Brick'></block>
-        <block type='robBrick_makeBlock-Brick'></block>
-        <block type='robBrick_ultrasonic'></block>
-        <block type='robBrick_colour'></block>
-        <block type='robBrick_light'></block>
-        <block type='robBrick_infrared'></block>
-        <block type='robBrick_touch'></block>
-        <block type='robBrick_gyro'></block>
-        <block type='robBrick_compass'></block>
-        <block type='robBrick_ultrasonic_ardu'></block>
-        <block type='robBrick_sound'></block>
-        <block type='robBrick_temperature'></block>
-        <block type='robBrick_joystick'></block>
-        <block type='robBrick_accelerometer'></block>
-        <block type='robBrick_flame'></block>
-        <block type='robBrick_ambientlight'></block>
-        <block type='robBrick_motion'></block>
-        <block type='robBrick_led'></block>
-        <block type='robBrick_led_matrix'></block>
-        <block type='robBrick_motor_big'></block>
-        <block type='robBrick_motor_geared'></block>
-        <block type='robBrick_motor_middle'></block>
-        <block type='robBrick_motor_ardu'>
-        </block>
-        <block type='robBrick_actor'></block>
-        </category>
-        <category name='TOOLBOX_MOVE' svg="true">
-            <block type='robActions_motor_on'>
-                <field name='MOTORPORT'>B</field>
-                <value name='POWER'>
-                    <block type='math_number'>
-                        <field name='NUM'>30</field>
-                    </block>
-                </value>
-            </block>
-            <block type='robActions_motor_on_for'>
-                <field name='MOTORPORT'>B</field>
-                <value name='POWER'>
-                    <block type='math_number'>
-                        <field name='NUM'>30</field>
-                    </block>
-                </value>
-                <value name='VALUE'>
-                    <block type='math_number'>
-                        <field name='NUM'>1</field>
-                    </block>
-                </value>
-            </block>
-           <block type='robActions_motor_getPower'>
-                <field name='MOTORPORT'>B</field>
-            </block>
-            <block type='robActions_motor_stop'>
-                <field name='MOTORPORT'>A</field>
-            </block>
-            <block type='makeblockActions_motor_stop'>
-                <field name='MOTORPORT'>M1</field>
-            </block>
-            <block type='robActions_motor_on_for_ardu'>
-            </block>
-        </category>
-        <category name='TOOLBOX_DRIVE' svg="true">
-            <block type='robActions_motorDiff_on'>
-                <value name='POWER'>
-                    <block type='math_number'>
-                        <field name='NUM'>50</field>
-                    </block>
-                </value>
-            </block>
-            <block type='robActions_motorDiff_on_for'>
-                <value name='POWER'>
-                    <block type='math_number'>
-                        <field name='NUM'>50</field>
-                    </block>
-                </value>
-                <value name='DISTANCE'>
-                    <block type='math_number'>
-                        <field name='NUM'>20</field>
-                    </block>
-                </value>
-            </block>
-            <block type='robActions_motorDiff_stop'>
-            </block>
-            <block type='robActions_motorDiff_turn'>
-                <value name='POWER'>
-                    <block type='math_number'>
-                        <field name='NUM'>50</field>
-                    </block>
-                </value>
-            </block>
-            <block type='robActions_motorDiff_turn_for'>
-                <value name='POWER'>
-                    <block type='math_number'>
-                        <field name='NUM'>50</field>
-                    </block>
-                </value>
-                <value name='DEGREE'>
-                    <block type='math_number'>
-                        <field name='NUM'>20</field>
-                    </block>
-                </value>
-            </block>
-            <block type='robActions_motorDiff_curve'>
-                <value name='POWER_LEFT'>
-                    <block type='math_number'>
-                        <field name='NUM'>20</field>
-                    </block>
-                </value>
-                <value name='POWER_RIGHT'>
-                    <block type='math_number'>
-                        <field name='NUM'>50</field>
-                    </block>
-                </value>
-            </block>
-            <block type='robActions_motorDiff_curve_for'>
-                <value name='POWER_LEFT'>
-                    <block type='math_number'>
-                        <field name='NUM'>20</field>
-                    </block>
-                </value>
-                <value name='POWER_RIGHT'>
-                    <block type='math_number'>
-                        <field name='NUM'>50</field>
-                    </block>
-                </value>
-                <value name='DISTANCE'>
-                    <block type='math_number'>
-                        <field name='NUM'>20</field>
-                    </block>
-                </value>
-            </block>
-        </category>
-        <category name='TOOLBOX_DISPLAY' svg="true">
-            <block type='makeblockActions_display_image'></block>
-            <block type='makeblockActions_display_text'></block>
-            <block type='makeblockActions_display_clear'></block>
-            <block type='robActions_display_text'>
-                <value name='OUT'>
-                    <block type='text'>
-                        <field name='TEXT'>Hallo</field>
-                    </block>
-                </value>
-                <value name='COL'>
-                    <block type='math_number'>
-                        <field name='NUM'>0</field>
-                    </block>
-                </value>
-                <value name='ROW'>
-                    <block type='math_number'>
-                        <field name='NUM'>0</field>
-                    </block>
-                </value>
-            </block>
-            <block type='robActions_display_picture'>
-                <value name='X'>
-                    <block type='math_number'>
-                        <field name='NUM'>0</field>
-                    </block>
-                </value>
-                <value name='Y'>
-                    <block type='math_number'>
-                        <field name='NUM'>0</field>
-                    </block>
-                </value>
-            </block>
-            <block type='robActions_display_matrix'></block>
-            <block type='robActions_display_clear'>
-            </block>
-        </category>
-        <category name='TOOLBOX_SOUND' svg="true">
-            <block type='robActions_play_tone'>
-                <value name='FREQUENCE'>
-                    <block type='math_number'>
-                        <field name='NUM'>300</field>
-                    </block>
-                </value>
-                <value name='DURATION'>
-                    <block type='math_number'>
-                        <field name='NUM'>100</field>
-                    </block>
-                </value>
-            </block>
-            <block type='robActions_play_file'>
-            </block>
-            <block type='robActions_play_setVolume'>
-                <value name='VOLUME'>
-                    <block type='math_number'>
-                        <field name='NUM'>50</field>
-                    </block>
-                </value>
-            </block>
-            <block type='robActions_play_getVolume'>
-            </block>
-        </category>
-        <category name='TOOLBOX_LIGHT' svg="true">
-            <block type='makeblockActions_external_leds_on'></block>
-            <block type='makeblockActions_external_leds_off'></block>
-            <block type='bob3Actions_set_led'></block>
-            <block type='robActions_brickLight_on'></block>
-            <block type='robActions_sensorLight_on'></block>
-            <block type='robActions_brickLight_off'></block>
-            <block type='robActions_brickLight_reset'></block>
-        </category>
-    </category>
-    <category name='TOOLBOX_SENSOR' svg="true">
-        <block type='makeblockSensors_light'></block>
-        <block type='makeblockSensors_ambientlight'></block>
-        <block type='bob3Sensors_getCode'>
-        </block>
-        <block type='bob3Sensors_ambientlight'>
-        </block>
-        <block type='bob3Sensors_temperature_getSample'>
-        </block>
-        <block type='bob3Sensors_touch_getSample'>
-        </block>
-        <block type='makeblockSensors_gyroscope_getSample'>
-        </block>
-	    <block type='makeblockSensors_accelerometer_getSample'>
-        </block>
-        <block type='robSensors_touch_isPressed'>
-        </block>
-        <block type='sim_touch_isPressed'>
-        </block>
-        <block type='robSensors_ultrasonic_getSample'>
-         </block>
-        <block type='robSensors_colour_getSample'>
-         </block>
-        <block type='robSensors_infrared_getSample'>
-        </block>
-        <block type='robSensors_encoder_reset'>
-        </block>
-        <block type='robSensors_encoder_getSample'>
-        </block>
-        <block type='robSensors_key_isPressed'>
-        </block>
-        <block type='robSensors_gyro_reset'>
-            <field name='SENSORPORT'>2</field>
-        </block>
-        <block type='robSensors_compass_getSample'>
-        </block>
-        <block type='robSensors_timer_getSample'>
-        </block>
-        <block type='robSensors_timer_reset'>
-        </block>
-        <block type='robSensors_sound_getSample'>
-        </block>
-        <block type='robSensors_light_getSample'>
-        </block>
-        <block type='robSensors_battery_voltage'>
-        </block>
-    </category>
-    <category name='TOOLBOX_CONTROL' svg="true">
-        <category name='TOOLBOX_DECISION'>
-            <block type='robControls_if'></block>
-            <block type='robControls_ifElse'></block>
-        </category>
-        <category name='TOOLBOX_LOOP'>
-            <block type='robControls_loopForever'></block>
-            <block type='controls_repeat_ext'>
-                <value name='TIMES'>
-                    <block type='math_number'>
-                        <field name='NUM'>10</field>
-                    </block>
-                </value>
-            </block>
-            <block type='controls_whileUntil'></block>
-            <block type='robControls_for'>
-                <value name='FROM'>
-                    <block type='math_number'>
-                        <field name='NUM'>1</field>
-                    </block>
-                </value>
-                <value name='TO'>
-                    <block type='math_number'>
-                        <field name='NUM'>10</field>
-                    </block>
-                </value>
-                <value name='BY'>
-                    <block type='math_number'>
-                        <field name='NUM'>1</field>
-                    </block>
-                </value>
-            </block>
-            <block type='robControls_forEach'>
-            </block>
-            <block type='controls_flow_statements'></block>
-        </category>
-        <category name=TOOLBOX_WAIT>
-            <block type='robControls_wait'>
-            </block>
-            <block type='robControls_wait_time'>
-                <value name='WAIT'>
-                    <block type='math_number'>
-                        <field name='NUM'>500</field>
-                    </block>
-                </value>
-            </block>
-            <block type='robControls_wait_for'>
-                <value name='WAIT0'>
-                    <block type='logic_compare'>
-                    <mutation operator_range='BOOL'></mutation>
-                        <value name='A'>
-                            <block type='arduSensors_getSample'>
-                            </block>
-                        </value>
-                        <value name='B'>
-                            <block type='logic_boolean'>
-                            </block>
-                        </value>
-                    </block>
-                </value>
-            </block>
-        </category>
-        <category name='Tasks'>
-            <block type='robControls_start'></block>
-            <block type='robControls_start_ardu'></block>
-        </category>
-    </category>
-    <category name='TOOLBOX_LOGIC' svg="true">
-        <block type='logic_compare'></block>
-        <block type='logic_operation'></block>
-        <block type='logic_negate'></block>
-        <block type='logic_boolean'></block>
-        <block type='logic_null'></block>
-        <block type='logic_ternary'></block>
-    </category>
-    <category name='TOOLBOX_MATH' svg="true">
-        <block type='math_number'></block>
-        <block type='math_arithmetic'></block>
-        <block type='math_single'></block>
-        <block type='math_trig'></block>
-        <block type='math_constant'></block>
-        <block type='math_number_property'></block>
-        <block type='robMath_change'>
-            <value name='DELTA'>
-                <block type='math_number'>
-                    <field name='NUM'>1</field>
-                </block>
-            </value>
-        </block>
-        <block type='math_round'></block>
-        <block type='math_on_list'></block>
-        <block type='math_modulo'></block>
-        <block type='math_constrain'>
-            <value name='LOW'>
-                <block type='math_number'>
-                    <field name='NUM'>1</field>
-                </block>
-            </value>
-            <value name='HIGH'>
-                <block type='math_number'>
-                    <field name='NUM'>100</field>
-                </block>
-            </value>
-        </block>
-        <block type='math_random_int'>
-            <value name='FROM'>
-                <block type='math_number'>
-                    <field name='NUM'>1</field>
-                </block>
-            </value>
-            <value name='TO'>
-                <block type='math_number'>
-                    <field name='NUM'>100</field>
-                </block>
-            </value>
-        </block>
-        <block type='math_random_float'></block>
-    </category>
-    <category name='TOOLBOX_TEXT' svg="true">
-        <block type='text'></block>
-        <block type='robText_join'></block>
-        <block type='robText_append'>
-            <value name='TEXT'>
-                <shadow type='text'></shadow>
-            </value>
-        </block>
-    </category>
-    <category name='TOOLBOX_LIST' svg="true">
-        <block type='robLists_create_with'>
-            <mutation items="0" list_type="Number"></mutation>
-        </block>
-        <block type='robLists_create_with'>
-            <value name='ADD0'>
-                <block type='math_number'></block>
-            </value>
-            <value name='ADD1'>
-                <block type='math_number'></block>
-            </value>
-            <value name='ADD2'>
-                <block type='math_number'></block>
-            </value>
-        </block>
-        <block type='robLists_repeat'>
-            <value name='NUM'>
-                <block type='math_number'>
-                    <field name='NUM'>5</field>
-                </block>
-            </value>
-        </block>
-        <block type='robLists_length'></block>
-        <block type='robLists_isEmpty'></block>
-        <block type='robLists_indexOf'>
-        </block>
-        <block type='robLists_getIndex'>
-        </block>
-        <block type='robLists_setIndex'>
-        </block>
-        <block type='robLists_getSublist'>
-        </block>
-    </category>
-    <category name='TOOLBOX_COLOUR' svg="true">
-        <block type='robColour_picker'>
-        </block>
-        <block type='makeblockColour_rgb'>
-        </block>
-    </category>
-    <category name='TOOLBOX_IMAGE' svg="true">
-        <block type='makeblockImage_image'></block>
-    </category>
-    <category name='TOOLBOX_VARIABLE' custom='VARIABLE' svg="true"></category>
-    <category name='TOOLBOX_PROCEDURE' custom='PROCEDURE' svg="true"></category>
-    <category name='TOOLBOX_COMMUNICATION' svg="true">
-        <block type='robCommunication_startConnection'></block>
-        <block type='robCommunication_sendBlock'></block>
-        <block type='robCommunication_receiveBlock'></block>
-        <block type='bob3Communication_sendBlock'></block>
-        <block type='bob3Communication_receiveBlock'></block>
-        <block type='robCommunication_waitForConnection'></block>
-        <block type='robCommunication_connection'></block>
-        <block type='robCommunication_checkConnection'>
-           <value name='CONNECTION'>
-           <block type='robCommunication_connection'></block>
-           </value>
-        </block>
-    </category>
+<toolbox_set id="toolbox" style="display: none">
+	<category name="TOOLBOX_ACTION" svg="true">
+		<category name="TOOLBOX_DRIVE" svg="true">
+			<block type="robActions_motorDiff_on_for">
+				<value name="POWER">
+					<block type="math_number">
+						<field name="NUM">30</field>
+					</block>
+				</value>
+				<value name="DISTANCE">
+					<block type="math_number">
+						<field name="NUM">500</field>
+					</block>
+				</value>
+			</block>
+			<block type="robActions_motorDiff_on">
+				<value name="POWER">
+					<block type="math_number">
+						<field name="NUM">30</field>
+					</block>
+				</value>
+			</block>
+			<block type="robActions_motorDiff_stop"></block>
+			<block type="robActions_motorDiff_turn_for">
+				<value name="POWER">
+					<block type="math_number">
+						<field name="NUM">30</field>
+					</block>
+				</value>
+				<value name="DEGREE">
+					<block type="math_number">
+						<field name="NUM">500</field>
+					</block>
+				</value>
+			</block>
+			<block type="robActions_motorDiff_turn">
+				<value name="POWER">
+					<block type="math_number">
+						<field name="NUM">30</field>
+					</block>
+				</value>
+			</block>
+			<block type="robActions_motorDiff_curve_for">
+				<value name="POWER_LEFT">
+					<block type="math_number">
+						<field name="NUM">10</field>
+					</block>
+				</value>
+				<value name="POWER_RIGHT">
+					<block type="math_number">
+						<field name="NUM">30</field>
+					</block>
+				</value>
+				<value name="DISTANCE">
+					<block type="math_number">
+						<field name="NUM">500</field>
+					</block>
+				</value>
+			</block>
+			<block type="robActions_motorDiff_curve">
+				<value name="POWER_LEFT">
+					<block type="math_number">
+						<field name="NUM">10</field>
+					</block>
+				</value>
+				<value name="POWER_RIGHT">
+					<block type="math_number">
+						<field name="NUM">30</field>
+					</block>
+				</value>
+			</block>
+		</category>
+		<category name="TOOLBOX_MOVE" svg="true">
+			<block type="robActions_motor_on_for">
+				<field name="MOTORPORT">B</field>
+				<value name="POWER">
+					<block type="math_number">
+						<field name="NUM">30</field>
+					</block>
+				</value>
+				<value name="VALUE">
+					<block type="math_number">
+						<field name="NUM">100</field>
+					</block>
+				</value>
+			</block>
+			<block type="robActions_motor_on">
+				<value name="POWER">
+					<block type="math_number">
+						<field name="NUM">30</field>
+					</block>
+				</value>
+			</block>
+			<block type="robActions_motor_on_for_ardu">
+				<value name="POWER">
+					<block type="math_number">
+						<field name="NUM">90</field>
+					</block>
+				</value>
+			</block>
+		</category>
+		<category name="TOOLBOX_DISPLAY" svg="true">
+			<block type="robActions_display_text">
+				<value name="OUT">
+					<block type="text">
+						<field name="TEXT">Hallo</field>
+					</block>
+				</value>
+				<value name="ROW">
+					<block type="math_number">
+						<field name="NUM">1</field>
+					</block>
+				</value>
+			</block>
+			<block type="robActions_display_clear"></block>
+		</category>
+		<category name="TOOLBOX_SOUND" svg="true">
+			<block type="robActions_play_tone">
+				<value name="FREQUENCE">
+					<block type="math_number">
+						<field name="NUM">300</field>
+					</block>
+				</value>
+				<value name="DURATION">
+					<block type="math_number">
+						<field name="NUM">100</field>
+					</block>
+				</value>
+			</block>
+			<block type="mbedActions_play_note"></block>
+		</category>
+		<category name="TOOLBOX_LIGHT" svg="true">
+			<block type="robActions_brickLight_on">
+				<field name="SWITCH_BLINK">ON</field>
+			</block>
+		</category>
+	</category>
+	<category name="TOOLBOX_SENSOR" svg="true">
+		<block type="robSensors_infrared_getSample"></block>
+		<block type="robSensors_light_getSample"></block>
+		<block type="robSensors_compass_getSample"></block>
+		<block type="robSensors_ultrasonic_getSample"></block>
+		<block type="robSensors_colour_getSample"></block>
+		<block type="robSensors_key_isPressed"></block>
+		<block type="robSensors_timer_getSample"></block>
+		<block type="robSensors_timer_reset"></block>
+		<block type="robSensors_battery_voltage"></block>
+	</category>
+	<category name="TOOLBOX_CONTROL" svg="true">
+		<category name="TOOLBOX_DECISION" svg="true">
+			<block type="robControls_if"></block>
+			<block type="robControls_ifElse"></block>
+		</category>
+		<category name="TOOLBOX_LOOP" svg="true">
+			<block type="robControls_loopForever"></block>
+			<block type="controls_repeat_ext">
+				<value name="TIMES">
+					<block type="math_number">
+						<field name="NUM">10</field>
+					</block>
+				</value>
+			</block>
+			<block type="controls_whileUntil"></block>
+			<block type="robControls_for">
+				<value name="FROM">
+					<block type="math_number">
+						<field name="NUM">1</field>
+					</block>
+				</value>
+				<value name="TO">
+					<block type="math_number">
+						<field name="NUM">10</field>
+					</block>
+				</value>
+				<value name="BY">
+					<block type="math_number">
+						<field name="NUM">1</field>
+					</block>
+				</value>
+			</block>
+			<block type="robControls_forEach"></block>
+			<block type="controls_flow_statements"></block>
+		</category>
+		<category name="TOOLBOX_WAIT" svg="true">
+			<block type="robControls_wait"></block>
+			<block type="robControls_wait_time">
+				<value name="WAIT">
+					<block type="math_number">
+						<field name="NUM">500</field>
+					</block>
+				</value>
+			</block>
+			<block type="robControls_wait_for">
+				<value name="WAIT0">
+					<block type="logic_compare">
+						<value name="A">
+							<block type="robSensors_getSample_ardu"></block>
+						</value>
+						<value name="B">
+							<block type="logic_boolean"></block>
+						</value>
+					</block>
+				</value>
+			</block>
+		</category>
+	</category>
+	<category name="TOOLBOX_LOGIC" svg="true">
+		<block type="logic_compare"></block>
+		<block type="logic_operation"></block>
+		<block type="logic_negate"></block>
+		<block type="logic_boolean"></block>
+		<block type="logic_null"></block>
+		<block type="logic_ternary"></block>
+	</category>
+	<category name="TOOLBOX_MATH" svg="true">
+		<block type="math_number"></block>
+		<block type="math_arithmetic"></block>
+		<block type="math_single"></block>
+		<block type="math_trig"></block>
+		<block type="math_constant"></block>
+		<block type="math_number_property"></block>
+		<block type="robMath_change">
+			<value name="DELTA">
+				<block type="math_number">
+					<field name="NUM">1</field>
+				</block>
+			</value>
+		</block>
+		<block type="math_round"></block>
+		<block type="math_on_list"></block>
+		<block type="math_modulo"></block>
+		<block type="math_constrain">
+			<value name="LOW">
+				<block type="math_number">
+					<field name="NUM">1</field>
+				</block>
+			</value>
+			<value name="HIGH">
+				<block type="math_number">
+					<field name="NUM">100</field>
+				</block>
+			</value>
+		</block>
+		<block type="math_random_int">
+			<value name="FROM">
+				<block type="math_number">
+					<field name="NUM">1</field>
+				</block>
+			</value>
+			<value name="TO">
+				<block type="math_number">
+					<field name="NUM">100</field>
+				</block>
+			</value>
+		</block>
+		<block type="math_random_float"></block>
+	</category>
+	<category name="TOOLBOX_TEXT" svg="true">
+		<block type="text"></block>
+		<block type="robText_append"></block>
+	</category>
+	<category name="TOOLBOX_LIST" svg="true">
+		<block type="robLists_create_with">
+			<mutation items="0" list_type="Number"></mutation>
+		</block>
+		<block type="robLists_create_with">
+			<value name="ADD0">
+				<block type="math_number"></block>
+			</value>
+			<value name="ADD1">
+				<block type="math_number"></block>
+			</value>
+			<value name="ADD2">
+				<block type="math_number"></block>
+			</value>
+		</block>
+		<block type="robLists_length"></block>
+		<block type="robLists_isEmpty"></block>
+		<block type="robLists_indexOf"></block>
+		<block type="robLists_getIndex"></block>
+		<block type="robLists_setIndex"></block>
+	</category>
+	<category name="TOOLBOX_COLOUR" svg="true">
+		<block type="robColour_picker"></block>
+	</category>
+	<category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true"></category>
+	<category name="TOOLBOX_PROCEDURE" custom="PROCEDURE" svg="true"></category>
 </toolbox_set>
 
   <h1>Blockly Playground</h1>

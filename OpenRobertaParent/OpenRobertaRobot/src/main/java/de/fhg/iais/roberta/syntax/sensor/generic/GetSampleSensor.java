@@ -61,12 +61,12 @@ public class GetSampleSensor<V> extends Sensor<V> {
         SensorMetaDataBean sensorMetaDataBean;
         switch ( sensorType.getSensorType() ) {
             case BlocklyConstants.TOUCH:
-                sensorMetaDataBean = new SensorMetaDataBean(factory.getSensorPort(port), factory.getTouchSensorMode("TOUCH"), factory.getSlot(slot));
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(factory.getSensorPort(port), factory.getTouchSensorMode("TOUCH"), factory.getSlot(BlocklyConstants.EMPTY_SLOT));
                 this.sensor = TouchSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.PINTOUCH:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(factory.getSensorPort(port), factory.getTouchSensorMode("PINTOUCH"), factory.getSlot(BlocklyConstants.NO_SLOT));
+                sensorMetaDataBean = new SensorMetaDataBean(factory.getSensorPort(port), factory.getTouchSensorMode("PINTOUCH"), factory.getSlot(slot));
                 this.sensor = PinTouchSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.ULTRASONIC:
@@ -74,7 +74,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.getSensorPort(port),
                         factory.getUltrasonicSensorMode(sensorType.getSensorMode()),
-                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
                 this.sensor = UltrasonicSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.COLOUR:
@@ -82,7 +82,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.getSensorPort(port),
                         factory.getColorSensorMode(sensorType.getSensorMode()),
-                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
                 this.sensor = ColorSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.INFRARED:
@@ -90,7 +90,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.getSensorPort(port),
                         factory.getInfraredSensorMode(sensorType.getSensorMode()),
-                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
                 this.sensor = InfraredSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.ENCODER:
@@ -98,7 +98,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.getActorPort(port),
                         factory.getMotorTachoMode(sensorType.getSensorMode()),
-                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
                 this.sensor = EncoderSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.KEY_PRESSED:
@@ -106,7 +106,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.getBrickKey(port),
                         factory.getBrickKeyPressMode(sensorType.getSensorMode()),
-                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
                 this.sensor = BrickSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.GYRO:
@@ -114,7 +114,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.getSensorPort(port),
                         factory.getGyroSensorMode(sensorType.getSensorMode()),
-                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
                 this.sensor = GyroSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.TIME:
@@ -122,7 +122,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.getSensorPort(port),
                         factory.getTimerSensorMode(sensorType.getSensorMode()),
-                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
                 this.sensor = TimerSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.SOUND:
@@ -130,7 +130,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.getSensorPort(port),
                         factory.getSoundSensorMode(sensorType.getSensorMode()),
-                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
                 this.sensor = SoundSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.LIGHT_VALUE:
@@ -139,7 +139,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.getSensorPort(port),
                         factory.getLightSensorMode(sensorType.getSensorMode()),
-                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
                 this.sensor = LightSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.COMPASS:
@@ -147,7 +147,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.getSensorPort(port),
                         factory.getCompassSensorMode(BlocklyConstants.DEFAULT),
-                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
                 this.sensor = CompassSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.TEMPERATURE:
@@ -155,7 +155,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.getSensorPort(port),
                         factory.getTemperatureSensorMode(BlocklyConstants.DEFAULT),
-                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
                 this.sensor = TemperatureSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.PIN_ANALOG:
@@ -166,12 +166,15 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.getSensorPort(port),
                         factory.getPinGetValueSensorMode(sensorType.getSensorMode()),
-                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
                 this.sensor = PinGetValueSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.ACCELERATION:
                 sensorMetaDataBean =
-                    new SensorMetaDataBean(factory.getSensorPort(port), factory.getAxis(BlocklyConstants.DEFAULT), factory.getSlot(BlocklyConstants.NO_SLOT));
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(port),
+                        factory.getAxis(BlocklyConstants.DEFAULT),
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
                 this.sensor = AccelerometerSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.GESTURE:
@@ -179,7 +182,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.getSensorPort(port),
                         factory.getGestureSensorMode(sensorType.getSensorMode()),
-                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
                 this.sensor = GestureSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             default:

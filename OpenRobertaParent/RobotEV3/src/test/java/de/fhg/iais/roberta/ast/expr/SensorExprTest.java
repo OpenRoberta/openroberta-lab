@@ -20,11 +20,11 @@ public class SensorExprTest {
     public void make() throws Exception {
         TouchSensor<Void> touchSensor =
             TouchSensor.make(
-                new SensorMetaDataBean(SensorPort.S1, TouchSensorMode.TOUCH, Slot.NO_SLOT),
+                new SensorMetaDataBean(SensorPort.S1, TouchSensorMode.TOUCH, Slot.EMPTY_SLOT),
                 BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false),
                 null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
-        String a = "SensorExpr [TouchSensor [S1, TOUCH, NO_SLOT]]";
+        String a = "SensorExpr [TouchSensor [S1, TOUCH, EMPTY_SLOT]]";
         Assert.assertEquals(a, sensorExpr.toString());
     }
 
@@ -32,11 +32,11 @@ public class SensorExprTest {
     public void getSensor() throws Exception {
         TouchSensor<Void> touchSensor =
             TouchSensor.make(
-                new SensorMetaDataBean(SensorPort.S1, TouchSensorMode.TOUCH, Slot.NO_SLOT),
+                new SensorMetaDataBean(SensorPort.S1, TouchSensorMode.TOUCH, Slot.EMPTY_SLOT),
                 BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false),
                 null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
-        String a = "TouchSensor [S1, TOUCH, NO_SLOT]";
+        String a = "TouchSensor [S1, TOUCH, EMPTY_SLOT]";
         Assert.assertEquals(a, sensorExpr.getSens().toString());
     }
 
@@ -44,7 +44,7 @@ public class SensorExprTest {
     public void getPresedance() throws Exception {
         TouchSensor<Void> touchSensor =
             TouchSensor.make(
-                new SensorMetaDataBean(SensorPort.S1, TouchSensorMode.TOUCH, Slot.NO_SLOT),
+                new SensorMetaDataBean(SensorPort.S1, TouchSensorMode.TOUCH, Slot.EMPTY_SLOT),
                 BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false),
                 null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
@@ -55,7 +55,7 @@ public class SensorExprTest {
     public void getAssoc() throws Exception {
         TouchSensor<Void> touchSensor =
             TouchSensor.make(
-                new SensorMetaDataBean(SensorPort.S1, TouchSensorMode.TOUCH, Slot.NO_SLOT),
+                new SensorMetaDataBean(SensorPort.S1, TouchSensorMode.TOUCH, Slot.EMPTY_SLOT),
                 BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false),
                 null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);

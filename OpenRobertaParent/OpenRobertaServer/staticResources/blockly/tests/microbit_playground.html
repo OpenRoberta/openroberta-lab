@@ -35,7 +35,6 @@
         <script src="../core/comment.js"></script>
         <script src="../core/bubble.js"></script>
         <script src="../core/trashcan.js"></script>
-        <script src="../core/utils.js"></script>
         <script src="../core/xml.js"></script>
         <script src="../blocks/logic.js"></script>
         <script src="../blocks/loops.js"></script>
@@ -60,7 +59,7 @@
             // Depending on the URL argument, render as LTR or RTL.
             var rtl = (document.location.search == '?rtl');
             var workspace = null;
-            var device = 'calliope';
+            var device = 'microbit';
             
             function start() {
               var toolbox = document.getElementById('toolbox');
@@ -250,9 +249,15 @@
     </head>
     <body onload="start()">
         <div id="blocklyDiv"></div>
-<toolbox_set id="toolbox" style="display: none">
-	<category name="TOOLBOX_ACTION" svg="true">
-		<category name="TOOLBOX_DISPLAY" svg="true">
+<toolbox_set
+	id="toolbox"
+	style="display: none">
+	<category
+		name="TOOLBOX_ACTION"
+		svg="true">
+		<category
+			name="TOOLBOX_DISPLAY"
+			svg="true">
 			<block type="mbedActions_display_text">
 				<value name="OUT">
 					<block type="text">
@@ -271,14 +276,6 @@
 				</value>
 			</block>
 			<block type="mbedActions_display_clear"></block>
-			<block type="mbedActions_display_setBrightness">
-				<value name="BRIGHTNESS">
-					<block type="math_number">
-						<field name="NUM">5</field>
-					</block>
-				</value>
-			</block>
-			<block type="mbedActions_display_getBrightness"></block>
 			<block type="mbedActions_display_setPixel">
 				<value name="X">
 					<block type="math_number">
@@ -309,52 +306,10 @@
 				</value>
 			</block>
 		</category>
-		<category name="TOOLBOX_LIGHT" svg="true">
-			<block type="mbedActions_leds_on">
-				<value name="COLOR">
-					<block type="mbedColour_picker">
-						<field name="COLOUR">#ff0000</field>
-					</block>
-				</value>
-			</block>
-			<block type="mbedActions_leds_off"></block>
-		</category>
-		<category name="TOOLBOX_MOVE" svg="true">
-			<block type="mbedActions_motor_on">
-				<value name="POWER">
-					<block type="math_number">
-						<field name="NUM">30</field>
-					</block>
-				</value>
-			</block>
-			<block type="mbedActions_motor_stop"></block>
-			<block type="mbedActions_single_motor_on">
-				<value name="POWER">
-					<block type="math_number">
-						<field name="NUM">30</field>
-					</block>
-				</value>
-			</block>
-			<block type="mbedActions_single_motor_stop"></block>
-		</category>
-		<category name="TOOLBOX_SOUND" svg="true">
-			<block type="mbedActions_play_tone">
-				<value name="FREQUENCE">
-					<block type="math_number">
-						<field name="NUM">300</field>
-					</block>
-				</value>
-				<value name="DURATION">
-					<block type="math_number">
-						<field name="NUM">100</field>
-					</block>
-				</value>
-			</block>&amp;gt;
-            
-			<block type="mbedActions_play_note"></block>
-		</category>
-		<category name="TOOLBOX_PIN" svg="false">
-			<block type="mbedActions_write_to_pin">
+		<category
+			name="TOOLBOX_PIN"
+			svg="false">
+			<block type='mbedActions_write_to_pin'>
 				<value name="VALUE">
 					<block type="math_number">
 						<field name="NUM">1</field>
@@ -363,27 +318,31 @@
 			</block>
 		</category>
 	</category>
-	<category name="TOOLBOX_SENSOR" svg="true">
+	<category
+		name="TOOLBOX_SENSOR"
+		svg="true">
 		<block type="mbedSensors_key_isPressed"></block>
-		<block type='mbedSensors_pin_isTouched'></block>
 		<block type="mbedSensors_gesture_isActive"></block>
 		<block type="mbedSensors_compass_getSample"></block>
-		<block type="mbedSensors_microphone_getSample"></block>
 		<block type="mbedSensors_timer_getSample"></block>
 		<block type="mbedSensors_timer_reset"></block>
 		<block type="mbedSensors_temperature_getSample"></block>
-		<block type="mbedSensors_getRssi"></block>
-		<block type="mbedSensors_ambientLight_getSample"></block>
-		<block type="mbedSensors_pin_getSample"></block>
-		<block type='mbedSensors_rotation_getSample'></block>
+		<block type='mbedSensors_pin_isTouched'></block>
+		<block type='mbedSensors_pin_getSample'></block>
 		<block type='mbedSensors_acceleration_getSample'></block>
 	</category>
-	<category name="TOOLBOX_CONTROL" svg="true">
-		<category name="TOOLBOX_DECISION" svg="true">
+	<category
+		name="TOOLBOX_CONTROL"
+		svg="true">
+		<category
+			name="TOOLBOX_DECISION"
+			svg="true">
 			<block type="robControls_if"></block>
 			<block type="robControls_ifElse"></block>
 		</category>
-		<category name="TOOLBOX_LOOP" svg="true">
+		<category
+			name="TOOLBOX_LOOP"
+			svg="true">
 			<block type="robControls_loopForever"></block>
 			<block type="controls_repeat_ext">
 				<value name="TIMES">
@@ -413,7 +372,9 @@
 			<block type="robControls_forEach"></block>
 			<block type="controls_flow_statements"></block>
 		</category>
-		<category name="TOOLBOX_WAIT" svg="true">
+		<category
+			name="TOOLBOX_WAIT"
+			svg="true">
 			<block type="robControls_wait"></block>
 			<block type="robControls_wait_time">
 				<value name="WAIT">
@@ -436,7 +397,9 @@
 			</block>
 		</category>
 	</category>
-	<category name="TOOLBOX_LOGIC" svg="true">
+	<category
+		name="TOOLBOX_LOGIC"
+		svg="true">
 		<block type="logic_compare"></block>
 		<block type="logic_operation"></block>
 		<block type="logic_negate"></block>
@@ -444,7 +407,9 @@
 		<block type="logic_null"></block>
 		<block type="logic_ternary"></block>
 	</category>
-	<category name="TOOLBOX_MATH" svg="true">
+	<category
+		name="TOOLBOX_MATH"
+		svg="true">
 		<block type="math_number"></block>
 		<block type="math_arithmetic"></block>
 		<block type="math_single"></block>
@@ -492,10 +457,13 @@
 		<block type="robText_join"></block>
 		<block type="robText_append"></block>
 	</category>
-	<category name="TOOLBOX_LIST" svg="true">
+	<category
+		name="TOOLBOX_LIST"
+		svg="true">
 		<block type="robLists_create_with">
-			<mutation items="0" list_type="Number">
-			</block>
+			<mutation
+				items="0"
+				list_type="Number"></mutation>
 		</block>
 		<block type="robLists_create_with">
 			<value name="ADD0">
@@ -514,65 +482,16 @@
 		<block type="robLists_getIndex"></block>
 		<block type="robLists_setIndex"></block>
 	</category>
-	<category name="TOOLBOX_COLOUR" svg="true">
-		<block type="mbedColour_picker">
-			<field name="COLOUR">#999999</field>
-		</block>
-		<block type="mbedColour_picker">
-			<field name="COLOUR">#cc0000</field>
-		</block>
-		<block type="mbedColour_picker">
-			<field name="COLOUR">#ff6600</field>
-		</block>
-		<block type="mbedColour_picker">
-			<field name="COLOUR">#ffcc33</field>
-		</block>
-		<block type="mbedColour_picker">
-			<field name="COLOUR">#33cc00</field>
-		</block>
-		<block type="mbedColour_picker">
-			<field name="COLOUR">#00cccc</field>
-		</block>
-		<block type="mbedColour_picker">
-			<field name="COLOUR">#3366ff</field>
-		</block>
-		<block type="mbedColour_picker">
-			<field name="COLOUR">#cc33cc</field>
-		</block>
-		<block type="mbedColour_rgb">
-			<value name="RED">
-				<block type="math_number">
-					<field name="NUM">255</field>
-				</block>
-			</value>
-			<value name="GREEN">
-				<block type="math_number">
-					<field name="NUM">20</field>
-				</block>
-			</value>
-			<value name="BLUE">
-				<block type="math_number">
-					<field name="NUM">150</field>
-				</block>
-			</value>
-			<value name="WHITE">
-				<block type="math_number">
-					<field name="NUM">255</field>
-				</block>
-			</value>
-		</block>
-	</category>
 	<category name="TOOLBOX_IMAGE" svg="true">
 		<block type="mbedImage_image"></block>
-		<block type="mbedImage_invert"></block>
 		<block type="mbedImage_shift">
-			<field name="OP">UP</field>
 			<value name="B">
 				<block type="math_number">
 					<field name="NUM">1</field>
 				</block>
 			</value>
 		</block>
+		<block type="mbedImage_invert"></block>
 		<block type="mbedImage_get_image">
 			<field name="IMAGE">HEART</field>
 		</block>
@@ -589,14 +508,20 @@
 			<field name="IMAGE">UMBRELLA</field>
 		</block>
 	</category>
-	<category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true">
-	</block>
-	<category name="TOOLBOX_PROCEDURE" custom="PROCEDURE" svg="true">
-	</block>
-	<category name="TOOLBOX_COMMUNICATION" svg="true">
+	<category
+		name="TOOLBOX_VARIABLE"
+		custom="VARIABLE"
+		svg="true"></category>
+	<category
+		name="TOOLBOX_PROCEDURE"
+		custom="PROCEDURE"
+		svg="true"></category>
+	<category
+		name="TOOLBOX_COMMUNICATION"
+		svg="true">
 		<block type="mbedCommunication_sendBlock">
 			<field name="POWER">7</field>
-			<value name="sendData">
+			<value name='sendData'>
 				<block type="text">
 					<field name="TEXT">geheim</field>
 				</block>
@@ -612,6 +537,7 @@
 		</block>
 	</category>
 </toolbox_set>
+
 
         <h1>Blockly Playground</h1>
         <p><a href="javascript:void(workspace.setVisible(true))">Show</a>

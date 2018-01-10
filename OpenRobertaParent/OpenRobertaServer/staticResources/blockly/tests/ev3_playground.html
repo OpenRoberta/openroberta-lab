@@ -51,8 +51,8 @@
 <script src="../blocks/robColour.js"></script>
 <script src="../blocks/robCommunication.js"></script>
 <script src="../blocks/robControls.js"></script>
-<script src="../blocks/bob3Sensors.js"></script>
 <script src="../blocks/robSensors.js"></script>
+<script src="../blocks/robSensorDefinitions.js"></script>
 <link rel="stylesheet" type="text/css" href="typicons.css"></link>
 
 <script>
@@ -191,14 +191,6 @@
         console.time('Spaghetti domToWorkspace');
         Blockly.Xml.domToWorkspace(dom, workspace);
         console.timeEnd('Spaghetti domToWorkspace');
-    }
-
-    function toggleDevice() {
-        if (device === 'ev3')
-            device = 'ardu';
-        else
-            device = 'ev3';
-        workspace.setDevice(device);
     }
 
     var spaghettiXml = [ '  <block type="robControls_if">', '    <value name="IF0">', '      <block type="logic_compare">',
@@ -351,7 +343,7 @@ h1 {
 		name="NUM">1</field> </block> </value> <value name="TO"> <block
 		type="math_number"> <field name="NUM">100</field> </block> </value> </block> <block
 		type="math_random_float"></block> </category> <category name="TOOLBOX_TEXT"
-		svg="true"> <block type="text"></block> <block
+		svg="true"> <block type="text"></block> <block type="text_comment"></block><block
 		type="robText_join"></block> <block type="robText_append"></block> </category> <category
 		name="TOOLBOX_LIST" svg="true"> <block
 		type="robLists_create_with"> <mutation items="0"
@@ -374,8 +366,8 @@ h1 {
 	<field name="COLOUR">#b30006</field> </block> <block type="robColour_picker">
 	<field name="COLOUR">#FFFFFF</field> </block> <block type="robColour_picker">
 	<field name="COLOUR">#532115</field> </block> </category> <category
-		name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true"> </block> <category
-		name="TOOLBOX_PROCEDURE" custom="PROCEDURE" svg="true"> </block> <category
+		name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true"> </category> <category
+		name="TOOLBOX_PROCEDURE" custom="PROCEDURE" svg="true"> </category> <category
 		name="TOOLBOX_COMMUNICATION" svg="true"> <block
 		type="robCommunication_startConnection"></block> <block
 		type="robCommunication_sendBlock"></block> <block
@@ -415,8 +407,7 @@ h1 {
 	<p>
 		Stress test: &nbsp; <input type="button" value="Airstrike!"
 			onclick="airstrike(100)"> <input type="button"
-			value="Spaghetti!" onclick="spaghetti(8)"> <input
-			type="button" value="Toggle device!" onclick="toggleDevice()">
+			value="Spaghetti!" onclick="spaghetti(8)">
 	</p>
 	<p>
 		Log events: &nbsp; <input type="checkbox"

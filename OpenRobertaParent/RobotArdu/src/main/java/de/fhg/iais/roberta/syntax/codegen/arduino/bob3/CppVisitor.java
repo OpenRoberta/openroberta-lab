@@ -40,8 +40,8 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.GetSampleSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
@@ -227,11 +227,11 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
     }
 
     @Override
-    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        if ( touchSensor.getSlot().getValues()[0].equals("0") ) {
-            this.sb.append("( myBob.getArm(" + touchSensor.getPort().getPortNumber() + ") > " + touchSensor.getSlot().getValues()[0] + ")");
+    public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
+        if ( pinTouchSensor.getSlot().getValues()[0].equals("0") ) {
+            this.sb.append("( myBob.getArm(" + pinTouchSensor.getPort().getPortNumber() + ") > " + pinTouchSensor.getSlot().getValues()[0] + " )");
         } else {
-            this.sb.append("( myBob.getArm(" + touchSensor.getPort().getPortNumber() + ") == " + touchSensor.getSlot().getValues()[0] + ")");
+            this.sb.append("( myBob.getArm(" + pinTouchSensor.getPort().getPortNumber() + ") == " + pinTouchSensor.getSlot().getValues()[0] + " )");
         }
         return null;
     }

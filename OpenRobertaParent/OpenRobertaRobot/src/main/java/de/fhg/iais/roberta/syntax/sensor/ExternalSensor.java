@@ -80,7 +80,7 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
         IRobotFactory factory = helper.getModeFactory();
         String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.NO_PORT);
         String modeName = helper.extractField(fields, BlocklyConstants.MODE, BlocklyConstants.DEFAULT);
-        String slotName = helper.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.NO_SLOT);
+        String slotName = helper.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.EMPTY_SLOT);
         return new SensorMetaDataBean(getPort.apply(portName), getMode.apply(modeName), factory.getSlot(slotName));
     }
 
@@ -106,7 +106,7 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
             String fieldValue = getPort().getPortNumber();
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
         }
-        if ( !this.getSlot().toString().equals(BlocklyConstants.NO_SLOT) ) {
+        if ( !this.getSlot().toString().equals(BlocklyConstants.EMPTY_SLOT) ) {
             String fieldValue = getSlot().getValues()[0];
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SLOT, fieldValue);
         }
