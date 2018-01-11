@@ -156,6 +156,9 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         if (robot.resetPose) {
             robot.resetPose();
         }
+        if (robot.time) {
+            robot.time = 0;
+        }
     }
     exports.resetPose = resetPose;
 

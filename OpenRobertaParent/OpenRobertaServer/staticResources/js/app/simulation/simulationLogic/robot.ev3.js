@@ -24,7 +24,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot' ]
         Ev3.led.color = "LIGHTGRAY";
         Ev3.led.mode = "OFF";
         Ev3.led.blink = 0;
-        Ev3.time = 0;
+        // Ev3.time = 0;
         for (key in this.timer) {
             Ev3.timer[key] = 0;
         }

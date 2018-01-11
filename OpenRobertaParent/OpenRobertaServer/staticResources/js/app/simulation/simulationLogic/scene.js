@@ -114,7 +114,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         // provide new user information
         $('#valuesContent').html('');
         $("#valuesContent").append('<div><label>FPS</label><span>' + UTIL.round(1 / SIM.getDt(), 0) + '</span></div>');
-        $("#valuesContent").append('<div><label>Time</label><span>' + UTIL.round(this.robot.time, 0) + 's</span></div>');
+        $("#valuesContent").append('<div><label>Time</label><span>' + UTIL.round(this.robot.time, 3) + 's</span></div>');
         $("#valuesContent").append('<div><label>Compass</label><span>' + UTIL.round(this.robot.compass.degree, 0) + '°</span></div>');
         $("#valuesContent").append('<div><label>Light Sensor</label><span>' + UTIL.round(this.robot.display.lightLevel, 0) + '%</span></div>');
         $("#valuesContent").append('<div><label>Temperature</label><span>' + UTIL.round(this.robot.temperature.degree, 2) + '°</span></div>');
@@ -159,7 +159,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         // provide new user information
         $('#valuesContent').html('');
         $("#valuesContent").append('<div><label>FPS</label><span>' + UTIL.round(1 / SIM.getDt(), 0) + '</span></div>');
-        $("#valuesContent").append('<div><label>Time</label><span>' + UTIL.round(this.robot.time, 0) + 's</span></div>');
+        $("#valuesContent").append('<div><label>Time</label><span>' + UTIL.round(this.robot.time, 3) + 's</span></div>');
         if (SIM.getBackground() === 7) {
             x = UTIL.round((this.robot.pose.x + this.robot.pose.transX) / 3, 1);
             y = UTIL.round((-this.robot.pose.y - this.robot.pose.transY) / 3, 1);
