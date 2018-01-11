@@ -248,11 +248,11 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
             sayTextAction.getMsg().visit(this);
         }
         BlockType emptyBlock = BlockTypeContainer.getByName("EMPTY_EXPR");
-        if ( !(sayTextAction.getSpeed().getKind().equals(emptyBlock) && sayTextAction.getShape().getKind().equals(emptyBlock)) ) {
+        if ( !(sayTextAction.getSpeed().getKind().equals(emptyBlock) && sayTextAction.getPitch().getKind().equals(emptyBlock)) ) {
             this.sb.append(",");
             sayTextAction.getSpeed().visit(this);
             this.sb.append(",");
-            sayTextAction.getShape().visit(this);
+            sayTextAction.getPitch().visit(this);
         }
         this.sb.append(")");
         return null;
@@ -587,14 +587,14 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         this.sb.append(", ");
         IndexLocation where1 = (IndexLocation) getSubFunct.getStrParam().get(0);
         this.sb.append(getEnumCode(where1));
-        if ( (where1 == IndexLocation.FROM_START) || (where1 == IndexLocation.FROM_END) ) {
+        if ( where1 == IndexLocation.FROM_START || where1 == IndexLocation.FROM_END ) {
             this.sb.append(", ");
             getSubFunct.getParam().get(1).visit(this);
         }
         this.sb.append(", ");
         IndexLocation where2 = (IndexLocation) getSubFunct.getStrParam().get(1);
         this.sb.append(getEnumCode(where2));
-        if ( (where2 == IndexLocation.FROM_START) || (where2 == IndexLocation.FROM_END) ) {
+        if ( where2 == IndexLocation.FROM_START || where2 == IndexLocation.FROM_END ) {
             this.sb.append(", ");
             if ( getSubFunct.getParam().size() == 3 ) {
                 getSubFunct.getParam().get(2).visit(this);
@@ -959,7 +959,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
 
     private boolean isActorUsed(Actor actor, IActorPort port) {
         for ( UsedActor usedActor : this.usedActors ) {
-            if ( (port == usedActor.getPort()) && (actor.getName() == usedActor.getType()) ) {
+            if ( port == usedActor.getPort() && actor.getName() == usedActor.getType() ) {
                 return true;
             }
         }
@@ -971,7 +971,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         for ( Map.Entry<IActorPort, Actor> entry : this.brickConfiguration.getActors().entrySet() ) {
             Actor actor = entry.getValue();
             IActorPort port = entry.getKey();
-            if ( (actor != null) && isActorUsed(actor, port) ) {
+            if ( actor != null && isActorUsed(actor, port) ) {
                 sb.append("        '").append(port.toString()).append("':");
                 sb.append(generateRegenerateActor(actor, port));
                 sb.append(",\n");
@@ -982,7 +982,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
 
     private boolean isSensorUsed(Sensor sensor, ISensorPort port) {
         for ( UsedSensor usedSensor : this.usedSensors ) {
-            if ( (port == usedSensor.getPort()) && (sensor.getType() == usedSensor.getType()) ) {
+            if ( port == usedSensor.getPort() && sensor.getType() == usedSensor.getType() ) {
                 return true;
             }
         }
@@ -994,7 +994,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         for ( Map.Entry<ISensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
             Sensor sensor = entry.getValue();
             ISensorPort port = entry.getKey();
-            if ( (sensor != null) && isSensorUsed(sensor, port) ) {
+            if ( sensor != null && isSensorUsed(sensor, port) ) {
                 sb.append("        '").append(port.getPortNumber()).append("':");
                 sb.append(generateRegenerateSensor(sensor, port));
                 sb.append(",\n");

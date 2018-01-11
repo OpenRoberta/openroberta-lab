@@ -299,8 +299,8 @@ public final class BlocklyConstants {
     public static final String COORDINATE = "COORDINATE";
     public static final String PIN = "PIN";
     public static final String VALUETYPE = "VALUETYPE";
-    public static final String SHAPE = "SHAPE";
-    public static final String VOICESPEED = "SPEED";
+    public static final String VOICEPITCH = "VOICEPITCH";
+    public static final String VOICESPEED = "VOICESPEED";
 
     public static final String MODE = "MODE";
     public static final String PHRASE = "PHRASE";

@@ -876,11 +876,11 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
             sayTextAction.getMsg().visit(this);
         }
         BlockType emptyBlock = BlockTypeContainer.getByName("EMPTY_EXPR");
-        if ( !(sayTextAction.getSpeed().getKind().equals(emptyBlock) && sayTextAction.getShape().getKind().equals(emptyBlock)) ) {
+        if ( !(sayTextAction.getSpeed().getKind().equals(emptyBlock) && sayTextAction.getPitch().getKind().equals(emptyBlock)) ) {
             this.sb.append(",");
             sayTextAction.getSpeed().visit(this);
             this.sb.append(",");
-            sayTextAction.getShape().visit(this);
+            sayTextAction.getPitch().visit(this);
         }
         this.sb.append(")");
         return null;

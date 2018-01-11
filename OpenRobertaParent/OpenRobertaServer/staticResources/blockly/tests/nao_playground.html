@@ -53,8 +53,7 @@
 <script src="../blocks/naoControls.js"></script>
 <script src="../blocks/naoSensors.js"></script>
 <script src="../blocks/naoColour.js"></script>
-<script src="../blocks/simActions.js"></script>
-<script src="../blocks/simSensors.js"></script>
+<script src="../blocks/robActions.js"></script>
 <link rel="stylesheet" type="text/css" href="typicons.css"></link>
 
 <script>
@@ -367,20 +366,27 @@ h1 {
                 </value>
             </block>
             <block type='naoActions_getVolume'></block>
-            <block type='naoActions_setLanguage'></block>
+            <block type='robActions_setLanguage'></block>
             <block type='naoActions_getLanguage'></block>
-            <block type='naoActions_sayText'>
-            	<value name='OUT'>
+            <block type='robActions_sayText'>
+                <value name='OUT'>
                     <block type='text'>
-                        <field name='TEXT'>Hello</field>
+                        <field name='TEXT'>Hallo</field>
                     </block>
                 </value>
-		<value name='SPEED'>
+            </block>
+            <block type='robActions_sayText_parameters'>
+                <value name='OUT'>
+                    <block type='text'>
+                        <field name='TEXT'>Hallo</field>
+                    </block>
+                </value>
+                <value name='VOICEPITCH'>
                     <block type='math_number'>
                         <field name='NUM'>100</field>
                     </block>
                 </value>
-		<value name='SHAPE'>
+                <value name='VOICESPEED'>
                     <block type='math_number'>
                         <field name='NUM'>100</field>
                     </block>
