@@ -14,8 +14,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
 import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
@@ -39,6 +37,12 @@ public class SimulationCheckVisitor extends RobotSimulationCheckVisitor implemen
     }
 
     @Override
+    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
+        accelerometerSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        return null;
+    }
+
+    @Override
     public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
         displayTextAction.getMsg().visit(this);
         return null;
@@ -57,11 +61,14 @@ public class SimulationCheckVisitor extends RobotSimulationCheckVisitor implemen
 
     @Override
     public Void visitImageShiftFunction(ImageShiftFunction<Void> imageShiftFunction) {
+        imageShiftFunction.getImage().visit(this);
+        imageShiftFunction.getPositions().visit(this);
         return null;
     }
 
     @Override
     public Void visitImageInvertFunction(ImageInvertFunction<Void> imageInvertFunction) {
+        imageInvertFunction.getImage().visit(this);
         return null;
     }
 
@@ -93,6 +100,7 @@ public class SimulationCheckVisitor extends RobotSimulationCheckVisitor implemen
 
     @Override
     public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
+        radioSendAction.getMsg().visit(this);
         radioSendAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
@@ -100,12 +108,6 @@ public class SimulationCheckVisitor extends RobotSimulationCheckVisitor implemen
     @Override
     public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
         radioReceiveAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
-        return null;
-    }
-
-    @Override
-    public Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
-        radioSetChannelAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 
@@ -130,11 +132,13 @@ public class SimulationCheckVisitor extends RobotSimulationCheckVisitor implemen
 
     @Override
     public Void visitPinWriteValueSensor(PinWriteValue<Void> pinWriteValueSensor) {
+        pinWriteValueSensor.getValue().visit(this);
         return null;
     }
 
     @Override
     public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Void> displaySetBrightnessAction) {
+        displaySetBrightnessAction.getBrightness().visit(this);
         return null;
     }
 
@@ -145,27 +149,29 @@ public class SimulationCheckVisitor extends RobotSimulationCheckVisitor implemen
 
     @Override
     public Void visitDisplaySetPixelAction(DisplaySetPixelAction<Void> displaySetPixelAction) {
+        displaySetPixelAction.getBrightness().visit(this);
+        displaySetPixelAction.getX().visit(this);
+        displaySetPixelAction.getY().visit(this);
         return null;
     }
 
     @Override
-    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
-        accelerometerSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+    public Void visitDisplayGetPixelAction(DisplayGetPixelAction<Void> displayGetPixelAction) {
+        displayGetPixelAction.getX().visit(this);
+        displayGetPixelAction.getY().visit(this);
         return null;
     }
 
     @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+    public Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
+        radioSetChannelAction.getChannel().visit(this);
+        radioSetChannelAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 
     @Override
     public Void visitSingleMotorOnAction(SingleMotorOnAction<Void> singleMotorOnAction) {
+        singleMotorOnAction.getSpeed().visit(this);
         singleMotorOnAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
@@ -179,12 +185,6 @@ public class SimulationCheckVisitor extends RobotSimulationCheckVisitor implemen
     @Override
     public Void visitRadioRssiSensor(RadioRssiSensor<Void> radioRssiSensor) {
         radioRssiSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
-        return null;
-    }
-
-    @Override
-    public Void visitDisplayGetPixelAction(DisplayGetPixelAction<Void> displayGetPixelAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 }

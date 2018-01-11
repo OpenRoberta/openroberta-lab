@@ -9,6 +9,16 @@ import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.MoveAction;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
+import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
+import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
+import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
+import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
@@ -17,6 +27,12 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
+import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
+import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.CheckVisitor;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
@@ -35,14 +51,15 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.visitor.actor.AstActorCommunicationVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
-public abstract class RobotCommonCheckVisitor extends CheckVisitor
-    implements AstActorMotorVisitor<Void>, AstSensorsVisitor<Void>, AstActorDisplayVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
+public abstract class RobotCommonCheckVisitor extends CheckVisitor implements AstActorMotorVisitor<Void>, AstSensorsVisitor<Void>, AstActorDisplayVisitor<Void>,
+    AstActorLightVisitor<Void>, AstActorSoundVisitor<Void>, AstActorCommunicationVisitor<Void> {
 
     protected ArrayList<ArrayList<Phrase<Void>>> checkedProgram;
     protected int errorCount = 0;
@@ -131,6 +148,7 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+        motorOnAction.getParam().getSpeed().visit(this);
         checkMotorPort(motorOnAction);
         MotorDuration<Void> duration = motorOnAction.getParam().getDuration();
         if ( duration != null ) {
@@ -176,6 +194,10 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor
 
     @Override
     public Void visitCurveAction(CurveAction<Void> driveAction) {
+        visitMotorDuration(driveAction.getParamLeft().getDuration());
+        visitMotorDuration(driveAction.getParamRight().getDuration());
+        driveAction.getParamLeft().getSpeed().visit(this);
+        driveAction.getParamRight().getSpeed().visit(this);
         checkDiffDrive(driveAction);
         checkForZeroSpeedInCurve(driveAction.getParamLeft().getSpeed(), driveAction.getParamRight().getSpeed(), driveAction);
 
@@ -233,9 +255,104 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor
         return null;
     }
 
+    @Override
+    public Void visitToneAction(ToneAction<Void> toneAction) {
+        toneAction.getDuration().visit(this);
+        toneAction.getFrequency().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
+        volumeAction.getVolume().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
+        sayTextAction.getMsg().visit(this);
+        sayTextAction.getSpeed().visit(this);
+        sayTextAction.getPitch().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitLightAction(LightAction<Void> lightAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
+        showPictureAction.getX().visit(this);
+        showPictureAction.getY().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+        showTextAction.getMsg().visit(this);
+        showTextAction.getX().visit(this);
+        showTextAction.getY().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReceiveAction) {
+        bluetoothReceiveAction.getConnection().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
+        bluetoothConnectAction.getAddress().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
+        bluetoothSendAction.getConnection().visit(this);
+        bluetoothSendAction.getMsg().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
+        return null;
+    }
+
+    @Override
+    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
+        bluetoothCheckConnectAction.getConnection().visit(this);
+        return null;
+    }
+
     private void checkDiffDrive(Phrase<Void> driveAction) {
         checkLeftRightMotorPort(driveAction);
-
     }
 
     private void checkMotorPort(MoveAction<Void> action) {
@@ -252,7 +369,6 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor
         checkRightMotorPresenceAndRegulation(driveAction, rightMotor);
         checkLeftAndRightMotorRotationDirection(driveAction, leftMotor, rightMotor);
         checkNumberOfMotors(driveAction);
-
     }
 
     private void checkRightMotorPresenceAndRegulation(Phrase<Void> driveAction, Actor rightMotor) {
@@ -315,7 +431,7 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor
             int signLeft = (int) Math.signum(speedLeftNumConst);
             int signRight = (int) Math.signum(speedRightNumConst);
             boolean sameSpeed = Math.abs(speedLeftNumConst) == Math.abs(speedRightNumConst); //NOSONAR : TODO: supply an delta of 0.1 (speed is in [0,100] ?
-            if ( sameSpeed && (signLeft != signRight && signLeft != 0 && signRight != 0) ) {
+            if ( sameSpeed && signLeft != signRight && signLeft != 0 && signRight != 0 ) {
                 action.addInfo(NepoInfo.warning("BLOCK_NOT_EXECUTED"));
                 this.warningCount++;
             }
@@ -327,5 +443,4 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor
             duration.getValue().visit(this);
         }
     }
-
 }

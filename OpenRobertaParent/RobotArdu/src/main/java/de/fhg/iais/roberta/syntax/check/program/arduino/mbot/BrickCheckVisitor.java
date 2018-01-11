@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.syntax.check.program.arduino.mbot;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOffAction;
@@ -30,104 +29,87 @@ public class BrickCheckVisitor extends RobotBrickCheckVisitor implements MbotAst
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        // TODO Auto-generated method stub
+        ledOnAction.getLedColor().visit(this);
         return null;
     }
 
     @Override
     public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitExternalLedOnAction(ExternalLedOnAction<Void> externalLedOnAction) {
-        // TODO Auto-generated method stub
+        externalLedOnAction.getLedColor().visit(this);
         return null;
     }
 
     @Override
     public Void visitExternalLedOffAction(ExternalLedOffAction<Void> externalLedOffAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitAmbientLightSensor(AmbientLightSensor<Void> lightSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitPIRMotionSensor(PIRMotionSensor<Void> motionSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitJoystick(Joystick<Void> joystick) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometer) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitFlameSensor(FlameSensor<Void> flameSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
-        // TODO Auto-generated method stub
+        rgbColor.getR().visit(this);
+        rgbColor.getG().visit(this);
+        rgbColor.getB().visit(this);
         return null;
     }
 
     @Override
     public Void visitImage(LedMatrix<Void> ledMatrix) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
-        // TODO Auto-generated method stub
+        displayTextAction.getMsg().visit(this);
         return null;
     }
 
     @Override
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMbotGetSampleSensor(GetSampleSensor<Void> getSampleSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
-
-    @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }
