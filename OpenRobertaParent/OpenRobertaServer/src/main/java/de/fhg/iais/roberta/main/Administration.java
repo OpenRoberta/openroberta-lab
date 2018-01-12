@@ -71,7 +71,16 @@ public class Administration {
     private void run() {
         expectArgs(1);
         String cmd = args[0];
-        LOG.info("*** " + cmd + " ***");
+        switch ( cmd ) {
+            case "version":
+                System.out.println(version(false));
+                return;
+            case "version-for-db":
+                System.out.println(version(true));
+                return;
+            default:
+                LOG.info("*** " + cmd + " ***");
+        }
         switch ( cmd ) {
             case "createemptydb":
                 createEmptyDatabase();
@@ -91,13 +100,6 @@ public class Administration {
             case "upgrade":
                 upgrade();
                 break;
-            case "version":
-                System.out.println(version(false));
-                break;
-            case "version-for-db":
-                System.out.println(version(true));
-                break;
-
             // old stuff for some old problematic upgrades of the database
             case "conf:xml2text":
                 // confXml2text();
@@ -111,7 +113,6 @@ public class Administration {
             default:
                 Administration.LOG.error("invalid argument: " + args[0] + " - exit 4");
                 System.exit(4);
-                break;
         }
     }
 
