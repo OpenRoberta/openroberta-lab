@@ -174,8 +174,8 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot' ]
             speed = Math.max(0, Math.min(100, speed));
             pitch = Math.max(0, Math.min(100, pitch));
             // Convert to SpeechSynthesis values
-            speed = speed * 0.03 + 0.1; // use range 0.1 - 3.1
-            pitch = pitch * 0.02; // use range 0.0 - 2.0
+            speed = speed * 0.015 + 0.5; // use range 0.5 - 2; range should be 0.1 - 10, but some voices dont accept values beyond 2
+            pitch = pitch * 0.02 + 0.001; // use range 0.0 - 2.0; + 0.001 as some voices dont accept 0
             
             var utterThis = new SpeechSynthesisUtterance(text);
             if (lang === "") {
