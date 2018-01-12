@@ -70,7 +70,9 @@ public class Administration {
 
     private void run() {
         expectArgs(1);
-        switch ( args[0] ) {
+        String cmd = args[0];
+        LOG.info("*** " + cmd + " ***");
+        switch ( cmd ) {
             case "createemptydb":
                 createEmptyDatabase();
                 break;
@@ -114,7 +116,6 @@ public class Administration {
     }
 
     private void createEmptyDatabase() {
-        Administration.LOG.info("*** creating an empty database ***");
         expectArgs(2);
         SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
         Session nativeSession = sessionFactoryWrapper.getNativeSession();
@@ -126,7 +127,6 @@ public class Administration {
     }
 
     private void runSql() {
-        Administration.LOG.info("*** runsql ***");
         expectArgs(3);
         String sqlQuery = this.args[2];
         SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", "jdbc:hsqldb:file:" + this.args[1]);
@@ -146,7 +146,7 @@ public class Administration {
      * backup the database. Needs the second parameter from the main args, which has to be the database URI (e.g. "jdbc:hsqldb:hsql://localhost/openroberta-db")
      */
     private void dbBackup() {
-        Administration.LOG.info("*** dbBackup. This makes sense in SERVER mode ONLY ***");
+        Administration.LOG.info("info: database backup makes sense in SERVER mode ONLY ***");
         expectArgs(2);
         SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
         Session nativeSession = sessionFactoryWrapper.getNativeSession();
@@ -172,7 +172,6 @@ public class Administration {
      * "jdbc:hsqldb:hsql://localhost/openroberta-db")
      */
     private void dbShutdown() {
-        Administration.LOG.info("*** dbShutdown ***");
         expectArgs(2);
         SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
         Session nativeSession = sessionFactoryWrapper.getNativeSession();
@@ -194,7 +193,6 @@ public class Administration {
      * Accesses the database in embedded mode!
      */
     private void upgrade() {
-        Administration.LOG.info("*** upgrade ***");
         expectArgs(2);
         String versionForDb = version(true);
         Upgrader.checkForUpgrade(versionForDb, new File(args[1]));
@@ -205,7 +203,6 @@ public class Administration {
      * Needs a second parameter from the main args, which has to be the database URI (e.g. "jdbc:hsqldb:hsql://localhost/openroberta-db")
      */
     private void sqlclient() {
-        Administration.LOG.info("*** sqlclient ***");
         expectArgs(2);
         SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
         Session nativeSession = sessionFactoryWrapper.getNativeSession();

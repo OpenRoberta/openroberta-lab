@@ -42,13 +42,19 @@ cd $GITREPO/Docker
 docker build -f DockerfileGen -t rbudde/openroberta_gen:1 .
 docker push rbudde/openroberta_gen:1
 
-3. RUN THE "GEN" IMAGE TO CREATE IMAGES FOR OPENROBERTALAB (AND DB SERVER)
+3. generate the "base" image. It contains software for crosscompilation. This is documentation, you must NOT do this
+
+cd $GITREPO/Docker
+docker build -f DockerfileBase -t rbudde/openroberta_base:1 .
+docker push rbudde/openroberta_base:1
+
+4. RUN THE "GEN" IMAGE TO CREATE IMAGES FOR OPENROBERTALAB (AND DB SERVER)
 
 If the "gen" image runs, it
 - retrieves the develop branch of the openroberta-lab from github
 - executes a maven build to generate the openrobertalab artifacts
 - exports these artifacts into a installation directory
-- creates docker images "openrobertalab" from the installation directory:
+- creates docker images:
   - "openrobertalab" contains a server ready to co-operate with a db server
   - "openrobertadb" contains a production-ready db server
   - "openrobertalaupgrade" contains an administration service working with an embedded database
@@ -60,7 +66,7 @@ If the "gen" image runs, it
 When the "gen" image is run,
 - the first -v arguments makes the "real" docker demon available in the "gen" container.
   Do not change this parameter
-- the second -v is optional. If you want to get only a docker image, dismiss the parameter.
+- a second -v is optional. If you want to get only a docker image, dismiss the parameter.
   If you want to access the installation directory (for testing, e.g.), then
   add -v $DISTR_DIR:/opt/robertalab/DockerInstallation to the docker run command. Set DISTR_DIR to an
   NOT EXISTING directory of the machine running the docker demon and you get the installation there
@@ -75,23 +81,23 @@ docker push rbudde/openrobertalabupgrade:$VERSION
 docker push rbudde/openrobertalabembedded:$VERSION
 docker push rbudde/openrobertaemptydbfortest:$VERSION
 
-4. RUN THE SERVER
+5. RUN THE SERVER
 
-4.1 EMBEDDED SERVER
+5.1 EMBEDDED SERVER
 Assume that the exported environment variable DB_PARENTDIR contains a valid data base directory, e.g. db-$VERSION,
 then you have to run the upgrader first, if you want to deploy a new version (running it o is a noop):
   docker run -v $DB_PARENTDIR:/opt/db rbudde/openrobertaupgrade:$VERSION
 and then you start the server with an embedded database (no sqlclient access during operation, otherwise fine) 
 - with docker:
-  docker run -p 7100:1999 -v $DB_PARENTDIR:/opt/db rbudde/openrobertalabembedded:$VERSION
+  docker run -p 7100:1999 -v $DB_PARENTDIR:/opt/db rbudde/openrobertalabembedded:$VERSION &
 - with docker-compose (using compose for a single container may appear a bit over-engineered):
   cd $GITREPO/Docker
-  docker-compose -f dc-embedded.yml up
+  docker-compose -p ora -f dc-embedded.yml up &
 Using docker-compose is preferred.
 If the log message is printed, which tells you how many programs are in the data base, everything is fine and you can
 access the server at http://dns-name-or-localhost:7100 (see docker command and the compose file)
 
-4.2 SERVER AND DATABASE SERVER
+5.2 SERVER AND DATABASE SERVER
 Running two container, one db server container and one server container is the preferred way for production systems.
 It allows the access to the database with a sql client (querying, but also backup and checkpoints):
   cd $GITREPO/Docker
@@ -102,12 +108,16 @@ To stop the service, run
   docker-compose -p ora -f dc-server-db-server.yml stop
   
 If you want to run two instances of the lab at the same time (do you really want to do this?), you start compose two times
-and give each compose instance a different name:
-  cd $GITREPO/Dockerdocker network inspect ora1_default
+and give each compose instance a different name. Of course you'll need two databases:
+  cd $GITREPO/Docker
   SERVER_PORT_ON_HOST=7301 DBSERVER_PORT_ON_HOST=9301 DB_PARENTDIR=/tmp/ora1 docker-compose -p ora1 -f dc-server-db-server.yml up -d
   SERVER_PORT_ON_HOST=7302 DBSERVER_PORT_ON_HOST=9302 DB_PARENTDIR=/tmp/ora2 docker-compose -p ora2 -f dc-server-db-server.yml up -d
 Stop the two applications is done with docker-compose -p <project name> as shown above.
 For the two services two different networks are created (inspect the output of "docker network ls"), IP ranges are separated (inspect
 the output of "docker network inspect ora1_default" resp "docker network inspect ora2_default")
 
-4.3 RUNNING A TEST SETUP
+5.3 RUNNING A TEST SETUP
+  cd $GITREPO/Docker
+  docker-compose -p test -f dc-testserver.yml up &
+  ...
+  docker-compose -p test -f dc-testserver.yml stop

@@ -21,15 +21,9 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractCompilerWorkflow.class);
 
-    /* (non-Javadoc)
-     * @see de.fhg.iais.roberta.factory.ICompilerWorkflow#generateSourceAndCompile(java.lang.String, java.lang.String, de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer, de.fhg.iais.roberta.inter.mode.action.ILanguage)
-     */
     @Override
     public abstract Key generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language);
 
-    /* (non-Javadoc)
-     * @see de.fhg.iais.roberta.factory.ICompilerWorkflow#generateSourceCode(de.fhg.iais.roberta.factory.IRobotFactory, java.lang.String, java.lang.String, java.lang.String, java.lang.String, de.fhg.iais.roberta.inter.mode.action.ILanguage)
-     */
     @Override
     public abstract String generateSourceCode(
         IRobotFactory iRobotFactory,
@@ -38,15 +32,9 @@ public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
         BlocklyProgramAndConfigTransformer transformer,
         ILanguage language);
 
-    /* (non-Javadoc)
-     * @see de.fhg.iais.roberta.factory.ICompilerWorkflow#generateConfiguration(de.fhg.iais.roberta.factory.IRobotFactory, java.lang.String)
-     */
     @Override
     public abstract Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception;
 
-    /* (non-Javadoc)
-     * @see de.fhg.iais.roberta.factory.ICompilerWorkflow#getCompiledCode()
-     */
     @Override
     public abstract String getCompiledCode();
 

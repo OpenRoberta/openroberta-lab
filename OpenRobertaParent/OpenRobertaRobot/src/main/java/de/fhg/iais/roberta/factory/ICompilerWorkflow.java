@@ -29,18 +29,16 @@ public interface ICompilerWorkflow {
     Key generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language);
 
     /**
-     * - take the program given<br>
-     * - generate the AST<br>
-     * - typecheck the AST, execute sanity checks, check the matching robot configuration<br>
+     * - take the program and configuration (require, that theese are without errors)<br>
+     * - generate and typecheck the AST, execute sanity checks, check the matching robot configuration<br>
      * - generate source code in the target language for the robot<br>
      * - and return it
      *
      * @param iRobotFactory
-     * @param token the credential the end user (at the terminal) and the brick have both agreed to use
+     * @param token the credential supplied by the user. Needed to provide a unique directory name for crosscompilation
      * @param programName name of the program
-     * @param programText source of the program, XML representation
-     * @param configurationText the configuration describing the hardware (sensors/actors) of the robot, XML representation
-     * @param language the locale to be used for messages
+     * @param transformer holding program and configuration. Require, that <code>transformer.getErrorMessage() == null</code>
+     * @param language locale to be used for messages
      * @return the generated source code; null in case of an error
      */
     String generateSourceCode(
