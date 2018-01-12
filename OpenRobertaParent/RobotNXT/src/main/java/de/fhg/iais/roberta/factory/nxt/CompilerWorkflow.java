@@ -30,13 +30,19 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
     public CompilerWorkflow(String pathToCrosscompilerBaseDir, String robotCompilerResourcesDir) {
         this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
         this.robotCompilerResourcesDir = robotCompilerResourcesDir;
-
     }
 
     @Override
-    public Key generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
-        String sourceCode = NxcVisitor.generate((NxtConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+    public String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) //
+    {
+        if ( data.getErrorMessage() != null ) {
+            return null;
+        }
+        return NxcVisitor.generate((NxtConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+    }
 
+    @Override
+    public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
         try {
             storeGeneratedProgram(token, programName, sourceCode, this.pathToCrosscompilerBaseDir, ".nxc");
         } catch ( Exception e ) {
@@ -51,15 +57,6 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
             CompilerWorkflow.LOG.info(messageKey.toString());
         }
         return messageKey;
-    }
-
-    @Override
-    public String generateSourceCode(IRobotFactory factory, String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) //
-    {
-        if ( data.getErrorMessage() != null ) {
-            return null;
-        }
-        return NxcVisitor.generate((NxtConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
     }
 
     @Override

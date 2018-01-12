@@ -22,15 +22,20 @@ public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractCompilerWorkflow.class);
 
     @Override
-    public abstract Key generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language);
+    public abstract String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language);
 
     @Override
-    public abstract String generateSourceCode(
-        IRobotFactory iRobotFactory,
-        String token,
-        String programName,
-        BlocklyProgramAndConfigTransformer transformer,
-        ILanguage language);
+    public abstract Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider);
+
+    /*
+     * (non-Javadoc)
+     * some subclasses overwrite this method to return "null" (simulator e.g.)
+     */
+    @Override
+    public Key generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language) {
+        String sourceCode = generateSourceCode(token, programName, transformer, language);
+        return compileSourceCode(token, programName, sourceCode, language, null);
+    }
 
     @Override
     public abstract Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception;

@@ -28,8 +28,15 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     @Override
-    public Key generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
-        String sourceCode = generateProgram(programName, data, language);
+    public String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
+        if ( data.getErrorMessage() != null ) {
+            return null;
+        }
+        return generateProgram(programName, data, language);
+    }
+
+    @Override
+    public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
         //Ev3CompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); // only needed for EXTREME debugging
         try {
             storeGeneratedProgram(token, programName, sourceCode, this.pathToCrosscompilerBaseDir, ".py");
@@ -42,14 +49,6 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
         // python -c "import py_compile; py_compile.compile('.../src/...py','.../target/....pyc')"
         return Key.COMPILERWORKFLOW_SUCCESS;
 
-    }
-
-    @Override
-    public String generateSourceCode(IRobotFactory factory, String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
-        if ( data.getErrorMessage() != null ) {
-            return null;
-        }
-        return generateProgram(programName, data, language);
     }
 
     @Override

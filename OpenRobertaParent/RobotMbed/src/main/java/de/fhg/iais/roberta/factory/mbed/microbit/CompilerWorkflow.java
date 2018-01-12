@@ -34,9 +34,16 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     @Override
-    public Key generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
-        String sourceCode = PythonVisitor.generate((MicrobitConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+    public String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
+        if ( data.getErrorMessage() != null ) {
+            return null;
+        }
 
+        return PythonVisitor.generate((MicrobitConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+    }
+
+    @Override
+    public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
         Key messageKey = runBuild(sourceCode);
         if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
             CompilerWorkflow.LOG.info("hex for program {} generated successfully", programName);
@@ -44,15 +51,6 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
             CompilerWorkflow.LOG.info(messageKey.toString());
         }
         return messageKey;
-    }
-
-    @Override
-    public String generateSourceCode(IRobotFactory factory, String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
-        if ( data.getErrorMessage() != null ) {
-            return null;
-        }
-
-        return PythonVisitor.generate((MicrobitConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
     }
 
     @Override

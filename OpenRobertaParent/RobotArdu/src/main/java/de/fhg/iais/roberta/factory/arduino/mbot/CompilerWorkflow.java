@@ -39,8 +39,16 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     @Override
-    public Key generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
-        String sourceCode = CppVisitor.generate((MbotConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+    public String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) //
+    {
+        if ( data.getErrorMessage() != null ) {
+            return null;
+        }
+        return CppVisitor.generate((MbotConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+    }
+
+    @Override
+    public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
         try {
             storeGeneratedProgram(token, programName, sourceCode, this.pathToCrosscompilerBaseDir, ".ino");
         } catch ( Exception e ) {
@@ -54,15 +62,6 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
             CompilerWorkflow.LOG.info(messageKey.toString());
         }
         return messageKey;
-    }
-
-    @Override
-    public String generateSourceCode(IRobotFactory factory, String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) //
-    {
-        if ( data.getErrorMessage() != null ) {
-            return null;
-        }
-        return CppVisitor.generate((MbotConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
     }
 
     @Override

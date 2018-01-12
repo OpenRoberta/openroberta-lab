@@ -28,10 +28,12 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     @Override
-    public Key generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
-        String sourceCode =
-            JavaVisitor.generate(programName, (EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
+    public String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
+        return JavaVisitor.generate(programName, (EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
+    }
 
+    @Override
+    public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
         //Ev3CompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); // only needed for EXTREME debugging
         try {
             storeGeneratedProgram(token, programName, sourceCode, this.pathToCrosscompilerBaseDir, ".java");
@@ -49,11 +51,6 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
             LOG.info("jar for program {} generated successfully", programName);
             return Key.COMPILERWORKFLOW_SUCCESS;
         }
-    }
-
-    @Override
-    public String generateSourceCode(IRobotFactory factory, String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
-        return JavaVisitor.generate(programName, (EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
     }
 
     @Override

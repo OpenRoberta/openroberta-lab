@@ -22,12 +22,7 @@ public class Ev3SimCompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     @Override
-    public Key generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
-        return null;
-    }
-
-    @Override
-    public String generateSourceCode(IRobotFactory factory, String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) //
+    public String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) //
     {
         if ( data.getErrorMessage() != null ) {
             return null;
@@ -35,6 +30,16 @@ public class Ev3SimCompilerWorkflow extends AbstractCompilerWorkflow {
         String sourceCode = SimulationVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree(), language);
         Ev3SimCompilerWorkflow.LOG.info("generating javascript code");
         return sourceCode;
+    }
+
+    @Override
+    public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
+        return null;
+    }
+
+    @Override
+    public Key generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language) {
+        return null;
     }
 
     @Override

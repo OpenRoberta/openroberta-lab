@@ -150,7 +150,7 @@ public class ClientProgram {
                 if ( transformer.getErrorMessage() != null ) {
                     forMessages.setError(transformer.getErrorMessage());
                 } else {
-                    String sourceCode = robotFactory.getRobotCompilerWorkflow().generateSourceCode(robotFactory, token, programName, transformer, language);
+                    String sourceCode = robotFactory.getRobotCompilerWorkflow().generateSourceCode(token, programName, transformer, language);
                     if ( sourceCode == null ) {
                         forMessages.setError(Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED);
                     } else {
@@ -416,6 +416,24 @@ public class ClientProgram {
                 }
                 handleRunProgramError(response, messageKey, token, wasRobotWaiting);
 
+            } else if ( cmd.equals("runN") ) {
+                boolean wasRobotWaiting = false;
+
+                String token = httpSessionState.getToken();
+                String programName = request.getString("name");
+                String programText = request.optString("programText");
+                ILanguage language = Language.findByAbbr(request.optString("language"));
+                LOG.info("compilation of native source started for program {}", programName);
+                Key messageKey = robotFactory.getRobotCompilerWorkflow().compileSourceCode(token, programName, programText, language, null);
+                if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS && token != null && !token.equals(ClientAdmin.NO_CONNECT) ) {
+                    wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
+                } else {
+                    if ( messageKey != null ) {
+                        LOG.info(messageKey.toString());
+                    }
+                }
+                handleRunProgramError(response, messageKey, token, wasRobotWaiting);
+
             } else if ( cmd.equals("runPBack") ) {
                 Key messageKey = null;
                 String token = httpSessionState.getToken();
@@ -476,8 +494,7 @@ public class ClientProgram {
                     Jaxb2AstTransformerData<Void> data = transformer.getProgramTransformer().getData();
                     if ( messageKey == null ) {
                         ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
-                        String javaScriptCode =
-                            robotFactory.getSimCompilerWorkflow().generateSourceCode(robotFactory, token, programName, transformer, language);
+                        String javaScriptCode = robotFactory.getSimCompilerWorkflow().generateSourceCode(token, programName, transformer, language);
                         ClientProgram.LOG.info("JavaScriptCode \n{}", javaScriptCode);
                         response.put("javaScriptProgram", javaScriptCode);
                         wasRobotWaiting = true;
