@@ -1722,3 +1722,72 @@ img.img-responsive {
 		margin-left: auto;
 	}
 }
+@media print {
+	@page {size: A4 portrait;max-height:100%; max-width:100%}
+
+	.navbar {
+	    display: block;
+	}
+    .nav {
+        display: block;
+    }
+    .headNavigationTabs {
+        display: block;
+    }
+    #head-navigation .container-fluid {
+        display: none;
+    }
+    #head-navigation .logo img {
+        display: none;
+    }
+    #head-navigation .logo:after {
+        content: "lab.open-roberta.org";
+    }
+    .navbar-collapse {
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+    .collapse {
+        display: block;
+        visibility: visible;
+    }
+    #blocklyDiv {
+        border: none;
+    }
+    div#simButtonsCollapse {
+        display: none;
+    }
+    .blocklyToolboxDiv {
+        display: none;
+    }
+    .blocklyMainBackground {
+        stroke: none !important;
+    }
+    #rightMenuDiv {
+        display: none;
+    }
+    g.blocklyButtons {
+        display: none;
+    }
+    .tab-content container {
+        padding: 0;
+    }
+    .blocklyMainBackground {
+        stroke: none;
+    }
+    a#tabConfiguration {
+        display: none;
+    }
+    .nav-tabs>li {
+        width: 100%;
+    }
+    #headNavigationTabs {
+        border: none;
+    }
+    .nav#head-navigation-tabs>li.active>a {
+        border-bottom: 2px solid #000;
+    }
+    g.blocklyBlockCanvas {
+        transform: translate(-350px, -50px);
+    } 
+}
