@@ -619,5 +619,12 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 });
             }
         });
+        // experimental
+        $(document).on('keydown', function ( e ) {
+            if ((e.metaKey || e.ctrlKey) && ( String.fromCharCode(e.which).toLowerCase() === 'r') ) {
+                PROGRAM_C.importSourceCodeToCompile();
+                return false;
+            }
+        });
     }
 });

@@ -45,16 +45,20 @@ define([ 'exports', 'log', 'jquery', 'blocks-msg' ], function(exports, LOG, $, B
      * @param {replaceWith}
      *            Text to replace an optional '$' in the message-text
      */
-    function displayMessage(messageId, output, replaceWith, opt_cancel) {
+    function displayMessage(messageId, output, replaceWith, opt_cancel, opt_robot) {
         var cancel = opt_cancel || false;
+        var robot = "";
+        if (opt_robot) {
+            robot = '_' + opt_robot.toUpperCase();
+        }
         if (messageId != undefined) {
             if (messageId.indexOf(".") >= 0 || messageId.toUpperCase() != messageId) {
                 // Invalid Message-Key 
                 LOG.info('Invalid message-key received: ' + messageId);
             }
 
-            var lkey = 'Blockly.Msg.' + messageId;
-            var value = Blockly.Msg[messageId];
+            var lkey = 'Blockly.Msg.' + messageId + robot;
+            var value = Blockly.Msg[messageId + robot] || Blockly.Msg[messageId];
             if (value === undefined || value === '') {
                 value = messageId;
             }
@@ -86,12 +90,12 @@ define([ 'exports', 'log', 'jquery', 'blocks-msg' ], function(exports, LOG, $, B
      * @param {messageParam}
      *            Parameter to be used in the message text.
      */
-    function displayInformation(result, successMessage, errorMessage, messageParam) {
+    function displayInformation(result, successMessage, errorMessage, messageParam, opt_robot) {
         if (result.rc === "ok") {
             $('.modal').modal('hide'); // close all opened popups
-            displayMessage(successMessage, "TOAST", messageParam);
+            displayMessage(successMessage, "TOAST", messageParam, false, opt_robot);
         } else {
-            displayMessage(errorMessage, "POPUP", messageParam);
+            displayMessage(errorMessage, "POPUP", messageParam, false, opt_robot);
         }
     }
     exports.displayInformation = displayInformation;

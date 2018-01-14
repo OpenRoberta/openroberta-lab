@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-01-14 09:29:24.262994",
+		"lastupdated": "2018-01-14 13:20:13.309469",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1265,5 +1265,7 @@
 	"SENSOR_GESTURE_SHAKE_GETSAMPLE_TOOLTIP": "Returns »true« if it is shaken.",
 	"SENSOR_GESTURE_FREEFALL_GETSAMPLE_TOOLTIP": "Returns »true« if it is free falling.",
 	"RIGHT": "right",
-	"LEFT": "left"
+	"LEFT": "left",
+	"ORA_ROBOT_PUSH_RUN_CALLIOPE2016": "Your program »$« is downloaded to Calliope, press the reset button to start!",
+	"ORA_ROBOT_PUSH_RUN_NXT": "Your program »$« is downloaded to the NXT, start it on the robot!"
 }

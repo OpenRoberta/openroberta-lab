@@ -74,7 +74,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
                 setTimeout(function() {
                     GUISTATE_C.setConnectionBusy(false);
                 }, 5000);
-                MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
+                MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
             } else {
                 //create link with content
                 var programLink = "<div id='programLink' style='text-align: center;'><br><a style='font-size:36px; padding: 20px' download='"
@@ -151,7 +151,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
                         $("#popupDownloadHeader").text(textH);
                     }
                     GUISTATE_C.setConnectionBusy(false);
-                    MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
+                    MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
                 });
                 // fix header$(selector).attr(attribute)
                 textH = $("#popupDownloadHeader").text();
@@ -162,7 +162,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             }
         } else {
             GUISTATE_C.setConnectionBusy(false);
-            MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
+            MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
         }
     }
 
@@ -183,7 +183,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
 
     function runForToken(result) {
         GUISTATE_C.setState(result);
-        MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
+        MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
         if (result.rc == "ok") {
             if (Blockly.Msg['MENU_ROBOT_STOP_HINT_' + GUISTATE_C.getRobotGroup().toUpperCase()]) {
                 MSG.displayMessage('MENU_ROBOT_STOP_HINT_' + GUISTATE_C.getRobotGroup().toUpperCase(), 'TOAST');

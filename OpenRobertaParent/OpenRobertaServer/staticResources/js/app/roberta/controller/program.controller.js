@@ -391,6 +391,30 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
     }
     exports.importXml = importXml;
 
+    /**
+     * Experimental: Open a file select dialog to load a program (source code) from local
+     * disk and ?
+     */
+    function importSourceCodeToCompile() {
+        var input = $(document.createElement('input'));
+        input.attr("type", "file");
+        input.attr("accept", ".cpp, .java, .py");
+        input.change(function(event) {
+            var file = event.target.files[0]
+            var reader = new FileReader()
+            reader.readAsText(file)
+            reader.onload = function(event) {
+                // TODO move this to the run controller once it is clear what should happen
+                var name = UTIL.getBasename(file.name);
+                PROGRAM.runN(name, event.target.result, GUISTATE_C.getLanguage(), function(result) {
+                    alert(result.rc + ' ' + result.compiledCode);
+                });
+            }
+        })
+        input.trigger('click'); // opening dialog
+    }
+    exports.importSourceCodeToCompile = importSourceCodeToCompile;
+
     function linkProgram() {
         var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xml = Blockly.Xml.domToText(dom);
@@ -547,7 +571,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
             $('#infoContent').html(blocklyWorkspace.description);
             var tmpTags = blocklyWorkspace.tags;
             $('#infoTags').tagsinput('removeAll');
-            $('.bootstrap-tagsinput input').attr('placeholder','Tags');
+            $('.bootstrap-tagsinput input').attr('placeholder', 'Tags');
             $('#infoTags').tagsinput('add', tmpTags);
             var xmlConfiguration = GUISTATE_C.getConfigurationXML();
             var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);

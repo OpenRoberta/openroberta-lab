@@ -288,6 +288,26 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     exports.runInSim = runInSim;
 
     /**
+     * Compile source code
+     * 
+     * @param programName
+     *            {String} - name of the program
+     * @param programText
+     *            {String} - source code of the program
+     * 
+     */
+    function runN(programName, programText, language, successFn) {
+        COMM.json("/program", {
+            "cmd" : "runN",
+            "name" : programName,
+            "programText" : programText,
+            "language" : language
+        }, successFn, "compile program '" + programName + "'");
+    }
+
+    exports.runN = runN;
+
+    /**
      * Check program
      * 
      * @param programName
