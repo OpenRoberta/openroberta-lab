@@ -23,8 +23,10 @@ import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
@@ -34,12 +36,6 @@ public class SimulationCheckVisitor extends RobotSimulationCheckVisitor implemen
 
     public SimulationCheckVisitor(Configuration brickConfiguration) {
         super(brickConfiguration);
-    }
-
-    @Override
-    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
-        accelerometerSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
-        return null;
     }
 
     @Override
@@ -187,4 +183,22 @@ public class SimulationCheckVisitor extends RobotSimulationCheckVisitor implemen
         radioRssiSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
+
+    @Override
+    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
+        accelerometerSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        return null;
+    }
+
+    @Override
+    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+        gyroSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        return null;
+    }
+
+    @Override
+    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+        return null;
+    }
+
 }

@@ -19,7 +19,9 @@ import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
 import de.fhg.iais.roberta.syntax.expr.mbed.RgbColor;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
@@ -190,4 +192,19 @@ public interface MbedAstVisitor<V> extends AstVisitor<V> {
      * @param singleMotorStopAction phrase to be visited
      */
     V visitRadioRssiSensor(RadioRssiSensor<V> radioRssiSensor);
+
+    /**
+     * visit a {@link AccelerometerSensor}.
+     *
+     * @param accelerometerSensor phrase to be visited
+     */
+    V visitAccelerometer(AccelerometerSensor<V> accelerometerSensor);
+
+    /**
+     * visit a {@link GyroSensor}.
+     *
+     * @param gyroSensor phrase to be visited
+     */
+    V visitGyroSensor(GyroSensor<V> gyroSensor);
+
 }

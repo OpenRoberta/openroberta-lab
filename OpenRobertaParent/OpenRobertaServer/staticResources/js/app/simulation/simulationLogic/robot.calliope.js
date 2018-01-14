@@ -1,4 +1,4 @@
-define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mbed' ], function(SIM, CONSTANTS, Mbed) {
+define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mbed', 'volume-meter' ], function(SIM, CONSTANTS, Mbed, Volume) {
 
     /**
      * Creates a new Calliope device for a simulation.
@@ -23,7 +23,8 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         clearTimeout(this.motorB.timeout);
         clearTimeout(this.motorA.timeout);
         this.led.color = 'grey';
-    }
+        this.webAudio.volume = 0.5;
+    };
 
     Calliope.prototype.button = {
         xA : -130,
@@ -38,7 +39,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         yReset : 140,
         rReset : 10,
         colorReset : '#ffffff',
-    }
+    };
 
     Calliope.prototype.led = {
         color : 'grey',
@@ -58,7 +59,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
                 canvas.fill();
             }
         }
-    }
+    };
 
     Calliope.prototype.pin0 = {
         x : -196.5,
@@ -77,7 +78,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
                 canvas.arc(-97, 169.5, 13, 0, Math.PI * 2);
                 canvas.fill();
             }
-            if (this.digitalOut != undefined) {
+            if (this.digitalOut !== undefined) {
                 canvas.fillStyle = 'green';
                 canvas.beginPath();
                 canvas.save();
@@ -92,7 +93,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
                 canvas.fillText('\u2293', this.x - 14, -this.y + 41);
                 canvas.fillText(this.digitalOut, this.x + 6, -this.y + 41);
                 canvas.restore();
-            } else if (this.digitalIn != undefined) {
+            } else if (this.digitalIn !== undefined) {
                 canvas.fillStyle = 'red';
                 canvas.beginPath();
                 canvas.save();
@@ -107,7 +108,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
                 canvas.fillText('\u2293', this.x - 22, -this.y + 41);
                 canvas.fillText(this.digitalIn, this.x + 15, -this.y + 41);
                 canvas.restore();
-            } else if (this.analogOut != undefined) {
+            } else if (this.analogOut !== undefined) {
                 canvas.fillStyle = 'green';
                 canvas.beginPath();
                 canvas.save();
@@ -122,7 +123,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
                 canvas.fillText('\u223F', this.x - 14, -this.y + 41);
                 canvas.fillText(this.analogOut, this.x + 6, -this.y + 41);
                 canvas.restore();
-            } else if (this.analogIn != undefined) {
+            } else if (this.analogIn !== undefined) {
                 canvas.fillStyle = 'red';
                 canvas.beginPath();
                 canvas.save();
@@ -182,6 +183,9 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
             }
         }
         // update tone
+        if (actions.volume && AudioContext) {
+            this.webAudio.volume = actions.volume / 100.0;
+        }
         if (actions.tone && AudioContext) {
             var ts = this.webAudio.context.currentTime;
             if (actions.tone.frequency) {
@@ -192,7 +196,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
                 ts += actions.tone.duration / 1000.0;
                 this.webAudio.gainNode.gain.setValueAtTime(0, ts);
             }
-            if (actions.tone.file != undefined) {
+            if (actions.tone.file !== undefined) {
                 this.tone.file[actions.tone.file](this.webAudio);
             }
         }
@@ -227,14 +231,17 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
                 this.display.brightness = Math.round(actions.display.brightness * 255.0 / 9.0, 0);  
             }
         }
-    }
-
+    };
+ 
     var AudioContext = window.AudioContext // Default
             || window.webkitAudioContext // Safari and old versions of Chrome
             || false;
-
+      
+    Calliope.prototype.sound = null;
+           
     if (AudioContext) {
         var context = new AudioContext();
+        var mediaStreamSource = null;
 
         var oscillator = context.createOscillator();
         oscillator.type = 'square';
@@ -245,8 +252,33 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         gainNode.connect(context.destination);
         gainNode.gain.value = 0;
 
+        try {
+            // monkeypatch getUserMedia 
+            navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+            // ask for an audio input
+            navigator.getUserMedia({
+                "audio" : {
+                    "mandatory" : {
+                        "googEchoCancellation" : "false",
+                        "googAutoGainControl" : "false",
+                        "googNoiseSuppression" : "false",
+                        "googHighpassFilter" : "false"
+                    },
+                    "optional" : []
+                },
+            }, function(stream) {
+                mediaStreamSource = context.createMediaStreamSource(stream);
+                Calliope.prototype.sound = Volume.createAudioMeter(context);
+                mediaStreamSource.connect(Calliope.prototype.sound);
+            }, function() {
+                console.log("Sorry, but there is no microphone available on your system");
+            });
+        } catch (e) {
+            console.log("Sorry, but the Web Audio API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox\n" + e);
+        }
     } else {
-        var context = null;
+        context = null;
         console.log("Sorry, but the Web Audio API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox");
     }
 
@@ -255,7 +287,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         oscillator : oscillator,
         gainNode : gainNode,
         volume : 0.5,
-    }
+    };
 
     var notches = 7, // num. of notches
     radiusO = 20, // outer radius
@@ -330,7 +362,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
             canvas.stroke();
             canvas.restore();
         }
-    }
+    };
 
     Calliope.prototype.motorB = {
         cx : 45, // center x
@@ -339,7 +371,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         color : 'grey',
 
         draw : Calliope.prototype.motorA.draw
-    }
+    };
 
     Calliope.prototype.handleMouse = function(e, offsetX, offsetY, scale, w, h) {
         w = w / scale;
@@ -416,7 +448,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         } else {
             $("#robotLayer").css('cursor', 'auto');
         }
-    }
+    };
 
     Calliope.prototype.controle = function() {
         $('#simRobotContent').append('<div id="mbedContent"><div id="mbedButtons" class="btn-group btn-group-vertical" data-toggle="buttons">' + //
@@ -430,7 +462,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_COMPASS + '</label><span style="margin-bottom: 8px;margin-top: 12px; min-width: 25px; width: 25px; display: inline-block" id="range">0</span>' + '<div style="margin:8px 0; "><input id="slider" type="range" min="0" max="360" value="0" step="5" /></div>' + //
         '<label style="width:100%;margin: 8px;margin-top: 12px; margin-left: 0"><select class="customDropdown" id="pin"><option id="0">' + Blockly.Msg.SENSOR_PIN + ' 0</option><option id="1">' + Blockly.Msg.SENSOR_PIN + ' 1</option><option id="2">' + Blockly.Msg.SENSOR_PIN + ' 2</option><option id="3">' + Blockly.Msg.SENSOR_PIN + ' 3</option></select><select class="customDropdown" style="float: right;" id="state"><option value="off">' + Blockly.Msg.OFF + '</option><option value="analog">analog</option><option value="digital">digital</option></select></label>' + //
         '<div style="margin:8px 0; "><input id="slider1" type="range" min="0" max="1023" value="0" step="1" /></div></div>'); //
-    }
+    };
 
     return Calliope;
 });

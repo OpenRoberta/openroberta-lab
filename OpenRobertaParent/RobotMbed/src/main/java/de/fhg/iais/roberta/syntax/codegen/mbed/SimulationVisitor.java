@@ -449,7 +449,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements M
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        this.sb.append("0");
+        this.sb.append("createGetSample(CONST.SOUND)");
         return null;
     }
 
@@ -467,4 +467,5 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements M
     public Void visitRadioRssiSensor(RadioRssiSensor<Void> radioRssiSensor) {
         return null;
     }
+
 }

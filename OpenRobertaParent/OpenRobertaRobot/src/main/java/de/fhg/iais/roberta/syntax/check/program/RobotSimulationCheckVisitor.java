@@ -12,7 +12,6 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectio
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 
@@ -109,13 +108,6 @@ public abstract class RobotSimulationCheckVisitor extends RobotCommonCheckVisito
     public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
         super.visitBluetoothCheckConnectAction(bluetoothCheckConnectAction);
         bluetoothCheckConnectAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
-        return null;
-    }
-
-    @Override
-    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        super.visitSoundSensor(soundSensor);
-        soundSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 

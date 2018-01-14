@@ -970,7 +970,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
     };
 
     var evalPinTouchSensor = function(obj) {
-        var pinNumber = UTIL.getPropertyFromObject(obj.currentStatement, "pinNumber");
+        var pinNumber = UTIL.getPropertyFromObject(obj.currentStatement, "pin");
         return obj.simulationData[pinNumber].touched;
     };
 

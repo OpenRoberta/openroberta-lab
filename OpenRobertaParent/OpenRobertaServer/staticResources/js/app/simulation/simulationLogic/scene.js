@@ -6,7 +6,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
 
     /**
      * Creates a new Scene.
-     *
+     * 
      * @constructor
      */
     function Scene(backgroundImg, robot, obstacle, pattern, ruler) {
@@ -141,9 +141,11 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.rCtx.translate(this.backgroundImg.width / 2.0 + 10, this.backgroundImg.height / 2.0 + 10);
         this.rCtx.scale(1, -1);
         for ( var prop in this.robot) {
-            if (this.robot[prop].draw != undefined && this.rCtx) {
-                this.robot[prop].draw(this.rCtx);
-            }
+            if (this.robot[prop]) {
+                if (this.robot[prop].draw != undefined && this.rCtx) {
+                    this.robot[prop].draw(this.rCtx);
+                }
+            }           
         }
         this.rCtx.restore();
     }
