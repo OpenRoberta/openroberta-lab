@@ -1,5 +1,5 @@
-define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.model', 'prettify', 'blocks', 'jquery', 'blocks-msg' ], function(exports, MSG,
-        LOG, UTIL, GUISTATE_C, PROGRAM, Prettify, Blockly, $) {
+define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.controller', 'program.model', 'prettify', 'blocks', 'jquery', 'blocks-msg' ], function(exports, MSG,
+        LOG, UTIL, GUISTATE_C, PROG_C, PROGRAM, Prettify, Blockly, $) {
 
     var blocklyWorkspace;
     /**
@@ -39,6 +39,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.mo
                 // TODO change javaSource to source on server                   // TODO change javaSource to source on server
                 GUISTATE_C.setProgramSource(result.sourceCode);
                 GUISTATE_C.setProgramFileExtension(result.fileExtension);
+                PROG_C.reloadProgram(result);
             });
         }, 'code refresh clicked');
     }
@@ -127,6 +128,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.mo
                 // TODO change javaSource to source on server                   // TODO change javaSource to source on server
                 GUISTATE_C.setProgramSource(result.sourceCode);
                 GUISTATE_C.setProgramFileExtension(result.fileExtension);
+                PROG_C.reloadProgram(result);
             });
         }
     }

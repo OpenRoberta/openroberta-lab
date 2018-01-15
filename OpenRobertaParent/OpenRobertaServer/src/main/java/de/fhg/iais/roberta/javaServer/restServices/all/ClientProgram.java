@@ -150,6 +150,9 @@ public class ClientProgram {
                 if ( transformer.getErrorMessage() != null ) {
                     forMessages.setError(transformer.getErrorMessage());
                 } else {
+                    RobotBrickCheckVisitor programChecker = robotFactory.getRobotProgramCheckVisitor(transformer.getBrickConfiguration());
+                    programConfigurationCompatibilityCheck(response, transformer, programChecker);
+
                     String sourceCode = robotFactory.getRobotCompilerWorkflow().generateSourceCode(token, programName, transformer, language);
                     if ( sourceCode == null ) {
                         forMessages.setError(Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED);
