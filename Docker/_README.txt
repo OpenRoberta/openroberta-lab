@@ -5,12 +5,12 @@ Variables used (set as needed!):
 export GITREPO=~rbudde/git/robertalab
 export VERSION='2.5.0'
 export DISTR_DIR='/tmp/distr'
-export DB_PARENTDIR='/tmp'
+export DB_PARENTDIR='/home/rbudde/db'
 export SERVER_PORT_ON_HOST=7000
 export DBSERVER_PORT_ON_HOST=9001
 
 tl;dr: 1. to generate an actual docker image "rbudde/openrobertalab:$VERSION" from the sources, run
-       docker run -v /var/run/docker.sock:/var/run/docker.sock rbudde/openroberta_gen:1
+       docker run -v /var/run/docker.sock:/var/run/docker.sock rbudde/openroberta_gen:1 $VERSION
 
        Assuming that the environment variable DB_PARENTDIR holds the name of the directory, which
        contains the database directories (e.g. the directory db-$VERSION), then ...
