@@ -533,8 +533,8 @@ Blockly.Msg.MENU_RIGHT_INFO_TOOLTIP = "Öffne/schließe die Beschreibungsansicht
 Blockly.Msg.MENU_ROBOT = "Roboter";
 Blockly.Msg.MENU_ROBOT_STATE_INFO = "Info";
 Blockly.Msg.MENU_ROBOT_STATE_TOOLTIP = "Roboter Infos";
-Blockly.Msg.MENU_ROBOT_STOP_HINT_EV3 = "Drücke<span class='typcn typcn-media-stop'></span>+<span class='typcn typcn-arrow-sorted-down'></span>am Roboter um das Programm zu beenden!";
-Blockly.Msg.MENU_ROBOT_STOP_HINT_NXT = "Drücke<span class='typcn typcn-media-cancel'></span>am Roboter um das Programm zu beenden!";
+Blockly.Msg.MENU_ROBOT_STOP_HINT_EV3 = "Drücke die<span class='typcn typcn-media-stop'></span>+<span class='typcn typcn-arrow-sorted-down'></span> Tasten am Roboter um das Programm zu beenden!";
+Blockly.Msg.MENU_ROBOT_STOP_HINT_NXT = "Drücke die<span class='typcn typcn-media-cancel'></span>Taste am Roboter um das Programm zu beenden!";
 Blockly.Msg.MENU_ROBOT_TOOLTIP = "Roboter";
 Blockly.Msg.MENU_SAVE = "speichern";
 Blockly.Msg.MENU_SAVE_AS = "speichern unter ...";

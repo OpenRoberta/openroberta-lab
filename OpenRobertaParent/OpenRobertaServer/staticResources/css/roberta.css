@@ -1723,8 +1723,15 @@ img.img-responsive {
 	}
 }
 @media print {
-	@page {size: A4 portrait;max-height:100%; max-width:100%}
-
+	div#show-startup-message {
+        display: none !important;
+    }
+    div#cookieDisclaimer {
+        display: none;
+    }	
+	svg.blocklySvg {
+        overflow: visible;
+    }	
 	.navbar {
 	    display: block;
 	}
@@ -1788,6 +1795,6 @@ img.img-responsive {
         border-bottom: 2px solid #000;
     }
     g.blocklyBlockCanvas {
-        transform: translate(-350px, -50px);
+        transform: translate(-200px, -50px);
     } 
 }
