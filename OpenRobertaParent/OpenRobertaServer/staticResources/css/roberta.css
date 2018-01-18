@@ -1765,7 +1765,7 @@ img.img-responsive {
         display: none;
     }
     .blocklyToolboxDiv {
-        display: none;
+        display: none !important;
     }
     .blocklyMainBackground {
         stroke: none !important;
