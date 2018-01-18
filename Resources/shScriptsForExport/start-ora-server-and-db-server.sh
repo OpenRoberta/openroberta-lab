@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # start of the openroberta server and a separate database server
-# typical use case: a large server with the need to access the database by a sql client when the server is running.
+# use case: a large server with the need to access the database by a sql client when the server is running.
 # E.g. the official server
 # for parameter see: help message
 # if the server runs version x.y.z, the the database is expected in directory x.y.z
@@ -11,29 +11,26 @@
 # - running the update script supplied with the server
 # admin responsibilities:
 # - avoid log files to grow and grow ...
-# - remove old database directories after successful upgrade
+# - remove old database directories some time after successful upgrade
 
-# DO NOT use this script with DOCKER, see the docker directory for alternatives
+# DO NOT use this script with DOCKER, see the README in the docker directory
 
 DBLOGFILE='./ora-db.log'
 SERVERLOGFILE='./ora-server.log'
 
-echo 'start-ora-server-embedded.sh with the following optional parameters:'
-echo "  -logdb <file-name>         database log file. Default: $DBLOGFILE"
-echo "  -logserver <file-name>     server log file. Default: $SERVERLOGFILE"
-echo '  -nohup                     start server with nohup. Default: without nohup'
+echo 'start-ora-server-and-db-server.sh with the following optional parameters:'
+echo "  --logdb <file-name>         database log file. Default: $DBLOGFILE"
+echo "  --logserver <file-name>     server log file. Default: $SERVERLOGFILE"
+echo '  all parameters after these parameters are passed to the server'
 
-NOHUP=''
 while [ true ]
 do
 	case "$1" in
-	  -logdb)     DBLOGFILE=$2
-				  shift; shift ;;
-	  -logserver) SERVERLOGFILE=$2
-				  shift; shift ;;
-	  -nohup)	  NOHUP="nohup"
-                  shift ;;
-	  *)		  break ;;
+	  --logdb)     DBLOGFILE=$2
+		 		   shift; shift ;;
+	  --logserver) SERVERLOGFILE=$2
+			 	   shift; shift ;;
+	  *)		   break ;;
 	esac
 done
 
@@ -44,6 +41,6 @@ echo 'start the database server and the openroberta server as separate processes
 serverVersionForDb=$(java -cp lib/\* de.fhg.iais.roberta.main.Administration version-for-db)
 database=db-${serverVersionForDb}/openroberta-db
 echo "the database server will use database directory $database"
-$NOHUP java -cp lib/\* org.hsqldb.Server --database.0 file:$database --dbname.0 openroberta-db \$* >>$DBLOGFILE 2>&1 &
-sleep 10 # time for the database to initialize
-$NOHUP java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter -d database.parentdir=. -d database.mode=server \$* >>$SERVERLOGFILE 2>&1 &
+java -cp lib/\* org.hsqldb.Server --database.0 file:$database --dbname.0 openroberta-db >>$DBLOGFILE 2>&1 &
+sleep 10 # for the database to initialize
+java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter -d database.parentdir=. -d database.mode=server $* >>$SERVERLOGFILE 2>&1 &

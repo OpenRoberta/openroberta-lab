@@ -14,6 +14,8 @@ The database may be run in 'server' mode,
     - DON'T block the server (e.g. by issuing an insert/update without committing immediately afterwards)
 
 Commands of the ora.sh script:
+  --help                    get help (this text)
+  
   --export INSTALLATION-DIR create a self-contained installation. You are responsible to copy a usable database into directory 'db-<serverVersion>'. 
                             The installation dir must NOT exist. In the INSTALLATION-DIR there are two scripts for starting OpenRoberta:
                             - start-ora-server-with-db-embedded.sh   uses an embedded hsqldb. For small systems (Raspberry Pi, for instance)
@@ -23,15 +25,22 @@ Commands of the ora.sh script:
 							- dbShutdown.sh                          shutdown the database and terminate the VM running the database server
 							- start-sql-client.sh                    start a SQL client (embedded mode works, if the database is not blocked)
 
-  --dockerE                 create a docker image. As a first step the application is exported to DockerInstallation (this directory is rm -rf before)
-                            Then docker is called to build the image OpenRobertaEmbedded. start-ora-server-with-db-embedded.sh is used when the container
-                            is started. The database is expected at VOLUME /opt/openRoberta/db-VERSION and has to be supplied at container startup.
-							It uses an embedded hsqldb. This image is thought for small systems (Raspberry Pi, for instance).
-                            Have a look at the docker-compose file in directory docker to see how mounting the database can be done.
 
-  --help                    get help
+  --createEmptydb [{VERSION}] create an empty database with all tables initialized as needed at path "OpenRobertaServer/db-VERSION". If the optional
+                            parameter VERSION is missing, the VERSION is retrieved by calling the server. In this case, "mvn install" must have run before
+                            - if the database exists, it is not recreated
+                            - if a table "PROGRAM" is found, it is assumed, that the setup has already been done and nothing happens.
+  --start-from-git          if a developer wants to start the server from a Git working tree in embedded mode (that is fine for test), use this command.
+                            Note, that running the server from an IDE as eclipse is PREFERRED.
+                            You need a valid database. Running '--createEmptydb' provides an empty database.
+
+  --gui-sql-client [{VERSION}] start a sql client from a Git working tree in embedded mode using the actual db version or the (optional) VERSION.
+                            This command fails if an openroberta server is running in embedded mode. You have to terminate the server to get access.
+                            The database URL is assumed to be "jdbc:hsqldb:file:OpenRobertaServer/db-<VERSION>/openroberta-db;ifexists=true"
+
+The following commands are used rarely:
   
-  --java                    check whether java and javac are on the path and the JDK version is ok.
+  --java                    check whether java and javac are on the path and the JDK version is ok (used internally)
 
   --alive {SERVERURL} {-q} {EVERY} {TIMEOUT} {MAIL} check after EVERY sec (default: 60) if the server is alive.
                            The server is assumed to have crashed, if it does not answer within TIMEOUT sec (default: 10).
@@ -39,21 +48,8 @@ Commands of the ora.sh script:
                            -q is the quiet mode: report crashes only
                            a usefull call, reporting to stdout, is e.g. ora.sh --alive localhost:1999 60 10
 
-  --start-from-git          if a developer wants to start the server from a Git working tree in embedded mode (that is fine for test), use this command.
-                            Note, that running the server from an IDE as eclipse is PREFERRED.
-                            You need a valid database. Running '--createEmptydb' provides an empty database.
-
-  --gui-sql-client [{VERSION}] start a sql client from a Git working tree in embedded mode using the actual db version or the (optional) VERSION.
-                            This command fails if an openroberta server is running in embedded mode. You have to terminate the server to get access.
-                            The database URL is assumed to be "jdbc:hsqldb:file:OpenRobertaServer/db-<serverversion>/openroberta-db;ifexists=true"
-
   --update-lejos {SERVERURL} {LEJOSVERSION} update an ev3 robot running the lejos os. Its ip-address is expected in lejosipaddr.
                             If a password is requested: it is "", thus simply hit 'return'
                             - scp the ev3menu.jar, which replaces the original lejos menu
                             - scp openroberta specific libraries needed by the user programs at runtime
                             - create a file on the lejos based robot with the address of the server
-
-  --createEmptydb [{VERSION}] create an empty database with all tables initialized as needed at path "OpenRobertaServer/db-VERSION". If the optional
-                            parameter VERSION is missing, the VERSION is retrieved by calling the server. In this case, "mvn install" must have run before
-                            - if the database exists, it is not recreated
-                            - if a table "PROGRAM" is found, it is assumed, that the setup has already been done and nothing happens.

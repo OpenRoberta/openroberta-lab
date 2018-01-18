@@ -88,7 +88,7 @@ function _exportApplication {
     cd OpenRobertaParent
 	serverVersion=$(java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.Administration version)
 	serverVersionForDb=$(java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.Administration version-for-db)
-    echo "server version: ${serverVersion} - server version for db: ${serverVersionForDb}"
+    echo "server version: ${serverVersion} - db: ${serverVersionForDb}"
     echo "created the target directory \"$exportpath\""
 	
     echo "copying all jars"

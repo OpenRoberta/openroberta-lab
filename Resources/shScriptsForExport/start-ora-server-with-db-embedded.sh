@@ -17,20 +17,17 @@ function propagateSignal() {
 }
 
 SERVERLOGFILE='./ora-server.log'
-START='plain'
 
-echo 'start-ora-server-embedded.sh with the following optional parameters:'
+echo 'start-ora-server-with-db-embedded.sh with the following optional parameter:'
 echo "  -logserver <file-name>     server log file. Default: $SERVERLOGFILE"
-echo '  -nohup                     start server with nohup. Default: without nohup'
+echo '  all parameters after these parameters are passed to the server'
 
 while [ true ]
 do
 	case "$1" in
-	  -logserver) SERVERLOGFILE=$2
-                  shift; shift ;;
-	  -nohup)     START="nohup"
-		          shift ;;
-	  *)	      break ;;
+	  --logserver) SERVERLOGFILE=$2
+                   shift; shift ;;
+	  *)	       break ;;
 	esac
 done
 
@@ -38,12 +35,8 @@ echo 'check for database upgrade'
 java -cp lib/\* de.fhg.iais.roberta.main.Administration upgrade . >>$SERVERLOGFILE 2>&1
 
 echo 'start the server with embedded database'
-case "$START" in
-nohup)  nohup java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
-	               -d database.parentdir=. -d database.mode=embedded \$* >>$SERVERLOGFILE 2>&1;;
-*)      trap propagateSignal SIGTERM SIGINT
-        java  -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
-	          -d database.parentdir=. -d database.mode=embedded \$* >>$SERVERLOGFILE 2>&1 &
-		child=$!
-		wait "$child" ;;
-esac
+trap propagateSignal SIGTERM SIGINT
+java  -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
+	  -d database.parentdir=. -d database.mode=embedded $* >>$SERVERLOGFILE 2>&1 &
+child=$!
+wait "$child"

@@ -94,6 +94,9 @@ public class Administration {
             case "dbShutdown":
                 dbShutdown();
                 break;
+            case "dbCheckpoint":
+                dbCheckpoint();
+                break;
             case "sqlclient":
                 sqlclient();
                 break;
@@ -163,6 +166,27 @@ public class Administration {
 
         dbExecutor.ddl("BACKUP DATABASE TO '" + backupFileName + "' BLOCKING;");
         LOG.info("backup succeeded for a database with " + users + " users and " + programs + " programs");
+
+        nativeSession.getTransaction().commit();
+        nativeSession.close();
+    }
+
+    /**
+     * backup the database. Needs the second parameter from the main args, which has to be the database URI (e.g. "jdbc:hsqldb:hsql://localhost/openroberta-db")
+     */
+    private void dbCheckpoint() {
+        expectArgs(3);
+        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
+        String checkpoint = "checkpoint" + ("--defrag".equals(this.args[2]) ? " defrag" : "");
+        Session nativeSession = sessionFactoryWrapper.getNativeSession();
+        DbExecutor dbExecutor = DbExecutor.make(nativeSession);
+        nativeSession.beginTransaction();
+
+        long users = ((BigInteger) dbExecutor.oneValueSelect("select count(*) from USER")).longValue();
+        long programs = ((BigInteger) dbExecutor.oneValueSelect("select count(*) from PROGRAM;")).longValue();
+
+        dbExecutor.ddl(checkpoint);
+        LOG.info(checkpoint + " succeeded for a database with " + users + " users and " + programs + " programs");
 
         nativeSession.getTransaction().commit();
         nativeSession.close();
