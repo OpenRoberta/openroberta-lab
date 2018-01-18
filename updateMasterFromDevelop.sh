@@ -110,12 +110,11 @@ git checkout master
 checkClean
 git checkout develop
 
-# 5. develop can be rebased on master (should be a noop!)
-git rebase master
+# 5. develop is an descendant of master
+git merge-base --is-ancestor master develop
 if [ $? -ne 0 ]
 then
-    git rebase --abort
-	echo 'develop IS NO SAFE DESCENDANT OF master. In develop run "git rebase master" and solve the problem - exit 12'
+	echo 'develop IS NO DESCENDANT OF master. Solve this problem - exit 12'
 	exit 12
 fi
 

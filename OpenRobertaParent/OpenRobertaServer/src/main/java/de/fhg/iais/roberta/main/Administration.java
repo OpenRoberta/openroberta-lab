@@ -176,8 +176,8 @@ public class Administration {
      */
     private void dbCheckpoint() {
         expectArgs(3);
-        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
-        String checkpoint = "checkpoint" + ("--defrag".equals(this.args[2]) ? " defrag" : "");
+        String checkpoint = "checkpoint" + ("-d".equals(this.args[1]) ? " defrag" : "");
+        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[2]);
         Session nativeSession = sessionFactoryWrapper.getNativeSession();
         DbExecutor dbExecutor = DbExecutor.make(nativeSession);
         nativeSession.beginTransaction();
