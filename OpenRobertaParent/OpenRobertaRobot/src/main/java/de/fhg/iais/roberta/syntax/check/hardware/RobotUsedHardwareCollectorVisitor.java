@@ -182,8 +182,10 @@ public abstract class RobotUsedHardwareCollectorVisitor extends CheckVisitor imp
             driveAction.getParam().getDuration().getValue().visit(this);
         }
         if ( this.brickConfiguration != null ) {
-            this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
-            this.usedActors.add(new UsedActor(this.brickConfiguration.getRightMotorPort(), ActorType.LARGE));
+            if ( this.brickConfiguration.getLeftMotorPort() != null && this.brickConfiguration.getRightMotorPort() != null ) {
+                this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
+                this.usedActors.add(new UsedActor(this.brickConfiguration.getRightMotorPort(), ActorType.LARGE));
+            }
         }
         return null;
     }
@@ -196,8 +198,10 @@ public abstract class RobotUsedHardwareCollectorVisitor extends CheckVisitor imp
             curveAction.getParamLeft().getDuration().getValue().visit(this);
         }
         if ( this.brickConfiguration != null ) {
-            this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
-            this.usedActors.add(new UsedActor(this.brickConfiguration.getRightMotorPort(), ActorType.LARGE));
+            if ( this.brickConfiguration.getLeftMotorPort() != null && this.brickConfiguration.getRightMotorPort() != null ) {
+                this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
+                this.usedActors.add(new UsedActor(this.brickConfiguration.getRightMotorPort(), ActorType.LARGE));
+            }
         }
         return null;
     }
@@ -209,8 +213,10 @@ public abstract class RobotUsedHardwareCollectorVisitor extends CheckVisitor imp
             turnAction.getParam().getDuration().getValue().visit(this);
         }
         if ( this.brickConfiguration != null ) {
-            this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
-            this.usedActors.add(new UsedActor(this.brickConfiguration.getRightMotorPort(), ActorType.LARGE));
+            if ( this.brickConfiguration.getLeftMotorPort() != null && this.brickConfiguration.getRightMotorPort() != null ) {
+                this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
+                this.usedActors.add(new UsedActor(this.brickConfiguration.getRightMotorPort(), ActorType.LARGE));
+            }
         }
         return null;
     }
@@ -219,7 +225,9 @@ public abstract class RobotUsedHardwareCollectorVisitor extends CheckVisitor imp
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
         if ( this.brickConfiguration != null ) {
             Actor actor = this.brickConfiguration.getActors().get(motorGetPowerAction.getPort());
-            this.usedActors.add(new UsedActor(motorGetPowerAction.getPort(), actor.getName()));
+            if ( actor != null ) {
+                this.usedActors.add(new UsedActor(motorGetPowerAction.getPort(), actor.getName()));
+            }
         }
         return null;
     }
@@ -232,7 +240,9 @@ public abstract class RobotUsedHardwareCollectorVisitor extends CheckVisitor imp
         }
         if ( this.brickConfiguration != null ) {
             Actor actor = this.brickConfiguration.getActors().get(motorOnAction.getPort());
-            this.usedActors.add(new UsedActor(motorOnAction.getPort(), actor.getName()));
+            if ( actor != null ) {
+                this.usedActors.add(new UsedActor(motorOnAction.getPort(), actor.getName()));
+            }
         }
         return null;
     }
@@ -242,7 +252,9 @@ public abstract class RobotUsedHardwareCollectorVisitor extends CheckVisitor imp
         motorSetPowerAction.getPower().visit(this);
         if ( this.brickConfiguration != null ) {
             Actor actor = this.brickConfiguration.getActors().get(motorSetPowerAction.getPort());
-            this.usedActors.add(new UsedActor(motorSetPowerAction.getPort(), actor.getName()));
+            if ( actor != null ) {
+                this.usedActors.add(new UsedActor(motorSetPowerAction.getPort(), actor.getName()));
+            }
         }
         return null;
     }
@@ -252,7 +264,9 @@ public abstract class RobotUsedHardwareCollectorVisitor extends CheckVisitor imp
         if ( this.brickConfiguration != null ) {
             if ( this.brickConfiguration.getActors() != null ) {
                 Actor actor = this.brickConfiguration.getActors().get(motorStopAction.getPort());
-                this.usedActors.add(new UsedActor(motorStopAction.getPort(), actor.getName()));
+                if ( actor != null ) {
+                    this.usedActors.add(new UsedActor(motorStopAction.getPort(), actor.getName()));
+                }
             }
         }
         return null;
@@ -260,6 +274,12 @@ public abstract class RobotUsedHardwareCollectorVisitor extends CheckVisitor imp
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
+        if ( this.brickConfiguration != null ) {
+            if ( this.brickConfiguration.getLeftMotorPort() != null && this.brickConfiguration.getRightMotorPort() != null ) {
+                this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
+                this.usedActors.add(new UsedActor(this.brickConfiguration.getRightMotorPort(), ActorType.LARGE));
+            }
+        }
         return null;
     }
 

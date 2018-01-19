@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
@@ -105,6 +106,7 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
 
     protected Map<String, String> predefinedImage = new HashMap<>();
     protected final Set<UsedSensor> usedSensors;
+    protected final Set<UsedActor> usedActors;
     protected final Set<String> usedImages;
 
     protected ILanguage language;
@@ -130,6 +132,7 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
 
         this.brickConfiguration = brickConfiguration;
         this.usedSensors = checkVisitor.getUsedSensors();
+        this.usedActors = checkVisitor.getUsedActors();
         this.usedImages = checkVisitor.getUsedImages();
         this.isSayTextUsed = checkVisitor.isSayTextUsed();
 
@@ -394,50 +397,67 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
         return null;
     }
 
+    private boolean isActorOnPort(IActorPort port) {
+        boolean isActorOnPort = false;
+        for ( UsedActor actor : this.usedActors ) {
+            isActorOnPort = isActorOnPort ? isActorOnPort : actor.getPort().equals(port);
+        }
+        return isActorOnPort;
+    }
+
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        String methodName;
-        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorOnAction.getPort());
-        boolean duration = motorOnAction.getParam().getDuration() != null;
-        if ( duration ) {
-            methodName = isRegulated ? "hal.rotateRegulatedMotor(" : "hal.rotateUnregulatedMotor(";
-        } else {
-            methodName = isRegulated ? "hal.turnOnRegulatedMotor(" : "hal.turnOnUnregulatedMotor(";
+        if ( isActorOnPort(motorOnAction.getPort()) ) {
+            String methodName;
+
+            boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorOnAction.getPort());
+            boolean duration = motorOnAction.getParam().getDuration() != null;
+            if ( duration ) {
+                methodName = isRegulated ? "hal.rotateRegulatedMotor(" : "hal.rotateUnregulatedMotor(";
+            } else {
+                methodName = isRegulated ? "hal.turnOnRegulatedMotor(" : "hal.turnOnUnregulatedMotor(";
+            }
+            this.sb.append(methodName + getEnumCode(motorOnAction.getPort()) + ", ");
+            motorOnAction.getParam().getSpeed().visit(this);
+            if ( duration ) {
+                this.sb.append(", " + getEnumCode(motorOnAction.getDurationMode()));
+                this.sb.append(", ");
+                motorOnAction.getDurationValue().visit(this);
+            }
+            this.sb.append(");");
         }
-        this.sb.append(methodName + getEnumCode(motorOnAction.getPort()) + ", ");
-        motorOnAction.getParam().getSpeed().visit(this);
-        if ( duration ) {
-            this.sb.append(", " + getEnumCode(motorOnAction.getDurationMode()));
-            this.sb.append(", ");
-            motorOnAction.getDurationValue().visit(this);
-        }
-        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
-        String methodName = isRegulated ? "hal.setRegulatedMotorSpeed(" : "hal.setUnregulatedMotorSpeed(";
-        this.sb.append(methodName + getEnumCode(motorSetPowerAction.getPort()) + ", ");
-        motorSetPowerAction.getPower().visit(this);
-        this.sb.append(");");
+        if ( isActorOnPort(motorSetPowerAction.getPort()) ) {
+            boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
+            String methodName = isRegulated ? "hal.setRegulatedMotorSpeed(" : "hal.setUnregulatedMotorSpeed(";
+            this.sb.append(methodName + getEnumCode(motorSetPowerAction.getPort()) + ", ");
+            motorSetPowerAction.getPower().visit(this);
+            this.sb.append(");");
+        }
         return null;
     }
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorGetPowerAction.getPort());
-        String methodName = isRegulated ? "hal.getRegulatedMotorSpeed(" : "hal.getUnregulatedMotorSpeed(";
-        this.sb.append(methodName + getEnumCode(motorGetPowerAction.getPort()) + ")");
+        if ( isActorOnPort(motorGetPowerAction.getPort()) ) {
+            boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorGetPowerAction.getPort());
+            String methodName = isRegulated ? "hal.getRegulatedMotorSpeed(" : "hal.getUnregulatedMotorSpeed(";
+            this.sb.append(methodName + getEnumCode(motorGetPowerAction.getPort()) + ")");
+        }
         return null;
     }
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorStopAction.getPort());
-        String methodName = isRegulated ? "hal.stopRegulatedMotor(" : "hal.stopUnregulatedMotor(";
-        this.sb.append(methodName + getEnumCode(motorStopAction.getPort()) + ", " + getEnumCode(motorStopAction.getMode()) + ");");
+        if ( isActorOnPort(motorStopAction.getPort()) ) {
+            boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorStopAction.getPort());
+            String methodName = isRegulated ? "hal.stopRegulatedMotor(" : "hal.stopUnregulatedMotor(";
+            this.sb.append(methodName + getEnumCode(motorStopAction.getPort()) + ", " + getEnumCode(motorStopAction.getMode()) + ");");
+        }
         return null;
     }
 

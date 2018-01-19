@@ -333,109 +333,134 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         return null;
     }
 
+    private boolean isActorOnPort(IActorPort port) {
+        boolean isActorOnPort = false;
+        for ( UsedActor actor : this.usedActors ) {
+            isActorOnPort = isActorOnPort ? isActorOnPort : actor.getPort().equals(port);
+        }
+        return isActorOnPort;
+    }
+
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        String methodName;
-        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorOnAction.getPort());
-        boolean duration = motorOnAction.getParam().getDuration() != null;
-        if ( duration ) {
-            methodName = isRegulated ? "hal.rotateRegulatedMotor('" : "hal.rotateUnregulatedMotor('";
-        } else {
-            methodName = isRegulated ? "hal.turnOnRegulatedMotor('" : "hal.turnOnUnregulatedMotor('";
+        if ( isActorOnPort(motorOnAction.getPort()) ) {
+            String methodName;
+            boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorOnAction.getPort());
+            boolean duration = motorOnAction.getParam().getDuration() != null;
+            if ( duration ) {
+                methodName = isRegulated ? "hal.rotateRegulatedMotor('" : "hal.rotateUnregulatedMotor('";
+            } else {
+                methodName = isRegulated ? "hal.turnOnRegulatedMotor('" : "hal.turnOnUnregulatedMotor('";
+            }
+            this.sb.append(methodName + motorOnAction.getPort().toString() + "', ");
+            motorOnAction.getParam().getSpeed().visit(this);
+            if ( duration ) {
+                this.sb.append(", " + getEnumCode(motorOnAction.getDurationMode()));
+                this.sb.append(", ");
+                motorOnAction.getDurationValue().visit(this);
+            }
+            this.sb.append(")");
         }
-        this.sb.append(methodName + motorOnAction.getPort().toString() + "', ");
-        motorOnAction.getParam().getSpeed().visit(this);
-        if ( duration ) {
-            this.sb.append(", " + getEnumCode(motorOnAction.getDurationMode()));
-            this.sb.append(", ");
-            motorOnAction.getDurationValue().visit(this);
-        }
-        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
-        String methodName = isRegulated ? "hal.setRegulatedMotorSpeed('" : "hal.setUnregulatedMotorSpeed('";
-        this.sb.append(methodName + motorSetPowerAction.getPort().toString() + "', ");
-        motorSetPowerAction.getPower().visit(this);
-        this.sb.append(")");
+        if ( isActorOnPort(motorSetPowerAction.getPort()) ) {
+            boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
+            String methodName = isRegulated ? "hal.setRegulatedMotorSpeed('" : "hal.setUnregulatedMotorSpeed('";
+            this.sb.append(methodName + motorSetPowerAction.getPort().toString() + "', ");
+            motorSetPowerAction.getPower().visit(this);
+            this.sb.append(")");
+        }
         return null;
     }
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorGetPowerAction.getPort());
-        String methodName = isRegulated ? "hal.getRegulatedMotorSpeed('" : "hal.getUnregulatedMotorSpeed('";
-        this.sb.append(methodName + motorGetPowerAction.getPort().toString() + "')");
+        if ( isActorOnPort(motorGetPowerAction.getPort()) ) {
+            boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorGetPowerAction.getPort());
+            String methodName = isRegulated ? "hal.getRegulatedMotorSpeed('" : "hal.getUnregulatedMotorSpeed('";
+            this.sb.append(methodName + motorGetPowerAction.getPort().toString() + "')");
+        }
         return null;
     }
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        this.sb.append("hal.stopMotor('").append(motorStopAction.getPort().toString()).append("', ").append(getEnumCode(motorStopAction.getMode())).append(')');
+        if ( isActorOnPort(motorStopAction.getPort()) ) {
+            this.sb.append("hal.stopMotor('").append(motorStopAction.getPort().toString()).append("', ").append(getEnumCode(motorStopAction.getMode())).append(
+                ')');
+        }
         return null;
     }
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        boolean isDuration = driveAction.getParam().getDuration() != null;
-        String methodName = isDuration ? "hal.driveDistance(" : "hal.regulatedDrive(";
-        this.sb.append(methodName);
-        this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
-        this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "', False, ");
-        this.sb.append(getEnumCode(driveAction.getDirection()) + ", ");
-        driveAction.getParam().getSpeed().visit(this);
-        if ( isDuration ) {
-            this.sb.append(", ");
-            driveAction.getParam().getDuration().getValue().visit(this);
+        if ( isActorOnPort(this.brickConfiguration.getLeftMotorPort()) && isActorOnPort(this.brickConfiguration.getRightMotorPort()) ) {
+            boolean isDuration = driveAction.getParam().getDuration() != null;
+            String methodName = isDuration ? "hal.driveDistance(" : "hal.regulatedDrive(";
+            this.sb.append(methodName);
+            this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
+            this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "', False, ");
+            this.sb.append(getEnumCode(driveAction.getDirection()) + ", ");
+            driveAction.getParam().getSpeed().visit(this);
+            if ( isDuration ) {
+                this.sb.append(", ");
+                driveAction.getParam().getDuration().getValue().visit(this);
+            }
+            this.sb.append(")");
         }
-        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        boolean isDuration = turnAction.getParam().getDuration() != null;
-        boolean isRegulated = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
-        String methodName = "hal.rotateDirection" + (isDuration ? "Angle" : isRegulated ? "Regulated" : "Unregulated") + "(";
-        this.sb.append(methodName);
-        this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
-        this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "', False, ");
-        this.sb.append(getEnumCode(turnAction.getDirection()) + ", ");
-        turnAction.getParam().getSpeed().visit(this);
-        if ( isDuration ) {
-            this.sb.append(", ");
-            turnAction.getParam().getDuration().getValue().visit(this);
+        if ( isActorOnPort(this.brickConfiguration.getLeftMotorPort()) && isActorOnPort(this.brickConfiguration.getRightMotorPort()) ) {
+            boolean isDuration = turnAction.getParam().getDuration() != null;
+            boolean isRegulated = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
+            String methodName = "hal.rotateDirection" + (isDuration ? "Angle" : isRegulated ? "Regulated" : "Unregulated") + "(";
+            this.sb.append(methodName);
+            this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
+            this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "', False, ");
+            this.sb.append(getEnumCode(turnAction.getDirection()) + ", ");
+            turnAction.getParam().getSpeed().visit(this);
+            if ( isDuration ) {
+                this.sb.append(", ");
+                turnAction.getParam().getDuration().getValue().visit(this);
+            }
+            this.sb.append(")");
         }
-        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        this.sb.append("hal.stopMotors(");
-        this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
-        this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "')");
+        if ( isActorOnPort(this.brickConfiguration.getLeftMotorPort()) && isActorOnPort(this.brickConfiguration.getRightMotorPort()) ) {
+            this.sb.append("hal.stopMotors(");
+            this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
+            this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "')");
+        }
         return null;
     }
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
+        if ( isActorOnPort(this.brickConfiguration.getLeftMotorPort()) && isActorOnPort(this.brickConfiguration.getRightMotorPort()) ) {
+            MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
 
-        this.sb.append("hal.driveInCurve(");
-        this.sb.append(getEnumCode(curveAction.getDirection()) + ", ");
-        this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
-        curveAction.getParamLeft().getSpeed().visit(this);
-        this.sb.append(", '" + this.brickConfiguration.getRightMotorPort().toString() + "', ");
-        curveAction.getParamRight().getSpeed().visit(this);
-        if ( duration != null ) {
-            this.sb.append(", ");
-            duration.getValue().visit(this);
+            this.sb.append("hal.driveInCurve(");
+            this.sb.append(getEnumCode(curveAction.getDirection()) + ", ");
+            this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
+            curveAction.getParamLeft().getSpeed().visit(this);
+            this.sb.append(", '" + this.brickConfiguration.getRightMotorPort().toString() + "', ");
+            curveAction.getParamRight().getSpeed().visit(this);
+            if ( duration != null ) {
+                this.sb.append(", ");
+                duration.getValue().visit(this);
+            }
+            this.sb.append(")");
         }
-        this.sb.append(")");
         return null;
     }
 
