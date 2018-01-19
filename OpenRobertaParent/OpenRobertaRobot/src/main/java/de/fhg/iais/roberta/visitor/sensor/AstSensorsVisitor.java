@@ -4,15 +4,21 @@ import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PulseSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.RfidSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
@@ -195,4 +201,61 @@ public interface AstSensorsVisitor<V> extends AstVisitor<V> {
         throw new DbcException("IRSeekerSensor not implemented!");
     }
 
+    /**
+     * visit a {@link MoistureSensor}.
+     *
+     * @param MoistureSensor to be visited
+     */
+    default V visitMoistureSensor(MoistureSensor<V> moistureSensor) {
+        throw new DbcException("MoistureSensor not implemented!");
+    }
+
+    /**
+     * visit a {@link HumiditySensor}.
+     *
+     * @param HumiditySensor to be visited
+     */
+    default V visitHumiditySensor(HumiditySensor<V> humiditySensor) {
+        throw new DbcException("HumiditySensor not implemented!");
+    }
+
+    /**
+     * visit a {@link MotionSensor}.
+     *
+     * @param MotionSensor to be visited
+     */
+
+    default V visitMotionSensor(MotionSensor<V> motionSensor) {
+        throw new DbcException("MotionSensor not implemented!");
+    }
+
+    /**
+     * visit a {@link DropSensor}.
+     *
+     * @param DropSensor to be visited
+     */
+
+    default V visitDropSensor(DropSensor<V> dropSensor) {
+        throw new DbcException("DropSensor not implemented!");
+    }
+
+    /**
+     * visit a {@link PulseSensor}.
+     *
+     * @param PulseSensor to be visited
+     */
+
+    default V visitPulseSensor(PulseSensor<V> pulseSensor) {
+        throw new DbcException("PulseSensor not implemented!");
+    }
+
+    /**
+     * visit a {@link RfidSensor}.
+     *
+     * @param RfidSensor to be visited
+     */
+
+    default V visitRfidSensor(RfidSensor<V> rfidSensor) {
+        throw new DbcException("RfidSensor not implemented!");
+    }
 }

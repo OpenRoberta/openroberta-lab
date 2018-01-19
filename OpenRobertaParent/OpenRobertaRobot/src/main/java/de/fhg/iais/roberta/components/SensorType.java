@@ -27,6 +27,12 @@ public enum SensorType implements ISensorType {
     VOLTAGE( "" ),
     TIMER( "" ),
     IRSEEKER( "robBrick_irseeker" ),
+    MOISTURE( "robBrick_moisture" ),
+    HUMIDITY( "robBrick_humidity" ),
+    MOTION( "robBrick_motion" ),
+    DROP( "robBrick_drop" ),
+    PULSE( "robBrick_pulse" ),
+    RFID( "robBrick_rfide" ),
     NONE( "" );
 
     private final String[] values;

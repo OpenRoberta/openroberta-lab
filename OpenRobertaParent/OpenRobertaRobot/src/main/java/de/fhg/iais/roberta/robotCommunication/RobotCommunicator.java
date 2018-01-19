@@ -26,12 +26,7 @@ public class RobotCommunicator {
     private final Map<String, RobotCommunicationData> allStates = new ConcurrentHashMap<>();
 
     public RobotCommunicator() {
-        Runnable pushTimerThread = new Runnable() {
-            @Override
-            public void run() {
-                pushTimerRunner();
-            }
-        };
+        Runnable pushTimerThread = () -> pushTimerRunner();
         new Thread(null, pushTimerThread, "PushTimer").start();
         LOG.info("timer thread created");
     }
@@ -45,11 +40,11 @@ public class RobotCommunicator {
     public boolean addNewRegistration(RobotCommunicationData newRobotCommunicationData) {
         String token = newRobotCommunicationData.getToken();
         String newIdentificator = newRobotCommunicationData.getRobotIdentificator();
-        Assert.isTrue(token != null && newIdentificator != null);
+        Assert.isTrue((token != null) && (newIdentificator != null));
         RobotCommunicationData existingRobotCommunicationData = this.allStates.get(token);
         if ( existingRobotCommunicationData != null ) {
             String existingIdentificator = existingRobotCommunicationData.getRobotIdentificator();
-            if ( existingIdentificator == null
+            if ( (existingIdentificator == null)
                 || !existingIdentificator.equals(newIdentificator)
                 || existingIdentificator.equals("usb")
                 || existingIdentificator.equals("unknown") ) {
@@ -100,7 +95,7 @@ public class RobotCommunicator {
     // TODO: when can this fail?
     private boolean checkRobotMatchesClient(String robot, RobotCommunicationData state) {
         //TODO: it is a hot fix for the release on 6.7.17, later we need to change the state robot name from ardu to botnroll
-        if ( robot.equals("botnroll") ) {
+        if ( robot.equals("botnroll") || robot.equals("arduino") ) {
             robot = "ardu";
         }
 
@@ -169,7 +164,7 @@ public class RobotCommunicator {
             } catch ( InterruptedException e ) { //NOSONAR : repeat the loop forever
             }
             for ( RobotCommunicationData state : this.allStates.values() ) {
-                if ( state.getState() == State.ROBOT_WAITING_FOR_PUSH_FROM_SERVER && state.getElapsedMsecOfStartOfLastRequest() > PUSH_TIMEOUT_INTERVALL ) {
+                if ( (state.getState() == State.ROBOT_WAITING_FOR_PUSH_FROM_SERVER) && (state.getElapsedMsecOfStartOfLastRequest() > PUSH_TIMEOUT_INTERVALL) ) {
                     state.terminatePushAndRequestNextPush();
                 }
             }

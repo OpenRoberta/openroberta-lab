@@ -32,16 +32,22 @@ import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ICompassSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ICoordinatesMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IDropSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGestureSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IHumiditySensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IIRSeekerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IMoistureSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IMotionSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IPinPull;
 import de.fhg.iais.roberta.inter.mode.sensor.IPinValue;
+import de.fhg.iais.roberta.inter.mode.sensor.IPulseSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IRSeekerSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IRfidSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISlot;
@@ -71,13 +77,19 @@ import de.fhg.iais.roberta.mode.sensor.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.BrickKeyPressMode;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
+import de.fhg.iais.roberta.mode.sensor.DropSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GestureSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
+import de.fhg.iais.roberta.mode.sensor.HumiditySensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
+import de.fhg.iais.roberta.mode.sensor.MoistureSensorMode;
+import de.fhg.iais.roberta.mode.sensor.MotionSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.PinPull;
 import de.fhg.iais.roberta.mode.sensor.PinValue;
+import de.fhg.iais.roberta.mode.sensor.PulseSensorMode;
+import de.fhg.iais.roberta.mode.sensor.RfidSensorMode;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.Slot;
 import de.fhg.iais.roberta.mode.sensor.SoundSensorMode;
@@ -555,6 +567,75 @@ public interface IRobotFactory {
      */
     default IVoltageSensorMode getVoltageSensorMode(String mode) {
         return IRobotFactory.getModeValue(mode, VoltageSensorMode.class);
+    }
+
+    /**
+     * Get a moisture sensor mode from {@link IMoistureSensorMode} given string parameter. It is possible for one motion sensor mode to have multiple string
+     * mappings. Throws exception if the moisture sensor mode does not exists.
+     *
+     * @param name of the moisture sensor mode
+     * @return the moisture sensor mode from the enum {@link IMoistureSensorMode}
+     */
+    default IMoistureSensorMode getMoistureSensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, MoistureSensorMode.class);
+    }
+
+    /**
+     * Get a motion sensor mode from {@link IMoistureSensorMode} given string parameter. It is possible for one motion sensor mode to have multiple string
+     * mappings. Throws exception if the motion sensor mode does not exists.
+     *
+     * @param name of the motion sensor mode
+     * @return the motion sensor mode from the enum {@link IMoistureSensorMode}
+     */
+    default IMotionSensorMode getMotionSensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, MotionSensorMode.class);
+    }
+
+    /**
+     * Get a motion sensor mode from {@link IHumiditySensorMode} given string parameter. It is possible for one humidity sensor mode to have multiple string
+     * mappings. Throws exception if the humidity sensor mode does not exists.
+     *
+     * @param name of the humidity sensor mode
+     * @return the motion sensor mode from the enum {@link IMoistureSensorMode}
+     */
+    default IHumiditySensorMode getHumiditySensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, HumiditySensorMode.class);
+    }
+
+    /**
+     * Get a drop sensor mode from {@link IHumiditySensorMode} given string parameter.
+     * It is possible for one drop sensor mode to have multiple string
+     * mappings. Throws exception if the drop sensor mode does not exists.
+     *
+     * @param name of the drop sensor mode
+     * @return the drop sensor mode from the enum {@link IHumiditySensorMode}
+     */
+    default IDropSensorMode getDropSensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, DropSensorMode.class);
+    }
+
+    /**
+     * Get a pulse sensor mode from {@link IPulseSensorMode} given string parameter.
+     * It is possible for one pulse sensor mode to have multiple string
+     * mappings. Throws exception if the pulse sensor mode does not exists.
+     *
+     * @param name of the pulse sensor mode
+     * @return the pulse sensor mode from the enum {@link IPulseSensorMode}
+     */
+    default IPulseSensorMode getPulseSensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, PulseSensorMode.class);
+    }
+
+    /**
+     * Get a RFID sensor mode from {@link IRfidSensorMode} given string parameter.
+     * It is possible for one RFID sensor mode to have multiple string
+     * mappings. Throws exception if the RFID sensor mode does not exists.
+     *
+     * @param name of the RFID sensor mode
+     * @return the RFID sensor mode from the enum {@link IDropSensorMode}
+     */
+    default IRfidSensorMode getRfidSensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, RfidSensorMode.class);
     }
 
     /**

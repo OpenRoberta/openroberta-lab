@@ -132,7 +132,7 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public Boolean hasConfiguration() {
-        return this.bob3Properties.getProperty("robot.configuration") != null ? false : true;
+        return Boolean.parseBoolean(this.bob3Properties.getProperty("robot.configuration"));
     }
 
     @Override
