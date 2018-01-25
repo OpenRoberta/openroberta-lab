@@ -19,6 +19,8 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
             pageList : '[ 10, 25, All ]',
             toolbar : '#progListToolbar',
             showRefresh : 'true',
+            sortName : 4,
+            sortOrder : 'desc',
             showPaginationSwitch : 'true',
             pagination : 'true',
             buttonsAlign : 'right',

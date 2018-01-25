@@ -32,7 +32,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
             cardView : 'true',
             rowStyle : rowStyle,
             rowAttributes : rowAttributes,
-            sortName : '4',
+            sortName : 4,
             sortOrder : 'desc',
             search : true,
             buttonsAlign : 'right',
@@ -115,6 +115,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         function update(result) {
             UTIL.response(result);
             if (result.rc === 'ok') {
+                console.log(result.programNames);
                 $('#galleryTable').bootstrapTable("load", result.programNames);
                 //configureTagsInput();
             }

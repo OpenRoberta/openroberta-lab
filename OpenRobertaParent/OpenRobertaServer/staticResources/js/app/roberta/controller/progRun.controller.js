@@ -78,7 +78,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             } else {
                 //create link with content
                 var programLink = "<div id='programLink' style='text-align: center;'><br><a style='font-size:36px; padding: 20px' download='"
-                        + GUISTATE_C.getProgramName() + ".hex' href='data:Application/octet-stream;content-disposition:attachment;charset=utf-8,"
+                        + GUISTATE_C.getProgramName() + ".hex' href='data:application/octet-stream;content-disposition:attachment;charset=utf-8,"
                         + encodeURIComponent(result.compiledCode) + "'>" + GUISTATE_C.getProgramName() + "</a></div>";
                 var rawSvg;
                 if (navigator.userAgent.indexOf('Edge') < 0) {

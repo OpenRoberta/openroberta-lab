@@ -361,7 +361,7 @@ public class ProgramProcessor extends AbstractProcessor {
                 tempProgram.put(program.getName());
                 tempProgram.put(program.getProgramText()); // only needed if we want to show the description of the program
                 tempProgram.put(accessRights.get(0).getUser().getAccount());
-                tempProgram.put(program.getLastChanged().getTime());
+                tempProgram.put(program.getCreated().getTime());
                 tempProgram.put(program.getNumberOfViews());
                 tempProgram.put(likes.size());
                 tempProgram.put(program.getTags());
