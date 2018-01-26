@@ -137,11 +137,9 @@ public abstract class Helper {
 
         StringWriter writer = new StringWriter();
         m.marshal(blockSet, writer);
-        LOG.trace(writer.toString());
         String t = Resources.toString(Helper.class.getResource(fileName), Charsets.UTF_8);
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = XMLUnit.compareXML(writer.toString(), t);
-        LOG.trace(diff.toString());
         Assert.assertTrue(diff.identical());
     }
 

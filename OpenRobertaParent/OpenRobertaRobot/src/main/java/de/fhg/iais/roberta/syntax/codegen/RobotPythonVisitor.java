@@ -114,7 +114,6 @@ public abstract class RobotPythonVisitor extends CommonLanguageVisitor {
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         this.usedGlobalVarInFunctions.add(var.getName());
-        LOG.trace(var.getName());
         this.sb.append(var.getName());
         this.sb.append(" = ");
         if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
@@ -126,7 +125,6 @@ public abstract class RobotPythonVisitor extends CommonLanguageVisitor {
                     list.get().get(0).visit(this);
                 }
             } else {
-                LOG.trace(var.getValue().toString());
                 var.getValue().visit(this);
             }
         } else {

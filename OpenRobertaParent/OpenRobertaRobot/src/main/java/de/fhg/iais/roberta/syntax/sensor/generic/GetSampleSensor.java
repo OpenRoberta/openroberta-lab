@@ -253,7 +253,6 @@ public class GetSampleSensor<V> extends Sensor<V> {
         String modeName = helper.extractField(fields, BlocklyConstants.SENSORTYPE);
         String portName = helper.extractField(fields, GetSampleType.get(modeName).getPortTypeName());
         String slot = helper.extractField(fields, GetSampleType.get(modeName).getValues()[0]);
-        LOG.trace(modeName);
         return GetSampleSensor
             .make(GetSampleType.get(modeName), portName, slot, helper.extractBlockProperties(block), helper.extractComment(block), helper.getModeFactory());
     }
