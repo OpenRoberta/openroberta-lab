@@ -88,11 +88,6 @@
 			<artifactId>commons-io</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.github.detro</groupId>
-			<artifactId>phantomjsdriver</artifactId>
-			<version>1.2.0</version>
-		</dependency>
-		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>javax.mail-api</artifactId>
 		</dependency>
@@ -103,6 +98,10 @@
 		<dependency>
 			<groupId>net.sf.jopt-simple</groupId>
 			<artifactId>jopt-simple</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
 		</dependency>
 	</dependencies>
 	<build>
@@ -185,22 +184,6 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<!-- auto install of phantomjs -->
-				<groupId>com.github.klieber</groupId>
-				<artifactId>phantomjs-maven-plugin</artifactId>
-				<version>0.7</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>install</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<version>2.1.1</version>
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.17</version>
@@ -216,10 +199,6 @@
 						<include>**/*.class</include>
 					</includes>
 					<excludedGroups>de.fhg.iais.roberta.util.testsetup.IntegrationTest</excludedGroups>
-					<!-- providing phantomjs for unit tests -->
-					<systemPropertyVariables>
-						<phantomjs.binary>${phantomjs.binary}</phantomjs.binary>
-					</systemPropertyVariables>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -235,10 +214,6 @@
 				</dependencies>
 				<configuration>
 					<groups>de.fhg.iais.roberta.util.testsetup.IntegrationTest</groups>
-					<!-- setting phantomjs path for integration tests, webdriver capabilities -->
-					<systemPropertyVariables>
-						<phantomjs.binary>${phantomjs.binary}</phantomjs.binary>
-					</systemPropertyVariables>
 				</configuration>
 				<executions>
 					<execution>

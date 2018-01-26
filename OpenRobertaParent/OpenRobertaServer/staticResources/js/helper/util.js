@@ -350,37 +350,47 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
     }
     exports.getBasename = getBasename;
 
-    function downloadWithBlob(filename, content) {
-        var blob = new Blob([ content ]);
-        if (window.navigator.msSaveOrOpenBlob) {
-            window.navigator.msSaveOrOpenBlob(blob, filename);
-        } else {
-            var element = document.createElement('a');
-            var myURL = window.URL || window.webkitURL;
-            element.setAttribute('href', myURL.createObjectURL(blob));
-            element.setAttribute('download', filename);
-            element.style.display = 'none';
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
-        }
-    }
+	function destroyClickedElement(event) {
+		  document.body.removeChild(event.target);
+		}
 
-    function download(filename, content) {
-        if (navigator.appName == 'Microsoft Internet Explorer' || (navigator.appName == "Netscape" && navigator.appVersion.indexOf('Edge') > -1)) {
-            downloadWithBlob(filename, content);
-            return;
-        }
-        var element = document.createElement('a');
-        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
-        element.setAttribute('download', filename);
+	function download(filename, content) {
+		if ('Blob' in window) {
+			  var fileName = 'blob_testfile3.txt';
+			  var textToWrite = 'bla bla bla bla 3';
+			  var textFileAsBlob = new Blob([textToWrite], { type: 'application/octet-stream' });
+			  if ('msSaveOrOpenBlob' in navigator) {
+			    console.log('msSaveOrOpenBlob found')
+				navigator.msSaveOrOpenBlob(textFileAsBlob, fileName);
+			  } else {
+				var downloadLink = document.createElement('a');
+				downloadLink.download = fileName;
+				downloadLink.innerHTML = 'Download File';
+				if ('webkitURL' in window) {
+				  // Chrome allows the link to be clicked without actually adding it to the DOM.
+				  console.log('webkitURL found')
+				  downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+				} else {
+				  // Firefox requires the link to be added to the DOM before it can be clicked.
+				  console.log('Firefox(???) found')
+				  downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+				  downloadLink.onclick = destroyClickedElement;
+				  downloadLink.style.display = 'none';
+				  document.body.appendChild(downloadLink);
+				}
+				downloadLink.click();
+			  }
+		} else {
+			console.log('browser does not support the HTML5 Blob.');
+			var downloadLink = document.createElement('a');
+			downloadLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+			downloadLink.setAttribute('download', filename);
 
-        element.style.display = 'none';
-        document.body.appendChild(element);
-
-        element.click();
-
-        document.body.removeChild(element);
+			downloadLink.style.display = 'none';
+	        document.body.appendChild(downloadLink);
+	        downloadLink.onclick = destroyClickedElement;
+	        downloadLink.click();
+		}
     }
     exports.download = download;
 

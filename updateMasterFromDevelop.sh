@@ -1,30 +1,37 @@
+# ===============================================================================================
+# in projects "miniServer" and "robertalab" are copies of this script. Transfer changes from here
+# ===============================================================================================
+
 # ---------------------------------------------------------------------------------------------------------------------
 # deployment script: deploy a version at master, setup develop for the next version.
-# For suggestions and errors contact reinhard.budde@iais.fraunhofer.de
-#
-# ASSUMPTIONS:
-# - maven project, may be hierarchical (parent + modules).
-#   mvn MUST be on the PATH!
-# - deploying a new master is done by a single person, i.e. there are NO conflicts when pushing master to the remote.
-#   If this occurs, the conflicts have to be solved manually (as usually).
-# - master and develop are clean. Develop is a descendant of master.
-# ACTIONS:
-# - develop is merged into master.
-# - in master the version to be deployed is set in all poms. A tag is defined with the name of the deployment version.
-# - in develop the next SNAPSHOT version should is set in all poms. No merge commit should occur (:-).
-#   We keep a straight line of commits.
-# From the assumptions as much as possible is checked to avoid any hassle.
-# Everything is done locally, after the deploy script is run, pushing develop and master to the remote should be done QUICK :-)
-# Running the script with the single parameter -push will do that
+# For suggestions and errors contact reinhard.budde at iais.fraunhofer.de
 #
 # For deployments, two parameters are mandatory (both WITHOUT SNAPSHOT)
 # 1. the version number to be deployed on master
 # 2. the next version to be set in develop (suffixed with "-SNAPSHOT") 
+# E.g. ./updateMasterFromDevelop.sh 2.4.1 2.5.0
+#
+# ASSUMPTIONS:
+# - maven project, may be hierarchical (parent + modules).
+#   mvn is used and on the PATH!
+# - the changes in master and develop can be done in a local repo first (+ checked for sanity) and then both are pushed
+#   to the remote. During this time interval nobody should push to develop.
+# - master and develop are clean. Develop is descendant of master.
+#
+# ACTIONS:
+# - Develop is merged into master.
+# - In master the version to be deployed is set in all poms. A tag is defined with the name of the deployment version.
+# - In develop the next SNAPSHOT version is set in all poms.
+# A goal of this script is to avoid merge commits. We want to keep a straight line of commits in master.
+#
+# Everything is done locally, after the deploy script is run, check for sanity and then push develop and master to
+# the remote IMMEDIATELY :-). Running the script with the single parameter -push will do that push of develop and master
+#
 # ---------------------------------------------------------------------------------------------------------------------
 
 # helper functions
 
-# check whether the branch is clean. If not: exit 12
+# check whether the branch is clean.
 function checkClean {
 	if [ -z "$(git status --porcelain)" ];
 	then
@@ -38,7 +45,6 @@ function checkClean {
 
 # run maven to set a new version (given in $1).
 # If a directory (with a pom) is defined, cd to that and at the end cd back.
-# to acces the parent pom in the current directory, set the variable PARENT to ''
 function runMaven {
 	VERSION=$1
 	cd $PARENT
@@ -47,7 +53,7 @@ function runMaven {
 	cd $CWD
 }
 
-# remember working directory and directory with (parent) pom 
+# remember working directory and directory with (parent) pom.
 CWD=$(pwd)
 if [ "$3" == '-p' ]
 then
@@ -55,7 +61,7 @@ then
 else
 	PARENT="$CWD"
 fi
-echo parent $PARENT
+echo "parent directory is $PARENT"
 if [ -d "$PARENT" -a -f "$PARENT/pom.xml" ]
 then
 	:
@@ -64,19 +70,15 @@ else
 	exit 12
 fi
 
-# start message
+# start message.
 echo
-echo 'parameter: <thisVersion> <nextVersion> [-p <directory with the (parent) pom>]'
-echo '           deploy a version in master and set the next version in develop'
-echo '           both versions WITHOUT "-SNAPSHOT"'
-echo 'parameter: -push'
-echo '           push develop and master to remote (small convenience script)'
-echo '==================================================================================================='
+echo './updateMasterFromDevelop.sh <thisVersion> <nextVersion> [-p <directory with the (parent) pom>]'
+echo '           merge develop into master, giving <thisVersion> and prepare develop for <nextVersion>'
 echo
 echo "working directory is $CWD"
 
-# CONSISTENCY CHECKS (6)
-# 1. mvn is on the path
+# CONSISTENCY CHECKS (6):
+# 1. mvn is on the path.
 MVN=$(mvn -version)
 if [ -z "$MVN" ]
 then
@@ -84,10 +86,10 @@ then
 	exit 12
 else
 	MVN=$(echo "$MVN"|head -1);
-	echo using "$MVN"
+	echo "using $MVN"
 fi
 
-# 2. git project
+# 2. is a git project.
 if [ -d .git ]
 then
 	:
@@ -96,7 +98,7 @@ else
 	exit 12
 fi
 
-# 3. we are in branch develop
+# 3. we are in branch develop.
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 if [ "$BRANCH" != 'develop' ];
 then
@@ -104,13 +106,13 @@ then
 	exit 12
 fi
 
-# 4. develop and master are clean
+# 4. develop and master are clean.
 checkClean
 git checkout master
 checkClean
 git checkout develop
 
-# 5. develop is an descendant of master
+# 5. develop is an descendant of master.
 git merge-base --is-ancestor master develop
 if [ $? -ne 0 ]
 then
@@ -118,7 +120,7 @@ then
 	exit 12
 fi
 
-# convenience part to be used AFTER this script with version commits has been run and  consistency checks 1 to 5 succeeded.
+# convenience part to be used AFTER this script with version commits has been run and consistency checks 1 to 5 succeeded.
 # Pushes master and develop to remote
 if [ "$1" = '-push' ]
 then
@@ -137,15 +139,16 @@ case "$thisVersion" in
               exit 12 ;;
   *-SNAPSHOT) echo 'snapshot version is not legal in deployments - exit 12'
               exit 12 ;;
-  *)          echo "deploying this version $thisVersion" ;;
+  *)          echo "master will become version $thisVersion" ;;
 esac
 nextVersion=$2
 case "$nextVersion" in
   '')         echo 'next version parameter is missing - exit 12'
               exit 12 ;;
-  *-SNAPSHOT) echo 'snapshot version is not legal in deployments - exit 12'
+  *-SNAPSHOT) echo 'please remove the -SNAPSHOT - exit 12'
               exit 12 ;;
-  *)          echo "preparing next version $nextVersion" ;;
+  *)          nextVersion="${nextVersion}-SNAPSHOT"
+              echo "develop will be initialized to version ${nextVersion}" ;;
 esac
 
 # the workflow: this version -> develop; merge develop into master; next version snapshot to develop
@@ -162,9 +165,9 @@ fi
 git tag "V-$thisVersion" -m "Version $thisVersion"
 
 git checkout develop
-nextVersion=${nextVersion}-SNAPSHOT
+
 runMaven "$nextVersion"
 git add --all;git commit -m "next version is planned to be $nextVersion"
 
-echo 'everything looks fine. You should are in branch develop and should push both develop and master now'
-echo 'to do this you may call this script with the single parameter -push'
+echo 'everything looks fine. You are in branch develop and should push both develop and master'
+echo 'to do this you may run ./updateMasterFromDevelop.sh -push'

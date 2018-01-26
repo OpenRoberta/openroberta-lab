@@ -71,8 +71,7 @@ When the "gen" image is run,
   add -v $DISTR_DIR:/opt/robertalab/DockerInstallation to the docker run command. Set DISTR_DIR to an
   NOT EXISTING directory of the machine running the docker demon and you get the installation there
 
-docker run -v /var/run/docker.sock:/var/run/docker.sock \
-	   rbudde/openroberta_gen:1 $VERSION
+docker run -v /var/run/docker.sock:/var/run/docker.sock rbudde/openroberta_gen:1 $VERSION
 	   
 # the following commands are executed by the roberta maintainer; you should NOT do this
 docker push rbudde/openrobertalab:$VERSION

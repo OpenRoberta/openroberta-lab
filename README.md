@@ -73,11 +73,11 @@ A successful build looks like:
     
     
 #### Step 2: Make sure you have a database
-If you have a fresh clone of the server, make sure that the OpenRobertaServer folder has a subfolder **db-x.y.z** with the database inside, where x.y.z is the current version from the server. If you don't have a database, you can create an empty database with
+If you have a fresh clone of the server, make sure that the OpenRobertaServer folder has a subfolder **db-x.y.z** with the database inside, where x.y.z is the current version from the server. The actual server version is found in the pom.xml of the OpenRobertaParent project. If you don't have a database, you can create an empty database with
 
     ./ora.sh --createEmptydb x.y.z
     
-If you update the server later with git pull, your database will not be changed. 
+If the server version is x.y.z-SNAPSHOT, remove the -SNAPSHOT. If you update the server later with git pull, your database will not be changed. 
 
 #### Step 3: Starting your own server instance using a unix-like shell (on either lin* or win*).
 
