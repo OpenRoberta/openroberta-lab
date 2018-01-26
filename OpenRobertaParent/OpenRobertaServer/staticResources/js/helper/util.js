@@ -356,12 +356,10 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
 
 	function download(filename, content) {
 		if ('Blob' in window) {
-			  var fileName = 'blob_testfile3.txt';
-			  var textToWrite = 'bla bla bla bla 3';
-			  var textFileAsBlob = new Blob([textToWrite], { type: 'application/octet-stream' });
+			  var contentAsBlob = new Blob([content], { type: 'application/octet-stream' });
 			  if ('msSaveOrOpenBlob' in navigator) {
 			    console.log('msSaveOrOpenBlob found')
-				navigator.msSaveOrOpenBlob(textFileAsBlob, fileName);
+				navigator.msSaveOrOpenBlob(contentAsBlob, fileName);
 			  } else {
 				var downloadLink = document.createElement('a');
 				downloadLink.download = fileName;
@@ -369,11 +367,11 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
 				if ('webkitURL' in window) {
 				  // Chrome allows the link to be clicked without actually adding it to the DOM.
 				  console.log('webkitURL found')
-				  downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+				  downloadLink.href = window.webkitURL.createObjectURL(contentAsBlob);
 				} else {
 				  // Firefox requires the link to be added to the DOM before it can be clicked.
 				  console.log('Firefox(???) found')
-				  downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+				  downloadLink.href = window.URL.createObjectURL(contentAsBlob);
 				  downloadLink.onclick = destroyClickedElement;
 				  downloadLink.style.display = 'none';
 				  document.body.appendChild(downloadLink);
