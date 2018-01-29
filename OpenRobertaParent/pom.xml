@@ -50,9 +50,6 @@
 		<log.level>INFO</log.level> <!-- possible settings: TRACE DEBUG INFO WARN ERROR OFF -->
 	</properties>
 
-	<prerequisites>
-		<maven>${maven.min-version}</maven>
-	</prerequisites>
 	<modules>
 		<module>OpenRobertaRobot</module>
 		<module>RobotEV3</module>
@@ -320,26 +317,6 @@
 		</testResources>
 
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>1.4.1</version>
-				<executions>
-					<execution>
-						<id>enforce-maven</id>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-						<configuration>
-							<rules>
-								<requireMavenVersion>
-									<version>[${maven.min-version},)</version>
-								</requireMavenVersion>
-							</rules>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
