@@ -78,44 +78,32 @@ public class Upgrader {
     }
 
     /**
-     * execute the updates. Please add new updates (for server versions with higher versions) at the beginning of the if. If the upgrade contains many actions,
-     * please delegate to a method or a class whose name contain the server version, e.g. <code>class Upgrader_2_3_0</code><br>
+     * <i>execute the updates to the version given as parameter</i>.<br>
+     * <b>Note 1</b> If no update is required (that means: the old database structure and the old database content are that, what is required by the new
+     * version, there has nothing to be done here.<br>
+     * <b>Note 2</b> If updates are required, please add them at the beginning of the if. If the upgrade contains many actions, please delegate to a method or a
+     * class whose name contain the server version, e.g. <code>class Upgrader_2_3_0</code><br>
      * <br>
      * <b>If you update the database with SQL, there are no restrictions. If you update the database programmatically, please note, that the Hibernate
      * controlled classes are bound to the actual version and not to the version you transform from and to. Using plain SQL, a result list of Object[] and
      * avoiding Hql and database entities is the <i>only</i> safe method to avoid crashes.</b>
      *
-     * @param serverVersion the target version
+     * @param versionToUpgradeTo the target version
      * @param pathToDatabaseDirectory path to the directory which contains the database files
      */
-    private static void to(String serverVersion, String pathToDatabaseDirectory) {
-        if ( serverVersion == null ) {
+    private static void to(String versionToUpgradeTo, String pathToDatabaseDirectory) {
+        if ( versionToUpgradeTo == null ) {
             LOG.error("Abort: serverVersion to upgrade to is null");
             System.exit(2);
         }
         String dbUrl = "jdbc:hsqldb:file:" + pathToDatabaseDirectory + "/openroberta-db;ifexists=true";
         SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", dbUrl);
-        if ( serverVersion.equals("2.5.1") ) {
-            LOG.info("upgrade to 2.5.1 - do nothing");
-        } else if ( serverVersion.equals("2.5.0") ) {
-            LOG.info("upgrade to 2.5.0 - do nothing");
-        } else if ( serverVersion.equals("2.4.1") ) {
-            LOG.info("upgrade to 2.4.1 - do nothing");
-        } else if ( serverVersion.equals("2.4.0") ) {
-            LOG.info("upgrade to 2.4.0 - do nothing");
-        } else if ( serverVersion.equals("2.3.4") ) {
-            LOG.info("upgrade to 2.3.4 - do nothing");
-        } else if ( serverVersion.equals("2.3.3") ) {
-            LOG.info("upgrade to 2.3.3 - do nothing");
-        } else if ( serverVersion.equals("2.3.2") ) {
-            LOG.info("upgrade to 2.3.2 - do nothing");
-        } else if ( serverVersion.equals("2.3.1") ) {
-            LOG.info("upgrade to 2.3.1 - do nothing");
-        } else if ( serverVersion.equals("2.3.0") ) {
-            LOG.info("upgrade to 2.3.0");
+        // if the version is not detected in the conditions of if/else-if, it is expected, that NOTHING CHANGES.
+        if ( versionToUpgradeTo.equals("2.3.0") ) {
+            LOG.info("upgrade to 2.3.0 WITH database changes");
             new Upgrader_2_3_0(sessionFactoryWrapper).run();
-        } else if ( serverVersion.equals("2.2.7") ) {
-            LOG.info("upgrade to 2.2.7");
+        } else if ( versionToUpgradeTo.equals("2.2.7") ) {
+            LOG.info("upgrade to 2.2.7 WITH database changes");
             Session nativeSession = sessionFactoryWrapper.getNativeSession();
             nativeSession.beginTransaction();
             DbSetup dbSetup = new DbSetup(nativeSession);
@@ -125,27 +113,8 @@ public class Upgrader {
                 "select count(*) from USER where ACCOUNT = 'Gallery'");
             nativeSession.createSQLQuery("shutdown").executeUpdate();
             nativeSession.close();
-        } else if ( serverVersion.equals("2.2.6") ) {
-            LOG.info("upgrade to 2.2.6 - do nothing");
-        } else if ( serverVersion.equals("2.2.5") ) {
-            LOG.info("upgrade to 2.2.5 - do nothing");
-        } else if ( serverVersion.equals("2.2.4") ) {
-            LOG.info("upgrade to 2.2.4 - do nothing");
-        } else if ( serverVersion.equals("2.2.3") ) {
-            LOG.info("upgrade to 2.2.3 - do nothing");
-        } else if ( serverVersion.equals("2.2.2") ) {
-            LOG.info("upgrade to 2.2.2 - do nothing");
-        } else if ( serverVersion.equals("2.2.1") ) {
-            LOG.info("upgrade to 2.2.1 - do nothing");
-        } else if ( serverVersion.equals("2.2.0") ) {
-            LOG.info("upgrade to 2.2.0 - do nothing");
-        } else if ( serverVersion.equals("2.1.0") ) {
-            LOG.info("upgrade to 2.1.0 - do nothing");
-        } else if ( serverVersion.equals("1.9.0") ) {
-            LOG.info("upgrade to 1.9.0 - do nothing");
         } else {
-            LOG.error("Abort: serverVersion to upgrade to not valid: " + serverVersion);
-            System.exit(2);
+            LOG.info("upgrade to " + versionToUpgradeTo + " without database changes");
         }
         Session nativeSession = sessionFactoryWrapper.getNativeSession();
         DbExecutor dbExecutor = DbExecutor.make(nativeSession);
@@ -153,7 +122,7 @@ public class Upgrader {
         try {
             dbExecutor.ddl("SHUTDOWN COMPACT;");
         } finally {
-            LOG.info("shutdown compact succeeded for a database db-" + serverVersion);
+            LOG.info("shutdown compact succeeded for a database db-" + versionToUpgradeTo);
         }
     }
 }
