@@ -763,6 +763,7 @@ div.rightMenuButton:hover,
     color: #bbb;
     font-size: 14px;
     padding-bottom: 16px !important;
+    padding-left: 16px !important;
     width: 100%;
 }
 .popup-checkbox input,
@@ -775,6 +776,7 @@ div.rightMenuButton:hover,
 .popup-checkbox label,
 .download-checkbox label {
     font-weight: normal;
+    display: inline;
     display: initial;
 }
 .download-checkbox ul {

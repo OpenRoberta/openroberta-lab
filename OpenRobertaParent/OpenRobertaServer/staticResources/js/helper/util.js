@@ -350,45 +350,37 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
     }
     exports.getBasename = getBasename;
 
-	function destroyClickedElement(event) {
-		  document.body.removeChild(event.target);
-		}
+    function destroyClickedElement(event) {
+        document.body.removeChild(event.target);
+    }
 
-	function download(filename, content) {
-		if ('Blob' in window) {
-			  var contentAsBlob = new Blob([content], { type: 'application/octet-stream' });
-			  if ('msSaveOrOpenBlob' in navigator) {
-			    console.log('msSaveOrOpenBlob found')
-				navigator.msSaveOrOpenBlob(contentAsBlob, fileName);
-			  } else {
-				var downloadLink = document.createElement('a');
-				downloadLink.download = fileName;
-				downloadLink.innerHTML = 'Download File';
-				if ('webkitURL' in window) {
-				  // Chrome allows the link to be clicked without actually adding it to the DOM.
-				  console.log('webkitURL found')
-				  downloadLink.href = window.webkitURL.createObjectURL(contentAsBlob);
-				} else {
-				  // Firefox requires the link to be added to the DOM before it can be clicked.
-				  console.log('Firefox(???) found')
-				  downloadLink.href = window.URL.createObjectURL(contentAsBlob);
-				  downloadLink.onclick = destroyClickedElement;
-				  downloadLink.style.display = 'none';
-				  document.body.appendChild(downloadLink);
-				}
-				downloadLink.click();
-			  }
-		} else {
-			console.log('browser does not support the HTML5 Blob.');
-			var downloadLink = document.createElement('a');
-			downloadLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
-			downloadLink.setAttribute('download', filename);
-
-			downloadLink.style.display = 'none';
-	        document.body.appendChild(downloadLink);
-	        downloadLink.onclick = destroyClickedElement;
-	        downloadLink.click();
-		}
+    function download(fileName, content) {
+        if ('Blob' in window) {
+            var contentAsBlob = new Blob([ content ], {
+                type : 'application/octet-stream'
+            });
+            if ('msSaveOrOpenBlob' in navigator) {
+                navigator.msSaveOrOpenBlob(contentAsBlob, fileName);
+            } else {
+                var downloadLink = document.createElement('a');
+                downloadLink.download = fileName;
+                downloadLink.innerHTML = 'Download File';
+                downloadLink.href = window.URL.createObjectURL(contentAsBlob);
+                downloadLink.href = window.URL.createObjectURL(contentAsBlob);
+                downloadLink.onclick = destroyClickedElement;
+                downloadLink.style.display = 'none';
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+            }
+        } else {
+            var downloadLink = document.createElement('a');
+            downloadLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+            downloadLink.setAttribute('download', fileName);
+            downloadLink.style.display = 'none';
+            document.body.appendChild(downloadLink);
+            downloadLink.onclick = destroyClickedElement;
+            downloadLink.click();
+        }
     }
     exports.download = download;
 
