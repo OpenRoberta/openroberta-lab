@@ -95,7 +95,9 @@ public class Upgrader {
         }
         String dbUrl = "jdbc:hsqldb:file:" + pathToDatabaseDirectory + "/openroberta-db;ifexists=true";
         SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", dbUrl);
-        if ( serverVersion.equals("2.5.0") ) {
+        if ( serverVersion.equals("2.5.1") ) {
+            LOG.info("upgrade to 2.5.1 - do nothing");
+        } else if ( serverVersion.equals("2.5.0") ) {
             LOG.info("upgrade to 2.5.0 - do nothing");
         } else if ( serverVersion.equals("2.4.1") ) {
             LOG.info("upgrade to 2.4.1 - do nothing");
