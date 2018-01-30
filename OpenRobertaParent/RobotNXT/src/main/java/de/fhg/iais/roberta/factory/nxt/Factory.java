@@ -21,6 +21,7 @@ import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.nxt.BrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.nxt.SimulationCheckVisitor;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 public class Factory extends AbstractRobotFactory {
@@ -30,7 +31,8 @@ public class Factory extends AbstractRobotFactory {
     private final String name;
     private final int robotPropertyNumber;
 
-    public Factory() {
+    public Factory(RobertaProperties robertaProperties) {
+        super(robertaProperties);
         this.nxtProperties = Util1.loadProperties("classpath:NXT.properties");
         this.name = this.nxtProperties.getProperty("robot.name");
         this.robotPropertyNumber = robertaProperties.getRobotNumberFromProperty(this.name);

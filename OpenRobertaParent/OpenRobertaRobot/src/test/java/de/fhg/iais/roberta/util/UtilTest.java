@@ -14,8 +14,7 @@ public class UtilTest {
 
     @BeforeClass
     public static void setup() {
-        RobertaProperties.setInstance(Util1.loadProperties(null));
-        robertaProperties = RobertaProperties.getInstance();
+        robertaProperties = new RobertaProperties(Util1.loadProperties(null));
     }
 
     @Test

@@ -1,20 +1,14 @@
 package de.fhg.iais.roberta.ast.methods;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.factory.arduino.botnroll.Factory;
-import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForTest;
 
 public class MethodIfReturnTest {
-    HelperBotNroll h = new HelperBotNroll();
-    Factory robotFactory = new Factory();
-
-    @Before
-    public void setUp() throws Exception {
-        this.h.setRobotFactory(this.robotFactory);
-    }
+    HelperBotNrollForTest h = new HelperBotNrollForTest(new RobertaProperties(Util1.loadProperties(null)));
 
     @Test
     public void methodIfReturn1() throws Exception {

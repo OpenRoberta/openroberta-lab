@@ -17,11 +17,13 @@ import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.hardware.ev3.UsedHardwareCollectorVisitor;
-import de.fhg.iais.roberta.util.test.ev3.Helper;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForTest;
 
 public class EV3ProgramUsedHardwareCheckTest {
 
-    Helper h = new Helper();
+    HelperEv3ForTest h = new HelperEv3ForTest(new RobertaProperties(Util1.loadProperties(null)));
 
     private Configuration makeConfiguration() {
         return new EV3Configuration.Builder()

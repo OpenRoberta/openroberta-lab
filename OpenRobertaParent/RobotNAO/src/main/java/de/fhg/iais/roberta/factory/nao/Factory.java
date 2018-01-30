@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 public class Factory extends AbstractRobotFactory {
@@ -21,7 +22,8 @@ public class Factory extends AbstractRobotFactory {
     private final String name;
     private final int robotPropertyNumber;
 
-    public Factory() {
+    public Factory(RobertaProperties robertaProperties) {
+        super(robertaProperties);
         this.naoProperties = Util1.loadProperties("classpath:NAO.properties");
         this.name = this.naoProperties.getProperty("robot.name");
         this.robotPropertyNumber = robertaProperties.getRobotNumberFromProperty(this.name);

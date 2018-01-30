@@ -78,8 +78,7 @@ public class RestInterfaceTest {
 
     @Before
     public void setup() throws Exception {
-        RobertaProperties.setInstance(Util1.loadProperties(null));
-        RobertaProperties robertaProperties = RobertaProperties.getInstance();
+        this.robertaProperties = new RobertaProperties(Util1.loadProperties(null));
 
         this.connectionUrl = "jdbc:hsqldb:mem:restTestInMemoryDb";
         this.brickCommunicator = new RobotCommunicator();
@@ -895,8 +894,8 @@ public class RestInterfaceTest {
             @SuppressWarnings("unchecked")
             Class<IRobotFactory> factoryClass =
                 (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass("de.fhg.iais.roberta.factory.ev3.lejos.v0.Factory");
-            Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor();
-            robotPlugins.put("ev3lejos", factoryConstructor.newInstance());
+            Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(robertaProperties.getClass());
+            robotPlugins.put("ev3lejos", factoryConstructor.newInstance(robertaProperties));
         } catch ( Exception e ) {
             throw new DbcException("robot plugin ev3 has an invalid factory. Check the properties. Server does NOT start", e);
         }

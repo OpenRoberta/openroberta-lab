@@ -2,11 +2,13 @@ package de.fhg.iais.roberta.factory.mbed.calliope.calliope2016;
 
 import de.fhg.iais.roberta.factory.mbed.calliope.AbstractFactory;
 import de.fhg.iais.roberta.factory.mbed.calliope.CompilerWorkflow;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 public class Factory extends AbstractFactory {
 
-    public Factory() {
+    public Factory(RobertaProperties robertaProperties) {
+        super(robertaProperties);
         this.calliopeProperties = Util1.loadProperties("classpath:Calliope2016.properties");
         this.name = this.calliopeProperties.getProperty("robot.name");
         this.robotPropertyNumber = robertaProperties.getRobotNumberFromProperty(this.name);

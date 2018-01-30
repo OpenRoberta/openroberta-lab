@@ -18,13 +18,19 @@ import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
 
-public class GenericHelper extends Helper {
+public class GenericHelper extends AbstractHelperForTest {
     public GenericHelper() {
-        this.robotFactory = new TestFactory();
+        super(new TestFactory(new RobertaProperties(Util1.loadProperties(null))));
     }
 
     private static class TestFactory extends AbstractRobotFactory {
+
+        public TestFactory(RobertaProperties robertaProperties) {
+            super(robertaProperties);
+        }
 
         @Override
         public IBlinkMode getBlinkMode(String mode) {

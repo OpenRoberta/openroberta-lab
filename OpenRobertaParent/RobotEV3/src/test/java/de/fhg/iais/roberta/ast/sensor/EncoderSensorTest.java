@@ -7,10 +7,12 @@ import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
-import de.fhg.iais.roberta.util.test.ev3.Helper;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForTest;
 
 public class EncoderSensorTest {
-    Helper h = new Helper();
+    HelperEv3ForTest h = new HelperEv3ForTest(new RobertaProperties(Util1.loadProperties(null)));
 
     @Test
     public void sensorSetEncoder() throws Exception {

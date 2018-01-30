@@ -18,21 +18,10 @@ public class RobertaProperties {
     public static final String ROBOT_DEFAULT_PROPERTY_KEY = "robot.default";
     public static final String PLUGIN_TEMPDIR_PROPERTY_KEY = "plugin.tempdir";
 
-    // TODO: to be removed. Test-unfriendly. See how guice injects.
-    private static RobertaProperties instance;
-    private Properties robertaProperties = null;
-    private String defaultRobot = null;
-    private List<String> robotsOnWhiteList = null;
-    private String tempDir = null;
-
-    public static RobertaProperties getInstance() {
-        Assert.notNull(instance, "singleton has not yet been created");
-        return instance;
-    }
-
-    public static void setInstance(Properties properties) {
-        RobertaProperties.instance = new RobertaProperties(properties);
-    }
+    private final Properties robertaProperties;
+    private final String defaultRobot;
+    private final List<String> robotsOnWhiteList;
+    private final String tempDir;
 
     /**
      * store the final set of properties, that control the OpenRoberta system.<br>
@@ -43,7 +32,7 @@ public class RobertaProperties {
      *
      * @param properties
      */
-    private RobertaProperties(Properties properties) {
+    public RobertaProperties(Properties properties) {
         Assert.notNull(properties);
         robertaProperties = properties;
 
@@ -64,13 +53,14 @@ public class RobertaProperties {
         robertaProperties.put(ROBOT_DEFAULT_PROPERTY_KEY, defaultRobot);
 
         // made a robust choice about the temporary directory
-        tempDir = getStringProperty(PLUGIN_TEMPDIR_PROPERTY_KEY);
-        if ( tempDir == null ) {
+        String tempTempDir = getStringProperty(PLUGIN_TEMPDIR_PROPERTY_KEY);
+        if ( tempTempDir == null ) {
             tempDir = System.getProperty("java.io.tmpdir");
             Assert.notNull(tempDir, "could not allocate a temporary directory");
-        }
-        if ( !(tempDir.endsWith("/") || tempDir.endsWith("\\")) ) {
-            tempDir = tempDir + "/";
+        } else if ( !(tempTempDir.endsWith("/") || tempTempDir.endsWith("\\")) ) {
+            tempDir = tempTempDir + "/";
+        } else {
+            tempDir = tempTempDir;
         }
         robertaProperties.put(PLUGIN_TEMPDIR_PROPERTY_KEY, tempDir);
         LOG.info("As temporary directory " + tempDir + " will be used");

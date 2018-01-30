@@ -7,10 +7,12 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.mbed.CalliopeConfiguration;
-import de.fhg.iais.roberta.util.test.mbed.Helper;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.test.mbed.HelperMbedForTest;
 
 public class CppVisitorTest {
-    Helper h = new Helper();
+    HelperMbedForTest h = new HelperMbedForTest(new RobertaProperties(Util1.loadProperties(null)));
 
     private static final String IMPORTS = //
         "#define_GNU_SOURCE\n\n"

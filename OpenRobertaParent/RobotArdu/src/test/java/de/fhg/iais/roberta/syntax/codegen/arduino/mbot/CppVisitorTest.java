@@ -2,10 +2,12 @@ package de.fhg.iais.roberta.syntax.codegen.arduino.mbot;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ardu.HelperMakeBlock;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.test.ardu.HelperMakeBlockForTest;
 
 public class CppVisitorTest {
-    HelperMakeBlock h = new HelperMakeBlock();
+    HelperMakeBlockForTest h = new HelperMakeBlockForTest(new RobertaProperties(Util1.loadProperties(null)));
 
     private static final String MAIN_METHOD1 =
         ""

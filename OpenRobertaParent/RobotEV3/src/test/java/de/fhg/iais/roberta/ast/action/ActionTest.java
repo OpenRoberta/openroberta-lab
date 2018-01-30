@@ -4,11 +4,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.test.ev3.Helper;
+import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForTest;
 
 public class ActionTest {
-    Helper h = new Helper();
+    HelperEv3ForTest h = new HelperEv3ForTest(new RobertaProperties(Util1.loadProperties(null)));
 
     @Test
     public void clearDisplay() throws Exception {

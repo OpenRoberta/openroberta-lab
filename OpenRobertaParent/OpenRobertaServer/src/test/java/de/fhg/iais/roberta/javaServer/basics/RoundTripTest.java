@@ -182,8 +182,7 @@ public class RoundTripTest {
     }
 
     private void initialize() {
-        RobertaProperties.setInstance(Util1.loadProperties("classpath:openRoberta.properties"));
-        RobertaProperties robertaProperties = RobertaProperties.getInstance();
+        RobertaProperties robertaProperties = new RobertaProperties(Util1.loadProperties("classpath:openRoberta.properties"));
         buildXml = robertaProperties.getStringProperty("robot.plugin.1.generated.programs.build.xml");
         connectionUrl = robertaProperties.getStringProperty("hibernate.connection.url");
         crosscompilerBasedir = robertaProperties.getTempDirForUserProjects();

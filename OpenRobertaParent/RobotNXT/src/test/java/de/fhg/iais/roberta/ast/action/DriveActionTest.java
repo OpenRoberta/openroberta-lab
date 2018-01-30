@@ -5,10 +5,12 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
-import de.fhg.iais.roberta.util.test.nxt.Helper;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.test.nxt.HelperNxtForTest;
 
 public class DriveActionTest {
-    Helper h = new Helper();
+    HelperNxtForTest h = new HelperNxtForTest(new RobertaProperties(Util1.loadProperties(null)));
 
     @Test
     public void make() throws Exception {

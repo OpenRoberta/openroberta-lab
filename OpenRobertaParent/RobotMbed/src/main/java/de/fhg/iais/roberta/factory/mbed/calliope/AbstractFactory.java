@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.mbed.calliope.SimulationCheckVisitor;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 public abstract class AbstractFactory extends AbstractRobotFactory {
@@ -26,8 +27,8 @@ public abstract class AbstractFactory extends AbstractRobotFactory {
     protected String name;
     protected int robotPropertyNumber;
 
-    public AbstractFactory() {
-        super();
+    public AbstractFactory(RobertaProperties robertaProperties) {
+        super(robertaProperties);
         final Properties mbedProperties = Util1.loadProperties("classpath:Mbed.properties");
         addBlockTypesFromProperties("Mbed.properties", mbedProperties);
 

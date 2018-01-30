@@ -10,10 +10,10 @@ import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisit
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.util.test.GenericHelper;
-import de.fhg.iais.roberta.util.test.Helper;
+import de.fhg.iais.roberta.util.test.AbstractHelperForTest;
 
 public class LoopCounterVisitorTest {
-    Helper h = new GenericHelper();
+    AbstractHelperForTest h = new GenericHelper();
 
     private class TestUsedHardware extends RobotUsedHardwareCollectorVisitor {
         //TODO create fake for this class

@@ -7,10 +7,10 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.util.test.GenericHelper;
-import de.fhg.iais.roberta.util.test.Helper;
+import de.fhg.iais.roberta.util.test.AbstractHelperForTest;
 
 public class ExprStmtTest {
-    Helper h = new GenericHelper();
+    AbstractHelperForTest h = new GenericHelper();
 
     @Test
     public void make() throws Exception {

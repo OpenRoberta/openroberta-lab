@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.mbed.microbit.SimulationCheckVisitor;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 public class Factory extends AbstractRobotFactory {
@@ -23,7 +24,8 @@ public class Factory extends AbstractRobotFactory {
     private final String name;
     private final int robotPropertyNumber;
 
-    public Factory() {
+    public Factory(RobertaProperties robertaProperties) {
+        super(robertaProperties);
         this.microbitProperties = Util1.loadProperties("classpath:Microbit.properties");
         this.name = this.microbitProperties.getProperty("robot.name");
         this.robotPropertyNumber = robertaProperties.getRobotNumberFromProperty(this.name);

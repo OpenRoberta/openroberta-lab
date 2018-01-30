@@ -15,12 +15,13 @@ import de.fhg.iais.roberta.syntax.codegen.ev3.JavaVisitor;
 import de.fhg.iais.roberta.syntax.codegen.ev3.PythonVisitor;
 import de.fhg.iais.roberta.syntax.codegen.ev3.SimulationVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.test.AbstractHelperForTest;
 
-public class Helper extends de.fhg.iais.roberta.util.test.Helper {
+public class HelperEv3ForTest extends AbstractHelperForTest {
 
-    public Helper() {
-        super();
-        this.robotFactory = new Factory();
+    public HelperEv3ForTest(RobertaProperties robertaProperties) {
+        super(new Factory(robertaProperties));
         Configuration brickConfiguration =
             new EV3Configuration.Builder()
                 .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))
@@ -71,8 +72,7 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
     }
 
     /**
-     * this.robotConfiguration
-     * Generate python code as string from a given program . Prepend and append wrappings.
+     * this.robotConfiguration Generate python code as string from a given program . Prepend and append wrappings.
      *
      * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
      * @return the code as string

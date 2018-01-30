@@ -13,7 +13,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Actor;
@@ -37,14 +36,9 @@ import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 public class Antlr4Ev3ConfigurationTest {
-    Factory robotModeFactory = new Factory();
+    Factory robotModeFactory = new Factory(new RobertaProperties(Util1.loadProperties(null)));
     private static final boolean DO_ASSERT = true;
     private static final boolean DO_PRINT = false;
-
-    @BeforeClass
-    public static void loadPropertiesForTests() {
-        RobertaProperties.setInstance(Util1.loadProperties(null));
-    }
 
     @Test
     public void testParsing() throws Exception {

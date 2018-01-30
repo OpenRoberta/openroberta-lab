@@ -3,10 +3,12 @@ package de.fhg.iais.roberta.syntax.expr.mbed;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.mbed.Helper;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.test.mbed.HelperMbedForTest;
 
 public class LedColorTest {
-    Helper h = new Helper();
+    HelperMbedForTest h = new HelperMbedForTest(new RobertaProperties(Util1.loadProperties(null)));
 
     @Test
     public void make_ByDefault_ReturnInstancesOfLedColorClass() throws Exception {

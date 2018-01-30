@@ -8,10 +8,10 @@ import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.test.GenericHelper;
-import de.fhg.iais.roberta.util.test.Helper;
+import de.fhg.iais.roberta.util.test.AbstractHelperForTest;
 
 public class VariableTest {
-    Helper h = new GenericHelper();
+    AbstractHelperForTest h = new GenericHelper();
 
     @Test
     public void variableSet() throws Exception {

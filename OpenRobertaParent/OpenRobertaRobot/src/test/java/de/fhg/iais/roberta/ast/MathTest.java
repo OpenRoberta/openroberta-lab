@@ -5,10 +5,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.util.test.GenericHelper;
-import de.fhg.iais.roberta.util.test.Helper;
+import de.fhg.iais.roberta.util.test.AbstractHelperForTest;
 
 public class MathTest {
-    Helper h = new GenericHelper();
+    AbstractHelperForTest h = new GenericHelper();
 
     @Test
     public void mathArithmetic() throws Exception {

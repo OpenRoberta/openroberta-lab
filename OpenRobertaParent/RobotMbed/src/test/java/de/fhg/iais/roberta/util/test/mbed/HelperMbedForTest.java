@@ -8,16 +8,16 @@ import de.fhg.iais.roberta.syntax.codegen.mbed.SimulationVisitor;
 import de.fhg.iais.roberta.syntax.codegen.mbed.calliope.CppVisitor;
 import de.fhg.iais.roberta.syntax.codegen.mbed.microbit.PythonVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.util.RobertaProperties;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
  */
-public class Helper extends de.fhg.iais.roberta.util.test.Helper {
+public class HelperMbedForTest extends de.fhg.iais.roberta.util.test.AbstractHelperForTest {
 
-    public Helper() {
-        super();
+    public HelperMbedForTest(RobertaProperties robertaProperties) {
+        super(new Factory(robertaProperties));
         Configuration brickConfiguration = new CalliopeConfiguration.Builder().build();
-        this.robotFactory = new Factory();
         setRobotConfiguration(brickConfiguration);
     }
 

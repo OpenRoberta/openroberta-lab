@@ -71,8 +71,7 @@ public class PerformanceUserInteractionTest {
 
     @BeforeClass
     public void setupClass() {
-        RobertaProperties.setInstance(Util1.loadProperties(null));
-        robertaProperties = RobertaProperties.getInstance();
+        robertaProperties = new RobertaProperties(Util1.loadProperties(null));
     }
 
     @Before

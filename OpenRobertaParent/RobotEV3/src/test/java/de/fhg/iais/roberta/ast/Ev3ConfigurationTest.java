@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.ast;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
@@ -15,12 +14,7 @@ import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 public class Ev3ConfigurationTest {
-    Factory robotModeFactory = new Factory();
-
-    @BeforeClass
-    public static void loadPropertiesForTests() {
-        RobertaProperties.setInstance(Util1.loadProperties(null));
-    }
+    Factory robotModeFactory = new Factory(new RobertaProperties(Util1.loadProperties(null)));
 
     @Test
     public void testRoundtrip() throws Exception {

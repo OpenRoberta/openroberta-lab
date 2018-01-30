@@ -6,10 +6,12 @@ import org.junit.Test;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.TypecheckVisitor;
-import de.fhg.iais.roberta.util.test.ev3.Helper;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForTest;
 
 public class TypecheckTest {
-    Helper h = new Helper();
+    HelperEv3ForTest h = new HelperEv3ForTest(new RobertaProperties(Util1.loadProperties(null)));
 
     @Test
     public void test0ok() throws Exception {

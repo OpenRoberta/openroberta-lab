@@ -2,10 +2,12 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.nxt.Helper;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.test.nxt.HelperNxtForTest;
 
 public class MathConstrainTest {
-    Helper h = new Helper();
+    HelperNxtForTest h = new HelperNxtForTest(new RobertaProperties(Util1.loadProperties(null)));
 
     @Test
     public void Test() throws Exception {

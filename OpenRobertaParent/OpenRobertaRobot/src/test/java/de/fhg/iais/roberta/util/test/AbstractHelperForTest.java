@@ -10,7 +10,6 @@ import javax.xml.bind.Marshaller;
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.Assert;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
@@ -18,34 +17,25 @@ import com.google.common.io.Resources;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.factory.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
-import de.fhg.iais.roberta.util.RobertaProperties;
-import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
  */
-public abstract class Helper {
+public abstract class AbstractHelperForTest {
     protected IRobotFactory robotFactory;
     protected Configuration robotConfiguration;
-    private static final ch.qos.logback.classic.Logger LOG = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(AbstractCompilerWorkflow.class);
 
-    public Helper() {
-        RobertaProperties.setInstance(Util1.loadProperties(null));
-        LOG.setLevel(ch.qos.logback.classic.Level.OFF);
+    public AbstractHelperForTest(IRobotFactory robotFactory) {
+        this.robotFactory = robotFactory;
     }
 
     public IRobotFactory getRobotFactory() {
         return this.robotFactory;
-    }
-
-    public void setRobotFactory(IRobotFactory robotFactory) {
-        this.robotFactory = robotFactory;
     }
 
     public Configuration getRobotConfiguration() {
@@ -135,7 +125,7 @@ public abstract class Helper {
 
         StringWriter writer = new StringWriter();
         m.marshal(blockSet, writer);
-        String t = Resources.toString(Helper.class.getResource(fileName), Charsets.UTF_8);
+        String t = Resources.toString(AbstractHelperForTest.class.getResource(fileName), Charsets.UTF_8);
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = XMLUnit.compareXML(writer.toString(), t);
         Assert.assertTrue(diff.identical());

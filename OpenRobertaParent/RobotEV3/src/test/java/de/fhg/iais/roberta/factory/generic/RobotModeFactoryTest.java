@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.factory.generic;
 
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -31,12 +30,7 @@ import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class RobotModeFactoryTest {
-    Factory factory = new Factory();
-
-    @BeforeClass
-    public static void loadPropertiesForTests() {
-        RobertaProperties.setInstance(Util1.loadProperties(null));
-    }
+    Factory factory = new Factory(new RobertaProperties(Util1.loadProperties(null)));
 
     @Test
     public void getIndexLocationFromString() {

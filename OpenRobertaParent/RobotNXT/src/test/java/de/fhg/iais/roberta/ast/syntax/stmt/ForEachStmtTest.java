@@ -3,11 +3,13 @@ package de.fhg.iais.roberta.ast.syntax.stmt;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.nxt.Helper;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.test.nxt.HelperNxtForTest;
 
 @Ignore
 public class ForEachStmtTest {
-    Helper h = new Helper();
+    HelperNxtForTest h = new HelperNxtForTest(new RobertaProperties(Util1.loadProperties(null)));
 
     @Test
     public void forEachStmt() throws Exception {

@@ -2,10 +2,12 @@ package de.fhg.iais.roberta.syntax.stmt;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ev3.Helper;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForTest;
 
 public class ForEachStmtTest {
-    Helper h = new Helper();
+    HelperEv3ForTest h = new HelperEv3ForTest(new RobertaProperties(Util1.loadProperties(null)));
 
     @Test
     public void forEachStmt() throws Exception {

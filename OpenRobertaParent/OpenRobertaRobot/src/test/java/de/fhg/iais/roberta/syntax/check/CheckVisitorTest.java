@@ -23,10 +23,10 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.util.test.GenericHelper;
-import de.fhg.iais.roberta.util.test.Helper;
+import de.fhg.iais.roberta.util.test.AbstractHelperForTest;
 
 public class CheckVisitorTest {
-    Helper h = new GenericHelper();
+    AbstractHelperForTest h = new GenericHelper();
 
     class TestProgramCheckVisitor extends RobotCommonCheckVisitor {
 

@@ -16,10 +16,19 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 
 public class Util {
     private static final Logger LOG = LoggerFactory.getLogger(Util.class);
-    private static final String SERVER_VERSION = RobertaProperties.getInstance().getStringProperty("openRobertaServer.version");
+    private static String serverVersion;
 
     private Util() {
         // no objects
+    }
+
+    /**
+     * TODO: remove this global setting. Injected from the <b>ServerStarter</b> to add version info to all frontend JSON objects. But not nice ... .
+     * 
+     * @param serverVersion the version to set.
+     */
+    public static void setServerVersion(String serverVersion) {
+        Util.serverVersion = serverVersion;
     }
 
     public static void addResultInfo(JSONObject response, AbstractProcessor processor) throws JSONException {
@@ -58,7 +67,7 @@ public class Util {
     public static void addFrontendInfo(JSONObject response, HttpSessionState httpSessionState, RobotCommunicator brickCommunicator) {
         try {
             response.put("serverTime", new Date());
-            response.put("server.version", Util.SERVER_VERSION);
+            response.put("server.version", Util.serverVersion);
             if ( httpSessionState != null ) {
                 String token = httpSessionState.getToken();
                 if ( token != null ) {

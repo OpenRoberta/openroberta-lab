@@ -4,10 +4,12 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.mbed.Helper;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.test.mbed.HelperMbedForTest;
 
 public class ImageInvertFunctionTest {
-    Helper h = new Helper();
+    HelperMbedForTest h = new HelperMbedForTest(new RobertaProperties(Util1.loadProperties(null)));
 
     @Test
     public void make_ByDefault_ReturnInstanceOfImageInvertFunctionClass() throws Exception {

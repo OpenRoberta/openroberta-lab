@@ -19,8 +19,8 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
     protected final RobertaProperties robertaProperties;
     private final Properties robotProperties;
 
-    public AbstractRobotFactory() {
-        this.robertaProperties = RobertaProperties.getInstance();
+    public AbstractRobotFactory(RobertaProperties robertaProperties) {
+        this.robertaProperties = robertaProperties;
         this.robotProperties = Util1.loadProperties("classpath:Robot.properties");
         addBlockTypesFromProperties("Robot.properties", this.robotProperties);
     }

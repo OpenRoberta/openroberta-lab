@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.codegen.arduino.bob3.CppVisitor;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 public class Factory extends AbstractRobotFactory {
@@ -25,7 +26,8 @@ public class Factory extends AbstractRobotFactory {
     private final String name;
     private final int robotPropertyNumber;
 
-    public Factory() {
+    public Factory(RobertaProperties robertaProperties) {
+        super(robertaProperties);
         String os = "linux";
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";

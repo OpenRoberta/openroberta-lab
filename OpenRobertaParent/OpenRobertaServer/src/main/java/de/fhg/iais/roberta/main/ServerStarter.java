@@ -41,6 +41,7 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import joptsimple.OptionParser;
@@ -94,8 +95,8 @@ public class ServerStarter {
     public ServerStarter(String propertyPath, List<String> defines) {
         Properties properties = Util1.loadAndMergeProperties(propertyPath, defines);
         setupPropertyForDatabaseConnection(properties);
-        RobertaProperties.setInstance(properties); // TODO: to be removed. test-unfriendly
-        robertaProperties = RobertaProperties.getInstance();
+        robertaProperties = new RobertaProperties(properties);
+        Util.setServerVersion(robertaProperties.getStringProperty("openRobertaServer.version"));
     }
 
     /**
@@ -267,8 +268,8 @@ public class ServerStarter {
                         try {
                             @SuppressWarnings("unchecked")
                             Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass(pluginFactory);
-                            Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor();
-                            robotPlugins.put(pluginName, factoryConstructor.newInstance());
+                            Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(robertaProperties.getClass());
+                            robotPlugins.put(pluginName, factoryConstructor.newInstance(robertaProperties));
                         } catch ( Exception e ) {
                             throw new DbcException("robot plugin " + pluginName + " has an invalid factory. Check the properties. Server does NOT start", e);
                         }

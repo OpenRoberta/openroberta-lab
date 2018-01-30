@@ -13,14 +13,16 @@ import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.syntax.codegen.nxt.NxcVisitor;
 import de.fhg.iais.roberta.syntax.codegen.nxt.SimulationVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.test.AbstractHelperForTest;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
  */
-public class Helper extends de.fhg.iais.roberta.util.test.Helper {
+public class HelperNxtForTest extends AbstractHelperForTest {
 
-    public Helper() {
-        this.robotFactory = new Factory();
+    public HelperNxtForTest(RobertaProperties robertaProperties) {
+        super(new Factory(robertaProperties));
         Configuration brickConfiguration =
             new NxtConfiguration.Builder()
                 .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))

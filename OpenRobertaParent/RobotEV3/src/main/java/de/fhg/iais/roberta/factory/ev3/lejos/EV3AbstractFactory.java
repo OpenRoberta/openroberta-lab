@@ -21,6 +21,7 @@ import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.ev3.BrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.ev3.SimulationCheckVisitor;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 public abstract class EV3AbstractFactory extends AbstractRobotFactory {
@@ -30,7 +31,8 @@ public abstract class EV3AbstractFactory extends AbstractRobotFactory {
     protected Properties ev3Properties;
     protected String name;
 
-    public EV3AbstractFactory(String propertyName) {
+    public EV3AbstractFactory(RobertaProperties robertaProperties, String propertyName) {
+        super(robertaProperties);
         this.ev3Properties = Util1.loadProperties("classpath:" + propertyName);
         this.name = this.ev3Properties.getProperty("robot.name");
         this.robotPropertyNumber = robertaProperties.getRobotNumberFromProperty(this.name);

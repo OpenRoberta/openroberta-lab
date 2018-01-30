@@ -6,10 +6,12 @@ import org.junit.Test;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
-import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForTest;
 
 public class TimerSensorTest {
-    HelperBotNroll h = new HelperBotNroll();
+    HelperBotNrollForTest h = new HelperBotNrollForTest(new RobertaProperties(Util1.loadProperties(null)));
 
     @Test
     public void getMode() throws Exception {

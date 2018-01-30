@@ -6,10 +6,12 @@ import org.junit.Test;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
-import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForTest;
 
 public class TurnActionTest {
-    HelperBotNroll h = new HelperBotNroll();
+    HelperBotNrollForTest h = new HelperBotNrollForTest(new RobertaProperties(Util1.loadProperties(null)));
 
     @Test
     public void make() throws Exception {
