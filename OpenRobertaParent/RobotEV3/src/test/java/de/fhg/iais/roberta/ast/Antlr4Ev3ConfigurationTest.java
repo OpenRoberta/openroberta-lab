@@ -6,7 +6,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.Properties;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
@@ -44,8 +43,7 @@ public class Antlr4Ev3ConfigurationTest {
 
     @BeforeClass
     public static void loadPropertiesForTests() {
-        Properties properties = Util1.loadProperties(null);
-        RobertaProperties.setRobertaProperties(properties);
+        RobertaProperties.setInstance(Util1.loadProperties(null));
     }
 
     @Test

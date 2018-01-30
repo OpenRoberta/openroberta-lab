@@ -44,10 +44,12 @@ public class ClientAdmin {
     public static final String NO_CONNECT = "NOCONNCT";
 
     private final RobotCommunicator brickCommunicator;
+    private final RobertaProperties robertaProperties;
 
     @Inject
-    public ClientAdmin(RobotCommunicator brickCommunicator) {
+    public ClientAdmin(RobotCommunicator brickCommunicator, RobertaProperties robertaProperties) {
         this.brickCommunicator = brickCommunicator;
+        this.robertaProperties = robertaProperties;
     }
 
     @POST
@@ -68,9 +70,9 @@ public class ClientAdmin {
             response.put("cmd", cmd);
             if ( cmd.equals("init") ) {
                 JSONObject server = new JSONObject();
-                server.put("defaultRobot", RobertaProperties.getDefaultRobot());
+                server.put("defaultRobot", robertaProperties.getDefaultRobot());
                 JSONObject robots = new JSONObject();
-                Collection<String> availableRobots = RobertaProperties.getRobotWhitelist();
+                Collection<String> availableRobots = robertaProperties.getRobotWhitelist();
                 int i = 0;
                 for ( String robot : availableRobots ) {
                     JSONObject robotDescription = new JSONObject();
@@ -84,7 +86,7 @@ public class ClientAdmin {
                     robots.put("" + i, robotDescription);
                     i++;
                 }
-                server.put("isPublic", RobertaProperties.getBooleanProperty("server.public"));
+                server.put("isPublic", robertaProperties.getBooleanProperty("server.public"));
                 server.put("robots", robots);
                 response.put("server", server);
                 LOG.info("success: create init object");
@@ -140,7 +142,7 @@ public class ClientAdmin {
                 }
             } else if ( cmd.equals("setRobot") ) {
                 String robot = request.getString("robot");
-                if ( robot != null && RobertaProperties.getRobotWhitelist().contains(robot) ) {
+                if ( robot != null && robertaProperties.getRobotWhitelist().contains(robot) ) {
                     Util.addSuccessInfo(response, Key.ROBOT_SET_SUCCESS);
                     if ( httpSessionState.getRobotName() != robot ) {
                         // disconnect previous robot

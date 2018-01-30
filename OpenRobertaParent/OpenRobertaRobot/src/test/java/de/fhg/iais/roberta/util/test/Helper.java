@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.util.test;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Properties;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -37,8 +36,7 @@ public abstract class Helper {
     private static final ch.qos.logback.classic.Logger LOG = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(AbstractCompilerWorkflow.class);
 
     public Helper() {
-        Properties properties = Util1.loadProperties(null);
-        RobertaProperties.setRobertaProperties(properties);
+        RobertaProperties.setInstance(Util1.loadProperties(null));
         LOG.setLevel(ch.qos.logback.classic.Level.OFF);
     }
 

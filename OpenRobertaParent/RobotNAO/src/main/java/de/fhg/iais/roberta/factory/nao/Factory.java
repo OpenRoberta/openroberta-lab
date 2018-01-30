@@ -13,7 +13,6 @@ import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
-import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 public class Factory extends AbstractRobotFactory {
@@ -25,11 +24,11 @@ public class Factory extends AbstractRobotFactory {
     public Factory() {
         this.naoProperties = Util1.loadProperties("classpath:NAO.properties");
         this.name = this.naoProperties.getProperty("robot.name");
-        this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
+        this.robotPropertyNumber = robertaProperties.getRobotNumberFromProperty(this.name);
         this.compilerWorkflow =
             new CompilerWorkflow(
-                RobertaProperties.getTempDirForUserProjects(),
-                RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"));
+                robertaProperties.getTempDirForUserProjects(),
+                robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"));
         addBlockTypesFromProperties("NAO.properties", this.naoProperties);
     }
 
@@ -55,7 +54,7 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public AbstractModule getGuiceModule() {
-        return new GuiceModule(RobertaProperties.getRobertaProperties());
+        return new GuiceModule(robertaProperties.getRobertaProperties());
     }
 
     @Override
@@ -125,8 +124,8 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public String getGroup() {
-        return RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group") != null
-            ? RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group")
+        return robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group") != null
+            ? robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group")
             : this.name;
     }
 

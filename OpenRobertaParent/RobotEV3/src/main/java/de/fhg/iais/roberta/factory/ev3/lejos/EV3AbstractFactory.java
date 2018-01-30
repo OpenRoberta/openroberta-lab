@@ -21,7 +21,6 @@ import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.ev3.BrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.ev3.SimulationCheckVisitor;
-import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 public abstract class EV3AbstractFactory extends AbstractRobotFactory {
@@ -34,11 +33,11 @@ public abstract class EV3AbstractFactory extends AbstractRobotFactory {
     public EV3AbstractFactory(String propertyName) {
         this.ev3Properties = Util1.loadProperties("classpath:" + propertyName);
         this.name = this.ev3Properties.getProperty("robot.name");
-        this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
+        this.robotPropertyNumber = robertaProperties.getRobotNumberFromProperty(this.name);
         this.robotCompilerWorkflow =
             new CompilerWorkflow(
-                RobertaProperties.getTempDirForUserProjects(),
-                RobertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.robotPropertyNumber + ".compiler.resources.dir"));
+                robertaProperties.getTempDirForUserProjects(),
+                robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.robotPropertyNumber + ".compiler.resources.dir"));
 
         this.simCompilerWorkflow = new Ev3SimCompilerWorkflow();
 
@@ -70,7 +69,7 @@ public abstract class EV3AbstractFactory extends AbstractRobotFactory {
 
     @Override
     public AbstractModule getGuiceModule() {
-        return new Ev3GuiceModule(RobertaProperties.getRobertaProperties());
+        return new Ev3GuiceModule(robertaProperties.getRobertaProperties());
     }
 
     @Override
@@ -150,8 +149,8 @@ public abstract class EV3AbstractFactory extends AbstractRobotFactory {
 
     @Override
     public String getGroup() {
-        return RobertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.robotPropertyNumber + ".group") != null
-            ? RobertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.robotPropertyNumber + ".group")
+        return robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.robotPropertyNumber + ".group") != null
+            ? robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.robotPropertyNumber + ".group")
             : this.name;
     }
 

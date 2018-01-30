@@ -74,7 +74,7 @@ function question {
 tagPrefix=ORA-
 question 'did you update the element <openRobertaServer.history> in the parent pom?'
 question 'is a database upgrade necessary? Did you change the class Upgrader.java and the SQL script "create-tables.sql" if needed?'
-question 'is an update of versions for the EV3 robots in RobotEV3/pom.xml needed?' 
+question 'is an update of versions for the EV3 robots in RobotEV3/pom.xml (e.g. <ev3runtime.v0.version>) needed?' 
 # =========================================================================================================================================
 
 # remember working directory and directory with (parent) pom.

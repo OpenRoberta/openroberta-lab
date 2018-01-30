@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import javax.ws.rs.core.Response;
@@ -52,22 +51,23 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 @Category(IntegrationTest.class)
 public class RoundTripTest {
     private static final String resourcePath = "/roundtrip/";
-    private static final String[] blocklyPrograms = {
-        "move",
-        "drive",
-        "show",
-        "sound",
-        "status_light",
-        "sensors",
-        "logic",
-        "control_stmt",
-        "wait",
-        "math",
-        "text",
-        "list",
-        "methods",
-        "bluetooth"
-    };
+    private static final String[] blocklyPrograms =
+        {
+            "move",
+            "drive",
+            "show",
+            "sound",
+            "status_light",
+            "sensors",
+            "logic",
+            "control_stmt",
+            "wait",
+            "math",
+            "text",
+            "list",
+            "methods",
+            "bluetooth"
+        };
 
     private static WebDriver driver;
     private static String baseUrl;
@@ -182,13 +182,13 @@ public class RoundTripTest {
     }
 
     private void initialize() {
-        Properties properties = Util1.loadProperties("classpath:openRoberta.properties");
-        RobertaProperties.setRobertaProperties(properties);
-        buildXml = properties.getProperty("robot.plugin.1.generated.programs.build.xml");
-        connectionUrl = properties.getProperty("hibernate.connection.url");
-        crosscompilerBasedir = RobertaProperties.getTempDirForUserProjects();
-        crossCompilerResourcesDir = properties.getProperty("robot.plugin.1.compiler.resources.dir");
-        browserVisibility = Boolean.parseBoolean(properties.getProperty("browser.visibility"));
+        RobertaProperties.setInstance(Util1.loadProperties("classpath:openRoberta.properties"));
+        RobertaProperties robertaProperties = RobertaProperties.getInstance();
+        buildXml = robertaProperties.getStringProperty("robot.plugin.1.generated.programs.build.xml");
+        connectionUrl = robertaProperties.getStringProperty("hibernate.connection.url");
+        crosscompilerBasedir = robertaProperties.getTempDirForUserProjects();
+        crossCompilerResourcesDir = robertaProperties.getStringProperty("robot.plugin.1.compiler.resources.dir");
+        browserVisibility = Boolean.parseBoolean(robertaProperties.getStringProperty("browser.visibility"));
 
         sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", connectionUrl);
         nativeSession = sessionFactoryWrapper.getNativeSession();
@@ -196,19 +196,20 @@ public class RoundTripTest {
         memoryDbSetup.createEmptyDatabase();
         brickCommunicator = new RobotCommunicator();
 
-        restUser = new ClientUser(brickCommunicator, null);
-        restProgram = new ClientProgram(sessionFactoryWrapper, brickCommunicator);
+        restUser = new ClientUser(brickCommunicator, robertaProperties, null);
+        restProgram = new ClientProgram(sessionFactoryWrapper, brickCommunicator, robertaProperties);
         Map<String, IRobotFactory> robotPlugins = new HashMap<>();
         loadPlugin(robotPlugins);
-        s1 = HttpSessionState.init(brickCommunicator, robotPlugins, 1);
+        s1 = HttpSessionState.init(brickCommunicator, robotPlugins, robertaProperties, 1);
     }
 
     private void setUpDatabase() throws Exception {
         Assert.assertEquals(1, getOneBigInteger("select count(*) from USER"));
-        response = restUser.command(
-            s1,
-            sessionFactoryWrapper.getSession(),
-            JSONUtilForServer.mkD("{'cmd':'createUser';'accountName':'orA';'userName':'orA';'password':'Pid';'userEmail':'cavy@home';'role':'STUDENT'}"));
+        response =
+            restUser.command(
+                s1,
+                sessionFactoryWrapper.getSession(),
+                JSONUtilForServer.mkD("{'cmd':'createUser';'accountName':'orA';'userName':'orA';'password':'Pid';'userEmail':'cavy@home';'role':'STUDENT'}"));
         Assert.assertEquals(2, getOneBigInteger("select count(*) from USER"));
         Assert.assertTrue(!s1.isUserLoggedIn());
         response = //

@@ -9,15 +9,18 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public abstract class AbstractRobotFactory implements IRobotFactory {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractRobotFactory.class);
+    protected final RobertaProperties robertaProperties;
     private final Properties robotProperties;
 
     public AbstractRobotFactory() {
+        this.robertaProperties = RobertaProperties.getInstance();
         this.robotProperties = Util1.loadProperties("classpath:Robot.properties");
         addBlockTypesFromProperties("Robot.properties", this.robotProperties);
     }

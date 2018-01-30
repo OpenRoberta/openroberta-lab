@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.guice;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -12,15 +11,16 @@ import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.util.RobertaProperties;
 
 public class RobertaGuiceServletConfig extends GuiceServletContextListener {
     private Injector injector;
-    private final Properties openRobertaProperties;
+    private final RobertaProperties robertaProperties;
     private final Map<String, IRobotFactory> robotPluginMap;
     private final RobotCommunicator robotCommunicator;
 
-    public RobertaGuiceServletConfig(Properties openRobertaProperties, Map<String, IRobotFactory> robotPluginMap, RobotCommunicator robotCommunicator) {
-        this.openRobertaProperties = openRobertaProperties;
+    public RobertaGuiceServletConfig(RobertaProperties robertaProperties, Map<String, IRobotFactory> robotPluginMap, RobotCommunicator robotCommunicator) {
+        this.robertaProperties = robertaProperties;
         this.robotPluginMap = robotPluginMap;
         this.robotCommunicator = robotCommunicator;
     }
@@ -33,7 +33,7 @@ public class RobertaGuiceServletConfig extends GuiceServletContextListener {
                 // configure at least one JAX-RS resource or the server won't start.
                 install(
                     new RobertaGuiceModule(
-                        RobertaGuiceServletConfig.this.openRobertaProperties,
+                        RobertaGuiceServletConfig.this.robertaProperties,
                         RobertaGuiceServletConfig.this.robotPluginMap,
                         RobertaGuiceServletConfig.this.robotCommunicator));
                 //TODO: we have doubled the properties

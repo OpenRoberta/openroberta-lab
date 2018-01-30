@@ -25,15 +25,25 @@ public class HttpSessionState implements Serializable {
     private long sessionNumber;
     private Map<String, IRobotFactory> robotPluginMap;
 
-    public HttpSessionState(RobotCommunicator robotCommunicator, Map<String, IRobotFactory> robotPluginMap, long sessionNumber) {
+    public HttpSessionState(
+        RobotCommunicator robotCommunicator,
+        Map<String, IRobotFactory> robotPluginMap,
+        RobertaProperties robertaProperties,
+        long sessionNumber) //
+    {
         this.robotPluginMap = robotPluginMap;
-        this.robotName = RobertaProperties.getDefaultRobot();
+        this.robotName = robertaProperties.getDefaultRobot();
         this.sessionNumber = sessionNumber;
 
     }
 
-    public static HttpSessionState init(RobotCommunicator robotCommunicator, Map<String, IRobotFactory> robotPluginMap, long sessionNumber) {
-        return new HttpSessionState(robotCommunicator, robotPluginMap, sessionNumber);
+    public static HttpSessionState init(
+        RobotCommunicator robotCommunicator,
+        Map<String, IRobotFactory> robotPluginMap,
+        RobertaProperties robertaProperties,
+        long sessionNumber) //
+    {
+        return new HttpSessionState(robotCommunicator, robotPluginMap, robertaProperties, sessionNumber);
     }
 
     public int getUserId() {

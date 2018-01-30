@@ -17,13 +17,21 @@ public class RobertaProperties {
     public static final String ROBOT_WHITE_LIST_PROPERTY_KEY = "robot.whitelist";
     public static final String ROBOT_DEFAULT_PROPERTY_KEY = "robot.default";
     public static final String PLUGIN_TEMPDIR_PROPERTY_KEY = "plugin.tempdir";
-    private static Properties robertaProperties = null;
-    private static String defaultRobot = null;
-    private static List<String> robotsOnWhiteList = null;
-    private static String tempDir = null;
 
-    private RobertaProperties() {
-        // no objects
+    // TODO: to be removed. Test-unfriendly. See how guice injects.
+    private static RobertaProperties instance;
+    private Properties robertaProperties = null;
+    private String defaultRobot = null;
+    private List<String> robotsOnWhiteList = null;
+    private String tempDir = null;
+
+    public static RobertaProperties getInstance() {
+        Assert.notNull(instance, "singleton has not yet been created");
+        return instance;
+    }
+
+    public static void setInstance(Properties properties) {
+        RobertaProperties.instance = new RobertaProperties(properties);
     }
 
     /**
@@ -35,7 +43,8 @@ public class RobertaProperties {
      *
      * @param properties
      */
-    public static void setRobertaProperties(Properties properties) {
+    private RobertaProperties(Properties properties) {
+        Assert.notNull(properties);
         robertaProperties = properties;
 
         // process the white list and get the default robot
@@ -67,29 +76,29 @@ public class RobertaProperties {
         LOG.info("As temporary directory " + tempDir + " will be used");
     }
 
-    public static Properties getRobertaProperties() {
+    public Properties getRobertaProperties() {
         Assert.notNull(robertaProperties);
         return robertaProperties;
     }
 
-    public static String getStringProperty(String propertyName) {
+    public String getStringProperty(String propertyName) {
         Assert.notNull(robertaProperties);
         return robertaProperties.getProperty(propertyName);
     }
 
-    public static int getIntProperty(String propertyName) {
+    public int getIntProperty(String propertyName) {
         Assert.notNull(robertaProperties);
         String property = robertaProperties.getProperty(propertyName);
         return Integer.parseInt(property);
     }
 
-    public static boolean getBooleanProperty(String propertyName) {
+    public boolean getBooleanProperty(String propertyName) {
         Assert.notNull(robertaProperties);
         String property = robertaProperties.getProperty(propertyName);
         return Boolean.parseBoolean(property);
     }
 
-    public static int getRobotNumberFromProperty(String robotName) {
+    public int getRobotNumberFromProperty(String robotName) {
         Assert.notNull(robertaProperties);
         for ( int i = 1; i < 1000; i++ ) {
             String value = robertaProperties.getProperty("robot.plugin." + i + ".name");
@@ -103,23 +112,23 @@ public class RobertaProperties {
         throw new DbcException("Only 999 robots supported!");
     }
 
-    public static List<String> getRobotWhitelist() {
+    public List<String> getRobotWhitelist() {
         return robotsOnWhiteList;
     }
 
-    public static String getDefaultRobot() {
+    public String getDefaultRobot() {
         return defaultRobot;
     }
 
-    public static String getTempDir() {
+    public String getTempDir() {
         return tempDir;
     }
 
-    public static String getTempDirFor(String kindOfTempDir) {
+    public String getTempDirFor(String kindOfTempDir) {
         return tempDir + kindOfTempDir + "/";
     }
 
-    public static String getTempDirForUserProjects() {
+    public String getTempDirForUserProjects() {
         return getTempDirFor("userProjects");
     }
 

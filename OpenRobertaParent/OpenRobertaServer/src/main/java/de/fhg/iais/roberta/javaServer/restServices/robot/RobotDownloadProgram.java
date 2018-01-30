@@ -35,9 +35,9 @@ public class RobotDownloadProgram {
     private final String pathToCrosscompilerBaseDir;
 
     @Inject
-    public RobotDownloadProgram(RobotCommunicator brickCommunicator) {
+    public RobotDownloadProgram(RobotCommunicator brickCommunicator, RobertaProperties robertaProperties) {
         this.brickCommunicator = brickCommunicator;
-        pathToCrosscompilerBaseDir = RobertaProperties.getTempDirForUserProjects();
+        pathToCrosscompilerBaseDir = robertaProperties.getTempDirForUserProjects();
     }
 
     @POST

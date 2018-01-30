@@ -1,7 +1,5 @@
 package de.fhg.iais.roberta.ast;
 
-import java.util.Properties;
-
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -21,8 +19,7 @@ public class NxtConfigurationTest {
 
     @BeforeClass
     public static void loadPropertiesForTests() {
-        Properties properties = Util1.loadProperties(null);
-        RobertaProperties.setRobertaProperties(properties);
+        RobertaProperties.setInstance(Util1.loadProperties(null));
     }
 
     @Test

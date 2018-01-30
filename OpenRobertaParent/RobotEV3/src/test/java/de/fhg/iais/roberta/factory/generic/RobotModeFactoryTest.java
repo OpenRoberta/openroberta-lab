@@ -1,7 +1,5 @@
 package de.fhg.iais.roberta.factory.generic;
 
-import java.util.Properties;
-
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -37,8 +35,7 @@ public class RobotModeFactoryTest {
 
     @BeforeClass
     public static void loadPropertiesForTests() {
-        Properties properties = Util1.loadProperties(null);
-        RobertaProperties.setRobertaProperties(properties);
+        RobertaProperties.setInstance(Util1.loadProperties(null));
     }
 
     @Test

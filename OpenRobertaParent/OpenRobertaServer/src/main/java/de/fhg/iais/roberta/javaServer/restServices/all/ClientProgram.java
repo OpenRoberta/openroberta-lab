@@ -70,10 +70,10 @@ public class ClientProgram {
     private final boolean isPublicServer;
 
     @Inject
-    public ClientProgram(SessionFactoryWrapper sessionFactoryWrapper, RobotCommunicator brickCommunicator) {
+    public ClientProgram(SessionFactoryWrapper sessionFactoryWrapper, RobotCommunicator brickCommunicator, RobertaProperties robertaProperties) {
         this.sessionFactoryWrapper = sessionFactoryWrapper;
         this.brickCommunicator = brickCommunicator;
-        this.isPublicServer = RobertaProperties.getBooleanProperty("server.public");
+        this.isPublicServer = robertaProperties.getBooleanProperty("server.public");
 
     }
 

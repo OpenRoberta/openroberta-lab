@@ -18,7 +18,6 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.codegen.arduino.botnroll.CppVisitor;
-import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 public class Factory extends AbstractRobotFactory {
@@ -34,12 +33,12 @@ public class Factory extends AbstractRobotFactory {
         }
         this.botnrollProperties = Util1.loadProperties("classpath:botnroll.properties");
         this.name = this.botnrollProperties.getProperty("robot.name");
-        this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
+        this.robotPropertyNumber = robertaProperties.getRobotNumberFromProperty(this.name);
         this.compilerWorkflow =
             new CompilerWorkflow(
-                RobertaProperties.getTempDirForUserProjects(),
-                RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"),
-                RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler." + os + ".dir"));
+                robertaProperties.getTempDirForUserProjects(),
+                robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"),
+                robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler." + os + ".dir"));
         addBlockTypesFromProperties("botnroll.properties", this.botnrollProperties);
     }
 
@@ -47,7 +46,6 @@ public class Factory extends AbstractRobotFactory {
     public IActorPort getActorPort(String port) {
         return IRobotFactory.getModeValue(port, ActorPort.class);
     }
-
 
     @Override
     public IShowPicture getShowPicture(String picture) {
@@ -141,9 +139,9 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public String getGroup() {
-        return RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group") != null
-            ? RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group")
-                : this.name;
+        return robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group") != null
+            ? robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group")
+            : this.name;
     }
 
     @Override

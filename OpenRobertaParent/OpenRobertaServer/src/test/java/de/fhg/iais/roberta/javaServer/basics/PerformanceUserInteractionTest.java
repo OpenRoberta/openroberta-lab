@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.javaServer.basics;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -16,6 +15,7 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -38,6 +38,7 @@ import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Clock;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
@@ -49,6 +50,8 @@ public class PerformanceUserInteractionTest {
 
     private static final int MAX_PARALLEL_USERS = 30;
     private static final int MAX_TOTAL_USERS = 400;
+
+    private RobertaProperties robertaProperties;
 
     private SessionFactoryWrapper sessionFactoryWrapper;
     private DbSetup memoryDbSetup;
@@ -66,20 +69,25 @@ public class PerformanceUserInteractionTest {
     private ExecutorService executorService;
     private Map<String, IRobotFactory> robotPlugins = new HashMap<>();
 
+    @BeforeClass
+    public void setupClass() {
+        RobertaProperties.setInstance(Util1.loadProperties(null));
+        robertaProperties = RobertaProperties.getInstance();
+    }
+
     @Before
-    public void setup() throws Exception {
-        Properties properties = Util1.loadProperties(null);
-        this.connectionUrl = properties.getProperty("hibernate.connection.url");
+    public void setupTest() throws Exception {
+        this.connectionUrl = robertaProperties.getStringProperty("hibernate.connection.url");
 
         this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-testConcurrent-cfg.xml", this.connectionUrl);
         this.memoryDbSetup = new DbSetup(this.sessionFactoryWrapper.getNativeSession());
         this.memoryDbSetup.createEmptyDatabase();
         this.brickCommunicator = new RobotCommunicator();
 
-        this.restUser = new ClientUser(this.brickCommunicator, null);
-        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.brickCommunicator);
-        this.restBlocks = new ClientAdmin(this.brickCommunicator);
-        this.downloadJar = new RobotDownloadProgram(this.brickCommunicator);
+        this.restUser = new ClientUser(this.brickCommunicator, robertaProperties, null);
+        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.brickCommunicator, robertaProperties);
+        this.restBlocks = new ClientAdmin(this.brickCommunicator, robertaProperties);
+        this.downloadJar = new RobotDownloadProgram(this.brickCommunicator, robertaProperties);
         this.brickCommand = new RobotCommand(this.brickCommunicator);
         this.theProgramOfAllUserLol =
             Resources.toString(PerformanceUserInteractionTest.class.getResource("/rest_ifc_test/action_BrickLight.xml"), Charsets.UTF_8);
@@ -142,16 +150,21 @@ public class PerformanceUserInteractionTest {
         PerformanceUserInteractionTest.LOG.info("" + userNumber + ";start;");
         Random random = new Random(userNumber);
 
-        HttpSessionState s = HttpSessionState.init(this.brickCommunicator, this.robotPlugins, 1);
+        HttpSessionState s = HttpSessionState.init(this.brickCommunicator, this.robotPlugins, robertaProperties, 1);
         Assert.assertTrue(!s.isUserLoggedIn());
 
         // create user "pid-*" with success
         thinkTimeInMillisec += think(random, 1, 4);
-        Response response = this.restUser.command(
-            s,
-            this.sessionFactoryWrapper.getSession(),
-            JSONUtilForServer.mkD(
-                "{'cmd':'createUser';'accountName':'pid-" + userNumber + "';'password':'dip-" + userNumber + "';'userEmail':'cavy@home';'role':'STUDENT'}"));
+        Response response =
+            this.restUser.command(
+                s,
+                this.sessionFactoryWrapper.getSession(),
+                JSONUtilForServer.mkD(
+                    "{'cmd':'createUser';'accountName':'pid-"
+                        + userNumber
+                        + "';'password':'dip-"
+                        + userNumber
+                        + "';'userEmail':'cavy@home';'role':'STUDENT'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", null);
 
         // login with user "pid", create 2 programs
