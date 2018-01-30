@@ -1,7 +1,3 @@
-# ===============================================================================================
-# in projects "miniServer" and "robertalab" are copies of this script. Transfer changes from here
-# ===============================================================================================
-
 # ---------------------------------------------------------------------------------------------------------------------
 # deployment script: deploy a version at master, setup develop for the next version.
 # For suggestions and errors contact reinhard.budde at iais.fraunhofer.de
@@ -52,6 +48,34 @@ function runMaven {
 	mvn versions:commit
 	cd $CWD
 }
+
+# ask a question. If user answers "y", everything is fine. Otherwise exit 1!
+function question {
+	echo -n "$1 (\"y\" if everything is ok) "
+	read ANSWER
+	case "$ANSWER" in
+	  y) : ;;
+	  *) exit 1 ;;
+	esac
+}
+
+# =========================================================================================================================================
+# this is the OpenRoberta specific part. It has been added to give hints what may have been forgotten when a new version has to be deployed
+# ask a question. If user answers "y", everything is fine. Otherwise exit 1!
+function question {
+	echo -n "$1 (y if ok) "
+	read ANSWER
+	case "$ANSWER" in
+	  y) : ;;
+	  *) exit 1 ;;
+	esac
+}
+
+tagPrefix=ORA-
+question 'did you update the element <openRobertaServer.history> in the parent pom?'
+question 'is a database upgrade necessary? Did you change the class Upgrader.java and the SQL script "create-tables.sql" if needed?'
+question 'is an update of versions for the EV3 robots in RobotEV3/pom.xml needed?' 
+# =========================================================================================================================================
 
 # remember working directory and directory with (parent) pom.
 CWD=$(pwd)
@@ -162,7 +186,7 @@ then
 	git merge --abort
 	exit 12
 fi
-git tag "V-$thisVersion" -m "Version $thisVersion"
+git tag "$tagPrefix$thisVersion" -m "Version $thisVersion"
 
 git checkout develop
 

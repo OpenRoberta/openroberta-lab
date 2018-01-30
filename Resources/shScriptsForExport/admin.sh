@@ -2,32 +2,40 @@
 
 # admin script
 
-#backup the database. see the echo text below!
-
-echo 'admin.sh [-log <path-to-log-file>]'
-echo '  --backup                   access the database server and create a backup in directory dbBackup'
-echo '  --shutdown [db-uri]        access the database and issue a "shutdown compact" command'
-echo '                             It is expected, that the lab runs in db server mode and not in embedded mode.'
-echo '                             If not, supply the full uri of the database. Put the uri into single quotes to avoid globbing'
-echo '                             - server mode (not needed, because this is the default): "jdbc:hsqldb:hsql://localhost/openroberta-db"'
-echo '                             - embedded mode: "jdbc:hsqldb:file:./db-x.y.z/openroberta-db;ifexists=true" for version x.y.z'
-echo '  --checkpoint [-d] [db-uri] access the database and issue a "checkpoint" command. Pay attention to the notes about --shutdown!'
-echo '                             the optional -d forces defragmentation and takes a lot more time to finish'
-echo '  --sqlclient [db-uri]       read SELECT commands from the terminal and execute them. Pay attention to the notes about --shutdown!'
-echo '  --upgrade [db-parent-dir]  upgrade the database, if necessary. The database is accessed in embedded mode.'
-echo '                             No server or db server must be running. The actual version is retrieved from the installation'
-echo '  --version                  print the server version (may be suffixed with -SNAPSHOT) and terminate'
-echo '  --version-for-db           print the database version (never contains -SNAPSHOT) and terminate'
-
 URI='jdbc:hsqldb:hsql://localhost/openroberta-db'
 
 LOGFILE='./dbAdmin.log'
-case "$1" in
-  '-log') LOGFILE=$2
-          shift; shift ;;
-  *)	  : ;;
-esac
-echo "logging into $LOGFILE"
+QUIET='no'
+while true
+do
+	case "$1" in
+	  '-log') LOGFILE=$2
+			  shift; shift ;;
+	  '-q')   QUIET='yes'
+			  shift ;;
+	  *)	  break ;;
+	esac
+done
+
+if [ "$QUIET" = 'no' ]
+then
+	echo 'admin.sh [-q] [-log <path-to-log-file>]'
+	echo '  --backup                   access the database server and create a backup in directory dbBackup'
+	echo '  --shutdown [db-uri]        access the database and issue a "shutdown compact" command'
+	echo '                             It is expected, that the lab runs in db server mode and not in embedded mode.'
+	echo '                             If not, supply the full uri of the database. Put the uri into single quotes to avoid globbing'
+	echo '                             - server mode (not needed, because this is the default): "jdbc:hsqldb:hsql://localhost/openroberta-db"'
+	echo '                             - embedded mode: "jdbc:hsqldb:file:./db-x.y.z/openroberta-db;ifexists=true" for version x.y.z'
+	echo '  --checkpoint [-d] [db-uri] access the database and issue a "checkpoint" command. Pay attention to the notes about --shutdown!'
+	echo '                             the optional -d forces defragmentation and takes a lot more time to finish'
+	echo '  --sqlclient [db-uri]       read SELECT commands from the terminal and execute them. Pay attention to the notes about --shutdown!'
+	echo '  --upgrade [db-parent-dir]  upgrade the database, if necessary. The database is accessed in embedded mode.'
+	echo '                             No server or db server must be running. The actual version is retrieved from the installation'
+	echo '  --version                  print the server version (may be suffixed with -SNAPSHOT) and terminate'
+	echo '  --version-for-db           print the database version (never contains -SNAPSHOT) and terminate'
+
+	echo "logging into $LOGFILE"
+fi
 
 CMD="$1"; shift
 case "$CMD" in
