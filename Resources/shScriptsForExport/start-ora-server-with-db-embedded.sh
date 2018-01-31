@@ -17,9 +17,11 @@ function propagateSignal() {
 }
 
 SERVERLOGFILE='./ora-server.log'
+XMX=''
 
 echo 'start-ora-server-with-db-embedded.sh with the following optional parameter:'
-echo "  -logserver <file-name>     server log file. Default: $SERVERLOGFILE"
+echo "  --logserver <file-name>     server log file. Default: $SERVERLOGFILE"
+echo "  -Xmx<size>                  heap for the JVM, for example -Xmx2G. Default: nothing"
 echo '  all parameters after these parameters are passed to the server'
 
 while [ true ]
@@ -27,16 +29,18 @@ do
 	case "$1" in
 	  --logserver) SERVERLOGFILE=$2
                    shift; shift ;;
+	  -Xmx*)       XMX=$1
+	               shift ;;
 	  *)	       break ;;
 	esac
 done
 
 echo 'check for database upgrade'
-java -cp lib/\* de.fhg.iais.roberta.main.Administration upgrade . >>$SERVERLOGFILE 2>&1
+java $XMX -cp lib/\* de.fhg.iais.roberta.main.Administration upgrade . >>$SERVERLOGFILE 2>&1
 
 echo 'start the server with embedded database'
 trap propagateSignal SIGTERM SIGINT
-java  -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
+java  $XMX -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
 	  -d database.parentdir=. -d database.mode=embedded $* >>$SERVERLOGFILE 2>&1 &
 child=$!
 wait "$child"
