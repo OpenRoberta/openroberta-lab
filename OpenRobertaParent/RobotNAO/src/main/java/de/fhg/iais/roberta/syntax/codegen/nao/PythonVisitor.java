@@ -200,6 +200,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     public Void visitMainTask(MainTask<Void> mainTask) {
         StmtList<Void> variables = mainTask.getVariables();
         variables.visit(this);
+        generateUserDefinedMethods();
         this.sb.append("\n\ndef run():");
         incrIndentation();
         List<Stmt<Void>> variableList = variables.get();
