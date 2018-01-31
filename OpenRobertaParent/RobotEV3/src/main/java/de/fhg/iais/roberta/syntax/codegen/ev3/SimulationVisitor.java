@@ -237,7 +237,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
         String end = createClosingBracket();
         this.sb.append("createSetLanguageAction(createConstant(CONST.STRING_CONST, \'");
         this.sb.append(this.getLanguageString(this.language));
-        this.sb.append("\')),");
+        this.sb.append("\'),");
         this.sb.append("createSayTextAction(");
         if ( !sayTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
             this.sb.append("String(");
@@ -253,6 +253,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
             this.sb.append(",");
             sayTextAction.getPitch().visit(this);
         }
+        this.sb.append(")");
         this.sb.append(end);
         return null;
     }
