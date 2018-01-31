@@ -21,8 +21,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
 
 /**
- * This class represents the <b>robActions_motor_stop</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for turning off the motor.<br/>
+ * This class represents the <b>robActions_motor_stop</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * turning off the motor.<br/>
  * <br/>
  * The client must provide the {@link ActorPort} and {@link MotorStopMode} (is the motor breaking or not).
  */

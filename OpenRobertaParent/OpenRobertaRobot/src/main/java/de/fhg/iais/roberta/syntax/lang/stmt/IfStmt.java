@@ -23,9 +23,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 /**
- * This class represents the <b>if-else-elseif</b> blocks from Blockly into the AST (abstract syntax
- * tree).
- * Object from this class will generate if statement.<br/>
+ * This class represents the <b>if-else-elseif</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate if
+ * statement.<br/>
  */
 public class IfStmt<V> extends Stmt<V> {
     private final List<Expr<V>> expr;

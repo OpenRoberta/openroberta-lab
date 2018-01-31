@@ -19,9 +19,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 /**
- * This class represents the <b>robControls_wait_time</b> block from Blockly into the AST (abstract syntax
- * tree).
- * Object from this class will generate wait statement.<br/>
+ * This class represents the <b>robControls_wait_time</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate wait
+ * statement.<br/>
  */
 public class WaitTimeStmt<V> extends Stmt<V> {
     private final Expr<V> time;

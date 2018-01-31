@@ -15,10 +15,8 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
 /**
  * This class represents the <b>robSensors_ultrasonic_getMode</b>, <b>robSensors_ultrasonic_getSample</b> and <b>robSensors_ultrasonic_setMode</b> blocks from
- * Blockly into
- * the AST (abstract syntax
- * tree).
- * Object from this class will generate code for setting the mode of the sensor or getting a sample from the sensor.<br/>
+ * Blockly into the AST (abstract syntax tree). Object from this class will generate code for setting the mode of the sensor or getting a sample from the
+ * sensor.<br/>
  * <br>
  * The client must provide the {@link SensorPort} and {@link UltrasonicSensorMode}. See enum {@link UltrasonicSensorMode} for all possible modes of the sensor.
  * <br>
@@ -34,8 +32,7 @@ public class UltrasonicSensor<V> extends ExternalSensor<V> {
     /**
      * Create object of the class {@link UltrasonicSensor}.
      *
-     * @param mode in which the sensor is operating; must be <b>not</b> null; see enum {@link UltrasonicSensorMode} for all possible modes that the sensor
-     *        have,
+     * @param mode in which the sensor is operating; must be <b>not</b> null; see enum {@link UltrasonicSensorMode} for all possible modes that the sensor have,
      * @param port on where the sensor is connected; must be <b>not</b> null; see enum {@link SensorPort} for all possible sensor ports,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,

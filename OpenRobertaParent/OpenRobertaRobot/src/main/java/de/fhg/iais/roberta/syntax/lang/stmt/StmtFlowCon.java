@@ -18,9 +18,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 /**
- * This class represents the <b>controls_flow_statements</b> blocks from Blockly into the AST (abstract syntax
- * tree).
- * Object from this class will generate code for flow control of a statement. <br>
+ * This class represents the <b>controls_flow_statements</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code
+ * for flow control of a statement. <br>
  * See enum {@link Flow} for all possible flows.
  */
 public class StmtFlowCon<V> extends Stmt<V> {
@@ -72,8 +71,8 @@ public class StmtFlowCon<V> extends Stmt<V> {
         }
 
         /**
-         * get flow from {@link Flow} from string parameter. It is possible for one kind of flow to have multiple string mappings.
-         * Throws exception if the kind of flow does not exists.
+         * get flow from {@link Flow} from string parameter. It is possible for one kind of flow to have multiple string mappings. Throws exception if the kind
+         * of flow does not exists.
          *
          * @param name of the flow
          * @return operator from the enum {@link Flow}

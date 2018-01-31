@@ -9,5 +9,4 @@ public interface IPort extends IMode {
      */
     public String getPortNumber();
 
-
 }

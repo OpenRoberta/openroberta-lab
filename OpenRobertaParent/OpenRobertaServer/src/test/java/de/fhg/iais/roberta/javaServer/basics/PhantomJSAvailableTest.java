@@ -9,9 +9,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 /**
- * Checks whether phantomjs is available on your local system PATH.
- * Maven downloads phantomjs for JavaScrip browser testing and makes the tool
- * available during phase: test, integration-test of your build.
+ * Checks whether phantomjs is available on your local system PATH. Maven downloads phantomjs for JavaScrip browser testing and makes the tool available during
+ * phase: test, integration-test of your build.
  */
 public class PhantomJSAvailableTest {
 

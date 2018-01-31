@@ -17,9 +17,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 /**
- * This class represents the <b>text_comment</b> blocks from Blockly into the AST (abstract syntax
- * tree).
- * Object from this class will generate code for an inline comment.
+ * This class represents the <b>text_comment</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code for an
+ * inline comment.
  */
 public class StmtTextComment<V> extends Stmt<V> {
     private final String textComment;

@@ -9,10 +9,7 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 
 /**
  * the top class of all method classes used to represent the AST (abstract syntax tree) of a program. After construction an AST should be immutable. The logic
- * to
- * achieve
- * that is in the {@link Phrase} class.
- * There are two ways for a client to find out which kind a {@link #Method}-object is:<br>
+ * to achieve that is in the {@link Phrase} class. There are two ways for a client to find out which kind a {@link #Method}-object is:<br>
  * - {@link #getKind()}<br>
  * - {@link #getAs(Class)}<br>
  */

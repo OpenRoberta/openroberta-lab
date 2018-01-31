@@ -29,8 +29,8 @@ public interface ICompilerWorkflow {
      * others:<br>
      * - robots get the library after a handshake between robot (e.g. ev3) or USB program (acting for the robot, e.g. nxt) and the server<br>
      * - for other robots code is sent to a download directory of the client computer (e.g. Calliope)
+     * 
      * @param flagProvider TODO
-     *
      * @return a message key in case of an error; null otherwise
      */
     Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider);

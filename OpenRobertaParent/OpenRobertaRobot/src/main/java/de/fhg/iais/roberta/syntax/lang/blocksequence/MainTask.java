@@ -20,8 +20,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 /**
- * This class represents the <b>robControls_start</b> block from Blockly
- * into the AST (abstract syntax tree). Object from this class points to the main thread of the program.<br/>
+ * This class represents the <b>robControls_start</b> block from Blockly into the AST (abstract syntax tree). Object from this class points to the main thread
+ * of the program.<br/>
  * <br/>
  * <b>In this block are defined all global variables that are used in the program.</b>
  */

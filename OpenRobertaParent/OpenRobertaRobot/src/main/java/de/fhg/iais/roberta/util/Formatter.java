@@ -9,8 +9,8 @@ public class Formatter {
     private static final Locale LOCALE_GB = new Locale("en", "UK");
 
     /**
-     * format a double using the UK locale (decimal POINT!) and show 1 digit after the decimal point. This is used for centimeters e.g.: 198.8 makes
-     * sense, finer resolution beyond millimeters is not needed
+     * format a double using the UK locale (decimal POINT!) and show 1 digit after the decimal point. This is used for centimeters e.g.: 198.8 makes sense,
+     * finer resolution beyond millimeters is not needed
      *
      * @param toFormat to be formatted
      * @return the formatted value

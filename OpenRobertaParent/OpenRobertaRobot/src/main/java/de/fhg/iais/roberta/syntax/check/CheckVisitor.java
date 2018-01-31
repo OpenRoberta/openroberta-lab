@@ -282,7 +282,7 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void> {
         textPrintFunct.getParam().stream().forEach(expr -> expr.visit(this));
         return null;
     }
-    
+
     @Override
     public Void visitStmtTextComment(StmtTextComment<Void> textComment) {
         return null;

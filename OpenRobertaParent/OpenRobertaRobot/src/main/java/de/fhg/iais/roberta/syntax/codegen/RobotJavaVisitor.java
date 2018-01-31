@@ -247,7 +247,7 @@ public abstract class RobotJavaVisitor extends CommonLanguageVisitor {
         this.sb.append(")");
         return null;
     }
-    
+
     @Override
     public Void visitStmtTextComment(StmtTextComment<Void> stmtTextComment) {
         this.sb.append("// " + stmtTextComment.getTextComment());

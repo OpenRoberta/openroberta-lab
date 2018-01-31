@@ -19,8 +19,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
 
 /**
- * This class represents the <b>mbedActions_play_note</b> blocks from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for playing a specific note.<br/>
+ * This class represents the <b>mbedActions_play_note</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * playing a specific note.<br/>
  * <br/>
  * The client must provide the note value and note of the sound. <br>
  */

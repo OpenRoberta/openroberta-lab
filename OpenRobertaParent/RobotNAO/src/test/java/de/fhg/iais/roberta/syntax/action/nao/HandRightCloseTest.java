@@ -5,15 +5,15 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.test.nao.HelperNaoForTest;
+import de.fhg.iais.roberta.util.test.nao.HelperNaoForXmlTest;
 
 public class HandRightCloseTest {
-    HelperNaoForTest h = new HelperNaoForTest(new RobertaProperties(Util1.loadProperties(null)));
+    private final HelperNaoForXmlTest h = new HelperNaoForXmlTest();
 
     @Test
     public void make_ByDefault_ReturnInstanceOfHandClass() throws Exception {
         String expectedResult = "BlockAST [project=[[Location [x=138, y=163], " + "MainTask [], " + "Hand [RIGHT, REST]]]]";
-        
+
         String result = this.h.generateTransformerString("/action/handRightClose.xml");
 
         Assert.assertEquals(expectedResult, result);
@@ -21,7 +21,7 @@ public class HandRightCloseTest {
     /*
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-
+    
         this.h.assertTransformationIsOk("/action/handLeftOpen.xml");
     }*/
 }

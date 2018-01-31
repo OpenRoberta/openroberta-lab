@@ -523,7 +523,7 @@ public abstract class RobotSimulationVisitor<V> implements AstLanguageVisitor<V>
     public V visitTextPrintFunct(TextPrintFunct<V> textPrintFunct) {
         return null;
     }
-    
+
     @Override
     public V visitStmtTextComment(StmtTextComment<V> textComment) {
         return null;

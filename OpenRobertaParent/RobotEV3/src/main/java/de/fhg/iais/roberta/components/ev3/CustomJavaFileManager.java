@@ -15,16 +15,14 @@ public class CustomJavaFileManager extends ForwardingJavaFileManager<JavaFileMan
     private ClassJavaFileObject classJavaFileObject;
 
     /**
-     * Instance of ClassJavaFileObject that will store the
-     * compiled bytecode of our class
+     * Instance of ClassJavaFileObject that will store the compiled bytecode of our class
      */
     public ClassJavaFileObject getClassJavaFileObject() {
         return this.classJavaFileObject;
     }
 
     /**
-     * Will initialize the manager with the specified
-     * standard java file manager
+     * Will initialize the manager with the specified standard java file manager
      *
      * @param standardManger
      */
@@ -33,11 +31,8 @@ public class CustomJavaFileManager extends ForwardingJavaFileManager<JavaFileMan
     }
 
     /**
-     * Will be used by us to get the class loader for our
-     * compiled class. It creates an anonymous class
-     * extending the SecureClassLoader which uses the
-     * byte code created by the compiler and stored in
-     * the JavaClassObject, and returns the Class for it
+     * Will be used by us to get the class loader for our compiled class. It creates an anonymous class extending the SecureClassLoader which uses the byte code
+     * created by the compiler and stored in the JavaClassObject, and returns the Class for it
      */
     @Override
     public ClassLoader getClassLoader(Location location) {
@@ -51,8 +46,7 @@ public class CustomJavaFileManager extends ForwardingJavaFileManager<JavaFileMan
     }
 
     /**
-     * Gives the compiler an instance of the JavaClassObject
-     * so that the compiler can write the byte code into it.
+     * Gives the compiler an instance of the JavaClassObject so that the compiler can write the byte code into it.
      */
     @Override
     public JavaFileObject getJavaFileForOutput(Location location, String className, Kind kind, FileObject sibling) throws IOException {

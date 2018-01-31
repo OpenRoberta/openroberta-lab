@@ -115,7 +115,7 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
  * StringBuilder. <b>This representation is correct C++ code for Calliope systems.</b> <br>
  */
 public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>, AstSensorsVisitor<Void>, AstActorMotorVisitor<Void>,
-AstActorDisplayVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
+    AstActorDisplayVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
     private final UsedHardwareCollectorVisitor codePreprocess;
     ArrayList<VarDeclaration<Void>> usedVars;
 

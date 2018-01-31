@@ -33,10 +33,8 @@ public class JavaSourceCompiler {
     private final String classPath;
 
     /**
-     * @param programName
-     *        Name of the program
-     * @param sourceCode
-     *        Here we specify the source code of the class to be compiled
+     * @param programName Name of the program
+     * @param sourceCode Here we specify the source code of the class to be compiled
      */
     public JavaSourceCompiler(String programName, String sourceCode, String classPath) {
         this.programName = programName;

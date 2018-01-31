@@ -11,8 +11,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
 /**
- * This class represents the <b>naoSensors_detectFace</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for detecting a face previously saved in NAOs database.<br/>
+ * This class represents the <b>naoSensors_detectFace</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * detecting a face previously saved in NAOs database.<br/>
  * <br/>
  */
 public final class DetectFace<V> extends de.fhg.iais.roberta.syntax.sensor.Sensor<V> {

@@ -9,10 +9,10 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.test.nxt.HelperNxtForTest;
+import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
 
 public class UltraSonicSensorTest {
-    HelperNxtForTest h = new HelperNxtForTest(new RobertaProperties(Util1.loadProperties(null)));
+    private final HelperNxtForXmlTest h = new HelperNxtForXmlTest();
 
     @Test
     public void sensorSetUltrasonic() throws Exception {

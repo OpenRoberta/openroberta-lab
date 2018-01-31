@@ -22,12 +22,10 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.nxt.NxtAstVisitor;
 
 /**
- * This class represents the <b>robActions_brickLight_on</b> block from Blockly
- * into the AST (abstract syntax tree). Object from this class will generate
- * code for turning the light on.<br/>
+ * This class represents the <b>robActions_brickLight_on</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
+ * for turning the light on.<br/>
  * <br/>
- * The client must provide the {@link BrickLedColor} of the lights and the mode
- * of blinking.
+ * The client must provide the {@link BrickLedColor} of the lights and the mode of blinking.
  */
 public class LightSensorAction<V> extends Action<V> {
     private final ILightSensorActionMode light;
@@ -44,8 +42,7 @@ public class LightSensorAction<V> extends Action<V> {
     }
 
     /**
-     * Creates instance of {@link LightSensorAction}. This instance is read only and
-     * can not be modified.
+     * Creates instance of {@link LightSensorAction}. This instance is read only and can not be modified.
      *
      * @param iActorPort
      * @param color of the lights on the sensor. All possible colors are defined in {@link BrickLedColor}; must be <b>not</b> null,

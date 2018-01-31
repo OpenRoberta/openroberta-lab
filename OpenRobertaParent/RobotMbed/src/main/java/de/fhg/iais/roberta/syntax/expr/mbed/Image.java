@@ -18,8 +18,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
 
 /**
- * This class represents the <b>mbedImage_image</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate image.<br/>
+ * This class represents the <b>mbedImage_image</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate image.<br/>
  * <br>
  * The client must provide the value for every pixel of the display (5x5). <br>
  * <br>

@@ -4,9 +4,8 @@ import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 
 /**
- * Stores information for port, type and the mode of used sensor in a blockly program.
- * This information is shared between the server and the brick for sensor debugging on the brick.
- * If sensor is used then the brick is sending debug information to the server for this particular sensor.
+ * Stores information for port, type and the mode of used sensor in a blockly program. This information is shared between the server and the brick for sensor
+ * debugging on the brick. If sensor is used then the brick is sending debug information to the server for this particular sensor.
  *
  * @author kcvejoski
  */

@@ -22,8 +22,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
 /**
- * This class represents the <b>naoActions_pointAt</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for making the NAO point at a specific position.<br/>
+ * This class represents the <b>naoActions_pointAt</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * making the NAO point at a specific position.<br/>
  * <br/>
  * The client must provide the {@link Frame}, {@link pointX}, {@link pointY}, {@link pointZ} and {@link speed} (frame, coordinates and fraction of speed).
  */

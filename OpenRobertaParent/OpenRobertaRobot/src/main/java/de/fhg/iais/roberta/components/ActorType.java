@@ -30,8 +30,8 @@ public enum ActorType {
     }
 
     /**
-     * Get direction from {@link DriveDirection} from string parameter. It is possible for one direction to have multiple string mappings.
-     * Throws exception if the direction does not exists.
+     * Get direction from {@link DriveDirection} from string parameter. It is possible for one direction to have multiple string mappings. Throws exception if
+     * the direction does not exists.
      *
      * @param name of the direction
      * @return name of the direction from the enum {@link DriveDirection}

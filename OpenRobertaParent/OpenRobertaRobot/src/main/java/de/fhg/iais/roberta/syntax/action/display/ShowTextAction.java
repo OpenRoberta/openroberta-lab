@@ -20,8 +20,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
 
 /**
- * This class represents the <b>robActions_display_text</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code showing a text message on the screen of the brick.<br>
+ * This class represents the <b>robActions_display_text</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
+ * showing a text message on the screen of the brick.<br>
  * <br>
  * To create an instance from this class use the method {@link #make(Expr, Expr, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
  * <br>

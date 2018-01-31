@@ -14,8 +14,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 /**
- * This class allows to create list of {@link Expr} elements.
- * Initially object from this class is writable. After adding all the elements to the list call {@link #setReadOnly()}.
+ * This class allows to create list of {@link Expr} elements. Initially object from this class is writable. After adding all the elements to the list call
+ * {@link #setReadOnly()}.
  */
 public class ExprList<V> extends Expr<V> {
     private final List<Expr<V>> el = new ArrayList<Expr<V>>();

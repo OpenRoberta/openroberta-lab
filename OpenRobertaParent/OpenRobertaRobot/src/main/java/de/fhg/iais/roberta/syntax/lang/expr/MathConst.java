@@ -19,8 +19,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 /**
- * This class represents the <b>math_constant</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate mathematical constant. See enum {@link Const} for all defined constants.<br/>
+ * This class represents the <b>math_constant</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate mathematical
+ * constant. See enum {@link Const} for all defined constants.<br/>
  * <br>
  * To create an instance from this class use the method {@link #make(Const, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
@@ -86,8 +86,8 @@ public class MathConst<V> extends Expr<V> {
         }
 
         /**
-         * get constant from {@link Const} from string parameter. It is possible for one constant to have multiple string mappings.
-         * Throws exception if the constant does not exists.
+         * get constant from {@link Const} from string parameter. It is possible for one constant to have multiple string mappings. Throws exception if the
+         * constant does not exists.
          *
          * @param name of the constant
          * @return constant from the enum {@link Const}

@@ -23,8 +23,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
 
 /**
- * This class represents the <b>robActions_display_picture</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code showing a picture on the screen of the brick.<br/>
+ * This class represents the <b>robActions_display_picture</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
+ * showing a picture on the screen of the brick.<br/>
  * <br/>
  * The client must provide the name of the picture and x and y coordinates.
  */

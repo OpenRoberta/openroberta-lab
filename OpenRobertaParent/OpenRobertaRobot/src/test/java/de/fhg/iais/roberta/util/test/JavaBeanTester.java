@@ -15,12 +15,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class is a utility class for Junit test classes responsible for testing Java-bean-like classes. From the many possibilites to guarantee
- * immutability the following design is used here:<br>
+ * This class is a utility class for Junit test classes responsible for testing Java-bean-like classes. From the many possibilites to guarantee immutability the
+ * following design is used here:<br>
  * - each class (a common superclass ...) has a transient field "readOnly" defaulting to "false".<br>
  * - each setter checks whether this field is false<br>
- * - after the construction of an immutable object is finished, the method setReadOnly() has to be called. After that call the object becomes
- * immutable forever.<br>
+ * - after the construction of an immutable object is finished, the method setReadOnly() has to be called. After that call the object becomes immutable
+ * forever.<br>
  * <br>
  * This class provides a utility method, that for a given class ...<br>
  * - detects all getter/setter-pairs<br>
@@ -55,16 +55,11 @@ public class JavaBeanTester<T> {
     /**
      * Tests the get/set methods of the specified class and the behavior if it is a immutable class.
      *
-     * @param <T>
-     *        the type parameter associated with the class under test
-     * @param clazz
-     *        the Class under test
-     * @param builder
-     *        a builder to create objects needed as parameters for setter. May be mock objects, may be objects. See {@link IValueBuilder}
-     * @param skipThese
-     *        the names of any properties that should not be tested
-     * @throws IntrospectionException
-     *         thrown if the Introspector.getBeanInfo() method throws this exception for the class under test
+     * @param <T> the type parameter associated with the class under test
+     * @param clazz the Class under test
+     * @param builder a builder to create objects needed as parameters for setter. May be mock objects, may be objects. See {@link IValueBuilder}
+     * @param skipThese the names of any properties that should not be tested
+     * @throws IntrospectionException thrown if the Introspector.getBeanInfo() method throws this exception for the class under test
      */
     private void test() throws Exception {
         String clazzName = this.clazz.getName();
@@ -176,8 +171,8 @@ public class JavaBeanTester<T> {
 
     /**
      * log the assembled warnings about classes, that are NOT created by custom builders, but instead by calling their no-arg constructors.<br>
-     * Nothing goes wrong, if this method is NOT called at the end of a test run. The log is a hint to extend the own builder. This is not strictly
-     * necessary, if the no-arg constructor creates a Junit-friendly object.
+     * Nothing goes wrong, if this method is NOT called at the end of a test run. The log is a hint to extend the own builder. This is not strictly necessary,
+     * if the no-arg constructor creates a Junit-friendly object.
      */
     private void logWarnings() {
         for ( Class<?> c : this.warningsAbout ) {
@@ -255,10 +250,8 @@ public class JavaBeanTester<T> {
     /**
      * Hunt down missing Boolean read method if needed as Introspector cannot find 'is' getters for Boolean type properties.
      *
-     * @param clazz
-     *        the type being introspected
-     * @param descriptor
-     *        the property descriptor found so far
+     * @param clazz the type being introspected
+     * @param descriptor the property descriptor found so far
      */
     private void findBooleanIsMethods(Class<T> clazz, PropertyDescriptor descriptor) throws IntrospectionException {
         if ( needToFindReadMethod(descriptor) ) {

@@ -5,12 +5,12 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.test.ardu.HelperBob3ForTest;
+import de.fhg.iais.roberta.util.test.ardu.HelperBob3ForXmlTest;
 
 @Ignore
 public class Bob3BodyLEDActionTest {
 
-    HelperBob3ForTest h = new HelperBob3ForTest(new RobertaProperties(Util1.loadProperties(null)));
+    private final HelperBob3ForXmlTest h = new HelperBob3ForXmlTest();
 
     @Test
     public void turnOnLeftLED() throws Exception {

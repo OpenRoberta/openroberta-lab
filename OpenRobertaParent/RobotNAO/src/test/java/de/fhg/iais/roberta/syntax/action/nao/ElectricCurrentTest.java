@@ -5,15 +5,15 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.test.nao.HelperNaoForTest;
+import de.fhg.iais.roberta.util.test.nao.HelperNaoForXmlTest;
 
 public class ElectricCurrentTest {
-    HelperNaoForTest h = new HelperNaoForTest(new RobertaProperties(Util1.loadProperties(null)));
+    private final HelperNaoForXmlTest h = new HelperNaoForXmlTest();
 
     @Test
     public void make_ByDefault_ReturnInstanceOfElectricCurrentClass() throws Exception {
         String expectedResult = "BlockAST [project=[[Location [x=63, y=63], " + "MainTask []], " + "[Location [x=87, y=113], " + "ElectricCurrent [LHAND]]]]";
-        
+
         String result = this.h.generateTransformerString("/action/electricCurrent.xml");
 
         Assert.assertEquals(expectedResult, result);
@@ -21,7 +21,7 @@ public class ElectricCurrentTest {
     /*
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-
+    
         this.h.assertTransformationIsOk("/action/electricCurrent.xml");
     }*/
 }

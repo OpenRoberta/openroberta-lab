@@ -108,8 +108,8 @@ import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
 /**
- * This class is implementing {@link AstVisitor}. All methods are implemented and they
- * append a human-readable JAVA code representation of a phrase to a StringBuilder. <b>This representation is correct JAVA code.</b> <br>
+ * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
+ * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
 public class InfoCollector<T> implements AstLanguageVisitor<T>, AstSensorsVisitor<T>, AstActorCommunicationVisitor<T>, AstActorDisplayVisitor<T>,
     AstActorMotorVisitor<T>, AstActorLightVisitor<T>, AstActorSoundVisitor<T> {

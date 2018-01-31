@@ -12,8 +12,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.nxt.NxtAstVisitor;
 
 /**
- * This class is implementing {@link AstVisitor}. All methods are implemented and they
- * append a human-readable JAVA code representation of a phrase to a StringBuilder. <b>This representation is correct JAVA code.</b> <br>
+ * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
+ * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
 public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisitor implements NxtAstVisitor<Void> {
 

@@ -4,9 +4,7 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 
 /**
  * This class is parameter class for finding expression or creating empty expression if the expression is missing in the XML. Client must provide type of the
- * value the expression should have
- * and the name of the location of the
- * expression in the XML.
+ * value the expression should have and the name of the location of the expression in the XML.
  *
  * @author kcvejoski
  */

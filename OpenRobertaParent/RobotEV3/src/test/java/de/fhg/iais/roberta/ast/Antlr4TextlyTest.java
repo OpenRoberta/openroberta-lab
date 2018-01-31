@@ -59,15 +59,16 @@ public class Antlr4TextlyTest {
     @Test
     public void testStmt1() throws Exception {
         String p = stmt2String("if (1+2*3==7 || 1*2+3==5 && !1+2==4) { a:=5*6;b:=!!1==2; };");
-        String r = ""
-            + "(stmt (ifThenR if ( (expr "
-            + "(expr (expr (expr 1) + (expr (expr 2) * (expr 3))) == (expr 7)) "
-            + "|| "
-            + "(expr (expr (expr (expr (expr 1) * (expr 2)) + (expr 3)) == (expr 5)) && (expr ! (expr (expr (expr 1) + (expr 2)) == (expr 4))))"
-            + ") ) "
-            + "(stmtl { "
-            + "(stmt a := (expr (expr 5) * (expr 6)) ;) "
-            + "(stmt b := (expr ! (expr ! (expr (expr 1) == (expr 2)))) ;) })) ;)";
+        String r =
+            ""
+                + "(stmt (ifThenR if ( (expr "
+                + "(expr (expr (expr 1) + (expr (expr 2) * (expr 3))) == (expr 7)) "
+                + "|| "
+                + "(expr (expr (expr (expr (expr 1) * (expr 2)) + (expr 3)) == (expr 5)) && (expr ! (expr (expr (expr 1) + (expr 2)) == (expr 4))))"
+                + ") ) "
+                + "(stmtl { "
+                + "(stmt a := (expr (expr 5) * (expr 6)) ;) "
+                + "(stmt b := (expr ! (expr ! (expr (expr 1) == (expr 2)))) ;) })) ;)";
         assertEquals(r, p);
     }
 

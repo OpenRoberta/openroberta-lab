@@ -26,8 +26,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
 
 /**
- * This class represents the <b>mbedActions_write_to_pin</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will
- * generate code for reading values from a given pin.<br/>
+ * This class represents the <b>mbedActions_write_to_pin</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code
+ * for reading values from a given pin.<br/>
  * <br>
  * <br>
  * To create an instance from this class use the method {@link #make(BlocklyBlockProperties, BlocklyComment)}.<br>
@@ -75,7 +75,7 @@ public class PinWriteValue<V> extends Action<V> {
 
     @Override
     public String toString() {
-        return "PinWriteValueSensor [" + this.pinValue + ", " + this.port + ", "+ this.value + "]";
+        return "PinWriteValueSensor [" + this.pinValue + ", " + this.port + ", " + this.value + "]";
     }
 
     @Override

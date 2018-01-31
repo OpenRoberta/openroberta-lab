@@ -6,8 +6,7 @@ import de.fhg.iais.roberta.components.arduino.Bob3Configuration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 
 /**
- * JAXB to brick configuration. Client should provide a tree of jaxb objects.
- * Generates a BrickConfiguration object.
+ * JAXB to brick configuration. Client should provide a tree of jaxb objects. Generates a BrickConfiguration object.
  */
 public class Jaxb2Bob3ConfigurationTransformer {
 

@@ -22,10 +22,7 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
 /**
  * This class represents the <b>robSensors_encoder_getMode</b>, <b>robSensors_encoder_getSample</b> and <b>robSensors_encoder_setMode</b> blocks from Blockly
- * into
- * the AST (abstract syntax
- * tree).
- * Object from this class will generate code for setting the mode of the sensor or getting a sample from the sensor.<br/>
+ * into the AST (abstract syntax tree). Object from this class will generate code for setting the mode of the sensor or getting a sample from the sensor.<br/>
  * <br>
  * The client must provide the {@link ActorPort} and {@link MotorTachoMode}. See enum {@link MotorTachoMode} for all possible modes of the sensor.<br>
  * <br>
@@ -68,7 +65,8 @@ public class EncoderSensor<V> extends ExternalSensor<V> {
         if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_ENCODER_RESET) ) {
             List<Field> fields = helper.extractFields(block, (short) 1);
             String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
-            sensorData = new SensorMetaDataBean(factory.getActorPort(portName), factory.getMotorTachoMode("RESET"), factory.getSlot(BlocklyConstants.EMPTY_SLOT));
+            sensorData =
+                new SensorMetaDataBean(factory.getActorPort(portName), factory.getMotorTachoMode("RESET"), factory.getSlot(BlocklyConstants.EMPTY_SLOT));
             return EncoderSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
         }
         sensorData = extractActorPortAndMode(block, helper, helper.getModeFactory()::getMotorTachoMode);

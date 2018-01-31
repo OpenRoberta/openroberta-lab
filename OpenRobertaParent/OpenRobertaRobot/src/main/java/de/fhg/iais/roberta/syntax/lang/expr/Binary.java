@@ -178,8 +178,8 @@ public final class Binary<V> extends Expr<V> {
         }
 
         /**
-         * get operator from {@link Op} from string parameter. It is possible for one operator to have multiple string mappings.
-         * Throws exception if the operator does not exists.
+         * get operator from {@link Op} from string parameter. It is possible for one operator to have multiple string mappings. Throws exception if the
+         * operator does not exists.
          *
          * @param name of the operator
          * @return operator from the enum {@link Op}

@@ -19,8 +19,7 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
- * JAXB to brick configuration. Client should provide a tree of jaxb objects.
- * Generates a BrickConfiguration object.
+ * JAXB to brick configuration. Client should provide a tree of jaxb objects. Generates a BrickConfiguration object.
  */
 public class Jaxb2CalliopeConfigurationTransformer {
     IRobotFactory factory;

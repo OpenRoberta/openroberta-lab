@@ -3,11 +3,11 @@ package de.fhg.iais.roberta.ast;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.GenericHelper;
-import de.fhg.iais.roberta.util.test.AbstractHelperForTest;
+import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
+import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
 
 public class ListsTest<V> {
-    AbstractHelperForTest h = new GenericHelper();
+    AbstractHelperForXmlTest h = new GenericHelperForXmlTest();
 
     @Test
     public void listEmpty() throws Exception {

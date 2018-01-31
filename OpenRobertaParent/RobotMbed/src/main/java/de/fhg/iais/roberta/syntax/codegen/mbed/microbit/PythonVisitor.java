@@ -102,8 +102,7 @@ import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
 /**
- * This class is implementing {@link AstVisitor}. All methods are implemented
- * and they append a human-readable Python code representation of a phrase to a
+ * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
 public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<Void>, AstSensorsVisitor<Void>, AstActorMotorVisitor<Void>,

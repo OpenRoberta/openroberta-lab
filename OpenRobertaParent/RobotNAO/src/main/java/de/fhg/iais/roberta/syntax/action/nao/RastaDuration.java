@@ -19,8 +19,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
 /**
- * This class represents the <b>robActions_motor_on_for</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for coloring the eyes in red, yellow and green.<br/>
+ * This class represents the <b>robActions_motor_on_for</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
+ * for coloring the eyes in red, yellow and green.<br/>
  * <br/>
  * The client must provide the {@link duration} (time the eyes will be colored).
  */

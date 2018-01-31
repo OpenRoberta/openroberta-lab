@@ -18,8 +18,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
 /**
- * This class represents the <b>robActions_motor_on_for</b> and <b>robActions_motor_on</b> blocks from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for setting the motor speed and type of movement connected on given port and turn the motor on.<br/>
+ * This class represents the <b>robActions_motor_on_for</b> and <b>robActions_motor_on</b> blocks from Blockly into the AST (abstract syntax tree). Object from
+ * this class will generate code for setting the motor speed and type of movement connected on given port and turn the motor on.<br/>
  * <br/>
  * The client must provide {@link MotionParam} (number of rotations or degrees and speed).
  */

@@ -17,8 +17,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 /**
- * This class represents the <b>math_number</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code numerical value.<br/>
+ * This class represents the <b>math_number</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code numerical
+ * value.<br/>
  * <br>
  * To create an instance from this class use the method {@link #make(String, BlocklyBlockProperties, BlocklyComment)}.<br>
  */

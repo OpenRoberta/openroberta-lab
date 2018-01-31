@@ -22,11 +22,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
 /**
- * This class represents the <b>naoSensors_getSample</b> block from Blockly
- * into
- * the AST (abstract syntax
- * tree).
- * Object from this class will generate code for setting the mode of the sensor or getting a sample from the sensor.<br/>
+ * This class represents the <b>naoSensors_getSample</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * setting the mode of the sensor or getting a sample from the sensor.<br/>
  * <br>
  * The client must provide the {@link SensorType}. See enum {@link SensorType} for all possible type of sensors.<br>
  * <br>

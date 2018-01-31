@@ -17,8 +17,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
 /**
- * This class represents the <b>naoActions_ledReset</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for resetting all LEDs to their standard state.<br/>
+ * This class represents the <b>naoActions_ledReset</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * resetting all LEDs to their standard state.<br/>
  * <br/>
  */
 public final class LedReset<V> extends Action<V> {

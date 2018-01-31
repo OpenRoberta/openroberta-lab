@@ -20,10 +20,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
 /**
- * This class represents the <b>robSensors_timer_reset</b> and <b>robSensors_timer_getSample</b> blocks from Blockly into
- * the AST (abstract syntax
- * tree).
- * Object from this class will generate code for reset the sensor or getting a sample from the sensor.<br/>
+ * This class represents the <b>robSensors_timer_reset</b> and <b>robSensors_timer_getSample</b> blocks from Blockly into the AST (abstract syntax tree). Object
+ * from this class will generate code for reset the sensor or getting a sample from the sensor.<br/>
  * <br>
  * The client must provide the {@link SensorPort} and {@link TimerSensorMode}. See enum {@link TimerSensorMode} for all possible modes of the sensor.<br>
  * <br>

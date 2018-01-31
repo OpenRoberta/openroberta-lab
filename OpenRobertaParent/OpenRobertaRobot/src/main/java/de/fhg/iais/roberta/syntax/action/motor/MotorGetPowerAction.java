@@ -19,8 +19,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
 
 /**
- * This class represents the <b>robActions_motor_getPower</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for returning the power of the motor on given port.<br/>
+ * This class represents the <b>robActions_motor_getPower</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
+ * for returning the power of the motor on given port.<br/>
  * <br/>
  * The client must provide the {@link ActorPort} on which the motor is connected.
  */

@@ -21,9 +21,9 @@ import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
-public class GenericHelper extends AbstractHelperForTest {
-    public GenericHelper() {
-        super(new TestFactory(new RobertaProperties(Util1.loadProperties(null))));
+public class GenericHelperForXmlTest extends AbstractHelperForXmlTest {
+    public GenericHelperForXmlTest() {
+        super(new TestFactory(new RobertaProperties(Util1.loadProperties(null))), null);
     }
 
     private static class TestFactory extends AbstractRobotFactory {

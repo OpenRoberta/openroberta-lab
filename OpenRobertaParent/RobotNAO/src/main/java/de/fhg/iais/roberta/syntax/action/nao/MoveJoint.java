@@ -23,8 +23,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
 /**
- * This class represents the <b>naoActions_walk</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for making the robot walk for a distance.<br/>
+ * This class represents the <b>naoActions_walk</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for making
+ * the robot walk for a distance.<br/>
  * <br/>
  * The client must provide the {@link joint} and {@link degrees} (direction and distance to walk).
  */

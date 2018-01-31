@@ -3,11 +3,11 @@ package de.fhg.iais.roberta.sound;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.GenericHelper;
-import de.fhg.iais.roberta.util.test.AbstractHelperForTest;
+import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
+import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
 
 public class SayTextActionTest {
-    AbstractHelperForTest h = new GenericHelper();
+    AbstractHelperForXmlTest h = new GenericHelperForXmlTest();
 
     @Test
     public void make_ByDefault_ReturnInstanceOfSayTextActionClass() throws Exception {

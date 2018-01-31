@@ -21,8 +21,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 /**
- * This class represents the <b>robProcedures_ifreturn</b> block from Blockly
- * into the AST (abstract syntax tree). Object from this class is used to create a <i>if-return</i> statement inside method<br/>
+ * This class represents the <b>robProcedures_ifreturn</b> block from Blockly into the AST (abstract syntax tree). Object from this class is used to create a
+ * <i>if-return</i> statement inside method<br/>
  */
 public class MethodIfReturn<V> extends Method<V> {
     private final Expr<V> condition;

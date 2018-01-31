@@ -5,15 +5,15 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.test.nao.HelperNaoForTest;
+import de.fhg.iais.roberta.util.test.nao.HelperNaoForXmlTest;
 
 public class AnimationWipeForeheadTest {
-    HelperNaoForTest h = new HelperNaoForTest(new RobertaProperties(Util1.loadProperties(null)));
+    private final HelperNaoForXmlTest h = new HelperNaoForXmlTest();
 
     @Test
     public void make_ByDefault_ReturnInstanceOfAnimationClass() throws Exception {
         String expectedResult = "BlockAST [project=[[Location [x=138, y=88], " + "MainTask [], " + "Animation [WIPEFOREHEAD]]]]";
-        
+
         String result = this.h.generateTransformerString("/action/animation_wipeForehead.xml");
 
         Assert.assertEquals(expectedResult, result);

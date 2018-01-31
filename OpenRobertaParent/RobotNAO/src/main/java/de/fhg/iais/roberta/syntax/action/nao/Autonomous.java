@@ -18,8 +18,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
 /**
- * This class represents the <b>naoActions_Autonomous</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for toggling the state of autonomous life.<br/>
+ * This class represents the <b>naoActions_Autonomous</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * toggling the state of autonomous life.<br/>
  * <br/>
  */
 public final class Autonomous<V> extends Action<V> {

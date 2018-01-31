@@ -15,8 +15,7 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
 /**
  * This class represents the <b>robSensors_key_isPressed</b> and <b>robSensors_key_isPressedAndReleased</b> blocks from Blockly into the AST (abstract syntax
- * tree).
- * Object from this class will generate code for checking if a button on the brick is pressed.<br/>
+ * tree). Object from this class will generate code for checking if a button on the brick is pressed.<br/>
  * <br>
  * The client must provide the {@link BrickKey} and {@link Mode}. <br>
  * <br>

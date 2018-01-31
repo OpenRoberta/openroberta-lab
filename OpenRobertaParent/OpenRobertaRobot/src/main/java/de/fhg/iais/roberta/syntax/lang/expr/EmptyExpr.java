@@ -9,8 +9,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 /**
- * {@link EmptyExpr} is used when in binary or unary expressions, expression is missing.
- * When create instance from this class we pass as parameter the type of the value should have the missing expression.
+ * {@link EmptyExpr} is used when in binary or unary expressions, expression is missing. When create instance from this class we pass as parameter the type of
+ * the value should have the missing expression.
  */
 public class EmptyExpr<V> extends Expr<V> {
 

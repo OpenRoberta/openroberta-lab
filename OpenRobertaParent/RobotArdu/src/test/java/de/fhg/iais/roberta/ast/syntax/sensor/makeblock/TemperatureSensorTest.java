@@ -6,12 +6,10 @@ import org.junit.Test;
 import de.fag.iais.roberta.mode.sensor.arduino.mbot.SensorPort;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
-import de.fhg.iais.roberta.util.RobertaProperties;
-import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.test.ardu.HelperMakeBlockForTest;
+import de.fhg.iais.roberta.util.test.ardu.HelperMBotForXmlTest;
 
 public class TemperatureSensorTest {
-    HelperMakeBlockForTest h = new HelperMakeBlockForTest(new RobertaProperties(Util1.loadProperties(null)));
+    private final HelperMBotForXmlTest h = new HelperMBotForXmlTest();
 
     @Test
     public void jaxbToAst_byDefault_temperatureSensorOnPort4() throws Exception {

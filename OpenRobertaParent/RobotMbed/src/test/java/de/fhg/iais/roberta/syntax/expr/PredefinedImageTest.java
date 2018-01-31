@@ -6,10 +6,10 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.test.mbed.HelperMbedForTest;
+import de.fhg.iais.roberta.util.test.mbed.HelperMbedForXmlTest;
 
 public class PredefinedImageTest {
-    HelperMbedForTest h = new HelperMbedForTest(new RobertaProperties(Util1.loadProperties(null)));
+    private final HelperMbedForXmlTest h = new HelperMbedForXmlTest();
 
     @Test
     public void make_ByDefault_ReturnTwoInstancesOfPredefinedImageClass() throws Exception {

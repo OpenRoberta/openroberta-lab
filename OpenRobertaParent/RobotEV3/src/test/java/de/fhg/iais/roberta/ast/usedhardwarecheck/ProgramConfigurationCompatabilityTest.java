@@ -19,10 +19,10 @@ import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.ev3.BrickCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForTest;
+import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
 
 public class ProgramConfigurationCompatabilityTest {
-    HelperEv3ForTest h = new HelperEv3ForTest(new RobertaProperties(Util1.loadProperties(null)));
+    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
 
     @Test
     public void ev3program_configuration_compatibility_4_errors() throws Exception {

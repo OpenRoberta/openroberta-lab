@@ -11,14 +11,11 @@ public class SourceJavaFileObject extends SimpleJavaFileObject {
     private CharSequence content;
 
     /**
-     * This constructor will store the source code in the
-     * internal "content" variable and register it as a
-     * source code, using a URI containing the class full name
+     * This constructor will store the source code in the internal "content" variable and register it as a source code, using a URI containing the class full
+     * name
      *
-     * @param className
-     *        name of the public class in the source code
-     * @param content
-     *        source code to compile
+     * @param className name of the public class in the source code
+     * @param content source code to compile
      */
     public SourceJavaFileObject(String className, CharSequence content) {
         super(URI.create("string:///" + className.replace('.', '/') + Kind.SOURCE.extension), Kind.SOURCE);
@@ -26,8 +23,7 @@ public class SourceJavaFileObject extends SimpleJavaFileObject {
     }
 
     /**
-     * Answers the CharSequence to be compiled. It will give
-     * the source code stored in variable "content"
+     * Answers the CharSequence to be compiled. It will give the source code stored in variable "content"
      */
     @Override
     public CharSequence getCharContent(boolean ignoreEncodingErrors) {

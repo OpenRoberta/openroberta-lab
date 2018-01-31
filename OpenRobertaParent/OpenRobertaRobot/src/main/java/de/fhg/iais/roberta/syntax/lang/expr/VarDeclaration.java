@@ -20,11 +20,11 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 /**
- * This class represents the <b>robGlobalvariables_declare</b> blocks from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for creating a variable.<br/>
+ * This class represents the <b>robGlobalvariables_declare</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate
+ * code for creating a variable.<br/>
  * <br>
- * User must provide name of the variable, type of the variable and initial value.
- * To create an instance from this class use the method {@link #make(BlocklyType, String, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
+ * User must provide name of the variable, type of the variable and initial value. To create an instance from this class use the method
+ * {@link #make(BlocklyType, String, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class VarDeclaration<V> extends Expr<V> {
     private final BlocklyType typeVar;

@@ -26,24 +26,21 @@ import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
  */
-public abstract class AbstractHelperForTest {
-    protected IRobotFactory robotFactory;
-    protected Configuration robotConfiguration;
+public abstract class AbstractHelperForXmlTest {
+    private final IRobotFactory robotFactory;
+    private final Configuration robotConfiguration;
 
-    public AbstractHelperForTest(IRobotFactory robotFactory) {
+    protected AbstractHelperForXmlTest(IRobotFactory robotFactory, Configuration robotConfiguration) {
         this.robotFactory = robotFactory;
+        this.robotConfiguration = robotConfiguration;
     }
 
-    public IRobotFactory getRobotFactory() {
+    protected IRobotFactory getRobotFactory() {
         return this.robotFactory;
     }
 
-    public Configuration getRobotConfiguration() {
+    protected Configuration getRobotConfiguration() {
         return this.robotConfiguration;
-    }
-
-    public void setRobotConfiguration(Configuration robotConfiguration) {
-        this.robotConfiguration = robotConfiguration;
     }
 
     /**
@@ -125,7 +122,7 @@ public abstract class AbstractHelperForTest {
 
         StringWriter writer = new StringWriter();
         m.marshal(blockSet, writer);
-        String t = Resources.toString(AbstractHelperForTest.class.getResource(fileName), Charsets.UTF_8);
+        String t = Resources.toString(AbstractHelperForXmlTest.class.getResource(fileName), Charsets.UTF_8);
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = XMLUnit.compareXML(writer.toString(), t);
         Assert.assertTrue(diff.identical());

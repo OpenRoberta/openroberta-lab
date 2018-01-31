@@ -21,8 +21,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 /**
- * This class represents the <b>robProcedures_defnoreturn</b> block from Blockly
- * into the AST (abstract syntax tree). Object from this class is used to create a method with no return<br/>
+ * This class represents the <b>robProcedures_defnoreturn</b> block from Blockly into the AST (abstract syntax tree). Object from this class is used to create a
+ * method with no return<br/>
  */
 public class MethodVoid<V> extends Method<V> {
     private final StmtList<V> body;

@@ -9,10 +9,10 @@ import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForTest;
+import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
 
 public class MotorDurationTest {
-    HelperBotNrollForTest helper = new HelperBotNrollForTest(new RobertaProperties(Util1.loadProperties(null)));
+    private final HelperBotNrollForXmlTest helper = new HelperBotNrollForXmlTest();
 
     @Test
     public void clearDisplay() throws Exception {

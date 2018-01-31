@@ -20,12 +20,10 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
 
 /**
- * This class represents the <b>robActions_brickLight_on</b> block from Blockly
- * into the AST (abstract syntax tree). Object from this class will generate
- * code for turning the light on.<br/>
+ * This class represents the <b>robActions_brickLight_on</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
+ * for turning the light on.<br/>
  * <br/>
- * The client must provide the {@link BrickLedColor} of the lights and the mode
- * of blinking.
+ * The client must provide the {@link BrickLedColor} of the lights and the mode of blinking.
  */
 public class LightAction<V> extends Action<V> {
     private final IBrickLedColor color;
@@ -49,8 +47,7 @@ public class LightAction<V> extends Action<V> {
     }
 
     /**
-     * Creates instance of {@link LightAction}. This instance is read only and
-     * can not be modified.
+     * Creates instance of {@link LightAction}. This instance is read only and can not be modified.
      *
      * @param color of the lights on the brick. All possible colors are defined in {@link BrickLedColor}; must be <b>not</b> null,
      * @param blinkMode type of the blinking; must be <b>not</b> null,

@@ -25,8 +25,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
 
 /**
- * This class represents the <b>robActions_motor_on_for</b> and <b>robActions_motor_on</b> blocks from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for setting the motors in pilot mode.<br/>
+ * This class represents the <b>robActions_motor_on_for</b> and <b>robActions_motor_on</b> blocks from Blockly into the AST (abstract syntax tree). Object from
+ * this class will generate code for setting the motors in pilot mode.<br/>
  * <br>
  * The client must provide the {@link DriveDirection} and {@link MotionParam} (distance the robot should cover and speed). <br>
  * <br>

@@ -252,7 +252,7 @@ public abstract class RobotCppVisitor extends CommonLanguageVisitor {
     public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
         return null;
     }
-    
+
     public Void visitStmtTextComment(StmtTextComment<Void> stmtTextComment) {
         this.sb.append("// " + stmtTextComment.getTextComment());
         return null;

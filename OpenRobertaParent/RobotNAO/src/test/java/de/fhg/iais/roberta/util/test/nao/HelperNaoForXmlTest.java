@@ -2,13 +2,14 @@ package de.fhg.iais.roberta.util.test.nao;
 
 import de.fhg.iais.roberta.factory.nao.Factory;
 import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
  */
-public class HelperNaoForTest extends de.fhg.iais.roberta.util.test.AbstractHelperForTest {
+public class HelperNaoForXmlTest extends de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest {
 
-    public HelperNaoForTest(RobertaProperties robertaProperties) {
-        super(new Factory(robertaProperties));
+    public HelperNaoForXmlTest() {
+        super(new Factory(new RobertaProperties(Util1.loadProperties(null))), null);
     }
 }

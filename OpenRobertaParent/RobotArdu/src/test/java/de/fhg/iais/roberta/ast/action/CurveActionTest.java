@@ -7,10 +7,10 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForTest;
+import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
 
 public class CurveActionTest {
-    HelperBotNrollForTest h = new HelperBotNrollForTest(new RobertaProperties(Util1.loadProperties(null)));
+    private final HelperBotNrollForXmlTest h = new HelperBotNrollForXmlTest();
 
     @Test
     public void make() throws Exception {

@@ -20,9 +20,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 /**
- * This class represents the <b>robControls_activity</b> block from Blockly
- * into the AST (abstract syntax tree). Object from this class will generate
- * code for new thread.<br/>
+ * This class represents the <b>robControls_activity</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * new thread.<br/>
  * <br/>
  */
 public class ActivityTask<V> extends Task<V> {
@@ -36,8 +35,7 @@ public class ActivityTask<V> extends Task<V> {
     }
 
     /**
-     * Creates instance of {@link ActivityTask}. This instance is read only and
-     * can not be modified.
+     * Creates instance of {@link ActivityTask}. This instance is read only and can not be modified.
      *
      * @param activityName name of the new thread; must be <b>non</b> null and <b>read-only</b>
      * @param properties of the block (see {@link BlocklyBlockProperties}),

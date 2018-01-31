@@ -17,8 +17,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
 /**
- * This class represents the <b>naoActions_ledOff</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for turning all LEDs off.<br/>
+ * This class represents the <b>naoActions_ledOff</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * turning all LEDs off.<br/>
  * <br/>
  */
 public final class LedOff<V> extends Action<V> {

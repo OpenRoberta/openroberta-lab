@@ -18,8 +18,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 /**
- * This class represents the <b>lists_create_empty</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for creating <b>empty list</b>.<br/>
+ * This class represents the <b>lists_create_empty</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * creating <b>empty list</b>.<br/>
  * <br>
  * To create an instance from this class use the method {@link #make(BlocklyBlockProperties, BlocklyComment)}.<br>
  */

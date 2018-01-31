@@ -23,8 +23,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitors.arduino.MbotAstVisitor;
 
 /**
- * This class represents the <b>mbedActions_display_image</b> blocks from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for showing a image on display.<br/>
+ * This class represents the <b>mbedActions_display_image</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code
+ * for showing a image on display.<br/>
  * <br>
  * The client must provide the {@link DisplayImageMode} and {@link Expr} (image(s) to be displayed). <br>
  * <br>

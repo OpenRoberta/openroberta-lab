@@ -31,9 +31,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 /**
- * This class represents the <b>repeat statement</b> blocks from Blockly into the AST (abstract syntax
- * tree).
- * Object from this class will generate repeat statement statement.<br/>
+ * This class represents the <b>repeat statement</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate repeat
+ * statement statement.<br/>
  * <br>
  * See {@link #getMode()} for the kind of the repeat statements.
  */
@@ -278,8 +277,8 @@ public class RepeatStmt<V> extends Stmt<V> {
         }
 
         /**
-         * get mode from {@link Mode} from string parameter. It is possible for one mode to have multiple string mappings.
-         * Throws exception if the mode does not exists.
+         * get mode from {@link Mode} from string parameter. It is possible for one mode to have multiple string mappings. Throws exception if the mode does not
+         * exists.
          *
          * @param name of the mode
          * @return mode from the enum {@link Mode}

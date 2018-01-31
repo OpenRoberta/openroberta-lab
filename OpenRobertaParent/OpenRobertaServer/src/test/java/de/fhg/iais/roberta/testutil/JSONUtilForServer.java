@@ -163,7 +163,8 @@ public class JSONUtilForServer {
         final ClientAdmin restBlocks,
         final HttpSessionState sessionState,
         final DbSession dbSession,
-        final String token) throws Exception //
+        final String token)
+        throws Exception //
     {
         ThreadedFunction theBrick = new ThreadedFunction() {
             @Override
@@ -187,7 +188,8 @@ public class JSONUtilForServer {
         final ClientProgram restProgram,
         final HttpSessionState sessionState,
         final String token,
-        final String programName) throws Exception //
+        final String programName)
+        throws Exception //
     {
         ThreadedFunction theBrick = new ThreadedFunction() {
             @Override

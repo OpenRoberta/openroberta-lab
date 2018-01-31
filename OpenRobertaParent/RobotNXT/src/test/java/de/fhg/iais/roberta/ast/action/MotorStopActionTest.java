@@ -9,10 +9,10 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.test.nxt.HelperNxtForTest;
+import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
 
 public class MotorStopActionTest {
-    HelperNxtForTest h = new HelperNxtForTest(new RobertaProperties(Util1.loadProperties(null)));
+    private final HelperNxtForXmlTest h = new HelperNxtForXmlTest();
 
     @Test
     public void make() throws Exception {

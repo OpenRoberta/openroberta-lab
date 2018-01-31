@@ -6,13 +6,13 @@ import org.hibernate.Session;
 import org.junit.Ignore;
 
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.util.test.GenericHelper;
+import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
 
 public class DbTest {
 
     @Ignore
     public void test() {
-        GenericHelper h = new GenericHelper();
+        GenericHelperForXmlTest h = new GenericHelperForXmlTest();
         SessionFactoryWrapper sessionFactoryWrapper =
             new SessionFactoryWrapper(
                 "hibernate-cfg.xml",

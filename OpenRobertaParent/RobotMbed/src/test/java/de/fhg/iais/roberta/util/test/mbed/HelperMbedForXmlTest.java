@@ -9,16 +9,15 @@ import de.fhg.iais.roberta.syntax.codegen.mbed.calliope.CppVisitor;
 import de.fhg.iais.roberta.syntax.codegen.mbed.microbit.PythonVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
  */
-public class HelperMbedForTest extends de.fhg.iais.roberta.util.test.AbstractHelperForTest {
+public class HelperMbedForXmlTest extends de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest {
 
-    public HelperMbedForTest(RobertaProperties robertaProperties) {
-        super(new Factory(robertaProperties));
-        Configuration brickConfiguration = new CalliopeConfiguration.Builder().build();
-        setRobotConfiguration(brickConfiguration);
+    public HelperMbedForXmlTest() {
+        super(new Factory(new RobertaProperties(Util1.loadProperties(null))), new CalliopeConfiguration.Builder().build());
     }
 
     /**
@@ -30,7 +29,7 @@ public class HelperMbedForTest extends de.fhg.iais.roberta.util.test.AbstractHel
      */
     public String generateJavaScript(String pathToProgramXml) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = SimulationVisitor.generate(this.robotConfiguration, transformer.getTree());
+        String code = SimulationVisitor.generate(getRobotConfiguration(), transformer.getTree());
         return code;
     }
 

@@ -7,11 +7,11 @@ import org.junit.Test;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
-import de.fhg.iais.roberta.util.test.GenericHelper;
-import de.fhg.iais.roberta.util.test.AbstractHelperForTest;
+import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
+import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
 
 public class VariableTest {
-    AbstractHelperForTest h = new GenericHelper();
+    AbstractHelperForXmlTest h = new GenericHelperForXmlTest();
 
     @Test
     public void variableSet() throws Exception {

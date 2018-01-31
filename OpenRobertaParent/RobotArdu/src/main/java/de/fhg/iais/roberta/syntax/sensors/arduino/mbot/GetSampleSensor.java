@@ -72,18 +72,12 @@ public class GetSampleSensor<V> extends Sensor<V> {
                 break;
             case BlocklyConstants.ACCELEROMETER:
                 sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        factory.getSensorPort(port),
-                        factory.getAxis(sensorType.getMode()),
-                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
+                    new SensorMetaDataBean(factory.getSensorPort(port), factory.getAxis(sensorType.getMode()), factory.getSlot(BlocklyConstants.EMPTY_SLOT));
                 this.sensor = AccelerometerSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.TIME:
                 sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        factory.getSensorPort(port),
-                        factory.getAxis(sensorType.getMode()),
-                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
+                    new SensorMetaDataBean(factory.getSensorPort(port), factory.getAxis(sensorType.getMode()), factory.getSlot(BlocklyConstants.EMPTY_SLOT));
                 this.sensor = TimerSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.LIGHT:

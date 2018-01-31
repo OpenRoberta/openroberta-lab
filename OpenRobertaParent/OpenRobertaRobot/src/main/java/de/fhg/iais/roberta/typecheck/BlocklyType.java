@@ -92,8 +92,7 @@ public enum BlocklyType {
     }
 
     /**
-     * get variable type from {@link BlocklyType} from string parameter.
-     * Throws exception if the actor variable type does not exists.
+     * get variable type from {@link BlocklyType} from string parameter. Throws exception if the actor variable type does not exists.
      *
      * @param name of the variable type
      * @return variable type from the enum {@link BlocklyType}

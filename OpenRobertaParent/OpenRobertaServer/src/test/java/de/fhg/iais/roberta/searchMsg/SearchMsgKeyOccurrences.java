@@ -28,25 +28,25 @@ import org.junit.Assert;
  * @author lbudde + rbudde + pmaurer
  */
 class SearchMsgKeyOccurrences {
-    private final List<String> robKeyList,
-        blocklyKeyList,
-        unusedKeys,
-        unknownKeys;
+    private final List<String> robKeyList, blocklyKeyList, unusedKeys, unknownKeys;
     private final String keyPattern = "([A-Z0-9]+(?:_[A-Z0-9]+)*[a-z]?)(?!\\w|\\d)";
     private final Pattern keyRegexp = Pattern.compile("[^\"]Key\\." + keyPattern + "(?:[^\\w\"]|$)"),
         nepoInfoRegExp = Pattern.compile("NepoInfo\\.\\w+\\((?:Serverity\\.[A-Z]+\\s*,)?\\s*\"" + keyPattern + "\"\\)"),
         checkMotorRegExp = Pattern.compile("checkIfMotorRegulated\\(.+?,\\s*\"" + keyPattern + "\"\\)"),
         directRegExp = Pattern.compile("Blockly\\.Msg(?:\\.|\\[[\"'])" + keyPattern + "(?:[^\\w]|$)"),
-        helperRegExp = Pattern.compile("\\.(?:showMsgOnTop\\(|display(?:(?:Popup)?Message\\(|Information\\(\\s*(?:\\{\\s*[\"']?\\w+?[\"']?\\s*:\\s*[\"']\\w+[\"']\\s*\\}|\\w+)\\s*,))\\s*[\"']" + keyPattern + "[\"']"),
+        helperRegExp =
+            Pattern.compile(
+                "\\.(?:showMsgOnTop\\(|display(?:(?:Popup)?Message\\(|Information\\(\\s*(?:\\{\\s*[\"']?\\w+?[\"']?\\s*:\\s*[\"']\\w+[\"']\\s*\\}|\\w+)\\s*,))\\s*[\"']"
+                    + keyPattern
+                    + "[\"']"),
         createButtonRegExp = Pattern.compile("\\.createButton\\_\\(.+?,\\-?\\d+,\\-?\\d+,[\"']" + keyPattern + "[\"']\\)"),
         categoryNameRegExp = Pattern.compile("\\<category(?:\\s+\\w+\\=(?:[\"][^\"]+[\"]|['][^']+[']))*\\s+name\\=[\"']" + keyPattern + "[\"']");
 
     /**
-     * 
-     * 
-     * @param robKeyFile        A file that contains a set of message keys and the corresponding messages
-     * @param blocklyKeyFile    Another file with messages and keys, that shall be used as fallback for unregistered keys, in case the key is used in another project
-     * @throws IOException      In case the files can not be opened
+     * @param robKeyFile A file that contains a set of message keys and the corresponding messages
+     * @param blocklyKeyFile Another file with messages and keys, that shall be used as fallback for unregistered keys, in case the key is used in another
+     *        project
+     * @throws IOException In case the files can not be opened
      */
     public SearchMsgKeyOccurrences(File robKeyFile, File blocklyKeyFile) throws IOException {
         this.robKeyList = getKeyList(robKeyFile);
@@ -58,19 +58,26 @@ class SearchMsgKeyOccurrences {
     }
 
     /**
-     * Searches all files in the given directory, or the given file, for keys and matches them with the keys from the key file
-     * Afterwards it prints a short report in the following format:<br/><br/>
+     * Searches all files in the given directory, or the given file, for keys and matches them with the keys from the key file Afterwards it prints a short
+     * report in the following format:<br/>
+     * <br/>
      * The directory {path} with {numFiles} files contained: {numFoundKeys} Roberta keys, {numFallbackKeys} Blockly keys and {numUnknownKeys} unregistered keys.
      * 
-     * @param dir   A directory that contains files, or a single file
-     * @param fileNamePattern   A pattern, that the files need to match to be searched
-     * @throws Exception    In case a file cannot be opened
+     * @param dir A directory that contains files, or a single file
+     * @param fileNamePattern A pattern, that the files need to match to be searched
+     * @throws Exception In case a file cannot be opened
      */
     public void search(File dir, Pattern fileNamePattern) throws Exception {
         List<File> files = filterDir(dir, fileNamePattern);
         String dirPath = dir.getCanonicalPath();
         KeyCounter keyCounts = this.searchForKeys(files);
-        System.out.printf("The directory %s with %d files contained: %d Roberta keys, %d Blockly keys and %d unregistered keys.\n", dirPath, files.size(), keyCounts.getRobertaKeyCount(), keyCounts.getBlocklyKeyCount(), keyCounts.getUnknownKeyCount());
+        System.out.printf(
+            "The directory %s with %d files contained: %d Roberta keys, %d Blockly keys and %d unregistered keys.\n",
+            dirPath,
+            files.size(),
+            keyCounts.getRobertaKeyCount(),
+            keyCounts.getBlocklyKeyCount(),
+            keyCounts.getUnknownKeyCount());
     }
 
     /**
@@ -98,11 +105,11 @@ class SearchMsgKeyOccurrences {
      */
     private List<String> getKeyList(File msgKeyFile) throws IOException {
         Assert.assertNotNull(msgKeyFile);
-        
+
         Pattern regex = Pattern.compile("^Blockly.Msg.([^ =]+)");
         String line;
         List<String> keys = new ArrayList<String>(1500);
-        
+
         try (LineNumberReader lineReader = new LineNumberReader(new FileReader(msgKeyFile))) {
             while ( (line = lineReader.readLine()) != null ) {
                 Matcher matcher = regex.matcher(line);
@@ -159,33 +166,33 @@ class SearchMsgKeyOccurrences {
         String key, line, filePath, fileEnding;
         Matcher matcher = null;
         ArrayList<Pattern> usedPatterns;
-        
+
         for ( File file : fileList ) {
             filePath = file.getAbsolutePath();
-            
-            if (filePath.contains("target") || filePath.contains("demos")) {
+
+            if ( filePath.contains("target") || filePath.contains("demos") ) {
                 continue;
             }
-            
+
             fileEnding = filePath.substring(filePath.lastIndexOf('.') + 1);
-            
+
             try (LineNumberReader lineReader = new LineNumberReader(new FileReader(file))) {
 
                 while ( (line = lineReader.readLine()) != null ) {
-                    
+
                     usedPatterns = new ArrayList<Pattern>(4);
-                    while (matcher != null && matcher.find() || (matcher = this.matchLine(line, fileEnding, usedPatterns)) != null) {
+                    while ( matcher != null && matcher.find() || (matcher = this.matchLine(line, fileEnding, usedPatterns)) != null ) {
                         key = matcher.pattern().equals(keyRegexp) ? "ORA_" + matcher.group(1) : matcher.group(1);
-                        
-                        if (robKeyList.contains(key)) {
+
+                        if ( robKeyList.contains(key) ) {
                             this.unusedKeys.remove(key);
                             keyCounter.addRobertaKey();
-                        } else if (this.blocklyKeyList.contains(key) && filePath.contains("blockly")) {
+                        } else if ( this.blocklyKeyList.contains(key) && filePath.contains("blockly") ) {
                             // Only accept the messages.js keys if they belong to the blockly core. 
                             // If we reuse keys in our code we should define them.
                             keyCounter.addBlocklyKey();
                         } else {
-                            if (!this.unknownKeys.contains(key)) {
+                            if ( !this.unknownKeys.contains(key) ) {
                                 this.unknownKeys.add(key);
                             }
                             keyCounter.addUnknownKey();
@@ -195,7 +202,7 @@ class SearchMsgKeyOccurrences {
                 lineReader.close();
             }
         }
-        
+
         return keyCounter;
     }
 
@@ -204,62 +211,62 @@ class SearchMsgKeyOccurrences {
             System.out.println("  " + msg);
         }
     }
-    
+
     /**
-     * Matches a line against multiple patterns, depending on the file ending. If a pattern matches, the matcher is returned.
-     * In addition to that a list of patterns is returned, that already matched to the given 
+     * Matches a line against multiple patterns, depending on the file ending. If a pattern matches, the matcher is returned. In addition to that a list of
+     * patterns is returned, that already matched to the given
      * 
-     * @param line  The line that shall be matched against
-     * @param fileEnding    The file ending of the file, that contains the line
-     * @param usedPatterns  Patterns, that were already used for that line
+     * @param line The line that shall be matched against
+     * @param fileEnding The file ending of the file, that contains the line
+     * @param usedPatterns Patterns, that were already used for that line
      * @return The matcher, that matched to one of the key patterns. If no pattern matches null is returned.
      */
     private Matcher matchLine(String line, String fileEnding, List<Pattern> usedPatterns) {
         Matcher matcher = null;
-        
-        switch (fileEnding) {
+
+        switch ( fileEnding ) {
             case "java":
-                if (!usedPatterns.contains(this.keyRegexp)) {
+                if ( !usedPatterns.contains(this.keyRegexp) ) {
                     matcher = this.keyRegexp.matcher(line);
                     usedPatterns.add(this.keyRegexp);
                 }
-                if (matcher == null || !matcher.find()) {
-                    if (!usedPatterns.contains(this.nepoInfoRegExp)) {
+                if ( matcher == null || !matcher.find() ) {
+                    if ( !usedPatterns.contains(this.nepoInfoRegExp) ) {
                         matcher = this.nepoInfoRegExp.matcher(line);
                         usedPatterns.add(this.nepoInfoRegExp);
                     }
-                    if (matcher == null || !matcher.find()) {
-                        if (!usedPatterns.contains(this.checkMotorRegExp)) {
+                    if ( matcher == null || !matcher.find() ) {
+                        if ( !usedPatterns.contains(this.checkMotorRegExp) ) {
                             matcher = this.checkMotorRegExp.matcher(line);
                             usedPatterns.add(this.checkMotorRegExp);
                         }
-                        if (matcher == null || !matcher.find()) {
+                        if ( matcher == null || !matcher.find() ) {
                             return null;
                         }
                     }
                 }
                 break;
             default:
-                if (!usedPatterns.contains(this.directRegExp)) {
+                if ( !usedPatterns.contains(this.directRegExp) ) {
                     matcher = this.directRegExp.matcher(line);
                     usedPatterns.add(this.directRegExp);
                 }
-                if (matcher == null || !matcher.find()) {
-                    if (!usedPatterns.contains(this.helperRegExp)) {
+                if ( matcher == null || !matcher.find() ) {
+                    if ( !usedPatterns.contains(this.helperRegExp) ) {
                         matcher = this.helperRegExp.matcher(line);
                         usedPatterns.add(this.helperRegExp);
                     }
-                    if (matcher == null || !matcher.find()) {
-                        if (!usedPatterns.contains(this.createButtonRegExp)) {
+                    if ( matcher == null || !matcher.find() ) {
+                        if ( !usedPatterns.contains(this.createButtonRegExp) ) {
                             matcher = this.createButtonRegExp.matcher(line);
                             usedPatterns.add(this.createButtonRegExp);
                         }
-                        if (matcher == null || !matcher.find()) {
-                            if (!usedPatterns.contains(this.categoryNameRegExp)) {
+                        if ( matcher == null || !matcher.find() ) {
+                            if ( !usedPatterns.contains(this.categoryNameRegExp) ) {
                                 matcher = this.categoryNameRegExp.matcher(line);
                                 usedPatterns.add(this.categoryNameRegExp);
                             }
-                            if (matcher == null || !matcher.find()) {
+                            if ( matcher == null || !matcher.find() ) {
                                 return null;
                             }
                         }
@@ -268,30 +275,30 @@ class SearchMsgKeyOccurrences {
         }
         return matcher;
     }
-    
+
     private class KeyCounter {
         private int robertaKeys, blocklyKeys, unknownKeys;
 
         public void addRobertaKey() {
             this.robertaKeys += 1;
         }
-        
+
         public void addBlocklyKey() {
             this.blocklyKeys += 1;
         }
-        
+
         public void addUnknownKey() {
             this.unknownKeys += 1;
         }
-        
+
         public int getRobertaKeyCount() {
             return this.robertaKeys;
         }
-        
+
         public int getBlocklyKeyCount() {
             return this.blocklyKeys;
         }
-        
+
         public int getUnknownKeyCount() {
             return this.unknownKeys;
         }

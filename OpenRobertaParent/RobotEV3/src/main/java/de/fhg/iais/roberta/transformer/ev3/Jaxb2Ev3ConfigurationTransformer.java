@@ -26,8 +26,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
- * JAXB to brick configuration. Client should provide a tree of jaxb objects.
- * Generates a BrickConfiguration object.
+ * JAXB to brick configuration. Client should provide a tree of jaxb objects. Generates a BrickConfiguration object.
  */
 public class Jaxb2Ev3ConfigurationTransformer {
     IRobotFactory factory;

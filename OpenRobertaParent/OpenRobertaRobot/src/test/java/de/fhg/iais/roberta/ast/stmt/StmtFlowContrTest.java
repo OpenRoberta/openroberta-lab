@@ -7,11 +7,11 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.test.GenericHelper;
-import de.fhg.iais.roberta.util.test.AbstractHelperForTest;
+import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
+import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
 
 public class StmtFlowContrTest {
-    AbstractHelperForTest h = new GenericHelper();
+    AbstractHelperForXmlTest h = new GenericHelperForXmlTest();
 
     @Test
     public void make() throws Exception {

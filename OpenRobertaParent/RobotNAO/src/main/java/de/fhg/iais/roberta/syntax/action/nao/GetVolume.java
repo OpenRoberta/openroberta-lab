@@ -12,8 +12,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
 /**
- * This class represents the <b>naoActions_getVolume</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for getting the volume of the robot.<br/>
+ * This class represents the <b>naoActions_getVolume</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * getting the volume of the robot.<br/>
  * <br/>
  */
 public final class GetVolume<V> extends Action<V> {

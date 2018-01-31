@@ -16,8 +16,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 /**
- * This class represents the <b>logic_boolean</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate boolean constant.<br/>
+ * This class represents the <b>logic_boolean</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate boolean
+ * constant.<br/>
  * <br>
  * The client must provide the value of the boolean constant. <br>
  * <br>

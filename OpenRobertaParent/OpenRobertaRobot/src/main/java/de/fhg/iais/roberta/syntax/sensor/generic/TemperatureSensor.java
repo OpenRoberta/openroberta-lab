@@ -13,8 +13,7 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
 /**
  * This class represents the <b>mbedSensors_temperature_getSample</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will
- * generate
- * code for checking if the sensor is pressed.<br/>
+ * generate code for checking if the sensor is pressed.<br/>
  * <br>
  * <br>
  * To create an instance from this class use the method {@link #make(BlocklyBlockProperties, BlocklyComment)}.<br>

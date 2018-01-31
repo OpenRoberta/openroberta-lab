@@ -4,10 +4,10 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForTest;
+import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
 
 public class MathRoundTest {
-    HelperEv3ForTest h = new HelperEv3ForTest(new RobertaProperties(Util1.loadProperties(null)));
+    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
 
     @Test
     public void Test() throws Exception {

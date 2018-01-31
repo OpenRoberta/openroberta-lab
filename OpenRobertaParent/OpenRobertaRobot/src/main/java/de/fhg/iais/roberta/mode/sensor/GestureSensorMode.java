@@ -16,7 +16,7 @@ public enum GestureSensorMode implements IGestureSensorMode {
     G3( "3g" ),
     G6( "6g" ),
     G8( "8g" );
-    
+
     private final String[] values;
 
     private GestureSensorMode(String... values) {

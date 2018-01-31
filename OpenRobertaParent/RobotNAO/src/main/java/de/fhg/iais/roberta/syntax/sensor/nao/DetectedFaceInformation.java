@@ -20,8 +20,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
 /**
- * This class represents the <b>naoSensors_getFaceInformation</b> blocks from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for detecting a NaoMark.<br/>
+ * This class represents the <b>naoSensors_getFaceInformation</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate
+ * code for detecting a NaoMark.<br/>
  * <br/>
  */
 public final class DetectedFaceInformation<V> extends Sensor<V> {

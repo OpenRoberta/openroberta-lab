@@ -22,8 +22,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
 /**
- * This class represents the <b>naoActions_turn</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for setting .<br/>
+ * This class represents the <b>naoActions_turn</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * setting .<br/>
  * <br/>
  * The client must provide the {@link turnDirection} and {@link degreesToTurn} (direction and number of degrees to turn).
  */

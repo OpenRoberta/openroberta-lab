@@ -26,11 +26,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitors.arduino.Bob3AstVisitor;
 
 /**
- * This class represents the <b>robSensors_getSample</b> block from Blockly
- * into
- * the AST (abstract syntax
- * tree).
- * Object from this class will generate code for setting the mode of the sensor or getting a sample from the sensor.<br/>
+ * This class represents the <b>robSensors_getSample</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * setting the mode of the sensor or getting a sample from the sensor.<br/>
  * <br>
  * The client must provide the {@link SensorType} and port. See enum {@link SensorType} for all possible type of sensors.<br>
  * <br>

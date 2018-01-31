@@ -12,8 +12,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
 
 /**
- * This class represents the <b>robActions_motorDiff_stop</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code to stop the work of the motors.<br/>
+ * This class represents the <b>robActions_motorDiff_stop</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
+ * to stop the work of the motors.<br/>
  */
 public class MotorDriveStopAction<V> extends Action<V> {
 

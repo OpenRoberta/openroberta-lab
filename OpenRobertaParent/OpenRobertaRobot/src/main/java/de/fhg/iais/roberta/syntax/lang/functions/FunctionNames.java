@@ -84,8 +84,8 @@ public enum FunctionNames {
     }
 
     /**
-     * get function from {@link FunctionNames} from string parameter. It is possible for one function to have multiple string mappings.
-     * Throws exception if the operator does not exists.
+     * get function from {@link FunctionNames} from string parameter. It is possible for one function to have multiple string mappings. Throws exception if the
+     * operator does not exists.
      *
      * @param functName of the function
      * @return function from the enum {@link FunctionNames}

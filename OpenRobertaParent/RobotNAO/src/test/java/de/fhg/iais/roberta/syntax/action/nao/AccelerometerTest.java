@@ -4,10 +4,10 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.test.nao.HelperNaoForTest;
+import de.fhg.iais.roberta.util.test.nao.HelperNaoForXmlTest;
 
 public class AccelerometerTest {
-    HelperNaoForTest h = new HelperNaoForTest(new RobertaProperties(Util1.loadProperties(null)));
+    private final HelperNaoForXmlTest h = new HelperNaoForXmlTest();
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {

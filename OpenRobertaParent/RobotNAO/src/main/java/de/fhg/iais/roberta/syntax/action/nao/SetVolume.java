@@ -19,8 +19,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
 /**
- * This class represents the <b>naoActions_setVolume</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for setting the of the robot.<br/>
+ * This class represents the <b>naoActions_setVolume</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * setting the of the robot.<br/>
  * <br/>
  * The client must provide the {@link Volume} (fraction the speech engine is set to).
  */

@@ -9,10 +9,10 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.mbed.MicrobitConfiguration;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.test.mbed.HelperMbedForTest;
+import de.fhg.iais.roberta.util.test.mbed.HelperMbedForXmlTest;
 
 public class PythonVisitorTest {
-    HelperMbedForTest h = new HelperMbedForTest(new RobertaProperties(Util1.loadProperties(null)));
+    private final HelperMbedForXmlTest h = new HelperMbedForXmlTest();
 
     private static final String IMPORTS =
         "" //

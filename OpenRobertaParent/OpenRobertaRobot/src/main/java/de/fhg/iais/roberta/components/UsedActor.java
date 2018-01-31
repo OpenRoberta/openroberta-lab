@@ -3,8 +3,7 @@ package de.fhg.iais.roberta.components;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 
 /**
- * Stores information for port and mode of used actor in a blockly program.
- * This information is used for program validation.
+ * Stores information for port and mode of used actor in a blockly program. This information is used for program validation.
  *
  * @author ensonic
  */

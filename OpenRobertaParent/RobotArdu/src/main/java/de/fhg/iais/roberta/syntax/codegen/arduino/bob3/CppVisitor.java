@@ -50,8 +50,8 @@ import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
 import de.fhg.iais.roberta.visitors.arduino.Bob3AstVisitor;
 
 /**
- * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a
- * StringBuilder. <b>This representation is correct C code for Arduino.</b> <br>
+ * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a StringBuilder.
+ * <b>This representation is correct C code for Arduino.</b> <br>
  */
 public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, AstActorLightVisitor<Void> {
     private final boolean isTimerSensorUsed;

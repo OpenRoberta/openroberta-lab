@@ -19,8 +19,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
 
 /**
- * This class represents the <b>naoActions_setLanguage</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for setting the language of the robot.<br/>
+ * This class represents the <b>naoActions_setLanguage</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * setting the language of the robot.<br/>
  * <br/>
  * The client must provide the {@link Language} (the language NAOs speech engine is set to).
  */

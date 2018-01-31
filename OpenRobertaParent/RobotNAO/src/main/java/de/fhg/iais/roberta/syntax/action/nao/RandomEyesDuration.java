@@ -19,8 +19,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
 /**
- * This class represents the <b>naoActions_randomEyes</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for coloring the eyes randomly.<br/>
+ * This class represents the <b>naoActions_randomEyes</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * coloring the eyes randomly.<br/>
  * <br/>
  * The client must provide the {@link duration} (time the eyes will be colored).
  */

@@ -5,8 +5,8 @@ public class Sensor {
     private final SensorType type;
 
     /**
-     * Creates hardware component of type {@link Category#SENSOR} that will be attached to the brick configuration.
-     * Client must provide valid {@link HardwareComponentType} from {@link Category#SENSOR} category.
+     * Creates hardware component of type {@link Category#SENSOR} that will be attached to the brick configuration. Client must provide valid
+     * {@link HardwareComponentType} from {@link Category#SENSOR} category.
      *
      * @param componentType of the sensor
      */

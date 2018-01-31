@@ -5,20 +5,20 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.test.nao.HelperNaoForTest;
+import de.fhg.iais.roberta.util.test.nao.HelperNaoForXmlTest;
 
 public class LedResetTest {
-    HelperNaoForTest h = new HelperNaoForTest(new RobertaProperties(Util1.loadProperties(null)));
+    private final HelperNaoForXmlTest h = new HelperNaoForXmlTest();
 
     @Test
     public void make_ByDefault_ReturnInstanceOfLedOffClass() throws Exception {
         String expectedResult = "BlockAST [project=[[Location [x=63, y=63], " + "MainTask [], " + "LedReset [led=HEAD]]]]";
-        
+
         String result = this.h.generateTransformerString("/action/ledReset.xml");
 
         Assert.assertEquals(expectedResult, result);
     }
-    
+
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
 

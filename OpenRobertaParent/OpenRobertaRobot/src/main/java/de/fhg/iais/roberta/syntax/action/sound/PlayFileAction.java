@@ -17,8 +17,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
 
 /**
- * This class represents the <b>robActions_play_file</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for playing a stored music file in the brick.<br/>
+ * This class represents the <b>robActions_play_file</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * playing a stored music file in the brick.<br/>
  * <br/>
  * The client must provide the name of the file.
  */

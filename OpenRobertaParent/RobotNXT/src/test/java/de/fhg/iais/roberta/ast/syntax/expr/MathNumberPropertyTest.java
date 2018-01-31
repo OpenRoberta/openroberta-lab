@@ -4,10 +4,10 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.test.nxt.HelperNxtForTest;
+import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
 
 public class MathNumberPropertyTest {
-    HelperNxtForTest h = new HelperNxtForTest(new RobertaProperties(Util1.loadProperties(null)));
+    private final HelperNxtForXmlTest h = new HelperNxtForXmlTest();
 
     @Test
     public void Test() throws Exception {

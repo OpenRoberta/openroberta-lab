@@ -20,8 +20,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
 
 /**
- * This class represents the <b>robActions_play_tone</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for making sound.<br/>
+ * This class represents the <b>robActions_play_tone</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * making sound.<br/>
  * <br/>
  * The client must provide the frequency and the duration of the sound.
  */

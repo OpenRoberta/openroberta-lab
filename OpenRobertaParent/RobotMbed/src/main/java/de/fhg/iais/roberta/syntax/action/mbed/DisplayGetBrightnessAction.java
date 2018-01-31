@@ -13,8 +13,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
 
 /**
- * This class represents the <b>mbedActions_leds_on</b> blocks from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for turning on the Led.<br/>
+ * This class represents the <b>mbedActions_leds_on</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * turning on the Led.<br/>
  * <br>
  * The client must provide the {@link ColorConst} color of the led. <br>
  * <br>

@@ -12,8 +12,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
 /**
- * This class represents the <b>naoActions_getLanguage</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for getting the languages that are installed on NAO<br/>
+ * This class represents the <b>naoActions_getLanguage</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * getting the languages that are installed on NAO<br/>
  * <br/>
  */
 public final class GetLanguage<V> extends Action<V> {

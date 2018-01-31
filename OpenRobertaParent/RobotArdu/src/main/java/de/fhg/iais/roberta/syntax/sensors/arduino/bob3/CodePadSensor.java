@@ -12,10 +12,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitors.arduino.Bob3AstVisitor;
 
 /**
- * This class represents the <b>robSensors_touch_isPressed</b> blocks from Blockly into
- * the AST (abstract syntax
- * tree).
- * Object from this class will generate code for checking if the sensor is pressed.<br/>
+ * This class represents the <b>robSensors_touch_isPressed</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate
+ * code for checking if the sensor is pressed.<br/>
  * <br>
  * The client must provide the {@link SensorPort}.<br>
  * <br>

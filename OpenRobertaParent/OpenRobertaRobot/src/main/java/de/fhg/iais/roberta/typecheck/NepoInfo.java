@@ -1,8 +1,8 @@
 package de.fhg.iais.roberta.typecheck;
 
 /**
- * describes either an error or a problem w.r.t. a phrase of the AST. Collections of objects of this class are stored
- * in the mutable part of the phrase (within a phrase the tree structure is immutable, but the attachment of problems is (more) dynamic.
+ * describes either an error or a problem w.r.t. a phrase of the AST. Collections of objects of this class are stored in the mutable part of the phrase (within
+ * a phrase the tree structure is immutable, but the attachment of problems is (more) dynamic.
  *
  * @author rbudde
  */

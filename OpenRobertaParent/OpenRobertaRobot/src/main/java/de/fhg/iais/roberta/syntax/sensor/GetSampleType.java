@@ -94,8 +94,8 @@ public enum GetSampleType {
     }
 
     /**
-     * get mode from {@link MotorTachoMode} from string parameter. It is possible for one mode to have multiple string mappings.
-     * Throws exception if the mode does not exists.
+     * get mode from {@link MotorTachoMode} from string parameter. It is possible for one mode to have multiple string mappings. Throws exception if the mode
+     * does not exists.
      *
      * @param name of the mode
      * @return mode from the enum {@link MotorTachoMode}

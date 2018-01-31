@@ -12,8 +12,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 /**
- * This class allows to create list of {@link Stmt} elements.
- * Initially object from this class is writable. After adding all the elements to the list call {@link #setReadOnly()}.
+ * This class allows to create list of {@link Stmt} elements. Initially object from this class is writable. After adding all the elements to the list call
+ * {@link #setReadOnly()}.
  */
 public class StmtList<V> extends Stmt<V> {
     private final List<Stmt<V>> sl = new ArrayList<Stmt<V>>();

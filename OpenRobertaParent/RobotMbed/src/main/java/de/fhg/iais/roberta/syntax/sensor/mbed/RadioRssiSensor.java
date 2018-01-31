@@ -12,8 +12,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
 
 /**
- * This class represents the <b>mbedSensors_getRssi</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will
- * generate code for getting the strength of the last package.<br/>
+ * This class represents the <b>mbedSensors_getRssi</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * getting the strength of the last package.<br/>
  * <br>
  * <br>
  * To create an instance from this class use the method {@link #make(BlocklyBlockProperties, BlocklyComment)}.<br>

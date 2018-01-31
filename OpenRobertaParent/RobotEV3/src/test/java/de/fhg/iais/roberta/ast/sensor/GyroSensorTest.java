@@ -9,14 +9,15 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForTest;
+import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
 
 public class GyroSensorTest {
-    HelperEv3ForTest h = new HelperEv3ForTest(new RobertaProperties(Util1.loadProperties(null)));
+    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
 
     @Test
     public void sensorSetGyro() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-30, y=210], GyroSensor [S2, ANGLE, EMPTY_SLOT]], [Location [x=-26, y=250], GyroSensor [S4, RATE, EMPTY_SLOT]]]]";
+        String a =
+            "BlockAST [project=[[Location [x=-30, y=210], GyroSensor [S2, ANGLE, EMPTY_SLOT]], [Location [x=-26, y=250], GyroSensor [S4, RATE, EMPTY_SLOT]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_setGyro.xml"));
     }

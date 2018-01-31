@@ -22,8 +22,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 /**
- * This class represents the <b>robProcedures_defreturn</b> block from Blockly
- * into the AST (abstract syntax tree). Object from this class is used to create a method with return value<br/>
+ * This class represents the <b>robProcedures_defreturn</b> block from Blockly into the AST (abstract syntax tree). Object from this class is used to create a
+ * method with return value<br/>
  */
 public class MethodCall<V> extends Method<V> {
     private final String methodName;
