@@ -228,16 +228,23 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
 
     @Override
     public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
-        this.language = setLanguageAction.getLanguage();
+        String end = createClosingBracket();
+        this.sb.append("createSetLanguageAction(createConstant(CONST.STRING_CONST, \'");
+        this.sb.append(getLanguageString(setLanguageAction.getLanguage()));
+        this.sb.append("\')");
+        this.sb.append(end);
         return null;
     }
 
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
         String end = createClosingBracket();
-        this.sb.append("createSetLanguageAction(createConstant(CONST.STRING_CONST, \'");
-        this.sb.append(this.getLanguageString(this.language));
-        this.sb.append("\')),");
+        // this.sb.append("createSetLanguageAction(createConstant(CONST.STRING_CONST,
+        // \'");
+        // this.sb.append(this.getLanguageString(this.language));
+        // this.sb.append("\')");
+        // this.sb.append(end);
+        // this.visitExprStmt();
         this.sb.append("createSayTextAction(");
         if ( !sayTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
             this.sb.append("String(");
@@ -253,6 +260,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
             this.sb.append(",");
             sayTextAction.getPitch().visit(this);
         }
+        // this.sb.append(")");
         this.sb.append(end);
         return null;
     }
