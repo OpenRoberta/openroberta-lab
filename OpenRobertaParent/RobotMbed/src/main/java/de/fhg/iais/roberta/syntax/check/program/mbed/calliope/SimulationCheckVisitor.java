@@ -14,6 +14,8 @@ import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
 import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
@@ -24,6 +26,7 @@ import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
@@ -198,6 +201,20 @@ public class SimulationCheckVisitor extends RobotSimulationCheckVisitor implemen
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+        return null;
+    }
+    
+    @Override
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        return null;
+    }
+        
+    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {      
+    	motorOnAction.getParam().getSpeed().visit(this);
+    	return null;
+    }
+    
+    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         return null;
     }
 

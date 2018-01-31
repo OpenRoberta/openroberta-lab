@@ -208,6 +208,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements M
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+    	this.sb.append("0");
         return null;
     }
 
