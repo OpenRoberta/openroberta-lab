@@ -39,7 +39,11 @@ public class Update {
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getHal() throws FileNotFoundException {
         File hal = new File(this.robotUpdateResourcesDir + "/roberta.zip");
-        return Response.ok(hal, MediaType.APPLICATION_OCTET_STREAM).header("Content-Disposition", "attachment; filename=\"" + hal.getName() + "\"").build();
+        return Response
+            .ok(hal, MediaType.APPLICATION_OCTET_STREAM)
+            .header("Content-Disposition", "attachment; filename=\"" + hal.getName() + "\"")
+            .header("Filename", hal.getName())
+            .build();
     }
 
     @GET
