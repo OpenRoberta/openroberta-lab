@@ -11,6 +11,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
  * class, that wraps the session factory of hibernate. Creating the session factory of hibernate is expensive. The session factory hides almost complete the
@@ -45,12 +46,15 @@ public final class SessionFactoryWrapper {
                 try {
                     Thread.sleep(5000);
                 } catch ( InterruptedException e1 ) {
-                    // retry
+                    String msg = "session factory creation interrupted. Server cannot start.";
+                    LOG.error(msg);
+                    throw new DbcException(msg);
                 }
             }
         }
-        LOG.error("session factory creation failed. Server cannot run ... .");
-        throw new ExceptionInInitializerError();
+        String msg = "session factory creation failed. Server cannot start.";
+        LOG.error(msg);
+        throw new DbcException(msg);
     }
 
     /**
