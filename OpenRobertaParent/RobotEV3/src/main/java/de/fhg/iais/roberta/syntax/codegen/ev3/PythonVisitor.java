@@ -1039,6 +1039,9 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
             case LARGE:
                 name = "LargeMotor";
                 break;
+            case OTHER:
+                name = "OtherConsumer";
+                break;
             default:
                 throw new IllegalArgumentException("no mapping for " + actor.getName() + "to ev3dev-lang-python");
         }

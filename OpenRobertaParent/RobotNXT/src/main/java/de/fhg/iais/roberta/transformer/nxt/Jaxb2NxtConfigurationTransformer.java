@@ -156,8 +156,14 @@ public class Jaxb2NxtConfigurationTransformer {
                                     this.factory.getDriveDirection(extractField(fields, "MOTOR_REVERSE", 1)),
                                     this.factory.getMotorSide(extractField(fields, "MOTOR_DRIVE", 2)))));
                         break;
+                    case "robBrick_actor":
+                        actors.add(
+                            Pair.of(
+                                this.factory.getActorPort(value.getName()),
+                                new Actor(ActorType.get(value.getBlock().getType()), false, DriveDirection.FOREWARD, MotorSide.NONE)));
+                        break;
                     default:
-                        throw new DbcException("Invalide motor type!");
+                        throw new DbcException("Invalid motor type!");
                 }
             }
         }
