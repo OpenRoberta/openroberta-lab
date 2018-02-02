@@ -47,6 +47,7 @@
 <script src="../blocks/variables.js"></script>
 <script src="../blocks/procedures.js"></script>
 <script src="../blocks/robActions.js"></script>
+<script src="../blocks/mbedActions.js"></script>
 <script src="../blocks/robBrick.js"></script>
 <script src="../blocks/robColour.js"></script>
 <script src="../blocks/robCommunication.js"></script>
@@ -286,7 +287,9 @@ h1 {
 	<block type="robActions_play_file"></block> <block
 		type="robActions_play_setVolume"> <value name="VOLUME">
 	<block type="math_number"> <field name="NUM">50</field> </block> </value> </block> <block
-		type="robActions_play_getVolume"></block> </category> <category
+		type="robActions_play_getVolume"></block> <block
+		type="robActions_sayText_parameters"></block><block
+		type="robActions_sayText"></block></category> <category
 		name="TOOLBOX_LIGHT" svg="true"> <block
 		type="robActions_brickLight_on"></block> <block
 		type="robActions_brickLight_off"></block> <block

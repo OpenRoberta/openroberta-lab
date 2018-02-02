@@ -283,6 +283,7 @@ Blockly.Msg.LANGUAGE_RUSSIAN = "Russian";
 Blockly.Msg.LANGUAGE_SPANISH = "Spanish";
 Blockly.Msg.LANGUAGE_SWEDISH = "Swedish";
 Blockly.Msg.LANGUAGE_TURKISH = "Turkish";
+Blockly.Msg.LED = "LED";
 Blockly.Msg.LED_OFF = "turn LED off";
 Blockly.Msg.LED_OFF_TOOLTIP = "Turns the LED off.";
 Blockly.Msg.LED_ON = "turn LED on";

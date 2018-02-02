@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-01-18 13:05:08.826375",
+		"lastupdated": "2018-02-02 14:55:00.102274",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -877,6 +877,7 @@
 	"PLAY_QUARTER": "quarter note",
 	"PLAY_EIGHTH": "eighth note",
 	"PLAY_SIXTEENTH": "sixteenth note",
+	"LED": "LED",
 	"LED_ON": "turn LED on",
 	"LED_OFF": "turn LED off",
 	"SENSOR_GESTURE": "gesture",
