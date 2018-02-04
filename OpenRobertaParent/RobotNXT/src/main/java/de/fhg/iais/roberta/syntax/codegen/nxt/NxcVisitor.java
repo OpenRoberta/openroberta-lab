@@ -796,7 +796,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
         this.sb.append(lightSensor.getPort());
         this.sb.append(", ");
         switch ( (LightSensorMode) lightSensor.getMode() ) {
-            case RED:
+            case LIGHT:
                 this.sb.append("\"LIGHT\"");
                 break;
             case AMBIENTLIGHT:

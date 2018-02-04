@@ -51,6 +51,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
+import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
+import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
 import de.fhg.iais.roberta.visitor.actor.AstActorCommunicationVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
@@ -100,13 +102,13 @@ public abstract class RobotUsedHardwareCollectorVisitor extends CheckVisitor imp
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        this.usedSensors.add(new UsedSensor((ISensorPort) colorSensor.getPort(), SensorType.COLOR, colorSensor.getMode()));
+        this.usedSensors.add(new UsedSensor((ISensorPort) colorSensor.getPort(), SensorType.COLOR, ColorSensorMode.valueOf(((ColorSensorMode) colorSensor.getMode()).getModeValue())));
         return null;
     }
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.usedSensors.add(new UsedSensor((ISensorPort) lightSensor.getPort(), SensorType.LIGHT, lightSensor.getMode()));
+        this.usedSensors.add(new UsedSensor((ISensorPort) lightSensor.getPort(), SensorType.LIGHT, LightSensorMode.valueOf(((LightSensorMode) lightSensor.getMode()).getModeValue())));
         return null;
     }
 
