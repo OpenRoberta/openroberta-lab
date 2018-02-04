@@ -188,24 +188,6 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
     exports.formatResultLog = formatResultLog;
 
     /**
-     * Extension of Jquery-datatables for sorting German date fields
-     */
-    function initDataTables() {
-        $.extend($.fn.dataTableExt.oSort['date-de-asc'] = function(a, b) {
-            a = parseDate(a);
-            b = parseDate(b);
-            return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-        },
-
-        $.fn.dataTableExt.oSort['date-de-desc'] = function(a, b) {
-            a = parseDate(a);
-            b = parseDate(b);
-            return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-        });
-    }
-    exports.initDataTables = initDataTables;
-
-    /**
      * Calculate height of data table
      */
     function calcDataTableHeight() {
@@ -251,7 +233,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
             onSubmit();
         });
         $('#single-modal').onWrap('hidden.bs.modal', function() {
-            $('#single-modal-form').unbind('submit');
+            $('#single-modal-form').off('submit');
             $('#singleModalInput').val('');
             $('#single-modal-form').validate().resetForm();
             onHidden();

@@ -115,7 +115,6 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         function update(result) {
             UTIL.response(result);
             if (result.rc === 'ok') {
-                console.log(result.programNames);
                 $('#galleryTable').bootstrapTable("load", result.programNames);
                 //configureTagsInput();
             }
