@@ -11,7 +11,9 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
+import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.MotorDuration;
@@ -313,13 +315,13 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        this.sb.append("createGetSample(CONST.COLOR, CONST." + colorSensor.getMode() + ")");
+        this.sb.append("createGetSample(CONST.COLOR, CONST." + ((ColorSensorMode) colorSensor.getMode()).getModeValue() + ")");
         return null;
     }
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.sb.append("createGetSample(CONST.LIGHT, CONST." + lightSensor.getMode() + ")");
+        this.sb.append("createGetSample(CONST.LIGHT, CONST." + ((LightSensorMode) lightSensor.getMode()).getModeValue() + ")");
         return null;
     }
 

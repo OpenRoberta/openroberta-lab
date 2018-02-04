@@ -213,7 +213,7 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getColorSensorModeByAlternativeName() {
-        Assert.assertEquals(this.factory.getColorSensorMode("ColorID"), ColorSensorMode.COLOUR);
+        Assert.assertEquals(this.factory.getColorSensorMode("Colour"), ColorSensorMode.COLOUR);
     }
 
     @Test(expected = DbcException.class)
