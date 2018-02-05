@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-01-18 13:05:08.826375",
+		"lastupdated": "2018-02-04 23:17:30.477198",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -877,6 +877,7 @@
 	"PLAY_QUARTER": "quarter note",
 	"PLAY_EIGHTH": "eighth note",
 	"PLAY_SIXTEENTH": "sixteenth note",
+	"LED": "LED",
 	"LED_ON": "turn LED on",
 	"LED_OFF": "turn LED off",
 	"SENSOR_GESTURE": "gesture",
@@ -1239,7 +1240,7 @@
 	"SENSOR_UNIT_OMEGA": "ω",
 	"SENSOR_UNIT_PERCENT": "%",
 	"SENSOR_UNIT_VOLT": "V",
-	"SENSOR_TOUCH_BOB3": "arm",
+	"SENSOR_PINTOUCH_BOB3": "arm",
 	"SENSOR_SOUND_CALLIOPE": "microphone",
 	"MODE_VALUE": "value",
 	"MODE_PRESSED": "pressed",
