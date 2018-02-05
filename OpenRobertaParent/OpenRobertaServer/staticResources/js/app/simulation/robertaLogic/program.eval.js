@@ -470,7 +470,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         var X = evalExpr(obj, "x");
         var Y = evalExpr(obj, "y");
         if (!isObject(X) && !isObject(Y) && !obj.modifiedStmt) {
-            return obj.simulationData[CONSTANTS.PIXEL][X][Y] * 9.0 / 255.0;
+            return obj.simulationData[CONSTANTS.PIXEL][Y][X] * 9.0 / 255.0;
         }
     };
 
