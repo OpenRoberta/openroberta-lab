@@ -3,7 +3,7 @@ HOW TO GET AN OPENROBERTALAB INSTALLATION WITHOUT MUCH SETUP
 
 Variables used (set as needed!):
 export GITREPO=~rbudde/git/robertalab
-export VERSION='2.5.0'
+export VERSION='2.5.3'
 export DISTR_DIR='/tmp/distr'
 export DB_PARENTDIR='/home/rbudde/db'
 export SERVER_PORT_ON_HOST=7000
@@ -13,60 +13,50 @@ tl;dr: 1. to generate an actual docker image "rbudde/openrobertalab:$VERSION" fr
        docker run -v /var/run/docker.sock:/var/run/docker.sock rbudde/openroberta_gen:1 $VERSION
 
        Assuming that the environment variable DB_PARENTDIR holds the name of the directory, which
-       contains the database directories (e.g. the directory db-$VERSION), then ...
+       contains the database directories (e.g. contains the directory db-$VERSION), then ...
 	   2. to start the embedded openrobertalab server run
 	      docker-compose -f dc-embedded.yml up
 	   3. to start the openrobertalab server and a separate database server run
 	      docker-compose -f dc-server-db-server.yml up
 
-1. generate the "meta" image. This is documentation, you must NOT do this
+1. generate the "gen" image. This is documentation, you must NOT do this
 
-the directory meta and its dockerfile are used to create the base image "meta", that contains
+the docker image "gen", when run, generates an OpenRoberta distribution. The image contains installations of
 - wget, curl
 - git
 - java
 - maven
-During image creation a (then unused) maven build is executed to fill the /root/.m2 cache.
-This makes later builds much faster. The image generated is pushed to the docker hub.
-
-cd $GITREPO/Docker
-docker build -f DockerfileMeta -t rbudde/openroberta_meta:1 .
-docker push rbudde/openroberta_meta:1
-
-2. generate the "gen" image. This is documentation, you must NOT do this
-
-based on the "meta" image, the directory gen and its dockerfile are used to create the image "gen".
-The generated image can be RUN. See the next section about what happens during a run.
+Furthermore during image creation a (then unused) maven build is executed to fill the /root/.m2 cache.
+This makes later builds much faster.
 
 cd $GITREPO/Docker
 docker build -f DockerfileGen -t rbudde/openroberta_gen:1 .
 docker push rbudde/openroberta_gen:1
 
-3. generate the "base" image. It contains software for crosscompilation. This is documentation, you must NOT do this
+2. generate the "base" image. It contains software for crosscompilation. This is documentation, you must NOT do this
 
 cd $GITREPO/Docker
 docker build -f DockerfileBase -t rbudde/openroberta_base:1 .
 docker push rbudde/openroberta_base:1
 
-4. RUN THE "GEN" IMAGE TO CREATE IMAGES FOR OPENROBERTALAB (AND DB SERVER)
+3. NOW EVERYTHING IS READY TO CREATE A DISTRIBUTION:
 
-If the "gen" image runs, it
-- retrieves the develop branch of the openroberta-lab from github
-- executes a maven build to generate the openrobertalab artifacts
-- exports these artifacts into a installation directory
-- creates docker images:
+Run the "gen" image. It will
+- retrieve the develop branch of the openroberta-lab from github
+- execute a maven build to generate the openrobertalab artifacts
+- export these artifacts into a installation directory
+- create docker images:
   - "openrobertalab" contains a server ready to co-operate with a db server
   - "openrobertadb" contains a production-ready db server
   - "openrobertalaupgrade" contains an administration service working with an embedded database
     to upgrade the database
-  
   - "openrobertalabembedded" contains a server working with an embedded database
   - "openrobertaemptydbfortest" contains for test/debug a container with an empty database
   
 When the "gen" image is run,
 - the first -v arguments makes the "real" docker demon available in the "gen" container.
   Do not change this parameter
-- a second -v is optional. If you want to get only a docker image, dismiss the parameter.
+- a second -v is optional. If you want to get only a docker images, dismiss the parameter.
   If you want to access the installation directory (for testing, e.g.), then
   add -v $DISTR_DIR:/opt/robertalab/DockerInstallation to the docker run command. Set DISTR_DIR to an
   NOT EXISTING directory of the machine running the docker demon and you get the installation there
@@ -84,9 +74,9 @@ docker push rbudde/openrobertaemptydbfortest:$VERSION
 
 5.1 EMBEDDED SERVER
 Assume that the exported environment variable DB_PARENTDIR contains a valid data base directory, e.g. db-$VERSION,
-then you have to run the upgrader first, if you want to deploy a new version (running it o is a noop):
+then run the upgrader first, if a new version is deployed (running it, if nothing has to be updated, is a noop):
   docker run -v $DB_PARENTDIR:/opt/db rbudde/openrobertaupgrade:$VERSION
-and then you start the server with an embedded database (no sqlclient access during operation, otherwise fine) 
+and then start the server with an embedded database (no sqlclient access during operation, otherwise fine) 
 - with docker:
   docker run -p 7100:1999 -v $DB_PARENTDIR:/opt/db rbudde/openrobertalabembedded:$VERSION &
 - with docker-compose (using compose for a single container may appear a bit over-engineered):
@@ -111,7 +101,7 @@ and give each compose instance a different name. Of course you'll need two datab
   cd $GITREPO/Docker
   SERVER_PORT_ON_HOST=7301 DBSERVER_PORT_ON_HOST=9301 DB_PARENTDIR=/tmp/ora1 docker-compose -p ora1 -f dc-server-db-server.yml up -d
   SERVER_PORT_ON_HOST=7302 DBSERVER_PORT_ON_HOST=9302 DB_PARENTDIR=/tmp/ora2 docker-compose -p ora2 -f dc-server-db-server.yml up -d
-Stop the two applications is done with docker-compose -p <project name> as shown above.
+Stop the two applications is done with docker-compose -p <project name>.
 For the two services two different networks are created (inspect the output of "docker network ls"), IP ranges are separated (inspect
 the output of "docker network inspect ora1_default" resp "docker network inspect ora2_default")
 
