@@ -273,10 +273,10 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 PROGRAM_C.linkProgram();
                 break;
             case 'menuToolboxBeginner':
-                $('#beginner').trigger('click');
+                $('.levelTabs a[href="#beginner"]').tab('show');
                 break;
             case 'menuToolboxExpert':
-                $('#expert').trigger('click');
+                $('.levelTabs a[href="#expert"]').tab('show');
                 break;
             default:
                 break;
@@ -620,8 +620,8 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             }
         });
         // experimental
-        $(document).on('keydown', function ( e ) {
-            if ((e.metaKey || e.ctrlKey) && ( String.fromCharCode(e.which).toLowerCase() === 'r') ) {
+        $(document).on('keydown', function(e) {
+            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which).toLowerCase() === 'r')) {
                 PROGRAM_C.importSourceCodeToCompile();
                 return false;
             }

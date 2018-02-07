@@ -45,7 +45,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         blocklyWorkspace.robControls.refreshTooltips(GUISTATE_C.getRobotRealName());
         GUISTATE_C.checkSim();
         var toolbox = $('#blocklyDiv .blocklyToolboxDiv');
-        toolbox.prepend('<ul class="nav nav-tabs levelTabs"><li class="active"><a id="beginner" class="typcn typcn-media-stop-outline" href="#" data-toggle="tab"></a></li><li class=""><a id="expert" href="#" class="typcn typcn-star-outline" data-toggle="tab"></a></li></ul>');
+        toolbox.prepend('<ul class="nav nav-tabs levelTabs"><li class="active"><a class="typcn typcn-media-stop-outline" href="#beginner" data-toggle="tab"></a></li><li class=""><a href="#expert" class="typcn typcn-star-outline" data-toggle="tab"></a></li></ul>');
     }
 
     function initEvents() {
@@ -97,15 +97,17 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         });
 
         // work around for touch devices
-        $('#beginner, #expert').on('touchend', function(e) {
-            $('#' + e.target.id).trigger('click');
+        $('.levelTabs').on('touchend', function(e) {
+            var target = $(e.target).attr("href");
+            $('.levelTabs a[href="' + target + '"]').tab('show');
         });
-
-        $('.levelTabs a').on('shown.bs.tab', function(e) {
+        
+        $('.levelTabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var target = $(e.target).attr("href").substring(1); // activated tab
             e.preventDefault();
-            loadToolbox(e.target.id);
+            loadToolbox(target);
             e.stopPropagation();
-            LOG.info('toolbox clicked, switched to ' + e.target.id);
+            LOG.info('toolbox clicked, switched to ' + target);
         });
 
         bindControl();
@@ -392,8 +394,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
     exports.importXml = importXml;
 
     /**
-     * Experimental: Open a file select dialog to load a program (source code) from local
-     * disk and ?
+     * Experimental: Open a file select dialog to load a program (source code)
+     * from local disk and ?
      */
     function importSourceCodeToCompile() {
         var input = $(document.createElement('input'));
