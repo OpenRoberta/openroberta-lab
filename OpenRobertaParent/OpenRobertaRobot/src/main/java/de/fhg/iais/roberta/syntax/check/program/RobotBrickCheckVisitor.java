@@ -66,7 +66,12 @@ public abstract class RobotBrickCheckVisitor extends RobotCommonCheckVisitor imp
                         this.errorCount++;
                     }
                     break;
-
+                case "COMPASS_SENSING":
+                    if ( usedSensor.getType() != SensorType.COMPASS ) {
+                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
+                        this.errorCount++;
+                    }
+                    break;
                 default:
                     break;
             }

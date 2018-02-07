@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-02-02 14:55:00.102274",
+		"lastupdated": "2018-02-07 17:14:04.372650",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -550,6 +550,7 @@
 	"MODE_RATE": "rate",
 	"MODE_ACCELERATION": "acceleration",
 	"MODE_ORIENTATION": "orientation",
+	"MODE_COMPASS": "compass",
 	"LOOP": "repeat until",
 	"LOOP_FOREVER": "repeat indefinitely",
 	"CONNECTION_SEND_DATA": "send message",
@@ -1240,7 +1241,7 @@
 	"SENSOR_UNIT_OMEGA": "ω",
 	"SENSOR_UNIT_PERCENT": "%",
 	"SENSOR_UNIT_VOLT": "V",
-	"SENSOR_TOUCH_BOB3": "arm",
+	"SENSOR_PINTOUCH_BOB3": "arm",
 	"SENSOR_SOUND_CALLIOPE": "microphone",
 	"MODE_VALUE": "value",
 	"MODE_PRESSED": "pressed",

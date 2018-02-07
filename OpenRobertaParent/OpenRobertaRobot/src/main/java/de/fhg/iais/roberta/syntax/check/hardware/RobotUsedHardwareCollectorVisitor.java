@@ -167,7 +167,7 @@ public abstract class RobotUsedHardwareCollectorVisitor extends CheckVisitor imp
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        this.usedSensors.add(new UsedSensor((ISensorPort) compassSensor.getPort(), SensorType.COMPASS, null));
+        this.usedSensors.add(new UsedSensor((ISensorPort) compassSensor.getPort(), SensorType.COMPASS, compassSensor.getMode()));
         return null;
     }
 

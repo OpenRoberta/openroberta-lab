@@ -20,6 +20,7 @@ import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.BrickKeyPressMode;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
+import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
@@ -77,6 +78,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
@@ -637,6 +639,22 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
         this.sb.append("hal.getSoundLevel(" + getEnumCode(soundSensor.getPort()) + ")");
+        return null;
+    }
+
+    @Override
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        switch ( (CompassSensorMode) compassSensor.getMode() ) {
+            case DEFAULT:
+            case ANGLE:
+                this.sb.append("hal.getHiTecCompassAngle(" + getEnumCode(compassSensor.getPort()) + ")");
+                break;
+            case COMPASS:
+                this.sb.append("hal.getHiTecCompassCompass(" + getEnumCode(compassSensor.getPort()) + ")");
+                break;
+            default:
+                throw new DbcException("Invalid Compass Mode!");
+        }
         return null;
     }
 

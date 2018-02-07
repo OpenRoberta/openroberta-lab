@@ -242,6 +242,7 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor implements As
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        checkSensorPort(compassSensor);
         return null;
     }
 
