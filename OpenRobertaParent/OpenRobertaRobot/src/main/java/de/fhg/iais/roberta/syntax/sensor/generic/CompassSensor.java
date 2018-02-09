@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -14,6 +15,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
+import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
@@ -72,5 +74,21 @@ public class CompassSensor<V> extends ExternalSensor<V> {
         }
         SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getModeFactory()::getCompassSensorMode);
         return CompassSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        //TODO: move reset to another block and delete astToBlock() method from here
+        String fieldValue = getPort().getPortNumber();
+        if ( getMode().toString().equals("ANGLE") || getMode().toString().equals("COMPASS") ) {
+            Mutation mutation = new Mutation();
+            mutation.setMode(getMode().toString());
+            jaxbDestination.setMutation(mutation);
+            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().toString());
+        }
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
+        return jaxbDestination;
     }
 }
