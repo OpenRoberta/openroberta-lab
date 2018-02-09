@@ -101,6 +101,7 @@ public final class BlocklyConstants {
     public static final String ROB_SENSORS_ENCODER_RESET = "robSensors_encoder_reset";
     public static final String ROB_SENSORS_TIMER_RESET = "robSensors_timer_reset";
     public static final String ROB_SENSORS_TIMER_RESET_CALLIOPE = "mbedSensors_timer_reset";
+    public static final String ROB_SENSORS_COMPASS_CALIBRATE = "robSensors_compass_calibrate";
     public static final String ROB_SENSOR_COLOUR_GET_SAMPLE = "robSensors_colour_getSample";
     public static final String ROB_SENSOR_LIGHT_GET_SAMPLE = "robSensors_light_getSample";
     public static final String ROB_SENSOR_SOUND_GET_SAMPLE = "robSensors_sound_getSample";

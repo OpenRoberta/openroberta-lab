@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.BrickKeyPressMode;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
+import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
@@ -73,6 +74,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
@@ -519,6 +521,23 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
             this.sb.append("hal.resetGyroSensor('" + gyroSensorPort + "')");
         } else {
             this.sb.append("hal.getGyroSensorValue('" + gyroSensorPort + "', " + getEnumCode(gyroSensor.getMode()) + ")");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        String compassSensorPort = compassSensor.getPort().getPortNumber();
+        switch ( (CompassSensorMode) compassSensor.getMode() ) {
+            case CALIBRATE:
+                // Calibration is not supported by ev3dev hitechnic sensor for now
+                break;
+            case ANGLE:
+            case COMPASS:
+                this.sb.append("hal.getHiTecCompassSensorValue('" + compassSensorPort + "', " + getEnumCode(compassSensor.getMode()) + ")");
+                break;
+            default:
+                throw new DbcException("Invalid Compass Mode!");
         }
         return null;
     }
@@ -1099,6 +1118,9 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
                 break;
             case SOUND:
                 name = "SoundSensor";
+                break;
+            case COMPASS:
+                name = "CompassSensor";
                 break;
             default:
                 throw new IllegalArgumentException("no mapping for " + sensor.getType() + "to ev3dev-lang-python");

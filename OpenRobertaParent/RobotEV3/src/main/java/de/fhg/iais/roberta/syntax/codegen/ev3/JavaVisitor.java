@@ -645,7 +645,13 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
         switch ( (CompassSensorMode) compassSensor.getMode() ) {
-            case DEFAULT:
+            case CALIBRATE:
+                this.sb.append("hal.hiTecCompassStartCalibration(" + getEnumCode(compassSensor.getPort()) + ");");
+                nlIndent();
+                this.sb.append("hal.waitFor(40000);");
+                nlIndent();
+                this.sb.append("hal.hiTecCompassStopCalibration(" + getEnumCode(compassSensor.getPort()) + ");");
+                break;
             case ANGLE:
                 this.sb.append("hal.getHiTecCompassAngle(" + getEnumCode(compassSensor.getPort()) + ")");
                 break;

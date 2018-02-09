@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.syntax.expr.mbed.RgbColor;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
@@ -200,20 +201,27 @@ public class SimulationCheckVisitor extends RobotSimulationCheckVisitor implemen
     }
 
     @Override
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        return null;
+    }
+
+    @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
         return null;
     }
-    
+
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
         return null;
     }
-        
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {      
-    	motorOnAction.getParam().getSpeed().visit(this);
-    	return null;
+
+    @Override
+    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+        motorOnAction.getParam().getSpeed().visit(this);
+        return null;
     }
-    
+
+    @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         return null;
     }

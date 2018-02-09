@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
+import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
@@ -38,6 +39,7 @@ import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.codegen.RobotSimulationVisitor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
@@ -46,17 +48,14 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class SimulationVisitor extends RobotSimulationVisitor<Void> {
     private static final String MOTOR_LEFT = "CONST.MOTOR_LEFT";
     private static final String MOTOR_RIGHT = "CONST.MOTOR_RIGHT";
 
-    private ILanguage language;
-
     private SimulationVisitor(Configuration brickConfiguration, ILanguage language) {
         super(brickConfiguration);
-
-        this.language = language;
     }
 
     public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, ILanguage language) {
@@ -346,6 +345,24 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
             this.sb.append(end);
         } else {
             this.sb.append("createGetGyroSensorSample(CONST.GYRO, CONST." + gyroSensor.getMode() + ")");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        switch ( (CompassSensorMode) compassSensor.getMode() ) {
+            case CALIBRATE:
+                this.sb.append("");
+                break;
+            case ANGLE:
+                this.sb.append("null");
+                break;
+            case COMPASS:
+                this.sb.append("null");
+                break;
+            default:
+                throw new DbcException("Invalid Compass Mode!");
         }
         return null;
     }

@@ -59,6 +59,10 @@ public abstract class RobotSimulationCheckVisitor extends RobotCommonCheckVisito
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
                     break;
+                case "COMPASS_SENSING":
+                    if ( usedSensor.getType() != SensorType.COMPASS ) {
+                        sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
+                    }
                 default:
                     break;
             }
