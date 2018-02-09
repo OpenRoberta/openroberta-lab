@@ -1061,9 +1061,6 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
             case OTHER:
                 name = "OtherConsumer";
                 break;
-            case EXTERNAL_LED:
-                name = "ExternalLed";
-                break;
             default:
                 throw new IllegalArgumentException("no mapping for " + actor.getName() + "to ev3dev-lang-python");
         }
