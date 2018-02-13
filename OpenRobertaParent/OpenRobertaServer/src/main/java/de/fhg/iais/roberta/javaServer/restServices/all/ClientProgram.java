@@ -418,8 +418,7 @@ public class ClientProgram {
                     }
                 }
                 handleRunProgramError(response, messageKey, token, wasRobotWaiting);
-
-            } else if ( cmd.equals("runN") ) {
+            } else if ( cmd.equals("compileN") || cmd.equals("runN") ) {
                 String token = httpSessionState.getToken();
                 String programName = request.getString("name");
                 String programText = request.optString("programText");
@@ -429,6 +428,37 @@ public class ClientProgram {
                 LOG.info("compile user supplied native program. Result: " + messageKey);
                 if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
                     Util.addSuccessInfo(response, Key.COMPILERWORKFLOW_SUCCESS);
+                } else {
+                    Util.addErrorInfo(response, messageKey);
+                }
+            } else if ( cmd.equals("compileP") ) {
+                Key messageKey = null;
+                String token = httpSessionState.getToken();
+                String programName = request.getString("name");
+                String programText = request.optString("programText");
+                String configName = request.optString("configuration", null);
+                String configurationText = request.optString("configurationText", null);
+                ILanguage language = Language.findByAbbr(request.optString("language"));
+                if ( configName != null ) {
+                    configurationText = configurationProcessor.getConfigurationText(configName, userId, robot);
+                } else if ( configurationText == null ) {
+                    configurationText = robotFactory.getConfigurationDefault();
+                }
+
+                BlocklyProgramAndConfigTransformer programAndConfigTransformer =
+                    BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
+                programAndConfigTransformer.getBrickConfiguration().setRobotName(httpSessionState.getRobotName());
+                messageKey = programAndConfigTransformer.getErrorMessage();
+                if ( messageKey == null ) {
+                    ClientProgram.LOG.info("compiler workflow started for program {}", programName);
+
+                    ICompilerWorkflow robotCompilerWorkflow = robotFactory.getRobotCompilerWorkflow();
+                    messageKey = robotCompilerWorkflow.generateSourceAndCompile(token, programName, programAndConfigTransformer, language);
+                    if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
+                        Util.addSuccessInfo(response, Key.COMPILERWORKFLOW_SUCCESS);
+                    } else {
+                        Util.addErrorInfo(response, messageKey);
+                    }
                 } else {
                     Util.addErrorInfo(response, messageKey);
                 }
@@ -464,10 +494,9 @@ public class ClientProgram {
                             handleRunProgramError(response, messageKey, token, true);
                         }
                     }
-                } // else {
+                }
                 response.put("data", programText);
                 handleRunProgramError(response, messageKey, token, true);
-                // }
             } else if ( cmd.equals("runPsim") ) {
                 boolean wasRobotWaiting = false;
 

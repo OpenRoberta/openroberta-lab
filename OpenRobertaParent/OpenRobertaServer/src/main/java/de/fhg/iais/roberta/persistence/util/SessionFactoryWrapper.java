@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  *
  * @author rbudde
  */
-public final class SessionFactoryWrapper {
+public class SessionFactoryWrapper {
     private static final Logger LOG = LoggerFactory.getLogger(SessionFactoryWrapper.class);
     private SessionFactory sessionFactory;
 

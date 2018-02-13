@@ -100,8 +100,27 @@ Development happens in the `develop` branch. Please sent PRs against that branch
     git clone git://github.com/OpenRoberta/robertalab.git
     cd robertalab
     git checkout -b develop origin/develop
+	
+The project OpenRobertaServer contains the server logic, that accesses
+* a database with Hibernate-based DAO objects
+* plugins for various robots which are supported in OpenRoberta
+* services for browser-based clients
+* services for robots connected to the lab either by Wifi or USB
+
+The server is made of
+* an embedded jetty server exposing REST services
+* the services are based on jersey
+* JSON (sometimes XML or plain text) is used for data exchange between front, robots and server
+
+Furthermore, the project OpenRobertaServer contains in directory staticResources for the browser client
+* HTML and CSS
+* Javascript libraries based on jquery and bootstrap for the frontend
+  * assertions (DBC), ajax-based server calls (COMM), logging (LOG) and
+  * javascript resources for blockly (see: http://code.google.com/p/blockly/)
+  * controller and models written in Javascript, which implement the GUI
 
 #### Blockly
 
 We are using Blockly, it is located in a separate repository. The build of the blockly is only done in the OpenRoberta/Blockly project and then copied to the OpenRobertaServer/staticResources. You can not build Blockly in OpenRobertaServer project directly.
 
+#### Have a look at the notes in LICENCE and NOTICE

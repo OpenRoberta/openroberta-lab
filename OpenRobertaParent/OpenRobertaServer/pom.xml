@@ -24,18 +24,6 @@
 			<artifactId>OpenRobertaRobot</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>de.fhg.iais.openroberta</groupId>
-			<artifactId>OpenRobertaRobot</artifactId>
-			<version>${project.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>de.fhg.iais.openroberta</groupId>
-			<artifactId>RobotEV3</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
 		</dependency>
@@ -76,10 +64,6 @@
 			<artifactId>hsqldb</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.antlr</groupId>
-			<artifactId>antlr4</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
@@ -102,6 +86,43 @@
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.fhg.iais.openroberta</groupId>
+			<artifactId>OpenRobertaRobot</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.fhg.iais.openroberta</groupId>
+			<artifactId>RobotArdu</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.fhg.iais.openroberta</groupId>
+			<artifactId>RobotEV3</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.fhg.iais.openroberta</groupId>
+			<artifactId>RobotMbed</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.fhg.iais.openroberta</groupId>
+			<artifactId>RobotNAO</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.fhg.iais.openroberta</groupId>
+			<artifactId>RobotNXT</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>
@@ -185,52 +206,6 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.17</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.apache.maven.surefire</groupId>
-						<artifactId>common-junit48</artifactId>
-						<version>2.17</version>
-					</dependency>
-				</dependencies>
-				<configuration>
-					<includes>
-						<include>**/*.class</include>
-					</includes>
-					<excludedGroups>de.fhg.iais.roberta.util.testsetup.IntegrationTest</excludedGroups>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.17</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.apache.maven.surefire</groupId>
-						<artifactId>common-junit48</artifactId>
-						<version>2.17</version>
-					</dependency>
-				</dependencies>
-				<configuration>
-					<groups>de.fhg.iais.roberta.util.testsetup.IntegrationTest</groups>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>integration-test</phase>
-						<goals>
-							<goal>integration-test</goal>
-						</goals>
-						<configuration>
-							<includes>
-								<include>**/*.class</include>
-							</includes>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
 				<version>1.4.1</version>
 				<executions>
@@ -254,7 +229,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.0.2</version>
+				<version>2.6</version>
 				<configuration>
 					<nonFilteredFileExtensions>
 						<nonFilteredFileExtension>ico</nonFilteredFileExtension>
@@ -292,41 +267,6 @@
 				</includes>
 			</resource>
 		</resources>
-		<pluginManagement>
-			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.apache.maven.plugins
-										</groupId>
-										<artifactId>
-											maven-clean-plugin
-										</artifactId>
-										<versionRange>
-											[3.0.0,)
-										</versionRange>
-										<goals>
-											<goal>clean</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 	</build>
 	<profiles>
 		<profile>
@@ -336,8 +276,7 @@
 			</activation>
 			<build>
 				<plugins>
-					<!-- Clean out compressed files that may have been added by a release
-						build. -->
+					<!-- Clean out compressed files that may have been added by a release build. -->
 					<plugin>
 						<artifactId>maven-clean-plugin</artifactId>
 						<version>3.0.0</version>
@@ -391,6 +330,41 @@
 							<force>true</force>
 							<gzip>true</gzip>
 						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>runIT</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>2.17</version>
+						<dependencies>
+							<dependency>
+								<groupId>org.apache.maven.surefire</groupId>
+								<artifactId>common-junit48</artifactId>
+								<version>2.17</version>
+							</dependency>
+						</dependencies>
+						<configuration>
+							<groups>de.fhg.iais.roberta.util.testsetup.IntegrationTest</groups>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>integration-test</phase>
+								<goals>
+									<goal>integration-test</goal>
+								</goals>
+								<configuration>
+									<includes>
+										<include>**/*.class</include>
+									</includes>
+								</configuration>
+							</execution>
+						</executions>
 					</plugin>
 				</plugins>
 			</build>

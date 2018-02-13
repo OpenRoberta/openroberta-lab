@@ -1,8 +1,6 @@
 package de.fhg.iais.roberta.javaServer.restInterfaceTest;
 
-import java.lang.reflect.Constructor;
 import java.sql.Timestamp;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.ws.rs.core.Response;
@@ -28,16 +26,18 @@ import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
  * <b>Testing the REST interface of the OpenRoberta server</b><br>
  * <br>
- * The tests in this class are integration tests. The front end is <b>not</b> tested. But as the server is called by small encapsulated REST calls issued from
- * the front end, the tests in this class should be easy to understand (try it!) and they are closely related to typical user stories as <i>log in with a wrong
- * password, then with the correct one, then create 4 programs and update one of them</i>. The more user stories are modeled in this class, the more confident
- * one can be, that the server is ok and errors visible in a browser will be in the Javascript front end only. The ultimate aim of this is to reduce the
- * debugging time of the front end considerably.<br>
+ * The tests in this class are essentially <b>integration tests</b> (in spite of the fact, that the front end is <i>not</i> tested. But as the server is called
+ * by small encapsulated REST calls issued from the front end, the tests in this class should be easy to understand and they are closely related to user stories
+ * as <i>log in with a wrong password, then with the correct one, then create 4 programs and update one of them</i>. The more user stories are modeled in this
+ * class, the more confident one can be, that the server is ok and errors visible in a browser will be in the Javascript front end only.<br>
+ * <i>The ultimate aim of this is to reduce the debugging time of the front end considerably.</i><br>
+ * <br>
+ * This integration runs as a unit test (as the class name indicates :-). This is possible, because the database can be run perfectly in-memory and the server
+ * is an embedded jetty, that can run without any installation (on CI server, for instance).<br>
  * <br>
  * The test class incorporates a full configured test data base (stored in memory), setup with all tables (see class <code>DbSetup</code>). The object
  * <code>this.memoryDbSetup</code> can be used to run SQL against the data base to check the effects of REST calls, e.g. after calling a service to add a new
@@ -46,10 +46,10 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * <b>once</b> for a JVM, i.e. it cannot be repeated. This is also true for tests from different classes using the same Junit runner. If tests need an
  * <b>empty</b> data base, the have to start with a call to <code>this.memoryDbSetup.deleteAllFromUserAndProgram()</code> <br>
  * The following conventions for REST calls should be used:<br>
- * - check the preconditions (typically using SQL),<br>
+ * - check the preconditions (in most cases using SQL),<br>
  * - call the REST service,<br>
  * - check the response object,<br>
- * - check the postconditions (typically using SQL).<br>
+ * - check the postconditions (in most cases using SQL).<br>
  * <br>
  * - to avoid code repetition, use simple wrappers for REST calls,<br>
  * - use the <code>this.sessionFactoryWrapper</code> object to create data base sessions and<br>
@@ -69,7 +69,7 @@ public class RestInterfaceTest {
     // objects for specialized user stories
     private String connectionUrl;
 
-    private RobotCommunicator brickCommunicator;
+    private RobotCommunicator robotCommunicator;
 
     private RobertaProperties robertaProperties;
     private ClientUser restUser;
@@ -81,19 +81,18 @@ public class RestInterfaceTest {
         this.robertaProperties = new RobertaProperties(Util1.loadProperties(null));
 
         this.connectionUrl = "jdbc:hsqldb:mem:restTestInMemoryDb";
-        this.brickCommunicator = new RobotCommunicator();
-        this.restUser = new ClientUser(this.brickCommunicator, robertaProperties, null);
+        this.robotCommunicator = new RobotCommunicator();
+        this.restUser = new ClientUser(this.robotCommunicator, robertaProperties, null);
 
         this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-test-cfg.xml", this.connectionUrl);
         Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
         this.memoryDbSetup = new DbSetup(nativeSession);
         this.memoryDbSetup.createEmptyDatabase();
-        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.brickCommunicator, robertaProperties);
-        this.restConfiguration = new ClientConfiguration(this.sessionFactoryWrapper, this.brickCommunicator);
-        Map<String, IRobotFactory> robotPlugins = new HashMap<>();
-        loadPlugin(robotPlugins);
-        this.sPid = HttpSessionState.init(this.brickCommunicator, robotPlugins, robertaProperties, 1);
-        this.sMinscha = HttpSessionState.init(this.brickCommunicator, robotPlugins, robertaProperties, 2);
+        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.robotCommunicator, robertaProperties);
+        this.restConfiguration = new ClientConfiguration(this.sessionFactoryWrapper, this.robotCommunicator);
+        Map<String, IRobotFactory> robotPlugins = ServerStarter.configureRobotPlugins(robotCommunicator, robertaProperties);
+        this.sPid = HttpSessionState.init(this.robotCommunicator, robotPlugins, robertaProperties, 1);
+        this.sMinscha = HttpSessionState.init(this.robotCommunicator, robotPlugins, robertaProperties, 2);
     }
 
     /**
@@ -887,17 +886,5 @@ public class RestInterfaceTest {
         }
         JSONUtilForServer.assertJsonEquals(expectedProgramNamesAsJson, programNames, false);
         return programListing;
-    }
-
-    private void loadPlugin(Map<String, IRobotFactory> robotPlugins) {
-        try {
-            @SuppressWarnings("unchecked")
-            Class<IRobotFactory> factoryClass =
-                (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass("de.fhg.iais.roberta.factory.ev3.lejos.v0.Factory");
-            Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(robertaProperties.getClass());
-            robotPlugins.put("ev3lejos", factoryConstructor.newInstance(robertaProperties));
-        } catch ( Exception e ) {
-            throw new DbcException("robot plugin ev3 has an invalid factory. Check the properties. Server does NOT start", e);
-        }
     }
 }

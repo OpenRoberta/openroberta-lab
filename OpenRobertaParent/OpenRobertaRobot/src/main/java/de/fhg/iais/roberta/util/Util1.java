@@ -1,6 +1,10 @@
 package de.fhg.iais.roberta.util;
 
 import java.io.FileReader;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
@@ -10,6 +14,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -179,5 +184,27 @@ public class Util1 {
         } else {
             return 2 << (exp - 1);
         }
+    }
+
+    /**
+     * read all lines from a resource
+     *
+     * @param resourceName
+     * @return the list of resource
+     * @throws URISyntaxException
+     */
+    public static List<String> readResourceLines(String resourceName) throws IOException, URISyntaxException {
+        return Files.readAllLines(Paths.get(Util1.class.getResource(resourceName).toURI()));
+    }
+
+    /**
+     * read all lines from a resource, concatenate them to a string separated by a newline
+     *
+     * @param resourceName
+     * @return the list of lines
+     * @throws URISyntaxException
+     */
+    public static String readResourceContent(String resourceName) throws IOException, URISyntaxException {
+        return readResourceLines(resourceName).stream().collect(Collectors.joining(System.lineSeparator()));
     }
 }

@@ -237,7 +237,7 @@ public class ServerStarter {
      * @param robotCommunicator
      * @return the mapping from robot names to the factory, that supplies all robot-specific data
      */
-    static Map<String, IRobotFactory> configureRobotPlugins(RobotCommunicator robotCommunicator, RobertaProperties robertaProperties) {
+    public static Map<String, IRobotFactory> configureRobotPlugins(RobotCommunicator robotCommunicator, RobertaProperties robertaProperties) {
         if ( robotCommunicator == null ) {
             LOG.error("the robot communicator object was not found. This is a severe error. The system will crash!");
         }

@@ -175,11 +175,6 @@
 				<version>2.3.3</version>
 			</dependency>
 			<dependency>
-				<groupId>org.antlr</groupId>
-				<artifactId>antlr4</artifactId>
-				<version>4.3</version>
-			</dependency>
-			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
 				<version>3.1</version>
