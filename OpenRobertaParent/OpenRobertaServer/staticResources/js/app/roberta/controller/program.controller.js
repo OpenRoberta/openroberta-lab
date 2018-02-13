@@ -409,7 +409,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                 // TODO move this to the run controller once it is clear what should happen
                 var name = UTIL.getBasename(file.name);
                 PROGRAM.runN(name, event.target.result, GUISTATE_C.getLanguage(), function(result) {
-                    alert(result.rc + ' ' + result.compiledCode);
+                    alert(result.rc);
                 });
             }
         })

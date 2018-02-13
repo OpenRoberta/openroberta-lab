@@ -420,23 +420,18 @@ public class ClientProgram {
                 handleRunProgramError(response, messageKey, token, wasRobotWaiting);
 
             } else if ( cmd.equals("runN") ) {
-                boolean wasRobotWaiting = false;
-
                 String token = httpSessionState.getToken();
                 String programName = request.getString("name");
                 String programText = request.optString("programText");
                 ILanguage language = Language.findByAbbr(request.optString("language"));
                 LOG.info("compilation of native source started for program {}", programName);
                 Key messageKey = robotFactory.getRobotCompilerWorkflow().compileSourceCode(token, programName, programText, language, null);
-                if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS && token != null && !token.equals(ClientAdmin.NO_CONNECT) ) {
-                    wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
+                LOG.info("compile user supplied native program. Result: " + messageKey);
+                if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
+                    Util.addSuccessInfo(response, Key.COMPILERWORKFLOW_SUCCESS);
                 } else {
-                    if ( messageKey != null ) {
-                        LOG.info(messageKey.toString());
-                    }
+                    Util.addErrorInfo(response, messageKey);
                 }
-                handleRunProgramError(response, messageKey, token, wasRobotWaiting);
-
             } else if ( cmd.equals("runPBack") ) {
                 Key messageKey = null;
                 String token = httpSessionState.getToken();
