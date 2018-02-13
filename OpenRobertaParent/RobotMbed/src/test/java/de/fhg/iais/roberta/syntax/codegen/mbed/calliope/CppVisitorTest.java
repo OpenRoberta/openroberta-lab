@@ -7,8 +7,6 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.mbed.CalliopeConfiguration;
-import de.fhg.iais.roberta.util.RobertaProperties;
-import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.mbed.HelperMbedForXmlTest;
 
 public class CppVisitorTest {

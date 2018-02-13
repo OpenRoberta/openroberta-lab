@@ -3,8 +3,6 @@ package de.fhg.iais.roberta.ast.syntax.actors.bob3;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.RobertaProperties;
-import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.ardu.HelperBob3ForXmlTest;
 
 @Ignore

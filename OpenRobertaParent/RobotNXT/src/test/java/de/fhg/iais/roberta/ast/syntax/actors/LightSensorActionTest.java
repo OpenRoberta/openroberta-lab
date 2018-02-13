@@ -2,8 +2,6 @@ package de.fhg.iais.roberta.ast.syntax.actors;
 
 import org.junit.Ignore;
 
-import de.fhg.iais.roberta.util.RobertaProperties;
-import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
 
 public class LightSensorActionTest {
