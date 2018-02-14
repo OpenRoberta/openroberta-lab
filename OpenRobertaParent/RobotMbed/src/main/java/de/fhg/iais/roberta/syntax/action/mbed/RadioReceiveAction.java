@@ -1,6 +1,9 @@
 package de.fhg.iais.roberta.syntax.action.mbed;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -10,18 +13,21 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
 
 public class RadioReceiveAction<V> extends Action<V> {
+    private final BlocklyType type;
 
-    private RadioReceiveAction(BlocklyBlockProperties properties, BlocklyComment comment) {
+    private RadioReceiveAction(BlocklyType type, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("RADIO_RECEIVE_ACTION"), properties, comment);
+        this.type = type;
         setReadOnly();
     }
 
-    public static <V> RadioReceiveAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new RadioReceiveAction<>(properties, comment);
+    public static <V> RadioReceiveAction<V> make(BlocklyType type, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new RadioReceiveAction<>(type, properties, comment);
     }
 
     @Override
@@ -32,7 +38,11 @@ public class RadioReceiveAction<V> extends Action<V> {
 
     @Override
     public String toString() {
-        return "BluetoothReceiveAction []";
+        return "BluetoothReceiveAction [" + getType().toString() + "]";
+    }
+
+    public BlocklyType getType() {
+        return this.type;
     }
 
     /**
@@ -43,7 +53,9 @@ public class RadioReceiveAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        return RadioReceiveAction.make(helper.extractBlockProperties(block), helper.extractComment(block));
+        List<Field> fields = helper.extractFields(block, (short) 1);
+        String type = helper.extractField(fields, BlocklyConstants.TYPE);
+        return RadioReceiveAction.make(BlocklyType.get(type), helper.extractBlockProperties(block), helper.extractComment(block));
 
     }
 
@@ -52,9 +64,9 @@ public class RadioReceiveAction<V> extends Action<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
-        mutation.setDatatype("String");
+        mutation.setDatatype(this.type.getBlocklyName());
         jaxbDestination.setMutation(mutation);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.TYPE, "String");
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.TYPE, this.type.getBlocklyName());
         return jaxbDestination;
     }
 }

@@ -355,7 +355,7 @@ public class CppVisitorTest {
                 + IMPORTS
                 + MAIN
                 + "uBit.radio.enable();\n"
-                + "uBit.radio.setTransmitPower(0); uBit.radio.datagram.send(ManagedString(\"Hallo\"));\n"
+                + "uBit.radio.setTransmitPower(0); uBit.radio.datagram.send(ManagedString((ManagedString(\"Hallo\"))));\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/action/radio_send_message.xml");
@@ -368,7 +368,7 @@ public class CppVisitorTest {
                 + IMPORTS
                 + MAIN
                 + "uBit.radio.enable();\n"
-                + "uBit.radio.setTransmitPower(0); uBit.radio.datagram.send(\"\");\n"
+                + "uBit.radio.setTransmitPower(0); uBit.radio.datagram.send(ManagedString((\"\")));\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/action/radio_send_missing_message.xml");
