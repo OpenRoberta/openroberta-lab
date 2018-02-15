@@ -1,0 +1,18 @@
+FROM rbudde/openroberta_base:1
+
+ARG LAST_RUN_OF_META=2018-02-15-13:05:98
+
+RUN apt-get update && apt-get install -y git maven && apt-get clean
+
+WORKDIR /opt
+RUN git clone --depth=1 -b develop https://github.com/OpenRoberta/robertalab.git
+
+WORKDIR /opt/robertalab
+RUN cd OpenRobertaParent \
+    && mvn clean install -DskipTests -DskipITs
+
+RUN cd RobotArdu/resources/linux/;chmod +x arduino-builder;cd tools-builder/ctags/5.8*;chmod +x ctags
+	
+# define the entry point for running the test
+WORKDIR /opt/robertalab/OpenRobertaParent
+ENTRYPOINT ["/bin/bash"]
