@@ -44,7 +44,9 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
  * programs encoded as expected by the crosscompilers) to the various crosscompilers and check whether the expected response is returned ("ok", "error").<br>
  * <br>
  * In src/test/compilerWorkflowTest for each robot "x" a directory with name "x" is expected. This directory contains all tests for this robot. The helper
- * methods "compileNepo" and "compileNative" are used to execute one test.
+ * methods "compileNepo" and "compileNative" are used to execute one test.<br>
+ * <br>
+ * TODO: add tests for generating simulation programs
  *
  * @author rbudde
  */
@@ -110,7 +112,6 @@ public class CompilerWorkflowIT {
         compileNative(true, "microbit", "pic", "py");
         compileNative(true, "nao", "move", "py");
         compileNative(true, "nxt", "drive", "nxc");
-        compileNative(true, "sim", "Drive", "java");
     }
 
     @Test
@@ -127,7 +128,6 @@ public class CompilerWorkflowIT {
         compileNepo(true, "microbit", "pic.xml");
         compileNepo(true, "nao", "move.xml");
         compileNepo(true, "nxt", "drive.xml");
-        compileNepo(true, "sim", "drive.xml");
     }
 
     // small helpers

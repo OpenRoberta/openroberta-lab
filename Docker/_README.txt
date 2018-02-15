@@ -70,9 +70,9 @@ docker push rbudde/openrobertalabupgrade:$VERSION
 docker push rbudde/openrobertalabembedded:$VERSION
 docker push rbudde/openrobertaemptydbfortest:$VERSION
 
-5. RUN THE SERVER
+4. RUN THE SERVER
 
-5.1 EMBEDDED SERVER
+4.1 EMBEDDED SERVER
 Assume that the exported environment variable DB_PARENTDIR contains a valid data base directory, e.g. db-$VERSION,
 then run the upgrader first, if a new version is deployed (running it, if nothing has to be updated, is a noop):
   docker run -v $DB_PARENTDIR:/opt/db rbudde/openrobertaupgrade:$VERSION
@@ -86,7 +86,7 @@ Using docker-compose is preferred.
 If the log message is printed, which tells you how many programs are in the data base, everything is fine and you can
 access the server at http://dns-name-or-localhost:7100 (see docker command and the compose file)
 
-5.2 SERVER AND DATABASE SERVER
+4.2 SERVER AND DATABASE SERVER
 Running two container, one db server container and one server container is the preferred way for production systems.
 It allows the access to the database with a sql client (querying, but also backup and checkpoints):
   cd $GITREPO/Docker
@@ -105,8 +105,41 @@ Stop the two applications is done with docker-compose -p <project name>.
 For the two services two different networks are created (inspect the output of "docker network ls"), IP ranges are separated (inspect
 the output of "docker network inspect ora1_default" resp "docker network inspect ora2_default")
 
-5.3 RUNNING A TEST SETUP
+4.3 RUNNING A TEST SETUP
   cd $GITREPO/Docker
   docker-compose -p test -f dc-testserver.yml up &
   ...
   docker-compose -p test -f dc-testserver.yml stop
+
+5. INTEGRATION TEST CONTAINER
+
+Using the configuration file DockerfileIT you create an image, that contains
+- all crosscompiler
+- mvn and git
+and has executed a
+- git clone and
+- mvn clean install
+The entrypoint is defined as a bash.
+
+cd $GITREPO/Docker
+docker build -t rbudde/openroberta_it:$VERSION -f DockerfileIT .
+
+# the following commands are executed by the roberta maintainer; you should NOT do this
+docker push rbudde/openroberta_it:$VERSION
+
+Starting this image opens a bash for you to
+- pull the develop branch
+- make arduino tools executable (this nasty step has to be removed)
+- execute all tests, including the integration tests
+
+docker run -it rbudde/openroberta_it:$VERSION
+
+# git pull
+# chmod +x RobotArdu/resources/linux/arduino-builder RobotArdu/resources/linux/tools-builder/ctags/5.8*/ctags
+
+# mvn clean install -Pdebug,runIT
+
+If you want to execute only the compiler-workflow integration test, then do
+
+# cd OpenRobertaServer
+# mvn -Dtest=CompilerWorkflowIT test
