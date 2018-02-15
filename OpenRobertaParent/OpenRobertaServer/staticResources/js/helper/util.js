@@ -337,7 +337,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
     }
 
     function download(fileName, content) {
-        if ('Blob' in window) {
+        if ('Blob' in window && navigator.userAgent.toLowerCase().match(/iPad|iPhone/i) == null) {
             var contentAsBlob = new Blob([ content ], {
                 type : 'application/octet-stream'
             });
@@ -347,7 +347,6 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
                 var downloadLink = document.createElement('a');
                 downloadLink.download = fileName;
                 downloadLink.innerHTML = 'Download File';
-                downloadLink.href = window.URL.createObjectURL(contentAsBlob);
                 downloadLink.href = window.URL.createObjectURL(contentAsBlob);
                 downloadLink.onclick = destroyClickedElement;
                 downloadLink.style.display = 'none';
