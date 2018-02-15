@@ -105,12 +105,12 @@ public class CompilerWorkflowIT {
         compileNative(true, "calliope2016", "led.cpp");
         compileNative(true, "calliope2017", "led.cpp");
         compileNative(true, "ev3dev", "drive.py");
-        compileNative(true, "ev3lejos", "drive.java");
-        compileNative(true, "ev3lejosv1", "drive.java");
+        compileNative(true, "ev3lejos", "Drive.java");
+        compileNative(true, "ev3lejosv1", "Drive.java");
         compileNative(true, "microbit", "pic.py");
         compileNative(true, "nao", "move.py");
         compileNative(true, "nxt", "drive.nxc");
-        compileNative(true, "sim", "drive.java");
+        compileNative(true, "sim", "Drive.java");
     }
 
     @Test
@@ -136,7 +136,7 @@ public class CompilerWorkflowIT {
 
     private void compileNative(boolean expectResultOk, String robot, String resource) throws Exception {
         setRobotTo(robot);
-        JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileN','name':'nxtNative','language':'de'}");
+        JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileN','name':'native','language':'de'}");
         String fileContent = Util1.readResourceContent("/compilerWorkflowTest/" + robot + "/" + resource);
         cmd.getJSONObject("data").put("programText", fileContent);
         response = this.restProgram.command(httpSessionState, cmd);
@@ -145,7 +145,7 @@ public class CompilerWorkflowIT {
 
     private void compileNepo(boolean expectResultOk, String robot, String resource) throws Exception {
         setRobotTo(robot);
-        JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileP','name':'nxtProg','language':'de'}");
+        JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileP','name':'prog','language':'de'}");
         setProgConf(cmd.getJSONObject("data"), Util1.readResourceContent("/compilerWorkflowTest/" + robot + "/" + resource));
         response = this.restProgram.command(httpSessionState, cmd);
         assertEntityRc(this.response, expectResultOk ? "ok" : "error");
