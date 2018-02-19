@@ -96,7 +96,7 @@ body.blocklyMinimalBody * {
     overflow: hidden;
     transform: none;
 }
-#head-navigation {
+#head-navigation, #tutorial-navigation{
     box-shadow: 0 3px 5px #aeaeaf;
     -webkit-box-shadow: 0 3px 5px #aeaeaf;
     border: 0;
@@ -390,6 +390,12 @@ div.rightMenuButton:hover,
     top: 8px;
     font-size: 24px;
     left: 7px;
+}
+#progTutorial.rightMenuButton {
+	background-color: #BACC1E;;
+}
+#progTutorial.rightMenuButton:before {  
+    border-right: 6px solid #BACC1E;;
 }
 .menu-icons {
     font-size: 24px;
@@ -1804,4 +1810,158 @@ img.img-responsive {
 /***** Overwrite prettify-CSS *****/
 li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
     list-style-type: inherit !important;
+}
+#tutorial-navigation {
+	display:none;
+}
+
+#head-navigation, #tutorial-navigation {
+	/* box-shadow: 0 3px 5px #aeaeaf;
+	-webkit-box-shadow: 0 3px 5px #aeaeaf;
+	border: 0;
+	margin: 0;
+}
+
+#head-navigation {
+	/* display: none; /* not needed in the tutorial form*/	
+}
+#tutorial-navigation ul {
+	width:100%;
+}
+#tutorial-navigation li a:hover {
+    transition-duration: 300ms;
+    background: #BACC1E;
+}
+
+#tutorial-navigation li.active a {
+    transition-duration: 300ms;
+    background: #BACC1E;
+}
+
+#tutorial-navigation li a.typcn:before {
+    font-size: 40px;
+}
+
+/* #tutorial-navigation li a {
+	margin: 4px 20px 4px 0;
+    background: #ddd;
+    display: block;
+} */
+#tutorial-navigation li a {
+    margin: 4px 30px 40px 0;
+    background: #ddd;
+    width: 48px;
+    height: 48px;
+    padding: 12px;
+    font-size: 24px;
+    display: block;
+    font-weight: bold;
+}
+#tutorial-navigation li:last-child {
+	float:right;
+}
+#tutorial-navigation li:last-child a:before {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+}
+#tutorial-navigation li:last-child a{
+	margin-right: 0;
+}
+#tutorial-navigation li {
+    text-align: center;
+}
+#tutorialDiv.fromRight {
+    background-color: #eee;
+    padding: 10px;
+}
+#tutorialContent {
+	background-color: #fff;
+	margin: 0;
+	padding: 16px;
+}
+p.quiz {
+	margin-top: 16px;
+}
+.quiz.footer {
+	margin-top: 16px;
+}
+.quiz.footer>.btn.right {
+	margin-left: 16px;
+}
+.quiz.answer{
+    display: block;
+    position: relative;
+    padding-left: 34px;
+    margin-top: 16px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+/* Hide the browser's default checkbox */
+.quiz.answer input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+    border-radius: 2px;
+}
+/* On mouse-over, add a grey background color */
+.quiz.answer:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+/* When the checkbox is checked, add a blue background */
+.quiz.answer input:checked ~ .checkmark {
+    background-color: #ccc;
+}
+/* Create the checkmark/indicator (hidden when not checked) */
+.quiz.answer>.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+/* Show the checkmark when checked */
+.quiz.answer input:checked ~ .checkmark:after {
+    display: block;
+}
+/* Style the checkmark/indicator */
+.quiz.answer>.checkmark:after {
+    left: 10px;
+    top: 5px;
+    width: 6px;
+    height: 14px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+label.quiz.answer{	
+    padding: 6px 10px 6px 36px;
+    border-radius: 4px;       
+}
+label.quiz.answer.correct {	
+    border: solid 2px #C7D92B;
+    background-color: #C7D92B;
+    padding: 4px 8px 4px 34px;
+}
+label.quiz.answer.fail {
+    border: solid 2px #E2001A;
+    padding: 4px 8px 4px 34px;
+}
+#welcomeHaribo {
+	z-index: 9999;
+}
+#welcomeHaribo .modal-dialog {
+	width: 40vw;
 }

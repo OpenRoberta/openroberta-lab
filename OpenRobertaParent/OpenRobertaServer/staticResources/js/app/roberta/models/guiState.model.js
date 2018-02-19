@@ -4,6 +4,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * Initialize gui state object
      */
     function init() {
+        var ready = new $.Deferred();
 
         exports.server = {};
         exports.server.ping = true;
@@ -30,10 +31,10 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         exports.gui.vendor = '';
         exports.gui.sim = '';
         exports.gui.connectionType = {
-                TOKEN: 'token',
-                AGENT: 'arduinoAgent',
-                AUTO: 'autoConnection',
-                AGENTORTOKEN: 'arduinoAgentOrToken'
+            TOKEN : 'token',
+            AGENT : 'arduinoAgent',
+            AUTO : 'autoConnection',
+            AGENTORTOKEN : 'arduinoAgentOrToken'
         }
 
         exports.user = {};
@@ -77,15 +78,62 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         exports.robot.time = -1;
         exports.robot.robotPort = '';
         exports.robot.socket = null;
-        return COMM.json("/admin", {
-            "cmd" : "init"
-        }, function(result) {
-            if (result.rc === 'ok') {
-                $.extend(exports.server, result.server);
-                exports.server.version = result["server.version"];
-                exports.server.time = result.serverTime;
-            }
-        }, 'init gui state model');
+
+        exports.tutorials = {};
+
+        var getInitFromServer = function() {
+            return COMM.json("/admin", {
+                "cmd" : "init"
+            }, function(result) {
+                if (result.rc === 'ok') {
+                    $.extend(exports.server, result.server);
+                    exports.server.version = result["server.version"];
+                    exports.server.time = result.serverTime;
+                    ready.resolve();
+                }
+            }, 'init gui state model');
+        }
+
+        // check if tutorials are available
+        $.ajax({
+            url : "../tutorial/",
+            success : function(data) {
+                var tutorialPathsList = [];
+                $(data).find("a:contains(.json)").each(function() {
+                    tutorialPathsList.push($(this).attr("href"));
+                });
+                function readTutorialsRecursive() {
+                    var tutorialPath = tutorialPathsList.splice(0, 1);
+                    // list of files is empty?
+                    if (tutorialPath.length == 0) {
+                        return $.Deferred().resolve().promise();
+                    }
+                    return $.getJSON('..' + tutorialPath).done(function(data) {
+                        // store the available tutorial objects
+                        if (data.name) {
+                            var tutorialId = data.name.toLowerCase().replace(/ /g, "");
+                            exports.tutorials[tutorialId] = data;
+                        } else {
+                            console.error('"' + tutorialPath + '" is not a valid tutorial file! No name could be found.');
+                        }
+                    }).fail(function(e, r) {
+                        // this should not happen
+                        console.error('"' + tutorialPath + '" is not a valid json file! The reason is probably a', r);
+                        return readTutorialsRecursive();
+                    }).then(function() {
+                        // check for more tutorials
+                        return readTutorialsRecursive();
+                    });
+                }
+                // all tutorials stored? do the last step for initializing the GUI
+                readTutorialsRecursive().always(function() {
+                    getInitFromServer();
+                });
+            },
+            // no tutorial folder available? ignore, do the last step for initializing the GUI
+            error : getInitFromServer,
+        });
+        return ready.promise();
     }
     exports.init = init;
 });

@@ -41,6 +41,7 @@ require.config({
         'progList.model' : '../app/roberta/models/progList.model',
         'program.controller' : '../app/roberta/controller/program.controller',
         'program.model' : '../app/roberta/models/program.model',
+        'progTutorial.controller' : '../app/roberta/controller/progTutorial.controller',
         'progShare.controller' : '../app/roberta/controller/progShare.controller',
         'progSim.controller' : '../app/roberta/controller/progSim.controller',
         'robot.controller' : '../app/roberta/controller/robot.controller',
@@ -119,7 +120,7 @@ require.config({
 require([ 'require', 'wrap', 'jquery', 'jquery-cookie', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
         'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'cookieDisclaimer.controller', 'menu.controller', 'user.controller',
         'robot.controller', 'program.controller', 'progSim.controller', 'progCode.controller', 'progDelete.controller', 'progHelp.controller',
-        'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller', 'volume-meter', 'user.model' ], function(
+        'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller', 'progTutorial.controller', 'volume-meter', 'user.model' ], function(
         require) {
 
     $ = require('jquery', 'jquery-cookie');
@@ -147,6 +148,7 @@ require([ 'require', 'wrap', 'jquery', 'jquery-cookie', 'guiState.controller', '
     userController = require('user.controller');
     userModel = require('user.model');
     socketController = require('socket.controller');
+    tutorialController = require('progTutorial.controller');
 
     $(document).ready(WRAP.fn3(init, 'page init'));
 });
@@ -178,6 +180,8 @@ function init() {
         progSimController.init();
         progRunController.init();
         menuController.init();
+        tutorialController.init();
+        
         cookieDisclaimer.init();
         $(".cover").fadeOut(100, function() {
             if (!guiStateController.getStartWithoutPopup()) {
@@ -192,6 +196,7 @@ function init() {
                 }
             }
         });
+        
         $(".pace").fadeOut(500);
     });
 }

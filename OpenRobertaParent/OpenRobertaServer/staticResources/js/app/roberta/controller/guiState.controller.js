@@ -4,7 +4,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
      * Init robot
      */
     function init(language) {
-
         var ready = $.Deferred();
         $.when(GUISTATE.init()).then(function() {
             var cookieName = "OpenRoberta_" + GUISTATE.server.version;
@@ -247,7 +246,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         }
 
         $('.robotType').removeClass('disabled');
-        $('.' + robot).addClass('disabled');
+        $('.robotType.' + robot).addClass('disabled');
         $('#head-navi-icon-robot').removeClass('typcn-open');
         $('#head-navi-icon-robot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
         $('#head-navi-icon-robot').addClass('typcn-' + robotGroup);
@@ -297,7 +296,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             SOCKET_C.listRobotStart();
             if (GUISTATE.gui.isAgent == true) {
                 updateMenuStatus();
-                //console.log('arduino based bobot was selected');
+            //console.log('arduino based bobot was selected');
             } else {
                 $('#menuConnect').parent().removeClass('disabled');
             }
@@ -307,7 +306,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             SOCKET_C.listRobotStart();
             if (GUISTATE.gui.isAgent == true) {
                 updateMenuStatus();
-                //console.log('arduino based bobot was selected');
+            //console.log('arduino based bobot was selected');
             } else {
                 $('#menuConnect').parent().addClass('disabled');
             }
@@ -328,13 +327,14 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         if (GUISTATE.gui.blocklyWorkspace) {
             GUISTATE.gui.blocklyWorkspace.robControls.refreshTooltips(getRobotRealName());
         }
+        updateTutorialMenu();
     }
 
     exports.setRobot = setRobot;
 
     function findGroup(robot) {
         var robots = getRobots();
-        for ( var propt in robots) {
+        for (var propt in robots) {
             if (robots[propt].name == robot && robots[propt].group !== '') {
                 robot = robots[propt].group;
                 return robot;
@@ -390,7 +390,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     exports.getRobotPort = getRobotPort;
 
     function getRobotRealName() {
-        for ( var robot in getRobots()) {
+        for (var robot in getRobots()) {
             if (!getRobots().hasOwnProperty(robot)) {
                 continue;
             }
@@ -403,7 +403,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     exports.getRobotRealName = getRobotRealName;
 
     function getMenuRobotRealName(robotName) {
-        for ( var robot in getRobots()) {
+        for (var robot in getRobots()) {
             if (!getRobots().hasOwnProperty(robot)) {
                 continue;
             }
@@ -416,7 +416,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     exports.getMenuRobotRealName = getMenuRobotRealName;
 
     function getIsRobotBeta(robotName) {
-        for ( var robot in getRobots()) {
+        for (var robot in getRobots()) {
             if (!getRobots().hasOwnProperty(robot)) {
                 continue;
             }
@@ -429,7 +429,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     exports.getIsRobotBeta = getIsRobotBeta;
 
     function getRobotInfo(robotName) {
-        for ( var robot in getRobots()) {
+        for (var robot in getRobots()) {
             if (!getRobots().hasOwnProperty(robot)) {
                 continue;
             }
@@ -535,6 +535,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             $('.EN').css('display', 'inline');
         }
         GUISTATE.gui.language = language;
+        updateTutorialMenu();
     }
     exports.setLanguage = setLanguage;
 
@@ -821,8 +822,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         $('.nav > li > ul > .login').addClass('disabled');
         $('#head-navi-icon-user').removeClass('ok');
         $('#head-navi-icon-user').addClass('error');
-//        setProgramSaved(true);
-//        setConfigurationSaved(true);
         if (GUISTATE.gui.view == 'tabProgList') {
             $('#tabProgram').trigger('click');
         } else if (GUISTATE.gui.view == 'tabConfList') {
@@ -850,11 +849,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
                 } else if (opt_owner === 'Roberta') { // user loads a program from the example program list
                     name += ' <b><span style="color:#33B8CA;" class="typcn typcn-roberta progName"></span></b>';
                 } else if (GUISTATE.program.shared == 'WRITE') { // user loads a program, owned by another user, but with WRITE rights
-                    name += ' <b><span style="color:#33B8CA;" class="typcn typcn-pencil progName"></span></b><span style="color:#33B8CA;">' + opt_owner
-                            + '</span>';
+                    name += ' <b><span style="color:#33B8CA;" class="typcn typcn-pencil progName"></span></b><span style="color:#33B8CA;">' + opt_owner + '</span>';
                 } else if (GUISTATE.program.shared == 'READ') { // user loads a program, owned by another user, but with READ rights
-                    name += ' <b><span style="color:#33B8CA;" class="typcn typcn-eye progName"></span></b><span style="color:#33B8CA;">' + opt_owner
-                            + '</span>';
+                    name += ' <b><span style="color:#33B8CA;" class="typcn typcn-eye progName"></span></b><span style="color:#33B8CA;">' + opt_owner + '</span>';
                 } else {
                     console.log("Program with undefined rights from " + opt_owner + " loaded.");
                 }
@@ -891,6 +888,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         }
     }
     exports.checkSim = checkSim;
+
+    function getListOfTutorials() {
+        return GUISTATE.tutorials;
+    }
+    exports.getListOfTutorials = getListOfTutorials;
 
     function getConnectionTypeEnum() {
         return GUISTATE.gui.connectionType;
@@ -988,7 +990,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
                     GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
                 }
                 $('#menuRunProg').parent().addClass('disabled');
-                //$('#menuConnect').parent().addClass('disabled');
+            //$('#menuConnect').parent().addClass('disabled');
             } else {
                 $('#head-navi-icon-robot').removeClass('error');
                 $('#head-navi-icon-robot').removeClass('busy');
@@ -1002,4 +1004,22 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         }
     }
     exports.updateMenuStatus = updateMenuStatus;
+
+    function updateTutorialMenu() {
+        $('#head-navigation-tutorial-dropdown li').hide();
+        var length = 0;
+        if (getLanguage() === 'de') {
+            $('#head-navigation-tutorial-dropdown li.DE.' + getRobotGroup()).show();
+            length = $('#head-navigation-tutorial-dropdown li.DE.' + getRobotGroup()).length;
+        } else {
+            $('#head-navigation-tutorial-dropdown li.EN.' + getRobotGroup()).show();
+            length = $('#head-navigation-tutorial-dropdown li.EN.' + getRobotGroup()).length;
+        }
+        if (length > 0) {
+            $('#head-navigation-tutorial').show();
+        } else {
+            $('#head-navigation-tutorial').hide();
+        }
+    }
+    exports.updateTutorialMenu = updateTutorialMenu;
 });

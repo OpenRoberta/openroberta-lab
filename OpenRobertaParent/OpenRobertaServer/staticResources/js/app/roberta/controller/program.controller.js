@@ -557,6 +557,14 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         }
     }
     exports.loadToolbox = loadToolbox;
+    
+    function loadExternalToolbox(toolbox) {
+        Blockly.hideChaff();
+        if (toolbox) {
+            blocklyWorkspace.updateToolbox(toolbox);
+        }
+    }
+    exports.loadExternalToolbox = loadExternalToolbox;
 
     function isVisible() {
         return GUISTATE_C.getView() == 'tabProgram';
