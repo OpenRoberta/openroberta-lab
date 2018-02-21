@@ -314,7 +314,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         if ( !isWaitStmt ) {
             addContinueLabelToLoop();
             nlIndent();
-            this.sb.append("uBit.sleep(1);");
+            this.sb.append("uBit.sleep(ITERATION_SLEEP_TIMEOUT);");
         } else {
             appendBreakStmt();
         }
@@ -329,11 +329,11 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
 
     @Override
     public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
-        this.sb.append("while (1) {");
+        this.sb.append("while (true) {");
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
         nlIndent();
-        this.sb.append("uBit.sleep(1);");
+        this.sb.append("uBit.sleep(ITERATION_SLEEP_TIMEOUT);");
         decrIndentation();
         nlIndent();
         this.sb.append("}");
@@ -1042,10 +1042,10 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
                 radioSendAction.getMsg().visit(this);
                 this.sb.append("))");
                 break;
-//            case STRING:
-//                this.sb.append("uBit.radio.datagram.send(");
-//                radioSendAction.getMsg().visit(this);
-//                break;
+            //            case STRING:
+            //                this.sb.append("uBit.radio.datagram.send(");
+            //                radioSendAction.getMsg().visit(this);
+            //                break;
             default:
                 throw new IllegalArgumentException("unhandled type");
         }
@@ -1113,13 +1113,13 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Void> displaySetBrightnessAction) {
         this.sb.append("uBit.display.setBrightness((");
         displaySetBrightnessAction.getBrightness().visit(this);
-        this.sb.append(") * 255.0 / 9.0);");
+        this.sb.append(") * SET_BRIGHTNESS_MULTIPLIER);");
         return null;
     }
 
     @Override
     public Void visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<Void> displayGetBrightnessAction) {
-        this.sb.append("round(uBit.display.getBrightness() * 9.0 / 255.0)");
+        this.sb.append("round(uBit.display.getBrightness() * GET_BRIGHTNESS_MULTIPLIER)");
         return null;
     }
 
@@ -1131,7 +1131,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         displaySetPixelAction.getY().visit(this);
         this.sb.append(", ");
         displaySetPixelAction.getBrightness().visit(this);
-        this.sb.append(" * 255.0 / 9.0);");
+        this.sb.append(" * SET_BRIGHTNESS_MULTIPLIER);");
         return null;
     }
 
@@ -1141,7 +1141,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         displayGetPixelAction.getX().visit(this);
         this.sb.append(", ");
         displayGetPixelAction.getY().visit(this);
-        this.sb.append(") * 9.0 / 255.0)");
+        this.sb.append(") * GET_BRIGHTNESS_MULTIPLIER)");
         return null;
     }
 
@@ -1248,6 +1248,9 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         this.sb.append("#include \"MicroBit.h\" \n");
         this.sb.append("#include <array>\n");
         this.sb.append("#include <stdlib.h>\n");
+        this.sb.append("#define SET_BRIGHTNESS_MULTIPLIER 255.0 / 9.0\n");
+        this.sb.append("#define GET_BRIGHTNESS_MULTIPLIER 9.0 / 255.0\n");
+        this.sb.append("#define ITERATION_SLEEP_TIMEOUT 1\n\n");
         this.sb.append("MicroBit uBit;\n\n");
     }
 
