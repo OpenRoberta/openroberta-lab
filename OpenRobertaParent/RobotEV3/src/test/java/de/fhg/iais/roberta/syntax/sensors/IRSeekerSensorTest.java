@@ -9,7 +9,9 @@ public class IRSeekerSensorTest {
 
     @Test
     public void getIRSeeker() throws Exception {
-        String a = "hal.drawText(String.valueOf(MODULATED), 0, 0);" + "hal.drawText(String.valueOf(UNMODULATED), 0, 0);}";
+        String a =
+            "hal.drawText(String.valueOf(hal.getHiTecIRSeekerModulated(SensorPort.S1)), 0, 0);"
+                + "hal.drawText(String.valueOf(hal.getHiTecIRSeekerUnmodulated(SensorPort.S1)), 0, 0);}";
 
         this.h.assertCodeIsOk(a, "/syntax/sensors/sensor_getIRSeeker.xml");
     }

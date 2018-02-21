@@ -670,10 +670,10 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
     public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
         switch ( (IRSeekerSensorMode) irSeekerSensor.getMode() ) {
             case MODULATED:
-                this.sb.append("MODULATED");
+                this.sb.append("hal.getHiTecIRSeekerModulated(" + getEnumCode(irSeekerSensor.getPort()) + ")");
                 break;
             case UNMODULATED:
-                this.sb.append("UNMODULATED");
+                this.sb.append("hal.getHiTecIRSeekerUnmodulated(" + getEnumCode(irSeekerSensor.getPort()) + ")");
                 break;
             default:
                 throw new DbcException("Invalid IRSeeker Mode!");

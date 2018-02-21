@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.mode.sensor;
 import de.fhg.iais.roberta.inter.mode.sensor.IIRSeekerSensorMode;
 
 public enum IRSeekerSensorMode implements IIRSeekerSensorMode {
-    MODULATED(), UNMODULATED();
+    MODULATED( "Modulated" ), UNMODULATED( "Unmodulated" );
 
     private final String[] values;
 
