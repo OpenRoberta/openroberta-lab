@@ -15,15 +15,15 @@ public class IRSeekerSensorTest {
     @Test
     public void sensorSetIRSeeker() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=-23, y=157], IRSeekerSensor [S1, MODULATED, EMPTY_SLOT]], "
-                + "[Location [x=-19, y=199], IRSeekerSensor [S2, UNMODULATED, EMPTY_SLOT]]]]";
+            "BlockAST [project=[[Location [x=258, y=138], IRSeekerSensor [S1, MODULATED, EMPTY_SLOT]], "
+                + "[Location [x=262, y=196], IRSeekerSensor [S1, UNMODULATED, EMPTY_SLOT]]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_setIRSeeker.xml"));
+        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_getIRSeeker.xml"));
     }
 
     @Test
     public void getMode() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setIRSeeker.xml");
+        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_getIRSeeker.xml");
 
         IRSeekerSensor<Void> cs = (IRSeekerSensor<Void>) transformer.getTree().get(0).get(1);
         IRSeekerSensor<Void> cs1 = (IRSeekerSensor<Void>) transformer.getTree().get(1).get(1);
@@ -34,17 +34,17 @@ public class IRSeekerSensorTest {
 
     @Test
     public void getPort() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setIRSeeker.xml");
+        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_getIRSeeker.xml");
 
         IRSeekerSensor<Void> cs = (IRSeekerSensor<Void>) transformer.getTree().get(0).get(1);
         IRSeekerSensor<Void> cs1 = (IRSeekerSensor<Void>) transformer.getTree().get(1).get(1);
 
         Assert.assertEquals(SensorPort.S1, cs.getPort());
-        Assert.assertEquals(SensorPort.S2, cs1.getPort());
+        Assert.assertEquals(SensorPort.S1, cs1.getPort());
     }
 
     @Test
     public void reverseTransformation() throws Exception {
-        this.h.assertTransformationIsOk("/ast/sensors/sensor_setIRSeeker.xml");
+        this.h.assertTransformationIsOk("/ast/sensors/sensor_getIRSeeker.xml");
     }
 }

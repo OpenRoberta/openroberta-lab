@@ -4,7 +4,6 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -78,17 +77,12 @@ public class CompassSensor<V> extends ExternalSensor<V> {
 
     @Override
     public Block astToBlock() {
-        Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        //TODO: move reset to another block and delete astToBlock() method from here
-        String fieldValue = getPort().getPortNumber();
-        if ( getMode().toString().equals("ANGLE") || getMode().toString().equals("COMPASS") ) {
-            Mutation mutation = new Mutation();
-            mutation.setMode(getMode().toString());
-            jaxbDestination.setMutation(mutation);
-            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().toString());
+        Block jaxbDestination = super.astToBlock();
+        if ( getMode().toString().equals("CALIBRATE") ) {
+            jaxbDestination = new Block();
+            JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, getPort().getPortNumber());
         }
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
         return jaxbDestination;
     }
 }
