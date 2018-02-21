@@ -26,6 +26,7 @@ public enum SensorType implements ISensorType {
     NAOMARK( "naoSensors_naoMark" ),
     VOLTAGE( "" ),
     TIMER( "" ),
+    IRSEEKER( "robBrick_irseeker" ),
     NONE( "" );
 
     private final String[] values;

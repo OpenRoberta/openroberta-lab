@@ -43,6 +43,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
@@ -213,6 +214,12 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor implements As
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         checkSensorPort(infraredSensor);
+        return null;
+    }
+
+    @Override
+    public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
+        checkSensorPort(irSeekerSensor);
         return null;
     }
 

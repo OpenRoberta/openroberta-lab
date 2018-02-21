@@ -11,6 +11,8 @@ import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
+import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TouchSensorMode;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
@@ -43,6 +45,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
@@ -51,8 +54,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
-import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
 import de.fhg.iais.roberta.visitor.actor.AstActorCommunicationVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
@@ -102,13 +103,21 @@ public abstract class RobotUsedHardwareCollectorVisitor extends CheckVisitor imp
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        this.usedSensors.add(new UsedSensor((ISensorPort) colorSensor.getPort(), SensorType.COLOR, ColorSensorMode.valueOf(((ColorSensorMode) colorSensor.getMode()).getModeValue())));
+        this.usedSensors.add(
+            new UsedSensor(
+                (ISensorPort) colorSensor.getPort(),
+                SensorType.COLOR,
+                ColorSensorMode.valueOf(((ColorSensorMode) colorSensor.getMode()).getModeValue())));
         return null;
     }
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.usedSensors.add(new UsedSensor((ISensorPort) lightSensor.getPort(), SensorType.LIGHT, LightSensorMode.valueOf(((LightSensorMode) lightSensor.getMode()).getModeValue())));
+        this.usedSensors.add(
+            new UsedSensor(
+                (ISensorPort) lightSensor.getPort(),
+                SensorType.LIGHT,
+                LightSensorMode.valueOf(((LightSensorMode) lightSensor.getMode()).getModeValue())));
         return null;
     }
 
@@ -150,6 +159,12 @@ public abstract class RobotUsedHardwareCollectorVisitor extends CheckVisitor imp
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         this.usedSensors.add(new UsedSensor((ISensorPort) infraredSensor.getPort(), SensorType.INFRARED, infraredSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
+        this.usedSensors.add(new UsedSensor((ISensorPort) irSeekerSensor.getPort(), SensorType.IRSEEKER, irSeekerSensor.getMode()));
         return null;
     }
 

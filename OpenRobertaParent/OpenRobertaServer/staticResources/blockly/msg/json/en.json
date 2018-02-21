@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-02-09 15:45:02.918246",
+		"lastupdated": "2018-02-21 09:21:18.244365",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -414,6 +414,7 @@
 	"ULTRASONIC_TOOLTIP": "Represents an ultrasonic sensor.",
 	"COLOUR_TOOLTIP": "Represents a colour sensor.",
 	"INFRARED_TOOLTIP": "Represents an infrared sensor.",
+	"IRSEEKER_TOOLTIP": "Represents a HighTechnic IRSeeker V2 sensor.",
 	"TOUCH_TOOLTIP": "Is the touch sensor pressed?",
 	"GYRO_TOOLTIP": "Represents a gyro sensor.",
 	"FLAME_TOOLTIP": "Represents a flame sensor.",
@@ -509,6 +510,7 @@
 	"SENSOR_MIC": "microphone",
 	"SENSOR_COLOUR": "colour sensor",
 	"SENSOR_INFRARED": "infrared sensor",
+	"SENSOR_IRSEEKER": "infrared seeker",
 	"SENSOR_ENCODER": "encoder",
 	"SENSOR_GYRO": "gyroscope",
 	"SENSOR_FLAME": "flame sensor",
@@ -552,6 +554,8 @@
 	"MODE_ACCELERATION": "acceleration",
 	"MODE_ORIENTATION": "orientation",
 	"MODE_COMPASS": "compass",
+	"MODE_MODULATED": "modulated",
+	"MODE_UNMODULATED": "unmodulated",
 	"LOOP": "repeat until",
 	"LOOP_FOREVER": "repeat indefinitely",
 	"CONNECTION_SEND_DATA": "send message",
@@ -1260,6 +1264,7 @@
 	"MENU_ROBOT_STOP_HINT_NXT": "Press <span class='typcn typcn-media-cancel'></span> button on the robot to abort the program!",
 	"INFO_DOCUMENTATION_HINT": "Document your program here ...",
 	"INFO_TAGS": "Tags",
+	"SENSOR_IRSEEKER_GETSAMPLE_TOOLTIP": "Gets the position of a infrared beacon.",
 	"SENSOR_RSSI": "signal strength",
 	"SENSOR_RSSI_VALUE_GETSAMPLE_TOOLTIP": "Gets the signal strength from the last received message.",
 	"SENSOR_GESTURE_UP_GETSAMPLE_TOOLTIP": "Returns »true« if the posture is upright.",

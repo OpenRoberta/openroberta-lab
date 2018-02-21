@@ -63,6 +63,12 @@ public abstract class RobotSimulationCheckVisitor extends RobotCommonCheckVisito
                     if ( usedSensor.getType() != SensorType.COMPASS ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
+                    break;
+                case "IRSEEKER_SENSING":
+                    if ( usedSensor.getType() != SensorType.IRSEEKER ) {
+                        sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
+                    }
+                    break;
                 default:
                     break;
             }
@@ -123,7 +129,7 @@ public abstract class RobotSimulationCheckVisitor extends RobotCommonCheckVisito
         temperatureSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
-    
+
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
         super.visitLightSensor(lightSensor);
@@ -132,7 +138,7 @@ public abstract class RobotSimulationCheckVisitor extends RobotCommonCheckVisito
         }
         return null;
     }
-    
+
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
         super.visitColorSensor(colorSensor);

@@ -22,6 +22,7 @@ import de.fhg.iais.roberta.mode.sensor.BrickKeyPressMode;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
+import de.fhg.iais.roberta.mode.sensor.IRSeekerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
@@ -81,6 +82,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
@@ -660,6 +662,21 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
                 break;
             default:
                 throw new DbcException("Invalid Compass Mode!");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
+        switch ( (IRSeekerSensorMode) irSeekerSensor.getMode() ) {
+            case MODULATED:
+                this.sb.append("MODULATED");
+                break;
+            case UNMODULATED:
+                this.sb.append("UNMODULATED");
+                break;
+            default:
+                throw new DbcException("Invalid IRSeeker Mode!");
         }
         return null;
     }

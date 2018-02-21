@@ -29,6 +29,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.ICompassSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ICoordinatesMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGestureSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IIRSeekerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
@@ -64,6 +65,7 @@ import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GestureSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.IBirckKeyPressMode;
+import de.fhg.iais.roberta.mode.sensor.IRSeekerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
@@ -84,7 +86,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 public interface IRobotFactory {
 
     static <E extends IMode> E getModeValue(String modeName, Class<E> modes) {
-        if ( (modeName == null) ) {
+        if ( modeName == null ) {
             throw new DbcException("Invalid " + modes.getName() + ": " + modeName);
         }
         final String sUpper = modeName.trim().toUpperCase(Locale.GERMAN);
@@ -102,7 +104,7 @@ public interface IRobotFactory {
     }
 
     static <E extends IActorPort> E getPort(String port, Class<E> ports) {
-        if ( (port == null) ) {
+        if ( port == null ) {
             throw new DbcException("Invalid " + ports.getName() + ": " + port);
         }
         final String sUpper = port.trim().toUpperCase(Locale.GERMAN);
@@ -374,6 +376,17 @@ public interface IRobotFactory {
      */
     default IInfraredSensorMode getInfraredSensorMode(String mode) {
         return IRobotFactory.getModeValue(mode, InfraredSensorMode.class);
+    }
+
+    /**
+     * Get a IRSeeker sensor mode from {@link IIRSeekerSensorMode} given string parameter. It is possible for one IRSeeker sensor mode to have multiple string
+     * mappings. Throws exception if the IRSeeker sensor mode does not exists.
+     *
+     * @param name of the IRSeeker sensor mode
+     * @return the IRSeeker sensor mode from the enum {@link IRSeekerSensorMode}
+     */
+    default IRSeekerSensorMode getIRSeekerSensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, IRSeekerSensorMode.class);
     }
 
     /**

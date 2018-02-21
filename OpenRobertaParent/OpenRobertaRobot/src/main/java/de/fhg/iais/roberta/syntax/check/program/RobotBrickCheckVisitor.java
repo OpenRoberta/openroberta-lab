@@ -72,6 +72,12 @@ public abstract class RobotBrickCheckVisitor extends RobotCommonCheckVisitor imp
                         this.errorCount++;
                     }
                     break;
+                case "IRSEEKER_SENSING":
+                    if ( usedSensor.getType() != SensorType.IRSEEKER ) {
+                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
+                        this.errorCount++;
+                    }
+                    break;
                 default:
                     break;
             }
