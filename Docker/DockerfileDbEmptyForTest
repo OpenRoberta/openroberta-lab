@@ -7,10 +7,10 @@ EXPOSE 9001
 
 COPY ["startDbServer.sh","./"]
 RUN chmod +x ./startDbServer.sh
-COPY ["lib/","./lib/"]
 
 ARG version
 
+COPY ["lib/","./lib/"]
 COPY ["db-${version}/","/opt/db/db-${version}/"]
 
 ENV VERSION=${version}

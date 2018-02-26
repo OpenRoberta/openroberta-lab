@@ -2,16 +2,19 @@ FROM rbudde/openroberta_base:1
 
 RUN apt-get update && apt-get install -y git maven && apt-get clean
 
-ARG LAST_RUN_OF_GIT_CLONE=2018-02-15-13:05:98
+ARG LAST_RUN_OF_GIT_CLONE=2018-02-26
 
+# shallow clone of the repo. Branch defaults to "develop". Run mvn once to install most all the artifacts needed in /root/.m2
 WORKDIR /opt
-RUN git clone --depth=1 -b develop https://github.com/OpenRoberta/robertalab.git
+ARG BRANCH=develop
+RUN git clone --depth=1 -b $BRANCH https://github.com/OpenRoberta/robertalab.git && \
+    cd /opt/robertalab/OpenRobertaParent && \
+    mvn clean install && \
+    chmod +x RobotArdu/resources/linux/arduino-builder RobotArdu/resources/linux/tools-builder/ctags/5.8*/ctags
 
-WORKDIR /opt/robertalab/OpenRobertaParent
-RUN mvn clean install
-
-RUN cd RobotArdu/resources/linux/;chmod +x arduino-builder;cd tools-builder/ctags/5.8*;chmod +x ctags
-	
-# define the entry point for running the test
-WORKDIR /opt/robertalab/OpenRobertaParent
-ENTRYPOINT ["/bin/bash"]
+# prepare the entry point
+WORKDIR /opt
+COPY ["./runIT.sh","./"]
+RUN chmod +x ./runIT.sh
+WORKDIR /opt/robertalab
+ENTRYPOINT ["/opt/runIT.sh"]

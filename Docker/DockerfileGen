@@ -1,6 +1,6 @@
 FROM openjdk:8u151-jdk
 
-ARG LAST_RUN_OF_META=2018-02-05-13:05:98
+ARG LAST_RUN_OF_GEN=2018-02-26
 
 RUN apt-get update && apt-get -y upgrade && apt-get -y install apt-utils
 RUN apt-get install -y \
@@ -18,19 +18,18 @@ RUN apt-get install -y docker-ce
 
 RUN apt-get update && apt-get install -y git maven && apt-get clean
 
-# run mvn once to install most all the artifacts needed in /root/.m2
+# shallow clone of develop. Branch defaults to "develop". Run mvn once to install most all the artifacts needed in /root/.m2
 WORKDIR /opt
-RUN git clone --depth=1 -b develop https://github.com/OpenRoberta/robertalab.git
+ARG BRANCH=develop
+RUN echo "cloning branch $BRANCH" && \
+    git clone --depth=1 -b $BRANCH https://github.com/OpenRoberta/robertalab.git && \
+    cd /opt/robertalab/OpenRobertaParent && \
+    mvn clean install && \
+    chmod +x RobotArdu/resources/linux/arduino-builder RobotArdu/resources/linux/tools-builder/ctags/5.8*/ctags
 
-WORKDIR /opt/robertalab
-RUN cd OpenRobertaParent \
-    && mvn clean install -DskipTests -DskipITs \
-    && cd .. \
-    && rm -rf /opt/robertalab
-	
-# define the entry point
+# prepare the entry point
 WORKDIR /opt
 COPY ["./genLab.sh","./"]
 RUN chmod +x ./genLab.sh
-
+WORKDIR /opt/robertalab
 ENTRYPOINT ["/opt/genLab.sh"]

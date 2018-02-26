@@ -2,7 +2,7 @@ version: '2'
 
 services:
     openrobertalab_embedded:
-        image: rbudde/openrobertalabembedded:${VERSION}
+        image: rbudde/openroberta_embedded:${BRANCH}-${VERSION}
         ports:
             - "7100:1999"
         volumes:

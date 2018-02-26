@@ -3,7 +3,6 @@ FROM openjdk:8u151-jdk
 RUN mkdir --parent /opt/openRoberta/lib /opt/openRoberta/OpenRobertaParent
 WORKDIR /opt/openRoberta
 
-EXPOSE 9001
 VOLUME /opt/db
  
 COPY ["lib/","./lib/"]

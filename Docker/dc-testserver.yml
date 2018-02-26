@@ -2,7 +2,7 @@ version: '2'
 
 services:
     openroberta_server:
-        image: rbudde/openrobertalab:${VERSION}
+        image: rbudde/openroberta_lab:${BRANCH}-${VERSION}
         ports:
             - "${SERVER_PORT_ON_HOST}:1999"
         command: ["-d", "database.uri=openroberta_db"]
@@ -10,7 +10,7 @@ services:
             - "openroberta_db"
         stop_signal: SIGINT
     openroberta_db:
-        image: rbudde/openrobertaemptydbfortest:${VERSION}
+        image: rbudde/openroberta_emptydbfortest:${BRANCH}-${VERSION}
         ports:
             - "${DBSERVER_PORT_ON_HOST}:9001"
         stop_signal: SIGINT

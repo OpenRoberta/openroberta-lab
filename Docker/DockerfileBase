@@ -1,6 +1,6 @@
 FROM openjdk:8u151-jdk
 
-ARG LAST_RUN_OF_BASE=2018-01-11-21:30:00
+ARG LAST_RUN_OF_BASE=2018-02-26
 
 RUN apt-get update && apt-get -y upgrade && apt-get -y install python-pip
  
