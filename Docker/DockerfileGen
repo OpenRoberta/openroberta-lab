@@ -26,7 +26,7 @@ RUN echo "cloning branch $BRANCH" && \
     cd /opt/robertalab/OpenRobertaParent && \
     mvn clean install && \
     chmod +x RobotArdu/resources/linux/arduino-builder RobotArdu/resources/linux/tools-builder/ctags/5.8*/ctags
-
+ 
 # prepare the entry point
 WORKDIR /opt
 COPY ["./genLab.sh","./"]

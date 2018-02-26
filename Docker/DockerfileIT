@@ -3,7 +3,7 @@ FROM rbudde/openroberta_base:1
 RUN apt-get update && apt-get install -y git maven && apt-get clean
 
 ARG LAST_RUN_OF_GIT_CLONE=2018-02-26
-
+ 
 # shallow clone of the repo. Branch defaults to "develop". Run mvn once to install most all the artifacts needed in /root/.m2
 WORKDIR /opt
 ARG BRANCH=develop

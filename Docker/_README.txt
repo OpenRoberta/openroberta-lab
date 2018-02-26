@@ -2,23 +2,21 @@ HOW TO GET AN OPENROBERTALAB INSTALLATION WITHOUT MUCH SETUP
 ... assuming you have installed docker and docker-compose ...
 
 Variables used (set as needed!):
+export VERSION='2.5.6'
 export BRANCH=develop
 export GITREPO=~rbudde/git/robertalab
-export VERSION='2.5.4'
 export DISTR_DIR='/tmp/distr'
 export DB_PARENTDIR='/home/rbudde/db'
 export SERVER_PORT_ON_HOST=7000
 export DBSERVER_PORT_ON_HOST=9001
 
-tl;dr: 1. to generate an docker image "rbudde/openrobertalab:$VERSION" from the actual sources, run
+tl;dr: to generate the docker image "rbudde/openroberta_lab:$VERSION" from the actual sources, run
        docker run -v /var/run/docker.sock:/var/run/docker.sock rbudde/openroberta_gen:$BRANCH-1 $VERSION
 
        Assuming that the environment variable DB_PARENTDIR holds the name of the directory, which
-       contains the database directories (e.g. contains the directory db-$VERSION), then ...
-	   2. to start the embedded openrobertalab server run
-	      docker-compose -f dc-embedded.yml up
-	   3. to start the openrobertalab server and a separate database server run
-	      docker-compose -f dc-server-db-server.yml up
+       contains the database directories (e.g. contains the directory db-$VERSION), then
+	   to start the openrobertalab server and a separate database server run
+	   docker-compose -f dc-server-db-server.yml up
 
 1. GENERATE THE "gen" IMAGE. THIS IS DOCUMENTATION. YOU MUST NOT DO THIS.
 
@@ -128,7 +126,7 @@ The entrypoint is defined as the bash script "runIT.sh".
 
 The following commands are executed by the roberta maintainer; you should NOT do this
   docker push rbudde/openroberta_it:$BRANCH-$VERSION
-
+ 
 Starting this image
 - fetches the branch $BRANCH
 - make arduino tools executable (:-<)

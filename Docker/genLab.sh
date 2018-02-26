@@ -17,8 +17,8 @@ else
 fi
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 echo "operating on branch $BRANCH"
-git fetch --depth=1 https://github.com/OpenRoberta/robertalab.git
-
+git pull --depth=1
+ 
 cd /opt/robertalab/OpenRobertaParent
 mvn clean install
 chmod +x RobotArdu/resources/linux/arduino-builder RobotArdu/resources/linux/tools-builder/ctags/5.8*/ctags
