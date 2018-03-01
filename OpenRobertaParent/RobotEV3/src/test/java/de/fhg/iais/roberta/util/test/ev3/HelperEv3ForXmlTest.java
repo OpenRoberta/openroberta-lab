@@ -1,11 +1,14 @@
 package de.fhg.iais.roberta.util.test.ev3;
 
+import java.util.Properties;
+
 import org.junit.Assert;
 
 import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ev3.EV3Configuration;
+import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.ev3.lejos.v0.Factory;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
@@ -30,6 +33,8 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
                 .addActor(ActorPort.C, new Actor(ActorType.LARGE, false, DriveDirection.FOREWARD, MotorSide.LEFT))
                 .addActor(ActorPort.D, new Actor(ActorType.MEDIUM, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
                 .build());
+        Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
+        AbstractRobotFactory.addBlockTypesFromProperties("Robot.properties", robotProperties);
     }
 
     /**

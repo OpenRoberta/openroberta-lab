@@ -1,10 +1,13 @@
 package de.fhg.iais.roberta.util.test.nxt;
 
+import java.util.Properties;
+
 import org.junit.Assert;
 
 import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
+import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.nxt.Factory;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
@@ -29,6 +32,8 @@ public class HelperNxtForXmlTest extends AbstractHelperForXmlTest {
                 .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))
                 .addActor(ActorPort.C, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
                 .build());
+        Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
+        AbstractRobotFactory.addBlockTypesFromProperties("Robot.properties", robotProperties);
     }
 
     /**

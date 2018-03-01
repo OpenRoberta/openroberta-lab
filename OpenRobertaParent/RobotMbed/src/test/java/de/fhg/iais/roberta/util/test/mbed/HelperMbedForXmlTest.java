@@ -1,8 +1,11 @@
 package de.fhg.iais.roberta.util.test.mbed;
 
+import java.util.Properties;
+
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.mbed.CalliopeConfiguration;
 import de.fhg.iais.roberta.components.mbed.MicrobitConfiguration;
+import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.mbed.calliope.calliope2016.Factory;
 import de.fhg.iais.roberta.syntax.codegen.mbed.SimulationVisitor;
 import de.fhg.iais.roberta.syntax.codegen.mbed.calliope.CppVisitor;
@@ -18,6 +21,8 @@ public class HelperMbedForXmlTest extends de.fhg.iais.roberta.util.test.Abstract
 
     public HelperMbedForXmlTest() {
         super(new Factory(new RobertaProperties(Util1.loadProperties(null))), new CalliopeConfiguration.Builder().build());
+        Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
+        AbstractRobotFactory.addBlockTypesFromProperties("Robot.properties", robotProperties);
     }
 
     /**

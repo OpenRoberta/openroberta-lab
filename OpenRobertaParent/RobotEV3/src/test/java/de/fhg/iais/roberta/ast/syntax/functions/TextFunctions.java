@@ -12,12 +12,14 @@ import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
 
 public class TextFunctions {
+    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
 
     @Test
     public void getPresedence() {
-        ArrayList<Expr<Void>> param = new ArrayList<Expr<Void>>();
+        ArrayList<Expr<Void>> param = new ArrayList<>();
         StringConst<Void> stringConst = StringConst.make("AS", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
         param.add(stringConst);
         MathPowerFunct<Void> funct =
@@ -27,7 +29,7 @@ public class TextFunctions {
 
     @Test
     public void getAssoc() {
-        ArrayList<Expr<Void>> param = new ArrayList<Expr<Void>>();
+        ArrayList<Expr<Void>> param = new ArrayList<>();
         StringConst<Void> stringConst = StringConst.make("AS", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
         param.add(stringConst);
         MathPowerFunct<Void> funct =
@@ -37,7 +39,7 @@ public class TextFunctions {
 
     @Test
     public void getOpSymbol() {
-        ArrayList<Expr<Void>> param = new ArrayList<Expr<Void>>();
+        ArrayList<Expr<Void>> param = new ArrayList<>();
         StringConst<Void> stringConst = StringConst.make("AS", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
         param.add(stringConst);
         MathPowerFunct<Void> funct =

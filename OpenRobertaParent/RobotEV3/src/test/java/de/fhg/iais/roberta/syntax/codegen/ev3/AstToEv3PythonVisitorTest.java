@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
 
 public class AstToEv3PythonVisitorTest {
+    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
 
     private static final String IMPORTS =
         "" //
@@ -78,7 +79,6 @@ public class AstToEv3PythonVisitorTest {
             + "if __name__ == \"__main__\":\n"
             + "    main()";
     private static Configuration brickConfiguration;
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
 
     @BeforeClass
     public static void setupConfigurationForAllTests() {

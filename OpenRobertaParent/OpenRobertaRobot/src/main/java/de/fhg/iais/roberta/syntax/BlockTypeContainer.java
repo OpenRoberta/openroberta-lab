@@ -67,8 +67,6 @@ public class BlockTypeContainer {
      * @return the block type value, never null
      */
     public static BlockType getByName(String name) {
-        // System.out.println("*** BlockTypeContainer.blockTypesByName.size(): " + BlockTypeContainer.blockTypesByName.size());
-
         Assert.notNull(name);
         BlockType blockType = blockTypesByName.get(name.toLowerCase());
         Assert.notNull(blockType);

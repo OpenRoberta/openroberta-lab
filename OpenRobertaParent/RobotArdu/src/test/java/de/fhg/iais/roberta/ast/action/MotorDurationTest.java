@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
 
 public class MotorDurationTest {
-    private final HelperBotNrollForXmlTest helper = new HelperBotNrollForXmlTest();
+    private final HelperBotNrollForXmlTest h = new HelperBotNrollForXmlTest();
 
     @Test
     public void clearDisplay() throws Exception {
