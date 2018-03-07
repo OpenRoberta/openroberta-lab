@@ -5,12 +5,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.components.UsedSensor;
+import de.fhg.iais.roberta.inter.mode.general.IMode;
+import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
+import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 
 /**
@@ -60,6 +66,16 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
         super.visitShowPictureAction(showPictureAction);
         this.usedImages.add(showPictureAction.getPicture().toString());
+        return null;
+    }
+
+    @Override
+    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+        IMode mode = infraredSensor.getMode();
+        if ( infraredSensor.getMode().equals(InfraredSensorMode.PRESENCE) ) {
+            mode = InfraredSensorMode.SEEK;
+        }
+        this.usedSensors.add(new UsedSensor((ISensorPort) infraredSensor.getPort(), SensorType.INFRARED, mode));
         return null;
     }
 
