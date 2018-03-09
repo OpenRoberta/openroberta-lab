@@ -1,5 +1,6 @@
 HOW TO GET AN OPENROBERTALAB INSTALLATION WITHOUT MUCH SETUP
 ... assuming you have installed docker and docker-compose ...
+=============================================================
 
 Variables used (set as needed!):
 export VERSION='2.5.6'
@@ -25,12 +26,12 @@ the docker image "gen", when run, generates an OpenRoberta distribution. The ima
 - git
 - java
 - maven
-Furthermore during image creation a maven build is executed to fill the /root/.m2 cache.
+Furthermore during image creation a maven build is executed for branch develop to fill the /root/.m2 cache.
 This makes later builds much faster.
 
 cd $GITREPO/Docker
-docker build -f DockerfileGen -t rbudde/openroberta_gen:$BRANCH-1 --build-arg BRANCH=$BRANCH .
-docker push rbudde/openroberta_gen:$BRANCH-1
+docker build -f DockerfileGen -t rbudde/openroberta_gen:1 --build-arg BRANCH=develop .
+docker push rbudde/openroberta_gen:1
 
 2. GENERATE THE "base" IMAGE. IT CONTAINS SOFTWARE FOR CROSSCOMPILATION. THIS IS DOCUMENTATION. YOU MUST NOT DO THIS.
 
@@ -41,7 +42,8 @@ docker push rbudde/openroberta_base:1
 3. NOW EVERYTHING IS READY TO CREATE A DISTRIBUTION:
 
 Run the "gen" image. It will
-- fetch the branch selected when the "gen" image was build from github
+- fetch the branch declared as first parameter
+- generate the images for the version given as second parameter
 - execute a maven build to generate the artifacts
 - export the artifacts into a installation directory
 - create several docker images:
@@ -60,7 +62,7 @@ When the "gen" image is run,
   add -v $DISTR_DIR:/opt/robertalab/DockerInstallation to the docker run command. Set DISTR_DIR to an
   NOT EXISTING directory of the machine running the docker demon and you get the installation there
 
-docker run -v /var/run/docker.sock:/var/run/docker.sock rbudde/openroberta_gen:$BRANCH-1 $VERSION
+docker run -v /var/run/docker.sock:/var/run/docker.sock rbudde/openroberta_gen:1 $BRANCH $VERSION 
 	   
 # the following commands are executed by the roberta maintainer; you should NOT do this
 docker push rbudde/openroberta_lab:$BRANCH-$VERSION
@@ -122,15 +124,14 @@ and has executed a
 The entrypoint is defined as the bash script "runIT.sh".
 
   cd $GITREPO/Docker
-  docker build -t rbudde/openroberta_it:$BRANCH-$VERSION -f DockerfileIT  --build-arg BRANCH=$BRANCH .
+  docker build -t rbudde/openroberta_it:1 -f DockerfileIT  --build-arg BRANCH=develop .
 
 The following commands are executed by the roberta maintainer; you should NOT do this
-  docker push rbudde/openroberta_it:$BRANCH-$VERSION
+  docker push rbudde/openroberta_it:1
  
 Starting this image
 - fetches the branch $BRANCH
-- make arduino tools executable (:-<)
 - execute all tests, including the integration tests
 - in case of success it returns 0, in case of errors/failures it returns 16
 
-  docker run rbudde/openroberta_it:$BRANCH-$VERSION
+  docker run rbudde/openroberta_it:1 $BRANCH $VERSION

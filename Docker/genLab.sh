@@ -7,17 +7,21 @@ else
    echo 'not running in a docker container - exit 1 to avoid destruction and crash :-)'
    exit 1
 fi
-VERSION="$1"
+BRANCH=$1
+if [ -z "$BRANCH" ]
+then
+    echo 'the branch to build is missing (first parameter) - exit 12'
+    exit 12
+fi
+VERSION="$2"
 if [ -z "$VERSION" ]
 then
-    echo 'the version parameter of form x.y.z is missing - exit 12'
+    echo 'the version parameter of form x.y.z is missing (second parameter) - exit 12'
     exit 12
-else
-    echo "generating the version $VERSION"
 fi
-BRANCH=$(git rev-parse --abbrev-ref HEAD)
-echo "operating on branch $BRANCH"
-git pull --depth=1
+echo "building branch $BRANCH with version $VERSION"
+git checkout $BRANCH
+git pull --strategy=recursive -Xtheirs --no-edit --depth=1 --allow-unrelated-histories
  
 cd /opt/robertalab/OpenRobertaParent
 mvn clean install
