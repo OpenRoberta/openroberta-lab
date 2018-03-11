@@ -7,8 +7,8 @@ import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
+import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
 
 public class RepeatStmtTest {
     AbstractHelperForXmlTest h = new GenericHelperForXmlTest();
@@ -132,7 +132,7 @@ public class RepeatStmtTest {
     public void repeatStmtForEach() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=-436, y=284], \n"
-                + "(repeat [FOR_EACH, Binary [IN, VarDeclaration [STRING, j, EmptyExpr [defVal=NUMBER_INT], false, false], EmptyList [STRING]]]\n"
+                + "(repeat [FOR_EACH, Binary [IN, VarDeclaration [STRING, j, EmptyExpr [defVal=STRING], false, false], EmptyList [STRING]]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [gg]]\n"
                 + ")]]]";
 
@@ -143,7 +143,7 @@ public class RepeatStmtTest {
     public void repeatStmtForEach1() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=-93, y=290], \n"
-                + "(repeat [FOR_EACH, Binary [IN, VarDeclaration [NUMBER, i, EmptyExpr [defVal=NUMBER_INT], false, false], EmptyExpr [defVal=ARRAY]]]\n)]]]";
+                + "(repeat [FOR_EACH, Binary [IN, VarDeclaration [NUMBER, i, EmptyExpr [defVal=NUMBER], false, false], EmptyExpr [defVal=ARRAY]]]\n)]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/repeat_stmt_for_each1.xml"));
     }
