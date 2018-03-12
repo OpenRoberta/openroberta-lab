@@ -20,8 +20,8 @@ then
     exit 12
 fi
 echo "building branch $BRANCH with version $VERSION"
-git checkout $BRANCH
 git pull --strategy=recursive -Xtheirs --no-edit --depth=1 --allow-unrelated-histories
+git checkout $BRANCH
  
 cd /opt/robertalab/OpenRobertaParent
 mvn clean install

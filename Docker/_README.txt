@@ -73,11 +73,14 @@ docker push rbudde/openroberta_emptydbfortest:$BRANCH-$VERSION
 
 4. RUN THE SERVER
 
-4.1 EMBEDDED SERVER
+4.1 Upgrading the database
+
 Assume that the exported environment variable DB_PARENTDIR contains a valid data base directory, e.g. db-$VERSION,
 then run the upgrader first, if a new version is deployed (running it, if nothing has to be updated, is a noop):
   docker run -v $DB_PARENTDIR:/opt/db rbudde/openroberta_upgrade:$BRANCH-$VERSION
-and then start the server with an embedded database (no sqlclient access during operation, otherwise fine) 
+
+4.2 EMBEDDED SERVER
+Start the server with an embedded database (no sqlclient access during operation, otherwise fine) 
 - with docker:
   docker run -p 7100:1999 -v $DB_PARENTDIR:/opt/db rbudde/openroberta_embedded:$BRANCH-$VERSION &
 - with docker-compose (using compose for a single container may appear a bit over-engineered):
