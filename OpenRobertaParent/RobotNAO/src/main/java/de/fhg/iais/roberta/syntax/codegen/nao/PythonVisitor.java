@@ -1421,7 +1421,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
                     this.sb.append(INDENT).append(INDENT).append("h.sonar.unsubscribe(\"OpenRobertaApp\")\n");
                     break;
                 case NAOMARK:
-                    this.sb.append(INDENT).append(INDENT).append("h.mark.unsubscribe(\"RobertaLab\", 500, 0.0)\n");
+                    this.sb.append(INDENT).append(INDENT).append("h.mark.unsubscribe(\"RobertaLab\")\n");
                     break;
                 case NAOFACE:
                     this.sb.append(INDENT).append(INDENT).append("faceRecognitionModule.unsubscribe()\n");
