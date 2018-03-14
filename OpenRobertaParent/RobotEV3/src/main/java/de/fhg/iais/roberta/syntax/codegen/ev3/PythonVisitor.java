@@ -566,10 +566,10 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         String irSeekerSensorPort = irSeekerSensor.getPort().getPortNumber();
         switch ( (IRSeekerSensorMode) irSeekerSensor.getMode() ) {
             case MODULATED:
-                this.sb.append("hal.getHiTecIRSeekerSensorModulated('" + irSeekerSensorPort + "')");
+                this.sb.append("hal.getHiTecIRSeekerSensorValue('" + irSeekerSensorPort + "', 'AC')");
                 break;
             case UNMODULATED:
-                this.sb.append("hal.getHiTecIRSeekerSensorUnmodulated('" + irSeekerSensorPort + "')");
+                this.sb.append("hal.getHiTecIRSeekerSensorValue('" + irSeekerSensorPort + "', 'DC')");
                 break;
             default:
                 throw new DbcException("Invalid IRSeeker Mode!");
