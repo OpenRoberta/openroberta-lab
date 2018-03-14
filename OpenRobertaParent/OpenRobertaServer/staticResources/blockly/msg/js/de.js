@@ -68,6 +68,7 @@ Blockly.Msg.COLOUR_TOOLTIP = "Block für den Farbsensor";
 Blockly.Msg.COMPASS_CALIBRATE_TOOLTIP = "Kalibriert den Kompass. Drehe den Kompass Sensor zwei Mal GANZ langsam (ca. 40 Sekunden).";
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gibt den aktuellen Wert des Kompasssensors zurück.";
 Blockly.Msg.COMPASS_TOOLTIP = "Block für den Kompasssensor.";
+Blockly.Msg.COMPASS_TOOLTIP_EV3 = "Block für den HiTechnic NXT Kompasssensor.";
 Blockly.Msg.CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION = "Die Drehrichtung des linken und rechten Motors ist nicht gleich!";
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_MISSING = "In der Roboterkonfiguration ist kein linker Motor angegeben!";
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED = "Beim linken Motor ist die Regulierung ausgestellt!";

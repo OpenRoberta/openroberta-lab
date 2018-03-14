@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-02-26 13:50:00.947015",
+		"lastupdated": "2018-03-14 11:05:57.095620",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -414,7 +414,7 @@
 	"ULTRASONIC_TOOLTIP": "Represents an ultrasonic sensor.",
 	"COLOUR_TOOLTIP": "Represents a colour sensor.",
 	"INFRARED_TOOLTIP": "Represents an infrared sensor.",
-	"IRSEEKER_TOOLTIP": "Represents a HighTechnic NXT IRSeeker V2 sensor.",
+	"IRSEEKER_TOOLTIP": "Represents a HiTechnic NXT IRSeeker V2 sensor.",
 	"TOUCH_TOOLTIP": "Is the touch sensor pressed?",
 	"GYRO_TOOLTIP": "Represents a gyro sensor.",
 	"FLAME_TOOLTIP": "Represents a flame sensor.",
@@ -866,6 +866,7 @@
 	"SENSOR_COMPASS": "compass sensor",
 	"SENSOR_COMPASS_EV3": "HT compass sensor",
 	"COMPASS_TOOLTIP": "Represents a compass sensor.",
+	"COMPASS_TOOLTIP_EV3": "Represents a HiTechnic NXT compass sensor.",
 	"COMPASS_CALIBRATE_TOOLTIP": "Calibrates the compass. Turn the compass sensor VERY slowly for two times (about 40 seconds).",
 	"SOUND_TOOLTIP": "Represents a sound sensor.",
 	"MOTOR_ARDU_TOOLTIP": "Represents a Bot'n Roll chassis motor.",
