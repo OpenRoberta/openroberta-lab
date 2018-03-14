@@ -77,6 +77,7 @@ Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING = "В конфигураци
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED = "Правый мотор не регулирован!";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS = "В Вашей конфигурации присутствует более одного левого мотора!";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS = "В Вашей конфигурации присутствует более одного правого мотора!";
+Blockly.Msg.CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED = "Other power consumer does not support this type of block!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_MISSING = "Этот датчик не поделючен к порту!";
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_WRONG = "К данному порту подключен неподходящий датчик!";
 Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP = "Click here to delete all selected programs.";  // untranslated

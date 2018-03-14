@@ -77,6 +77,7 @@ Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING = "Kurulumda sağ motor eksi
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED = "Sağ motor ayarlanamadı!";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS = "Kurulumunuzda birden fazla sol motor tanımlı!";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS = "Kurulumunuzda birden fazla sağ motor tanımlı!";
+Blockly.Msg.CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED = "Other power consumer does not support this type of block!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_MISSING = "Bu sensör port'a tanımlanmadı!";
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_WRONG = "Belirtilen port'a yanlış sensör bağlandı!";
 Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP = "Click here to delete all selected programs.";  // untranslated

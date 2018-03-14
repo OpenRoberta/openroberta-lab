@@ -77,6 +77,7 @@ Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING = "In der Roboterkonfigurati
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED = "Beim rechten Motor ist die Regulierung ausgestellt!";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS = "Es kann nur ein linker Motor in der Roboterkonfiguration sein!";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS = "Es kann nur ein rechter Motor in der Roboterkonfiguration sein!";
+Blockly.Msg.CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED = "Anderer Stromverbraucher unterstützt diese Art von Block nicht!";
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_MISSING = "In der Roboterkonfiguration ist dieser Sensor nicht mit einem Sensorport verbunden!";
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_WRONG = "In der Roboterkonfiguration ist ein anderer Sensor mit diesem Sensorport verbunden!";
 Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP = "Klicke hier um alle ausgewählten Roboterkonfigurationen zu löschen.";

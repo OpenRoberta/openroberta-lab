@@ -77,6 +77,7 @@ Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING = "El motor dret falta a la 
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED = "El motor dret no està regulat!";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS = "Tens més d'un motor esquerra a la configuració!";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS = "Tens més d'un motor dret a la configuració!";
+Blockly.Msg.CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED = "Other power consumer does not support this type of block!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_MISSING = "Aquest sensor no està connectat al port!";
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_WRONG = "Sensor erròni connectat al port!";
 Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP = "Fes clic aquí per esborrar tots els programes seleccionats.";

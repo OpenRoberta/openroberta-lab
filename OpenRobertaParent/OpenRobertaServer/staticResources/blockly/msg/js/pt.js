@@ -77,6 +77,7 @@ Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING = "Motor direito em falta na
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED = "Motor direito não está regulado!";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS = "Foram atribuidos múltiplos motores esquerdos na configuração!";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS = "Foram atribuidos múltiplos motores direitos na configuração!";
+Blockly.Msg.CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED = "Other power consumer does not support this type of block!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_MISSING = "Este sensor não está definido na porta!";
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_WRONG = "Ligaste o sensor errado na porta indicada!";
 Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP = "Click here to delete all selected programs.";  // untranslated

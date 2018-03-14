@@ -1,7 +1,9 @@
 package de.fhg.iais.roberta.syntax.check.program.ev3;
 
+import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
+import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -11,6 +13,17 @@ public class BrickCheckVisitor extends RobotBrickCheckVisitor {
 
     public BrickCheckVisitor(Configuration brickConfiguration) {
         super(brickConfiguration);
+    }
+
+    @Override
+    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+        super.visitMotorOnAction(motorOnAction);
+        ActorType type = this.brickConfiguration.getActorOnPort(motorOnAction.getPort()).getName();
+        boolean duration = motorOnAction.getParam().getDuration() != null;
+        if ( type == ActorType.OTHER && duration ) {
+            motorOnAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED"));
+        }
+        return null;
     }
 
     @Override

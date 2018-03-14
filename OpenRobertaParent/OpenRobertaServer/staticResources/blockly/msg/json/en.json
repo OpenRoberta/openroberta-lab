@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-03-14 11:05:57.095620",
+		"lastupdated": "2018-03-14 17:18:07.865391",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -787,6 +787,7 @@
 	"CONFIGURATION_ERROR_MOTOR_MISSING": "Motor is missing on the given port!",
 	"CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED": "Left motor is not regulated!",
 	"CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED": "Right motor is not regulated!",
+	"CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED": "Other power consumer does not support this type of block!",
 	"DATATABLE_PROGRAM_NAME": "Program name",
 	"DATATABLE_CREATED_BY": "Creator",
 	"DATATABLE_SHARED": "Shared",

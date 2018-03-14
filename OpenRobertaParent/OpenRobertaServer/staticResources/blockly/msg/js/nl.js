@@ -77,6 +77,7 @@ Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING = "Rechter motor is niet gec
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED = "Rechter motor is niet gereguleerd!";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS = "Je hebt meerdere linker motoren in je configuratie!";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS = "Je hebt meerdere rechter motoren in je configuratie!";
+Blockly.Msg.CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED = "Other power consumer does not support this type of block!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_MISSING = "Deze sensor heeft geen poort!";
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_WRONG = "Verkeerde sensor in de poort!";
 Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP = "Klik hier om alle geselecteerde programma's te verwijderen.";
