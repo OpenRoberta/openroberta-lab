@@ -18,10 +18,12 @@ public class BrickCheckVisitor extends RobotBrickCheckVisitor {
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         super.visitMotorOnAction(motorOnAction);
-        ActorType type = this.brickConfiguration.getActorOnPort(motorOnAction.getPort()).getName();
-        boolean duration = motorOnAction.getParam().getDuration() != null;
-        if ( type == ActorType.OTHER && duration ) {
-            motorOnAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED"));
+        if ( motorOnAction.getInfos().getErrorCount() == 0 ) {
+            ActorType type = this.brickConfiguration.getActorOnPort(motorOnAction.getPort()).getName();
+            boolean duration = motorOnAction.getParam().getDuration() != null;
+            if ( type == ActorType.OTHER && duration ) {
+                motorOnAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED"));
+            }
         }
         return null;
     }
