@@ -92,6 +92,7 @@
                     <descriptors>
                         <descriptor>src/assembly/zip.xml</descriptor>
                     </descriptors>
+                    <outputDirectory>${project.basedir}/resources/updateResources</outputDirectory>
                     <finalName>roberta</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                 </configuration>

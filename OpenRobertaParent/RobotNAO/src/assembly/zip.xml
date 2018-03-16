@@ -7,7 +7,6 @@
   <fileSets>
     <fileSet>
       <directory>${project.basedir}/resources/updateResources/roberta</directory>
-      <outputDirectory>.</outputDirectory>
       <includes>
         <include>*.*</include>
       </includes>
