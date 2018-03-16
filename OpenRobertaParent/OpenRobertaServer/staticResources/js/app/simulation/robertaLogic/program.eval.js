@@ -1261,7 +1261,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         var list = evalExpr(obj, "list");
         var ite = evalExpr(obj, "item");
         if (!isObject(list) && !isObject(ite) && !obj.modifiedStmt) {
-            if ("position" == CONSTANTS.FIRST) {
+            if (obj.currentStatement.position == CONSTANTS.FIRST) {
                 return list.indexOf(ite);
             }
             return list.lastIndexOf(ite);
