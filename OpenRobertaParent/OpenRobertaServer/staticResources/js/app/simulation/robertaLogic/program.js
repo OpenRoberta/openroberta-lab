@@ -3,7 +3,7 @@
  *
  * @module robertaLogic/program
  */
-define([ 'robertaLogic.timer' ], function(Timer) {
+define([ 'robertaLogic.timer', 'util' ], function(Timer, UTIL) {
     var privateMem = new WeakMap();
     /**
      * @constructor Create an instance of the class program.
@@ -59,7 +59,7 @@ define([ 'robertaLogic.timer' ], function(Timer) {
         if (method == undefined) {
             throw "Method not found";
         }
-        return method;
+        return UTIL.clone(method);
     };
 
     Program.prototype.addCustomMethodForEvaluation = function(stmts, methodCallName) {
