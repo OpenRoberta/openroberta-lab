@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.javaServer.restInterfaceTest;
+package de.fhg.iais.roberta.javaServer.basics;
 
 import java.sql.Timestamp;
 import java.util.Map;
@@ -57,7 +57,6 @@ import de.fhg.iais.roberta.util.Util1;
  *
  * @author rbudde
  */
-
 public class RestInterfaceTest {
     private SessionFactoryWrapper sessionFactoryWrapper; // used by REST services to retrieve data base sessions
     private DbSetup memoryDbSetup; // use to query the test data base, etc.
@@ -79,6 +78,7 @@ public class RestInterfaceTest {
     @Before
     public void setup() throws Exception {
         this.robertaProperties = new RobertaProperties(Util1.loadProperties(null));
+        this.robertaProperties.getRobertaProperties().put("server.public", "true"); // not dangerous! For this.restUser the mail management is set to null
 
         this.connectionUrl = "jdbc:hsqldb:mem:restTestInMemoryDb";
         this.robotCommunicator = new RobotCommunicator();
@@ -115,12 +115,7 @@ public class RestInterfaceTest {
         pidDeletesProgramsMinschaCannotAccess();
         pidSharesProgram1MinschaCanDeleteTheShare();
         pidAndMinschaAccessConcurrently();
-
         saveProgramsAndConfigurations();
-
-        // "pid" registers a robot with token "garzi" (and optionally many more ...); runs "p1"
-        // registerToken(this.brickCommand, this.restBlocks, this.s1, this.sessionFactoryWrapper.getSession(), "garzi");
-        // TODO: refactor downloadJar(this.downloadJar, this.restProgram, this.s1, "garzi", "p1");
     }
 
     /**
@@ -139,13 +134,13 @@ public class RestInterfaceTest {
             Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'pid';'userName':'cavy';'password':'dip';'userEmail':'cavy1@home';'role':'STUDENT', 'isYoungerThen14': 'true', 'language': 'de'}",
+                "{'cmd':'createUser';'accountName':'pid';'userName':'cavy';'password':'dip';'userEmail':'cavy1@home';'role':'STUDENT', 'isYoungerThen14': 1, 'language': 'de'}",
                 "error",
                 Key.USER_ACTIVATION_SENT_MAIL_FAIL);
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'pid';'userName':'administrator';'password':'dip';'userEmail':'cavy1@home';'role':'STUDENT', 'isYoungerThen14': 'false', 'language': 'de'}",
+                "{'cmd':'createUser';'accountName':'pid';'userName':'secondTry';'password':'dip';'userEmail':'cavy1@home';'role':'STUDENT', 'isYoungerThen14': 'false', 'language': 'de'}",
                 "error",
                 Key.USER_CREATE_ERROR_NOT_SAVED_TO_DB);
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
@@ -680,7 +675,7 @@ public class RestInterfaceTest {
     }
 
     /**
-     * check, that the relationhip btween programs and configurations works<br>
+     * check, that the relationship between programs and configurations works<br>
      * <br>
      * 1. save a new config. Check, that a name and data is required. Check, that the name doesn't exist. Check, that the data is ok.<br>
      * 2. save a new program with default configuration, anonymous configuration and named configuration. Check, that the data is ok.<br>

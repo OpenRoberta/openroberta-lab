@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.javaServer.basics;
+package de.fhg.iais.roberta.javaServer.integrationTest;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -49,7 +49,7 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
 @Ignore
 @Category(IntegrationTest.class)
-public class RoundTripTest {
+public class RoundTripIT {
     private static final String resourcePath = "/roundtrip/";
     private static final String[] blocklyPrograms =
         {
@@ -221,7 +221,7 @@ public class RoundTripTest {
         int s1Id = s1.getUserId();
         Assert.assertEquals(0, getOneBigInteger("select count(*) from PROGRAM where OWNER_ID = " + s1Id));
         for ( String program : blocklyPrograms ) {
-            blocklyProgram = Resources.toString(PerformanceUserInteractionTest.class.getResource(resourcePath + program + ".xml"), Charsets.UTF_8);
+            blocklyProgram = Resources.toString(PerformanceUserIT.class.getResource(resourcePath + program + ".xml"), Charsets.UTF_8);
             JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"saveAsP\";\"name\":\"" + program + "\";\"timestamp\":0}}");
             fullRequest.getJSONObject("data").put("program", blocklyProgram);
             response = restProgram.command(s1, fullRequest);
@@ -307,7 +307,7 @@ public class RoundTripTest {
         loadProgram(programName);
 
         String resultProgram = saveProgram(programName);
-        blocklyProgram = Resources.toString(PerformanceUserInteractionTest.class.getResource(resourcePath + programName + ".xml"), Charsets.UTF_8);
+        blocklyProgram = Resources.toString(PerformanceUserIT.class.getResource(resourcePath + programName + ".xml"), Charsets.UTF_8);
         //        Helper.assertXML(blocklyProgram, resultProgram);
     }
 
@@ -320,7 +320,7 @@ public class RoundTripTest {
             @SuppressWarnings("unchecked")
             Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass("de.fhg.iais.roberta.factory.EV3Factory");
             Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(RobotCommunicator.class);
-            robotPlugins.put("ev3", factoryConstructor.newInstance(RoundTripTest.brickCommunicator));
+            robotPlugins.put("ev3", factoryConstructor.newInstance(RoundTripIT.brickCommunicator));
         } catch ( Exception e ) {
             throw new DbcException("robot plugin ev3 has an invalid factory. Check the properties. Server does NOT start", e);
         }

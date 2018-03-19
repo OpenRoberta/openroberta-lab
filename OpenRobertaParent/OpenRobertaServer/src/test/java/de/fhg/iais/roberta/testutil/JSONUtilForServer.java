@@ -82,7 +82,9 @@ public class JSONUtilForServer {
      * @throws JSONException
      */
     public static JSONObject mkRegisterToken(String token) throws JSONException {
-        String s = "{'token':'" + token + "','cmd':'register','macaddr':'00-9A-90-00-2B-5B','brickname':'Garzi','battery':'7.2','version':'1.0.1'}";
+        String s = "" + //
+            "{'token':'" + token + "'," + //
+            "'cmd':'register','macaddr':'00-9A-90-00-2B-5B','brickname':'Garzi','battery':'7.2','version':'1.0.1','firmwarename':'ev3lejosv1'}";
         return JSONUtilForServer.mk(s);
     }
 
@@ -201,9 +203,7 @@ public class JSONUtilForServer {
         ThreadedFunction theUser = new ThreadedFunction() {
             @Override
             public boolean apply() throws Exception {
-                Response response =
-                    restProgram
-                        .command(sessionState, JSONUtilForServer.mkD("{'cmd':'runP';'name':'" + programName + "', 'configuration': 'Standardkonfiguration'}"));
+                Response response = restProgram.command(sessionState, JSONUtilForServer.mkD("{'cmd':'runP';'name':'" + programName + "'}"));
                 JSONObject entity = (JSONObject) response.getEntity();
                 return entity.getString("rc").equals("ok") && entity.getString("data").equals("Brick is waiting");
             }

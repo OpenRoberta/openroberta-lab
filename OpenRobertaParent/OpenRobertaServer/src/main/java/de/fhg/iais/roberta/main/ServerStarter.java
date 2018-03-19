@@ -271,7 +271,9 @@ public class ServerStarter {
                             Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(robertaProperties.getClass());
                             robotPlugins.put(pluginName, factoryConstructor.newInstance(robertaProperties));
                         } catch ( Exception e ) {
-                            throw new DbcException("robot plugin " + pluginName + " has an invalid factory. Check the properties. Server does NOT start", e);
+                            throw new DbcException(
+                                "no factory for robot plugin " + pluginName + ". Plugin-jar not on the classpath? Invalid properties? Server does NOT start",
+                                e);
                         }
                     }
                     continue whitelist;

@@ -52,7 +52,7 @@ public class RobotCommand {
             token = requestEntity.getString("token");
             firmwarename = requestEntity.getString("firmwarename");
         } catch ( Exception e ) {
-            LOG.error("Robot request aborted. Robot uses a wrong JSON: " + requestEntity);
+            LOG.error("Robot request aborted. Robot uses a wrong JSON: " + requestEntity, e);
             return Response.serverError().build();
         }
         // TODO: move robot to the requested properties for the next version
@@ -96,7 +96,7 @@ public class RobotCommand {
                     return Response.ok(response).build();
                 }
             default:
-                LOG.error("Robot request aborted. Robot uses a wrong JSON: " + requestEntity);
+                LOG.error("Robot request aborted. Robot uses an invalid \"cmd\" in JSON: " + requestEntity);
                 return Response.serverError().build();
         }
     }

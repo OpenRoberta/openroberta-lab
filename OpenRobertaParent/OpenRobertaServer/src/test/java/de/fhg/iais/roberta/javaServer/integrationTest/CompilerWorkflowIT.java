@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.javaServer.restInterfaceTest;
+package de.fhg.iais.roberta.javaServer.integrationTest;
 
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;

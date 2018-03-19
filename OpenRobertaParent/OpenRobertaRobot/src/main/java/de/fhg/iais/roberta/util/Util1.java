@@ -50,7 +50,7 @@ public class Util1 {
      * @return the properties. Never null, may be empty
      */
     public static Properties loadProperties(String propertyURI) {
-        return loadProperties(true, propertyURI);
+        return loadProperties(false, propertyURI);
     }
 
     /**
