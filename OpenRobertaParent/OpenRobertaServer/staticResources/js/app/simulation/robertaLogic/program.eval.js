@@ -1182,7 +1182,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
     };
 
     var evalMathConstrainFunct = function(obj) {
-        var val_ = evalExpr(obj, "val");
+        var val_ = evalExpr(obj, "value");
         var min_ = evalExpr(obj, "min");
         var max_ = evalExpr(obj, "max");
         if (!isObject(val_) && !isObject(min_) && !isObject(max_) && !obj.modifiedStmt)
