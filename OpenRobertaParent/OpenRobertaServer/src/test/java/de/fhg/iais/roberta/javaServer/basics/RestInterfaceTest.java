@@ -685,9 +685,9 @@ public class RestInterfaceTest {
 
         {
             saveConfigAs(this.sMinscha, minschaId, "mc1", "<conf>mc1.1.conf.minscha</conf>", "ok", Key.CONFIGURATION_SAVE_SUCCESS);
-            saveConfigAs(this.sMinscha, minschaId, null, "<conf>mc1.1.conf.minscha</conf>", "error", null);
-            saveConfigAs(this.sMinscha, minschaId, "mc2", null, "error", null);
-            saveConfigAs(this.sMinscha, minschaId, "mc1", "<conf>mc1.2.conf.minscha</conf>", "error", null);
+            saveConfigAs(this.sMinscha, minschaId, null, "<conf>mc1.1.conf.minscha</conf>", "error", Key.SERVER_ERROR);
+            saveConfigAs(this.sMinscha, minschaId, "mc2", null, "error", Key.SERVER_ERROR);
+            saveConfigAs(this.sMinscha, minschaId, "mc1", "<conf>mc1.2.conf.minscha</conf>", "error", Key.CONFIGURATION_SAVE_ERROR);
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from CONFIGURATION where NAME like 'mc%'"));
             String confHash = this.memoryDbSetup.getOne("select CONFIGURATION_HASH from CONFIGURATION where NAME = 'mc1'");
             String confText = this.memoryDbSetup.getOne("select CONFIGURATION_TEXT from CONFIGURATION_DATA where CONFIGURATION_HASH = '" + confHash + "'");
@@ -695,10 +695,18 @@ public class RestInterfaceTest {
         }
 
         {
-            saveProgramAs(this.sMinscha, minschaId, "mp1", "<program>mp1.minscha</program>", null, null, "ok", null);
-            saveProgramAs(this.sMinscha, minschaId, "mp2", "<program>mp2.minscha</program>", null, "<conf>mp2.conf.minscha</conf>", "ok", null);
-            saveProgramAs(this.sMinscha, minschaId, "mp3", "<program>mp3.minscha</program>", "mc1", null, "ok", null);
-            saveProgramAs(this.sMinscha, minschaId, "mp4", "<program>mp3.minscha</program>", "mc1", "<conf>mp2.conf.minscha</conf>", "error", null);
+            saveProgramAs(this.sMinscha, minschaId, "mp1", "<program>mp1.minscha</program>", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
+            saveProgramAs(
+                this.sMinscha,
+                minschaId,
+                "mp2",
+                "<program>mp2.minscha</program>",
+                null,
+                "<conf>mp2.conf.minscha</conf>",
+                "ok",
+                Key.PROGRAM_SAVE_SUCCESS);
+            saveProgramAs(this.sMinscha, minschaId, "mp3", "<program>mp3.minscha</program>", "mc1", null, "ok", Key.PROGRAM_SAVE_SUCCESS);
+            saveProgramAs(this.sMinscha, minschaId, "mp4", "<program>mp3.minscha</program>", "mc1", "<conf>mp2.conf.minscha</conf>", "error", Key.SERVER_ERROR);
             Assert.assertEquals(3, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where NAME like 'mp%'"));
             String cnMp1 = this.memoryDbSetup.getOne("select CONFIG_NAME from PROGRAM where NAME = 'mp1'");
             String chMp1 = this.memoryDbSetup.getOne("select CONFIG_HASH from PROGRAM where NAME = 'mp1'");
@@ -844,7 +852,10 @@ public class RestInterfaceTest {
      */
     private void saveConfigAs(HttpSessionState httpSession, int owner, String configName, String configText, String result, Key msgOpt) throws Exception //
     {
-        String jsonAsString = "{'cmd':'saveAsC';'name':'" + configName + "'";
+        String jsonAsString = "{'cmd':'saveAsC'";
+        if ( configName != null ) {
+            jsonAsString += ";'name':'" + configName + "'";
+        }
         if ( configText != null ) {
             jsonAsString += ";'configuration':'" + configText + "'";
         }

@@ -35,6 +35,17 @@ do
 	esac
 done
 
+serverVersionForDb=$(java -cp lib/\* de.fhg.iais.roberta.main.Administration version-for-db)
+database=db-${serverVersionForDb}/openroberta-db
+
+echo 'check whether any version of the database exists'
+shopt -s nullglob
+dbfiles=$(echo db-*)
+if [[ -z $dbfiles ]]; then 
+    echo "A POTENTIAL PROBLEM: No databases found. An empty database for version ${serverVersionForDb} will be created."
+    java -cp lib/\* de.fhg.iais.roberta.main.Administration createemptydb jdbc:hsqldb:file:${database}
+fi
+
 echo 'check for database upgrade'
 java $XMX -cp lib/\* de.fhg.iais.roberta.main.Administration upgrade . >>$SERVERLOGFILE 2>&1
 
