@@ -44,6 +44,10 @@
 			<artifactId>jersey-server</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-json</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.sun.jersey.contribs</groupId>
 			<artifactId>jersey-guice</artifactId>
 		</dependency>
@@ -60,14 +64,6 @@
 			<artifactId>hsqldb</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>javax.mail-api</artifactId>
 		</dependency>
@@ -80,20 +76,8 @@
 			<artifactId>jopt-simple</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>de.fhg.iais.openroberta</groupId>
-			<artifactId>OpenRobertaRobot</artifactId>
-			<version>${project.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>de.fhg.iais.openroberta</groupId>
@@ -120,6 +104,14 @@
 			<artifactId>RobotNXT</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+        <dependency>
+            <groupId>de.fhg.iais.openroberta</groupId>
+            <artifactId>OpenRobertaRobot</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 	<build>
 		<plugins>

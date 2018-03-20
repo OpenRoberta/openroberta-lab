@@ -2,8 +2,8 @@ package de.fhg.iais.roberta.persistence.util;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,8 +37,8 @@ public class SessionFactoryWrapper {
                 Configuration configuration = new Configuration();
                 configuration.configure(cfgXml);
                 configuration.setProperty("hibernate.connection.url", databaseUrl);
-                ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder().applySettings(configuration.getProperties());
-                this.sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder.buildServiceRegistry());
+                StandardServiceRegistryBuilder serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
+                this.sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder.build());
                 LOG.info("session factory successfully created");
                 return;
             } catch ( Exception e ) {

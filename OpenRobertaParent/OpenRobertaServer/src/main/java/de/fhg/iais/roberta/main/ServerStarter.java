@@ -15,7 +15,6 @@ import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.HandlerList;
-import org.eclipse.jetty.server.session.HashSessionManager;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -124,7 +123,7 @@ public class ServerStarter {
         // REST API with /rest/<version>/ prefix
         ServletContextHandler versionedHttpHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         versionedHttpHandler.setContextPath("/rest");
-        versionedHttpHandler.setSessionHandler(new SessionHandler(new HashSessionManager()));
+        versionedHttpHandler.setSessionHandler(new SessionHandler());
 
         versionedHttpHandler.addEventListener(robertaGuiceServletConfig);
         versionedHttpHandler.addFilter(GuiceFilter.class, "/*", null);
@@ -133,7 +132,7 @@ public class ServerStarter {
         // REST API without prefix (deprecated) and static resources
         ServletContextHandler rootHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         rootHandler.setContextPath("/*");
-        rootHandler.setSessionHandler(new SessionHandler(new HashSessionManager()));
+        rootHandler.setSessionHandler(new SessionHandler());
 
         rootHandler.addEventListener(robertaGuiceServletConfig);
         rootHandler.addFilter(GuiceFilter.class, "/alive/*", null);
