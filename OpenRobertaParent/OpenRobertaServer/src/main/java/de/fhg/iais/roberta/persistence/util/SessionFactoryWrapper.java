@@ -45,10 +45,9 @@ public class SessionFactoryWrapper {
                 LOG.error("session factory creation failed (" + retrycount + "). Trying again in 5 seconds", e);
                 try {
                     Thread.sleep(5000);
-                } catch ( InterruptedException e1 ) {
-                    String msg = "session factory creation interrupted. Server cannot start.";
-                    LOG.error(msg);
-                    throw new DbcException(msg);
+                } catch ( InterruptedException ie ) {
+                    LOG.error("session factory creation interrupted. Server cannot start.", ie);
+                    Thread.currentThread().interrupt();
                 }
             }
         }
