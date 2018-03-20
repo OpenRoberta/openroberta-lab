@@ -20,10 +20,10 @@ then
     exit 12
 fi
 echo "building branch $BRANCH with version $VERSION [version is unused as long as no db-its are executed]"
-git pull --strategy=recursive -Xtheirs --no-edit --depth=1 --allow-unrelated-histories
-git checkout $BRANCH
-
+git clone --depth=1 -b $BRANCH https://github.com/OpenRoberta/robertalab.git
 cd /opt/robertalab/OpenRobertaParent
+chmod +x RobotArdu/resources/linux/arduino-builder RobotArdu/resources/linux/tools-builder/ctags/5.8*/ctags && \
+
 mvn clean install -DskipTests -DskipITs
 
 # execute all tests, including the integration tests
