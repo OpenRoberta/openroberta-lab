@@ -15,7 +15,7 @@ public class CppVisitorTest {
     private static final String IMPORTS = //
         "#define_GNU_SOURCE\n\n"
             + "#include \"MicroBit.h\"" //
-            + "#include <list>\n"
+            + "#include <array>\n"
             + "#include <stdlib.h>\n"
             + "#define _SET_BRIGHTNESS_MULTIPLIER 28.34\n"
             + "#define _GET_BRIGHTNESS_MULTIPLIER 0.0353\n"
@@ -26,7 +26,7 @@ public class CppVisitorTest {
     private static final String IMPORTS_NO_TIMER = //
         "#define_GNU_SOURCE\n\n"
             + "#include \"MicroBit.h\"" //
-            + "#include <list>\n"
+            + "#include <array>\n"
             + "#include <stdlib.h>\n"
             + "#define _SET_BRIGHTNESS_MULTIPLIER 28.34\n"
             + "#define _GET_BRIGHTNESS_MULTIPLIER 0.0353\n"
@@ -614,13 +614,16 @@ public class CppVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS_NO_TIMER
-                + "void doSomething(std::list<MicroBitImage> x);"
+                + "template<size_t N>"
+                + "void doSomething(array<MicroBitImage,N> x);"
                 + "int initTime=uBit.systemTime();\n"
-                + "std::list<MicroBitImage> item={MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\"),MicroBitImage(\"0,0,0,0,0\\n0,255,0,255,0\\n0,255,255,255,0\\n0,0,255,0,0\\n0,0,0,0,0\\n\"),MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\")};"
+                + "array<MicroBitImage,3> item;\n"
                 + MAIN
+                + "item={MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\"),MicroBitImage(\"0,0,0,0,0\\n0,255,0,255,0\\n0,255,255,255,0\\n0,0,255,0,0\\n0,0,0,0,0\\n\"),MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\")};"
                 + "doSomething(item);"
                 + END
-                + "void doSomething(std::list<MicroBitImage> x) {"
+                + "template<size_t N>"
+                + "void doSomething(array<MicroBitImage, N> x) {"
                 + "uBit.display.animateImages(x,200);"
                 + "}";
 
@@ -677,8 +680,9 @@ public class CppVisitorTest {
         String a =
             "" //
                 + IMPORTS
-                + "std::list<double> item2 = {0, 0, 0};"
+                + "array<double, 3> item2;"
                 + MAIN
+                + "item2 = {0, 0, 0};"
                 + "while (true) {"
                 + "if (30 == 20) {"
                 + "     break;"

@@ -58,6 +58,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
@@ -191,30 +192,24 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar()));
         if ( var.getTypeVar().isArray() ) {
             if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-                //final ListCreate<Void> list = (ListCreate<Void>) var.getValue();
-                //this.sb.append(list.getValue().get().size() + ">");
-                this.sb.append(whitespace() + var.getName());
-                this.sb.append(whitespace() + "=" + whitespace());
-                var.getValue().visit(this);
+                final ListCreate<Void> list = (ListCreate<Void>) var.getValue();
+                this.sb.append(list.getValue().get().size() + ">");
             } else {
-                this.sb.append(whitespace() + var.getName());
+                this.sb.append("N>");
             }
-        } else {
-            this.sb.append(whitespace() + var.getName());
         }
+        this.sb.append(whitespace() + var.getName());
         return null;
     }
 
     protected Void generateUsedVars() {
         for ( final VarDeclaration<Void> var : this.usedVars ) {
-
+            nlIndent();
             if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-                if ( var.getTypeVar().isArray() ) {
-                    //ListCreate<Void> list = (ListCreate<Void>) var.getValue();
-                    //this.sb.append(list.getValue().get().size() + ">");
-                    continue;
-                }
-                nlIndent();
+                /*if ( var.getTypeVar().isArray() ) {
+                    ListCreate<Void> list = (ListCreate<Void>) var.getValue();
+                    this.sb.append(list.getValue().get().size() + ">");
+                }*/
                 this.sb.append(var.getName());
                 this.sb.append(whitespace() + "=" + whitespace());
                 var.getValue().visit(this);
@@ -924,18 +919,25 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
 
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        methodVoid.getParameters().get();
-        //  appendTemplateIfArrayParameter(parameters);
+        final List<Expr<Void>> parameters = methodVoid.getParameters().get();
+        appendTemplateIfArrayParameter(parameters);
         super.visitMethodVoid(methodVoid);
         return null;
     }
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        methodReturn.getParameters().get();
-        //appendTemplateIfArrayParameter(parameters);
+        final List<Expr<Void>> parameters = methodReturn.getParameters().get();
+        appendTemplateIfArrayParameter(parameters);
         super.visitMethodReturn(methodReturn);
         return null;
+    }
+
+    private void appendTemplateIfArrayParameter(List<Expr<Void>> parameters) {
+        final boolean isContainedArrayParameter = parameters.stream().filter(p -> p.getVarType().isArray()).findFirst().isPresent();
+        if ( isContainedArrayParameter ) {
+            this.sb.append("\ntemplate<size_t N>");
+        }
     }
 
     @Override
@@ -1181,15 +1183,15 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
             case ARRAY:
                 return "array<";
             case ARRAY_NUMBER:
-                return "std::list<double>";
+                return "array<double, ";
             case ARRAY_STRING:
-                return "std::list<ManagedString>";
+                return "array<ManagedString,";
             case ARRAY_BOOLEAN:
-                return "std::list<bool>";
+                return "array<bool,";
             case ARRAY_IMAGE:
-                return "std::list<MicroBitImage>";
+                return "array<MicroBitImage,";
             case ARRAY_COLOUR:
-                return "std::list<MicroBitColor>";
+                return "array<MicroBitColor,";
             case BOOLEAN:
                 return "bool";
             case NUMBER:
@@ -1244,7 +1246,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     private void addIncludes() {
         this.sb.append("#define _GNU_SOURCE\n\n");
         this.sb.append("#include \"MicroBit.h\" \n");
-        this.sb.append("#include <list>\n");
+        this.sb.append("#include <array>\n");
         this.sb.append("#include <stdlib.h>\n");
         this.sb.append("#define _SET_BRIGHTNESS_MULTIPLIER 28.34\n");
         this.sb.append("#define _GET_BRIGHTNESS_MULTIPLIER 0.0353\n");
@@ -1255,7 +1257,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     @Override
     protected void generateSignaturesOfUserDefinedMethods() {
         for ( final Method<Void> phrase : this.userDefinedMethods ) {
-            //appendTemplateIfArrayParameter(phrase.getParameters().get());
+            appendTemplateIfArrayParameter(phrase.getParameters().get());
             nlIndent();
             this.sb.append(getLanguageVarTypeFromBlocklyType(phrase.getReturnType()) + " ");
             this.sb.append(phrase.getMethodName() + "(");
