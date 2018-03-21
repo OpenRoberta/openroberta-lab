@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.actors.arduino.mbot.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.Axis;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.codegen.arduino.mbot.CppVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
@@ -151,8 +151,8 @@ public class Factory extends AbstractRobotFactory {
     @Override
     public String getGroup() {
 
-        return robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group") != null
-            ? robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group")
+        return this.robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group") != null
+            ? this.robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group")
             : this.name;
     }
 
@@ -187,8 +187,7 @@ public class Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public RobotBrickCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
-        // TODO Auto-generated method stub
+    public RobotCommonCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
         return null;
     }
 

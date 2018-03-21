@@ -79,7 +79,7 @@ import de.fhg.iais.roberta.mode.sensor.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.sensor.VoltageSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -542,7 +542,7 @@ public interface IRobotFactory {
 
     RobotSimulationCheckVisitor getSimProgramCheckVisitor(Configuration brickConfiguration);
 
-    RobotBrickCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration);
+    RobotCommonCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration);
 
     String getGroup();
 

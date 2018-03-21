@@ -34,9 +34,24 @@ import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.CheckVisitor;
+import de.fhg.iais.roberta.syntax.lang.expr.Binary;
+import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
+import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
+import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
+import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
+import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
+import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -46,6 +61,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
@@ -264,6 +280,11 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor implements As
     }
 
     @Override
+    public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
+        return null;
+    }
+
+    @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         toneAction.getDuration().visit(this);
         toneAction.getFrequency().visit(this);
@@ -331,6 +352,10 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor implements As
 
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReceiveAction) {
+        if ( bluetoothReceiveAction.getConnection() instanceof EmptyExpr ) {
+            bluetoothReceiveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
+            this.errorCount++;
+        }
         bluetoothReceiveAction.getConnection().visit(this);
         return null;
     }
@@ -343,6 +368,10 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor implements As
 
     @Override
     public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
+        if ( bluetoothSendAction.getConnection() instanceof EmptyExpr ) {
+            bluetoothSendAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
+            this.errorCount++;
+        }
         bluetoothSendAction.getConnection().visit(this);
         bluetoothSendAction.getMsg().visit(this);
         return null;
@@ -363,7 +392,7 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor implements As
         checkLeftRightMotorPort(driveAction);
     }
 
-    private void checkMotorPort(MoveAction<Void> action) {
+    protected void checkMotorPort(MoveAction<Void> action) {
         if ( this.brickConfiguration.getActorOnPort(action.getPort()) == null ) {
             action.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_MISSING"));
             this.errorCount++;
@@ -450,5 +479,158 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor implements As
         if ( duration != null ) {
             duration.getValue().visit(this);
         }
+    }
+
+    @Override
+    public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
+        super.visitMethodReturn(methodReturn);
+        if ( methodReturn.getReturnValue() instanceof EmptyExpr ) {
+            methodReturn.addInfo(NepoInfo.error("ERROR_MISSING_RETURN"));
+            this.errorCount++;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitMethodCall(MethodCall<Void> methodCall) {
+        super.visitMethodCall(methodCall);
+        boolean oneParamEmpty = false;
+        for ( Expr<Void> expr : methodCall.getParametersValues().get() ) {
+            oneParamEmpty = oneParamEmpty ? true : expr instanceof EmptyExpr;
+        }
+        if ( oneParamEmpty ) {
+            methodCall.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
+            this.errorCount++;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
+        super.visitRepeatStmt(repeatStmt);
+        if ( repeatStmt.getExpr() instanceof EmptyExpr ) {
+            repeatStmt.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
+            this.errorCount++;
+        } else if ( repeatStmt.getExpr() instanceof Unary ) {
+            if ( ((Unary<Void>) repeatStmt.getExpr()).getExpr() instanceof EmptyExpr ) {
+                repeatStmt.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
+                this.errorCount++;
+            }
+        } else if ( repeatStmt.getExpr() instanceof Binary ) {
+            if ( ((Binary<Void>) repeatStmt.getExpr()).getRight() instanceof EmptyExpr ) {
+                repeatStmt.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
+                this.errorCount++;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
+        super.visitWaitStmt(waitStmt);
+        for ( Stmt<Void> stmt : waitStmt.getStatements().get() ) {
+            for ( NepoInfo info : stmt.getInfos().getInfos() ) {
+                waitStmt.addInfo(info);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
+        super.visitIndexOfFunct(indexOfFunct);
+        boolean oneParamEmpty = false;
+        for ( Expr<Void> expr : indexOfFunct.getParam() ) {
+            oneParamEmpty = oneParamEmpty ? true : expr instanceof EmptyExpr;
+        }
+        if ( oneParamEmpty ) {
+            indexOfFunct.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
+            this.errorCount++;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
+        super.visitMathOnListFunct(mathOnListFunct);
+        if ( mathOnListFunct.getParam().get(0) instanceof EmptyExpr ) {
+            mathOnListFunct.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
+            this.errorCount++;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
+        super.visitLengthOfIsEmptyFunct(lengthOfIsEmptyFunct);
+        if ( lengthOfIsEmptyFunct.getParam().get(0) instanceof EmptyExpr ) {
+            lengthOfIsEmptyFunct.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
+            this.errorCount++;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitListRepeat(ListRepeat<Void> listRepeat) {
+        super.visitListRepeat(listRepeat);
+        boolean oneParamEmpty = false;
+        for ( Expr<Void> expr : listRepeat.getParam() ) {
+            oneParamEmpty = oneParamEmpty ? true : expr instanceof EmptyExpr;
+        }
+        if ( oneParamEmpty ) {
+            listRepeat.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
+            this.errorCount++;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
+        super.visitListGetIndex(listGetIndex);
+        if ( listGetIndex.getParam().get(0) instanceof EmptyExpr ) {
+            listGetIndex.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
+            this.errorCount++;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
+        super.visitGetSubFunct(getSubFunct);
+        if ( getSubFunct.getParam().get(0) instanceof EmptyExpr ) {
+            getSubFunct.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
+            this.errorCount++;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
+        super.visitListSetIndex(listSetIndex);
+        boolean oneParamEmpty = false;
+        for ( Expr<Void> expr : listSetIndex.getParam() ) {
+            oneParamEmpty = oneParamEmpty ? true : expr instanceof EmptyExpr;
+        }
+        if ( oneParamEmpty ) {
+            listSetIndex.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
+            this.errorCount++;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitBinary(Binary<Void> binary) {
+        super.visitBinary(binary);
+        if ( (binary.getOp() == Binary.Op.MATH_CHANGE || binary.getOp() == Binary.Op.TEXT_APPEND) && binary.getLeft() instanceof EmptyExpr ) {
+            binary.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
+            this.errorCount++;
+        }
+
+        if ( (binary.getOp() == Binary.Op.AND || binary.getOp() == Binary.Op.OR)
+            && (binary.getLeft() instanceof EmptyExpr || binary.getRight() instanceof EmptyExpr) ) {
+            binary.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
+            this.errorCount++;
+        }
+        return null;
     }
 }

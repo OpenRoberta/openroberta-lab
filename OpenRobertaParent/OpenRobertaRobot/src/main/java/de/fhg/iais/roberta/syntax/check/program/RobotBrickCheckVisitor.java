@@ -8,9 +8,8 @@ import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction.Mode;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
-import de.fhg.iais.roberta.visitor.actor.AstActorCommunicationVisitor;
 
-public abstract class RobotBrickCheckVisitor extends RobotCommonCheckVisitor implements AstActorCommunicationVisitor<Void> {
+public abstract class RobotBrickCheckVisitor extends RobotCommonCheckVisitor {
 
     public RobotBrickCheckVisitor(Configuration brickConfiguration) {
         super(brickConfiguration);

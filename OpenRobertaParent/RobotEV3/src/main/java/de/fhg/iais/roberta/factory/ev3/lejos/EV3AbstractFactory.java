@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ev3.ShowPicture;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.ev3.BrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.ev3.SimulationCheckVisitor;
@@ -71,7 +71,7 @@ public abstract class EV3AbstractFactory extends AbstractRobotFactory {
 
     @Override
     public AbstractModule getGuiceModule() {
-        return new Ev3GuiceModule(robertaProperties.getRobertaProperties());
+        return new Ev3GuiceModule(this.robertaProperties.getRobertaProperties());
     }
 
     @Override
@@ -140,7 +140,7 @@ public abstract class EV3AbstractFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public RobotBrickCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
+    public RobotCommonCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
         return new BrickCheckVisitor(brickConfiguration);
     }
 
@@ -151,8 +151,8 @@ public abstract class EV3AbstractFactory extends AbstractRobotFactory {
 
     @Override
     public String getGroup() {
-        return robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.robotPropertyNumber + ".group") != null
-            ? robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.robotPropertyNumber + ".group")
+        return this.robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.robotPropertyNumber + ".group") != null
+            ? this.robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.robotPropertyNumber + ".group")
             : this.name;
     }
 

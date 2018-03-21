@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-03-14 17:18:07.865391",
+		"lastupdated": "2018-03-21 16:54:50.204886",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1279,5 +1279,7 @@
 	"RIGHT": "right",
 	"LEFT": "left",
 	"ORA_ROBOT_PUSH_RUN_CALLIOPE2016": "Your program »$« is downloaded to Calliope, press the reset button to start it!",
-	"ORA_ROBOT_PUSH_RUN_NXT": "Your program »$« is downloaded to the NXT, start it on the robot!"
+	"ORA_ROBOT_PUSH_RUN_NXT": "Your program »$« is downloaded to the NXT, start it on the robot!",
+	"ERROR_MISSING_PARAMETER": "An input value is missing!",
+	"ERROR_MISSING_RETURN": "The function return value is missing!"
 }

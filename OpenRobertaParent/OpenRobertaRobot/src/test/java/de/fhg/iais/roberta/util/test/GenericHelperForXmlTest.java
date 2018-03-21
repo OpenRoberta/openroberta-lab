@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
@@ -153,7 +153,7 @@ public class GenericHelperForXmlTest extends AbstractHelperForXmlTest {
         }
 
         @Override
-        public RobotBrickCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
+        public RobotCommonCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
             return null;
         }
 

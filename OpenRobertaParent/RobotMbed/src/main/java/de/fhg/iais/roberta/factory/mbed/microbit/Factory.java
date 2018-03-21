@@ -10,8 +10,9 @@ import de.fhg.iais.roberta.factory.mbed.SimCompilerWorkflow;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.mbed.BoardCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.mbed.microbit.SimulationCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
@@ -120,8 +121,8 @@ public class Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public RobotBrickCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
-        return null;
+    public RobotCommonCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
+        return new BoardCheckVisitor(brickConfiguration);
     }
 
     @Override
