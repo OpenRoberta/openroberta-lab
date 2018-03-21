@@ -184,7 +184,7 @@ define(['exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scrollt
         },
         {
             'event_type': 'next',
-            'selector': '.navbar-nav',
+            'selector': '#mainNavigationBar',
             'description': 'Blockly.Msg.TOUR1_DESCRIPTION03',
             'nextButton': {
                 text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
