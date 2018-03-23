@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y git maven && apt-get clean
 ARG LAST_RUN_OF_CLONE=2018-03-20
 WORKDIR /opt
 ARG BRANCH=develop
-RUN echo "cloning branch $BRANCH and executing mvn to fill the .m2 cache" && \
+RUN echo "cloning branch $BRANCH and executing mvn to fill the .m2 cache"
 
 RUN git clone --depth=1 -b $BRANCH https://github.com/OpenRoberta/robertalab.git && \
     git config --global core.fileMode false && \

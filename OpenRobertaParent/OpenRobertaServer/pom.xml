@@ -105,13 +105,13 @@
 			<scope>test</scope>
 		</dependency>
 
-        <dependency>
-            <groupId>de.fhg.iais.openroberta</groupId>
-            <artifactId>OpenRobertaRobot</artifactId>
-            <version>${project.version}</version>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
+		<dependency>
+			<groupId>de.fhg.iais.openroberta</groupId>
+			<artifactId>OpenRobertaRobot</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -351,6 +351,13 @@
 										<include>**/*.class</include>
 									</includes>
 								</configuration>
+							</execution>
+							<execution>
+								<id>verify</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>verify</goal>
+								</goals>
 							</execution>
 						</executions>
 					</plugin>

@@ -22,5 +22,4 @@ RUN git clone --depth=1 -b $BRANCH https://github.com/OpenRoberta/robertalab.git
 WORKDIR /opt
 COPY ["./runIT.sh","./"]
 RUN chmod +x ./runIT.sh
-WORKDIR /opt/robertalab
 ENTRYPOINT ["/opt/runIT.sh"]

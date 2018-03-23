@@ -149,7 +149,7 @@ shift
 case "$cmd" in
 --export)         _exportApplication $* ;;
 
---start-from-git) echo 'the script expects, that a mvn build was successful; if the start fails or the system is frozen, check whether a database exists and NO *.lck file exists'
+--start-from-git) echo 'the script expects, that a mvn build was successful; if the start fails or the system is frozen, make sure that a database exists and NO *.lck file exists'
                   echo '1. step: make an optional upgrade of the db 2. step: start the server'
                   java -cp OpenRobertaParent/OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.Administration upgrade OpenRobertaParent/OpenRobertaServer
                   java -cp OpenRobertaParent/OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter -d database.mode=embedded -d database.parentdir=OpenRobertaParent/OpenRobertaServer $* ;;

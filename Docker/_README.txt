@@ -30,7 +30,7 @@ Furthermore during image creation a maven build is executed for branch develop t
 This makes later builds much faster.
 
 cd $GITREPO/Docker
-docker build -f DockerfileGen -t rbudde/openroberta_gen:1 --build-arg BRANCH=develop .
+docker build -f DockerfileGen -t rbudde/openroberta_gen:1 .
 docker push rbudde/openroberta_gen:1
 
 2. GENERATE THE "base" IMAGE. IT CONTAINS SOFTWARE FOR CROSSCOMPILATION. THIS IS DOCUMENTATION. YOU MUST NOT DO THIS.
@@ -85,7 +85,7 @@ Start the server with an embedded database (no sqlclient access during operation
   docker run -p 7100:1999 -v $DB_PARENTDIR:/opt/db rbudde/openroberta_embedded:$BRANCH-$VERSION &
 - with docker-compose (using compose for a single container may appear a bit over-engineered):
   cd $GITREPO/Docker
-  docker-compose -p ora -f dc-embedded.yml up &
+  docker-compose -p ora -f dc-embedded.yml up -d &
 Using docker-compose is preferred.
 If the log message is printed, which tells you how many programs are in the data base, everything is fine and you can
 access the server at http://dns-name-or-localhost:7100 (see docker command and the compose file)
@@ -110,6 +110,8 @@ Stop the two applications is done with
 For the two services two different networks are created (inspect the output of "docker network ls"), IP ranges are separated (inspect
 the output of "docker network inspect ora1_default" resp "docker network inspect ora2_default")
 
+Note: when the container terminate, the message "... exited with code 130" is no error, but signals termination with CTRL-C
+
 4.3 RUNNING A TEST SETUP
   cd $GITREPO/Docker
   docker-compose -p test -f dc-testserver.yml up &
@@ -127,13 +129,13 @@ and has executed a
 The entrypoint is defined as the bash script "runIT.sh".
 
   cd $GITREPO/Docker
-  docker build -t rbudde/openroberta_it:1 -f DockerfileIT  --build-arg BRANCH=develop .
+  docker build -t rbudde/openroberta_it:1 -f DockerfileIT .
 
 The following commands are executed by the roberta maintainer; you should NOT do this
   docker push rbudde/openroberta_it:1
  
 Starting this image
-- fetches the branch $BRANCH
+- clones the branch $BRANCH
 - execute all tests, including the integration tests
 - in case of success it returns 0, in case of errors/failures it returns 16
 
