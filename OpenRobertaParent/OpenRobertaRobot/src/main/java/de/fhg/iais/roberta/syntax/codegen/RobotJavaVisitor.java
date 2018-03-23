@@ -400,6 +400,8 @@ public abstract class RobotJavaVisitor extends CommonLanguageVisitor {
                 return "ArrayList<PickColor>";
             case ARRAY_BOOLEAN:
                 return "ArrayList<Boolean>";
+            case ARRAY_CONNECTION:
+                return "ArrayList<NXTConnection>";
             case BOOLEAN:
                 return "boolean";
             case NUMBER:
