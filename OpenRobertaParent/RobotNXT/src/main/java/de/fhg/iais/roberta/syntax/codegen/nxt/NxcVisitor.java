@@ -415,11 +415,14 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
                 methodName = "ColorOut";
                 break;
             case NOTHING:
-                if ( showTextAction.getMsg().getProperty().getBlockType().toString().contains("isPressed") ) {
+                if ( showTextAction.getMsg().getProperty().getBlockType().toString().contains("isPressed")
+                    || showTextAction.getMsg().getProperty().getBlockType().toString().contains("logic_ternary") ) {
                     methodName = "BoolOut";
                 } else if ( showTextAction.getMsg().getProperty().getBlockType().toString().contains("colour") ) {
                     methodName = "ColorOut";
-                } else if ( showTextAction.getMsg().getProperty().getBlockType().toString().contains("robSensors") ) {
+                } else if ( showTextAction.getMsg().getProperty().getBlockType().toString().contains("robSensors")
+                    || showTextAction.getMsg().getProperty().getBlockType().toString().contains("robActions")
+                    || showTextAction.getMsg().toString().contains("POWER") ) {
                     methodName = "NumOut";
                 } else {
                     methodName = "TextOut";
@@ -432,10 +435,13 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
                     || showTextAction.getMsg().toString().contains("MULTIPLY")
                     || showTextAction.getMsg().toString().contains("DIVIDE")
                     || showTextAction.getMsg().toString().contains("MOD")
+                    || showTextAction.getMsg().toString().contains("NEG")
                     || showTextAction.getMsg().toString().contains("LISTS_LENGTH")
                     || showTextAction.getMsg().toString().contains("IndexOfFunct")
                     || showTextAction.getMsg().toString().contains("[ListGetIndex [GET, FROM_START, [ListCreate [NUMBER")
-                    || showTextAction.getMsg().toString().contains("[ListGetIndex [GET, FROM_START, [ListCreate [CONNECTION") ) {
+                    || showTextAction.getMsg().toString().contains("[ListGetIndex [GET, FROM_START, [ListCreate [CONNECTION")
+                    || showTextAction.getMsg().toString().contains("MotorGetPower")
+                    || showTextAction.getMsg().toString().contains("VolumeAction") ) {
                     methodName = "NumOut";
                 } else if ( showTextAction.getMsg().toString().contains("EQ")
                     || showTextAction.getMsg().toString().contains("NEQ")
@@ -446,7 +452,9 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
                     || showTextAction.getMsg().toString().contains("LIST_IS_EMPTY")
                     || showTextAction.getMsg().toString().contains("AND")
                     || showTextAction.getMsg().toString().contains("OR")
-                    || showTextAction.getMsg().toString().contains("[ListGetIndex [GET, FROM_START, [ListCreate [BOOLEAN") ) {
+                    || showTextAction.getMsg().toString().contains("NOT")
+                    || showTextAction.getMsg().toString().contains("[ListGetIndex [GET, FROM_START, [ListCreate [BOOLEAN")
+                    || showTextAction.getMsg().toString().contains("BluetoothConnectAction") ) {
                     methodName = "BoolOut";
                 } else {
                     methodName = "TextOut";
