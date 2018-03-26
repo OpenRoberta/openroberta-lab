@@ -833,8 +833,11 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
                 this.sb.append(", 2) != 0");
                 break;
             case PRIME:
+                this.sb.append("isPrime(");
+                mathNumPropFunct.getParam().get(0).visit(this);
                 break;
             case WHOLE:
+                this.sb.append("isWhole(");
                 mathNumPropFunct.getParam().get(0).visit(this);
                 break;
             case POSITIVE:

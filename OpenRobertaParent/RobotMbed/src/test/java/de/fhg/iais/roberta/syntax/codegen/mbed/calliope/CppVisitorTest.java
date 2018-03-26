@@ -453,6 +453,30 @@ public class CppVisitorTest {
     }
 
     @Test
+    public void visitMathPropertyFunct_ShowIsWholeNumber_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + MAIN
+                + "uBit.display.scroll(ManagedString(isWhole(2)));\n"
+                + END;
+
+        assertCodeIsOk(expectedResult, "/function/is_whole_number.xml");
+    }
+
+    @Test
+    public void visitMathPropertyFunct_ShowIsPrimeNumber_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + MAIN
+                + "uBit.display.scroll(ManagedString(isPrime(2)));\n"
+                + END;
+
+        assertCodeIsOk(expectedResult, "/function/is_prime_number.xml");
+    }
+
+    @Test
     public void visitMathRandomIntFunct_ShowRandIntMissingParam_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult =
             "" //
