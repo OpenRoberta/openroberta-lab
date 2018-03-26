@@ -811,7 +811,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
                 this.sb.append("\"AMBIENTLIGHT\"");
                 break;
             default:
-                throw new DbcException("Invalide mode for Color Sensor!");
+                throw new DbcException("Invalide mode for Light Sensor!");
         }
         this.sb.append(")");
         return null;
@@ -987,6 +987,8 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
             case ARRAY_BOOLEAN:
                 methodName += "Bool(";
                 break;
+            case NOTHING:
+                methodName += "Num(";
             default:
                 throw new DbcException("Invalid array type: " + arrayType);
         }

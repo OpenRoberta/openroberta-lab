@@ -16,7 +16,7 @@ public class MathSingleTest {
 
     @Test
     public void Test1() throws Exception {
-        final String a = "volume=sqrt(0)*4/100.0+0.5;";
+        final String a = "volume=(sqrt(0))*4/100.0;";
 
         this.h.assertCodeIsOk(a, "/syntax/math/math_single1.xml");
     }

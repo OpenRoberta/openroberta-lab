@@ -9,7 +9,7 @@ public class VolumeActionTest {
 
     @Test
     public void setVolume() throws Exception {
-        String a = "\nvolume=50*4/100.0+0.5;";
+        String a = "\nvolume=(50)*4/100.0;";
 
         this.h.assertCodeIsOk(a, "/ast/actions/action_SetVolume.xml");
     }

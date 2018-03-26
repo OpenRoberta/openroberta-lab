@@ -18,7 +18,7 @@ public class ToneActionFunctionTest {
                 + "Element=0;"
                 + "macheEtwas();}"
                 + "void macheEtwas(){\n"
-                + "volume=50*4/100.0+0.5;"
+                + "volume=(50)*4/100.0;"
                 + "PlayToneEx(300, 100, volume, false);\n"
                 + "Wait(100);}";
 
