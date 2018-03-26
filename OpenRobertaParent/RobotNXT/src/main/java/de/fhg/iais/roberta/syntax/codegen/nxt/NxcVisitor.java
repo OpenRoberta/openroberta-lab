@@ -108,7 +108,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
     private final NxtConfiguration brickConfiguration;
 
     private final boolean timeSensorUsed;
-    private final boolean playToneActionUsed;
+    private final boolean isVolumeVariableNeeded;
 
     protected final Set<UsedActor> usedActors;
     //private final String tmpArr;
@@ -130,7 +130,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
         this.usedVars = codePreprocessVisitor.getVisitedVars();
         this.usedActors = codePreprocessVisitor.getUsedActors();
         this.timeSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
-        this.playToneActionUsed = codePreprocessVisitor.isPlayToneUsed();
+        this.isVolumeVariableNeeded = codePreprocessVisitor.isVolumeVariableNeeded();
         this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
         this.userDefinedMethods = codePreprocessVisitor.getUserDefinedMethods();
         //this.tmpArr = codePreprocessVisitor.getTmpArrVar();
@@ -477,9 +477,9 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         switch ( volumeAction.getMode() ) {
             case SET:
-                this.sb.append("volume = ");
+                this.sb.append("volume = (");
                 volumeAction.getVolume().visit(this);
-                this.sb.append(" * 4 / 100.0 + 0.5;");
+                this.sb.append(") * 4 / 100.0;");
                 break;
             case GET:
                 this.sb.append("volume * 100 / 4");
@@ -936,7 +936,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        if ( this.playToneActionUsed ) {
+        if ( this.isVolumeVariableNeeded ) {
             this.sb.append("byte volume = 0x02;");
         }
         if ( this.timeSensorUsed ) {
