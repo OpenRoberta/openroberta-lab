@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.main;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -12,13 +13,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import org.slf4j.Logger;
@@ -104,16 +108,38 @@ public class ServerStarter {
      * @return the server
      */
     public Server start() throws IOException {
-        Server server = new Server();
-        ServerConnector http = new ServerConnector(server); //NOSONAR : no need to close. Active until program termination
         String host = robertaProperties.getStringProperty("server.ip");
-        int port = robertaProperties.getIntProperty("server.port");
-        http.setHost(host);
-        http.setPort(port);
-        server.setConnectors(
-            new ServerConnector[] {
-                http
-            });
+        int httpPort = robertaProperties.getIntProperty("server.port", 0);
+        int httpsPort = robertaProperties.getIntProperty("server.portHttps", 0);
+
+        Server server = new Server();
+        List<ServerConnector> connectors = new ArrayList<>();
+
+        if ( httpPort > 0 ) {
+            ServerConnector httpConnector = new ServerConnector(server); //NOSONAR : no need to close. Active until program termination
+            httpConnector.setHost(host);
+            httpConnector.setPort(httpPort);
+            connectors.add(httpConnector);
+        }
+        if ( httpsPort > 0 ) {
+            SslContextFactory sslContextFactory = new SslContextFactory(); //NOSONAR : no need to close. Active until program termination
+            String keyStoreUri = robertaProperties.getStringProperty("server.keystore.uri");
+            if ( keyStoreUri == null ) {
+                keyStoreUri = ServerStarter.class.getResource("/keystore.jks").toExternalForm();
+            }
+            String password = robertaProperties.getStringProperty("server.keystore.password");
+            if ( password == null ) {
+                password = "oraOra";
+            }
+            sslContextFactory.setKeyStorePath(keyStoreUri);
+            sslContextFactory.setKeyStorePassword(password);
+            sslContextFactory.setKeyManagerPassword(password);
+            ServerConnector sslConnector = new ServerConnector(server, new SslConnectionFactory(sslContextFactory, "http/1.1"), new HttpConnectionFactory());
+            sslConnector.setHost(host);
+            sslConnector.setPort(httpsPort);
+            connectors.add(sslConnector);
+        }
+        server.setConnectors(connectors.toArray(new ServerConnector[0]));
 
         // configure robot plugins
         RobotCommunicator robotCommunicator = new RobotCommunicator();
@@ -166,12 +192,23 @@ public class ServerStarter {
             });
         server.setHandler(handlers);
 
+        StringBuilder sb = new StringBuilder();
+        if ( httpPort > 0 ) {
+            sb.append("http://").append(host).append(":").append(httpPort);
+        }
+        if ( httpPort > 0 && httpsPort > 0 ) {
+            sb.append(" and ");
+        }
+        if ( httpsPort > 0 ) {
+            sb.append("https://").append(host).append(":").append(httpsPort);
+        }
+        String serverMessage = sb.toString();
+
         try {
             server.start();
-            ServerStarter.LOG.info("server started at " + server.getURI());
+            ServerStarter.LOG.info("server started at " + serverMessage);
         } catch ( Exception e ) {
-            ServerStarter.LOG.error("Could not start the server at " + host + ":" + port, e);
-            http.close();
+            ServerStarter.LOG.error("Could not start the server at " + serverMessage, e);
             System.exit(16);
         }
         this.injector = robertaGuiceServletConfig.getCreatedInjector();

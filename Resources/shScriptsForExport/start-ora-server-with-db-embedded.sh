@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# start of the openroberta server with the database EMBEDDED.
+# start of the openroberta server with the database EMBEDDED. Optionally enable remote debugging.
 # typical use case: small standalone servers, e.g. Raspberry PI. When the server is running, the database cannot
 # be accessed by a sql client.
 # if the server runs version x.y.z, the the database is expected in directory db-x.y.z
@@ -18,10 +18,14 @@ function propagateSignal() {
 
 SERVERLOGFILE='./ora-server.log'
 XMX=''
+REMOTEDEBUG=''
+
+remoteDebugDecl='-agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=y'
 
 echo 'start-ora-server-with-db-embedded.sh with the following optional parameter:'
 echo "  --logserver <file-name>     server log file. Default: $SERVERLOGFILE"
 echo "  -Xmx<size>                  heap for the JVM, for example -Xmx2G. Default: nothing"
+echo "  -rdbg                       enable remote debugging. Default: no remote debugging"
 echo '  all parameters after these parameters are passed to the server'
 
 while [ true ]
@@ -30,6 +34,8 @@ do
 	  --logserver) SERVERLOGFILE=$2
                    shift; shift ;;
 	  -Xmx*)       XMX=$1
+	               shift ;;
+	  -rdbg)       REMOTEDEBUG=$remoteDebugDecl
 	               shift ;;
 	  *)	       break ;;
 	esac
@@ -51,7 +57,7 @@ java $XMX -cp lib/\* de.fhg.iais.roberta.main.Administration upgrade . >>$SERVER
 
 echo 'start the server with embedded database'
 trap propagateSignal SIGTERM SIGINT
-java  $XMX -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
-	  -d database.parentdir=. -d database.mode=embedded $* >>$SERVERLOGFILE 2>&1 &
+java $REMOTEDEBUG $XMX -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
+	 -d database.parentdir=. -d database.mode=embedded $* >>$SERVERLOGFILE 2>&1 &
 child=$!
 wait "$child"

@@ -83,6 +83,16 @@ public class RobertaProperties {
         return Integer.parseInt(property);
     }
 
+    public int getIntProperty(String propertyName, int defaultValue) {
+        Assert.notNull(this.robertaProperties);
+        String property = this.robertaProperties.getProperty(propertyName);
+        if ( property == null ) {
+            return defaultValue;
+        } else {
+            return Integer.parseInt(property);
+        }
+    }
+
     public boolean getBooleanProperty(String propertyName) {
         Assert.notNull(this.robertaProperties);
         String property = this.robertaProperties.getProperty(propertyName);

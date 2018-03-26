@@ -220,6 +220,7 @@
 				<version>2.6</version>
 				<configuration>
 					<nonFilteredFileExtensions>
+						<nonFilteredFileExtension>jks</nonFilteredFileExtension>
 						<nonFilteredFileExtension>ico</nonFilteredFileExtension>
 						<nonFilteredFileExtension>eot</nonFilteredFileExtension>
 						<nonFilteredFileExtension>otf</nonFilteredFileExtension>
