@@ -629,8 +629,8 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
                 this.sb.append(");");
             }
         } else {
-            if ( isActorOnPort(this.brickConfiguration.getLeftMotorPort()) && isActorOnPort(this.brickConfiguration.getRightMotorPort()) ) {
-                this.sb.append("Off(OUT_" + this.brickConfiguration.getLeftMotorPort() + this.brickConfiguration.getRightMotorPort());
+            if ( isActorOnPort(motorStopAction.getPort()) ) {
+                this.sb.append("Off(OUT_" + motorStopAction.getPort());
                 this.sb.append(");");
             }
         }
