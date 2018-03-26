@@ -241,7 +241,7 @@ public abstract class ArduinoVisitor extends RobotCppVisitor {
 
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
-        boolean isWaitStmt = repeatStmt.getMode() == RepeatStmt.Mode.WAIT || repeatStmt.getMode() == RepeatStmt.Mode.FOREVER_ARDU;
+        boolean isWaitStmt = repeatStmt.getMode() == RepeatStmt.Mode.WAIT;// || repeatStmt.getMode() == RepeatStmt.Mode.FOREVER_ARDU;
         switch ( repeatStmt.getMode() ) {
             case UNTIL:
             case WHILE:
@@ -279,6 +279,7 @@ public abstract class ArduinoVisitor extends RobotCppVisitor {
                 }
                 break;
             case FOREVER_ARDU:
+                increaseLoopCounter();
                 repeatStmt.getList().visit(this);
                 return null;
             default:
