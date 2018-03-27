@@ -288,7 +288,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     exports.runInSim = runInSim;
 
     /**
-     * Compile source code
+     * Compile geenrated source code
      * 
      * @param programName
      *            {String} - name of the program
@@ -296,17 +296,37 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - source code of the program
      * 
      */
-    function runN(programName, programText, language, successFn) {
+    function compileN(programName, programText, language, successFn) {
         COMM.json("/program", {
-            "cmd" : "runN",
+            "cmd" : "compileN",
             "name" : programName,
             "programText" : programText,
             "language" : language
         }, successFn, "compile program '" + programName + "'");
     }
 
-    exports.runN = runN;
+    exports.compileN = compileN;
 
+    /**
+     * Compile NEPO source code
+     * 
+     * @param programName
+     *            {String} - name of the program
+     * @param programText
+     *            {String} - source code of the program
+     * 
+     */
+    function compileP(programName, programText, language, successFn) {
+    	COMM.json("/program", {
+    		"cmd" : "compileP",
+    		"name" : programName,
+    		"program" : programText,
+    		"language" : language
+    	}, successFn, "compile program '" + programName + "'");
+    }
+    
+    exports.compileP = compileP;
+    
     /**
      * Check program
      * 

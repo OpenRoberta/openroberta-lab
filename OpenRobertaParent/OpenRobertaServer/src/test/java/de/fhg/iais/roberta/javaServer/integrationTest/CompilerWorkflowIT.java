@@ -73,7 +73,9 @@ public class CompilerWorkflowIT {
 
     @BeforeClass
     public static void setupClass() throws Exception {
-        robertaProperties = new RobertaProperties(Util1.loadProperties("classpath:openRoberta.properties"));
+        robertaProperties = new RobertaProperties(Util1.loadProperties(null));
+        // TODO: add a robotBasedir property to the openRoberta.proerties. Make all pathes relative to that dir. Create special accessors. Change String to Path.
+        fixPropertyPathes();
         robotCommunicator = new RobotCommunicator();
         pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, robertaProperties);
         httpSessionState = HttpSessionState.init(robotCommunicator, pluginMap, robertaProperties, 1);
@@ -146,7 +148,7 @@ public class CompilerWorkflowIT {
     private void compileNepo(boolean expectResultOk, String robot, String resource) throws Exception {
         setRobotTo(robot);
         JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileP','name':'prog','language':'de'}");
-        setProgConf(cmd.getJSONObject("data"), Util1.readResourceContent("/compilerWorkflowTest/" + robot + "/" + resource));
+        addProgAndConfToJsonCmd(cmd.getJSONObject("data"), Util1.readResourceContent("/compilerWorkflowTest/" + robot + "/" + resource));
         response = this.restProgram.command(httpSessionState, cmd);
         assertEntityRc(this.response, expectResultOk ? "ok" : "error");
 
@@ -157,7 +159,23 @@ public class CompilerWorkflowIT {
         JSONUtilForServer.assertEntityRc(this.response, "ok", Key.ROBOT_SET_SUCCESS);
     }
 
-    private static void setProgConf(JSONObject data, String exportedProgramAsXmlString) throws Exception {
+    private static void fixPropertyPathes() {
+        for ( int i = 0; i < 999; i++ ) {
+            replace("robot.plugin." + i + ".compiler.resources.dir");
+            replace("robot.plugin." + i + ".updateResources.dir");
+            replace("robot.plugin." + i + ".generated.programs.build.xml");
+        }
+    }
+
+    private static void replace(String key) {
+        String path = robertaProperties.getStringProperty(key);
+        if ( path != null ) {
+            path.replaceFirst("OpenRobertaParent", "..");
+            robertaProperties.getRobertaProperties().put(key, path);
+        }
+    }
+
+    private static void addProgAndConfToJsonCmd(JSONObject data, String exportedProgramAsXmlString) throws Exception {
         Export jaxb = JaxbHelper.xml2Element(exportedProgramAsXmlString, Export.class);
         data.put("programText", JaxbHelper.blockSet2xml(jaxb.getProgram().getBlockSet()));
         data.put("configurationText", JaxbHelper.blockSet2xml(jaxb.getConfig().getBlockSet()));
@@ -170,7 +188,7 @@ public class CompilerWorkflowIT {
      * @param rc the return code expected
      * @throws JSONException
      */
-    public static void assertEntityRc(Response response, String rc) throws JSONException {
+    private static void assertEntityRc(Response response, String rc) throws JSONException {
         JSONObject entity = (JSONObject) response.getEntity();
         Assert.assertEquals(rc, entity.getString("rc"));
     }

@@ -394,13 +394,11 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
     exports.importXml = importXml;
 
     /**
-     * Experimental: Open a file select dialog to load a program (source code)
-     * from local disk and ?
+     * two Experimental functions: Open a file select dialog to load source code from local disk and send it to the cross compiler
      */
     function importSourceCodeToCompile() {
         var input = $(document.createElement('input'));
         input.attr("type", "file");
-        input.attr("accept", ".cpp, .java, .py");
         input.change(function(event) {
             var file = event.target.files[0]
             var reader = new FileReader()
@@ -408,7 +406,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
             reader.onload = function(event) {
                 // TODO move this to the run controller once it is clear what should happen
                 var name = UTIL.getBasename(file.name);
-                PROGRAM.runN(name, event.target.result, GUISTATE_C.getLanguage(), function(result) {
+                PROGRAM.compileN(name, event.target.result, GUISTATE_C.getLanguage(), function(result) {
                     alert(result.rc);
                 });
             }
@@ -416,6 +414,28 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         input.trigger('click'); // opening dialog
     }
     exports.importSourceCodeToCompile = importSourceCodeToCompile;
+    
+    /**
+     * two Experimental functions: Open a file select dialog to load source code from local disk and send it to the cross compiler
+     */
+    function importNepoCodeToCompile() {
+    	var input = $(document.createElement('input'));
+    	input.attr("type", "file");
+    	input.change(function(event) {
+    		var file = event.target.files[0]
+    		var reader = new FileReader()
+    		reader.readAsText(file)
+    		reader.onload = function(event) {
+    			// TODO move this to the run controller once it is clear what should happen
+    			var name = UTIL.getBasename(file.name);
+    			PROGRAM.compileP(name, event.target.result, GUISTATE_C.getLanguage(), function(result) {
+    				alert(result.rc);
+    			});
+    		}
+    	})
+    	input.trigger('click'); // opening dialog
+    }
+    exports.importNepoCodeToCompile = importNepoCodeToCompile;
 
     function linkProgram() {
         var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);

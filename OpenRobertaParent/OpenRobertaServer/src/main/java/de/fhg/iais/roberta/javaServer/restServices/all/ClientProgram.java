@@ -417,7 +417,7 @@ public class ClientProgram {
                     }
                 }
                 handleRunProgramError(response, messageKey, token, wasRobotWaiting);
-            } else if ( cmd.equals("compileN") || cmd.equals("runN") ) {
+            } else if ( cmd.equals("compileN") ) {
                 String token = httpSessionState.getToken();
                 String programName = request.getString("name");
                 String programText = request.optString("programText");
@@ -432,34 +432,54 @@ public class ClientProgram {
                 }
             } else if ( cmd.equals("compileP") ) {
                 Key messageKey = null;
-                String token = httpSessionState.getToken();
+
                 String programName = request.getString("name");
-                String programText = request.optString("programText");
-                String configName = request.optString("configuration", null);
-                String configurationText = request.optString("configurationText", null);
+                String xmlText = request.getString("program");
                 ILanguage language = Language.findByAbbr(request.optString("language"));
-                if ( configName != null ) {
-                    configurationText = configurationProcessor.getConfigurationText(configName, userId, robot);
-                } else if ( configurationText == null ) {
-                    configurationText = robotFactory.getConfigurationDefault();
+                if ( !Util1.isValidJavaIdentifier(programName) ) {
+                    programName = "NEPOprog";
                 }
 
-                BlocklyProgramAndConfigTransformer programAndConfigTransformer =
-                    BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
-                programAndConfigTransformer.getBrickConfiguration().setRobotName(httpSessionState.getRobotName());
-                messageKey = programAndConfigTransformer.getErrorMessage();
-                if ( messageKey == null ) {
-                    ClientProgram.LOG.info("compiler workflow started for program {}", programName);
-
-                    ICompilerWorkflow robotCompilerWorkflow = robotFactory.getRobotCompilerWorkflow();
-                    messageKey = robotCompilerWorkflow.generateSourceAndCompile(token, programName, programAndConfigTransformer, language);
+                Export jaxbImportExport = null;
+                try {
+                    jaxbImportExport = JaxbHelper.xml2Element(xmlText, Export.class);
+                } catch ( final UnmarshalException | org.xml.sax.SAXException e ) {
+                    jaxbImportExport = null;
+                }
+                if ( jaxbImportExport != null ) {
+                    String robotType1 = jaxbImportExport.getProgram().getBlockSet().getRobottype();
+                    String robotType2 = jaxbImportExport.getConfig().getBlockSet().getRobottype();
+                    if ( robotType1.equals(robot) && robotType2.equals(robot) ) {
+                        String programText = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
+                        String configText = JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet());
+                        String token = "toknTokn";
+                        BlocklyProgramAndConfigTransformer programAndConfigTransformer =
+                            BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configText);
+                        programAndConfigTransformer.getBrickConfiguration().setRobotName(httpSessionState.getRobotName());
+                        messageKey = programAndConfigTransformer.getErrorMessage();
+                        if ( messageKey == null ) {
+                            RobotCommonCheckVisitor programChecker =
+                                robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
+                            messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer, programChecker);
+                            if ( messageKey == null ) {
+                                ClientProgram.LOG.info("compiler workflow started for program {}", programName);
+                                messageKey =
+                                    robotFactory.getRobotCompilerWorkflow().generateSourceAndCompile(token, programName, programAndConfigTransformer, language);
+                            }
+                        } else {
+                            messageKey = Key.PROGRAM_IMPORT_ERROR;
+                        }
+                    } else {
+                        messageKey = Key.PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE;
+                    }
+                    LOG.info("compileN terminated with " + messageKey);
                     if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
                         Util.addSuccessInfo(response, Key.COMPILERWORKFLOW_SUCCESS);
                     } else {
                         Util.addErrorInfo(response, messageKey);
                     }
                 } else {
-                    Util.addErrorInfo(response, messageKey);
+                    messageKey = Key.PROGRAM_IMPORT_ERROR;
                 }
             } else if ( cmd.equals("runPBack") ) {
                 Key messageKey = null;
