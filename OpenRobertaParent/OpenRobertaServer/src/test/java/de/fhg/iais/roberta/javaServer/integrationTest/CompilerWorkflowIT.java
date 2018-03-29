@@ -21,7 +21,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import de.fhg.iais.roberta.blockly.generated.Export;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientAdmin;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientProgram;
@@ -34,7 +33,6 @@ import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
 /**
@@ -148,7 +146,7 @@ public class CompilerWorkflowIT {
     private void compileNepo(boolean expectResultOk, String robot, String resource) throws Exception {
         setRobotTo(robot);
         JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileP','name':'prog','language':'de'}");
-        addProgAndConfToJsonCmd(cmd.getJSONObject("data"), Util1.readResourceContent("/compilerWorkflowTest/" + robot + "/" + resource));
+        cmd.getJSONObject("data").put("program", Util1.readResourceContent("/compilerWorkflowTest/" + robot + "/" + resource));
         response = this.restProgram.command(httpSessionState, cmd);
         assertEntityRc(this.response, expectResultOk ? "ok" : "error");
 
@@ -170,15 +168,9 @@ public class CompilerWorkflowIT {
     private static void replace(String key) {
         String path = robertaProperties.getStringProperty(key);
         if ( path != null ) {
-            path.replaceFirst("OpenRobertaParent", "..");
+            path = path.replaceFirst("OpenRobertaParent", "..");
             robertaProperties.getRobertaProperties().put(key, path);
         }
-    }
-
-    private static void addProgAndConfToJsonCmd(JSONObject data, String exportedProgramAsXmlString) throws Exception {
-        Export jaxb = JaxbHelper.xml2Element(exportedProgramAsXmlString, Export.class);
-        data.put("programText", JaxbHelper.blockSet2xml(jaxb.getProgram().getBlockSet()));
-        data.put("configurationText", JaxbHelper.blockSet2xml(jaxb.getConfig().getBlockSet()));
     }
 
     /**
