@@ -76,6 +76,12 @@ function _checkJava {
 
 function _exportApplication {
     exportpath="$1"
+	case "$2" in
+	 '')     gzip='no' ;;
+	 'gzip') gzip='yes' ;;
+	 *)      echo "invalid second parameter. Expected 'gzip' or nothing. Exit 12. Got: $2"
+             exit 12 ;;
+	esac
     if [ -e "$exportpath" ] && [ ! -z "$(ls -A $exportpath)" ]
     then
         echo "target directory \"$exportpath\" exists and is not empty - exit 1"
@@ -95,7 +101,23 @@ function _exportApplication {
     mkAndCheckDir "${exportpath}/lib"
     cp OpenRobertaServer/target/resources/*.jar "$exportpath/lib"
 
-    echo 'copying resources for all robot plugins'
+    echo 'copying the staticResources'
+	cp -r OpenRobertaServer/staticResources ${exportpath}/staticResources
+	case "$gzip" in
+	'no'  ) echo 'staticResources are NOT gzip-ped. This increases load times when the internet connection is slow' ;;
+	'yes' ) numberGzFiles=$(find ${exportpath}/staticResources -type f | egrep '\.gz$' | wc -l)
+			if [[ $numberGzFiles != 0 ]]
+			then
+				echo "\n$numberGzFiles gz-files found. This should NOT happen. Please CHECK staticResources in the Git repository\n"
+			fi
+			find ${exportpath}/staticResources -type f \
+			| grep -Ev '\.(png|gif|mp3|gz|jpg|jpeg|wav|ogg)$' \
+			| tr '\12' '\0' | tr '\a' '\0' \
+			| xargs -n1 -0 gzip -9 -k -v -f
+			;;
+	esac
+	
+	echo 'copying resources for all robot plugins'
     set *
     mkAndCheckDir "${exportpath}/OpenRobertaParent"
     for Robot do
@@ -151,8 +173,14 @@ case "$cmd" in
 
 --start-from-git) echo 'the script expects, that a mvn build was successful; if the start fails or the system is frozen, make sure that a database exists and NO *.lck file exists'
                   echo '1. step: make an optional upgrade of the db 2. step: start the server'
+				  case "$1" in
+                  '-rdbg') RDBG='-agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=y'
+						   shift ;;
+                  *)       RDBG='' ;;
+                  esac
                   java -cp OpenRobertaParent/OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.Administration upgrade OpenRobertaParent/OpenRobertaServer
-                  java -cp OpenRobertaParent/OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter -d database.mode=embedded -d database.parentdir=OpenRobertaParent/OpenRobertaServer $* ;;
+                  java $RDBG -cp OpenRobertaParent/OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter \
+                       -d database.mode=embedded -d database.parentdir=OpenRobertaParent/OpenRobertaServer -d server.staticresources.dir=OpenRobertaParent/OpenRobertaServer/staticResources $* ;;
 
 --gui-sql-client) lib="OpenRobertaParent/OpenRobertaServer/target/resources"
                   hsqldbVersion='2.3.3'

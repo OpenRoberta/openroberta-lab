@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.main;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -172,10 +173,12 @@ public class ServerStarter {
         rootHandler.addFilter(GuiceFilter.class, "/pushcmd/*", null);
         rootHandler.addFilter(GuiceFilter.class, "/download/*", null);
         rootHandler.addFilter(GuiceFilter.class, "/update/*", null);
-        ServletHolder staticResourceServlet = rootHandler.addServlet(DefaultServlet.class, "/*");
 
-        staticResourceServlet.setInitParameter("gzip", "true");
-        staticResourceServlet.setInitParameter("resourceBase", ServerStarter.class.getResource("/staticResources").toExternalForm());
+        ServletHolder staticResourceServlet = rootHandler.addServlet(DefaultServlet.class, "/*");
+        staticResourceServlet.setInitParameter("precompressed", "gzip=.gz");
+        String staticResources =
+            new File(robertaProperties.getStringProperty("server.staticresources.dir")).toPath().toAbsolutePath().normalize().toUri().toASCIIString();
+        staticResourceServlet.setInitParameter("resourceBase", staticResources);
         staticResourceServlet.setInitParameter("cacheControl", "private, must-revalidate");
 
         // websockets with /ws/<version>/ prefix

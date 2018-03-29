@@ -28,7 +28,7 @@ chmod +x RobotArdu/resources/linux/arduino-builder RobotArdu/resources/linux/too
 mvn clean install -DskipTests -DskipITs
 
 # execute all tests, including the integration tests
-mvn install -Pdebug,runIT
+mvn install -PrunIT
 RC=$?
 echo "maven return code is $RC"
  

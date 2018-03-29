@@ -12,12 +12,13 @@ export SERVER_PORT_ON_HOST=7000
 export DBSERVER_PORT_ON_HOST=9001
 
 tl;dr: to generate the docker image "rbudde/openroberta_lab:$VERSION" from the actual sources, run
-       docker run -v /var/run/docker.sock:/var/run/docker.sock rbudde/openroberta_gen:$BRANCH-1 $VERSION
+       docker run -v /var/run/docker.sock:/var/run/docker.sock rbudde/openroberta_gen:1 $BRANCH $VERSION
 
        Assuming that the environment variable DB_PARENTDIR holds the name of the directory, which
-       contains the database directories (e.g. contains the directory db-$VERSION), then
-	   to start the openrobertalab server and a separate database server run
-	   docker-compose -f dc-server-db-server.yml up
+       contains the database directories (e.g. contains the directory db-$VERSION), then:
+	   1. upgrade the db:                    docker run -v $DB_PARENTDIR:/opt/db rbudde/openroberta_upgrade:$BRANCH-$VERSION
+	   2. start server and database server:  docker-compose -p ora -f dc-server-db-server.yml up &
+	   3. stop both servers later:           docker-compose -p ora -f dc-server-db-server.yml stop
 
 1. GENERATE THE "gen" IMAGE. THIS IS DOCUMENTATION. YOU MUST NOT DO THIS.
 

@@ -58,6 +58,6 @@ java $XMX -cp lib/\* de.fhg.iais.roberta.main.Administration upgrade . >>$SERVER
 echo 'start the server with embedded database'
 trap propagateSignal SIGTERM SIGINT
 java $REMOTEDEBUG $XMX -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
-	 -d database.parentdir=. -d database.mode=embedded $* >>$SERVERLOGFILE 2>&1 &
+	 -d server.staticresources.dir=./staticResources -d database.parentdir=. -d database.mode=embedded $* >>$SERVERLOGFILE 2>&1 &
 child=$!
 wait "$child"

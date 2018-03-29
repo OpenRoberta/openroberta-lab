@@ -14,7 +14,7 @@ RUN git clone --depth=1 -b $BRANCH https://github.com/OpenRoberta/robertalab.git
     cd /opt/robertalab/OpenRobertaParent && \
     chmod +x RobotArdu/resources/linux/arduino-builder RobotArdu/resources/linux/tools-builder/ctags/5.8*/ctags && \
     mvn clean install -DskipTests && \
-    mvn install -Pdebug,runIT && \
+    mvn install -PrunIT && \
     cd /opt && \
     rm -rf robertalab 
 

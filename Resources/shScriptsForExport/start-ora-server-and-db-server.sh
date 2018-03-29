@@ -56,4 +56,5 @@ echo 'start the database server and the openroberta server as separate processes
 echo "the database server will use database directory $database"
 java $XMX -cp lib/\* org.hsqldb.Server --database.0 file:$database --dbname.0 openroberta-db >>$DBLOGFILE 2>&1 &
 sleep 10 # for the database to initialize
-java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter -d database.parentdir=. -d database.mode=server $* >>$SERVERLOGFILE 2>&1 &
+java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
+     -d server.staticresources.dir=./staticResources -d database.parentdir=. -d database.mode=server $* >>$SERVERLOGFILE 2>&1 &
