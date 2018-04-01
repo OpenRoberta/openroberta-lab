@@ -778,16 +778,26 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
     public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
         this.sb.append("radio.config(power=" + radioSendAction.getPower() + ")");
         nlIndent();
-        this.sb.append("radio.send(");
+        this.sb.append("radio.send(str(");
         radioSendAction.getMsg().visit(this);
-        this.sb.append(")");
+        this.sb.append("))");
         return null;
     }
 
     @Override
     public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
-        this.sb.append("radio.receive()");
-        return null;
+        switch ( radioReceiveAction.getType() ) {
+            case NUMBER:
+                this.sb.append("(float(radio.receive())");
+                break;
+            case BOOLEAN:
+            case STRING:
+                this.sb.append("radio.receive()");
+                break;
+            default:
+                throw new IllegalArgumentException("unhandled type");
+        }
+        return null;        
     }
 
     @Override
