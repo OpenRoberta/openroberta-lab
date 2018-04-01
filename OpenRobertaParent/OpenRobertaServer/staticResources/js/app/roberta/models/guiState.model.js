@@ -99,7 +99,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
             url : "../tutorial/",
             success : function(data) {
                 var tutorialPathsList = [];
-                $(data).find("a:contains(.json)").each(function() {
+                $(data).find("a[href*='\.json']:not(a[href*='\.gz'])").each(function() {
                     tutorialPathsList.push($(this).attr("href"));
                 });
                 function readTutorialsRecursive() {

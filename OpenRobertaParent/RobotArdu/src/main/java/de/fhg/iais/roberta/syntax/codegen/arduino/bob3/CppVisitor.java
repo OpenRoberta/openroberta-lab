@@ -115,6 +115,8 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
                 return "String";
             case ARRAY_BOOLEAN:
                 return "bool";
+            case ARRAY_COLOUR:
+                return "Bob3Color";
             case BOOLEAN:
                 return "bool";
             case NUMBER:
@@ -150,21 +152,29 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
     public Void visitMainTask(MainTask<Void> mainTask) {
         decrIndentation();
         mainTask.getVariables().visit(this);
-        if ( this.isTimerSensorUsed || this.usedTimer.toString().contains("TIMER") ) {
+        nlIndent();
+        if ( this.isTimerSensorUsed || this.usedTimer.toString().contains("TIMER") ) {           
+            this.sb.append("unsigned long __time = millis();");
             nlIndent();
-            this.sb.append("unsigned long __time = millis(); \n");
         }
-        incrIndentation();
         generateUserDefinedMethods();
-        this.sb.append("\nvoid setup() \n");
+        nlIndent();
+        this.sb.append("void setup()");
+        nlIndent();
+        incrIndentation();
         this.sb.append("{");
         nlIndent();
         this.sb.append("Serial.begin(9600); ");
+        generateUsedVars();   
+        decrIndentation();
         nlIndent();
-        generateUsedVars();
-        this.sb.append("\n}");
-        this.sb.append("\n").append("void loop() \n");
+        this.sb.append("}");     
+        nlIndent();
+        nlIndent();
+        this.sb.append("void loop()");
+        nlIndent();
         this.sb.append("{");
+        incrIndentation();
         return null;
     }
 

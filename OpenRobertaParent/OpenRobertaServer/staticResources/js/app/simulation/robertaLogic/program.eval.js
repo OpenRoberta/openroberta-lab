@@ -3,7 +3,7 @@
  * reads every statement of the program and gives command to the simulation what
  * the robot should do.
  */
-define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'robertaLogic.gyro', 'util', 'robertaLogic.constants',
+define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'robertaLogic.gyro', 'util', 'robertaLogic.constants',
     'simulation.program.builder'
 ], function(Actors, Memory, Program, Gyro, UTIL, CONSTANTS, PROGRAM_BUILDER) {
     var privateMem = new WeakMap();
@@ -64,172 +64,172 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             var stmt = internal(this).program.getRemove();
             internal(this).currentStatement = stmt;
             switch (stmt.stmt) {
-                case CONSTANTS.ASSIGN_STMT:
-                    evalAssignmentStmt(internal(this), stmt);
-                    break;
+            case CONSTANTS.ASSIGN_STMT:
+                evalAssignmentStmt(internal(this), stmt);
+                break;
 
-                case CONSTANTS.ASSIGN_METHOD_PARAMETER_STMT:
-                    evalAssignMethodParameters(internal(this), stmt);
-                    break;
+            case CONSTANTS.ASSIGN_METHOD_PARAMETER_STMT:
+                evalAssignMethodParameters(internal(this), stmt);
+                break;
 
-                case CONSTANTS.VAR_DECLARATION:
-                    evalVarDeclaration(internal(this), "");
-                    break;
+            case CONSTANTS.VAR_DECLARATION:
+                evalVarDeclaration(internal(this), "");
+                break;
 
-                case CONSTANTS.IF_STMT:
-                    evalIf(internal(this), stmt);
-                    // this.step(simulationData);
-                    break;
+            case CONSTANTS.IF_STMT:
+                evalIf(internal(this), stmt);
+                // this.step(simulationData);
+                break;
 
-                case CONSTANTS.REPEAT_STMT:
-                    evalRepeat(internal(this), stmt);
-                    break;
+            case CONSTANTS.REPEAT_STMT:
+                evalRepeat(internal(this), stmt);
+                break;
 
-                case CONSTANTS.DRIVE_ACTION:
-                    evalDriveAction(internal(this), stmt);
-                    break;
+            case CONSTANTS.DRIVE_ACTION:
+                evalDriveAction(internal(this), stmt);
+                break;
 
-                case CONSTANTS.CURVE_ACTION:
-                    evalCurveAction(internal(this), stmt);
-                    break;
+            case CONSTANTS.CURVE_ACTION:
+                evalCurveAction(internal(this), stmt);
+                break;
 
-                case CONSTANTS.TURN_ACTION:
-                    evalTurnAction(internal(this), stmt);
-                    break;
+            case CONSTANTS.TURN_ACTION:
+                evalTurnAction(internal(this), stmt);
+                break;
 
-                case CONSTANTS.MOTOR_ON_ACTION:
-                    evalMotorOnAction(internal(this), stmt);
-                    break;
+            case CONSTANTS.MOTOR_ON_ACTION:
+                evalMotorOnAction(internal(this), stmt);
+                break;
 
-                case CONSTANTS.SHOW_PICTURE_ACTION:
-                    evalShowPictureAction(internal(this), stmt);
-                    break;
+            case CONSTANTS.SHOW_PICTURE_ACTION:
+                evalShowPictureAction(internal(this), stmt);
+                break;
 
-                case CONSTANTS.DISPLAY_IMAGE_ACTION:
-                    evalDisplayImageAction(internal(this), simulationData, stmt);
-                    break;
+            case CONSTANTS.DISPLAY_IMAGE_ACTION:
+                evalDisplayImageAction(internal(this), simulationData, stmt);
+                break;
 
-                case CONSTANTS.SHOW_TEXT_ACTION:
-                    evalShowTextAction(internal(this), stmt);
-                    break;
+            case CONSTANTS.SHOW_TEXT_ACTION:
+                evalShowTextAction(internal(this), stmt);
+                break;
 
-                case CONSTANTS.DISPLAY_TEXT_ACTION:
-                    evalDisplayTextAction(internal(this), simulationData, stmt);
-                    break;
+            case CONSTANTS.DISPLAY_TEXT_ACTION:
+                evalDisplayTextAction(internal(this), simulationData, stmt);
+                break;
 
-                case CONSTANTS.DISPLAY_SET_BRIGHTNESS_ACTION:
-                    evalDisplaySetBrightnessAction(internal(this));
-                    break;
+            case CONSTANTS.DISPLAY_SET_BRIGHTNESS_ACTION:
+                evalDisplaySetBrightnessAction(internal(this));
+                break;
 
-                case CONSTANTS.DISPLAY_SET_PIXEL_ACTION:
-                    evalDisplaySetPixelAction(internal(this));
-                    break;
+            case CONSTANTS.DISPLAY_SET_PIXEL_ACTION:
+                evalDisplaySetPixelAction(internal(this));
+                break;
 
-                case CONSTANTS.CLEAR_DISPLAY_ACTION:
-                    evalClearDisplayAction(internal(this));
-                    break;
+            case CONSTANTS.CLEAR_DISPLAY_ACTION:
+                evalClearDisplayAction(internal(this));
+                break;
 
-                case CONSTANTS.CREATE_DEBUG_ACTION:
-                    internal(this).outputCommands.debug = true;
-                    break;
+            case CONSTANTS.CREATE_DEBUG_ACTION:
+                internal(this).outputCommands.debug = true;
+                break;
 
-                case CONSTANTS.WAIT_STMT:
-                    evalWaitStmt(internal(this), stmt);
-                    break;
+            case CONSTANTS.WAIT_STMT:
+                evalWaitStmt(internal(this), stmt);
+                break;
 
-                case CONSTANTS.WAIT_TIME_STMT:
-                    evalWaitTime(internal(this), simulationData);
-                    break;
+            case CONSTANTS.WAIT_TIME_STMT:
+                evalWaitTime(internal(this), simulationData);
+                break;
 
-                case CONSTANTS.TURN_LIGHT:
-                    evalTurnLightAction(internal(this), stmt);
-                    break;
+            case CONSTANTS.TURN_LIGHT:
+                evalTurnLightAction(internal(this), stmt);
+                break;
 
-                case CONSTANTS.LED_ON_ACTION:
-                    evalLedOnAction(internal(this));
-                    break;
+            case CONSTANTS.LED_ON_ACTION:
+                evalLedOnAction(internal(this));
+                break;
 
-                case CONSTANTS.LIGHT_ACTION:
-                    evalLightSensorAction(internal(this), stmt);
-                    break;
+            case CONSTANTS.LIGHT_ACTION:
+                evalLightSensorAction(internal(this), stmt);
+                break;
 
-                case CONSTANTS.STOP_DRIVE:
-                    internal(this).actors.setSpeed(0);
-                    break;
+            case CONSTANTS.STOP_DRIVE:
+                internal(this).actors.setSpeed(0);
+                break;
 
-                case CONSTANTS.MOTOR_STOP:
-                    evalMotorStopAction(internal(this), stmt);
-                    break;
+            case CONSTANTS.MOTOR_STOP:
+                evalMotorStopAction(internal(this), stmt);
+                break;
 
-                case CONSTANTS.MOTOR_SET_POWER:
-                    evalMotorSetPowerAction(internal(this), stmt);
-                    break;
+            case CONSTANTS.MOTOR_SET_POWER:
+                evalMotorSetPowerAction(internal(this), stmt);
+                break;
 
-                case CONSTANTS.STATUS_LIGHT_ACTION:
-                    evalLedStatusAction(internal(this), stmt);
-                    break;
+            case CONSTANTS.STATUS_LIGHT_ACTION:
+                evalLedStatusAction(internal(this), stmt);
+                break;
 
-                case CONSTANTS.ENCODER_SENSOR_RESET:
-                    evalResetEncoderSensor(internal(this), stmt);
-                    break;
+            case CONSTANTS.ENCODER_SENSOR_RESET:
+                evalResetEncoderSensor(internal(this), stmt);
+                break;
 
-                case CONSTANTS.GYRO_SENSOR_RESET:
-                    evalResetGyroSensor(internal(this));
-                    break;
+            case CONSTANTS.GYRO_SENSOR_RESET:
+                evalResetGyroSensor(internal(this));
+                break;
 
-                case CONSTANTS.TIMER_SENSOR_RESET:
-                    evalResetTimerSensor(internal(this), stmt);
-                    break;
+            case CONSTANTS.TIMER_SENSOR_RESET:
+                evalResetTimerSensor(internal(this), stmt);
+                break;
 
-                case CONSTANTS.TONE_ACTION:
-                    evalToneAction(internal(this), simulationData);
-                    break;
+            case CONSTANTS.TONE_ACTION:
+                evalToneAction(internal(this), simulationData);
+                break;
 
-                case CONSTANTS.PLAY_FILE_ACTION:
-                    evalPlayFileAction(internal(this), simulationData, stmt);
-                    break;
+            case CONSTANTS.PLAY_FILE_ACTION:
+                evalPlayFileAction(internal(this), simulationData, stmt);
+                break;
 
-                case CONSTANTS.SET_LANGUAGE_ACTION:
-                    evalSetLanguageAction(internal(this));
-                    break;
+            case CONSTANTS.SET_LANGUAGE_ACTION:
+                evalSetLanguageAction(internal(this));
+                break;
 
-                case CONSTANTS.SAY_TEXT_ACTION:
-                    evalSayTextAction(internal(this));
-                    break;
+            case CONSTANTS.SAY_TEXT_ACTION:
+                evalSayTextAction(internal(this));
+                break;
 
-                case CONSTANTS.SET_VOLUME_ACTION:
-                    evalVolumeAction(internal(this));
-                    break;
+            case CONSTANTS.SET_VOLUME_ACTION:
+                evalVolumeAction(internal(this));
+                break;
 
-                case CONSTANTS.CREATE_LISTS_GET_INDEX_STMT:
-                    evalListsGetIndexStmt(internal(this), stmt);
-                    break;
+            case CONSTANTS.CREATE_LISTS_GET_INDEX_STMT:
+                evalListsGetIndexStmt(internal(this), stmt);
+                break;
 
-                case CONSTANTS.CREATE_LISTS_SET_INDEX:
-                    evalListsSetIndex(internal(this), stmt);
-                    break;
+            case CONSTANTS.CREATE_LISTS_SET_INDEX:
+                evalListsSetIndex(internal(this), stmt);
+                break;
 
-                case CONSTANTS.METHOD_CALL_VOID:
-                    evalMethodCallVoid(internal(this), stmt);
-                    break;
+            case CONSTANTS.METHOD_CALL_VOID:
+                evalMethodCallVoid(internal(this), stmt);
+                break;
 
-                case CONSTANTS.PIN_WRITE_VALUE_SENSOR:
-                    evalPinWriteValueSensor(internal(this), stmt);
-                    break;
+            case CONSTANTS.PIN_WRITE_VALUE_SENSOR:
+                evalPinWriteValueSensor(internal(this), stmt);
+                break;
 
-                case CONSTANTS.FLOW_CONTROL:
-                    evalFlowControlStatement(internal(this), stmt);
-                    break;
-                case CONSTANTS.IF_RETURN:
-                    evalIfReturn(internal(this), stmt);
-                    break;
+            case CONSTANTS.FLOW_CONTROL:
+                evalFlowControlStatement(internal(this), stmt);
+                break;
+            case CONSTANTS.IF_RETURN:
+                evalIfReturn(internal(this), stmt);
+                break;
 
-                default:
-                    throw "Invalid Statement " + stmt.stmt + "!";
+            default:
+                throw "Invalid Statement " + stmt.stmt + "!";
             }
 
             if (internal(this).modifiedStmt) {
-                internal(this).program.addCustomMethodForEvaluation([internal(this).currentStatement]);
+                internal(this).program.addCustomMethodForEvaluation([ internal(this).currentStatement ]);
                 internal(this).program.merge();
                 internal(this).modifiedStmt = false;
             }
@@ -249,7 +249,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             t = obj.program.getRemove();
         }
         if (stmt.mode == CONSTANTS.CONTINUE) {
-            obj.program.prepend([t]);
+            obj.program.prepend([ t ]);
         }
     };
 
@@ -510,21 +510,21 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
     var evalPlayFileAction = function(obj, simulationData, stmt) {
         var duration = 0; // ms
         switch (stmt.file) {
-            case 0:
-                duration = 1000;
-                break;
-            case 1:
-                duration = 350;
-                break;
-            case 2:
-                duration = 700;
-                break;
-            case 3:
-                duration = 700;
-                break;
-            case 4:
-                duration = 500;
-                break;
+        case 0:
+            duration = 1000;
+            break;
+        case 1:
+            duration = 350;
+            break;
+        case 2:
+            duration = 700;
+            break;
+        case 3:
+            duration = 700;
+            break;
+        case 4:
+            duration = 500;
+            break;
         }
         setSimulationTimer(obj, simulationData, duration);
         obj.outputCommands.tone = {};
@@ -590,7 +590,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         obj.program.addCustomMethodForEvaluation(parameters, functionCallName);
         obj.program.addCustomMethodForEvaluation(method.stmtList, functionCallName);
 
-        obj.program.addCustomMethodForEvaluation([returnVariable], functionCallName);
+        obj.program.addCustomMethodForEvaluation([ returnVariable ], functionCallName);
         return createReferenceToReturnVarible(method.returnType, functionCallName);
     };
 
@@ -602,7 +602,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                 obj.program.getRemove();
             }
             var returnVariable = createReturnPlaceHolderVariable(stmt, functionCallName);
-            obj.program.prepend([returnVariable]);
+            obj.program.prepend([ returnVariable ]);
         }
 
     };
@@ -734,56 +734,58 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             obj.repeatStmtExpr = UTIL.clone(stmt);
         }
         switch (stmt.mode) {
-            case CONSTANTS.FOR_EACH:
-                var i = obj.repeatStmtExpr.eachCounter++;
-                if (i === 0) {
-                    evalVarDeclaration(obj, "expr.left");
-                }
-                var list = evalExpr(obj, "expr.right");
-                if (!isObject(list) && !obj.modifiedStmt) {
-                    if (i < list.length) {
-                        obj.memory.assign(stmt.expr.left.name, list[i]);
-                        obj.program.prepend([obj.repeatStmtExpr]);
-                        obj.program.prepend(stmt.stmtList);
-                    } else {
-                        obj.memory.remove(stmt.expr.left.name);
-                        obj.repeatStmtExpr = {};
-                    }
-                }
+        case CONSTANTS.FOR_EACH:
+            var i = obj.repeatStmtExpr.eachCounter++;
+            if (i === 0) {
+                evalVarDeclaration(obj, "expr.left");
+            }
+            var list = evalExpr(obj, "expr.right");
+            if (i == list.length) {
+                obj.memory.remove(stmt.expr.left.name);
+                obj.repeatStmtExpr = {};
                 break;
-            case CONSTANTS.TIMES:
-            case CONSTANTS.FOR:
-                var from = evalExpr(obj, "expr", 1);
-                var to = evalExpr(obj, "expr", 2);
-                var step = evalExpr(obj, "expr", 3);
+            }           
+            if (!isObject(list) && !obj.modifiedStmt) {
+                if (i < list.length) {
+                    obj.memory.assign(stmt.expr.left.name, list[i]);
+                    obj.program.prepend([ obj.repeatStmtExpr ]);
+                    obj.program.prepend(stmt.stmtList);                   
+                }
+            }
+            break;
+        case CONSTANTS.TIMES:
+        case CONSTANTS.FOR:
+            var from = evalExpr(obj, "expr", 1);
+            var to = evalExpr(obj, "expr", 2);
+            var step = evalExpr(obj, "expr", 3);
 
-                if (!isObject(from) && !isObject(to) && !isObject(to) && !obj.modifiedStmt) {
-                    if (obj.memory.get(stmt.expr[0].name) === undefined) {
-                        obj.memory.decl(stmt.expr[0].name, from);
-                    } else {
-                        var oldValue = obj.memory.get(stmt.expr[0].name);
-                        obj.memory.assign(stmt.expr[0].name, oldValue + step);
-                    }
-                    var left = obj.memory.get(stmt.expr[0].name);
-                    if (left < to) {
-                        obj.program.prepend([obj.repeatStmtExpr]);
-                        obj.program.prepend(stmt.stmtList);
-                        obj.repeatStmtExpr = {};
-                    } else {
-                        obj.memory.remove(stmt.expr[0].name);
-                        obj.repeatStmtExpr = {};
-                    }
+            if (!isObject(from) && !isObject(to) && !isObject(to) && !obj.modifiedStmt) {
+                if (obj.memory.get(stmt.expr[0].name) === undefined) {
+                    obj.memory.decl(stmt.expr[0].name, from);
+                } else {
+                    var oldValue = obj.memory.get(stmt.expr[0].name);
+                    obj.memory.assign(stmt.expr[0].name, oldValue + step);
                 }
-                break;
-            default:
-                var value = evalExpr(obj, "expr");
-                if (!isObject(value) && !obj.modifiedStmt) {
-                    if (value) {
-                        obj.program.prepend([obj.repeatStmtExpr]);
-                        obj.program.prepend(stmt.stmtList);
-                    }
+                var left = obj.memory.get(stmt.expr[0].name);
+                if (left < to) {
+                    obj.program.prepend([ obj.repeatStmtExpr ]);
+                    obj.program.prepend(stmt.stmtList);
+                    obj.repeatStmtExpr = {};
+                } else {
+                    obj.memory.remove(stmt.expr[0].name);
                     obj.repeatStmtExpr = {};
                 }
+            }
+            break;
+        default:
+            var value = evalExpr(obj, "expr");
+            if (!isObject(value) && !obj.modifiedStmt) {
+                if (value) {
+                    obj.program.prepend([ obj.repeatStmtExpr ]);
+                    obj.program.prepend(stmt.stmtList);
+                }
+                obj.repeatStmtExpr = {};
+            }
         }
     };
 
@@ -828,7 +830,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             }
         }
         if (stmtNotEvaluated) {
-            obj.program.prepend([obj.repeatStmtExpr]);
+            obj.program.prepend([ obj.repeatStmtExpr ]);
         }
         obj.repeatStmtExpr = {};
     };
@@ -839,122 +841,122 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         obj.currentStatement = expr;
         var val = null;
         switch (expr.expr) {
-            case CONSTANTS.NUM_CONST:
-            case CONSTANTS.LED_COLOR_CONST:
-            case CONSTANTS.BOOL_CONST:
-            case CONSTANTS.COLOR_CONST:
-            case CONSTANTS.STRING_CONST:
-            case CONSTANTS.IMAGE_CONST:
-                val = expr.value;
-                break;
-            case CONSTANTS.NULL_CONST:
-                val = null;
-                break;
-            case CONSTANTS.ARRAY_NUMBER:
-            case CONSTANTS.ARRAY_STRING:
-            case CONSTANTS.ARRAY_COLOUR:
-            case CONSTANTS.ARRAY_BOOLEAN:
-            case CONSTANTS.ARRAY_IMAGE:
-                val = evalArray(obj);
-                break;
-            case CONSTANTS.CREATE_LIST_WITH_ITEM:
-                val = evalCreateArrayWithItem(obj);
-                break;
-            case CONSTANTS.CREATE_LIST_LENGTH:
-                val = evalListLength(obj);
-                break;
-            case CONSTANTS.CREATE_LIST_IS_EMPTY:
-                val = evalListIsEmpty(obj);
-                break;
-            case CONSTANTS.CREATE_LIST_FIND_ITEM:
-                val = evalListFindItem(obj);
-                break;
-            case CONSTANTS.CREATE_LISTS_GET_INDEX:
-                val = evalListsGetIndex(obj, expr.op, expr.position);
-                break;
-            case CONSTANTS.TEXT_JOIN:
-                val = evalTextJoin(obj);
-                break;
-            case CONSTANTS.CREATE_LISTS_GET_SUBLIST:
-                val = evalListsGetSubList(obj);
-                break;
-            case CONSTANTS.VAR:
-                val = obj.memory.get(expr.name);
-                break;
-            case CONSTANTS.BINARY:
-                val = evalBinary(obj, expr.op);
-                break;
-            case CONSTANTS.UNARY:
-                val = evalUnary(obj, expr.op);
-                break;
-            case CONSTANTS.TERNARY_EXPR:
-                val = evalTernaryExpr(obj);
-                break;
-            case CONSTANTS.SINGLE_FUNCTION:
-                val = evalSingleFunction(obj, expr.op);
-                break;
-            case CONSTANTS.RANDOM_INT:
-                val = evalRandInt(obj);
-                break;
-            case CONSTANTS.RANDOM_DOUBLE:
-                val = evalRandDouble();
-                break;
-            case CONSTANTS.MATH_CONSTRAIN_FUNCTION:
-                val = evalMathConstrainFunct(obj);
-                break;
-            case CONSTANTS.MATH_ON_LIST:
-                val = evalMathOnList(obj, expr.op);
-                break;
-            case CONSTANTS.MATH_PROP_FUNCT:
-                val = evalMathPropFunct(obj, expr.op);
-                break;
-            case CONSTANTS.MATH_CONST:
-                val = evalMathConst(obj, expr.value);
-                break;
-            case CONSTANTS.GET_SAMPLE:
-                val = evalSensor(obj);
-                break;
-            case CONSTANTS.PIN_TOUCH_SENSOR:
-                val = evalPinTouchSensor(obj);
-                break;
-            case CONSTANTS.PIN_GET_VALUE_SENSOR:
-                val = evalPinGetValueSensor(obj);
-                break;
-            case CONSTANTS.GET_GYRO_SENSOR_SAMPLE:
-                val = evalGyroSensor(obj);
-                break;
-            case CONSTANTS.ENCODER_SENSOR_SAMPLE:
-                val = evalEncoderSensor(obj);
-                break;
-            case CONSTANTS.MOTOR_GET_POWER:
-                val = evalMotorGetPowerAction(obj);
-                break;
-            case CONSTANTS.GET_VOLUME:
-                val = evalGetVolume(obj);
-                break;
-            case CONSTANTS.DISPLAY_GET_BRIGHTNESS_ACTION:
-                val = evalDisplayGetBrightnessAction(obj);
-                break;
-            case CONSTANTS.DISPLAY_GET_PIXEL_ACTION:
-                val = evalDisplayGetPixelAction(obj);
-                break;
-            case CONSTANTS.METHOD_CALL_RETURN:
-                var value = evalMethodCallReturn(obj, expr.name, expr.parameters);
-                UTIL.setObjectProperty(stmt, propName, value, arrayIndex);
-                obj.modifiedStmt = true;
-                val = value;
-                break;
-            case CONSTANTS.RGB_COLOR_CONST:
-                val = evalRgbColorConst(obj);
-                break;
-            case CONSTANTS.IMAGE_SHIFT_ACTION:
-                val = evalImageShiftAction(obj, expr.direction);
-                break;
-            case CONSTANTS.IMAGE_INVERT_ACTION:
-                val = evalImageInvertAction(obj);
-                break;
-            default:
-                throw "Invalid Expression Type!";
+        case CONSTANTS.NUM_CONST:
+        case CONSTANTS.LED_COLOR_CONST:
+        case CONSTANTS.BOOL_CONST:
+        case CONSTANTS.COLOR_CONST:
+        case CONSTANTS.STRING_CONST:
+        case CONSTANTS.IMAGE_CONST:
+            val = expr.value;
+            break;
+        case CONSTANTS.NULL_CONST:
+            val = null;
+            break;
+        case CONSTANTS.ARRAY_NUMBER:
+        case CONSTANTS.ARRAY_STRING:
+        case CONSTANTS.ARRAY_COLOR:
+        case CONSTANTS.ARRAY_BOOLEAN:
+        case CONSTANTS.ARRAY_IMAGE:
+            val = evalArray(obj);
+            break;
+        case CONSTANTS.CREATE_LIST_WITH_ITEM:
+            val = evalCreateArrayWithItem(obj);
+            break;
+        case CONSTANTS.CREATE_LIST_LENGTH:
+            val = evalListLength(obj);
+            break;
+        case CONSTANTS.CREATE_LIST_IS_EMPTY:
+            val = evalListIsEmpty(obj);
+            break;
+        case CONSTANTS.CREATE_LIST_FIND_ITEM:
+            val = evalListFindItem(obj);
+            break;
+        case CONSTANTS.CREATE_LISTS_GET_INDEX:
+            val = evalListsGetIndex(obj, expr.op, expr.position);
+            break;
+        case CONSTANTS.TEXT_JOIN:
+            val = evalTextJoin(obj);
+            break;
+        case CONSTANTS.CREATE_LISTS_GET_SUBLIST:
+            val = evalListsGetSubList(obj);
+            break;
+        case CONSTANTS.VAR:
+            val = obj.memory.get(expr.name);
+            break;
+        case CONSTANTS.BINARY:
+            val = evalBinary(obj, expr.op);
+            break;
+        case CONSTANTS.UNARY:
+            val = evalUnary(obj, expr.op);
+            break;
+        case CONSTANTS.TERNARY_EXPR:
+            val = evalTernaryExpr(obj);
+            break;
+        case CONSTANTS.SINGLE_FUNCTION:
+            val = evalSingleFunction(obj, expr.op);
+            break;
+        case CONSTANTS.RANDOM_INT:
+            val = evalRandInt(obj);
+            break;
+        case CONSTANTS.RANDOM_DOUBLE:
+            val = evalRandDouble();
+            break;
+        case CONSTANTS.MATH_CONSTRAIN_FUNCTION:
+            val = evalMathConstrainFunct(obj);
+            break;
+        case CONSTANTS.MATH_ON_LIST:
+            val = evalMathOnList(obj, expr.op);
+            break;
+        case CONSTANTS.MATH_PROP_FUNCT:
+            val = evalMathPropFunct(obj, expr.op);
+            break;
+        case CONSTANTS.MATH_CONST:
+            val = evalMathConst(obj, expr.value);
+            break;
+        case CONSTANTS.GET_SAMPLE:
+            val = evalSensor(obj);
+            break;
+        case CONSTANTS.PIN_TOUCH_SENSOR:
+            val = evalPinTouchSensor(obj);
+            break;
+        case CONSTANTS.PIN_GET_VALUE_SENSOR:
+            val = evalPinGetValueSensor(obj);
+            break;
+        case CONSTANTS.GET_GYRO_SENSOR_SAMPLE:
+            val = evalGyroSensor(obj);
+            break;
+        case CONSTANTS.ENCODER_SENSOR_SAMPLE:
+            val = evalEncoderSensor(obj);
+            break;
+        case CONSTANTS.MOTOR_GET_POWER:
+            val = evalMotorGetPowerAction(obj);
+            break;
+        case CONSTANTS.GET_VOLUME:
+            val = evalGetVolume(obj);
+            break;
+        case CONSTANTS.DISPLAY_GET_BRIGHTNESS_ACTION:
+            val = evalDisplayGetBrightnessAction(obj);
+            break;
+        case CONSTANTS.DISPLAY_GET_PIXEL_ACTION:
+            val = evalDisplayGetPixelAction(obj);
+            break;
+        case CONSTANTS.METHOD_CALL_RETURN:
+            var value = evalMethodCallReturn(obj, expr.name, expr.parameters);
+            UTIL.setObjectProperty(stmt, propName, value, arrayIndex);
+            obj.modifiedStmt = true;
+            val = value;
+            break;
+        case CONSTANTS.RGB_COLOR_CONST:
+            val = evalRgbColorConst(obj);
+            break;
+        case CONSTANTS.IMAGE_SHIFT_ACTION:
+            val = evalImageShiftAction(obj, expr.direction);
+            break;
+        case CONSTANTS.IMAGE_INVERT_ACTION:
+            val = evalImageInvertAction(obj);
+            break;
+        default:
+            throw "Invalid Expression Type!";
         }
         obj.currentStatement = stmt;
         return val;
@@ -983,12 +985,12 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
     var evalGyroSensor = function(obj) {
         var sensorMode = UTIL.getPropertyFromObject(obj.currentStatement, "sensorMode");
         switch (sensorMode) {
-            case CONSTANTS.ANGLE:
-                return obj.gyro.getAngle();
-            case CONSTANTS.RATE:
-                return obj.gyro.getRate();
-            default:
-                throw "Invalid Gyro Mode!";
+        case CONSTANTS.ANGLE:
+            return obj.gyro.getAngle();
+        case CONSTANTS.RATE:
+            return obj.gyro.getRate();
+        default:
+            throw "Invalid Gyro Mode!";
         }
     };
 
@@ -1000,14 +1002,14 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             value = obj.simulationData.encoder.left / 360.0;
         }
         switch (sensorMode) {
-            case CONSTANTS.ROTATION:
-                return value;
-            case CONSTANTS.DEGREE:
-                return value * 360.0;
-            case CONSTANTS.DISTANCE:
-                return value * (CONSTANTS.WHEEL_DIAMETER * 3.14);
-            default:
-                throw "Invalid Encoder Mode!";
+        case CONSTANTS.ROTATION:
+            return value;
+        case CONSTANTS.DEGREE:
+            return value * 360.0;
+        case CONSTANTS.DISTANCE:
+            return value * (CONSTANTS.WHEEL_DIAMETER * 3.14);
+        default:
+            throw "Invalid Encoder Mode!";
         }
     };
 
@@ -1020,7 +1022,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         var green = evalExpr(obj, "value", 1);
         var blue = evalExpr(obj, "value", 2);
         if (!isObject(red) && !isObject(green) && !isObject(blue) && !obj.modifiedStmt) {
-            return [red, green, blue];
+            return [ red, green, blue ];
         }
     };
 
@@ -1030,55 +1032,55 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         if (!isObject(valLeft) && !isObject(valRight) && !obj.modifiedStmt) {
             var val;
             switch (op) {
-                case CONSTANTS.ADD:
-                    val = valLeft + valRight;
-                    break;
-                case CONSTANTS.MINUS:
-                    val = valLeft - valRight;
-                    break;
-                case CONSTANTS.MULTIPLY:
-                    val = valLeft * valRight;
-                    break;
-                case CONSTANTS.DIVIDE:
-                    val = valLeft / valRight;
-                    break;
-                case CONSTANTS.POWER:
-                    val = Math.pow(valLeft, valRight);
-                    break;
-                case CONSTANTS.TEXT_APPEND:
-                    valLeft = isNumber(valLeft) ? UTIL.round(valLeft, 2) : valLeft;
-                    valRight = isNumber(valRight) ? UTIL.round(valRight, 2) : valRight;
-                    val = String(valLeft) + String(valRight);
-                    break;
-                case CONSTANTS.LT:
-                    val = valLeft < valRight;
-                    break;
-                case CONSTANTS.GT:
-                    val = valLeft > valRight;
-                    break;
-                case CONSTANTS.EQ:
-                    val = valLeft == valRight;
-                    break;
-                case CONSTANTS.NEQ:
-                    val = valLeft != valRight;
-                    break;
-                case CONSTANTS.GTE:
-                    val = valLeft >= valRight;
-                    break;
-                case CONSTANTS.LTE:
-                    val = valLeft <= valRight;
-                    break;
-                case CONSTANTS.OR:
-                    val = valLeft || valRight;
-                    break;
-                case CONSTANTS.AND:
-                    val = valLeft && valRight;
-                    break;
-                case CONSTANTS.MOD:
-                    val = valLeft % valRight;
-                    break;
-                default:
-                    throw "Invalid Binary Operator";
+            case CONSTANTS.ADD:
+                val = valLeft + valRight;
+                break;
+            case CONSTANTS.MINUS:
+                val = valLeft - valRight;
+                break;
+            case CONSTANTS.MULTIPLY:
+                val = valLeft * valRight;
+                break;
+            case CONSTANTS.DIVIDE:
+                val = valLeft / valRight;
+                break;
+            case CONSTANTS.POWER:
+                val = Math.pow(valLeft, valRight);
+                break;
+            case CONSTANTS.TEXT_APPEND:
+                valLeft = isNumber(valLeft) ? UTIL.round(valLeft, 2) : valLeft;
+                valRight = isNumber(valRight) ? UTIL.round(valRight, 2) : valRight;
+                val = String(valLeft) + String(valRight);
+                break;
+            case CONSTANTS.LT:
+                val = valLeft < valRight;
+                break;
+            case CONSTANTS.GT:
+                val = valLeft > valRight;
+                break;
+            case CONSTANTS.EQ:
+                val = valLeft == valRight;
+                break;
+            case CONSTANTS.NEQ:
+                val = valLeft != valRight;
+                break;
+            case CONSTANTS.GTE:
+                val = valLeft >= valRight;
+                break;
+            case CONSTANTS.LTE:
+                val = valLeft <= valRight;
+                break;
+            case CONSTANTS.OR:
+                val = valLeft || valRight;
+                break;
+            case CONSTANTS.AND:
+                val = valLeft && valRight;
+                break;
+            case CONSTANTS.MOD:
+                val = valLeft % valRight;
+                break;
+            default:
+                throw "Invalid Binary Operator";
             }
             return val;
         }
@@ -1088,71 +1090,71 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         var val = evalExpr(obj, "value");
         if (!isObject(val) && !obj.modifiedStmt)
             switch (op) {
-                case CONSTANTS.NEG:
-                    return -val;
-                case CONSTANTS.NOT:
-                    return !val;
-                default:
-                    throw "Invalid Unary Operator";
-            }
+            case CONSTANTS.NEG:
+                return -val;
+            case CONSTANTS.NOT:
+                return !val;
+            default:
+                throw "Invalid Unary Operator";
+        }
     };
 
     var evalSingleFunction = function(obj, functName) {
         var val = evalExpr(obj, "value");
         if (!isObject(val) && !obj.modifiedStmt) {
             switch (functName) {
-                case 'ROOT':
-                    return Math.sqrt(val);
-                case 'ABS':
-                    return Math.abs(val);
-                case 'LN':
-                    return Math.log(val);
-                case 'LOG10':
-                    return Math.log10(val);
-                case 'EXP':
-                    return Math.exp(val);
-                case 'POW10':
-                    return Math.pow(10, val);
-                case 'SIN':
-                    return Math.sin(val);
-                case 'COS':
-                    return Math.cos(val);
-                case 'TAN':
-                    return Math.tan(val);
-                case 'ASIN':
-                    return Math.asin(val);
-                case 'ATAN':
-                    return Math.atan(val);
-                case 'ACOS':
-                    return Math.acos(val);
-                case 'ROUND':
-                    return Math.round(val);
-                case 'ROUNDUP':
-                    return Math.ceil(val);
-                case 'ROUNDDOWN':
-                    return Math.floor(val);
-                default:
-                    throw "Invalid Function Name";
+            case 'ROOT':
+                return Math.sqrt(val);
+            case 'ABS':
+                return Math.abs(val);
+            case 'LN':
+                return Math.log(val);
+            case 'LOG10':
+                return Math.log10(val);
+            case 'EXP':
+                return Math.exp(val);
+            case 'POW10':
+                return Math.pow(10, val);
+            case 'SIN':
+                return Math.sin(val);
+            case 'COS':
+                return Math.cos(val);
+            case 'TAN':
+                return Math.tan(val);
+            case 'ASIN':
+                return Math.asin(val);
+            case 'ATAN':
+                return Math.atan(val);
+            case 'ACOS':
+                return Math.acos(val);
+            case 'ROUND':
+                return Math.round(val);
+            case 'ROUNDUP':
+                return Math.ceil(val);
+            case 'ROUNDDOWN':
+                return Math.floor(val);
+            default:
+                throw "Invalid Function Name";
             }
         }
     };
 
     var evalMathConst = function(obj, mathConst) {
         switch (mathConst) {
-            case 'PI':
-                return Math.PI;
-            case 'E':
-                return Math.E;
-            case 'GOLDEN_RATIO':
-                return (1.0 + Math.sqrt(5.0)) / 2.0;
-            case 'SQRT2':
-                return Math.SQRT2;
-            case 'SQRT1_2':
-                return Math.SQRT1_2;
-            case 'INFINITY':
-                return Infinity;
-            default:
-                throw "Invalid Math Constant Name";
+        case 'PI':
+            return Math.PI;
+        case 'E':
+            return Math.E;
+        case 'GOLDEN_RATIO':
+            return (1.0 + Math.sqrt(5.0)) / 2.0;
+        case 'SQRT2':
+            return Math.SQRT2;
+        case 'SQRT1_2':
+            return Math.SQRT1_2;
+        case 'INFINITY':
+            return Infinity;
+        default:
+            throw "Invalid Math Constant Name";
         }
     };
 
@@ -1160,25 +1162,25 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         var listVal = evalExpr(obj, "list");
         if (!isObject(listVal) && !obj.modifiedStmt)
             switch (op) {
-                case CONSTANTS.SUM:
-                    return listVal.reduce(function(x, y) {
-                        return x + y;
-                    });
-                case CONSTANTS.MIN:
-                    return Math.min.apply(null, listVal);
-                case CONSTANTS.MAX:
-                    return Math.max.apply(null, listVal);
-                case CONSTANTS.AVERAGE:
-                    return mathMean(listVal);
-                case CONSTANTS.MEDIAN:
-                    return mathMedian(listVal);
-                case CONSTANTS.STD_DEV:
-                    return mathStandardDeviation(listVal);
-                case CONSTANTS.RANDOM:
-                    return mathRandomList(listVal);
-                default:
-                    throw "Invalid Matematical Operation On List";
-            }
+            case CONSTANTS.SUM:
+                return listVal.reduce(function(x, y) {
+                    return x + y;
+                });
+            case CONSTANTS.MIN:
+                return Math.min.apply(null, listVal);
+            case CONSTANTS.MAX:
+                return Math.max.apply(null, listVal);
+            case CONSTANTS.AVERAGE:
+                return mathMean(listVal);
+            case CONSTANTS.MEDIAN:
+                return mathMedian(listVal);
+            case CONSTANTS.STD_DEV:
+                return mathStandardDeviation(listVal);
+            case CONSTANTS.RANDOM:
+                return mathRandomList(listVal);
+            default:
+                throw "Invalid Matematical Operation On List";
+        }
     };
 
     var evalMathConstrainFunct = function(obj) {
@@ -1197,22 +1199,22 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         }
         if (!isObject(val1) && !isObject(val2) && !obj.modifiedStmt) {
             switch (functionName) {
-                case 'EVEN':
-                    return val1 % 2 === 0;
-                case 'ODD':
-                    return val1 % 2 !== 0;
-                case 'PRIME':
-                    return isPrime(val1);
-                case 'WHOLE':
-                    return Number(val1) === val1 && val1 % 1 === 0;
-                case 'POSITIVE':
-                    return val1 >= 0;
-                case 'NEGATIVE':
-                    return val1 < 0;
-                case 'DIVISIBLE_BY':
-                    return val1 % val2 === 0;
-                default:
-                    throw "Invalid Math Property Function Name";
+            case 'EVEN':
+                return val1 % 2 === 0;
+            case 'ODD':
+                return val1 % 2 !== 0;
+            case 'PRIME':
+                return isPrime(val1);
+            case 'WHOLE':
+                return Number(val1) === val1 && val1 % 1 === 0;
+            case 'POSITIVE':
+                return val1 >= 0;
+            case 'NEGATIVE':
+                return val1 < 0;
+            case 'DIVISIBLE_BY':
+                return val1 % val2 === 0;
+            default:
+                throw "Invalid Math Property Function Name";
             }
         }
     };
@@ -1277,30 +1279,30 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         if (!isObject(list) && !isObject(it) && !obj.modifiedStmt) {
             var remove = op == CONSTANTS.GET_REMOVE;
             switch (position) {
-                case CONSTANTS.FROM_START:
-                    if (remove) {
-                        return list.splice(it, 1)[0];
-                    }
-                    return list[it];
-                case CONSTANTS.FROM_END:
-                    if (remove) {
-                        return listsRemoveFromEnd(list, it);
-                    }
-                    return list.slice(-(it + 1))[0];
-                case CONSTANTS.FIRST:
-                    if (remove) {
-                        return list.shift();
-                    }
-                    return list[0];
-                case CONSTANTS.LAST:
-                    if (remove) {
-                        return list.pop();
-                    }
-                    return list.slice(-1)[0];
-                case CONSTANTS.RANDOM:
-                    return listsGetRandomItem(list, remove);
-                default:
-                    throw "Position on list is not supported!";
+            case CONSTANTS.FROM_START:
+                if (remove) {
+                    return list.splice(it, 1)[0];
+                }
+                return list[it];
+            case CONSTANTS.FROM_END:
+                if (remove) {
+                    return listsRemoveFromEnd(list, it);
+                }
+                return list.slice(-(it + 1))[0];
+            case CONSTANTS.FIRST:
+                if (remove) {
+                    return list.shift();
+                }
+                return list[0];
+            case CONSTANTS.LAST:
+                if (remove) {
+                    return list.pop();
+                }
+                return list.slice(-1)[0];
+            case CONSTANTS.RANDOM:
+                return listsGetRandomItem(list, remove);
+            default:
+                throw "Position on list is not supported!";
             }
         }
     };
@@ -1313,23 +1315,23 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         }
         if (!isObject(list) && !isObject(it) && !obj.modifiedStmt) {
             switch (stmt.position) {
-                case CONSTANTS.FROM_START:
-                    list.splice(it, 1);
-                    break;
-                case CONSTANTS.FROM_END:
-                    listsRemoveFromEnd(list, it);
-                    break;
-                case CONSTANTS.FIRST:
-                    list.shift();
-                    break;
-                case CONSTANTS.LAST:
-                    list.pop();
-                    break;
-                case CONSTANTS.RANDOM:
-                    listsGetRandomItem(list, true);
-                    break;
-                default:
-                    throw "Position on list is not supported!";
+            case CONSTANTS.FROM_START:
+                list.splice(it, 1);
+                break;
+            case CONSTANTS.FROM_END:
+                listsRemoveFromEnd(list, it);
+                break;
+            case CONSTANTS.FIRST:
+                list.shift();
+                break;
+            case CONSTANTS.LAST:
+                list.pop();
+                break;
+            case CONSTANTS.RANDOM:
+                listsGetRandomItem(list, true);
+                break;
+            default:
+                throw "Position on list is not supported!";
             }
         }
     };
@@ -1344,44 +1346,44 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         if (!isObject(list) && !isObject(it) && !isObject(newValue) && !obj.modifiedStmt) {
             var insert = stmt.op == CONSTANTS.INSERT;
             switch (stmt.position) {
-                case CONSTANTS.FROM_START:
-                    if (insert) {
-                        list.splice(it, 0, newValue);
-                        break;
-                    }
-                    list[it] = newValue;
+            case CONSTANTS.FROM_START:
+                if (insert) {
+                    list.splice(it, 0, newValue);
                     break;
-                case CONSTANTS.FROM_END:
-                    if (insert) {
-                        list.splice(list.length - it - 1, 0, newValue);
-                        break;
-                    }
-                    list[list.length - it - 1] = newValue;
+                }
+                list[it] = newValue;
+                break;
+            case CONSTANTS.FROM_END:
+                if (insert) {
+                    list.splice(list.length - it - 1, 0, newValue);
                     break;
-                case CONSTANTS.FIRST:
-                    if (insert) {
-                        list.unshift(newValue);
-                        break;
-                    }
-                    list[0] = newValue;
+                }
+                list[list.length - it - 1] = newValue;
+                break;
+            case CONSTANTS.FIRST:
+                if (insert) {
+                    list.unshift(newValue);
                     break;
-                case CONSTANTS.LAST:
-                    if (insert) {
-                        list.push(newValue);
-                        break;
-                    }
-                    list[list.length - 1] = newValue;
+                }
+                list[0] = newValue;
+                break;
+            case CONSTANTS.LAST:
+                if (insert) {
+                    list.push(newValue);
                     break;
-                case CONSTANTS.RANDOM:
-                    var tmp_x = Math.floor(Math.random() * list.length);
-                    if (insert) {
-                        list.splice(tmp_x, 0, newValue);
-                        break;
-                    }
-                    list[tmp_x] = newValue;
+                }
+                list[list.length - 1] = newValue;
+                break;
+            case CONSTANTS.RANDOM:
+                var tmp_x = Math.floor(Math.random() * list.length);
+                if (insert) {
+                    list.splice(tmp_x, 0, newValue);
                     break;
-                default:
-                    throw "Position on list is not supported!";
+                }
+                list[tmp_x] = newValue;
+                break;
+            default:
+                throw "Position on list is not supported!";
             }
         }
     };
@@ -1527,8 +1529,8 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
     var mathMean = function(myList) {
         return myList.reduce(function(x, y) {
-            return x + y;
-        }) / myList.length;
+                return x + y;
+            }) / myList.length;
     };
 
     var mathMedian = function(myList) {
@@ -1554,8 +1556,8 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             return null;
         }
         var mean = numbers.reduce(function(x, y) {
-            return x + y;
-        }) / n;
+                return x + y;
+            }) / n;
         var variance = 0;
         for (var j = 0; j < n; j++) {
             variance += Math.pow(numbers[j] - mean, 2);
@@ -1585,21 +1587,21 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
     var shiftImage = function(image, direction, n) {
         n = Math.round(n);
         var shift = {
-            down: function() {
+            down : function() {
                 image.pop();
-                image.unshift([0, 0, 0, 0, 0]);
+                image.unshift([ 0, 0, 0, 0, 0 ]);
             },
-            up: function() {
+            up : function() {
                 image.shift();
-                image.push([0, 0, 0, 0, 0]);
+                image.push([ 0, 0, 0, 0, 0 ]);
             },
-            right: function() {
+            right : function() {
                 image.forEach(function(array) {
                     array.pop();
                     array.unshift(0);
                 });
             },
-            left: function() {
+            left : function() {
                 image.forEach(function(array) {
                     array.shift();
                     array.push(0);

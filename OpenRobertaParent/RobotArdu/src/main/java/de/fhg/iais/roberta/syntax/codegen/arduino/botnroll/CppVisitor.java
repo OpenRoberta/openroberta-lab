@@ -513,13 +513,16 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
     public Void visitMainTask(MainTask<Void> mainTask) {
         decrIndentation();
         mainTask.getVariables().visit(this);
+        nlIndent();
         if ( this.isTimerSensorUsed ) {
             nlIndent();
-            this.sb.append("unsigned long __time = millis(); \n");
+            this.sb.append("unsigned long __time = millis();");
         }
-        incrIndentation();
         generateUserDefinedMethods();
-        this.sb.append("\n \n void setup() \n");
+        nlIndent();
+        this.sb.append("void setup()");
+        nlIndent();
+        incrIndentation();
         this.sb.append("{");
         nlIndent();
         this.sb.append("Wire.begin();");
@@ -540,12 +543,17 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
         this.sb.append("bnr.setOne(one);");
         nlIndent();
         this.sb.append("bnr.setBrm(brm);");
-        nlIndent();
         this.generateSensors();
-        generateUsedVars();
-        this.sb.append("\n}\n");
-        this.sb.append("\n").append("void loop() \n");
+        generateUsedVars();   
+        decrIndentation();
+        nlIndent();
+        this.sb.append("}");     
+        nlIndent();
+        nlIndent();
+        this.sb.append("void loop()");
+        nlIndent();
         this.sb.append("{");
+        incrIndentation();
         return null;
     }
 
@@ -589,16 +597,16 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
         for ( UsedSensor usedSensor : this.usedSensors ) {
             switch ( (SensorType) usedSensor.getType() ) {
                 case COLOR:
-                    this.sb.append("brm.setRgbStatus(ENABLE);");
                     nlIndent();
+                    this.sb.append("brm.setRgbStatus(ENABLE);");               
                     break;
                 case INFRARED:
+                    nlIndent();
                     this.sb.append("one.obstacleEmitters(ON);");
-                    nlIndent();
-                    break;
+                   break;
                 case ULTRASONIC:
-                    this.sb.append("brm.setSonarStatus(ENABLE);");
                     nlIndent();
+                    this.sb.append("brm.setSonarStatus(ENABLE);");
                     break;
                 case VOLTAGE:
                 case TIMER:

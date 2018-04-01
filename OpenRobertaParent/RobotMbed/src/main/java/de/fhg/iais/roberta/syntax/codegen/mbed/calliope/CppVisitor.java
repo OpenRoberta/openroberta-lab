@@ -664,11 +664,13 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        //        decrIndentation();
-        this.sb.append("int initTime = uBit.systemTime(); \n");
+        // TODO check if timer is used in the user program
+        this.sb.append("int initTime = uBit.systemTime();");       
         mainTask.getVariables().visit(this);
-
-        this.sb.append("\n").append("int main() \n");
+        nlIndent();
+        nlIndent();
+        this.sb.append("int main()");
+        nlIndent();
         this.sb.append("{");
         incrIndentation();
         nlIndent();

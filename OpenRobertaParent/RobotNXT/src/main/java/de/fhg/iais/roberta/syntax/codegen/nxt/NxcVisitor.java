@@ -1353,6 +1353,8 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
                 return "string";
             case ARRAY_BOOLEAN:
                 return "bool";
+            case ARRAY_COLOUR:
+                return "int";
             case ARRAY_CONNECTION:
                 return "int";
             case BOOLEAN:

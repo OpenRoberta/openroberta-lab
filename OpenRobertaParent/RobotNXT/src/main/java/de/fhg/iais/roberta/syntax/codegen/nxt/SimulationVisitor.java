@@ -128,7 +128,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements N
     @Override
     public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
         String end = createClosingBracket();
-        this.sb.append("createLightSensorAction(CONST.COLOR_ENUM." + lightSensorAction.getLight() + ", CONST." + lightSensorAction.getState());
+        this.sb.append("createLightSensorAction(CONST.COLOUR_ENUM." + lightSensorAction.getLight() + ", CONST." + lightSensorAction.getState());
         this.sb.append(end);
         return null;
     }
@@ -261,7 +261,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements N
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        this.sb.append("createGetSample(CONST.COLOR, CONST." + ((ColorSensorMode) colorSensor.getMode()).getModeValue() + ")");
+        this.sb.append("createGetSample(CONST.COLOUR, CONST." + ((ColorSensorMode) colorSensor.getMode()).getModeValue() + ")");
         return null;
     }
 

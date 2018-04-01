@@ -304,6 +304,8 @@ public abstract class RobotCppVisitor extends CommonLanguageVisitor {
                 return "String";
             case ARRAY_BOOLEAN:
                 return "bool";
+            case ARRAY_COLOUR:
+                return "String";
             case BOOLEAN:
                 return "bool";
             case NUMBER:

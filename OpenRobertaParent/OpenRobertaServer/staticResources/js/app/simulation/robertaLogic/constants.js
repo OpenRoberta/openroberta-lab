@@ -224,7 +224,7 @@ define({
 
     ARRAY_BOOLEAN: "Array_Boolean",
 
-    ARRAY_COLOUR: "Array_Colour",
+    ARRAY_COLOR: "Array_Colour",
 
     ARRAY_IMAGE: "Array_Image",
 
