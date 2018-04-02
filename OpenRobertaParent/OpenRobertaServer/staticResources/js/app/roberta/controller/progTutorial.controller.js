@@ -67,6 +67,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
             initStepEvents();
             createInstruction();
             openTutorialView();
+            showOverview();
         }
 
         function initStepEvents() {
@@ -78,13 +79,21 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
                 openTutorialView();
             });
             $("#tutorialEnd").on("click", function() {
-                Blockly.hideChaff();
-                closeTutorialView();
-                $('#tutorial-navigation').fadeOut(750);
-                $('#head-navigation').fadeIn(750);
-                $('#progTutorial').fadeOut();
-                $('.blocklyToolboxDiv>.levelTabs').removeClass('invisible');
-                PROG_C.loadExternalToolbox(GUISTATE_C.getProgramToolbox());
+                exitTutorial();
+            });
+        }
+
+        function showOverview() {
+            if (!tutorial.overview)
+                return;
+            $('#tutorialOverviewText').html(tutorial.overview);
+            $('#tutorialOverviewTitle').html(tutorial.name);
+            $('#tutorialOverview').modal();
+            $('#tutorialOverview').on('click.dismiss.bs.modal', function(event) {
+                if (event.target.id === 'tutorialContinue') {
+                    return false;
+                }
+                exitTutorial();
             });
         }
 
@@ -137,8 +146,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
                         }));
                     }
                 } else {
-                    // apparently a step without an instruction -> go
-                    // directly to the quiz
+                    // apparently a step without an instruction -> go directly to the quiz
                     createQuiz();
                 }
             }
@@ -297,7 +305,8 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
 
         function shuffle(answers) {
             for (var j, x, i = answers.length; i; j = Math.floor(Math.random() * i), x = answers[--i], answers[i] = answers[j], answers[j] = x)
-                return answers;
+                ;
+            return answers;
         }
 
         function toggleTutorial() {
@@ -391,5 +400,15 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
             if ($('.rightMenuButton.shifted').length >= 0) {
                 $('.rightMenuButton.shifted').trigger('click');
             }
+        }
+
+        function exitTutorial() {
+            Blockly.hideChaff();
+            closeTutorialView();
+            $('#tutorial-navigation').fadeOut(750);
+            $('#head-navigation').fadeIn(750);
+            $('#progTutorial').fadeOut();
+            $('.blocklyToolboxDiv>.levelTabs').removeClass('invisible');
+            PROG_C.loadExternalToolbox(GUISTATE_C.getProgramToolbox());
         }
     });

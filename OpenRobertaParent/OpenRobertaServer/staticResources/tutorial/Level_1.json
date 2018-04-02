@@ -2,7 +2,7 @@
 	"name": "Tutorial Erstellung für Einsteiger :-)",
 	"language": "DE",
 	"robot": "ev3",
-	"overview": "Noch nicht unterstützt!",
+	"overview": "Hier sollte ein kurzer Text erläutern<ul><li>was das Ziel dieses Tutorials ist,</li><li>was man in diesem Tutorial lernen kann,</li><li>welche Vorkenntnisse man benötigt und</li><li>ob es in der Simulation oder mit dem realen Roboter erarbeitet werden kann.</li></ul>Eine kleine RobertaFriends könnte die Motivation steigern.",
 	"end": "Prima, jetzt weißt du, wie man ein Tutorial erstellt!",
 	"step": [
 		{
