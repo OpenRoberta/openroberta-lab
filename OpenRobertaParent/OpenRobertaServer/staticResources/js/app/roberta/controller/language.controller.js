@@ -1,5 +1,5 @@
-define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller', 'configuration.controller', 'user.controller', 'progHelp.controller', 'progInfo.controller' ], function(
-        exports, LOG, $, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, USER_C, HELP_C, INFO_C) {
+define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller', 'configuration.controller', 'user.controller' ], function(
+        exports, LOG, $, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, USER_C) {
 
     /**
      * Initialize language switching
@@ -74,16 +74,14 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
         if (GUISTATE_C.getLanguage == language) {
             return;
         }
-        GUISTATE_C.setLanguage(language);
-
+        
         var url = 'blockly/msg/js/' + language.toLowerCase() + '.js';
         getCachedScript(url).done(function(data) {
             translate();
+            GUISTATE_C.setLanguage(language);
             PROGRAM_C.reloadView();
             CONFIGURATION_C.reloadView();
-            USER_C.initValidationMessages();
-            HELP_C.initView();
-            INFO_C.init();
+            USER_C.initValidationMessages();            
             var value = Blockly.Msg.MENU_START_BRICK;
             if (value.indexOf("$") >= 0) {
                 value = value.replace("$", GUISTATE_C.getRobotRealName());

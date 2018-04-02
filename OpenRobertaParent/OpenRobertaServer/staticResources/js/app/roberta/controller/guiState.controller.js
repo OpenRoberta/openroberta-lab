@@ -1,4 +1,4 @@
-define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controller', 'jquery' ], function(exports, UTIL, LOG, MSG, GUISTATE, SOCKET_C, $) {
+define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.controller', 'progInfo.controller', 'socket.controller', 'jquery' ], function(exports, UTIL, LOG, MSG, GUISTATE, HELP_C, INFO_C, SOCKET_C, $) {
 
     /**
      * Init robot
@@ -316,6 +316,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             break;
         }
 
+        var groupSwitched = false;
+        if (findGroup(robot) != getRobotGroup()) {
+            groupSwitched = true;
+        }
+
         GUISTATE.gui.robot = robot;
         GUISTATE.gui.robotGroup = robotGroup;
 
@@ -327,7 +332,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         if (GUISTATE.gui.blocklyWorkspace) {
             GUISTATE.gui.blocklyWorkspace.robControls.refreshTooltips(getRobotRealName());
         }
-        updateTutorialMenu();
+        if (groupSwitched) {
+            HELP_C.initView();
+            INFO_C.init();
+            updateTutorialMenu();
+        }
     }
 
     exports.setRobot = setRobot;
@@ -535,6 +544,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             $('.EN').css('display', 'inline');
         }
         GUISTATE.gui.language = language;
+        HELP_C.initView();
+        $('#infoContent').attr('data-placeholder', Blockly.Msg.INFO_DOCUMENTATION_HINT || 'Document your program here ...');
+        $('.bootstrap-tagsinput input').attr('placeholder', Blockly.Msg.INFO_TAGS || 'Tags');
         updateTutorialMenu();
     }
     exports.setLanguage = setLanguage;

@@ -38,7 +38,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                 if (result.rc === "ok") {
                     GUISTATE_C.setRobotToken(token);
                     GUISTATE_C.setState(result);
-                    console.log(result.message);
+                    // console.log(result.message);
                     MSG.displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, GUISTATE_C.getRobotName());
                     handleFirmwareConflict(result['robot.update']);
                 } else {
