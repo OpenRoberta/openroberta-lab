@@ -1187,7 +1187,8 @@ table [data-toggle="collapse"].collapsed:after {
     margin-right: 6px;
 }
 .blocklyToolboxDiv>.nav-tabs .typcn:before {
-    margin-right: 0;
+    position: relative;
+    top: 1;
 }
 .blbtn.typcn:before {
     margin-right: 0;
