@@ -788,9 +788,11 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
     public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
         switch ( radioReceiveAction.getType() ) {
             case NUMBER:
-                this.sb.append("(float(radio.receive())");
+                this.sb.append("((lambda x: 0 if x is None else float(x))(radio.receive()))");
                 break;
             case BOOLEAN:
+                this.sb.append("('True' == radio.receive())");
+                break;
             case STRING:
                 this.sb.append("radio.receive()");
                 break;
