@@ -285,6 +285,10 @@ public abstract class ArduinoVisitor extends RobotCppVisitor {
         repeatStmt.getList().visit(this);
         if ( !isWaitStmt ) {
             addContinueLabelToLoop();
+            incrIndentation();
+            nlIndent();
+            this.sb.append("delay(1);");
+            decrIndentation();
         } else {
             appendBreakStmt();
         }
