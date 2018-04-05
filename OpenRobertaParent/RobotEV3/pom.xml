@@ -19,8 +19,8 @@
 	<name>RobotEV3</name>
 	<description>the plugin for the EV3 robot</description>
 	<properties>
-		<ev3runtime.v0.version>2.5.0</ev3runtime.v0.version>
-		<ev3runtime.v1.version>2.5.0</ev3runtime.v1.version>
+		<ev3runtime.v0.version>2.6.0</ev3runtime.v0.version>
+		<ev3runtime.v1.version>2.6.0</ev3runtime.v1.version>
 		<ev3classes.v0.version>0.9.0</ev3classes.v0.version>
 		<ev3classes.v1.version>0.9.1</ev3classes.v1.version>
 		<dbusjava.v0.version>0.9.0</dbusjava.v0.version>
