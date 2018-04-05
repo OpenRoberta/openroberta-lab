@@ -444,11 +444,11 @@ public abstract class RobotPythonVisitor extends CommonLanguageVisitor {
         this.sb.append(stmtType).append(whitespace());
         ExprList<Void> expressions = (ExprList<Void>) expr;
         expressions.get().get(0).visit(this);
-        this.sb.append(whitespace() + "in range(round(");
+        this.sb.append(whitespace() + "in range(int(");
         expressions.get().get(1).visit(this);
-        this.sb.append(")," + whitespace() + "round(");
+        this.sb.append(")," + whitespace() + "int(");
         expressions.get().get(2).visit(this);
-        this.sb.append(")," + whitespace() + "round(");
+        this.sb.append(")," + whitespace() + "int(");
         expressions.get().get(3).visit(this);
         this.sb.append(")):");
     }
