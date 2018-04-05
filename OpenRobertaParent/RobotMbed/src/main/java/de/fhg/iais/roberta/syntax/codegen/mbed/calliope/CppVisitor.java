@@ -533,7 +533,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.sb.append("uBit.display.readLightLevel()");
+        this.sb.append("round(uBit.display.readLightLevel() * _GET_LIGHTLEVEL_MULTIPLIER)");
         return null;
     }
 
@@ -665,7 +665,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         // TODO check if timer is used in the user program
-        this.sb.append("int initTime = uBit.systemTime();");       
+        this.sb.append("int initTime = uBit.systemTime();");
         mainTask.getVariables().visit(this);
         nlIndent();
         nlIndent();
@@ -1255,6 +1255,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         this.sb.append("#include <stdlib.h>\n");
         this.sb.append("#define _SET_BRIGHTNESS_MULTIPLIER 28.34\n");
         this.sb.append("#define _GET_BRIGHTNESS_MULTIPLIER 0.0353\n");
+        this.sb.append("#define _GET_LIGHTLEVEL_MULTIPLIER 0.3922\n");
         this.sb.append("#define _ITERATION_SLEEP_TIMEOUT 1\n\n");
         this.sb.append("MicroBit uBit;\n\n");
     }

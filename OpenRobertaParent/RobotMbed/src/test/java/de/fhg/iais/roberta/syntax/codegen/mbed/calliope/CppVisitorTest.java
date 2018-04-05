@@ -19,6 +19,7 @@ public class CppVisitorTest {
             + "#include <stdlib.h>\n"
             + "#define _SET_BRIGHTNESS_MULTIPLIER 28.34\n"
             + "#define _GET_BRIGHTNESS_MULTIPLIER 0.0353\n"
+            + "#define _GET_LIGHTLEVEL_MULTIPLIER 0.3922\n"
             + "#define _ITERATION_SLEEP_TIMEOUT 1\n\n"
             + "MicroBituBit;"
             + "int initTime=uBit.systemTime();";
@@ -30,6 +31,7 @@ public class CppVisitorTest {
             + "#include <stdlib.h>\n"
             + "#define _SET_BRIGHTNESS_MULTIPLIER 28.34\n"
             + "#define _GET_BRIGHTNESS_MULTIPLIER 0.0353\n"
+            + "#define _GET_LIGHTLEVEL_MULTIPLIER 0.3922\n"
             + "#define _ITERATION_SLEEP_TIMEOUT 1\n\n"
             + "MicroBituBit;";
 
@@ -355,7 +357,7 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.display.scroll(ManagedString(uBit.display.readLightLevel()));\n"
+                + "uBit.display.scroll(ManagedString(round(uBit.display.readLightLevel() * _GET_LIGHTLEVEL_MULTIPLIER)));\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/sensor/get_ambient_light.xml");

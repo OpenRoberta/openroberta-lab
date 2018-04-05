@@ -110,7 +110,7 @@ public class AstToEv3PythonVisitorTest {
                 + IMPORTS
                 + GLOBALS
                 + "\ndef run():\n"
-                + "    for k0 in range(round(0), round(10), round(1)):\n"
+                + "    for k0 in range(int(0), int(10), int(1)):\n"
                 + "        hal.drawText(\"Hallo\", 0, 3)\n\n"
                 + MAIN_METHOD;
 
@@ -136,7 +136,7 @@ public class AstToEv3PythonVisitorTest {
                 + "            hal.turnOnRegulatedMotor('B', 30)\n"
                 + "    hal.playFile(1)\n"
                 + "    hal.setVolume(50)\n"
-                + "    for i in range(round(1), round(10), round(1)):\n"
+                + "    for i in range(int(1), int(10), int(1)):\n"
                 + "        hal.rotateRegulatedMotor('B', 30, 'rotations', 1)\n\n"
                 + MAIN_METHOD;
 
@@ -562,13 +562,13 @@ public class AstToEv3PythonVisitorTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "for k0 in range(round(0), round(10), round(1)):\n"
+                + "for k0 in range(int(0), int(10), int(1)):\n"
                 + "    pass\n"
-                + "for k1 in range(round(0), round(10), round(1)):\n"
+                + "for k1 in range(int(0), int(10), int(1)):\n"
                 + "    print(\"15\")\n"
                 + "    print(\"15\")\n"
-                + "for k2 in range(round(0), round(10), round(1)):\n"
-                + "    for k3 in range(round(0), round(10), round(1)):\n"
+                + "for k2 in range(int(0), int(10), int(1)):\n"
+                + "    for k3 in range(int(0), int(10), int(1)):\n"
                 + "        print(\"15\")\n"
                 + "        print(\"15\")\n\n"
                 + MAIN_METHOD;
@@ -582,9 +582,9 @@ public class AstToEv3PythonVisitorTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "for i in range(round(1), round(10), round(15)):\n"
+                + "for i in range(int(1), int(10), int(15)):\n"
                 + "    pass\n"
-                + "for i in range(round(1), round(10), round(15)):\n"
+                + "for i in range(int(1), int(10), int(15)):\n"
                 + "    print(\"\")\n\n"
                 + MAIN_METHOD;
 
