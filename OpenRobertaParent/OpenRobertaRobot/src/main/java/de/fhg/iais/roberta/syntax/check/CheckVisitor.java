@@ -69,8 +69,8 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void> {
 
     private int loopCounter = 0;
     private int currenLoop = 0;
-    private HashMap<Integer, Boolean> loopsLabelContainer = new HashMap<Integer, Boolean>();
-    private HashMap<Integer, Integer> waitsInLoops = new HashMap<>();
+    private final HashMap<Integer, Boolean> loopsLabelContainer = new HashMap<Integer, Boolean>();
+    private final HashMap<Integer, Integer> waitsInLoops = new HashMap<>();
 
     /**
      * Returns map of loop number and boolean value that indicates if the loop is labeled in Blockly program.
@@ -95,13 +95,28 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void> {
 
     protected void check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         Assert.isTrue(!phrasesSet.isEmpty());
+        collectGlobalVariables(phrasesSet);
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
             for ( Phrase<Void> phrase : phrases ) {
-                if ( isMainBlock(phrase) && phrases.size() == 2 ) {
-                    this.isProgramEmpty = true;
+                if ( isMainBlock(phrase) ) {
+                    this.isProgramEmpty = phrases.size() == 2;
+                } else {
+                    phrase.visit(this);
                 }
-                phrase.visit(this);
             }
+        }
+    }
+
+    protected void collectGlobalVariables(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+            Phrase<Void> phrase = phrases.get(1);
+            visitIfMain(phrase);
+        }
+    }
+
+    private void visitIfMain(Phrase<Void> phrase) {
+        if ( isMainBlock(phrase) ) {
+            phrase.visit(this);
         }
     }
 
