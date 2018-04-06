@@ -90,6 +90,7 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor implements As
     @Override
     public void check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         Assert.isTrue(!phrasesSet.isEmpty());
+        collectGlobalVariables(phrasesSet);
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
             for ( Phrase<Void> phrase : phrases ) {
                 phrase.visit(this);
