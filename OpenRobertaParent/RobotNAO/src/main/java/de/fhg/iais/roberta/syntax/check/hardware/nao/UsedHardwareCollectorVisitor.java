@@ -153,6 +153,9 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
+        sayTextAction.getMsg().visit(this);
+        sayTextAction.getPitch().visit(this);
+        sayTextAction.getPitch().visit(this);
         return null;
     }
 
