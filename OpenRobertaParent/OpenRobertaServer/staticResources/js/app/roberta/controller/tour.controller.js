@@ -127,7 +127,7 @@ define(['exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scrollt
             },
         }, {
             'event': 'mousedown touchstart',
-            'selector': '#progSim', //'.blocklyButtons>g:eq(1)>rect',
+            'selector': '#simButton', //'.blocklyButtons>g:eq(1)>rect',
             'description': 'Blockly.Msg.TOUR1_DESCRIPTION13',
             'showSkip': false,
             onBeforeStart: function() {
@@ -157,7 +157,7 @@ define(['exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scrollt
 
         }, {
             'event': 'mousedown touchstart',
-            'selector': '#progSim',
+            'selector': '#simButton',
             'description': 'Blockly.Msg.TOUR1_DESCRIPTION16',
             'showSkip': false,
         }
@@ -285,7 +285,7 @@ define(['exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scrollt
             },
         }, {
             'event': 'mousedown touchstart',
-            'selector': '#progSim', //'.blocklyButtons>g:eq(1)>rect',
+            'selector': '#simButton', //'.blocklyButtons>g:eq(1)>rect',
             'description': 'Blockly.Msg.TOUR1_DESCRIPTION13',
             'showSkip': false,
             onBeforeStart: function() {
@@ -315,7 +315,7 @@ define(['exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scrollt
 
         }, {
             'event': 'mousedown touchstart',
-            'selector': '#progSim',
+            'selector': '#simButton',
             'description': 'Blockly.Msg.TOUR1_DESCRIPTION16',
             'showSkip': false,
         }

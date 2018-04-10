@@ -1,6 +1,7 @@
 define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', 'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, MSG, LOG, UTIL,
-        GUISTATE_C, Blockly, $) {
+    GUISTATE_C, Blockly, $) {
 
+    const INITIAL_WIDTH = 0.3;
     var blocklyWorkspace;
     var currentHelp;
     /**
@@ -22,14 +23,14 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
                 url = '../help/progHelp_' + GUISTATE_C.getRobotGroup() + '_en.html';
                 $('#helpDiv').load(url, function(response, status, xhr) {
                     if (status == "error") {
-                        $('#progHelp').hide();
+                        $('#helpButton').hide();
                     } else {
-                        $('#progHelp').show();
+                        $('#helpButton').show();
                         currentHelp = GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getLanguage().toLowerCase();
                     }
                 })
             } else {
-                $('#progHelp').show();
+                $('#helpButton').show();
                 currentHelp = GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getLanguage().toLowerCase();
             }
         });
@@ -37,8 +38,8 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
     exports.initView = initView;
 
     function initEvents() {
-        $('#progHelp').off('click touchend');
-        $('#progHelp').on('click touchend', function(event) {
+        $('#helpButton').off('click touchend');
+        $('#helpButton').on('click touchend', function(event) {
             toggleHelp();
             return false;
         });
@@ -46,82 +47,24 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
 
     function toggleHelp() {
         Blockly.hideChaff();
-        if ($('#blocklyDiv').hasClass('rightActive')) {
-            $('.blocklyToolboxDiv').css('display', 'inherit');
-            Blockly.svgResize(blocklyWorkspace);
-            $('#progHelp').animate({
-                right : '0px',
-            }, {
-                duration : 750
-            });
-            $('#blocklyDiv').animate({
-                width : '100%'
-            }, {
-                duration : 750,
-                step : function() {
-                    $(window).resize();
-                    Blockly.svgResize(blocklyWorkspace);
-                },
-                done : function() {
-                    $('#blocklyDiv').removeClass('rightActive');
-                    $('#helpDiv').removeClass('rightActive');
-                    $(window).resize();
-                    Blockly.svgResize(blocklyWorkspace);
-                    $('#sliderDiv').hide();
-                    $('#progHelp').removeClass('shifted');
-                }
-            });
+        if ($('#blockly').hasClass('rightActive')) {
+            $('#blockly').closeRightView();
         } else {
-            if (currentHelp != GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getLanguage().toLowerCase()) {
-                init();
-            }
-            $('#blocklyDiv').addClass('rightActive');
-            $('#helpDiv').addClass('rightActive');
             if (GUISTATE_C.getProgramToolboxLevel() === 'beginner') {
                 $('.help.expert').hide();
             } else {
                 $('.help.expert').show();
             }
-            var width;
-            var smallScreen;
-            if ($(window).width() < 768) {
-                smallScreen = true;
-                width = 52;
-            } else {
-                smallScreen = false;
-                width = $('#blocklyDiv').width() * 0.7;
+            if (currentHelp != GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getLanguage().toLowerCase()) {
+                init();
             }
-            $('#progHelp').animate({
-                right : $('#blocklyDiv').width() - width + 4,
-            }, {
-                duration : 750
-            });
-            $('#blocklyDiv').animate({
-                width : width
-            }, {
-                duration : 750,
-                step : function() {
-                    $(window).resize();
-                    Blockly.svgResize(blocklyWorkspace);
-                },
-                done : function() {
-                    if (smallScreen) {
-                        $('.blocklyToolboxDiv').css('display', 'none');
-                    }
-                    $('#sliderDiv').css({
-                        'left' : width - 10
+            $('#blockly').openRightView('help', INITIAL_WIDTH, function() {
+                if (Blockly.selected) {
+                    var block = Blockly.selected.type;
+                    $('#' + block).addClass('selectedHelp');
+                    $('#helpContent').scrollTo('#' + block, 1000, {
+                        offset : -10,
                     });
-                    $('#sliderDiv').show();
-                    $('#progHelp').addClass('shifted');
-                    $(window).resize();
-                    Blockly.svgResize(blocklyWorkspace);
-                    if (Blockly.selected) {
-                        var block = Blockly.selected.type;
-                        $('#' + block).addClass('selectedHelp');
-                        $('#helpContent').scrollTo('#' + block, 1000, {
-                            offset : -10,
-                        });
-                    }
                 }
             });
         }

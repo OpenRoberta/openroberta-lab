@@ -1,4 +1,6 @@
 define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ], function(exports, MSG, LOG, $) {
+
+    const ANIMATION_DURATION = 750;
     /**
      * Set cookie
      * 
@@ -52,7 +54,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
         // Handle Object
         if (obj instanceof Object) {
             copy = {};
-            for ( var attr in obj) {
+            for (var attr in obj) {
                 if (obj.hasOwnProperty(attr))
                     copy[attr] = clone(obj[attr]);
             }
@@ -125,7 +127,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
         if (dateLong) {
             var date = new Date(dateLong);
             var datestring = ("0" + date.getDate()).slice(-2) + "." + ("0" + (date.getMonth() + 1)).slice(-2) + "." + date.getFullYear() + ", "
-                    + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+            + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
             return datestring;
         } else {
             return "";
@@ -196,12 +198,14 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
     exports.calcDataTableHeight = calcDataTableHeight;
 
     function checkVisibility() {
-        var stateKey, eventKey, keys = {
-            hidden : "visibilitychange",
-            webkitHidden : "webkitvisibilitychange",
-            mozHidden : "mozvisibilitychange",
-            msHidden : "msvisibilitychange"
-        };
+        var stateKey,
+            eventKey,
+            keys = {
+                hidden : "visibilitychange",
+                webkitHidden : "webkitvisibilitychange",
+                mozHidden : "mozvisibilitychange",
+                msHidden : "msvisibilitychange"
+            };
         for (stateKey in keys) {
             if (stateKey in document) {
                 eventKey = keys[stateKey];
@@ -264,7 +268,6 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
      * 
      */
     function showMsgOnTop(msg) {
-
         $('#show-message').find('button').removeAttr("data-dismiss");
         $('#show-message').find('button').one('click', function(e) {
             $('#show-message').modal("hide");
@@ -428,24 +431,30 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
                 $selected = $(this).parent();
                 $selected.addClass(opt.draggableClass).find(opt.handle).addClass(opt.activeHandleClass);
             }
-            var drg_h = $selected.outerHeight(), drg_w = $selected.outerWidth(), pos_y = $selected.offset().top + drg_h - pageY, pos_x = $selected.offset().left
+            var drg_h = $selected.outerHeight(),
+                drg_w = $selected.outerWidth(),
+                pos_y = $selected.offset().top + drg_h - pageY,
+                pos_x = $selected.offset().left
                     + drg_w - pageX;
             $(document).on("mousemove touchmove", function(e) {
                 var pageX = e.pageX || e.originalEvent.touches[0].pageX;
                 var pageY = e.pageY || e.originalEvent.touches[0].pageY;
                 // special case movable slider between workspace and right divs
                 if (opt.axis == 'x') {
-                    var left = pageX + pos_x - drg_w - 6;
+                    var left = pageX + pos_x - drg_w;
                     var left = Math.min(left, $('#main-section').width() - 80);
                     var left = Math.max(left, 42);
                     $selected.offset({
                         top : 0,
-                        left : left
+                        left : left - 4
                     });
-                    $('#blocklyDiv').width(left + 6);
-                    $('.rightMenuButton.shifted').css({
-                        'right' : $('#main-section').width() - left - 10
+                    $('#blockly').width(left + 3);
+                    $('.rightMenuButton.rightActive').css({
+                        'right' : $(window).width() - left
                     });
+                    $('.fromRight.rightActive').css({
+                        'width' : $(window).width() - $('#blockly').width()
+                    })
                     $(window).resize();
                 } else {
                     $selected.offset({
@@ -475,4 +484,91 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
         });
         return this;
     };
+
+    $.fn.closeRightView = function(opt_callBack) {
+        Blockly.hideChaff();
+        $('.blocklyToolboxDiv').css('display', 'inherit');
+        var that = this;
+        $('.fromRight.rightActive').animate({
+            width : 0
+        }, {
+            duration : ANIMATION_DURATION,
+            start : function() {
+                $(".modal").modal("hide");
+            },
+            step : function(now) {
+                that.width($(window).width() - now);
+                $('.rightMenuButton.rightActive').css('right', now);
+                $(window).resize();
+            },
+            done : function() {
+                that.width($(window).width());
+                $('.rightMenuButton.rightActive').css('right', 0);
+                $(window).resize();
+                that.removeClass('rightActive');
+                $('.fromRight.rightActive').removeClass('rightActive');
+                $('.rightMenuButton.rightActive').removeClass('rightActive');
+                $('#sliderDiv').hide();
+                if (typeof opt_callBack == 'function') {
+                    opt_callBack();
+                }
+            }
+        });
+    };
+
+    $.fn.openRightView = function(viewName, initialViewWidth, opt_callBack) {
+        Blockly.hideChaff();
+        this.addClass('rightActive');
+        $('#' + viewName + 'Div, #' + viewName + 'Button').addClass('rightActive');
+        var width;
+        var smallScreen;
+        if ($(window).width() < 768) {
+            smallScreen = true;
+            width = 52;
+        } else {
+            smallScreen = false;
+            width = this.width() * initialViewWidth;
+        }
+        var that = this;
+        $('.fromRight.rightActive').animate({
+            width : width
+        }, {
+            duration : ANIMATION_DURATION,
+            step : function(now) {
+                that.width($(window).width() - now);
+                $('.rightMenuButton.rightActive').css('right', now);
+                $(window).resize();
+            },
+            done : function() {
+                $('#sliderDiv').show();
+                that.width($(window).width() - $('.fromRight.rightActive').width());
+                $('.rightMenuButton.rightActive').css('right', $('.fromRight.rightActive').width());
+                $(window).resize();
+                if (smallScreen) {
+                    $('.blocklyToolboxDiv').css('display', 'none');
+                }
+                $('#sliderDiv').css({
+                    'left' : that.width() - 7
+                });
+                if (typeof opt_callBack == 'function') {
+                    opt_callBack();
+                }
+            }
+        });
+    };
+
+    $(window).resize(function() {
+        var width = $('#blockly').outerWidth();
+        var height = $('#blockly').outerHeight();
+        if ($('#blocklyDiv')) {
+            $('#blocklyDiv').width(width - 4);
+            $('#blocklyDiv').height(height);
+        }
+        if ($('#bricklyDiv')) {
+            $('#bricklyDiv').width(width);
+            $('#bricklyDiv').height(height);
+        }
+        Blockly.svgResize(Blockly.getMainWorkspace());
+    });
+
 });

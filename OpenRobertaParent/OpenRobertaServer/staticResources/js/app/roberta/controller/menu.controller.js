@@ -238,7 +238,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 RUN_C.runOnBrick();
                 break;
             case 'menuRunSim':
-                $('#progSim').trigger('click');
+                $('#simButton').trigger('click');
                 break;
             case 'menuCheckProg':
                 PROGRAM_C.checkProgram();
@@ -261,7 +261,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 PROGRAM_C.showSaveAsModal();
                 break;
             case 'menuShowCode':
-                $('#progCode').trigger("click");
+                $('codeButton').trigger("click");
                 break;
             case 'menuImportProg':
                 PROGRAM_C.importXml();
@@ -607,18 +607,6 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
 //            }
         });
 
-        var blocklyWidth = 0;
-        $(window).on('resize', function(e) {
-            Blockly.svgResize(GUISTATE_C.getBlocklyWorkspace());
-            Blockly.svgResize(GUISTATE_C.getBricklyWorkspace());
-            if ($('.rightMenuButton.shifted') && $('#blockly').width() != blocklyWidth) {
-                var right = $('#blockly').width() - $('#blocklyDiv').width();
-                blocklyWidth = $('#blockly').width();
-                $('.rightMenuButton.shifted').css({
-                    right : right - 4,
-                });
-            }
-        });
         // experimental
         $(document).on('keydown', function(e) {
         	if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '1')) {

@@ -214,8 +214,12 @@ body.blocklyMinimalBody * {
     
     overflow: hidden;
 }
-#blocklyDiv,
-#bricklyDiv {
+#blocklyDiv, #bricklyDiv {
+    position: absolute;
+    touch-action: none;
+}
+#blockly, #brickly {
+	float: left;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -260,6 +264,9 @@ body.blocklyMinimalBody * {
     border-right: 4px solid #bbb;
 }
 .fromRight {
+	float: right;
+	height: 100%;
+	width: 0;
     background-color: #d8d8d8;
     display: none;
     position: relative;
@@ -391,10 +398,10 @@ div.rightMenuButton:hover,
     font-size: 24px;
     left: 7px;
 }
-#progTutorial.rightMenuButton {
+#tutorialButton.rightMenuButton {
 	background-color: #BACC1E;;
 }
-#progTutorial.rightMenuButton:before {  
+#tutorialButton.rightMenuButton:before {  
     border-right: 6px solid #BACC1E;;
 }
 .menu-icons {
@@ -556,12 +563,12 @@ div.rightMenuButton:hover,
 }
 /***** BEGIN Overwrite Bootstrap-CSS *****/
 
-.tab-content > .tab-pane:not(.active),
+/* .tab-content > .tab-pane:not(.active),
 .pill-content > .pill-pane:not(.active) {
     display: block;
     height: 0;
     overflow-y: hidden;
-}
+} */
 .tooltip>.tooltip-inner {
     background-color: #333;
 }
@@ -1619,9 +1626,6 @@ input[type=range]:focus::-ms-fill-upper {
         padding: 16px 16px;
         margin-bottom: 0;
     }
-    #blocklyDiv.codeActive {
-        display: none;
-    }
     .modal.simRobotModal {
         left: 6px;
         top: 60px;
@@ -1878,6 +1882,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 }
 #tutorialContent {
 	background-color: #fff;
+	height: 100%;
 	margin: 0;
 	padding: 16px;
 }

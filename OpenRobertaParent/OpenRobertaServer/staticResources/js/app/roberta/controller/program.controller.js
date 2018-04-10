@@ -37,6 +37,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
             variableDeclaration : true,
             robControls : true
         });
+        $(window).resize();
         blocklyWorkspace.setDevice(GUISTATE_C.getRobotGroup());
         //TODO: add the version information in the Parent POM!.
         blocklyWorkspace.setVersion('2.0');
@@ -84,18 +85,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
             blocklyWorkspace.markFocused();
         });
 
-        $('#tabProgram').onWrap('shown.bs.tab', function(e) {
-            blocklyWorkspace.setVisible(true);
-            reloadProgram();
-            e.stopPropagation();
-        }, 'tabProgram clicked');
-
-        $('#tabProgram').on('hide.bs.tab', function(e) {
-            var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-            var xml = Blockly.Xml.domToText(dom);
-            GUISTATE_C.setProgramXML(xml);
-        });
-
         // work around for touch devices
         $('.levelTabs').on('touchend', function(e) {
             var target = $(e.target).attr("href");
@@ -121,7 +110,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                 }
             }
             $('.selectedHelp').removeClass('selectedHelp');
-            if (Blockly.selected && $('#blocklyDiv').hasClass('rightActive')) {
+            if (Blockly.selected && $('#blockly').hasClass('rightActive')) {
                 var block = Blockly.selected.type;
                 $('#' + block).addClass('selectedHelp');
                 $('#helpContent').scrollTo('#' + block, 1000, {

@@ -893,10 +893,10 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
     function checkSim() {
         if (GUISTATE.gui.sim == true) {
             $('#menuRunSim').parent().removeClass('disabled');
-            $('#progSim').show();
+            $('#simButton').show();
         } else {
             $('#menuRunSim').parent().addClass('disabled');
-            $('#progSim').hide();
+            $('#simButton').hide();
         }
     }
     exports.checkSim = checkSim;

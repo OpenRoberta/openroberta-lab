@@ -109,15 +109,15 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
                 $('#head-navi-tooltip-program').attr('data-original-title', value);
                 $('#head-navi-tooltip-configuration').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_SHOW_CODE') {
-                $('#progCode').attr('data-original-title', value);
+                $('codeButton').attr('data-original-title', value);
                 $('#menuShowCode').html(value);
             } else if (lkey == 'Blockly.Msg.MENU_START_SIM') {
-                $('#progSim').attr('data-original-title', value);
+                $('#simButton').attr('data-original-title', value);
                 $('#menuRunSim').html(value);
             } else if (lkey == 'Blockly.Msg.MENU_RIGHT_INFO_TOOLTIP') {
-                $('#progInfo').attr('data-original-title', value);
+                $('#infoButton').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_RIGHT_HELP_TOOLTIP') {
-                $('#progHelp').attr('data-original-title', value);
+                $('#helpButton').attr('data-original-title', value);
             } else if (lkey === 'Blockly.Msg.MENU_ROBOT_TOOLTIP') {
                 $('#head-navi-tooltip-robot').attr('data-original-title', value);
             } else if (lkey === 'Blockly.Msg.MENU_HELP_TOOLTIP') {

@@ -98,7 +98,6 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configu
 
         $('#confNameTable').onWrap('dbl-click-row.bs.table', function($element, row) {
             configurationController.loadFromListing(row);
-            //$('#blocklyDiv').trigger('load', [ row ]);
         }, "Load configuration from listing double clicked");
 
         $('#confNameTable').onWrap('check-all.bs.table', function($element, rows) {

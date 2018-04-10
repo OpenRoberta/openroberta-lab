@@ -1,6 +1,7 @@
 define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.controller', 'blocks', 'jquery' ],
     function(exports, COMM, MSG, LOG, GUISTATE_C, PROG_C, Blockly, $) {
 
+        const INITIAL_WIDTH = 0.3;
         var blocklyWorkspace;
         var tutorialList;
         var tutorial;
@@ -26,7 +27,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
             $(".menu.tutorial").on("click", function(event) {
                 startTutorial(event.target.id);
             });
-            $('#progTutorial').on('click touchend', function() {
+            $('#tutorialButton').on('click touchend', function() {
                 toggleTutorial();
                 return false;
             });
@@ -61,7 +62,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
             $('#head-navigation').fadeOut(750);
 
             $('#tutorial-list :first-child').addClass('active');
-            $('#progTutorial').show();
+            $('#tutorialButton').show();
             $('.blocklyToolboxDiv>.levelTabs').addClass('invisible');
 
             initStepEvents();
@@ -310,70 +311,10 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
         }
 
         function toggleTutorial() {
-            Blockly.hideChaff();
-            if ($('#blocklyDiv').hasClass('rightActive')) {
-                $('.blocklyToolboxDiv').css('display', 'inherit');
-                Blockly.svgResize(blocklyWorkspace);
-                $('#progTutorial').animate({
-                    right : '0px',
-                }, {
-                    duration : 750
-                });
-                $('#blocklyDiv').animate({
-                    width : '100%'
-                }, {
-                    duration : 750,
-                    step : function() {
-                        $(window).resize();
-                        Blockly.svgResize(blocklyWorkspace);
-                    },
-                    done : function() {
-                        $('#blocklyDiv').removeClass('rightActive');
-                        $('#tutorialDiv').removeClass('rightActive');
-                        $(window).resize();
-                        Blockly.svgResize(blocklyWorkspace);
-                        $('#sliderDiv').hide();
-                        $('#progTutorial').removeClass('shifted');
-                    }
-                });
+            if ($('#blockly').hasClass('rightActive')) {
+                $('#blockly').closeRightView();
             } else {
-                $('#blocklyDiv').addClass('rightActive');
-                $('#tutorialDiv').addClass('rightActive');
-                var width;
-                var smallScreen;
-                if ($(window).width() < 768) {
-                    smallScreen = true;
-                    width = 52;
-                } else {
-                    smallScreen = false;
-                    width = $('#blocklyDiv').width() * 0.7;
-                }
-                $('#progTutorial').animate({
-                    right : $('#blocklyDiv').width() - width + 4,
-                }, {
-                    duration : 750
-                });
-                $('#blocklyDiv').animate({
-                    width : width
-                }, {
-                    duration : 750,
-                    step : function() {
-                        $(window).resize();
-                        Blockly.svgResize(blocklyWorkspace);
-                    },
-                    done : function() {
-                        if (smallScreen) {
-                            $('.blocklyToolboxDiv').css('display', 'none');
-                        }
-                        $('#sliderDiv').css({
-                            'left' : width - 10
-                        });
-                        $('#sliderDiv').show();
-                        $('#progTutorial').addClass('shifted');
-                        $(window).resize();
-                        Blockly.svgResize(blocklyWorkspace);
-                    }
-                });
+                $('#blockly').openRightView('tutorial', INITIAL_WIDTH);
             }
         }
 
@@ -381,24 +322,24 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
             if ($('#tutorialDiv').hasClass('rightActive')) {
                 return;
             }
-            if ($('.rightMenuButton.shifted').length >= 0) {
+            if ($('.rightMenuButton.rightActive').length > 0) {
                 function waitForClose() {
-                    if ($('.rightMenuButton.shifted').length <= 0) {
+                    if ($('.rightMenuButton.rightActive').length <= 0) {
                         toggleTutorial();
                     } else {
                         setTimeout(waitForClose, 50);
                     }
                 }
                 waitForClose();
-                $('.rightMenuButton.shifted').trigger('click');
+                $('.rightMenuButton.rightActive').trigger('click');
             } else {
                 toggleTutorial();
             }
         }
 
         function closeTutorialView() {
-            if ($('.rightMenuButton.shifted').length >= 0) {
-                $('.rightMenuButton.shifted').trigger('click');
+            if ($('.rightMenuButton.rightActive').length >= 0) {
+                $('.rightMenuButton.rightActive').trigger('click');
             }
         }
 
@@ -407,7 +348,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
             closeTutorialView();
             $('#tutorial-navigation').fadeOut(750);
             $('#head-navigation').fadeIn(750);
-            $('#progTutorial').fadeOut();
+            $('#tutorialButton').fadeOut();
             $('.blocklyToolboxDiv>.levelTabs').removeClass('invisible');
             PROG_C.loadExternalToolbox(GUISTATE_C.getProgramToolbox());
         }
