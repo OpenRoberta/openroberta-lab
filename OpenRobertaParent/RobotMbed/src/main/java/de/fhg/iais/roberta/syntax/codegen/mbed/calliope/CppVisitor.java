@@ -1251,12 +1251,9 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     private void addIncludes() {
         this.sb.append("#define _GNU_SOURCE\n\n");
         this.sb.append("#include \"MicroBit.h\" \n");
+        this.sb.append("#include \"NEPODefs.h\"\n");
         this.sb.append("#include <array>\n");
         this.sb.append("#include <stdlib.h>\n");
-        this.sb.append("#define _SET_BRIGHTNESS_MULTIPLIER 28.34\n");
-        this.sb.append("#define _GET_BRIGHTNESS_MULTIPLIER 0.0353\n");
-        this.sb.append("#define _GET_LIGHTLEVEL_MULTIPLIER 0.3922\n");
-        this.sb.append("#define _ITERATION_SLEEP_TIMEOUT 1\n\n");
         this.sb.append("MicroBit uBit;\n\n");
     }
 
