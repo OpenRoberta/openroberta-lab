@@ -49,11 +49,11 @@ public class CppVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "int initTime = _uBit.systemTime();"
+                + "int _initTime = _uBit.systemTime();"
                 + "double item;"
                 + MAIN
                 + "item = 0;\n"
-                + "item = ( _uBit.systemTime() - initTime );"
+                + "item = ( _uBit.systemTime() - _initTime );"
                 + END;
 
         assertCodeIsOk(expectedResult, "/action/timer_used.xml");
@@ -517,7 +517,7 @@ public class CppVisitorTest {
                 + "while(1){if((_uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FACE_DOWN)==true){break;}_uBit.sleep(1);}"
                 + "while(1){if((_uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_SHAKE)==true){break;}_uBit.sleep(1);}"
                 + "while(1){if((_uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FREEFALL)==true){break;}_uBit.sleep(1);}"
-                + "while(1){if(_uBit.compass.heading()>180){break;}_uBit.sleep(1);}while(1){if((_uBit.systemTime()-initTime)>500){break;}_uBit.sleep(1);}"
+                + "while(1){if(_uBit.compass.heading()>180){break;}_uBit.sleep(1);}while(1){if((_uBit.systemTime()-_initTime)>500){break;}_uBit.sleep(1);}"
                 + "while(1){if(_uBit.thermometer.getTemperature()>20){break;}_uBit.sleep(1);}while(1){if(_uBit.display.readLightLevel()>50){break;}_uBit.sleep(1);}"
                 + END;
 

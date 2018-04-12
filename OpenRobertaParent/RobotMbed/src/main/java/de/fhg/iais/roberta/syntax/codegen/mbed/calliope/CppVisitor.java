@@ -604,10 +604,10 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
             case DEFAULT:
             case VALUE:
-                this.sb.append("( _uBit.systemTime() - initTime )");
+                this.sb.append("( _uBit.systemTime() - _initTime )");
                 break;
             case RESET:
-                this.sb.append("initTime = _uBit.systemTime();");
+                this.sb.append("_initTime = _uBit.systemTime();");
                 break;
             default:
                 throw new DbcException("Invalid Time Mode!");
@@ -666,7 +666,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     public Void visitMainTask(MainTask<Void> mainTask) {
         // TODO check if timer is used in the user program
         if ( this.codePreprocess.isTimerSensorUsed() ) {
-            this.sb.append("int initTime = _uBit.systemTime();");
+            this.sb.append("int _initTime = _uBit.systemTime();");
         }
         mainTask.getVariables().visit(this);
         nlIndent();
