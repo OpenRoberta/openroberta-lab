@@ -665,7 +665,9 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         // TODO check if timer is used in the user program
-        this.sb.append("int initTime = _uBit.systemTime();");
+        if ( this.codePreprocess.isTimerSensorUsed() ) {
+            this.sb.append("int initTime = _uBit.systemTime();");
+        }
         mainTask.getVariables().visit(this);
         nlIndent();
         nlIndent();

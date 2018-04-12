@@ -18,15 +18,6 @@ public class CppVisitorTest {
             + "#include \"NEPODefs.h\""
             + "#include <array>\n"
             + "#include <stdlib.h>\n"
-            + "MicroBit_uBit;"
-            + "int initTime=_uBit.systemTime();";
-
-    private static final String IMPORTS_NO_TIMER = //
-        "#define_GNU_SOURCE\n\n"
-            + "#include \"MicroBit.h\"" //
-            + "#include \"NEPODefs.h\""
-            + "#include <array>\n"
-            + "#include <stdlib.h>\n"
             + "MicroBit_uBit;";
 
     private static final String MAIN = "int main() { _uBit.init();";
@@ -51,6 +42,21 @@ public class CppVisitorTest {
                 + END;
 
         assertCodeIsOk(expectedResult, "/task/main_task_no_variables_empty.xml");
+    }
+
+    @Test
+    public void visitMainTask_timerUsed() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + "int initTime = _uBit.systemTime();"
+                + "double item;"
+                + MAIN
+                + "item = 0;\n"
+                + "item = ( _uBit.systemTime() - initTime );"
+                + END;
+
+        assertCodeIsOk(expectedResult, "/action/timer_used.xml");
     }
 
     @Test
@@ -633,10 +639,9 @@ public class CppVisitorTest {
     public void visitUserDefinedMethod__ReturnsCorrectCppProgram() throws Exception {
         String expectedResult =
             "" //
-                + IMPORTS_NO_TIMER
+                + IMPORTS
                 + "template<size_t N>"
                 + "void doSomething(array<MicroBitImage,N> x);"
-                + "int initTime=_uBit.systemTime();\n"
                 + "array<MicroBitImage,3> item;\n"
                 + MAIN
                 + "item={MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\"),MicroBitImage(\"0,0,0,0,0\\n0,255,0,255,0\\n0,255,255,255,0\\n0,0,255,0,0\\n0,0,0,0,0\\n\"),MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\")};"
