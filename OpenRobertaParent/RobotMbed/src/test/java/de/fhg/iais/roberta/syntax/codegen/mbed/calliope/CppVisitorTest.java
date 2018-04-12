@@ -15,27 +15,21 @@ public class CppVisitorTest {
     private static final String IMPORTS = //
         "#define_GNU_SOURCE\n\n"
             + "#include \"MicroBit.h\"" //
+            + "#include \"NEPODefs.h\""
             + "#include <array>\n"
             + "#include <stdlib.h>\n"
-            + "#define _SET_BRIGHTNESS_MULTIPLIER 28.34\n"
-            + "#define _GET_BRIGHTNESS_MULTIPLIER 0.0353\n"
-            + "#define _GET_LIGHTLEVEL_MULTIPLIER 0.3922\n"
-            + "#define _ITERATION_SLEEP_TIMEOUT 1\n\n"
-            + "MicroBituBit;"
-            + "int initTime=uBit.systemTime();";
+            + "MicroBit_uBit;"
+            + "int initTime=_uBit.systemTime();";
 
     private static final String IMPORTS_NO_TIMER = //
         "#define_GNU_SOURCE\n\n"
             + "#include \"MicroBit.h\"" //
+            + "#include \"NEPODefs.h\""
             + "#include <array>\n"
             + "#include <stdlib.h>\n"
-            + "#define _SET_BRIGHTNESS_MULTIPLIER 28.34\n"
-            + "#define _GET_BRIGHTNESS_MULTIPLIER 0.0353\n"
-            + "#define _GET_LIGHTLEVEL_MULTIPLIER 0.3922\n"
-            + "#define _ITERATION_SLEEP_TIMEOUT 1\n\n"
-            + "MicroBituBit;";
+            + "MicroBit_uBit;";
 
-    private static final String MAIN = "int main() { uBit.init();";
+    private static final String MAIN = "int main() { _uBit.init();";
 
     private static final String END = "release_fiber();}";
 
@@ -65,8 +59,8 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.display.scroll(ManagedString(\"Hallo\"));"
-                + "uBit.display.print(ManagedString(\"H\"));"
+                + "_uBit.display.scroll(ManagedString(\"Hallo\"));"
+                + "_uBit.display.print(ManagedString(\"H\"));"
                 + END;
 
         assertCodeIsOk(expectedResult, "/action/display_text_show_hello.xml");
@@ -93,12 +87,12 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.display.print(MicroBitImage(\"0,255,0,255,0\\n"
+                + "_uBit.display.print(MicroBitImage(\"0,255,0,255,0\\n"
                 + "255,255,255,255,255\\n"
                 + "255,255,255,255,255\\n"
                 + "0,255,255,255,0\\n"
                 + "0,0,255,0,0\\n\"));"
-                + "uBit.display.animateImages({MicroBitImage(\"0,0,0,0,0\\n"
+                + "_uBit.display.animateImages({MicroBitImage(\"0,0,0,0,0\\n"
                 + "0,255,0,255,0\\n"
                 + "0,255,255,255,0\\n"
                 + "0,0,255,0,0\\n"
@@ -118,7 +112,7 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.display.print(\"\");"
+                + "_uBit.display.print(\"\");"
                 + END;
         //
 
@@ -132,7 +126,7 @@ public class CppVisitorTest {
                 + IMPORTS
                 + MAIN
                 + "\n"
-                + "uBit.display.clear();"
+                + "_uBit.display.clear();"
                 + END;
 
         assertCodeIsOk(expectedResult, "/action/display_clear.xml");
@@ -145,8 +139,8 @@ public class CppVisitorTest {
                 + IMPORTS
                 + MAIN
                 + "\n"
-                + "uBit.display.print(MicroBitImage(\"255,0,0,0,255\\n0,0,0,0,0\\n255,255,255,255,255\\n0,0,255,0,255\\n0,0,255,255,255\\n\").shiftImageUp(1));\n"
-                + "uBit.display.print(MicroBitImage(\"255,0,0,0,255\\n0,0,0,0,0\\n255,255,255,255,255\\n0,0,255,0,255\\n0,0,255,255,255\\n\").shiftImageDown(2));"
+                + "_uBit.display.print(MicroBitImage(\"255,0,0,0,255\\n0,0,0,0,0\\n255,255,255,255,255\\n0,0,255,0,255\\n0,0,255,255,255\\n\").shiftImageUp(1));\n"
+                + "_uBit.display.print(MicroBitImage(\"255,0,0,0,255\\n0,0,0,0,0\\n255,255,255,255,255\\n0,0,255,0,255\\n0,0,255,255,255\\n\").shiftImageDown(2));"
                 + END;
 
         assertCodeIsOk(expectedResult, "/function/image_shift_up_down.xml");
@@ -159,7 +153,7 @@ public class CppVisitorTest {
                 + IMPORTS
                 + MAIN
                 + "\n"
-                + "uBit.display.print(MicroBitImage().shiftImageUp(0));"
+                + "_uBit.display.print(MicroBitImage().shiftImageUp(0));"
                 + END;
 
         assertCodeIsOk(expectedResult, "/function/image_shift_missing_image_and_position.xml");
@@ -172,7 +166,7 @@ public class CppVisitorTest {
                 + IMPORTS
                 + MAIN
                 + "\n"
-                + "uBit.display.print(MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\").invert());"
+                + "_uBit.display.print(MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\").invert());"
                 + END;
 
         assertCodeIsOk(expectedResult, "/function/image_invert_heart_image.xml");
@@ -185,7 +179,7 @@ public class CppVisitorTest {
                 + IMPORTS
                 + MAIN
                 + "\n"
-                + "uBit.display.print(MicroBitImage().invert());"
+                + "_uBit.display.print(MicroBitImage().invert());"
                 + END;
 
         assertCodeIsOk(expectedResult, "/function/image_invert_missing_image.xml");
@@ -197,7 +191,7 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.display.scroll(ManagedString(uBit.buttonA.isPressed()));"
+                + "_uBit.display.scroll(ManagedString(_uBit.buttonA.isPressed()));"
                 + END;
 
         assertCodeIsOk(expectedResult, "/sensor/check_if_key_A_is_pressed.xml");
@@ -209,8 +203,8 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.accelerometer.updateSample();\n"
-                + "uBit.display.scroll(ManagedString(uBit.compass.heading()));"
+                + "_uBit.accelerometer.updateSample();\n"
+                + "_uBit.display.scroll(ManagedString(_uBit.compass.heading()));"
                 + END;
 
         assertCodeIsOk(expectedResult, "/sensor/get_compass_orientation_value.xml");
@@ -222,8 +216,8 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);"
-                + "uBit.display.print(MicroBitImage(\"255,255,0,0,0\\n0,0,0,0,255\\n0,85,0,0,0\\n0,0,0,255,0\\n0,56,0,0,0\\n\"));"
+                + "_uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);"
+                + "_uBit.display.print(MicroBitImage(\"255,255,0,0,0\\n0,0,0,0,255\\n0,85,0,0,0\\n0,0,0,255,0\\n0,56,0,0,0\\n\"));"
                 + END;
 
         assertCodeIsOk(expectedResult, "/expr/image_create.xml");
@@ -236,10 +230,10 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.accelerometer.updateSample();\n"
+                + "_uBit.accelerometer.updateSample();\n"
                 + "\n"
-                + "uBit.display.scroll(ManagedString((uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FACE_DOWN)));"
-                + "uBit.display.scroll(ManagedString((uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_TILT_LEFT)));"
+                + "_uBit.display.scroll(ManagedString((_uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FACE_DOWN)));"
+                + "_uBit.display.scroll(ManagedString((_uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_TILT_LEFT)));"
                 + END;
 
         assertCodeIsOk(expectedResult, "/sensor/check_gesture.xml");
@@ -251,7 +245,7 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.display.scroll(ManagedString(uBit.thermometer.getTemperature()));"
+                + "_uBit.display.scroll(ManagedString(_uBit.thermometer.getTemperature()));"
                 + END;
 
         assertCodeIsOk(expectedResult, "/sensor/get_temperature.xml");
@@ -263,9 +257,9 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.rgb.setColour(MicroBitColor(255, 0, 0, 255));\n"
-                + "uBit.rgb.setColour(MicroBitColor(0, 153, 0, 255));\n"
-                + "uBit.rgb.setColour(MicroBitColor(153, 153, 255, 255));\n"
+                + "_uBit.rgb.setColour(MicroBitColor(255, 0, 0, 255));\n"
+                + "_uBit.rgb.setColour(MicroBitColor(0, 153, 0, 255));\n"
+                + "_uBit.rgb.setColour(MicroBitColor(153, 153, 255, 255));\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/action/led_on_three_colors.xml");
@@ -277,7 +271,7 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.rgb.setColour(MicroBitColor());\n"
+                + "_uBit.rgb.setColour(MicroBitColor());\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/action/led_on_missing_color.xml");
@@ -289,7 +283,7 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.rgb.off();\n"
+                + "_uBit.rgb.off();\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/action/led_off.xml");
@@ -301,10 +295,10 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.soundmotor.motorAOn(30);\n"
-                + "uBit.soundmotor.motorBOn(30);\n"
-                + "uBit.soundmotor.motorAOn(30);\n"
-                + "uBit.soundmotor.motorBOn(30);\n"
+                + "_uBit.soundmotor.motorAOn(30);\n"
+                + "_uBit.soundmotor.motorBOn(30);\n"
+                + "_uBit.soundmotor.motorAOn(30);\n"
+                + "_uBit.soundmotor.motorBOn(30);\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/action/motor_on.xml");
@@ -316,8 +310,8 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.soundmotor.motorOn(0);\n"
-                + "uBit.soundmotor.motorOn(14);\n"
+                + "_uBit.soundmotor.motorOn(0);\n"
+                + "_uBit.soundmotor.motorOn(14);\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/action/single_motor_on.xml");
@@ -329,9 +323,9 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.soundmotor.soundOn(50);\n"
-                + "uBit.sleep(500);\n"
-                + "uBit.soundmotor.soundOff();\n"
+                + "_uBit.soundmotor.soundOn(50);\n"
+                + "_uBit.sleep(500);\n"
+                + "_uBit.soundmotor.soundOff();\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/action/play_tone.xml");
@@ -343,9 +337,9 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.soundmotor.soundOn(261.626);\n"
-                + "uBit.sleep(2000);\n"
-                + "uBit.soundmotor.soundOff();\n"
+                + "_uBit.soundmotor.soundOn(261.626);\n"
+                + "_uBit.sleep(2000);\n"
+                + "_uBit.soundmotor.soundOff();\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/action/play_note.xml");
@@ -357,7 +351,7 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.display.scroll(ManagedString(round(uBit.display.readLightLevel() * _GET_LIGHTLEVEL_MULTIPLIER)));\n"
+                + "_uBit.display.scroll(ManagedString(round(_uBit.display.readLightLevel() * _GET_LIGHTLEVEL_MULTIPLIER)));\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/sensor/get_ambient_light.xml");
@@ -369,8 +363,8 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.radio.enable();\n"
-                + "uBit.radio.setTransmitPower(0); uBit.radio.datagram.send(ManagedString((ManagedString(\"Hallo\"))));\n"
+                + "_uBit.radio.enable();\n"
+                + "_uBit.radio.setTransmitPower(0); _uBit.radio.datagram.send(ManagedString((ManagedString(\"Hallo\"))));\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/action/radio_send_message.xml");
@@ -382,8 +376,8 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.radio.enable();\n"
-                + "uBit.radio.setTransmitPower(0); uBit.radio.datagram.send(ManagedString((\"\")));\n"
+                + "_uBit.radio.enable();\n"
+                + "_uBit.radio.setTransmitPower(0); _uBit.radio.datagram.send(ManagedString((\"\")));\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/action/radio_send_missing_message.xml");
@@ -395,8 +389,8 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.radio.enable();\n"
-                + "uBit.display.scroll(ManagedString(ManagedString(uBit.radio.datagram.recv())));\n"
+                + "_uBit.radio.enable();\n"
+                + "_uBit.display.scroll(ManagedString(ManagedString(_uBit.radio.datagram.recv())));\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/action/radio_receive_message.xml");
@@ -408,8 +402,8 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.radio.enable();\n"
-                + "uBit.display.scroll(ManagedString(uBit.radio.getRSSI()));\n"
+                + "_uBit.radio.enable();\n"
+                + "_uBit.display.scroll(ManagedString(_uBit.radio.getRSSI()));\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/sensor/radio_rssi.xml");
@@ -421,8 +415,8 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.soundmotor.motorAOff();\n"
-                + "uBit.soundmotor.motorBOff();\n"
+                + "_uBit.soundmotor.motorAOff();\n"
+                + "_uBit.soundmotor.motorBOff();\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/action/motor_stop.xml");
@@ -434,9 +428,9 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.soundmotor.motorCoast();\n"
-                + "uBit.soundmotor.motorBreak();\n"
-                + "uBit.soundmotor.motorSleep();\n"
+                + "_uBit.soundmotor.motorCoast();\n"
+                + "_uBit.soundmotor.motorBreak();\n"
+                + "_uBit.soundmotor.motorSleep();\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/action/single_motor_stop.xml");
@@ -448,7 +442,7 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.display.scroll(ManagedString((uBit.random(200 - 1 + 1) + 1)));\n"
+                + "_uBit.display.scroll(ManagedString((_uBit.random(200 - 1 + 1) + 1)));\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/function/random_int_generator.xml");
@@ -460,7 +454,7 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.display.scroll(ManagedString(isWhole(2)));\n"
+                + "_uBit.display.scroll(ManagedString(isWhole(2)));\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/function/is_whole_number.xml");
@@ -472,7 +466,7 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.display.scroll(ManagedString(isPrime(2)));\n"
+                + "_uBit.display.scroll(ManagedString(isPrime(2)));\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/function/is_prime_number.xml");
@@ -484,7 +478,7 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.display.scroll(ManagedString((uBit.random(0 - 0 + 1) + 0)));\n"
+                + "_uBit.display.scroll(ManagedString((_uBit.random(0 - 0 + 1) + 0)));\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/function/random_int_generator_missing_param.xml");
@@ -497,28 +491,28 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.accelerometer.updateSample();"
+                + "_uBit.accelerometer.updateSample();"
                 + "while(1){"
-                + "if(uBit.buttonA.isPressed()==true){"
+                + "if(_uBit.buttonA.isPressed()==true){"
                 + "break;"
                 + "}"
-                + "uBit.sleep(1);"
+                + "_uBit.sleep(1);"
                 + "}"
                 + "while(1){"
-                + "if(uBit.buttonB.isPressed()==true){"
+                + "if(_uBit.buttonB.isPressed()==true){"
                 + "break;"
                 + "}"
-                + "uBit.sleep(1);"
+                + "_uBit.sleep(1);"
                 + "}"
                 + "while(1){"
-                + "if((uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_TILT_UP)==true){break;}uBit.sleep(1);}"
-                + "while(1){if((uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_TILT_DOWN)==true){break;}uBit.sleep(1);}"
-                + "while(1){if((uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FACE_UP)==true){break;}uBit.sleep(1);}"
-                + "while(1){if((uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FACE_DOWN)==true){break;}uBit.sleep(1);}"
-                + "while(1){if((uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_SHAKE)==true){break;}uBit.sleep(1);}"
-                + "while(1){if((uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FREEFALL)==true){break;}uBit.sleep(1);}"
-                + "while(1){if(uBit.compass.heading()>180){break;}uBit.sleep(1);}while(1){if((uBit.systemTime()-initTime)>500){break;}uBit.sleep(1);}"
-                + "while(1){if(uBit.thermometer.getTemperature()>20){break;}uBit.sleep(1);}while(1){if(uBit.display.readLightLevel()>50){break;}uBit.sleep(1);}"
+                + "if((_uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_TILT_UP)==true){break;}_uBit.sleep(1);}"
+                + "while(1){if((_uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_TILT_DOWN)==true){break;}_uBit.sleep(1);}"
+                + "while(1){if((_uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FACE_UP)==true){break;}_uBit.sleep(1);}"
+                + "while(1){if((_uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FACE_DOWN)==true){break;}_uBit.sleep(1);}"
+                + "while(1){if((_uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_SHAKE)==true){break;}_uBit.sleep(1);}"
+                + "while(1){if((_uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FREEFALL)==true){break;}_uBit.sleep(1);}"
+                + "while(1){if(_uBit.compass.heading()>180){break;}_uBit.sleep(1);}while(1){if((_uBit.systemTime()-initTime)>500){break;}_uBit.sleep(1);}"
+                + "while(1){if(_uBit.thermometer.getTemperature()>20){break;}_uBit.sleep(1);}while(1){if(_uBit.display.readLightLevel()>50){break;}_uBit.sleep(1);}"
                 + END;
 
         assertCodeIsOk(expectedResult, "/sensor/get_sample_sensor.xml");
@@ -530,21 +524,21 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.accelerometer.updateSample();"
+                + "_uBit.accelerometer.updateSample();"
                 + "while(true){"
-                + "if(uBit.buttonA.isPressed()==true){"
+                + "if(_uBit.buttonA.isPressed()==true){"
                 + "break;"
                 + "}"
-                + "uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "}"
-                + "uBit.display.scroll(ManagedString(\"Hallo\"));"
+                + "_uBit.display.scroll(ManagedString(\"Hallo\"));"
                 + "while(true){"
-                + "if(uBit.accelerometer.getPitch()>90){"
+                + "if(_uBit.accelerometer.getPitch()>90){"
                 + "break;"
                 + "}"
-                + "uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "}"
-                + "uBit.display.scroll(ManagedString(\"Hallo\"));"
+                + "_uBit.display.scroll(ManagedString(\"Hallo\"));"
                 + END;
 
         assertCodeIsOk(expectedResult, "/sensor/wait_stmt_two_cases.xml");
@@ -557,7 +551,7 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.display.scroll(ManagedString(20, 25, 30, 30));"
+                + "_uBit.display.scroll(ManagedString(20, 25, 30, 30));"
                 + END;
 
         assertCodeIsOk(expectedResult, "/expr/create_color.xml");
@@ -570,9 +564,9 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.display.scroll(ManagedString(uBit.io.P12.isTouched()));\n"
-                + "uBit.display.scroll(ManagedString(uBit.io.P1.isTouched()));"
-                + "uBit.display.scroll(ManagedString(uBit.io.P16.isTouched()));"
+                + "_uBit.display.scroll(ManagedString(_uBit.io.P12.isTouched()));\n"
+                + "_uBit.display.scroll(ManagedString(_uBit.io.P1.isTouched()));"
+                + "_uBit.display.scroll(ManagedString(_uBit.io.P16.isTouched()));"
                 + END;
 
         assertCodeIsOk(expectedResult, "/sensor/pin3_is_touched.xml");
@@ -584,11 +578,11 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.accelerometer.updateSample();\n"
-                + "uBit.display.scroll(ManagedString(uBit.accelerometer.getX()));\n"
-                + "uBit.display.scroll(ManagedString(uBit.accelerometer.getY()));\n"
-                + "uBit.display.scroll(ManagedString(uBit.accelerometer.getZ()));\n"
-                + "uBit.display.scroll(ManagedString(uBit.accelerometer.getStrength()));"
+                + "_uBit.accelerometer.updateSample();\n"
+                + "_uBit.display.scroll(ManagedString(_uBit.accelerometer.getX()));\n"
+                + "_uBit.display.scroll(ManagedString(_uBit.accelerometer.getY()));\n"
+                + "_uBit.display.scroll(ManagedString(_uBit.accelerometer.getZ()));\n"
+                + "_uBit.display.scroll(ManagedString(_uBit.accelerometer.getStrength()));"
                 + END;
 
         assertCodeIsOk(expectedResult, "/sensor/acceleration_sensor.xml");
@@ -600,9 +594,9 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.accelerometer.updateSample();\n"
-                + "uBit.display.scroll(ManagedString(uBit.accelerometer.getPitch()));\n"
-                + "uBit.display.scroll(ManagedString(uBit.accelerometer.getRoll()));"
+                + "_uBit.accelerometer.updateSample();\n"
+                + "_uBit.display.scroll(ManagedString(_uBit.accelerometer.getPitch()));\n"
+                + "_uBit.display.scroll(ManagedString(_uBit.accelerometer.getRoll()));"
 
                 + END;
 
@@ -615,8 +609,8 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.display.scroll(ManagedString(uBit.io.P0.getAnalogValue()));\n"
-                + "uBit.display.scroll(ManagedString(uBit.io.P12.getDigitalValue()));"
+                + "_uBit.display.scroll(ManagedString(_uBit.io.P0.getAnalogValue()));\n"
+                + "_uBit.display.scroll(ManagedString(_uBit.io.P12.getDigitalValue()));"
                 + END;
 
         assertCodeIsOk(expectedResult, "/sensor/read_value_from_pin.xml");
@@ -628,8 +622,8 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "uBit.io.P0.setAnalogValue(1);\n"
-                + "uBit.io.P12.setDigitalValue(1);"
+                + "_uBit.io.P0.setAnalogValue(1);\n"
+                + "_uBit.io.P12.setDigitalValue(1);"
                 + END;
 
         assertCodeIsOk(expectedResult, "/action/write_value_to_pin.xml");
@@ -642,7 +636,7 @@ public class CppVisitorTest {
                 + IMPORTS_NO_TIMER
                 + "template<size_t N>"
                 + "void doSomething(array<MicroBitImage,N> x);"
-                + "int initTime=uBit.systemTime();\n"
+                + "int initTime=_uBit.systemTime();\n"
                 + "array<MicroBitImage,3> item;\n"
                 + MAIN
                 + "item={MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\"),MicroBitImage(\"0,0,0,0,0\\n0,255,0,255,0\\n0,255,255,255,0\\n0,0,255,0,0\\n0,0,0,0,0\\n\"),MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\")};"
@@ -650,7 +644,7 @@ public class CppVisitorTest {
                 + END
                 + "template<size_t N>"
                 + "void doSomething(array<MicroBitImage, N> x) {"
-                + "uBit.display.animateImages(x,200);"
+                + "_uBit.display.animateImages(x,200);"
                 + "}";
 
         assertCodeIsOk(expectedResult, "/function/user_defined_function.xml");
@@ -665,10 +659,10 @@ public class CppVisitorTest {
                 + MAIN
                 + "if (20 == 30) {"
                 + "   while (1) {"
-                + "     if (uBit.buttonA.isPressed() == true) {"
+                + "     if (_uBit.buttonA.isPressed() == true) {"
                 + "         break;"
                 + "     }"
-                + "     uBit.sleep(1);"
+                + "     _uBit.sleep(1);"
                 + "   }"
                 + "}"
                 + END;
@@ -686,16 +680,16 @@ public class CppVisitorTest {
                 + "while (true) {"
                 + "if (30 == 20) {"
                 + "   while (1) {"
-                + "     if (uBit.buttonA.isPressed() == true) {"
+                + "     if (_uBit.buttonA.isPressed() == true) {"
                 + "         break;"
                 + "     }"
-                + "     uBit.sleep(1);"
+                + "     _uBit.sleep(1);"
                 + "   }"
                 + "}"
                 + "for (int i = 1; i < 10; i += 1) {"
-                + "uBit.sleep(1);"
+                + "_uBit.sleep(1);"
                 + "}"
-                + "uBit.sleep(1);"
+                + "_uBit.sleep(1);"
                 + "}"
                 + END;
         assertCodeIsOk(a, "/stmts/nested_loops.xml");
@@ -715,7 +709,7 @@ public class CppVisitorTest {
                 + "} else if (30 == 12) {"
                 + "     continue;"
                 + "}"
-                + "uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "}"
                 + "for (int i = 1; i < 10; i += 1) {"
                 + "if (30 == 20) {"
@@ -723,7 +717,7 @@ public class CppVisitorTest {
                 + "} else if (30 == 12) {"
                 + "     break;"
                 + "}"
-                + "uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "}"
                 + "for (double item : item2) {"
                 + "if (30 == 20) {"
@@ -731,7 +725,7 @@ public class CppVisitorTest {
                 + "} else if (30 == 20) {"
                 + "     break;"
                 + "}"
-                + "uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "}"
                 + "while (true) {"
                 + "if (30 == 20) {"
@@ -739,7 +733,7 @@ public class CppVisitorTest {
                 + "} else if (30 == 20) {"
                 + "     break;"
                 + "}"
-                + "uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "}"
                 + "for (int k0 = 0; k0 < 10; k0 += 1) {"
                 + "if (30 == 20) {"
@@ -747,7 +741,7 @@ public class CppVisitorTest {
                 + "} else if (30 == 20) {"
                 + "     continue;"
                 + "}"
-                + "uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "}"
                 + END;
         assertCodeIsOk(a, "/stmts/loops_with_break_and_continue.xml");
@@ -763,18 +757,18 @@ public class CppVisitorTest {
                 + "while (true) {"
 
                 + "   while (1) {"
-                + "     if (uBit.buttonA.isPressed() == true) {"
+                + "     if (_uBit.buttonA.isPressed() == true) {"
                 + "         goto break_loop1;"
                 + "         break;"
                 + "     }"
-                + "     if (uBit.buttonA.isPressed() == true) {"
+                + "     if (_uBit.buttonA.isPressed() == true) {"
                 + "         goto continue_loop1;"
                 + "         break;"
                 + "     }"
-                + "     uBit.sleep(1);"
+                + "     _uBit.sleep(1);"
                 + "   }"
                 + "continue_loop1:"
-                + "uBit.sleep(1);"
+                + "_uBit.sleep(1);"
                 + "}"
                 + "break_loop1:"
                 + END;
@@ -789,25 +783,25 @@ public class CppVisitorTest {
                 + MAIN
                 + "while (true) {"
                 + "   while (true) {"
-                + "     if (uBit.buttonA.isPressed() == true) {"
+                + "     if (_uBit.buttonA.isPressed() == true) {"
                 + "         goto break_loop1;"
                 + "         break;"
                 + "     }"
-                + "     if (uBit.buttonA.isPressed() == true) {"
+                + "     if (_uBit.buttonA.isPressed() == true) {"
                 + "         goto continue_loop1;"
                 + "         break;"
                 + "     }"
-                + "     uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "     _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "   }"
                 + "continue_loop1:"
-                + "uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "}"
                 + "break_loop1:"
                 + "for (int i = 1; i < 10; i += 1) {"
                 + "     if (i < 10) {"
                 + "         continue;"
                 + "     }"
-                + "     uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "     _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "}"
                 + END;
 
@@ -822,24 +816,24 @@ public class CppVisitorTest {
                 + MAIN
                 + "while (true) {"
                 + "   while (true) {"
-                + "     if (uBit.buttonA.isPressed() == true) {"
+                + "     if (_uBit.buttonA.isPressed() == true) {"
                 + "         goto break_loop1;"
                 + "         break;"
                 + "     }"
-                + "     if (uBit.buttonA.isPressed() == true) {"
+                + "     if (_uBit.buttonA.isPressed() == true) {"
                 + "         goto continue_loop1;"
                 + "         break;"
                 + "     }"
-                + "     uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "     _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "   }"
                 + "for (int i = 1; i < 10; i += 1) {"
                 + "     if (i < 10) {"
                 + "        continue;"
                 + "     }"
-                + "uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "}"
                 + "continue_loop1:"
-                + "uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "}"
                 + "break_loop1:"
                 + END;
@@ -854,30 +848,30 @@ public class CppVisitorTest {
                 + MAIN
                 + "while (true) {"
                 + "   while (true) {"
-                + "     if (uBit.buttonA.isPressed() == true) {"
+                + "     if (_uBit.buttonA.isPressed() == true) {"
                 + "         for (int i = 1; i < 10; i += 1) {"
                 + "             if (i < 10) {"
                 + "                 continue;"
                 + "             }"
-                + "             uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "             _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "         }"
                 + "         goto break_loop1;"
                 + "         break;"
                 + "     }"
-                + "     if (uBit.buttonA.isPressed() == true) {"
+                + "     if (_uBit.buttonA.isPressed() == true) {"
                 + "         for (int j = 1; j < 10; j += 1) {"
                 + "             if (j < 10) {"
                 + "                 continue;"
                 + "             }"
-                + "             uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "             _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "         }"
                 + "         goto continue_loop1;"
                 + "         break;"
                 + "     }"
-                + "     uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "     _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "   }"
                 + "continue_loop1:"
-                + "uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "}"
                 + "break_loop1:"
                 + END;
@@ -893,40 +887,40 @@ public class CppVisitorTest {
                 + MAIN
                 + "while (true) {"
                 + "   while (true) {"
-                + "     if (uBit.buttonA.isPressed() == true) {"
+                + "     if (_uBit.buttonA.isPressed() == true) {"
                 + "         for (int j = 1; j < 10; j += 1) {"
                 + "             if (j < 10) {"
                 + "                 continue;"
                 + "             }"
-                + "             uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "             _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "         }"
                 + "         goto continue_loop1;"
                 + "         break;"
                 + "     }"
-                + "     if (uBit.buttonA.isPressed() == true) {"
+                + "     if (_uBit.buttonA.isPressed() == true) {"
                 + "         for (int i = 1; i < 10; i += 1) {"
                 + "         while (true) {"
-                + "             if (uBit.buttonA.isPressed() == true) {"
+                + "             if (_uBit.buttonA.isPressed() == true) {"
                 + "                 goto continue_loop3;"
                 + "                 break;"
                 + "             }"
-                + "             if (uBit.buttonA.isPressed() == true) {"
+                + "             if (_uBit.buttonA.isPressed() == true) {"
                 + "                 goto break_loop3;"
                 + "                 break;"
                 + "             }"
-                + "             uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "             _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "         }"
                 + "         continue_loop3:"
-                + "         uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "         _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "         }"
                 + "         break_loop3:"
                 + "         goto break_loop1;"
                 + "         break;"
                 + "     }"
-                + "     uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "     _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "   }"
                 + "continue_loop1:"
-                + "uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "}"
                 + "break_loop1:"
                 + END;
@@ -941,62 +935,62 @@ public class CppVisitorTest {
                 + MAIN
                 + "while (true) {"
                 + "   while (true) {"
-                + "     if (uBit.buttonA.isPressed() == true) {"
+                + "     if (_uBit.buttonA.isPressed() == true) {"
                 + "         for (int j = 1; j < 10; j += 1) {"
                 + "             if (j < 10) {"
                 + "                 continue;"
                 + "             }"
-                + "             uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "             _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "         }"
                 + "         goto continue_loop1;"
                 + "         break;"
                 + "     }"
-                + "     if (uBit.buttonA.isPressed() == true) {"
+                + "     if (_uBit.buttonA.isPressed() == true) {"
                 + "         for (int i = 1; i < 10; i += 1) {"
                 + "         while (true) {"
-                + "             if (uBit.buttonA.isPressed() == true) {"
+                + "             if (_uBit.buttonA.isPressed() == true) {"
                 + "                 goto continue_loop3;"
                 + "                 break;"
                 + "             }"
-                + "             if (uBit.buttonA.isPressed() == true) {"
+                + "             if (_uBit.buttonA.isPressed() == true) {"
                 + "                 goto break_loop3;"
                 + "                 break;"
                 + "             }"
-                + "             uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "             _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "         }"
                 + "         continue_loop3:"
-                + "         uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "         _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "         }"
                 + "         break_loop3:"
                 + "         goto break_loop1;"
                 + "         break;"
                 + "     }"
-                + "     uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "     _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "   }"
                 + "continue_loop1:"
-                + "uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "}"
                 + "break_loop1:"
                 + "while (true) {"
                 + "     if (10 < 10) {"
                 + "         continue;"
                 + "     }"
-                + "uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "}"
                 + "while (true) {"
                 + "         while (true) {"
-                + "             if (uBit.buttonA.isPressed() == true) {"
+                + "             if (_uBit.buttonA.isPressed() == true) {"
                 + "                 goto continue_loop5;"
                 + "                 break;"
                 + "             }"
-                + "             if (uBit.buttonA.isPressed() == true) {"
+                + "             if (_uBit.buttonA.isPressed() == true) {"
                 + "                 goto break_loop5;"
                 + "                 break;"
                 + "             }"
-                + "             uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "             _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "         }"
                 + "continue_loop5:"
-                + "uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
+                + "_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "}"
                 + "break_loop5:"
                 + END;
