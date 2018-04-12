@@ -9,7 +9,6 @@ import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.expressions.arduino.LedMatrix;
-import de.fhg.iais.roberta.syntax.expressions.arduino.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
@@ -76,14 +75,6 @@ public class BrickCheckVisitor extends RobotBrickCheckVisitor implements MbotAst
 
     @Override
     public Void visitFlameSensor(FlameSensor<Void> flameSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitRgbColor(RgbColor<Void> rgbColor) {
-        rgbColor.getR().visit(this);
-        rgbColor.getG().visit(this);
-        rgbColor.getB().visit(this);
         return null;
     }
 

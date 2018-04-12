@@ -40,9 +40,9 @@ import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.check.hardware.arduino.botnroll.UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.codegen.arduino.ArduinoVisitor;
-import de.fhg.iais.roberta.syntax.expressions.arduino.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -544,10 +544,10 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
         nlIndent();
         this.sb.append("bnr.setBrm(brm);");
         this.generateSensors();
-        generateUsedVars();   
+        generateUsedVars();
         decrIndentation();
         nlIndent();
-        this.sb.append("}");     
+        this.sb.append("}");
         nlIndent();
         nlIndent();
         this.sb.append("void loop()");
@@ -598,12 +598,12 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
             switch ( (SensorType) usedSensor.getType() ) {
                 case COLOR:
                     nlIndent();
-                    this.sb.append("brm.setRgbStatus(ENABLE);");               
+                    this.sb.append("brm.setRgbStatus(ENABLE);");
                     break;
                 case INFRARED:
                     nlIndent();
                     this.sb.append("one.obstacleEmitters(ON);");
-                   break;
+                    break;
                 case ULTRASONIC:
                     nlIndent();
                     this.sb.append("brm.setSonarStatus(ENABLE);");
@@ -653,8 +653,6 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
-        // TODO Auto-generated method stub
         return null;
     }
-
 }

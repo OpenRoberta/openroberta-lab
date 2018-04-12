@@ -196,7 +196,7 @@ public abstract class AbstractHelperForXmlTest {
     }
 
     /**
-     * Generate java code as string from a given program fragment. Do not prepend and append wrappings.
+     * Generate code as string from a given program fragment. Do not prepend and append wrappings.
      *
      * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
      * @return the code fragment as string
@@ -211,11 +211,11 @@ public abstract class AbstractHelperForXmlTest {
      * Assert that Java code generated from Blockly XML program is correct.<br>
      * All white space are ignored!
      *
-     * @param correctJavaCode correct java code
+     * @param correctCode correct code
      * @param fileName of the program we want to generate java code
      * @throws Exception
      */
-    public void assertCodeIsOk(String correctJavaCode, String fileName, boolean wrapping) throws Exception {
-        Assert.assertEquals(correctJavaCode.replaceAll("\\s+", ""), generateString(fileName, wrapping).replaceAll("\\s+", ""));
+    public void assertCodeIsOk(String correctCode, String fileName, boolean wrapping) throws Exception {
+        Assert.assertEquals(correctCode.replaceAll("\\s+", ""), generateString(fileName, wrapping).replaceAll("\\s+", ""));
     }
 }

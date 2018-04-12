@@ -48,6 +48,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
+import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.ShadowExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.StmtExpr;
@@ -226,6 +227,12 @@ public class TypecheckVisitor implements AstLanguageVisitor<BlocklyType>, AstSen
     public BlocklyType visitColorConst(ColorConst<BlocklyType> colorConst) {
         Assert.isTrue(colorConst.getKind().hasName("COLOR_CONST"));
         return BlocklyType.COLOR;
+    }
+
+    @Override
+    public BlocklyType visitRgbColor(RgbColor<BlocklyType> rgbColor) {
+        Assert.isTrue(rgbColor.getKind().hasName("RGB_COLOR"));
+        return rgbColor.getVarType();
     }
 
     @Override

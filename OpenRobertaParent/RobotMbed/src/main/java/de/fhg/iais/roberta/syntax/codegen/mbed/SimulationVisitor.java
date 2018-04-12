@@ -38,7 +38,6 @@ import de.fhg.iais.roberta.syntax.codegen.RobotSimulationVisitor;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
 import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
 import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
-import de.fhg.iais.roberta.syntax.expr.mbed.RgbColor;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
@@ -208,7 +207,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements M
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-    	this.sb.append("0");
+        this.sb.append("0");
         return null;
     }
 
@@ -366,18 +365,6 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements M
 
     @Override
     public Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitRgbColor(RgbColor<Void> rgbColor) {
-        this.sb.append("createRgbColor([");
-        rgbColor.getR().visit(this);
-        this.sb.append(", ");
-        rgbColor.getG().visit(this);
-        this.sb.append(", ");
-        rgbColor.getB().visit(this);
-        this.sb.append("])");
         return null;
     }
 

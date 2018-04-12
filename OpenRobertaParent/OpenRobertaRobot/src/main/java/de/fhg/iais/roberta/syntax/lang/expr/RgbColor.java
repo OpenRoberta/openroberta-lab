@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.expressions.arduino;
+package de.fhg.iais.roberta.syntax.lang.expr;
 
 import java.util.List;
 
@@ -9,17 +9,15 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
-import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitors.arduino.ArduinoAstVisitor;
+import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 /**
- * This class represents the <b>makeblockColours</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate color.<br/>
+ * This class represents the <b>robColour_rgb</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate color.<br/>
  * <br>
  * The client must provide the value for each color channel. <br>
  * <br>
@@ -29,12 +27,14 @@ public class RgbColor<V> extends Expr<V> {
     private final Expr<V> R;
     private final Expr<V> G;
     private final Expr<V> B;
+    private final Expr<V> A;
 
-    private RgbColor(Expr<V> R, Expr<V> G, Expr<V> B, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("RGB_COLOR_ARDU"), properties, comment);
+    private RgbColor(Expr<V> R, Expr<V> G, Expr<V> B, Expr<V> A, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(BlockTypeContainer.getByName("RGB_COLOR"), properties, comment);
         this.R = R;
         this.G = G;
         this.B = B;
+        this.A = A;
         setReadOnly();
     }
 
@@ -46,8 +46,8 @@ public class RgbColor<V> extends Expr<V> {
      * @param comment added from the user,
      * @return read only object of class {@link RgbColor}
      */
-    public static <V> RgbColor<V> make(Expr<V> R, Expr<V> G, Expr<V> B, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new RgbColor<V>(R, G, B, properties, comment);
+    public static <V> RgbColor<V> make(Expr<V> R, Expr<V> G, Expr<V> B, Expr<V> A, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new RgbColor<V>(R, G, B, A, properties, comment);
     }
 
     public Expr<V> getR() {
@@ -62,6 +62,10 @@ public class RgbColor<V> extends Expr<V> {
         return this.B;
     }
 
+    public Expr<V> getA() {
+        return this.A;
+    }
+
     @Override
     public int getPrecedence() {
         return 999;
@@ -74,17 +78,17 @@ public class RgbColor<V> extends Expr<V> {
 
     @Override
     public BlocklyType getVarType() {
-        return BlocklyType.BOOLEAN;
+        return BlocklyType.COLOR;
     }
 
     @Override
     public String toString() {
-        return "RgbColor [" + this.R + ", " + this.G + ", " + this.B + "]";
+        return "RgbColor [" + this.R + ", " + this.G + ", " + this.B + ", " + this.A + "]";
     }
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return ((ArduinoAstVisitor<V>) visitor).visitRgbColor(this);
+        return ((AstLanguageVisitor<V>) visitor).visitRgbColor(this);
 
     }
 
@@ -97,19 +101,17 @@ public class RgbColor<V> extends Expr<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Value> values;
-        try {
-            values = helper.extractValues(block, (short) 4);
-        } catch ( Exception e ) {
-            values = helper.extractValues(block, (short) 3);
-        }
+        values = helper.extractValues(block, (short) 4);
 
         Phrase<V> red = helper.extractValue(values, new ExprParam(BlocklyConstants.RED, BlocklyType.NUMBER_INT));
         Phrase<V> green = helper.extractValue(values, new ExprParam(BlocklyConstants.GREEN, BlocklyType.NUMBER_INT));
         Phrase<V> blue = helper.extractValue(values, new ExprParam(BlocklyConstants.BLUE, BlocklyType.NUMBER_INT));
+        Phrase<V> alpha = helper.extractValue(values, new ExprParam(BlocklyConstants.ALPHA, BlocklyType.NUMBER_INT));
         return RgbColor.make(
             helper.convertPhraseToExpr(red),
             helper.convertPhraseToExpr(green),
             helper.convertPhraseToExpr(blue),
+            helper.convertPhraseToExpr(alpha),
             helper.extractBlockProperties(block),
             helper.extractComment(block));
     }
@@ -121,6 +123,7 @@ public class RgbColor<V> extends Expr<V> {
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.RED, this.R);
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.GREEN, this.G);
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.BLUE, this.B);
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.ALPHA, this.A);
 
         return jaxbDestination;
     }

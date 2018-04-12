@@ -5,16 +5,12 @@ import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RecallAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction;
-import de.fhg.iais.roberta.syntax.expressions.arduino.RgbColor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.GetSampleSensor;
 
 public interface Bob3AstVisitor<V> extends ArduinoAstVisitor<V> {
 
     V visitBob3CodePadSensor(CodePadSensor<V> codePadSensor);
-
-    @Override
-    V visitRgbColor(RgbColor<V> rgbColor);
 
     V visitBodyLEDAction(BodyLEDAction<V> bodyLEDAction);
 

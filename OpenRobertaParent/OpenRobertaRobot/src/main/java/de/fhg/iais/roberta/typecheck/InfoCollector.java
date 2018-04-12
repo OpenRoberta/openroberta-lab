@@ -46,6 +46,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
+import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.ShadowExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.StmtExpr;
@@ -388,6 +389,12 @@ public class InfoCollector<T> implements AstLanguageVisitor<T>, AstSensorsVisito
     }
 
     @Override
+    public T visitRgbColor(RgbColor<T> rgbColor) {
+        extractInfos(rgbColor);
+        return null;
+    }
+
+    @Override
     public T visitEncoderSensor(EncoderSensor<T> encoderSensor) {
         extractInfos(encoderSensor);
         return null;
@@ -447,8 +454,8 @@ public class InfoCollector<T> implements AstLanguageVisitor<T>, AstSensorsVisito
         return null;
     }
 
-    private void extractInfos(Phrase<T> numConst) {
-        this.infos.addAll(numConst.getInfos().getInfos());
+    private void extractInfos(Phrase<T> phrase) {
+        this.infos.addAll(phrase.getInfos().getInfos());
     }
 
     @Override

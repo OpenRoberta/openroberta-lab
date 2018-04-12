@@ -397,4 +397,5 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
         this.sb.append("createGetSample(CONST.SOUND)");
         return null;
     }
+
 }

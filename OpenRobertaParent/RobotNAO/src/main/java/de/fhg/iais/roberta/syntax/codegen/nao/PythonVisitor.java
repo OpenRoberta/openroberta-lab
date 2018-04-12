@@ -57,6 +57,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
+import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.expr.nao.ColorHexString;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
@@ -147,6 +148,14 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     @Override
     public String getEnumCode(IMode value) {
         return "'" + value.toString().toUpperCase() + "'";
+    }
+
+    @Override
+    public Void visitRgbColor(RgbColor<Void> rgbColor) {
+        this.sb.append("BlocklyMethods.rgba2hex(");
+        super.visitRgbColor(rgbColor);
+        this.sb.append(")");
+        return null;
     }
 
     @Override

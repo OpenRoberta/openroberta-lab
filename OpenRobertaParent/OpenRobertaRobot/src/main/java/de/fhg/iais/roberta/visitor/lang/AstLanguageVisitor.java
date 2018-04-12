@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
+import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.ShadowExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.StmtExpr;
@@ -102,6 +103,20 @@ public interface AstLanguageVisitor<V> extends AstVisitor<V> {
      * @param colorConst to be visited
      */
     V visitColorConst(ColorConst<V> colorConst);
+
+    /**
+     * visit a {@link RgbColor}.
+     *
+     * @param rgbColor to be visited
+     */
+    V visitRgbColor(RgbColor<V> rgbColor);
+
+    /**
+     * visit a {@link StmtTextComment}.
+     *
+     * @param stmtTextComment to be visited
+     */
+    V visitStmtTextComment(StmtTextComment<V> stmtTextComment);
 
     /**
      * visit a {@link ConnectConst}.
@@ -437,7 +452,4 @@ public interface AstLanguageVisitor<V> extends AstVisitor<V> {
         functionExpr.getFunction().visit(this);
         return null;
     }
-
-    V visitStmtTextComment(StmtTextComment<V> stmtTextComment);
-
 }

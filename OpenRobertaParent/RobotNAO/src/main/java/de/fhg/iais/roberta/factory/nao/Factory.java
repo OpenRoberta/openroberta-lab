@@ -6,13 +6,16 @@ import java.util.Properties;
 import com.google.inject.AbstractModule;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.nao.NAOConfiguration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
+import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
+import de.fhg.iais.roberta.syntax.codegen.nao.PythonVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
@@ -133,7 +136,7 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        return null;
+        return PythonVisitor.generate((NAOConfiguration) brickConfiguration, phrasesSet, withWrapping, Language.GERMAN);
     }
 
     @Override

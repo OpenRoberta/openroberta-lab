@@ -21,6 +21,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
+import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
@@ -156,6 +157,15 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void> {
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
+        return null;
+    }
+
+    @Override
+    public Void visitRgbColor(RgbColor<Void> rgbColor) {
+        rgbColor.getR().visit(this);
+        rgbColor.getG().visit(this);
+        rgbColor.getB().visit(this);
+        rgbColor.getA().visit(this);
         return null;
     }
 

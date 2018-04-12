@@ -35,9 +35,9 @@ import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.check.hardware.arduino.bob3.UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.codegen.arduino.ArduinoVisitor;
-import de.fhg.iais.roberta.syntax.expressions.arduino.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
@@ -153,7 +153,7 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
         decrIndentation();
         mainTask.getVariables().visit(this);
         nlIndent();
-        if ( this.isTimerSensorUsed || this.usedTimer.toString().contains("TIMER") ) {           
+        if ( this.isTimerSensorUsed || this.usedTimer.toString().contains("TIMER") ) {
             this.sb.append("unsigned long __time = millis();");
             nlIndent();
         }
@@ -165,10 +165,10 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
         this.sb.append("{");
         nlIndent();
         this.sb.append("Serial.begin(9600); ");
-        generateUsedVars();   
+        generateUsedVars();
         decrIndentation();
         nlIndent();
-        this.sb.append("}");     
+        this.sb.append("}");
         nlIndent();
         nlIndent();
         this.sb.append("void loop()");

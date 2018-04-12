@@ -21,6 +21,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
+import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
@@ -130,6 +131,18 @@ public abstract class CommonLanguageVisitor implements AstLanguageVisitor<Void> 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
         this.sb.append(getEnumCode(colorConst.getValue()));
+        return null;
+    }
+
+    @Override
+    public Void visitRgbColor(RgbColor<Void> rgbColor) {
+        rgbColor.getR().visit(this);
+        this.sb.append(", ");
+        rgbColor.getG().visit(this);
+        this.sb.append(", ");
+        rgbColor.getB().visit(this);
+        this.sb.append(", ");
+        rgbColor.getA().visit(this);
         return null;
     }
 
