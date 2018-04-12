@@ -225,6 +225,9 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
                 }
                 this.sb.append(vd.getName());
             }
+        } else if ( this.programPhrases.size() == 1 ) {
+            nlIndent();
+            this.sb.append("pass");
         }
         return null;
     }
