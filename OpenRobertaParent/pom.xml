@@ -43,6 +43,7 @@
 		<jersey.version>1.19.4</jersey.version>
 		<jetty.version>9.4.8.v20171121</jetty.version>
 		<hibernate.version>4.3.11.Final</hibernate.version>
+		<ev3.websocket.version>1.3.0</ev3.websocket.version>
 
 		<log.level>INFO</log.level> <!-- possible settings: TRACE DEBUG INFO WARN ERROR OFF -->
 	</properties>
@@ -219,7 +220,7 @@
 			<dependency>
 				<groupId>org.java-websocket</groupId>
 				<artifactId>Java-WebSocket</artifactId>
-				<version>1.3.7</version>
+				<version>${ev3.websocket.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>xmlunit</groupId>

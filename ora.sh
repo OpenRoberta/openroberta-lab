@@ -179,6 +179,12 @@ case "$cmd" in
                   *)       RDBG='' ;;
                   esac
                   java -cp OpenRobertaParent/OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.Administration upgrade OpenRobertaParent/OpenRobertaServer
+				  RC=$?;
+				  if [ $RC != 0 ]
+				  then
+					 echo "database upgrade failed. Server NOT started"
+					 exit 1
+				  fi
                   java $RDBG -cp OpenRobertaParent/OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter \
                        -d database.mode=embedded -d database.parentdir=OpenRobertaParent/OpenRobertaServer -d server.staticresources.dir=OpenRobertaParent/OpenRobertaServer/staticResources $* ;;
 

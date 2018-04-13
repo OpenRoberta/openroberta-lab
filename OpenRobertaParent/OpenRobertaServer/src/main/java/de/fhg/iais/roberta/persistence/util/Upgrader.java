@@ -53,6 +53,7 @@ public class Upgrader {
 
     private void upgrade() throws Exception {
         while ( true ) {
+            boolean oldVersionFound = false;
             for ( int previousIndex = 0; previousIndex < this.previousServerVersions.length; previousIndex++ ) {
                 String previousServerVersion = this.previousServerVersions[previousIndex];
                 File dbPreviousDir = new File(this.databaseParentdir, "db-" + previousServerVersion);
@@ -70,9 +71,14 @@ public class Upgrader {
                     if ( upgradeToActualVersion ) {
                         return;
                     } else {
+                        oldVersionFound = true;
                         break;
                     }
                 }
+            }
+            if ( !oldVersionFound ) {
+                LOG.error("No old version to upgrade found. Upgrade failed. System cannot run!");
+                System.exit(2);
             }
         }
     }

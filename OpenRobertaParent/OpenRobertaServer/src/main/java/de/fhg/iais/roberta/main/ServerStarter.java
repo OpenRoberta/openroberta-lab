@@ -147,51 +147,53 @@ public class ServerStarter {
         Map<String, IRobotFactory> robotPluginMap = configureRobotPlugins(robotCommunicator, robertaProperties);
         RobertaGuiceServletConfig robertaGuiceServletConfig = new RobertaGuiceServletConfig(robertaProperties, robotPluginMap, robotCommunicator);
 
-        // REST API with /rest/<version>/ prefix
-        ServletContextHandler versionedHttpHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        versionedHttpHandler.setContextPath("/rest");
-        versionedHttpHandler.setSessionHandler(new SessionHandler());
+        // 1. REST API with /rest prefix
+        ServletContextHandler restHttpHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        restHttpHandler.setContextPath("/rest");
+        restHttpHandler.setSessionHandler(new SessionHandler());
 
-        versionedHttpHandler.addEventListener(robertaGuiceServletConfig);
-        versionedHttpHandler.addFilter(GuiceFilter.class, "/*", null);
-        versionedHttpHandler.addServlet(DefaultServlet.class, "/*");
+        restHttpHandler.addEventListener(robertaGuiceServletConfig);
+        restHttpHandler.addFilter(GuiceFilter.class, "/*", null);
+        restHttpHandler.addServlet(DefaultServlet.class, "/*");
 
-        // REST API without prefix (deprecated) and static resources
-        ServletContextHandler rootHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        rootHandler.setContextPath("/*");
-        rootHandler.setSessionHandler(new SessionHandler());
-
-        rootHandler.addEventListener(robertaGuiceServletConfig);
-        rootHandler.addFilter(GuiceFilter.class, "/alive/*", null);
-        rootHandler.addFilter(GuiceFilter.class, "/admin/*", null);
-        rootHandler.addFilter(GuiceFilter.class, "/conf/*", null);
-        rootHandler.addFilter(GuiceFilter.class, "/ping/*", null);
-        rootHandler.addFilter(GuiceFilter.class, "/program/*", null);
-        rootHandler.addFilter(GuiceFilter.class, "/toolbox/*", null);
-        rootHandler.addFilter(GuiceFilter.class, "/user/*", null);
-        rootHandler.addFilter(GuiceFilter.class, "/hello/*", null);
-        rootHandler.addFilter(GuiceFilter.class, "/pushcmd/*", null);
-        rootHandler.addFilter(GuiceFilter.class, "/download/*", null);
-        rootHandler.addFilter(GuiceFilter.class, "/update/*", null);
-
-        ServletHolder staticResourceServlet = rootHandler.addServlet(DefaultServlet.class, "/*");
-        staticResourceServlet.setInitParameter("precompressed", "gzip=.gz");
-        String staticResources =
-            new File(robertaProperties.getStringProperty("server.staticresources.dir")).toPath().toAbsolutePath().normalize().toUri().toASCIIString();
-        staticResourceServlet.setInitParameter("resourceBase", staticResources);
-        staticResourceServlet.setInitParameter("cacheControl", "private, must-revalidate");
-
-        // websockets with /ws/<version>/ prefix
+        // 2. websockets with /ws/<version>/ prefix
         ServletContextHandler wsHandler = new ServletContextHandler();
         wsHandler.setContextPath("/ws");
         wsHandler.addServlet(WebSocketServiceServlet.class, "/*");
 
+        // 3. static resources and REST API without /rest prefix (deprecated, used by very old ev3 robots)
+        ServletContextHandler defaultHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        defaultHandler.setContextPath("/*");
+        defaultHandler.setSessionHandler(new SessionHandler());
+
+        // 3.1 REST API without prefix (deprecated, used by very old ev3 robots)
+        defaultHandler.addEventListener(robertaGuiceServletConfig);
+        defaultHandler.addFilter(GuiceFilter.class, "/alive/*", null);
+        defaultHandler.addFilter(GuiceFilter.class, "/admin/*", null);
+        defaultHandler.addFilter(GuiceFilter.class, "/conf/*", null);
+        defaultHandler.addFilter(GuiceFilter.class, "/ping/*", null);
+        defaultHandler.addFilter(GuiceFilter.class, "/program/*", null);
+        defaultHandler.addFilter(GuiceFilter.class, "/toolbox/*", null);
+        defaultHandler.addFilter(GuiceFilter.class, "/user/*", null);
+        defaultHandler.addFilter(GuiceFilter.class, "/hello/*", null);
+        defaultHandler.addFilter(GuiceFilter.class, "/pushcmd/*", null);
+        defaultHandler.addFilter(GuiceFilter.class, "/download/*", null);
+        defaultHandler.addFilter(GuiceFilter.class, "/update/*", null);
+
+        // 3.2 static resources
+        ServletHolder staticResourceServlet = defaultHandler.addServlet(DefaultServlet.class, "/*");
+        staticResourceServlet.setInitParameter("dirAllowed", "false");
+        staticResourceServlet.setInitParameter("precompressed", "gzip=.gz");
+        String dirNameStaticResources = robertaProperties.getStringProperty("server.staticresources.dir");
+        staticResourceServlet.setInitParameter("resourceBase", new File(dirNameStaticResources).toPath().toAbsolutePath().normalize().toUri().toASCIIString());
+        staticResourceServlet.setInitParameter("cacheControl", "private, must-revalidate");
+
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(
             new Handler[] {
-                versionedHttpHandler,
+                restHttpHandler,
                 wsHandler,
-                rootHandler
+                defaultHandler
             });
         server.setHandler(handlers);
 
