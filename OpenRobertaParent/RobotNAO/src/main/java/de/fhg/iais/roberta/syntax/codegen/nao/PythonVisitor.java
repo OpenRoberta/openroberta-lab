@@ -152,8 +152,12 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
 
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
-        this.sb.append("BlocklyMethods.rgba2hex(");
-        super.visitRgbColor(rgbColor);
+        this.sb.append("BlocklyMethods.rgb2hex(");
+        rgbColor.getR().visit(this);
+        this.sb.append(", ");
+        rgbColor.getG().visit(this);
+        this.sb.append(", ");
+        rgbColor.getB().visit(this);
         this.sb.append(")");
         return null;
     }
