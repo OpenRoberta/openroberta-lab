@@ -11,6 +11,8 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
     function Mbed(pose) {
         this.pose = pose;
     }
+    
+    var SET_BRIGHTNESS_MULTIPLIER = 28.3333;
 
     Mbed.prototype.endless = true;
     Mbed.prototype.debug = true;
@@ -236,7 +238,16 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
                 this.display.leds = [ [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ] ];
             }
             if (actions.display.pixel) {
-                this.display.leds[actions.display.pixel.y][actions.display.pixel.x] = actions.display.pixel.brightness * 255 / 9;
+                if (0 <= actions.display.pixel.y == actions.display.pixel.y < this.display.leds.length && 0 <= actions.display.pixel.x == actions.display.pixel.x < this.display.leds[0].length) {
+                    this.display.leds[actions.display.pixel.y][actions.display.pixel.x] = actions.display.pixel.brightness * SET_BRIGHTNESS_MULTIPLIER;
+                } else {
+                    if (0 <= actions.display.pixel.y != actions.display.pixel.y < this.display.leds.length) {
+                        console.warn('actions.display.pixel.y out of range: ' + actions.display.pixel.y);
+                    }
+                    if (0 <= actions.display.pixel.x != actions.display.pixel.x < this.display.leds[0].length) {
+                        console.warn('actions.display.pixel.x out of range: ' + actions.display.pixel.x);
+                    }
+                }
             }
         }
         for (var i = 0; i < 4; i++) {
