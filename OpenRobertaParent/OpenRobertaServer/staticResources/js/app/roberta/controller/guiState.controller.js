@@ -517,7 +517,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             $('#head-navigation-program-edit').addClass('disabled');
             $('#head-navigation-configuration-edit').addClass('disabled');
         }
-    }
+     }
 
     exports.setView = setView;
 

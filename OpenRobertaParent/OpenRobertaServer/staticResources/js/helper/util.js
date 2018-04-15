@@ -1,6 +1,8 @@
 define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ], function(exports, MSG, LOG, $) {
 
     const ANIMATION_DURATION = 750;
+
+    var ratioWorkspace = 1;
     /**
      * Set cookie
      * 
@@ -54,7 +56,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
         // Handle Object
         if (obj instanceof Object) {
             copy = {};
-            for (var attr in obj) {
+            for ( var attr in obj) {
                 if (obj.hasOwnProperty(attr))
                     copy[attr] = clone(obj[attr]);
             }
@@ -127,7 +129,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
         if (dateLong) {
             var date = new Date(dateLong);
             var datestring = ("0" + date.getDate()).slice(-2) + "." + ("0" + (date.getMonth() + 1)).slice(-2) + "." + date.getFullYear() + ", "
-            + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+                    + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
             return datestring;
         } else {
             return "";
@@ -198,14 +200,12 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
     exports.calcDataTableHeight = calcDataTableHeight;
 
     function checkVisibility() {
-        var stateKey,
-            eventKey,
-            keys = {
-                hidden : "visibilitychange",
-                webkitHidden : "webkitvisibilitychange",
-                mozHidden : "mozvisibilitychange",
-                msHidden : "msvisibilitychange"
-            };
+        var stateKey, eventKey, keys = {
+            hidden : "visibilitychange",
+            webkitHidden : "webkitvisibilitychange",
+            mozHidden : "mozvisibilitychange",
+            msHidden : "msvisibilitychange"
+        };
         for (stateKey in keys) {
             if (stateKey in document) {
                 eventKey = keys[stateKey];
@@ -431,10 +431,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
                 $selected = $(this).parent();
                 $selected.addClass(opt.draggableClass).find(opt.handle).addClass(opt.activeHandleClass);
             }
-            var drg_h = $selected.outerHeight(),
-                drg_w = $selected.outerWidth(),
-                pos_y = $selected.offset().top + drg_h - pageY,
-                pos_x = $selected.offset().left
+            var drg_h = $selected.outerHeight(), drg_w = $selected.outerWidth(), pos_y = $selected.offset().top + drg_h - pageY, pos_x = $selected.offset().left
                     + drg_w - pageX;
             $(document).on("mousemove touchmove", function(e) {
                 var pageX = e.pageX || e.originalEvent.touches[0].pageX;
@@ -455,6 +452,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
                     $('.fromRight.rightActive').css({
                         'width' : $(window).width() - $('#blockly').width()
                     })
+                    ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
                     $(window).resize();
                 } else {
                     $selected.offset({
@@ -487,6 +485,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
 
     $.fn.closeRightView = function(opt_callBack) {
         Blockly.hideChaff();
+        $('.fromRight.rightActive').addClass('shifting');
         $('.blocklyToolboxDiv').css('display', 'inherit');
         var that = this;
         $('.fromRight.rightActive').animate({
@@ -505,6 +504,8 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
                 that.width($(window).width());
                 $('.rightMenuButton.rightActive').css('right', 0);
                 $(window).resize();
+                $('.fromRight.rightActive.shifting').removeClass('shifting');
+                ratioWorkspace = 1;
                 that.removeClass('rightActive');
                 $('.fromRight.rightActive').removeClass('rightActive');
                 $('.rightMenuButton.rightActive').removeClass('rightActive');
@@ -524,7 +525,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
         var smallScreen;
         if ($(window).width() < 768) {
             smallScreen = true;
-            width = 52;
+            width = this.width() - 52;
         } else {
             smallScreen = false;
             width = this.width() * initialViewWidth;
@@ -534,6 +535,9 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
             width : width
         }, {
             duration : ANIMATION_DURATION,
+            start : function() {
+                $('#' + viewName + 'Div').addClass('shifting');
+            },
             step : function(now) {
                 that.width($(window).width() - now);
                 $('.rightMenuButton.rightActive').css('right', now);
@@ -544,6 +548,8 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
                 that.width($(window).width() - $('.fromRight.rightActive').width());
                 $('.rightMenuButton.rightActive').css('right', $('.fromRight.rightActive').width());
                 $(window).resize();
+                $('#' + viewName + 'Div').removeClass('shifting');
+                ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
                 if (smallScreen) {
                     $('.blocklyToolboxDiv').css('display', 'none');
                 }
@@ -558,14 +564,29 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
     };
 
     $(window).resize(function() {
-        var width = $('#blockly').outerWidth();
-        var height = $('#blockly').outerHeight();
+        var parentWidth = $('#main-section').outerWidth();
+        var height = Math.max($('#blockly').outerHeight(),$('#brickly').outerHeight());
+
+        var rightWidth = (1 - ratioWorkspace) * parentWidth;
+        var leftWidth = ratioWorkspace * parentWidth;
+        
+        if (!$('.fromRight.rightActive.shifting').length > 0) {
+            if ($('.fromRight.rightActive').length > 0) {
+                $('.fromRight.rightActive').width(rightWidth);
+                $('.rightMenuButton.rightActive').css('right', rightWidth);
+                $('#sliderDiv').css('left', leftWidth - 7);
+            }
+            $('#blockly').width(leftWidth);
+        } else {
+            leftWidth = $('#blockly').outerWidth();
+        }
+
         if ($('#blocklyDiv')) {
-            $('#blocklyDiv').width(width - 4);
+            $('#blocklyDiv').width(leftWidth - 4);
             $('#blocklyDiv').height(height);
         }
         if ($('#bricklyDiv')) {
-            $('#bricklyDiv').width(width);
+            $('#bricklyDiv').width(parentWidth);
             $('#bricklyDiv').height(height);
         }
         Blockly.svgResize(Blockly.getMainWorkspace());

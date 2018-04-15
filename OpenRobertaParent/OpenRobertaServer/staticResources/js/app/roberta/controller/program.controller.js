@@ -45,7 +45,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         blocklyWorkspace.robControls.disable('saveProgram');
         blocklyWorkspace.robControls.refreshTooltips(GUISTATE_C.getRobotRealName());
         GUISTATE_C.checkSim();
-        var toolbox = $('#blocklyDiv .blocklyToolboxDiv');
+        var toolbox = $('#blockly .blocklyToolboxDiv');
         toolbox.prepend('<ul class="nav nav-tabs levelTabs"><li class="active"><a class="typcn typcn-media-stop-outline" href="#beginner" data-toggle="tab">1</a></li><li class=""><a href="#expert" class="typcn typcn-star-outline" data-toggle="tab">2</a></li></ul>');
     }
 
@@ -84,6 +84,10 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
             GUISTATE_C.setView('tabProgram');
             blocklyWorkspace.markFocused();
         });
+
+        $('#tabProgram').on('shown.bs.tab', function(e) {
+            $(window).resize();
+        });       
 
         // work around for touch devices
         $('.levelTabs').on('touchend', function(e) {

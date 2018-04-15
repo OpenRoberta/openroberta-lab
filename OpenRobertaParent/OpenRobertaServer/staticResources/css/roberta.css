@@ -252,7 +252,8 @@ body.blocklyMinimalBody * {
     height: 100%;
     right: 0px;
     cursor: col-resize;
-    display: none;
+    z-index: 11;
+    display: none;   
 }
 .codeActive>pre {
     width: 100%;
@@ -588,7 +589,7 @@ div.rightMenuButton:hover,
 .blocklyToolboxDiv>.nav-tabs li {
     width: 50%;
     text-align: center;
-    height: 26px;
+    height: 22px;
     padding-top: 1px;
 }
 .blocklyToolboxDiv>.nav-tabs li.active {
