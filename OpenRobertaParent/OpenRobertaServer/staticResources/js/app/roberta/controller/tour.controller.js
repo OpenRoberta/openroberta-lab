@@ -18,16 +18,16 @@ define(['exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scrollt
             onSkip: function() {
                 Blockly.mainWorkspace.clear();              
                 $('#tabProgram').trigger('click');
-                if ($('.rightMenuButton.shifted')) {
-                    $('.rightMenuButton.shifted').trigger('click');
+                if ($('.rightMenuButton.rightActive')) {
+                    $('.rightMenuButton.rightActive').trigger('click');
                 }
                 $("#show-startup-message").modal("show");
             },
             onEnd: function() {
                 Blockly.mainWorkspace.clear();
                  $('#tabProgram').trigger('click');
-                if ($('.rightMenuButton.shifted')) {
-                    $('.rightMenuButton.shifted').trigger('click');
+                if ($('.rightMenuButton.rightActive')) {
+                    $('.rightMenuButton.rightActive').trigger('click');
                 }
                 setTimeout(function() {
                     $("#show-startup-message").modal("show");

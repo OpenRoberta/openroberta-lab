@@ -230,8 +230,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                     if (GUISTATE_C.getView() == 'tabProgList') {
                         $('#progList>.bootstrap-table').find('button[name="refresh"]').trigger('click');
                     }
-                    if ($('.rightMenuButton.shifted')) {
-                        $('.rightMenuButton.shifted').trigger('click');
+                    if ($('.rightMenuButton.rightActive')) {
+                        $('.rightMenuButton.rightActive').trigger('click');
                     }
                     typeof opt_callback === "function" && opt_callback();
                 }

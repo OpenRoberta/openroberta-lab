@@ -495,6 +495,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         $('#head-navi-tooltip-configuration').attr('data-toggle', 'dropdown');
         $('#head-navigation-program-edit').removeClass('disabled');
         $('#head-navigation-configuration-edit').removeClass('disabled');
+        $(".modal").modal("hide");
         GUISTATE.gui.prevView = GUISTATE.gui.view;
         GUISTATE.gui.view = view;
         if (!isRobotConnected()) {
