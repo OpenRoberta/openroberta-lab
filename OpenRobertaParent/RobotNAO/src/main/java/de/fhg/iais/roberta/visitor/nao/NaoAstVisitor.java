@@ -28,8 +28,6 @@ import de.fhg.iais.roberta.syntax.action.nao.WalkAsync;
 import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
 import de.fhg.iais.roberta.syntax.lang.expr.nao.ColorHexString;
-//import de.fhg.iais.roberta.syntax.expr.nao.LedColor;
-import de.fhg.iais.roberta.syntax.sensor.nao.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.Dialog;
@@ -44,11 +42,12 @@ import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
 import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
+import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
-public interface NaoAstVisitor<V> extends AstVisitor<V>, AstActorSoundVisitor<V> {
+public interface NaoAstVisitor<V> extends AstVisitor<V>, AstActorSoundVisitor<V>, AstSensorsVisitor<V> {
     /**
      * visit a {@link SetMode}.
      *
@@ -223,13 +222,6 @@ public interface NaoAstVisitor<V> extends AstVisitor<V>, AstActorSoundVisitor<V>
      * @param gyrometer phrase to be visited
      */
     V visitGyrometer(Gyrometer<V> gyrometer);
-
-    /**
-     * visit a {@link Accelerometer}.
-     *
-     * @param accelerometer phrase to be visited
-     */
-    V visitAccelerometer(Accelerometer<V> accelerometer);
 
     /**
      * visit a {@link ForceSensor}.

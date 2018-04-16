@@ -5,19 +5,21 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
-import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.mode.sensor.nao.GetSensorSampleType;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.sensor.GetSampleType;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
-import de.fhg.iais.roberta.transformer.ExprParam;
+import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
-import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
@@ -31,32 +33,100 @@ import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
  */
 public class NaoGetSampleSensor<V> extends Sensor<V> {
     private final Sensor<V> sensor;
-    private final GetSensorSampleType sensorType;
+    private final String sensorPort;
+    private final String slot;
+    private final GetSampleType sensorType;
 
-    private NaoGetSampleSensor(GetSensorSampleType sensorType, Sensor<V> sensor) {
-        super(BlockTypeContainer.getByName("GET_SAMPLE"), sensor.getProperty(), sensor.getComment());
-        Assert.isTrue(sensorType != null);
+    private NaoGetSampleSensor(
+        GetSampleType sensorType,
+        String port,
+        String slot,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment,
+        IRobotFactory factory) {
+        super(BlockTypeContainer.getByName("GET_SAMPLE"), properties, comment);
+        Assert.notNull(sensorType);
+        Assert.notNull(port);
+        this.sensorPort = port;
+        this.slot = slot;
+        //TODO: reimplemnt it in a better way
+        if ( port.equals("") ) {
+            port = BlocklyConstants.NO_PORT;
+        }
         this.sensorType = sensorType;
-        this.sensor = sensor;
+        SensorMetaDataBean sensorMetaDataBean;
+        switch ( sensorType.getSensorType() ) {
+            //            case BlocklyConstants.NAO_TOUCHSENSOR:
+            //                String sensor = helper.extractField(fields, BlocklyConstants.POSITION);
+            //                String sensorSide = helper.extractField(fields, BlocklyConstants.SIDE);
+            //                Sensor<V> touchSensor =
+            //                    Touchsensors.make(Touchsensors.SensorType.valueOf(sensor), Touchsensors.TouchSide.valueOf(sensorSide), blockProperties, blockComment);
+            //                return NaoGetSampleSensor.make(sensorType, touchSensor);
+            //            case BlocklyConstants.NAO_DETECTFACE:
+            //                Sensor<V> detectFace = DetectFace.make(blockProperties, blockComment);
+            //                return NaoGetSampleSensor.make(sensorType, detectFace);
+            //            case BlocklyConstants.NAO_NAOMARK:
+            //                Sensor<V> markSensor = NaoMark.make(blockProperties, blockComment);
+            //                return NaoGetSampleSensor.make(sensorType, markSensor);
+            //            case BlocklyConstants.NAO_SONAR:
+            //                Sensor<V> sonar = Sonar.make(blockProperties, blockComment);
+            //                return NaoGetSampleSensor.make(sensorType, sonar);
+            //            case BlocklyConstants.NAO_GYROMETER:
+            //                coordinate = helper.extractField(fields, BlocklyConstants.COORDINATE);
+            //                Sensor<V> gyroSensor = Gyrometer.make(Gyrometer.Coordinate.valueOf(coordinate), blockProperties, blockComment);
+            //                return NaoGetSampleSensor.make(sensorType, gyroSensor);
+            case BlocklyConstants.ACCELEROMETER:
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(port),
+                        factory.getAxis(BlocklyConstants.DEFAULT),
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
+                this.sensor = AccelerometerSensor.make(sensorMetaDataBean, properties, comment);
+                break;
+            //            case BlocklyConstants.NAO_FSR:
+            //                sensorSide = helper.extractField(fields, BlocklyConstants.SIDE);
+            //                Sensor<V> fsrSensor = ForceSensor.make(ForceSensor.Side.valueOf(sensorSide), blockProperties, blockComment);
+            //                return NaoGetSampleSensor.make(sensorType, fsrSensor);
+            //            case BlocklyConstants.NAO_RECOGNIZEWORD:
+            //                values = helper.extractValues(block, (short) 1);
+            //                Phrase<V> dictionary = helper.extractValue(values, new ExprParam(BlocklyConstants.WORD, BlocklyType.ARRAY_STRING));
+            //                Sensor<V> recognizeWord = RecognizeWord.make(helper.convertPhraseToExpr(dictionary), blockProperties, blockComment);
+            //                return NaoGetSampleSensor.make(sensorType, recognizeWord);
+            default:
+                throw new DbcException("Invalid sensor " + sensorType.getSensorType() + "!");
+        }
         setReadOnly();
     }
 
-    private static <V> NaoGetSampleSensor<V> make(GetSensorSampleType sensorType, Sensor<V> sensor) {
-        return new NaoGetSampleSensor<V>(sensorType, sensor);
-
-    }
-
-    public GetSensorSampleType getSensorType() {
-        return this.sensorType;
-    }
-
+    /**
+     * @return the sensor
+     */
     public Sensor<V> getSensor() {
         return this.sensor;
+    }
+
+    /**
+     * @return name of the port
+     */
+    public String getSensorPort() {
+        return this.sensorPort;
+    }
+
+    /**
+     * @return type of the sensor who will get the sample
+     */
+    public GetSampleType getSensorType() {
+        return this.sensorType;
     }
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return ((NaoAstVisitor<V>) visitor).visitNaoGetSampleSensor(this);
+    }
+
+    @Override
+    public String toString() {
+        return "NaoGetSampleSensor [" + this.sensor + "]";
     }
 
     /**
@@ -68,54 +138,11 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 4);
-        GetSensorSampleType sensorType = GetSensorSampleType.get(helper.extractField(fields, BlocklyConstants.SENSORTYPE));
-
-        List<Value> values;
-        String coordinate;
-        BlocklyBlockProperties blockProperties = helper.extractBlockProperties(block);
-        BlocklyComment blockComment = helper.extractComment(block);
-        switch ( sensorType ) {
-            case NAO_TOUCHSENSOR:
-                String sensor = helper.extractField(fields, BlocklyConstants.POSITION);
-                String sensorSide = helper.extractField(fields, BlocklyConstants.SIDE);
-                Sensor<V> touchSensor =
-                    Touchsensors.make(Touchsensors.SensorType.valueOf(sensor), Touchsensors.TouchSide.valueOf(sensorSide), blockProperties, blockComment);
-                return NaoGetSampleSensor.make(sensorType, touchSensor);
-            case NAO_DETECTFACE:
-                Sensor<V> detectFace = DetectFace.make(blockProperties, blockComment);
-                return NaoGetSampleSensor.make(sensorType, detectFace);
-            case NAO_NAOMARK:
-                Sensor<V> markSensor = NaoMark.make(blockProperties, blockComment);
-                return NaoGetSampleSensor.make(sensorType, markSensor);
-            case NAO_SONAR:
-                Sensor<V> sonar = Sonar.make(blockProperties, blockComment);
-                return NaoGetSampleSensor.make(sensorType, sonar);
-            case NAO_GYROMETER:
-                coordinate = helper.extractField(fields, BlocklyConstants.COORDINATE);
-                Sensor<V> gyroSensor = Gyrometer.make(Gyrometer.Coordinate.valueOf(coordinate), blockProperties, blockComment);
-                return NaoGetSampleSensor.make(sensorType, gyroSensor);
-            case NAO_ACCELEROMETER:
-                coordinate = helper.extractField(fields, BlocklyConstants.COORDINATE);
-                Sensor<V> accelerometer = Accelerometer.make(Accelerometer.Coordinate.valueOf(coordinate), blockProperties, blockComment);
-                return NaoGetSampleSensor.make(sensorType, accelerometer);
-            case NAO_FSR:
-                sensorSide = helper.extractField(fields, BlocklyConstants.SIDE);
-                Sensor<V> fsrSensor = ForceSensor.make(ForceSensor.Side.valueOf(sensorSide), blockProperties, blockComment);
-                return NaoGetSampleSensor.make(sensorType, fsrSensor);
-            case NAO_RECOGNIZEWORD:
-                values = helper.extractValues(block, (short) 1);
-                Phrase<V> dictionary = helper.extractValue(values, new ExprParam(BlocklyConstants.WORD, BlocklyType.ARRAY_STRING));
-                Sensor<V> recognizeWord = RecognizeWord.make(helper.convertPhraseToExpr(dictionary), blockProperties, blockComment);
-                return NaoGetSampleSensor.make(sensorType, recognizeWord);
-            default:
-                return null;
-        }
-
-    }
-
-    @Override
-    public String toString() {
-        return "NaoGetSampleSensor [" + this.sensor + "]";
+        String modeName = helper.extractField(fields, BlocklyConstants.SENSORTYPE);
+        String portName = helper.extractField(fields, GetSampleType.get(modeName).getPortTypeName());
+        String slot = helper.extractField(fields, GetSampleType.get(modeName).getValues()[0]);
+        return GetSampleSensor
+            .make(GetSampleType.get(modeName), portName, slot, helper.extractBlockProperties(block), helper.extractComment(block), helper.getModeFactory());
     }
 
     @Override
@@ -128,21 +155,21 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
         jaxbDestination.setMutation(mutation);
 
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORTYPE, getSensorType().name());
-        switch ( this.sensorType ) {
-            case NAO_TOUCHSENSOR:
+        switch ( this.sensorType.getSensorType() ) {
+            case BlocklyConstants.NAO_TOUCHSENSOR:
                 JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.POSITION, ((Touchsensors<V>) this.sensor).getSensor().toString());
                 JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SIDE, ((Touchsensors<V>) this.sensor).getSide().toString());
                 break;
-            case NAO_GYROMETER:
+            case BlocklyConstants.NAO_GYROMETER:
                 JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.COORDINATE, ((Gyrometer<V>) this.sensor).getCoordinate().toString());
                 break;
-            case NAO_ACCELEROMETER:
-                JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.COORDINATE, ((Accelerometer<V>) this.sensor).getCoordinate().toString());
+            case BlocklyConstants.ACCELEROMETER:
+                JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.COORDINATE, ((AccelerometerSensor<V>) this.sensor).getPort().toString());
                 break;
-            case NAO_FSR:
+            case BlocklyConstants.NAO_FSR:
                 JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SIDE, ((ForceSensor<V>) this.sensor).getSide().toString());
                 break;
-            case NAO_RECOGNIZEWORD:
+            case BlocklyConstants.NAO_RECOGNIZEWORD:
                 JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.WORD, ((RecognizeWord<V>) this.sensor).getVocabulary());
             default:
                 break;

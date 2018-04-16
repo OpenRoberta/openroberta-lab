@@ -13,4 +13,11 @@ public class PythonVisitorTest {
 
         this.h.assertCodeIsOk(correct_code, "/expr/create_rgb_variable.xml", false);
     }
+
+    @Test
+    public void rgbAccelerometerVisit_returnsCorrectPythonCodeGettingValueFromAccelerometerSensor() throws Exception {
+        String correct_code = "defrun():h.walk(h.accelerometer('X'), 0, 0)";
+
+        this.h.assertCodeIsOk(correct_code, "/sensor/accelerometer.xml", false);
+    }
 }

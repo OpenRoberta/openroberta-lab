@@ -78,7 +78,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.nao.Accelerometer;
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.Dialog;
@@ -735,13 +735,13 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
             this.sb.append("-");
         }
         walkDistance.getDistanceToWalk().visit(this);
-        this.sb.append(",0,0)");
+        this.sb.append(", 0, 0)");
         return null;
     }
 
     @Override
     public Void visitTurnDegrees(TurnDegrees<Void> turnDegrees) {
-        this.sb.append("h.walk(0,0,");
+        this.sb.append("h.walk(0, 0,");
         if ( turnDegrees.getTurnDirection() == TurnDirection.RIGHT ) {
             this.sb.append("-");
         }
@@ -1156,9 +1156,9 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     }
 
     @Override
-    public Void visitAccelerometer(Accelerometer<Void> accelerometer) {
+    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometer) {
         this.sb.append("h.accelerometer(");
-        this.sb.append(accelerometer.getCoordinate().getPythonCode());
+        this.sb.append(getEnumCode(accelerometer.getPort()));
         this.sb.append(")");
         return null;
     }
