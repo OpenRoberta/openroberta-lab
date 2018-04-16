@@ -6,7 +6,6 @@ import java.util.Set;
 
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.nao.NAOConfiguration;
-import de.fhg.iais.roberta.components.nao.SensorType;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
@@ -16,6 +15,7 @@ import de.fhg.iais.roberta.mode.action.nao.Camera;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
@@ -79,17 +79,17 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.Dialog;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.Gyrometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
-import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
 import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -1134,15 +1134,15 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     }
 
     @Override
-    public Void visitSonar(Sonar<Void> sonar) {
+    public Void visitUltrasonicSensor(UltrasonicSensor<Void> sonar) {
         this.sb.append("h.ultrasonic()");
         return null;
     }
 
     @Override
-    public Void visitGyrometer(Gyrometer<Void> gyrometer) {
+    public Void visitGyroSensor(GyroSensor<Void> gyrometer) {
         this.sb.append("h.gyrometer(");
-        this.sb.append(gyrometer.getCoordinate().getPythonCode());
+        this.sb.append(getEnumCode((gyrometer.getPort())));
         this.sb.append(")");
         return null;
     }
@@ -1395,30 +1395,30 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
 
     private void generateSensors() {
         for ( UsedSensor usedSensor : this.usedSensors ) {
-            switch ( (SensorType) usedSensor.getType() ) {
-                case COLOR:
+            switch ( usedSensor.getType().toString() ) {
+                case BlocklyConstants.COLOR:
                     break;
-                case INFRARED:
+                case BlocklyConstants.INFRARED:
                     break;
-                case ULTRASONIC:
+                case BlocklyConstants.ULTRASONIC:
                     this.sb.append("h.sonar.subscribe(\"OpenRobertaApp\")\n");
                     break;
-                case NAOMARK:
+                case BlocklyConstants.NAO_MARK:
                     this.sb.append("h.mark.subscribe(\"RobertaLab\", 500, 0.0)\n");
                     break;
-                case NAOFACE:
+                case BlocklyConstants.NAO_FACE:
                     this.sb.append("\nfrom roberta import FaceRecognitionModule\n");
                     this.sb.append("faceRecognitionModule = FaceRecognitionModule(\"faceRecognitionModule\")\n");
                     break;
-                case NAOSPEECH:
+                case BlocklyConstants.NAO_SPEECH:
                     this.sb.append("\nfrom roberta import SpeechRecognitionModule\n");
                     this.sb.append("speechRecognitionModule = SpeechRecognitionModule(\"speechRecognitionModule\")\n");
                     this.sb.append("speechRecognitionModule.pauseASR()\n");
                     break;
-                case LIGHT:
-                case COMPASS:
-                case SOUND:
-                case TOUCH:
+                case BlocklyConstants.LIGHT:
+                case BlocklyConstants.COMPASS:
+                case BlocklyConstants.SOUND:
+                case BlocklyConstants.TOUCH:
                     break;
                 default:
                     throw new DbcException("Sensor is not supported!");
@@ -1428,26 +1428,26 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
 
     private void removeSensors() {
         for ( UsedSensor usedSensor : this.usedSensors ) {
-            switch ( (SensorType) usedSensor.getType() ) {
-                case COLOR:
+            switch ( usedSensor.getType().toString() ) {
+                case BlocklyConstants.COLOR:
                     break;
-                case INFRARED:
+                case BlocklyConstants.INFRARED:
                     break;
-                case ULTRASONIC:
+                case BlocklyConstants.ULTRASONIC:
                     this.sb.append(INDENT).append(INDENT).append("h.sonar.unsubscribe(\"OpenRobertaApp\")\n");
                     break;
-                case NAOMARK:
+                case BlocklyConstants.NAO_MARK:
                     this.sb.append(INDENT).append(INDENT).append("h.mark.unsubscribe(\"RobertaLab\")\n");
                     break;
-                case NAOFACE:
+                case BlocklyConstants.NAO_FACE:
                     this.sb.append(INDENT).append(INDENT).append("faceRecognitionModule.unsubscribe()\n");
                     break;
-                case NAOSPEECH:
+                case BlocklyConstants.NAO_SPEECH:
                     this.sb.append(INDENT).append(INDENT).append("speechRecognitionModule.unsubscribe()\n");
-                case LIGHT:
-                case COMPASS:
-                case SOUND:
-                case TOUCH:
+                case BlocklyConstants.LIGHT:
+                case BlocklyConstants.COMPASS:
+                case BlocklyConstants.SOUND:
+                case BlocklyConstants.TOUCH:
                     break;
                 default:
                     throw new DbcException("Sensor is not supported!");

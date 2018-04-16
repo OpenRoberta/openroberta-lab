@@ -314,9 +314,11 @@ public final class BlocklyConstants {
     public static final String FILENAME = "FILENAME";
     public static final String NAO_TOUCHSENSOR = "TOUCHSENSOR";
     public static final String NAO_DETECTFACE = "DETECTFACE";
-    public static final String NAO_NAOMARK = "NAOMARK";
+    public static final String NAO_MARK = "NAOMARK";
     public static final String NAO_SONAR = "SONAR";
     public static final String NAO_GYROMETER = "GYROMETER";
+    public static final String NAO_FACE = "NAOFACE";
+    public static final String NAO_SPEECH = "NAOSPEECH";
     public static final String ACCELEROMETER = "ACCELEROMETER";
     public static final String NAO_FSR = "FSR";
     public static final String NAO_PHRASE = "PHRASE";
@@ -336,4 +338,5 @@ public final class BlocklyConstants {
     public static final String EMPTY_SLOT = "EMPTY_SLOT";
     public static final String PIN_PULSE_HIGH = "PIN_PULSE_HIGH";
     public static final String PIN_PULSE_LOW = "PIN_PULSE_LOW";
+
 }

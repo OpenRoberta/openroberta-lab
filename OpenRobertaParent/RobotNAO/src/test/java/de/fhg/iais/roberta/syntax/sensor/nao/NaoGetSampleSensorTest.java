@@ -1,10 +1,12 @@
 package de.fhg.iais.roberta.syntax.sensor.nao;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.util.test.nao.HelperNaoForXmlTest;
 
+@Ignore
 public class NaoGetSampleSensorTest {
     private final HelperNaoForXmlTest h = new HelperNaoForXmlTest();
 

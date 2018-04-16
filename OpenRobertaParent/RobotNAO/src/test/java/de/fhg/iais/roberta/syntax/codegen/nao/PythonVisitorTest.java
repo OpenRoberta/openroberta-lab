@@ -20,4 +20,18 @@ public class PythonVisitorTest {
 
         this.h.assertCodeIsOk(correct_code, "/sensor/accelerometer.xml", false);
     }
+
+    @Test
+    public void rgbGyroSensorVisit_returnsCorrectPythonCodeGettingValueFromXaxis() throws Exception {
+        String correct_code = "defrun():h.walk(h.gyrometer('X'), 0, 0)";
+
+        this.h.assertCodeIsOk(correct_code, "/sensor/gyrometer.xml", false);
+    }
+
+    @Test
+    public void rgbUltrasonicSensorVisit_returnsCorrectPythonCodeGettingDistance() throws Exception {
+        String correct_code = "defrun():h.walk(h.ultrasonic(), 0, 0)";
+
+        this.h.assertCodeIsOk(correct_code, "/sensor/ultrasonic.xml", false);
+    }
 }

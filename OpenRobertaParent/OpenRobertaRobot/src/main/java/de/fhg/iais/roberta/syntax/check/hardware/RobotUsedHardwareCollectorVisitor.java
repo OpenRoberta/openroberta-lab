@@ -40,6 +40,7 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction.Mode;
 import de.fhg.iais.roberta.syntax.check.CheckVisitor;
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -183,6 +184,12 @@ public abstract class RobotUsedHardwareCollectorVisitor extends CheckVisitor imp
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
         this.usedSensors.add(new UsedSensor((ISensorPort) compassSensor.getPort(), SensorType.COMPASS, compassSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
+        this.usedSensors.add(new UsedSensor((ISensorPort) accelerometerSensor.getPort(), SensorType.ACCELEROMETER, accelerometerSensor.getMode()));
         return null;
     }
 
