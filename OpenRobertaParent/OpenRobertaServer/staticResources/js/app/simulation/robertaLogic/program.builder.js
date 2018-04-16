@@ -659,5 +659,12 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
 
         return result;
     }
+    
+    function createNoopStmt() {
+        var result = {};
+        result[CONST.STMT] = CONST.NOOP_STMT;
+
+        return result;
+    }
 
 });

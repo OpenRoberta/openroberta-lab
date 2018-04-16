@@ -223,6 +223,9 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', '
             case CONSTANTS.IF_RETURN:
                 evalIfReturn(internal(this), stmt);
                 break;
+            case CONSTANTS.NOOP_STMT:
+                this.step(simulationData);
+                break;
 
             default:
                 throw "Invalid Statement " + stmt.stmt + "!";
@@ -346,7 +349,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', '
 
     var evalTurnLightAction = function(obj, stmt) {
         obj.outputCommands.led = {};
-        obj.outputCommands.led.color = stmt.color;
+        obj.outputCommands.led.color = stmt.colorValue;
         obj.outputCommands.led.mode = stmt.mode;
     };
 

@@ -542,6 +542,9 @@ public abstract class RobotSimulationVisitor<V> implements AstLanguageVisitor<V>
 
     @Override
     public V visitStmtTextComment(StmtTextComment<V> textComment) {
+        String end = createClosingBracket();
+        this.sb.append("createNoopStmt(");
+        this.sb.append(end);
         return null;
     }
 

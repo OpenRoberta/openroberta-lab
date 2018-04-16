@@ -483,6 +483,8 @@ define({
     PIN_GET_VALUE_SENSOR: "createPinGetValueSensor",
 
     PIN_WRITE_VALUE_SENSOR: "createPinWriteValueSensor",
+    
+    NOOP_STMT: "createNoopStmt",
 
     PIN: "pin",
 
