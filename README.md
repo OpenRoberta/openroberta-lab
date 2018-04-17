@@ -6,6 +6,10 @@ Build status:
 * master [![master](https://travis-ci.org/OpenRoberta/robertalab.svg?branch=master)](https://travis-ci.org/OpenRoberta/robertalab/builds)
 * develop [![develop](https://travis-ci.org/OpenRoberta/robertalab.svg?branch=develop)](https://travis-ci.org/OpenRoberta/robertalab/builds)
 
+We use BrowserStack for Cross-Browser Testing
+
+[<img src="https://github.com/OpenRoberta/robertalab/blob/develop/Resources/images/browserstack-logo-600x315.png" alt="Image of BrowserStack" style="width: 200px;"/>](http://browserstack.com/)
+
 ### Introduction
 
 The steps below explain how to get started with the sources. If you just want to run the server locally, please have a look into the [wiki - installation](https://github.com/OpenRoberta/robertalab/wiki/Installation). If you want to contribute, please get in touch with us, see [wiki - Community](https://github.com/OpenRoberta/robertalab/wiki/Community) before you start.
