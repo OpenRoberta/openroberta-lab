@@ -8,7 +8,7 @@ Build status:
 
 We use BrowserStack for Cross-Browser Testing
 
-[<img src="https://github.com/OpenRoberta/robertalab/blob/develop/Resources/images/browserstack-logo-600x315.png" alt="Image of BrowserStack" style="width: 200px;"/>](http://browserstack.com/)
+[<img src="https://github.com/OpenRoberta/robertalab/blob/develop/Resources/images/browserstack-logo-600x315.png" width="200">](http://browserstack.com/)
 
 ### Introduction
 
