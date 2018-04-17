@@ -1,5 +1,5 @@
 define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', 'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, MSG, LOG, UTIL,
-    GUISTATE_C, Blockly, $) {
+        GUISTATE_C, Blockly, $) {
 
     const INITIAL_WIDTH = 0.3;
     var blocklyWorkspace;
@@ -17,23 +17,28 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
 
     function initView() {
         $('#helpContent').remove();
-        var url = '../help/progHelp_' + GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getLanguage().toLowerCase() + '.html';
-        $('#helpDiv').load(url, function(response, status, xhr) {
-            if (status == "error") {
-                url = '../help/progHelp_' + GUISTATE_C.getRobotGroup() + '_en.html';
-                $('#helpDiv').load(url, function(response, status, xhr) {
-                    if (status == "error") {
-                        $('#helpButton').hide();
-                    } else {
-                        $('#helpButton').show();
-                        currentHelp = GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getLanguage().toLowerCase();
-                    }
-                })
-            } else {
-                $('#helpButton').show();
-                currentHelp = GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getLanguage().toLowerCase();
-            }
-        });
+        
+        var loadHelpFile = function(helpFileName) {
+            var url = '../help/' + helpFileName;
+            $('#helpDiv').load(url, function(response, status, xhr) {
+                if (status == "error") {
+                    $('#helpButton').hide();
+                } else {
+                    $('#helpButton').show();
+                    currentHelp = GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getLanguage().toLowerCase();
+                }
+            });
+        };
+        
+        var helpFileNameDefault = 'progHelp_' + GUISTATE_C.getRobotGroup() + '_en.html';
+        var helpFileName = 'progHelp_' + GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getLanguage().toLowerCase() + '.html';
+        if (GUISTATE_C.getAvailableHelp().indexOf(helpFileName) > -1) {
+            loadHelpFile(helpFileName);
+        } else if (GUISTATE_C.getAvailableHelp().indexOf(helpFileNameDefault) > -1) {
+            loadHelpFile(helpFileNameDefault);
+        } else {
+            $('#helpButton').hide();
+        }
     }
     exports.initView = initView;
 

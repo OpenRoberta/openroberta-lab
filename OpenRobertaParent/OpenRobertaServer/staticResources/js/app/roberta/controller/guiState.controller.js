@@ -1,4 +1,5 @@
-define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.controller', 'progInfo.controller', 'socket.controller', 'jquery' ], function(exports, UTIL, LOG, MSG, GUISTATE, HELP_C, INFO_C, SOCKET_C, $) {
+define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.controller', 'progInfo.controller', 'socket.controller', 'jquery' ], function(
+        exports, UTIL, LOG, MSG, GUISTATE, HELP_C, INFO_C, SOCKET_C, $) {
 
     /**
      * Init robot
@@ -35,6 +36,21 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             GUISTATE.program.shared = false;
             GUISTATE.program.toolbox.level = 'beginner';
 
+            for (var i = 0; i < GUISTATE.server.tutorial.length; i++) {
+                var tutorialPath = '../tutorial/' + GUISTATE.server.tutorial[i];
+                $.getJSON(tutorialPath).done(function(data) {
+                    // store the available tutorial objects
+                    if (data.name) {
+                        var tutorialId = data.name.toLowerCase().replace(/ /g, "");
+                        GUISTATE.tutorials[tutorialId] = data;
+                    } else {
+                        console.error('"' + tutorialPath + '" is not a valid tutorial file! No name could be found.');
+                    }
+                }).fail(function(e, r) {
+                    // this should not happen
+                    console.error('"' + tutorialPath + '" is not a valid json file! The reason is probably a', r);
+                });
+            }
             LOG.info('init gui state');
             ready.resolve();
         });
@@ -296,7 +312,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             SOCKET_C.listRobotStart();
             if (GUISTATE.gui.isAgent == true) {
                 updateMenuStatus();
-            //console.log('arduino based bobot was selected');
+                //console.log('arduino based bobot was selected');
             } else {
                 $('#menuConnect').parent().removeClass('disabled');
             }
@@ -306,7 +322,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             SOCKET_C.listRobotStart();
             if (GUISTATE.gui.isAgent == true) {
                 updateMenuStatus();
-            //console.log('arduino based bobot was selected');
+                //console.log('arduino based bobot was selected');
             } else {
                 $('#menuConnect').parent().addClass('disabled');
             }
@@ -343,7 +359,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
 
     function findGroup(robot) {
         var robots = getRobots();
-        for (var propt in robots) {
+        for ( var propt in robots) {
             if (robots[propt].name == robot && robots[propt].group !== '') {
                 robot = robots[propt].group;
                 return robot;
@@ -399,7 +415,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
     exports.getRobotPort = getRobotPort;
 
     function getRobotRealName() {
-        for (var robot in getRobots()) {
+        for ( var robot in getRobots()) {
             if (!getRobots().hasOwnProperty(robot)) {
                 continue;
             }
@@ -412,7 +428,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
     exports.getRobotRealName = getRobotRealName;
 
     function getMenuRobotRealName(robotName) {
-        for (var robot in getRobots()) {
+        for ( var robot in getRobots()) {
             if (!getRobots().hasOwnProperty(robot)) {
                 continue;
             }
@@ -425,7 +441,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
     exports.getMenuRobotRealName = getMenuRobotRealName;
 
     function getIsRobotBeta(robotName) {
-        for (var robot in getRobots()) {
+        for ( var robot in getRobots()) {
             if (!getRobots().hasOwnProperty(robot)) {
                 continue;
             }
@@ -438,7 +454,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
     exports.getIsRobotBeta = getIsRobotBeta;
 
     function getRobotInfo(robotName) {
-        for (var robot in getRobots()) {
+        for ( var robot in getRobots()) {
             if (!getRobots().hasOwnProperty(robot)) {
                 continue;
             }
@@ -518,7 +534,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             $('#head-navigation-program-edit').addClass('disabled');
             $('#head-navigation-configuration-edit').addClass('disabled');
         }
-     }
+    }
 
     exports.setView = setView;
 
@@ -862,9 +878,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
                 } else if (opt_owner === 'Roberta') { // user loads a program from the example program list
                     name += ' <b><span style="color:#33B8CA;" class="typcn typcn-roberta progName"></span></b>';
                 } else if (GUISTATE.program.shared == 'WRITE') { // user loads a program, owned by another user, but with WRITE rights
-                    name += ' <b><span style="color:#33B8CA;" class="typcn typcn-pencil progName"></span></b><span style="color:#33B8CA;">' + opt_owner + '</span>';
+                    name += ' <b><span style="color:#33B8CA;" class="typcn typcn-pencil progName"></span></b><span style="color:#33B8CA;">' + opt_owner
+                            + '</span>';
                 } else if (GUISTATE.program.shared == 'READ') { // user loads a program, owned by another user, but with READ rights
-                    name += ' <b><span style="color:#33B8CA;" class="typcn typcn-eye progName"></span></b><span style="color:#33B8CA;">' + opt_owner + '</span>';
+                    name += ' <b><span style="color:#33B8CA;" class="typcn typcn-eye progName"></span></b><span style="color:#33B8CA;">' + opt_owner
+                            + '</span>';
                 } else {
                     console.log("Program with undefined rights from " + opt_owner + " loaded.");
                 }
@@ -961,6 +979,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         return GUISTATE.robot.socket;
     }
     exports.getSocket = getSocket;
+    
+    function getAvailableHelp() {
+        return GUISTATE.server.help;
+    }
+    exports.getAvailableHelp = getAvailableHelp;
 
     function updateMenuStatus() {
         switch (SOCKET_C.getPortList().length) {
@@ -1003,7 +1026,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
                     GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
                 }
                 $('#menuRunProg').parent().addClass('disabled');
-            //$('#menuConnect').parent().addClass('disabled');
+                //$('#menuConnect').parent().addClass('disabled');
             } else {
                 $('#head-navi-icon-robot').removeClass('error');
                 $('#head-navi-icon-robot').removeClass('busy');

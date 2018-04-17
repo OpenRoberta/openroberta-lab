@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.javaServer.restServices.all;
 
+import java.io.File;
 import java.util.Collection;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -88,7 +90,15 @@ public class ClientAdmin {
                 }
                 server.put("isPublic", robertaProperties.getBooleanProperty("server.public"));
                 server.put("robots", robots);
+                String staticRecourcesDir = this.robertaProperties.getStringProperty("server.staticresources.dir");
+                String pathToTutorial = staticRecourcesDir+ File.separator + "tutorial";                
+                List<String> listOfFileNames = Util.getListOfFileNames(pathToTutorial, "json");               
+                server.put("tutorial", listOfFileNames);
+                String pathToHelp = staticRecourcesDir+ File.separator + "help";                
+                listOfFileNames = Util.getListOfFileNames(pathToHelp, "html");               
+                server.put("help", listOfFileNames);
                 response.put("server", server);
+                System.out.println(server);
                 LOG.info("success: create init object");
                 Util.addSuccessInfo(response, Key.INIT_SUCCESS);
             } else if ( cmd.equals("setToken") ) {

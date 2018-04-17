@@ -1,7 +1,11 @@
 package de.fhg.iais.roberta.util;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
@@ -126,5 +130,23 @@ public class Util {
         }
 
         return Integer.signum(vals1.length - vals2.length);
+    }
+    
+    
+    /**
+     * Look up file names with specific file extensions in a specific directory.
+     * 
+     * @param path The path to the directory where to look for the files.
+     * @param extension The file extension(s).
+     * @return a list of files names or an empty list.
+     */
+    public static List<String> getListOfFileNames (String path, String... extensions) {
+        File dir = new File(path);  
+        List<File> listOfFiles = (List<File>)FileUtils.listFiles(dir, extensions, true);
+        List<String> listOfFileNames = new ArrayList<String>();
+        for ( File file : listOfFiles) {
+            listOfFileNames.add(file.getName());
+        }
+        return listOfFileNames;
     }
 }

@@ -93,46 +93,8 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
                 }
             }, 'init gui state model');
         }
-
-        // check if tutorials are available
-        $.ajax({
-            url : "../tutorial/",
-            success : function(data) {
-                var tutorialPathsList = [];
-                $(data).find("a[href*='\.json']:not(a[href*='\.gz'])").each(function() {
-                    tutorialPathsList.push($(this).attr("href"));
-                });
-                function readTutorialsRecursive() {
-                    var tutorialPath = tutorialPathsList.splice(0, 1);
-                    // list of files is empty?
-                    if (tutorialPath.length == 0) {
-                        return $.Deferred().resolve().promise();
-                    }
-                    return $.getJSON('..' + tutorialPath).done(function(data) {
-                        // store the available tutorial objects
-                        if (data.name) {
-                            var tutorialId = data.name.toLowerCase().replace(/ /g, "");
-                            exports.tutorials[tutorialId] = data;
-                        } else {
-                            console.error('"' + tutorialPath + '" is not a valid tutorial file! No name could be found.');
-                        }
-                    }).fail(function(e, r) {
-                        // this should not happen
-                        console.error('"' + tutorialPath + '" is not a valid json file! The reason is probably a', r);
-                        return readTutorialsRecursive();
-                    }).then(function() {
-                        // check for more tutorials
-                        return readTutorialsRecursive();
-                    });
-                }
-                // all tutorials stored? do the last step for initializing the GUI
-                readTutorialsRecursive().always(function() {
-                    getInitFromServer();
-                });
-            },
-            // no tutorial folder available? ignore, do the last step for initializing the GUI
-            error : getInitFromServer,
-        });
+        getInitFromServer();
+        
         return ready.promise();
     }
     exports.init = init;
