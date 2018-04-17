@@ -250,8 +250,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
 
         oscillator.connect(gainNode);
         gainNode.connect(context.destination);
-        gainNode.gain.value = 0;
-
+        gainNode.gain.setValueAtTime(0, 0);
         try {
             // monkeypatch getUserMedia 
             navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;

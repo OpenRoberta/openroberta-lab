@@ -46,7 +46,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants' ], function(SIM, CONS
 
         oscillator.connect(gainNode);
         gainNode.connect(context.destination);
-        gainNode.gain.value = 0;
+        gainNode.gain.setValueAtTime(0, 0);
 
     } else {
         var context = null;
