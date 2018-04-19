@@ -7,7 +7,6 @@ import java.util.Set;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.nao.NAOConfiguration;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
@@ -80,6 +79,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
@@ -90,7 +90,6 @@ import de.fhg.iais.roberta.syntax.sensor.nao.NaoGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
-import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -143,11 +142,6 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
         astVisitor.generateCode(withWrapping);
 
         return astVisitor.sb.toString();
-    }
-
-    @Override
-    public String getEnumCode(IMode value) {
-        return "'" + value.toString().toUpperCase() + "'";
     }
 
     @Override
@@ -1124,11 +1118,11 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     }
 
     @Override
-    public Void visitTouchsensors(Touchsensors<Void> touchsensors) {
+    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
         this.sb.append("h.touchsensors(");
-        this.sb.append("\"" + touchsensors.getSensor().getPythonCode() + "\"");
+        this.sb.append(getEnumCode(touchSensor.getMode()));
         this.sb.append(", ");
-        this.sb.append("\"" + touchsensors.getSide().getPythonCode() + "\"");
+        this.sb.append(getEnumCode(touchSensor.getPort()));
         this.sb.append(")");
         return null;
     }

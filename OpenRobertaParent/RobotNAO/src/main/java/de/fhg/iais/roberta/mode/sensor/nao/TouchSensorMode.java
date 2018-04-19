@@ -1,13 +1,13 @@
 package de.fhg.iais.roberta.mode.sensor.nao;
 
-import de.fhg.iais.roberta.inter.mode.general.IMode;
+import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 
-public enum Side implements IMode {
-    LEFT(), RIGHT(), FRONT(), REAR(), MIDDLE();
+public enum TouchSensorMode implements ITouchSensorMode {
+    HAND(), BUMPER(), HEAD();
 
     private final String[] values;
 
-    private Side(String... values) {
+    private TouchSensorMode(String... values) {
         this.values = values;
     }
 

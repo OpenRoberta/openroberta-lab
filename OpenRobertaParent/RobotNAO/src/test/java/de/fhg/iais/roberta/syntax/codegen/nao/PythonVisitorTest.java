@@ -16,14 +16,14 @@ public class PythonVisitorTest {
 
     @Test
     public void rgbAccelerometerVisit_returnsCorrectPythonCodeGettingValueFromAccelerometerSensor() throws Exception {
-        String correct_code = "defrun():h.walk(h.accelerometer('X'), 0, 0)";
+        String correct_code = "defrun():h.walk(h.accelerometer('x'), 0, 0)";
 
         this.h.assertCodeIsOk(correct_code, "/sensor/accelerometer.xml", false);
     }
 
     @Test
     public void rgbGyroSensorVisit_returnsCorrectPythonCodeGettingValueFromXaxis() throws Exception {
-        String correct_code = "defrun():h.walk(h.gyrometer('X'), 0, 0)";
+        String correct_code = "defrun():h.walk(h.gyrometer('x'), 0, 0)";
 
         this.h.assertCodeIsOk(correct_code, "/sensor/gyrometer.xml", false);
     }
@@ -33,5 +33,20 @@ public class PythonVisitorTest {
         String correct_code = "defrun():h.walk(h.ultrasonic(), 0, 0)";
 
         this.h.assertCodeIsOk(correct_code, "/sensor/ultrasonic.xml", false);
+    }
+
+    @Test
+    public void touchSensorVisit_returnsCorrectPythonCode() throws Exception {
+        String correct_code =
+            "def run():\n"
+                + "    h.say(str(h.touchsensors('hand', 'left')))\n"
+                + "    h.say(str(h.touchsensors('hand', 'right')))\n"
+                + "    h.say(str(h.touchsensors('head', 'front')))\n"
+                + "    h.say(str(h.touchsensors('head', 'middle')))\n"
+                + "    h.say(str(h.touchsensors('head', 'rear')))\n"
+                + "    h.say(str(h.touchsensors('bumper', 'left')))\n"
+                + "    h.say(str(h.touchsensors('bumper', 'right')))";
+
+        this.h.assertCodeIsOk(correct_code, "/sensor/touch.xml", false);
     }
 }

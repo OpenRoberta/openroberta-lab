@@ -9,9 +9,14 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.nao.NAOConfiguration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
+import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.mode.action.Language;
+import de.fhg.iais.roberta.mode.sensor.nao.SensorPorts;
+import de.fhg.iais.roberta.mode.sensor.nao.TouchSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
@@ -35,6 +40,16 @@ public class Factory extends AbstractRobotFactory {
                 robertaProperties.getTempDirForUserProjects(),
                 robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"));
         addBlockTypesFromProperties("NAO.properties", this.naoProperties);
+    }
+
+    @Override
+    public ISensorPort getSensorPort(String port) {
+        return IRobotFactory.getModeValue(port, SensorPorts.class);
+    }
+
+    @Override
+    public ITouchSensorMode getTouchSensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, TouchSensorMode.class);
     }
 
     @Override

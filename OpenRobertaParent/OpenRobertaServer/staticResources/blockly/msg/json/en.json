@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-04-16 10:10:51.461382",
+		"lastupdated": "2018-04-19 15:13:33.400728",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1330,5 +1330,8 @@
 	"SENSOR_PULSE_GETSAMPLE_TOOLTIP": "Gets the current reading from the pulse sensor.",
 	"SENSOR_RFID_GETSAMPLE_TOOLTIP": "Gets the current reading from the RFID reader.",
 	"CONFIGURATION_PORT": "Port1",
-	"CONFIGURATION_NO_PORT": "no port"
+	"CONFIGURATION_NO_PORT": "no port",
+	"MODE_HAND": "Hand",
+	"MODE_HEAD": "Head",
+	"MODE_BUMPER": "Bumper"
 }

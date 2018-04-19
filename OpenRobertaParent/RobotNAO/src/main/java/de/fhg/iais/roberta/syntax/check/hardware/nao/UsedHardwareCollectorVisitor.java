@@ -47,7 +47,6 @@ import de.fhg.iais.roberta.syntax.sensor.nao.NaoGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
-import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
 import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
 /**
@@ -192,11 +191,6 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     @Override
     public Void visitRastaDuration(RastaDuration<Void> rastaDuration) {
         rastaDuration.getDuration().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitTouchsensors(Touchsensors<Void> touchsensors) {
         return null;
     }
 

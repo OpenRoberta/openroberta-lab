@@ -157,8 +157,8 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORTYPE, getSensorType().name());
         switch ( this.sensorType.getSensorType() ) {
             case BlocklyConstants.NAO_TOUCHSENSOR:
-                JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.POSITION, ((Touchsensors<V>) this.sensor).getSensor().toString());
-                JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SIDE, ((Touchsensors<V>) this.sensor).getSide().toString());
+                //                JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.POSITION, ((Touchsensors<V>) this.sensor).getSensor().toString());
+                //                JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SIDE, ((Touchsensors<V>) this.sensor).getSide().toString());
                 break;
             //            case BlocklyConstants.NAO_GYROMETER:
             //                JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.COORDINATE, ((Gyrometer<V>) this.sensor).getCoordinate().toString());
