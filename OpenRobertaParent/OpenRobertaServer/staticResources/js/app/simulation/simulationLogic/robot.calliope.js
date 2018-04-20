@@ -252,11 +252,13 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         gainNode.connect(context.destination);
         gainNode.gain.setValueAtTime(0, 0);
         try {
-            // monkeypatch getUserMedia 
-            navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+            if (navigator.mediaDevices === undefined) {
+                navigator.mediaDevices = {};
+            }
+            navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
             // ask for an audio input
-            navigator.getUserMedia({
+            navigator.mediaDevices.getUserMedia({
                 "audio" : {
                     "mandatory" : {
                         "googEchoCancellation" : "false",
