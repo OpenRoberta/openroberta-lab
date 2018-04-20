@@ -8,6 +8,8 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
+import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
+import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
@@ -178,6 +180,19 @@ public class BoardCheckVisitor extends RobotBoardCheckVisitor implements MbedAst
 
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitFourDigitDisplayShowAction(FourDigitDisplayShowAction<Void> fourDigitDisplayShowAction) {
+        fourDigitDisplayShowAction.getValue().visit(this);
+        fourDigitDisplayShowAction.getPosition().visit(this);
+        fourDigitDisplayShowAction.getColon().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitFourDigitDisplayClearAction(FourDigitDisplayClearAction<Void> fourDigitDisplayClearAction) {
         return null;
     }
 

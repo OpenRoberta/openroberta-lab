@@ -10,6 +10,8 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
+import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
+import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
@@ -47,6 +49,7 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     private boolean radioUsed;
     private boolean accelerometerUsed;
     private boolean greyScale;
+    private boolean fourDigitDisplayUsed;
 
     public UsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, Configuration configuration) {
         super(configuration);
@@ -63,6 +66,10 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     public boolean isGreyScale() {
         return this.greyScale;
+    }
+
+    public boolean isFourDigitDisplayUsed() {
+        return this.fourDigitDisplayUsed;
     }
 
     @Override
@@ -240,4 +247,18 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
         return null;
     }
 
+    @Override
+    public Void visitFourDigitDisplayShowAction(FourDigitDisplayShowAction<Void> fourDigitDisplayShowAction) {
+        fourDigitDisplayShowAction.getValue().visit(this);
+        fourDigitDisplayShowAction.getPosition().visit(this);
+        fourDigitDisplayShowAction.getColon().visit(this);
+        this.fourDigitDisplayUsed = true;
+        return null;
+    }
+
+    @Override
+    public Void visitFourDigitDisplayClearAction(FourDigitDisplayClearAction<Void> fourDigitDisplayClearAction) {
+        this.fourDigitDisplayUsed = true;
+        return null;
+    }
 }

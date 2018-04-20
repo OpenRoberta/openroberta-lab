@@ -15,6 +15,8 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
+import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
+import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
@@ -287,7 +289,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements M
     }
 
     private int map(int x, int in_min, int in_max, int out_min, int out_max) {
-        return (((x - in_min) * (out_max - out_min)) / (in_max - in_min)) + out_min;
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
 
     @Override
@@ -453,6 +455,16 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements M
 
     @Override
     public Void visitRadioRssiSensor(RadioRssiSensor<Void> radioRssiSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitFourDigitDisplayShowAction(FourDigitDisplayShowAction<Void> fourDigitDisplayShowAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitFourDigitDisplayClearAction(FourDigitDisplayClearAction<Void> fourDigitDisplayClearAction) {
         return null;
     }
 

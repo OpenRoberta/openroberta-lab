@@ -7,6 +7,8 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
+import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
+import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
@@ -226,4 +228,15 @@ public class SimulationCheckVisitor extends RobotSimulationCheckVisitor implemen
         return null;
     }
 
+    @Override
+    public Void visitFourDigitDisplayShowAction(FourDigitDisplayShowAction<Void> fourDigitDisplayShowAction) {
+        fourDigitDisplayShowAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        return null;
+    }
+
+    @Override
+    public Void visitFourDigitDisplayClearAction(FourDigitDisplayClearAction<Void> fourDigitDisplayClearAction) {
+        fourDigitDisplayClearAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        return null;
+    }
 }

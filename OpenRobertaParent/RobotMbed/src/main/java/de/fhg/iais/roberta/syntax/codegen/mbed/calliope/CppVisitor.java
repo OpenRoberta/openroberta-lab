@@ -24,6 +24,8 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
+import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
+import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
@@ -548,10 +550,10 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     @Override
     public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
         this.sb.append("(_uBit.accelerometer.getGesture() == MICROBIT_ACCELEROMETER_EVT_");
-        if ( (gestureSensor.getMode() == GestureSensorMode.UP)
-            || (gestureSensor.getMode() == GestureSensorMode.DOWN)
-            || (gestureSensor.getMode() == GestureSensorMode.LEFT)
-            || (gestureSensor.getMode() == GestureSensorMode.RIGHT) ) {
+        if ( gestureSensor.getMode() == GestureSensorMode.UP
+            || gestureSensor.getMode() == GestureSensorMode.DOWN
+            || gestureSensor.getMode() == GestureSensorMode.LEFT
+            || gestureSensor.getMode() == GestureSensorMode.RIGHT ) {
             this.sb.append("TILT_");
         }
         this.sb.append(gestureSensor.getMode() + ")");
@@ -917,7 +919,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
             this.sb.append("ManagedString(");
             parameters.get(i).visit(this);
             this.sb.append(")");
-            if ( i < (numberOfParameters - 1) ) {
+            if ( i < numberOfParameters - 1 ) {
                 this.sb.append(" + ");
             }
         }
@@ -1153,6 +1155,24 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     }
 
     @Override
+    public Void visitFourDigitDisplayShowAction(FourDigitDisplayShowAction<Void> fourDigitDisplayShowAction) {
+        this.sb.append("fdd.show(");
+        fourDigitDisplayShowAction.getValue().visit(this);
+        this.sb.append(", ");
+        fourDigitDisplayShowAction.getPosition().visit(this);
+        this.sb.append(", ");
+        fourDigitDisplayShowAction.getColon().visit(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitFourDigitDisplayClearAction(FourDigitDisplayClearAction<Void> fourDigitDisplayClearAction) {
+        this.sb.append("fdd.clear();");
+        return null;
+    }
+
+    @Override
     protected void generateProgramPrefix(boolean withWrapping) {
         if ( !withWrapping ) {
             return;
@@ -1221,7 +1241,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     }
 
     private int map(int x, int in_min, int in_max, int out_min, int out_max) {
-        return (((x - in_min) * (out_max - out_min)) / (in_max - in_min)) + out_min;
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
 
     private void arrayLen(Var<Void> arr) {
@@ -1244,7 +1264,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     }
 
     private String capitalizeFirstLetter(String original) {
-        if ( (original == null) || (original.length() == 0) ) {
+        if ( original == null || original.length() == 0 ) {
             return original;
         }
         return original.substring(0, 1).toUpperCase() + original.substring(1).toLowerCase();
@@ -1254,9 +1274,15 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         this.sb.append("#define _GNU_SOURCE\n\n");
         this.sb.append("#include \"MicroBit.h\" \n");
         this.sb.append("#include \"NEPODefs.h\"\n");
+        if ( this.codePreprocess.isFourDigitDisplayUsed() ) {
+            this.sb.append("#include \"FourDigitDisplay.h\"\n");
+        }
         this.sb.append("#include <array>\n");
         this.sb.append("#include <stdlib.h>\n");
         this.sb.append("MicroBit _uBit;\n\n");
+        if ( this.codePreprocess.isFourDigitDisplayUsed() ) {
+            this.sb.append("FourDigitDisplay fdd(MICROBIT_PIN_P2, MICROBIT_PIN_P8);\n");
+        }
     }
 
     @Override

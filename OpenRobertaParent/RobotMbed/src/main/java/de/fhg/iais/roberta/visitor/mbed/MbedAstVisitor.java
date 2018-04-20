@@ -6,6 +6,8 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
+import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
+import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
@@ -207,4 +209,17 @@ public interface MbedAstVisitor<V> extends AstVisitor<V> {
      */
     V visitGyroSensor(GyroSensor<V> gyroSensor);
 
+    /**
+     * visit a {@link visitFourDigitDisplayShowAction}.
+     *
+     * @param FourDigitDisplayShowAction phrase to be visited
+     */
+    V visitFourDigitDisplayShowAction(FourDigitDisplayShowAction<V> fourDigitDisplayShowAction);
+
+    /**
+     * visit a {@link FourDigitDisplayClearAction}.
+     *
+     * @param FourDigitDisplayClearAction phrase to be visited
+     */
+    V visitFourDigitDisplayClearAction(FourDigitDisplayClearAction<V> fourDigitDisplayClearAction);
 }

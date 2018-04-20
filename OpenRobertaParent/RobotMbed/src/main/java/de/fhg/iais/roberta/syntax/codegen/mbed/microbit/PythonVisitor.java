@@ -23,6 +23,8 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
+import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
+import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
@@ -799,7 +801,7 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
             default:
                 throw new IllegalArgumentException("unhandled type");
         }
-        return null;        
+        return null;
     }
 
     @Override
@@ -847,6 +849,16 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
         this.sb.append(", ");
         displayGetPixelAction.getY().visit(this);
         this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitFourDigitDisplayShowAction(FourDigitDisplayShowAction<Void> fourDigitDisplayShowAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitFourDigitDisplayClearAction(FourDigitDisplayClearAction<Void> fourDigitDisplayClearAction) {
         return null;
     }
 
