@@ -808,6 +808,284 @@
 				</div>
 			</div>
 		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<h2 id="Programming-BlocksNAO-Sensors">Sensors</h2>
+				<p>The category Ssensors« contains blocks for all sensors of the
+					NAO robot:</p>
+				<ul>
+					<li>touch sensor</li>
+					<li>ultrasonic sensor</li>
+					<li>gyroscope sensor</li>
+					<li>accelerometer sensor</li>
+					<li>force-resistor sensor</li>
+					<li>electric current sensor</li>
+					<li>NAO-mark sensor</li>
+					<li>speech recognition sensor</li>
+					<li>face recognition sensor</li>
+				</ul>
+				<p>A special feature of the sensor blocks compared to the action
+					blocks is that all sensor-blocks return a »value«. The value type
+					returned by a sensor block corresponds to the color of the
+					connector. The connector is the "nose" which enables NEPO blocks to
+					be inserted into other blocks. An exact description can found in
+					section NEPO.</p>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="robSensors_touch_getSample" class="help beginner">
+					<h3 id="Programming-BlocksNAO-»touchgetsample«">
+						<span style="color: rgb(0, 0, 0);">»get ... touch sensor</span><span
+							style="color: rgb(0, 0, 0);">«</span>
+					</h3>
+					<p>With the »get ... touch sensor« block you can check if
+						certain NAO's touch sensors where touched or pressed.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-sorted-down">sensor, you can
+							choose from "Hand", "Head" or "Bumper" sensors</li>
+						<li class="typcn typcn-arrow-sorted-down">sensor side, you
+							can choose "Left" or "Right" for the "Hand" and "Head" sensors
+							and "Front", "Middle" or "Rear" for the "Head" sensor</li>
+					</ul>
+					<p>Return value(s):</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-right">touched, "Boolean" type
+							value, can be True or False</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="robSensors_ultrasonic_getSample" class="help beginner">
+					<h3 id="Programming-BlocksNAO-»ultrasonicgetsample«">
+						<span style="color: rgb(0, 0, 0);">»get distance cm
+							ultrasonic sensor</span><span style="color: rgb(0, 0, 0);">«</span>
+					</h3>
+					<p>With the »get distance cm ultrasonic sensor« block you can
+						get the distance in centimetres from NAO to the obstacle.
+						Detection range is from 0.01 metre to 3 metre. Effective cone is
+						60 degrees.</p>
+					<p>Return value(s):</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-right">distance, "Number" type
+							value, distance to the obstacle in centimetres.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="robSensors_gyro_getSample" class="help beginner">
+					<h3 id="Programming-BlocksNAO-»gyrogetsample«">
+						<span style="color: rgb(0, 0, 0);">»get angle gyroscope</span><span
+							style="color: rgb(0, 0, 0);">«</span>
+					</h3>
+					<p>With the »get angle gyroscope« block you can get the angle
+						in degrees of the NAO body.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-sorted-down">axis, you can
+							choose from "x" or "y"</li>
+					</ul>
+					<p>Return value(s):</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-right">angle, "Number" type
+							value, angle of tilt of NAO body.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="robSensors_accelerometer_getSample" class="help beginner">
+					<h3 id="Programming-BlocksNAO-»accelerometergetsample«">
+						<span style="color: rgb(0, 0, 0);">»get value milli-g
+							accelerometer</span><span style="color: rgb(0, 0, 0);">«</span>
+					</h3>
+					<p>With the »get value milli-g accelerometer« block you can get
+						the acceleration in milli-g of the NAO body.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-sorted-down">axis, you can
+							choose from "x", "y" or "z"</li>
+					</ul>
+					<p>Return value(s):</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-right">acceleration, "Number"
+							type value, acceleration of NAO body.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="robSensors_fsr_getSample" class="help beginner">
+					<h3 id="Programming-BlocksNAO-»fsrgetsample«">
+						<span style="color: rgb(0, 0, 0);">»get value N fsr sensor</span><span
+							style="color: rgb(0, 0, 0);">«</span>
+					</h3>
+					<p>With the »get value N fsr sensor« block you can get the
+						force applied to the sole on NAO's feet.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-sorted-down">side, you can
+							choose from "left" or "right"</li>
+					</ul>
+					<p>Return value(s):</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-right">force, "Number" type
+							value, force applied to the NAO's foot, can be in the range from
+							0 to 25 Newton.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="robSensors_detectmark_getSample" class="help beginner">
+					<h3 id="Programming-BlocksNAO-»detectmarkgetsample«">
+						<span style="color: rgb(0, 0, 0);">»get value get last
+							detected NAO mark(s)</span><span style="color: rgb(0, 0, 0);">«</span>
+					</h3>
+					<p>With the »get value get last detected NAO mark(s)« block you
+						can start the NAO mark detection and if NAO recognises a mark or
+						several marks a list will be returned.</p>
+					<p>Return value(s):</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-right">NAO-marks, "List Number"
+							type value, a list of numbers that are associated with NAO-marks.
+							You can find the numbers in the corner of you NAO-marks.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoSensors_getCurrent" class="help expert">
+					<h3 id="Programming-BlocksNAO-»getcurrent«[Expertblock]">
+						<span style="color: rgb(0, 0, 0);">»get electric current of</span><span
+							style="color: rgb(0, 0, 0);">«<span
+							class="typcn typcn-star"></span></span>
+					</h3>
+					<p>With the »get electric current of« block you can get the
+						current flowing in certain NAO's joints.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-sorted-down">joint, you can
+							choose one of the joints of NAO.</li>
+					</ul>
+					<p>Return value(s):</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-right">current, "Number" type
+							value, current flowing through NAO's joint, measured in Amperes.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoSensors_recognizeWord" class="help expert">
+					<h3 id="Programming-BlocksNAO-»recognizeword«[Expertblock]">
+						<span style="color: rgb(0, 0, 0);">»get recognize word from
+							list</span><span style="color: rgb(0, 0, 0);">«<span
+							class="typcn typcn-star"></span></span>
+					</h3>
+					<p>With the »get recognize word from list« block you can make
+						NAO recognize words and return the last recognized word or phrase.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-left">word/phrase list, you need
+							to supply a list of strings from which NAO will be able to
+							recognize one.</li>
+					</ul>
+					<p>Return value(s):</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-right">word/phrase, "String"
+							type value, latest recognized word or phrase.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="robSensors_detectface_getSample" class="help expert">
+					<h3 id="Programming-BlocksNAO-»detectfacegetsample«[Expertblock]">
+						<span style="color: rgb(0, 0, 0);">»get value get last
+							recognized face</span><span style="color: rgb(0, 0, 0);">«<span
+							class="typcn typcn-star"></span></span>
+					</h3>
+					<p>With the »get value get last recognized face« block you can
+						make NAO recognize previously learnt faces and return the list of
+						faces present in NAO's field of view.</p>
+					<p>Return value(s):</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-right">face(s), "List String"
+							type value, all faces in NAO's field of view.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoSensors_getMarkInformation" class="help expert">
+					<h3 id="Programming-BlocksNAO-»getmarkinformation«[Expertblock]">
+						<span style="color: rgb(0, 0, 0);">»get information about
+							NAO mark</span><span style="color: rgb(0, 0, 0);">«<span
+							class="typcn typcn-star"></span></span>
+					</h3>
+					<p>With the »get information about NAO mark« block you can get
+						full characteristics of a particular NAO mark.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-left">NAO mark number, you need
+							to supply a number of the detected mark.</li>
+					</ul>
+					<p>Return value(s):</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-right">characteristics, a list
+							of numbers that represent this detected NAO mark.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoSensors_getFaceInformation" class="help expert">
+					<h3 id="Programming-BlocksNAO-»getfaceinformation«[Expertblock]">
+						<span style="color: rgb(0, 0, 0);">»get information about
+							recognized face</span><span style="color: rgb(0, 0, 0);">«<span
+							class="typcn typcn-star"></span></span>
+					</h3>
+					<p>With the »get information about recognized face« block you
+						can get full characteristics of a particular recognized face.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-left">face name, you need to
+							supply a name of the detected person.</li>
+					</ul>
+					<p>Return value(s):</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-right">characteristics, a list
+							of strings that represent this detected face.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
 	</div>
 </body>
 </html>
