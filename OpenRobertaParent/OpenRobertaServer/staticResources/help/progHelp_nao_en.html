@@ -1,171 +1,813 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!DOCTYPE html>
 <html lang="de">
-  <head/>
-  <body>
-    <div id="helpContent">
-      <div class="cell normal" data-type="normal">
-        <div class="innerCell">
-          <div id="robControls_start" class="help beginner">
-            <h3 id="Programming-BlocksNAO-»Programstart«">
-              <span style="color: rgb(0,0,0);">»Program start«</span>
-            </h3>
-            <p>Each program starts with the red »Program start« block.</p>
-            <p>This block is always available in the Open Roberta Lab and cannot be deleted. The little triangle below the start block is called  »sequence connector«. The first block you want to use will be connected by using the »sequence connector« at the start block.  The sequence connector color changes to yellow when a suitable block comes into its range.</p>
-            <p>Settings:</p>
-            <ul style="margin-top: 0; margin-bottom: 10px">
-              <li class="typcn typcn-plus">create a new global variable</li>
-              <li class="typcn typcn-minus">delete the global variable</li>
-            </ul>
-             If global variables have been created:
-            <p></p>
-            <ul style="margin-top: 0; margin-bottom: 10px">
-              <li class="typcn typcn-pen">Text, name of the variable</li>
-              <li class="typcn typcn-arrow-down">Type of the variable, »Number«, »Boolean«, »String«, »Color«, »List Number«, »List Boolean«, »List String«, »List Color«</li>
-              <li class="typcn typcn-arrow-left">Value, that corresponds to the variable type. This is the initial value of the variable.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="cell normal" data-type="normal">
-        <div class="innerCell">
-          <h2 id="Programming-BlocksEV3-Action">Action</h2>
-          <p>The »Action« category contains the blocks where an action is performed on the Aldebaran NAO-robot. For example, the movement or the eyes of the Aldebaran NAO-robot can be programmed.</p>
-          <p>The »Action« Category includes the following program blocks:</p>
-          <ul>
-            <li>Blocks to control movements</li>
-            <li>Blocks to control the walking</li>
-            <li>Blocks to control the animations</li>
-            <li>Blocks to control the speaker</li>
-            <li>Blocks to control the vision</li>
-            <li>Blocks to control the lights (LEDs)</li>
-          </ul>
-          <p>In expert mode, the category »Action« is subdivided into the following subcategories:</p>
-          <ul>
-            <li>Move</li>
-            <li>Walk</li>
-            <li>Animation</li>
-            <li>Sounds</li>
-            <li>Vision</li>
-            <li>Lights</li>
-          </ul>
-          <p>The expert category contains all blocks of the beginner category.</p>
-        </div>
-      </div>
-      <div class="cell normal" data-type="normal">
-        <div class="innerCell">
-          <p/>
-          <div id="naoActions_mode" class="help beginenr">
-            <h3 id="Programming-BlocksNAO-»setmode«">
-              <span style="color: rgb(0,0,0);">»set mode ...</span>
-              <span style="color: rgb(0,0,0);">«
-              <span class="typcn typcn-star"></span>
-              </span>
-            </h3>
-            <p>With the »set mode ...« block you can bring NAO robot to different states, like standing with all motors turned on or sitting.</p>
-            <p>Options and Arguments:</p>
-            <ul style="margin-top: 0; margin-bottom: 10px">
-              <li class="typcn typcn-arrow-down">mode</li>
-                <ul>
-                  <li>active, NAO is standing and all the motors are activated.</li>
-                  <li>rest, NAO will go to resting position, turning off the motors.</li>              
-                  <li>sit, NAO will sit.</li>
-                </ul>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="cell normal" data-type="normal">
-        <div class="innerCell">
-          <p/>
-          <div id="naoActions_applyPosture" class="help expert">
-            <h3 id="Programming-BlocksNAO-»applyposture«[Expertblock]">
-              <span style="color: rgb(0,0,0);">»apply posture ...</span><span style="color: rgb(0,0,0);">«<span class="typcn typcn-star"></span></span>
-            </h3>
-            <p>With the »apply posture ...« block you can set NAO's desired posture.</p>
-            <p>Options and Arguments:</p>
-            <ul style="margin-top: 0; margin-bottom: 10px">
-              <li class="typcn typcn-arrow-down">posture</li>
-                <ul>
-                  <li class="typcn typcn-arrow-down">Stand, NAO will go to default stand position, hands down</li>
-                  <li class="typcn typcn-arrow-down">StandInit, NAO will go to the position, as if it is ready to walk/run</li>
-                  <li class="typcn typcn-arrow-down">StandZero, NAO will go to similar position as Stand, only in StandZero it's hands are stretched forward in front of the robot</li>
-                  <li class="typcn typcn-arrow-down">Sit, NAO will go to default sit position with hands on it's knees</li>
-                  <li class="typcn typcn-arrow-down">SitRelax, NAO will go to the sit position with stretched legs and hands behind the body</li>
-                  <li class="typcn typcn-arrow-down">LyingBelly, NAO will go to lying on the belly position, putting arms before/under the head</li>
-                  <li class="typcn typcn-arrow-down">LyingBack, NAO will lie on it's back putting arms on the belly</li>
-                  <li class="typcn typcn-arrow-down">Crouch, NAO will got to squatting position keeping arms on the waist level</li>
-                </ul>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="cell normal" data-type="normal">
-        <div class="innerCell">
-          <p/>
-          <div id="naoActions_stiffness" class="help expert">
-            <h3 id="Programming-BlocksNAO-»stiffnessof«[Expertblock]">
-              <span style="color: rgb(0,0,0);">»stiffness of ... ...</span><span style="color: rgb(0,0,0);">«<span class="typcn typcn-star"></span></span>
-            </h3>
-            <p>The block »<span style="color: rgb(0,0,0);">stiffness of ... ...</span>« allows to turn on or off motor stiffness on selected robot's parts</p>
-            <p>Options and Arguments:</p>
-            <ul style="margin-top: 0; margin-bottom: 10px">
-              <li class="typcn typcn-arrow-down">robot part, can be "body", "head", "arms", "left arm", "right arm", "legs", "left leg", "right leg"</li>
-              <li class="typcn typcn-arrow-down">state, can be "on" or "off"</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="cell normal" data-type="normal">
-        <div class="innerCell">
-          <p/>
-          <div id="naoActions_autonomous" class="help expert">
-            <h3 id="Programming-BlocksNAO-»autonomouslife«[Expertblock]">
-              <span style="color: rgb(0,0,0);">»autonomous life ...</span><span style="color: rgb(0,0,0);">«<span class="typcn typcn-star"></span></span>
-            </h3>
-            <p>With the »autonomous life ...« block you can set NAO's "body breath" behaviour. This means that while standing in one place NAO will execute a waddling movement pattern as well as background human recognition and tracking. It is very usefull to turn autonomous life off before starting to execute any body part movements because NAO's "breathing" will override user-defined body part positioning</p>
-            <p>Options and Arguments:</p>
-            <ul style="margin-top: 0; margin-bottom: 10px">
-              <li class="typcn typcn-arrow-down">state, can be "on" or "off"</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="cell normal" data-type="normal">
-        <div class="innerCell">
-          <p/>
-          <div id="naoActions_hand" class="help expert">
-            <h3 id="Programming-BlocksNAO-»hand«[Expertblock]">
-              <span style="color: rgb(0,0,0);">»hand ... ...</span><span style="color: rgb(0,0,0);">«<span class="typcn typcn-star"></span></span>
-            </h3>
-            <p>With the »hand ... ...« block you can open and close NAO's grippers (fingers)</p>
-            <p>Options and Arguments:</p>
-            <ul style="margin-top: 0; margin-bottom: 10px">
-              <li class="typcn typcn-arrow-down">hand, can be "left" or "right"</li>
-              <li class="typcn typcn-arrow-down">state, can be "open" or "close"</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      
-      <div class="cell normal" data-type="normal">
-        <div class="innerCell">
-          <p/>
-          <div id="naoActions_moveJoint" class="help expert">
-            <h3 id="Programming-BlocksNAO-»movejoint«[Expertblock]">
-              <span style="color: rgb(0,0,0);">»move ... ... degree ...</span><span style="color: rgb(0,0,0);">«<span class="typcn typcn-star"></span></span>
-            </h3>
-            <p>With the »move ... ... degree ...« block you can set each individual angle for each individual robot's joint. Most of the joints have pitch, roll and yaw angles possible to be set, however some are limited only to 2 degrees of freedom.</p>
-            <p>Options and Arguments:</p>
-            <ul style="margin-top: 0; margin-bottom: 10px">
-              <li class="typcn typcn-arrow-down">body part + angle name, can be one of the available joint + angle combinations</li>
-              <li class="typcn typcn-arrow-down">mode, can be "absolute" to set from value relative to the origin or "relative" to set the value relative to current position</li>
-              <li class="typcn typcn-arrow-left">degree, can be a "Number" value. This value is specific for each joint + angle combination</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      
-    </div>
-  </body>
+<head />
+<body>
+	<div id="helpContent">
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<div id="robControls_start" class="help beginner">
+					<h3 id="Programming-BlocksNAO-»Programstart«">
+						<span style="color: rgb(0, 0, 0);">»Program start«</span>
+					</h3>
+					<p>Each program starts with the red »Program start« block.</p>
+					<p>This block is always available in the Open Roberta Lab and
+						cannot be deleted. The little triangle below the start block is
+						called »sequence connector«. The first block you want to use will
+						be connected by using the »sequence connector« at the start block.
+						The sequence connector color changes to yellow when a suitable
+						block comes into its range.</p>
+					<p>Settings:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-plus">create a new global variable</li>
+						<li class="typcn typcn-minus">delete the global variable</li>
+					</ul>
+					If global variables have been created:
+					<p></p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-pen">Text, name of the variable</li>
+						<li class="typcn typcn-arrow-sorted-down">Type of the
+							variable, »Number«, »Boolean«, »String«, »Color«, »List Number«,
+							»List Boolean«, »List String«, »List Color«</li>
+						<li class="typcn typcn-arrow-left">Value, that corresponds to
+							the variable type. This is the initial value of the variable.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<h2 id="Programming-BlocksEV3-Action">Action</h2>
+				<p>The »Action« category contains the blocks where an action is
+					performed on the Aldebaran NAO-robot. For example, the movement or
+					the eyes of the Aldebaran NAO-robot can be programmed.</p>
+				<p>The »Action« Category includes the following program blocks:</p>
+				<ul>
+					<li>Blocks to control movements</li>
+					<li>Blocks to control the walking</li>
+					<li>Blocks to control the animations</li>
+					<li>Blocks to control the speaker</li>
+					<li>Blocks to control the vision</li>
+					<li>Blocks to control the lights (LEDs)</li>
+				</ul>
+				<p>In expert mode, the category »Action« is subdivided into the
+					following subcategories:</p>
+				<ul>
+					<li>Move</li>
+					<li>Walk</li>
+					<li>Animation</li>
+					<li>Sounds</li>
+					<li>Vision</li>
+					<li>Lights</li>
+				</ul>
+				<p>The expert category contains all blocks of the beginner
+					category.</p>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_mode" class="help beginner">
+					<h3 id="Programming-BlocksNAO-»setmode«">
+						<span style="color: rgb(0, 0, 0);">»set mode</span><span
+							style="color: rgb(0, 0, 0);">«</span>
+					</h3>
+					<p>With the »set mode« block you can bring NAO robot to
+						different states, like standing with all motors turned on or
+						sitting.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-sorted-down">mode</li>
+						<li class="typcn typcn-media-play">active, NAO is standing
+							and all the motors are activated.</li>
+						<li class="typcn typcn-media-play">rest, NAO will go to
+							resting position, turning off the motors.</li>
+						<li class="typcn typcn-media-play">sit, NAO will sit.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_applyPosture" class="help expert">
+					<h3 id="Programming-BlocksNAO-»applyposture«[Expertblock]">
+						<span style="color: rgb(0, 0, 0);">»apply posture</span><span
+							style="color: rgb(0, 0, 0);">«</span>
+					</h3>
+					<p>With the »apply posture« block you can set NAO's desired
+						posture.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-sorted-down">posture</li>
+						<li class="typcn typcn-media-play">Stand, NAO will go to
+							default stand position, hands down.</li>
+						<li class="typcn typcn-media-play">StandInit, NAO will go to
+							the position, as if it is ready to walk/run.</li>
+						<li class="typcn typcn-media-play">StandZero, NAO will go to
+							similar position as Stand, only in StandZero it's hands are
+							stretched forward in front of the robot.</li>
+						<li class="typcn typcn-media-play">Sit, NAO will go to
+							default sit position with hands on it's knees.</li>
+						<li class="typcn typcn-media-play">SitRelax, NAO will go to
+							the sit position with stretched legs and hands behind the body.</li>
+						<li class="typcn typcn-media-play">LyingBelly, NAO will go to
+							lying on the belly position, putting arms before/under the head.</li>
+						<li class="typcn typcn-media-play">LyingBack, NAO will lie on
+							it's back putting arms on the belly.</li>
+						<li class="typcn typcn-media-play">Crouch, NAO will got to
+							squatting position keeping arms on the waist level.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_stiffness" class="help expert">
+					<h3 id="Programming-BlocksNAO-»stiffnessof«[Expertblock]">
+						<span style="color: rgb(0, 0, 0);">»stiffness of</span><span
+							style="color: rgb(0, 0, 0);">«<span
+							class="typcn typcn-star"></span></span>
+					</h3>
+					<p>
+						The block »<span style="color: rgb(0, 0, 0);">stiffness of</span>«
+						allows to turn on or off motor stiffness on selected robot's
+						parts.
+					</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-sorted-down">robot part, can be
+							"body", "head", "arms", "left arm", "right arm", "legs", "left
+							leg", "right leg".</li>
+						<li class="typcn typcn-arrow-sorted-down">state, can be "on"
+							or "off".</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_autonomous" class="help expert">
+					<h3 id="Programming-BlocksNAO-»autonomouslife«[Expertblock]">
+						<span style="color: rgb(0, 0, 0);">»autonomous life</span><span
+							style="color: rgb(0, 0, 0);">«<span
+							class="typcn typcn-star"></span></span>
+					</h3>
+					<p>With the »autonomous life« block you can set NAO's "body
+						breath" behaviour. This means that while standing in one place NAO
+						will execute a waddling movement pattern as well as background
+						human recognition and tracking. It is very usefull to turn
+						autonomous life off before starting to execute any body part
+						movements because NAO's "breathing" will override user-defined
+						body part positioning.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-sorted-down">state, can be "on"
+							or "off".</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_hand" class="help expert">
+					<h3 id="Programming-BlocksNAO-»hand«[Expertblock]">
+						<span style="color: rgb(0, 0, 0);">»hand</span><span
+							style="color: rgb(0, 0, 0);">«<span
+							class="typcn typcn-star"></span></span>
+					</h3>
+					<p>With the »hand« block you can open and close NAO's grippers
+						(fingers).</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-sorted-down">hand, can be "left"
+							or "right".</li>
+						<li class="typcn typcn-arrow-sorted-down">state, can be
+							"open" or "close".</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_moveJoint" class="help expert">
+					<h3 id="Programming-BlocksNAO-»movejoint«[Expertblock]">
+						<span style="color: rgb(0, 0, 0);">»move ... degree</span><span
+							style="color: rgb(0, 0, 0);">«<span
+							class="typcn typcn-star"></span></span>
+					</h3>
+					<p>With the »move ... degree« block you can set each individual
+						angle for each individual robot's joint. Most of the joints have
+						pitch, roll and yaw angles possible to be set, however some are
+						limited only to 2 degrees of freedom.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-sorted-down">body part + angle
+							name, can be one of the available joint + angle combinations.</li>
+						<li class="typcn typcn-arrow-sorted-down">mode, can be
+							"absolute" to set from value relative to the origin or "relative"
+							to set the value relative to current position.</li>
+						<li class="typcn typcn-arrow-left">degree, a "Number" value.
+							This value is specific for each joint + angle combination.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_walk" class="help beginner">
+					<h3 id="Programming-BlocksNAO-»walk«">
+						<span style="color: rgb(0, 0, 0);">»walk ... distance cm</span><span
+							style="color: rgb(0, 0, 0);">«</span>
+					</h3>
+					<p>With the »walk ... distance cm« block you can make NAO walk
+						a certain distance in one of two available directions.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-sorted-down">direction, can be
+							one of the available joint + angle combinations.</li>
+						<li class="typcn typcn-arrow-sorted-down">mode, can be
+							"absolute" to set from value relative to the origin or "relative"
+							to set the value relative to current position.</li>
+						<li class="typcn typcn-arrow-left">degree, a "Number" value.
+							This value is specific for each joint + angle combination.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_turn" class="help beginner">
+					<h3 id="Programming-BlocksNAO-»turn«">
+						<span style="color: rgb(0, 0, 0);">»turn ... degree</span><span
+							style="color: rgb(0, 0, 0);">«</span>
+					</h3>
+					<p>With the »turn ... degree« block you can make NAO rotate on
+						a certain degree.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-sorted-down">direction, can be
+							"left" or "right"</li>
+						<li class="typcn typcn-arrow-left">degree, a "Number" value.
+							The units for this value are degrees.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_stop" class="help beginner">
+					<h3 id="Programming-BlocksNAO-»stop«">
+						<span style="color: rgb(0, 0, 0);">»stop movement</span><span
+							style="color: rgb(0, 0, 0);">«</span>
+					</h3>
+					<p>With the »stop movement« block you can make NAO stop
+						executing any movement action.</p>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_walkTo" class="help expert">
+					<h3 id="Programming-BlocksNAO-»walkto«[Expertblock]">
+						<span style="color: rgb(0, 0, 0);">»walk to</span><span
+							style="color: rgb(0, 0, 0);">«<span
+							class="typcn typcn-star"></span></span>
+					</h3>
+					<p>With the »walk to« block you can make NAO go to a certain
+						position defined by the coordinates.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-left">x, "Number" value for x
+							coordinate.</li>
+						<li class="typcn typcn-arrow-left">y, "Number" value for y
+							coordinate.</li>
+						<li class="typcn typcn-arrow-left">theta, "Number" value for
+							theta(rotation) of the robot.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_walk_async" class="help expert">
+					<h3 id="Programming-BlocksNAO-»walkasync«[Expertblock]">
+						<span style="color: rgb(0, 0, 0);">»walk</span><span
+							style="color: rgb(0, 0, 0);">«<span
+							class="typcn typcn-star"></span></span>
+					</h3>
+					<p>With the »walk« block you can make NAO start wlaking with
+						given speeds. Note that this block executes walking in a
+						non-blocking way, meaning that the program will continue executing
+						next blocks after the start of NAO moving. It is important to keep
+						in mind, that this block has no timeout or stop condition, in
+						order to stop NAO from moving the stop movement block is
+						necessary, otherwise NAO will continue walking indefenitely.
+						Another notice: when close to zero speeds are selected, NAO will
+						walk in place.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-left">x speed, "Number" value
+							for NAO speed along the x axis. Can be in range of 0 to 100.</li>
+						<li class="typcn typcn-arrow-left">y speed, "Number" value
+							for NAO speed along the y axis. Can be in range of 0 to 100.</li>
+						<li class="typcn typcn-arrow-left">theta speed, "Number"
+							value for theta(rotational) speed of the robot.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_animation" class="help expert">
+					<h3 id="Programming-BlocksNAO-»animation«[Expertblock]">
+						<span style="color: rgb(0, 0, 0);">»perform</span><span
+							style="color: rgb(0, 0, 0);">«<span
+							class="typcn typcn-star"></span></span>
+					</h3>
+					<p>With the »perform« block you can make NAO perform one of the
+						pre-defined animations. For certain animations it is important
+						that NAO is standing on a flat even surface, because of the center
+						of mass should be in the middle of the robot, otherwise it may
+						tip. This is especially important for the "tai chi" animation
+						where nao is standing on one leg.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-sorted-down">animation, the
+							animation to perform, can be "tai chi", "wave", "blink" or "wipe
+							forehead".</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_pointLookAt" class="help expert">
+					<h3 id="Programming-BlocksNAO-»pointlookat«[Expertblock]">
+						<span style="color: rgb(0, 0, 0);">»point/look at frame</span><span
+							style="color: rgb(0, 0, 0);">«<span
+							class="typcn typcn-star"></span></span>
+					</h3>
+					<p>With the »point/look at frame« block you can make NAO point
+						with it's hands or turn it's head towards the specified
+						coordinates at the desired speed (can be in range of 0 to 100).</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-sorted-down">action, you can
+							select "point" for pointing with hands or "look" to make NAO turn
+							it's head</li>
+						<li class="typcn typcn-arrow-sorted-down">frame, the frame of
+							reference in which the coordinates are evaluated, can be "torso"
+							for the robot's body, "world" for the absolute world frame or
+							"robot" for the robot's origin frame. It may be possible that
+							certain coordinates cannot be reached by the robot due to
+							physical restrictions.</li>
+						<li class="typcn typcn-arrow-left">x, the x coordinate in the
+							selected frame of reference.</li>
+						<li class="typcn typcn-arrow-left">y, the y coordinate in the
+							selected frame of reference.</li>
+						<li class="typcn typcn-arrow-left">z, the z coordinate in the
+							selected frame of reference.</li>
+						<li class="typcn typcn-arrow-left">speed, the speed at which
+							the robot will move.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_setVolume" class="help beginner">
+					<h3 id="Programming-BlocksNAO-»setvolume«">
+						<span style="color: rgb(0, 0, 0);">»set volume</span><span
+							style="color: rgb(0, 0, 0);">«</span>
+					</h3>
+					<p>With the »set volume« block you can set NAO speakers volume.
+						Please note, that this sets the volume with respect to the robot's
+						setup that is done through the robot's web page i.e. when this
+						block is used to set the volume to 25, but the robot is setup to
+						the maximum 50% of volume, then this block will not override that
+						property with 25% instead it will set the volume to quater of the
+						value setup through the robot's web interface.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-left">volume, a "Number" value,
+							the volume to set, can be in range of 0 to 100.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_getVolume" class="help beginner">
+					<h3 id="Programming-BlocksNAO-»setvolume«">
+						<span style="color: rgb(0, 0, 0);">»get volume</span><span
+							style="color: rgb(0, 0, 0);">«</span>
+					</h3>
+					<p>With the »get volume« block you can get NAO speakers volume.
+						Please note, that this gets the volume with respect to the robot's
+						setup that is done through the robot's web page i.e. when this
+						block is returning 25% it does not mean, that this is the 25% of
+						maximum volume, instead it is the 25% of the volume setup through
+						the robot's web interface.</p>
+					<p>Return value(s):</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-right">volume, a "Number" value,
+							the current speakers volume, can be in range of 0 to 100.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="robActions_setLanguage" class="help expert">
+					<h3 id="Programming-BlocksNAO-»setlanguage«[Expertblock]">
+						<span style="color: rgb(0, 0, 0);">»set language</span><span
+							style="color: rgb(0, 0, 0);">«<span
+							class="typcn typcn-star"></span></span>
+					</h3>
+					<p>With the »set language« block you can set NAO's speech
+						language. Please note, that despite the plethora of available
+						languages in the drop-down menu NAO may have not all of them
+						installed. Usually the robot has English and one local language.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-sorted-down">language, language
+							to set, please consult robot's web page to see which languages
+							are available for your NAO.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_getLanguage" class="help expert">
+					<h3 id="Programming-BlocksNAO-»getlanguage«[Expertblock]">
+						<span style="color: rgb(0, 0, 0);">»get language</span><span
+							style="color: rgb(0, 0, 0);">«<span
+							class="typcn typcn-star"></span></span>
+					</h3>
+					<p>With the »get language« block you can get NAO's current
+						speech language.</p>
+					<p>Return value(s):</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-right">current language of your
+							NAO.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="robActions_sayText" class="help beginner">
+					<h3 id="Programming-BlocksNAO-»saytext«">
+						<span style="color: rgb(0, 0, 0);">»say</span><span
+							style="color: rgb(0, 0, 0);">«</span>
+					</h3>
+					<p>With the »say« block you can make NAO pronounce text,
+						phrases and/or numbers.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-left">text, a string of
+							characters for NAO to pronounce.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="robActions_sayText_parameters" class="help expert">
+					<h3 id="Programming-BlocksNAO-»saytextparameters«[Expertblock]">
+						<span style="color: rgb(0, 0, 0);">»say ... voice speed ...
+							voice pitch</span><span style="color: rgb(0, 0, 0);">«<span
+							class="typcn typcn-star"></span></span>
+					</h3>
+					<p>With the »say ... voice speed ... voice pitch« block you can
+						make NAO pronounce text, phrases and/or numbers with given voice
+						speed and voice pitch properties. Speed and pitch may vary in the
+						range from 0 to 100.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-left">text, a string of
+							characters for NAO to pronounce.</li>
+						<li class="typcn typcn-arrow-left">voice speed, NAO's speech
+							speed.</li>
+						<li class="typcn typcn-arrow-left">voice pitch, NAO's speech
+							pitch.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_playFile" class="help expert">
+					<h3 id="Programming-BlocksNAO-»playfile«[Expertblock]">
+						<span style="color: rgb(0, 0, 0);">»play file</span><span
+							style="color: rgb(0, 0, 0);">«<span
+							class="typcn typcn-star"></span></span>
+					</h3>
+					<p>With the »play file« block you can make NAO play a
+						previously uploaded recording. Currently the only way to get NAO
+						to play user recordings is by providing a .wav file and putting it
+						manually under /usr/share/naoqi/wav/ directory on the robot. This
+						requires SSH file transfer.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-left">filename, a string of
+							characters that represents the filename of the recording to be
+							played.</li>
+					</ul>
+					<p>The following sound files are already present on the robot:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-media-play">0.wav</li>
+						<li class="typcn typcn-media-play">1.wav</li>
+						<li class="typcn typcn-media-play">2.wav</li>
+						<li class="typcn typcn-media-play">3.wav</li>
+						<li class="typcn typcn-media-play">4.wav</li>
+						<li class="typcn typcn-media-play">5.wav</li>
+						<li class="typcn typcn-media-play">6.wav</li>
+						<li class="typcn typcn-media-play">7.wav</li>
+						<li class="typcn typcn-media-play">8.wav</li>
+						<li class="typcn typcn-media-play">9.wav</li>
+						<li class="typcn typcn-media-play">account_registration_begin.wav</li>
+						<li class="typcn typcn-media-play">account_registration_front.wav</li>
+						<li class="typcn typcn-media-play">account_registration_middle.wav</li>
+						<li class="typcn typcn-media-play">account_registration_not_registered.wav</li>
+						<li class="typcn typcn-media-play">account_registration_rear.wav</li>
+						<li class="typcn typcn-media-play">account_registration_registered.wav</li>
+						<li class="typcn typcn-media-play">begin_reco.wav</li>
+						<li class="typcn typcn-media-play">bip_gentle.wav</li>
+						<li class="typcn typcn-media-play">bip_power_off.wav</li>
+						<li class="typcn typcn-media-play">bip_power_on.wav</li>
+						<li class="typcn typcn-media-play">body_not_found.wav</li>
+						<li class="typcn typcn-media-play">byebye.wav</li>
+						<li class="typcn typcn-media-play">cnx_choregraphe.wav</li>
+						<li class="typcn typcn-media-play">emergency_stiffness.wav</li>
+						<li class="typcn typcn-media-play">end_reco.wav</li>
+						<li class="typcn typcn-media-play">energy.wav</li>
+						<li class="typcn typcn-media-play">fall.wav</li>
+						<li class="typcn typcn-media-play">fall_jpj.wav</li>
+						<li class="typcn typcn-media-play">heat.wav</li>
+						<li class="typcn typcn-media-play">hello.wav</li>
+						<li class="typcn typcn-media-play">memory.wav</li>
+						<li class="typcn typcn-media-play">motor_protection.wav</li>
+						<li class="typcn typcn-media-play">my_internet_address_is.wav</li>
+						<li class="typcn typcn-media-play">noise.raw
+						<li class="typcn typcn-media-play">outch.wav</li>
+						<li class="typcn typcn-media-play">point.wav</li>
+						<li class="typcn typcn-media-play">push_recovery_1.wav</li>
+						<li class="typcn typcn-media-play">push_recovery_2.wav</li>
+						<li class="typcn typcn-media-play">push_recovery_jpj.wav</li>
+						<li class="typcn typcn-media-play">random.wav</li>
+						<li class="typcn typcn-media-play">shutdown.wav</li>
+						<li class="typcn typcn-media-play">start_jingle.wav</li>
+						<li class="typcn typcn-media-play">stop_jingle.wav</li>
+						<li class="typcn typcn-media-play">white_noise_amp02_5s_48kHz.raw</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_takePicture" class="help beginner">
+					<h3 id="Programming-BlocksNAO-»takepicture«">
+						<span style="color: rgb(0, 0, 0);">»take picture camera ...
+							filename</span><span style="color: rgb(0, 0, 0);">«</span>
+					</h3>
+					<p>With the »take picture camera ... filename« block you can
+						make NAO take a picture with either of two cameras and save it
+						under the specified filename. Pictures are stored under
+						/home/nao/recordings/cameras/ directory. In order to retrieve
+						taken pictures an SSH file transfer is required.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-sorted-down">camera, the camera
+							to use, can be "top" or "bottom". Both cameras are located in the
+							head of the robot.</li>
+						<li class="typcn typcn-arrow-left">filename, a string of
+							characters that represents the filename of the picture to be
+							stored.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_recordVideo" class="help expert">
+					<h3 id="Programming-BlocksNAO-»recordvideo«[Expertblock]">
+						<span style="color: rgb(0, 0, 0);">»record video resolution
+							... camera ... duration ... filename</span><span
+							style="color: rgb(0, 0, 0);">«<span
+							class="typcn typcn-star"></span></span>
+					</h3>
+					<p>With the »record video resolution ... camera ... duration
+						... filename« block you can make NAO record a video with either of
+						two cameras for the specified duration and save it under the given
+						filename. Recorded video is stored under
+						/home/nao/recordings/cameras/ directory. In order to retrieve
+						taken recordings an SSH file transfer is required.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-sorted-down">resolution, the
+							resolution (frame size) to use. Can be either 160x120 or 320x240
+							or 640x480.</li>
+						<li class="typcn typcn-arrow-sorted-down">camera, the camera
+							to use, can be "top" or "bottom". Both cameras are located in the
+							head of the robot.</li>
+						<li class="typcn typcn-arrow-left">duration, a number of
+							milliseconds thaty represent the length of video to be taken.</li>
+						<li class="typcn typcn-arrow-left">filename, a string of
+							characters that represents the filename of the picture to be
+							stored.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_learnFace" class="help expert">
+					<h3 id="Programming-BlocksNAO-»learnface«[Expertblock]">
+						<span style="color: rgb(0, 0, 0);">»learn face of</span><span
+							style="color: rgb(0, 0, 0);">«<span
+							class="typcn typcn-star"></span></span>
+					</h3>
+					<p>With the »learn face of« block you can make NAO associate a
+						face with a name. This block will execute learning procedure after
+						which it will return success or failure.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-left">name, a string of
+							characters that represents the name of the person whose face is
+							to be learned.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_forgetFace" class="help expert">
+					<h3 id="Programming-BlocksNAO-»forgetface«[Expertblock]">
+						<span style="color: rgb(0, 0, 0);">»forget face of</span><span
+							style="color: rgb(0, 0, 0);">«<span
+							class="typcn typcn-star"></span></span>
+					</h3>
+					<p>With the »forget face of« block you can make NAO erase the
+						learned face entry from the memory. This block will return success
+						or failure.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-left">name, a string of
+							characters that represents the name of the person whose face is
+							to be forgotten.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_rgbLeds" class="help beginner">
+					<h3 id="Programming-BlocksNAO-»rgbleds«">
+						<span style="color: rgb(0, 0, 0);">»LED ... colour</span><span
+							style="color: rgb(0, 0, 0);">«</span>
+					</h3>
+					<p>With the »LED ... colour« block you can set the colour of
+						NAO's LEDs.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-sorted-down">LED, the LED to
+							operate on, can be "eyes", "left eye", "right eye", "left foot",
+							"right foot" or "all".</li>
+						<li class="typcn typcn-arrow-left">colour, a "Colour" type
+							value, the colour to set the LED on.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_setIntensity" class="help beginner">
+					<h3 id="Programming-BlocksNAO-»setintensity«">
+						<span style="color: rgb(0, 0, 0);">»LED ... intensity</span><span
+							style="color: rgb(0, 0, 0);">«</span>
+					</h3>
+					<p>With the »LED ... intensity« block you can set the intensity
+						of certain NAO's LEDs.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-sorted-down">LED, the LED to
+							operate on, can be "ears", "left ear", "right ear", "chest" or
+							"head".</li>
+						<li class="typcn typcn-arrow-left">intensity, a "Number" type
+							value, represents how bright should LED be turned on. This value
+							can be in range from 0 to 100.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_ledOff" class="help beginner">
+					<h3 id="Programming-BlocksNAO-»ledoff«">
+						<span style="color: rgb(0, 0, 0);">»LED ... off</span><span
+							style="color: rgb(0, 0, 0);">«</span>
+					</h3>
+					<p>With the »LED ... off« block you can turn off certain NAO's
+						LEDs.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-sorted-down">LED, the LED to
+							operate on, can be "eyes", "left eye", "right eye", "left foot",
+							"right foot", "ears", "left ear", "right ear", "chest", "head" or
+							"all".</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_ledReset" class="help expert">
+					<h3 id="Programming-BlocksNAO-»ledreset«[Expertblock]">
+						<span style="color: rgb(0, 0, 0);">»LED ... reset</span><span
+							style="color: rgb(0, 0, 0);">«<span
+							class="typcn typcn-star"></span></span>
+					</h3>
+					<p>With the »LED ... reset« block you can reset NAO's LEDs to
+						their initial state, as if on fresh boot.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-sorted-down">LED, the LED to
+							operate on, can be "eyes", "left eye", "right eye", "left foot",
+							"right foot", "ears", "left ear", "right ear", "chest", "head" or
+							"all".</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_randomEyes" class="help beginner">
+					<h3 id="Programming-BlocksNAO-»randomeyes«">
+						<span style="color: rgb(0, 0, 0);">»random eyes duration ms</span><span
+							style="color: rgb(0, 0, 0);">«</span>
+					</h3>
+					<p>With the »random eyes duration ms« block you can turn on
+						NAO's eye LEDs to show random colours on each segment of the eye.
+						Colours will continueto change for the specified duration.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-left">duration, a "Number" type
+							value, the duration in milliseconds during which to perform
+							random eye colour action.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<p />
+				<div id="naoActions_rasta" class="help beginner">
+					<h3 id="Programming-BlocksNAO-»rastaeyes«">
+						<span style="color: rgb(0, 0, 0);">»rasta duration ms</span><span
+							style="color: rgb(0, 0, 0);">«</span>
+					</h3>
+					<p>With the »rasta duration ms« block you can turn on NAO's eye
+						LEDs to show red, yellow and green colours in large segments
+						slowly spinning the colours around the eye.</p>
+					<p>Options and Arguments:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-left">duration, a "Number" type
+							value, the duration in milliseconds during which to perform rasta
+							eye colour action.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
 </html>
