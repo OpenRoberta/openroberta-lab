@@ -268,7 +268,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
                     },
                     "optional" : []
                 },
-            }, function(stream) {
+            }).then(function(stream) {
                 mediaStreamSource = context.createMediaStreamSource(stream);
                 Calliope.prototype.sound = Volume.createAudioMeter(context);
                 mediaStreamSource.connect(Calliope.prototype.sound);

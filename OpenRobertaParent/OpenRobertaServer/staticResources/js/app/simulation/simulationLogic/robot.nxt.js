@@ -155,7 +155,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 
             navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
             
             // ask for an audio input
-            navigator.getUserMedia({
+            navigator.mediaDevices.getUserMedia({
                 "audio" : {
                     "mandatory" : {
                         "googEchoCancellation" : "false",
@@ -165,7 +165,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 
                     },
                     "optional" : []
                 },
-            }, function(stream) {
+            }).then(function(stream) {
                 mediaStreamSource = context.createMediaStreamSource(stream);
                 Nxt.prototype.sound = Volume.createAudioMeter(context);
                 mediaStreamSource.connect(Nxt.prototype.sound);
