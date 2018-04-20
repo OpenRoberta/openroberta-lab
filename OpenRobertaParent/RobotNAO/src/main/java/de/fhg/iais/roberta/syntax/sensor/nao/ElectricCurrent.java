@@ -24,7 +24,6 @@ import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
  * The client must provide the {@link joint} and {@link degrees} (direction and distance to walk).
  */
 public final class ElectricCurrent<V> extends Sensor<V> {
-
     private final Joint joint;
 
     private ElectricCurrent(Joint joint, BlocklyBlockProperties properties, BlocklyComment comment) {

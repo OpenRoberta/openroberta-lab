@@ -1,6 +1,4 @@
-package de.fhg.iais.roberta.mode.sensor;
-
-import de.fhg.iais.roberta.inter.mode.sensor.IIRSeekerSensorMode;
+package de.fhg.iais.roberta.inter.mode.sensor;
 
 public enum IRSeekerSensorMode implements IIRSeekerSensorMode {
     MODULATED( "Modulated" ), UNMODULATED( "Unmodulated" );

@@ -49,4 +49,32 @@ public class PythonVisitorTest {
 
         this.h.assertCodeIsOk(correct_code, "/sensor/touch.xml", false);
     }
+
+    @Test
+    public void fsrSensorVisit_returnsCorrectPythonCode() throws Exception {
+        String correct_code =
+            "def run():\n" //
+                + "    h.say(str(h.fsr('left')))\n"
+                + "    h.say(str(h.fsr('right')))";
+
+        this.h.assertCodeIsOk(correct_code, "/sensor/fsr.xml", false);
+    }
+
+    @Test
+    public void detectFaceSensorVisit_returnsCorrectPythonCode() throws Exception {
+        String correct_code =
+            "def run():\n" //
+                + "    h.say(str(faceRecognitionModule.detectFace()))";
+
+        this.h.assertCodeIsOk(correct_code, "/sensor/facedetection.xml", false);
+    }
+
+    @Test
+    public void detectMarkSensorVisit_returnsCorrectPythonCode() throws Exception {
+        String correct_code =
+            "def run():\n" //
+                + "    h.say(str(h.getDetectedMarks()))";
+
+        this.h.assertCodeIsOk(correct_code, "/sensor/detectmark.xml", false);
+    }
 }

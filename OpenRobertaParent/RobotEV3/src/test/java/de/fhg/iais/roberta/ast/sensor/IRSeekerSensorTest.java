@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.sensor.IRSeekerSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IRSeekerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
@@ -15,8 +15,8 @@ public class IRSeekerSensorTest {
     @Test
     public void sensorSetIRSeeker() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=258, y=138], IRSeekerSensor [S1, MODULATED, EMPTY_SLOT]], "
-                + "[Location [x=262, y=196], IRSeekerSensor [S1, UNMODULATED, EMPTY_SLOT]]]]";
+            "BlockAST [project=[[Location [x=258, y=138], IRSeekerSensor [S1, MODULATED, NO_SLOT]], "
+                + "[Location [x=262, y=196], IRSeekerSensor [S1, UNMODULATED, NO_SLOT]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_getIRSeeker.xml"));
     }

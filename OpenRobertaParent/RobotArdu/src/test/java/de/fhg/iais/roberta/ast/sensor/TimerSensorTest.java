@@ -31,14 +31,14 @@ public class TimerSensorTest {
 
     @Test
     public void sensorResetTimer() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-96, y=73], TimerSensor [S1, RESET, EMPTY_SLOT]]]]";
+        String a = "BlockAST [project=[[Location [x=-96, y=73], TimerSensor [S1, RESET, NO_SLOT]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_resetTimer.xml"));
     }
 
     @Test
     public void sensorGetSampleTimer() throws Exception {
-        String a = "BlockAST [project=[[Location [x=1, y=1], TimerSensor [S1, DEFAULT, EMPTY_SLOT]]]]";
+        String a = "BlockAST [project=[[Location [x=1, y=1], TimerSensor [S1, DEFAULT, NO_SLOT]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_getSampleTimer.xml"));
     }

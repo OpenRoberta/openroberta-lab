@@ -6,9 +6,9 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
+import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
@@ -17,28 +17,23 @@ import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
  * detecting a NaoMark.<br/>
  * <br/>
  */
-public final class NaoMark<V> extends Sensor<V> {
+public final class DetectMark<V> extends ExternalSensor<V> {
 
-    private NaoMark(BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("NAO_MARK"), properties, comment);
+    private DetectMark(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("DETECT_MARK"), properties, comment);
         setReadOnly();
     }
 
     /**
-     * Creates instance of {@link NaoMark}. This instance is read only and can not be modified.
+     * Creates instance of {@link DetectMark}. This instance is read only and can not be modified.
      *
      * @param param {@link MotionParam} that set up the parameters for the movement of the robot (number of rotations or degrees and speed),
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link NaoMark}
+     * @return read only object of class {@link DetectMark}
      */
-    static <V> NaoMark<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new NaoMark<>(properties, comment);
-    }
-
-    @Override
-    public String toString() {
-        return "NaoMark []";
+    static <V> DetectMark<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new DetectMark<V>(sensorMetaDataBean, properties, comment);
     }
 
     @Override
@@ -54,15 +49,7 @@ public final class NaoMark<V> extends Sensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-
-        return NaoMark.make(helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
-    @Override
-    public Block astToBlock() {
-        Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-
-        return jaxbDestination;
+        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getModeFactory()::getPlaceholderSensorMode);
+        return DetectMark.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 }

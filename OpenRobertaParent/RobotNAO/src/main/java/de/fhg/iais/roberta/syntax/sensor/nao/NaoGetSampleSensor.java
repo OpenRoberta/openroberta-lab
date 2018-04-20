@@ -167,7 +167,7 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
                 JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.COORDINATE, ((AccelerometerSensor<V>) this.sensor).getPort().toString());
                 break;
             case BlocklyConstants.NAO_FSR:
-                JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SIDE, ((ForceSensor<V>) this.sensor).getSide().toString());
+                //                JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SIDE, ((FsrSensor<V>) this.sensor).getSide().toString());
                 break;
             case BlocklyConstants.NAO_RECOGNIZEWORD:
                 JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.WORD, ((RecognizeWord<V>) this.sensor).getVocabulary());

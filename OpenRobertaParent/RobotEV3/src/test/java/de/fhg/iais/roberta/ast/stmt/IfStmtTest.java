@@ -29,7 +29,7 @@ public class IfStmtTest {
                 + ",then\n"
                 + "exprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]\n"
                 + ",else\n"
-                + "SensorStmt EncoderSensor [A, RESET, EMPTY_SLOT]\n"
+                + "SensorStmt EncoderSensor [A, RESET, NO_SLOT]\n"
                 + "]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/if_stmt1.xml"));
@@ -55,7 +55,7 @@ public class IfStmtTest {
     public void getElse() throws Exception {
         IfStmt<Void> ifStmt = (IfStmt<Void>) this.h.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(0).get(1);
 
-        String a = "\nSensorStmt EncoderSensor [A, RESET, EMPTY_SLOT]";
+        String a = "\nSensorStmt EncoderSensor [A, RESET, NO_SLOT]";
         Assert.assertEquals(a, ifStmt.getElseList().toString());
     }
 
@@ -68,7 +68,7 @@ public class IfStmtTest {
                 + "exprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]\n"
                 + ",else if Binary [EQ, NumConst [1], NumConst [1]]\n"
                 + ",then\n"
-                + "SensorStmt EncoderSensor [A, RESET, EMPTY_SLOT]\n"
+                + "SensorStmt EncoderSensor [A, RESET, NO_SLOT]\n"
                 + "]]]";
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/if_stmt2.xml"));
     }
@@ -82,9 +82,9 @@ public class IfStmtTest {
                 + "exprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]\n"
                 + ",else if Binary [EQ, NumConst [1], NumConst [1]]\n"
                 + ",then\n"
-                + "SensorStmt EncoderSensor [A, RESET, EMPTY_SLOT]\n"
+                + "SensorStmt EncoderSensor [A, RESET, NO_SLOT]\n"
                 + ",else\n"
-                + "SensorStmt EncoderSensor [A, RESET, EMPTY_SLOT]\n"
+                + "SensorStmt EncoderSensor [A, RESET, NO_SLOT]\n"
                 + "]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/if_stmt3.xml"));
@@ -99,9 +99,9 @@ public class IfStmtTest {
                 + "exprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]\n"
                 + ",else if Binary [EQ, NumConst [1], NumConst [1]]\n"
                 + ",then\n"
-                + "SensorStmt EncoderSensor [A, RESET, EMPTY_SLOT]\n"
+                + "SensorStmt EncoderSensor [A, RESET, NO_SLOT]\n"
                 + ",else\n"
-                + "SensorStmt EncoderSensor [A, RESET, EMPTY_SLOT]\n"
+                + "SensorStmt EncoderSensor [A, RESET, NO_SLOT]\n"
                 + "]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/if_stmt4.xml"));
@@ -116,7 +116,7 @@ public class IfStmtTest {
                 + "exprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]\n"
                 + ",else if Binary [EQ, NumConst [1], NumConst [1]]\n"
                 + ",then\n"
-                + "SensorStmt EncoderSensor [A, RESET, EMPTY_SLOT]\n"
+                + "SensorStmt EncoderSensor [A, RESET, NO_SLOT]\n"
                 + "]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/if_stmt5.xml"));
@@ -130,7 +130,7 @@ public class IfStmtTest {
                 + ",then\n"
                 + "exprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]\n"
                 + ",else\n"
-                + "SensorStmt EncoderSensor [A, RESET, EMPTY_SLOT]\n"
+                + "SensorStmt EncoderSensor [A, RESET, NO_SLOT]\n"
                 + "]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/if_stmt6.xml"));

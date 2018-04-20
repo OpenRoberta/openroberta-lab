@@ -14,7 +14,7 @@ public class BrickSensorTest {
 
     @Test
     public void main() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-19, y=1], BrickSensor [ENTER, PRESSED, EMPTY_SLOT]]]]";
+        String a = "BlockAST [project=[[Location [x=-19, y=1], BrickSensor [ENTER, PRESSED, NO_SLOT]]]]";
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_brick1.xml"));
     }
 
@@ -36,9 +36,9 @@ public class BrickSensorTest {
     public void sensorBrick() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=-96, y=73], \n"
-                + "if SensorExpr [TouchSensor [S1, DEFAULT, EMPTY_SLOT]]\n"
+                + "if SensorExpr [TouchSensor [S1, DEFAULT, NO_SLOT]]\n"
                 + ",then\n"
-                + "Var [item] := SensorExpr [BrickSensor [ENTER, PRESSED, EMPTY_SLOT]]\n\n"
+                + "Var [item] := SensorExpr [BrickSensor [ENTER, PRESSED, NO_SLOT]]\n\n"
                 + "]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_brick.xml"));

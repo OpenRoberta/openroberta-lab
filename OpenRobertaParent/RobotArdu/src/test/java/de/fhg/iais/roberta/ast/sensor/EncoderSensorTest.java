@@ -15,8 +15,8 @@ public class EncoderSensorTest {
     @Test
     public void sensorSetEncoder() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=-20, y=94], EncoderSensor [A, ROTATION, EMPTY_SLOT]], "
-                + "[Location [x=-15, y=129], EncoderSensor [D, DEGREE, EMPTY_SLOT]]]]";
+            "BlockAST [project=[[Location [x=-20, y=94], EncoderSensor [A, ROTATION, NO_SLOT]], "
+                + "[Location [x=-15, y=129], EncoderSensor [D, DEGREE, NO_SLOT]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_setEncoder.xml"));
     }
@@ -45,7 +45,7 @@ public class EncoderSensorTest {
 
     @Test
     public void sensorResetEncoder() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-40, y=105], EncoderSensor [A, RESET, EMPTY_SLOT]]]]";
+        String a = "BlockAST [project=[[Location [x=-40, y=105], EncoderSensor [A, RESET, NO_SLOT]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_resetEncoder.xml"));
     }

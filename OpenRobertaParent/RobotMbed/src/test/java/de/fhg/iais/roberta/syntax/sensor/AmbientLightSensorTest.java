@@ -13,7 +13,7 @@ public class AmbientLightSensorTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=163, y=62], "
                 + "MainTask [], "
-                + "DisplayTextAction [TEXT, SensorExpr [LightSensor [NO_PORT, DEFAULT, EMPTY_SLOT]]]]]]";
+                + "DisplayTextAction [TEXT, SensorExpr [LightSensor [NO_PORT, DEFAULT, NO_SLOT]]]]]]";
 
         String result = this.h.generateTransformerString("/sensor/get_ambient_light.xml");
 

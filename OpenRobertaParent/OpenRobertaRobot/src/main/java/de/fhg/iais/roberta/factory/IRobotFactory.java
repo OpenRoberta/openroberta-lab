@@ -23,6 +23,7 @@ import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.general.IPickColor;
 import de.fhg.iais.roberta.inter.mode.general.IWorkingState;
+import de.fhg.iais.roberta.inter.mode.sensor.IBirckKeyPressMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ICompassSensorMode;
@@ -35,6 +36,8 @@ import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IPinValue;
+import de.fhg.iais.roberta.inter.mode.sensor.IRSeekerSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.ISensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISlot;
 import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
@@ -56,6 +59,7 @@ import de.fhg.iais.roberta.mode.general.Direction;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.mode.general.PickColor;
+import de.fhg.iais.roberta.mode.general.PlaceholderSensorMode;
 import de.fhg.iais.roberta.mode.general.WorkingState;
 import de.fhg.iais.roberta.mode.sensor.Axis;
 import de.fhg.iais.roberta.mode.sensor.BrickKey;
@@ -64,8 +68,6 @@ import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GestureSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.mode.sensor.IBirckKeyPressMode;
-import de.fhg.iais.roberta.mode.sensor.IRSeekerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
@@ -200,6 +202,18 @@ public interface IRobotFactory {
      */
     default IBrickLedColor getBrickLedColor(String mode) {
         return IRobotFactory.getModeValue(mode, BrickLedColor.class);
+    }
+
+    /**
+     * Get a {@link ISensorMode} enumeration given string parameter. It is possible for one color to have multiple string mappings. Throws exception if the
+     * color
+     * cannot be found.
+     *
+     * @param name of the color
+     * @return enum {@link ISensorMode}
+     */
+    default ISensorMode getPlaceholderSensorMode(String color) {
+        return IRobotFactory.getModeValue(color, PlaceholderSensorMode.class);
     }
 
     /**

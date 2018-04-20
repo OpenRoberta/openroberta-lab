@@ -32,9 +32,9 @@ import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.Dialog;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
-import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoGetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -200,30 +200,30 @@ public interface NaoAstVisitor<V> extends AstVisitor<V>, AstActorSoundVisitor<V>
     V visitRastaDuration(RastaDuration<V> rastaDuration);
 
     /**
-     * visit a {@link ForceSensor}.
+     * visit a {@link FsrSensor}.
      *
      * @param force sensor phrase to be visited
      */
-    V visitForceSensor(ForceSensor<V> forceSensor);
+    V visitFsrSensor(FsrSensor<V> forceSensor);
 
     /**
-     * visit a {@link NaoMark}.
+     * visit a {@link DetectMark}.
      *
-     * @param NaoMark on phrase to be visited
+     * @param DetectMark on phrase to be visited
      */
-    V visitNaoMark(NaoMark<V> naoMark);
+    V visitNaoMark(DetectMark<V> naoMark);
 
     /**
-     * visit a {@link NaoMark}.
+     * visit a {@link DetectMark}.
      *
-     * @param NaoMark on phrase to be visited
+     * @param DetectMark on phrase to be visited
      */
     V visitTakePicture(TakePicture<V> takePicture);
 
     /**
-     * visit a {@link NaoMark}.
+     * visit a {@link DetectMark}.
      *
-     * @param NaoMark on phrase to be visited
+     * @param DetectMark on phrase to be visited
      */
     V visitRecordVideo(RecordVideo<V> recordVideo);
 

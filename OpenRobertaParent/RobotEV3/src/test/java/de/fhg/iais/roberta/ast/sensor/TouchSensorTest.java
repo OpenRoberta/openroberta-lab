@@ -13,7 +13,7 @@ public class TouchSensorTest {
 
     @Test
     public void sensorTouch() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-86, y=1], TouchSensor [S1, DEFAULT, EMPTY_SLOT]]]]";
+        String a = "BlockAST [project=[[Location [x=-86, y=1], TouchSensor [S1, DEFAULT, NO_SLOT]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_Touch.xml"));
     }

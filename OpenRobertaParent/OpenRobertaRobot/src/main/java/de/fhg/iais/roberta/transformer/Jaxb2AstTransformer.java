@@ -520,11 +520,7 @@ abstract public class Jaxb2AstTransformer<V> {
     public String extractField(List<Field> fields, String name, String defaultValue) {
         for ( Field field : fields ) {
             if ( field.getName().equals(name) ) {
-                if ( field.getValue().equals("") ) {
-                    return defaultValue;
-                } else {
-                    return field.getValue();
-                }
+                return field.getValue();
             }
         }
         if ( defaultValue == null ) {

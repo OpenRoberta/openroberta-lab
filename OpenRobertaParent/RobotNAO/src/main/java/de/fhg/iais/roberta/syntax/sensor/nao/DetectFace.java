@@ -5,8 +5,9 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
+import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
@@ -15,10 +16,10 @@ import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
  * detecting a face previously saved in NAOs database.<br/>
  * <br/>
  */
-public final class DetectFace<V> extends de.fhg.iais.roberta.syntax.sensor.Sensor<V> {
+public final class DetectFace<V> extends ExternalSensor<V> {
 
-    private DetectFace(BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("DETECT_FACE"), properties, comment);
+    private DetectFace(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("DETECT_FACE"), properties, comment);
         setReadOnly();
     }
 
@@ -28,13 +29,8 @@ public final class DetectFace<V> extends de.fhg.iais.roberta.syntax.sensor.Senso
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      */
-    static <V> DetectFace<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new DetectFace<V>(properties, comment);
-    }
-
-    @Override
-    public String toString() {
-        return "DetectFace []";
+    static <V> DetectFace<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new DetectFace<V>(sensorMetaDataBean, properties, comment);
     }
 
     @Override
@@ -50,15 +46,7 @@ public final class DetectFace<V> extends de.fhg.iais.roberta.syntax.sensor.Senso
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-
-        return DetectFace.make(helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
-    @Override
-    public Block astToBlock() {
-        Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-
-        return jaxbDestination;
+        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getModeFactory()::getPlaceholderSensorMode);
+        return DetectFace.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 }

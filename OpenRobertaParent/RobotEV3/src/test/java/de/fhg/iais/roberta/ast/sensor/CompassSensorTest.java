@@ -15,8 +15,8 @@ public class CompassSensorTest {
     @Test
     public void sensorGetCompass() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=384, y=50], CompassSensor [S2, ANGLE, EMPTY_SLOT]], "
-                + "[Location [x=384, y=100], CompassSensor [S4, COMPASS, EMPTY_SLOT]]]]";
+            "BlockAST [project=[[Location [x=384, y=50], CompassSensor [S2, ANGLE, NO_SLOT]], "
+                + "[Location [x=384, y=100], CompassSensor [S4, COMPASS, NO_SLOT]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_getCompass.xml"));
     }
@@ -45,7 +45,7 @@ public class CompassSensorTest {
 
     @Test
     public void sensorCalibrateCompass() throws Exception {
-        String a = "BlockAST [project=[[Location [x=384, y=50], CompassSensor [S1, CALIBRATE, EMPTY_SLOT]]]]";
+        String a = "BlockAST [project=[[Location [x=384, y=50], CompassSensor [S1, CALIBRATE, NO_SLOT]]]]";
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_calibrateCompass.xml"));
     }
 

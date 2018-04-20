@@ -13,7 +13,7 @@ public class TemperatureSensorTest {
 
     @Test
     public void jaxbToAst_byDefault_temperatureSensorOnPort4() throws Exception {
-        String a = "BlockAST [project=[[Location [x=113, y=88], TemperatureSensor [PORT_4, DEFAULT, EMPTY_SLOT]]]]";
+        String a = "BlockAST [project=[[Location [x=113, y=88], TemperatureSensor [PORT_4, DEFAULT, NO_SLOT]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_temperature.xml"));
     }

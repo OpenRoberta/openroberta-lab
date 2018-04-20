@@ -13,8 +13,8 @@ public class GyroSensorTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=88, y=38], "
                 + "MainTask [], "
-                + "DisplayTextAction [TEXT, SensorExpr [GyroSensor [X, ANGLE, EMPTY_SLOT]]], "
-                + "DisplayTextAction [TEXT, SensorExpr [GyroSensor [Y, ANGLE, EMPTY_SLOT]]]]]]";
+                + "DisplayTextAction [TEXT, SensorExpr [GyroSensor [X, ANGLE, NO_SLOT]]], "
+                + "DisplayTextAction [TEXT, SensorExpr [GyroSensor [Y, ANGLE, NO_SLOT]]]]]]";
 
         String result = this.h.generateTransformerString("/sensor/gyro_sensor.xml");
 

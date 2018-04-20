@@ -82,12 +82,12 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.Dialog;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
-import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoGetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -1158,16 +1158,16 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     }
 
     @Override
-    public Void visitForceSensor(ForceSensor<Void> forceSensor) {
+    public Void visitFsrSensor(FsrSensor<Void> fsr) {
         this.sb.append("h.fsr(");
-        this.sb.append(forceSensor.getSide().getPythonCode());
+        this.sb.append(getEnumCode(fsr.getPort()));
         this.sb.append(")");
         return null;
     }
 
     @Override
-    public Void visitNaoMark(NaoMark<Void> naoMark) {
-        this.sb.append("h.naoMark()");
+    public Void visitNaoMark(DetectMark<Void> naoMark) {
+        this.sb.append("h.getDetectedMarks()");
         return null;
     }
 

@@ -13,7 +13,7 @@ public class TemperatureSensorTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=187, y=38], "
                 + "MainTask [], "
-                + "DisplayTextAction [TEXT, SensorExpr [TemperatureSensor [NO_PORT, DEFAULT, EMPTY_SLOT]]]]]]";
+                + "DisplayTextAction [TEXT, SensorExpr [TemperatureSensor [NO_PORT, DEFAULT, NO_SLOT]]]]]]";
 
         String result = this.h.generateTransformerString("/sensor/get_temperature.xml");
 

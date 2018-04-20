@@ -14,8 +14,7 @@ public class GyroSensorTest {
 
     @Test
     public void sensorSetGyro() throws Exception {
-        String a =
-            "BlockAST [project=[[Location [x=-30, y=210], GyroSensor [S2, ANGLE, EMPTY_SLOT]], [Location [x=-26, y=250], GyroSensor [S4, RATE, EMPTY_SLOT]]]]";
+        String a = "BlockAST [project=[[Location [x=-30, y=210], GyroSensor [S2, ANGLE, NO_SLOT]], [Location [x=-26, y=250], GyroSensor [S4, RATE, NO_SLOT]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_setGyro.xml"));
     }
@@ -44,7 +43,7 @@ public class GyroSensorTest {
 
     @Test
     public void sensorResetGyro() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-13, y=105], GyroSensor [S2, RESET, EMPTY_SLOT]]]]";
+        String a = "BlockAST [project=[[Location [x=-13, y=105], GyroSensor [S2, RESET, NO_SLOT]]]]";
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_resetGyro.xml"));
     }
 
