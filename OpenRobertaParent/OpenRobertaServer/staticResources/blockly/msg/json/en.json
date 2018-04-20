@@ -1,7 +1,11 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
+<<<<<<< f3bc020a9cfa1e6bafffab04edf40a0b0726f27e
 		"lastupdated": "2018-04-22 08:33:23.634528",
+=======
+		"lastupdated": "2018-04-20 15:09:15.567471",
+>>>>>>> #806 change the wait until block in nao toolbox property
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
