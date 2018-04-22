@@ -1,5 +1,5 @@
-define([ 'exports', 'message', 'log', 'util', 'simulation.simulation', 'guiState.controller', 'program.controller', 'program.model', 'blocks', 'jquery',
-    'jquery-validate', 'blocks-msg' ], function(exports, MSG, LOG, UTIL, SIM, GUISTATE_C, PROG_C, PROGRAM, Blockly, $) {
+define([ 'exports', 'message', 'log', 'util', 'simulation.simulation', 'guiState.controller', 'tour.controller', 'program.controller', 'program.model',
+        'blocks', 'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, MSG, LOG, UTIL, SIM, GUISTATE_C, TOUR_C, PROG_C, PROGRAM, Blockly, $) {
 
     const INITIAL_WIDTH = 0.5;
     var blocklyWorkspace;
@@ -10,7 +10,7 @@ define([ 'exports', 'message', 'log', 'util', 'simulation.simulation', 'guiState
         blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
         //initView();
         initEvents();
-    // LOG.sim('init sim view');
+        // LOG.sim('init sim view');
     }
     exports.init = init;
 
@@ -137,6 +137,9 @@ define([ 'exports', 'message', 'log', 'util', 'simulation.simulation', 'guiState
                     $('#simButtonsCollapse').collapse({
                         'toggle' : false
                     });
+                    if (TOUR_C.getInstance() && TOUR_C.getInstance().trigger) {
+                        TOUR_C.getInstance().trigger('startSim');
+                    }
                     $('#blockly').openRightView('sim', INITIAL_WIDTH);
                 } else {
                     MSG.displayInformation(result, "", result.message, "");
