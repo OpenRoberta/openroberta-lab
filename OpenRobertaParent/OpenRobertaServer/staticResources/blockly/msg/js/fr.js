@@ -608,6 +608,7 @@ Blockly.Msg.MESSAGE_EDIT_SAVE_PROGRAM_AS = "Ton programme a été sauvegardé so
 Blockly.Msg.MESSAGE_EDIT_START = "Ton programme $ va démarrer sur le robot !";
 Blockly.Msg.MESSAGE_FIRMWARE_ERROR = "Incomptabilité entre le firmware de Open Roberta Lab et celui de ton robot. Envoi nous s'il te plaît un email !";
 Blockly.Msg.MESSAGE_GROUP_DELETED = "Group »$« was deleted";  // untranslated
+Blockly.Msg.MESSAGE_INVALID_CONF_NAME = "Please fill in a correct name. A correct name begins with a letter and can only contain letters or numbers. The default name »[robot]basis« can't be used here.";  // untranslated
 Blockly.Msg.MESSAGE_INVALID_NAME = "Utilise uniquement des lettres et des chiffres et commance TOUJOURS par une letrre. Réessaie de nouveau !";
 Blockly.Msg.MESSAGE_NOT_AVAILABLE = "Cette fonction n'existe pas encore, désolé !";
 Blockly.Msg.MESSAGE_PROGRAM_DELETED = "Tu as effacé ton programme '$'.";

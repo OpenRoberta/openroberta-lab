@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-04-22 08:06:24.641888",
+		"lastupdated": "2018-04-22 08:33:23.634528",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -697,6 +697,7 @@
 	"BUTTON_EMPTY_LIST": "Empty list",
 	"MESSAGE_NOT_AVAILABLE": "Not available.",
 	"MESSAGE_INVALID_NAME": "Please fill in a correct name. A correct name begins with a letter and can only contain letters or numbers.",
+	"MESSAGE_INVALID_CONF_NAME": "Please fill in a correct name. A correct name begins with a letter and can only contain letters or numbers. The default name »[robot]basis« can't be used here.",
 	"MESSAGE_EDIT_START": "Your program »$« will run in a moment!",
 	"MESSAGE_EDIT_CHECK": "Your program is now checked!",
 	"MESSAGE_EDIT_SAVE_PROGRAM": "Your program has been saved",

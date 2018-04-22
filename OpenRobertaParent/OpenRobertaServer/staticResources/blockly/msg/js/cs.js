@@ -608,6 +608,7 @@ Blockly.Msg.MESSAGE_EDIT_SAVE_PROGRAM_AS = "Váš program byl uložen jako »$«
 Blockly.Msg.MESSAGE_EDIT_START = "Váš program $ se za chvíli spustí!";
 Blockly.Msg.MESSAGE_FIRMWARE_ERROR = "Verze firmwaru vašeho robota a verze Open Roberta Lab se liší. Kontaktujte nás prosím.";
 Blockly.Msg.MESSAGE_GROUP_DELETED = "Skupina »$« byla smazána";
+Blockly.Msg.MESSAGE_INVALID_CONF_NAME = "Please fill in a correct name. A correct name begins with a letter and can only contain letters or numbers. The default name »[robot]basis« can't be used here.";  // untranslated
 Blockly.Msg.MESSAGE_INVALID_NAME = "Vyplňte prosím správné jméno. Musí začínat písmenem a může obsahovat pouze písmena a číslice.";
 Blockly.Msg.MESSAGE_NOT_AVAILABLE = "Nedostupné";
 Blockly.Msg.MESSAGE_PROGRAM_DELETED = "Program »$« byl smazán";

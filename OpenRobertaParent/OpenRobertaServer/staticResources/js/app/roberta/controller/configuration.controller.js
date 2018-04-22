@@ -224,7 +224,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
             messages : {
                 singleModalInput : {
                     required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"]),
-                    regex : jQuery.validator.format(Blockly.Msg["MESSAGE_INVALID_NAME"])
+                    regex : jQuery.validator.format(Blockly.Msg["MESSAGE_INVALID_CONF_NAME"])
                 }
             }
         });

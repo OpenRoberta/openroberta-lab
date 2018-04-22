@@ -608,6 +608,7 @@ Blockly.Msg.MESSAGE_EDIT_SAVE_PROGRAM_AS = "Programiniz »$« olarak kaydedildi"
 Blockly.Msg.MESSAGE_EDIT_START = "$ Programi bir dakika icerisinde calisacak!";
 Blockly.Msg.MESSAGE_FIRMWARE_ERROR = "Robotunuzun aygit yazilim versiyonu ile Open Roberta Lab uyusmuyor. Lütfen bizimle irtibata geciniz.";
 Blockly.Msg.MESSAGE_GROUP_DELETED = "Group »$« was deleted";  // untranslated
+Blockly.Msg.MESSAGE_INVALID_CONF_NAME = "Please fill in a correct name. A correct name begins with a letter and can only contain letters or numbers. The default name »[robot]basis« can't be used here.";  // untranslated
 Blockly.Msg.MESSAGE_INVALID_NAME = "Lütfen gecerli bir isim giriniz. Gecerli bir isim, bir harf ile baslar ve sadece harflerden ya da rakamlardan olusabilir.";
 Blockly.Msg.MESSAGE_NOT_AVAILABLE = "Kullanilabilir degil.";
 Blockly.Msg.MESSAGE_PROGRAM_DELETED = "»$« programi silindi.";

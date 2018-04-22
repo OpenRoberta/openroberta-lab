@@ -608,6 +608,7 @@ Blockly.Msg.MESSAGE_EDIT_SAVE_PROGRAM_AS = "Ваша программа сохр
 Blockly.Msg.MESSAGE_EDIT_START = "Ваша программа »$« будет запущена через несколько мгновений.";
 Blockly.Msg.MESSAGE_FIRMWARE_ERROR = "Обнаружен конфликт между версией прошивки вашего робота и Open Roberta Lab. Пожалуйста. свяжитесь с нами.";
 Blockly.Msg.MESSAGE_GROUP_DELETED = "Group »$« was deleted";  // untranslated
+Blockly.Msg.MESSAGE_INVALID_CONF_NAME = "Please fill in a correct name. A correct name begins with a letter and can only contain letters or numbers. The default name »[robot]basis« can't be used here.";  // untranslated
 Blockly.Msg.MESSAGE_INVALID_NAME = "Пожалуйста, введите имя пользователя в правильном формате. Имя пользователя должно начинаться с буквы и содержать только буквы и цифры.";
 Blockly.Msg.MESSAGE_NOT_AVAILABLE = "Недоступно";
 Blockly.Msg.MESSAGE_PROGRAM_DELETED = "Программа $ была удалена";

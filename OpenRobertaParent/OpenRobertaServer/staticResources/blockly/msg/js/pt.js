@@ -608,6 +608,7 @@ Blockly.Msg.MESSAGE_EDIT_SAVE_PROGRAM_AS = "O programa foi guardado como »$«";
 Blockly.Msg.MESSAGE_EDIT_START = "O programa »$« vai executar de seguida!";
 Blockly.Msg.MESSAGE_FIRMWARE_ERROR = "Roberta Lab. contacta-nos por favor.";
 Blockly.Msg.MESSAGE_GROUP_DELETED = "Group »$« was deleted";  // untranslated
+Blockly.Msg.MESSAGE_INVALID_CONF_NAME = "Please fill in a correct name. A correct name begins with a letter and can only contain letters or numbers. The default name »[robot]basis« can't be used here.";  // untranslated
 Blockly.Msg.MESSAGE_INVALID_NAME = "só pode conter letras e números.";
 Blockly.Msg.MESSAGE_NOT_AVAILABLE = "Não disponível.";
 Blockly.Msg.MESSAGE_PROGRAM_DELETED = "O programa »$« foi apagado";
