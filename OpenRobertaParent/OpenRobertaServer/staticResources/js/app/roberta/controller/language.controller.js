@@ -108,12 +108,10 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
             if (lkey === 'Blockly.Msg.MENU_EDIT_TOOLTIP') {
                 $('#head-navi-tooltip-program').attr('data-original-title', value);
                 $('#head-navi-tooltip-configuration').attr('data-original-title', value);
-            } else if (lkey == 'Blockly.Msg.MENU_SHOW_CODE') {
-                $('codeButton').attr('data-original-title', value);
-                $('#menuShowCode').html(value);
-            } else if (lkey == 'Blockly.Msg.MENU_START_SIM') {
+            } else if (lkey == 'Blockly.Msg.MENU_RIGHT_CODE_TOOLTIP') {
+                $('#codeButton').attr('data-original-title', value);
+            } else if (lkey == 'Blockly.Msg.MENU_RIGHT_SIM_TOOLTIP') {
                 $('#simButton').attr('data-original-title', value);
-                $('#menuRunSim').html(value);
             } else if (lkey == 'Blockly.Msg.MENU_RIGHT_INFO_TOOLTIP') {
                 $('#infoButton').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_RIGHT_HELP_TOOLTIP') {

@@ -195,10 +195,12 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
      */
     function initMenuEvents() {
         $('[rel="tooltip"]').not('.rightMenuButton').tooltip({
+            container: 'body',
             placement : "right"
         });
         $('[rel="tooltip"].rightMenuButton').tooltip({
-            placement : "auto"
+            container: 'body',
+            placement : "left"
         });
         // prevent Safari 10. from zooming
         document.addEventListener('gesturestart', function(e) {
