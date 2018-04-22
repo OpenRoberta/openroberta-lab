@@ -399,10 +399,10 @@ div.rightMenuButton:hover,
     font-size: 24px;
     left: 7px;
 }
-#tutorialButton.rightMenuButton {
+#tutorialButton.rightMenuButton, #infoButton.notEmpty {
 	background-color: #BACC1E;;
 }
-#tutorialButton.rightMenuButton:before {  
+#tutorialButton.rightMenuButton:before, #infoButton.notEmpty:before {
     border-right: 6px solid #BACC1E;;
 }
 .menu-icons {

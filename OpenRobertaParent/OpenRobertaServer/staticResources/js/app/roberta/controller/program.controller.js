@@ -87,15 +87,15 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
 
         $('#tabProgram').on('shown.bs.tab', function(e) {
             $(window).resize();
-        });       
+        });
 
         // work around for touch devices
         $('.levelTabs').on('touchend', function(e) {
             var target = $(e.target).attr("href");
             $('.levelTabs a[href="' + target + '"]').tab('show');
         });
-        
-        $('.levelTabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+
+        $('.levelTabs a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
             var target = $(e.target).attr("href").substring(1); // activated tab
             e.preventDefault();
             loadToolbox(target);
@@ -209,7 +209,11 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                     GUISTATE_C.setConfigurationName(result.configName);
                     GUISTATE_C.setConfigurationXML(result.configText);
                 }
+                $('#tabProgram').one('shown.bs.tab', function(e) {
+                    reloadProgram();
+                });
                 $('#tabProgram').trigger('click');
+
             }
             MSG.displayInformation(result, "", result.message);
         });
@@ -251,6 +255,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                         GUISTATE_C.setConfigurationName(result.configName);
                         GUISTATE_C.setConfigurationXML(result.configText);
                     }
+                    $('#tabProgram').one('shown.bs.tab', function(e) {
+                        reloadProgram();
+                    });
                     $('#tabProgram').trigger('click');
                 }
                 MSG.displayInformation(result, "", result.message);
@@ -387,7 +394,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
     exports.importXml = importXml;
 
     /**
-     * two Experimental functions: Open a file select dialog to load source code from local disk and send it to the cross compiler
+     * two Experimental functions: Open a file select dialog to load source code
+     * from local disk and send it to the cross compiler
      */
     function importSourceCodeToCompile() {
         var input = $(document.createElement('input'));
@@ -407,26 +415,27 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         input.trigger('click'); // opening dialog
     }
     exports.importSourceCodeToCompile = importSourceCodeToCompile;
-    
+
     /**
-     * two Experimental functions: Open a file select dialog to load source code from local disk and send it to the cross compiler
+     * two Experimental functions: Open a file select dialog to load source code
+     * from local disk and send it to the cross compiler
      */
     function importNepoCodeToCompile() {
-    	var input = $(document.createElement('input'));
-    	input.attr("type", "file");
-    	input.change(function(event) {
-    		var file = event.target.files[0]
-    		var reader = new FileReader()
-    		reader.readAsText(file)
-    		reader.onload = function(event) {
-    			// TODO move this to the run controller once it is clear what should happen
-    			var name = UTIL.getBasename(file.name);
-    			PROGRAM.compileP(name, event.target.result, GUISTATE_C.getLanguage(), function(result) {
-    				alert(result.rc);
-    			});
-    		}
-    	})
-    	input.trigger('click'); // opening dialog
+        var input = $(document.createElement('input'));
+        input.attr("type", "file");
+        input.change(function(event) {
+            var file = event.target.files[0]
+            var reader = new FileReader()
+            reader.readAsText(file)
+            reader.onload = function(event) {
+                // TODO move this to the run controller once it is clear what should happen
+                var name = UTIL.getBasename(file.name);
+                PROGRAM.compileP(name, event.target.result, GUISTATE_C.getLanguage(), function(result) {
+                    alert(result.rc);
+                });
+            }
+        })
+        input.trigger('click'); // opening dialog
     }
     exports.importNepoCodeToCompile = importNepoCodeToCompile;
 
@@ -570,7 +579,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         }
     }
     exports.loadToolbox = loadToolbox;
-    
+
     function loadExternalToolbox(toolbox) {
         Blockly.hideChaff();
         if (toolbox) {
@@ -589,23 +598,26 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         blocklyWorkspace.clear();
         var dom = Blockly.Xml.textToDom(xml, blocklyWorkspace);
         Blockly.Xml.domToWorkspace(dom, blocklyWorkspace);
-        // update right panel if it is already open
-        if ($('.fromRight').hasClass('rightActive')) {
-            $('#infoContent').html(blocklyWorkspace.description);
-            var tmpTags = blocklyWorkspace.tags;
-            $('#infoTags').tagsinput('removeAll');
-            $('.bootstrap-tagsinput input').attr('placeholder', 'Tags');
-            $('#infoTags').tagsinput('add', tmpTags);
-            var xmlConfiguration = GUISTATE_C.getConfigurationXML();
-            var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-            var xmlProgram = Blockly.Xml.domToText(dom);
+        $('#infoContent').html(blocklyWorkspace.description);
+        if (typeof blocklyWorkspace.description === 'string' && blocklyWorkspace.description.length) {
+            $('#infoButton').addClass('notEmpty');
+        } else {
+            $('#infoButton').removeClass('notEmpty');
+        }
+        var tmpTags = blocklyWorkspace.tags;
+        $('#infoTags').tagsinput('removeAll');
+        $('.bootstrap-tagsinput input').attr('placeholder', 'Tags');
+        $('#infoTags').tagsinput('add', tmpTags);
+        var xmlConfiguration = GUISTATE_C.getConfigurationXML();
+        var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+        var xmlProgram = Blockly.Xml.domToText(dom);
 
-            var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
-            var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
-            var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
+        var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
+        var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
+        var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
 
-            var language = GUISTATE_C.getLanguage();
-
+        var language = GUISTATE_C.getLanguage();
+        if ($('#codeDiv').hasClass('rightActive')) {
             PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function(result) {
                 $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.sourceCode.escapeHTML(), null, true) + '</pre>');
             });

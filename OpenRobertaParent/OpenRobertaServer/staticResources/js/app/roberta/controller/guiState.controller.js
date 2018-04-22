@@ -1,5 +1,5 @@
-define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.controller', 'progInfo.controller', 'socket.controller', 'jquery' ], function(
-        exports, UTIL, LOG, MSG, GUISTATE, HELP_C, INFO_C, SOCKET_C, $) {
+define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.controller', 'socket.controller', 'jquery' ], function(exports, UTIL, LOG, MSG,
+        GUISTATE, HELP_C, SOCKET_C, $) {
 
     /**
      * Init robot
@@ -350,7 +350,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         }
         if (groupSwitched) {
             HELP_C.initView();
-            INFO_C.init();
             updateTutorialMenu();
         }
     }
@@ -979,7 +978,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         return GUISTATE.robot.socket;
     }
     exports.getSocket = getSocket;
-    
+
     function getAvailableHelp() {
         return GUISTATE.server.help;
     }
