@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.mode.sensor.nao;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 
 public enum SensorPorts implements ISensorPort {
-    NO_PORT, EMPTY_PORT( "" ), LEFT( "left" ), RIGHT( "right" ), FRONT( "front" ), REAR( "rear" ), MIDDLE( "middle" ), X( "x" ), Y( "y" ), Z( "z" );
+    NO_PORT, EMPTY_PORT( "" ), X( "x" ), Y( "y" ), Z( "z" ), HEAD( "HEAD" ), HAND( "HAND" ), BUMPER( "BUMPER" ), LEFT( "LEFT" ), RIGHT( "RIGHT" );
 
     private final String[] values;
 

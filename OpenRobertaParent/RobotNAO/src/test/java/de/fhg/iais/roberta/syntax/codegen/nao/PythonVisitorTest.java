@@ -39,11 +39,11 @@ public class PythonVisitorTest {
     public void touchSensorVisit_returnsCorrectPythonCode() throws Exception {
         String correct_code =
             "def run():\n"
-                + "    h.say(str(h.touchsensors('hand', 'left')))\n"
-                + "    h.say(str(h.touchsensors('hand', 'right')))\n"
                 + "    h.say(str(h.touchsensors('head', 'front')))\n"
                 + "    h.say(str(h.touchsensors('head', 'middle')))\n"
                 + "    h.say(str(h.touchsensors('head', 'rear')))\n"
+                + "    h.say(str(h.touchsensors('hand', 'left')))\n"
+                + "    h.say(str(h.touchsensors('hand', 'right')))\n"
                 + "    h.say(str(h.touchsensors('bumper', 'left')))\n"
                 + "    h.say(str(h.touchsensors('bumper', 'right')))";
 

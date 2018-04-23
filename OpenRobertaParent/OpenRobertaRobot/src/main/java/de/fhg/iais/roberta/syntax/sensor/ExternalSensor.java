@@ -76,6 +76,22 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
         Jaxb2AstTransformer<V> helper,
         Function<String, IPort> getPort,
         Function<String, IMode> getMode) {
+        return extractPortAndModeAndSlot(block, helper, getPort, getMode, helper.getModeFactory()::getSlot);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> SensorMetaDataBean extractPortAndModeAndSlot(
+        Block block,
+        Jaxb2AstTransformer<V> helper,
+        Function<String, IPort> getPort,
+        Function<String, IMode> getMode,
+        Function<String, ISlot> getSlot) {
         List<Field> fields = helper.extractFields(block, (short) 3);
         IRobotFactory factory = helper.getModeFactory();
         String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.NO_PORT);
@@ -96,10 +112,11 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        boolean addMutation = false;
+        Mutation mutation = new Mutation();
         if ( !this.mode.toString().equals(BlocklyConstants.DEFAULT) ) {
-            Mutation mutation = new Mutation();
             mutation.setMode(getMode().toString());
-            jaxbDestination.setMutation(mutation);
+            addMutation = true;
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().toString());
         }
         if ( !this.getPort().toString().equals(BlocklyConstants.NO_PORT) ) {
@@ -109,6 +126,13 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
         if ( !this.getSlot().toString().equals(BlocklyConstants.NO_SLOT) ) {
             String fieldValue = getSlot().getValues()[0];
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SLOT, fieldValue);
+        }
+        if ( !this.getSlot().toString().equals(BlocklyConstants.NO_SLOT) && !this.getSlot().toString().equals(BlocklyConstants.EMPTY_SLOT) ) {
+            addMutation = true;
+            mutation.setPort(getPort().toString());
+        }
+        if ( addMutation ) {
+            jaxbDestination.setMutation(mutation);
         }
         return jaxbDestination;
     }

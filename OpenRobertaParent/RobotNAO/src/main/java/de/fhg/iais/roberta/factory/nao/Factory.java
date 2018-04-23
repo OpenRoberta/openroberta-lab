@@ -13,10 +13,8 @@ import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.sensor.nao.SensorPorts;
-import de.fhg.iais.roberta.mode.sensor.nao.TouchSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
@@ -45,11 +43,6 @@ public class Factory extends AbstractRobotFactory {
     @Override
     public ISensorPort getSensorPort(String port) {
         return IRobotFactory.getModeValue(port, SensorPorts.class);
-    }
-
-    @Override
-    public ITouchSensorMode getTouchSensorMode(String mode) {
-        return IRobotFactory.getModeValue(mode, TouchSensorMode.class);
     }
 
     @Override
