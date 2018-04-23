@@ -1378,9 +1378,12 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
                 case BlocklyConstants.COMPASS:
                 case BlocklyConstants.SOUND:
                 case BlocklyConstants.TOUCH:
+                case BlocklyConstants.GYRO:
+                case BlocklyConstants.ACCELEROMETER:
                     break;
                 default:
-                    throw new DbcException("Sensor is not supported!");
+
+                    throw new DbcException("Sensor is not supported!" + usedSensor.getType().toString());
             }
         }
     }
@@ -1407,6 +1410,8 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
                 case BlocklyConstants.COMPASS:
                 case BlocklyConstants.SOUND:
                 case BlocklyConstants.TOUCH:
+                case BlocklyConstants.GYRO:
+                case BlocklyConstants.ACCELEROMETER:
                     break;
                 default:
                     throw new DbcException("Sensor is not supported!");
