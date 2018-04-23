@@ -13,8 +13,9 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
 
 /**
- * This class represents the <b>mbedActions_display_4digit</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
- * showing a text message on the screen of the brick.<br>
+ * This class represents the <b>mbedActions_fourdigitdisplay_show</b> block from Blockly into the AST (abstract syntax tree). Object from this class will
+ * generate code
+ * for showing numbers on the Grove 4-Digit Display.<br>
  * <br>
  * To create an instance from this class use the method {@link #make(Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
  * <br>

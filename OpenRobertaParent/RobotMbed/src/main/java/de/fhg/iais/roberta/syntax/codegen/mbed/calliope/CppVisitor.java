@@ -26,6 +26,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
+import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
@@ -1173,6 +1174,16 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     }
 
     @Override
+    public Void visitLedBarSetAction(LedBarSetAction<Void> ledBarSetAction) {
+        this.sb.append("ledBar.setLed(");
+        ledBarSetAction.getX().visit(this);
+        this.sb.append(", ");
+        ledBarSetAction.getBrightness().visit(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
     protected void generateProgramPrefix(boolean withWrapping) {
         if ( !withWrapping ) {
             return;
@@ -1277,11 +1288,17 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         if ( this.codePreprocess.isFourDigitDisplayUsed() ) {
             this.sb.append("#include \"FourDigitDisplay.h\"\n");
         }
+        if ( this.codePreprocess.isLedBarUsed() ) {
+            this.sb.append("#include \"Grove_LED_Bar.h\"\n");
+        }
         this.sb.append("#include <array>\n");
         this.sb.append("#include <stdlib.h>\n");
         this.sb.append("MicroBit _uBit;\n\n");
         if ( this.codePreprocess.isFourDigitDisplayUsed() ) {
-            this.sb.append("FourDigitDisplay fdd(MICROBIT_PIN_P2, MICROBIT_PIN_P8);\n");
+            this.sb.append("FourDigitDisplay fdd(MICROBIT_PIN_P2, MICROBIT_PIN_P8);\n"); // Only works on the right UART Grove connector
+        }
+        if ( this.codePreprocess.isLedBarUsed() ) {
+            this.sb.append("Grove_LED_Bar ledBar(MICROBIT_PIN_P8, MICROBIT_PIN_P2);\n"); // Only works on the right UART Grove connector; Clock/Data pins are swapped compared to 4DigitDisplay
         }
     }
 
