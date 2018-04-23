@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.nao.NAOConfiguration;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
@@ -12,6 +14,7 @@ import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nao.Camera;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.sensor.nao.SensorPorts;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -1242,91 +1245,53 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
 
     @Override
     public Void visitElectricCurrent(ElectricCurrent<Void> electricCurrent) {
-        this.sb.append("h.getElectricCurrent(");
-        switch ( electricCurrent.getJoint() ) {
-            case HEADYAW:
-                this.sb.append("\"HeadYaw\"");
-                break;
-            case HEADPITCH:
-                this.sb.append("\"HeadPitch\"");
-                break;
-            case LSHOULDERPITCH:
-                this.sb.append("\"LShoulderPitch\"");
-                break;
-            case LSHOULDERROLL:
-                this.sb.append("\"LShoulderRoll\"");
-                break;
-            case LELBOWYAW:
-                this.sb.append("\"LElbowYaw\"");
-                break;
-            case LELBOWROLL:
-                this.sb.append("\"LElbowRoll\"");
-                break;
-            case LWRISTYAW:
-                this.sb.append("\"LWristYaw\"");
-                break;
-            case LHAND:
-                this.sb.append("\"LHand\"");
-                break;
-            case LHIPYAWPITCH:
-                this.sb.append("\"LHipYawPitch\"");
-                break;
-            case LHIPROLL:
-                this.sb.append("\"LHipRoll\"");
-                break;
-            case LHIPPITCH:
-                this.sb.append("\"LHipPitch\"");
-                break;
-            case LKNEEPITCH:
-                this.sb.append("\"LKneePitch\"");
-                break;
-            case LANKLEPITCH:
-                this.sb.append("\"LAnklePitch\"");
-                break;
-            case RANKLEROLL:
-                this.sb.append("\"RAnkleRoll\"");
-                break;
-            case RHIPYAWPITCH:
-                this.sb.append("\"RHipYawPitch\"");
-                break;
-            case RHIPROLL:
-                this.sb.append("\"RHipRoll\"");
-                break;
-            case RHIPITCH:
-                this.sb.append("\"RHipPitch\"");
-                break;
-            case RKNEEPITCH:
-                this.sb.append("\"RKneePitch\"");
-                break;
-            case RANKLEPITCH:
-                this.sb.append("\"RAnklePitch\"");
-                break;
-            case RSHOULDERPITCH:
-                this.sb.append("\"RShoulderPitch\"");
-                break;
-            case RSHOULDERROLL:
-                this.sb.append("\"RShoulderRoll\"");
-                break;
-            case RELBOWYAW:
-                this.sb.append("\"RElbowYaw\"");
-                break;
-            case RELBOWROLL:
-                this.sb.append("\"RElbowRoll\"");
-                break;
-            case RWRISTYAW:
-                this.sb.append("\"RWristYaw\"");
-                break;
-            case RHAND:
-                this.sb.append("\"RHand\"");
-                break;
-            case LANKLEROLL:
-                this.sb.append("\"LAnkleRoll\"");
-                break;
-            default:
-                throw new DbcException("Invalide Joint!");
-        }
-        this.sb.append(")");
+        String side_axis = electricCurrent.getSlot().toString().toLowerCase();
+        String[] slots = side_axis.split("_");
+
+        SensorPorts portType = (SensorPorts) electricCurrent.getPort();
+        String port = portType.toString().toLowerCase();
+        port = StringUtils.capitalize(port);
+
+        String side = extractSideFromSlot(slots, portType);
+        String axis1 = extractAxis1FromSlot(slots);
+        String axis2 = extractAxis2FromSlot(slots);
+        String jointActuator = constructJointActuator(portType, port, side, axis1, axis2);
+
+        this.sb.append("h.getElectricCurrent('");
+        this.sb.append(jointActuator);
+        this.sb.append("')");
         return null;
+    }
+
+    private String constructJointActuator(SensorPorts portType, String port, String side, String axis1, String axis2) {
+        if ( portType == SensorPorts.HEAD ) {
+            return port + side;
+        } else {
+            return side + port + axis1 + axis2;
+        }
+    }
+
+    private String extractSideFromSlot(String[] slots, SensorPorts portType) {
+        String side;
+        side = Character.toString(slots[0].toUpperCase().charAt(0));
+        if ( portType == SensorPorts.HEAD ) {
+            side = StringUtils.capitalize(slots[0].toLowerCase());
+        }
+        return side;
+    }
+
+    private String extractAxis1FromSlot(String[] slots) {
+        if ( slots.length > 1 ) {
+            return StringUtils.capitalize(slots[1].toLowerCase());
+        }
+        return "";
+    }
+
+    private String extractAxis2FromSlot(String[] slots) {
+        if ( slots.length == 3 ) {
+            return StringUtils.capitalize(slots[2].toLowerCase());
+        }
+        return "";
     }
 
     @Override

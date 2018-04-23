@@ -77,4 +77,38 @@ public class PythonVisitorTest {
 
         this.h.assertCodeIsOk(correct_code, "/sensor/detectmark.xml", false);
     }
+
+    @Test
+    public void electricCurrentVisit_returnsCorrectPythonCode() throws Exception {
+        String correct_code =
+            "def run():\n"
+                + "    h.say(str(h.getElectricCurrent('HeadYaw')))\n"
+                + "    h.say(str(h.getElectricCurrent('HeadPitch')))\n"
+                + "    h.say(str(h.getElectricCurrent('LShoulderPitch')))\n"
+                + "    h.say(str(h.getElectricCurrent('LShoulderRoll')))\n"
+                + "    h.say(str(h.getElectricCurrent('RShoulderPitch')))\n"
+                + "    h.say(str(h.getElectricCurrent('RShoulderRoll')))\n"
+                + "    h.say(str(h.getElectricCurrent('LElbowYaw')))\n"
+                + "    h.say(str(h.getElectricCurrent('LElbowRoll')))\n"
+                + "    h.say(str(h.getElectricCurrent('RElbowYaw')))\n"
+                + "    h.say(str(h.getElectricCurrent('RElbowRoll')))\n"
+                + "    h.say(str(h.getElectricCurrent('LWristYaw')))\n"
+                + "    h.say(str(h.getElectricCurrent('RWristYaw')))\n"
+                + "    h.say(str(h.getElectricCurrent('LHand')))\n"
+                + "    h.say(str(h.getElectricCurrent('RHand')))\n"
+                + "    h.say(str(h.getElectricCurrent('LHipYawPitch')))\n"
+                + "    h.say(str(h.getElectricCurrent('LHipRoll')))\n"
+                + "    h.say(str(h.getElectricCurrent('LHipPitch')))\n"
+                + "    h.say(str(h.getElectricCurrent('RHipYawPitch')))\n"
+                + "    h.say(str(h.getElectricCurrent('RHipRoll')))\n"
+                + "    h.say(str(h.getElectricCurrent('RHipPitch')))\n"
+                + "    h.say(str(h.getElectricCurrent('LKneePitch')))\n"
+                + "    h.say(str(h.getElectricCurrent('RKneePitch')))\n"
+                + "    h.say(str(h.getElectricCurrent('LAnklePitch')))\n"
+                + "    h.say(str(h.getElectricCurrent('LAnkleRoll')))\n"
+                + "    h.say(str(h.getElectricCurrent('RAnklePitch')))\n"
+                + "    h.say(str(h.getElectricCurrent('RAnkleRoll')))";
+
+        this.h.assertCodeIsOk(correct_code, "/sensor/electriccurrent.xml", false);
+    }
 }

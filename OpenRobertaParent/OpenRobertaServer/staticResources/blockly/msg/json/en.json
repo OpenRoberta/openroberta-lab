@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-04-23 09:35:21.008379",
+		"lastupdated": "2018-04-23 13:29:23.796580",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1001,7 +1001,6 @@
 	"NAO_FORGETFACEOF": "forget face of",
 	"NAO_PERFORM": "perform",
 	"NAO_MOVE": "move",
-	"NAO_CURRENT": "electric current of",
 	"NAO_POSTURE_STAND": "Stand",
 	"NAO_POSTURE_STANDINIT": "StandInit",
 	"NAO_POSTURE_STANDZERO": "StandZero",
@@ -1121,7 +1120,6 @@
 	"NAO_RECOGNIZEDWORD_TOOLTIP": "Returns the last word the robot recognized.",
 	"NAO_LEARNFACE_TOOLTIP": "Learn and save a face under a given name in the vision recognition database on the robot.",
 	"NAO_FORGETFACE_TOOLTIP": "Delete a face previously saved under a given name from the vision recognition database on the robot. ",
-	"NAO_GETCURRENT_TOOLTIP": "Get the electric current from the motorboard in the selected joint.",
 	"MENU_CODE_DOWNLOAD_TOOLTIP": "Download the source code of your program on the computer",
 	"MENU_CODE_REFRESH_TOOLTIP": "Refresh the source code, if you have changed the NEPO Blocks.",
 	"MENU_SIM_WRO": "World Robot Olympiad scene",
@@ -1341,5 +1339,23 @@
 	"SENSOR_DETECTFACE": "get last recognized face(s)",
 	"SENSOR_DETECTFACE_GETSAMPLE_TOOLTIP": "Detect a face previously learned and saved.",
 	"SENSOR_DETECTMARK": "get last detected NAO mark(s)",
-	"SENSOR_DETECTMARK_GETSAMPLE_TOOLTIP": "Returns an array of IDs of last detected NAO marks. If no marks are detected, an array consisting of 1 element with value -1 is returned. For a list of NAO marks with corresponding numbers refer to the wiki."
+	"SENSOR_DETECTMARK_GETSAMPLE_TOOLTIP": "Returns an array of IDs of last detected NAO marks. If no marks are detected, an array consisting of 1 element with value -1 is returned. For a list of NAO marks with corresponding numbers refer to the wiki.",
+	"SENSOR_ELECTRICCURRENT": "electric current of",
+	"SENSOR_ELECTRICCURRENT_GETSAMPLE_TOOLTIP": "Get the electric current from the motorboard in the selected joint.",
+	"SLOT_YAW": "yaw",
+	"SLOT_PITCH": "pitch",
+	"PORT_SHOULDER": "schoulder",
+	"PORT_ELBOW": "elbow",
+	"PORT_WRIST": "wrist",
+	"PORT_HIP": "hip",
+	"PORT_KNEE": "knee",
+	"PORT_ANKLE": "ankle",
+	"SLOT_LEFT_PITCH": "left pitch",
+	"SLOT_LEFT_ROLL": "left roll",
+	"SLOT_LEFT_YAW": "left yaw",
+	"SLOT_LEFT_YAW_PITCH": "left yaw pitch",
+	"SLOT_RIGHT_PITCH": "right pitch",
+	"SLOT_RIGHT_ROLL": "right roll",
+	"SLOT_RIGHT_YAW": "right yaw",
+	"SLOT_RIGHT_YAW_PITCH": "right yaw pitch"
 }
