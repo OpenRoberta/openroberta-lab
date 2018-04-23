@@ -231,9 +231,6 @@
 					<ul style="margin-top: 0; margin-bottom: 10px">
 						<li class="typcn typcn-arrow-sorted-down">direction, can be
 							one of the available joint + angle combinations.</li>
-						<li class="typcn typcn-arrow-sorted-down">mode, can be
-							"absolute" to set from value relative to the origin or "relative"
-							to set the value relative to current position.</li>
 						<li class="typcn typcn-arrow-left">degree, a "Number" value.
 							This value is specific for each joint + angle combination.</li>
 					</ul>
@@ -837,10 +834,10 @@
 				<p />
 				<div id="robSensors_touch_getSample" class="help beginner">
 					<h3 id="Programming-BlocksNAO-»touchgetsample«">
-						<span style="color: rgb(0, 0, 0);">»get ... touch sensor</span><span
-							style="color: rgb(0, 0, 0);">«</span>
+						<span style="color: rgb(0, 0, 0);">»touch sensor ...
+							pressed</span><span style="color: rgb(0, 0, 0);">«</span>
 					</h3>
-					<p>With the »get ... touch sensor« block you can check if
+					<p>With the »touch sensor ... pressed« block you can check if
 						certain NAO's touch sensors where touched or pressed.</p>
 					<p>Options and Arguments:</p>
 					<ul style="margin-top: 0; margin-bottom: 10px">
@@ -1047,7 +1044,12 @@
 							class="typcn typcn-star"></span></span>
 					</h3>
 					<p>With the »get information about NAO mark« block you can get
-						full characteristics of a particular NAO mark.</p>
+						full characteristics of a particular NAO mark. Info data structure
+						is as follows: [1, alpha, beta, sizeX, sizeY, heading] alpha and
+						beta represent the Naomark’s location in terms of camera angles -
+						sizeX and sizeY are the mark’s size in camera angles - the heading
+						angle describes how the Naomark is oriented about the vertical
+						axis with regards to the robot’s head.</p>
 					<p>Options and Arguments:</p>
 					<ul style="margin-top: 0; margin-bottom: 10px">
 						<li class="typcn typcn-arrow-left">NAO mark number, you need
@@ -1335,7 +1337,7 @@
 		</div>
 		<div class="cell normal" data-type="normal">
 			<div class="innerCell">
-				<div id="robControls_wait_for" class="help beginner">
+				<div id="robControls_wait" class="help beginner">
 					<h3 id="Programming-BlocksNAO-»waituntil«">»wait until«</h3>
 					<p>With the block »wait until« you can "stop" your program at
 						the point you insert the »wait until« block. Your program then
@@ -1389,7 +1391,6 @@
 					</ul>
 					<p style="text-align: left;">
 					<p>Return value:</p>
-					</p>
 					<ul style="margin-top: 0; margin-bottom: 10px">
 						<li class="typcn typcn-arrow-right">Boolean value, »true« or
 							»false«.</li>
@@ -1415,9 +1416,12 @@
 						<li class="typcn typcn-arrow-left">Boolean value on the right
 							hand side.</li>
 					</ul>
-					Return value:
-					<li class="typcn typcn-arrow-right">Boolean value »true«
-						or»false«.</li>
+					<p>Return value:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-arrow-right">Boolean value »true«
+							or»false«.</li>
+					</ul>
+
 				</div>
 			</div>
 		</div>
@@ -1470,10 +1474,10 @@
 					</h3>
 					<p style="text-align: left;">The block »null« is a place holder
 						for an input value that is not yet specified. If for instance a
-						new connection variable has been created and is not yet bound, the
+						new variable has been created and is not yet initialised, the
 						initial value of this connection will be set to »null«.</p>
 					<p style="text-align: left;">Input value: none</p>
-					<p style="text-align: left;">Return value::</p>
+					<p style="text-align: left;">Return value:</p>
 					<ul style="margin-top: 0; margin-bottom: 10px">
 						<li class="typcn typcn-arrow-right">Boolean value, »null«.</li>
 					</ul>
@@ -1539,7 +1543,6 @@
 					</ul>
 					<p style="text-align: left;">
 					<p>Return value:</p>
-					</p>
 					<ul style="margin-top: 0; margin-bottom: 10px">
 						<li class="typcn typcn-arrow-right"> Number</li>
 					</ul>
@@ -1603,12 +1606,12 @@
 					</h3>
 					<p>With the block »trigonometric function« sine, cosine,
 						tangent and their respective revers functions can be calculated.
-						Input values are expected in radian measure(see hint above).</p>
+						Input values are expected in degree measure(see hint above).</p>
 					<p>Settings and input value:</p>
 					<ul style="margin-top: 0; margin-bottom: 10px">
 						<li class="typcn typcn-arrow-down">Trigonometric function,
 							choose one.</li>
-						<li class="typcn typcn-arrow-left">Number, in radian measure.</li>
+						<li class="typcn typcn-arrow-left">Number, in degree measure.</li>
 					</ul>
 					<p>Return value:</p>
 					<ul style="margin-top: 0; margin-bottom: 10px">
@@ -1634,7 +1637,6 @@
 					</ul>
 					<p>
 					<p>Return value:</p>
-					</p>
 					<ul style="margin-top: 0; margin-bottom: 10px">
 						<li class="typcn typcn-arrow-right"> Number, value of the
 							selected mathematical constant. Infinity will return »infinity«.</li>
@@ -1818,7 +1820,6 @@
 						and 1.0 is calculated.</p>
 					<p>
 					<p>Return value:</p>
-					</p>
 					<ul style="margin-top: 0; margin-bottom: 10px">
 						<li class="typcn typcn-arrow-right">Number, positive random
 							value between 0.0 and 1.0.</li>
@@ -1852,6 +1853,21 @@
 					<ul style="margin-top: 0; margin-bottom: 10px">
 						<li class="typcn typcn-arrow-right">String, containing
 							arbitrary characters.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cell normal" data-type="normal">
+			<div class="innerCell">
+				<div id="text_comment" class="help beginner">
+					<h3 id="Programming-BlocksNAO-»Comment«">»Text comment«</h3>
+					<p>»Text comment« block allows to insert comments in the
+						program's source code. Usefull for providing documentation or
+						explaining what certain parts of your program does.</p>
+					<p>Input value:</p>
+					<ul style="margin-top: 0; margin-bottom: 10px">
+						<li class="typcn typcn-pen">String, containing arbitrary
+							characters.</li>
 					</ul>
 				</div>
 			</div>
@@ -2215,9 +2231,9 @@
 				<h2 id="Programming-BlocksNAO-Functions[Expertblocks]">
 					Functions<span class="typcn typcn-star"></span>
 				</h2>
-				<p>With »Functions« blocks (in Java also called »methods« or
-					»subprograms«) you may create more readable programs. NEPO offers
-					some function blocks:</p>
+				<p>With »Functions« blocks (in Python also called »methods«) you
+					may create more readable programs. NEPO offers some function
+					blocks:</p>
 				<ul>
 					<li>Function blocks with/without input parameters and no
 						return parameter</li>
@@ -2226,7 +2242,7 @@
 					<li>If block to be used within a function</li>
 				</ul>
 				<p>With elementary function blocks you may program simple and
-					komplex functions which may be used by function calls. Each
+					complex functions which may be used by function calls. Each
 					programmed function is available immediately as an additional block
 					in the »Functions« category. Those are</p>
 				<ul>
