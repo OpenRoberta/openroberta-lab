@@ -6,29 +6,65 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.util.test.nao.HelperNaoForXmlTest;
 
-@Ignore
-public class NaoGetSampleSensorTest {
+public class GetSampleSensorTest {
     private final HelperNaoForXmlTest h = new HelperNaoForXmlTest();
+
+    @Test
+    public void make_ByDefault_ReturnInstanceOfNaoGetSampleAccelerometer() throws Exception {
+        String expectedResult =
+            "BlockAST [project=[[Location [x=384, y=50], "
+                + "MainTask [], "
+                + "WaitStmt [\n"
+                + "(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [AccelerometerSensor [X, DEFAULT, EMPTY_SLOT]]], NumConst [512]]]\n"
+                + ")], WaitStmt [\n"
+                + "(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [AccelerometerSensor [Y, DEFAULT, EMPTY_SLOT]]], NumConst [512]]]\n"
+                + ")], WaitStmt [\n"
+                + "(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [AccelerometerSensor [Z, DEFAULT, EMPTY_SLOT]]], NumConst [512]]]\n"
+                + ")]]]]";
+
+        String result = this.h.generateTransformerString("/sensor/waitUntilAccelerometer.xml");
+
+        Assert.assertEquals(expectedResult, result);
+    }
+
+    @Test
+    public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXMLNaoGetSampleAccelerometer() throws Exception {
+        this.h.assertTransformationIsOk("/sensor/waitUntilAccelerometer.xml");
+    }
+
+    @Test
+    public void make_ByDefault_ReturnInstanceOfNaoGetSampleElectricCurrent() throws Exception {
+        String expectedResult =
+            "BlockAST [project=[[Location [x=384, y=50], "
+                + "MainTask [], "
+                + "WaitStmt [\n"
+                + "(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [ElectricCurrent [HEAD, VALUE, YAW]]], NumConst [30]]]\n"
+                + ")], WaitStmt [\n"
+                + "(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [ElectricCurrent [HEAD, VALUE, PITCH]]], NumConst [30]]]\n"
+                + ")]]]]";
+
+        String result = this.h.generateTransformerString("/sensor/waitUntilElectricCurrent.xml");
+
+        Assert.assertEquals(expectedResult, result);
+    }
+
+    @Test
+    public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXMLNaoGetSampleElectricCurrent() throws Exception {
+
+        this.h.assertTransformationIsOk("/sensor/waitUntilElectricCurrent.xml");
+    }
 
     @Test
     public void make_ByDefault_ReturnInstanceOfNaoGetSampleTouchHandLeftTouchHandBumperHead() throws Exception {
         String expectedResult =
-            "BlockAST [project=[[Location [x=188, y=138], "
+            "BlockAST [project=[[Location [x=384, y=50], "
                 + "MainTask [], "
                 + "WaitStmt [\n"
-                + "(repeat [WAIT, Binary [EQ, SensorExpr [NaoGetSampleSensor [Touchsensors [HAND, LEFT]]], BoolConst [true]]]\n"
+                + "(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [TouchSensor [HEAD, TOUCH, FRONT]]], BoolConst [true]]]\n"
                 + ")], WaitStmt [\n"
-                + "(repeat [WAIT, Binary [EQ, SensorExpr [NaoGetSampleSensor [Touchsensors [HAND, RIGHT]]], BoolConst [true]]]\n"
+                + "(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [TouchSensor [HEAD, TOUCH, MIDDLE]]], BoolConst [true]]]\n"
                 + ")], WaitStmt [\n"
-                + "(repeat [WAIT, Binary [EQ, SensorExpr [NaoGetSampleSensor [Touchsensors [BUMPER, RIGHT]]], BoolConst [true]]]\n"
-                + ")], WaitStmt [\n"
-                + "(repeat [WAIT, Binary [EQ, SensorExpr [NaoGetSampleSensor [Touchsensors [BUMPER, LEFT]]], BoolConst [true]]]\n"
-                + ")], WaitStmt [\n"
-                + "(repeat [WAIT, Binary [EQ, SensorExpr [NaoGetSampleSensor [Touchsensors [HEAD, FRONT]]], BoolConst [true]]]\n"
-                + ")], WaitStmt [\n"
-                + "(repeat [WAIT, Binary [EQ, SensorExpr [NaoGetSampleSensor [Touchsensors [HEAD, LEFT]]], BoolConst [true]]]\n"
-                + ")], WaitStmt [\n"
-                + "(repeat [WAIT, Binary [EQ, SensorExpr [NaoGetSampleSensor [Touchsensors [HEAD, RIGHT]]], BoolConst [true]]]\n"
+                + "(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [TouchSensor [HEAD, TOUCH, REAR]]], BoolConst [true]]]\n"
                 + ")]]]]";
 
         String result = this.h.generateTransformerString("/sensor/waitUntilTouch.xml");
@@ -42,7 +78,7 @@ public class NaoGetSampleSensorTest {
         this.h.assertTransformationIsOk("/sensor/waitUntilTouch.xml");
     }
 
-    @Test
+    @Ignore
     public void make_ByDefault_ReturnInstanceOfNaoGetSampleFaceDetect() throws Exception {
         String expectedResult =
             "BlockAST [project=[[Location [x=63, y=138], "
@@ -56,13 +92,13 @@ public class NaoGetSampleSensorTest {
         Assert.assertEquals(expectedResult, result);
     }
 
-    @Test
+    @Ignore
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXMLNaoGetSampleTouchFaceDetect() throws Exception {
 
         this.h.assertTransformationIsOk("/sensor/waitUntilDetectFace.xml");
     }
 
-    @Test
+    @Ignore
     public void make_ByDefault_ReturnInstanceOfNaoGetSampleDetectMarks() throws Exception {
         String expectedResult =
             "BlockAST [project=[[Location [x=113, y=113], "
@@ -76,13 +112,13 @@ public class NaoGetSampleSensorTest {
         Assert.assertEquals(expectedResult, result);
     }
 
-    @Test
+    @Ignore
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXMLNaoGetSampleDetectMarks() throws Exception {
 
         this.h.assertTransformationIsOk("/sensor/waitUntilDetectMarks.xml");
     }
 
-    @Test
+    @Ignore
     public void make_ByDefault_ReturnInstanceOfNaoGetSampleSonar() throws Exception {
         String expectedResult =
             "BlockAST [project=[[Location [x=113, y=113], "
@@ -96,13 +132,13 @@ public class NaoGetSampleSensorTest {
         Assert.assertEquals(expectedResult, result);
     }
 
-    @Test
+    @Ignore
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXMLNaoGetSampleSonar() throws Exception {
 
         this.h.assertTransformationIsOk("/sensor/waitUntilSonar.xml");
     }
 
-    @Test
+    @Ignore
     public void make_ByDefault_ReturnInstanceOfNaoGetSampleGyro() throws Exception {
         String expectedResult =
             "BlockAST [project=[[Location [x=113, y=113], "
@@ -119,45 +155,21 @@ public class NaoGetSampleSensorTest {
         Assert.assertEquals(expectedResult, result);
     }
 
-    @Test
+    @Ignore
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXMLNaoGetSampleGyro() throws Exception {
 
         this.h.assertTransformationIsOk("/sensor/waitUntilGyro.xml");
     }
 
     @Test
-    public void make_ByDefault_ReturnInstanceOfNaoGetSampleAccelerometer() throws Exception {
-        String expectedResult =
-            "BlockAST [project=[[Location [x=213, y=88], "
-                + "MainTask [], "
-                + "WaitStmt [\n"
-                + "(repeat [WAIT, Binary [GT, SensorExpr [NaoGetSampleSensor [Accelerometer [X]]], NumConst [1]]]\n"
-                + ")], WaitStmt [\n"
-                + "(repeat [WAIT, Binary [GT, SensorExpr [NaoGetSampleSensor [Accelerometer [Y]]], NumConst [1]]]\n"
-                + ")], WaitStmt [\n"
-                + "(repeat [WAIT, Binary [GT, SensorExpr [NaoGetSampleSensor [Accelerometer [Z]]], NumConst [1]]]\n"
-                + ")]]]]";
-
-        String result = this.h.generateTransformerString("/sensor/waitUntilAccelerometer.xml");
-
-        Assert.assertEquals(expectedResult, result);
-    }
-
-    @Test
-    public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXMLNaoGetSampleAccelerometer() throws Exception {
-
-        this.h.assertTransformationIsOk("/sensor/waitUntilAccelerometer.xml");
-    }
-
-    @Test
     public void make_ByDefault_ReturnInstanceOfNaoGetSampleFSR() throws Exception {
         String expectedResult =
-            "BlockAST [project=[[Location [x=288, y=113], "
+            "BlockAST [project=[[Location [x=101, y=79], "
                 + "MainTask [], "
                 + "WaitStmt [\n"
-                + "(repeat [WAIT, Binary [GT, SensorExpr [NaoGetSampleSensor [ForceSensor [LEFT]]], NumConst [2]]]\n"
+                + "(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [FsrSensor [LEFT, VALUE, EMPTY_SLOT]]], NumConst [90]]]\n"
                 + ")], WaitStmt [\n"
-                + "(repeat [WAIT, Binary [GT, SensorExpr [NaoGetSampleSensor [ForceSensor [RIGHT]]], NumConst [2]]]\n"
+                + "(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [FsrSensor [RIGHT, VALUE, EMPTY_SLOT]]], NumConst [90]]]\n"
                 + ")]]]]";
 
         String result = this.h.generateTransformerString("/sensor/waitUntilFSR.xml");
@@ -167,11 +179,10 @@ public class NaoGetSampleSensorTest {
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXMLNaoGetSampleFSR() throws Exception {
-
         this.h.assertTransformationIsOk("/sensor/waitUntilFSR.xml");
     }
 
-    @Test
+    @Ignore
     public void make_ByDefault_ReturnInstanceOfNaoGetSampleRecognizeWord() throws Exception {
         String expectedResult =
             "BlockAST [project=[[Location [x=188, y=113], "
@@ -185,7 +196,7 @@ public class NaoGetSampleSensorTest {
         Assert.assertEquals(expectedResult, result);
     }
 
-    @Test
+    @Ignore
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXMLNaoRecognizeWord() throws Exception {
 
         this.h.assertTransformationIsOk("/sensor/waitUntilRecognizeWord.xml");

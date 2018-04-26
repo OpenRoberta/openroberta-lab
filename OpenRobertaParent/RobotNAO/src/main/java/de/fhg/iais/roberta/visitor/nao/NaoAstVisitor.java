@@ -29,12 +29,12 @@ import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
 import de.fhg.iais.roberta.syntax.lang.expr.nao.ColorHexString;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.Dialog;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
 import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.NaoGetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.DetectMark;
+import de.fhg.iais.roberta.syntax.sensor.nao.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -248,7 +248,7 @@ public interface NaoAstVisitor<V> extends AstVisitor<V>, AstActorSoundVisitor<V>
      */
     V visitDetectFace(DetectFace<V> detectFace);
 
-    V visitNaoGetSampleSensor(NaoGetSampleSensor<V> naoGetSampleSensor);
+    V visitGetSampleSensor(GetSampleSensor<V> getSampleSensor);
 
     V visitElectricCurrent(ElectricCurrent<V> electricCurrent);
 

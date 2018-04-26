@@ -13,9 +13,9 @@ public class WaitStmtTest {
     public void make_ByDefault_ReturnInstanceOfGetSampleSensorClass() throws Exception {
         String expectedResult =
             "BlockAST [project=[[Location [x=80, y=92], MainTask [], WaitStmt [\n"
-                + "(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [sensor=BrickSensor [BUTTON_A, PRESSED, EMPTY_SLOT]]], BoolConst [true]]]\n"
+                + "(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [BrickSensor [BUTTON_A, PRESSED, EMPTY_SLOT]]], BoolConst [true]]]\n"
                 + ")], DisplayTextAction [TEXT, StringConst [Hallo]], WaitStmt [\n"
-                + "(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [sensor=GyroSensor [X, ANGLE, EMPTY_SLOT]]], NumConst [90]]]\n"
+                + "(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [GyroSensor [X, ANGLE, EMPTY_SLOT]]], NumConst [90]]]\n"
                 + ")], DisplayTextAction [TEXT, StringConst [Hallo]]]]]";
 
         String result = this.h.generateTransformerString("/sensor/wait_stmt_two_cases.xml");

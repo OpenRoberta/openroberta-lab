@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.sensor.generic;
+package de.fhg.iais.roberta.syntax.sensor.nao;
 
 import java.util.List;
 
@@ -17,11 +17,18 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.GetSampleType;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
+import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
 /**
  * This class represents the <b>robSensors_getSample</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -38,7 +45,6 @@ public class GetSampleSensor<V> extends Sensor<V> {
     private final GetSampleType sensorType;
     private static final ch.qos.logback.classic.Logger LOG = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(AbstractCompilerWorkflow.class);
 
-    @SuppressWarnings("unchecked")
     private GetSampleSensor(
         GetSampleType sensorType,
         String port,
@@ -46,14 +52,60 @@ public class GetSampleSensor<V> extends Sensor<V> {
         BlocklyBlockProperties properties,
         BlocklyComment comment,
         IRobotFactory factory) {
-        super(BlockTypeContainer.getByName("SENSOR_GET_SAMPLE"), properties, comment);
+        super(BlockTypeContainer.getByName("NAO_SENSOR_GET_SAMPLE"), properties, comment);
         LOG.setLevel(ch.qos.logback.classic.Level.TRACE);
         Assert.notNull(sensorType);
         Assert.notNull(port);
         this.sensorPort = port;
         this.slot = slot;
+        //TODO: reimplemnt it in a better way
+        if ( port.equals("") ) {
+            port = BlocklyConstants.NO_PORT;
+        }
         this.sensorType = sensorType;
-        this.sensor = (Sensor<V>) factory.createSensor(sensorType, port, slot, properties, comment);
+        SensorMetaDataBean sensorMetaDataBean;
+        switch ( sensorType.getSensorType() ) {
+            case BlocklyConstants.TOUCH:
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(factory.getSensorPort(port), factory.getTouchSensorMode("TOUCH"), factory.getSlot(BlocklyConstants.EMPTY_SLOT));
+                this.sensor = TouchSensor.make(sensorMetaDataBean, properties, comment);
+                break;
+            case BlocklyConstants.ULTRASONIC:
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(port),
+                        factory.getUltrasonicSensorMode(sensorType.getSensorMode()),
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
+                this.sensor = UltrasonicSensor.make(sensorMetaDataBean, properties, comment);
+                break;
+
+            case BlocklyConstants.GYRO:
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(port),
+                        factory.getGyroSensorMode(sensorType.getSensorMode()),
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
+                this.sensor = GyroSensor.make(sensorMetaDataBean, properties, comment);
+                break;
+            case BlocklyConstants.TIME:
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(port),
+                        factory.getTimerSensorMode(sensorType.getSensorMode()),
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
+                this.sensor = TimerSensor.make(sensorMetaDataBean, properties, comment);
+                break;
+            case BlocklyConstants.ACCELERATION:
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(port),
+                        factory.getAxis(BlocklyConstants.DEFAULT),
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
+                this.sensor = AccelerometerSensor.make(sensorMetaDataBean, properties, comment);
+                break;
+            default:
+                throw new DbcException("Invalid sensor " + sensorType.getSensorType() + "!");
+        }
         setReadOnly();
     }
 
@@ -90,10 +142,6 @@ public class GetSampleSensor<V> extends Sensor<V> {
         return this.sensorPort;
     }
 
-    public String getSlot() {
-        return this.slot;
-    }
-
     /**
      * @return type of the sensor who will get the sample
      */
@@ -108,7 +156,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return ((AstSensorsVisitor<V>) visitor).visitGetSampleSensor(this);
+        return ((NaoAstVisitor<V>) visitor).visitGetSampleSensor(this);
     }
 
     /**
@@ -136,9 +184,8 @@ public class GetSampleSensor<V> extends Sensor<V> {
         mutation.setInput(getSensorType().name());
         jaxbDestination.setMutation(mutation);
 
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORTYPE, this.sensorType.name());
-        JaxbTransformerHelper.addField(jaxbDestination, getSensorType().getPortTypeName(), this.sensorPort);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SLOT, this.slot);
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORTYPE, getSensorType().name());
+        JaxbTransformerHelper.addField(jaxbDestination, getSensorType().getPortTypeName(), getSensorPort());
 
         return jaxbDestination;
     }

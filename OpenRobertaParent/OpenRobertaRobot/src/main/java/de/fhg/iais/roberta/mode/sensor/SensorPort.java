@@ -4,6 +4,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 
 public enum SensorPort implements ISensorPort {
     NO_PORT,
+    EMPTY_PORT( "" ),
     X( "X", "Pitch" ),
     Y( "Y", "Roll" ),
     Z( "Z", "Yaw" ),

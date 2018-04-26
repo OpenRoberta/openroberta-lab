@@ -37,7 +37,7 @@ public class ColorSensor<V> extends ExternalSensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ColorSensor}
      */
-    static <V> ColorSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> ColorSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new ColorSensor<V>(sensorMetaDataBean, properties, comment);
     }
 

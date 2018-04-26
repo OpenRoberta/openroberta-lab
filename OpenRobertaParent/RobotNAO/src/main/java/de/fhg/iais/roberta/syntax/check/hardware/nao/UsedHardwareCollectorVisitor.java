@@ -39,12 +39,12 @@ import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisit
 import de.fhg.iais.roberta.syntax.lang.expr.nao.ColorHexString;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.Dialog;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
 import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.NaoGetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.DetectMark;
+import de.fhg.iais.roberta.syntax.sensor.nao.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
 import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
@@ -239,8 +239,8 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     }
 
     @Override
-    public Void visitNaoGetSampleSensor(NaoGetSampleSensor<Void> naoGetSampleSensor) {
-        naoGetSampleSensor.getSensor().visit(this);
+    public Void visitGetSampleSensor(GetSampleSensor<Void> getSampleSensor) {
+        getSampleSensor.getSensor().visit(this);
         return null;
     }
 

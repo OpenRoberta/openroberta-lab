@@ -90,7 +90,7 @@ import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.Dialog;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
 import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.NaoGetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -1239,7 +1239,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     }
 
     @Override
-    public Void visitNaoGetSampleSensor(NaoGetSampleSensor<Void> sensorGetSample) {
+    public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
         return sensorGetSample.getSensor().visit(this);
     }
 

@@ -15,10 +15,18 @@ import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.sensor.nao.SensorPorts;
+import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.codegen.nao.PythonVisitor;
+import de.fhg.iais.roberta.syntax.sensor.GetSampleType;
+import de.fhg.iais.roberta.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
+import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
+import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
@@ -151,4 +159,20 @@ public class Factory extends AbstractRobotFactory {
     public ILightSensorActionMode getLightActionColor(String mode) {
         return null;
     }
+
+    @Override
+    public Sensor<?> createSensor(GetSampleType sensorType, String port, String slot, BlocklyBlockProperties properties, BlocklyComment comment) {
+        SensorMetaDataBean sensorMetaDataBean;
+        switch ( sensorType.getSensorType() ) {
+            case BlocklyConstants.ELECTRIC_CURRENT:
+                sensorMetaDataBean = new SensorMetaDataBean(getSensorPort(port), getPlaceholderSensorMode(sensorType.getSensorMode()), getSlot(slot));
+                return ElectricCurrent.make(sensorMetaDataBean, properties, comment);
+            case BlocklyConstants.FSR:
+                sensorMetaDataBean = new SensorMetaDataBean(getSensorPort(port), getPlaceholderSensorMode(sensorType.getSensorMode()), getSlot(slot));
+                return FsrSensor.make(sensorMetaDataBean, properties, comment);
+            default:
+                return super.createSensor(sensorType, port, slot, properties, comment);
+        }
+    }
+
 }
