@@ -572,7 +572,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         if (xml) {
             blocklyWorkspace.updateToolbox(xml);
         }
-        if (toolbox === 'beginner') {
+        if (level === 'beginner') {
             $('.help.expert').hide();
         } else {
             $('.help.expert').show();
