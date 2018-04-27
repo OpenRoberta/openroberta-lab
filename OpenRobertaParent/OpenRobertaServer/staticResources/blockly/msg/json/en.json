@@ -1,11 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-<<<<<<< 5a327f87939c03775f0e08c5971cf7bff8306a89
-		"lastupdated": "2018-04-23 17:56:23.957588",
-=======
-		"lastupdated": "2018-04-23 14:48:22.906242",
->>>>>>> #806 move the transformation for robSensor_getSample in the factory
+		"lastupdated": "2018-04-27 12:48:17.278433",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -560,6 +556,9 @@
 	"MODE_COMPASS": "compass",
 	"MODE_MODULATED": "modulated",
 	"MODE_UNMODULATED": "unmodulated",
+	"MODE_HUMIDITY": "humidity",
+	"MODE_TEMPERATURE": "temperature",
+	"MODE_SERIAL": "card serial",
 	"LOOP": "repeat until",
 	"LOOP_FOREVER": "repeat indefinitely",
 	"CONNECTION_SEND_DATA": "send message",
