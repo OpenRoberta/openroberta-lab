@@ -636,6 +636,25 @@ public class CppVisitorTest {
     }
 
     @Test
+    public void visitMathOnListFunct_DisplayAllMathOnListFunctsResults_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + "array<double, 4> item;"
+                + MAIN
+                + "item = {1, 2, 3, 4};"
+                + "_uBit.display.scroll(ManagedString(sum(item)));\n"
+                + "_uBit.display.scroll(ManagedString(min(item)));\n"
+                + "_uBit.display.scroll(ManagedString(max(item)));\n"
+                + "_uBit.display.scroll(ManagedString(average(item)));\n"
+                + "_uBit.display.scroll(ManagedString(median(item)));\n"
+                + "_uBit.display.scroll(ManagedString(standardDeviation(item)));\n"
+                + "_uBit.display.scroll(ManagedString(randomElement(item)));"
+                + END;
+        assertCodeIsOk(expectedResult, "/action/math_on_list.xml");
+    }
+
+    @Test
     public void visitUserDefinedMethod__ReturnsCorrectCppProgram() throws Exception {
         String expectedResult =
             "" //

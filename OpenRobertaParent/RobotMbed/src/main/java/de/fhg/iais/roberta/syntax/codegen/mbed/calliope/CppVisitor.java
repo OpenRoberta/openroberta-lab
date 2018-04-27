@@ -879,7 +879,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         } else if ( functName == FunctionNames.RANDOM ) {
             this.sb.append("randomElement(");
         } else {
-            this.sb.append(functName.toString().toLowerCase());
+            this.sb.append(functName.toString().toLowerCase() + "(");
         }
         mathOnListFunct.getParam().get(0).visit(this);
         this.sb.append(")");
