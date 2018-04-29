@@ -364,6 +364,8 @@
 	"PROCEDURES_IFRETURN_HELPURL": "url - Information about guard clauses.",
 	"PROCEDURES_IFRETURN_WARNING": "warning - This appears if the user tries to use this block outside of a function definition.",
 	"MOTOR_ON_TOOLTIP": "Rob Actions tooltips",
+	"MOTOR_ON_TOOLTIP_CALLIOPE": "",
+	"SINGLE_MOTOR_ON_TOOLTIP_CALLIOPE": "",
 	"MOTOR_ON_FOR_TOOLTIP": "",
 	"MOTOR_GETPOWER_TOOLTIP": "",
 	"MOTOR_SETPOWER_TOOLTIP": "",

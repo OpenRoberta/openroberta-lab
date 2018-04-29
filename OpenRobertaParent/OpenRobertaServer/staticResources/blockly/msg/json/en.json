@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-04-27 12:48:17.278433",
+		"lastupdated": "2018-04-29 22:37:28.534024",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -274,7 +274,7 @@
 	"LISTS_INDEX_OF_HELPURL": "https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list",
 	"LISTS_INDEX_OF_FIRST": "find first occurrence of item",
 	"LISTS_INDEX_OF_LAST": "find last occurrence of item",
-	"LISTS_INDEX_OF_TOOLTIP": "Returns the index of the first/last occurrence of the item in the list. Returns 0 if item is not found.",
+	"LISTS_INDEX_OF_TOOLTIP": "Returns the index of the first/last occurrence of the item in the list. Returns -1 if item is not found.",
 	"LISTS_GET_INDEX_GET": "get",
 	"LISTS_GET_INDEX_GET_REMOVE": "get and remove",
 	"LISTS_GET_INDEX_REMOVE": "remove",
@@ -370,6 +370,8 @@
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Warning: This block may be used only within a function definition.",
 	"MOTOR_ON_TOOLTIP": "Turns motor on with specific power.",
+	"MOTOR_ON_TOOLTIP_CALLIOPE": "Turns motor A, B or A+B on with a specific power.",
+	"SINGLE_MOTOR_ON_TOOLTIP_CALLIOPE": "Turns the single motor on with a specific power. Power can be positiv or negativ for reverse direction.",
 	"MOTOR_ON_FOR_TOOLTIP": "Turns motor on and stops motor after execution of rotations/degrees.",
 	"MOTOR_GETPOWER_TOOLTIP": "Gets current power of this motor.",
 	"MOTOR_SETPOWER_TOOLTIP": "Sets power of this motor.",
