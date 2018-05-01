@@ -608,6 +608,12 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
 //                }
 //            }
         });
+        
+        // help Bootstrap to calculate the correct size for the collapse element when the sceen height is smaller than the elements height.
+        $('#navbarCollapse').on('shown.bs.collapse', function() {
+            var newHeight = Math.min($(this).height(), $('#blockly').height());
+            $(this).css('height', newHeight);
+        });
 
         // experimental
         $(document).on('keydown', function(e) {
