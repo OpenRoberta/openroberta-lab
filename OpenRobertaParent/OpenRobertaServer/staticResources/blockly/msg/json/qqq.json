@@ -1363,5 +1363,9 @@
 	"COLON": "",
 	"FROM_POSITION": "",
 	"LEDBAR": "",
-	"LEDBAR_SET_TOOLTIP": ""
+	"LEDBAR_SET_TOOLTIP": "",
+	"MODE_IDONE": "",
+	"MODE_IDALL": "",
+	"MODE_NAMEONE": "",
+	"MODE_NAMEALL": ""
 }

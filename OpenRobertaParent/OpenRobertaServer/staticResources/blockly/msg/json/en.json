@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-04-29 22:37:28.534024",
+		"lastupdated": "2018-05-05 14:53:42.750566",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1240,10 +1240,10 @@
 	"RESEND_ACTIVATION": "resend verification email",
 	"ORA_USER_ACTIVATION_INVALID_URL": "The link is not valid anymore. Please ask for resending your verification mail again",
 	"FLYOUT_VARIABLE_TEXT": "You need a variable? Please declare it first with a click on the + sign at the »start«\u00a0block.",
-	"NAO_MARK_GET_INFORMATION": "get information about NAO mark",
-	"NAO_MARK_GET_INFORMATION_TOOLTIP": "This block will return additional information about the given NAO mark in the format on a 1-d array with following values: [XAngle, YAngle, XSize, YSize, Heading], please note that all values are given in camera angles.",
-	"NAO_FACE_GET_INFORMATION": "get information about recognized face",
-	"NAO_FACE_GET_INFORMATION_TOOLTIP": "This block will return additional information about the given recognized face in the format on a 1-d array with following values: [XAngle, YAngle, XSize, YSize, Heading], please note that all values are given in camera angles.",
+	"NAO_MARK_GET_INFORMATION": "get information about NAO Mark",
+	"NAO_MARK_GET_INFORMATION_TOOLTIP": "Returns additional information about the given NAO mark in an array with following values: [XAngle, YAngle, XSize, YSize, Heading], please note that all values are given in camera angles.",
+	"NAO_FACE_GET_INFORMATION": "get information about detected face",
+	"NAO_FACE_GET_INFORMATION_TOOLTIP": "Returns additional information about the given detected in an array with following values: [XAngle, YAngle, XSize, YSize, Heading], please note that all values are given in camera angles.",
 	"SENSOR_RADIO_RSSI": "radio RSSI sensor",
 	"RADIO_GET_RSSI_TOOLTIP": "Gets the RSSI of the last package.",
 	"SENSOR_UNIT_CM": "cm",
@@ -1339,13 +1339,13 @@
 	"CONFIGURATION_PORT": "Port1",
 	"CONFIGURATION_NO_PORT": "no port",
 	"PORT_HEAD": "head",
-	"SENSOR_FSR": "fsr sensor",
+	"SENSOR_FSR": "force-sensing resistor",
 	"SENSOR_FSR_GETSAMPLE_TOOLTIP": "Get the current reading from the force sensitive resistor under the feet of the robot.",
-	"SENSOR_DETECTFACE": "get last recognized face(s)",
+	"SENSOR_DETECTFACE": "face detector",
 	"SENSOR_DETECTFACE_GETSAMPLE_TOOLTIP": "Detect a face previously learned and saved.",
-	"SENSOR_DETECTMARK": "get last detected NAO mark(s)",
-	"SENSOR_DETECTMARK_GETSAMPLE_TOOLTIP": "Returns an array of IDs of last detected NAO marks. If no marks are detected, an array consisting of 1 element with value -1 is returned. For a list of NAO marks with corresponding numbers refer to the wiki.",
-	"SENSOR_ELECTRICCURRENT": "electric current of",
+	"SENSOR_DETECTMARK": "NAO Mark sensor",
+	"SENSOR_DETECTMARK_GETSAMPLE_TOOLTIP": "Returns one or an array of IDs (number) of the last detected NAO Mark(s). If no marks are detected, -1 or an array consisting of 1 element with value -1 is returned. For a list of NAO marks with corresponding numbers refer to the wiki.",
+	"SENSOR_ELECTRICCURRENT": "current sensor",
 	"SENSOR_ELECTRICCURRENT_GETSAMPLE_TOOLTIP": "Get the electric current from the motorboard in the selected joint.",
 	"SLOT_YAW": "yaw",
 	"SLOT_PITCH": "pitch",
@@ -1369,5 +1369,9 @@
 	"COLON": "colon",
 	"FROM_POSITION": "from position",
 	"LEDBAR": "LED Bar",
-	"LEDBAR_SET_TOOLTIP": "Sets the specified LED [0-9] on the Grove LED Bar v2.0 by Seeed to the given brightness [0-8]. The LED Bar has to be connected to the A1 (right) Grove connector."
+	"LEDBAR_SET_TOOLTIP": "Sets the specified LED [0-9] on the Grove LED Bar v2.0 by Seeed to the given brightness [0-8]. The LED Bar has to be connected to the A1 (right) Grove connector.",
+	"MODE_IDONE": "ID",
+	"MODE_IDALL": "IDs (list)",
+	"MODE_NAMEONE": "name",
+	"MODE_NAMEALL": "names (list)"
 }
