@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nao.Camera;
+import de.fhg.iais.roberta.mode.action.nao.Posture;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.nao.SensorPorts;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -546,6 +547,9 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
                 break;
             case CROUCH:
                 this.sb.append("\"Crouch\")");
+                break;
+            case REST:
+                this.sb.append("\"Rest\")");
                 break;
         }
         return null;
