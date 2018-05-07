@@ -33,7 +33,7 @@ public final class DetectedMark<V> extends ExternalSensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link DetectedMark}
      */
-    static <V> DetectedMark<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> DetectedMark<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new DetectedMark<V>(sensorMetaDataBean, properties, comment);
     }
 

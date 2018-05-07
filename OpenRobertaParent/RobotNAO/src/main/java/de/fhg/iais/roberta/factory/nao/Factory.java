@@ -28,6 +28,8 @@ import de.fhg.iais.roberta.syntax.codegen.nao.PythonVisitor;
 import de.fhg.iais.roberta.syntax.sensor.GetSampleType;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectedMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
 import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
 import de.fhg.iais.roberta.util.RobertaProperties;
@@ -56,12 +58,12 @@ public class Factory extends AbstractRobotFactory {
         return IRobotFactory.getModeValue(port, SensorPorts.class);
     }
 
-    public IMode getDetectMarkMode(String port) {
-        return IRobotFactory.getModeValue(port, DetectedMarkMode.class);
+    public IMode getDetectMarkMode(String mode) {
+        return IRobotFactory.getModeValue(mode, DetectedMarkMode.class);
     }
 
-    public IMode getDetectFaceMode(String port) {
-        return IRobotFactory.getModeValue(port, DetectedFaceMode.class);
+    public IMode getDetectFaceMode(String mode) {
+        return IRobotFactory.getModeValue(mode, DetectedFaceMode.class);
     }
 
     @Override
@@ -189,6 +191,14 @@ public class Factory extends AbstractRobotFactory {
                 sensorMetaDataBean =
                     new SensorMetaDataBean(getSensorPort(port), getPlaceholderSensorMode(sensorType.getSensorMode()), getSlot(slot), isPortInMutation);
                 return FsrSensor.make(sensorMetaDataBean, properties, comment);
+            case BlocklyConstants.DETECT_MARK:
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(getSensorPort(port), getDetectMarkMode(sensorType.getSensorMode()), getSlot(slot), isPortInMutation);
+                return DetectedMark.make(sensorMetaDataBean, properties, comment);
+            case BlocklyConstants.DETECT_FACE:
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(getSensorPort(port), getDetectFaceMode(sensorType.getSensorMode()), getSlot(slot), isPortInMutation);
+                return DetectFace.make(sensorMetaDataBean, properties, comment);
             default:
                 return super.createSensor(sensorType, port, slot, isPortInMutation, properties, comment);
         }

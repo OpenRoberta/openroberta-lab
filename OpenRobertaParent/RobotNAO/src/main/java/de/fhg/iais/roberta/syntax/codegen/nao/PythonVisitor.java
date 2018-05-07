@@ -1375,7 +1375,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
                 case BlocklyConstants.ULTRASONIC:
                     this.sb.append("h.sonar.subscribe(\"OpenRobertaApp\")\n");
                     break;
-                case BlocklyConstants.NAO_MARK:
+                case BlocklyConstants.DETECT_MARK:
                     this.sb.append("h.mark.subscribe(\"RobertaLab\", 500, 0.0)\n");
                     break;
                 case BlocklyConstants.NAO_FACE:
@@ -1411,7 +1411,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
                 case BlocklyConstants.ULTRASONIC:
                     this.sb.append(INDENT).append(INDENT).append("h.sonar.unsubscribe(\"OpenRobertaApp\")\n");
                     break;
-                case BlocklyConstants.NAO_MARK:
+                case BlocklyConstants.DETECT_MARK:
                     this.sb.append(INDENT).append(INDENT).append("h.mark.unsubscribe(\"RobertaLab\")\n");
                     break;
                 case BlocklyConstants.NAO_FACE:

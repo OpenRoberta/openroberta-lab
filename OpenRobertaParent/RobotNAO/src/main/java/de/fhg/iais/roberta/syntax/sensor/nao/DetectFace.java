@@ -30,7 +30,7 @@ public final class DetectFace<V> extends ExternalSensor<V> {
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      */
-    static <V> DetectFace<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> DetectFace<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new DetectFace<V>(sensorMetaDataBean, properties, comment);
     }
 
