@@ -27,6 +27,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
@@ -828,6 +829,26 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
         this.sb.append(".write_" + valueType);
         pinWriteValueSensor.getValue().visit(this);
         this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPullAction) {
+        // TODO add as soon as microbit runtime is updated
+        //        this.sb.append("microbit.pin" + pinSetPullAction.getPort().getValues()[0] + ".set_pull(");
+        //        switch ( (PinPull) pinSetPullAction.getMode() ) {
+        //            case UP:
+        //                this.sb.append("PULL_UP");
+        //                break;
+        //            case DOWN:
+        //                this.sb.append("PULL_DOWN");
+        //                break;
+        //            case NONE:
+        //            default:
+        //                this.sb.append("NO_PULL");
+        //                break;
+        //        }
+        //        this.sb.append(");");
         return null;
     }
 

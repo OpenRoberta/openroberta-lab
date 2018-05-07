@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
@@ -201,6 +202,11 @@ public class BoardCheckVisitor extends RobotBoardCheckVisitor implements MbedAst
     public Void visitLedBarSetAction(LedBarSetAction<Void> ledBarSetAction) {
         ledBarSetAction.getX().visit(this);
         ledBarSetAction.getBrightness().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPull) {
         return null;
     }
 

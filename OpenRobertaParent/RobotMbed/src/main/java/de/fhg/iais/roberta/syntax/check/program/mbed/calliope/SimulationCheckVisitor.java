@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
@@ -73,7 +74,7 @@ public class SimulationCheckVisitor extends RobotSimulationCheckVisitor implemen
     public Void visitImageInvertFunction(ImageInvertFunction<Void> imageInvertFunction) {
         imageInvertFunction.getImage().visit(this);
         return null;
-    }
+    } // TODO Auto-generated method stub
 
     @Override
     public Void visitImage(Image<Void> image) {
@@ -244,6 +245,12 @@ public class SimulationCheckVisitor extends RobotSimulationCheckVisitor implemen
     @Override
     public Void visitLedBarSetAction(LedBarSetAction<Void> ledBarSetAction) {
         ledBarSetAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        return null;
+    }
+
+    @Override
+    public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPull) {
+        pinSetPull.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 }

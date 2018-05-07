@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.GestureSensorMode;
+import de.fhg.iais.roberta.mode.sensor.PinPull;
 import de.fhg.iais.roberta.mode.sensor.PinValue;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
@@ -28,6 +29,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
@@ -651,6 +653,25 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         }
         this.sb.append("_uBit.io." + pinWriteValueSensor.getPort().getValues()[1] + ".set" + valueType);
         pinWriteValueSensor.getValue().visit(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPullAction) {
+        this.sb.append("_uBit.io." + pinSetPullAction.getPort().getValues()[1] + ".setPull(");
+        switch ( (PinPull) pinSetPullAction.getMode() ) {
+            case UP:
+                this.sb.append("PullUp");
+                break;
+            case DOWN:
+                this.sb.append("PullDown");
+                break;
+            case NONE:
+            default:
+                this.sb.append("PullNone");
+                break;
+        }
         this.sb.append(");");
         return null;
     }

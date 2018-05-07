@@ -35,6 +35,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IPinPull;
 import de.fhg.iais.roberta.inter.mode.sensor.IPinValue;
 import de.fhg.iais.roberta.inter.mode.sensor.IRSeekerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorMode;
@@ -71,6 +72,7 @@ import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.mode.sensor.PinPull;
 import de.fhg.iais.roberta.mode.sensor.PinValue;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.Slot;
@@ -374,6 +376,10 @@ public interface IRobotFactory {
 
     default IPinValue getPinGetValueSensorMode(String mode) {
         return IRobotFactory.getModeValue(mode, PinValue.class);
+    }
+
+    default IPinPull getPinPullMode(String mode) {
+        return IRobotFactory.getModeValue(mode, PinPull.class);
     }
 
     default ITemperatureSensorMode getTemperatureSensorMode(String mode) {

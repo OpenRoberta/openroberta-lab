@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
@@ -139,6 +140,13 @@ public interface MbedAstVisitor<V> extends AstVisitor<V> {
      * @param pinWriteValueSensor phrase to be visited
      */
     V visitPinWriteValueSensor(PinWriteValue<V> pinWriteValueSensor);
+
+    /**
+     * visit a {@link PinSetPullAction}.
+     *
+     * @param pinSetPull phrase to be visited
+     */
+    V visitPinSetPullAction(PinSetPullAction<V> pinSetPullAction);
 
     /**
      * visit a {@link DisplaySetBrightnessAction}.

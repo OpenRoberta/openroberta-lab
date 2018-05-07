@@ -636,6 +636,20 @@ public class CppVisitorTest {
     }
 
     @Test
+    public void visitPinSetPull_SetPullToValues_ReturnsCorrectCPP_Program() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + MAIN
+                + "_uBit.io.P12.setPull(PullUp);\n"
+                + "_uBit.io.P0.setPull(PullDown);\n"
+                + "_uBit.io.P1.setPull(PullNone);"
+                + END;
+
+        assertCodeIsOk(expectedResult, "/action/pin_set_pull.xml");
+    }
+
+    @Test
     public void visitMathOnListFunct_DisplayAllMathOnListFunctsResults_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult =
             "" //
