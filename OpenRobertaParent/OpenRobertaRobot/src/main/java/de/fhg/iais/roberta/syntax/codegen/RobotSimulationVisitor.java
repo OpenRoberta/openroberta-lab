@@ -445,7 +445,7 @@ public abstract class RobotSimulationVisitor<V> implements AstLanguageVisitor<V>
     @Override
     public V visitStmtFlowCon(StmtFlowCon<V> stmtFlowCon) {
         String end = createClosingBracket();
-        this.sb.append("createStmtFlowControl('loop_" + this.loopsCounter + "', CONST." + stmtFlowCon.getFlow());
+        this.sb.append("createStmtFlowControl('loop_" + this.currentLoop + "', CONST." + stmtFlowCon.getFlow());
         this.sb.append(end);
         return null;
     }

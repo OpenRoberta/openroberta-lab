@@ -666,7 +666,6 @@ public class Ast2Ev3SimVisitorTest {
 
     @Test
     public void loopWithBreakAndContinue() throws Exception {
-
         String a =
             ""
                 + "var stmt0 = createDebugAction();\n"
@@ -679,6 +678,26 @@ public class Ast2Ev3SimVisitorTest {
                 + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java/loops_with_break_and_continue.xml");
+    }
+
+    @Test
+    public void loopInLoop() throws Exception {
+        String a =
+            ""
+                + "var stmt0 = createRepeatStmt('loop_1', CONST.FOREVER, createConstant(CONST.BOOL_CONST, true),"
+                + "                             [createRepeatStmt('loop_2', CONST.FOREVER, createConstant(CONST.BOOL_CONST, true),"
+                + "                                               [createStmtFlowControl('loop_2', CONST.BREAK)]),"
+                + "                              createStmtFlowControl('loop_1', CONST.BREAK)"
+                + "                             ]);\n"
+                + "var stmt1 = createRepeatStmt('loop_3', CONST.FOREVER, createConstant(CONST.BOOL_CONST, true),"
+                + "                             [createStmtFlowControl('loop_3', CONST.BREAK)]);\n"
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
+
+        assertCondensedCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_loop_in_loop.xml");
+    }
+
+    private void assertCondensedCodeIsOk(String a, String fileName) throws Exception {
+        Assert.assertEquals(a.replaceAll("\\s+", ""), this.h.generateJavaScript(fileName).replaceAll("\\s+", ""));
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {

@@ -544,7 +544,7 @@ public class ClientProgram {
                     if ( messageKey == null ) {
                         ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
                         String javaScriptCode = robotFactory.getSimCompilerWorkflow().generateSourceCode(token, programName, transformer, language);
-                        ClientProgram.LOG.info("JavaScriptCode \n{}", javaScriptCode);
+                        // extreme debugging: ClientProgram.LOG.debug("JavaScriptCode \n{}", javaScriptCode);
                         response.put("javaScriptProgram", javaScriptCode);
                         wasRobotWaiting = true;
                         messageKey = Key.COMPILERWORKFLOW_SUCCESS;
