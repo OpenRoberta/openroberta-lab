@@ -65,8 +65,13 @@ public class Joystick<V> extends ExternalSensor<V> {
 
         String port = helper.extractField(fields, BlocklyConstants.SENSORPORT);
         String mode = helper.extractField(fields, BlocklyConstants.JOYSTICKAXIS);
+        boolean isPortInMutation = block.getMutation() != null && block.getMutation().getPort() != null;
         SensorMetaDataBean sensorData =
-            new SensorMetaDataBean(factory.getSensorPort(port), IRobotFactory.getModeValue(mode, Axis.class), factory.getSlot(BlocklyConstants.EMPTY_SLOT));
+            new SensorMetaDataBean(
+                factory.getSensorPort(port),
+                IRobotFactory.getModeValue(mode, Axis.class),
+                factory.getSlot(BlocklyConstants.EMPTY_SLOT),
+                isPortInMutation);
         return Joystick.make(mode, sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 

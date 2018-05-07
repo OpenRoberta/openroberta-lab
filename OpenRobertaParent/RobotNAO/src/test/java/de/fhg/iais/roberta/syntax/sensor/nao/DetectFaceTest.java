@@ -13,7 +13,8 @@ public class DetectFaceTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=384, y=50], "
                 + "MainTask [], "
-                + "SayTextAction [SensorExpr [DetectFace [EMPTY_PORT, VALUE, EMPTY_SLOT]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]"
+                + "SayTextAction [SensorExpr [DetectFace [EMPTY_PORT, NAMEONE, EMPTY_SLOT]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]], "
+                + "SayTextAction [SensorExpr [DetectFace [EMPTY_PORT, NAMEALL, EMPTY_SLOT]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]"
                 + "]]]";
 
         String result = this.h.generateTransformerString("/sensor/facedetection.xml");

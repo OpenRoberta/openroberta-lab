@@ -20,7 +20,7 @@ public class SensorExprTest {
     public void make() throws Exception {
         TouchSensor<Void> touchSensor =
             TouchSensor.make(
-                new SensorMetaDataBean(SensorPort.S1, TouchSensorMode.TOUCH, Slot.EMPTY_SLOT),
+                new SensorMetaDataBean(SensorPort.S1, TouchSensorMode.TOUCH, Slot.EMPTY_SLOT, false),
                 BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false),
                 null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
@@ -32,7 +32,7 @@ public class SensorExprTest {
     public void getSensor() throws Exception {
         TouchSensor<Void> touchSensor =
             TouchSensor.make(
-                new SensorMetaDataBean(SensorPort.S1, TouchSensorMode.TOUCH, Slot.EMPTY_SLOT),
+                new SensorMetaDataBean(SensorPort.S1, TouchSensorMode.TOUCH, Slot.EMPTY_SLOT, false),
                 BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false),
                 null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
@@ -44,7 +44,7 @@ public class SensorExprTest {
     public void getPresedance() throws Exception {
         TouchSensor<Void> touchSensor =
             TouchSensor.make(
-                new SensorMetaDataBean(SensorPort.S1, TouchSensorMode.TOUCH, Slot.EMPTY_SLOT),
+                new SensorMetaDataBean(SensorPort.S1, TouchSensorMode.TOUCH, Slot.EMPTY_SLOT, false),
                 BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false),
                 null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
@@ -55,7 +55,7 @@ public class SensorExprTest {
     public void getAssoc() throws Exception {
         TouchSensor<Void> touchSensor =
             TouchSensor.make(
-                new SensorMetaDataBean(SensorPort.S1, TouchSensorMode.TOUCH, Slot.EMPTY_SLOT),
+                new SensorMetaDataBean(SensorPort.S1, TouchSensorMode.TOUCH, Slot.EMPTY_SLOT, false),
                 BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false),
                 null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);

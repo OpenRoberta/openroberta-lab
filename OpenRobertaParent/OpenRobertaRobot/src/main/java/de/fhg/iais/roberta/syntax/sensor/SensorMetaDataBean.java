@@ -8,11 +8,13 @@ public class SensorMetaDataBean {
     private IPort port;
     private IMode mode;
     private ISlot slot;
+    private boolean isPortInMutation;
 
-    public SensorMetaDataBean(IPort port, IMode mode, ISlot slot) {
+    public SensorMetaDataBean(IPort port, IMode mode, ISlot slot, boolean isPortInMutation) {
         this.port = port;
         this.mode = mode;
         this.slot = slot;
+        this.setPortInMutation(isPortInMutation);
     }
 
     public IPort getPort() {
@@ -37,6 +39,14 @@ public class SensorMetaDataBean {
 
     public void setSlot(ISlot slot) {
         this.slot = slot;
+    }
+
+    public boolean isPortInMutation() {
+        return this.isPortInMutation;
+    }
+
+    public void setPortInMutation(boolean isPortInMutation) {
+        this.isPortInMutation = isPortInMutation;
     }
 
     @Override

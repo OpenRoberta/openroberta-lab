@@ -39,7 +39,7 @@ import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisit
 import de.fhg.iais.roberta.syntax.lang.expr.nao.ColorHexString;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
-import de.fhg.iais.roberta.syntax.sensor.nao.DetectMark;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectedMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.Dialog;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
@@ -200,7 +200,7 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     }
 
     @Override
-    public Void visitNaoMark(DetectMark<Void> naoMark) {
+    public Void visitNaoMark(DetectedMark<Void> naoMark) {
         this.usedSensors.add(new UsedSensor(null, SensorType.NAOMARK, null));
         return null;
     }

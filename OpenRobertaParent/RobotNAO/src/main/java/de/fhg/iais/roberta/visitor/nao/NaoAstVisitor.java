@@ -29,7 +29,7 @@ import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
 import de.fhg.iais.roberta.syntax.lang.expr.nao.ColorHexString;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
-import de.fhg.iais.roberta.syntax.sensor.nao.DetectMark;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectedMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.Dialog;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
@@ -207,23 +207,23 @@ public interface NaoAstVisitor<V> extends AstVisitor<V>, AstActorSoundVisitor<V>
     V visitFsrSensor(FsrSensor<V> forceSensor);
 
     /**
-     * visit a {@link DetectMark}.
+     * visit a {@link DetectedMark}.
      *
-     * @param DetectMark on phrase to be visited
+     * @param DetectMarkMode on phrase to be visited
      */
-    V visitNaoMark(DetectMark<V> naoMark);
+    V visitNaoMark(DetectedMark<V> naoMark);
 
     /**
-     * visit a {@link DetectMark}.
+     * visit a {@link DetectedMark}.
      *
-     * @param DetectMark on phrase to be visited
+     * @param DetectMarkMode on phrase to be visited
      */
     V visitTakePicture(TakePicture<V> takePicture);
 
     /**
-     * visit a {@link DetectMark}.
+     * visit a {@link DetectedMark}.
      *
-     * @param DetectMark on phrase to be visited
+     * @param DetectMarkMode on phrase to be visited
      */
     V visitRecordVideo(RecordVideo<V> recordVideo);
 

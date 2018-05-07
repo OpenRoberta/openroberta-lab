@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.sensor.nao;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.factory.nao.Factory;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -17,23 +18,23 @@ import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
  * detecting a NaoMark.<br/>
  * <br/>
  */
-public final class DetectMark<V> extends ExternalSensor<V> {
+public final class DetectedMark<V> extends ExternalSensor<V> {
 
-    private DetectMark(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private DetectedMark(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(sensorMetaDataBean, BlockTypeContainer.getByName("DETECT_MARK"), properties, comment);
         setReadOnly();
     }
 
     /**
-     * Creates instance of {@link DetectMark}. This instance is read only and can not be modified.
+     * Creates instance of {@link DetectedMark}. This instance is read only and can not be modified.
      *
      * @param param {@link MotionParam} that set up the parameters for the movement of the robot (number of rotations or degrees and speed),
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link DetectMark}
+     * @return read only object of class {@link DetectedMark}
      */
-    static <V> DetectMark<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new DetectMark<V>(sensorMetaDataBean, properties, comment);
+    static <V> DetectedMark<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new DetectedMark<V>(sensorMetaDataBean, properties, comment);
     }
 
     @Override
@@ -49,7 +50,7 @@ public final class DetectMark<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getModeFactory()::getPlaceholderSensorMode);
-        return DetectMark.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
+        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, ((Factory) helper.getModeFactory())::getDetectMarkMode);
+        return DetectedMark.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 }

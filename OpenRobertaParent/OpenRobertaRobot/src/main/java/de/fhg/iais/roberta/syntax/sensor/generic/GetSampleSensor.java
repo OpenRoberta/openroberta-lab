@@ -36,6 +36,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
     private final String sensorPort;
     private final String slot;
     private final GetSampleType sensorType;
+    private final boolean isPortInMutation;
     private static final ch.qos.logback.classic.Logger LOG = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(AbstractCompilerWorkflow.class);
 
     @SuppressWarnings("unchecked")
@@ -43,6 +44,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
         GetSampleType sensorType,
         String port,
         String slot,
+        boolean isPortInMutation,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
         IRobotFactory factory) {
@@ -53,7 +55,8 @@ public class GetSampleSensor<V> extends Sensor<V> {
         this.sensorPort = port;
         this.slot = slot;
         this.sensorType = sensorType;
-        this.sensor = (Sensor<V>) factory.createSensor(sensorType, port, slot, properties, comment);
+        this.isPortInMutation = isPortInMutation;
+        this.sensor = (Sensor<V>) factory.createSensor(sensorType, port, slot, isPortInMutation, properties, comment);
         setReadOnly();
     }
 
@@ -70,10 +73,11 @@ public class GetSampleSensor<V> extends Sensor<V> {
         GetSampleType sensorType,
         String port,
         String slot,
+        boolean isPortInMutation,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
         IRobotFactory factory) {
-        return new GetSampleSensor<>(sensorType, port, slot, properties, comment, factory);
+        return new GetSampleSensor<>(sensorType, port, slot, isPortInMutation, properties, comment, factory);
     }
 
     /**
@@ -123,8 +127,15 @@ public class GetSampleSensor<V> extends Sensor<V> {
         String modeName = helper.extractField(fields, BlocklyConstants.SENSORTYPE);
         String portName = helper.extractField(fields, GetSampleType.get(modeName).getPortTypeName());
         String slot = helper.extractField(fields, GetSampleType.get(modeName).getValues()[0]);
-        return GetSampleSensor
-            .make(GetSampleType.get(modeName), portName, slot, helper.extractBlockProperties(block), helper.extractComment(block), helper.getModeFactory());
+        boolean isPortInMutation = block.getMutation().getPort() != null;
+        return GetSampleSensor.make(
+            GetSampleType.get(modeName),
+            portName,
+            slot,
+            isPortInMutation,
+            helper.extractBlockProperties(block),
+            helper.extractComment(block),
+            helper.getModeFactory());
     }
 
     @Override
@@ -134,6 +145,9 @@ public class GetSampleSensor<V> extends Sensor<V> {
 
         Mutation mutation = new Mutation();
         mutation.setInput(getSensorType().name());
+        if ( this.isPortInMutation ) {
+            mutation.setPort(this.sensorPort);
+        }
         jaxbDestination.setMutation(mutation);
 
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORTYPE, this.sensorType.name());

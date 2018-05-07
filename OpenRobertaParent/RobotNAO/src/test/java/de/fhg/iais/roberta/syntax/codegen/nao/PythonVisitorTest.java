@@ -64,7 +64,8 @@ public class PythonVisitorTest {
     public void detectFaceSensorVisit_returnsCorrectPythonCode() throws Exception {
         String correct_code =
             "def run():\n" //
-                + "    h.say(str(faceRecognitionModule.detectFace()))";
+                + "    h.say(str(faceRecognitionModule.detectFace()))\n"
+                + "    h.say(str(faceRecognitionModule.detectFaces()))";
 
         this.h.assertCodeIsOk(correct_code, "/sensor/facedetection.xml", false);
     }
@@ -73,6 +74,7 @@ public class PythonVisitorTest {
     public void detectMarkSensorVisit_returnsCorrectPythonCode() throws Exception {
         String correct_code =
             "def run():\n" //
+                + "    h.say(str(h.getDetectedMark()))\n"
                 + "    h.say(str(h.getDetectedMarks()))";
 
         this.h.assertCodeIsOk(correct_code, "/sensor/detectmark.xml", false);

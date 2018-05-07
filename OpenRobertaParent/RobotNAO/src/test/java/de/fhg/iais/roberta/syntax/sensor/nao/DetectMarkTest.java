@@ -11,9 +11,10 @@ public class DetectMarkTest {
     @Test
     public void make_ByDefault_ReturnInstanceOfNaoMarkClass() throws Exception {
         String expectedResult =
-            "BlockAST [project=[[Location [x=384, y=50], "
+            "BlockAST [project=[[Location [x=232, y=251], "
                 + "MainTask [], "
-                + "SayTextAction [SensorExpr [DetectMark [EMPTY_PORT, VALUE, EMPTY_SLOT]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]"
+                + "SayTextAction [SensorExpr [DetectedMark [EMPTY_PORT, IDONE, EMPTY_SLOT]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]], "
+                + "SayTextAction [SensorExpr [DetectedMark [EMPTY_PORT, IDALL, EMPTY_SLOT]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]"
                 + "]]]";
 
         String result = this.h.generateTransformerString("/sensor/detectmark.xml");

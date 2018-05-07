@@ -67,7 +67,7 @@ public class TimerSensor<V> extends ExternalSensor<V> {
             List<Field> fields = helper.extractFields(block, (short) 1);
             String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
             sensorMetaDataBean =
-                new SensorMetaDataBean(factory.getSensorPort(portName), factory.getTimerSensorMode("RESET"), factory.getSlot(BlocklyConstants.NO_SLOT));
+                new SensorMetaDataBean(factory.getSensorPort(portName), factory.getTimerSensorMode("RESET"), factory.getSlot(BlocklyConstants.NO_SLOT), false);
             return TimerSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
         }
         sensorMetaDataBean = extractSensorPortAndMode(block, helper, helper.getModeFactory()::getTimerSensorMode);

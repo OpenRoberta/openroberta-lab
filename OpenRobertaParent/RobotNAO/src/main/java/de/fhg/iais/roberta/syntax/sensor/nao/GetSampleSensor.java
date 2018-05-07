@@ -43,12 +43,14 @@ public class GetSampleSensor<V> extends Sensor<V> {
     private final String sensorPort;
     private final String slot;
     private final GetSampleType sensorType;
+    private final boolean isPortInMutation;
     private static final ch.qos.logback.classic.Logger LOG = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(AbstractCompilerWorkflow.class);
 
     private GetSampleSensor(
         GetSampleType sensorType,
         String port,
         String slot,
+        boolean isPortInMutation,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
         IRobotFactory factory) {
@@ -58,6 +60,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
         Assert.notNull(port);
         this.sensorPort = port;
         this.slot = slot;
+        this.isPortInMutation = isPortInMutation;
         //TODO: reimplemnt it in a better way
         if ( port.equals("") ) {
             port = BlocklyConstants.NO_PORT;
@@ -67,7 +70,11 @@ public class GetSampleSensor<V> extends Sensor<V> {
         switch ( sensorType.getSensorType() ) {
             case BlocklyConstants.TOUCH:
                 sensorMetaDataBean =
-                    new SensorMetaDataBean(factory.getSensorPort(port), factory.getTouchSensorMode("TOUCH"), factory.getSlot(BlocklyConstants.EMPTY_SLOT));
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(port),
+                        factory.getTouchSensorMode("TOUCH"),
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT),
+                        this.isPortInMutation);
                 this.sensor = TouchSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.ULTRASONIC:
@@ -75,7 +82,8 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.getSensorPort(port),
                         factory.getUltrasonicSensorMode(sensorType.getSensorMode()),
-                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT),
+                        this.isPortInMutation);
                 this.sensor = UltrasonicSensor.make(sensorMetaDataBean, properties, comment);
                 break;
 
@@ -84,7 +92,8 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.getSensorPort(port),
                         factory.getGyroSensorMode(sensorType.getSensorMode()),
-                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT),
+                        this.isPortInMutation);
                 this.sensor = GyroSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.TIME:
@@ -92,7 +101,8 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.getSensorPort(port),
                         factory.getTimerSensorMode(sensorType.getSensorMode()),
-                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT),
+                        this.isPortInMutation);
                 this.sensor = TimerSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.ACCELERATION:
@@ -100,7 +110,8 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.getSensorPort(port),
                         factory.getAxis(BlocklyConstants.DEFAULT),
-                        factory.getSlot(BlocklyConstants.EMPTY_SLOT));
+                        factory.getSlot(BlocklyConstants.EMPTY_SLOT),
+                        this.isPortInMutation);
                 this.sensor = AccelerometerSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             default:
@@ -122,10 +133,11 @@ public class GetSampleSensor<V> extends Sensor<V> {
         GetSampleType sensorType,
         String port,
         String slot,
+        boolean isPortInMutaition,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
         IRobotFactory factory) {
-        return new GetSampleSensor<>(sensorType, port, slot, properties, comment, factory);
+        return new GetSampleSensor<>(sensorType, port, slot, isPortInMutaition, properties, comment, factory);
     }
 
     /**
@@ -171,8 +183,15 @@ public class GetSampleSensor<V> extends Sensor<V> {
         String modeName = helper.extractField(fields, BlocklyConstants.SENSORTYPE);
         String portName = helper.extractField(fields, GetSampleType.get(modeName).getPortTypeName());
         String slot = helper.extractField(fields, GetSampleType.get(modeName).getValues()[0]);
-        return GetSampleSensor
-            .make(GetSampleType.get(modeName), portName, slot, helper.extractBlockProperties(block), helper.extractComment(block), helper.getModeFactory());
+        boolean isPortInMutation = block.getMutation().getPort() != null;
+        return GetSampleSensor.make(
+            GetSampleType.get(modeName),
+            portName,
+            slot,
+            isPortInMutation,
+            helper.extractBlockProperties(block),
+            helper.extractComment(block),
+            helper.getModeFactory());
     }
 
     @Override

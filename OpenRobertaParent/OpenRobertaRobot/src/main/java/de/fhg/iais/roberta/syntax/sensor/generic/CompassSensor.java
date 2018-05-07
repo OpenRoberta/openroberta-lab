@@ -65,7 +65,11 @@ public class CompassSensor<V> extends ExternalSensor<V> {
             List<Field> fields = helper.extractFields(block, (short) 1);
             String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
             sensorMetaDataBean =
-                new SensorMetaDataBean(factory.getSensorPort(portName), factory.getCompassSensorMode("CALIBRATE"), factory.getSlot(BlocklyConstants.NO_SLOT));
+                new SensorMetaDataBean(
+                    factory.getSensorPort(portName),
+                    factory.getCompassSensorMode("CALIBRATE"),
+                    factory.getSlot(BlocklyConstants.NO_SLOT),
+                    false);
             return CompassSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
         }
         SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getModeFactory()::getCompassSensorMode);

@@ -13,8 +13,9 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nao.Camera;
-import de.fhg.iais.roberta.mode.action.nao.Posture;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.sensor.nao.DetectedFaceMode;
+import de.fhg.iais.roberta.mode.sensor.nao.DetectedMarkMode;
 import de.fhg.iais.roberta.mode.sensor.nao.SensorPorts;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
@@ -86,8 +87,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
-import de.fhg.iais.roberta.syntax.sensor.nao.DetectMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectedMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.Dialog;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
 import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
@@ -1173,8 +1174,12 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     }
 
     @Override
-    public Void visitNaoMark(DetectMark<Void> naoMark) {
-        this.sb.append("h.getDetectedMarks()");
+    public Void visitNaoMark(DetectedMark<Void> detectedMark) {
+        this.sb.append("h.getDetectedMark");
+        if ( detectedMark.getMode() == DetectedMarkMode.IDALL ) {
+            this.sb.append("s");
+        }
+        this.sb.append("()");
         return null;
     }
 
@@ -1238,7 +1243,11 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
 
     @Override
     public Void visitDetectFace(DetectFace<Void> detectFace) {
-        this.sb.append("faceRecognitionModule.detectFace()");
+        this.sb.append("faceRecognitionModule.detectFace");
+        if ( detectFace.getMode() == DetectedFaceMode.NAMEALL ) {
+            this.sb.append("s");
+        }
+        this.sb.append("()");
         return null;
     }
 
