@@ -29,9 +29,8 @@ import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
 import de.fhg.iais.roberta.syntax.lang.expr.nao.ColorHexString;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
-import de.fhg.iais.roberta.syntax.sensor.nao.DetectedMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
-import de.fhg.iais.roberta.syntax.sensor.nao.Dialog;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectedMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
 import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.GetSampleSensor;
@@ -156,13 +155,6 @@ public interface NaoAstVisitor<V> extends AstVisitor<V>, AstActorSoundVisitor<V>
      * @param playFile phrase to be visited
      */
     V visitPlayFile(PlayFile<V> playFile);
-
-    /**
-     * visit a {@link Dialog}.
-     *
-     * @param dialog phrase to be visited
-     */
-    V visitDialog(Dialog<V> dialog);
 
     /**
      * visit a {@link SetLeds}.

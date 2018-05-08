@@ -39,9 +39,8 @@ import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisit
 import de.fhg.iais.roberta.syntax.lang.expr.nao.ColorHexString;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
-import de.fhg.iais.roberta.syntax.sensor.nao.DetectedMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
-import de.fhg.iais.roberta.syntax.sensor.nao.Dialog;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectedMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
 import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.GetSampleSensor;
@@ -162,11 +161,6 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     }
 
     @Override
-    public Void visitDialog(Dialog<Void> dialog) {
-        return null;
-    }
-
-    @Override
     public Void visitSetLeds(SetLeds<Void> setLeds) {
         setLeds.getColor().visit(this);
         return null;
@@ -201,7 +195,7 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitNaoMark(DetectedMark<Void> naoMark) {
-        this.usedSensors.add(new UsedSensor(null, SensorType.NAOMARK, null));
+        this.usedSensors.add(new UsedSensor(null, SensorType.DETECT_MARK, null));
         return null;
     }
 
@@ -288,7 +282,7 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     @Override
     public Void visitNaoMarkInformation(NaoMarkInformation<Void> naoMarkInformation) {
         naoMarkInformation.getNaoMarkId().visit(this);
-        this.usedSensors.add(new UsedSensor(null, SensorType.NAOMARK, null));
+        this.usedSensors.add(new UsedSensor(null, SensorType.DETECT_MARK, null));
         return null;
     }
 

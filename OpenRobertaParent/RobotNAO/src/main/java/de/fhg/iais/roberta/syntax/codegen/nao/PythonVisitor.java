@@ -89,7 +89,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedMark;
-import de.fhg.iais.roberta.syntax.sensor.nao.Dialog;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
 import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.GetSampleSensor;
@@ -1145,14 +1144,6 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     public Void visitGyroSensor(GyroSensor<Void> gyrometer) {
         this.sb.append("h.gyrometer(");
         this.sb.append(getEnumCode((gyrometer.getPort())));
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitDialog(Dialog<Void> dialog) {
-        this.sb.append("h.dialog(");
-        this.sb.append(dialog.getPhrase().getPythonCode());
         this.sb.append(")");
         return null;
     }

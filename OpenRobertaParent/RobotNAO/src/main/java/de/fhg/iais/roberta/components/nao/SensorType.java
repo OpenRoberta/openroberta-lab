@@ -23,7 +23,7 @@ public enum SensorType implements ISensorType {
     ACCELEROMETER( "makeblockSensors_accelerometer_getSample" ),
     JOYSTICK( "arduSensors_joystick_getSample" ),
     PIR_MOTION( "makeblockSensors_motionSensor_getSample" ),
-    NAOMARK( "naoSensors_naoMark" ),
+    DETECT_MARK( "naoSensors_naoMark" ),
     NAOFACE( "naoSensors_detectFace" ),
     NAOSPEECH( "naoSensors_recognizeWord" ),
     VOLTAGE( "" ),

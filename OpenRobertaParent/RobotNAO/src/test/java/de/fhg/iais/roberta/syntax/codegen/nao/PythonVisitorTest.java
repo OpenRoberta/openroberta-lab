@@ -71,6 +71,24 @@ public class PythonVisitorTest {
     }
 
     @Test
+    public void detectedFaceInformationVisit_returnsCorrectPythonCode() throws Exception {
+        String correct_code =
+            "def run():\n" //
+                + "    h.say(str(faceRecognitionModule.getFaceInformation(\"Roberta\")))";
+
+        this.h.assertCodeIsOk(correct_code, "/sensor/faceinformation.xml", false);
+    }
+
+    @Test
+    public void detectedMarkInformationVisit_returnsCorrectPythonCode() throws Exception {
+        String correct_code =
+            "def run():\n" //
+                + "    h.say(str(h.getNaoMarkInformation(84)))";
+
+        this.h.assertCodeIsOk(correct_code, "/sensor/markinformation.xml", false);
+    }
+
+    @Test
     public void detectMarkSensorVisit_returnsCorrectPythonCode() throws Exception {
         String correct_code =
             "def run():\n" //
