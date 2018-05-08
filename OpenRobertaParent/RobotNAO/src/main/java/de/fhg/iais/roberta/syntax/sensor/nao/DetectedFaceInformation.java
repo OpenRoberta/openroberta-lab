@@ -77,6 +77,7 @@ public final class DetectedFaceInformation<V> extends Sensor<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, "");
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, this.faceName);
         return jaxbDestination;
     }
