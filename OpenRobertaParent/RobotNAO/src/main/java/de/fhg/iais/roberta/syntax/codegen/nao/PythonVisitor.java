@@ -214,6 +214,13 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
         generateUserDefinedMethods();
         this.sb.append("\n\ndef run():");
         incrIndentation();
+        if ( mainTask.getDebug().equals("TRUE") ) {
+            nlIndent();
+            this.sb.append("h.setAutonomousLife('ON')");
+        } else {
+            nlIndent();
+            this.sb.append("h.setAutonomousLife('OFF')");
+        }
         List<Stmt<Void>> variableList = variables.get();
         if ( !variableList.isEmpty() ) {
             nlIndent();
@@ -236,9 +243,6 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
                 }
                 this.sb.append(vd.getName());
             }
-        } else if ( this.programPhrases.size() == 1 ) {
-            nlIndent();
-            this.sb.append("pass");
         }
         return null;
     }
