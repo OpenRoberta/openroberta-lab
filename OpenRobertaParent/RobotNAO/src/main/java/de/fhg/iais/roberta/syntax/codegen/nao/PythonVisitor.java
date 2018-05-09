@@ -598,7 +598,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
 
     @Override
     public Void visitAutonomous(Autonomous<Void> autonomous) {
-        this.sb.append("h.setAutonomousLife(" + getEnumCode(autonomous.getOnOff()) + ")");
+        this.sb.append("h.setAutonomousLife(" + getEnumCode(autonomous.getOnOff()).toUpperCase() + ")");
         return null;
     }
 
