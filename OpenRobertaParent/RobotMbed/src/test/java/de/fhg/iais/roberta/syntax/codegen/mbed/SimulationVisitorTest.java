@@ -170,8 +170,8 @@ public class SimulationVisitorTest {
     public void visitPinWriteValueSensor_SetAnalogPin0andDigitalPin2To0_ReturnsCorrectJavaScriptProgram() throws Exception {
         String expectedResult =
             "" //
-                + "var stmt0 = createPinWriteValueSensor(CONST.ANALOG, 1, createConstant(CONST.NUM_CONST, 1));\n"
-                + "var stmt1 = createPinWriteValueSensor(CONST.DIGITAL, 0, createConstant(CONST.NUM_CONST, 1));\n"
+                + "var stmt0 = createPinWriteValueSensor(CONST.ANALOG, 2, createConstant(CONST.NUM_CONST, 1));\n"
+                + "var stmt1 = createPinWriteValueSensor(CONST.DIGITAL, 4, createConstant(CONST.NUM_CONST, 1));\n"
                 + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
 
         assertCodeIsOk(expectedResult, "/action/write_value_to_pin.xml");
