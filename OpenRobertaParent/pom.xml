@@ -55,6 +55,7 @@
 		<module>RobotArdu</module>
 		<module>RobotNAO</module>
 		<module>RobotMbed</module>
+		<module>RobotVorwerk</module>
 		<module>OpenRobertaServer</module>
 	</modules>
 	<repositories>
@@ -105,6 +106,11 @@
 			<dependency>
 				<groupId>de.fhg.iais.openroberta</groupId>
 				<artifactId>RobotNAO</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.fhg.iais.openroberta</groupId>
+				<artifactId>RobotVorwerk</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
