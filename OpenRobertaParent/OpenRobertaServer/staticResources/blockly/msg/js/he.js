@@ -1202,6 +1202,7 @@ Blockly.Msg.START = "start";
 Blockly.Msg.START_ACTIVITY = "activity";
 Blockly.Msg.START_ACTIVITY_TOOLTIP = "Starts additional activity.";
 Blockly.Msg.START_PROGRAM = "start";
+Blockly.Msg.START_PROGRAM_AUTOMOMOUSLIFE = "autonomous behaviour";  // untranslated
 Blockly.Msg.START_PROGRAM_DEBUG = "show sensor data";
 Blockly.Msg.START_TOOLTIP = "The starting point for the main program.";
 Blockly.Msg.STEPMOTOR_TOOLTIP = "Represents a step motor.";  // untranslated

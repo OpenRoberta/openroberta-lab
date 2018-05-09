@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-05-08 12:57:58.580718",
+		"lastupdated": "2018-05-09 12:21:57.062875",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -810,9 +810,9 @@
 	"VALIDATION_CONTAINS_SPECIAL_CHARACTERS": "Valid special characters: »=+!?.,%#+&^@_-«",
 	"VALIDATION_MAX_LENGTH": "The max. lenght is 25 characters!",
 	"SIM_BLOCK_NOT_SUPPORTED": "Unfortunately you can not use this block in the simulation!",
-	"SIM_CONFIGURATION_WARNING_SENSOR_MISSING": "This sensor is not in the configuration! The behavior of the program on the real robot will be different than expected!",
-	"SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT": "In this block you have used a wrong sensor port! The behavior of the program on the real robot will be different than expected, please check the robot configuration!",
-	"SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT": "The infrared sensor is not connected in the configuration! The behavior of the program on the real robot will be different than expected, please check the robot configuration!",
+	"SIM_CONFIGURATION_WARNING_SENSOR_MISSING": "This sensor is not in the configuration! The behaviour of the program on the real robot will be different than expected!",
+	"SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT": "In this block you have used a wrong sensor port! The behaviour of the program on the real robot will be different than expected, please check the robot configuration!",
+	"SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT": "The infrared sensor is not connected in the configuration! The behaviour of the program on the real robot will be different than expected, please check the robot configuration!",
 	"SERVER_NOT_AVAILABLE": "The Open Roberta Lab is currently not available. </br>Your internet connection was interrupted. If you currently have an EV3 connected via the USB cable solve this with a click on the programming environment.<br>If this problem persists please check your internet connection and try to reload this website. If you have this problem again, please don't hesitate to contact us via mail:</br>roberta-zentrale@iais.fraunhofer.de",
 	"MENU_MESSAGE_DOWNLOAD": "Your program has been successfully downloaded.",
 	"POPUP_PROGRAM_TERMINATED_UNEXPECTED": "The execution of the program on the robot has terminated unexpectedly!",
@@ -980,7 +980,7 @@
 	"NAO_POINTAT": "point at",
 	"NAO_LOOKAT": "look at",
 	"NAO_STIFFNESS": "lock motors",
-	"NAO_AUTONOMOUS": "turn autonomous life",
+	"NAO_AUTONOMOUS": "turn autonomous behaviour",
 	"NAO_WALK": "walk",
 	"NAO_WALKTO": "walk to",
 	"NAO_STOP": "stop movement",
@@ -1087,7 +1087,7 @@
 	"VOICE_PITCH": "voice pitch",
 	"NAO_APPLYPOSTURE_TOOLTIP": "Robot will take the selected posture or position. Use the dropdown menu to choose one.",
 	"NAO_STIFFNESS_TOOLTIP": "The stiffness of the selected body part of the robot will be turned on or off. Be aware that releasing the leg motors while the robot is standing may result in robot collapsing.",
-	"NAO_AUTONOMOUS_TOOLTIP": "Turn the robots autonomous life on or off. While 'on' the robot will react to sounds, move slightly from side to side and try to track faces. Turn it off if this behaviour interrupts your program.",
+	"NAO_AUTONOMOUS_TOOLTIP": "Turn the robots autonomous behaviour on or off. While 'on' the robot will react to sounds, move slightly from side to side and try to track faces. Turn it off if this behaviour interrupts your program.",
 	"NAO_HAND_TOOLTIP": "Open or close a single hand (wrist) of the robot.",
 	"NAO_MOVEJOINT_TOOLTIP": "Move a single joint of the robot. A relative movement means that the current position of the selected joint is used to calculate the new position. Be aware that every joint has different limits. Therefore the input range for the degerees varies.",
 	"NAO_WALK_TOOLTIP": "Makes the robot walk a distance entered in cm. Distances below 10cm might lead to no movement at all. Depending on your robot and the surface the robots is walking on the distance might not be exact.",
@@ -1370,5 +1370,6 @@
 	"MODE_WORD": "word",
 	"MODE_INFO": "information",
 	"ABOUT": "about",
-	"THETA": "theta"
+	"THETA": "theta",
+	"START_PROGRAM_AUTOMOMOUSLIFE": "autonomous behaviour"
 }
