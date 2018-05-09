@@ -9,28 +9,28 @@ public class PythonVisitorTest {
 
     @Test
     public void rgbColorVisit_returnsCorrectPythonCodeConvertingRgb2Hex() throws Exception {
-        String correct_code = "item=BlocklyMethods.rgb2hex(0, 100, 68)defrun():globalitem";
+        String correct_code = "item=BlocklyMethods.rgb2hex(0, 100, 68)defrun():h.setAutonomousLife('ON')globalitem";
 
         this.h.assertCodeIsOk(correct_code, "/expr/create_rgb_variable.xml", false);
     }
 
     @Test
     public void rgbAccelerometerVisit_returnsCorrectPythonCodeGettingValueFromAccelerometerSensor() throws Exception {
-        String correct_code = "defrun():h.walk(h.accelerometer('x'), 0, 0)";
+        String correct_code = "defrun():h.setAutonomousLife('ON')h.walk(h.accelerometer('x'), 0, 0)";
 
         this.h.assertCodeIsOk(correct_code, "/sensor/accelerometer.xml", false);
     }
 
     @Test
     public void rgbGyroSensorVisit_returnsCorrectPythonCodeGettingValueFromXaxis() throws Exception {
-        String correct_code = "defrun():h.walk(h.gyrometer('x'), 0, 0)";
+        String correct_code = "defrun():h.setAutonomousLife('ON')h.walk(h.gyrometer('x'), 0, 0)";
 
         this.h.assertCodeIsOk(correct_code, "/sensor/gyrometer.xml", false);
     }
 
     @Test
     public void rgbUltrasonicSensorVisit_returnsCorrectPythonCodeGettingDistance() throws Exception {
-        String correct_code = "defrun():h.walk(h.ultrasonic(), 0, 0)";
+        String correct_code = "defrun():h.setAutonomousLife('ON')h.walk(h.ultrasonic(), 0, 0)";
 
         this.h.assertCodeIsOk(correct_code, "/sensor/ultrasonic.xml", false);
     }
@@ -39,6 +39,7 @@ public class PythonVisitorTest {
     public void touchSensorVisit_returnsCorrectPythonCode() throws Exception {
         String correct_code =
             "def run():\n"
+                + "    h.setAutonomousLife('ON')"
                 + "    h.say(str(h.touchsensors('head', 'front')))\n"
                 + "    h.say(str(h.touchsensors('head', 'middle')))\n"
                 + "    h.say(str(h.touchsensors('head', 'rear')))\n"
@@ -54,6 +55,7 @@ public class PythonVisitorTest {
     public void fsrSensorVisit_returnsCorrectPythonCode() throws Exception {
         String correct_code =
             "def run():\n" //
+                + "    h.setAutonomousLife('ON')"
                 + "    h.say(str(h.fsr('left')))\n"
                 + "    h.say(str(h.fsr('right')))";
 
@@ -64,6 +66,7 @@ public class PythonVisitorTest {
     public void detectFaceSensorVisit_returnsCorrectPythonCode() throws Exception {
         String correct_code =
             "def run():\n" //
+                + "    h.setAutonomousLife('OFF')"
                 + "    h.say(str(faceRecognitionModule.detectFace()))\n"
                 + "    h.say(str(faceRecognitionModule.detectFaces()))";
 
@@ -74,6 +77,7 @@ public class PythonVisitorTest {
     public void detectedFaceInformationVisit_returnsCorrectPythonCode() throws Exception {
         String correct_code =
             "def run():\n" //
+                + "    h.setAutonomousLife('OFF')"
                 + "    h.say(str(faceRecognitionModule.getFaceInformation(\"Roberta\")))";
 
         this.h.assertCodeIsOk(correct_code, "/sensor/faceinformation.xml", false);
@@ -83,6 +87,7 @@ public class PythonVisitorTest {
     public void detectedMarkInformationVisit_returnsCorrectPythonCode() throws Exception {
         String correct_code =
             "def run():\n" //
+                + "    h.setAutonomousLife('OFF')"
                 + "    h.say(str(h.getNaoMarkInformation(84)))";
 
         this.h.assertCodeIsOk(correct_code, "/sensor/markinformation.xml", false);
@@ -92,6 +97,7 @@ public class PythonVisitorTest {
     public void detectMarkSensorVisit_returnsCorrectPythonCode() throws Exception {
         String correct_code =
             "def run():\n" //
+                + "    h.setAutonomousLife('OFF')"
                 + "    h.say(str(h.getDetectedMark()))\n"
                 + "    h.say(str(h.getDetectedMarks()))";
 
@@ -102,6 +108,7 @@ public class PythonVisitorTest {
     public void electricCurrentVisit_returnsCorrectPythonCode() throws Exception {
         String correct_code =
             "def run():\n"
+                + "    h.setAutonomousLife('ON')"
                 + "    h.say(str(h.getElectricCurrent('HeadYaw')))\n"
                 + "    h.say(str(h.getElectricCurrent('HeadPitch')))\n"
                 + "    h.say(str(h.getElectricCurrent('LShoulderPitch')))\n"
