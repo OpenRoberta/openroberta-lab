@@ -23,7 +23,17 @@ public enum SensorPort implements ISensorPort {
     ANY( "3" ),
     BOTH( "3" ),
     MOTOR_LEFT( "2" ),
-    MOTOR_RIGHT( "1" );
+    MOTOR_RIGHT( "1" ),
+    // Calliope header rows
+    C04( "C04", "P3" ),
+    C05( "C05", "P4" ),
+    C06( "C06", "P10" ),
+    C07( "C07", "P13" ),
+    C08( "C08", "P14" ),
+    C09( "C09", "P15" ),
+    C10( "C10", "P9" ),
+    C11( "C11", "P7" ),
+    C12( "C12", "P6" );
 
     private final String[] values;
 

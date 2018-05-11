@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-05-09 16:40:48.422142",
+		"lastupdated": "2018-05-11 10:16:01.042871",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1199,10 +1199,10 @@
 	"INTERNAL_PORT": "internal",
 	"PULSE_LOW": "pulse time LOW",
 	"PULSE_HIGH": "pulse time HIGH",
-	"PIN_GETSAMPLE_ANALOG_TOOLTIP": "Returns the value from the specified analog pin. The value is between 0 and 1023.",
-	"PIN_GETSAMPLE_DIGITAL_TOOLTIP": "Returns the value from the specified digital pin. The value is either HIGH »1« or LOW »0«.",
-	"PIN_GETSAMPLE_PULSEHIGH_TOOLTIP": "Returns the pulse HIGH on a pin in microseconds or -1 if no complete pulse was received within the timeout.",
-	"PIN_GETSAMPLE_PULSELOW_TOOLTIP": "Returns the pulse LOW on a pin in microseconds or -1 if no complete pulse was received within the timeout.",
+	"SENSOR_PIN_ANALOG_GETSAMPLE_TOOLTIP": "Returns the value from the specified analog pin. The value is between 0 and 1023.",
+	"SENSOR_PIN_DIGITAL_GETSAMPLE_TOOLTIP": "Returns the value from the specified digital pin. The value is either HIGH »1« or LOW »0«.",
+	"SENSOR_PIN_PULSE_HIGH_GETSAMPLE_TOOLTIP": "Returns the pulse HIGH on a pin in microseconds or -1 if no complete pulse was received within the timeout.",
+	"SENSOR_PIN_PULSE_LOW_GETSAMPLE_TOOLTIP": "Returns the pulse LOW on a pin in microseconds or -1 if no complete pulse was received within the timeout.",
 	"CONNECTION_POWER": "with strength",
 	"SENSOR_IS_ARM": "is arm",
 	"CONNECTION_MBED_RECEIVE_TOOLTIP": "Reads a message over one of the channels (0 - 255). The default channel is 0.",
