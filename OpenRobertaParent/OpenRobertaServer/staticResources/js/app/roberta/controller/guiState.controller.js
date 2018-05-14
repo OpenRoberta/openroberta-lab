@@ -555,9 +555,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         if (language === 'de') {
             $('.EN').css('display', 'none');
             $('.DE').css('display', 'inline');
+            $('li>a.DE').css('display', 'block');
         } else {
             $('.DE').css('display', 'none');
             $('.EN').css('display', 'inline');
+            $('li>a.EN').css('display', 'block');
         }
         GUISTATE.gui.language = language;
         HELP_C.initView();

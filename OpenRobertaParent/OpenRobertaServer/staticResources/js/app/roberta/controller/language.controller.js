@@ -43,9 +43,11 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
         if (language === 'de') {
             $('.EN').css('display', 'none');
             $('.DE').css('display', 'inline');
+            $('li>a.DE').css('display', 'block');
         } else {
             $('.DE').css('display', 'none');
             $('.EN').css('display', 'inline');
+            $('li>a.EN').css('display', 'block');
         }
         $('#language li a[lang=' + language + ']').parent().addClass('disabled');
         var url = 'blockly/msg/js/' + language + '.js';
