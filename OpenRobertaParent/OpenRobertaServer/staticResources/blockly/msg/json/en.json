@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-05-11 10:16:01.042871",
+		"lastupdated": "2018-05-14 12:14:21.703845",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1044,6 +1044,7 @@
 	"SLOT_FRONT": "front",
 	"SLOT_MIDDLE": "middle",
 	"SLOT_REAR": "rear",
+	"SLOT_SIDE": "side",
 	"PORT_HAND": "hand",
 	"PORT_BUMPER": "bumper",
 	"NAO_CAMERA_TOP": "top",
@@ -1245,6 +1246,7 @@
 	"SENSOR_RADIO_RSSI": "radio RSSI sensor",
 	"RADIO_GET_RSSI_TOOLTIP": "Gets the RSSI of the last package.",
 	"SENSOR_UNIT_CM": "cm",
+	"SENSOR_UNIT_MM": "mm",
 	"SENSOR_UNIT_DEGREE": "°",
 	"SENSOR_UNIT_MS": "ms",
 	"SENSOR_UNIT_MILLIG": "milli-g",
@@ -1291,6 +1293,7 @@
 	"INPUT": "input",
 	"SENSOR_MOTION": "motion sensor",
 	"SENSOR_POTENTIOMETER": "potentiometer",
+	"SENSOR_WALL": "wall sensor",
 	"SERVO_MOTOR": "servo motor",
 	"SENSOR_PULSE": "pulse sensor",
 	"RELAY": "relay",
@@ -1300,6 +1303,7 @@
 	"SENSOR_MOISTURE": "moisture sensor",
 	"MODE_MOISTURE": "moisture",
 	"SENSOR_DROP": "drop sensor",
+	"SENSOR_DROP_OFF": "drop-off sensor",
 	"SENSOR_RFID": "RFID reader",
 	"ACTION_LCD": "LCD",
 	"ACTION_LCDI2C": "LCD",

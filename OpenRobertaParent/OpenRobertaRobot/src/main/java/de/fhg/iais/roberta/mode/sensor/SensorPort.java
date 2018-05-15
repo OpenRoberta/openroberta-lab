@@ -24,6 +24,9 @@ public enum SensorPort implements ISensorPort {
     BOTH( "3" ),
     MOTOR_LEFT( "2" ),
     MOTOR_RIGHT( "1" ),
+    LEFT( "LEFT" ),
+    RIGHT( "RIGHT" ),
+    CENTER( "CENTER" ),
     // Calliope header rows
     C04( "C04", "P3" ),
     C05( "C05", "P4" ),
