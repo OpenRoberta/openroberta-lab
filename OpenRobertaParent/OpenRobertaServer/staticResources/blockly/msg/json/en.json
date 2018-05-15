@@ -1,7 +1,11 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
+<<<<<<< HEAD
 		"lastupdated": "2018-05-14 12:14:21.703845",
+=======
+		"lastupdated": "2018-05-14 13:54:14.785939",
+>>>>>>> 993186b6fbc009f20e246ff23943d74f35b43d7a
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
