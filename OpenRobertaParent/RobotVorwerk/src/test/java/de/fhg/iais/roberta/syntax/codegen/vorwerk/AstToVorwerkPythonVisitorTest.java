@@ -84,18 +84,6 @@ public class AstToVorwerkPythonVisitorTest {
         assertCodeIsOk(expectedResult, "/sensors/accelerometer.xml");
     }
 
-    @Test
-    public void visitPlayNoteAction_PlayNote261dot626Hz2000ms_ReturnsCorrectCppProgram() throws Exception {
-        String expectedResult =
-            "" //
-                + IMPORTS
-                + GLOBALS
-                + "hal.playTone(float(261.626), float(2000))\n"
-                + "\n"
-                + MAIN_METHOD;
-        assertCodeIsOk(expectedResult, "/ast/actions/action_PlayNote.xml");
-    }
-
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         String b = this.h.generatePython(fileName, brickConfiguration);
         Assert.assertEquals(a, b);
