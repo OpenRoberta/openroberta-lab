@@ -1,15 +1,26 @@
 package de.fhg.iais.roberta.ast.stmt;
 
+import java.util.Properties;
+
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.Util1;
 
 public class AssignmentStmtTest {
+
+    @Before
+    public void addBlockProperties() {
+            Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
+            AbstractRobotFactory.addBlockTypesFromProperties("Robot.properties", robotProperties);
+    }
 
     @Test
     public void make() throws Exception {
