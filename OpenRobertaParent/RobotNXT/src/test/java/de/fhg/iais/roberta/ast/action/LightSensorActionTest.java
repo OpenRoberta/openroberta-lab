@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.mode.action.nxt.LightSensorActionMode;
 import de.fhg.iais.roberta.mode.general.WorkingState;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.action.nxt.LightSensorAction;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
@@ -36,10 +35,10 @@ public class LightSensorActionTest {
         LightSensorAction<Void> cs2 = (LightSensorAction<Void>) transformer.getTree().get(0).get(3);
         LightSensorAction<Void> cs3 = (LightSensorAction<Void>) transformer.getTree().get(0).get(4);
 
-        Assert.assertEquals(SensorPort.S1, cs.getPort());
-        Assert.assertEquals(SensorPort.S2, cs1.getPort());
-        Assert.assertEquals(SensorPort.S3, cs2.getPort());
-        Assert.assertEquals(SensorPort.S4, cs3.getPort());
+        Assert.assertEquals("S1", cs.getPort().getPortName());
+        Assert.assertEquals("S2", cs1.getPort().getPortName());
+        Assert.assertEquals("S3", cs2.getPort().getPortName());
+        Assert.assertEquals("S4", cs3.getPort().getPortName());
 
     }
 

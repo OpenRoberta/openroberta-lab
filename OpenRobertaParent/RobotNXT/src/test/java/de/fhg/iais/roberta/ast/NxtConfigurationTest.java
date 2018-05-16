@@ -32,7 +32,7 @@ public class NxtConfigurationTest {
     @Test
     public void test1() throws Exception {
         String a = //
-            "robotev3test{" //
+            "robotnxttest{" //
                 + "size{wheeldiameter5.0cm;trackwidth17.0cm;}"
                 + "sensorport{3:infrared;}"
                 + "actorport{A:middlemotor,regulated,forward;}}";
@@ -46,7 +46,7 @@ public class NxtConfigurationTest {
     @Test
     public void test2() throws Exception {
         String a =
-            "robotev3test{"
+            "robotnxttest{"
                 + "size{wheeldiameter5.6cm;trackwidth17.0cm;}"
                 + "sensorport{1:touch;4:ultrasonic;}"
                 + "actorport{B:largemotor,regulated,forward,right;C:largemotor,regulated,forward,left;}}";
@@ -60,7 +60,7 @@ public class NxtConfigurationTest {
     @Test
     public void test3() throws Exception {
         String a =
-            "robotev3test{"
+            "robotnxttest{"
                 + "size{wheeldiameter5.6cm;trackwidth17.0cm;}"
                 + "sensorport{1:touch;4:ultrasonic;}"
                 + "actorport{B:largemotor,regulated,forward,right;C:largemotor,regulated,forward,left;}}";

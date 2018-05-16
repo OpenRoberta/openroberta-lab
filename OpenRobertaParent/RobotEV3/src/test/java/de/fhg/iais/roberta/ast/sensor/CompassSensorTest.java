@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
@@ -39,8 +38,8 @@ public class CompassSensorTest {
         CompassSensor<Void> cs = (CompassSensor<Void>) transformer.getTree().get(0).get(1);
         CompassSensor<Void> cs1 = (CompassSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals(SensorPort.S2, cs.getPort());
-        Assert.assertEquals(SensorPort.S4, cs1.getPort());
+        Assert.assertEquals("S2", cs.getPort().getPortName());
+        Assert.assertEquals("S4", cs1.getPort().getPortName());
     }
 
     @Test

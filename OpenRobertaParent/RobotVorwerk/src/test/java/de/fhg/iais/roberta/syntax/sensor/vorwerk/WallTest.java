@@ -14,7 +14,7 @@ public class WallTest {
             "BlockAST [project=[[Location [x=349, y=50], "
                 + "MainTask [\n"
                 + "exprStmt VarDeclaration [NUMBER, item, NumConst [0], false, true]], \n"
-                + "Var [item] := SensorExpr [WallSensor [EMPTY_PORT, DISTANCE, EMPTY_SLOT]]\n"
+                + "Var [item] := SensorExpr [WallSensor [NO_PORT, DISTANCE, EMPTY_SLOT]]\n"
                 + "]]]";
 
         String result = this.h.generateTransformerString("/sensors/wall.xml");

@@ -21,4 +21,10 @@ public enum SensorPort implements ISensorPort {
         return this.values[0];
     }
 
+    @Override
+    public String getPortName() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

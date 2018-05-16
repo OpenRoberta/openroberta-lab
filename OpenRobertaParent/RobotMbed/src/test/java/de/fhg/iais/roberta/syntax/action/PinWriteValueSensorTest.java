@@ -3,17 +3,17 @@ package de.fhg.iais.roberta.syntax.action;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.mbed.HelperMbedForXmlTest;
+import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
 
 public class PinWriteValueSensorTest {
-    private final HelperMbedForXmlTest h = new HelperMbedForXmlTest();
+    private final HelperCalliopeForXmlTest h = new HelperCalliopeForXmlTest();
 
     @Test
     public void make_ByDefault_ReturnInstanceOfPinValueSensorClass() throws Exception {
         String expectedResult =
             "BlockAST [project=[[Location [x=384, y=50], "
                 + "MainTask [], "
-                + "PinWriteValueSensor [ANALOG, S2, NumConst [1]], PinWriteValueSensor [DIGITAL, S4, NumConst [1]]]]]";
+                + "PinWriteValueSensor [ANALOG, P1, NumConst [1]], PinWriteValueSensor [DIGITAL, 4, NumConst [1]]]]]";
 
         String result = this.h.generateTransformerString("/action/write_value_to_pin.xml");
 

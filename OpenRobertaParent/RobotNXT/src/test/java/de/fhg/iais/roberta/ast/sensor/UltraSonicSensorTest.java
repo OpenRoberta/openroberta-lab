@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
@@ -38,8 +37,8 @@ public class UltraSonicSensorTest {
         UltrasonicSensor<Void> cs = (UltrasonicSensor<Void>) transformer.getTree().get(0).get(1);
         UltrasonicSensor<Void> cs1 = (UltrasonicSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals(SensorPort.S4, cs.getPort());
-        Assert.assertEquals(SensorPort.S2, cs1.getPort());
+        Assert.assertEquals("S4", cs.getPort().getPortName());
+        Assert.assertEquals("S2", cs1.getPort().getPortName());
     }
 
     @Test

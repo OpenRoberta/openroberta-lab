@@ -60,7 +60,7 @@ public class Jaxb2NxtConfigurationTransformer {
             for ( ISensorPort port : sensors.keySet() ) {
                 Sensor sensor = sensors.get(port);
                 Value hardwareComponent = new Value();
-                hardwareComponent.setName(port.toString());
+                hardwareComponent.setName(port.getPortName());
                 Block sensorBlock = mkBlock(idCount++);
                 hardwareComponent.setBlock(sensorBlock);
                 sensorBlock.setType(sensor.getType().blocklyName());
@@ -108,8 +108,8 @@ public class Jaxb2NxtConfigurationTransformer {
     private Configuration blockToBrickConfiguration(Block block) {
         switch ( block.getType() ) {
             case "robBrick_EV3-Brick":
-                List<Pair<ISensorPort, Sensor>> sensors = new ArrayList<Pair<ISensorPort, Sensor>>();
-                List<Pair<IActorPort, Actor>> actors = new ArrayList<Pair<IActorPort, Actor>>();
+                List<Pair<ISensorPort, Sensor>> sensors = new ArrayList<>();
+                List<Pair<IActorPort, Actor>> actors = new ArrayList<>();
                 List<Field> fields = extractFields(block, (short) 2);
                 double wheelDiameter = Double.valueOf(extractField(fields, "WHEEL_DIAMETER", (short) 0)).doubleValue();
                 double trackWidth = Double.valueOf(extractField(fields, "TRACK_WIDTH", (short) 1)).doubleValue();

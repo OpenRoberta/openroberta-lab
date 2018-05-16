@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.factory.nao;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Properties;
 
 import com.google.inject.AbstractModule;
@@ -15,9 +16,9 @@ import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.Language;
+import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.nao.DetectedFaceMode;
 import de.fhg.iais.roberta.mode.sensor.nao.DetectedMarkMode;
-import de.fhg.iais.roberta.mode.sensor.nao.SensorPorts;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -40,6 +41,7 @@ public class Factory extends AbstractRobotFactory {
     private final Properties naoProperties;
     private final String name;
     private final int robotPropertyNumber;
+    Map<String, SensorPort> sensorToPorts = IRobotFactory.getPortsFromProperties(Util1.loadProperties("classpath:NAOports.properties"));
 
     public Factory(RobertaProperties robertaProperties) {
         super(robertaProperties);
@@ -55,7 +57,7 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public ISensorPort getSensorPort(String port) {
-        return IRobotFactory.getModeValue(port, SensorPorts.class);
+        return getPortValue(port, this.sensorToPorts);
     }
 
     public IMode getDetectMarkMode(String mode) {

@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
-import de.fhg.iais.roberta.mode.sensor.vorwerk.SensorPort;
+import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class VorwerkConfiguration extends Configuration {
@@ -34,15 +34,15 @@ public class VorwerkConfiguration extends Configuration {
             }
         }, new HashMap<ISensorPort, Sensor>() {
             {
-                put(SensorPort.LEFT_ULTRASONIC, new Sensor(SensorType.ULTRASONIC));
-                put(SensorPort.CENTER_ULTRASONIC, new Sensor(SensorType.ULTRASONIC));
-                put(SensorPort.RIGHT_ULTRASONIC, new Sensor(SensorType.ULTRASONIC));
-                put(SensorPort.LEFT, new Sensor(SensorType.TOUCH));
-                put(SensorPort.RIGHT, new Sensor(SensorType.TOUCH));
-                put(SensorPort.X, new Sensor(SensorType.ACCELEROMETER));
-                put(SensorPort.Y, new Sensor(SensorType.ACCELEROMETER));
-                put(SensorPort.Z, new Sensor(SensorType.ACCELEROMETER));
-                put(SensorPort.STRENGTH, new Sensor(SensorType.ACCELEROMETER));
+                put(new SensorPort("LEFT_ULTRASONIC", "LEFT_ULTRASONIC"), new Sensor(SensorType.ULTRASONIC));
+                put(new SensorPort("CENTER_ULTRASONIC", "CENTER_ULTRASONIC"), new Sensor(SensorType.ULTRASONIC));
+                put(new SensorPort("RIGHT_ULTRASONIC", "RIGHT_ULTRASONIC"), new Sensor(SensorType.ULTRASONIC));
+                put(new SensorPort("LEFT", "LEFT"), new Sensor(SensorType.TOUCH));
+                put(new SensorPort("RIGHT", "RIGHT"), new Sensor(SensorType.TOUCH));
+                put(new SensorPort("X", "X"), new Sensor(SensorType.ACCELEROMETER));
+                put(new SensorPort("Y", "Y"), new Sensor(SensorType.ACCELEROMETER));
+                put(new SensorPort("Z", "Z"), new Sensor(SensorType.ACCELEROMETER));
+                put(new SensorPort("STRENGTH", "STRENGTH"), new Sensor(SensorType.ACCELEROMETER));
             }
         }, 0.0, 0.0);
 

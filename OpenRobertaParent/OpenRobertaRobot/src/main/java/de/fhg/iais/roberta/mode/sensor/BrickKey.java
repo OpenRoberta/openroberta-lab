@@ -23,4 +23,10 @@ public enum BrickKey implements IBrickKey {
             return this.toString();
         }
     }
+
+    @Override
+    public String getPortName() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

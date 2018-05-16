@@ -1,7 +1,11 @@
 package de.fhg.iais.roberta.factory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
 
 import com.google.inject.AbstractModule;
 
@@ -128,6 +132,59 @@ public interface IRobotFactory {
         }
         throw new DbcException("Invalid " + modes.getName() + ": " + modeName);
     }
+
+    static Map<String, SensorPort> getPortsFromProperties(Properties properties) {
+        Map<String, SensorPort> sensorToPorts = new HashMap<>();
+        for ( Entry<Object, Object> property : properties.entrySet() ) {
+            SensorPort sensorPort = new SensorPort((String) property.getValue(), (String) property.getKey());
+            sensorToPorts.put((String) property.getKey(), sensorPort);
+        }
+        return sensorToPorts;
+    }
+
+    /**
+     * Get a sensor port from {@link ISensorPort} given string parameter and mapping from a port to SensorPort. It is possible for one sensor port to have
+     * multiple string mappings. Throws exception if the sensor port does not exists. <br>
+     * It can only be used by subclasses of IRobotFactory.
+     *
+     * @param name of the sensor port
+     * @param port-SensorPort map
+     * @return SensorPort {@link ISensorPort}
+     */
+    default ISensorPort getPortValue(String port, Map<String, SensorPort> sensorToPorts) {
+        if ( port == null ) {
+            throw new DbcException("Null sensor port!");
+        }
+        if ( port.isEmpty() ) {
+            return sensorToPorts.get("NO_PORT");
+        }
+        System.out.println("port");
+        System.out.println(sensorToPorts);
+        System.out.println(port);
+        final String sUpper = port.trim().toUpperCase(Locale.GERMAN);
+        SensorPort sensorPort = sensorToPorts.get(sUpper);
+        if ( sensorPort != null ) {
+            return sensorPort;
+        }
+        for ( Map.Entry<String, SensorPort> portName : sensorToPorts.entrySet() ) {
+            if ( portName.getValue().getPortNumber().equals(port) ) {
+                return portName.getValue();
+            }
+        }
+        System.out.println("!");
+        throw new DbcException("Invalid sensor port: " + port);
+    }
+
+    /**
+     * Get a sensor port from {@link ISensorPort} given its name as a string parameter. It is possible for one sensor port to have
+     * multiple
+     * string mappings. Throws exception
+     * if the sensor port does not exists.
+     *
+     * @param port name of the sensor
+     * @return SensorPort {@link ISensorPort}
+     */
+    ISensorPort getSensorPort(String port);
 
     static <E extends IActorPort> E getPort(String port, Class<E> ports) {
         if ( port == null ) {
@@ -495,17 +552,6 @@ public interface IRobotFactory {
      */
     default IGestureSensorMode getGestureSensorMode(String mode) {
         return IRobotFactory.getModeValue(mode, GestureSensorMode.class);
-    }
-
-    /**
-     * Get a sensor port from {@link ISensorPort} given string parameter. It is possible for one sensor port to have multiple string mappings. Throws exception
-     * if the sensor port does not exists.
-     *
-     * @param name of the sensor port
-     * @return the sensor port from the enum {@link ISensorPort}
-     */
-    default ISensorPort getSensorPort(String port) {
-        return IRobotFactory.getModeValue(port, SensorPort.class);
     }
 
     /**

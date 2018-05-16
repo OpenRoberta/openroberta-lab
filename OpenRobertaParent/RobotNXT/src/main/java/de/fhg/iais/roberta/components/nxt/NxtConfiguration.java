@@ -90,7 +90,7 @@ public class NxtConfiguration extends Configuration {
     @Override
     public String generateText(String name) {
         StringBuilder sb = new StringBuilder();
-        sb.append("robot ev3 ").append(name).append(" {\n");
+        sb.append("robot nxt ").append(name).append(" {\n");
         generateWheelData(sb);
         generateSensors(sb);
         generateActors(sb);
@@ -99,7 +99,7 @@ public class NxtConfiguration extends Configuration {
     }
 
     private void generateWheelData(StringBuilder sb) {
-        if ( this.wheelDiameterCM != 0.0 || this.trackWidthCM != 0.0 ) { //NOSONAR : 0.0 is safe here, as it is used as 'null' value
+        if ( (this.wheelDiameterCM != 0.0) || (this.trackWidthCM != 0.0) ) { //NOSONAR : 0.0 is safe here, as it is used as 'null' value
             sb.append("  size {\n");
             sb.append("    wheel diameter ").append(Formatter.d2s(this.wheelDiameterCM)).append(" cm;\n");
             sb.append("    track width    ").append(Formatter.d2s(this.trackWidthCM)).append(" cm;\n");

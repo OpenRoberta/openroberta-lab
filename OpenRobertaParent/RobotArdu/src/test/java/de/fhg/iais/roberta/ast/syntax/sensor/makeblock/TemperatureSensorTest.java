@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.ast.syntax.sensor.makeblock;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fag.iais.roberta.mode.sensor.arduino.mbot.SensorPort;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.test.ardu.HelperMBotForXmlTest;
@@ -24,7 +23,7 @@ public class TemperatureSensorTest {
 
         TemperatureSensor<Void> cs = (TemperatureSensor<Void>) transformer.getTree().get(0).get(1);
 
-        Assert.assertEquals(SensorPort.PORT_4, cs.getPort());
+        Assert.assertEquals("PORT_4", cs.getPort().getPortName());
     }
 
     @Test

@@ -20,4 +20,10 @@ public enum ActorPort implements IActorPort {
     public String getPortNumber() {
         return this.values[0];
     }
+
+    @Override
+    public String getPortName() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

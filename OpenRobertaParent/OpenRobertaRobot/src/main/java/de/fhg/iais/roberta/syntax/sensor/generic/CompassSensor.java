@@ -43,7 +43,7 @@ public class CompassSensor<V> extends ExternalSensor<V> {
      * @return read only object of {@link CompassSensor}
      */
     public static <V> CompassSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new CompassSensor<V>(sensorMetaDataBean, properties, comment);
+        return new CompassSensor<>(sensorMetaDataBean, properties, comment);
     }
 
     @Override

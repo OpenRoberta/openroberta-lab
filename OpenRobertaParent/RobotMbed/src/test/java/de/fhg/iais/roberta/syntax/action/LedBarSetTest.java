@@ -3,10 +3,10 @@ package de.fhg.iais.roberta.syntax.action;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.mbed.HelperMbedForXmlTest;
+import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
 
 public class LedBarSetTest {
-    private final HelperMbedForXmlTest h = new HelperMbedForXmlTest();
+    private final HelperCalliopeForXmlTest h = new HelperCalliopeForXmlTest();
 
     @Test
     public void make_ByDefault_ReturnInstanceOfLedBarSetActionClass() throws Exception {

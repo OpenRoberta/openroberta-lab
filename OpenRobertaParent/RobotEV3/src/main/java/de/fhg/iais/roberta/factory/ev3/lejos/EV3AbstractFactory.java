@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.factory.ev3.lejos;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Properties;
 
 import com.google.inject.AbstractModule;
@@ -30,6 +31,8 @@ public abstract class EV3AbstractFactory extends AbstractRobotFactory {
     protected ICompilerWorkflow robotCompilerWorkflow;
     protected Properties ev3Properties;
     protected String name;
+    protected int robotPropertyNumber;
+    Map<String, SensorPort> sensorToPorts = IRobotFactory.getPortsFromProperties(Util1.loadProperties("classpath:EV3ports.properties"));
 
     public EV3AbstractFactory(RobertaProperties robertaProperties, String propertyName) {
         super(robertaProperties);
@@ -47,16 +50,14 @@ public abstract class EV3AbstractFactory extends AbstractRobotFactory {
 
     }
 
-    protected int robotPropertyNumber;
+    @Override
+    public ISensorPort getSensorPort(String port) {
+        return getPortValue(port, this.sensorToPorts);
+    }
 
     @Override
     public IShowPicture getShowPicture(String picture) {
         return IRobotFactory.getModeValue(picture, ShowPicture.class);
-    }
-
-    @Override
-    public ISensorPort getSensorPort(String port) {
-        return IRobotFactory.getModeValue(port, SensorPort.class);
     }
 
     @Override

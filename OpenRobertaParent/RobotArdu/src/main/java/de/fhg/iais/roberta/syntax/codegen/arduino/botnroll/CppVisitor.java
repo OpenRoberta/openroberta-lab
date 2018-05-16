@@ -421,7 +421,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
         String port = colorSensor.getPort().getPortNumber();
         String colors;
-        if ( port == "1" ) {
+        if ( port.equals("1") ) {
             colors = "colorsLeft, ";
         } else {
             colors = "colorsRight, ";
@@ -430,7 +430,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
             case COLOUR:
                 this.sb.append("bnr.colorSensorColor(");
                 this.sb.append(colors);
-                this.sb.append(colorSensor.getPort().getPortNumber());
+                this.sb.append(port);
                 this.sb.append(")");
                 break;
             case RGB:
@@ -489,7 +489,11 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
             default:
                 throw new DbcException("Invalid Infrared Sensor Mode: " + infraredSensor.getMode());
         }
-        this.sb.append(port + ")");
+        if ( port.equals("BOTH") ) {
+            this.sb.append("3)");
+        } else {
+            this.sb.append(port + ")");
+        }
         return null;
     }
 

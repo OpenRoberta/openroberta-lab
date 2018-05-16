@@ -9,7 +9,6 @@ import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.PinValue;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
@@ -429,11 +428,11 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
 
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
-        if ( accelerometerSensor.getPort() == SensorPort.STRENGTH ) {
+        if ( accelerometerSensor.getPort().getPortName().equals("STRENGTH") ) {
             this.sb.append("math.sqrt(microbit.accelerometer.get_x()**2 + microbit.accelerometer.get_y()**2 + microbit.accelerometer.get_z()**2)");
         } else {
             this.sb.append("microbit.accelerometer.get_");
-            this.sb.append(accelerometerSensor.getPort().toString().toLowerCase());
+            this.sb.append(accelerometerSensor.getPort().getPortName());
             this.sb.append("()");
         }
         return null;
@@ -443,7 +442,7 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
         final String valueType = pinValueSensor.getMode().toString().toLowerCase();
         this.sb.append("microbit.pin");
-        this.sb.append(pinValueSensor.getPort().getValues()[0]);
+        this.sb.append(pinValueSensor.getPort().getPortName());
         this.sb.append(".read_");
         this.sb.append(valueType);
         this.sb.append("()");

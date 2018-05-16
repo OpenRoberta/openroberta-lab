@@ -4,10 +4,10 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.mbed.HelperMbedForXmlTest;
+import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
 
 public class ImageShiftFunctionTest {
-    private final HelperMbedForXmlTest h = new HelperMbedForXmlTest();
+    private final HelperCalliopeForXmlTest h = new HelperCalliopeForXmlTest();
 
     @Test
     public void make_ByDefault_ReturnInstanceOfImageShiftFunctionClass() throws Exception {

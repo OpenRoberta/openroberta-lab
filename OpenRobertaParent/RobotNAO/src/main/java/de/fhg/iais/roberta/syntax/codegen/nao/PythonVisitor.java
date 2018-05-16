@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.nao.NAOConfiguration;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
+import de.fhg.iais.roberta.inter.mode.sensor.IPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
@@ -16,7 +17,6 @@ import de.fhg.iais.roberta.mode.action.nao.Camera;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.nao.DetectedFaceMode;
 import de.fhg.iais.roberta.mode.sensor.nao.DetectedMarkMode;
-import de.fhg.iais.roberta.mode.sensor.nao.SensorPorts;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -262,14 +262,14 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
         this.sb.append(", ");
         IndexLocation where1 = (IndexLocation) getSubFunct.getStrParam().get(0);
         this.sb.append(getEnumCode(where1));
-        if ( where1 == IndexLocation.FROM_START || where1 == IndexLocation.FROM_END ) {
+        if ( (where1 == IndexLocation.FROM_START) || (where1 == IndexLocation.FROM_END) ) {
             this.sb.append(", ");
             getSubFunct.getParam().get(1).visit(this);
         }
         this.sb.append(", ");
         IndexLocation where2 = (IndexLocation) getSubFunct.getStrParam().get(1);
         this.sb.append(getEnumCode(where2));
-        if ( where2 == IndexLocation.FROM_START || where2 == IndexLocation.FROM_END ) {
+        if ( (where2 == IndexLocation.FROM_START) || (where2 == IndexLocation.FROM_END) ) {
             this.sb.append(", ");
             if ( getSubFunct.getParam().size() == 3 ) {
                 getSubFunct.getParam().get(2).visit(this);
@@ -1256,7 +1256,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
         String side_axis = electricCurrent.getSlot().toString().toLowerCase();
         String[] slots = side_axis.split("_");
 
-        SensorPorts portType = (SensorPorts) electricCurrent.getPort();
+        IPort portType = electricCurrent.getPort();
         String port = portType.toString().toLowerCase();
         port = StringUtils.capitalize(port);
 
@@ -1271,18 +1271,18 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
         return null;
     }
 
-    private String constructJointActuator(SensorPorts portType, String port, String side, String axis1, String axis2) {
-        if ( portType == SensorPorts.HEAD ) {
+    private String constructJointActuator(IPort portType, String port, String side, String axis1, String axis2) {
+        if ( portType.getPortName().equals("HEAD") ) {
             return port + side;
         } else {
             return side + port + axis1 + axis2;
         }
     }
 
-    private String extractSideFromSlot(String[] slots, SensorPorts portType) {
+    private String extractSideFromSlot(String[] slots, IPort portType) {
         String side;
         side = Character.toString(slots[0].toUpperCase().charAt(0));
-        if ( portType == SensorPorts.HEAD ) {
+        if ( portType.getPortName().equals("HEAD") ) {
             side = StringUtils.capitalize(slots[0].toLowerCase());
         }
         return side;

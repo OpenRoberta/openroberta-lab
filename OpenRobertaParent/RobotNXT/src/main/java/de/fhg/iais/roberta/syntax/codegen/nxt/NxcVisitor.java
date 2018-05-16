@@ -125,7 +125,6 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
     private NxcVisitor(NxtConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
         this.brickConfiguration = brickConfiguration;
-
         UsedHardwareCollectorVisitor codePreprocessVisitor = new UsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
         this.usedVars = codePreprocessVisitor.getVisitedVars();
         this.usedActors = codePreprocessVisitor.getUsedActors();
@@ -642,8 +641,8 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
         if ( isActorOnPort(this.brickConfiguration.getLeftMotorPort()) && isActorOnPort(this.brickConfiguration.getRightMotorPort()) ) {
             final boolean isDuration = driveAction.getParam().getDuration() != null;
             final boolean reverse =
-                this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
-                    || this.brickConfiguration.getActorOnPort(this.brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD;
+                (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD)
+                    || (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD);
             final boolean localReverse = driveAction.getDirection() == DriveDirection.BACKWARD;
             String methodName = "";
             if ( isDuration ) {
@@ -659,7 +658,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
                 this.sb.append(this.brickConfiguration.getRightMotorPort());
                 this.sb.append(this.brickConfiguration.getLeftMotorPort());
             }
-            if ( !reverse && localReverse || !localReverse && reverse ) {
+            if ( (!reverse && localReverse) || (!localReverse && reverse) ) {
                 this.sb.append(", -1 * ");
             } else {
                 this.sb.append(", ");
@@ -686,8 +685,8 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
         if ( isActorOnPort(this.brickConfiguration.getLeftMotorPort()) && isActorOnPort(this.brickConfiguration.getRightMotorPort()) ) {
             final boolean isDuration = turnAction.getParam().getDuration() != null;
             final boolean reverse =
-                this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
-                    || this.brickConfiguration.getActorOnPort(this.brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD;
+                (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD)
+                    || (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD);
 
             String methodName = "";
             int turnpct = 100;
@@ -801,7 +800,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
         this.sb.append("SensorLight(");
-        this.sb.append(lightSensor.getPort());
+        this.sb.append(lightSensor.getPort().getPortName());
         this.sb.append(", ");
         switch ( (LightSensorMode) lightSensor.getMode() ) {
             case LIGHT:
@@ -844,7 +843,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
         } else {
             this.sb.append("SensorColor(");
         }
-        this.sb.append(colorSensor.getPort());
+        this.sb.append(colorSensor.getPort().getPortName());
         this.sb.append(", ");
         ColorSensorMode sensorMode = (ColorSensorMode) colorSensor.getMode();
         switch ( sensorMode ) {
@@ -867,7 +866,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
         this.sb.append("Sensor(");
-        this.sb.append(soundSensor.getPort());
+        this.sb.append(soundSensor.getPort().getPortName());
         this.sb.append(")");
         return null;
     }
@@ -925,14 +924,14 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("Sensor(" + touchSensor.getPort());
+        this.sb.append("Sensor(" + touchSensor.getPort().getPortName());
         this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.sb.append("SensorUS(" + ultrasonicSensor.getPort() + ")");
+        this.sb.append("SensorUS(" + ultrasonicSensor.getPort().getPortName() + ")");
         return null;
     }
 
@@ -1382,22 +1381,22 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
             this.sb.append("SetSensor(");
             switch ( entry.getValue().getType() ) {
                 case COLOR:
-                    this.sb.append(entry.getKey() + ", SENSOR_COLORFULL);");
+                    this.sb.append(entry.getKey().getPortName() + ", SENSOR_COLORFULL);");
                     break;
                 case HT_COLOR:
-                    this.sb.append(entry.getKey() + ", SENSOR_LOWSPEED);");
+                    this.sb.append(entry.getKey().getPortName() + ", SENSOR_LOWSPEED);");
                     break;
                 case LIGHT:
-                    this.sb.append(entry.getKey() + ", SENSOR_LIGHT);");
+                    this.sb.append(entry.getKey().getPortName() + ", SENSOR_LIGHT);");
                     break;
                 case TOUCH:
-                    this.sb.append(entry.getKey() + ", SENSOR_TOUCH);");
+                    this.sb.append(entry.getKey().getPortName() + ", SENSOR_TOUCH);");
                     break;
                 case ULTRASONIC:
-                    this.sb.append(entry.getKey() + ", SENSOR_LOWSPEED);");
+                    this.sb.append(entry.getKey().getPortName() + ", SENSOR_LOWSPEED);");
                     break;
                 case SOUND:
-                    this.sb.append(entry.getKey() + ", SENSOR_SOUND);");
+                    this.sb.append(entry.getKey().getPortName() + ", SENSOR_SOUND);");
                     break;
                 default:
                     break;

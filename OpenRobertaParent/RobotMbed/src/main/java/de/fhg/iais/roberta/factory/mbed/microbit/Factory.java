@@ -1,14 +1,18 @@
 package de.fhg.iais.roberta.factory.mbed.microbit;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Properties;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.factory.mbed.SimCompilerWorkflow;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
+import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
@@ -24,6 +28,7 @@ public class Factory extends AbstractRobotFactory {
     private final Properties microbitProperties;
     private final String name;
     private final int robotPropertyNumber;
+    Map<String, SensorPort> sensorToPorts = IRobotFactory.getPortsFromProperties(Util1.loadProperties("classpath:Microbitports.properties"));
 
     public Factory(RobertaProperties robertaProperties) {
         super(robertaProperties);
@@ -38,6 +43,11 @@ public class Factory extends AbstractRobotFactory {
         Properties mbedProperties = Util1.loadProperties("classpath:Mbed.properties");
         addBlockTypesFromProperties("Mbed.properties", mbedProperties);
         addBlockTypesFromProperties("Microbit.properties", this.microbitProperties);
+    }
+
+    @Override
+    public ISensorPort getSensorPort(String port) {
+        return getPortValue(port, this.sensorToPorts);
     }
 
     @Override

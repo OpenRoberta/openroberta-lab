@@ -520,12 +520,13 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
+        String brickSensorPort = getEnumCode(brickSensor.getPort());
         switch ( (BrickKeyPressMode) brickSensor.getMode() ) {
             case PRESSED:
-                this.sb.append("hal.isPressed(" + getEnumCode(brickSensor.getPort()) + ")");
+                this.sb.append("hal.isPressed(" + brickSensorPort + ")");
                 break;
             case WAIT_FOR_PRESS_AND_RELEASE:
-                this.sb.append("hal.isPressedAndReleased(" + getEnumCode(brickSensor.getPort()) + ")");
+                this.sb.append("hal.isPressedAndReleased(" + brickSensorPort + ")");
                 break;
             default:
                 throw new DbcException("Invalide mode for BrickSensor!");
@@ -535,7 +536,7 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        String colorSensorPort = getEnumCode(colorSensor.getPort());
+        String colorSensorPort = "SensorPort." + colorSensor.getPort().getPortName();
         switch ( (ColorSensorMode) colorSensor.getMode() ) {
             case AMBIENTLIGHT:
                 this.sb.append("hal.getColorSensorAmbient(" + colorSensorPort + ")");
@@ -571,7 +572,7 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        String gyroSensorPort = getEnumCode(gyroSensor.getPort());
+        String gyroSensorPort = "SensorPort." + gyroSensor.getPort().getPortName();
         switch ( (GyroSensorMode) gyroSensor.getMode() ) {
             case ANGLE:
                 this.sb.append("hal.getGyroSensorAngle(" + gyroSensorPort + ")");
@@ -590,7 +591,7 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        String infraredSensorPort = getEnumCode(infraredSensor.getPort());
+        String infraredSensorPort = "SensorPort." + infraredSensor.getPort().getPortName();
         switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
             case DISTANCE:
                 this.sb.append("hal.getInfraredSensorDistance(" + infraredSensorPort + ")");
@@ -623,13 +624,13 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("hal.isPressed(" + getEnumCode(touchSensor.getPort()) + ")");
+        this.sb.append("hal.isPressed(" + "SensorPort." + touchSensor.getPort().getPortName() + ")");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        String ultrasonicSensorPort = getEnumCode(ultrasonicSensor.getPort());
+        String ultrasonicSensorPort = "SensorPort." + ultrasonicSensor.getPort().getPortName();
         if ( ultrasonicSensor.getMode() == UltrasonicSensorMode.DISTANCE ) {
             this.sb.append("hal.getUltraSonicSensorDistance(" + ultrasonicSensorPort + ")");
         } else {
@@ -640,25 +641,26 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        this.sb.append("hal.getSoundLevel(" + getEnumCode(soundSensor.getPort()) + ")");
+        this.sb.append("hal.getSoundLevel(" + "SensorPort." + soundSensor.getPort().getPortName() + ")");
         return null;
     }
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        String compassSensorPort = "SensorPort." + compassSensor.getPort().getPortName();
         switch ( (CompassSensorMode) compassSensor.getMode() ) {
             case CALIBRATE:
-                this.sb.append("hal.hiTecCompassStartCalibration(" + getEnumCode(compassSensor.getPort()) + ");");
+                this.sb.append("hal.hiTecCompassStartCalibration(" + compassSensorPort + ");");
                 nlIndent();
                 this.sb.append("hal.waitFor(40000);");
                 nlIndent();
-                this.sb.append("hal.hiTecCompassStopCalibration(" + getEnumCode(compassSensor.getPort()) + ");");
+                this.sb.append("hal.hiTecCompassStopCalibration(" + compassSensorPort + ");");
                 break;
             case ANGLE:
-                this.sb.append("hal.getHiTecCompassAngle(" + getEnumCode(compassSensor.getPort()) + ")");
+                this.sb.append("hal.getHiTecCompassAngle(" + compassSensorPort + ")");
                 break;
             case COMPASS:
-                this.sb.append("hal.getHiTecCompassCompass(" + getEnumCode(compassSensor.getPort()) + ")");
+                this.sb.append("hal.getHiTecCompassCompass(" + compassSensorPort + ")");
                 break;
             default:
                 throw new DbcException("Invalid Compass Mode!");
@@ -668,12 +670,13 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
 
     @Override
     public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
+        String irSeekerSensorPort = "SensorPort." + irSeekerSensor.getPort().getPortName();
         switch ( (IRSeekerSensorMode) irSeekerSensor.getMode() ) {
             case MODULATED:
-                this.sb.append("hal.getHiTecIRSeekerModulated(" + getEnumCode(irSeekerSensor.getPort()) + ")");
+                this.sb.append("hal.getHiTecIRSeekerModulated(" + irSeekerSensorPort + ")");
                 break;
             case UNMODULATED:
-                this.sb.append("hal.getHiTecIRSeekerUnmodulated(" + getEnumCode(irSeekerSensor.getPort()) + ")");
+                this.sb.append("hal.getHiTecIRSeekerUnmodulated(" + irSeekerSensorPort + ")");
                 break;
             default:
                 throw new DbcException("Invalid IRSeeker Mode!");
@@ -708,14 +711,14 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
         this.sb.append(", ");
         IndexLocation where1 = (IndexLocation) getSubFunct.getStrParam().get(0);
         this.sb.append(getEnumCode(where1));
-        if ( where1 == IndexLocation.FROM_START || where1 == IndexLocation.FROM_END ) {
+        if ( (where1 == IndexLocation.FROM_START) || (where1 == IndexLocation.FROM_END) ) {
             this.sb.append(", ");
             getSubFunct.getParam().get(1).visit(this);
         }
         this.sb.append(", ");
         IndexLocation where2 = (IndexLocation) getSubFunct.getStrParam().get(1);
         this.sb.append(getEnumCode(where2));
-        if ( where2 == IndexLocation.FROM_START || where2 == IndexLocation.FROM_END ) {
+        if ( (where2 == IndexLocation.FROM_START) || (where2 == IndexLocation.FROM_END) ) {
             this.sb.append(", ");
             if ( getSubFunct.getParam().size() == 3 ) {
                 getSubFunct.getParam().get(2).visit(this);
@@ -1096,7 +1099,7 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
         IMode mode = usedSensor.getMode();
 
         sb.append("new UsedSensor(");
-        sb.append("SensorPort." + usedSensor.getPort().toString()).append(", ");
+        sb.append("SensorPort." + usedSensor.getPort().getPortName()).append(", ");
         sb.append(sensor.getClass().getSimpleName() + "." + sensor.name()).append(", ");
         sb.append(mode.getClass().getSimpleName() + "." + mode.toString()).append(")");
         return sb.toString();

@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
@@ -24,7 +23,7 @@ public class TouchSensorTest {
 
         TouchSensor<Void> cs = (TouchSensor<Void>) transformer.getTree().get(0).get(1);
 
-        Assert.assertEquals(SensorPort.S1, cs.getPort());
+        Assert.assertEquals("S1", cs.getPort().getPortName());
     }
 
     @Test

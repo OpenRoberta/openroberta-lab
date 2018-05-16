@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
@@ -47,10 +46,10 @@ public class ColorSensorTest {
         ColorSensor<Void> cs2 = (ColorSensor<Void>) transformer.getTree().get(2).get(1);
         ColorSensor<Void> cs3 = (ColorSensor<Void>) transformer.getTree().get(3).get(1);
 
-        Assert.assertEquals(SensorPort.S3, cs.getPort());
-        Assert.assertEquals(SensorPort.S1, cs1.getPort());
-        Assert.assertEquals(SensorPort.S2, cs2.getPort());
-        Assert.assertEquals(SensorPort.S4, cs3.getPort());
+        Assert.assertEquals("S3", cs.getPort().getPortName());
+        Assert.assertEquals("S1", cs1.getPort().getPortName());
+        Assert.assertEquals("S2", cs2.getPort().getPortName());
+        Assert.assertEquals("S4", cs3.getPort().getPortName());
     }
 
     @Test

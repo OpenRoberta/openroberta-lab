@@ -1,10 +1,12 @@
 package de.fhg.iais.roberta.util.test;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
@@ -15,6 +17,8 @@ import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
@@ -27,6 +31,7 @@ public class GenericHelperForXmlTest extends AbstractHelperForXmlTest {
     }
 
     private static class TestFactory extends AbstractRobotFactory {
+        Map<String, SensorPort> sensorToPorts = IRobotFactory.getPortsFromProperties(Util1.loadProperties("classpath:robotports.properties"));
 
         public TestFactory(RobertaProperties robertaProperties) {
             super(robertaProperties);
@@ -185,6 +190,11 @@ public class GenericHelperForXmlTest extends AbstractHelperForXmlTest {
         @Override
         public IColorSensorMode getColorSensorMode(String modeName) {
             return null;
+        }
+
+        @Override
+        public ISensorPort getSensorPort(String port) {
+            return getPortValue(port, this.sensorToPorts);
         }
     }
 }
