@@ -16,3 +16,5 @@ OpenRobertaParent/RobotNAO/resources/updateResources/roberta.zip
 .idea
 *.iml
 **/*.log
+**/*.pyc
+**/*.py~

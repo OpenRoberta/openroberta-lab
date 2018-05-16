@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.vorwerk.VorwerkConfiguration;
 import de.fhg.iais.roberta.util.test.ev3.HelperVorwerkForXmlTest;
 
-public class AstToVorwerkPythonVisitorTest {
+public class PythonVisitorTest {
     private final HelperVorwerkForXmlTest h = new HelperVorwerkForXmlTest();
 
     private static final String IMPORTS =
@@ -82,6 +82,39 @@ public class AstToVorwerkPythonVisitorTest {
                 + MAIN_METHOD;
 
         assertCodeIsOk(expectedResult, "/sensors/accelerometer.xml");
+    }
+
+    @Test
+    public void visitDropOffSensor_GetValuesFromAllPortsAndSlots_ReturnsCorrectPythonProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + GLOBALS
+                + "\nitem = 0\n"
+                + "def run():\n"
+                + "    global item\n"
+                + "    item = hal.sample_dropoff_sensor('left')\n"
+                + "    item = hal.sample_dropoff_sensor('right')\n"
+                + "\n"
+                + MAIN_METHOD;
+
+        assertCodeIsOk(expectedResult, "/sensors/drop_off.xml");
+    }
+
+    @Test
+    public void visitWallSensor_GetValuesFromAllPortsAndSlots_ReturnsCorrectPythonProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + GLOBALS
+                + "\nitem = 0\n"
+                + "def run():\n"
+                + "    global item\n"
+                + "    item = hal.sample_wall_sensor()\n"
+                + "\n"
+                + MAIN_METHOD;
+
+        assertCodeIsOk(expectedResult, "/sensors/wall.xml");
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {

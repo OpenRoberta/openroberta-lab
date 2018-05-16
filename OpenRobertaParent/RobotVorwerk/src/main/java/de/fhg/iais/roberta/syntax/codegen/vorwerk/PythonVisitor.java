@@ -1,29 +1,15 @@
 package de.fhg.iais.roberta.syntax.codegen.vorwerk;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
-import de.fhg.iais.roberta.components.UsedActor;
-import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.vorwerk.VorwerkConfiguration;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
-import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
@@ -65,36 +51,28 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.vorwerk.DropOffSensor;
+import de.fhg.iais.roberta.syntax.sensor.vorwerk.WallSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorCommunicationVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
+import de.fhg.iais.roberta.visitor.vorwerk.VorwerkAstVisitor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
-public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisitor<Void>, AstActorCommunicationVisitor<Void>, AstActorDisplayVisitor<Void>,
-    AstActorMotorVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
+public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisitor<Void>, AstActorDisplayVisitor<Void>, AstActorMotorVisitor<Void>,
+    AstActorLightVisitor<Void>, AstActorSoundVisitor<Void>, VorwerkAstVisitor<Void> {
     protected final VorwerkConfiguration brickConfiguration;
-
-    protected final Map<String, String> predefinedImage = new HashMap<>();
-
-    protected final Set<UsedSensor> usedSensors;
-    protected final Set<UsedActor> usedActors;
-    protected final Set<String> usedImages;
-
-    protected ILanguage language;
 
     /**
      * initialize the Python code generator visitor.
@@ -110,15 +88,9 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
 
         this.brickConfiguration = brickConfiguration;
 
-        this.usedActors = checkVisitor.getUsedActors();
-        this.usedSensors = checkVisitor.getUsedSensors();
-        this.usedImages = checkVisitor.getUsedImages();
-
         this.usedGlobalVarInFunctions = checkVisitor.getMarkedVariablesAsGlobal();
         this.isProgramEmpty = checkVisitor.isProgramEmpty();
         this.loopsLabels = checkVisitor.getloopsLabelContainer();
-
-        this.language = language;
     }
 
     /**
@@ -319,156 +291,51 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         return null;
     }
 
-    private boolean isActorOnPort(IActorPort port) {
-        boolean isActorOnPort = false;
-        for ( UsedActor actor : this.usedActors ) {
-            isActorOnPort = isActorOnPort ? isActorOnPort : actor.getPort().equals(port);
-        }
-        return isActorOnPort;
-    }
-
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        if ( isActorOnPort(motorOnAction.getPort()) ) {
-            String methodName;
-            boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorOnAction.getPort());
-            boolean duration = motorOnAction.getParam().getDuration() != null;
-            if ( duration ) {
-                methodName = isRegulated ? "hal.rotateRegulatedMotor('" : "hal.rotateUnregulatedMotor('";
-            } else {
-                methodName = isRegulated ? "hal.turnOnRegulatedMotor('" : "hal.turnOnUnregulatedMotor('";
-            }
-            this.sb.append(methodName + motorOnAction.getPort().toString() + "', ");
-            motorOnAction.getParam().getSpeed().visit(this);
-            if ( duration ) {
-                this.sb.append(", " + getEnumCode(motorOnAction.getDurationMode()));
-                this.sb.append(", ");
-                motorOnAction.getDurationValue().visit(this);
-            }
-            this.sb.append(")");
-        }
+
         return null;
     }
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        if ( isActorOnPort(motorSetPowerAction.getPort()) ) {
-            boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
-            String methodName = isRegulated ? "hal.setRegulatedMotorSpeed('" : "hal.setUnregulatedMotorSpeed('";
-            this.sb.append(methodName + motorSetPowerAction.getPort().toString() + "', ");
-            motorSetPowerAction.getPower().visit(this);
-            this.sb.append(")");
-        }
+
         return null;
     }
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        if ( isActorOnPort(motorGetPowerAction.getPort()) ) {
-            boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorGetPowerAction.getPort());
-            String methodName = isRegulated ? "hal.getRegulatedMotorSpeed('" : "hal.getUnregulatedMotorSpeed('";
-            this.sb.append(methodName + motorGetPowerAction.getPort().toString() + "')");
-        }
+
         return null;
     }
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        if ( isActorOnPort(motorStopAction.getPort()) ) {
-            this.sb.append("hal.stopMotor('").append(motorStopAction.getPort().toString()).append("', ").append(getEnumCode(motorStopAction.getMode())).append(
-                ')');
-        }
+
         return null;
     }
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        if ( isActorOnPort(this.brickConfiguration.getLeftMotorPort()) && isActorOnPort(this.brickConfiguration.getRightMotorPort()) ) {
-            boolean isDuration = driveAction.getParam().getDuration() != null;
-            String methodName = isDuration ? "hal.driveDistance(" : "hal.regulatedDrive(";
-            this.sb.append(methodName);
-            this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
-            this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "', False, ");
-            this.sb.append(getEnumCode(driveAction.getDirection()) + ", ");
-            driveAction.getParam().getSpeed().visit(this);
-            if ( isDuration ) {
-                this.sb.append(", ");
-                driveAction.getParam().getDuration().getValue().visit(this);
-            }
-            this.sb.append(")");
-        }
+
         return null;
     }
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        if ( isActorOnPort(this.brickConfiguration.getLeftMotorPort()) && isActorOnPort(this.brickConfiguration.getRightMotorPort()) ) {
-            boolean isDuration = turnAction.getParam().getDuration() != null;
-            boolean isRegulated = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
-            String methodName = "hal.rotateDirection" + (isDuration ? "Angle" : isRegulated ? "Regulated" : "Unregulated") + "(";
-            this.sb.append(methodName);
-            this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
-            this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "', False, ");
-            this.sb.append(getEnumCode(turnAction.getDirection()) + ", ");
-            turnAction.getParam().getSpeed().visit(this);
-            if ( isDuration ) {
-                this.sb.append(", ");
-                turnAction.getParam().getDuration().getValue().visit(this);
-            }
-            this.sb.append(")");
-        }
+
         return null;
     }
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        if ( isActorOnPort(this.brickConfiguration.getLeftMotorPort()) && isActorOnPort(this.brickConfiguration.getRightMotorPort()) ) {
-            this.sb.append("hal.stopMotors(");
-            this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
-            this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "')");
-        }
+
         return null;
     }
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        if ( isActorOnPort(this.brickConfiguration.getLeftMotorPort()) && isActorOnPort(this.brickConfiguration.getRightMotorPort()) ) {
-            MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
 
-            this.sb.append("hal.driveInCurve(");
-            this.sb.append(getEnumCode(curveAction.getDirection()) + ", ");
-            this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
-            curveAction.getParamLeft().getSpeed().visit(this);
-            this.sb.append(", '" + this.brickConfiguration.getRightMotorPort().toString() + "', ");
-            curveAction.getParamRight().getSpeed().visit(this);
-            if ( duration != null ) {
-                this.sb.append(", ");
-                duration.getValue().visit(this);
-            }
-            this.sb.append(")");
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        String encoderSensorPort = encoderSensor.getPort().toString();
-        if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
-            this.sb.append("hal.resetMotorTacho('" + encoderSensorPort + "')");
-        } else {
-            this.sb.append("hal.getMotorTachoValue('" + encoderSensorPort + "', " + getEnumCode(encoderSensor.getMode()) + ")");
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        String gyroSensorPort = gyroSensor.getPort().getPortNumber();
-        if ( gyroSensor.getMode() == GyroSensorMode.RESET ) {
-            this.sb.append("hal.resetGyroSensor('" + gyroSensorPort + "')");
-        } else {
-            this.sb.append("hal.getGyroSensorValue('" + gyroSensorPort + "', " + getEnumCode(gyroSensor.getMode()) + ")");
-        }
         return null;
     }
 
@@ -491,7 +358,10 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("hal.isPressed('" + touchSensor.getPort().getPortNumber() + "')");
+        this.sb.append("hal.sample_touch_sensor(" + getEnumCode(touchSensor.getPort()));
+        this.sb.append(", ");
+        this.sb.append(getEnumCode(touchSensor.getSlot()));
+        this.sb.append(")");
         return null;
     }
 
@@ -507,6 +377,18 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
         this.sb.append("hal.sample_accelerometer_sensor(" + getEnumCode(accelerometerSensor.getPort()) + ")");
+        return null;
+    }
+
+    @Override
+    public Void visitDropOffSensor(DropOffSensor<Void> dropOffSensor) {
+        this.sb.append("hal.sample_dropoff_sensor(" + getEnumCode(dropOffSensor.getPort()) + ")");
+        return null;
+    }
+
+    @Override
+    public Void visitWallSensor(WallSensor<Void> wallSensor) {
+        this.sb.append("hal.sample_wall_sensor()");
         return null;
     }
 
@@ -781,56 +663,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
     }
 
     @Override
-    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReadAction) {
-        this.sb.append("hal.readMessage(");
-        bluetoothReadAction.getConnection().visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
-        this.sb.append("hal.establishConnectionTo(");
-        if ( !bluetoothConnectAction.getAddress().getKind().hasName("STRING_CONST") ) {
-            this.sb.append("str(");
-            bluetoothConnectAction.getAddress().visit(this);
-            this.sb.append(")");
-        } else {
-            bluetoothConnectAction.getAddress().visit(this);
-        }
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
-        this.sb.append("hal.sendMessage(");
-        bluetoothSendAction.getConnection().visit(this);
-        this.sb.append(", ");
-        if ( !bluetoothSendAction.getMsg().getKind().hasName("STRING_CONST") ) {
-            this.sb.append("str(");
-            bluetoothSendAction.getMsg().visit(this);
-            this.sb.append(")");
-        } else {
-            bluetoothSendAction.getMsg().visit(this);
-        }
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
-        this.sb.append("hal.waitForConnection()");
-        return null;
-    }
-
-    @Override
     public Void visitConnectConst(ConnectConst<Void> connectConst) {
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
         return null;
     }
 

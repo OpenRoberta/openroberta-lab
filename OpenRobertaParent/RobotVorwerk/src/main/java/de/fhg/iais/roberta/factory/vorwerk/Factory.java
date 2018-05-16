@@ -16,7 +16,6 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.vorwerk.BrickCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.vorwerk.SimulationCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
@@ -111,7 +110,7 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public RobotSimulationCheckVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
-        return new SimulationCheckVisitor(brickConfiguration);
+        return null;
     }
 
     @Override
