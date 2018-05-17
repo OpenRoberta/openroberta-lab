@@ -40,6 +40,7 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
         this.port = metaDataBean.getPort();
         this.mode = metaDataBean.getMode();
         this.slot = metaDataBean.getSlot();
+        this.isPortInMutation = metaDataBean.isPortInMutation();
     }
 
     /**
@@ -122,7 +123,7 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
             addMutation = true;
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().toString());
             if ( this.isPortInMutation ) {
-                JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, this.port.toString());
+                mutation.setPort(getPort().toString());
             }
         }
         if ( !this.getPort().toString().equals(BlocklyConstants.NO_PORT) ) {
@@ -132,10 +133,6 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
         if ( !this.getSlot().toString().equals(BlocklyConstants.NO_SLOT) ) {
             String fieldValue = getSlot().getValues()[0];
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SLOT, fieldValue);
-        }
-        if ( !this.getSlot().toString().equals(BlocklyConstants.NO_SLOT) && !this.getSlot().toString().equals(BlocklyConstants.EMPTY_SLOT) ) {
-            addMutation = true;
-            mutation.setPort(getPort().toString());
         }
         if ( addMutation ) {
             jaxbDestination.setMutation(mutation);
