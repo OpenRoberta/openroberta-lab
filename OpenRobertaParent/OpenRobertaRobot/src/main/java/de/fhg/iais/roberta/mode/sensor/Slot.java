@@ -12,6 +12,7 @@ public enum Slot implements ISlot {
     LEFT( "LEFT" ),
     RIGHT( "RIGHT" ),
     FRONT( "FRONT" ),
+    SIDE( "SIDE" ),
     REAR( "REAR" ),
     MIDDLE( "MIDDLE" ),
     YAW( "YAW" ),

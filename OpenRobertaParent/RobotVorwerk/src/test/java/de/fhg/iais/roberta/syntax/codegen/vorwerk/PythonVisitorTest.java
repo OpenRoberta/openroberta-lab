@@ -43,6 +43,25 @@ public class PythonVisitorTest {
     }
 
     @Test
+    public void visitTouchSensor_GetValuesFromAllPortsAndSlots_ReturnsCorrectPythonProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + GLOBALS
+                + "\nitem = True\n"
+                + "def run():\n"
+                + "    global item\n"
+                + "    item = hal.sample_touch_sensor('left', 'front')\n"
+                + "    item = hal.sample_touch_sensor('left', 'side')\n"
+                + "    item = hal.sample_touch_sensor('right', 'front')\n"
+                + "    item = hal.sample_touch_sensor('right', 'side')\n"
+                + "\n"
+                + MAIN_METHOD;
+
+        assertCodeIsOk(expectedResult, "/sensors/touch.xml");
+    }
+
+    @Test
     public void visitUltrasonicsSensor_GetValuesFromAllPortsAndSlots_ReturnsCorrectPythonProgram() throws Exception {
         String expectedResult =
             "" //
@@ -115,6 +134,35 @@ public class PythonVisitorTest {
                 + MAIN_METHOD;
 
         assertCodeIsOk(expectedResult, "/sensors/wall.xml");
+    }
+
+    @Test
+    public void visitDriveForward_GetValuesFromAllPortsAndSlots_ReturnsCorrectPythonProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + GLOBALS
+                + "\ndef run():\n"
+                + "    hal.drive_distance('foreward', 30, 20)\n"
+                + "    hal.drive_distance('backward', 30, 20)\n"
+                + "\n"
+                + MAIN_METHOD;
+
+        assertCodeIsOk(expectedResult, "/actors/drive.xml");
+    }
+
+    @Test
+    public void visitMotorStop_GetValuesFromAllPortsAndSlots_ReturnsCorrectPythonProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + GLOBALS
+                + "\ndef run():\n"
+                + "    hal.stop_motors()\n"
+                + "\n"
+                + MAIN_METHOD;
+
+        assertCodeIsOk(expectedResult, "/actors/stop.xml");
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {

@@ -84,7 +84,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
     private PythonVisitor(VorwerkConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation, ILanguage language) {
         super(programPhrases, indentation);
 
-        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
+        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(programPhrases, null);
 
         this.brickConfiguration = brickConfiguration;
 
@@ -317,7 +317,11 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-
+        this.sb.append("hal.drive_distance(" + getEnumCode(driveAction.getDirection()) + ", ");
+        driveAction.getParam().getSpeed().visit(this);
+        this.sb.append(", ");
+        driveAction.getParam().getDuration().getValue().visit(this);
+        this.sb.append(")");
         return null;
     }
 
@@ -329,7 +333,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-
+        this.sb.append("hal.stop_motors()");
         return null;
     }
 
