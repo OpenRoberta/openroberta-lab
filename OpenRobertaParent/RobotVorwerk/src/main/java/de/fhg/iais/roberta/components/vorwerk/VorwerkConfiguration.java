@@ -1,9 +1,12 @@
 package de.fhg.iais.roberta.components.vorwerk;
 
+import java.util.HashMap;
+
 import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
+import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -17,8 +20,16 @@ public class VorwerkConfiguration extends Configuration {
     private static Actor leftMotor = new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT);
     private static Actor rightMotor = new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT);
 
+    @SuppressWarnings("serial")
     public VorwerkConfiguration(String ipAddress, String portNumber, String userName, String password) {
-        super(null, null, 0.0, 0.0);
+        super(new HashMap<IActorPort, Actor>() {
+            {
+                put(ActorPort.LEFT, leftMotor);
+                put(ActorPort.RIGHT, rightMotor);
+
+            }
+        }, null, 0.0, 0.0);
+
         this.ipAddress = ipAddress;
         this.portNumber = portNumber;
         this.userName = userName;

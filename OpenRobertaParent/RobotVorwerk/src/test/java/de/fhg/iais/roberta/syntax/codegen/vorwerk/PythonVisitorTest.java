@@ -238,6 +238,36 @@ public class PythonVisitorTest {
         assertCodeIsOk(expectedResult, "/actors/vacuum_off.xml");
     }
 
+    @Test
+    public void visitMotorOn_LeftRightDistance20Power30_ReturnsCorrectPythonProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + GLOBALS
+                + "\ndef run():\n"
+                + "    hal.left_motor_on(30, 20)\n"
+                + "    hal.right_motor_on(30, 20)\n"
+                + "\n"
+                + MAIN_METHOD;
+
+        assertCodeIsOk(expectedResult, "/actors/motor_on.xml");
+    }
+
+    @Test
+    public void visitMotorStop_LeftRightStop_ReturnsCorrectPythonProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + GLOBALS
+                + "\ndef run():\n"
+                + "    hal.left_motor_stop()\n"
+                + "    hal.right_motor_stop()\n"
+                + "\n"
+                + MAIN_METHOD;
+
+        assertCodeIsOk(expectedResult, "/actors/motor_stop.xml");
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         String b = this.h.generatePython(fileName, brickConfiguration);
         Assert.assertEquals(a, b);

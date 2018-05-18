@@ -236,7 +236,11 @@ public class PythonVisitor extends RobotPythonVisitor
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-
+        this.sb.append("hal." + motorOnAction.getPort().getPortNumber() + "_motor_on(");
+        motorOnAction.getParam().getSpeed().visit(this);
+        this.sb.append(", ");
+        motorOnAction.getDurationValue().visit(this);
+        this.sb.append(")");
         return null;
     }
 
@@ -254,7 +258,7 @@ public class PythonVisitor extends RobotPythonVisitor
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-
+        this.sb.append("hal." + motorStopAction.getPort().getPortNumber() + "_motor_stop()");
         return null;
     }
 
