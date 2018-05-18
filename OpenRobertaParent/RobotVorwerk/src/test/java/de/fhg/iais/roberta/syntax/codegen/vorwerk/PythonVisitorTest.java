@@ -165,6 +165,79 @@ public class PythonVisitorTest {
         assertCodeIsOk(expectedResult, "/actors/stop.xml");
     }
 
+    @Test
+    public void visitPlayFile_PlaySounds1to4_ReturnsCorrectPythonProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + GLOBALS
+                + "\ndef run():\n"
+                + "    hal.play_sound(0)\n"
+                + "    hal.play_sound(1)\n"
+                + "    hal.play_sound(2)\n"
+                + "    hal.play_sound(3)\n"
+                + "\n"
+                + MAIN_METHOD;
+
+        assertCodeIsOk(expectedResult, "/actors/play_sound.xml");
+    }
+
+    @Test
+    public void visitBrushOn_TurnsOnTheBrushSpeed50_ReturnsCorrectPythonProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + GLOBALS
+                + "\ndef run():\n"
+                + "    hal.brush_on(50)\n"
+                + "\n"
+                + MAIN_METHOD;
+
+        assertCodeIsOk(expectedResult, "/actors/brush_on.xml");
+    }
+
+    @Test
+    public void visitBrushOff_TurnsOffTheBrush_ReturnsCorrectPythonProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + GLOBALS
+                + "\ndef run():\n"
+                + "    hal.brush_off()\n"
+                + "\n"
+                + MAIN_METHOD;
+
+        assertCodeIsOk(expectedResult, "/actors/brush_off.xml");
+    }
+
+    @Test
+    public void visitVacuumOn_TurnsOnTheVacuumSpeed60_ReturnsCorrectPythonProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + GLOBALS
+                + "\ndef run():\n"
+                + "    hal.vacuum_on(60)\n"
+                + "\n"
+                + MAIN_METHOD;
+
+        assertCodeIsOk(expectedResult, "/actors/vacuum_on.xml");
+    }
+
+    @Test
+    public void visitVacuumOff_TurnsOffTheVacuum_ReturnsCorrectPythonProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + GLOBALS
+                + "\ndef run():\n"
+                + "    hal.vacuum_off()\n"
+                + "\n"
+                + MAIN_METHOD;
+
+        assertCodeIsOk(expectedResult, "/actors/vacuum_off.xml");
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         String b = this.h.generatePython(fileName, brickConfiguration);
         Assert.assertEquals(a, b);

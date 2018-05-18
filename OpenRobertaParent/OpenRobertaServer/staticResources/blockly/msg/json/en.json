@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-05-17 13:21:49.287581",
+		"lastupdated": "2018-05-18 09:53:34.856577",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1384,5 +1384,17 @@
 	"BRICK_IPADDRESS": "ip address",
 	"BRICK_PORT": "port",
 	"BRICK_USERNAME": "user name",
-	"BRICK_PASSWORD": "password"
+	"BRICK_PASSWORD": "password",
+	"BRUSH_ON": "Turn Brush On (RPM)",
+	"BRUSH_ON_TOOLTIP": "Turns on the brush with RPM of the motor (0<=RPM<=10000)",
+	"BRUSH_OFF": "Turn Brush Off",
+	"BRUSH_OFF_TOOLTIP": "Turn the brush off.",
+	"SIDE_BRUSH_OFF": "Turn Side Brush Off",
+	"SIDE_BRUSH_OFF_TOOLTIP": "Turn the side brush off.",
+	"SIDE_BRUSH_STATUS": "Side Brush",
+	"SIDE_BRUSH_TOOLTIP": "Turn on/off the side brush.",
+	"VACUUM_ON": "Turn Vacuum On (%)",
+	"VACUUM_ON_TOOLTIP": "Turns on the vacuum speed in procent",
+	"VACUUM_OFF": "Turn Vacuum Off",
+	"VACUUM_OFF_TOOLTIP": "Turn the vacuum off."
 }

@@ -161,6 +161,9 @@ public abstract class RobotPythonVisitor extends CommonLanguageVisitor {
             case NUMBER_INT:
                 this.sb.append("0");
                 break;
+            case NUMBER:
+                this.sb.append("0.0");
+                break;
             case CAPTURED_TYPE:
                 this.sb.append("None");
                 break;

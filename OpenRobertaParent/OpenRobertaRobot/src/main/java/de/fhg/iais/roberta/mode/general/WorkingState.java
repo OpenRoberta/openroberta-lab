@@ -14,11 +14,11 @@ public enum WorkingState implements IWorkingState {
         this.values = values;
     }
 
-    public static WorkingState get(String direction) {
-        if ( (direction == null) || direction.isEmpty() ) {
-            throw new DbcException("Invalid Modus: " + direction);
+    public static WorkingState get(String workingState) {
+        if ( (workingState == null) || workingState.isEmpty() ) {
+            throw new DbcException("Invalid Modus: " + workingState);
         }
-        String sUpper = direction.trim().toUpperCase(Locale.GERMAN);
+        String sUpper = workingState.trim().toUpperCase(Locale.GERMAN);
         for ( WorkingState p : WorkingState.values() ) {
             if ( p.toString().equals(sUpper) ) {
                 return p;
@@ -29,7 +29,7 @@ public enum WorkingState implements IWorkingState {
                 }
             }
         }
-        throw new DbcException("Invalid Modus: " + direction);
+        throw new DbcException("Invalid Modus: " + workingState);
     }
 
     @Override

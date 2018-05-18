@@ -10,11 +10,6 @@ import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
@@ -29,6 +24,11 @@ import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
+import de.fhg.iais.roberta.syntax.action.vorwerk.BrushOff;
+import de.fhg.iais.roberta.syntax.action.vorwerk.BrushOn;
+import de.fhg.iais.roberta.syntax.action.vorwerk.SideBrush;
+import de.fhg.iais.roberta.syntax.action.vorwerk.VacuumOff;
+import de.fhg.iais.roberta.syntax.action.vorwerk.VacuumOn;
 import de.fhg.iais.roberta.syntax.check.hardware.vorwerk.UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.codegen.RobotPythonVisitor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
@@ -59,8 +59,6 @@ import de.fhg.iais.roberta.syntax.sensor.vorwerk.WallSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
@@ -70,8 +68,8 @@ import de.fhg.iais.roberta.visitor.vorwerk.VorwerkAstVisitor;
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
-public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisitor<Void>, AstActorDisplayVisitor<Void>, AstActorMotorVisitor<Void>,
-    AstActorLightVisitor<Void>, AstActorSoundVisitor<Void>, VorwerkAstVisitor<Void> {
+public class PythonVisitor extends RobotPythonVisitor
+    implements AstSensorsVisitor<Void>, AstActorMotorVisitor<Void>, AstActorSoundVisitor<Void>, VorwerkAstVisitor<Void> {
     protected final VorwerkConfiguration brickConfiguration;
 
     /**
@@ -128,12 +126,6 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         this.sb.append("hal.waitFor(");
         waitTimeStmt.getTime().visit(this);
         this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        this.sb.append("hal.clearDisplay()");
         return null;
     }
 
@@ -217,57 +209,8 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
     }
 
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
-        this.sb.append("hal.ledOn(" + getEnumCode(lightAction.getColor()) + ", " + getEnumCode(lightAction.getBlinkMode()) + ")");
-        return null;
-    }
-
-    @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        switch ( lightStatusAction.getStatus() ) {
-            case OFF:
-                this.sb.append("hal.ledOff()");
-                break;
-            case RESET:
-                this.sb.append("hal.resetLED()");
-                break;
-            default:
-                throw new DbcException("Invalid LED status mode!");
-        }
-        return null;
-    }
-
-    @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        this.sb.append("hal.playFile(" + playFileAction.getFileName() + ")");
-        return null;
-    }
-
-    @Override
-    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        this.sb.append("hal.drawPicture(predefinedImages['").append(showPictureAction.getPicture()).append("'], ");
-        showPictureAction.getX().visit(this);
-        this.sb.append(", ");
-        showPictureAction.getY().visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        this.sb.append("hal.drawText(");
-        if ( !showTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
-            this.sb.append("str(");
-            showTextAction.getMsg().visit(this);
-            this.sb.append(")");
-        } else {
-            showTextAction.getMsg().visit(this);
-        }
-        this.sb.append(", ");
-        showTextAction.getX().visit(this);
-        this.sb.append(", ");
-        showTextAction.getY().visit(this);
-        this.sb.append(")");
+        this.sb.append("hal.play_sound(" + playFileAction.getFileName() + ")");
         return null;
     }
 
@@ -312,6 +255,40 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
 
+        return null;
+    }
+
+    @Override
+    public Void visitBrushOn(BrushOn<Void> brushOn) {
+        this.sb.append("hal.brush_on(");
+        brushOn.getSpeed().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitBrushOff(BrushOff<Void> brushOff) {
+        this.sb.append("hal.brush_off()");
+        return null;
+    }
+
+    @Override
+    public Void visitSideBrush(SideBrush<Void> sideBrush) {
+        this.sb.append("hal.side_brush_" + sideBrush.getWorkingState().toString().toLowerCase() + "()");
+        return null;
+    }
+
+    @Override
+    public Void visitVacuumOn(VacuumOn<Void> vacuumOn) {
+        this.sb.append("hal.vacuum_on(");
+        vacuumOn.getSpeed().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitVacuumOff(VacuumOff<Void> vacuumOff) {
+        this.sb.append("hal.vacuum_off()");
         return null;
     }
 
