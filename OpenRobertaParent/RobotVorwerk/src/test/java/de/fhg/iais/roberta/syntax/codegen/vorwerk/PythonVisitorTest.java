@@ -16,7 +16,7 @@ public class PythonVisitorTest {
             + "#!/usr/bin/python\n\n"
             + "from __future__ import absolute_import\n"
             + "from roberta import Hal\n"
-            + "from roberta.BlocklyMethods import BlocklyMethods\n"
+            + "from roberta import BlocklyMethods\n"
             + "import math\n\n"
             + "class BreakOutOfALoop(Exception): pass\n"
             + "class ContinueLoop(Exception): pass\n\n";
@@ -29,9 +29,9 @@ public class PythonVisitorTest {
             + "    try:\n"
             + "        run()\n"
             + "    except Exception as e:\n"
-            + "        print 'Fehler im Vorwerk'\n"
-            + "        print e.__class__.__name__\n"
-            + "        print e\n"
+            + "        print('Fehler im Vorwerk')\n"
+            + "        print(e.__class__.__name__)\n"
+            + "        print(e)\n"
             + "if __name__ == \"__main__\":\n"
             + "    main()";
     private static Configuration brickConfiguration;

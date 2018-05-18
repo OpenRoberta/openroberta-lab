@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-05-17 07:56:09.201383",
+		"lastupdated": "2018-05-17 13:21:49.287581",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1380,5 +1380,9 @@
 	"MODE_INFO": "information",
 	"ABOUT": "about",
 	"THETA": "theta",
-	"START_PROGRAM_AUTOMOMOUSLIFE": "autonomous behaviour"
+	"START_PROGRAM_AUTOMOMOUSLIFE": "autonomous behaviour",
+	"BRICK_IPADDRESS": "ip address",
+	"BRICK_PORT": "port",
+	"BRICK_USERNAME": "user name",
+	"BRICK_PASSWORD": "password"
 }

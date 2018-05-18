@@ -680,7 +680,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         this.sb.append("#!/usr/bin/python\n\n");
         this.sb.append("from __future__ import absolute_import\n");
         this.sb.append("from roberta import Hal\n");
-        this.sb.append("from roberta.BlocklyMethods import BlocklyMethods\n");
+        this.sb.append("from roberta import BlocklyMethods\n");
         this.sb.append("import math\n\n");
 
         this.sb.append("class BreakOutOfALoop(Exception): pass\n");
@@ -700,10 +700,10 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         this.sb.append(INDENT).append("try:\n");
         this.sb.append(INDENT).append(INDENT).append("run()\n");
         this.sb.append(INDENT).append("except Exception as e:\n");
-        this.sb.append(INDENT).append(INDENT).append("print 'Fehler im Vorwerk'\n");
-        this.sb.append(INDENT).append(INDENT).append("print e.__class__.__name__\n");
+        this.sb.append(INDENT).append(INDENT).append("print('Fehler im Vorwerk')\n");
+        this.sb.append(INDENT).append(INDENT).append("print(e.__class__.__name__)\n");
         // FIXME: we can only print about 30 chars
-        this.sb.append(INDENT).append(INDENT).append("print e");
+        this.sb.append(INDENT).append(INDENT).append("print(e)");
 
         this.sb.append("\n");
         this.sb.append("if __name__ == \"__main__\":\n");
