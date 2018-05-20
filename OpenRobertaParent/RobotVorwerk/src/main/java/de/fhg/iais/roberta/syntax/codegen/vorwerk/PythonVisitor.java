@@ -123,7 +123,7 @@ public class PythonVisitor extends RobotPythonVisitor
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
-        this.sb.append("hal.waitFor(");
+        this.sb.append("hal.wait(");
         waitTimeStmt.getTime().visit(this);
         this.sb.append(")");
         return null;
