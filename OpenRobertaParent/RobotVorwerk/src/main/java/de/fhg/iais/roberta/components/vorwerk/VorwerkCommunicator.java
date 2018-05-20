@@ -75,7 +75,7 @@ public class VorwerkCommunicator {
             session.connect();
 
             return session;
-        } catch ( JSchException e ) {
+        } catch ( Exception e ) {
             System.out.println(e);
             return null;
         }
