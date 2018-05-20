@@ -546,11 +546,7 @@ public interface IRobotFactory {
                 return PinTouchSensor.make(sensorMetaDataBean, properties, comment);
             case BlocklyConstants.ULTRASONIC:
                 sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        getSensorPort(port),
-                        getUltrasonicSensorMode(sensorType.getSensorMode()),
-                        getSlot(BlocklyConstants.EMPTY_SLOT),
-                        isPortInMutation);
+                    new SensorMetaDataBean(getSensorPort(port), getUltrasonicSensorMode(sensorType.getSensorMode()), getSlot(slot), isPortInMutation);
                 return UltrasonicSensor.make(sensorMetaDataBean, properties, comment);
             case BlocklyConstants.COLOUR:
                 sensorMetaDataBean =

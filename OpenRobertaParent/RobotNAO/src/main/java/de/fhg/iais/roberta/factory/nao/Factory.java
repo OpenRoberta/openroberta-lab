@@ -203,5 +203,4 @@ public class Factory extends AbstractRobotFactory {
                 return super.createSensor(sensorType, port, slot, isPortInMutation, properties, comment);
         }
     }
-
 }

@@ -30,7 +30,7 @@ public final class AccelerometerSensor<V> extends ExternalSensor<V> {
      * @return read only object of class {@link Gyroscope}
      */
     public static <V> AccelerometerSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new AccelerometerSensor<>(sensorMetaDataBean, properties, comment);
+        return new AccelerometerSensor<V>(sensorMetaDataBean, properties, comment);
     }
 
     @Override

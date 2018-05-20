@@ -5,10 +5,14 @@ import java.util.HashMap;
 import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.Sensor;
+import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
+import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
+import de.fhg.iais.roberta.mode.sensor.vorwerk.SensorPort;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class VorwerkConfiguration extends Configuration {
@@ -28,7 +32,19 @@ public class VorwerkConfiguration extends Configuration {
                 put(ActorPort.RIGHT, rightMotor);
 
             }
-        }, null, 0.0, 0.0);
+        }, new HashMap<ISensorPort, Sensor>() {
+            {
+                put(SensorPort.LEFT_ULTRASONIC, new Sensor(SensorType.ULTRASONIC));
+                put(SensorPort.CENTER_ULTRASONIC, new Sensor(SensorType.ULTRASONIC));
+                put(SensorPort.RIGHT_ULTRASONIC, new Sensor(SensorType.ULTRASONIC));
+                put(SensorPort.LEFT, new Sensor(SensorType.TOUCH));
+                put(SensorPort.RIGHT, new Sensor(SensorType.TOUCH));
+                put(SensorPort.X, new Sensor(SensorType.ACCELEROMETER));
+                put(SensorPort.Y, new Sensor(SensorType.ACCELEROMETER));
+                put(SensorPort.Z, new Sensor(SensorType.ACCELEROMETER));
+                put(SensorPort.STRENGTH, new Sensor(SensorType.ACCELEROMETER));
+            }
+        }, 0.0, 0.0);
 
         this.ipAddress = ipAddress;
         this.portNumber = portNumber;
