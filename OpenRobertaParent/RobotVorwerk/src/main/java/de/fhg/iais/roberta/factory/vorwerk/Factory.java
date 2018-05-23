@@ -44,6 +44,10 @@ public class Factory extends AbstractRobotFactory {
             new CompilerWorkflow(
                 robertaProperties.getTempDirForUserProjects(),
                 robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.robotPropertyNumber + ".compiler.resources.dir"));
+        String ip = this.vorwerkProperties.getProperty("robot.ip.address");
+        String username = this.vorwerkProperties.getProperty("robot.username");
+        String password = this.vorwerkProperties.getProperty("robot.password");
+        ((CompilerWorkflow) this.robotCompilerWorkflow).setConnection(ip, username, password);
 
         addBlockTypesFromProperties("Vorwerk.property", this.vorwerkProperties);
 

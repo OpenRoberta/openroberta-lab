@@ -32,6 +32,10 @@ public class VorwerkCommunicator {
         this.pathToCompilerResourcesDir = pathToCompilerResourcesDir;
     }
 
+    public VorwerkCommunicator(String pathToCompilerResourcesDir) {
+        this.pathToCompilerResourcesDir = pathToCompilerResourcesDir;
+    }
+
     public String getIp() {
         return this.ip;
     }

@@ -25,7 +25,11 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
 
     public CompilerWorkflow(String pathToCrosscompilerBaseDir, String pathToCompilerResourcesDir) {
         this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
-        this.vorwerkCommunicator = new VorwerkCommunicator("10.116.20.73", "pi", "raspberry", pathToCompilerResourcesDir);
+        this.vorwerkCommunicator = new VorwerkCommunicator(pathToCompilerResourcesDir);
+    }
+
+    public void setConnection(String ip, String username, String password) {
+        this.vorwerkCommunicator.updateRobotInformation(ip, username, password);
     }
 
     @Override
