@@ -51,13 +51,15 @@ public class VorwerkCommunicator {
         Session session = createSession(this.username, this.ip, 22, this.password);
         try {
             key = sshCommand("mkdir roberta");
-            for ( String fname : fileNames ) {
-                copyLocalToRemote(session, this.pathToCompilerResourcesDir + "roberta", "roberta", fname);
+            if ( key == Key.VORWERK_PROGRAM_UPLOAD_SUCCESSFUL ) {
+                for ( String fname : fileNames ) {
+                    copyLocalToRemote(session, this.pathToCompilerResourcesDir + "roberta", "roberta", fname);
+                }
+                copyLocalToRemote(session, path, ".", programName);
+                key = sshCommand("python " + programName);
+                key = sshCommand("rm " + programName);
+                key = sshCommand("rm -r roberta");
             }
-            copyLocalToRemote(session, path, ".", programName);
-            key = sshCommand("python " + programName);
-            key = sshCommand("rm " + programName);
-            key = sshCommand("rm -r roberta");
             session.disconnect();
         } catch ( Exception e ) {
             session.disconnect();
@@ -76,7 +78,7 @@ public class VorwerkCommunicator {
             Session session = jsch.getSession(user, host, port);
             session.setConfig(config);
             session.setPassword(password);
-            session.connect();
+            session.connect(5000);
 
             return session;
         } catch ( Exception e ) {
@@ -206,46 +208,49 @@ public class VorwerkCommunicator {
     private Key sshCommand(String command) {
         try {
             Session session = createSession(this.username, this.ip, 22, this.password);
+            if ( session != null ) {
+                //open channel and send command
+                Channel channel = session.openChannel("exec");
+                ((ChannelExec) channel).setCommand(command);
 
-            //open channel and send command
-            Channel channel = session.openChannel("exec");
-            ((ChannelExec) channel).setCommand(command);
+                //set streams
+                channel.setInputStream(null);
+                ((ChannelExec) channel).setErrStream(System.err);
+                InputStream in = channel.getInputStream();
 
-            //set streams
-            channel.setInputStream(null);
-            ((ChannelExec) channel).setErrStream(System.err);
-            InputStream in = channel.getInputStream();
+                //establish channel connection
+                channel.connect();
 
-            //establish channel connection
-            channel.connect();
-
-            //show messages on the ssh channel
-            byte[] tmp = new byte[1024];
-            while ( true ) {
-                while ( in.available() > 0 ) {
-                    int i = in.read(tmp, 0, 1024);
-                    if ( i < 0 ) {
+                //show messages on the ssh channel
+                byte[] tmp = new byte[1024];
+                while ( true ) {
+                    while ( in.available() > 0 ) {
+                        int i = in.read(tmp, 0, 1024);
+                        if ( i < 0 ) {
+                            break;
+                        }
+                        //System.out.print(new String(tmp, 0, i));
+                    }
+                    if ( channel.isClosed() ) {
+                        if ( in.available() > 0 ) {
+                            continue;
+                        }
+                        // LOG.info("exit-status: " + channel.getExitStatus());
                         break;
                     }
-                    //System.out.print(new String(tmp, 0, i));
-                }
-                if ( channel.isClosed() ) {
-                    if ( in.available() > 0 ) {
-                        continue;
+                    try {
+                        Thread.sleep(1000);
+                    } catch ( Exception ee ) {
                     }
-                    // LOG.info("exit-status: " + channel.getExitStatus());
-                    break;
                 }
-                try {
-                    Thread.sleep(1000);
-                } catch ( Exception ee ) {
-                }
-            }
 
-            //disconnect from channel and session
-            channel.disconnect();
-            session.disconnect();
-            return Key.VORWERK_PROGRAM_UPLOAD_SUCCESSFUL;
+                //disconnect from channel and session
+                channel.disconnect();
+                session.disconnect();
+                return Key.VORWERK_PROGRAM_UPLOAD_SUCCESSFUL;
+            } else {
+                return Key.VORWERK_PROGRAM_UPLOAD_ERROR_SSH_CONNECTION;
+            }
         } catch ( Exception e ) {
             System.out.println(e);
             return Key.VORWERK_PROGRAM_UPLOAD_ERROR_SSH_CONNECTION;

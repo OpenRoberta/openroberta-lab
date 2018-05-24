@@ -34,7 +34,8 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
             TOKEN : 'token',
             AGENT : 'arduinoAgent',
             AUTO : 'autoConnection',
-            AGENTORTOKEN : 'arduinoAgentOrToken'
+            AGENTORTOKEN : 'arduinoAgentOrToken',
+            LOCAL : 'local'
         }
 
         exports.user = {};
@@ -94,7 +95,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
             }, 'init gui state model');
         }
         getInitFromServer();
-        
+
         return ready.promise();
     }
     exports.init = init;

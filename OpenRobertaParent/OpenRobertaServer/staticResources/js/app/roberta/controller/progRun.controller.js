@@ -46,7 +46,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
         var language = GUISTATE_C.getLanguage();
 
         var connectionType = GUISTATE_C.getConnectionTypeEnum();
-        if (GUISTATE_C.getConnection() == connectionType.AUTO) {
+        if (GUISTATE_C.getConnection() == connectionType.AUTO || GUISTATE_C.getConnection() == connectionType.LOCAL) {
             PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
                 runForAutoConnection(result);
                 PROG_C.reloadProgram(result);
@@ -71,8 +71,12 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             var filename = GUISTATE_C.getProgramName();
             if (GUISTATE_C.isProgramToDownload() || navigator.userAgent.toLowerCase().match(/iPad|iPhone|android/i) != null) {
                 // either the user doesn't want to see the modal anymore or he uses a smartphone / tablet, where you cannot choose the download folder.
-
                 UTIL.download(filename + '.hex', result.compiledCode);
+                setTimeout(function() {
+                    GUISTATE_C.setConnectionBusy(false);
+                }, 5000);
+                MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+            } else if (GUISTATE_C.getConnection() == connectionType.LOCAL) {
                 setTimeout(function() {
                     GUISTATE_C.setConnectionBusy(false);
                 }, 5000);

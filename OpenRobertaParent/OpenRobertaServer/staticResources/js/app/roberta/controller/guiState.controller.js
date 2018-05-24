@@ -202,6 +202,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             break;
         case GUISTATE.gui.connectionType.AUTO:
             break;
+        case GUISTATE.gui.connectionType.LOCAL:
+            break;
         case GUISTATE.gui.connectionType.AGENT:
             break;
         default:
@@ -296,6 +298,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             $('#menuRunProg').parent().addClass('disabled');
             $('#menuConnect').parent().removeClass('disabled');
             break;
+        case GUISTATE.gui.connectionType.LOCAL:
         case GUISTATE.gui.connectionType.AUTO:
             SOCKET_C.listRobotStop();
             //console.log('autoConnection');
@@ -987,6 +990,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
     exports.getAvailableHelp = getAvailableHelp;
 
     function updateMenuStatus() {
+        // TODO revice this function, because isAgent is the exception
         switch (SOCKET_C.getPortList().length) {
         case 0:
             if (getConnection() !== GUISTATE.gui.connectionType.AGENTORTOKEN) {
