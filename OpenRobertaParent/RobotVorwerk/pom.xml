@@ -20,15 +20,7 @@
 	<artifactId>RobotVorwerk</artifactId>
 	<name>RobotVorwerk</name>
 	<description>the plugin for the Vorwerk robot</description>
-	<properties>
-		<ev3runtime.v0.version>2.6.2</ev3runtime.v0.version>
-		<ev3runtime.v1.version>2.6.2</ev3runtime.v1.version>
-		<ev3classes.v0.version>0.9.0</ev3classes.v0.version>
-		<ev3classes.v1.version>0.9.1</ev3classes.v1.version>
-		<dbusjava.v0.version>0.9.0</dbusjava.v0.version>
-		<dbusjava.v1.version>0.9.1</dbusjava.v1.version>
-		<jna.version>3.2.7</jna.version>
-	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>de.fhg.iais.openroberta</groupId>
@@ -50,19 +42,4 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.9</version>
-			</plugin>
-		</plugins>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
-	</build>
 </project>
