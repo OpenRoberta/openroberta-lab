@@ -50,6 +50,8 @@ public class VorwerkCommunicator {
 
         Session session = createSession(this.username, this.ip, 22, this.password);
         try {
+            key = sshCommand("rm " + programName);
+            key = sshCommand("rm -r roberta");
             key = sshCommand("mkdir roberta");
             if ( key == Key.VORWERK_PROGRAM_UPLOAD_SUCCESSFUL ) {
                 for ( String fname : fileNames ) {
@@ -89,7 +91,7 @@ public class VorwerkCommunicator {
 
     private static void copyLocalToRemote(Session session, String from, String to, String fileName) throws JSchException, IOException {
         boolean ptimestamp = true;
-        from = from + File.separator + fileName;
+        from = from + "/" + fileName;
 
         // exec 'scp -t rfile' remotely
         String command = "scp " + (ptimestamp ? "-p" : "") + " -t " + to;
@@ -110,10 +112,10 @@ public class VorwerkCommunicator {
             File _lfile = new File(from);
 
             if ( ptimestamp ) {
-                command = "T" + (_lfile.lastModified() / 1000) + " 0";
+                command = "T" + _lfile.lastModified() / 1000 + " 0";
                 // The access time should be sent here,
                 // but it is not accessible with JavaAPI ;-<
-                command += (" " + (_lfile.lastModified() / 1000) + " 0\n");
+                command += " " + _lfile.lastModified() / 1000 + " 0\n";
                 out.write(command.getBytes());
                 out.flush();
                 if ( checkAck(in) != 0 ) {
