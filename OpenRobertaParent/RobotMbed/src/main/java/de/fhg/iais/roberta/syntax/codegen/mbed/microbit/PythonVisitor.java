@@ -487,7 +487,7 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
 
     @Override
     public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
-        this.sb.append("\"" + gestureSensor.getMode() + "\" == microbit.accelerometer.current_gesture()");
+        this.sb.append("\"" + gestureSensor.getMode().toString().toLowerCase().replace("_", " ") + "\" == microbit.accelerometer.current_gesture()");
         return null;
     }
 

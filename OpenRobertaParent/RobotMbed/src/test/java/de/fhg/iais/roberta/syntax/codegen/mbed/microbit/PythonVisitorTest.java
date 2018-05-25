@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.syntax.codegen.mbed.microbit;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Configuration;
@@ -324,15 +323,25 @@ public class PythonVisitorTest {
         assertCodeIsOk(expectedResult, "/expr/image_create.xml");
     }
 
-    @Ignore("Test is ignored until next commit")
     @Test
     public void visitGestureSensor_ScriptGetCurrentGestureAndDisplay_ReturnsCoorectMicroPythonScript() throws Exception {
         String expectedResult =
             "" //
                 + IMPORTS
                 + "\n"
-                + "microbit.display.scroll(str(\"face down\" == microbit.accelerometer.current_gesture()))\n"
-                + "microbit.display.scroll(str(\"left\" == microbit.accelerometer.current_gesture()))";
+                + "def run():\n"
+                + "    global timer1\n"
+                + "    microbit.display.scroll(str(\"face down\" == microbit.accelerometer.current_gesture()))\n"
+                + "    microbit.display.scroll(str(\"left\" == microbit.accelerometer.current_gesture()))\n"
+                + "\n"
+                + "def main():\n"
+                + "    try:\n"
+                + "        run()\n"
+                + "    except Exception as e:\n"
+                + "        raise\n"
+                + "\n"
+                + "if __name__ == \"__main__\":\n"
+                + "    main()";
 
         assertCodeIsOk(expectedResult, "/sensor/check_gesture.xml");
     }
@@ -359,15 +368,25 @@ public class PythonVisitorTest {
         assertCodeIsOk(expectedResult, "/sensor/get_temperature.xml");
     }
 
-    @Ignore("Test is ignored until next commit")
     @Test
     public void visitPinTouchSensor_ScriptDisplayPin0andPin2areTouched_ReturnsCorrectMicroPythonScript() throws Exception {
         String expectedResult =
             "" //
                 + IMPORTS
                 + "\n"
-                + "microbit.display.scroll(str(microbit.pin0.is_touched()))\n"
-                + "microbit.display.scroll(str(microbit.pin2.is_touched()))";
+                + "def run():\n"
+                + "    global timer1\n"
+                + "    microbit.display.scroll(str(microbit.pin0.is_touched()))\n"
+                + "    microbit.display.scroll(str(microbit.pin2.is_touched()))\n"
+                + "\n"
+                + "def main():\n"
+                + "    try:\n"
+                + "        run()\n"
+                + "    except Exception as e:\n"
+                + "        raise\n"
+                + "\n"
+                + "if __name__ == \"__main__\":\n"
+                + "    main()";
 
         assertCodeIsOk(expectedResult, "/sensor/pin_is_touched.xml");
     }
@@ -420,59 +439,89 @@ public class PythonVisitorTest {
         assertCodeIsOk(expectedResult, "/sensor/acceleration_sensor.xml");
     }
 
-    @Ignore("Test is ignored until next commit")
     @Test
     public void check_noLoops_returnsNoLabeledLoops() throws Exception {
         String a =
             "" //
                 + IMPORTS
                 + "\n"
-                + "if 20 == 30:\n"
-                + "    while True:\n"
-                + "        if microbit.button_a.is_pressed() == True:\n"
-                + "            break";
+                + "def run():\n"
+                + "    global timer1\n"
+                + "    if 20 == 30:\n"
+                + "        while True:\n"
+                + "            if microbit.button_a.is_pressed() == True:\n"
+                + "                break\n"
+                + "\n"
+                + "def main():\n"
+                + "    try:\n"
+                + "        run()\n"
+                + "    except Exception as e:\n"
+                + "        raise\n"
+                + "\n"
+                + "if __name__ == \"__main__\":\n"
+                + "    main()";
 
         assertCodeIsOk(a, "/stmts/no_loops.xml");
     }
 
-    @Ignore("Test is ignored until next commit")
     @Test
     public void check_nestedLoopsNoBreakorContinue_returnsNoLabeledLoops() throws Exception {
         String a =
             "" //
                 + IMPORTS
                 + "\n"
-                + "while True:\n"
-                + "    if 30 == 20:\n"
-                + "        while True:\n"
-                + "            if microbit.button_a.is_pressed() == True:\n"
-                + "                break\n"
-                + "    for i in range(1, 10, 1):\n"
-                + "        pass";
+                + "def run():\n"
+                + "    global timer1\n"
+                + "    while True:\n"
+                + "        if 30 == 20:\n"
+                + "            while True:\n"
+                + "                if microbit.button_a.is_pressed() == True:\n"
+                + "                    break\n"
+                + "        for i in range(int(1), int(10), int(1)):\n"
+                + "            pass\n"
+                + "\n"
+                + "def main():\n"
+                + "    try:\n"
+                + "        run()\n"
+                + "    except Exception as e:\n"
+                + "        raise\n"
+                + "\n"
+                + "if __name__ == \"__main__\":\n"
+                + "    main()";
 
         assertCodeIsOk(a, "/stmts/nested_loops.xml");
     }
 
-    @Ignore("Test is ignored until next commit")
     @Test
     public void check_loopWithBreakAndContinueInWait_returnsOneLabeledLoop() throws Exception {
         String a =
             "" //
                 + IMPORTS
                 + "\n"
-                + "while True:\n"
+                + "def run():\n"
+                + "    global timer1\n"
+                + "    while True:\n"
+                + "        try:\n"
+                + "            while True:\n"
+                + "                if microbit.button_a.is_pressed() == True:\n"
+                + "                    raise BreakOutOfALoop\n"
+                + "                    break\n"
+                + "                if microbit.button_a.is_pressed() == True:\n"
+                + "                    raise ContinueLoop\n"
+                + "                    break\n"
+                + "        except BreakOutOfALoop:\n"
+                + "            break\n"
+                + "        except ContinueLoop:\n"
+                + "            continue\n"
+                + "\n"
+                + "def main():\n"
                 + "    try:\n"
-                + "        while True:\n"
-                + "            if microbit.button_a.is_pressed() == True:\n"
-                + "                raise BreakOutOfALoop\n"
-                + "                break\n"
-                + "            if microbit.button_a.is_pressed() == True:\n"
-                + "                raise ContinueLoop\n"
-                + "                break\n"
-                + "    except BreakOutOfALoop:\n"
-                + "        break\n"
-                + "    except ContinueLoop:\n"
-                + "        continue";
+                + "        run()\n"
+                + "    except Exception as e:\n"
+                + "        raise\n"
+                + "\n"
+                + "if __name__ == \"__main__\":\n"
+                + "    main()";
 
         assertCodeIsOk(a, "/stmts/loop_with_break_and_continue_inside_wait.xml");
     }
