@@ -97,8 +97,9 @@ public class ClientAdmin {
                 String pathToHelp = staticRecourcesDir+ File.separator + "help";                
                 listOfFileNames = Util.getListOfFileNames(pathToHelp, "html");               
                 server.put("help", listOfFileNames);
+                String theme = robertaProperties.getStringProperty("server.theme");
+                server.put("theme", theme);
                 response.put("server", server);
-                System.out.println(server);
                 LOG.info("success: create init object");
                 Util.addSuccessInfo(response, Key.INIT_SUCCESS);
             } else if ( cmd.equals("setToken") ) {

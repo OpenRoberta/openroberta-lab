@@ -17,12 +17,12 @@ public class RobertaProperties {
     public static final String ROBOT_WHITE_LIST_PROPERTY_KEY = "robot.whitelist";
     public static final String ROBOT_DEFAULT_PROPERTY_KEY = "robot.default";
     public static final String PLUGIN_TEMPDIR_PROPERTY_KEY = "plugin.tempdir";
-
+   
     private final Properties robertaProperties;
     private final String defaultRobot;
     private final List<String> robotsOnWhiteList;
     private final String tempDir;
-
+ 
     /**
      * store the final set of properties, that control the OpenRoberta system.<br>
      * <br>

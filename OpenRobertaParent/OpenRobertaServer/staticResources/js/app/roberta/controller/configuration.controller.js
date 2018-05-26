@@ -41,7 +41,8 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
             },
             checkInTask : [ '-Brick' ],
             variableDeclaration : true,
-            robControls : true
+            robControls : true,
+            theme: GUISTATE_C.getTheme()
         });
         bricklyWorkspace.setDevice(GUISTATE_C.getRobotGroup());
         bricklyWorkspace.setVersion('2.0');

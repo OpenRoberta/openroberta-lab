@@ -35,7 +35,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
             },
             checkInTask : [ 'start', '_def', 'event' ],
             variableDeclaration : true,
-            robControls : true
+            robControls : true,
+            theme: GUISTATE_C.getTheme()
         });
         $(window).resize();
         blocklyWorkspace.setDevice(GUISTATE_C.getRobotGroup());
