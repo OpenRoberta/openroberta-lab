@@ -28,15 +28,13 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
         this.vorwerkCommunicator = new VorwerkCommunicator(pathToCompilerResourcesDir);
     }
 
-    public void setConnection(String ip, String username, String password) {
-        this.vorwerkCommunicator.updateRobotInformation(ip, username, password);
-    }
-
     @Override
     public String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
         if ( data.getErrorMessage() != null ) {
             return null;
         }
+        VorwerkConfiguration configuration = (VorwerkConfiguration) data.getBrickConfiguration();
+        this.vorwerkCommunicator.updateRobotInformation(configuration.getIpAddress(), configuration.getUserName(), configuration.getPassword());
         return PythonVisitor.generate((VorwerkConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
     }
 

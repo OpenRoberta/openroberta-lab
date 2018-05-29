@@ -64,7 +64,7 @@ public class Jaxb2VorwerkConfigurationTransformer {
 
     private Configuration blockToBrickConfiguration(Block block) {
         switch ( block.getType() ) {
-            case "naoBrick_NAO-Brick":
+            case "robBrick_vorwerk-Brick":
                 List<Field> fields = extractFields(block, (short) 4);
                 String ipAddress = extractField(fields, "IP_ADDRESS", 0);
                 String portNumber = extractField(fields, "PORT", 1);
