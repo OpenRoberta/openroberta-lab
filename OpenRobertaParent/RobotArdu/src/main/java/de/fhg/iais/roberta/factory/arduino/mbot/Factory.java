@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.mode.actors.arduino.mbot.ActorPort;
+import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.Axis;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -32,7 +32,8 @@ public class Factory extends AbstractRobotFactory {
     private final Properties mbotProperties;
     private final String name;
     private final int robotPropertyNumber;
-    Map<String, SensorPort> sensorToPorts = IRobotFactory.getPortsFromProperties(Util1.loadProperties("classpath:mbotports.properties"));
+    Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:mbotports.properties"));
+    Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:mbotports.properties"));
 
     public Factory(RobertaProperties robertaProperties) {
         super(robertaProperties);
@@ -54,7 +55,7 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public IActorPort getActorPort(String port) {
-        return IRobotFactory.getPort(port, ActorPort.class);
+        return getActorPortValue(port, this.actorToPorts);
     }
 
     @Override
@@ -64,7 +65,7 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public ISensorPort getSensorPort(String port) {
-        return getPortValue(port, this.sensorToPorts);
+        return getSensorPortValue(port, this.sensorToPorts);
     }
 
     @Override

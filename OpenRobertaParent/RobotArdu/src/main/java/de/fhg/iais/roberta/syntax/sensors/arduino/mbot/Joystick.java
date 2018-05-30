@@ -79,7 +79,7 @@ public class Joystick<V> extends ExternalSensor<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        String fieldValue = this.getPort().getPortNumber();
+        String fieldValue = this.getPort().getOraName();
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
         return jaxbDestination;
     }

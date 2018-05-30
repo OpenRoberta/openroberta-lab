@@ -13,9 +13,9 @@ public class PinSetPullActionTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=384, y=50], "
                 + "MainTask [], "
-                + "PinSetPullAction [UP, P12], "
-                + "PinSetPullAction [DOWN, P0], "
-                + "PinSetPullAction [NONE, P1]]]]";
+                + "PinSetPullAction [UP, 0], "
+                + "PinSetPullAction [DOWN, 1], "
+                + "PinSetPullAction [NONE, 2]]]]";
 
         String result = this.h.generateTransformerString("/action/pin_set_pull.xml");
 

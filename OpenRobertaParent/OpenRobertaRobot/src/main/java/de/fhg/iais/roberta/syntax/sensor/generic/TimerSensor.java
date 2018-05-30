@@ -79,7 +79,7 @@ public class TimerSensor<V> extends ExternalSensor<V> {
         if ( getMode().toString().equals("RESET") ) {
             Block jaxbDestination = new Block();
             JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-            String fieldValue = getPort().getPortNumber();
+            String fieldValue = getPort().getOraName();
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
             return jaxbDestination;
         } else {

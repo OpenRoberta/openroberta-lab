@@ -15,7 +15,7 @@ public class LightSensorActionTest {
     @Test
     public void make() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=137, y=188], LightSensorAction [RED, ON, S1], LightSensorAction [GREEN, ON, S2], LightSensorAction [BLUE, ON, S3], LightSensorAction [RED, OFF, S4]]]]";
+            "BlockAST [project=[[Location [x=137, y=188], LightSensorAction [RED, ON, 1], LightSensorAction [GREEN, ON, 2], LightSensorAction [BLUE, ON, 3], LightSensorAction [RED, OFF, 4]]]]";
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/actions/action_LightSensorAction.xml"));
     }
 
@@ -35,10 +35,10 @@ public class LightSensorActionTest {
         LightSensorAction<Void> cs2 = (LightSensorAction<Void>) transformer.getTree().get(0).get(3);
         LightSensorAction<Void> cs3 = (LightSensorAction<Void>) transformer.getTree().get(0).get(4);
 
-        Assert.assertEquals("S1", cs.getPort().getPortName());
-        Assert.assertEquals("S2", cs1.getPort().getPortName());
-        Assert.assertEquals("S3", cs2.getPort().getPortName());
-        Assert.assertEquals("S4", cs3.getPort().getPortName());
+        Assert.assertEquals("S1", cs.getPort().getCodeName());
+        Assert.assertEquals("S2", cs1.getPort().getCodeName());
+        Assert.assertEquals("S3", cs2.getPort().getCodeName());
+        Assert.assertEquals("S4", cs3.getPort().getCodeName());
 
     }
 
@@ -61,7 +61,7 @@ public class LightSensorActionTest {
             Assert.assertEquals("No enum constant de.fhg.iais.roberta.syntax.action.generic.VolumeAction.Mode.invalid", e.getMessage());
         }
     }
-    
+
     @Test
     public void getVolumeAction() throws Exception {
         String a = "BlockAST [project=[[Location [x=-2, y=189], VolumeAction [GET, NullConst [null]]]]]";

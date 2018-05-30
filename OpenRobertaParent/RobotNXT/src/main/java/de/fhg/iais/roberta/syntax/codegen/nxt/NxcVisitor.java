@@ -800,7 +800,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
         this.sb.append("SensorLight(");
-        this.sb.append(lightSensor.getPort().getPortName());
+        this.sb.append(lightSensor.getPort().getCodeName());
         this.sb.append(", ");
         switch ( (LightSensorMode) lightSensor.getMode() ) {
             case LIGHT:
@@ -843,7 +843,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
         } else {
             this.sb.append("SensorColor(");
         }
-        this.sb.append(colorSensor.getPort().getPortName());
+        this.sb.append(colorSensor.getPort().getCodeName());
         this.sb.append(", ");
         ColorSensorMode sensorMode = (ColorSensorMode) colorSensor.getMode();
         switch ( sensorMode ) {
@@ -866,7 +866,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
         this.sb.append("Sensor(");
-        this.sb.append(soundSensor.getPort().getPortName());
+        this.sb.append(soundSensor.getPort().getCodeName());
         this.sb.append(")");
         return null;
     }
@@ -907,7 +907,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        String timerNumber = timerSensor.getPort().getPortNumber();
+        String timerNumber = timerSensor.getPort().getOraName();
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
             case DEFAULT:
             case VALUE:
@@ -924,14 +924,14 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("Sensor(" + touchSensor.getPort().getPortName());
+        this.sb.append("Sensor(" + touchSensor.getPort().getCodeName());
         this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.sb.append("SensorUS(" + ultrasonicSensor.getPort().getPortName() + ")");
+        this.sb.append("SensorUS(" + ultrasonicSensor.getPort().getCodeName() + ")");
         return null;
     }
 
@@ -1381,22 +1381,22 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
             this.sb.append("SetSensor(");
             switch ( entry.getValue().getType() ) {
                 case COLOR:
-                    this.sb.append(entry.getKey().getPortName() + ", SENSOR_COLORFULL);");
+                    this.sb.append(entry.getKey().getCodeName() + ", SENSOR_COLORFULL);");
                     break;
                 case HT_COLOR:
-                    this.sb.append(entry.getKey().getPortName() + ", SENSOR_LOWSPEED);");
+                    this.sb.append(entry.getKey().getCodeName() + ", SENSOR_LOWSPEED);");
                     break;
                 case LIGHT:
-                    this.sb.append(entry.getKey().getPortName() + ", SENSOR_LIGHT);");
+                    this.sb.append(entry.getKey().getCodeName() + ", SENSOR_LIGHT);");
                     break;
                 case TOUCH:
-                    this.sb.append(entry.getKey().getPortName() + ", SENSOR_TOUCH);");
+                    this.sb.append(entry.getKey().getCodeName() + ", SENSOR_TOUCH);");
                     break;
                 case ULTRASONIC:
-                    this.sb.append(entry.getKey().getPortName() + ", SENSOR_LOWSPEED);");
+                    this.sb.append(entry.getKey().getCodeName() + ", SENSOR_LOWSPEED);");
                     break;
                 case SOUND:
-                    this.sb.append(entry.getKey().getPortName() + ", SENSOR_SOUND);");
+                    this.sb.append(entry.getKey().getCodeName() + ", SENSOR_SOUND);");
                     break;
                 default:
                     break;

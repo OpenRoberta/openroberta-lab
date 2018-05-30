@@ -5,7 +5,6 @@ import java.util.List;
 
 import de.fhg.iais.roberta.components.mbed.CalliopeConfiguration;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
-import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.GestureSensorMode;
@@ -443,7 +442,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         this.sb.append("_uBit.soundmotor.motor");
-        if ( motorOnAction.getPort() != ActorPort.AB ) {
+        if ( !motorOnAction.getPort().getCodeName().equals("AB") ) {
             this.sb.append(motorOnAction.getPort());
         }
         // fix for IT Gipfel
@@ -482,7 +481,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         this.sb.append("_uBit.soundmotor.motor");
-        if ( motorStopAction.getPort() == ActorPort.AB ) {
+        if ( motorStopAction.getPort().getCodeName().equals("AB") ) {
             this.sb.append("AOff();");
             nlIndent();
             this.sb.append("_uBit.soundmotor.motorB");
@@ -593,7 +592,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         this.sb.append("_uBit.accelerometer.get");
-        this.sb.append(gyroSensor.getPort().getPortName());
+        this.sb.append(gyroSensor.getPort().getCodeName());
         this.sb.append("()");
         return null;
     }
@@ -621,24 +620,14 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        String port = pinTouchSensor.getPort().getPortName();
-        if ( pinTouchSensor.getPort().getPortName().equals("4") ) {
-            port = "P19";
-        } else if ( pinTouchSensor.getPort().getPortName().equals("5") ) {
-            port = "P2";
-        }
+        String port = pinTouchSensor.getPort().getCodeName();
         this.sb.append("_uBit.io." + port + ".isTouched()");
         return null;
     }
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
-        String port = pinValueSensor.getPort().getPortName();
-        if ( pinValueSensor.getPort().getPortName().equals("4") ) {
-            port = "P19";
-        } else if ( pinValueSensor.getPort().getPortName().equals("5") ) {
-            port = "P2";
-        }
+        String port = pinValueSensor.getPort().getCodeName();
         this.sb.append("_uBit.io." + port);
         switch ( (PinValue) pinValueSensor.getMode() ) {
             case DIGITAL:
@@ -658,10 +647,10 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
 
     @Override
     public Void visitPinWriteValueSensor(PinWriteValue<Void> pinWriteValueSensor) {
-        String port = pinWriteValueSensor.getPort().getPortName();
-        if ( pinWriteValueSensor.getPort().getPortName().equals("4") ) {
+        String port = pinWriteValueSensor.getPort().getCodeName();
+        if ( pinWriteValueSensor.getPort().getCodeName().equals("4") ) {
             port = "P19";
-        } else if ( pinWriteValueSensor.getPort().getPortName().equals("5") ) {
+        } else if ( pinWriteValueSensor.getPort().getCodeName().equals("5") ) {
             port = "P2";
         }
         String valueType = "AnalogValue(";
@@ -676,12 +665,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
 
     @Override
     public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPullAction) {
-        String port = pinSetPullAction.getPort().getPortName();
-        if ( pinSetPullAction.getPort().getPortName().equals("4") ) {
-            port = "P19";
-        } else if ( pinSetPullAction.getPort().getPortName().equals("5") ) {
-            port = "P2";
-        }
+        String port = pinSetPullAction.getPort().getCodeName();
         this.sb.append("_uBit.io." + port + ".setPull(");
         switch ( (PinPull) pinSetPullAction.getMode() ) {
             case UP:
@@ -1140,10 +1124,10 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
         this.sb.append("_uBit.accelerometer.get");
-        if ( accelerometerSensor.getPort().getPortNumber().equals("STRENGTH") ) {
+        if ( accelerometerSensor.getPort().getOraName().equals("STRENGTH") ) {
             this.sb.append("Strength");
         } else {
-            this.sb.append(accelerometerSensor.getPort().getPortNumber());
+            this.sb.append(accelerometerSensor.getPort().getOraName());
         }
         this.sb.append("()");
         return null;

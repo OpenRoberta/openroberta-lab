@@ -7,11 +7,11 @@ import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.arduino.BotNrollConfiguration;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
+import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.BlinkMode;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
-import de.fhg.iais.roberta.mode.actors.arduino.botnroll.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -221,16 +221,16 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         final boolean reverse =
             (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD)
-                || (this.brickConfiguration.getActorOnPort(ActorPort.A).getRotationDirection() == DriveDirection.BACKWARD);
+                || (this.brickConfiguration.getActorOnPort(new ActorPort("A", "MA")).getRotationDirection() == DriveDirection.BACKWARD);
         String methodName;
         String port = null;
         final boolean isDuration = motorOnAction.getParam().getDuration() != null;
-        final boolean isServo = (motorOnAction.getPort() == ActorPort.A) || (motorOnAction.getPort() == ActorPort.D);
+        final boolean isServo = (motorOnAction.getPort().getOraName().equals("A")) || (motorOnAction.getPort().toString().equals("D"));
         if ( isServo ) {
-            methodName = motorOnAction.getPort() == ActorPort.A ? "one.servo1(" : "one.servo2(";
+            methodName = motorOnAction.getPort().getOraName().equals("A") ? "one.servo1(" : "one.servo2(";
         } else {
             methodName = isDuration ? "bnr.move1mTime(" : "one.move1m(";
-            port = motorOnAction.getPort() == ActorPort.B ? "1" : "2";
+            port = motorOnAction.getPort().getOraName().equals("B") ? "1" : "2";
         }
         this.sb.append(methodName);
         if ( !isServo ) {
@@ -260,7 +260,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        String port = motorStopAction.getPort() == ActorPort.B ? "1" : "2";
+        String port = motorStopAction.getPort().toString().equals("B") ? "1" : "2";
         if ( motorStopAction.getMode() == MotorStopMode.FLOAT ) {
             this.sb.append("one.stop1m(");
 
@@ -276,11 +276,11 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
         //this.sb.append(this.brickConfiguration.generateText("q") + "\n");
         final boolean isRegulatedDrive =
             this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated()
-                || this.brickConfiguration.getActorOnPort(ActorPort.A).isRegulated();
+                || this.brickConfiguration.getActorOnPort(new ActorPort("A", "MA")).isRegulated();
         final boolean isDuration = driveAction.getParam().getDuration() != null;
         final boolean reverse =
             (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD)
-                || (this.brickConfiguration.getActorOnPort(ActorPort.A).getRotationDirection() == DriveDirection.BACKWARD);
+                || (this.brickConfiguration.getActorOnPort(new ActorPort("A", "MA")).getRotationDirection() == DriveDirection.BACKWARD);
         final boolean localReverse = driveAction.getDirection() == DriveDirection.BACKWARD;
         String methodName;
         String sign = "";
@@ -314,11 +314,11 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
     public Void visitCurveAction(CurveAction<Void> curveAction) {
         final boolean isRegulatedDrive =
             this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated()
-                || this.brickConfiguration.getActorOnPort(ActorPort.A).isRegulated();
+                || this.brickConfiguration.getActorOnPort(new ActorPort("A", "MA")).isRegulated();
         final boolean isDuration = curveAction.getParamLeft().getDuration() != null;
         final boolean reverse =
             (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD)
-                || (this.brickConfiguration.getActorOnPort(ActorPort.A).getRotationDirection() == DriveDirection.BACKWARD);
+                || (this.brickConfiguration.getActorOnPort(new ActorPort("A", "MA")).getRotationDirection() == DriveDirection.BACKWARD);
         final boolean localReverse = curveAction.getDirection() == DriveDirection.BACKWARD;
         String methodName;
         String sign = "";
@@ -404,7 +404,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
         this.sb.append("one.readAdc(");
         // ports from 0 to 7
-        this.sb.append(lightSensor.getPort().getPortNumber()); // we could add "-1" so the number of ports would be 1-8 for users
+        this.sb.append(lightSensor.getPort().getOraName()); // we could add "-1" so the number of ports would be 1-8 for users
         // botnroll's light sensor returns values from 0 to 1023, so to get a range from 0 to 100 we divide
         // the result by 10.23
         this.sb.append(") / 10.23");
@@ -419,7 +419,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        String port = colorSensor.getPort().getPortNumber();
+        String port = colorSensor.getPort().getOraName();
         String colors;
         if ( port.equals("1") ) {
             colors = "colorsLeft, ";
@@ -478,7 +478,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        String port = infraredSensor.getPort().getPortNumber();
+        String port = infraredSensor.getPort().getOraName();
         switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
             case OBSTACLE:
                 this.sb.append("bnr.infraredSensorObstacle(");
@@ -490,7 +490,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                 throw new DbcException("Invalid Infrared Sensor Mode: " + infraredSensor.getMode());
         }
         if ( port.equals("BOTH") ) {
-            this.sb.append("3)");
+            this.sb.append(infraredSensor.getPort().getCodeName() + ")");
         } else {
             this.sb.append(port + ")");
         }
@@ -504,8 +504,8 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        String port = ultrasonicSensor.getPort().getPortNumber();
-        if ( ultrasonicSensor.getPort().getPortNumber().equals("3") ) {
+        String port = ultrasonicSensor.getPort().getOraName();
+        if ( ultrasonicSensor.getPort().getOraName().equals("3") ) {
             this.sb.append("bnr.sonar()");
         } else {
             this.sb.append("bnr.ultrasonicDistance(" + port + ")");

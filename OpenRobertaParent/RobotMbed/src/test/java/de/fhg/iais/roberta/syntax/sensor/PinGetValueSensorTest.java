@@ -13,7 +13,7 @@ public class PinGetValueSensorTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=213, y=113], "
                 + "MainTask [], "
-                + "DisplayTextAction [TEXT, SensorExpr [PinGetValueSensor [P0, ANALOG, NO_SLOT]]], DisplayTextAction [TEXT, SensorExpr [PinGetValueSensor [P12, DIGITAL, NO_SLOT]]]]]]";
+                + "DisplayTextAction [TEXT, SensorExpr [PinGetValueSensor [1, ANALOG, NO_SLOT]]], DisplayTextAction [TEXT, SensorExpr [PinGetValueSensor [0, DIGITAL, NO_SLOT]]]]]]";
 
         String result = this.h.generateTransformerString("/sensor/read_value_from_pin.xml");
 

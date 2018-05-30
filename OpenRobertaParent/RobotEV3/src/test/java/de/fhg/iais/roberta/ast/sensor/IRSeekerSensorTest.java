@@ -14,8 +14,8 @@ public class IRSeekerSensorTest {
     @Test
     public void sensorSetIRSeeker() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=258, y=138], IRSeekerSensor [S1, MODULATED, NO_SLOT]], "
-                + "[Location [x=262, y=196], IRSeekerSensor [S1, UNMODULATED, NO_SLOT]]]]";
+            "BlockAST [project=[[Location [x=258, y=138], IRSeekerSensor [1, MODULATED, NO_SLOT]], "
+                + "[Location [x=262, y=196], IRSeekerSensor [1, UNMODULATED, NO_SLOT]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_getIRSeeker.xml"));
     }
@@ -38,8 +38,8 @@ public class IRSeekerSensorTest {
         IRSeekerSensor<Void> cs = (IRSeekerSensor<Void>) transformer.getTree().get(0).get(1);
         IRSeekerSensor<Void> cs1 = (IRSeekerSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals("S1", cs.getPort().getPortName());
-        Assert.assertEquals("S1", cs1.getPort().getPortName());
+        Assert.assertEquals("S1", cs.getPort().getCodeName());
+        Assert.assertEquals("S1", cs1.getPort().getCodeName());
     }
 
     @Test

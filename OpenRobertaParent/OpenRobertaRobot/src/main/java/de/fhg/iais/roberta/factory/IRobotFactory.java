@@ -133,10 +133,10 @@ public interface IRobotFactory {
         throw new DbcException("Invalid " + modes.getName() + ": " + modeName);
     }
 
-    static Map<String, SensorPort> getPortsFromProperties(Properties properties) {
+    static Map<String, SensorPort> getSensorPortsFromProperties(Properties properties) {
         Map<String, SensorPort> sensorToPorts = new HashMap<>();
         for ( Entry<Object, Object> property : properties.entrySet() ) {
-            SensorPort sensorPort = new SensorPort((String) property.getValue(), (String) property.getKey());
+            SensorPort sensorPort = new SensorPort((String) property.getKey(), (String) property.getValue());
             sensorToPorts.put((String) property.getKey(), sensorPort);
         }
         return sensorToPorts;
@@ -151,27 +151,23 @@ public interface IRobotFactory {
      * @param port-SensorPort map
      * @return SensorPort {@link ISensorPort}
      */
-    default ISensorPort getPortValue(String port, Map<String, SensorPort> sensorToPorts) {
+    default ISensorPort getSensorPortValue(String port, Map<String, SensorPort> sensorToPorts) {
         if ( port == null ) {
             throw new DbcException("Null sensor port!");
         }
         if ( port.isEmpty() ) {
             return sensorToPorts.get("NO_PORT");
         }
-        System.out.println("port");
-        System.out.println(sensorToPorts);
-        System.out.println(port);
         final String sUpper = port.trim().toUpperCase(Locale.GERMAN);
         SensorPort sensorPort = sensorToPorts.get(sUpper);
         if ( sensorPort != null ) {
             return sensorPort;
         }
         for ( Map.Entry<String, SensorPort> portName : sensorToPorts.entrySet() ) {
-            if ( portName.getValue().getPortNumber().equals(port) ) {
+            if ( portName.getValue().getCodeName().equals(port) ) {
                 return portName.getValue();
             }
         }
-        System.out.println("!");
         throw new DbcException("Invalid sensor port: " + port);
     }
 
@@ -186,23 +182,52 @@ public interface IRobotFactory {
      */
     ISensorPort getSensorPort(String port);
 
-    static <E extends IActorPort> E getPort(String port, Class<E> ports) {
+    static Map<String, ActorPort> getActorPortsFromProperties(Properties properties) {
+        Map<String, ActorPort> actorToPorts = new HashMap<>();
+        for ( Entry<Object, Object> property : properties.entrySet() ) {
+            ActorPort actorPort = new ActorPort((String) property.getKey(), (String) property.getValue());
+            actorToPorts.put((String) property.getKey(), actorPort);
+        }
+        return actorToPorts;
+    }
+
+    /**
+     * Get a actor port from {@link IActorPort} given string parameter and mapping from a port to ActorPort. It is possible for one sensor port to have
+     * multiple string mappings. Throws exception if the sensor port does not exists. <br>
+     * It can only be used by subclasses of IRobotFactory.
+     *
+     * @param name of the sensor port
+     * @param port-ActorPort map
+     * @return ActorPort {@link IActorPort}
+     */
+    default IActorPort getActorPortValue(String port, Map<String, ActorPort> actorToPorts) {
         if ( port == null ) {
-            throw new DbcException("Invalid " + ports.getName() + ": " + port);
+            throw new DbcException("Null actor port!");
+        }
+        if ( port.isEmpty() ) {
+            return actorToPorts.get("NO_PORT");
         }
         final String sUpper = port.trim().toUpperCase(Locale.GERMAN);
-        for ( final E mode : ports.getEnumConstants() ) {
-            if ( mode.toString().equals(sUpper) ) {
-                return mode;
-            }
-            for ( final String value : mode.getValues() ) {
-                if ( sUpper.equals(value.toUpperCase()) ) {
-                    return mode;
-                }
+        ActorPort actorPort = actorToPorts.get(sUpper);
+        if ( actorPort != null ) {
+            return actorPort;
+        }
+        for ( Map.Entry<String, ActorPort> portName : actorToPorts.entrySet() ) {
+            if ( portName.getValue().getCodeName().equals(port) ) {
+                return portName.getValue();
             }
         }
-        throw new DbcException("Invalid " + ports.getName() + ": " + port);
+        throw new DbcException("Invalid actor port: " + port);
     }
+
+    /**
+     * Get actor port from {@link IActorPort} enumeration given string parameter. It is possible for actor port to have multiple string mappings. Throws
+     * exception if the actor port does not exists.
+     *
+     * @param name of the actor port
+     * @return actor port from the enum {@link IActorPort}
+     */
+    IActorPort getActorPort(String port);
 
     /**
      * Get index location enumeration from {@link IIndexLocation} given string parameter. It is possible for one index location to have multiple string
@@ -340,17 +365,6 @@ public interface IRobotFactory {
      */
     default IMotorMoveMode getMotorMoveMode(String mode) {
         return IRobotFactory.getModeValue(mode, MotorMoveMode.class);
-    }
-
-    /**
-     * Get actor port from {@link IActorPort} enumeration given string parameter. It is possible for actor port to have multiple string mappings. Throws
-     * exception if the actor port does not exists.
-     *
-     * @param name of the actor port
-     * @return actor port from the enum {@link IActorPort}
-     */
-    default IActorPort getActorPort(String port) {
-        return IRobotFactory.getPort(port, ActorPort.class);
     }
 
     /**

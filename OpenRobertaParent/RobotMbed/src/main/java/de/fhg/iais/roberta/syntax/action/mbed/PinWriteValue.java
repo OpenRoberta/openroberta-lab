@@ -117,7 +117,7 @@ public class PinWriteValue<V> extends Action<V> {
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, this.value);
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VALUETYPE, this.pinValue.toString());
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PIN, this.port.getPortNumber());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PIN, this.port.getOraName());
         return jaxbDestination;
     }
 }

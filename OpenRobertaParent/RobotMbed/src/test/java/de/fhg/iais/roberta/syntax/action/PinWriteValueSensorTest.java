@@ -13,7 +13,7 @@ public class PinWriteValueSensorTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=384, y=50], "
                 + "MainTask [], "
-                + "PinWriteValueSensor [ANALOG, P1, NumConst [1]], PinWriteValueSensor [DIGITAL, 4, NumConst [1]]]]]";
+                + "PinWriteValueSensor [ANALOG, 2, NumConst [1]], PinWriteValueSensor [DIGITAL, 4, NumConst [1]]]]]";
 
         String result = this.h.generateTransformerString("/action/write_value_to_pin.xml");
 

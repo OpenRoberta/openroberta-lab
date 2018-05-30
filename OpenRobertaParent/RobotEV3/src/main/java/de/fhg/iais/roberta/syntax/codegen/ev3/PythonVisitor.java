@@ -485,7 +485,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        String colorSensorPort = colorSensor.getPort().getPortNumber();
+        String colorSensorPort = colorSensor.getPort().getOraName();
         switch ( (ColorSensorMode) colorSensor.getMode() ) {
             case AMBIENTLIGHT:
                 this.sb.append("hal.getColorSensorAmbient('" + colorSensorPort + "')");
@@ -518,7 +518,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        String gyroSensorPort = gyroSensor.getPort().getPortNumber();
+        String gyroSensorPort = gyroSensor.getPort().getOraName();
         if ( gyroSensor.getMode() == GyroSensorMode.RESET ) {
             this.sb.append("hal.resetGyroSensor('" + gyroSensorPort + "')");
         } else {
@@ -529,7 +529,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        String compassSensorPort = compassSensor.getPort().getPortNumber();
+        String compassSensorPort = compassSensor.getPort().getOraName();
         switch ( (CompassSensorMode) compassSensor.getMode() ) {
             case CALIBRATE:
                 // Calibration is not supported by ev3dev hitechnic sensor for now
@@ -546,7 +546,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        String infraredSensorPort = infraredSensor.getPort().getPortNumber();
+        String infraredSensorPort = infraredSensor.getPort().getOraName();
         switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
             case DISTANCE:
                 this.sb.append("hal.getInfraredSensorDistance('" + infraredSensorPort + "')");
@@ -563,7 +563,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
 
     @Override
     public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
-        String irSeekerSensorPort = irSeekerSensor.getPort().getPortNumber();
+        String irSeekerSensorPort = irSeekerSensor.getPort().getOraName();
         switch ( (IRSeekerSensorMode) irSeekerSensor.getMode() ) {
             case MODULATED:
                 this.sb.append("hal.getHiTecIRSeekerSensorValue('" + irSeekerSensorPort + "', 'AC')");
@@ -579,7 +579,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        String timerNumber = timerSensor.getPort().getPortNumber();
+        String timerNumber = timerSensor.getPort().getOraName();
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
             case DEFAULT:
             case VALUE:
@@ -596,13 +596,13 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("hal.isPressed('" + touchSensor.getPort().getPortNumber() + "')");
+        this.sb.append("hal.isPressed('" + touchSensor.getPort().getOraName() + "')");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        String ultrasonicSensorPort = ultrasonicSensor.getPort().getPortNumber();
+        String ultrasonicSensorPort = ultrasonicSensor.getPort().getOraName();
         if ( ultrasonicSensor.getMode() == UltrasonicSensorMode.DISTANCE ) {
             this.sb.append("hal.getUltraSonicSensorDistance('" + ultrasonicSensorPort + "')");
         } else {
@@ -613,7 +613,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        String soundSensorPort = soundSensor.getPort().getPortNumber();
+        String soundSensorPort = soundSensor.getPort().getOraName();
         this.sb.append("hal.getSoundLevel('" + soundSensorPort + "')");
         return null;
     }
@@ -649,14 +649,14 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         this.sb.append(", ");
         IndexLocation where1 = (IndexLocation) getSubFunct.getStrParam().get(0);
         this.sb.append(getEnumCode(where1));
-        if ( (where1 == IndexLocation.FROM_START) || (where1 == IndexLocation.FROM_END) ) {
+        if ( where1 == IndexLocation.FROM_START || where1 == IndexLocation.FROM_END ) {
             this.sb.append(", ");
             getSubFunct.getParam().get(1).visit(this);
         }
         this.sb.append(", ");
         IndexLocation where2 = (IndexLocation) getSubFunct.getStrParam().get(1);
         this.sb.append(getEnumCode(where2));
-        if ( (where2 == IndexLocation.FROM_START) || (where2 == IndexLocation.FROM_END) ) {
+        if ( where2 == IndexLocation.FROM_START || where2 == IndexLocation.FROM_END ) {
             this.sb.append(", ");
             if ( getSubFunct.getParam().size() == 3 ) {
                 getSubFunct.getParam().get(2).visit(this);
@@ -1021,7 +1021,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
 
     private boolean isActorUsed(Actor actor, IActorPort port) {
         for ( UsedActor usedActor : this.usedActors ) {
-            if ( (port == usedActor.getPort()) && (actor.getName() == usedActor.getType()) ) {
+            if ( port.equals(usedActor.getPort()) && actor.getName() == usedActor.getType() ) {
                 return true;
             }
         }
@@ -1033,7 +1033,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         for ( Map.Entry<IActorPort, Actor> entry : this.brickConfiguration.getActors().entrySet() ) {
             Actor actor = entry.getValue();
             IActorPort port = entry.getKey();
-            if ( (actor != null) && isActorUsed(actor, port) ) {
+            if ( actor != null && isActorUsed(actor, port) ) {
                 sb.append("        '").append(port.toString()).append("':");
                 sb.append(generateRegenerateActor(actor, port));
                 sb.append(",\n");
@@ -1044,7 +1044,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
 
     private boolean isSensorUsed(Sensor sensor, ISensorPort port) {
         for ( UsedSensor usedSensor : this.usedSensors ) {
-            if ( (port.getPortName().equals(usedSensor.getPort().getPortName())) && (sensor.getType() == usedSensor.getType()) ) {
+            if ( port.equals(usedSensor.getPort()) && sensor.getType() == usedSensor.getType() ) {
                 return true;
             }
         }
@@ -1056,8 +1056,8 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         for ( Map.Entry<ISensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
             Sensor sensor = entry.getValue();
             ISensorPort port = entry.getKey();
-            if ( (sensor != null) && isSensorUsed(sensor, port) ) {
-                sb.append("        '").append(port.getPortNumber()).append("':");
+            if ( sensor != null && isSensorUsed(sensor, port) ) {
+                sb.append("        '").append(port.getOraName()).append("':");
                 sb.append(generateRegenerateSensor(sensor, port));
                 sb.append(",\n");
             }
@@ -1143,7 +1143,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
             default:
                 throw new IllegalArgumentException("no mapping for " + sensor.getType() + "to ev3dev-lang-python");
         }
-        sb.append("Hal.make").append(name).append("(ev3dev.INPUT_").append(port.getPortNumber()).append(")");
+        sb.append("Hal.make").append(name).append("(ev3dev.INPUT_").append(port.getOraName()).append(")");
         return sb.toString();
     }
 }

@@ -16,7 +16,7 @@ public enum BrickKey implements IBrickKey {
     }
 
     @Override
-    public String getPortNumber() {
+    public String getOraName() {
         if ( this.values.length != 0 ) {
             return this.values[0];
         } else {
@@ -25,7 +25,7 @@ public enum BrickKey implements IBrickKey {
     }
 
     @Override
-    public String getPortName() {
+    public String getCodeName() {
         // TODO Auto-generated method stub
         return null;
     }

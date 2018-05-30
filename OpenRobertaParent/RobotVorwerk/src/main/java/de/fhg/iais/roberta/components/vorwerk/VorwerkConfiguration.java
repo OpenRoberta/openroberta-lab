@@ -28,8 +28,8 @@ public class VorwerkConfiguration extends Configuration {
     public VorwerkConfiguration(String ipAddress, String portNumber, String userName, String password) {
         super(new HashMap<IActorPort, Actor>() {
             {
-                put(ActorPort.LEFT, leftMotor);
-                put(ActorPort.RIGHT, rightMotor);
+                put(new ActorPort("LEFT", "LEFT"), leftMotor);
+                put(new ActorPort("RIGHT", "RIGHT"), rightMotor);
 
             }
         }, new HashMap<ISensorPort, Sensor>() {

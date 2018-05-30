@@ -82,7 +82,7 @@ public class CompassSensor<V> extends ExternalSensor<V> {
         if ( getMode().toString().equals("CALIBRATE") ) {
             jaxbDestination = new Block();
             JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, getPort().getPortNumber());
+            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, getPort().getOraName());
         }
         return jaxbDestination;
     }

@@ -291,7 +291,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements M
     }
 
     private int map(int x, int in_min, int in_max, int out_min, int out_max) {
-        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+        return (((x - in_min) * (out_max - out_min)) / (in_max - in_min)) + out_min;
     }
 
     @Override
@@ -374,14 +374,14 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements M
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        this.sb.append("createPinTouchSensor(" + pinTouchSensor.getPort().getValues()[0] + ")");
+        this.sb.append("createPinTouchSensor(" + pinTouchSensor.getPort().getOraName() + ")");
         return null;
     }
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
         this.sb.append("createPinGetValueSensor(CONST." + pinValueSensor.getMode());
-        this.sb.append(", " + pinValueSensor.getPort().getValues()[0] + ")");
+        this.sb.append(", " + pinValueSensor.getPort().getOraName() + ")");
         return null;
     }
 
@@ -389,7 +389,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements M
     public Void visitPinWriteValueSensor(PinWriteValue<Void> pinWriteValueSensor) {
         final String end = createClosingBracket();
         this.sb.append("createPinWriteValueSensor(CONST." + pinWriteValueSensor.getMode());
-        this.sb.append(", " + pinWriteValueSensor.getPort().getValues()[0] + ", ");
+        this.sb.append(", " + pinWriteValueSensor.getPort().getOraName() + ", ");
         pinWriteValueSensor.getValue().visit(this);
         this.sb.append(end);
         return null;

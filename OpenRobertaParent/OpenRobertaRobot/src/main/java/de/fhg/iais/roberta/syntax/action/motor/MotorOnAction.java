@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IMotorMoveMode;
+import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -37,7 +38,7 @@ public final class MotorOnAction<V> extends MoveAction<V> {
 
     private MotorOnAction(IActorPort port, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(port, BlockTypeContainer.getByName("MOTOR_ON_ACTION"), properties, comment);
-        Assert.isTrue(param != null && port != null);
+        Assert.isTrue((param != null) && (port != null));
         this.param = param;
 
         setReadOnly();
@@ -53,7 +54,7 @@ public final class MotorOnAction<V> extends MoveAction<V> {
      * @return read only object of class {@link MotorOnAction}
      */
     private static <V> MotorOnAction<V> make(IActorPort port, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MotorOnAction<V>(port, param, properties, comment);
+        return new MotorOnAction<>(port, param, properties, comment);
     }
 
     /**
@@ -86,10 +87,10 @@ public final class MotorOnAction<V> extends MoveAction<V> {
             Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER_INT));
             MotorDuration<V> md;
             if ( fields.size() == 1 ) {
-                md = new MotorDuration<V>(null, helper.convertPhraseToExpr(right));
+                md = new MotorDuration<>(null, helper.convertPhraseToExpr(right));
             } else {
                 String mode = helper.extractField(fields, BlocklyConstants.MOTORROTATION);
-                md = new MotorDuration<V>(factory.getMotorMoveMode(mode), helper.convertPhraseToExpr(right));
+                md = new MotorDuration<>(factory.getMotorMoveMode(mode), helper.convertPhraseToExpr(right));
             }
             mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(left)).duration(md).build();
         }
@@ -139,7 +140,9 @@ public final class MotorOnAction<V> extends MoveAction<V> {
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORPORT, getPort().toString());
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.POWER, getParam().getSpeed());
         if ( getParam().getDuration() != null ) {
-            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORROTATION, getDurationMode().toString());
+            if ( getDurationMode() != null ) {
+                JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORROTATION, getDurationMode().toString());
+            }
             JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, getDurationValue());
         }
 

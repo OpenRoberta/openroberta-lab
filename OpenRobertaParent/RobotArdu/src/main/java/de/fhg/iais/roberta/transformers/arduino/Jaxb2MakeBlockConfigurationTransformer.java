@@ -71,7 +71,7 @@ public class Jaxb2MakeBlockConfigurationTransformer {
             for ( IActorPort port : actors.keySet() ) {
                 Actor actor = actors.get(port);
                 Value hardwareComponent = new Value();
-                hardwareComponent.setName(port.getPortNumber());
+                hardwareComponent.setName(port.getOraName());
                 Block actorBlock = mkBlock(idCount++);
                 hardwareComponent.setBlock(actorBlock);
                 actorBlock.setType(actor.getName().blocklyName());

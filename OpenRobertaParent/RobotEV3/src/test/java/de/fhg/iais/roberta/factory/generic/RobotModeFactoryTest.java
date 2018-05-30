@@ -78,12 +78,12 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getActorPortFromString() {
-        Assert.assertEquals(this.factory.getActorPort("A"), ActorPort.A);
+        Assert.assertEquals(this.factory.getActorPort("A"), new ActorPort("A", "MA"));
     }
 
     @Test
     public void getActorPortByAlternativeName() {
-        Assert.assertEquals(this.factory.getActorPort("MB"), ActorPort.B);
+        Assert.assertEquals(this.factory.getActorPort("B"), new ActorPort("B", "MB"));
     }
 
     @Test(expected = DbcException.class)
@@ -278,12 +278,12 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getSensorPortFromString() {
-        Assert.assertEquals(this.factory.getSensorPort("S1").getPortName(), "S1");
+        Assert.assertEquals(this.factory.getSensorPort("S1").getCodeName(), "S1");
     }
 
     @Test
     public void getSensorPortByAlternativeName() {
-        Assert.assertEquals(this.factory.getSensorPort("4").getPortName(), "S4");
+        Assert.assertEquals(this.factory.getSensorPort("4").getCodeName(), "S4");
     }
 
     @Test(expected = DbcException.class)

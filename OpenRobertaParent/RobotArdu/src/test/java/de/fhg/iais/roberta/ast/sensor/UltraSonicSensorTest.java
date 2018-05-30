@@ -14,7 +14,7 @@ public class UltraSonicSensorTest {
     @Test
     public void sensorSetUltrasonic() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=1, y=57], UltrasonicSensor [S4, DISTANCE, NO_SLOT]], [Location [x=1, y=98], UltrasonicSensor [S2, PRESENCE, NO_SLOT]]]]";
+            "BlockAST [project=[[Location [x=1, y=57], UltrasonicSensor [4, DISTANCE, NO_SLOT]], [Location [x=1, y=98], UltrasonicSensor [2, PRESENCE, NO_SLOT]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_setUltrasonic.xml"));
     }
@@ -37,8 +37,8 @@ public class UltraSonicSensorTest {
         UltrasonicSensor<Void> cs = (UltrasonicSensor<Void>) transformer.getTree().get(0).get(1);
         UltrasonicSensor<Void> cs1 = (UltrasonicSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals("S4", cs.getPort().getPortName());
-        Assert.assertEquals("S2", cs1.getPort().getPortName());
+        Assert.assertEquals("S4", cs.getPort().getCodeName());
+        Assert.assertEquals("S2", cs1.getPort().getCodeName());
     }
 
     @Test

@@ -23,7 +23,7 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
     private final IPort port;
     private final IMode mode;
     private final ISlot slot;
-    private boolean isPortInMutation;
+    private final boolean isPortInMutation;
 
     /**
      * This constructor set the kind of the sensor object used in the AST (abstract syntax tree). All possible kinds can be found in {@link BlockType}.
@@ -127,10 +127,8 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
             }
         }
         if ( !this.getPort().toString().equals(BlocklyConstants.NO_PORT) ) {
-            String fieldValue = getPort().getPortNumber();
+            String fieldValue = getPort().getOraName();
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
-        } else {
-            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, "");
         }
         if ( !this.getSlot().toString().equals(BlocklyConstants.NO_SLOT) ) {
             String fieldValue = getSlot().getValues()[0];

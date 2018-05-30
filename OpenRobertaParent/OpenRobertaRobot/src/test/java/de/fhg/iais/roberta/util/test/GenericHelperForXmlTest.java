@@ -31,7 +31,7 @@ public class GenericHelperForXmlTest extends AbstractHelperForXmlTest {
     }
 
     private static class TestFactory extends AbstractRobotFactory {
-        Map<String, SensorPort> sensorToPorts = IRobotFactory.getPortsFromProperties(Util1.loadProperties("classpath:robotports.properties"));
+        Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:robotports.properties"));
 
         public TestFactory(RobertaProperties robertaProperties) {
             super(robertaProperties);
@@ -194,7 +194,7 @@ public class GenericHelperForXmlTest extends AbstractHelperForXmlTest {
 
         @Override
         public ISensorPort getSensorPort(String port) {
-            return getPortValue(port, this.sensorToPorts);
+            return getSensorPortValue(port, this.sensorToPorts);
         }
     }
 }

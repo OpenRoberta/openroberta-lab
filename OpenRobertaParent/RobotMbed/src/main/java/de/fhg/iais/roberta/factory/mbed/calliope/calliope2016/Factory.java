@@ -1,18 +1,11 @@
 package de.fhg.iais.roberta.factory.mbed.calliope.calliope2016;
 
-import java.util.Map;
-
-import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.factory.mbed.calliope.AbstractFactory;
 import de.fhg.iais.roberta.factory.mbed.calliope.CompilerWorkflow;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 public class Factory extends AbstractFactory {
-
-    Map<String, SensorPort> sensorToPorts = IRobotFactory.getPortsFromProperties(Util1.loadProperties("classpath:Calliopeports.properties"));
 
     public Factory(RobertaProperties robertaProperties) {
         super(robertaProperties);
@@ -26,10 +19,5 @@ public class Factory extends AbstractFactory {
                 robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.dir"));
 
         addBlockTypesFromProperties("Calliope2016.properties", this.calliopeProperties);
-    }
-
-    @Override
-    public ISensorPort getSensorPort(String port) {
-        return getPortValue(port, this.sensorToPorts);
     }
 }

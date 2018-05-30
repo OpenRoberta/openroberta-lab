@@ -111,7 +111,7 @@ public class NxtConfiguration extends Configuration {
         if ( !this.sensors.isEmpty() ) {
             sb.append("  sensor port {\n");
             for ( ISensorPort port : this.sensors.keySet() ) {
-                sb.append("    ").append(port.getPortNumber()).append(": ");
+                sb.append("    ").append(port.getOraName()).append(": ");
                 String sensor = this.sensors.get(port).getType().toString();
                 sb.append(sensor.toLowerCase()).append(";\n");
             }

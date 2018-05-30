@@ -90,7 +90,7 @@ public class EV3Configuration extends Configuration {
     public String generateText(String name) {
         StringBuilder sb = new StringBuilder();
         sb.append("robot ev3 ").append(name).append(" {\n");
-        if ( this.wheelDiameterCM != 0.0 || this.trackWidthCM != 0.0 ) { //NOSONAR : 0.0 is safe here, as it is used as 'null' value
+        if ( (this.wheelDiameterCM != 0.0) || (this.trackWidthCM != 0.0) ) { //NOSONAR : 0.0 is safe here, as it is used as 'null' value
             sb.append("  size {\n");
             sb.append("    wheel diameter ").append(Formatter.d2s(this.wheelDiameterCM)).append(" cm;\n");
             sb.append("    track width    ").append(Formatter.d2s(this.trackWidthCM)).append(" cm;\n");
@@ -99,7 +99,7 @@ public class EV3Configuration extends Configuration {
         if ( !this.sensors.isEmpty() ) {
             sb.append("  sensor port {\n");
             for ( ISensorPort port : this.sensors.keySet() ) {
-                sb.append("    ").append(port.getPortNumber()).append(": ");
+                sb.append("    ").append(port.getOraName()).append(": ");
                 String sensor = this.sensors.get(port).getType().toString();
                 sb.append(sensor.toLowerCase()).append(";\n");
             }

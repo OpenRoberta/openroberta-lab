@@ -239,9 +239,9 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
         if ( pinTouchSensor.getSlot().getValues()[0].equals("0") ) {
-            this.sb.append("( myBob.getArm(" + pinTouchSensor.getPort().getPortNumber() + ") > " + pinTouchSensor.getSlot().getValues()[0] + " )");
+            this.sb.append("( myBob.getArm(" + pinTouchSensor.getPort().getOraName() + ") > " + pinTouchSensor.getSlot().getValues()[0] + " )");
         } else {
-            this.sb.append("( myBob.getArm(" + pinTouchSensor.getPort().getPortNumber() + ") == " + pinTouchSensor.getSlot().getValues()[0] + " )");
+            this.sb.append("( myBob.getArm(" + pinTouchSensor.getPort().getOraName() + ") == " + pinTouchSensor.getSlot().getValues()[0] + " )");
         }
         return null;
     }

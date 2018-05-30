@@ -1272,7 +1272,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     }
 
     private String constructJointActuator(IPort portType, String port, String side, String axis1, String axis2) {
-        if ( portType.getPortName().equals("HEAD") ) {
+        if ( portType.getCodeName().equals("HEAD") ) {
             return port + side;
         } else {
             return side + port + axis1 + axis2;
@@ -1282,7 +1282,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     private String extractSideFromSlot(String[] slots, IPort portType) {
         String side;
         side = Character.toString(slots[0].toUpperCase().charAt(0));
-        if ( portType.getPortName().equals("HEAD") ) {
+        if ( portType.getCodeName().equals("HEAD") ) {
             side = StringUtils.capitalize(slots[0].toLowerCase());
         }
         return side;

@@ -7,8 +7,8 @@ public interface IPort extends IMode {
     /**
      * @return the number of the port
      */
-    public String getPortNumber();
+    public String getOraName();
 
-    public String getPortName();
+    public String getCodeName();
 
 }

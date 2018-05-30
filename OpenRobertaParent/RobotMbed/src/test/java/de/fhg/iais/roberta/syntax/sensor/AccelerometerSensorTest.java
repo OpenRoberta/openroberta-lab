@@ -13,9 +13,9 @@ public class AccelerometerSensorTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=88, y=63], "
                 + "MainTask [], "
-                + "DisplayTextAction [TEXT, SensorExpr [AccelerometerSensor [Pitch, VALUE, NO_SLOT]]], "
-                + "DisplayTextAction [TEXT, SensorExpr [AccelerometerSensor [Roll, VALUE, NO_SLOT]]], "
-                + "DisplayTextAction [TEXT, SensorExpr [AccelerometerSensor [Yaw, VALUE, NO_SLOT]]], "
+                + "DisplayTextAction [TEXT, SensorExpr [AccelerometerSensor [X, VALUE, NO_SLOT]]], "
+                + "DisplayTextAction [TEXT, SensorExpr [AccelerometerSensor [Y, VALUE, NO_SLOT]]], "
+                + "DisplayTextAction [TEXT, SensorExpr [AccelerometerSensor [Z, VALUE, NO_SLOT]]], "
                 + "DisplayTextAction [TEXT, SensorExpr [AccelerometerSensor [STRENGTH, VALUE, NO_SLOT]]]]]]";
 
         String result = this.h.generateTransformerString("/sensor/acceleration_sensor.xml");

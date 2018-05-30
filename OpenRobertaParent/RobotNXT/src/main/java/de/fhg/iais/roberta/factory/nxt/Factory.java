@@ -31,7 +31,8 @@ public class Factory extends AbstractRobotFactory {
     private final Properties nxtProperties;
     private final String name;
     private final int robotPropertyNumber;
-    Map<String, SensorPort> sensorToPorts = IRobotFactory.getPortsFromProperties(Util1.loadProperties("classpath:NXTports.properties"));
+    Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:NXTports.properties"));
+    Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:NXTports.properties"));
 
     public Factory(RobertaProperties robertaProperties) {
         super(robertaProperties);
@@ -47,11 +48,6 @@ public class Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public IActorPort getActorPort(String port) {
-        return IRobotFactory.getModeValue(port, ActorPort.class);
-    }
-
-    @Override
     public IPickColor getPickColor(String color) {
         return IRobotFactory.getModeValue(color, PickColor.class);
     }
@@ -63,7 +59,12 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public ISensorPort getSensorPort(String port) {
-        return getPortValue(port, this.sensorToPorts);
+        return getSensorPortValue(port, this.sensorToPorts);
+    }
+
+    @Override
+    public IActorPort getActorPort(String port) {
+        return getActorPortValue(port, this.actorToPorts);
     }
 
     @Override

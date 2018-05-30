@@ -14,8 +14,8 @@ public class CompassSensorTest {
     @Test
     public void sensorGetCompass() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=384, y=50], CompassSensor [S2, ANGLE, NO_SLOT]], "
-                + "[Location [x=384, y=100], CompassSensor [S4, COMPASS, NO_SLOT]]]]";
+            "BlockAST [project=[[Location [x=384, y=50], CompassSensor [2, ANGLE, NO_SLOT]], "
+                + "[Location [x=384, y=100], CompassSensor [4, COMPASS, NO_SLOT]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_getCompass.xml"));
     }
@@ -38,13 +38,13 @@ public class CompassSensorTest {
         CompassSensor<Void> cs = (CompassSensor<Void>) transformer.getTree().get(0).get(1);
         CompassSensor<Void> cs1 = (CompassSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals("S2", cs.getPort().getPortName());
-        Assert.assertEquals("S4", cs1.getPort().getPortName());
+        Assert.assertEquals("S2", cs.getPort().getCodeName());
+        Assert.assertEquals("S4", cs1.getPort().getCodeName());
     }
 
     @Test
     public void sensorCalibrateCompass() throws Exception {
-        String a = "BlockAST [project=[[Location [x=384, y=50], CompassSensor [S1, CALIBRATE, NO_SLOT]]]]";
+        String a = "BlockAST [project=[[Location [x=384, y=50], CompassSensor [1, CALIBRATE, NO_SLOT]]]]";
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_calibrateCompass.xml"));
     }
 

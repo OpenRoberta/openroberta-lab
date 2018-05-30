@@ -94,7 +94,7 @@ public class PinSetPullAction<V> extends Action<V> {
 
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PIN_PULL, this.pinPull.toString());
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PIN_PORT, this.port.getPortNumber());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PIN_PORT, this.port.getOraName());
 
         return jaxbDestination;
     }

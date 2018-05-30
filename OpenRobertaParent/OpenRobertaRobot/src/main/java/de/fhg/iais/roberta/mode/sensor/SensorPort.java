@@ -1,38 +1,65 @@
 package de.fhg.iais.roberta.mode.sensor;
 
+import java.util.Objects;
+
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class SensorPort implements ISensorPort, Comparable<SensorPort> {
 
-    private final String[] values;
+    private final String oraName;
+    private final String codeName;
 
-    public SensorPort(String... values) {
-        this.values = values;
+    public SensorPort(String oraName, String codeName) {
+        this.oraName = oraName;
+        this.codeName = codeName;
     }
 
     @Override
     public String[] getValues() {
-        return this.values;
+        throw new DbcException("unsupported operation");
     }
 
     @Override
-    public String getPortNumber() {
-        return this.values[0];
+    public String getOraName() {
+        return this.oraName;
     }
 
     @Override
-    public String getPortName() {
-        return this.values[1];
+    public String getCodeName() {
+        return this.codeName;
     }
 
     @Override
     public int compareTo(SensorPort other) {
-        return this.values[1].compareTo(other.values[1]);
+        int oraComp = this.oraName.compareTo(other.oraName);
+        if ( oraComp == 0 ) {
+            return this.codeName.compareTo(other.codeName);
+        } else {
+            return oraComp;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.oraName, this.codeName);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if ( obj == this ) {
+            return true;
+        }
+        if ( !(obj instanceof SensorPort) ) {
+            return false;
+        }
+        SensorPort other = (SensorPort) obj;
+        return Objects.equals(this.oraName, other.oraName) && Objects.equals(this.codeName, other.codeName);
     }
 
     @Override
     public String toString() {
-        return this.values[1];
+        return this.oraName;
     }
 
 }

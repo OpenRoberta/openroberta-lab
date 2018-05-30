@@ -122,8 +122,8 @@ public abstract class AbstractHelperForXmlTest {
         StringWriter writer = new StringWriter();
         m.marshal(blockSet, writer);
         String t = Resources.toString(AbstractHelperForXmlTest.class.getResource(fileName), Charsets.UTF_8);
-        //System.out.println(t);
-        //System.out.println(writer.toString());
+        //        System.out.println(t);
+        //        System.out.println(writer.toString());
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = XMLUnit.compareXML(writer.toString(), t);
         Assert.assertTrue(diff.identical());

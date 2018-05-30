@@ -182,8 +182,8 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         final MotorDuration<Void> duration = motorOnAction.getParam().getDuration();
-        this.sb.append(motorOnAction.getPort().getValues()[1]).append(".run(");
-        if ( this.brickConfiguration.getRightMotorPort().equals(motorOnAction.getPort()) ) {
+        this.sb.append(motorOnAction.getPort().getOraName()).append(".run(");
+        if ( this.brickConfiguration.getRightMotorPort().getCodeName().equals(motorOnAction.getPort().getCodeName()) ) {
             this.sb.append("-1*");
         }
         this.sb.append("(");
@@ -195,7 +195,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
             motorOnAction.getDurationValue().visit(this);
             this.sb.append(");");
             nlIndent();
-            this.sb.append(motorOnAction.getPort().getValues()[1]).append(".stop();");
+            this.sb.append(motorOnAction.getPort().getCodeName()).append(".stop();");
         }
         return null;
     }
@@ -212,7 +212,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        this.sb.append(motorStopAction.getPort().getValues()[1]).append(".stop();");
+        this.sb.append(motorStopAction.getPort().getCodeName()).append(".stop();");
         return null;
     }
 
@@ -275,10 +275,12 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
         switch ( (LightSensorMode) lightSensor.getMode() ) {
             case LEFT:
-                this.sb.append("lineFinder" + lightSensor.getPort().getPortNumber() + ".readSensors" + "()&2");
+                this.sb.append("lineFinder" + lightSensor.getPort().getOraName() + ".readSensors" + "()&2");
                 break;
             case RIGHT:
-                this.sb.append("lineFinder" + lightSensor.getPort().getPortNumber() + ".readSensors" + "()&1");
+                this.sb.append("lineFinder" + lightSensor.getPort().getOraName() + ".readSensors" + "()&1");
+                break;
+            default:
                 break;
 
         }
@@ -287,7 +289,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
 
     @Override
     public Void visitAmbientLightSensor(AmbientLightSensor<Void> lightSensor) {
-        this.sb.append("myLight" + lightSensor.getPort().getPortNumber() + ".read()");
+        this.sb.append("myLight" + lightSensor.getPort().getOraName() + ".read()");
         return null;
 
     }
@@ -307,7 +309,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
 
-        this.sb.append("mySound" + soundSensor.getPort().getPortNumber() + ".strength()");
+        this.sb.append("mySound" + soundSensor.getPort().getOraName() + ".strength()");
         return null;
     }
 
@@ -324,13 +326,13 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        this.sb.append("myGyro" + gyroSensor.getPort().getPortNumber() + ".getGyro" + gyroSensor.getMode().toString() + "()");
+        this.sb.append("myGyro" + gyroSensor.getPort().getOraName() + ".getGyro" + gyroSensor.getMode().toString() + "()");
         return null;
     }
 
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometer) {
-        this.sb.append("myGyro" + accelerometer.getPort().getPortNumber() + ".getAngle" + accelerometer.getMode() + "()");
+        this.sb.append("myGyro" + accelerometer.getPort().getOraName() + ".getAngle" + accelerometer.getMode() + "()");
         return null;
     }
 
@@ -341,31 +343,31 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        this.sb.append("myTemp" + temperatureSensor.getPort().getPortNumber() + ".getTemperature()");
+        this.sb.append("myTemp" + temperatureSensor.getPort().getOraName() + ".getTemperature()");
         return null;
     }
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("myTouch" + touchSensor.getPort().getPortNumber() + ".touched()");
+        this.sb.append("myTouch" + touchSensor.getPort().getOraName() + ".touched()");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.sb.append("ultraSensor" + ultrasonicSensor.getPort().getPortNumber() + ".distanceCm()");
+        this.sb.append("ultraSensor" + ultrasonicSensor.getPort().getOraName() + ".distanceCm()");
         return null;
     }
 
     @Override
     public Void visitPIRMotionSensor(PIRMotionSensor<Void> motionSensor) {
-        this.sb.append("pir" + motionSensor.getPort().getPortNumber() + ".isHumanDetected()");
+        this.sb.append("pir" + motionSensor.getPort().getOraName() + ".isHumanDetected()");
         return null;
     }
 
     @Override
     public Void visitFlameSensor(FlameSensor<Void> flameSensor) {
-        this.sb.append("flameSensor" + flameSensor.getPort().getPortNumber() + ".readAnalog()");
+        this.sb.append("flameSensor" + flameSensor.getPort().getOraName() + ".readAnalog()");
         return null;
     }
 
@@ -375,7 +377,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
          * after understanding how to implement modes this also works:
          * this.sb.append("myJoystick" + joystick.getPort().getPortNumber() + ".read" + joystick.getMode().getValues()[0] + "()");
          */
-        this.sb.append("myJoystick" + joystick.getPort().getPortNumber() + ".read" + joystick.getAxis() + "()");
+        this.sb.append("myJoystick" + joystick.getPort().getOraName() + ".read" + joystick.getAxis() + "()");
         return null;
     }
 
@@ -399,7 +401,9 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
                 case GYRO:
                 case ACCELEROMETER:
                     nlIndent();
-                    this.sb.append("myGyro" + usedSensor.getPort().getPortNumber() + ".begin();");
+                    this.sb.append("myGyro" + usedSensor.getPort().getOraName() + ".begin();");
+                    break;
+                default:
                     break;
             }
         }
@@ -412,15 +416,17 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
             switch ( (SensorType) usedSensor.getType() ) {
                 case GYRO:
                     nlIndent();
-                    this.sb.append("myGyro" + usedSensor.getPort().getPortNumber() + ".update();");
+                    this.sb.append("myGyro" + usedSensor.getPort().getOraName() + ".update();");
                     break;
                 case ACCELEROMETER:
                     nlIndent();
-                    this.sb.append("myGyro" + usedSensor.getPort().getPortNumber() + ".update();");
+                    this.sb.append("myGyro" + usedSensor.getPort().getOraName() + ".update();");
                     break;
                 case TEMPERATURE:
                     nlIndent();
-                    this.sb.append("myTemp" + usedSensor.getPort().getPortNumber() + ".update();");
+                    this.sb.append("myTemp" + usedSensor.getPort().getOraName() + ".update();");
+                    break;
+                default:
                     break;
             }
         }
@@ -460,40 +466,41 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
                 case INFRARED:
                     break;
                 case ULTRASONIC:
-                    this.sb.append("MeUltrasonicSensor ultraSensor" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                    this.sb.append("MeUltrasonicSensor ultraSensor" + usedSensor.getPort().getOraName() + "(" + usedSensor.getPort().getCodeName() + ");\n");
                     break;
                 case PIR_MOTION:
-                    this.sb.append("MePIRMotionSensor pir" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                    this.sb.append("MePIRMotionSensor pir" + usedSensor.getPort().getOraName() + "(" + usedSensor.getPort().getCodeName() + ");\n");
                     break;
                 case TEMPERATURE:
-                    this.sb.append("MeHumiture myTemp" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                    this.sb.append("MeHumiture myTemp" + usedSensor.getPort().getOraName() + "(" + usedSensor.getPort().getCodeName() + ");\n");
                     break;
                 case TOUCH:
-                    this.sb.append("MeTouchSensor myTouch" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                    this.sb.append("MeTouchSensor myTouch" + usedSensor.getPort().getOraName() + "(" + usedSensor.getPort().getCodeName() + ");\n");
                     break;
                 case AMBIENT_LIGHT:
-                    this.sb.append("MeLightSensor myLight" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                    this.sb.append("MeLightSensor myLight" + usedSensor.getPort().getOraName() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case LINE_FOLLOWER:
-                    this.sb.append("MeLineFollower lineFinder" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                    this.sb.append("MeLineFollower lineFinder" + usedSensor.getPort().getOraName() + "(" + usedSensor.getPort().getCodeName() + ");\n");
                     break;
                 case COMPASS:
                     break;
                 case GYRO:
                 case ACCELEROMETER:
-                    this.sb.append("MeGyro myGyro" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                    this.sb.append("MeGyro myGyro" + usedSensor.getPort().getOraName() + "(" + usedSensor.getPort().getCodeName() + ");\n");
                     break;
                 case SOUND:
-                    this.sb.append("MeSoundSensor mySound" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                    this.sb.append("MeSoundSensor mySound" + usedSensor.getPort().getOraName() + "(" + usedSensor.getPort().getCodeName() + ");\n");
                     break;
                 case JOYSTICK:
-                    this.sb.append("MeJoystick myJoystick" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                    this.sb.append("MeJoystick myJoystick" + usedSensor.getPort().getOraName() + "(" + usedSensor.getPort().getCodeName() + ");\n");
                     break;
                 case FLAMESENSOR:
-                    this.sb.append("MeFlameSensor flameSensor" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                    this.sb.append("MeFlameSensor flameSensor" + usedSensor.getPort().getOraName() + "(" + usedSensor.getPort().getCodeName() + ");\n");
                     break;
                 case VOLTAGE:
-                    this.sb.append("MePotentiometer myVoltageSensor" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                    this.sb
+                        .append("MePotentiometer myVoltageSensor" + usedSensor.getPort().getOraName() + "(" + usedSensor.getPort().getCodeName() + ");\n");
                     break;
                 case TIMER:
                     break;
@@ -511,21 +518,21 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
                     this.sb.append("MeRGBLed rgbled_7(7, 7==7?2:4);\n");
                     break;
                 case GEARED_MOTOR:
-                    this.sb.append("MeDCMotor " + usedActor.getPort().getValues()[1] + "(" + usedActor.getPort().getValues()[0] + ");\n");
+                    this.sb.append("MeDCMotor " + usedActor.getPort().getOraName() + "(" + usedActor.getPort().getCodeName() + ");\n");
                     break;
                 case DIFFERENTIAL_DRIVE:
                     this.sb.append(
                         "MeDrive myDrive("
-                            + this.brickConfiguration.getLeftMotorPort().getValues()[0]
+                            + this.brickConfiguration.getLeftMotorPort().getCodeName()
                             + ", "
-                            + this.brickConfiguration.getRightMotorPort().getValues()[0]
+                            + this.brickConfiguration.getRightMotorPort().getCodeName()
                             + ");\n");
                     break;
                 case EXTERNAL_LED:
-                    this.sb.append("MeRGBLed rgbled_" + usedActor.getPort().getValues()[0] + "(" + usedActor.getPort().getValues()[0] + ", 4);\n");
+                    this.sb.append("MeRGBLed rgbled_" + usedActor.getPort().getOraName() + "(" + usedActor.getPort().getOraName() + ", 4);\n");
                     break;
                 case LED_MATRIX:
-                    this.sb.append("MeLEDMatrix myLEDMatrix_" + usedActor.getPort().getValues()[0] + "(" + usedActor.getPort().getValues()[0] + ");\n");
+                    this.sb.append("MeLEDMatrix myLEDMatrix_" + usedActor.getPort().getOraName() + "(" + usedActor.getPort().getOraName() + ");\n");
                     break;
                 case BUZZER:
                     this.sb.append("MeBuzzer buzzer;\n");
@@ -639,7 +646,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
 
     @Override
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        this.sb.append("myVoltageSensor" + voltageSensor.getPort().getPortNumber() + ".read()");
+        this.sb.append("myVoltageSensor" + voltageSensor.getPort().getOraName() + ".read()");
         return null;
     }
 

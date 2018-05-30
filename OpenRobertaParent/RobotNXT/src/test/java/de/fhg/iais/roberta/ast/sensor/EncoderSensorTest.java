@@ -39,8 +39,8 @@ public class EncoderSensorTest {
         EncoderSensor<Void> cs = (EncoderSensor<Void>) transformer.getTree().get(0).get(1);
         EncoderSensor<Void> cs1 = (EncoderSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals(ActorPort.A, cs.getPort());
-        Assert.assertEquals(ActorPort.D, cs1.getPort());
+        Assert.assertEquals(new ActorPort("A", "MA"), cs.getPort());
+        Assert.assertEquals(new ActorPort("D", "MD"), cs1.getPort());
     }
 
     @Test

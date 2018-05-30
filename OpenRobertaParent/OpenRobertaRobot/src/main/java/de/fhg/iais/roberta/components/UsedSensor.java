@@ -51,9 +51,9 @@ public class UsedSensor {
     public final int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = (prime * result) + (this.port == null ? 0 : this.port.hashCode());
-        result = (prime * result) + (this.mode == null ? 0 : this.mode.hashCode());
-        result = (prime * result) + this.type.hashCode();
+        result = prime * result + (this.port == null ? 0 : this.port.hashCode());
+        result = prime * result + (this.mode == null ? 0 : this.mode.hashCode());
+        result = prime * result + this.type.hashCode();
         return result;
     }
 
@@ -76,7 +76,7 @@ public class UsedSensor {
             if ( other.port != null ) {
                 return false;
             }
-        } else if ( this.port != other.port ) {
+        } else if ( !this.port.equals(other.port) ) {
             return false;
         }
         if ( this.mode == null ) {

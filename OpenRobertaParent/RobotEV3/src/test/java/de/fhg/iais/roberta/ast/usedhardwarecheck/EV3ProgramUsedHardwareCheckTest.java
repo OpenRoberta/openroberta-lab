@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
-import de.fhg.iais.roberta.mode.sensor.ev3.SensorPort;
+import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.hardware.ev3.UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
@@ -27,11 +27,11 @@ public class EV3ProgramUsedHardwareCheckTest {
         return new EV3Configuration.Builder()
             .setTrackWidth(17)
             .setWheelDiameter(5.6)
-            .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))
-            .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
-            .addActor(ActorPort.D, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.NONE))
-            .addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH))
-            .addSensor(SensorPort.S2, new Sensor(SensorType.ULTRASONIC))
+            .addActor(new ActorPort("A", "MA"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))
+            .addActor(new ActorPort("B", "MB"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
+            .addActor(new ActorPort("D", "MD"), new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.NONE))
+            .addSensor(new SensorPort("1", "S1"), new Sensor(SensorType.TOUCH))
+            .addSensor(new SensorPort("2", "S2"), new Sensor(SensorType.ULTRASONIC))
             .build();
     }
 
@@ -58,7 +58,7 @@ public class EV3ProgramUsedHardwareCheckTest {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/visitors/hardware_check2.xml");
 
         UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
-        Assert.assertEquals("[UsedSensor [S1, TOUCH, TOUCH], UsedSensor [S3, COLOR, COLOUR]]", checkVisitor.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [1, TOUCH, TOUCH], UsedSensor [3, COLOR, COLOUR]]", checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[UsedActor [B, LARGE]]", checkVisitor.getUsedActors().toString());
     }
 
@@ -67,7 +67,7 @@ public class EV3ProgramUsedHardwareCheckTest {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/visitors/hardware_check3.xml");
 
         UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
-        Assert.assertEquals("[UsedSensor [S1, TOUCH, TOUCH], UsedSensor [S4, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [1, TOUCH, TOUCH], UsedSensor [4, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[UsedActor [B, LARGE]]", checkVisitor.getUsedActors().toString());
     }
 
@@ -77,7 +77,7 @@ public class EV3ProgramUsedHardwareCheckTest {
 
         UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
         Assert.assertEquals(
-            "[UsedSensor [S4, INFRARED, DISTANCE], UsedSensor [S4, ULTRASONIC, DISTANCE], UsedSensor [S1, TOUCH, TOUCH]]",
+            "[UsedSensor [4, INFRARED, DISTANCE], UsedSensor [4, ULTRASONIC, DISTANCE], UsedSensor [1, TOUCH, TOUCH]]",
             checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[UsedActor [B, LARGE], UsedActor [A, LARGE]]", checkVisitor.getUsedActors().toString());
     }
@@ -96,7 +96,7 @@ public class EV3ProgramUsedHardwareCheckTest {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/ast/control/wait_stmt1.xml");
 
         UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
-        Assert.assertEquals("[UsedSensor [S1, TOUCH, TOUCH]]", checkVisitor.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [1, TOUCH, TOUCH]]", checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[]", checkVisitor.getUsedActors().toString());
     }
 
@@ -114,7 +114,7 @@ public class EV3ProgramUsedHardwareCheckTest {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/ast/control/wait_stmt3.xml");
 
         UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
-        Assert.assertEquals("[UsedSensor [S1, INFRARED, DISTANCE]]", checkVisitor.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [1, INFRARED, DISTANCE]]", checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[]", checkVisitor.getUsedActors().toString());
     }
 
@@ -133,7 +133,7 @@ public class EV3ProgramUsedHardwareCheckTest {
 
         UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
         Assert.assertEquals(
-            "[UsedSensor [S3, COLOR, COLOUR], UsedSensor [S4, INFRARED, DISTANCE], UsedSensor [S4, ULTRASONIC, DISTANCE]]",
+            "[UsedSensor [3, COLOR, COLOUR], UsedSensor [4, INFRARED, DISTANCE], UsedSensor [4, ULTRASONIC, DISTANCE]]",
             checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[]", checkVisitor.getUsedActors().toString());
     }
@@ -153,7 +153,7 @@ public class EV3ProgramUsedHardwareCheckTest {
 
         UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
         Assert.assertEquals(
-            "[UsedSensor [S3, COLOR, COLOUR], UsedSensor [S3, COLOR, AMBIENTLIGHT], UsedSensor [S4, COLOR, RED]]",
+            "[UsedSensor [3, COLOR, COLOUR], UsedSensor [3, COLOR, AMBIENTLIGHT], UsedSensor [4, COLOR, RED]]",
             checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[]", checkVisitor.getUsedActors().toString());
     }
