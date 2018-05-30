@@ -76,7 +76,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
                     GUISTATE_C.setConnectionBusy(false);
                 }, 5000);
                 MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
-            } else if (GUISTATE_C.getConnection() == connectionType.LOCAL) {
+            } else if (GUISTATE_C.getConnection() == GUISTATE_C.getConnectionTypeEnum().LOCAL) {
                 setTimeout(function() {
                     GUISTATE_C.setConnectionBusy(false);
                 }, 5000);
