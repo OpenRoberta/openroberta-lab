@@ -127,10 +127,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             }
             addPair(robots[i].group, robots[i].name);
         }
-
         for ( var key in groupsDict) {
             if (groupsDict.hasOwnProperty(key)) {
-                if (groupsDict[key] == key) { //this means that a robot has no subgroup
+                if (groupsDict[key].length == 1) { //this means that a robot has no subgroup
                     var robotName = key; // robot name is the same as robot group
                     var clone = proto.clone().prop('id', 'menu-' + robotName);
                     clone.attr('data-type', robotName);
@@ -195,11 +194,11 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
      */
     function initMenuEvents() {
         $('[rel="tooltip"]').not('.rightMenuButton').tooltip({
-            container: 'body',
+            container : 'body',
             placement : "right"
         });
         $('[rel="tooltip"].rightMenuButton').tooltip({
-            container: 'body',
+            container : 'body',
             placement : "left"
         });
         // prevent Safari 10. from zooming
@@ -519,15 +518,13 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             }
             event.preventDefault();
             $('#startPopupBack').trigger('click');
-            var choosenRobotType = event.target.dataset.type || event.currentTarget.dataset.type || event.target.parentElement.dataset.type
-                    || event.target.parentElement.parentElement.dataset.type;
-            var choosenRobottGroup = event.target.dataset.group || event.currentTarget.dataset.group || event.target.parentElement.dataset.group
-                    || event.target.parentElement.parentElement.dataset.group;
+            var choosenRobotType = event.target.dataset.type || event.currentTarget.dataset.type;
+            var choosenRobotGroup = event.target.dataset.group || event.currentTarget.dataset.group;
             if (event.target.className.indexOf("info") >= 0) {
                 var win = window.open(GUISTATE_C.getRobots()[choosenRobotType].info, '_blank');
             } else {
                 if (choosenRobotType) {
-                    if (choosenRobottGroup) {
+                    if (choosenRobotGroup) {
                         $('#popup-robot-main').addClass('hidden');
                         $('.popup-robot.' + choosenRobotType).removeClass('hidden');
                         $('.popup-robot.' + choosenRobotType).addClass('robotSpecial');
@@ -608,7 +605,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
 //                }
 //            }
         });
-        
+
         // help Bootstrap to calculate the correct size for the collapse element when the sceen height is smaller than the elements height.
         $('#navbarCollapse').on('shown.bs.collapse', function() {
             var newHeight = Math.min($(this).height(), Math.max($('#blockly').height(), $('#brickly').height()));
@@ -617,14 +614,14 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
 
         // experimental
         $(document).on('keydown', function(e) {
-        	if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '1')) {
-        		PROGRAM_C.importSourceCodeToCompile();
-        		return false;
-        	}
-        	if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '2')) {
-        		PROGRAM_C.importNepoCodeToCompile();
-        		return false;
-        	}
+            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '1')) {
+                PROGRAM_C.importSourceCodeToCompile();
+                return false;
+            }
+            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '2')) {
+                PROGRAM_C.importNepoCodeToCompile();
+                return false;
+            }
         });
     }
 });
