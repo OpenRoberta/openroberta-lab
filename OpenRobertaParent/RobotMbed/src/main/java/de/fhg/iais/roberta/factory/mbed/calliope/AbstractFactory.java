@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.factory.mbed.calliope;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Properties;
 
 import de.fhg.iais.roberta.components.Configuration;
@@ -11,7 +12,9 @@ import de.fhg.iais.roberta.factory.mbed.SimCompilerWorkflow;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
-import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
+import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.mode.action.ActorPort;
+import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
@@ -27,6 +30,8 @@ public abstract class AbstractFactory extends AbstractRobotFactory {
     protected Properties calliopeProperties;
     protected String name;
     protected int robotPropertyNumber;
+    Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:Calliopeports.properties"));
+    Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:Calliopeports.properties"));
 
     public AbstractFactory(RobertaProperties robertaProperties) {
         super(robertaProperties);
@@ -37,8 +42,13 @@ public abstract class AbstractFactory extends AbstractRobotFactory {
     }
 
     @Override
+    public ISensorPort getSensorPort(String port) {
+        return getSensorPortValue(port, this.sensorToPorts);
+    }
+
+    @Override
     public IActorPort getActorPort(String port) {
-        return IRobotFactory.getModeValue(port, ActorPort.class);
+        return getActorPortValue(port, this.actorToPorts);
     }
 
     @Override

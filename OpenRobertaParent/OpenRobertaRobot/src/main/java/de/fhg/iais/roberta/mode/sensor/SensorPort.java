@@ -1,61 +1,65 @@
 package de.fhg.iais.roberta.mode.sensor;
 
+import java.util.Objects;
+
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public enum SensorPort implements ISensorPort {
-    NO_PORT,
-    EMPTY_PORT( "" ),
-    X( "X", "Pitch" ),
-    Y( "Y", "Roll" ),
-    Z( "Z", "Yaw" ),
-    STRENGTH( "STRENGTH" ),
-    S0( "0", "P12" ),
-    S1( "1", "P0" ),
-    S2( "2", "P1" ),
-    S3( "3", "P16" ),
-    S4( "4", "P19" ),
-    S5( "5", "P2" ),
-    S6( "6" ),
-    S7( "7" ),
-    S8( "8" ),
-    S9( "9" ),
-    S10( "10" ),
-    ANY( "3" ),
-    BOTH( "3" ),
-    MOTOR_LEFT( "2" ),
-    MOTOR_RIGHT( "1" ),
-    LEFT( "LEFT" ),
-    RIGHT( "RIGHT" ),
-    CENTER( "CENTER" ),
-    // Calliope header rows
-    C04( "C04", "P3" ),
-    C05( "C05", "P4" ),
-    C06( "C06", "P10" ),
-    C07( "C07", "P13" ),
-    C08( "C08", "P14" ),
-    C09( "C09", "P15" ),
-    C10( "C10", "P9" ),
-    C11( "C11", "P7" ),
-    C12( "C12", "P6" ),
-    C16( "C16", "P2" ),
-    C17( "C17", "P8" ),
-    C18( "C18", "P20" ),
-    C19( "C19", "P19" );
+public class SensorPort implements ISensorPort, Comparable<SensorPort> {
 
-    private final String[] values;
+    private final String oraName;
+    private final String codeName;
 
-    private SensorPort(String... values) {
-        this.values = values;
+    public SensorPort(String oraName, String codeName) {
+        this.oraName = oraName;
+        this.codeName = codeName;
     }
 
     @Override
     public String[] getValues() {
-        return this.values;
+        throw new DbcException("unsupported operation");
     }
 
     @Override
-    public String getPortNumber() {
-        return this.values[0];
+    public String getOraName() {
+        return this.oraName;
+    }
+
+    @Override
+    public String getCodeName() {
+        return this.codeName;
+    }
+
+    @Override
+    public int compareTo(SensorPort other) {
+        int oraComp = this.oraName.compareTo(other.oraName);
+        if ( oraComp == 0 ) {
+            return this.codeName.compareTo(other.codeName);
+        } else {
+            return oraComp;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.oraName, this.codeName);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if ( obj == this ) {
+            return true;
+        }
+        if ( !(obj instanceof SensorPort) ) {
+            return false;
+        }
+        SensorPort other = (SensorPort) obj;
+        return Objects.equals(this.oraName, other.oraName) && Objects.equals(this.codeName, other.codeName);
+    }
+
+    @Override
+    public String toString() {
+        return this.oraName;
     }
 
 }

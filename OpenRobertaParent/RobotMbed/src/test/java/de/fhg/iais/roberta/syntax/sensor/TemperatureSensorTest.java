@@ -3,10 +3,10 @@ package de.fhg.iais.roberta.syntax.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.mbed.HelperMbedForXmlTest;
+import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
 
 public class TemperatureSensorTest {
-    private final HelperMbedForXmlTest h = new HelperMbedForXmlTest();
+    private final HelperCalliopeForXmlTest h = new HelperCalliopeForXmlTest();
 
     @Test
     public void make_ByDefault_ReturnInstanceOfTemperatureSensorClass() throws Exception {

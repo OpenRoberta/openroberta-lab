@@ -79,7 +79,7 @@ public class GyroSensor<V> extends ExternalSensor<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         //TODO: move reset to another block and delete astToBlock() method from here
-        String fieldValue = getPort().getPortNumber();
+        String fieldValue = getPort().getOraName();
         if ( getMode().toString().equals("ANGLE") || getMode().toString().equals("RATE") ) {
             Mutation mutation = new Mutation();
             mutation.setMode(getMode().toString());

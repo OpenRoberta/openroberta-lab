@@ -68,7 +68,7 @@ public class UsedActor {
             if ( other.port != null ) {
                 return false;
             }
-        } else if ( this.port != other.port ) {
+        } else if ( !this.port.equals(other.port) ) {
             return false;
         }
         return true;

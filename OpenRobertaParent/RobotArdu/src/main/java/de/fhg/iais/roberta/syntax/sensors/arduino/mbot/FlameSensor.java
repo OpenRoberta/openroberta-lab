@@ -65,7 +65,7 @@ public final class FlameSensor<V> extends Sensor<V> {
     public Block astToBlock() {
         final Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        final String fieldValue = this.port.getPortNumber();
+        final String fieldValue = this.port.getOraName();
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
 
         return jaxbDestination;

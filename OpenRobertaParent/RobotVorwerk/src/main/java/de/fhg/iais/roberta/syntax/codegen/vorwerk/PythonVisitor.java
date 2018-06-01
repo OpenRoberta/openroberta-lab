@@ -236,7 +236,7 @@ public class PythonVisitor extends RobotPythonVisitor
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        this.sb.append("hal." + motorOnAction.getPort().getPortNumber() + "_motor_on(");
+        this.sb.append("hal." + motorOnAction.getPort().getCodeName() + "_motor_on(");
         motorOnAction.getParam().getSpeed().visit(this);
         this.sb.append(", ");
         motorOnAction.getDurationValue().visit(this);
@@ -258,7 +258,7 @@ public class PythonVisitor extends RobotPythonVisitor
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        this.sb.append("hal." + motorStopAction.getPort().getPortNumber() + "_motor_stop()");
+        this.sb.append("hal." + motorStopAction.getPort().getCodeName() + "_motor_stop()");
         return null;
     }
 
@@ -326,7 +326,7 @@ public class PythonVisitor extends RobotPythonVisitor
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        String timerNumber = timerSensor.getPort().getPortNumber();
+        String timerNumber = timerSensor.getPort().getOraName();
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
             case DEFAULT:
             case VALUE:
@@ -408,14 +408,14 @@ public class PythonVisitor extends RobotPythonVisitor
         this.sb.append(", ");
         IndexLocation where1 = (IndexLocation) getSubFunct.getStrParam().get(0);
         this.sb.append(getEnumCode(where1));
-        if ( where1 == IndexLocation.FROM_START || where1 == IndexLocation.FROM_END ) {
+        if ( (where1 == IndexLocation.FROM_START) || (where1 == IndexLocation.FROM_END) ) {
             this.sb.append(", ");
             getSubFunct.getParam().get(1).visit(this);
         }
         this.sb.append(", ");
         IndexLocation where2 = (IndexLocation) getSubFunct.getStrParam().get(1);
         this.sb.append(getEnumCode(where2));
-        if ( where2 == IndexLocation.FROM_START || where2 == IndexLocation.FROM_END ) {
+        if ( (where2 == IndexLocation.FROM_START) || (where2 == IndexLocation.FROM_END) ) {
             this.sb.append(", ");
             if ( getSubFunct.getParam().size() == 3 ) {
                 getSubFunct.getParam().get(2).visit(this);

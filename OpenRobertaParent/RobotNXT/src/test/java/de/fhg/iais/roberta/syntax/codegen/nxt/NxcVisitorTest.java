@@ -42,9 +42,9 @@ public class NxcVisitorTest {
         final NxtConfiguration.Builder builder = new NxtConfiguration.Builder();
         builder.setTrackWidth(11).setWheelDiameter(5.6);
         builder
-            .addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT))
-            .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
-        builder.addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH)).addSensor(SensorPort.S2, new Sensor(SensorType.ULTRASONIC));
+            .addActor(new ActorPort("A", "A"), new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT))
+            .addActor(new ActorPort("B", "B"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
+        builder.addSensor(new SensorPort("1", "S1"), new Sensor(SensorType.TOUCH)).addSensor(new SensorPort("2", "S2"), new Sensor(SensorType.ULTRASONIC));
         brickConfiguration = (NxtConfiguration) builder.build();
     }
 

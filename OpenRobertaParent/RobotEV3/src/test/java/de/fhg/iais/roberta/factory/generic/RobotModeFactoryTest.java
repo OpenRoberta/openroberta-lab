@@ -22,7 +22,6 @@ import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.util.RobertaProperties;
@@ -79,12 +78,12 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getActorPortFromString() {
-        Assert.assertEquals(this.factory.getActorPort("A"), ActorPort.A);
+        Assert.assertEquals(this.factory.getActorPort("A"), new ActorPort("A", "MA"));
     }
 
     @Test
     public void getActorPortByAlternativeName() {
-        Assert.assertEquals(this.factory.getActorPort("MB"), ActorPort.B);
+        Assert.assertEquals(this.factory.getActorPort("B"), new ActorPort("B", "MB"));
     }
 
     @Test(expected = DbcException.class)
@@ -279,12 +278,12 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getSensorPortFromString() {
-        Assert.assertEquals(this.factory.getSensorPort("S1"), SensorPort.S1);
+        Assert.assertEquals(this.factory.getSensorPort("S1").getCodeName(), "S1");
     }
 
     @Test
     public void getSensorPortByAlternativeName() {
-        Assert.assertEquals(this.factory.getSensorPort("4"), SensorPort.S4);
+        Assert.assertEquals(this.factory.getSensorPort("4").getCodeName(), "S4");
     }
 
     @Test(expected = DbcException.class)

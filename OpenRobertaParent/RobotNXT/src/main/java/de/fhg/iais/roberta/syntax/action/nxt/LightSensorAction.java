@@ -118,7 +118,7 @@ public class LightSensorAction<V> extends Action<V> {
 
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SWITCH_COLOR, getLight().toString());
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SWITCH_STATE, getState().toString());
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, getPort().getPortNumber());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, getPort().getOraName());
 
         return jaxbDestination;
 

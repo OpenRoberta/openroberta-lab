@@ -65,7 +65,7 @@ public final class PIRMotionSensor<V> extends Sensor<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        String fieldValue = this.port.getPortNumber();
+        String fieldValue = this.port.getOraName();
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
 
         return jaxbDestination;

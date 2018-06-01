@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
@@ -15,8 +14,8 @@ public class LightSensorTest {
     @Test
     public void sensorSetLight() throws Exception {
         final String a =
-            "BlockAST [project=[[Location [x=162, y=238], LightSensor [S3, LIGHT, NO_SLOT]], "
-                + "[Location [x=163, y=263], LightSensor [S4, AMBIENTLIGHT, NO_SLOT]]]]";
+            "BlockAST [project=[[Location [x=162, y=238], LightSensor [3, LIGHT, NO_SLOT]], "
+                + "[Location [x=163, y=263], LightSensor [4, AMBIENTLIGHT, NO_SLOT]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_setLight.xml"));
     }
@@ -38,8 +37,8 @@ public class LightSensorTest {
         final LightSensor<Void> cs = (LightSensor<Void>) transformer.getTree().get(0).get(1);
         final LightSensor<Void> cs1 = (LightSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals(SensorPort.S3, cs.getPort());
-        Assert.assertEquals(SensorPort.S4, cs1.getPort());
+        Assert.assertEquals("S3", cs.getPort().getCodeName());
+        Assert.assertEquals("S4", cs1.getPort().getCodeName());
     }
 
     @Test

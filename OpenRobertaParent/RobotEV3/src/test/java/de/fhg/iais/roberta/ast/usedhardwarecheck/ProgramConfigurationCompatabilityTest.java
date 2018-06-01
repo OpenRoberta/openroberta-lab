@@ -27,9 +27,9 @@ public class ProgramConfigurationCompatabilityTest {
         EV3Configuration.Builder builder = new EV3Configuration.Builder();
         builder.setTrackWidth(17).setWheelDiameter(5.6);
         builder
-            .addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT))
-            .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
-        builder.addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH)).addSensor(SensorPort.S2, new Sensor(SensorType.ULTRASONIC));
+            .addActor(new ActorPort("A", "MA"), new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT))
+            .addActor(new ActorPort("B", "MB"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
+        builder.addSensor(new SensorPort("1", "S1"), new Sensor(SensorType.TOUCH)).addSensor(new SensorPort("2", "S2"), new Sensor(SensorType.ULTRASONIC));
 
         EV3Configuration brickConfiguration = (EV3Configuration) builder.build();
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/visitors/program_config_compatibility.xml");
@@ -46,13 +46,13 @@ public class ProgramConfigurationCompatabilityTest {
         EV3Configuration.Builder builder = new EV3Configuration.Builder();
         builder.setTrackWidth(17).setWheelDiameter(5.6);
         builder
-            .addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT))
-            .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
+            .addActor(new ActorPort("A", "MA"), new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT))
+            .addActor(new ActorPort("B", "MB"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
         builder
-            .addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH))
-            .addSensor(SensorPort.S2, new Sensor(SensorType.COLOR))
-            .addSensor(SensorPort.S3, new Sensor(SensorType.GYRO))
-            .addSensor(SensorPort.S4, new Sensor(SensorType.ULTRASONIC));
+            .addSensor(new SensorPort("1", "S1"), new Sensor(SensorType.TOUCH))
+            .addSensor(new SensorPort("2", "S2"), new Sensor(SensorType.COLOR))
+            .addSensor(new SensorPort("3", "S3"), new Sensor(SensorType.GYRO))
+            .addSensor(new SensorPort("4", "S4"), new Sensor(SensorType.ULTRASONIC));
 
         EV3Configuration brickConfiguration = (EV3Configuration) builder.build();
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/visitors/program_config_compatibility_gyro_touch_ultra_color.xml");

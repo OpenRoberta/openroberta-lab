@@ -11,7 +11,6 @@ import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.MotorSide;
-import de.fhg.iais.roberta.mode.actors.arduino.botnroll.ActorPort;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -100,7 +99,7 @@ public class MbotConfiguration extends Configuration {
         if ( !this.sensors.isEmpty() ) {
             sb.append("  sensor port {\n");
             for ( ISensorPort port : this.sensors.keySet() ) {
-                sb.append("    ").append(port.getPortNumber()).append(": ");
+                sb.append("    ").append(port.getOraName()).append(": ");
                 String sensor = this.sensors.get(port).getType().toString();
                 sb.append(sensor.toLowerCase()).append(";\n");
             }

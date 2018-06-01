@@ -4,7 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
+import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -32,7 +32,7 @@ public final class SingleMotorOnAction<V> extends Action<V> {
 
     private SingleMotorOnAction(Expr<V> speed, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("SINGLE_MOTOR_ON_ACTION"), properties, comment);
-        Assert.isTrue(speed != null && speed.isReadOnly());
+        Assert.isTrue((speed != null) && speed.isReadOnly());
         this.speed = speed;
 
         setReadOnly();
@@ -47,7 +47,7 @@ public final class SingleMotorOnAction<V> extends Action<V> {
      * @return read only object of class {@link SingleMotorOnAction}
      */
     private static <V> SingleMotorOnAction<V> make(Expr<V> speed, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SingleMotorOnAction<V>(speed, properties, comment);
+        return new SingleMotorOnAction<>(speed, properties, comment);
     }
 
     public Expr<V> getSpeed() {

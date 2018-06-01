@@ -70,7 +70,7 @@ public class UsedHardwareCollectorVisitorTest {
 
         UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
 
-        Assert.assertEquals("[UsedSensor [EMPTY_PORT, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [NO_PORT, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
     }
 
     @Test
@@ -79,7 +79,7 @@ public class UsedHardwareCollectorVisitorTest {
 
         UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
 
-        Assert.assertEquals("[UsedSensor [EMPTY_PORT, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [NO_PORT, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
     }
 
     @Test
@@ -88,7 +88,7 @@ public class UsedHardwareCollectorVisitorTest {
 
         UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
 
-        Assert.assertEquals("[UsedSensor [EMPTY_PORT, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [NO_PORT, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
     }
 
     @Test
@@ -97,7 +97,7 @@ public class UsedHardwareCollectorVisitorTest {
 
         UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
 
-        Assert.assertEquals("[UsedSensor [EMPTY_PORT, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [NO_PORT, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
     }
 
     @Test
@@ -106,7 +106,7 @@ public class UsedHardwareCollectorVisitorTest {
 
         UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
 
-        Assert.assertEquals("[UsedSensor [EMPTY_PORT, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [NO_PORT, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
     }
 
     @Test
@@ -115,6 +115,6 @@ public class UsedHardwareCollectorVisitorTest {
 
         UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
 
-        Assert.assertEquals("[UsedSensor [EMPTY_PORT, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [NO_PORT, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
     }
 }

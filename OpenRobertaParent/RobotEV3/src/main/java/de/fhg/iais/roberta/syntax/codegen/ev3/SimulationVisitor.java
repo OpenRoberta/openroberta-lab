@@ -6,7 +6,6 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
-import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
@@ -139,7 +138,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        this.sb.append("createGetMotorPower(" + (motorGetPowerAction.getPort() == ActorPort.B ? MOTOR_RIGHT : MOTOR_LEFT).toString() + ")");
+        this.sb.append("createGetMotorPower(" + (motorGetPowerAction.getPort().getOraName().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString() + ")");
         return null;
     }
 
@@ -149,7 +148,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
         String end = createClosingBracket();
         this.sb.append("createMotorOnAction(");
         motorOnAction.getParam().getSpeed().visit(this);
-        this.sb.append(", " + (motorOnAction.getPort() == ActorPort.B ? MOTOR_RIGHT : MOTOR_LEFT).toString());
+        this.sb.append(", " + (motorOnAction.getPort().getOraName().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString());
         if ( isDuration ) {
             this.sb.append(", createDuration(CONST.");
             this.sb.append(motorOnAction.getParam().getDuration().getType().toString() + ", ");
@@ -163,7 +162,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         String end = createClosingBracket();
-        this.sb.append("createSetMotorPowerAction(" + (motorSetPowerAction.getPort() == ActorPort.B ? MOTOR_RIGHT : MOTOR_LEFT).toString() + ", ");
+        this.sb.append("createSetMotorPowerAction(" + (motorSetPowerAction.getPort().getOraName().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString() + ", ");
         motorSetPowerAction.getPower().visit(this);
         this.sb.append(end);
         return null;
@@ -173,7 +172,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         String end = createClosingBracket();
         this.sb.append("createStopMotorAction(");
-        this.sb.append((motorStopAction.getPort() == ActorPort.B ? MOTOR_RIGHT : MOTOR_LEFT).toString());
+        this.sb.append((motorStopAction.getPort().getOraName().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString());
         this.sb.append(end);
         return null;
     }
@@ -327,7 +326,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        String encoderMotor = (encoderSensor.getPort() == ActorPort.B ? MOTOR_RIGHT : MOTOR_LEFT).toString();
+        String encoderMotor = (encoderSensor.getPort().getOraName().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString();
         if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
             String end = createClosingBracket();
             this.sb.append("createResetEncoderSensor(" + encoderMotor);

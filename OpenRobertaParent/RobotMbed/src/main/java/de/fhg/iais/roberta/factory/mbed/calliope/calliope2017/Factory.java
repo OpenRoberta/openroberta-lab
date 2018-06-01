@@ -20,5 +20,4 @@ public class Factory extends AbstractFactory {
 
         addBlockTypesFromProperties("Calliope2017.properties", this.calliopeProperties);
     }
-
 }

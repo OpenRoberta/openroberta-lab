@@ -13,8 +13,8 @@ public class DetectMarkTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=232, y=251], "
                 + "MainTask [], "
-                + "SayTextAction [SensorExpr [DetectedMark [EMPTY_PORT, IDONE, EMPTY_SLOT]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]], "
-                + "SayTextAction [SensorExpr [DetectedMark [EMPTY_PORT, IDALL, EMPTY_SLOT]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]"
+                + "SayTextAction [SensorExpr [DetectedMark [NO_PORT, IDONE, EMPTY_SLOT]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]], "
+                + "SayTextAction [SensorExpr [DetectedMark [NO_PORT, IDALL, EMPTY_SLOT]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]"
                 + "]]]";
 
         String result = this.h.generateTransformerString("/sensor/detectmark.xml");

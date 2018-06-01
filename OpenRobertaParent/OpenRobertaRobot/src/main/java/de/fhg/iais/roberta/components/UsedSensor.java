@@ -76,7 +76,7 @@ public class UsedSensor {
             if ( other.port != null ) {
                 return false;
             }
-        } else if ( this.port != other.port ) {
+        } else if ( !this.port.equals(other.port) ) {
             return false;
         }
         if ( this.mode == null ) {

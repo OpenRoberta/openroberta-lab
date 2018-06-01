@@ -24,7 +24,7 @@ public abstract class RobotBrickCheckVisitor extends RobotCommonCheckVisitor {
         } else {
             switch ( sensor.getKind().getName() ) {
                 case "COLOR_SENSING":
-                    if ( usedSensor.getType() != SensorType.COLOR && usedSensor.getType() != SensorType.HT_COLOR ) {
+                    if ( (usedSensor.getType() != SensorType.COLOR) && (usedSensor.getType() != SensorType.HT_COLOR) ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }

@@ -21,7 +21,7 @@ public class MotorSetPowerActionTest {
     public void getPort() throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/actions/action_MotorSetPower.xml");
         MotorSetPowerAction<Void> mgp = (MotorSetPowerAction<Void>) transformer.getTree().get(0).get(1);
-        Assert.assertEquals(ActorPort.B, mgp.getPort());
+        Assert.assertEquals(new ActorPort("B", "MB"), mgp.getPort());
     }
 
     @Test

@@ -7,10 +7,10 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.mbed.CalliopeConfiguration;
-import de.fhg.iais.roberta.util.test.mbed.HelperMbedForXmlTest;
+import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
 
 public class CppVisitorTest {
-    private final HelperMbedForXmlTest h = new HelperMbedForXmlTest();
+    private final HelperCalliopeForXmlTest h = new HelperCalliopeForXmlTest();
 
     private static final String IMPORTS = //
         "#define_GNU_SOURCE\n\n"

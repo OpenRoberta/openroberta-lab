@@ -33,7 +33,7 @@ public class ArduConfigurationTest {
     public void test1() throws Exception {
         String a = //
             "robotardutest{" //
-                + "sensorport{1:infrared;2:infrared;3:light;4:compass;5:ultrasonic;6:ultrasonic;7:ultrasonic;8:color;9:color;10:ultrasonic;}"
+                + "sensorport{1:infrared;10:ultrasonic;2:infrared;3:light;4:compass;5:ultrasonic;6:ultrasonic;7:ultrasonic;8:color;9:color;}"
                 + "actorport{A:ardumotor,regulated,forward;B:ardumotor,regulated,forward;C:ardumotor,regulated,forward;D:ardumotor,regulated,forward;}}";
 
         BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration.xml");

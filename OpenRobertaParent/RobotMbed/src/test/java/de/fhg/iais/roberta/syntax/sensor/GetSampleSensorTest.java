@@ -4,10 +4,10 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.mbed.HelperMbedForXmlTest;
+import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
 
 public class GetSampleSensorTest {
-    private final HelperMbedForXmlTest h = new HelperMbedForXmlTest();
+    private final HelperCalliopeForXmlTest h = new HelperCalliopeForXmlTest();
 
     @Ignore("Test is ignored until next commit")
     @Test
@@ -32,7 +32,7 @@ public class GetSampleSensorTest {
                 + ")], WaitStmt [\n"
                 + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [CompassSensor [NO_PORT, DEFAULT, EMPTY_SLOT]]], NumConst [180]]]\n"
                 + ")], WaitStmt [\n"
-                + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [TimerSensor [S1, VALUE, EMPTY_SLOT]]], NumConst [500]]]\n"
+                + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [TimerSensor [1, VALUE, EMPTY_SLOT]]], NumConst [500]]]\n"
                 + ")], WaitStmt [\n"
                 + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [TemperatureSensor [NO_PORT, DEFAULT, EMPTY_SLOT]]], NumConst [20]]]\n"
                 + ")], WaitStmt [\n"

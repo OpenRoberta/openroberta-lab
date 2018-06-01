@@ -21,7 +21,6 @@ import de.fhg.iais.roberta.inter.mode.action.IMotorSide;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
-import de.fhg.iais.roberta.mode.actors.arduino.botnroll.ActorPort;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -73,7 +72,7 @@ public class Jaxb2BotNrollConfigurationTransformer {
             for ( IActorPort port : actors.keySet() ) {
                 Actor actor = actors.get(port);
                 Value hardwareComponent = new Value();
-                hardwareComponent.setName(port.getPortNumber());
+                hardwareComponent.setName(port.getOraName());
                 Block actorBlock = mkBlock(idCount++);
                 hardwareComponent.setBlock(actorBlock);
                 actorBlock.setType(actor.getName().blocklyName());
@@ -140,9 +139,9 @@ public class Jaxb2BotNrollConfigurationTransformer {
                         break;
                     case "robBrick_motor_middle":
                         //fields = extractFields(value.getBlock(), (short) 2);
-                        if ( this.factory.getActorPort(value.getName()).equals(ActorPort.B) ) {
+                        if ( this.factory.getActorPort(value.getName()).getCodeName().equals("MA") ) {
                             motorSide = MotorSide.LEFT;
-                        } else if ( this.factory.getActorPort(value.getName()).equals(ActorPort.A) ) {
+                        } else if ( this.factory.getActorPort(value.getName()).getCodeName().equals("MB") ) {
                             motorSide = MotorSide.RIGHT;
                         } else {
                             motorSide = MotorSide.NONE;

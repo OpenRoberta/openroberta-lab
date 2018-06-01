@@ -139,7 +139,7 @@ public class GetSampleSensorTest {
             "BlockAST [project=[[Location [x=349, y=50], "
                 + "MainTask [], "
                 + "WaitStmt [\n"
-                + "(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [DetectFace [EMPTY_PORT, NAMEONE, EMPTY_SLOT]]], StringConst [Roberta]]]\n"
+                + "(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [DetectFace [NO_PORT, NAMEONE, EMPTY_SLOT]]], StringConst [Roberta]]]\n"
                 + ")]]]]";
 
         String result = this.h.generateTransformerString("/sensor/waitUntilDetectFace.xml");
@@ -158,7 +158,7 @@ public class GetSampleSensorTest {
             "BlockAST [project=[[Location [x=349, y=50], "
                 + "MainTask [], "
                 + "WaitStmt [\n"
-                + "(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [DetectedMark [EMPTY_PORT, IDONE, EMPTY_SLOT]]], NumConst [84]]]\n"
+                + "(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [DetectedMark [NO_PORT, IDONE, EMPTY_SLOT]]], NumConst [84]]]\n"
                 + ")]]]]";
 
         String result = this.h.generateTransformerString("/sensor/waitUntilDetectMarks.xml");
@@ -177,7 +177,7 @@ public class GetSampleSensorTest {
             "BlockAST [project=[[Location [x=349, y=50], "
                 + "MainTask [], "
                 + "WaitStmt [\n"
-                + "(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [UltrasonicSensor [EMPTY_PORT, DISTANCE, EMPTY_SLOT]]], NumConst [30]]]\n"
+                + "(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [UltrasonicSensor [NO_PORT, DISTANCE, EMPTY_SLOT]]], NumConst [30]]]\n"
                 + ")]]]]";
 
         String result = this.h.generateTransformerString("/sensor/waitUntilSonar.xml");

@@ -22,7 +22,7 @@ public class MotorStopActionTest {
     public void getPort() throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/actions/action_MotorStop.xml");
         MotorStopAction<Void> mgp = (MotorStopAction<Void>) transformer.getTree().get(0).get(1);
-        Assert.assertEquals(ActorPort.A, mgp.getPort());
+        Assert.assertEquals(new ActorPort("A", "MA"), mgp.getPort());
     }
 
     @Test

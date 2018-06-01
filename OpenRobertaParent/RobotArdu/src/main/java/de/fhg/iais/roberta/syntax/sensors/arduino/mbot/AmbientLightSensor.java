@@ -77,7 +77,7 @@ public class AmbientLightSensor<V> extends Sensor<V> {
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
         jaxbDestination.setMutation(mutation);
-        String fieldValue = getPort().getPortNumber();
+        String fieldValue = getPort().getOraName();
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
 
         return jaxbDestination;

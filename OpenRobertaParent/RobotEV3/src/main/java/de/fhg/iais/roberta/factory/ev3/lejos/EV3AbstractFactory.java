@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.factory.ev3.lejos;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Properties;
 
 import com.google.inject.AbstractModule;
@@ -11,9 +12,11 @@ import de.fhg.iais.roberta.factory.ICompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.factory.ev3.Ev3GuiceModule;
 import de.fhg.iais.roberta.factory.ev3.Ev3SimCompilerWorkflow;
+import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.ev3.ShowPicture;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -30,6 +33,9 @@ public abstract class EV3AbstractFactory extends AbstractRobotFactory {
     protected ICompilerWorkflow robotCompilerWorkflow;
     protected Properties ev3Properties;
     protected String name;
+    protected int robotPropertyNumber;
+    Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:EV3ports.properties"));
+    Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:EV3ports.properties"));
 
     public EV3AbstractFactory(RobertaProperties robertaProperties, String propertyName) {
         super(robertaProperties);
@@ -47,16 +53,19 @@ public abstract class EV3AbstractFactory extends AbstractRobotFactory {
 
     }
 
-    protected int robotPropertyNumber;
+    @Override
+    public ISensorPort getSensorPort(String port) {
+        return getSensorPortValue(port, this.sensorToPorts);
+    }
+
+    @Override
+    public IActorPort getActorPort(String port) {
+        return getActorPortValue(port, this.actorToPorts);
+    }
 
     @Override
     public IShowPicture getShowPicture(String picture) {
         return IRobotFactory.getModeValue(picture, ShowPicture.class);
-    }
-
-    @Override
-    public ISensorPort getSensorPort(String port) {
-        return IRobotFactory.getModeValue(port, SensorPort.class);
     }
 
     @Override
