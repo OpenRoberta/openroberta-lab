@@ -22,7 +22,7 @@ public enum Joint implements IMode {
     RANKLEROLL(),
     RHIPYAWPITCH(),
     RHIPROLL(),
-    RHIPITCH(),
+    RHIPPITCH(),
     RKNEEPITCH(),
     RANKLEPITCH(),
     LANKLEROLL(),

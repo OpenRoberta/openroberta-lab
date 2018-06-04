@@ -686,7 +686,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
             case RHIPROLL:
                 this.sb.append("\"RHipRoll\"");
                 break;
-            case RHIPITCH:
+            case RHIPPITCH:
                 this.sb.append("\"RHipPitch\"");
                 break;
             case RKNEEPITCH:
