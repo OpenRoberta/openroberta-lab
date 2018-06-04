@@ -189,7 +189,7 @@ case "$cmd" in
                        -d database.mode=embedded -d database.parentdir=OpenRobertaParent/OpenRobertaServer -d server.staticresources.dir=OpenRobertaParent/OpenRobertaServer/staticResources $* ;;
 
 --gui-sql-client) lib="OpenRobertaParent/OpenRobertaServer/target/resources"
-                  hsqldbVersion='2.3.3'
+                  hsqldbVersion='2.4.0'
 				  hsqldbJar="${lib}/hsqldb-${hsqldbVersion}.jar"
 				  serverVersionForDb="$1"
 				  if [[ "$serverVersionForDb" == '' ]]

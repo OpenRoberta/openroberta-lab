@@ -171,18 +171,14 @@ public class Util1 {
     /**
      * compute 2 to the power of 'exp'.
      *
-     * @param exp >= 0
-     * @return 2 to the power of 'exp'; if parameter is invalid, return 0
+     * @param exp the exponent
+     * @return 2 to the power of 'exp' if 'exp' >= 0; 0 otherwise
      */
     public static int pow2(int exp) {
         if ( exp < 0 ) {
             return 0;
-        } else if ( exp == 0 ) {
-            return 1;
-        } else if ( exp == 1 ) {
-            return 2;
         } else {
-            return 2 << (exp - 1);
+            return 1 << exp;
         }
     }
 

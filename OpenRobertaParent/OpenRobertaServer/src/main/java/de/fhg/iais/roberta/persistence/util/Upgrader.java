@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.persistence.util;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
@@ -36,6 +37,10 @@ public class Upgrader {
             // server version upgrade is necessary
             Properties robertaProperties = Util1.loadProperties(false, null);
             String[] previousServerVersions = robertaProperties.getProperty("openRobertaServer.history").split(",");
+            if ( previousServerVersions.length > 0 && serverVersionForDbDirectory.equals(previousServerVersions[0]) ) {
+                // if the first entry is the actual version, remove the entry ...
+                previousServerVersions = Arrays.copyOfRange(previousServerVersions, 1, previousServerVersions.length);
+            }
             try {
                 new Upgrader(databaseParentdir, previousServerVersions, serverVersionForDbDirectory).upgrade();
             } catch ( Exception e ) {

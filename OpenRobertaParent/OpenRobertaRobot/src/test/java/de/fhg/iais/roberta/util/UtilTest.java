@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -65,10 +67,25 @@ public class UtilTest {
 
     @Test
     public void testPow() {
+        assertEquals(0, Util1.pow2(-1));
         assertEquals(1, Util1.pow2(0));
         assertEquals(2, Util1.pow2(1));
         assertEquals(4, Util1.pow2(2));
         assertEquals(16, Util1.pow2(4));
         assertEquals(1024, Util1.pow2(10));
+    }
+
+    @Test
+    public void testCopyFrom() {
+        String[] from =
+            {
+                "a",
+                "b",
+                "c"
+            };
+        from = Arrays.copyOfRange(from, 1, from.length);
+        assertEquals(2, from.length);
+        assertEquals("b", from[0]);
+        assertEquals("c", from[1]);
     }
 }
