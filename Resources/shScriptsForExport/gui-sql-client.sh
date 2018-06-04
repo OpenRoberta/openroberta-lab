@@ -2,7 +2,7 @@
 # start a SQL client after exporting.
 
 serverVersionForDb=$(java -cp ./lib/\* de.fhg.iais.roberta.main.ServerStarter --version-for-db)
-hsqldbVersion='2.3.3'
+hsqldbVersion='2.4.0'
 hsqldbJar="lib/hsqldb-${hsqldbVersion}.jar"
 
 echo 'gui-sql-client.sh <DB-URL>'
