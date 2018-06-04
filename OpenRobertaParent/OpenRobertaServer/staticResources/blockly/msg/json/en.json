@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-05-28 08:24:24.892935",
+		"lastupdated": "2018-06-04 22:26:24.512243",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -603,6 +603,7 @@
 	"TOOLBOX_MOVE": "Move",
 	"TOOLBOX_ANIMATION": "Animation",
 	"TOOLBOX_VISION": "Vision",
+	"TOOLBOX_CLEANING": "Cleaning",
 	"MENU_EDIT": "edit",
 	"MENU_ROBOT": "robot",
 	"MENU_HELP": "help",
@@ -1385,16 +1386,16 @@
 	"BRICK_PORT": "port",
 	"BRICK_USERNAME": "user name",
 	"BRICK_PASSWORD": "password",
-	"BRUSH_ON": "Turn Brush On (RPM)",
+	"BRUSH_ON": "turn brush on (RPM)",
 	"BRUSH_ON_TOOLTIP": "Turns on the brush with RPM of the motor (0<=RPM<=10000)",
-	"BRUSH_OFF": "Turn Brush Off",
-	"BRUSH_OFF_TOOLTIP": "Turn the brush off.",
-	"SIDE_BRUSH_OFF": "Turn Side Brush Off",
-	"SIDE_BRUSH_OFF_TOOLTIP": "Turn the side brush off.",
-	"SIDE_BRUSH_STATUS": "Side Brush",
-	"SIDE_BRUSH_TOOLTIP": "Turn on/off the side brush.",
-	"VACUUM_ON": "Turn Vacuum On (%)",
+	"BRUSH_OFF": "turn brush Off",
+	"BRUSH_OFF_TOOLTIP": "Turns the brush off.",
+	"SIDE_BRUSH_OFF": "turn side brush off",
+	"SIDE_BRUSH_OFF_TOOLTIP": "Turns the side brush off.",
+	"SIDE_BRUSH_STATUS": "turn side brush",
+	"SIDE_BRUSH_TOOLTIP": "Turns the side brush on or off .",
+	"VACUUM_ON": "turn vacuum on %",
 	"VACUUM_ON_TOOLTIP": "Turns on the vacuum speed in procent",
-	"VACUUM_OFF": "Turn Vacuum Off",
-	"VACUUM_OFF_TOOLTIP": "Turn the vacuum off."
+	"VACUUM_OFF": "turn vacuum off",
+	"VACUUM_OFF_TOOLTIP": "Turns the vacuum off."
 }
