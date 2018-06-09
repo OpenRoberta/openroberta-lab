@@ -320,6 +320,60 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             case 'menuToolboxExpert':
                 $('.levelTabs a[href="#expert"]').tab('show');
                 break;
+            case 'multipleSimNav':
+                console.log("mulnav clicked");
+                PROGLIST.loadProgList(function(result){
+                    console.log(result);
+                    console.log($("#simModal .btn-primary").text());
+                    if(result.rc === "ok"){
+                        console.log("successful extraction");                 
+                        var marr = [];
+                        var programsparsed =0;
+                        result.programNames.forEach(function(item, i, oriarray){
+                            PROGRAM_M.loadProgramFromListing(item[0], item[1],item[3], function(dat){
+                                var myparser = dat.programText;
+                                var parser = new DOMParser();
+                                var xmlDocm = parser.parseFromString(myparser,"text/xml");
+                                var robottype = xmlDocm.documentElement.attributes.robottype.nodeValue;
+                                marr.push({name: item[0], robot: robottype, creator: item[1]});
+                                programsparsed++;
+                                if(programsparsed===oriarray.length ){
+                                    $('#mtable').bootstrapTable({
+                                        height : 400,
+                                        columns: [
+                                        {
+                                            field: 'name',
+                                            title: 'Program Name'
+                                        }, {
+                                            field: 'robot',
+                                            title: 'Robot Name'
+                                        },{
+                                            field: 'creator',
+                                            title: 'Creator'
+                                        },{
+                                            checkbox : true,
+                                            valign : 'middle',
+                                        }],
+                                        data: marr
+                                    });
+                                }
+                                $("#simModal .btn-primary").show();
+                                $("#simModal .btn-primary").on("click",function(){
+                                    console.log('Selections obtained via getSelections: are ' + JSON.stringify($("#mtable").bootstrapTable('getSelections')));
+                                    
+                                });
+                            });                     
+                        });
+                        
+                    }else{
+                        console.log(result.message);
+                        $("#mtable").bootstrapTable('destroy');
+                        $("#simModal .btn-primary").hide();
+                       
+
+                    }
+                });
+                break;           
             default:
                 break;
             }

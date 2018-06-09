@@ -18,6 +18,7 @@ define([ 'exports', 'message', 'log', 'util', 'simulation.simulation', 'guiState
         $('#simButton').off('click touchend');
         $('#simButton').on('click touchend', function(event) {
             toggleSim();
+
             return false;
         });
 
