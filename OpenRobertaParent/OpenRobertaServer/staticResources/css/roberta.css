@@ -2021,3 +2021,7 @@ label.quiz.answer.fail {
     transform: translate(19px, 0);
   }
 }
+/*CSS FOR MULTIPLE SIMULATION POPUP*/
+#simModal .fixed-table-header{
+	background-color:#B3BFB8;
+}

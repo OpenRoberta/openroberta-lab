@@ -24,16 +24,31 @@ define(['exports', 'progList.model', 'program.model', 'jquery'],function(exports
                         if(programsparsed===oriarray.length ){ //the end of loop
                             $('#mtable').bootstrapTable({
                                 height : 400,
+                                sortName: "name",
+                                toggle: "mtable",
+                                iconsPrefix : 'typcn',
+                                icons : {
+                                    paginationSwitchDown : 'typcn-document-text',
+                                    paginationSwitchUp : 'typcn-book',
+                                    refresh : 'typcn-refresh',
+                                },
+                                pagination : 'true',
+                                buttonsAlign : 'right',
+                                resizable : 'true',
+                                
                                 columns: [
                                 {
                                     field: 'name',
-                                    title: 'Program Name'
+                                    title: 'Program Name',
+                                    sortable: true
                                 }, {
                                     field: 'robot',
-                                    title: 'Robot Name'
+                                    title: 'Robot Name',
+                                    sortable: true
                                 },{
                                     field: 'creator',
-                                    title: 'Creator'
+                                    title: 'Creator',
+                                    sortable: true
                                 },{
                                     checkbox : true,
                                     valign : 'middle',
@@ -42,6 +57,8 @@ define(['exports', 'progList.model', 'program.model', 'jquery'],function(exports
                             });
                         }
                         $("#simModal .btn-primary").show();
+                        //the css manipulation has been done in roberta.css
+//                        $("#simModal .fixed-table-header").css({"background-color": "#B3BFB8"});
                         $("#simModal .btn-primary").on("click",function(){
                             console.log('Selections obtained via getSelections: are ' + JSON.stringify($("#mtable").bootstrapTable('getSelections')));
                             
