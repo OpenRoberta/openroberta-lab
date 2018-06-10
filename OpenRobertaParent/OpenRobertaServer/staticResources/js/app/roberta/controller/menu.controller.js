@@ -1,7 +1,7 @@
 define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket.controller', 'user.controller', 'user.model', 'guiState.controller',
-        'cookieDisclaimer.controller', 'program.controller', 'progRun.controller', 'configuration.controller', 'import.controller', 'enjoyHint',
-        'tour.controller', 'simulation.simulation', 'jquery', 'blocks', 'slick' ], function(exports, LOG, UTIL, MSG, COMM, ROBOT_C, SOCKET_C, USER_C, USER,
-        GUISTATE_C, CookieDisclaimer, PROGRAM_C, RUN_C, CONFIGURATION_C, IMPORT_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
+        'cookieDisclaimer.controller', 'program.controller', 'program.model','multSim.controller', 'progRun.controller', 'configuration.controller','import.controller', 'enjoyHint', 'tour.controller',
+        'simulation.simulation', 'progList.model', 'jquery', 'blocks', 'slick' ], function(exports, LOG, UTIL, MSG, COMM, ROBOT_C, SOCKET_C, USER_C, USER, GUISTATE_C,
+        CookieDisclaimer, PROGRAM_C, PROGRAM_M, MULT_SIM, RUN_C, CONFIGURATION_C,  IMPORT_C, EnjoyHint, TOUR_C, SIM, PROGLIST, $, Blockly) {
 
     function init() {
         initMenu();
@@ -321,59 +321,8 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 $('.levelTabs a[href="#expert"]').tab('show');
                 break;
             case 'multipleSimNav':
-                console.log("mulnav clicked");
-                PROGLIST.loadProgList(function(result){
-                    console.log(result);
-                    console.log($("#simModal .btn-primary").text());
-                    if(result.rc === "ok"){
-                        console.log("successful extraction");                 
-                        var marr = [];
-                        var programsparsed =0;
-                        result.programNames.forEach(function(item, i, oriarray){
-                            PROGRAM_M.loadProgramFromListing(item[0], item[1],item[3], function(dat){
-                                var myparser = dat.programText;
-                                var parser = new DOMParser();
-                                var xmlDocm = parser.parseFromString(myparser,"text/xml");
-                                var robottype = xmlDocm.documentElement.attributes.robottype.nodeValue;
-                                marr.push({name: item[0], robot: robottype, creator: item[1]});
-                                programsparsed++;
-                                if(programsparsed===oriarray.length ){
-                                    $('#mtable').bootstrapTable({
-                                        height : 400,
-                                        columns: [
-                                        {
-                                            field: 'name',
-                                            title: 'Program Name'
-                                        }, {
-                                            field: 'robot',
-                                            title: 'Robot Name'
-                                        },{
-                                            field: 'creator',
-                                            title: 'Creator'
-                                        },{
-                                            checkbox : true,
-                                            valign : 'middle',
-                                        }],
-                                        data: marr
-                                    });
-                                }
-                                $("#simModal .btn-primary").show();
-                                $("#simModal .btn-primary").on("click",function(){
-                                    console.log('Selections obtained via getSelections: are ' + JSON.stringify($("#mtable").bootstrapTable('getSelections')));
-                                    
-                                });
-                            });                     
-                        });
-                        
-                    }else{
-                        console.log(result.message);
-                        $("#mtable").bootstrapTable('destroy');
-                        $("#simModal .btn-primary").hide();
-                       
-
-                    }
-                });
-                break;           
+                MULT_SIM.showListProg();
+                break;          
             default:
                 break;
             }
