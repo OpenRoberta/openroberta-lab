@@ -55,14 +55,16 @@ define(['exports', 'progList.model', 'program.model', 'jquery'],function(exports
                                 }],
                                 data: dataarr
                             });
+                            $("#simModal .btn-primary").show();
+                            //the css manipulation has been done in roberta.css
+//                            $("#simModal .fixed-table-header").css({"background-color": "#B3BFB8"});
+                            $("#simModal .btn-primary").on("click",function(){
+                                console.log("Selections will be executed");
+                                console.log('Selections obtained via getSelections: are ' + JSON.stringify($("#mtable").bootstrapTable('getSelections')));
+                                alert("The following programs would be executed: "+ JSON.stringify($("#mtable").bootstrapTable('getSelections')));
+                            });
                         }
-                        $("#simModal .btn-primary").show();
-                        //the css manipulation has been done in roberta.css
-//                        $("#simModal .fixed-table-header").css({"background-color": "#B3BFB8"});
-                        $("#simModal .btn-primary").on("click",function(){
-                            console.log('Selections obtained via getSelections: are ' + JSON.stringify($("#mtable").bootstrapTable('getSelections')));
-                            
-                        });
+
                     });                     
                 });
             }else{
