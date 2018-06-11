@@ -157,6 +157,7 @@ public class ClientProgram {
                         forMessages.setError(Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED);
                     } else {
                         response.put("sourceCode", sourceCode);
+                        response.put("fileExtension", robotFactory.getFileExtension());
                         forMessages.setSuccess(Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS);
                     }
                 }
@@ -471,7 +472,7 @@ public class ClientProgram {
                     } else {
                         messageKey = Key.PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE;
                     }
-                    LOG.info("compileN terminated with " + messageKey);
+                    LOG.info("compileP terminated with " + messageKey);
                     if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
                         Util.addSuccessInfo(response, Key.COMPILERWORKFLOW_SUCCESS);
                     } else {
@@ -479,6 +480,7 @@ public class ClientProgram {
                     }
                 } else {
                     messageKey = Key.PROGRAM_IMPORT_ERROR;
+                    Util.addErrorInfo(response, messageKey);
                 }
             } else if ( cmd.equals("runPBack") ) {
                 Key messageKey = null;

@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.util;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -15,9 +16,12 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class Util1 {
     private static final Logger LOG = LoggerFactory.getLogger(Util1.class);
@@ -186,21 +190,71 @@ public class Util1 {
      * read all lines from a resource
      *
      * @param resourceName
-     * @return the list of resource
-     * @throws URISyntaxException
+     * @return the list of lines of the resource
      */
-    public static List<String> readResourceLines(String resourceName) throws IOException, URISyntaxException {
-        return Files.readAllLines(Paths.get(Util1.class.getResource(resourceName).toURI()));
+    public static List<String> readResourceLines(String resourceName) {
+        try {
+            return Files.readAllLines(Paths.get(Util1.class.getResource(resourceName).toURI()));
+        } catch ( IOException | URISyntaxException e ) {
+            throw new DbcException("read from resource failed for: " + resourceName, e);
+        }
     }
 
     /**
      * read all lines from a resource, concatenate them to a string separated by a newline
      *
      * @param resourceName
-     * @return the list of lines
-     * @throws URISyntaxException
+     * @return the content of the resource as one String
      */
-    public static String readResourceContent(String resourceName) throws IOException, URISyntaxException {
+    public static String readResourceContent(String resourceName) {
         return readResourceLines(resourceName).stream().collect(Collectors.joining(System.lineSeparator()));
+    }
+
+    /**
+     * read all lines from a file
+     *
+     * @param fileName
+     * @return the list of lines of the file
+     */
+    public static List<String> readFileLines(String fileName) {
+        try {
+            return Files.readAllLines(Paths.get(fileName));
+        } catch ( IOException e ) {
+            throw new DbcException("read from file failed for: " + fileName, e);
+        }
+    }
+
+    /**
+     * read all lines from a file, concatenate them to a string separated by a newline
+     *
+     * @param fileName
+     * @return the content of the resource as one String
+     */
+    public static String readFileContent(String fileName) {
+        return readFileLines(fileName).stream().collect(Collectors.joining(System.lineSeparator()));
+    }
+
+    /**
+     * return a stream of all files found in a file directory
+     *
+     * @param directory whose files are requested
+     * @return the stream of all files
+     */
+    public static Stream<String> fileStreamOfFileDirectory(String directory) {
+        return Arrays.stream(new File(directory).list());
+    }
+
+    /**
+     * return a stream of all files found in a resource directory
+     *
+     * @param directory whose files are requested
+     * @return the stream of all files
+     */
+    public static Stream<String> fileStreamOfResourceDirectory(String directory) {
+        try {
+            return Arrays.stream(Paths.get(Util1.class.getResource(directory).toURI()).toFile().list());
+        } catch ( URISyntaxException e ) {
+            throw new DbcException("getting a file stream from a resource directory failed for: " + directory, e);
+        }
     }
 }
