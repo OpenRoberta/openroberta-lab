@@ -28,8 +28,8 @@ public class VorwerkConfiguration extends Configuration {
     public VorwerkConfiguration(String ipAddress, String portNumber, String userName, String password) {
         super(new HashMap<IActorPort, Actor>() {
             {
-                put(new ActorPort("LEFT", "LEFT"), leftMotor);
-                put(new ActorPort("RIGHT", "RIGHT"), rightMotor);
+                put(new ActorPort("LEFT", "left"), leftMotor);
+                put(new ActorPort("RIGHT", "right"), rightMotor);
 
             }
         }, new HashMap<ISensorPort, Sensor>() {
@@ -37,12 +37,12 @@ public class VorwerkConfiguration extends Configuration {
                 put(new SensorPort("LEFT_ULTRASONIC", "LEFT_ULTRASONIC"), new Sensor(SensorType.ULTRASONIC));
                 put(new SensorPort("CENTER_ULTRASONIC", "CENTER_ULTRASONIC"), new Sensor(SensorType.ULTRASONIC));
                 put(new SensorPort("RIGHT_ULTRASONIC", "RIGHT_ULTRASONIC"), new Sensor(SensorType.ULTRASONIC));
-                put(new SensorPort("LEFT", "LEFT"), new Sensor(SensorType.TOUCH));
-                put(new SensorPort("RIGHT", "RIGHT"), new Sensor(SensorType.TOUCH));
+                put(new SensorPort("LEFT", "left"), new Sensor(SensorType.TOUCH));
+                put(new SensorPort("RIGHT", "right"), new Sensor(SensorType.TOUCH));
                 put(new SensorPort("X", "X"), new Sensor(SensorType.ACCELEROMETER));
                 put(new SensorPort("Y", "Y"), new Sensor(SensorType.ACCELEROMETER));
                 put(new SensorPort("Z", "Z"), new Sensor(SensorType.ACCELEROMETER));
-                put(new SensorPort("STRENGTH", "STRENGTH"), new Sensor(SensorType.ACCELEROMETER));
+                put(new SensorPort("STRENGTH", "strength"), new Sensor(SensorType.ACCELEROMETER));
             }
         }, 0.0, 0.0);
 
