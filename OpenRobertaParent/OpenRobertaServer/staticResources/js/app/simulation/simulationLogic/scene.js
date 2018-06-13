@@ -321,7 +321,8 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             this.robot.frontRight.bumped = false;
             this.robot.backLeft.bumped = false;
             this.robot.backRight.bumped = false;
-
+//            console.log("obstacle list is ");
+//            console.log(SIM.obstacleList);
             for (var i = 0; i < SIM.obstacleList.length; i++) {
                 var p = SIM.obstacleList[i];
                 if (i == 0) {
