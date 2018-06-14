@@ -122,7 +122,7 @@ cp ${scripts}/startbt ${work}/lejosimage/lejosfs/home/root/lejos/bin
 cp ${scripts}/startpan ${work}/lejosimage/lejosfs/home/root/lejos/bin
 cp ${scripts}/startup ${work}/lejosimage/lejosfs/home/root/lejos/bin
 
-cp ${espeak}/bin/speak ${work}/lejosimage/lejosfs/usr/bin/speak
+cp ${espeak}/speak ${work}/lejosimage/lejosfs/usr/bin/speak
 cp ${espeak}/lib/* ${work}/lejosimage/lejosfs/usr/lib/
 cp -r ${espeak}/share/espeak-data ${work}/lejosimage/lejosfs/usr/share
 
