@@ -3,7 +3,10 @@ package de.fhg.iais.roberta.syntax.action.display;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -31,13 +34,15 @@ public class ShowTextAction<V> extends Action<V> {
     private final Expr<V> msg;
     private final Expr<V> x;
     private final Expr<V> y;
+    private final IActorPort port;
 
-    private ShowTextAction(Expr<V> msg, Expr<V> column, Expr<V> row, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private ShowTextAction(Expr<V> msg, Expr<V> column, Expr<V> row, IActorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("SHOW_TEXT_ACTION"), properties, comment);
-        Assert.isTrue(msg != null && column != null && row != null);
+        Assert.isTrue((msg != null) && (column != null) && (row != null));
         this.msg = msg;
         this.x = column;
         this.y = row;
+        this.port = port;
         setReadOnly();
     }
 
@@ -47,12 +52,13 @@ public class ShowTextAction<V> extends Action<V> {
      * @param msg that will be printed on the display of the brick; must be <b>not</b> null,
      * @param x position where the message will start; must be <b>not</b> null,
      * @param y position where the message will start; must be <b>not</b> null,
+     * @param port
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of class {@link ShowTextAction}
      */
-    private static <V> ShowTextAction<V> make(Expr<V> msg, Expr<V> x, Expr<V> y, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ShowTextAction<V>(msg, x, y, properties, comment);
+    private static <V> ShowTextAction<V> make(Expr<V> msg, Expr<V> x, Expr<V> y, IActorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new ShowTextAction<>(msg, x, y, port, properties, comment);
     }
 
     /**
@@ -76,6 +82,13 @@ public class ShowTextAction<V> extends Action<V> {
         return this.y;
     }
 
+    /**
+     * @return port of the display.
+     */
+    public IActorPort getPort() {
+        return this.port;
+    }
+
     @Override
     public String toString() {
         return "ShowTextAction [" + this.msg + ", " + this.x + ", " + this.y + "]";
@@ -94,14 +107,18 @@ public class ShowTextAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+        IRobotFactory factory = helper.getModeFactory();
         List<Value> values = helper.extractValues(block, (short) 3);
+        List<Field> fields = helper.extractFields(block, (short) 1);
         Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.OUT, BlocklyType.STRING));
         Phrase<V> col = helper.extractValue(values, new ExprParam(BlocklyConstants.COL, BlocklyType.NUMBER_INT));
         Phrase<V> row = helper.extractValue(values, new ExprParam(BlocklyConstants.ROW, BlocklyType.NUMBER_INT));
+        String port = helper.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.NO_PORT);
         return ShowTextAction.make(
             helper.convertPhraseToExpr(msg),
             helper.convertPhraseToExpr(col),
             helper.convertPhraseToExpr(row),
+            factory.getActorPort(port),
             helper.extractBlockProperties(block),
             helper.extractComment(block));
     }
@@ -114,7 +131,6 @@ public class ShowTextAction<V> extends Action<V> {
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.OUT, getMsg());
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.COL, getX());
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.ROW, getY());
-
         return jaxbDestination;
     }
 

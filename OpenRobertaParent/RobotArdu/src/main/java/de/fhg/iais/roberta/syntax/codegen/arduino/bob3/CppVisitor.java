@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
@@ -427,6 +428,12 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
     @Override
     public Void visitRecallAction(RecallAction<Void> recallAction) {
         this.sb.append("recall()");
+        return null;
+    }
+
+    @Override
+    public Void visitLedAction(LedAction<Void> ledAction) {
+        // TODO Auto-generated method stub
         return null;
     }
 

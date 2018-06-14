@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.vorwerk.BrushOff;
 import de.fhg.iais.roberta.syntax.action.vorwerk.BrushOn;
 import de.fhg.iais.roberta.syntax.action.vorwerk.SideBrush;
@@ -58,6 +59,12 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitVacuumOff(VacuumOff<Void> vacuumOff) {
+        return null;
+    }
+
+    @Override
+    public Void visitLedAction(LedAction<Void> ledAction) {
+        // TODO Auto-generated method stub
         return null;
     }
 

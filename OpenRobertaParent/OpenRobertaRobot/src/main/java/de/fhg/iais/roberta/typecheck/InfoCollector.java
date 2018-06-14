@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectio
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
@@ -131,7 +132,7 @@ public class InfoCollector<T> implements AstLanguageVisitor<T>, AstSensorsVisito
      */
     public static <T> List<NepoInfo> collectInfos(Phrase<T> phrase) //
     {
-        InfoCollector<T> astVisitor = new InfoCollector<T>();
+        InfoCollector<T> astVisitor = new InfoCollector<>();
         phrase.visit(astVisitor);
         return astVisitor.infos;
     }
@@ -706,6 +707,12 @@ public class InfoCollector<T> implements AstLanguageVisitor<T>, AstSensorsVisito
 
     @Override
     public T visitStmtTextComment(StmtTextComment<T> stmtTextComment) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitLedAction(LedAction<T> ledAction) {
         // TODO Auto-generated method stub
         return null;
     }

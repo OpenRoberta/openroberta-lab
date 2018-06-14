@@ -126,7 +126,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
         List<Field> fields = helper.extractFields(block, (short) 3);
         String modeName = helper.extractField(fields, BlocklyConstants.SENSORTYPE);
         String portName = helper.extractField(fields, GetSampleType.get(modeName).getPortTypeName());
-        String slot = helper.extractField(fields, GetSampleType.get(modeName).getValues()[0]);
+        String slot = helper.extractField(fields, GetSampleType.get(modeName).getValues()[0], BlocklyConstants.NO_SLOT);
         boolean isPortInMutation = block.getMutation().getPort() != null;
         return GetSampleSensor.make(
             GetSampleType.get(modeName),

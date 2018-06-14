@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
@@ -25,7 +26,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
  * @author kcvejoski
  */
 public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisitor {
-    private final Set<String> usedImages = new HashSet<String>();
+    private final Set<String> usedImages = new HashSet<>();
 
     private boolean isSayTextUsed = false;
 
@@ -76,6 +77,12 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
             mode = InfraredSensorMode.SEEK;
         }
         this.usedSensors.add(new UsedSensor((ISensorPort) infraredSensor.getPort(), SensorType.INFRARED, mode));
+        return null;
+    }
+
+    @Override
+    public Void visitLedAction(LedAction<Void> ledAction) {
+        // TODO Auto-generated method stub
         return null;
     }
 

@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.check.program.vorwerk;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.vorwerk.BrushOff;
 import de.fhg.iais.roberta.syntax.action.vorwerk.BrushOn;
 import de.fhg.iais.roberta.syntax.action.vorwerk.SideBrush;
@@ -49,6 +50,12 @@ public class BrickCheckVisitor extends RobotBrickCheckVisitor implements Vorwerk
 
     @Override
     public Void visitVacuumOff(VacuumOff<Void> vacuumOff) {
+        return null;
+    }
+
+    @Override
+    public Void visitLedAction(LedAction<Void> ledAction) {
+        // TODO Auto-generated method stub
         return null;
     }
 

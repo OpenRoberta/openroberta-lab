@@ -346,4 +346,6 @@ public final class BlocklyConstants {
     public static final String COLON = "COLON";
     public static final String WALL = "WALL";
     public static final String DROP_OFF = "DROP_OFF";
+    public static final String ACTORPORT = "ACTORPORT";
+    public static final String LEDSTATE = "LEDSTATE";
 }

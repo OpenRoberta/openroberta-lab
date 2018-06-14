@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectio
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
@@ -746,6 +747,12 @@ public class TypecheckVisitor implements AstLanguageVisitor<BlocklyType>, AstSen
 
     @Override
     public BlocklyType visitStmtTextComment(StmtTextComment<BlocklyType> stmtTextComment) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitLedAction(LedAction<BlocklyType> ledAction) {
         // TODO Auto-generated method stub
         return null;
     }

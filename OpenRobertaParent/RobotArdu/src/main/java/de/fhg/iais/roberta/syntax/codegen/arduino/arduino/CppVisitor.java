@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
@@ -95,16 +96,19 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        //this.sb.append("lcd.setCursor(0," + showTextAction.getX() + ");");
-        //nlIndent();
-        //this.sb.append("lcd.print(\"");
-        //showTextAction.visit(this);
-        //this.sb.append("\");");
+        this.sb.append("lcd_" + showTextAction.getPort().getOraName() + ".setCursor(0,");
+        showTextAction.getY().visit(this);
+        this.sb.append(");");
+        nlIndent();
+        this.sb.append("lcd_" + showTextAction.getPort().getOraName() + ".print(");
+        showTextAction.getMsg().visit(this);
+        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+        this.sb.append("lcd_" + clearDisplayAction.getPort().getOraName() + ".clear();");
         return null;
     }
 
@@ -142,7 +146,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         //9 - sound port
-        this.sb.append("tone(..,");
+        this.sb.append("tone(_spiele_" + toneAction.getPort().getOraName() + ",");
         toneAction.getFrequency().visit(this);
         this.sb.append(", ");
         toneAction.getDuration().visit(this);
@@ -196,14 +200,20 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
     }
 
     @Override
+    public Void visitLedAction(LedAction<Void> ledAction) {
+        this.sb.append("digitalWrite(_led_" + ledAction.getPort().getOraName() + ")");
+        return null;
+    }
+
+    @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
         this.sb.append("analogRead(_output_" + lightSensor.getPort().getOraName() + ")");
-        //this.sb.append("analogRead(eingang_" + lightSensor.getBlockName() + ")");
         return null;
     }
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> button) {
+        this.sb.append("digitalRead(_taster_" + button.getPort().getOraName() + ")  == HIGH");
         return null;
     }
 
@@ -344,34 +354,19 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
         this.sb.append("\n}\n");
         this.sb.append("\n").append("void loop() \n");
         this.sb.append("{");
+
         for ( UsedConfigurationBlock usedConfigurationBlock : this.usedConfigurationBlocks ) {
-            switch ( (ConfigurationBlockType) usedConfigurationBlock.getType() ) {
-                case ULTRASONIC:
-                    nlIndent();
-                    this.sb.append("digitalWrite(_trigger_" + usedConfigurationBlock.getBlockName() + ", LOW);");
-                    nlIndent();
-                    this.sb.append("delay(5);");
-                    nlIndent();
-                    this.sb.append("digitalWrite(_trigger_" + usedConfigurationBlock.getBlockName() + ", HIGH);");
-                    nlIndent();
-                    this.sb.append("delay(10);");
-                    nlIndent();
-                    this.sb.append("digitalWrite(_trigger_" + usedConfigurationBlock.getBlockName() + ", LOW);");
-                    break;
-                case KEY:
-                case DROP:
-                case RFID:
-                case PULSE:
-                case HUMIDITY:
-                case TEMPERATURE:
-                case POTENTIOMETER:
-                case INFRARED:
-                case LIGHT:
-                case MOTION:
-                case MOISTURE:
-                    break;
-                default:
-                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getType());
+            if ( usedConfigurationBlock.getType().equals(ConfigurationBlockType.ULTRASONIC) ) {
+                nlIndent();
+                this.sb.append("digitalWrite(_trigger_" + usedConfigurationBlock.getBlockName() + ", LOW);");
+                nlIndent();
+                this.sb.append("delay(5);");
+                nlIndent();
+                this.sb.append("digitalWrite(_trigger_" + usedConfigurationBlock.getBlockName() + ", HIGH);");
+                nlIndent();
+                this.sb.append("delay(10);");
+                nlIndent();
+                this.sb.append("digitalWrite(_trigger_" + usedConfigurationBlock.getBlockName() + ", LOW);");
             }
         }
         return null;
@@ -391,6 +386,10 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
         //if RFID is used
         this.sb.append("#include <SPI.h> \n");
         this.sb.append("#include <MFRC522.h> \n");
+        //if LCD I2C is used
+        this.sb.append("#include <LiquidCrystal_I2C.h> \n");
+        //if LCD is used
+        this.sb.append("#include <LiquidCrystal.h> \n");
         this.sb.append("#include <RobertaFunctions.h>   // Open Roberta library \n");
         this.sb.append("RobertaFunctions rob;  \n");
     }
@@ -428,6 +427,8 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                     nlIndent();
                     break;
                 case KEY:
+                    this.sb.append("pinMode(_taster_" + usedConfigurationBlock.getBlockName() + ", INPUT);");
+                    nlIndent();
                 case LIGHT:
                     break;
                 case POTENTIOMETER:
@@ -445,6 +446,28 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                     nlIndent();
                     this.sb.append("_mfrc522_" + usedConfigurationBlock.getBlockName() + ".PCD_Init();");
                     nlIndent();
+                    break;
+                case LCD:
+                    this.sb.append("lcd_" + usedConfigurationBlock.getBlockName() + ".begin(16, 2);");
+                    nlIndent();
+                    break;
+                case LCDI2C:
+                    this.sb.append("lcd_" + usedConfigurationBlock.getBlockName() + ".begin();");
+                    nlIndent();
+                    break;
+                case LED:
+                    this.sb.append("pinMode(_led_" + usedConfigurationBlock.getBlockName() + ", OUTPUT);");
+                    nlIndent();
+                    break;
+                case RGBLED:
+                    break;
+                case BUZZER:
+                    break;
+                case RELAY:
+                    break;
+                case STEPMOTOR:
+                    break;
+                case SERVOMOTOR:
                     break;
                 default:
                     throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getType());
@@ -520,17 +543,50 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                     nlIndent();
                     break;
                 case KEY:
+                    this.sb.append("int _taster_" + blockName + " = ").append(usedConfigurationBlock.getPins().get(0)).append(";");
+                    nlIndent();
+                    break;
+                case LCD:
+                    this.sb
+                        .append("LiquidCrystal lcd_" + blockName + "(")
+                        .append(usedConfigurationBlock.getPins().get(0))
+                        .append(",")
+                        .append(usedConfigurationBlock.getPins().get(1))
+                        .append(",")
+                        .append(usedConfigurationBlock.getPins().get(2))
+                        .append(",")
+                        .append(usedConfigurationBlock.getPins().get(3))
+                        .append(",")
+                        .append(usedConfigurationBlock.getPins().get(4))
+                        .append(",")
+                        .append(usedConfigurationBlock.getPins().get(5))
+                        .append(");");
+                    nlIndent();
+                    break;
+                case LCDI2C:
+                    this.sb.append("LiquidCrystal_I2C lcd_" + blockName + "(0x27, 16, 2);");
+                    nlIndent();
+                    break;
+                case LED:
+                    this.sb.append("int _led_" + blockName + " = ").append(usedConfigurationBlock.getPins().get(0)).append(";");
+                    nlIndent();
+                    break;
+                case RGBLED:
+                    break;
+                case BUZZER:
+                    this.sb.append("int _spiele_" + blockName + " = ").append(usedConfigurationBlock.getPins().get(0)).append(";");
+                    nlIndent();
+                    break;
+                case RELAY:
+                    break;
+                case STEPMOTOR:
+                    break;
+                case SERVOMOTOR:
                     break;
                 default:
-                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getType());
+                    throw new DbcException("Configuration block is not supported: " + usedConfigurationBlock.getType());
             }
         }
-    }
-
-    @Override
-    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override
@@ -547,6 +603,12 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitExternalLedOffAction(ExternalLedOffAction<Void> externalLedOffAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
         // TODO Auto-generated method stub
         return null;
     }

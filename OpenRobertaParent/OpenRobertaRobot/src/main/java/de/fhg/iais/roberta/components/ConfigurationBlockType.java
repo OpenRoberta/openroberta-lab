@@ -22,7 +22,15 @@ public enum ConfigurationBlockType implements IConfigurationBlockType {
     PULSE( "robConf_pulse" ),
     RFID( "robConf_rfid" ),
     INFRARED( "robConf_infrared" ),
-    KEY( "robConf_key" );
+    KEY( "robConf_key" ),
+    LCD( "robConf_lcd" ),
+    LCDI2C( "robConf_lcdi2c" ),
+    LED( "robConf_led" ),
+    RGBLED( "robConf_rgbled" ),
+    BUZZER( "robConf_buzzer" ),
+    RELAY( "robConf_relay" ),
+    STEPMOTOR( "robConf_stepmotor" ),
+    SERVOMOTOR( "robConf_servo" );
 
     //INFRARED( "robBrick_infrared" ),
     //GYRO( "robBrick_gyro", "makeblockSensors_gyroscope_getSample" ),

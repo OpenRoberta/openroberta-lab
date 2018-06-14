@@ -7,6 +7,7 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
+import de.fhg.iais.roberta.mode.action.BrickLedColor;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -32,7 +33,7 @@ public class LightAction<V> extends Action<V> {
 
     private LightAction(IBrickLedColor color, IBlinkMode blinkMode, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("LIGHT_ACTION"), properties, comment);
-        Assert.isTrue(color != null && blinkMode != null);
+        Assert.isTrue((color != null) && (blinkMode != null));
         this.color = color;
         this.blinkMode = blinkMode;
         setReadOnly();
@@ -56,11 +57,11 @@ public class LightAction<V> extends Action<V> {
      * @return read only object of class {@link LightAction}
      */
     private static <V> LightAction<V> make(IBrickLedColor color, IBlinkMode blinkMode, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LightAction<V>(color, blinkMode, properties, comment);
+        return new LightAction<>(color, blinkMode, properties, comment);
     }
 
     private static <V> LightAction<V> make(IBlinkMode blinkMode, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LightAction<V>(blinkMode, properties, comment);
+        return new LightAction<>(blinkMode, properties, comment);
     }
 
     /**

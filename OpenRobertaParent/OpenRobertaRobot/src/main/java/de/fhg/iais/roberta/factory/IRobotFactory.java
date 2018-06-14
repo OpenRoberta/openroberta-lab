@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
+import de.fhg.iais.roberta.inter.mode.action.ILedMode;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IMotorMoveMode;
 import de.fhg.iais.roberta.inter.mode.action.IMotorSide;
@@ -62,6 +63,7 @@ import de.fhg.iais.roberta.mode.action.BlinkMode;
 import de.fhg.iais.roberta.mode.action.BrickLedColor;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
+import de.fhg.iais.roberta.mode.action.LedMode;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
@@ -391,6 +393,17 @@ public interface IRobotFactory {
      */
     default IMotorStopMode getMotorStopMode(String mode) {
         return IRobotFactory.getModeValue(mode, MotorStopMode.class);
+    }
+
+    /**
+     * Get LED mode from {@link ILedMode} from string parameter. Throws
+     * exception if the mode does not exists.
+     *
+     * @param name of the mode
+     * @return name of the mode from the enum {@link LedMode}
+     */
+    default ILedMode getLedMode(String mode) {
+        return IRobotFactory.getModeValue(mode, LedMode.class);
     }
 
     /**

@@ -6,11 +6,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
-import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
+import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
 
 public class LoopCounterVisitorTest {
     AbstractHelperForXmlTest h = new GenericHelperForXmlTest();
@@ -24,7 +24,11 @@ public class LoopCounterVisitorTest {
 
         @Override
         public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public Void visitLedAction(LedAction<Void> ledAction) {
             return null;
         }
     }

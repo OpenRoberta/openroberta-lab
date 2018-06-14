@@ -36,6 +36,7 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectio
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
@@ -649,14 +650,14 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         this.sb.append(", ");
         IndexLocation where1 = (IndexLocation) getSubFunct.getStrParam().get(0);
         this.sb.append(getEnumCode(where1));
-        if ( where1 == IndexLocation.FROM_START || where1 == IndexLocation.FROM_END ) {
+        if ( (where1 == IndexLocation.FROM_START) || (where1 == IndexLocation.FROM_END) ) {
             this.sb.append(", ");
             getSubFunct.getParam().get(1).visit(this);
         }
         this.sb.append(", ");
         IndexLocation where2 = (IndexLocation) getSubFunct.getStrParam().get(1);
         this.sb.append(getEnumCode(where2));
-        if ( where2 == IndexLocation.FROM_START || where2 == IndexLocation.FROM_END ) {
+        if ( (where2 == IndexLocation.FROM_START) || (where2 == IndexLocation.FROM_END) ) {
             this.sb.append(", ");
             if ( getSubFunct.getParam().size() == 3 ) {
                 getSubFunct.getParam().get(2).visit(this);
@@ -1021,7 +1022,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
 
     private boolean isActorUsed(Actor actor, IActorPort port) {
         for ( UsedActor usedActor : this.usedActors ) {
-            if ( port.equals(usedActor.getPort()) && actor.getName() == usedActor.getType() ) {
+            if ( port.equals(usedActor.getPort()) && (actor.getName() == usedActor.getType()) ) {
                 return true;
             }
         }
@@ -1033,7 +1034,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         for ( Map.Entry<IActorPort, Actor> entry : this.brickConfiguration.getActors().entrySet() ) {
             Actor actor = entry.getValue();
             IActorPort port = entry.getKey();
-            if ( actor != null && isActorUsed(actor, port) ) {
+            if ( (actor != null) && isActorUsed(actor, port) ) {
                 sb.append("        '").append(port.toString()).append("':");
                 sb.append(generateRegenerateActor(actor, port));
                 sb.append(",\n");
@@ -1044,7 +1045,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
 
     private boolean isSensorUsed(Sensor sensor, ISensorPort port) {
         for ( UsedSensor usedSensor : this.usedSensors ) {
-            if ( port.equals(usedSensor.getPort()) && sensor.getType() == usedSensor.getType() ) {
+            if ( port.equals(usedSensor.getPort()) && (sensor.getType() == usedSensor.getType()) ) {
                 return true;
             }
         }
@@ -1056,7 +1057,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         for ( Map.Entry<ISensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
             Sensor sensor = entry.getValue();
             ISensorPort port = entry.getKey();
-            if ( sensor != null && isSensorUsed(sensor, port) ) {
+            if ( (sensor != null) && isSensorUsed(sensor, port) ) {
                 sb.append("        '").append(port.getOraName()).append("':");
                 sb.append(generateRegenerateSensor(sensor, port));
                 sb.append(",\n");
@@ -1145,5 +1146,11 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         }
         sb.append("Hal.make").append(name).append("(ev3dev.INPUT_").append(port.getOraName()).append(")");
         return sb.toString();
+    }
+
+    @Override
+    public Void visitLedAction(LedAction<Void> ledAction) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
