@@ -520,7 +520,7 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        String brickSensorPort = getEnumCode(brickSensor.getPort());
+        String brickSensorPort = "BrickKey." + brickSensor.getPort().getOraName();
         switch ( (BrickKeyPressMode) brickSensor.getMode() ) {
             case PRESSED:
                 this.sb.append("hal.isPressed(" + brickSensorPort + ")");

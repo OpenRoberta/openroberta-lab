@@ -358,6 +358,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                     nlIndent();
                     this.sb.append("digitalWrite(_trigger_" + usedConfigurationBlock.getBlockName() + ", LOW);");
                     break;
+                case KEY:
                 case DROP:
                 case RFID:
                 case PULSE:
@@ -426,6 +427,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                     this.sb.append("irrecv" + usedConfigurationBlock.getBlockName() + ".enableIRIn();");
                     nlIndent();
                     break;
+                case KEY:
                 case LIGHT:
                     break;
                 case POTENTIOMETER:
@@ -516,6 +518,8 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                     nlIndent();
                     this.sb.append("MFRC522 _mfrc522_" + blockName + "(SS_PIN_" + blockName + ", RST_PIN_" + blockName + ");");
                     nlIndent();
+                    break;
+                case KEY:
                     break;
                 default:
                     throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getType());

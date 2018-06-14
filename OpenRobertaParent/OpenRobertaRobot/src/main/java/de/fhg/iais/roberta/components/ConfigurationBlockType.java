@@ -21,7 +21,9 @@ public enum ConfigurationBlockType implements IConfigurationBlockType {
     DROP( "robConf_drop" ),
     PULSE( "robConf_pulse" ),
     RFID( "robConf_rfid" ),
-    INFRARED( "robConf_infrared" );
+    INFRARED( "robConf_infrared" ),
+    KEY( "robConf_key" );
+
     //INFRARED( "robBrick_infrared" ),
     //GYRO( "robBrick_gyro", "makeblockSensors_gyroscope_getSample" ),
     //SOUND( "robBrick_sound" ),

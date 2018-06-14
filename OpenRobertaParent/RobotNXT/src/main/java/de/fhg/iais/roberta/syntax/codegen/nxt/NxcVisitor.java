@@ -16,7 +16,6 @@ import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.nxt.PickColor;
-import de.fhg.iais.roberta.mode.sensor.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
@@ -818,21 +817,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        String button = null;
-        switch ( (BrickKey) brickSensor.getPort() ) {
-            case ENTER:
-                button = "BTNCENTER";
-                break;
-            case LEFT:
-                button = "BTNLEFT";
-                break;
-            case RIGHT:
-                button = "BTNRIGHT";
-                break;
-            default:
-                throw new DbcException("Invalid Key!");
-        }
-        this.sb.append("ButtonPressed(" + button + ", false)");
+        this.sb.append("ButtonPressed(" + brickSensor.getPort().getCodeName() + ", false)");
         return null;
     }
 

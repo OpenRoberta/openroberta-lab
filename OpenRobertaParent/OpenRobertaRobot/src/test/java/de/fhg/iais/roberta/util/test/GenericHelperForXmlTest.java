@@ -13,7 +13,6 @@ import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.general.IWorkingState;
-import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
@@ -69,11 +68,6 @@ public class GenericHelperForXmlTest extends AbstractHelperForXmlTest {
 
         @Override
         public IActorPort getActorPort(String port) {
-            return null;
-        }
-
-        @Override
-        public IBrickKey getBrickKey(String brickKey) {
             return null;
         }
 

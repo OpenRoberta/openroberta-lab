@@ -542,9 +542,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        String key = getEnumCode(brickSensor.getPort());
-        key = key.substring(key.length() - 1).toUpperCase();
-        this.sb.append("_uBit.button" + key + ".isPressed()");
+        this.sb.append("_uBit.button" + brickSensor.getPort().getCodeName() + ".isPressed()");
         return null;
     }
 

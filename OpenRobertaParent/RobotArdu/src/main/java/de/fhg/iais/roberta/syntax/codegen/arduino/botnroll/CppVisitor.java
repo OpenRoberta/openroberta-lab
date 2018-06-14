@@ -413,7 +413,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        this.sb.append("bnr.buttonIsPressed(" + brickSensor.getPort().getValues()[1] + ")");
+        this.sb.append("bnr.buttonIsPressed(" + brickSensor.getPort().getCodeName() + ")");
         return null;
     }
 
