@@ -111,6 +111,12 @@
 			<artifactId>RobotVorwerk</artifactId>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>de.fhg.iais.openroberta</groupId>
+            <artifactId>RobotWeDo</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
 		<dependency>
 			<groupId>de.fhg.iais.openroberta</groupId>
 			<artifactId>OpenRobertaRobot</artifactId>
@@ -196,6 +202,13 @@
 									<type>jar</type>
 									<overWrite>true</overWrite>
 								</artifactItem>
+                                <artifactItem>
+                                    <groupId>de.fhg.iais.openroberta</groupId>
+                                    <artifactId>RobotWeDo</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                </artifactItem>
 							</artifactItems>
 							<outputDirectory>${project.build.directory}/resources</outputDirectory>
 							<overWriteReleases>true</overWriteReleases>
