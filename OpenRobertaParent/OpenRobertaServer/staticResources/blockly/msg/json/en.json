@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-06-04 22:26:24.512243",
+		"lastupdated": "2018-06-17 14:14:29.928679",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -450,7 +450,7 @@
 	"SET": "set",
 	"BRICK_WHEEL_DIAMETER": "wheel diameter",
 	"BRICK_TRACK_WIDTH": "track width",
-	"MOTOR": "motor",
+	"ACTION_MOTOR": "motor",
 	"MOTOR_MIDDLE": "middle",
 	"MOTOR_BIG": "big",
 	"MOTOR_NONE": "none",
@@ -534,7 +534,7 @@
 	"SENSOR_GET": "get",
 	"SENSOR_IS_PRESSED": "pressed?",
 	"SENSOR_IS_TOUCHED": "touched?",
-	"SENSOR_PRESSED": " (pressed)",
+	"SENSOR_IS_TILTED": "tilted?",
 	"PITCH": "pitch",
 	"ROLL": "roll",
 	"YAW": "yaw",
@@ -1261,6 +1261,7 @@
 	"SENSOR_SOUND_CALLIOPE": "microphone",
 	"MODE_VALUE": "value",
 	"MODE_PRESSED": "pressed",
+	"MODE_TILTED": "tilted",
 	"MODE_CURRENT": "current",
 	"INFRARED_DISTANCE_GETSAMPLE_TOOLTIP": "Gets the current relative distance from the infrared sensor. The values are between 1 and 75 cm.",
 	"INFRARED_PRESENCE_GETSAMPLE_TOOLTIP": "Returns an array of measurements for the presence of a beacon.",
@@ -1397,5 +1398,13 @@
 	"VACUUM_ON": "turn vacuum on %",
 	"VACUUM_ON_TOOLTIP": "Turns on the vacuum speed in procent",
 	"VACUUM_OFF": "turn vacuum off",
-	"VACUUM_OFF_TOOLTIP": "Turns the vacuum off."
+	"VACUUM_OFF_TOOLTIP": "Turns the vacuum off.",
+	"VACUUM_OFF": "Turn Vacuum Off",
+	"VACUUM_OFF_TOOLTIP": "Turn the vacuum off.",
+	"SLOT_TILTED_UP": "up",
+	"SLOT_TILTED_DOWN": "down",
+	"SLOT_TILTED_BACK": "back",
+	"SLOT_TILTED_FRONT": "front",
+	"SLOT_TILTED_NO": "not",
+	"SLOT_TILTED_ANY": "shake"
 }

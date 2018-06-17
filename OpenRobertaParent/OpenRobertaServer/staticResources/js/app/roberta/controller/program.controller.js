@@ -5,6 +5,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
 
     var blocklyWorkspace;
     var listenToBlocklyEvents = true;
+    var seen = true;
     /**
      * Inject Blockly with initial toolbox
      */
@@ -36,7 +37,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
             checkInTask : [ 'start', '_def', 'event' ],
             variableDeclaration : true,
             robControls : true,
-            theme: GUISTATE_C.getTheme()
+            theme : GUISTATE_C.getTheme()
         });
         $(window).resize();
         blocklyWorkspace.setDevice(GUISTATE_C.getRobotGroup());
@@ -83,11 +84,20 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         });
         $('#tabProgram').on('show.bs.tab', function(e) {
             GUISTATE_C.setView('tabProgram');
-            blocklyWorkspace.markFocused();
         });
 
         $('#tabProgram').on('shown.bs.tab', function(e) {
-            $(window).resize();
+            blocklyWorkspace.markFocused();
+            blocklyWorkspace.setVisible(true);
+            if (!seen) {
+                reloadView();
+            }
+        });
+        $('#tabProgram').on('hide.bs.tab', function(e) {
+            Blockly.hideChaff();
+        });
+        $('#tabProgram').on('hidden.bs.tab', function(e) {
+            blocklyWorkspace.setVisible(false);
         });
 
         // work around for touch devices
@@ -549,9 +559,12 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
             var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
             var xml = Blockly.Xml.domToText(dom);
             programToBlocklyWorkspace(xml);
+            var toolbox = GUISTATE_C.getProgramToolbox();
+            blocklyWorkspace.updateToolbox(toolbox);
+            seen = true;
+        } else {
+            seen = false;
         }
-        var toolbox = GUISTATE_C.getProgramToolbox();
-        blocklyWorkspace.updateToolbox(toolbox);
     }
 
     exports.reloadView = reloadView;

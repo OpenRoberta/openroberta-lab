@@ -58,6 +58,7 @@
 		<module>RobotNAO</module>
 		<module>RobotMbed</module>
 		<module>RobotVorwerk</module>
+        <module>RobotWeDo</module>
 		<module>OpenRobertaServer</module>
 	</modules>
 	<repositories>
@@ -115,6 +116,11 @@
 				<artifactId>RobotVorwerk</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+            <dependency>
+                <groupId>de.fhg.iais.openroberta</groupId>
+                <artifactId>RobotWedo</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
