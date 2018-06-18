@@ -200,7 +200,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         hOld : 0
     };
     var obslist= [ground, obstacle];
-    for(var i=0;i<10;i++){
+    for(var i=0;i<20;i++){
         var tempobs= {
                 x : 0,
                 y : 0,
@@ -363,13 +363,23 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             obstacle.color = "#33B8CA";
         } else if (currentBackground == 2) {
             for(var i=1;i<obslist.length; i++){
+                var batchx;
+                var prevy;
                 if(i===1){
                     obslist[i].x = 500;
                     obslist[i].y = 20;
                     obslist[i].color = "white";
+                    batchx = 500;
                 }else{
-                    obslist[i].x = 500 + Math.random()*60 -30;
-                    obslist[i].y = obslist[i-1].y + 40;
+                    if(i%11===0){
+                        batchx += 140;
+                        prevy = 20;
+                        obslist[i].y = 20;
+                    }else{
+                        prevy = obslist[i-1].y;
+                        obslist[i].y = prevy + 40;
+                    }
+                    obslist[i].x = batchx + Math.random()*60 -30;
                     var letters = '0123456789ABCDEF';
                     var tempcol= "#";
                     for (var j = 0; j < 6; j++) {
