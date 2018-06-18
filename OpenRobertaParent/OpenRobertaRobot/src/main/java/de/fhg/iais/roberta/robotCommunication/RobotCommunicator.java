@@ -26,7 +26,12 @@ public class RobotCommunicator {
     private final Map<String, RobotCommunicationData> allStates = new ConcurrentHashMap<>();
 
     public RobotCommunicator() {
-        Runnable pushTimerThread = () -> pushTimerRunner();
+        Runnable pushTimerThread = new Runnable() {
+            @Override
+            public void run() {
+                pushTimerRunner();
+            }
+        };
         new Thread(null, pushTimerThread, "PushTimer").start();
         LOG.info("timer thread created");
     }
@@ -40,11 +45,11 @@ public class RobotCommunicator {
     public boolean addNewRegistration(RobotCommunicationData newRobotCommunicationData) {
         String token = newRobotCommunicationData.getToken();
         String newIdentificator = newRobotCommunicationData.getRobotIdentificator();
-        Assert.isTrue((token != null) && (newIdentificator != null));
+        Assert.isTrue(token != null && newIdentificator != null);
         RobotCommunicationData existingRobotCommunicationData = this.allStates.get(token);
         if ( existingRobotCommunicationData != null ) {
             String existingIdentificator = existingRobotCommunicationData.getRobotIdentificator();
-            if ( (existingIdentificator == null)
+            if ( existingIdentificator == null
                 || !existingIdentificator.equals(newIdentificator)
                 || existingIdentificator.equals("usb")
                 || existingIdentificator.equals("unknown") ) {
@@ -164,7 +169,7 @@ public class RobotCommunicator {
             } catch ( InterruptedException e ) { //NOSONAR : repeat the loop forever
             }
             for ( RobotCommunicationData state : this.allStates.values() ) {
-                if ( (state.getState() == State.ROBOT_WAITING_FOR_PUSH_FROM_SERVER) && (state.getElapsedMsecOfStartOfLastRequest() > PUSH_TIMEOUT_INTERVALL) ) {
+                if ( state.getState() == State.ROBOT_WAITING_FOR_PUSH_FROM_SERVER && state.getElapsedMsecOfStartOfLastRequest() > PUSH_TIMEOUT_INTERVALL ) {
                     state.terminatePushAndRequestNextPush();
                 }
             }

@@ -17,11 +17,11 @@ import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.mode.general.PickColor;
-import de.fhg.iais.roberta.mode.sensor.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.util.RobertaProperties;
@@ -111,7 +111,7 @@ public class RobotModeFactoryTest {
         this.factory.getBrickLedColor("Q");
     }
 
-    @Ignore ("Not supported block")
+    @Ignore("Not supported block")
     @Test(expected = DbcException.class)
     public void invalidShowPicture() {
         this.factory.getShowPicture("Q");
@@ -179,12 +179,12 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getBrickKeyFromString() {
-        Assert.assertEquals(this.factory.getBrickKey("DOWN"), BrickKey.DOWN);
+        Assert.assertEquals(this.factory.getSensorPort("DOWN"), new SensorPort("DOWN", "DOWN"));
     }
 
     @Test(expected = DbcException.class)
     public void invalidBrickKey() {
-        this.factory.getBrickKey("Q");
+        this.factory.getSensorPort("Q");
     }
 
     @Test
