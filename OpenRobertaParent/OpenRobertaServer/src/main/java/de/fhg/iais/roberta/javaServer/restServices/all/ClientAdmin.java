@@ -189,6 +189,7 @@ public class ClientAdmin {
                         response.put("configurationUsed", robotFactory.hasConfiguration());
                         response.put("commandLine", robotFactory.getCommandline());
                         response.put("signature", robotFactory.getSignature());
+                        response.put("fileExtension", robotFactory.getFileExtension());
 
                         LOG.info("set robot to {}", robot);
                     } else {

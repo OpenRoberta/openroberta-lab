@@ -73,7 +73,7 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public String getFileExtension() {
-        return "java";
+        return "js";
     }
 
     @Override

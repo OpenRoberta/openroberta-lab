@@ -265,6 +265,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         GUISTATE.gui.signature = result.signature;
         GUISTATE.gui.commandLine = result.commandLine;
         GUISTATE.gui.configurationUsed = result.configurationUsed;
+        GUISTATE.gui.fileExtension = result.fileExtension;
         $('#blocklyDiv, #bricklyDiv').css('background', 'url(../../../../css/img/' + robotGroup + 'Background.jpg) repeat');
         $('#blocklyDiv, #bricklyDiv').css('background-size', '100%');
         $('#blocklyDiv, #bricklyDiv').css('background-position', 'initial');
@@ -654,12 +655,12 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
     exports.getProgramSource = getProgramSource;
 
     function setProgramFileExtension(fileExtension) {
-        GUISTATE.program.fileExtension = fileExtension;
+        GUISTATE.gui.fileExtension = fileExtension;
     }
     exports.setProgramFileExtension = setProgramFileExtension;
 
     function getProgramFileExtension() {
-        return GUISTATE.program.fileExtension;
+        return GUISTATE.gui.fileExtension;
     }
     exports.getProgramFileExtension = getProgramFileExtension;
 

@@ -157,7 +157,6 @@ public class ClientProgram {
                         forMessages.setError(Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED);
                     } else {
                         response.put("sourceCode", sourceCode);
-                        response.put("fileExtension", robotFactory.getFileExtension());
                         forMessages.setSuccess(Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS);
                     }
                 }

@@ -1,7 +1,7 @@
 define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket.controller', 'user.controller', 'user.model', 'guiState.controller',
-        'cookieDisclaimer.controller', 'program.controller', 'progRun.controller', 'configuration.controller', 'enjoyHint', 'tour.controller',
-        'simulation.simulation', 'jquery', 'blocks', 'slick' ], function(exports, LOG, UTIL, MSG, COMM, ROBOT_C, SOCKET_C, USER_C, USER, GUISTATE_C,
-        CookieDisclaimer, PROGRAM_C, RUN_C, CONFIGURATION_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
+        'cookieDisclaimer.controller', 'program.controller', 'progRun.controller', 'configuration.controller', 'import.controller', 'enjoyHint',
+        'tour.controller', 'simulation.simulation', 'jquery', 'blocks', 'slick' ], function(exports, LOG, UTIL, MSG, COMM, ROBOT_C, SOCKET_C, USER_C, USER,
+        GUISTATE_C, CookieDisclaimer, PROGRAM_C, RUN_C, CONFIGURATION_C, IMPORT_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
 
     function init() {
         initMenu();
@@ -26,7 +26,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             USER_C.showResetPassword(target[1]);
         } else if (target[0] === "#loadProgram" && target.length >= 4) {
             GUISTATE_C.setStartWithoutPopup();
-            PROGRAM_C.openProgramFromXML(target);
+            IMPORT_C.openProgramFromXML(target);
         } else if (target[0] === "#activateAccount") {
             USER_C.activateAccount(target[1]);
         } else if (target[0] === "#overview") {
@@ -35,6 +35,11 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         } else if (target[0] === "#gallery") {
             GUISTATE_C.setStartWithoutPopup();
             $('#tabGalleryList').click();
+        }
+        var uri = window.location.toString();
+        if (uri.indexOf("#") > 0) {
+            var clean_uri = uri.substring(0, uri.indexOf("#"));
+            window.history.replaceState({}, document.title, clean_uri);
         }
 
         var firsttime = true
@@ -265,7 +270,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 $('codeButton').trigger("click");
                 break;
             case 'menuImportProg':
-                PROGRAM_C.importXml();
+                IMPORT_C.importXml();
                 break;
             case 'menuExportProg':
                 PROGRAM_C.exportXml();
@@ -615,11 +620,11 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         // experimental
         $(document).on('keydown', function(e) {
             if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '1')) {
-                PROGRAM_C.importSourceCodeToCompile();
+                IMPORT_C.importSourceCodeToCompile();
                 return false;
             }
             if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '2')) {
-                PROGRAM_C.importNepoCodeToCompile();
+                IMPORT_C.importNepoCodeToCompile();
                 return false;
             }
         });

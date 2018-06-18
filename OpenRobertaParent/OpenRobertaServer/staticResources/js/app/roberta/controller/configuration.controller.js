@@ -54,23 +54,11 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
     }
 
     function initEvents() {
-
         $('#tabConfiguration').on('show.bs.tab', function(e) {
             GUISTATE_C.setView('tabConfiguration');
-            bricklyWorkspace.markFocused();
-        });
-
-        $('#tabConfiguration').on('reload', function(e) {
-            reloadConf();
         });
 
         $('#tabConfiguration').onWrap('shown.bs.tab', function(e) {
-//            if (GUISTATE_C.isConfigurationUsed()) {
-//                bricklyWorkspace.setVisible(true);
-//            } else {
-//                bricklyWorkspace.setVisible(false);
-//            }
-//            reloadConf();
             bricklyWorkspace.markFocused();
             bricklyWorkspace.setVisible(true);
             if (!seen) {
@@ -82,9 +70,9 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
         });
 
         $('#tabConfiguration').on('hidden.bs.tab', function(e) {
-//            var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
-//            var xml = Blockly.Xml.domToText(dom);
-//            GUISTATE_C.setConfigurationXML(xml);
+            var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
+            var xml = Blockly.Xml.domToText(dom);
+            GUISTATE_C.setConfigurationXML(xml);
             bricklyWorkspace.setVisible(false);
         });
 
@@ -297,36 +285,27 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
     }
     exports.getBricklyWorkspace = getBricklyWorkspace;
 
-    function reloadConf() {
-        var conf = GUISTATE_C.getConfigurationXML();
-        configurationToBricklyWorkspace(conf);
-        if (!seen) {
-            if ($(window).width() < 768) {
-                x = $(window).width() / 50;
-                y = 25;
-            } else {
-                x = $(window).width() / 5;
-                y = 50;
-            }
-            var blocks = bricklyWorkspace.getTopBlocks(true);
-            if (blocks[0]) {
-                var coord = blocks[0].getRelativeToSurfaceXY();
-                blocks[0].moveBy(x - coord.x, y - coord.y);
-            }
-            seen = true;
+    function reloadConf(opt_result) {
+        var conf;
+        if (opt_result) {
+            conf = opt_result.data;
+        } else {
+            conf = GUISTATE_C.getConfigurationXML();
         }
+        configurationToBricklyWorkspace(conf);
     }
+    exports.reloadConf = reloadConf;
 
     function reloadView() {
         if (isVisible()) {
             var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
             var xml = Blockly.Xml.domToText(dom);
             configurationToBricklyWorkspace(xml);
-            var toolbox = GUISTATE_C.getConfigurationToolbox();
-            bricklyWorkspace.updateToolbox(toolbox);
         } else {
             seen = false;
         }
+        var toolbox = GUISTATE_C.getConfigurationToolbox();
+        bricklyWorkspace.updateToolbox(toolbox);
     }
     exports.reloadView = reloadView;
 
@@ -354,10 +333,11 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
         setTimeout(function() {
             listenToBricklyEvents = true;
         }, 500);
-//        if (GUISTATE_C.isConfigurationUsed()) {
-//            bricklyWorkspace.setVisible(true);
-//        } else {
-//            bricklyWorkspace.setVisible(false);
-//        }
+        if (isVisible()) {
+            seen = true;
+        } else {
+            seen = false;
+        }
     }
+    exports.configurationToBricklyWorkspace = configurationToBricklyWorkspace;
 });

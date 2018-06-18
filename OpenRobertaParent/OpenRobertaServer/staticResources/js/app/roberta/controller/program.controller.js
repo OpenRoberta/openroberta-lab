@@ -1,5 +1,5 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'program.model', 'robot.controller', 'prettify', 'blocks', 'jquery',
-        'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, PROGRAM, ROBOT_C, Prettify, Blockly, $) {
+define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'program.model', 'prettify', 'blocks', 'jquery', 'jquery-validate', 'blocks-msg' ], function(
+        exports, COMM, MSG, LOG, UTIL, GUISTATE_C, PROGRAM, Prettify, Blockly, $) {
 
     var $formSingleModal;
 
@@ -188,50 +188,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
     }
 
     /**
-     * Load the program that was selected in program list
-     */
-    function loadFromListing(program) {
-        var right = 'none';
-        LOG.info('loadFromList ' + program[0]);
-        PROGRAM.loadProgramFromListing(program[0], program[1], program[3], function(result) {
-            if (result.rc === 'ok') {
-                result.programShared = false;
-                var alien = program[1] === GUISTATE_C.getUserAccountName() ? null : program[1];
-                if (alien) {
-                    result.programShared = 'READ';
-                }
-                if (program[2].sharedFrom) {
-                    var right = program[2].sharedFrom;
-                    result.programShared = right;
-                }
-                result.name = program[0];
-                GUISTATE_C.setProgram(result, alien);
-                GUISTATE_C.setProgramXML(result.programText);
-
-                if (result.configName === undefined) {
-                    if (result.configText === undefined) {
-                        GUISTATE_C.setConfigurationNameDefault();
-                        GUISTATE_C.setConfigurationXML(GUISTATE_C.getConfigurationConf());
-                    } else {
-                        GUISTATE_C.setConfigurationName('');
-                        GUISTATE_C.setConfigurationXML(result.configText);
-                    }
-                } else {
-                    GUISTATE_C.setConfigurationName(result.configName);
-                    GUISTATE_C.setConfigurationXML(result.configText);
-                }
-                $('#tabProgram').one('shown.bs.tab', function(e) {
-                    reloadProgram();
-                });
-                $('#tabProgram').trigger('click');
-
-            }
-            MSG.displayInformation(result, "", result.message);
-        });
-    }
-    exports.loadFromListing = loadFromListing;
-
-    /**
      * Load the program that was selected in gallery list
      */
     function loadFromGallery(program) {
@@ -381,75 +337,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         }
     }
 
-    /**
-     * Open a file select dialog to load a blockly program (xml) from local
-     * disk.
-     */
-    function importXml() {
-        var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-        var xml = Blockly.Xml.domToText(dom);
-        var input = $(document.createElement('input'));
-        input.attr("type", "file");
-        input.attr("accept", ".xml");
-        input.change(function(event) {
-            var file = event.target.files[0]
-            var reader = new FileReader()
-            reader.readAsText(file)
-            reader.onload = function(event) {
-                var name = UTIL.getBasename(file.name);
-                loadProgramFromXML(name, event.target.result);
-            }
-        })
-        input.trigger('click'); // opening dialog
-    }
-    exports.importXml = importXml;
-
-    /**
-     * two Experimental functions: Open a file select dialog to load source code
-     * from local disk and send it to the cross compiler
-     */
-    function importSourceCodeToCompile() {
-        var input = $(document.createElement('input'));
-        input.attr("type", "file");
-        input.change(function(event) {
-            var file = event.target.files[0]
-            var reader = new FileReader()
-            reader.readAsText(file)
-            reader.onload = function(event) {
-                // TODO move this to the run controller once it is clear what should happen
-                var name = UTIL.getBasename(file.name);
-                PROGRAM.compileN(name, event.target.result, GUISTATE_C.getLanguage(), function(result) {
-                    alert(result.rc);
-                });
-            }
-        })
-        input.trigger('click'); // opening dialog
-    }
-    exports.importSourceCodeToCompile = importSourceCodeToCompile;
-
-    /**
-     * two Experimental functions: Open a file select dialog to load source code
-     * from local disk and send it to the cross compiler
-     */
-    function importNepoCodeToCompile() {
-        var input = $(document.createElement('input'));
-        input.attr("type", "file");
-        input.change(function(event) {
-            var file = event.target.files[0]
-            var reader = new FileReader()
-            reader.readAsText(file)
-            reader.onload = function(event) {
-                // TODO move this to the run controller once it is clear what should happen
-                var name = UTIL.getBasename(file.name);
-                PROGRAM.compileP(name, event.target.result, GUISTATE_C.getLanguage(), function(result) {
-                    alert(result.rc);
-                });
-            }
-        })
-        input.trigger('click'); // opening dialog
-    }
-    exports.importNepoCodeToCompile = importNepoCodeToCompile;
-
     function linkProgram() {
         var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xml = Blockly.Xml.domToText(dom);
@@ -470,52 +357,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         MSG.displayMessage('POPUP_GET_LINK', 'POPUP', displayLink);
     }
     exports.linkProgram = linkProgram;
-
-    function openProgramFromXML(target) {
-        var robotType = target[1];
-        var programName = target[2];
-        var programXml = target[3];
-        ROBOT_C.switchRobot(robotType, true, function() {
-            loadProgramFromXML(programName, programXml);
-        });
-    }
-    exports.openProgramFromXML = openProgramFromXML;
-
-    function loadProgramFromXML(name, xml) {
-        if (xml.search("<export") === -1) {
-            xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + xml + '</program><config>' + GUISTATE_C.getConfigurationXML()
-                    + '</config></export>';
-        }
-        PROGRAM.loadProgramFromXML(name, xml, function(result) {
-            if (result.rc == "ok") {
-                // save the old program that it can be restored
-                var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-                var xmlOld = Blockly.Xml.domToText(dom);
-                GUISTATE_C.setProgramXML(xmlOld);
-                // on server side we only test case insensitive block names, displaying xml can still fail:
-                try {
-                    result.programSaved = false;
-                    result.name = 'NEPOprog';
-                    result.programShared = false;
-                    result.programTimestamp = '';
-                    programToBlocklyWorkspace(result.programText);
-                    GUISTATE_C.setProgram(result);
-                    GUISTATE_C.setProgramXML(result.programText);
-                    GUISTATE_C.setConfigurationName('');
-                    GUISTATE_C.setConfigurationXML(result.configText);
-
-                    LOG.info('show program ' + GUISTATE_C.getProgramName());
-                } catch (e) {
-                    // restore old Program
-                    reloadProgram();
-                    result.rc = "error";
-                    MSG.displayInformation(result, "", Blockly.Msg.ORA_PROGRAM_IMPORT_ERROR, result.name);
-                }
-            } else {
-                MSG.displayInformation(result, "", result.message, "");
-            }
-        });
-    }
 
     /**
      * Create a file from the blocks and download it.
@@ -640,4 +481,5 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
             listenToBlocklyEvents = true;
         }, 500);
     }
+    exports.programToBlocklyWorkspace = programToBlocklyWorkspace;
 });

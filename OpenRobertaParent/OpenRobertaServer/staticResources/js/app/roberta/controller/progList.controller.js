@@ -1,5 +1,6 @@
-define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program.controller', 'blocks-msg', 'jquery', 'bootstrap-table' ], function(require,
-        exports, LOG, UTIL, COMM, PROGLIST, PROGRAM_C, Blockly, $) {
+define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program.model', 'configuration.controller', 'program.controller',
+        'guiState.controller', 'blocks-msg', 'jquery', 'bootstrap-table' ], function(require, exports, LOG, UTIL, COMM, PROGLIST, PROGRAM, CONFIGURATION_C,
+        PROGRAM_C, GUISTATE_C, Blockly, $) {
 
     /**
      * Initialize table of programs
@@ -99,7 +100,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
         }, "refresh program list clicked");
 
         $('#programNameTable').onWrap('dbl-click-row.bs.table', function($element, row) {
-            PROGRAM_C.loadFromListing(row);
+            loadFromListing(row);
         }, "Load program from listing double clicked");
 
         $('#programNameTable').onWrap('check-all.bs.table', function($element, rows) {
@@ -348,4 +349,48 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
     }
     var titleActions = '<a href="#" id="deleteSomeProg" class="deleteSomeProg disabled" rel="tooltip" lkey="Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP" data-original-title="" data-container="body" title="">'
             + '<span class="typcn typcn-delete"></span></a>';
+
+    /**
+     * Load the program and configuration that was selected in program list
+     */
+    function loadFromListing(program) {
+        var right = 'none';
+        LOG.info('loadFromList ' + program[0]);
+        PROGRAM.loadProgramFromListing(program[0], program[1], program[3], function(result) {
+            if (result.rc === 'ok') {
+                result.programShared = false;
+                var alien = program[1] === GUISTATE_C.getUserAccountName() ? null : program[1];
+                if (alien) {
+                    result.programShared = 'READ';
+                }
+                if (program[2].sharedFrom) {
+                    var right = program[2].sharedFrom;
+                    result.programShared = right;
+                }
+                result.name = program[0];
+                GUISTATE_C.setProgram(result, alien);
+                GUISTATE_C.setProgramXML(result.programText);
+
+                if (result.configName === undefined) {
+                    if (result.configText === undefined) {
+                        GUISTATE_C.setConfigurationNameDefault();
+                        GUISTATE_C.setConfigurationXML(GUISTATE_C.getConfigurationConf());
+                    } else {
+                        GUISTATE_C.setConfigurationName('');
+                        GUISTATE_C.setConfigurationXML(result.configText);
+                    }
+                } else {
+                    GUISTATE_C.setConfigurationName(result.configName);
+                    GUISTATE_C.setConfigurationXML(result.configText);
+                }
+                $('#tabProgram').one('shown.bs.tab', function(e) {
+                    CONFIGURATION_C.reloadConf();
+                    PROGRAM_C.reloadProgram();
+                });
+                $('#tabProgram').trigger('click');
+
+            }
+            MSG.displayInformation(result, "", result.message);
+        });
+    }
 });

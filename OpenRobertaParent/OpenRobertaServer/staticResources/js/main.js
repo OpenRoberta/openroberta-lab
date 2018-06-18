@@ -27,6 +27,7 @@ require.config({
         'galleryList.controller' : '../app/roberta/controller/galleryList.controller',
         'guiState.controller' : '../app/roberta/controller/guiState.controller',
         'guiState.model' : '../app/roberta/models/guiState.model',
+        'import.controller' : '../app/roberta/controller/import.controller',
         'language.controller' : '../app/roberta/controller/language.controller',
         'logList.controller' : '../app/roberta/controller/logList.controller',
         'logList.model' : '../app/roberta/models/logList.model',
