@@ -9,11 +9,11 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
      * 
      * @constructor
      */
-    function Scene(backgroundImg, robot, obstacle, pattern, ruler) {
+    function Scene(backgroundImg, robot,  pattern, ruler) {
 
         this.backgroundImg = backgroundImg;
         this.robot = robot;
-        this.obstacle = obstacle;
+//        this.obstacle = obstacle;
         this.ruler = ruler;
         this.pattern = pattern;
         this.uCtx = $('#unitBackgroundLayer')[0].getContext('2d'); // unit context
@@ -87,23 +87,27 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             this.mCtx.drawImage(this.ruler.img, this.ruler.x, this.ruler.y, this.ruler.w, this.ruler.h);
         }
     }
-
-    Scene.prototype.drawObjects = function() {
-        this.oCtx.clearRect(this.obstacle.xOld - 20, this.obstacle.yOld - 20, this.obstacle.wOld + 40, this.obstacle.hOld + 40);
-        this.obstacle.xOld = this.obstacle.x;
-        this.obstacle.yOld = this.obstacle.y;
-        this.obstacle.wOld = this.obstacle.w;
-        this.obstacle.hOld = this.obstacle.h;
-        this.oCtx.restore();
-        this.oCtx.save();
-        this.oCtx.scale(SIM.getScale(), SIM.getScale());
-        if (this.obstacle.img) {
-            this.oCtx.drawImage(this.obstacle.img, this.obstacle.x, this.obstacle.y, this.obstacle.w, this.obstacle.h);
-        } else if (this.obstacle.color) {
-            this.oCtx.fillStyle = this.obstacle.color;
-            this.oCtx.shadowBlur = 5;
-            this.oCtx.shadowColor = "black";
-            this.oCtx.fillRect(this.obstacle.x, this.obstacle.y, this.obstacle.w, this.obstacle.h);
+    Scene.prototype.drawObjects = function(){
+        var obslist = SIM.obstacleList;
+        for(var i=1;i<obslist.length;i++){
+            var paddingrect = 8;
+            this.oCtx.clearRect(obslist[i].xOld - paddingrect, obslist[i].yOld - paddingrect, obslist[i].wOld + 2*paddingrect, obslist[i].hOld + 2*paddingrect);
+            obslist[i].xOld = obslist[i].x;
+            obslist[i].yOld = obslist[i].y;
+            obslist[i].wOld = obslist[i].w;
+            obslist[i].hOld = obslist[i].h;
+            this.oCtx.restore();
+            this.oCtx.save();
+            this.oCtx.scale(SIM.getScale(), SIM.getScale());
+            if (obslist[i].img) {
+                this.oCtx.drawImage(obslist[i].img, obslist[i].x, obslist[i].y, obslist[i].w, obslist[i].h);
+            } else if (obslist[i].color) {
+                this.oCtx.fillStyle = obslist[i].color;
+                this.oCtx.shadowBlur = 5;
+                this.oCtx.shadowColor = "black";
+                this.oCtx.fillRect(obslist[i].x, obslist[i].y, obslist[i].w, obslist[i].h);
+            }
+            
         }
     }
 

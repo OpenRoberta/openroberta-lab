@@ -64,7 +64,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         if (num == undefined) {
             setObstacle();
             setRuler();
-            scene = new Scene(imgObjectList[currentBackground], robot, obstacle, imgPattern, ruler);
+            scene = new Scene(imgObjectList[currentBackground], robot, imgPattern, ruler);
             scene.updateBackgrounds();
             scene.drawObjects();
             scene.drawRuler();
@@ -199,7 +199,24 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         wOld : 0,
         hOld : 0
     };
-
+    var obslist= [ground, obstacle];
+    for(var i=0;i<10;i++){
+        var tempobs= {
+                x : 0,
+                y : 0,
+                xOld : 0,
+                yOld : 0,
+                w : 0,
+                h : 0,
+                wOld : 0,
+                hOld : 0
+            };
+        obslist.push(tempobs);
+    }
+    var hoverindex =1;
+    
+    exports.hoverindex = hoverindex;
+    
     var ruler = {
         x : 0,
         y : 0,
@@ -212,8 +229,9 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     }
     // Note: The ruler is not considered an obstacle. The robot will
     // simply drive over it.
-    exports.obstacleList = [ ground, obstacle ];
-
+    
+//    var obslist = [ ground, obstacle, obstacle1 ];
+    exports.obstacleList = obslist;
 // render stuff
     var globalID;
     var robot;
@@ -221,7 +239,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     var ROBOT;
 
     function init(program, refresh, robotType) {
-
+        console.log("when was simulation.init executed");
         reset = false;
         simRobotType = robotType;
         userProgram = program;
@@ -248,6 +266,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         var blocklyProgram = BUILDER.build(userProgram);
         programEval.initProgram(blocklyProgram);
         if (refresh) {
+            console.log("was refresh executed? ");
             require([ 'simulation.robot.' + simRobotType ], function(reqRobot) {
                 createRobot(reqRobot);
                 robot.reset();
@@ -334,6 +353,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     }
 
     function setObstacle() {
+        console.log("currentBackground is "+currentBackground);
         if (currentBackground == 3) {
             obstacle.x = 500;
             obstacle.y = 250;
@@ -342,12 +362,25 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             obstacle.img = null;
             obstacle.color = "#33B8CA";
         } else if (currentBackground == 2) {
-            obstacle.x = 580;
-            obstacle.y = 290;
-            obstacle.w = 100;
-            obstacle.h = 100;
-            obstacle.img = null;
-            obstacle.color = "#33B8CA";
+            for(var i=1;i<obslist.length; i++){
+                if(i===1){
+                    obslist[i].x = 500;
+                    obslist[i].y = 20;
+                    obslist[i].color = "white";
+                }else{
+                    obslist[i].x = 500 + Math.random()*60 -30;
+                    obslist[i].y = obslist[i-1].y + 40;
+                    var letters = '0123456789ABCDEF';
+                    var tempcol= "#";
+                    for (var j = 0; j < 6; j++) {
+                        tempcol += letters[Math.floor(Math.random() * 16)];
+                      }
+                    obslist[i].color = tempcol;
+                }
+                obslist[i].w = 30;
+                obslist[i].h = 30;
+                obslist[i].img = null;
+            }
         } else if (currentBackground == 4) {
             obstacle.x = 500;
             obstacle.y = 260;
@@ -399,6 +432,8 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             obstacle.color = "#33B8CA";
             obstacle.img = null;
         }
+        console.log("what is obstacle list");
+        console.log(obslist);
     }
 
     function setRuler() {
@@ -434,7 +469,13 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         var dx = startX - robot.mouse.rx;
         var dy = startY - robot.mouse.ry;
         isDownRobot = (dx * dx + dy * dy < robot.mouse.r * robot.mouse.r);
-        isDownObstacle = (startX > obstacle.x && startX < obstacle.x + obstacle.w && startY > obstacle.y && startY < obstacle.y + obstacle.h);
+        for(var i=0;i<obslist.length;i++){
+            isDownObstacle = (startX > obslist[i].x && startX < obslist[i].x + obslist[i].w && startY > obslist[i].y && startY < obslist[i].y + obslist[i].h);
+            if(isDownObstacle){
+                break;
+            }
+        }
+//        isDownObstacle = (startX > obslist[i].x && startX < obslist[i].x + obslist[i].w && startY > obslist[i].y && startY < obslist[i].y + obslist[i].h);
         isDownRuler = (startX > ruler.x && startX < ruler.x + ruler.w && startY > ruler.y && startY < ruler.y + ruler.h);
         if (isDownRobot || isDownObstacle || isDownRuler) {
             e.stopPropagation();
@@ -460,6 +501,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     }
 
     function handleMouseMove(e) {
+        
         var X = e.clientX || e.originalEvent.touches[0].pageX;
         var Y = e.clientY || e.originalEvent.touches[0].pageY;
         var top = $('#robotLayer').offset().top;
@@ -470,12 +512,20 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         var dy = mouseY - robot.mouse.ry;
         if (!isDownRobot && !isDownObstacle && !isDownRuler) {
             var hoverRobot = (dx * dx + dy * dy < robot.mouse.r * robot.mouse.r);
-            var hoverObstacle = (mouseX > obstacle.x && mouseX < obstacle.x + obstacle.w && mouseY > obstacle.y && mouseY < obstacle.y + obstacle.h);
             var hoverRuler = (mouseX > ruler.x && mouseX < ruler.x + ruler.w && mouseY > ruler.y && mouseY < ruler.y + ruler.h);
-            if (hoverRobot || hoverObstacle || hoverRuler)
+            if (hoverRobot || hoverRuler)
                 $("#robotLayer").css('cursor', 'pointer');
-            else
-                $("#robotLayer").css('cursor', 'auto');
+            var hoverObstacle;
+            for(var i=1;i<obslist.length;i++){
+                hoverObstacle = (mouseX > obslist[i].x && mouseX < obslist[i].x + obslist[i].w && mouseY > obslist[i].y && mouseY < obslist[i].y + obslist[i].h);
+                if(hoverObstacle){
+                    $("#robotLayer").css('cursor', 'pointer');
+                    hoverindex =i;
+//                    console.log("hoverindex now is "+ i);
+                    return;
+                }
+            }
+            $("#robotLayer").css('cursor', 'auto');
             return;
         }
         $("#robotLayer").css('cursor', 'pointer');
@@ -494,8 +544,10 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             robot.mouse.rx += dx;
             robot.mouse.ry += dy;
         } else if (isDownObstacle) {
-            obstacle.x += dx;
-            obstacle.y += dy;
+            console.log("when does this isDownObstacle occur");
+            console.log(hoverindex);
+            obslist[hoverindex].x += dx;
+            obslist[hoverindex].y += dy;
             scene.drawObjects();
         } else if (isDownRuler) {
             ruler.x += dx;
@@ -611,7 +663,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     }
 
     function initScene() {
-        scene = new Scene(imgObjectList[currentBackground], robot, obstacle, imgPattern, ruler);
+        scene = new Scene(imgObjectList[currentBackground], robot, imgPattern, ruler);
         scene.updateBackgrounds();
         scene.drawObjects();
         scene.drawRuler();
