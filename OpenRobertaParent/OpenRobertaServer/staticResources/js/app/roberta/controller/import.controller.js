@@ -3,6 +3,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         CONFIGURATION_C, PROGRAM, ROBOT_C, Prettify, Blockly, $) {
 
     function init(callback) {
+        $('#fileSelector').val(null);
         $('#fileSelector').off();
         $('#fileSelector').onWrap('change', function(event) {
             var file = event.target.files[0];
