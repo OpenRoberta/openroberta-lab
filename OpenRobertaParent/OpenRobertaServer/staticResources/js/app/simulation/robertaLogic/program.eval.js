@@ -343,7 +343,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', '
 
     var evalLightSensorAction = function(obj, stmt) {
         obj.outputCommands.led = {};
-        obj.outputCommands.led.color = stmt.color;
+        obj.outputCommands.led.color = stmt.colorValue;
         obj.outputCommands.led.mode = stmt.mode;
     };
 

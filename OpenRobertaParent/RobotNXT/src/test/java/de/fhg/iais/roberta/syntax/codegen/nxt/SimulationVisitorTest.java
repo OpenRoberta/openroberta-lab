@@ -288,8 +288,8 @@ public class SimulationVisitorTest {
     @Test
     public void visitLightSensorAction_RedOnPort1_CreateLightSensorAction() throws Exception {
         String a =
-            "var stmt0 = createLightSensorAction(CONST.COLOUR_ENUM.RED, CONST.ON);\n"
-                + "var stmt1 = createLightSensorAction(CONST.COLOUR_ENUM.BLUE, CONST.OFF);\n"
+            "var stmt0 = createLightSensorAction(CONST.COLOR_ENUM.RED, CONST.ON);\n"
+                + "var stmt1 = createLightSensorAction(CONST.COLOR_ENUM.BLUE, CONST.OFF);\n"
 
                 + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
 
