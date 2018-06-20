@@ -85,9 +85,6 @@ public class Administration {
             case "createemptydb":
                 createEmptyDatabase();
                 break;
-            case "sql":
-                runSql();
-                break;
             case "dbBackup":
                 dbBackup();
                 break;
@@ -99,6 +96,9 @@ public class Administration {
                 break;
             case "sqlclient":
                 sqlclient();
+                break;
+            case "sql":
+                runSql();
                 break;
             case "upgrade":
                 upgrade();
@@ -209,7 +209,7 @@ public class Administration {
 
     private void runSql() {
         expectArgs(3);
-        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", "jdbc:hsqldb:file:" + this.args[1]);
+        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
         Session nativeSession = sessionFactoryWrapper.getNativeSession();
         String sqlQuery = this.args[2];
         if ( DbExecutor.isSelect(sqlQuery) ) {

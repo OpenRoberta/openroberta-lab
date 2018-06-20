@@ -32,6 +32,7 @@ then
 	echo '  --checkpoint [-d] [db-uri] access the database and issue a "checkpoint" command. Pay attention to the notes about --shutdown!'
 	echo '                             the optional -d forces defragmentation and takes a lot more time to finish'
 	echo '  --sqlclient [db-uri]       read SELECT commands from the terminal and execute them. Pay attention to the notes about --shutdown!'
+	echo '  --sqlclient <SQL> [db-uri] execute the well-quoted <SQL> command'
 	echo '  --upgrade [db-parent-dir]  upgrade the database, if necessary. The database is accessed in embedded mode.'
 	echo '                             No server or db server must be running. The actual version is retrieved from the installation'
 	echo '  --version                  print the server version (may be suffixed with -SNAPSHOT) and terminate'
@@ -65,7 +66,7 @@ case "$CMD" in
                          esac
                          echo "sql client for database accessable at $URI. Type commands, terminate with <return>"
                          java $XMX -cp lib/\* de.fhg.iais.roberta.main.Administration sqlclient "$URI" ;;
-  '--sql')   		     SQL="$2"; shift
+  '--sql')   		     SQL="$1"; shift
 						 case "$1" in
                            '') : ;;
                            *)  URI="$1"; shift ;;

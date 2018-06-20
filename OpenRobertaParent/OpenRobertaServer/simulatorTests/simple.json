@@ -1,0 +1,100 @@
+{
+	"programStmts": [
+		{
+			"stmt": "VarDeclaration",
+			"type": "NUMBER",
+			"name": "x",
+			"value": {
+				"expr": "NumConst",
+				"value": 0
+			}
+		},
+		{
+			"mode": "FOR",
+			"loopNumber": "loop_1",
+			"stmt": "RepeatStmt",
+			"expr": [
+				{
+					"expr": "Var",
+					"type": "NUMBER",
+					"name": "i"
+				},
+				{
+					"expr": "NumConst",
+					"value": 1
+				},
+				{
+					"expr": "NumConst",
+					"value": 3
+				},
+				{
+					"expr": "NumConst",
+					"value": 1
+				}
+			],
+			"stmtList": [
+				{
+					"stmt": "AssignStmt",
+					"name": "x",
+					"expr": {
+						"expr": "Binary",
+						"op": "ADD",
+						"left": {
+							"expr": "Var",
+							"type": "NUMBER",
+							"name": "x"
+						},
+						"right": {
+							"expr": "Var",
+							"type": "NUMBER",
+							"name": "i"
+						}
+					}
+				},
+				{
+					"mode": "TIMES",
+					"loopNumber": "loop_2",
+					"stmt": "RepeatStmt",
+					"expr": [
+						{
+							"expr": "Var",
+							"name": "k0"
+						},
+						{
+							"expr": "NumConst",
+							"value": 0
+						},
+						{
+							"expr": "NumConst",
+							"value": 3
+						},
+						{
+							"expr": "NumConst",
+							"value": 1
+						}
+					],
+					"stmtList": [
+						{
+							"stmt": "ShowTextAction",
+							"text": {
+								"expr": "Var",
+								"type": "NUMBER",
+								"name": "x"
+							},
+							"x": {
+								"expr": "NumConst",
+								"value": 0
+							},
+							"y": {
+								"expr": "NumConst",
+								"value": 0
+							}
+						}
+					],
+					"eachCounter": 0
+				}
+			],
+			"eachCounter": 0
+		}
+	]
+}

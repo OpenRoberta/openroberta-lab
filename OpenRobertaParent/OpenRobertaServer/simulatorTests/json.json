@@ -1,0 +1,96 @@
+{
+	"programStmts": [
+		{
+			"mode": "TIMES",
+			"loopNumber": "loop_1",
+			"stmt": "RepeatStmt",
+			"expr": [
+				{
+					"expr": "Var",
+					"name": "k0"
+				},
+				{
+					"expr": "NumConst",
+					"value": 0
+				},
+				{
+					"expr": "NumConst",
+					"value": 10
+				},
+				{
+					"expr": "NumConst",
+					"value": 1
+				}
+			],
+			"stmtList": [
+				{
+					"stmt": "DriveAction",
+					"speed": {
+						"expr": "NumConst",
+						"value": 30
+					},
+					"driveDirection": "FOREWARD",
+					"distance": {
+						"expr": "NumConst",
+						"value": 20
+					}
+				},
+				{
+					"mode": "UNTIL",
+					"loopNumber": "loop_2",
+					"stmt": "RepeatStmt",
+					"expr": {
+						"expr": "Unary",
+						"op": "NOT",
+						"value": {
+							"expr": "Binary",
+							"op": "EQ",
+							"left": {
+								"expr": "NumConst",
+								"value": 0
+							},
+							"right": {
+								"expr": "NumConst",
+								"value": 0
+							}
+						}
+					},
+					"stmtList": [
+						{
+							"stmt": "ShowTextAction",
+							"text": {
+								"expr": "StringConst",
+								"value": "Hallo"
+							},
+							"x": {
+								"expr": "NumConst",
+								"value": 0
+							},
+							"y": {
+								"expr": "NumConst",
+								"value": 0
+							}
+						}
+					],
+					"eachCounter": 0
+				},
+				{
+					"stmt": "ShowTextAction",
+					"text": {
+						"expr": "StringConst",
+						"value": "Hallo"
+					},
+					"x": {
+						"expr": "NumConst",
+						"value": 0
+					},
+					"y": {
+						"expr": "NumConst",
+						"value": 0
+					}
+				}
+			],
+			"eachCounter": 0
+		}
+	]
+}

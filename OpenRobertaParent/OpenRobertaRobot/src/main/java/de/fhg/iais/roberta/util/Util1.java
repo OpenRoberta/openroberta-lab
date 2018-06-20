@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
@@ -213,7 +214,7 @@ public class Util1 {
     /**
      * read all lines from a file
      *
-     * @param fileName
+     * @param fileName of the file to be read
      * @return the list of lines of the file
      */
     public static List<String> readFileLines(String fileName) {
@@ -221,6 +222,20 @@ public class Util1 {
             return Files.readAllLines(Paths.get(fileName));
         } catch ( IOException e ) {
             throw new DbcException("read from file failed for: " + fileName, e);
+        }
+    }
+
+    /**
+     * write String into a file
+     *
+     * @param fileName of the file to be written
+     * @param content of the file. UTF-8 is enforced
+     */
+    public static void writeFile(String fileName, String content) {
+        try {
+            Files.write(Paths.get(fileName), content.getBytes(Charset.forName("UTF-8")));
+        } catch ( IOException e ) {
+            throw new DbcException("write to file failed for: " + fileName, e);
         }
     }
 
