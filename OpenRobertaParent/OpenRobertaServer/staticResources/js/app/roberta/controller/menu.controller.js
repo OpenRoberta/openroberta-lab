@@ -267,7 +267,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 PROGRAM_C.showSaveAsModal();
                 break;
             case 'menuShowCode':
-                $('codeButton').trigger("click");
+                $('#codeButton').trigger("click");
                 break;
             case 'menuImportProg':
                 IMPORT_C.importXml();
