@@ -217,8 +217,12 @@ public class Administration {
             @SuppressWarnings("unchecked")
             List<Object[]> resultSet = nativeSession.createSQLQuery(sqlQuery).list(); //NOSONAR : no sql injection possible here. Dangerous sql of course :-)
             Administration.LOG.info("result set has " + resultSet.size() + " rows");
-            for ( Object[] object : resultSet ) {
-                Administration.LOG.info(">>>  " + Arrays.toString(object));
+            for ( Object object : resultSet ) {
+                if ( object instanceof Object[] ) {
+                    Administration.LOG.info(">>>  " + Arrays.toString((Object[]) object));
+                } else {
+                    Administration.LOG.info(">>>  " + object.toString());
+                }
             }
             nativeSession.getTransaction().rollback();
             nativeSession.close();
