@@ -65,6 +65,13 @@ case "$CMD" in
                          esac
                          echo "sql client for database accessable at $URI. Type commands, terminate with <return>"
                          java $XMX -cp lib/\* de.fhg.iais.roberta.main.Administration sqlclient "$URI" ;;
+  '--sql')   		     SQL="$2"; shift
+						 case "$1" in
+                           '') : ;;
+                           *)  URI="$1"; shift ;;
+                         esac
+                         echo "execute one sql statement using $URI"
+                         java $XMX -cp lib/\* de.fhg.iais.roberta.main.Administration sql "$URI" "$SQL" ;; # note: parameter URI + SQL exchanged
   '--upgrade')           DB_VERSION=$(java -cp lib/\* de.fhg.iais.roberta.main.Administration version-for-db)
 				         case "$1" in
 				           '') echo 'database parent directory is missing - exit 1'

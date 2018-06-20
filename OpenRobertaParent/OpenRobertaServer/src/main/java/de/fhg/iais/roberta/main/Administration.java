@@ -130,22 +130,6 @@ public class Administration {
         nativeSession.close();
     }
 
-    private void runSql() {
-        expectArgs(3);
-        String sqlQuery = this.args[2];
-        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", "jdbc:hsqldb:file:" + this.args[1]);
-        Session nativeSession = sessionFactoryWrapper.getNativeSession();
-        nativeSession.beginTransaction();
-        @SuppressWarnings("unchecked")
-        List<Object[]> resultSet = nativeSession.createSQLQuery(sqlQuery).list(); //NOSONAR : no sql injection possible here. Dangerous sql of course :-)
-        Administration.LOG.info("result set has " + resultSet.size() + " rows");
-        for ( Object[] object : resultSet ) {
-            Administration.LOG.info("  " + Arrays.toString(object));
-        }
-        nativeSession.getTransaction().rollback();
-        nativeSession.close();
-    }
-
     /**
      * backup the database. Needs the second parameter from the main args, which has to be the database URI (e.g. "jdbc:hsqldb:hsql://localhost/openroberta-db")
      */
@@ -223,6 +207,28 @@ public class Administration {
         Upgrader.checkForUpgrade(versionForDb, new File(args[1]));
     }
 
+    private void runSql() {
+        expectArgs(3);
+        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", "jdbc:hsqldb:file:" + this.args[1]);
+        Session nativeSession = sessionFactoryWrapper.getNativeSession();
+        String sqlQuery = this.args[2];
+        if ( DbExecutor.isSelect(sqlQuery) ) {
+            nativeSession.beginTransaction();
+            @SuppressWarnings("unchecked")
+            List<Object[]> resultSet = nativeSession.createSQLQuery(sqlQuery).list(); //NOSONAR : no sql injection possible here. Dangerous sql of course :-)
+            Administration.LOG.info("result set has " + resultSet.size() + " rows");
+            for ( Object[] object : resultSet ) {
+                Administration.LOG.info(">>>  " + Arrays.toString(object));
+            }
+            nativeSession.getTransaction().rollback();
+            nativeSession.close();
+        } else {
+            // better not: dbExecutor.sqlStmt(sqlQuery);
+            System.out.println("for safety reasons only a SELECT statements is processed");
+        }
+
+    }
+
     /**
      * runs a sql client. Reads commands from a terminal and executes them.<br>
      * Needs a second parameter from the main args, which has to be the database URI (e.g. "jdbc:hsqldb:hsql://localhost/openroberta-db")
@@ -238,7 +244,11 @@ public class Administration {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             while ( true ) {
                 System.out.print("Enter sql command: ");
-                String sqlStmt = br.readLine().trim();
+                String line = br.readLine();
+                if ( line == null ) {
+                    break;
+                }
+                String sqlStmt = line.trim();
                 if ( "".equals(sqlStmt) ) {
                     break;
                 }
