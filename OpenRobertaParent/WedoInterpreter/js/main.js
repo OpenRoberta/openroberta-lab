@@ -3,7 +3,7 @@ const INTERPRETER = require('D:/temp/node/interpreter.js');
 const FS = require('fs');
 
 const BASEDIR = 'D:/git/robertalab/OpenRobertaParent/WedoInterpreter/simulatorTests/';
-const BASE = 'simple';
+const BASE = 'threeFors';
 
 FS.readFile(BASEDIR + BASE + '.sim', 'utf8', function (err,simString) {
   if (err) {

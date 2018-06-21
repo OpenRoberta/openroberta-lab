@@ -76,7 +76,7 @@ public class GenerateJsomFromSimIT {
 
     @Test
     public void testNepo() throws Exception {
-        String base = "simple";
+        String base = "threeFors";
         String robot = "ev3lejosv1";
         String fullResource = TEST_BASE + base + ".xml";
         LOG.info("robot: " + robot + ", xml: " + fullResource);
