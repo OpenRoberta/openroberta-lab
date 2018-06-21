@@ -10,8 +10,8 @@ import javax.ws.rs.core.Response;
 
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -41,8 +41,8 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
  */
 @Category(IntegrationTest.class)
 @RunWith(MockitoJUnitRunner.class)
-public class SimulatorIT {
-    private static final Logger LOG = LoggerFactory.getLogger(SimulatorIT.class);
+public class GenerateJsomFromSimIT {
+    private static final Logger LOG = LoggerFactory.getLogger(GenerateJsomFromSimIT.class);
     private static final String TEST_BASE = "simulatorTests/";
 
     private static RobotCommunicator robotCommunicator;
@@ -62,7 +62,7 @@ public class SimulatorIT {
 
     @Before
     public void setup() throws Exception {
-        robertaProperties = new RobertaProperties(Util1.loadProperties(null));
+        robertaProperties = new RobertaProperties(Util1.loadProperties("classpath:wedoOpenRoberta.properties"));
         // TODO: add a robotBasedir property to the openRoberta.properties. Make all pathes relative to that dir. Create special accessors. Change String to Path.
         fixPropertyPathes();
         robotCommunicator = new RobotCommunicator();
@@ -74,14 +74,14 @@ public class SimulatorIT {
         doNothing().when(dbSession).commit();
     }
 
-    @Ignore
     @Test
     public void testNepo() throws Exception {
         String base = "simple";
+        String robot = "ev3lejosv1";
         String fullResource = TEST_BASE + base + ".xml";
-        LOG.info("robot: ev3lejosv1, xml: " + fullResource);
-        setRobotTo("ev3lejosv1");
-        JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'runPsim','name':'prog','language':'de'}");
+        LOG.info("robot: " + robot + ", xml: " + fullResource);
+        setRobotTo(robot);
+        JSONObject cmd = mkD("{'cmd':'runPsim','name':'prog','language':'de'}");
         cmd.getJSONObject("data").put("programText", Util1.readFileContent(fullResource));
         response = this.restProgram.command(httpSessionState, cmd);
         JSONObject entity = (JSONObject) response.getEntity();
@@ -91,8 +91,8 @@ public class SimulatorIT {
     }
 
     private void setRobotTo(String robot) throws Exception, JSONException {
-        response = this.restAdmin.command(httpSessionState, dbSession, JSONUtilForServer.mkD("{'cmd':'setRobot','robot':'" + robot + "'}"));
-        JSONUtilForServer.assertEntityRc(this.response, "ok", Key.ROBOT_SET_SUCCESS);
+        response = this.restAdmin.command(httpSessionState, dbSession, mkD("{'cmd':'setRobot','robot':'" + robot + "'}"));
+        assertEntityRc(this.response, "ok", Key.ROBOT_SET_SUCCESS);
     }
 
     private static void fixPropertyPathes() {
@@ -110,4 +110,22 @@ public class SimulatorIT {
             robertaProperties.getRobertaProperties().put(key, path);
         }
     }
+
+    /**
+     * see {@link JSONUtilForServer}
+     */
+    public static JSONObject mkD(String s) throws JSONException {
+        return new JSONObject("{'data':" + s + ",'log':[]}".replaceAll("'", "\""));
+    }
+
+    /**
+     * see {@link JSONUtilForServer}
+     */
+    public static void assertEntityRc(Response response, String rc, Key message) throws JSONException {
+        JSONObject entity = (JSONObject) response.getEntity();
+        Assert.assertEquals(rc, entity.getString("rc"));
+        String responseKey = entity.optString("message");
+        Assert.assertEquals(message.getKey(), responseKey);
+    }
+
 }

@@ -6,19 +6,22 @@ import java.util.Objects;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class InterpreterTest {
+    private static final Logger LOG = LoggerFactory.getLogger(InterpreterTest.class);
+    private static final String TEST_BASE = "simulatorTests/";
 
-    @Ignore
     @Test
     public void testInterpreter() throws Exception {
-        String joAsString = Util1.readFileContent("simulatorTests/simple.json");
+        String base = "simple";
+        String joAsString = Util1.readFileContent(TEST_BASE + base + ".json");
         JSONObject program = new JSONObject(joAsString);
         JSONArray stmts = program.getJSONArray("programStmts");
         Map<String, Object> bindings = new HashMap<>();
@@ -85,7 +88,7 @@ public class InterpreterTest {
             case "ShowTextAction": {
                 String text = evalExpr(bindings, stmt.getJSONObject("text")).toString();
                 float x = (float) evalExpr(bindings, stmt.getJSONObject("x"));
-                float y = (float) evalExpr(bindings, stmt.getJSONObject("x"));
+                float y = (float) evalExpr(bindings, stmt.getJSONObject("y"));
                 p("show \"" + text + "\" at " + x + "," + y);
                 break;
             }
