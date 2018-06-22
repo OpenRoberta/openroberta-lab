@@ -7,6 +7,6 @@ import de.fhg.iais.roberta.inter.mode.general.IMode;
  *
  * @author kcvejoski
  */
-public interface IBlinkMode extends IMode {
+public interface ILightMode extends IMode {
 
 }

@@ -24,7 +24,7 @@ public class MethodIfReturnTest {
                 + " VarDeclaration [NUMBER, x, EmptyExpr [defVal=NUMBER], true, false],"
                 + " VarDeclaration [NUMBER, x2, EmptyExpr [defVal=NUMBER], true, false],"
                 + " VarDeclaration [NUMBER, x3, EmptyExpr [defVal=NUMBER], false, false], "
-                + "\nAktionStmt [LightAction [GREEN, ON]]MethodStmt [MethodIfReturn [Binary [EQ, NumConst [0], NumConst [0]], NUMBER, Var [x2]]], NUMBER, Var [x3]]]]]";
+                + "\nAktionStmt [LightAction [NO_PORT, ON, DEFAULT, EmptyExpr [defVal=COLOR]]]MethodStmt [MethodIfReturn [Binary [EQ, NumConst [0], NumConst [0]], NUMBER, Var [x2]]], NUMBER, Var [x3]]]]]";
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/methods/method_if_return_2.xml"));
     }
 

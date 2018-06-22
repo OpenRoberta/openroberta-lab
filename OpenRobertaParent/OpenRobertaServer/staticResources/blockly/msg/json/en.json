@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-07-17 11:57:18.739656",
+		"lastupdated": "2018-08-01 14:48:48.930433",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1420,5 +1420,8 @@
 	"SLOT_TILTED_NO": "not",
 	"SLOT_TILTED_ANY": "any",
 	"CONNECTOR": "connection",
-	"BRICKNAME_WEDO": "WeDo"
+	"BRICKNAME_WEDO": "WeDo",
+	"SLOT_TILTED_ANY": "shake",
+	"STEPS_PER_REVOLUTION": "steps per revolution",
+	"ROTATIONS_PER_MINUTE": "rotations per minute"
 }

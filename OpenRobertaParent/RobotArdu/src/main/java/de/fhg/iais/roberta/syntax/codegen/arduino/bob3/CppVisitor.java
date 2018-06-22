@@ -5,10 +5,10 @@ import java.util.Set;
 
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.control.RelayAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
@@ -262,85 +262,71 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -407,13 +393,11 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
 
     @Override
     public Void visitExternalLedOnAction(ExternalLedOnAction<Void> externalLedOnAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitExternalLedOffAction(ExternalLedOffAction<Void> externalLedOffAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -432,8 +416,7 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
     }
 
     @Override
-    public Void visitLedAction(LedAction<Void> ledAction) {
-        // TODO Auto-generated method stub
+    public Void visitRelayAction(RelayAction<Void> relayAction) {
         return null;
     }
 

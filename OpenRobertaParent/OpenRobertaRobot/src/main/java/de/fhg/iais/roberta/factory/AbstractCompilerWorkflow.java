@@ -44,7 +44,7 @@ public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
     public abstract String getCompiledCode();
 
     protected final void storeGeneratedProgram(String token, String programName, String sourceCode, String pathToCrosscompilerBaseDir, String ext) {
-        Assert.isTrue(token != null && programName != null && sourceCode != null);
+        Assert.isTrue((token != null) && (programName != null) && (sourceCode != null));
         File sourceFile = new File(pathToCrosscompilerBaseDir + token + "/" + programName + "/src/" + programName + ext);
         Path path = Paths.get(pathToCrosscompilerBaseDir + token + "/" + programName + "/target/");
         try {

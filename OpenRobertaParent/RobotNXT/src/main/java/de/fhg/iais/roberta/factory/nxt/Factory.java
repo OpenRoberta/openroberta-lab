@@ -9,12 +9,10 @@ import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.general.IPickColor;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.action.nxt.LightSensorActionMode;
 import de.fhg.iais.roberta.mode.general.nxt.PickColor;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -65,12 +63,6 @@ public class Factory extends AbstractRobotFactory {
     @Override
     public IActorPort getActorPort(String port) {
         return getActorPortValue(port, this.actorToPorts);
-    }
-
-    @Override
-    public ILightSensorActionMode getLightActionColor(String light) {
-        return IRobotFactory.getModeValue(light, LightSensorActionMode.class);
-
     }
 
     @Override

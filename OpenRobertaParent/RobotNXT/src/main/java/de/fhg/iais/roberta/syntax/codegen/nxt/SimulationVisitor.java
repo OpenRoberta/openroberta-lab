@@ -16,7 +16,6 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
@@ -27,7 +26,6 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
-import de.fhg.iais.roberta.syntax.action.nxt.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
@@ -45,9 +43,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.nxt.NxtAstVisitor;
 
-public class SimulationVisitor extends RobotSimulationVisitor<Void> implements NxtAstVisitor<Void> {
+public class SimulationVisitor extends RobotSimulationVisitor<Void> {
     private static final String MOTOR_LEFT = "CONST.MOTOR_LEFT";
     private static final String MOTOR_RIGHT = "CONST.MOTOR_RIGHT";
 
@@ -120,15 +117,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements N
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         String end = createClosingBracket();
-        this.sb.append("createTurnLight(CONST." + lightAction.getColor() + ", CONST." + lightAction.getBlinkMode());
-        this.sb.append(end);
-        return null;
-    }
-
-    @Override
-    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        String end = createClosingBracket();
-        this.sb.append("createLightSensorAction(CONST.COLOR_ENUM." + lightSensorAction.getLight() + ", CONST." + lightSensorAction.getState());
+        this.sb.append("createLightSensorAction(CONST.COLOR_ENUM." + lightAction.getColor() + ", CONST." + lightAction.getMode());
         this.sb.append(end);
         return null;
     }
@@ -327,13 +316,6 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements N
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitLedAction(LedAction<Void> ledAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 

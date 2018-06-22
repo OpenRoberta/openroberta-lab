@@ -11,15 +11,14 @@ import com.google.inject.AbstractModule;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.inter.mode.action.ILedMode;
-import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
+import de.fhg.iais.roberta.inter.mode.action.ILightMode;
 import de.fhg.iais.roberta.inter.mode.action.IMotorMoveMode;
 import de.fhg.iais.roberta.inter.mode.action.IMotorSide;
 import de.fhg.iais.roberta.inter.mode.action.IMotorStopMode;
+import de.fhg.iais.roberta.inter.mode.action.IRelayMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
 import de.fhg.iais.roberta.inter.mode.general.IDirection;
@@ -59,14 +58,14 @@ import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IVoltageSensorMode;
 import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.action.BlinkMode;
 import de.fhg.iais.roberta.mode.action.BrickLedColor;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
-import de.fhg.iais.roberta.mode.action.LedMode;
+import de.fhg.iais.roberta.mode.action.LightMode;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
+import de.fhg.iais.roberta.mode.action.RelayMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.Direction;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
@@ -306,14 +305,14 @@ public interface IRobotFactory {
     }
 
     /**
-     * Get a {@link IBlinkMode} enumeration given string parameter. It is possible for one mode to have multiple string mappings. Throws exception if the mode
+     * Get a {@link ILightMode} enumeration given string parameter. It is possible for one mode to have multiple string mappings. Throws exception if the mode
      * does not exists.
      *
      * @param name of the mode
-     * @return mode from the enum {@link BlinkMode}
+     * @return mode from the enum {@link LightMode}
      */
-    default IBlinkMode getBlinkMode(String mode) {
-        return IRobotFactory.getModeValue(mode, BlinkMode.class);
+    default ILightMode getBlinkMode(String mode) {
+        return IRobotFactory.getModeValue(mode, LightMode.class);
     }
 
     /**
@@ -321,7 +320,7 @@ public interface IRobotFactory {
      * mode does not exists.
      *
      * @param name of the mode
-     * @return mode from the enum {@link IBlinkMode}
+     * @return mode from the enum {@link ILightMode}
      */
     default IBrickLedColor getBrickLedColor(String mode) {
         return IRobotFactory.getModeValue(mode, BrickLedColor.class);
@@ -346,8 +345,6 @@ public interface IRobotFactory {
     default ILightSensorMode getLightColor(String mode) {
         return IRobotFactory.getModeValue(mode, LightSensorMode.class);
     }
-
-    ILightSensorActionMode getLightActionColor(String mode);
 
     default IWorkingState getWorkingState(String mode) {
         return IRobotFactory.getModeValue(mode, WorkingState.class);
@@ -396,17 +393,6 @@ public interface IRobotFactory {
     }
 
     /**
-     * Get LED mode from {@link ILedMode} from string parameter. Throws
-     * exception if the mode does not exists.
-     *
-     * @param name of the mode
-     * @return name of the mode from the enum {@link LedMode}
-     */
-    default ILedMode getLedMode(String mode) {
-        return IRobotFactory.getModeValue(mode, LedMode.class);
-    }
-
-    /**
      * Get motor side from {@link IMotorSide} given string parameter. It is possible for one motor side to have multiple string mappings. Throws exception if
      * the motor side does not exists.
      *
@@ -426,6 +412,16 @@ public interface IRobotFactory {
      */
     default IDriveDirection getDriveDirection(String driveDirection) {
         return IRobotFactory.getModeValue(driveDirection, DriveDirection.class);
+    }
+
+    /**
+     * Get relay mode {@link IRelayMode} given string parameter. Throws exception if the mode does not exists.
+     *
+     * @param name of the mode
+     * @return the drelay mode from the enum {@link IRelayMode}
+     */
+    default IRelayMode getRelayMode(String relayMode) {
+        return IRobotFactory.getModeValue(relayMode, RelayMode.class);
     }
 
     /**

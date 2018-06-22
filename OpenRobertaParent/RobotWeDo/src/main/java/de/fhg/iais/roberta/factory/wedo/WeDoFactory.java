@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.factory.wedo;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Properties;
 
 import de.fhg.iais.roberta.components.Configuration;
@@ -10,7 +9,6 @@ import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ActorPort;
@@ -175,12 +173,6 @@ public class WeDoFactory extends AbstractRobotFactory {
     @Override
     public String getSignature() {
         return this.wedoProperties.getProperty("robot.connection.signature");
-    }
-
-    @Override
-    public ILightSensorActionMode getLightActionColor(String mode) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override

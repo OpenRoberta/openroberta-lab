@@ -8,9 +8,8 @@ import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
+import de.fhg.iais.roberta.inter.mode.action.ILightMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
-import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.general.IWorkingState;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
@@ -37,7 +36,7 @@ public class GenericHelperForXmlTest extends AbstractHelperForXmlTest {
         }
 
         @Override
-        public IBlinkMode getBlinkMode(String mode) {
+        public ILightMode getBlinkMode(String mode) {
             return null;
         }
 
@@ -48,11 +47,6 @@ public class GenericHelperForXmlTest extends AbstractHelperForXmlTest {
 
         @Override
         public ILightSensorMode getLightColor(String mode) {
-            return null;
-        }
-
-        @Override
-        public ILightSensorActionMode getLightActionColor(String mode) {
             return null;
         }
 

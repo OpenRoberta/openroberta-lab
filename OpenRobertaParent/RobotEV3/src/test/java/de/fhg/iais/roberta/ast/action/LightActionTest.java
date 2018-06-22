@@ -10,7 +10,7 @@ public class LightActionTest {
 
     @Test
     public void make() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-9, y=1], LightAction [GREEN, ON]]]]";
+        String a = "BlockAST [project=[[Location [x=-9, y=1], LightAction [NO_PORT, ON, GREEN, EmptyExpr [defVal=COLOR]]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/actions/action_BrickLight.xml"));
     }
@@ -31,7 +31,7 @@ public class LightActionTest {
 
     @Test
     public void lightAction() throws Exception {
-        String a = "BlockAST [project=[[Location [x=46, y=109], LightAction [GREEN, DOUBLE_FLASH]]]]";
+        String a = "BlockAST [project=[[Location [x=46, y=109], LightAction [NO_PORT, DOUBLE_FLASH, GREEN, EmptyExpr [defVal=COLOR]]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/actions/action_BrickLight3.xml"));
     }

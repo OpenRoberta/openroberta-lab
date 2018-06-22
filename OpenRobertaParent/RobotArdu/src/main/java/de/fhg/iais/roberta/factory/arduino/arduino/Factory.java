@@ -10,7 +10,6 @@ import de.fhg.iais.roberta.components.arduino.ArduinoConfiguration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ActorPort;
@@ -18,6 +17,7 @@ import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.arduino.arduino.BrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.codegen.arduino.arduino.CppVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
@@ -145,7 +145,7 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public RobotBrickCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
-        return null;
+        return new BrickCheckVisitor(brickConfiguration);
     }
 
     @Override
@@ -173,11 +173,5 @@ public class Factory extends AbstractRobotFactory {
     @Override
     public String getSignature() {
         return this.arduinoProperties.getProperty("robot.connection.signature");
-    }
-
-    @Override
-    public ILightSensorActionMode getLightActionColor(String mode) {
-        // TODO Auto-generated method stub
-        return null;
     }
 }

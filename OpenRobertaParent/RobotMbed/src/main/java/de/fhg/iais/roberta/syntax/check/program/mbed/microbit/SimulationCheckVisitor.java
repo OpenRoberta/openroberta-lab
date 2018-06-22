@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.syntax.check.program.mbed.microbit;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
@@ -239,9 +238,4 @@ public class SimulationCheckVisitor extends RobotSimulationCheckVisitor implemen
         return null;
     }
 
-    @Override
-    public Void visitLedAction(LedAction<Void> ledAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 }

@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.syntax.check.program.ev3;
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
@@ -47,9 +46,4 @@ public class BrickCheckVisitor extends RobotBrickCheckVisitor {
         return null;
     }
 
-    @Override
-    public Void visitLedAction(LedAction<Void> ledAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 }

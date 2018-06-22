@@ -14,7 +14,7 @@ public class MethodCallTest {
             "BlockAST [project=[[Location [x=44, y=104], MethodReturn [Funktionsblock, VarDeclaration [NUMBER, x, EmptyExpr [defVal=NUMBER], true, false], "
                 + "VarDeclaration [NUMBER, x2, EmptyExpr [defVal=NUMBER], true, false], "
                 + "VarDeclaration [NUMBER, x3, EmptyExpr [defVal=NUMBER], false, false], \n"
-                + "AktionStmt [LightAction [GREEN, ON]]MethodStmt [MethodIfReturn [Binary [EQ, NumConst [0], NumConst [0]], NUMBER, Var [x2]]], NUMBER, Var [x3]]], [Location [x=75, y=488], MethodCall [Funktionsblock, Var [x], Var [x2], Var [x3], NumConst [0], NumConst [1], NumConst [2], NUMBER]]]]";
+                + "AktionStmt [LightAction [NO_PORT, ON, DEFAULT, EmptyExpr [defVal=COLOR]]]MethodStmt [MethodIfReturn [Binary [EQ, NumConst [0], NumConst [0]], NUMBER, Var [x2]]], NUMBER, Var [x3]]], [Location [x=75, y=488], MethodCall [Funktionsblock, Var [x], Var [x2], Var [x3], NumConst [0], NumConst [1], NumConst [2], NUMBER]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/methods/method_call_1.xml"));
     }

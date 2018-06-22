@@ -4,20 +4,18 @@ import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
-import de.fhg.iais.roberta.syntax.action.nxt.LightSensorAction;
+import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.nxt.NxtAstVisitor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
  * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
-public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisitor implements NxtAstVisitor<Void> {
+public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisitor {
 
     private boolean isVolumeVariableNeeded = false;
 
@@ -35,7 +33,7 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     }
 
     @Override
-    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
+    public Void visitLightAction(LightAction<Void> lightAction) {
         return null;
     }
 
@@ -147,11 +145,4 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
         }
         return null;
     }*/
-
-    @Override
-    public Void visitLedAction(LedAction<Void> ledAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }

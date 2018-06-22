@@ -17,7 +17,6 @@ import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.nxt.PickColor;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -29,7 +28,6 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectio
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
@@ -40,7 +38,6 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
-import de.fhg.iais.roberta.syntax.action.nxt.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
@@ -94,7 +91,6 @@ import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
-import de.fhg.iais.roberta.visitor.nxt.NxtAstVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
 /**
@@ -103,8 +99,8 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
  *
  * @param <V>
  */
-public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, AstSensorsVisitor<Void>, AstActorCommunicationVisitor<Void>,
-    AstActorDisplayVisitor<Void>, AstActorMotorVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
+public class NxcVisitor extends RobotCppVisitor implements AstSensorsVisitor<Void>, AstActorCommunicationVisitor<Void>, AstActorDisplayVisitor<Void>,
+    AstActorMotorVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
     private final NxtConfiguration brickConfiguration;
 
     private final boolean timeSensorUsed;
@@ -508,11 +504,6 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
     }
 
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
-        return null;
-    }
-
-    @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         return null;
     }
@@ -776,23 +767,13 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
     }
 
     @Override
-    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        if ( lightSensorAction.getState().toString() == "ON" ) {
-            switch ( lightSensorAction.getLight().toString() ) {
-                case "RED":
-                    this.sb.append("SetSensorColorRed(");
-                    break;
-                case "GREEN":
-                    this.sb.append("SetSensorColorGreen(");
-                    break;
-                case "BLUE":
-                    this.sb.append("SetSensorColorBlue(");
-                    break;
-            }
+    public Void visitLightAction(LightAction<Void> lightAction) {
+        if ( lightAction.getMode().toString().equals("ON") ) {
+            this.sb.append("SetSensorColor" + lightAction.getColor().getValues()[0] + "(");
         } else {
             this.sb.append("SetSensorColorNone(");
         }
-        this.sb.append(lightSensorAction.getPort());
+        this.sb.append(lightAction.getPort());
         this.sb.append(");");
         return null;
     }
@@ -802,16 +783,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
         this.sb.append("SensorLight(");
         this.sb.append(lightSensor.getPort().getCodeName());
         this.sb.append(", ");
-        switch ( (LightSensorMode) lightSensor.getMode() ) {
-            case LIGHT:
-                this.sb.append("\"LIGHT\"");
-                break;
-            case AMBIENTLIGHT:
-                this.sb.append("\"AMBIENTLIGHT\"");
-                break;
-            default:
-                throw new DbcException("Invalide mode for Light Sensor!");
-        }
+        this.sb.append("\"" + lightSensor.getMode() + "\"");
         this.sb.append(")");
         return null;
     }
@@ -1396,13 +1368,6 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitLedAction(LedAction<Void> ledAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 }

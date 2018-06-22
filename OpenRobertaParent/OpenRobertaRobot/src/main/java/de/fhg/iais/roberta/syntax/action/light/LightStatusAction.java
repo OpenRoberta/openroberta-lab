@@ -80,11 +80,13 @@ public class LightStatusAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+        Status status = LightStatusAction.Status.RESET;
         IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 1);
         String port = helper.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.NO_PORT);
-        Status status = LightStatusAction.Status.RESET;
-        if ( block.getType().equals(BlocklyConstants.ROB_ACTIONS_BRICK_LIGHT_OFF) || block.getType().equals("mbedActions_leds_off") ) {
+        if ( block.getType().equals(BlocklyConstants.ROB_ACTIONS_BRICK_LIGHT_OFF)
+            || block.getType().equals("mbedActions_leds_off")
+            || block.getType().equals("robActions_leds_off") ) {
             status = LightStatusAction.Status.OFF;
         }
         return LightStatusAction.make(factory.getActorPort(port), status, helper.extractBlockProperties(block), helper.extractComment(block));

@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.syntax.check.program.mbed;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayImageMode;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
@@ -210,11 +209,4 @@ public class BoardCheckVisitor extends RobotBoardCheckVisitor implements MbedAst
     public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPull) {
         return null;
     }
-
-    @Override
-    public Void visitLedAction(LedAction<Void> ledAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }

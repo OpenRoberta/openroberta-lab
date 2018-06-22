@@ -6,7 +6,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
@@ -24,11 +23,6 @@ public class LoopCounterVisitorTest {
 
         @Override
         public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-            return null;
-        }
-
-        @Override
-        public Void visitLedAction(LedAction<Void> ledAction) {
             return null;
         }
     }

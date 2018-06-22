@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.mode.action;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
 
 public enum BrickLedColor implements IBrickLedColor {
-    GREEN(), ORANGE(), RED();
+    DEFAULT(), GREEN( "Green" ), ORANGE( "Orange" ), RED( "Red" ), BLUE( "Blue" );
 
     private final String[] values;
 

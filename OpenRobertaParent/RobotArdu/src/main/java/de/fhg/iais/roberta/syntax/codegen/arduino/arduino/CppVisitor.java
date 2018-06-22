@@ -1,18 +1,22 @@
 package de.fhg.iais.roberta.syntax.codegen.arduino.arduino;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import de.fhg.iais.roberta.components.ConfigurationBlockType;
 import de.fhg.iais.roberta.components.UsedConfigurationBlock;
 import de.fhg.iais.roberta.components.arduino.ArduinoConfiguration;
+import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.sensor.HumiditySensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.RfidSensorMode;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.control.RelayAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
@@ -113,6 +117,11 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
     }
 
     @Override
+    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
+        return null;
+    }
+
+    @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         return null;
     }
@@ -129,8 +138,26 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
+        if ( !lightAction.getMode().toString().equals(BlocklyConstants.DEFAULT) ) {
+            this.sb.append("digitalWrite(_led_" + lightAction.getPort().getOraName() + ", " + lightAction.getMode().getValues()[0] + ");");
+        } else {
+            String in = lightAction.getRgbLedColor().toString();
+            String regexString = Pattern.quote("NumConst [") + "(.*?)" + Pattern.quote("],");
+            Pattern p = Pattern.compile(regexString);
+            Matcher m = p.matcher(in);
+            String[] colors = {
+                "red",
+                "green",
+                "blue"
+            };
+            int color_index = 0;
+            while ( m.find() ) {
+                this.sb.append("analogWrite(_led_" + colors[color_index] + "_" + lightAction.getPort().getOraName() + ", " + m.group(1) + ");");
+                nlIndent();
+                color_index++;
+            }
+        }
         return null;
-
     }
 
     @Override
@@ -161,6 +188,34 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+        boolean step = motorOnAction.getParam().getDuration() != null;
+        if ( step ) {//step motor
+            this.sb.append("Motor_" + motorOnAction.getPort().getOraName() + ".setSpeed(");
+            motorOnAction.getParam().getSpeed().visit(this);
+            this.sb.append(");");
+            nlIndent();
+            this.sb.append("Motor_" + motorOnAction.getPort().getOraName() + ".step(_SPU_" + motorOnAction.getPort().getOraName() + "*");
+            motorOnAction.getDurationValue().visit(this);
+            if ( motorOnAction.getDurationMode().equals(MotorMoveMode.DEGREE) ) {
+                this.sb.append("/360");
+            }
+            this.sb.append(");");
+        } else {//servo motor
+            this.sb.append("_servo_" + motorOnAction.getPort().getOraName() + ".write(");
+            motorOnAction.getParam().getSpeed().visit(this);
+            this.sb.append(");");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitRelayAction(RelayAction<Void> relayAction) {
+        this.sb
+            .append("digitalWrite(_relay_")
+            .append(relayAction.getPort().getOraName())
+            .append(", ")
+            .append(relayAction.getMode().getValues()[0])
+            .append(");");
         return null;
     }
 
@@ -196,12 +251,6 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLedAction(LedAction<Void> ledAction) {
-        this.sb.append("digitalWrite(_led_" + ledAction.getPort().getOraName() + ")");
         return null;
     }
 
@@ -291,9 +340,8 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                 this.sb.append("mfrc522_" + rfidSensor.getPort().getCodeName() + ".PICC_IsNewCardPresent()");
                 break;
             case SERIAL:
-                //TODO: move to function and change to string?
                 this.sb.append(
-                    "(double)(((long)(mfrc522_"
+                    "String(((long)(mfrc522_"
                         + rfidSensor.getPort().getCodeName()
                         + ".uid.uidByte[0])<<24) |((long)(mfrc522_"
                         + rfidSensor.getPort().getCodeName()
@@ -301,10 +349,10 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                         + rfidSensor.getPort().getCodeName()
                         + ".uid.uidByte[2])<<8) | ((long)mfrc522_"
                         + rfidSensor.getPort().getCodeName()
-                        + ".uid.uidByte[3]))");
+                        + ".uid.uidByte[3]), HEX)");
                 break;
             default:
-                throw new DbcException("Invalide mode for Humidity Sensor!");
+                throw new DbcException("Invalide mode for RFID Sensor!");
         }
         return null;
     }
@@ -390,6 +438,8 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
         this.sb.append("#include <LiquidCrystal_I2C.h> \n");
         //if LCD is used
         this.sb.append("#include <LiquidCrystal.h> \n");
+        this.sb.append("#include <Stepper.h> \n");
+        this.sb.append("#include <Servo.h> \n");
         this.sb.append("#include <RobertaFunctions.h>   // Open Roberta library \n");
         this.sb.append("RobertaFunctions rob;  \n");
     }
@@ -460,14 +510,24 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                     nlIndent();
                     break;
                 case RGBLED:
+                    this.sb.append("pinMode(_led_red_" + usedConfigurationBlock.getBlockName() + ", OUTPUT);");
+                    nlIndent();
+                    this.sb.append("pinMode(_led_green_" + usedConfigurationBlock.getBlockName() + ", OUTPUT);");
+                    nlIndent();
+                    this.sb.append("pinMode(_led_blue_" + usedConfigurationBlock.getBlockName() + ", OUTPUT);");
+                    nlIndent();
                     break;
                 case BUZZER:
                     break;
                 case RELAY:
+                    this.sb.append("pinMode(_relay_" + usedConfigurationBlock.getBlockName() + ", OUTPUT);");
+                    nlIndent();
                     break;
                 case STEPMOTOR:
                     break;
                 case SERVOMOTOR:
+                    this.sb.append("_servo_" + usedConfigurationBlock.getBlockName() + ".attach(" + usedConfigurationBlock.getPins().get(0) + ")");
+                    nlIndent();
                     break;
                 default:
                     throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getType());
@@ -550,15 +610,15 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                     this.sb
                         .append("LiquidCrystal lcd_" + blockName + "(")
                         .append(usedConfigurationBlock.getPins().get(0))
-                        .append(",")
+                        .append(", ")
                         .append(usedConfigurationBlock.getPins().get(1))
-                        .append(",")
+                        .append(", ")
                         .append(usedConfigurationBlock.getPins().get(2))
-                        .append(",")
+                        .append(", ")
                         .append(usedConfigurationBlock.getPins().get(3))
-                        .append(",")
+                        .append(", ")
                         .append(usedConfigurationBlock.getPins().get(4))
-                        .append(",")
+                        .append(", ")
                         .append(usedConfigurationBlock.getPins().get(5))
                         .append(");");
                     nlIndent();
@@ -572,16 +632,39 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                     nlIndent();
                     break;
                 case RGBLED:
+                    this.sb.append("int _led_red_" + blockName + " = ").append(usedConfigurationBlock.getPins().get(0)).append(";");
+                    nlIndent();
+                    this.sb.append("int _led_green_" + blockName + " = ").append(usedConfigurationBlock.getPins().get(1)).append(";");
+                    nlIndent();
+                    this.sb.append("int _led_blue_" + blockName + " = ").append(usedConfigurationBlock.getPins().get(2)).append(";");
+                    nlIndent();
                     break;
                 case BUZZER:
                     this.sb.append("int _spiele_" + blockName + " = ").append(usedConfigurationBlock.getPins().get(0)).append(";");
                     nlIndent();
                     break;
                 case RELAY:
+                    this.sb.append("int _relay_" + blockName + " = ").append(usedConfigurationBlock.getPins().get(0)).append(";");
+                    nlIndent();
                     break;
                 case STEPMOTOR:
+                    this.sb.append("int _SPU_" + blockName + " = ").append("2048"); //TODO: change 2048 to customized
+                    nlIndent();
+                    this.sb
+                        .append("Stepper Motor_" + blockName + "(_SPU_" + blockName + ", ")
+                        .append(usedConfigurationBlock.getPins().get(0))
+                        .append(", ")
+                        .append(usedConfigurationBlock.getPins().get(1))
+                        .append(", ")
+                        .append(usedConfigurationBlock.getPins().get(2))
+                        .append(", ")
+                        .append(usedConfigurationBlock.getPins().get(3))
+                        .append(");");
+                    nlIndent();
                     break;
                 case SERVOMOTOR:
+                    this.sb.append("Servo _servo_" + blockName + ";");
+                    nlIndent();
                     break;
                 default:
                     throw new DbcException("Configuration block is not supported: " + usedConfigurationBlock.getType());
@@ -590,26 +673,17 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
     }
 
     @Override
-    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public Void visitExternalLedOnAction(ExternalLedOnAction<Void> externalLedOnAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitExternalLedOffAction(ExternalLedOffAction<Void> externalLedOffAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 }

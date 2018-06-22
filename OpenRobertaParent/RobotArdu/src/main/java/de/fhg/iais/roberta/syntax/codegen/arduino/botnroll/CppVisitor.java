@@ -8,17 +8,16 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.arduino.BotNrollConfiguration;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.action.BlinkMode;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.control.RelayAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
@@ -171,17 +170,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        BlinkMode blinkingMode = (BlinkMode) lightAction.getBlinkMode();
-        switch ( blinkingMode ) {
-            case ON:
-                this.sb.append("one.led(HIGH);");
-                break;
-            case OFF:
-                this.sb.append("one.led(LOW);");
-                break;
-            default:
-                throw new DbcException("Invalide blinking mode: " + blinkingMode);
-        }
+        this.sb.append("one.led(" + lightAction.getMode().getValues()[0] + ");");
         return null;
 
     }
@@ -628,31 +617,11 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitExternalLedOnAction(ExternalLedOnAction<Void> externalLedOnAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitExternalLedOffAction(ExternalLedOffAction<Void> externalLedOffAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -662,8 +631,22 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
     }
 
     @Override
-    public Void visitLedAction(LedAction<Void> ledAction) {
-        // TODO Auto-generated method stub
+    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitExternalLedOnAction(ExternalLedOnAction<Void> externalLedOnAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitExternalLedOffAction(ExternalLedOffAction<Void> externalLedOffAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitRelayAction(RelayAction<Void> relayAction) {
         return null;
     }
 }

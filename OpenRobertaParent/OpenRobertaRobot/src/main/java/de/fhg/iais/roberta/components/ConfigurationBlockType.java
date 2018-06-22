@@ -7,9 +7,6 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public enum ConfigurationBlockType implements IConfigurationBlockType {
-    //COLOR( "robBrick_colour" ),
-    //HT_COLOR( "robBrick_HiTechnic_colour" ),
-    //TOUCH( "robBrick_touch" ),
     BUZZER( "robConf_buzzer" ),
     DROP( "robConf_drop" ),
     ENCODER( "robConf_encoder" ),
@@ -33,21 +30,6 @@ public enum ConfigurationBlockType implements IConfigurationBlockType {
     STEPMOTOR( "robConf_stepmotor" ),
     TEMPERATURE( "robConf_temperature" ),
     ULTRASONIC( "robConf_ultrasonic" );
-
-    //INFRARED( "robBrick_infrared" ),
-    //GYRO( "robBrick_gyro", "makeblockSensors_gyroscope_getSample" ),
-    //SOUND( "robBrick_sound" ),
-    //LINE_FOLLOWER( "makeblockSensors_light" ),
-    //AMBIENT_LIGHT( "makeblockSensors_ambientlight" ),
-    //COMPASS( "robBrick_compass" ),
-    //TEMPERATURE( "robBrick_temperature" ),
-    //FLAMESENSOR( "makeblockSensors_flameSensor_getSample" ),
-    //ACCELEROMETER( "makeblockSensors_accelerometer_getSample" ),
-    //JOYSTICK( "arduSensors_joystick_getSample" ),
-    //PIR_MOTION( "makeblockSensors_motionSensor_getSample" ),
-    //NAOMARK( "naoSensors_naoMark" ),
-    //VOLTAGE( "" ),
-    //TIMER( "" ),
 
     private final String[] values;
 

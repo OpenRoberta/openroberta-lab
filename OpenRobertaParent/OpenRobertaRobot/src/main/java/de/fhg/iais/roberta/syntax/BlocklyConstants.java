@@ -239,6 +239,7 @@ public final class BlocklyConstants {
     public static final String GYRO = "GYRO";
     public static final String TIME = "TIME";
     public static final String COLOR = "COLOR";
+    public static final String NO_COLOR = "NO_COLOR";
     public static final String LIGHT = "LIGHT";
     public static final String LIGHT_VALUE = "LIGHT_VALUE";
     public static final String AMBIENTLIGHT = "AMBIENTLIGHT";
@@ -348,4 +349,5 @@ public final class BlocklyConstants {
     public static final String DROP_OFF = "DROP_OFF";
     public static final String ACTORPORT = "ACTORPORT";
     public static final String LEDSTATE = "LEDSTATE";
+    public static final String RELAYSTATE = "RELAYSTATE";
 }

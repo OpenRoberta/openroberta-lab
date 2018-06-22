@@ -21,7 +21,6 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
@@ -124,7 +123,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         String end = createClosingBracket();
-        this.sb.append("createTurnLight(CONST." + lightAction.getColor() + ", CONST." + lightAction.getBlinkMode());
+        this.sb.append("createTurnLight(CONST." + lightAction.getColor() + ", CONST." + lightAction.getMode());
         this.sb.append(end);
         return null;
     }
@@ -397,11 +396,4 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
         this.sb.append("createGetSample(CONST.SOUND)");
         return null;
     }
-
-    @Override
-    public Void visitLedAction(LedAction<Void> ledAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }

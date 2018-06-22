@@ -13,7 +13,6 @@ import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.factory.ev3.Ev3GuiceModule;
 import de.fhg.iais.roberta.factory.ev3.Ev3SimCompilerWorkflow;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ActorPort;
@@ -81,11 +80,6 @@ public abstract class EV3AbstractFactory extends AbstractRobotFactory {
     @Override
     public AbstractModule getGuiceModule() {
         return new Ev3GuiceModule(this.robertaProperties.getRobertaProperties());
-    }
-
-    @Override
-    public ILightSensorActionMode getLightActionColor(String mode) {
-        return null;
     }
 
     @Override

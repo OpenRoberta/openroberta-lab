@@ -6,7 +6,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.factory.ev3.lejos.v0.Factory;
 import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.action.BlinkMode;
+import de.fhg.iais.roberta.mode.action.LightMode;
 import de.fhg.iais.roberta.mode.action.BrickLedColor;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
@@ -93,7 +93,7 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getBlinkModeFromString() {
-        Assert.assertEquals(this.factory.getBlinkMode("FLASH"), BlinkMode.FLASH);
+        Assert.assertEquals(this.factory.getBlinkMode("FLASH"), LightMode.FLASH);
     }
 
     @Test(expected = DbcException.class)

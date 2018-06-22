@@ -64,6 +64,15 @@ public class ArduinoConfiguration extends Configuration {
         return configurationBlock.getFourth();
     }
 
+    public ConfigurationBlock getConfigurationBlockOnPort(String port) {
+        for ( int i = 0; i < this.configurationBlocks.size(); i++ ) {
+            if ( this.configurationBlocks.get(i).getSecond().toUpperCase().equals(port) ) {
+                return this.configurationBlocks.get(i).getFirst();
+            }
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return "BrickConfiguration [configuration blocks=" + this.configurationBlocks + "]";

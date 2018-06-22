@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.syntax.check.program.arduino.mbot;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.control.RelayAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOffAction;
@@ -24,7 +24,6 @@ public class BrickCheckVisitor extends RobotBrickCheckVisitor implements MbotAst
 
     public BrickCheckVisitor(Configuration brickConfiguration) {
         super(brickConfiguration);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
@@ -106,8 +105,7 @@ public class BrickCheckVisitor extends RobotBrickCheckVisitor implements MbotAst
     }
 
     @Override
-    public Void visitLedAction(LedAction<Void> ledAction) {
-        // TODO Auto-generated method stub
+    public Void visitRelayAction(RelayAction<Void> relayAction) {
         return null;
     }
 }

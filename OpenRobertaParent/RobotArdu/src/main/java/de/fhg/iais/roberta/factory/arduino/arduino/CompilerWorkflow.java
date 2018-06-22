@@ -31,7 +31,7 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
     public final String robotCompilerResourcesDir;
     public final String robotCompilerDir;
 
-    private String compiledHex = "";
+    private String compiledHex = "error";
 
     public CompilerWorkflow(String pathToCrosscompilerBaseDir, String robotCompilerResourcesDir, String robotCompilerDir) {
         this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
@@ -45,7 +45,14 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
         if ( data.getErrorMessage() != null ) {
             return null;
         }
-        return CppVisitor.generate((ArduinoConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        try {
+            String sourceCode = CppVisitor.generate((ArduinoConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+            CompilerWorkflow.LOG.info("generating javascript code");
+            return sourceCode;
+        } catch ( Exception e ) {
+            LOG.error("generating source code failed", e);
+            return null;
+        }
     }
 
     @Override
@@ -63,7 +70,7 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
         } else {
             CompilerWorkflow.LOG.info(messageKey.toString());
         }
-        return messageKey;
+        return sourceCode == null ? Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED : messageKey;
     }
 
     @Override

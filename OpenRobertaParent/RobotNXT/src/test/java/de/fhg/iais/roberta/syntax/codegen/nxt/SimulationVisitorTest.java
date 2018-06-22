@@ -48,7 +48,7 @@ public class SimulationVisitorTest {
         String a =
             "var stmt0 = createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.FOREWARD);\n"
                 + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(CONST.EQ, createGetSample(CONST.TOUCH), createConstant(CONST.BOOL_CONST, true))], [])]);\n"
-                + "var stmt2 = createTurnLight(CONST.GREEN, CONST.ON);\n"
+                + "var stmt2 = createLightSensorAction(CONST.COLOR_ENUM.RED, CONST.ON);\n"
                 + "var stmt3 = createStopDrive();\n"
                 + "var stmt4 = createStatusLight(CONST.RESET);\n"
                 + "var stmt5 = createWaitStmt([createIfStmt([createBinaryExpr(CONST.EQ, createGetSample(CONST.TOUCH), createConstant(CONST.BOOL_CONST, true))], [])]);\n"
@@ -116,7 +116,7 @@ public class SimulationVisitorTest {
                 + "var stmt6 = createTurnAction(createConstant(CONST.NUM_CONST, 80), CONST.LEFT, createConstant(CONST.NUM_CONST, 15));\n"
                 + "var stmt7 = createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.FOREWARD, createConstant(CONST.NUM_CONST, 26));\n"
                 + "var stmt8 = createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.BACKWARD, createConstant(CONST.NUM_CONST, 33));\n"
-                + "var stmt9 = createTurnLight(CONST.GREEN, CONST.ON);\n"
+                + "var stmt9 = createLightSensorAction(CONST.COLOR_ENUM.RED, CONST.ON);\n"
                 + "var stmt10 = createStatusLight(CONST.OFF);\n"
                 + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7,stmt8,stmt9,stmt10]};";
 
@@ -286,7 +286,7 @@ public class SimulationVisitorTest {
     }
 
     @Test
-    public void visitLightSensorAction_RedOnPort1_CreateLightSensorAction() throws Exception {
+    public void visitLightAction_RedOnPort1_CreateLightAction() throws Exception {
         String a =
             "var stmt0 = createLightSensorAction(CONST.COLOR_ENUM.RED, CONST.ON);\n"
                 + "var stmt1 = createLightSensorAction(CONST.COLOR_ENUM.BLUE, CONST.OFF);\n"
@@ -405,10 +405,9 @@ public class SimulationVisitorTest {
 
     @Test
     public void testLightSensor() throws Exception {
-        String a =
-            "var stmt0 = createVarDeclaration(CONST.NUMBER, \"Element\", createGetSample(CONST.LIGHT, CONST.RED));\n"
+        String a = "var stmt0 = createVarDeclaration(CONST.NUMBER, \"Element\", createGetSample(CONST.LIGHT, CONST.RED));\n"
 
-                + "var blocklyProgram = {'programStmts': [stmt0]};";
+            + "var blocklyProgram = {'programStmts': [stmt0]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator29.xml");
 

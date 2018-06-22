@@ -13,7 +13,6 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
@@ -30,7 +29,6 @@ import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.action.wedo.LedOnAction;
 import de.fhg.iais.roberta.syntax.check.hardware.wedo.UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
@@ -44,9 +42,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.visitor.wedo.WeDoAstVisitor;
 
-public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements WeDoAstVisitor<V> {
+public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> {
     protected Set<UsedSensor> usedSensors;
     protected Set<UsedConfigurationBlock> usedConfigurationBlocks;
     protected Set<UsedActor> usedActors;
@@ -87,7 +84,19 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitLightAction(LightAction<V> lightAction) {
-        throw new DbcException("operation not supported");
+        String actorName = lightAction.getPort().getOraName();
+        UsedConfigurationBlock confLedBlock = getConfigurationBlock(actorName);
+        if ( confLedBlock == null ) {
+            throw new DbcException("no LED declared in the configuration");
+        }
+        String brickName = confLedBlock.getPins().size() >= 1 ? confLedBlock.getPins().get(0) : null;
+        if ( (brickName != null) ) {
+            lightAction.getRgbLedColor().visit(this);
+            JSONObject o = mk(C.LED_ON_ACTION).put(C.NAME, brickName);
+            return app(o);
+        } else {
+            throw new DbcException("No robot name or no port!");
+        }
     }
 
     @Override
@@ -276,11 +285,6 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitLedAction(LedAction<V> ledAction) {
-        throw new DbcException("operation not supported");
-    }
-
-    @Override
     public V visitMotorGetPowerAction(MotorGetPowerAction<V> motorGetPowerAction) {
         throw new DbcException("operation not supported");
     }
@@ -288,23 +292,6 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     @Override
     public V visitMotorSetPowerAction(MotorSetPowerAction<V> motorSetPowerAction) {
         throw new DbcException("operation not supported");
-    }
-
-    @Override
-    public V visitLedOnAction(LedOnAction<V> ledOnAction) {
-        String actorName = ledOnAction.getPort().getOraName();
-        UsedConfigurationBlock confLedBlock = getConfigurationBlock(actorName);
-        if ( confLedBlock == null ) {
-            throw new DbcException("no LED declared in the configuration");
-        }
-        String brickName = confLedBlock.getPins().size() >= 1 ? confLedBlock.getPins().get(0) : null;
-        if ( (brickName != null) ) {
-            ledOnAction.getLedColor().visit(this);
-            JSONObject o = mk(C.LED_ON_ACTION).put(C.NAME, brickName);
-            return app(o);
-        } else {
-            throw new DbcException("No robot name or no port!");
-        }
     }
 
     @Override
