@@ -6,12 +6,12 @@ export function dbc( expected, actual ) {
     }
 }
 
-export function dbcException( s ) {
+export function dbcException( s: string ) {
     console.trace( s );
     throw s;
 }
 
-export function expectExc( fct, cause?) {
+export function expectExc( fct, cause?: string ) {
     try {
         fct();
         var msg = 'DBC. Expected exception was not thrown';
@@ -26,6 +26,6 @@ export function expectExc( fct, cause?) {
     }
 }
 
-export function p( s ) {
+export function p( s: any ) {
     console.log( s );
 }

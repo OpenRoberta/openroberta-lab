@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.components.wedo.WeDoConfiguration;
 import de.fhg.iais.roberta.factory.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.syntax.codegen.wedo.SimulationVisitor;
+import de.fhg.iais.roberta.syntax.codegen.wedo.WeDoStackMachineVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.wedo.Jaxb2WeDoConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
@@ -28,7 +28,7 @@ public class WeDoSimCompilerWorkflow extends AbstractCompilerWorkflow {
         if ( data.getErrorMessage() != null ) {
             return null;
         }
-        String sourceCode = SimulationVisitor.generate((WeDoConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree());
+        String sourceCode = WeDoStackMachineVisitor.generate((WeDoConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree());
         WeDoSimCompilerWorkflow.LOG.info("generating javascript code");
         return sourceCode;
     }

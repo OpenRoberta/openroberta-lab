@@ -1,4 +1,4 @@
-import * as CONST from "./constants";
+import * as C from "./constants";
 
 export function build( program ) {
     var blocklyProgram;
@@ -6,410 +6,306 @@ export function build( program ) {
     return blocklyProgram;
 }
 
+export function createStmtList( stmts ) {
+    return concat( ...stmts );
+}
+
 export function createConstant( dataType, value ) {
     var result = {};
-    result[CONST.EXPR] = dataType;
-    result[CONST.VALUE] = value;
-    return result;
+    result[C.OPCODE] = C.EXPR;
+    result[C.EXPR] = dataType;
+    result[C.VALUE] = value;
+    return [result];
 }
 
 export function createMathConstant( value ) {
     var result = {};
-    result[CONST.EXPR] = CONST.MATH_CONST;
-    result[CONST.VALUE] = value;
-    return result;
+    result[C.OPCODE] = C.EXPR;
+    result[C.EXPR] = C.MATH_CONST;
+    result[C.VALUE] = value;
+    return [result];
 }
 
 export function createMathChange( left, right ) {
-    var binary = createBinaryExpr( CONST.ADD, left, right );
-    var assignment = createAssignStmt( left.name, binary )
-    return assignment;
+    var binary = createBinaryExpr( C.ADD, left, right );
+    return createAssignStmt( left.name, binary );
 }
 
 export function createTextAppend( left, right ) {
-    var binary = createBinaryExpr( CONST.TEXT_APPEND, left, right );
-    var assignment = createAssignStmt( left.name, binary )
-    return assignment;
+    var binary = createBinaryExpr( C.TEXT_APPEND, left, right );
+    return createAssignStmt( left.name, binary );
 }
 
 export function createBinaryExpr( op, left, right ) {
     var result = {};
-    result[CONST.EXPR] = CONST.BINARY;
-    result[CONST.OP] = op;
-    result[CONST.LEFT] = left;
-    result[CONST.RIGHT] = right;
-    return result;
+    result[C.OPCODE] = C.EXPR;
+    result[C.EXPR] = C.BINARY;
+    result[C.OP] = op;
+    return concat( left, right, [result] );
 }
 
 export function createUnaryExpr( op, value ) {
     var result = {};
-    result[CONST.EXPR] = CONST.UNARY;
-    result[CONST.OP] = op;
-    result[CONST.VALUE] = value;
-    return result;
+    result[C.OPCODE] = C.EXPR;
+    result[C.EXPR] = C.UNARY;
+    result[C.OP] = op;
+    return push( value, result );
 }
 
 export function createSingleFunction( funcName, value ) {
     var result = {};
-    result[CONST.EXPR] = CONST.SINGLE_FUNCTION;
-    result[CONST.OP] = funcName;
-    result[CONST.VALUE] = value;
-    return result;
+    result[C.OPCODE] = C.EXPR;
+    result[C.EXPR] = C.SINGLE_FUNCTION;
+    result[C.OP] = funcName;
+    result[C.VALUE] = value;
+    return [result];
 }
 
 export function createMathPropFunct( funcName, arg1, arg2 ) {
     var result = {};
-    result[CONST.EXPR] = CONST.MATH_PROP_FUNCT;
-    result[CONST.OP] = funcName;
-    result[CONST.ARG1] = arg1;
-    result[CONST.ARG2] = arg2;
-    return result;
+    result[C.OPCODE] = C.EXPR;
+    result[C.EXPR] = C.MATH_PROP_FUNCT;
+    result[C.OP] = funcName;
+    return concat( arg1, arg2, [result] );
 }
 
 export function createMathConstrainFunct( val, min, max ) {
     var result = {};
-    result[CONST.EXPR] = CONST.MATH_CONSTRAIN_FUNCTION;
-    result[CONST.VALUE] = val;
-    result[CONST.MIN] = min;
-    result[CONST.MAX] = max;
-    return result;
+    result[C.OPCODE] = C.EXPR;
+    result[C.EXPR] = C.MATH_CONSTRAIN_FUNCTION;
+    return concat( val, min, max, [result] );
 }
 
 export function createRandInt( min, max ) {
     var result = {};
-    result[CONST.EXPR] = CONST.RANDOM_INT;
-    result[CONST.MIN] = min;
-    result[CONST.MAX] = max;
-    return result;
+    result[C.OPCODE] = C.EXPR;
+    result[C.EXPR] = C.RANDOM_INT;
+    result[C.MIN] = min;
+    result[C.MAX] = max;
+    return concat( min, max, [result] );
 }
 
 export function createRandDouble() {
     var result = {};
-    result[CONST.EXPR] = CONST.RANDOM_DOUBLE;
-    return result;
+    result[C.OPCODE] = C.EXPR;
+    result[C.EXPR] = C.RANDOM_DOUBLE;
+    return [result];
 }
 
 export function createVarReference( type, name ) {
     var result = {};
-    result[CONST.EXPR] = CONST.VAR;
-    result[CONST.TYPE] = type;
-    result[CONST.NAME] = name;
-    return result;
+    result[C.OPCODE] = C.EXPR;
+    result[C.EXPR] = C.VAR;
+    result[C.TYPE] = type;
+    result[C.NAME] = name;
+    return [result];
 }
 
 export function createVarDeclaration( type, name, value ) {
     var result = {};
-    result[CONST.STMT] = CONST.VAR_DECLARATION;
-    result[CONST.TYPE] = type;
-    result[CONST.NAME] = name;
-    result[CONST.VALUE] = value;
-    return result;
+    result[C.OPCODE] = C.VAR_DECLARATION;
+    result[C.TYPE] = type;
+    result[C.NAME] = name;
+    return push( value, result );
 }
 
 export function createAssignStmt( name, value ) {
     var result = {};
-    result[CONST.STMT] = CONST.ASSIGN_STMT;
-    result[CONST.NAME] = name;
-    result[CONST.EXPR] = value;
-    return result;
+    result[C.OPCODE] = C.ASSIGN_STMT;
+    result[C.NAME] = name;
+    return push( value, result );
 }
 
 export function createAssignMethodParameter( name, value ) {
     var result = {};
-    result[CONST.STMT] = CONST.ASSIGN_METHOD_PARAMETER_STMT;
-    result[CONST.NAME] = name;
-    result[CONST.EXPR] = value;
-    return result;
+    result[C.OPCODE] = C.ASSIGN_METHOD_PARAMETER_STMT;
+    result[C.NAME] = name;
+    return push( value, result );
 }
 
-export function createRepeatStmt( loopNumber, mode, expr, stmtList ) {
+export function createRepeatStmt( loopNumber, mode, variable, theDecl, theEnd, theStep, stmtList ) {
     if ( !Array.isArray( stmtList ) ) {
         throw "Expression List is not List!";
     }
     var result = {};
-    result[CONST.MODE] = mode;
-    result[CONST.LOOP_NUMBER] = loopNumber;
-    result[CONST.STMT] = CONST.REPEAT_STMT;
-    result[CONST.EXPR] = expr;
-    result[CONST.STMT_LIST] = stmtList;
-    result[CONST.EACH_COUNTER] = 0;
-    return result;
+    result[C.OPCODE] = C.REPEAT_STMT;
+    result[C.MODE] = mode;
+    result[C.LOOP_NUMBER] = loopNumber;
+    result[C.VAR] = variable;
+    result[C.STMT_LIST] = stmtList;
+    result[C.EACH_COUNTER] = 0;
+    return concat( theDecl, theEnd, theStep, [result] );
 }
 
 export function createStmtFlowControl( loopNumber, mode ) {
     var result = {};
-    result[CONST.STMT] = CONST.FLOW_CONTROL;
-    result[CONST.MODE] = mode;
-    result[CONST.LOOP_NUMBER] = loopNumber;
-    return result;
-}
-
-export function createShowPictureAction( picture, x, y ) {
-    var result = {};
-    result[CONST.STMT] = CONST.SHOW_PICTURE_ACTION;
-    result[CONST.PICTURE] = picture;
-    result[CONST.X] = x;
-    result[CONST.Y] = y;
-    return result;
-}
-
-export function createDisplayImageAction( mode, image ) {
-    var result = {};
-    result[CONST.STMT] = CONST.DISPLAY_IMAGE_ACTION;
-    result[CONST.MODE] = mode;
-    result[CONST.IMAGE] = image;
-    return result;
-}
-
-export function createImageShiftAction( direction, n, image ) {
-    var result = {};
-    result[CONST.EXPR] = CONST.IMAGE_SHIFT_ACTION;
-    result[CONST.DIRECTION] = direction;
-    result[CONST.N] = n;
-    result[CONST.IMAGE] = image;
-    return result;
-}
-
-export function createImageInvertAction( image ) {
-    var result = {};
-    result[CONST.EXPR] = CONST.IMAGE_INVERT_ACTION;
-    result[CONST.IMAGE] = image;
-    return result;
+    result[C.OPCODE] = C.FLOW_CONTROL;
+    result[C.MODE] = mode;
+    result[C.LOOP_NUMBER] = loopNumber;
+    return [result];
 }
 
 export function createRgbColor( rgbColor ) {
     var result = {};
-    result[CONST.EXPR] = CONST.RGB_COLOR_CONST;
-    result[CONST.VALUE] = rgbColor;
-    return result;
+    result[C.OPCODE] = C.EXPR;
+    result[C.EXPR] = C.RGB_COLOR_CONST;
+    result[C.VALUE] = rgbColor;
+    return [result];
 }
 
 export function createLedOnAction( ledColor ) {
     var result = {};
-    result[CONST.STMT] = CONST.LED_ON_ACTION;
-    result[CONST.RGB_COLOR_CONST] = ledColor;
-    return result;
+    result[C.OPCODE] = C.LED_ON_ACTION;
+    result[C.RGB_COLOR_CONST] = ledColor;
+    return [result];
 }
 
 export function createShowTextAction( text, x, y ) {
     var result = {};
-    result[CONST.STMT] = CONST.SHOW_TEXT_ACTION;
-    result[CONST.TEXT] = text;
-    result[CONST.X] = x;
-    result[CONST.Y] = y;
-    return result;
-}
-
-export function createDisplayTextAction( displayMode, text ) {
-    var result = {};
-    result[CONST.STMT] = CONST.DISPLAY_TEXT_ACTION;
-    result[CONST.MODE] = displayMode;
-    result[CONST.TEXT] = text;
-    return result;
-}
-
-export function createClearDisplayAction() {
-    var result = {};
-    result[CONST.STMT] = CONST.CLEAR_DISPLAY_ACTION;
-    return result;
-}
-
-export function createDebugAction() {
-    var result = {};
-    result[CONST.STMT] = CONST.CREATE_DEBUG_ACTION;
-
-    return result;
+    result[C.OPCODE] = C.SHOW_TEXT_ACTION;
+    return concat( text, x, y, [result] );
 }
 
 export function createDriveAction( speed, direction, distance ) {
     var result = {};
-    result[CONST.STMT] = CONST.DRIVE_ACTION;
-    result[CONST.SPEED] = speed;
-    result[CONST.DRIVE_DIRECTION] = direction;
-    result[CONST.DISTANCE] = distance;
-
-    return result;
-}
-
-export function createCurveAction( speedL, speedR, direction, distance ) {
-    var result = {};
-    result[CONST.STMT] = CONST.CURVE_ACTION;
-    result[CONST.SPEED_L] = speedL;
-    result[CONST.SPEED_R] = speedR;
-    result[CONST.DRIVE_DIRECTION] = direction;
-    result[CONST.DISTANCE] = distance;
-
-    return result;
+    result[C.OPCODE] = C.DRIVE_ACTION;
+    result[C.SPEED] = speed;
+    result[C.DRIVE_DIRECTION] = direction;
+    result[C.DISTANCE] = distance;
+    return concat( speed, distance, [result] );
 }
 
 export function createMotorOnAction( speed, motorSide, motorDuration ) {
     var result = {};
-    result[CONST.STMT] = CONST.MOTOR_ON_ACTION;
-    result[CONST.SPEED] = speed;
-    result[CONST.MOTOR_SIDE] = motorSide;
-    result[CONST.MOTOR_DURATION] = motorDuration;
-
-    return result;
+    result[C.OPCODE] = C.MOTOR_ON_ACTION;
+    result[C.MOTOR_SIDE] = motorSide;
+    return concat( speed, motorDuration, [result] );
 }
 
 export function createSetMotorPowerAction( motorSide, speed ) {
     var result = {};
-    result[CONST.STMT] = CONST.MOTOR_SET_POWER;
-    result[CONST.SPEED] = speed;
-    result[CONST.MOTOR_SIDE] = motorSide;
-
-    return result;
+    result[C.OPCODE] = C.MOTOR_SET_POWER;
+    result[C.MOTOR_SIDE] = motorSide;
+    return push( speed, result );
 }
 
 export function createGetMotorPower( motorSide ) {
     var result = {};
-    result[CONST.EXPR] = CONST.MOTOR_GET_POWER;
-    result[CONST.MOTOR_SIDE] = motorSide;
-
-    return result;
+    result[C.OPCODE] = C.EXPR;
+    result[C.EXPR] = C.MOTOR_GET_POWER;
+    result[C.MOTOR_SIDE] = motorSide;
+    return [result];
 }
 
 export function createDuration( motorMoveMode, duration ) {
     var result = {};
-    result[CONST.MOTOR_MOVE_MODE] = motorMoveMode;
-    result[CONST.MOTOR_DURATION_VALUE] = duration;
-    return result;
+    result[C.OPCODE] = C.MOTOR_ACTION;
+    result[C.MOTOR_MOVE_MODE] = motorMoveMode;
+    return push( duration, result );
 }
 
 export function createToneAction( frequency, duration ) {
     var result = {};
-    result[CONST.STMT] = CONST.TONE_ACTION;
-    result[CONST.FREQUENCY] = frequency;
-    result[CONST.DURATION] = duration;
-    return result;
+    result[C.OPCODE] = C.TONE_ACTION;
+    result[C.FREQUENCY] = frequency;
+    result[C.DURATION] = duration;
+    return concat( frequency, duration, [result] )
 }
 
 export function createSetVolumeAction( mode, volume ) {
     var result = {};
-    result[CONST.STMT] = CONST.SET_VOLUME_ACTION;
-    result[CONST.VOLUME] = volume;
-    return result;
+    result[C.OPCODE] = C.SET_VOLUME_ACTION;
+    return push( volume, result );
 }
 
 export function createGetVolume() {
     var result = {};
-    result[CONST.EXPR] = CONST.GET_VOLUME;
-    return result;
+    result[C.OPCODE] = C.EXPR;
+    result[C.EXPR] = C.GET_VOLUME;
+    return [result];
 }
 
 export function createPlayFileAction( file ) {
     var result = {};
-    result[CONST.STMT] = CONST.PLAY_FILE_ACTION;
-    result[CONST.FILE] = file;
-    return result;
-}
-
-export function createSetLanguageAction( language ) {
-    var result = {};
-    result[CONST.STMT] = CONST.SET_LANGUAGE_ACTION;
-    result[CONST.LANGUAGE] = language;
-    return result;
-}
-
-export function createSayTextAction( text, speed, pitch ) {
-    var result = {};
-    result[CONST.STMT] = CONST.SAY_TEXT_ACTION;
-    result[CONST.TEXT] = text;
-    result[CONST.SPEED] = speed;
-    result[CONST.PITCH] = pitch;
-    return result;
-}
-
-export function createTurnAction( speed, direction, angle ) {
-    var result = {};
-    result[CONST.STMT] = CONST.TURN_ACTION;
-    result[CONST.SPEED] = speed;
-    result[CONST.TURN_DIRECTION] = direction;
-    result[CONST.ANGLE] = angle;
-
-    return result;
+    result[C.OPCODE] = C.PLAY_FILE_ACTION;
+    return push( file, result );
 }
 
 export function createTurnLight( color, mode ) {
     var result = {};
-    result[CONST.STMT] = CONST.TURN_LIGHT;
-    result[CONST.COLOUR] = color;
-    result[CONST.MODE] = mode;
-    return result;
+    result[C.OPCODE] = C.TURN_LIGHT;
+    result[C.COLOUR] = color;
+    result[C.MODE] = mode;
+    return [result];
 }
 
 export function createLightSensorAction( color, mode ) {
     var result = {};
-    result[CONST.STMT] = CONST.LIGHT_ACTION;
-    result[CONST.COLOUR] = color;
-    result[CONST.MODE] = mode;
-    return result;
+    result[C.OPCODE] = C.LIGHT_ACTION;
+    result[C.COLOUR] = color;
+    result[C.MODE] = mode;
+    return [result];
 }
 
 export function createStatusLight( mode ) {
     var result = {};
-    result[CONST.STMT] = CONST.STATUS_LIGHT_ACTION;
-    result[CONST.MODE] = mode;
-    return result;
-}
-
-export function createStopDrive() {
-    var result = {};
-    result[CONST.STMT] = CONST.STOP_DRIVE;
-    return result;
+    result[C.OPCODE] = C.STATUS_LIGHT_ACTION;
+    result[C.MODE] = mode;
+    return [result];
 }
 
 export function createStopMotorAction( motorSide ) {
     var result = {};
-    result[CONST.STMT] = CONST.MOTOR_STOP;
-    result[CONST.MOTOR_SIDE] = motorSide;
-    return result;
+    result[C.OPCODE] = C.MOTOR_STOP;
+    result[C.MOTOR_SIDE] = motorSide;
+    return [result];
 }
 
 export function createGetSample( sensorType, sensorMode ) {
     var result = {};
-    result[CONST.EXPR] = CONST.GET_SAMPLE;
-    result[CONST.SENSOR_TYPE] = sensorType;
-    result[CONST.SENSOR_MODE] = sensorMode;
-    return result;
+    result[C.OPCODE] = C.EXPR;
+    result[C.EXPR] = C.GET_SAMPLE;
+    result[C.SENSOR_TYPE] = sensorType;
+    result[C.SENSOR_MODE] = sensorMode;
+    return [result];
 }
 
 export function createGetGyroSensorSample( sensorType, sensorMode ) {
     var result = {};
-    result[CONST.EXPR] = CONST.GET_GYRO_SENSOR_SAMPLE;
-    result[CONST.SENSOR_TYPE] = sensorType;
-    result[CONST.SENSOR_MODE] = sensorMode;
-    return result;
+    result[C.OPCODE] = C.EXPR;
+    result[C.EXPR] = C.GET_GYRO_SENSOR_SAMPLE;
+    result[C.SENSOR_TYPE] = sensorType;
+    result[C.SENSOR_MODE] = sensorMode;
+    return [result];
 }
 
 export function createResetGyroSensor() {
     var result = {};
-    result[CONST.STMT] = CONST.GYRO_SENSOR_RESET;
-    return result;
+    result[C.OPCODE] = C.GYRO_SENSOR_RESET;
+    return [result];
 }
 
 export function createResetTimer( timer ) {
     var result = {};
-    result[CONST.STMT] = CONST.TIMER_SENSOR_RESET;
-    result[CONST.TIMER] = timer;
-    return result;
+    result[C.OPCODE] = C.TIMER_SENSOR_RESET;
+    result[C.TIMER] = timer;
+    return [result];
 }
 
 export function createGetSampleEncoderSensor( motorSide, sensorMode ) {
     var result = {};
-    result[CONST.EXPR] = CONST.ENCODER_SENSOR_SAMPLE;
-    result[CONST.MOTOR_SIDE] = motorSide;
-    result[CONST.SENSOR_MODE] = sensorMode;
-
-    return result;
+    result[C.OPCODE] = C.EXPR;
+    result[C.EXPR] = C.ENCODER_SENSOR_SAMPLE;
+    result[C.MOTOR_SIDE] = motorSide;
+    result[C.SENSOR_MODE] = sensorMode;
+    return [result];
 }
 
 export function createResetEncoderSensor( motorSide ) {
     var result = {};
-    result[CONST.STMT] = CONST.ENCODER_SENSOR_RESET;
-    result[CONST.MOTOR_SIDE] = motorSide;
-
-    return result;
+    result[C.OPCODE] = C.ENCODER_SENSOR_RESET;
+    result[C.MOTOR_SIDE] = motorSide;
+    return [result];
 }
 
 export function createIfStmt( exprList, thenList, elseStmts ) {
@@ -420,17 +316,17 @@ export function createIfStmt( exprList, thenList, elseStmts ) {
         throw "Then List is not List!"
     }
     var result = {};
-    result[CONST.STMT] = CONST.IF_STMT;
-    result[CONST.EXPR_LIST] = {};
+    result[C.OPCODE] = C.IF_STMT;
+    result[C.EXPR_LIST] = {};
     for ( var i = 0; i < exprList.length; i++ ) {
-        result[CONST.EXPR_LIST][i] = exprList[i];
+        result[C.EXPR_LIST][i] = exprList[i];
     }
-    result[CONST.THEN_LIST] = {};
+    result[C.THEN_LIST] = {};
     for ( var i = 0; i < thenList.length; i++ ) {
-        result[CONST.THEN_LIST][i] = thenList[i];
+        result[C.THEN_LIST][i] = thenList[i];
     }
-    result[CONST.ELSE_STMTS] = elseStmts;
-    return result;
+    result[C.ELSE_STMTS] = elseStmts;
+    return [result];
 }
 
 export function createWaitStmt( stmtList ) {
@@ -438,230 +334,92 @@ export function createWaitStmt( stmtList ) {
         throw "Statement List is not a List!";
     }
     var result = {};
-    result[CONST.STMT] = CONST.WAIT_STMT;
-    result[CONST.STATEMENTS] = {};
+    result[C.OPCODE] = C.WAIT_STMT;
+    result[C.STATEMENTS] = {};
     for ( var i = 0; i < stmtList.length; i++ ) {
-        result[CONST.STATEMENTS][i] = stmtList[i];
+        result[C.STATEMENTS][i] = stmtList[i];
     }
-    return result;
+    return [result];
 }
 
 export function createWaitTimeStmt( timeValue ) {
     var result = {};
-    result[CONST.STMT] = CONST.WAIT_TIME_STMT;
-    result[CONST.TIME] = timeValue;
-    return result;
-}
-
-export function createCreateListWith( type, values ) {
-    var result = {}
-    result[CONST.EXPR] = type;
-    result[CONST.VALUE] = values;
-    return result;
-}
-
-export function createCreateListWithItem( value, size ) {
-    var result = {}
-    result[CONST.EXPR] = CONST.CREATE_LIST_WITH_ITEM;
-    result[CONST.SIZE] = size;
-    result[CONST.VALUE] = value;
-    return result;
-}
-
-export function createListLength( list ) {
-    var result = {};
-    result[CONST.EXPR] = CONST.CREATE_LIST_LENGTH;
-    result[CONST.LIST] = list;
-    return result;
-}
-
-export function createListIsEmpty( list ) {
-    var result = {};
-    result[CONST.EXPR] = CONST.CREATE_LIST_IS_EMPTY;
-    result[CONST.LIST] = list;
-    return result;
-}
-
-export function createListFindItem( position, list, item ) {
-    var result = {};
-    result[CONST.EXPR] = CONST.CREATE_LIST_FIND_ITEM;
-    result[CONST.POSITION] = position;
-    result[CONST.LIST] = list;
-    result[CONST.ITEM] = item;
-    return result;
-}
-
-export function createListsSetIndex( list, op, newVal, position, item ) {
-    var result = {};
-    result[CONST.STMT] = CONST.CREATE_LISTS_SET_INDEX;
-    result[CONST.OP] = op;
-    result[CONST.POSITION] = position;
-    result[CONST.VALUE] = newVal;
-    result[CONST.LIST] = list;
-    result[CONST.ITEM] = item;
-    return result;
-}
-
-export function createListsGetIndex( list, op, position, item ) {
-    var result = {};
-    result[CONST.EXPR] = CONST.CREATE_LISTS_GET_INDEX;
-    result[CONST.OP] = op;
-    result[CONST.POSITION] = position;
-    result[CONST.LIST] = list;
-    result[CONST.ITEM] = item;
-    return result;
-}
-
-export function createListsGetIndexStmt( list, op, position, item ) {
-    var result = {};
-    result[CONST.STMT] = CONST.CREATE_LISTS_GET_INDEX_STMT;
-    result[CONST.OP] = op;
-    result[CONST.POSITION] = position;
-    result[CONST.LIST] = list;
-    result[CONST.ITEM] = item;
-    return result;
-}
-
-export function createGetSubList( args ) {
-    var result = {};
-    result = args;
-    result[CONST.EXPR] = CONST.CREATE_LISTS_GET_SUBLIST;
-    return result;
-}
-
-export function createMathOnList( op, list ) {
-    var result = {};
-    result[CONST.EXPR] = CONST.MATH_ON_LIST;
-    result[CONST.OP] = op;
-    result[CONST.LIST] = list;
-    return result;
+    result[C.OPCODE] = C.WAIT_TIME_STMT;
+    return push( timeValue, result );
 }
 
 export function createTextJoin( values ) {
     var result = {};
-    result[CONST.EXPR] = CONST.TEXT_JOIN;
-    result[CONST.VALUE] = values;
-    return result;
+    result[C.OPCODE] = C.EXPR;
+    result[C.EXPR] = C.TEXT_JOIN;
+    result[C.VALUE] = values;
+    return [result];
 }
 
 export function createTernaryExpr( cond, then, _else ) {
     var result = {};
-    result[CONST.EXPR] = CONST.TERNARY_EXPR;
-    result[CONST.EXPR_LIST] = cond;
-    result[CONST.THEN_LIST] = then;
-    result[CONST.ELSE_STMTS] = _else;
-    return result;
+    result[C.OPCODE] = C.EXPR;
+    result[C.EXPR] = C.TERNARY_EXPR;
+    result[C.THEN_LIST] = then;
+    result[C.ELSE_STMTS] = _else;
+    return push( cond, result );
 }
 
 export function createMethodVoid( methodName, parameters, stmts ) {
     var result = {};
-    result[CONST.FUNCTION_DECLARATION] = CONST.METHOD_VOID;
-    result[CONST.NAME] = methodName;
-    result[CONST.PARAMETERS] = parameters;
-    result[CONST.STMT_LIST] = stmts;
-    return result;
+    result[C.FUNCTION_DECLARATION] = C.METHOD_VOID;
+    result[C.NAME] = methodName;
+    result[C.PARAMETERS] = parameters;
+    result[C.STMT_LIST] = stmts;
+    return [result];
 }
 
 export function createMethodReturn( methodName, stmts, returnType, return_ ) {
     var result = {};
-    result[CONST.FUNCTION_DECLARATION] = CONST.METHOD_RETURN;
-    result[CONST.NAME] = methodName;
-    result[CONST.STMT_LIST] = stmts;
-    result[CONST.RETURN_TYPE] = returnType;
-    result[CONST.RETURN] = return_;
-    return result;
+    result[C.FUNCTION_DECLARATION] = C.METHOD_RETURN;
+    result[C.NAME] = methodName;
+    result[C.STMT_LIST] = stmts;
+    result[C.RETURN_TYPE] = returnType;
+    result[C.RETURN] = return_;
+    return [result];
 }
 
 export function createIfReturn( condition, returnType, return_ ) {
     var result = {};
-    result[CONST.STMT] = CONST.IF_RETURN;
-    result[CONST.EXPR] = condition;
-    result[CONST.RETURN_TYPE] = returnType;
-    result[CONST.RETURN] = return_;
-    return result;
+    result[C.OPCODE] = C.IF_RETURN;
+    result[C.RETURN_TYPE] = returnType;
+    result[C.RETURN] = return_;
+    return push( condition, result );
 }
 
 export function createMethodCallVoid( methodName, parameters ) {
     var result = {};
-    result[CONST.STMT] = CONST.METHOD_CALL_VOID;
-    result[CONST.NAME] = methodName;
-    result[CONST.PARAMETERS] = parameters;
-    return result;
+    result[C.OPCODE] = C.METHOD_CALL_VOID;
+    result[C.NAME] = methodName;
+    result[C.PARAMETERS] = parameters;
+    return [result];
 }
 
 export function createMethodCallReturn( methodName, parameters, values ) {
     var result = {};
-    result[CONST.EXPR] = CONST.METHOD_CALL_RETURN;
-    result[CONST.NAME] = methodName;
-    result[CONST.PARAMETERS] = parameters;
-    result[CONST.VALUES] = values;
-    return result;
-}
-
-export function createPinTouchSensor( pinNumber ) {
-    var result = {};
-    result[CONST.EXPR] = CONST.PIN_TOUCH_SENSOR;
-    result[CONST.PIN] = 'pin' + pinNumber;
-
-    return result;
-}
-
-export function createPinGetValueSensor( valueType, pinNumber ) {
-    var result = {};
-    result[CONST.EXPR] = CONST.PIN_GET_VALUE_SENSOR;
-    result[CONST.TYPE] = valueType;
-    result[CONST.PIN] = 'pin' + pinNumber;
-
-    return result;
-}
-
-export function createPinWriteValueSensor( valueType, pinNumber, value ) {
-    var result = {};
-    result[CONST.STMT] = CONST.PIN_WRITE_VALUE_SENSOR;
-    result[CONST.TYPE] = valueType;
-    result[CONST.PIN] = 'pin' + pinNumber;
-    result[CONST.VALUE] = value;
-
-    return result;
-}
-
-export function createDisplaySetBrightnessAction( value ) {
-    var result = {};
-    result[CONST.STMT] = CONST.DISPLAY_SET_BRIGHTNESS_ACTION;
-    result[CONST.VALUE] = value;
-
-    return result;
-}
-
-export function createDisplaySetPixelAction( x, y, value ) {
-    var result = {};
-    result[CONST.STMT] = CONST.DISPLAY_SET_PIXEL_ACTION;
-    result[CONST.X] = x;
-    result[CONST.Y] = y;
-    result[CONST.VALUE] = value;
-
-    return result;
-}
-
-export function createDisplayGetBrightnessAction() {
-    var result = {};
-    result[CONST.EXPR] = CONST.DISPLAY_GET_BRIGHTNESS_ACTION;
-
-    return result;
-}
-
-export function createDisplayGetPixelAction( x, y ) {
-    var result = {};
-    result[CONST.EXPR] = CONST.DISPLAY_GET_PIXEL_ACTION;
-    result[CONST.X] = x;
-    result[CONST.Y] = y;
-
-    return result;
+    result[C.EXPR] = C.METHOD_CALL_RETURN;
+    result[C.NAME] = methodName;
+    result[C.PARAMETERS] = parameters;
+    result[C.VALUES] = values;
+    return [result];
 }
 
 export function createNoopStmt() {
     var result = {};
-    result[CONST.STMT] = CONST.NOOP_STMT;
+    result[C.OPCODE] = C.NOOP_STMT;
+    return [result];
+}
 
-    return result;
+export function concat( ...codes: any[] ) {
+    let first = codes.shift();
+    return first.concat( ...codes );
+}
+
+export function push( code: any[], op: any ) {
+    return concat( code, [op] );
 }

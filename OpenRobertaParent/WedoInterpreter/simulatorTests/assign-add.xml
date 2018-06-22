@@ -1,0 +1,67 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+	<program>
+		<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="2.0" description="" tags="">
+			<instance x="384" y="50">
+				<block type="robControls_start" id="@9Zi]C.SWKv-;%v`Sf7E" intask="true" deletable="false">
+					<mutation declare="true"></mutation>
+					<field name="DEBUG">FALSE</field>
+					<statement name="ST">
+						<block type="robGlobalVariables_declare" id="{b4ohu{dNNhoEKSEd1F|" intask="true" deletable="false" movable="false">
+							<mutation next="false" declaration_type="Number"></mutation>
+							<field name="VAR">v</field>
+							<field name="TYPE">Number</field>
+							<value name="VALUE">
+								<block type="math_number" id="x=WOF2W?g:05U?0(:s?n" intask="true">
+									<field name="NUM">0</field>
+								</block>
+							</value>
+						</block>
+					</statement>
+				</block>
+				<block type="variables_set" id="#`3NNM^mS|(E;y5z4y%x" intask="true">
+					<mutation datatype="Number"></mutation>
+					<field name="VAR">v</field>
+					<value name="VALUE">
+						<block type="math_arithmetic" id="cN(t4./B%s1BgI`[Sl3S" intask="true">
+							<field name="OP">ADD</field>
+							<value name="A">
+								<block type="variables_get" id="PBM/9=}v^u7#5P2t%=H1" intask="true">
+									<mutation datatype="Number"></mutation>
+									<field name="VAR">v</field>
+								</block>
+							</value>
+							<value name="B">
+								<block type="math_number" id="OG^Es.2Dxrl|aE1WO+qu" intask="true">
+									<field name="NUM">1</field>
+								</block>
+							</value>
+						</block>
+					</value>
+				</block>
+			</instance>
+		</block_set>
+	</program>
+	<config>
+		<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="2.0" description="" tags="">
+			<instance x="300" y="50">
+				<block type="robBrick_WeDo-Brick" id="1" intask="true">
+					<field name="VAR">Brick1</field>
+				</block>
+			</instance>
+			<instance x="100" y="150">
+				<block type="robConf_motor" id="2" intask="true">
+					<field name="NAME">Port1</field>
+					<field name="VAR">Brick1</field>
+					<field name="CONNECTOR">1</field>
+				</block>
+			</instance>
+			<instance x="400" y="150">
+				<block type="robConf_infrared" id="3" intask="true">
+					<field name="NAME">Port2</field>
+					<field name="VAR">Brick1</field>
+					<field name="CONNECTOR">1</field>
+				</block>
+			</instance>
+		</block_set>
+	</config>
+</export>

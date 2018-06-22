@@ -1,1 +1,152 @@
-{"programStmts":[{"stmt":"VarDeclaration","type":"NUMBER","name":"s","value":{"expr":"NumConst","value":0}},{"mode":"FOR","loopNumber":"loop_1","stmt":"RepeatStmt","expr":[{"expr":"Var","type":"NUMBER","name":"i"},{"expr":"NumConst","value":1},{"expr":"NumConst","value":3},{"expr":"NumConst","value":1}],"stmtList":[{"mode":"FOR","loopNumber":"loop_2","stmt":"RepeatStmt","expr":[{"expr":"Var","type":"NUMBER","name":"j"},{"expr":"NumConst","value":1},{"expr":"NumConst","value":3},{"expr":"NumConst","value":1}],"stmtList":[{"mode":"FOR","loopNumber":"loop_3","stmt":"RepeatStmt","expr":[{"expr":"Var","type":"NUMBER","name":"k"},{"expr":"NumConst","value":1},{"expr":"NumConst","value":3},{"expr":"NumConst","value":1}],"stmtList":[{"stmt":"AssignStmt","name":"s","expr":{"expr":"Binary","op":"ADD","left":{"expr":"Var","type":"NUMBER","name":"i"},"right":{"expr":"Binary","op":"ADD","left":{"expr":"Var","type":"NUMBER","name":"j"},"right":{"expr":"Var","type":"NUMBER","name":"k"}}}},{"stmt":"ShowTextAction","text":{"expr":"Var","type":"NUMBER","name":"s"},"x":{"expr":"Var","type":"NUMBER","name":"i"},"y":{"expr":"Var","type":"NUMBER","name":"j"}}],"eachcounter":0}],"eachcounter":0}],"eachcounter":0}]}
+[
+	{
+		"opc": "expr",
+		"expr": "NumConst",
+		"value": 0
+	},
+	{
+		"opc": "VarDeclaration",
+		"type": "NUMBER",
+		"name": "s"
+	},
+	{
+		"opc": "expr",
+		"expr": "NumConst",
+		"value": 1
+	},
+	{
+		"opc": "VarDeclaration",
+		"type": "NUMBER",
+		"name": "i"
+	},
+	{
+		"opc": "expr",
+		"expr": "NumConst",
+		"value": 3
+	},
+	{
+		"opc": "expr",
+		"expr": "NumConst",
+		"value": 1
+	},
+	{
+		"opc": "RepeatStmt",
+		"mode": "FOR",
+		"loopNumber": "loop_1",
+		"Var": "i",
+		"stmtList": [
+			{
+				"opc": "expr",
+				"expr": "NumConst",
+				"value": 1
+			},
+			{
+				"opc": "VarDeclaration",
+				"type": "NUMBER",
+				"name": "j"
+			},
+			{
+				"opc": "expr",
+				"expr": "NumConst",
+				"value": 3
+			},
+			{
+				"opc": "expr",
+				"expr": "NumConst",
+				"value": 1
+			},
+			{
+				"opc": "RepeatStmt",
+				"mode": "FOR",
+				"loopNumber": "loop_2",
+				"Var": "j",
+				"stmtList": [
+					{
+						"opc": "expr",
+						"expr": "NumConst",
+						"value": 1
+					},
+					{
+						"opc": "VarDeclaration",
+						"type": "NUMBER",
+						"name": "k"
+					},
+					{
+						"opc": "expr",
+						"expr": "NumConst",
+						"value": 3
+					},
+					{
+						"opc": "expr",
+						"expr": "NumConst",
+						"value": 1
+					},
+					{
+						"opc": "RepeatStmt",
+						"mode": "FOR",
+						"loopNumber": "loop_3",
+						"Var": "k",
+						"stmtList": [
+							{
+								"opc": "expr",
+								"expr": "Var",
+								"type": "NUMBER",
+								"name": "i"
+							},
+							{
+								"opc": "expr",
+								"expr": "Var",
+								"type": "NUMBER",
+								"name": "j"
+							},
+							{
+								"opc": "expr",
+								"expr": "Var",
+								"type": "NUMBER",
+								"name": "k"
+							},
+							{
+								"opc": "expr",
+								"expr": "Binary",
+								"op": "ADD"
+							},
+							{
+								"opc": "expr",
+								"expr": "Binary",
+								"op": "ADD"
+							},
+							{
+								"opc": "AssignStmt",
+								"name": "s"
+							},
+							{
+								"opc": "expr",
+								"expr": "Var",
+								"type": "NUMBER",
+								"name": "s"
+							},
+							{
+								"opc": "expr",
+								"expr": "Var",
+								"type": "NUMBER",
+								"name": "i"
+							},
+							{
+								"opc": "expr",
+								"expr": "Var",
+								"type": "NUMBER",
+								"name": "j"
+							},
+							{
+								"opc": "ShowTextAction"
+							}
+						],
+						"eachcounter": 0
+					}
+				],
+				"eachcounter": 0
+			}
+		],
+		"eachcounter": 0
+	}
+]

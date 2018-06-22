@@ -29,7 +29,6 @@ import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.wedo.LedOnAction;
 import de.fhg.iais.roberta.syntax.check.hardware.wedo.UsedHardwareCollectorVisitor;
-import de.fhg.iais.roberta.syntax.codegen.RobotSimulationVisitor;
 import de.fhg.iais.roberta.syntax.expr.wedo.LedColor;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
@@ -45,7 +44,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.wedo.WeDoAstVisitor;
 
-public class SimulationVisitor<V> extends RobotSimulationVisitor<V> implements WeDoAstVisitor<V> {
+public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements WeDoAstVisitor<V> {
     protected Set<UsedSensor> usedSensors;
     protected Set<UsedConfigurationBlock> usedConfigurationBlocks;
     protected Set<UsedActor> usedActors;
@@ -53,7 +52,7 @@ public class SimulationVisitor<V> extends RobotSimulationVisitor<V> implements W
     private boolean isTimerSensorUsed;
     private Map<Integer, Boolean> loopsLabels;
 
-    private SimulationVisitor(WeDoConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases) {
+    private WeDoStackMachineVisitor(WeDoConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases) {
         super(brickConfiguration);
         UsedHardwareCollectorVisitor codePreprocessVisitor = new UsedHardwareCollectorVisitor(phrases, brickConfiguration);
         this.usedVars = codePreprocessVisitor.getVisitedVars();
@@ -66,7 +65,7 @@ public class SimulationVisitor<V> extends RobotSimulationVisitor<V> implements W
         Assert.isTrue(!phrasesSet.isEmpty());
         Assert.notNull(brickConfiguration);
 
-        SimulationVisitor<Void> astVisitor = new SimulationVisitor<Void>(brickConfiguration, phrasesSet);
+        WeDoStackMachineVisitor<Void> astVisitor = new WeDoStackMachineVisitor<>(brickConfiguration, phrasesSet);
         astVisitor.generateCodeFromPhrases(phrasesSet);
         return astVisitor.sb.toString();
     }

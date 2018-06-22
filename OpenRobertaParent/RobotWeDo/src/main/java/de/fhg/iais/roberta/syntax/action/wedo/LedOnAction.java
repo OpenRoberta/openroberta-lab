@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
-import de.fhg.iais.roberta.syntax.codegen.wedo.SimulationVisitor;
+import de.fhg.iais.roberta.syntax.codegen.wedo.WeDoStackMachineVisitor;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;

@@ -35,14 +35,14 @@ import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
 /**
- * <b>Testing the generation of suimulator code</b><br>
+ * <b>Testing the generation of simulator code</b><br>
  *
  * @author rbudde
  */
 @Category(IntegrationTest.class)
 @RunWith(MockitoJUnitRunner.class)
-public class GenerateJsomFromSimIT {
-    private static final Logger LOG = LoggerFactory.getLogger(GenerateJsomFromSimIT.class);
+public class GenerateJsonFromSimIT {
+    private static final Logger LOG = LoggerFactory.getLogger(GenerateJsonFromSimIT.class);
     private static final String TEST_BASE = "simulatorTests/";
 
     private static RobotCommunicator robotCommunicator;
@@ -63,8 +63,6 @@ public class GenerateJsomFromSimIT {
     @Before
     public void setup() throws Exception {
         robertaProperties = new RobertaProperties(Util1.loadProperties("classpath:wedoOpenRoberta.properties"));
-        // TODO: add a robotBasedir property to the openRoberta.properties. Make all pathes relative to that dir. Create special accessors. Change String to Path.
-        fixPropertyPathes();
         robotCommunicator = new RobotCommunicator();
         pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, robertaProperties);
         httpSessionState = HttpSessionState.init(robotCommunicator, pluginMap, robertaProperties, 1);
@@ -76,8 +74,8 @@ public class GenerateJsomFromSimIT {
 
     @Test
     public void testNepo() throws Exception {
-        String base = "threeFors";
-        String robot = "ev3lejosv1";
+        String base = "assign-add-2";
+        String robot = "wedo";
         String fullResource = TEST_BASE + base + ".xml";
         LOG.info("robot: " + robot + ", xml: " + fullResource);
         setRobotTo(robot);
@@ -95,22 +93,6 @@ public class GenerateJsomFromSimIT {
         assertEntityRc(this.response, "ok", Key.ROBOT_SET_SUCCESS);
     }
 
-    private static void fixPropertyPathes() {
-        for ( int i = 0; i < 999; i++ ) {
-            replace("robot.plugin." + i + ".compiler.resources.dir");
-            replace("robot.plugin." + i + ".updateResources.dir");
-            replace("robot.plugin." + i + ".generated.programs.build.xml");
-        }
-    }
-
-    private static void replace(String key) {
-        String path = robertaProperties.getStringProperty(key);
-        if ( path != null ) {
-            path = path.replaceFirst("OpenRobertaParent", "..");
-            robertaProperties.getRobertaProperties().put(key, path);
-        }
-    }
-
     /**
      * see {@link JSONUtilForServer}
      */
@@ -119,7 +101,7 @@ public class GenerateJsomFromSimIT {
     }
 
     /**
-     * see {@link JSONUtilForServer}
+     * copy from JSONUtilForServer
      */
     public static void assertEntityRc(Response response, String rc, Key message) throws JSONException {
         JSONObject entity = (JSONObject) response.getEntity();

@@ -3,8 +3,6 @@ package de.fhg.iais.roberta.factory.wedo;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import org.apache.commons.lang3.SystemUtils;
-
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.wedo.WeDoConfiguration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
@@ -18,7 +16,7 @@ import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
-import de.fhg.iais.roberta.syntax.codegen.wedo.SimulationVisitor;
+import de.fhg.iais.roberta.syntax.codegen.wedo.WeDoStackMachineVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
@@ -33,8 +31,7 @@ public class Factory extends AbstractRobotFactory {
         this.wedoProperties = Util1.loadProperties("classpath:WeDo.properties");
         this.name = this.wedoProperties.getProperty("robot.name");
         this.robotPropertyNumber = robertaProperties.getRobotNumberFromProperty(this.name);
-        this.compilerWorkflow =
-            new WeDoSimCompilerWorkflow();
+        this.compilerWorkflow = new WeDoSimCompilerWorkflow();
         addBlockTypesFromProperties("wedo.properties", this.wedoProperties);
     }
 
@@ -68,7 +65,7 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getSimCompilerWorkflow() {
-        return null;
+        return this.compilerWorkflow;
     }
 
     @Override
@@ -155,7 +152,7 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        return SimulationVisitor.generate((WeDoConfiguration) brickConfiguration, phrasesSet);
+        return WeDoStackMachineVisitor.generate((WeDoConfiguration) brickConfiguration, phrasesSet);
     }
 
     @Override

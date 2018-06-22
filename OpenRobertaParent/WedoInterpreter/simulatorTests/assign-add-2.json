@@ -1,0 +1,32 @@
+[
+	{
+		"opc": "expr",
+		"expr": "NumConst",
+		"value": 0
+	},
+	{
+		"opc": "VarDeclaration",
+		"type": "NUMBER",
+		"name": "v"
+	},
+	{
+		"opc": "expr",
+		"expr": "Var",
+		"type": "NUMBER",
+		"name": "v"
+	},
+	{
+		"opc": "expr",
+		"expr": "NumConst",
+		"value": 1
+	},
+	{
+		"opc": "expr",
+		"expr": "Binary",
+		"op": "ADD"
+	},
+	{
+		"opc": "AssignStmt",
+		"name": "v"
+	}
+]
