@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"outDir": "./jsGenerated",
+		"rootDir": "./ts",
+		"target": "es5",
+		"moduleResolution": "node",
+		"noUnusedLocals": true,
+		"module": "umd"
+	},
+	"compileOnSave": true,
+	"buildOnSave": true
+}

@@ -1,0 +1,72 @@
+{
+	"stmt": "AssignStmt",
+	"name": "s",
+	"expr": {
+		"expr": "Binary",
+		"op": "ADD",
+		"left": {
+			"expr": "Var",
+			"type": "NUMBER",
+			"name": "i"
+		},
+		"right": {
+			"expr": "Binary",
+			"op": "ADD",
+			"left": {
+				"expr": "Var",
+				"type": "NUMBER",
+				"name": "j"
+			},
+			"right": {
+				"expr": "Var",
+				"type": "NUMBER",
+				"name": "k"
+			}
+		}
+	}
+}
+
+[
+    {
+        "kind": "expr",
+    	"what": "Var",
+    	"type": "NUMBER",
+    	"name": "i"
+    },
+    {
+        "kind": "expr",
+    	"what": "Var",
+    	"type": "NUMBER",
+    	"name": "j"
+    },
+    {
+        "kind": "expr",
+    	"what": "Var",
+    	"type": "NUMBER",
+    	"name": "k"
+    },
+    {
+        "kind": "expr",
+    	"what": "ADD"
+    },
+    {
+        "kind": "expr",
+    	"what": "ADD"
+    },
+    {
+        "kind": "stmt",
+    	"what": "AssignStmt",
+    	"name": "s"
+    }
+]
+
+[
+	...
+	{ ... }
+	{ ... } // boolean expr
+	{ "kind": "if",
+	  "then": [ ... ],
+	  "then": [ ... ]
+	}
+	...
+]
