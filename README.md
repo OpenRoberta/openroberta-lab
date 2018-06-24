@@ -52,7 +52,7 @@ Please also check our wiki for detailed installation instructions, development p
 
 #### Step 1: Clone the repository and compile
 
-    git clone git://github.com/OpenRoberta/robertalab.git # get the repository
+    git clone https://github.com/OpenRoberta/robertalab.git # get the repository
     cd robertalab        # cd into repository
 	cd OpenRobertaParent # cd to parent project
     mvn clean install    # generate the server
@@ -101,7 +101,7 @@ You can follow the test status on https://travis-ci.org/OpenRoberta/.
 
 Development happens in the `develop` branch. Please sent PRs against that branch.
 
-    git clone git://github.com/OpenRoberta/robertalab.git
+    git clone https://github.com/OpenRoberta/robertalab.git
     cd robertalab
     git checkout -b develop origin/develop
 	
