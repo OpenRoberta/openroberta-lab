@@ -126,7 +126,9 @@ Furthermore, the project OpenRobertaServer contains in directory staticResources
 To run specific tests, use `mvn test` with the `-Dtest=` option to specify the
 test name and `-DfailIfNoTests=false` to avoid a failure if a test of such name
 is not present in every sub-project of the repository. Example:
+
     mvn -Dtest=de.fhg.iais.roberta.syntax.codegen.PythonVisitorTest -DfailIfNoTests=false test
+
 If the tests report broken dependencies, make sure to run `mvn clean install`
 first.
 
