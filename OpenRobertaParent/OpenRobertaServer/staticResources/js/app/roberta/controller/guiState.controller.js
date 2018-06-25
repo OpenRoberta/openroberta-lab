@@ -1,12 +1,13 @@
-define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.controller', 'socket.controller', 'jquery' ], function(exports, UTIL, LOG, MSG,
-        GUISTATE, HELP_C, SOCKET_C, $) {
+define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.controller', 'webview.controller', 'socket.controller', 'jquery' ], function(exports,
+        UTIL, LOG, MSG, GUISTATE, HELP_C, WEBVIEW_C, SOCKET_C, $) {
 
     /**
      * Init robot
      */
-    function init(language) {
+    function init(language, opt_data) {
         var ready = $.Deferred();
         $.when(GUISTATE.init()).then(function() {
+            GUISTATE.gui.webview = opt_data || false;
             var cookieName = "OpenRoberta_" + GUISTATE.server.version;
 
             if ($.cookie(cookieName)) {
@@ -55,7 +56,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             if (GUISTATE.server.theme !== 'default') {
                 var themePath = '../theme/' + GUISTATE.server.theme + '.json';
                 $.getJSON(themePath).done(function(data) {
-                 // store new theme properties (only colors so far)
+                    // store new theme properties (only colors so far)
                     GUISTATE.server.theme = data;
                 }).fail(function(e, r) {
                     // this should not happen
@@ -218,6 +219,15 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             break;
         case GUISTATE.gui.connectionType.AGENT:
             break;
+        case GUISTATE.gui.connectionType.WEBVIEW:
+            if (GUISTATE.robot.state === 'wait') {
+                $('#head-navi-icon-robot').removeClass('error');
+                $('#head-navi-icon-robot').removeClass('busy');
+                $('#head-navi-icon-robot').addClass('wait');
+                GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
+                $('#menuRunProg').parent().removeClass('disabled');
+            }
+            break;
         default:
             break;
         }
@@ -299,6 +309,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         $('#simRobot').addClass('typcn-' + robotGroup);
 
         connectionType = getConnection();
+        $('#robotConnect').removeClass('disabled');
         switch (getConnection()) {
         case GUISTATE.gui.connectionType.TOKEN:
             SOCKET_C.listRobotStop();
@@ -343,6 +354,21 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
                 $('#menuConnect').parent().addClass('disabled');
             }
             break;
+        case GUISTATE.gui.connectionType.WEBVIEW:
+            SOCKET_C.listRobotStop();
+            $('#head-navi-icon-robot').removeClass('error');
+            $('#head-navi-icon-robot').removeClass('busy');
+            $('#head-navi-icon-robot').removeClass('wait');
+            if (GUISTATE.gui.blocklyWorkspace) {
+                GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+            }
+            $('#menuRunProg').parent().addClass('disabled');
+            $('#menuConnect').parent().removeClass('disabled');
+            // are we in an Open Roberta Webview
+            if (GUISTATE.gui.webview.app !== "OpenRoberta") {
+                $('#robotConnect').addClass('disabled');
+            }
+            break;
         default:
             //console.log('unknown connection');
             break;
@@ -367,6 +393,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         if (groupSwitched) {
             HELP_C.initView();
             updateTutorialMenu();
+            WEBVIEW_C.jsToAppInterface({
+                'target' : 'internal',
+                'op' : 'setRobot',
+                'robot' : robotGroup
+            });
         }
     }
 
@@ -1001,7 +1032,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         return GUISTATE.server.help;
     }
     exports.getAvailableHelp = getAvailableHelp;
-    
+
     function getTheme() {
         return GUISTATE.server.theme;
     }

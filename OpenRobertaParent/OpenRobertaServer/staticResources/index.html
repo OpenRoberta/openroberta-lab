@@ -134,7 +134,7 @@ limitations under the License.
                             lkey="Blockly.Msg.MENU_ROBOT"></span>
                     </a>
                         <ul id="navigation-robot" class="dropdown-menu">
-                            <li><a href="#" id="menuConnect" class="typcn typcn-wi-fi" lkey="Blockly.Msg.MENU_CONNECT">verbinden ...</a></li>
+                            <li id="robotConnect"><a href="#" id="menuConnect" class="typcn typcn-wi-fi" lkey="Blockly.Msg.MENU_CONNECT">verbinden ...</a></li>
                             <li><a href="#" id="menuRobotInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_ROBOT_STATE_INFO">Roboterinformationen</a></li>
                             <li class="divider"></li>
                             <li class="robotType"><a href="#" class="typcn menu-robot"></a></li>
@@ -154,8 +154,8 @@ limitations under the License.
                                     das Open Roberta Projekt</a></li>
                             <li><a href="#" id="menuShowStart" class="typcn typcn-refresh" lkey="Blockly.Msg.MENU_SHOW_AGAIN">Starthinweis anzeigen</a></li>
                             <li><a href="#" id="menuLogging" class="typcn typcn-spanner" lkey="Blockly.Msg.MENU_LOGGING">Logging</a></li>
-                            <li><a href="https://www.roberta-home.de/index.php?id=137" target="_blank" class="typcn typcn-info-large DE">Datenschutzerklärung</a> <a
-                                href="https://www.roberta-home.de/index.php?id=137&L=1" target="_blank" class="typcn typcn-info-large EN">privacy policy</a></li>
+                            <li><a href="https://www.roberta-home.de/index.php?id=137" target="_blank" class="typcn typcn-info-large DE">Datenschutzerklärung</a>
+                                <a href="https://www.roberta-home.de/index.php?id=137&L=1" target="_blank" class="typcn typcn-info-large EN">privacy policy</a></li>
                             <li><a href="https://www.roberta-home.de/impressum" target="_blank" class="typcn typcn-info-large DE">Impressum</a> <a
                                 href="https://www.roberta-home.de/impressum/?L=1" target="_blank" class="typcn typcn-info-large EN">publishing notes</a></li>
                         </ul></li>
@@ -730,6 +730,25 @@ limitations under the License.
             </div>
         </div>
     </div>
+    <!--  Popup to show relations / share programs -->
+    <div id="show-available-connections" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 id="#headConnections" class="modal-title">Available robots</h3>
+                </div>
+                <!-- <form id="share-program-form"> -->
+                <div class="modal-body">
+                    <table id="connectionsTable">
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Popup show about info -->
     <div id="show-about" class="modal fade">
@@ -1099,7 +1118,7 @@ limitations under the License.
         <div id="xs" class="visible-xs"></div>
     </div>
     <div class="hidden">
-          <input type="file" id="fileSelector" display="none"></input>
+        <input type="file" id="fileSelector" display="none"></input>
     </div>
     <div id="cookieDisclaimer" class="cookies-enabled hidden">
         <span> <span lkey="Blockly.Msg.POPUP_STARTUP_COOKIES">We use cookies to personalise content and to analyse our traffic.</span> <a

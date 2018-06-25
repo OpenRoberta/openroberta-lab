@@ -1,6 +1,6 @@
 define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.model', 'robot.model', 'program.controller', 'configuration.controller',
-        'socket.controller', 'jquery', 'jquery-validate' ], function(exports, UTIL, LOG, MSG, GUISTATE_C, GUISTATE, ROBOT, PROGRAM_C, CONFIGURATION_C,
-        SOCKET_C, $) {
+        'webview.controller', 'socket.controller', 'jquery', 'jquery-validate' ], function(exports, UTIL, LOG, MSG, GUISTATE_C, GUISTATE, ROBOT, PROGRAM_C,
+        CONFIGURATION_C, WEBVIEW_C, SOCKET_C, $) {
 
     var $formSingleModal;
     var $formSingleListModal;
@@ -75,6 +75,47 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
         }, 'update firmware of robot');
 
         $formSingleModal = $('#single-modal-form');
+
+        $('#connectionsTable').bootstrapTable({
+            height : 160,
+            formatNoMatches : function() {
+                return '<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>';
+            },
+            columns : [ {
+                // TODO: translations
+                title : 'Name',
+                field : 'name',
+            } ]
+        });
+        $('#connectionsTable').onWrap('dbl-click-row.bs.table', function(e, row) {
+            WEBVIEW_C.jsToAppInterface({
+                'target' : 'peripheral',
+                'op' : 'connect',
+                'val1' : row.name
+            });
+        }, "connect to robot");
+        $('#show-available-connections').onWrap('hide.bs.modal', function(e) {
+            WEBVIEW_C.jsToAppInterface({
+                'target' : 'peripheral',
+                'op' : 'stopScan'
+            });
+        }, "");
+
+        $('#show-available-connections').onWrap('add', function(event, data) {
+            $('#connectionsTable').bootstrapTable('insertRow', {
+                index : 999,
+                row : {
+                    name : data
+                }
+            });
+        });
+        $('#show-available-connections').onWrap('connect', function(event, data) {
+            var result = {};
+            result["robot.name"] = data;
+            result["robot.state"] = 'wait';
+            GUISTATE_C.setState(result);
+            $('#show-available-connections').hide();
+        }, "");
     }
 
     function showSetTokenModal() {
@@ -111,6 +152,16 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
         });
     }
     exports.showSetTokenModal = showSetTokenModal;
+
+    function showScanModal() {
+        $('#connectionsTable').bootstrapTable('removeAll');
+        WEBVIEW_C.jsToAppInterface({
+            'target' : 'peripheral',
+            'op' : 'startScan'
+        });
+        $('#show-available-connections').modal('show');
+    }
+    exports.showScanModal = showScanModal;
 
     function showListModal() {
         UTIL.showSingleListModal(function() {
@@ -167,7 +218,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
     /**
      * Handle firmware conflict between server and robot
      */
-    function handleFirmwareConflict(updateInfo) {      
+    function handleFirmwareConflict(updateInfo) {
         if (updateInfo < 0) {
             LOG.info("The firmware version '" + GUISTATE_C.getServerVersion() + "' on the server is newer than the firmware version '"
                     + GUISTATE_C.getRobotVersion() + "' on the robot");
@@ -233,7 +284,12 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                     if ($('.rightMenuButton.rightActive')) {
                         $('.rightMenuButton.rightActive').trigger('click');
                     }
+                    WEBVIEW_C.jsToAppInterface({
+                        'target' : 'peripheral',
+                        'op' : 'disconnect'
+                    });
                     typeof opt_callback === "function" && opt_callback();
+
                 }
                 MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getRobotRealName());
             });

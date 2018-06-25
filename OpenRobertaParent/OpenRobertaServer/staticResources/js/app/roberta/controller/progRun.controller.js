@@ -1,5 +1,5 @@
-define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.model', 'socket.controller', 'guiState.controller', 'jquery' ], function(exports,
-        UTIL, LOG, MSG, PROG_C, PROGRAM, SOCKET_C, GUISTATE_C, $) {
+define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.model', 'socket.controller', 'guiState.controller', 'webview.controller', 'jquery' ], function(
+        exports, UTIL, LOG, MSG, PROG_C, PROGRAM, SOCKET_C, GUISTATE_C, WEBVIEW_C, $) {
 
     var blocklyWorkspace;
     /**
@@ -56,6 +56,10 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
                 runForAgentConnection(result);
                 PROG_C.reloadProgram(result);
             });
+        } else if (GUISTATE_C.getConnection() == connectionType.WEBVIEW) {
+            // test program execution :-)
+            runForWebviewConnection();
+
         } else {
             PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
                 runForToken(result);
@@ -135,6 +139,55 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
         } else {
             GUISTATE_C.setConnectionBusy(false);
         }
+    }
+
+    function runForWebviewConnection() {
+        // TODO: implement here something to start a program from the server and not the simple test ;-)
+        var command = {};
+        command.target = "motor";
+        command.op = "speed";
+        command.id = 1;
+        command.val1 = 50;
+        WEBVIEW_C.jsToAppInterface(command);
+        WEBVIEW_C.jsToAppInterface({
+            "target" : "light",
+            "op" : "discrete",
+            "id" : 0,
+            "val1" : 0
+        });
+        WEBVIEW_C.jsToAppInterface({
+            "target" : "light",
+            "op" : "discrete",
+            "id" : 0,
+            "val1" : 1
+        });
+        setTimeout(function() {
+            WEBVIEW_C.jsToAppInterface({
+                "target" : "light",
+                "op" : "discrete",
+                "id" : 0,
+                "val1" : 2
+            });
+        }, 1000);
+        setTimeout(function() {
+            WEBVIEW_C.jsToAppInterface({
+                "target" : "light",
+                "op" : "discrete",
+                "id" : 0,
+                "val1" : 4
+            });
+        }, 2000);
+        setTimeout(function() {
+            command.val1 = 0;
+            WEBVIEW_C.jsToAppInterface(command);
+            WEBVIEW_C.jsToAppInterface({
+                "target" : "light",
+                "op" : "discrete",
+                "id" : 0,
+                "val1" : 9
+            });
+            GUISTATE_C.setConnectionBusy(false);
+        }, 3000);
     }
 
     function fillDownloadModal(fileName, content) {

@@ -36,7 +36,8 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
             AGENT : 'arduinoAgent',
             AUTO : 'autoConnection',
             AGENTORTOKEN : 'arduinoAgentOrToken',
-            LOCAL : 'local'
+            LOCAL : 'local',
+            WEBVIEW : 'webview'
         }
 
         exports.user = {};

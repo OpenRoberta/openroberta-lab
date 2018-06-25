@@ -337,6 +337,8 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                             i++;
                         });
                         ROBOT_C.showListModal();
+                    }else if (GUISTATE_C.getConnection() == 'webview'){
+                        ROBOT_C.showScanModal();
                     } else {
                         $('#buttonCancelFirmwareUpdate').css('display', 'inline');
                         $('#buttonCancelFirmwareUpdateAndRun').css('display', 'none');

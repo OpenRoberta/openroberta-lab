@@ -317,16 +317,16 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function compileP(programName, programText, language, successFn) {
-    	COMM.json("/program", {
-    		"cmd" : "compileP",
-    		"name" : programName,
-    		"program" : programText,
-    		"language" : language
-    	}, successFn, "compile program '" + programName + "'");
+        COMM.json("/program", {
+            "cmd" : "compileP",
+            "name" : programName,
+            "program" : programText,
+            "language" : language
+        }, successFn, "compile program '" + programName + "'");
     }
-    
+
     exports.compileP = compileP;
-    
+
     /**
      * Check program
      * 
