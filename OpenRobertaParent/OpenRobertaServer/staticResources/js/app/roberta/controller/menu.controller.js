@@ -35,6 +35,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         } else if (target[0] === "#gallery") {
             GUISTATE_C.setStartWithoutPopup();
             $('#tabGalleryList').click();
+        } else if (target[0] === "#loadSystem" && target.length >= 2) {
+            GUISTATE_C.setStartWithoutPopup();
+            ROBOT_C.switchRobot(target[1], true);
         }
         var uri = window.location.toString();
         if (uri.indexOf("#") > 0) {
