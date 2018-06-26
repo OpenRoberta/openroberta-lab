@@ -168,6 +168,8 @@ fi
 cmd="$1"
 shift
 
+serverTargetDir="OpenRobertaParent/OpenRobertaServer/target/resources"
+
 case "$cmd" in
 --export)         _exportApplication $* ;;
 
@@ -178,23 +180,22 @@ case "$cmd" in
 						   shift ;;
                   *)       RDBG='' ;;
                   esac
-                  java -cp OpenRobertaParent/OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.Administration upgrade OpenRobertaParent/OpenRobertaServer
+                  java -cp ${serverTargetDir}/\* de.fhg.iais.roberta.main.Administration upgrade OpenRobertaParent/OpenRobertaServer
 				  RC=$?;
 				  if [ $RC != 0 ]
 				  then
 					 echo "database upgrade failed. Server NOT started"
 					 exit 1
 				  fi
-                  java $RDBG -cp OpenRobertaParent/OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter \
+                  java $RDBG -cp ${serverTargetDir}/\* de.fhg.iais.roberta.main.ServerStarter \
                        -d database.mode=embedded -d database.parentdir=OpenRobertaParent/OpenRobertaServer -d server.staticresources.dir=OpenRobertaParent/OpenRobertaServer/staticResources $* ;;
 
---gui-sql-client) lib="OpenRobertaParent/OpenRobertaServer/target/resources"
-                  hsqldbVersion='2.4.0'
-				  hsqldbJar="${lib}/hsqldb-${hsqldbVersion}.jar"
+--gui-sql-client) hsqldbVersion='2.4.0'
+				  hsqldbJar="${serverTargetDir}/hsqldb-${hsqldbVersion}.jar"
 				  serverVersionForDb="$1"
 				  if [[ "$serverVersionForDb" == '' ]]
                   then
-					serverVersionForDb=$(java -cp ./${lib}/\* de.fhg.iais.roberta.main.Administration version-for-db)
+					serverVersionForDb=$(java -cp ./${serverTargetDir}/\* de.fhg.iais.roberta.main.Administration version-for-db)
 				  fi
 				  databaseurl="jdbc:hsqldb:file:OpenRobertaParent/OpenRobertaServer/db-$serverVersionForDb/openroberta-db;ifexists=true"
                   java -jar "${hsqldbJar}" --driver org.hsqldb.jdbc.JDBCDriver --url "$databaseurl" --user orA --password Pid ;;
@@ -222,8 +223,7 @@ case "$cmd" in
 --createEmptydb)  serverVersionForDb="$1"
                   if [[ "$serverVersionForDb" == '' ]]
                   then
-				    lib="OpenRobertaParent/OpenRobertaServer/target/resources"
-					serverVersionForDb=$(java -cp ./${lib}/\* de.fhg.iais.roberta.main.Administration version-for-db)
+				    serverVersionForDb=$(java -cp ./${serverTargetDir}/\* de.fhg.iais.roberta.main.Administration version-for-db)
 				  fi
 				  databaseurl="jdbc:hsqldb:file:OpenRobertaParent/OpenRobertaServer/db-$serverVersionForDb/openroberta-db"
 				  echo -n "do you really want to create the db for version \"$serverVersionForDb\"? If it exists, it will NOT be damaged. 'yes', 'no') "
@@ -235,7 +235,7 @@ case "$cmd" in
                   esac
 				  echo "creating an empty db using the url $databaseurl"
 				  main='de.fhg.iais.roberta.main.Administration'
-                  java -cp 'OpenRobertaParent/OpenRobertaServer/target/resources/*' "${main}" createemptydb "$databaseurl" ;;
+                  java -cp ${serverTargetDir}/\* "${main}" createemptydb "$databaseurl" ;;
 
 --alive)          _aliveFn $* ;;
 
