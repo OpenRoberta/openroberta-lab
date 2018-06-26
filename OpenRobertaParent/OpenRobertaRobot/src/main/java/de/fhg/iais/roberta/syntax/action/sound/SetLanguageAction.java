@@ -22,7 +22,7 @@ import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
  * This class represents the <b>naoActions_setLanguage</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
  * setting the language of the robot.<br/>
  * <br/>
- * The client must provide the {@link Language} (the language NAOs speech engine is set to).
+ * The client must provide the {@link ILanguage} (the language NAOs speech engine is set to).
  */
 public final class SetLanguageAction<V> extends Action<V> {
 
@@ -41,12 +41,12 @@ public final class SetLanguageAction<V> extends Action<V> {
     }
 
     /**
-     * Creates instance of {@link SetLanguage}. This instance is read only and can not be modified.
+     * Creates instance of {@link SetLanguageAction}. This instance is read only and can not be modified.
      *
-     * @param language {@link Language} the speech engine of the robot is set to,
+     * @param language {@link ILanguage} the speech engine of the robot is set to,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link SetLanguage}
+     * @return read only object of class {@link SetLanguageAction}
      */
     private static <V> SetLanguageAction<V> make(ILanguage language, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new SetLanguageAction<V>(language, properties, comment);

@@ -40,12 +40,12 @@ public class SayTextAction<V> extends Action<V> {
     }
 
     /**
-     * Creates instance of {@link DisplayTextAction}. This instance is read only and can not be modified.
+     * Creates instance of {@link SayTextAction}. This instance is read only and can not be modified.
      *
-     * @param msg {@link msg} that will be printed on the display of the brick; must be <b>not</b> null,
+     * @param msg {@link Expr} that will be printed on the display of the brick; must be <b>not</b> null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link DisplayTextAction}
+     * @return read only object of class {@link SayTextAction}
      */
     private static <V> SayTextAction<V> make(Expr<V> msg, Expr<V> speed, Expr<V> pitch, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new SayTextAction<>(msg, speed, pitch, properties, comment);
