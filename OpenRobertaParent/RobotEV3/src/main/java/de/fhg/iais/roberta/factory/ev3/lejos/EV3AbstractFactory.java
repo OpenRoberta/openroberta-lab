@@ -32,7 +32,6 @@ public abstract class EV3AbstractFactory extends AbstractRobotFactory {
     protected ICompilerWorkflow robotCompilerWorkflow;
     protected Properties ev3Properties;
     protected String name;
-    protected int robotPropertyNumber;
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:EV3ports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:EV3ports.properties"));
 
@@ -40,11 +39,10 @@ public abstract class EV3AbstractFactory extends AbstractRobotFactory {
         super(robertaProperties);
         this.ev3Properties = Util1.loadProperties("classpath:" + propertyName);
         this.name = this.ev3Properties.getProperty("robot.name");
-        this.robotPropertyNumber = robertaProperties.getRobotNumberFromProperty(this.name);
         this.robotCompilerWorkflow =
             new CompilerWorkflow(
                 robertaProperties.getTempDirForUserProjects(),
-                robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.robotPropertyNumber + ".compiler.resources.dir"));
+                robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.name + ".compiler.resources.dir"));
 
         this.simCompilerWorkflow = new Ev3SimCompilerWorkflow();
 
@@ -154,8 +152,8 @@ public abstract class EV3AbstractFactory extends AbstractRobotFactory {
 
     @Override
     public String getGroup() {
-        return this.robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.robotPropertyNumber + ".group") != null
-            ? this.robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.robotPropertyNumber + ".group")
+        return this.robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.name + ".group") != null
+            ? this.robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.name + ".group")
             : this.name;
     }
 

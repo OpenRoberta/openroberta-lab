@@ -11,12 +11,11 @@ public class Factory extends AbstractFactory {
         super(robertaProperties);
         this.calliopeProperties = Util1.loadProperties("classpath:Calliope2016.properties");
         this.name = this.calliopeProperties.getProperty("robot.name");
-        this.robotPropertyNumber = robertaProperties.getRobotNumberFromProperty(this.name);
         this.compilerWorkflow =
             new CompilerWorkflow(
                 robertaProperties.getTempDirForUserProjects(),
-                robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"),
-                robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.dir"));
+                robertaProperties.getStringProperty("robot.plugin." + this.name + ".compiler.resources.dir"),
+                robertaProperties.getStringProperty("robot.plugin." + this.name + ".compiler.dir"));
 
         addBlockTypesFromProperties("Calliope2016.properties", this.calliopeProperties);
     }

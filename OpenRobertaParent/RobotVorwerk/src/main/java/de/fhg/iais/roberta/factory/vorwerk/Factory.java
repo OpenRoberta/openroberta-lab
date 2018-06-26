@@ -43,11 +43,10 @@ public class Factory extends AbstractRobotFactory {
         super(robertaProperties);
         this.vorwerkProperties = Util1.loadProperties("classpath:Vorwerk.properties");
         this.name = this.vorwerkProperties.getProperty("robot.name");
-        this.robotPropertyNumber = robertaProperties.getRobotNumberFromProperty(this.name);
         this.robotCompilerWorkflow =
             new CompilerWorkflow(
                 robertaProperties.getTempDirForUserProjects(),
-                robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.robotPropertyNumber + ".compiler.resources.dir"));
+                robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.name + ".compiler.resources.dir"));
 
         addBlockTypesFromProperties("Vorwerk.property", this.vorwerkProperties);
 

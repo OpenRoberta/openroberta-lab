@@ -27,7 +27,6 @@ public class Factory extends AbstractRobotFactory {
     private final CompilerWorkflow compilerWorkflow;
     private final Properties botnrollProperties;
     private final String name;
-    private final int robotPropertyNumber;
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:botnrollports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:botnrollports.properties"));
 
@@ -39,12 +38,11 @@ public class Factory extends AbstractRobotFactory {
         }
         this.botnrollProperties = Util1.loadProperties("classpath:botnroll.properties");
         this.name = this.botnrollProperties.getProperty("robot.name");
-        this.robotPropertyNumber = robertaProperties.getRobotNumberFromProperty(this.name);
         this.compilerWorkflow =
             new CompilerWorkflow(
                 robertaProperties.getTempDirForUserProjects(),
-                robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"),
-                robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler." + os + ".dir"));
+                robertaProperties.getStringProperty("robot.plugin." + this.name + ".compiler.resources.dir"),
+                robertaProperties.getStringProperty("robot.plugin." + this.name + ".compiler." + os + ".dir"));
         addBlockTypesFromProperties("botnroll.properties", this.botnrollProperties);
     }
 
@@ -145,8 +143,8 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public String getGroup() {
-        return this.robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group") != null
-            ? this.robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group")
+        return this.robertaProperties.getStringProperty("robot.plugin." + this.name + ".group") != null
+            ? this.robertaProperties.getStringProperty("robot.plugin." + this.name + ".group")
             : this.name;
     }
 

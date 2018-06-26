@@ -28,7 +28,6 @@ public class Factory extends AbstractRobotFactory {
     private final SimCompilerWorkflow microbitSimCompilerWorkflow;
     private final Properties microbitProperties;
     private final String name;
-    private final int robotPropertyNumber;
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:Microbitports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:Microbitports.properties"));
 
@@ -36,11 +35,10 @@ public class Factory extends AbstractRobotFactory {
         super(robertaProperties);
         this.microbitProperties = Util1.loadProperties("classpath:Microbit.properties");
         this.name = this.microbitProperties.getProperty("robot.name");
-        this.robotPropertyNumber = robertaProperties.getRobotNumberFromProperty(this.name);
         this.compilerWorkflow =
             new CompilerWorkflow(
-                robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"),
-                robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.dir"));
+                robertaProperties.getStringProperty("robot.plugin." + this.name + ".compiler.resources.dir"),
+                robertaProperties.getStringProperty("robot.plugin." + this.name + ".compiler.dir"));
         this.microbitSimCompilerWorkflow = new SimCompilerWorkflow();
         Properties mbedProperties = Util1.loadProperties("classpath:Mbed.properties");
         addBlockTypesFromProperties("Mbed.properties", mbedProperties);

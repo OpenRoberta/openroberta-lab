@@ -5,13 +5,9 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.HttpConnectionFactory;
@@ -282,45 +278,27 @@ public class ServerStarter {
         if ( robotCommunicator == null ) {
             LOG.error("the robot communicator object was not found. This is a severe error. The system will crash!");
         }
-        Set<String> pluginNumbers = new HashSet<>();
-        Pattern pluginPattern = Pattern.compile("robot\\.plugin\\.(\\d+)\\..*");
-        for ( String key : robertaProperties.getRobertaProperties().stringPropertyNames() ) {
-            Matcher keyMatcher = pluginPattern.matcher(key);
-            if ( keyMatcher.matches() ) {
-                pluginNumbers.add(keyMatcher.group(1));
-            }
-        }
         List<String> robotWhitelist = robertaProperties.getRobotWhitelist();
         Map<String, IRobotFactory> robotPlugins = new HashMap<>();
-        whitelist: for ( String robotToUse : robotWhitelist ) {
-            for ( String pluginNumber : pluginNumbers ) {
-                String pluginName = robertaProperties.getStringProperty("robot.plugin." + pluginNumber + ".name");
-                if ( pluginName == null ) {
-                    throw new DbcException("robot plugin with number " + pluginNumber + " is invalid. Check the properties. Server does NOT start");
-                }
-                if ( robotToUse.equals("sim") ) {
-                    continue whitelist;
-                }
-                if ( robotToUse.equals(pluginName) ) {
-                    String pluginFactory = robertaProperties.getStringProperty("robot.plugin." + pluginNumber + ".factory");
-                    if ( pluginFactory == null ) {
-                        throw new DbcException("robot plugin " + pluginName + " has no factory. Check the properties. Server does NOT start");
-                    } else {
-                        try {
-                            @SuppressWarnings("unchecked")
-                            Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass(pluginFactory);
-                            Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(robertaProperties.getClass());
-                            robotPlugins.put(pluginName, factoryConstructor.newInstance(robertaProperties));
-                        } catch ( Exception e ) {
-                            throw new DbcException(
-                                "no factory for robot plugin " + pluginName + ". Plugin-jar not on the classpath? Invalid properties? Server does NOT start",
-                                e);
-                        }
-                    }
-                    continue whitelist;
+        for ( String robotToUse : robotWhitelist ) {
+            if ( robotToUse.equals("sim") ) {
+                continue;
+            }
+            String pluginFactory = robertaProperties.getStringProperty("robot.plugin." + robotToUse + ".factory");
+            if ( pluginFactory == null ) {
+                throw new DbcException("robot plugin " + robotToUse + " has no factory. Check the properties. Server does NOT start");
+            } else {
+                try {
+                    @SuppressWarnings("unchecked")
+                    Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass(pluginFactory);
+                    Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(robertaProperties.getClass());
+                    robotPlugins.put(robotToUse, factoryConstructor.newInstance(robertaProperties));
+                } catch ( Exception e ) {
+                    throw new DbcException(
+                        "no factory for robot plugin " + robotToUse + ". Plugin-jar not on the classpath? Invalid properties? Server does NOT start",
+                        e);
                 }
             }
-            throw new DbcException("robot plugin " + robotToUse + " not found. Check the properties. Server does NOT start");
         }
         StringBuilder sb = new StringBuilder();
         sb.append("ROBOT PLUGINS: ").append(robotPlugins.size()).append(" plugins are found: ");
@@ -345,22 +323,14 @@ public class ServerStarter {
      */
     @Deprecated
     private void checkRobotPluginsDB() {
-        Properties properties = robertaProperties.getRobertaProperties();
-        Set<String> pluginNumbers = new HashSet<>();
-        Pattern pluginPattern = Pattern.compile("robot\\.plugin\\.(\\d+)\\..*");
-        for ( String key : properties.stringPropertyNames() ) {
-            Matcher keyMatcher = pluginPattern.matcher(key);
-            if ( keyMatcher.matches() ) {
-                pluginNumbers.add(keyMatcher.group(1));
-            }
-        }
         try {
+            List<String> robotWhitelist = robertaProperties.getRobotWhitelist();
             DbSession session = this.injector.getInstance(SessionFactoryWrapper.class).getSession();
             RobotDao robotDao = new RobotDao(session);
-            for ( String pluginNumber : pluginNumbers ) {
-                String pluginName = robertaProperties.getStringProperty("robot.plugin." + pluginNumber + ".name");
-                if ( robertaProperties.getStringProperty("robot.plugin." + pluginNumber + ".group") != null ) {
-                    pluginName = robertaProperties.getStringProperty("robot.plugin." + pluginNumber + ".group");
+            for ( String robotToUse : robotWhitelist ) {
+                String pluginName = robotToUse;
+                if ( robertaProperties.getStringProperty("robot.plugin." + pluginName + ".group") != null ) {
+                    pluginName = robertaProperties.getStringProperty("robot.plugin." + pluginName + ".group");
                 }
                 Robot pluginRobot = robotDao.loadRobot(pluginName);
                 if ( pluginRobot == null ) {

@@ -47,19 +47,6 @@ public class UtilTest {
     }
 
     @Test
-    public void testGetRobotNumberFromProperty() {
-
-        assertEquals(1, robertaProperties.getRobotNumberFromProperty("ev3"));
-        assertEquals(2, robertaProperties.getRobotNumberFromProperty("nxt"));
-        assertEquals(3, robertaProperties.getRobotNumberFromProperty("ardu"));
-    }
-
-    @Test(expected = DbcException.class)
-    public void testGetRobotNumberFromPropertyWrong() {
-        robertaProperties.getRobotNumberFromProperty("ev31");
-    }
-
-    @Test
     public void testMissingProperty() {
         boolean browserVisibility = Boolean.parseBoolean(robertaProperties.getStringProperty("does.not.exist"));
         assertEquals(false, browserVisibility);

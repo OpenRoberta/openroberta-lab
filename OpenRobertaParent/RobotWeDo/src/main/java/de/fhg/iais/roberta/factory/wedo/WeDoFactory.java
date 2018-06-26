@@ -34,13 +34,11 @@ public class WeDoFactory extends AbstractRobotFactory {
     private final WeDoCompilerWorkflow compilerWorkflow;
     private final Properties wedoProperties;
     private final String name;
-    private final int robotPropertyNumber;
 
     public WeDoFactory(RobertaProperties robertaProperties) {
         super(robertaProperties);
         this.wedoProperties = Util1.loadProperties("classpath:WeDo.properties");
         this.name = this.wedoProperties.getProperty("robot.name");
-        this.robotPropertyNumber = robertaProperties.getRobotNumberFromProperty(this.name);
         this.compilerWorkflow = new WeDoCompilerWorkflow();
         addBlockTypesFromProperties("wedo.properties", this.wedoProperties);
     }
@@ -155,8 +153,8 @@ public class WeDoFactory extends AbstractRobotFactory {
 
     @Override
     public String getGroup() {
-        return this.robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group") != null
-            ? this.robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group")
+        return this.robertaProperties.getStringProperty("robot.plugin." + this.name + ".group") != null
+            ? this.robertaProperties.getStringProperty("robot.plugin." + this.name + ".group")
             : this.name;
     }
 

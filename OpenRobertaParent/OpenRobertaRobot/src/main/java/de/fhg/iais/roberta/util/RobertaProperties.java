@@ -102,20 +102,6 @@ public class RobertaProperties {
         return Boolean.parseBoolean(property);
     }
 
-    public int getRobotNumberFromProperty(String robotName) {
-        Assert.notNull(this.robertaProperties);
-        for ( int i = 1; i < 1000; i++ ) {
-            String value = this.robertaProperties.getProperty("robot.plugin." + i + ".name");
-            if ( value == null ) {
-                throw new DbcException("Robot with name: " + robotName + " not found!");
-            }
-            if ( value.equals(robotName) ) {
-                return i;
-            }
-        }
-        throw new DbcException("Only 999 robots supported!");
-    }
-
     public List<String> getRobotWhitelist() {
         return this.robotsOnWhiteList;
     }
