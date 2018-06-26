@@ -123,6 +123,15 @@ Furthermore, the project OpenRobertaServer contains in directory staticResources
   * javascript resources for blockly (see: http://code.google.com/p/blockly/)
   * controller and models written in Javascript, which implement the GUI
 
+To run specific tests, use `mvn test` with the `-Dtest=` option to specify the
+test name and `-DfailIfNoTests=false` to avoid a failure if a test of such name
+is not present in every sub-project of the repository. Example:
+
+    mvn -Dtest=de.fhg.iais.roberta.syntax.codegen.PythonVisitorTest -DfailIfNoTests=false test
+
+If the tests report broken dependencies, make sure to run `mvn clean install`
+first.
+
 #### Blockly
 
 We are using Blockly, it is located in a separate repository. The build of the blockly is only done in the OpenRoberta/Blockly project and then copied to the OpenRobertaServer/staticResources. You can not build Blockly in OpenRobertaServer project directly.
