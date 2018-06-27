@@ -1,83 +1,61 @@
 package de.fhg.iais.roberta.syntax.check.hardware.wedo;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.Actor;
+import de.fhg.iais.roberta.components.ActorType;
+import de.fhg.iais.roberta.components.ConfigurationBlock;
 import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.components.UsedActor;
+import de.fhg.iais.roberta.components.UsedConfigurationBlock;
 import de.fhg.iais.roberta.components.UsedSensor;
+import de.fhg.iais.roberta.components.wedo.WeDoConfiguration;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
-import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
+import de.fhg.iais.roberta.syntax.action.wedo.LedOnAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.expr.wedo.LedColor;
+import de.fhg.iais.roberta.util.Quadruplet;
+import de.fhg.iais.roberta.visitor.wedo.WeDoAstVisitor;
 
 /**
  * This visitor collects information for used actors and sensors in blockly program.
  *
- * @author kcvejoski
+ * @author eovchinnikova
  */
-public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisitor {
-    private final Set<String> usedImages = new HashSet<>();
+public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisitor implements WeDoAstVisitor<Void> {
 
-    private boolean isSayTextUsed = false;
+    protected final Set<UsedConfigurationBlock> usedConfigurationBlocks = new LinkedHashSet<>();
 
-    public UsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, Configuration brickConfiguration) {
+    WeDoConfiguration configuration;
+
+    public UsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, WeDoConfiguration brickConfiguration) {
         super(brickConfiguration);
+        this.configuration = brickConfiguration;
         check(phrasesSet);
     }
 
-    public Set<String> getUsedImages() {
-        return this.usedImages;
+    public Set<UsedSensor> getTimer() {
+        return this.usedSensors;
     }
 
-    public boolean isSayTextUsed() {
-        return this.isSayTextUsed;
-    }
-
-    @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        if ( gyroSensor.getMode() != GyroSensorMode.RESET ) {
-            super.visitGyroSensor(gyroSensor);
+    public Set<UsedConfigurationBlock> getUsedConfigurationBlocks() {
+        for ( Quadruplet<ConfigurationBlock, String, List<String>, List<String>> configurationBlock : this.configuration.getConfigurationBlocks() ) {
+            this.usedConfigurationBlocks.add(
+                new UsedConfigurationBlock(
+                    this.configuration.getConfigurationBlockType(configurationBlock),
+                    this.configuration.getBlockName(configurationBlock),
+                    this.configuration.getPorts(configurationBlock),
+                    this.configuration.getPins(configurationBlock)));
         }
-        return null;
-    }
-
-    @Override
-    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        super.visitSayTextAction(sayTextAction);
-        this.isSayTextUsed = true;
-        return null;
-    }
-
-    @Override
-    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        super.visitShowPictureAction(showPictureAction);
-        this.usedImages.add(showPictureAction.getPicture().toString());
-        return null;
-    }
-
-    @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        IMode mode = infraredSensor.getMode();
-        if ( infraredSensor.getMode().equals(InfraredSensorMode.PRESENCE) ) {
-            mode = InfraredSensorMode.SEEK;
-        }
-        this.usedSensors.add(new UsedSensor((ISensorPort) infraredSensor.getPort(), SensorType.INFRARED, mode));
-        return null;
+        return this.usedConfigurationBlocks;
     }
 
     @Override
@@ -86,4 +64,36 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
         return null;
     }
 
+    @Override
+    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+        motorOnAction.getParam().getSpeed().visit(this);
+        if ( motorOnAction.getParam().getDuration() != null ) {
+            motorOnAction.getDurationValue().visit(this);
+        }
+        String a = motorOnAction.getPort().getOraName();
+        UsedConfigurationBlock confMotor = getConfigurationBlock(a);
+        if ( this.brickConfiguration != null ) {
+            this.usedActors.add(new UsedActor(motorOnAction.getPort(), ActorType.MOTOR));
+        }
+        return null;
+    }
+
+    UsedConfigurationBlock getConfigurationBlock(String name) {
+        for ( UsedConfigurationBlock usedConfigurationBlock : this.usedConfigurationBlocks ) {
+            if ( usedConfigurationBlock.getBlockName().equals(name) ) {
+                return usedConfigurationBlock;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitLedColor(LedColor<Void> ledColor) {
+        return null;
+    }
 }

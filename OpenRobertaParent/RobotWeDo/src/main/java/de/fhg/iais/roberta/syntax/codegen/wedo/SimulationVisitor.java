@@ -1,22 +1,13 @@
 package de.fhg.iais.roberta.syntax.codegen.wedo;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
-import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
-import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
-import de.fhg.iais.roberta.mode.action.Language;
-import de.fhg.iais.roberta.mode.action.TurnDirection;
-import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
-import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
-import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
-import de.fhg.iais.roberta.syntax.MotorDuration;
+import de.fhg.iais.roberta.components.UsedActor;
+import de.fhg.iais.roberta.components.UsedConfigurationBlock;
+import de.fhg.iais.roberta.components.UsedSensor;
+import de.fhg.iais.roberta.components.wedo.WeDoConfiguration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
@@ -36,11 +27,13 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
+import de.fhg.iais.roberta.syntax.action.wedo.LedOnAction;
+import de.fhg.iais.roberta.syntax.check.hardware.wedo.UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.codegen.RobotSimulationVisitor;
+import de.fhg.iais.roberta.syntax.expr.wedo.LedColor;
+import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
@@ -50,79 +43,51 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.wedo.WeDoAstVisitor;
 
-public class SimulationVisitor extends RobotSimulationVisitor<Void> {
-    private static final String MOTOR_LEFT = "CONST.MOTOR_LEFT";
-    private static final String MOTOR_RIGHT = "CONST.MOTOR_RIGHT";
+public class SimulationVisitor<V> extends RobotSimulationVisitor<V> implements WeDoAstVisitor<V> {
+    protected Set<UsedSensor> usedSensors;
+    protected Set<UsedConfigurationBlock> usedConfigurationBlocks;
+    protected Set<UsedActor> usedActors;
+    protected ArrayList<VarDeclaration<Void>> usedVars;
+    private boolean isTimerSensorUsed;
+    private Map<Integer, Boolean> loopsLabels;
 
-    private SimulationVisitor(Configuration brickConfiguration, ILanguage language) {
+    private SimulationVisitor(WeDoConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases) {
         super(brickConfiguration);
+        UsedHardwareCollectorVisitor codePreprocessVisitor = new UsedHardwareCollectorVisitor(phrases, brickConfiguration);
+        this.usedVars = codePreprocessVisitor.getVisitedVars();
+        this.usedConfigurationBlocks = codePreprocessVisitor.getUsedConfigurationBlocks();
+        this.isTimerSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
+        this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
     }
 
-    public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, ILanguage language) {
+    public static String generate(WeDoConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         Assert.isTrue(!phrasesSet.isEmpty());
         Assert.notNull(brickConfiguration);
 
-        SimulationVisitor astVisitor = new SimulationVisitor(brickConfiguration, language);
+        SimulationVisitor<Void> astVisitor = new SimulationVisitor<Void>(brickConfiguration, phrasesSet);
         astVisitor.generateCodeFromPhrases(phrasesSet);
         return astVisitor.sb.toString();
     }
 
     @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
-        String end = createClosingBracket();
-        this.sb.append("createDriveAction(");
-        driveAction.getParam().getSpeed().visit(this);
-        IDriveDirection leftMotorRotationDirection = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection();
-        DriveDirection driveDirection = (DriveDirection) driveAction.getDirection();
-        if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
-            driveDirection = getDriveDirection(driveAction.getDirection() == DriveDirection.FOREWARD);
-        }
-        this.sb.append(", CONST." + driveDirection);
-        MotorDuration<Void> duration = driveAction.getParam().getDuration();
-        appendDuration(duration);
-        this.sb.append(end);
-        return null;
+    public V visitDriveAction(DriveAction<V> driveAction) {
+        throw new DbcException("operation not supported");
     }
 
     @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
-        String end = createClosingBracket();
-        this.sb.append("createCurveAction(");
-        curveAction.getParamLeft().getSpeed().visit(this);
-        this.sb.append(", ");
-        curveAction.getParamRight().getSpeed().visit(this);
-        IDriveDirection leftMotorRotationDirection = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection();
-        DriveDirection driveDirection = (DriveDirection) curveAction.getDirection();
-        if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
-            driveDirection = getDriveDirection(curveAction.getDirection() == DriveDirection.FOREWARD);
-        }
-        this.sb.append(", CONST." + driveDirection);
-        MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
-        appendDuration(duration);
-        this.sb.append(end);
-        return null;
+    public V visitCurveAction(CurveAction<V> curveAction) {
+        throw new DbcException("operation not supported");
     }
 
     @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
-        String end = createClosingBracket();
-        this.sb.append("createTurnAction(");
-        turnAction.getParam().getSpeed().visit(this);
-        IDriveDirection leftMotorRotationDirection = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection();
-        ITurnDirection turnDirection = turnAction.getDirection();
-        if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
-            turnDirection = getTurnDirection(turnAction.getDirection() == TurnDirection.LEFT);
-        }
-        this.sb.append(", CONST." + turnDirection);
-        MotorDuration<Void> duration = turnAction.getParam().getDuration();
-        appendDuration(duration);
-        this.sb.append(end);
-        return null;
+    public V visitTurnAction(TurnAction<V> turnAction) {
+        throw new DbcException("operation not supported");
     }
 
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
+    public V visitLightAction(LightAction<V> lightAction) {
         String end = createClosingBracket();
         this.sb.append("createTurnLight(CONST." + lightAction.getColor() + ", CONST." + lightAction.getBlinkMode());
         this.sb.append(end);
@@ -130,56 +95,50 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
     }
 
     @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        String end = createClosingBracket();
-        this.sb.append("createStatusLight(CONST." + lightStatusAction.getStatus());
+    public V visitLightStatusAction(LightStatusAction<V> lightStatusAction) {
+        final String end = createClosingBracket();
+        this.sb.append("createStatusLight(CONST.OFF)");
         this.sb.append(end);
         return null;
     }
 
     @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        this.sb.append("createGetMotorPower(" + (motorGetPowerAction.getPort().getOraName().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString() + ")");
-        return null;
-    }
-
-    @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+    public V visitMotorOnAction(MotorOnAction<V> motorOnAction) {
         boolean isDuration = motorOnAction.getParam().getDuration() != null;
-        String end = createClosingBracket();
-        this.sb.append("createMotorOnAction(");
-        motorOnAction.getParam().getSpeed().visit(this);
-        this.sb.append(", " + (motorOnAction.getPort().getOraName().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString());
-        if ( isDuration ) {
-            this.sb.append(", createDuration(CONST.");
-            this.sb.append(motorOnAction.getParam().getDuration().getType().toString() + ", ");
-            motorOnAction.getParam().getDuration().getValue().visit(this);
-            this.sb.append(")");
+        String actorName = motorOnAction.getPort().getOraName();
+        UsedConfigurationBlock confMotorBlock = getConfigurationBlock(actorName);
+        if ( confMotorBlock == null ) {
+            throw new DbcException("no motor declared in the configuration");
         }
-        this.sb.append(end);
+        String brickName = confMotorBlock.getPins().size() >= 1 ? confMotorBlock.getPins().get(0) : null;
+        String port = confMotorBlock.getPins().size() >= 2 ? confMotorBlock.getPins().get(1) : null;
+        if ( brickName != null && port != null ) {
+            String end = createClosingBracket();
+            this.sb.append("createMotorOnAction('" + brickName + "', '" + port + "', ");
+            motorOnAction.getParam().getSpeed().visit(this);
+            if ( isDuration ) {
+                this.sb.append(", createDuration(CONST.TIME, ");
+                motorOnAction.getParam().getDuration().getValue().visit(this);
+                this.sb.append(")");
+            }
+            this.sb.append(end);
+            return null;
+        } else {
+            this.sb.append("null");
+        }
         return null;
     }
 
     @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        String end = createClosingBracket();
-        this.sb.append("createSetMotorPowerAction(" + (motorSetPowerAction.getPort().getOraName().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString() + ", ");
-        motorSetPowerAction.getPower().visit(this);
-        this.sb.append(end);
-        return null;
-    }
-
-    @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+    public V visitMotorStopAction(MotorStopAction<V> motorStopAction) {
         String end = createClosingBracket();
         this.sb.append("createStopMotorAction(");
-        this.sb.append((motorStopAction.getPort().getOraName().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString());
         this.sb.append(end);
         return null;
     }
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+    public V visitClearDisplayAction(ClearDisplayAction<V> clearDisplayAction) {
         String end = createClosingBracket();
         this.sb.append("createClearDisplayAction(");
         this.sb.append(end);
@@ -187,221 +146,161 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        if ( volumeAction.getMode() == VolumeAction.Mode.SET ) {
-            String end = createClosingBracket();
-            this.sb.append("createSetVolumeAction(CONST." + volumeAction.getMode() + ", ");
-            volumeAction.getVolume().visit(this);
-            this.sb.append(end);
-        } else {
-            this.sb.append("createGetVolume()");
-        }
-        return null;
-    }
-
-    private String getLanguageString(ILanguage language) {
-        switch ( (Language) language ) {
-            case GERMAN:
-                return "de-DE";
-            case ENGLISH:
-                return "en-US";
-            case FRENCH:
-                return "fr-FR";
-            case SPANISH:
-                return "es-ES";
-            case ITALIAN:
-                return "it-IT";
-            case DUTCH:
-                return "nl-NL";
-            case POLISH:
-                return "pl-PL";
-            case RUSSIAN:
-                return "ru-RU";
-            case PORTUGUESE:
-                return "pt-BR";
-            case JAPANESE:
-                return "ja-JP";
-            case CHINESE:
-                return "zh-CN";
-            default:
-                return "";
-        }
+    public V visitVolumeAction(VolumeAction<V> volumeAction) {
+        throw new DbcException("operation not supported");
     }
 
     @Override
-    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
-        String end = createClosingBracket();
-        this.sb.append("createSetLanguageAction(createConstant(CONST.STRING_CONST, \'");
-        this.sb.append(getLanguageString(setLanguageAction.getLanguage()));
-        this.sb.append("\')");
-        this.sb.append(end);
-        return null;
+    public V visitSetLanguageAction(SetLanguageAction<V> setLanguageAction) {
+        throw new DbcException("operation not supported");
     }
 
     @Override
-    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        String end = createClosingBracket();
-        // this.sb.append("createSetLanguageAction(createConstant(CONST.STRING_CONST,
-        // \'");
-        // this.sb.append(this.getLanguageString(this.language));
-        // this.sb.append("\')");
-        // this.sb.append(end);
-        // this.visitExprStmt();
-        this.sb.append("createSayTextAction(");
-        if ( !sayTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
-            this.sb.append("String(");
-            sayTextAction.getMsg().visit(this);
-            this.sb.append(")");
-        } else {
-            sayTextAction.getMsg().visit(this);
-        }
-        BlockType emptyBlock = BlockTypeContainer.getByName("EMPTY_EXPR");
-        if ( !(sayTextAction.getSpeed().getKind().equals(emptyBlock) && sayTextAction.getPitch().getKind().equals(emptyBlock)) ) {
-            this.sb.append(",");
-            sayTextAction.getSpeed().visit(this);
-            this.sb.append(",");
-            sayTextAction.getPitch().visit(this);
-        }
-        // this.sb.append(")");
-        this.sb.append(end);
-        return null;
+    public V visitSayTextAction(SayTextAction<V> sayTextAction) {
+        throw new DbcException("operation not supported");
     }
 
     @Override
-    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        String end = createClosingBracket();
-        this.sb.append("createPlayFileAction(" + playFileAction.getFileName());
-        this.sb.append(end);
-        return null;
+    public V visitPlayFileAction(PlayFileAction<V> playFileAction) {
+        throw new DbcException("operation not supported");
     }
 
     @Override
-    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        String end = createClosingBracket();
-        this.sb.append("createShowPictureAction('" + showPictureAction.getPicture() + "', ");
-        showPictureAction.getX().visit(this);
-        this.sb.append(", ");
-        showPictureAction.getY().visit(this);
-        this.sb.append(end);
-        return null;
+    public V visitShowPictureAction(ShowPictureAction<V> showPictureAction) {
+        throw new DbcException("operation not supported");
     }
 
     @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+    public V visitShowTextAction(ShowTextAction<V> showTextAction) {
         String end = createClosingBracket();
         this.sb.append("createShowTextAction(");
         showTextAction.getMsg().visit(this);
-        this.sb.append(", ");
-        showTextAction.getX().visit(this);
-        this.sb.append(", ");
-        showTextAction.getY().visit(this);
         this.sb.append(end);
         return null;
     }
 
     @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        String end = createClosingBracket();
-        this.sb.append("createStopDrive(");
-        this.sb.append(end);
-        return null;
+    public V visitMotorDriveStopAction(MotorDriveStopAction<V> stopAction) {
+        throw new DbcException("operation not supported");
     }
 
     @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
+    public V visitBrickSensor(BrickSensor<V> brickSensor) {
         this.sb.append("createGetSample(CONST.BUTTONS, CONST." + brickSensor.getPort() + ")");
         return null;
     }
 
     @Override
-    public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        this.sb.append("createGetSample(CONST.COLOR, CONST." + ((ColorSensorMode) colorSensor.getMode()).getModeValue() + ")");
-        return null;
+    public V visitColorSensor(ColorSensor<V> colorSensor) {
+        throw new DbcException("operation not supported");
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.sb.append("createGetSample(CONST.LIGHT, CONST." + ((LightSensorMode) lightSensor.getMode()).getModeValue() + ")");
-        return null;
+    public V visitLightSensor(LightSensor<V> lightSensor) {
+        throw new DbcException("operation not supported");
     }
 
     @Override
-    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        String encoderMotor = (encoderSensor.getPort().getOraName().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString();
-        if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
-            String end = createClosingBracket();
-            this.sb.append("createResetEncoderSensor(" + encoderMotor);
-            this.sb.append(end);
+    public V visitGyroSensor(GyroSensor<V> gyroSensor) {
+        String sensorName = gyroSensor.getPort().getOraName();
+        UsedConfigurationBlock confGyroSensor = getConfigurationBlock(sensorName);
+        if ( confGyroSensor == null ) {
+            throw new DbcException("no gyro sensor declared in the configuration");
+        }
+        String brickName = confGyroSensor.getPins().size() >= 1 ? confGyroSensor.getPins().get(0) : null;
+        String port = confGyroSensor.getPins().size() >= 2 ? confGyroSensor.getPins().get(1) : null;
+        String slot = gyroSensor.getSlot().toString();
+
+        if ( brickName != null && port != null ) {
+            this.sb.append("createGetSample(CONST.GYRO, '" + brickName + "', '" + port + "', '" + slot + "')");
         } else {
-            this.sb.append("createGetSampleEncoderSensor(" + encoderMotor + ", CONST." + encoderSensor.getMode() + ")");
+            throw new DbcException("operation not supported");
         }
         return null;
     }
 
     @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        if ( gyroSensor.getMode() == GyroSensorMode.RESET ) {
-            String end = createClosingBracket();
-            this.sb.append("createResetGyroSensor(");
-            this.sb.append(end);
+    public V visitInfraredSensor(InfraredSensor<V> infraredSensor) {
+        String sensorName = infraredSensor.getPort().getOraName();
+        UsedConfigurationBlock confInfraredSensor = getConfigurationBlock(sensorName);
+        if ( confInfraredSensor == null ) {
+            throw new DbcException("no infrared sensor declared in the configuration");
+        }
+        String brickName = confInfraredSensor.getPins().size() >= 1 ? confInfraredSensor.getPins().get(0) : null;
+        String port = confInfraredSensor.getPins().size() >= 2 ? confInfraredSensor.getPins().get(1) : null;
+        if ( brickName != null && port != null ) {
+            this.sb.append("createGetSample(CONST.INFRARED, '" + brickName + "', '" + port + "')");
         } else {
-            this.sb.append("createGetGyroSensorSample(CONST.GYRO, CONST." + gyroSensor.getMode() + ")");
+            this.sb.append("null");
         }
         return null;
     }
 
     @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        switch ( (CompassSensorMode) compassSensor.getMode() ) {
-            case CALIBRATE:
-                this.sb.append("");
-                break;
-            case ANGLE:
-                this.sb.append("null");
-                break;
-            case COMPASS:
-                this.sb.append("null");
-                break;
-            default:
-                throw new DbcException("Invalid Compass Mode!");
+    public V visitIRSeekerSensor(IRSeekerSensor<V> irSeekerSensor) {
+        throw new DbcException("operation not supported");
+    }
+
+    @Override
+    public V visitTouchSensor(TouchSensor<V> touchSensor) {
+        throw new DbcException("operation not supported");
+    }
+
+    @Override
+    public V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor) {
+        throw new DbcException("operation not supported");
+    }
+
+    @Override
+    public V visitSoundSensor(SoundSensor<V> soundSensor) {
+        throw new DbcException("operation not supported");
+    }
+
+    @Override
+    public V visitLedAction(LedAction<V> ledAction) {
+        throw new DbcException("operation not supported");
+    }
+
+    @Override
+    public V visitMotorGetPowerAction(MotorGetPowerAction<V> motorGetPowerAction) {
+        throw new DbcException("operation not supported");
+    }
+
+    @Override
+    public V visitMotorSetPowerAction(MotorSetPowerAction<V> motorSetPowerAction) {
+        throw new DbcException("operation not supported");
+    }
+
+    UsedConfigurationBlock getConfigurationBlock(String name) {
+        for ( UsedConfigurationBlock usedConfigurationBlock : this.usedConfigurationBlocks ) {
+            if ( usedConfigurationBlock.getBlockName().equals(name) ) {
+                return usedConfigurationBlock;
+            }
         }
         return null;
     }
 
     @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.sb.append("createGetSample(CONST.INFRARED, CONST." + infraredSensor.getMode() + ")");
+    public V visitLedColor(LedColor<V> ledColor) {
+        this.sb.append(
+            "createConstant(CONST."
+                + ledColor.getKind().getName()
+                + ", ["
+                + ledColor.getRedChannel()
+                + ", "
+                + ledColor.getGreenChannel()
+                + ", "
+                + ledColor.getBlueChannel()
+                + "])");
         return null;
     }
 
     @Override
-    public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
-        this.sb.append("null");
+    public V visitLedOnAction(LedOnAction<V> ledOnAction) {
+        final String end = createClosingBracket();
+        this.sb.append("createLedOnAction(");
+        ledOnAction.getLedColor().visit(this);
+        this.sb.append(end);
         return null;
     }
-
-    @Override
-    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("createGetSample(CONST.TOUCH)");
-        return null;
-    }
-
-    @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.sb.append("createGetSample(CONST.ULTRASONIC, CONST." + ultrasonicSensor.getMode() + ")");
-        return null;
-    }
-
-    @Override
-    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        this.sb.append("createGetSample(CONST.SOUND)");
-        return null;
-    }
-
-    @Override
-    public Void visitLedAction(LedAction<Void> ledAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }

@@ -177,8 +177,9 @@ function init() {
         confDeleteController.init();
         progShareController.init();
         logListController.init();
-        configurationController.init();
+        
         programController.init();
+        configurationController.init();
         progHelpController.init();
         progInfoController.init();
         progCodeController.init();

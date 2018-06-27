@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.wedo.WeDoConfiguration;
 import de.fhg.iais.roberta.factory.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
@@ -27,7 +28,7 @@ public class WeDoSimCompilerWorkflow extends AbstractCompilerWorkflow {
         if ( data.getErrorMessage() != null ) {
             return null;
         }
-        String sourceCode = SimulationVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree(), language);
+        String sourceCode = SimulationVisitor.generate((WeDoConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree());
         WeDoSimCompilerWorkflow.LOG.info("generating javascript code");
         return sourceCode;
     }

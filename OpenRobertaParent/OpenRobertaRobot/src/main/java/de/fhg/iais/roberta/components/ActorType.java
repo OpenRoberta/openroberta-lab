@@ -17,6 +17,7 @@ public enum ActorType {
     GEARED_MOTOR( "robBrick_motor_geared" ),
     DIFFERENTIAL_DRIVE( "" ),
     BUZZER( "robActions_play_tone" ),
+    MOTOR ( "robConf_motor"),
     OTHER( "robBrick_actor" );
 
     private final String[] values;

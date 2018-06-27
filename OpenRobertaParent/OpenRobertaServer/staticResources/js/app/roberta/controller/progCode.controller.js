@@ -58,7 +58,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.co
             var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
 
             var language = GUISTATE_C.getLanguage();
-
+            
             PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function(result) {
                 GUISTATE_C.setState(result);
                 $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.sourceCode.escapeHTML(), null, true) + '</pre>');

@@ -1,14 +1,14 @@
 package de.fhg.iais.roberta.factory.wedo;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.lang3.SystemUtils;
+
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.wedo.WeDoConfiguration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
-import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.factory.wedo.WeDoSimCompilerWorkflow;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
@@ -16,64 +16,64 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.wedo.BrickCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.wedo.SimulationCheckVisitor;
+import de.fhg.iais.roberta.syntax.codegen.wedo.SimulationVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 public class Factory extends AbstractRobotFactory {
-    private static final String ROBOT_PLUGIN_PREFIX = "robot.plugin.";
-    protected WeDoSimCompilerWorkflow simCompilerWorkflow;
-    protected ICompilerWorkflow robotCompilerWorkflow;
-    protected Properties wedoProperties;
-    protected String name;
-    protected int robotPropertyNumber;
-    Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:WeDoports.properties"));
-    Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:WeDoports.properties"));
+    private final WeDoSimCompilerWorkflow compilerWorkflow;
+    private final Properties wedoProperties;
+    private final String name;
+    private final int robotPropertyNumber;
 
     public Factory(RobertaProperties robertaProperties) {
         super(robertaProperties);
         this.wedoProperties = Util1.loadProperties("classpath:WeDo.properties");
         this.name = this.wedoProperties.getProperty("robot.name");
         this.robotPropertyNumber = robertaProperties.getRobotNumberFromProperty(this.name);
-        this.robotCompilerWorkflow = new WeDoSimCompilerWorkflow();
+        this.compilerWorkflow =
+            new WeDoSimCompilerWorkflow();
+        addBlockTypesFromProperties("wedo.properties", this.wedoProperties);
+    }
 
-        this.simCompilerWorkflow = new WeDoSimCompilerWorkflow();
+    public SensorPort getSensorName(String port) {
+        return new SensorPort(port, port);
+    }
 
-        addBlockTypesFromProperties("WeDo.properties", this.wedoProperties);
-
+    public ActorPort getActorName(String port) {
+        return new ActorPort(port, port);
     }
 
     @Override
     public ISensorPort getSensorPort(String port) {
-        return getSensorPortValue(port, this.sensorToPorts);
+        return getSensorName(port);
     }
 
     @Override
     public IActorPort getActorPort(String port) {
-        return getActorPortValue(port, this.actorToPorts);
+        return getActorName(port);
     }
 
     @Override
-    public ICompilerWorkflow getSimCompilerWorkflow() {
-        return this.simCompilerWorkflow;
+    public IShowPicture getShowPicture(String picture) {
+        return null;
     }
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return this.robotCompilerWorkflow;
+        return this.compilerWorkflow;
     }
 
     @Override
-    public ILightSensorActionMode getLightActionColor(String mode) {
+    public ICompilerWorkflow getSimCompilerWorkflow() {
         return null;
     }
 
     @Override
     public String getFileExtension() {
-        return "js";
+        return "ino";
     }
 
     @Override
@@ -127,39 +127,49 @@ public class Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public RobotSimulationCheckVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
-        return new SimulationCheckVisitor(brickConfiguration);
+    public String getVendorId() {
+        return this.wedoProperties.getProperty("robot.vendor");
     }
 
     @Override
-    public RobotCommonCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
-        return new BrickCheckVisitor(brickConfiguration);
+    public RobotSimulationCheckVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
+        return null;
+    }
+
+    @Override
+    public RobotBrickCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
+        return null;
     }
 
     @Override
     public Boolean hasConfiguration() {
-        return this.wedoProperties.getProperty("robot.configuration") != null ? false : true;
+        return Boolean.parseBoolean(this.wedoProperties.getProperty("robot.configuration"));
     }
 
     @Override
     public String getGroup() {
-        return this.robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.robotPropertyNumber + ".group") != null
-            ? this.robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.robotPropertyNumber + ".group")
+        return this.robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group") != null
+            ? this.robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group")
             : this.name;
     }
 
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        return null;
+        return SimulationVisitor.generate((WeDoConfiguration) brickConfiguration, phrasesSet);
     }
 
     @Override
-    public String getMenuVersion() {
-        return this.wedoProperties.getProperty("robot.menu.verision");
+    public String getCommandline() {
+        return this.wedoProperties.getProperty("robot.connection.commandLine");
     }
 
     @Override
-    public IShowPicture getShowPicture(String picture) {
+    public String getSignature() {
+        return this.wedoProperties.getProperty("robot.connection.signature");
+    }
+
+    @Override
+    public ILightSensorActionMode getLightActionColor(String mode) {
         // TODO Auto-generated method stub
         return null;
     }

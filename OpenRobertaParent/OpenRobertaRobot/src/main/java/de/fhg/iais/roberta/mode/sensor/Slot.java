@@ -24,7 +24,12 @@ public enum Slot implements ISlot {
     RIGHT_PITCH( "RIGHT_PITCH" ),
     RIGHT_ROLL( "RIGHT_ROLL" ),
     RIGHT_YAW( "RIGHT_YAW" ),
-    RIGHT_YAW_PITCH( "RIGHT_YAW_PITCH" );
+    RIGHT_YAW_PITCH( "RIGHT_YAW_PITCH" ),
+    UP( "UP" ),
+    DOWN( "DOWN" ),
+    BACK( "BACK" ),
+    NOT( "NOT" ),
+    SHAKE( "SHALE" );
     private final String[] values;
 
     private Slot(String... values) {
