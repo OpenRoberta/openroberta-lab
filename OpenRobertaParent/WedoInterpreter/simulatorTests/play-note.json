@@ -1,1 +1,15 @@
-[{"opc":"expr","expr":"NumConst","value":"261.626"}, {"opc":"expr","expr":"NumConst","value":"2000"}, {"opc":"ToneAction"}]
+[
+	{
+		"opc": "expr",
+		"expr": "NUM_CONST",
+		"value": "261.626"
+	},
+	{
+		"opc": "expr",
+		"expr": "NUM_CONST",
+		"value": "2000"
+	},
+	{
+		"opc": "ToneAction"
+	}
+]

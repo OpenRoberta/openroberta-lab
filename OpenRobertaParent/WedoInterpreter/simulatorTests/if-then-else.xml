@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="2.0" description="" tags="">
+  <instance x="190" y="44">
+    <block type="robControls_start" id="./!wEbCfiPb~jk4/8Yk/" intask="true" deletable="false">
+      <mutation declare="false"/>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robControls_ifElse" id="cObs|W6cWY_32h_Gyt9]" intask="true">
+      <mutation elseif="2" else="1"/>
+      <repetitions>
+        <value name="IF0">
+          <block type="logic_compare" id="m]|fXrC?LDq@ga~:!`PS" intask="true">
+            <field name="OP">EQ</field>
+            <value name="A">
+              <block type="math_number" id="]g,~C18,am`g^6D5MeeJ" intask="true">
+                <field name="NUM">1</field>
+              </block>
+            </value>
+            <value name="B">
+              <block type="math_number" id="GMo0h|6guAuF#a)XhxTn" intask="true">
+                <field name="NUM">1</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="robControls_wait_time" id="DP,wk4^A:7Y(e/3kD,pY" intask="true">
+            <value name="WAIT">
+              <block type="math_number" id="iP{Rer{:x2:)O!_4EAN+" intask="true">
+                <field name="NUM">10</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <value name="IF1">
+          <block type="logic_compare" id="u:;m?r/3ds!:KxE8OMT3" intask="true">
+            <field name="OP">EQ</field>
+            <value name="A">
+              <block type="math_number" id="TyfjZJX?fIx7?70*VJbX" intask="true">
+                <field name="NUM">2</field>
+              </block>
+            </value>
+            <value name="B">
+              <block type="math_number" id="}!sf2;r*G[F0SG}y30xu" intask="true">
+                <field name="NUM">2</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO1">
+          <block type="robControls_wait_time" id="i__I64,!u2GIssMsnluj" intask="true">
+            <value name="WAIT">
+              <block type="math_number" id="YqpA.-qUFaL0Uo_URgA2" intask="true">
+                <field name="NUM">20</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <value name="IF2">
+          <block type="logic_compare" id="XGt`9@Jle!QlFbeu^!2+" intask="true">
+            <field name="OP">EQ</field>
+            <value name="A">
+              <block type="math_number" id="`}w2q8CT,}YTI`uYIWhB" intask="true">
+                <field name="NUM">3</field>
+              </block>
+            </value>
+            <value name="B">
+              <block type="math_number" id="/W7.sZryRjV.{audiNKg" intask="true">
+                <field name="NUM">3</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO2">
+          <block type="robControls_wait_time" id="l_`e{s/}xgH_~kbkiGxX" intask="true">
+            <value name="WAIT">
+              <block type="math_number" id=",Q+XB*pDX8mPTKClJ/-6" intask="true">
+                <field name="NUM">30</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <statement name="ELSE">
+          <block type="robControls_wait_time" id=":6!g+du4o]+HH^~uZ)lv" intask="true">
+            <value name="WAIT">
+              <block type="math_number" id="^3:|OVYh{MjLolR@@BAm" intask="true">
+                <field name="NUM">40</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+      </repetitions>
+    </block>
+  </instance>
+</block_set>

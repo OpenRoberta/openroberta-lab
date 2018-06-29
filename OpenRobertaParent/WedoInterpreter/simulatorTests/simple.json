@@ -1,1 +1,94 @@
-[{"opc":"expr","expr":"NUM_CONST","value":"0"}, {"opc":"VarDeclaration","name":"x","type":"NUMBER"}, {"mode":"FOR","opc":"RepeatStmt","stmtList":[{"opc":"expr","name":"i","expr":"Var"},{"opc":"expr","expr":"NUM_CONST","value":"1"},{"opc":"expr","expr":"NUM_CONST","value":"3"},{"opc":"expr","expr":"NUM_CONST","value":"1"},{"opc":"flowControl","break":true,"createMethodIfReturn":true,"loopNumber":1},{"opc":"expr","name":"x","expr":"Var"},{"opc":"expr","name":"i","expr":"Var"},{"op":"ADD","opc":"expr","expr":"Binary"},{"opc":"AssignStmt","name":"x"},{"mode":"TIMES","opc":"RepeatStmt","stmtList":[{"opc":"expr","name":"k0","expr":"Var"},{"opc":"expr","expr":"NUM_CONST","value":"0"},{"opc":"expr","expr":"NUM_CONST","value":"3"},{"opc":"expr","expr":"NUM_CONST","value":"1"},{"opc":"flowControl","break":true,"createMethodIfReturn":true,"loopNumber":2},{"opc":"expr","name":"x","expr":"Var"},{"opc":"ShowTextAction"}],"loopNumber":2}],"loopNumber":2}]
+[
+	{
+		"opc": "expr",
+		"expr": "NUM_CONST",
+		"value": "0"
+	},
+	{
+		"opc": "VarDeclaration",
+		"name": "x",
+		"type": "NUMBER"
+	},
+	{
+		"opc": "expr",
+		"name": "i",
+		"expr": "Var"
+	},
+	{
+		"opc": "expr",
+		"expr": "NUM_CONST",
+		"value": "1"
+	},
+	{
+		"opc": "expr",
+		"expr": "NUM_CONST",
+		"value": "3"
+	},
+	{
+		"opc": "expr",
+		"expr": "NUM_CONST",
+		"value": "1"
+	},
+	{
+		"mode": "FOR",
+		"opc": "RepeatStmt",
+		"stmtList": [
+			{
+				"opc": "expr",
+				"name": "x",
+				"expr": "Var"
+			},
+			{
+				"opc": "expr",
+				"name": "i",
+				"expr": "Var"
+			},
+			{
+				"op": "ADD",
+				"opc": "expr",
+				"expr": "Binary"
+			},
+			{
+				"opc": "AssignStmt",
+				"name": "x"
+			},
+			{
+				"opc": "expr",
+				"name": "k0",
+				"expr": "Var"
+			},
+			{
+				"opc": "expr",
+				"expr": "NUM_CONST",
+				"value": "0"
+			},
+			{
+				"opc": "expr",
+				"expr": "NUM_CONST",
+				"value": "3"
+			},
+			{
+				"opc": "expr",
+				"expr": "NUM_CONST",
+				"value": "1"
+			},
+			{
+				"mode": "TIMES",
+				"opc": "RepeatStmt",
+				"stmtList": [
+					{
+						"opc": "expr",
+						"name": "x",
+						"expr": "Var"
+					},
+					{
+						"opc": "ShowTextAction"
+					},
+					{
+						"opc": "pop"
+					}
+				]
+			}
+		]
+	}
+]

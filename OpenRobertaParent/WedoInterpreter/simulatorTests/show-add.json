@@ -2,16 +2,24 @@
 	{
 		"opc": "expr",
 		"expr": "NUM_CONST",
-		"value": "0"
+		"value": "1"
 	},
 	{
 		"opc": "VarDeclaration",
-		"name": "v",
+		"name": "x",
 		"type": "NUMBER"
 	},
 	{
 		"opc": "expr",
-		"name": "v",
+		"expr": "STRING_CONST",
+		"value": "Hallo"
+	},
+	{
+		"opc": "ShowTextAction"
+	},
+	{
+		"opc": "expr",
+		"name": "x",
 		"expr": "Var"
 	},
 	{
@@ -26,6 +34,14 @@
 	},
 	{
 		"opc": "AssignStmt",
-		"name": "v"
+		"name": "x"
+	},
+	{
+		"opc": "expr",
+		"name": "x",
+		"expr": "Var"
+	},
+	{
+		"opc": "ShowTextAction"
 	}
 ]

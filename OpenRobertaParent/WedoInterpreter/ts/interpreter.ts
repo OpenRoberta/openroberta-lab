@@ -13,50 +13,76 @@ export function run( stmts: any[] ) {
 
 export function evalOperation() {
     while ( true ) {
-        // S.opLog( 'actual ops: ' );
+        S.opLog( 'actual ops: ' );
         let stmt = S.getOp();
         if ( stmt === undefined ) {
             p( "PROGRAM TERMINATED. No ops remaining" );
             return;
         }
-        // S.opLog( "remaining ops: " );
         const opCode = stmt[C.OPCODE];
         // p( '*** ' + opCode );
         switch ( opCode ) {
-            case "stop":
-                p( "PROGRAM TERMINATED. stop op" );
-                return;
-            case C.EXPR:
-                evalExpr( stmt );
+            case C.ASSIGN_STMT: {
+                const name = stmt[C.NAME];
+                S.setVar( name, S.pop() );
                 break;
-            case C.IF_STMT:
-                evalIf( stmt );
+            }
+            case C.CREATE_DEBUG_ACTION: {
+                p( 'NYI' );
                 break;
-            case C.REPEAT_STMT:
-                evalRepeat( stmt );
-                break;
-            case "DriveAction": {
+            }
+            case C.DRIVE_ACTION: {
                 const distance = S.pop();
                 const speed = S.pop();
                 const driveDirection = stmt[C.DRIVE_DIRECTION];
                 p( "drive, dir: " + driveDirection + ", dist: " + distance + ", speed: " + speed );
                 break;
             }
+            case C.EXPR:
+                evalExpr( stmt );
+                break;
+            case C.FLOW_CONTROL:
+                const conditional = stmt[C.IF_RETURN];
+                const doIt = conditional ? S.pop() : true;
+                if ( doIt ) {
+                    S.popOpsUntil( stmt[C.KIND] );
+                    if ( stmt[C.BREAK] ) {
+                        S.getOp();
+                    }
+                }
+                break;
+            case C.GET_SAMPLE:
+                p( 'NYI' );
+                break;
+            case C.IF_STMT:
+                evalIf( stmt );
+                break;
+            case C.POP:
+                S.pop(); // some expr are used as stmts. Clear stack
+                break;
+            case C.REPEAT_STMT:
+                evalRepeat( stmt );
+                break;
             case C.SHOW_TEXT_ACTION: {
-                const y = S.pop();
-                const x = S.pop();
                 const showText = "" + S.pop();
-                p( "show \"" + showText + "\" at " + x + "," + y );
+                p( 'show "' + showText + '"' );
                 break;
             }
+            case C.STOP:
+                p( "PROGRAM TERMINATED. stop op" );
+                return;
+            case C.TIMER_SENSOR_RESET:
+                p( 'NYI' );
+                return;
             case C.VAR_DECLARATION: {
                 const name = stmt[C.NAME];
                 S.bindVar( name, S.pop() );
                 break;
             }
-            case C.ASSIGN_STMT: {
-                const name = stmt[C.NAME];
-                S.setVar( name, S.pop() );
+            case C.TONE_ACTION: {
+                const duration = S.pop();
+                const frequency = S.pop();
+                p( "tone, duration: " + duration + ", frequency: " + frequency );
                 break;
             }
             default:
@@ -72,6 +98,7 @@ function evalExpr( expr ) {
             S.push( S.getVar( expr[C.NAME] ) );
             break;
         case C.NUM_CONST:
+        case C.STRING_CONST:
             S.push( expr[C.VALUE] );
             break;
         case C.UNARY: {
@@ -141,6 +168,9 @@ function evalExpr( expr ) {
         case C.RANDOM_DOUBLE:
             S.push( Math.random() );
             break;
+        case C.TEXT_JOIN:
+            S.push( '' + S.pop() + S.pop() );
+            break;
         case C.MATH_PROP_FUNCT: {
             const subOp = expr[C.OP];
             const value = S.pop();
@@ -181,17 +211,12 @@ function evalExpr( expr ) {
             break;
         }
         default:
-            U.dbcException( "invalid expr op: " + expr );
+            U.dbcException( "invalid expr op: " + kind );
     }
 }
 
 function evalIf( stmt: any ) {
-    const cond = S.pop();
-    if ( cond ) {
-        S.pushOps( stmt[C.THEN_STMTS] )
-    } else {
-        S.pushOps( stmt[C.ELSE_STMTS] )
-    }
+    S.pushOps( true, stmt[C.STMT_LIST] )
 }
 
 function evalRepeat( stmt: any ) {
@@ -205,16 +230,14 @@ function evalRepeat( stmt: any ) {
         const end = [C.END];
         stmt[C.VALUE] = value;
         if ( value < end ) {
-            S.reEnableOp();
-            S.pushOps( stmt[C.STMT_LIST] );
+            S.pushOps( true, stmt[C.STMT_LIST] );
         } else {
             stmt[C.VALUE] = undefined;
             stmt[C.END] = undefined;
         }
     } else if ( mode === C.UNTIL ) {
         if ( !S.pop() ) {
-            S.reEnableOp();
-            S.pushOps( stmt[C.STMT_LIST] );
+            S.pushOps( true, stmt[C.STMT_LIST] );
         }
     } else if ( mode === C.FOR ) {
         const variable = stmt[C.VAR];
@@ -234,8 +257,7 @@ function evalRepeat( stmt: any ) {
         }
         // p( 'actual:' + actual + ' step:' + step + ' end:' + end );
         if ( actual <= end ) {
-            S.reEnableOp();
-            S.pushOps( stmt[C.STMT_LIST] );
+            S.pushOps( true, stmt[C.STMT_LIST] );
         } else {
             S.unbindVar( variable );
             stmt[C.STEP] = undefined;

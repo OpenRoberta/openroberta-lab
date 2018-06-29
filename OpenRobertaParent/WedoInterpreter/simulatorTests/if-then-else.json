@@ -1,0 +1,123 @@
+[
+	{
+		"opc": "IfStatement",
+		"stmtList": [
+			{
+				"opc": "expr",
+				"expr": "NUM_CONST",
+				"value": "1"
+			},
+			{
+				"opc": "expr",
+				"expr": "NUM_CONST",
+				"value": "1"
+			},
+			{
+				"op": "EQ",
+				"opc": "expr",
+				"expr": "Binary"
+			},
+			{
+				"opc": "IfTrueStatement",
+				"stmtList": [
+					{
+						"opc": "expr",
+						"expr": "NUM_CONST",
+						"value": "10"
+					},
+					{
+						"opc": "WaitTimeSTMT"
+					},
+					{
+						"opc": "flowControl",
+						"break": true,
+						"kind": "IfStatement",
+						"createMethodIfReturn": false
+					}
+				]
+			},
+			{
+				"opc": "expr",
+				"expr": "NUM_CONST",
+				"value": "2"
+			},
+			{
+				"opc": "expr",
+				"expr": "NUM_CONST",
+				"value": "2"
+			},
+			{
+				"op": "EQ",
+				"opc": "expr",
+				"expr": "Binary"
+			},
+			{
+				"opc": "IfTrueStatement",
+				"stmtList": [
+					{
+						"opc": "expr",
+						"expr": "NUM_CONST",
+						"value": "20"
+					},
+					{
+						"opc": "WaitTimeSTMT"
+					},
+					{
+						"opc": "flowControl",
+						"break": true,
+						"kind": "IfStatement",
+						"createMethodIfReturn": false
+					}
+				]
+			},
+			{
+				"opc": "expr",
+				"expr": "NUM_CONST",
+				"value": "3"
+			},
+			{
+				"opc": "expr",
+				"expr": "NUM_CONST",
+				"value": "3"
+			},
+			{
+				"op": "EQ",
+				"opc": "expr",
+				"expr": "Binary"
+			},
+			{
+				"opc": "IfTrueStatement",
+				"stmtList": [
+					{
+						"opc": "expr",
+						"expr": "NUM_CONST",
+						"value": "30"
+					},
+					{
+						"opc": "WaitTimeSTMT"
+					},
+					{
+						"opc": "flowControl",
+						"break": true,
+						"kind": "IfStatement",
+						"createMethodIfReturn": false
+					}
+				]
+			},
+			{
+				"opc": "expr",
+				"expr": "NUM_CONST",
+				"value": "40"
+			},
+			{
+				"opc": "WaitTimeSTMT"
+			},
+			{
+				"opc": "flowControl",
+				"break": true,
+				"kind": "IfStatement",
+				"createMethodIfReturn": false
+			}
+		]
+	}
+]

@@ -1,7 +1,9 @@
 package de.fhg.iais.roberta.syntax.codegen.wedo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -99,8 +101,8 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
     protected int currentLoop = 0;
     protected int stmtsNumber = 0;
     protected int methodsNumber = 0;
-    private final ArrayList<Boolean> inStmt = new ArrayList<>();
 
+    protected Map<String, JSONObject> fctDecls = new HashMap<>();
     protected List<JSONObject> opArray = new ArrayList<>();
     protected final List<List<JSONObject>> opArrayStack = new ArrayList<>();
     protected final Configuration brickConfiguration;
@@ -302,13 +304,15 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
     @Override
     public V visitStmtExpr(StmtExpr<V> stmtExpr) {
         stmtExpr.getStmt().visit(this);
-        return null;
+        JSONObject o = mk(C.POP);
+        return app(o);
     }
 
     @Override
     public V visitActionStmt(ActionStmt<V> actionStmt) {
         actionStmt.getAction().visit(this);
-        return null;
+        JSONObject o = mk(C.POP);
+        return app(o);
     }
 
     @Override
@@ -324,51 +328,75 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
         return null;
     }
 
-    //TODO
     @Override
     public V visitIfStmt(IfStmt<V> ifStmt) {
         if ( ifStmt.isTernary() ) {
             throw new DbcException("Operation not supported");
         } else {
-            appendIfStmtConditions(ifStmt);
-            appendThenStmts(ifStmt);
-            appendElseStmt(ifStmt);
-            JSONObject o = mk(C.IF_STMT);
+            pushOpArray();
+            int numberOfThens = ifStmt.getExpr().size();
+            JSONObject stmtListEnd = mk(C.FLOW_CONTROL).put(C.KIND, C.IF_STMT).put(C.IF_RETURN, false).put(C.BREAK, true);
+            for ( int i = 0; i < numberOfThens; i++ ) {
+                ifStmt.getExpr().get(i).visit(this);
+                pushOpArray();
+                ifStmt.getThenList().get(i).visit(this);
+                this.opArray.add(stmtListEnd);
+                List<JSONObject> thenStmts = popOpArray();
+                JSONObject ifTrue = mk(C.IF_TRUE_STMT).put(C.STMT_LIST, thenStmts);
+                this.opArray.add(ifTrue);
+            }
+            if ( !ifStmt.getElseList().get().isEmpty() ) {
+                ifStmt.getElseList().visit(this);
+                this.opArray.add(stmtListEnd);
+            }
+            List<JSONObject> ifThenElseOps = popOpArray();
+            JSONObject o = mk(C.IF_STMT).put(C.STMT_LIST, ifThenElseOps);
             return app(o);
         }
     }
 
     @Override
     public V visitRepeatStmt(RepeatStmt<V> repeatStmt) {
-        increaseLoopCounter(repeatStmt);
-        pushOpArray();
-        repeatStmt.getExpr().visit(this);
-        JSONObject ifBreak = mk(C.FLOW_CONTROL).put(C.LOOP_NUMBER, this.currentLoop).put(C.IF_RETURN, true).put(C.BREAK, true);
-        this.opArray.add(ifBreak);
-        repeatStmt.getList().visit(this);
-        List<JSONObject> whileBody = popOpArray();
-        JSONObject o = mk(C.REPEAT_STMT).put(C.LOOP_NUMBER, this.loopsCounter).put(C.MODE, repeatStmt.getMode()).put(C.STMT_LIST, whileBody);
-        exitLoop(repeatStmt);
-        return app(o);
-    }
-
-    private void increaseLoopCounter(RepeatStmt<V> repeatStmt) {
-        if ( repeatStmt.getMode() != RepeatStmt.Mode.WAIT ) {
-            this.loopsCounter++;
-            this.currentLoop = this.loopsCounter;
-        }
-    }
-
-    private void exitLoop(RepeatStmt<V> repeatStmt) {
-        if ( repeatStmt.getMode() != RepeatStmt.Mode.WAIT ) {
-            this.currentLoop--;
+        switch ( repeatStmt.getMode() ) {
+            case TIMES: {
+                repeatStmt.getExpr().visit(this);
+                pushOpArray();
+                repeatStmt.getList().visit(this);
+                List<JSONObject> whileBody = popOpArray();
+                JSONObject o = mk(C.REPEAT_STMT).put(C.MODE, repeatStmt.getMode()).put(C.STMT_LIST, whileBody);
+                return app(o);
+            }
+            case FOR: {
+                repeatStmt.getExpr().visit(this); // expected: stmt list length 3
+                pushOpArray();
+                repeatStmt.getList().visit(this);
+                List<JSONObject> whileBody = popOpArray();
+                JSONObject o = mk(C.REPEAT_STMT).put(C.MODE, repeatStmt.getMode()).put(C.STMT_LIST, whileBody);
+                return app(o);
+            }
+            case FOREVER:
+            case WHILE:
+            case UNTIL: {
+                pushOpArray();
+                repeatStmt.getExpr().visit(this);
+                JSONObject ifBreak = mk(C.FLOW_CONTROL).put(C.KIND, C.REPEAT_STMT).put(C.IF_RETURN, true).put(C.BREAK, true);
+                this.opArray.add(ifBreak);
+                repeatStmt.getList().visit(this);
+                List<JSONObject> whileBody = popOpArray();
+                JSONObject o = mk(C.REPEAT_STMT).put(C.MODE, repeatStmt.getMode()).put(C.STMT_LIST, whileBody);
+                return app(o);
+            }
+            default: {
+                throw new DbcException("invalid repeat mode: " + repeatStmt.getMode());
+            }
         }
     }
 
     @Override
     public V visitSensorStmt(SensorStmt<V> sensorStmt) {
         sensorStmt.getSensor().visit(this);
-        return null;
+        JSONObject o = mk(C.POP);
+        return app(o);
     }
 
     @Override
@@ -433,9 +461,7 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
 
     @Override
     public V visitWaitStmt(WaitStmt<V> waitStmt) {
-        addInStmt();
         visitStmtList(waitStmt.getStatements());
-        removeInStmt();
         JSONObject o = mk(C.WAIT_STMT);
         return app(o);
     }
@@ -564,29 +590,25 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
 
     @Override
     public V visitMethodVoid(MethodVoid<V> methodVoid) {
-        addInStmt();
         pushOpArray();
         methodVoid.getParameters().visit(this);
         methodVoid.getBody().visit(this);
-        removeInStmt();
-        increaseMethods();
         List<JSONObject> methodBody = popOpArray();
         JSONObject o = mk(C.METHOD_VOID).put(C.NAME, methodVoid.getMethodName()).put(C.STATEMENTS, methodBody);
-        return app(o);
+        fctDecls.put(methodVoid.getMethodName(), o);
+        return null;
     }
 
     @Override
     public V visitMethodReturn(MethodReturn<V> methodReturn) {
-        addInStmt();
         pushOpArray();
         methodReturn.getParameters().visit(this);
         methodReturn.getBody().visit(this);
         methodReturn.getReturnValue().visit(this);
-        removeInStmt();
-        increaseMethods();
         List<JSONObject> methodBody = popOpArray();
         JSONObject o = mk(C.METHOD_RETURN).put(C.TYPE, methodReturn.getReturnType()).put(C.NAME, methodReturn.getMethodName()).put(C.STATEMENTS, methodBody);
-        return app(o);
+        fctDecls.put(methodReturn.getMethodName(), o);
+        return null;
     }
 
     @Override
@@ -647,61 +669,6 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
     @Override
     public V visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<V> bluetoothCheckConnectAction) {
         throw new DbcException("Operation not supported");
-    }
-
-    protected void increaseStmt() {
-        this.stmtsNumber++;
-    }
-
-    protected void increaseMethods() {
-        this.methodsNumber++;
-    }
-
-    /**
-     * @return the inStmt
-     */
-    protected boolean isInStmt() {
-        if ( this.inStmt.size() == 0 ) {
-            return false;
-        }
-        return this.inStmt.get(this.inStmt.size() - 1);
-    }
-
-    /**
-     * @param inStmt the inStmt to set
-     */
-    protected void addInStmt() {
-        this.inStmt.add(true);
-    }
-
-    protected void removeInStmt() {
-        if ( !this.inStmt.isEmpty() ) {
-            this.inStmt.remove(this.inStmt.size() - 1);
-        }
-    }
-
-    protected void appendIfStmtConditions(IfStmt<V> ifStmt) {
-        int exprSize = ifStmt.getExpr().size();
-        for ( int i = 0; i < exprSize; i++ ) {
-            ifStmt.getExpr().get(i).visit(this);
-        }
-    }
-
-    protected void appendElseStmt(IfStmt<V> ifStmt) {
-        if ( !ifStmt.getElseList().get().isEmpty() ) {
-            addInStmt();
-            ifStmt.getElseList().visit(this);
-            removeInStmt();
-        }
-    }
-
-    protected void appendThenStmts(IfStmt<V> ifStmt) {
-        int thenListSize = ifStmt.getThenList().size();
-        for ( int i = 0; i < thenListSize; i++ ) {
-            addInStmt();
-            ifStmt.getThenList().get(i).visit(this);
-            removeInStmt();
-        }
     }
 
     protected void appendDuration(MotorDuration<V> duration) {

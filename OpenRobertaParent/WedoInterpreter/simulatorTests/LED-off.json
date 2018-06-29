@@ -1,1 +1,5 @@
-[{"opc":"statusLightAction"}]
+[
+	{
+		"opc": "statusLightAction"
+	}
+]

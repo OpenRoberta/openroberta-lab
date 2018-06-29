@@ -108,14 +108,10 @@ export function getOp() {
     }
 }
 
-export function reEnableOp() {
-    if ( pc-- <= 0 ) {
-        pc++;
-        U.dbcException( "No op to re-enable: " + pc );
+export function pushOps( reenable: boolean, ops: any[] ) {
+    if ( reenable && pc > 0 ) {
+        pc--;
     }
-}
-
-export function pushOps( ops ) {
     const opsWrapper = {};
     opsWrapper["ops"] = operations;
     opsWrapper["pc"] = pc;
@@ -130,12 +126,26 @@ export function popOps() {
     pc = opsWrapper === undefined ? 0 : opsWrapper["pc"];
 }
 
+export function popOpsUntil( target: string ) {
+    while ( true ) {
+        const opsWrapper = operationsStack.shift();
+        if ( opsWrapper === undefined ) {
+            throw "pop ops until " + target + "-stmt failed";
+        }
+        if ( opsWrapper["ops"][opsWrapper["pc"]]["opc"] === target ) {
+            operations = opsWrapper["ops"];
+            pc = opsWrapper["pc"];
+            return;
+        }
+    }
+}
+
 export function opLog( msg: string ) {
     var opl = ''
     for ( let op of operations ) {
         opl = opl + op["opc"] + ' '
     }
-    p( msg + ' ' + opl );
+    p( msg + ' pc:' + pc + ' ' + opl );
 }
 
 

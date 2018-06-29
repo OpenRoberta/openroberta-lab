@@ -1,3 +1,13 @@
+export const Colors = {
+    NONE: "NONE",
+    BLACK: "BLACK",
+    BLUE: "BLUE",
+    GREEN: "GREEN",
+    YELLOW: "YELLOW",
+    RED: "RED",
+    WHITE: "WHITE",
+    BROWN: "BROWN"
+}
 export const ADD: string = "ADD";
 export const AMBIENTLIGHT: string = "ambientlight";
 export const ANALOG: string = "analog";
@@ -30,18 +40,6 @@ export const CHARACTER: string = "character";
 export const CLEAR_DISPLAY_ACTION: string = "ClearDisplay";
 export const COLOR: string = "color";
 export const COLOR_CONST: string = "COLOR_CONST";
-
-export const COLOR_ENUM = {
-    NONE: "NONE",
-    BLACK: "BLACK",
-    BLUE: "BLUE",
-    GREEN: "GREEN",
-    YELLOW: "YELLOW",
-    RED: "RED",
-    WHITE: "WHITE",
-    BROWN: "BROWN"
-};
-
 export const COLOUR: string = "colorValue";
 export const COMPASS: string = "compass";
 export const CONTINUE: string = "continue";
@@ -109,6 +107,7 @@ export const GYRO: string = "gyro";
 export const GYRO_SENSOR_RESET: string = "createResetGyroSensor";
 export const IF_RETURN: string = "createMethodIfReturn";
 export const IF_STMT: string = "IfStatement";
+export const IF_TRUE_STMT: string = "IfTrueStatement";
 export const IMAGE: string = "image";
 export const IMAGE_CONST: string = "image";
 export const IMAGE_INVERT_ACTION: string = "ImageInvertAction";
@@ -136,7 +135,8 @@ export const MATH_PROP_FUNCT: string = "MathPropFunct";
 export const MATH_CONSTRAIN_FUNCTION: string = "MathConstrainFunct";
 export const MAX: string = "max";
 export const MAXDIAG: number = 2500;
-export const MAXPOWER: number = 0.351858377 * 3; // real Robot drives approx. 35 cm / 1 sec -> 105 pix/sec | 3pix  : string =  1cm
+// real Robot drives approx. 35 cm / 1 sec -> 105 pix/sec | 3pix   =  1cm
+export const MAXPOWER: number = 0.351858377 * 3;
 export const MAX_HEIGHT: number = 1000;
 export const MAX_WIDTH: number = 2000;
 export const MEDIAN: string = "median";
@@ -165,6 +165,7 @@ export const MOTOR_XB: string = "XB";
 export const MULTIPLY: string = "MULTIPLY";
 export const N: string = "n";
 export const NAME: string = "name";
+export const NAMES: string = "names";
 export const NEG: string = "NEG";
 export const NEQ: string = "NEQ";
 export const NOOP_STMT: string = "createNoopStmt";
@@ -172,7 +173,7 @@ export const NOT: string = "NOT";
 export const NULL_CONST: string = "null";
 export const NUMBER: string = "NUMBER";
 export const NUMERIC: string = "Numeric";
-export const NUM_CONST: string = "NumConst";
+export const NUM_CONST: string = "NUM_CONST";
 export const OFF: string = "OFF";
 export const ON: string = "ON";
 export const OP: string = "op";
@@ -191,6 +192,8 @@ export const PIN_WRITE_VALUE_SENSOR: string = "createPinWriteValueSensor";
 export const PITCH: string = "pitch";
 export const PIXEL: string = "pixel";
 export const PLAY_FILE_ACTION: string = "PlayFileAction";
+export const POP: string = "pop";
+export const PORT: string = "PORT";
 export const POSITION: string = "position";
 export const POWER: string = "POWER";
 export const PRESENCE: string = "presence";
@@ -221,6 +224,7 @@ export const SHOW_PICTURE_ACTION: string = "ShowPictureAction";
 export const SHOW_TEXT_ACTION: string = "ShowTextAction";
 export const SINGLE_FUNCTION: string = "SingleFunction";
 export const SIZE: string = "size";
+export const SLOT: string = "slot";
 export const SOUND: string = "sound";
 export const SPEED: string = "speed";
 export const SPEED_L: string = "speedL";
@@ -229,9 +233,10 @@ export const STATEMENTS: string = "statements";
 export const STATUS_LIGHT_ACTION: string = "statusLightAction";
 export const STD_DEV: string = "stdDev";
 export const STMT_LIST: string = "stmtList";
+export const STOP: string = "stop";
 export const STOP_DRIVE: string = "stopDrive";
 export const STRING: string = "STRING";
-export const STRING_CONST: string = "StringConst";
+export const STRING_CONST: string = "STRING_CONST";
 export const SUM: string = "sum";
 export const TEMPERATURE: string = "temperature";
 export const TERNARY_EXPR: string = "createTernaryExpr";
@@ -263,7 +268,7 @@ export const VAR_DECLARATION: string = "VarDeclaration";
 export const VOLUME: string = "volume";
 export const WAIT_STMT: string = "WaitStmt";
 export const WAIT_TIME_STMT: string = "WaitTimeSTMT";
-export const WAVE_LENGTH: number = 60
+export const WAVE_LENGTH: number = 60;
 export const WHEEL_DIAMETER: number = 5.6;
 export const WHERE1: string = "where1";
 export const WHERE2: string = "where2";

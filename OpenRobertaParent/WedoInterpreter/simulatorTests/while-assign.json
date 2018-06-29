@@ -1,1 +1,57 @@
-[{"opc":"expr","expr":"NUM_CONST","value":"0"}, {"opc":"VarDeclaration","name":"v","type":"NUMBER"}, {"mode":"FOR","opc":"RepeatStmt","stmtList":[{"opc":"expr","name":"i","expr":"Var"},{"opc":"expr","expr":"NUM_CONST","value":"0"},{"opc":"expr","expr":"NUM_CONST","value":"3"},{"opc":"expr","expr":"NUM_CONST","value":"1"},{"opc":"flowControl","break":true,"createMethodIfReturn":true,"loopNumber":1},{"opc":"expr","name":"v","expr":"Var"},{"opc":"expr","expr":"NUM_CONST","value":"1"},{"op":"ADD","opc":"expr","expr":"Binary"},{"opc":"AssignStmt","name":"v"}],"loopNumber":1}]
+[
+	{
+		"opc": "expr",
+		"expr": "NUM_CONST",
+		"value": "0"
+	},
+	{
+		"opc": "VarDeclaration",
+		"name": "v",
+		"type": "NUMBER"
+	},
+	{
+		"opc": "expr",
+		"name": "i",
+		"expr": "Var"
+	},
+	{
+		"opc": "expr",
+		"expr": "NUM_CONST",
+		"value": "0"
+	},
+	{
+		"opc": "expr",
+		"expr": "NUM_CONST",
+		"value": "3"
+	},
+	{
+		"opc": "expr",
+		"expr": "NUM_CONST",
+		"value": "1"
+	},
+	{
+		"mode": "FOR",
+		"opc": "RepeatStmt",
+		"stmtList": [
+			{
+				"opc": "expr",
+				"name": "v",
+				"expr": "Var"
+			},
+			{
+				"opc": "expr",
+				"expr": "NUM_CONST",
+				"value": "1"
+			},
+			{
+				"op": "ADD",
+				"opc": "expr",
+				"expr": "Binary"
+			},
+			{
+				"opc": "AssignStmt",
+				"name": "v"
+			}
+		]
+	}
+]

@@ -48,6 +48,9 @@ public class GenerateJsonFromSimIT {
     private static final String ROBOT = "wedo";
 
     private static final String[] NAME_OF_TESTS = {
+    	"show-add",
+        "if-then-else",
+        //"wait-if",
         "assign-add-2",
         "assign-add",
         "simple",

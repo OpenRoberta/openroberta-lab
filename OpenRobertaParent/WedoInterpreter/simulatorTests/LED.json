@@ -1,1 +1,10 @@
-[{"opc":"expr","expr":"COLOR_CONST","value":"RED"}, {"opc":"ledOnAction"}]
+[
+	{
+		"opc": "expr",
+		"expr": "COLOR_CONST",
+		"value": "RED"
+	},
+	{
+		"opc": "ledOnAction"
+	}
+]

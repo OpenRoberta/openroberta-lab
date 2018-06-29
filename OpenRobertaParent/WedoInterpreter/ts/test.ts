@@ -1,4 +1,3 @@
-import * as B from './builder';
 import * as S from './state';
 import * as U from './util';
 
@@ -11,16 +10,12 @@ U.dbc( 1, S.getVar( "a" ) );
 S.unbindVar( "a" );
 U.expectExc(() => S.unbindVar( "a" ) );
 
-var concat = B.concat( [0, 1, 2, 3], [4], [], [5, 6, 7, 8] );
-for ( var i = 0; i < concat.length; i++ ) {
-    U.dbc( i, concat[i] );
-}
-console.log( "concat succeeded" );
+var result = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 S.storeOps( [5, 6, 7, 8] );
-S.pushOps( [2, 3, 4] );
-S.pushOps( [0, 1] );
-for ( var i = 0; i < concat.length; i++ ) {
+S.pushOps( false, [2, 3, 4] );
+S.pushOps( false, [0, 1] );
+for ( var i = 0; i < result.length; i++ ) {
     U.dbc( i, S.getOp() );
 }
-U.dbc( undefined, S.getOps() );
-console.log( "prepend/push succeeded" );
+U.dbc( undefined, S.getOp() );
+console.log( "op push/pop succeeded" );

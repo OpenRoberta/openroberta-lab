@@ -1,1 +1,6 @@
-[{"opc":"motorStop","port":"1"}]
+[
+	{
+		"opc": "motorStop",
+		"PORT": "1"
+	}
+]

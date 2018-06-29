@@ -2,6 +2,9 @@ package de.fhg.iais.roberta.syntax.codegen.wedo;
 
 public class C {
 
+    public static enum Colors {
+        NONE, BLACK, BLUE, GREEN, YELLOW, RED, WHITE, BROWN
+    }
     public static final String ADD = "ADD";
     public static final String AMBIENTLIGHT = "ambientlight";
     public static final String ANALOG = "analog";
@@ -65,7 +68,7 @@ public class C {
     public static final String DURATION = "duration";
     public static final String EACH_COUNTER = "eachcounter";
     public static final String ELSE_STMTS = "elseStmts";
-    public static final double ENC = 360.0 / (3.0 * Math.PI * 5.6);
+    public static final double ENC = 360.0 / ( 3.0 * Math.PI * 5.6 );
     public static final String ENCODER_SENSOR_RESET = "encoderSensorReset";
     public static final String ENCODER_SENSOR_SAMPLE = "encoderSensorSample";
     public static final String ENTER = "enter";
@@ -101,6 +104,7 @@ public class C {
     public static final String GYRO_SENSOR_RESET = "createResetGyroSensor";
     public static final String IF_RETURN = "createMethodIfReturn";
     public static final String IF_STMT = "IfStatement";
+    public static final String IF_TRUE_STMT = "IfTrueStatement";
     public static final String IMAGE = "image";
     public static final String IMAGE_CONST = "image";
     public static final String IMAGE_INVERT_ACTION = "ImageInvertAction";
@@ -128,7 +132,8 @@ public class C {
     public static final String MATH_CONSTRAIN_FUNCTION = "MathConstrainFunct";
     public static final String MAX = "max";
     public static final int MAXDIAG = 2500;
-    public static final double MAXPOWER = 0.351858377 * 3; // real Robot drives approx. 35 cm / 1 sec -> 105 pix/sec | 3pix   =  1cm
+// real Robot drives approx. 35 cm / 1 sec -> 105 pix/sec | 3pix   =  1cm
+    public static final double MAXPOWER = 0.351858377 * 3;
     public static final int MAX_HEIGHT = 1000;
     public static final int MAX_WIDTH = 2000;
     public static final String MEDIAN = "median";
@@ -165,7 +170,7 @@ public class C {
     public static final String NULL_CONST = "null";
     public static final String NUMBER = "NUMBER";
     public static final String NUMERIC = "Numeric";
-    public static final String NUM_CONST = "NumConst";
+    public static final String NUM_CONST = "NUM_CONST";
     public static final String OFF = "OFF";
     public static final String ON = "ON";
     public static final String OP = "op";
@@ -184,9 +189,10 @@ public class C {
     public static final String PITCH = "pitch";
     public static final String PIXEL = "pixel";
     public static final String PLAY_FILE_ACTION = "PlayFileAction";
+    public static final String POP = "pop";
+    public static final String PORT = "PORT";
     public static final String POSITION = "position";
     public static final String POWER = "POWER";
-    public static final String PORT = "port";
     public static final String PRESENCE = "presence";
     public static final String RANDOM = "random";
     public static final String RANDOM_DOUBLE = "randDouble";
@@ -224,9 +230,10 @@ public class C {
     public static final String STATUS_LIGHT_ACTION = "statusLightAction";
     public static final String STD_DEV = "stdDev";
     public static final String STMT_LIST = "stmtList";
+    public static final String STOP = "stop";
     public static final String STOP_DRIVE = "stopDrive";
     public static final String STRING = "STRING";
-    public static final String STRING_CONST = "StringConst";
+    public static final String STRING_CONST = "STRING_CONST";
     public static final String SUM = "sum";
     public static final String TEMPERATURE = "temperature";
     public static final String TERNARY_EXPR = "createTernaryExpr";
@@ -245,7 +252,7 @@ public class C {
     public static final String TURN_ACTION = "TurnAction";
     public static final String TURN_DIRECTION = "turnDirection";
     public static final String TURN_LIGHT = "turnLight";
-    public static final double TURN_RATIO = (40 / 3.) / 2.8;
+    public static final double TURN_RATIO = ( 40 / 3. ) / 2.8;
     public static final String TYPE = "type";
     public static final String ULTRASONIC = "ultrasonic";
     public static final String UNARY = "Unary";
@@ -265,8 +272,4 @@ public class C {
     public static final String WHILE = "WHILE";
     public static final String X = "x";
     public static final String Y = "y";
-
-    public static enum Colors {
-        NONE, BLACK, BLUE, GREEN, YELLOW, RED, WHITE, BROWN;
-    }
 }
