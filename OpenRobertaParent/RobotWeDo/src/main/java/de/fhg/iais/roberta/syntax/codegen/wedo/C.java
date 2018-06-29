@@ -157,6 +157,7 @@ public class C {
     public static final String MULTIPLY = "MULTIPLY";
     public static final String N = "n";
     public static final String NAME = "name";
+    public static final String NAMES = "names";
     public static final String NEG = "NEG";
     public static final String NEQ = "NEQ";
     public static final String NOOP_STMT = "createNoopStmt";
@@ -231,6 +232,7 @@ public class C {
     public static final String TEXT_APPEND = "textAppend";
     public static final String TEXT_JOIN = "createTextJoin";
     public static final String THEN_LIST = "thenList";
+    public static final String THEN_STMTS = "thenStmts";
     public static final String TIME = "time";
     public static final String TIMER = "timer";
     public static final String TIMER_SENSOR_RESET = "createResetTimer";
@@ -261,4 +263,8 @@ public class C {
     public static final String WHILE = "WHILE";
     public static final String X = "x";
     public static final String Y = "y";
+
+    public static enum Colors {
+        NONE, BLACK, BLUE, GREEN, YELLOW, RED, WHITE, BROWN;
+    }
 }

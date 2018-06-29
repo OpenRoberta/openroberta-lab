@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.syntax.codegen.wedo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.JSONObject;
@@ -73,9 +74,9 @@ import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
@@ -100,7 +101,8 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
     protected int methodsNumber = 0;
     private final ArrayList<Boolean> inStmt = new ArrayList<>();
 
-    protected final StringBuilder sb = new StringBuilder();
+    protected List<JSONObject> opArray = new ArrayList<>();
+    protected final List<List<JSONObject>> opArrayStack = new ArrayList<>();
     protected final Configuration brickConfiguration;
 
     protected AbstractStackMachineVisitor(Configuration brickConfiguration) {
@@ -115,45 +117,42 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
 
     @Override
     public V visitMathConst(MathConst<V> mathConst) {
-        JSONObject o = mk("expr").put("expr", mathConst.getMathConst() + "')");
+        JSONObject o = mk(C.EXPR).put(C.EXPR, mathConst.getMathConst() + "')");
         return app(o);
     }
 
     @Override
     public V visitBoolConst(BoolConst<V> boolConst) {
-        JSONObject o = mk("expr").put("expr", boolConst.getKind().getName()).put("value", boolConst.isValue());
+        JSONObject o = mk(C.EXPR).put(C.EXPR, boolConst.getKind().getName()).put(C.VALUE, boolConst.isValue());
         return app(o);
     }
 
     @Override
     public V visitStringConst(StringConst<V> stringConst) {
-        JSONObject o = mk("expr").put("expr", stringConst.getKind().getName());
-        o.put("value", StringEscapeUtils.escapeEcmaScript(stringConst.getValue().replaceAll("[<>\\$]", "")));
+        JSONObject o = mk(C.EXPR).put(C.EXPR, stringConst.getKind().getName());
+        o.put(C.VALUE, StringEscapeUtils.escapeEcmaScript(stringConst.getValue().replaceAll("[<>\\$]", "")));
         return app(o);
     }
 
     @Override
     public V visitNullConst(NullConst<V> nullConst) {
-        JSONObject o = mk("expr").put("expr", "C." + nullConst.getKind().getName());
+        JSONObject o = mk(C.EXPR).put(C.EXPR, "C." + nullConst.getKind().getName());
         return app(o);
     }
 
     @Override
     public V visitColorConst(ColorConst<V> colorConst) {
-        this.sb.append("createConstant(CONST." + colorConst.getKind().getName() + ", CONST.COLOR_ENUM." + colorConst.getValue() + ")");
-        return null;
+        JSONObject o = mk(C.EXPR).put(C.EXPR, colorConst.getKind().getName()).put(C.VALUE, colorConst.getValue());
+        return app(o);
     }
 
     @Override
     public V visitRgbColor(RgbColor<V> rgbColor) {
-        this.sb.append("createRgbColor([");
         rgbColor.getR().visit(this);
-        this.sb.append(", ");
         rgbColor.getG().visit(this);
-        this.sb.append(", ");
         rgbColor.getB().visit(this);
-        this.sb.append("])");
-        return null;
+        JSONObject o = mk(C.RGB_COLOR_CONST);
+        return app(o);
     }
 
     @Override
@@ -168,13 +167,12 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
 
     @Override
     public V visitVar(Var<V> var) {
-        JSONObject o = mk("expr").put("expr", "Var").put("name", var.getValue());
+        JSONObject o = mk(C.EXPR).put(C.EXPR, C.VAR).put(C.NAME, var.getValue());
         return app(o);
     }
 
     @Override
     public V visitVarDeclaration(VarDeclaration<V> var) {
-        this.sb.append("createVarDeclaration(CONST." + var.getTypeVar() + ", \"" + var.getName() + "\", ");
         if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
             ExprList<V> list = (ExprList<V>) var.getValue();
             if ( list.get().size() == 2 ) {
@@ -185,72 +183,61 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
         } else {
             var.getValue().visit(this);
         }
-        this.sb.append(")");
-        return null;
+        JSONObject o = mk(C.VAR_DECLARATION).put(C.TYPE, var.getTypeVar()).put(C.NAME, var.getName());
+        return app(o);
     }
 
     @Override
     public V visitUnary(Unary<V> unary) {
         unary.getExpr().visit(this);
-        JSONObject o = mk("expr").put("expr", "Unary");
+        JSONObject o = mk(C.EXPR).put(C.EXPR, C.UNARY).put(C.OP, unary.getOp());
         return app(o);
     }
 
     @Override
     public V visitBinary(Binary<V> binary) {
-        String method = "createBinaryExpr(CONST." + binary.getOp() + ", ";
-        String end = ")";
+        binary.getLeft().visit(this);
+        binary.getRight().visit(this);
+        JSONObject o;
         // FIXME: The math change should be removed from the binary expression since it is a statement
         switch ( binary.getOp() ) {
             case MATH_CHANGE:
-                method = "createMathChange(";
-                //                end = createClosingBracket();
+                o = mk(C.MATH_CHANGE);
                 break;
             case TEXT_APPEND:
-                method = "createTextAppend(";
-                end = createClosingBracket();
+                o = mk(C.TEXT_APPEND);
                 break;
             default:
+                o = mk(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, binary.getOp());
                 break;
         }
-        this.sb.append(method);
-        binary.getLeft().visit(this);
-        this.sb.append(", ");
-        binary.getRight().visit(this);
-        this.sb.append(end);
-        return null;
+        return app(o);
     }
 
     @Override
     public V visitToneAction(ToneAction<V> toneAction) {
-        String end = createClosingBracket();
-        this.sb.append("createToneAction(");
         toneAction.getFrequency().visit(this);
-        this.sb.append(", ");
         toneAction.getDuration().visit(this);
-        this.sb.append(end);
-        return null;
+        JSONObject o = mk(C.TONE_ACTION);
+        return app(o);
     }
 
     @Override
     public V visitPlayNoteAction(PlayNoteAction<V> playNoteAction) {
-        String end = createClosingBracket();
-        this.sb.append("createToneAction(");
-        this.sb.append("createConstant(CONST.NUM_CONST, " + playNoteAction.getFrequency() + ")");
-        this.sb.append(", ");
-        this.sb.append("createConstant(CONST.NUM_CONST, " + playNoteAction.getDuration() + ")");
-        this.sb.append(end);
-        return null;
+        JSONObject frequency = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, playNoteAction.getFrequency());
+        app(frequency);
+        JSONObject duration = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, playNoteAction.getDuration());
+        app(duration);
+        JSONObject o = mk(C.TONE_ACTION);
+        return app(o);
     }
 
     @Override
     public V visitMathPowerFunct(MathPowerFunct<V> mathPowerFunct) {
-        this.sb.append("createBinaryExpr(CONST." + mathPowerFunct.getFunctName() + ", ");
         mathPowerFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
         mathPowerFunct.getParam().get(1).visit(this);
-        this.sb.append(")");
-        return null;
+        JSONObject o = mk(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, mathPowerFunct.getFunctName());
+        return app(o);
     }
 
     @Override
@@ -278,39 +265,34 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
 
     @Override
     public V visitEmptyExpr(EmptyExpr<V> emptyExpr) {
+        JSONObject o;
         switch ( emptyExpr.getDefVal() ) {
             case STRING:
-                this.sb.append("createConstant(CONST.STRING_CONST, '')");
+                o = mk(C.EXPR).put(C.EXPR, C.STRING_CONST).put(C.VALUE, "");
                 break;
             case BOOLEAN:
-                this.sb.append("createConstant(CONST.BOOL_CONST, true)");
+                o = mk(C.EXPR).put(C.EXPR, C.BOOL_CONST).put(C.VALUE, "true");
                 break;
             case NUMBER_INT:
             case NUMBER:
-                this.sb.append("createConstant(CONST.NUM_CONST, 0)");
+                o = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0);
                 break;
             case COLOR:
-                this.sb.append("createConstant(CONST.LED_COLOR_CONST, [153, 153, 153])");
+                o = mk(C.EXPR).put(C.EXPR, C.LED_COLOR_CONST).put(C.VALUE, C.Colors.GREEN);
                 break;
             case NULL:
-                this.sb.append("createConstant(CONST.NULL_CONST, null)");
+                o = mk(C.EXPR).put(C.EXPR, C.NULL_CONST);
                 break;
             default:
                 throw new DbcException("Operation not supported");
         }
-        return null;
+        return app(o);
     }
 
     @Override
     public V visitExprList(ExprList<V> exprList) {
-        boolean first = true;
         for ( Expr<V> expr : exprList.get() ) {
             if ( !expr.getKind().hasName("EMPTY_EXPR") ) {
-                if ( first ) {
-                    first = false;
-                } else {
-                    this.sb.append(", ");
-                }
                 expr.visit(this);
             }
         }
@@ -331,65 +313,43 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
 
     @Override
     public V visitAssignStmt(AssignStmt<V> assignStmt) {
-        String end = createClosingBracket();
-        this.sb.append("createAssignStmt(\"" + assignStmt.getName().getValue());
-        this.sb.append("\", ");
         assignStmt.getExpr().visit(this);
-        this.sb.append(end);
-        return null;
+        JSONObject o = mk(C.ASSIGN_STMT).put(C.NAME, assignStmt.getName().getValue());
+        return app(o);
     }
 
     @Override
     public V visitExprStmt(ExprStmt<V> exprStmt) {
-        String end = "";
-        if ( !isInStmt() ) {
-            this.sb.append("var stmt" + this.stmtsNumber + " = ");
-            increaseStmt();
-            end = ";";
-        }
         exprStmt.getExpr().visit(this);
-        this.sb.append(end);
-
         return null;
     }
 
+    //TODO
     @Override
     public V visitIfStmt(IfStmt<V> ifStmt) {
         if ( ifStmt.isTernary() ) {
-            this.sb.append("createTernaryExpr(");
-            ifStmt.getExpr().get(0).visit(this);
-            this.sb.append(", ");
-            ((ExprStmt<V>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
-            this.sb.append(", ");
-            ((ExprStmt<V>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
-            this.sb.append(")");
+            throw new DbcException("Operation not supported");
         } else {
-            String end = createClosingBracket();
-            this.sb.append("createIfStmt([");
             appendIfStmtConditions(ifStmt);
-            this.sb.append("], [");
             appendThenStmts(ifStmt);
-            this.sb.append("], [");
             appendElseStmt(ifStmt);
-            this.sb.append("]");
-
-            this.sb.append(end);
+            JSONObject o = mk(C.IF_STMT);
+            return app(o);
         }
-        return null;
     }
 
     @Override
     public V visitRepeatStmt(RepeatStmt<V> repeatStmt) {
         increaseLoopCounter(repeatStmt);
-        String end = createClosingBracket();
-        appendRepeatStmtCondition(repeatStmt);
-        addInStmt();
-        appendRepeatStmtStatements(repeatStmt);
-        this.sb.append("]");
-        this.sb.append(end);
-        removeInStmt();
+        pushOpArray();
+        repeatStmt.getExpr().visit(this);
+        JSONObject ifBreak = mk(C.FLOW_CONTROL).put(C.LOOP_NUMBER, this.currentLoop).put(C.IF_RETURN, true).put(C.BREAK, true);
+        this.opArray.add(ifBreak);
+        repeatStmt.getList().visit(this);
+        List<JSONObject> whileBody = popOpArray();
+        JSONObject o = mk(C.REPEAT_STMT).put(C.LOOP_NUMBER, this.loopsCounter).put(C.MODE, repeatStmt.getMode()).put(C.STMT_LIST, whileBody);
         exitLoop(repeatStmt);
-        return null;
+        return app(o);
     }
 
     private void increaseLoopCounter(RepeatStmt<V> repeatStmt) {
@@ -413,10 +373,8 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
 
     @Override
     public V visitStmtFlowCon(StmtFlowCon<V> stmtFlowCon) {
-        String end = createClosingBracket();
-        this.sb.append("createStmtFlowControl('loop_" + this.currentLoop + "', CONST." + stmtFlowCon.getFlow());
-        this.sb.append(end);
-        return null;
+        JSONObject o = mk(C.FLOW_CONTROL).put(C.LOOP_NUMBER, this.currentLoop).put(C.IF_RETURN, false).put(C.BREAK, stmtFlowCon.getFlow() == Flow.BREAK);
+        return app(o);
     }
 
     @Override
@@ -424,31 +382,27 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
         if ( stmtList.get().size() == 0 ) {
             return null;
         }
-        String symbol = isInStmt() ? ", " : "\n";
         for ( int i = 0; i < stmtList.get().size(); i++ ) {
             stmtList.get().get(i).visit(this);
-            this.sb.append(symbol);
         }
-        removeLastComma();
         return null;
     }
 
     @Override
     public V visitTimerSensor(TimerSensor<V> timerSensor) {
+        JSONObject o;
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
             case DEFAULT:
             case VALUE:
-                this.sb.append("createGetSample(CONST.TIMER, 'timer" + timerSensor.getPort().getOraName() + "')");
+                o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TIMER).put(C.NAME, "timer" + timerSensor.getPort().getOraName());
                 break;
             case RESET:
-                String end = createClosingBracket();
-                this.sb.append("createResetTimer('timer" + timerSensor.getPort().getOraName() + "'");
-                this.sb.append(end);
+                o = mk(C.TIMER_SENSOR_RESET).put(C.NAME, "timer" + timerSensor.getPort().getOraName());
                 break;
             default:
                 throw new DbcException("Invalid Time Mode!");
         }
-        return null;
+        return app(o);
     }
 
     @Override
@@ -459,7 +413,12 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
 
     @Override
     public V visitMainTask(MainTask<V> mainTask) {
-        throw new DbcException("Operation not supported");
+        mainTask.getVariables().visit(this);
+        if ( mainTask.getDebug().equals("TRUE") ) {
+            JSONObject o = mk(C.CREATE_DEBUG_ACTION);
+            return app(o);
+        }
+        return null;
     }
 
     @Override
@@ -474,23 +433,18 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
 
     @Override
     public V visitWaitStmt(WaitStmt<V> waitStmt) {
-        String end = createClosingBracket();
-        this.sb.append("createWaitStmt([");
         addInStmt();
         visitStmtList(waitStmt.getStatements());
         removeInStmt();
-        this.sb.append("]");
-        this.sb.append(end);
-        return null;
+        JSONObject o = mk(C.WAIT_STMT);
+        return app(o);
     }
 
     @Override
     public V visitWaitTimeStmt(WaitTimeStmt<V> waitTimeStmt) {
-        String end = createClosingBracket();
-        this.sb.append("createWaitTimeStmt(");
         waitTimeStmt.getTime().visit(this);
-        this.sb.append(end);
-        return null;
+        JSONObject o = mk(C.WAIT_TIME_STMT);
+        return app(o);
     }
 
     @Override
@@ -505,10 +459,8 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
 
     @Override
     public V visitStmtTextComment(StmtTextComment<V> textComment) {
-        String end = createClosingBracket();
-        this.sb.append("createNoopStmt(");
-        this.sb.append(end);
-        return null;
+        JSONObject o = mk(C.NOOP_STMT);
+        return app(o);
     }
 
     @Override
@@ -560,26 +512,21 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
 
     @Override
     public V visitMathConstrainFunct(MathConstrainFunct<V> mathConstrainFunct) {
-        this.sb.append("createMathConstrainFunct(");
         mathConstrainFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
         mathConstrainFunct.getParam().get(1).visit(this);
-        this.sb.append(", ");
         mathConstrainFunct.getParam().get(2).visit(this);
-        this.sb.append(")");
-        return null;
+        JSONObject o = mk(C.MATH_CONSTRAIN_FUNCTION);
+        return app(o);
     }
 
     @Override
     public V visitMathNumPropFunct(MathNumPropFunct<V> mathNumPropFunct) {
-        this.sb.append("createMathPropFunct('" + mathNumPropFunct.getFunctName() + "', ");
         mathNumPropFunct.getParam().get(0).visit(this);
         if ( mathNumPropFunct.getFunctName() == FunctionNames.DIVISIBLE_BY ) {
-            this.sb.append(", ");
             mathNumPropFunct.getParam().get(1).visit(this);
         }
-        this.sb.append(")");
-        return null;
+        JSONObject o = mk(C.MATH_PROP_FUNCT).put(C.NAME, mathNumPropFunct.getFunctName());
+        return app(o);
     }
 
     @Override
@@ -589,73 +536,65 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
 
     @Override
     public V visitMathRandomFloatFunct(MathRandomFloatFunct<V> mathRandomFloatFunct) {
-        this.sb.append("createRandDouble()");
-        return null;
+        JSONObject o = mk(C.RANDOM_DOUBLE);
+        return app(o);
     }
 
     @Override
     public V visitMathRandomIntFunct(MathRandomIntFunct<V> mathRandomIntFunct) {
-        this.sb.append("createRandInt(");
         mathRandomIntFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
         mathRandomIntFunct.getParam().get(1).visit(this);
-        this.sb.append(")");
-        return null;
+        JSONObject o = mk(C.RANDOM_INT);
+        return app(o);
     }
 
     @Override
     public V visitMathSingleFunct(MathSingleFunct<V> mathSingleFunct) {
-        this.sb.append("createSingleFunction('" + mathSingleFunct.getFunctName() + "', ");
         mathSingleFunct.getParam().get(0).visit(this);
-        this.sb.append(")");
-        return null;
+        JSONObject o = mk(C.SINGLE_FUNCTION).put(C.NAME, mathSingleFunct.getFunctName());
+        return app(o);
     }
 
     @Override
     public V visitTextJoinFunct(TextJoinFunct<V> textJoinFunct) {
-        this.sb.append("createTextJoin([");
         textJoinFunct.getParam().visit(this);
-        this.sb.append("])");
-        return null;
+        JSONObject o = mk(C.TEXT_JOIN);
+        return app(o);
     }
 
     @Override
     public V visitMethodVoid(MethodVoid<V> methodVoid) {
-        this.sb.append("var method" + this.methodsNumber + " = createMethodVoid('" + methodVoid.getMethodName() + "', [");
-        methodVoid.getParameters().visit(this);
-        this.sb.append("], [");
         addInStmt();
+        pushOpArray();
+        methodVoid.getParameters().visit(this);
         methodVoid.getBody().visit(this);
         removeInStmt();
-        this.sb.append("]);\n");
         increaseMethods();
-        return null;
+        List<JSONObject> methodBody = popOpArray();
+        JSONObject o = mk(C.METHOD_VOID).put(C.NAME, methodVoid.getMethodName()).put(C.STATEMENTS, methodBody);
+        return app(o);
     }
 
     @Override
     public V visitMethodReturn(MethodReturn<V> methodReturn) {
-        this.sb.append("var method" + this.methodsNumber + " = createMethodReturn('" + methodReturn.getMethodName() + "', [");
         addInStmt();
+        pushOpArray();
+        methodReturn.getParameters().visit(this);
         methodReturn.getBody().visit(this);
-        this.sb.append("], CONST." + methodReturn.getReturnType().toString());
-
-        this.sb.append(", ");
         methodReturn.getReturnValue().visit(this);
-        this.sb.append(");\n");
         removeInStmt();
         increaseMethods();
-        return null;
+        List<JSONObject> methodBody = popOpArray();
+        JSONObject o = mk(C.METHOD_RETURN).put(C.TYPE, methodReturn.getReturnType()).put(C.NAME, methodReturn.getMethodName()).put(C.STATEMENTS, methodBody);
+        return app(o);
     }
 
     @Override
     public V visitMethodIfReturn(MethodIfReturn<V> methodIfReturn) {
-        this.sb.append("createIfReturn(");
         methodIfReturn.getCondition().visit(this);
-        this.sb.append(", CONST." + methodIfReturn.getReturnType().toString());
-        this.sb.append(", ");
         methodIfReturn.getReturnValue().visit(this);
-        this.sb.append(")");
-        return null;
+        JSONObject o = mk(C.IF_RETURN).put(C.TYPE, methodIfReturn.getReturnType().toString());
+        return app(o);
     }
 
     @Override
@@ -666,29 +605,18 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
 
     @Override
     public V visitMethodCall(MethodCall<V> methodCall) {
-        String end = ")";
-        String name = "createMethodCallReturn('";
-        if ( methodCall.getReturnType() == BlocklyType.VOID ) {
-            name = "createMethodCallVoid('";
-            end = createClosingBracket();
-        }
-        this.sb.append(name + methodCall.getMethodName() + "', [");
         List<Expr<V>> parametersNames = methodCall.getParameters().get();
         List<Expr<V>> parametersValues = methodCall.getParametersValues().get();
-        for ( int i = 0; i < parametersNames.size(); i++ ) {
-            this.sb.append("createAssignMethodParameter(\"");
-            this.sb.append(((Var<V>) parametersNames.get(i)).getValue());
-            this.sb.append("\", ");
-            parametersValues.get(i).visit(this);
-            this.sb.append(")");
-            boolean isLastMethodParameter = i != parametersNames.size() - 1;
-            if ( isLastMethodParameter ) {
-                this.sb.append(", ");
-            }
-
-        }
-        this.sb.append("]" + end);
-        return null;
+        parametersValues.stream().forEach(p -> p.visit(this));
+        pushOpArray();
+        parametersNames.stream().forEach(p -> p.visit(this));
+        List<String> names = this.opArray.stream().map(d -> d.getString(C.NAME)).collect(Collectors.toList());
+        popOpArray();
+        JSONObject o =
+            mk(methodCall.getReturnType() == BlocklyType.VOID ? C.METHOD_CALL_VOID : C.METHOD_CALL_RETURN)
+                .put(C.NAME, methodCall.getMethodName())
+                .put(C.NAMES, names);
+        return app(o);
     }
 
     @Override
@@ -756,9 +684,6 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
         int exprSize = ifStmt.getExpr().size();
         for ( int i = 0; i < exprSize; i++ ) {
             ifStmt.getExpr().get(i).visit(this);
-            if ( i < exprSize - 1 ) {
-                this.sb.append(", ");
-            }
         }
     }
 
@@ -774,93 +699,23 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
         int thenListSize = ifStmt.getThenList().size();
         for ( int i = 0; i < thenListSize; i++ ) {
             addInStmt();
-            this.sb.append("[");
             ifStmt.getThenList().get(i).visit(this);
-            boolean isLastStmt = i < thenListSize - 1;
-            this.sb.append("]");
-            if ( isLastStmt ) {
-                this.sb.append(", ");
-            }
             removeInStmt();
-        }
-    }
-
-    protected void appendRepeatStmtStatements(RepeatStmt<V> repeatStmt) {
-        if ( repeatStmt.getMode() == Mode.WAIT ) {
-            if ( !repeatStmt.getList().get().isEmpty() ) {
-                this.sb.append("[");
-                repeatStmt.getList().visit(this);
-                this.sb.append("]");
-            }
-        } else {
-            repeatStmt.getList().visit(this);
-        }
-    }
-
-    protected void appendRepeatStmtCondition(RepeatStmt<V> repeatStmt) {
-        String methodName = "createRepeatStmt('loop_" + this.loopsCounter + "', CONST." + repeatStmt.getMode() + ", ";
-        switch ( repeatStmt.getMode() ) {
-            case WAIT:
-                this.sb.append("createIfStmt([");
-                repeatStmt.getExpr().visit(this);
-                this.sb.append("], [");
-                break;
-            case FOREVER:
-            case WHILE:
-            case UNTIL:
-            case FOR_EACH:
-                this.sb.append(methodName);
-                repeatStmt.getExpr().visit(this);
-                this.sb.append(", [");
-                break;
-            case TIMES:
-            case FOR:
-                this.sb.append(methodName + "[");
-                repeatStmt.getExpr().visit(this);
-                this.sb.append("], [");
-                break;
-
-            default:
-                throw new DbcException("Invalid repeat mode");
-
-        }
-    }
-
-    protected String createClosingBracket() {
-        String end = ")";
-        if ( !isInStmt() ) {
-            this.sb.append("var stmt" + this.stmtsNumber + " = ");
-            increaseStmt();
-            end = ");\n";
-        }
-        return end;
-    }
-
-    protected void removeLastComma() {
-        if ( isInStmt() ) {
-            this.sb.setLength(this.sb.length() - 2);
         }
     }
 
     protected void appendDuration(MotorDuration<V> duration) {
         if ( duration != null ) {
-            this.sb.append(", ");
             duration.getValue().visit(this);
         }
     }
 
     protected DriveDirection getDriveDirection(boolean isReverse) {
-        if ( isReverse ) {
-            return DriveDirection.BACKWARD;
-        }
-        return DriveDirection.FOREWARD;
+        return isReverse ? DriveDirection.BACKWARD : DriveDirection.FOREWARD;
     }
 
     protected TurnDirection getTurnDirection(boolean isReverse) {
-        if ( isReverse ) {
-            return TurnDirection.RIGHT;
-        }
-        return TurnDirection.LEFT;
+        return isReverse ? TurnDirection.RIGHT : TurnDirection.LEFT;
     }
 
     protected void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<V>>> phrasesSet) {
@@ -869,42 +724,6 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
                 phrase.visit(this);
             }
         }
-        appendProgramInitialization(this);
-    }
-
-    private void appendStmtsInitialization(AbstractStackMachineVisitor<V> astVisitor) {
-        astVisitor.sb.append("'programStmts': [");
-        if ( astVisitor.stmtsNumber > 0 ) {
-            for ( int i = 0; i < astVisitor.stmtsNumber; i++ ) {
-                astVisitor.sb.append("stmt" + i);
-                if ( i != astVisitor.stmtsNumber - 1 ) {
-                    astVisitor.sb.append(",");
-                }
-
-            }
-        }
-        astVisitor.sb.append("]");
-    }
-
-    private void appendMethodsInitialization(AbstractStackMachineVisitor<V> astVisitor) {
-        if ( astVisitor.methodsNumber > 0 ) {
-            astVisitor.sb.append("'programMethods': [");
-            for ( int i = 0; i < astVisitor.methodsNumber; i++ ) {
-                astVisitor.sb.append("method" + i);
-                if ( i != astVisitor.methodsNumber - 1 ) {
-                    astVisitor.sb.append(",");
-                } else {
-                    astVisitor.sb.append("], ");
-                }
-            }
-        }
-    }
-
-    private void appendProgramInitialization(AbstractStackMachineVisitor<V> astVisitor) {
-        astVisitor.sb.append("var blocklyProgram = {");
-        appendMethodsInitialization(astVisitor);
-        appendStmtsInitialization(astVisitor);
-        astVisitor.sb.append("};");
     }
 
     protected JSONObject mk(String opCode) {
@@ -912,10 +731,18 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
     }
 
     protected V app(JSONObject o) {
-        if ( this.sb.length() > 0 ) {
-            this.sb.append(',');
-        }
-        this.sb.append(o.toString());
+        this.opArray.add(o);
         return null;
+    }
+
+    protected void pushOpArray() {
+        this.opArrayStack.add(this.opArray);
+        this.opArray = new ArrayList<>();
+    }
+
+    protected List<JSONObject> popOpArray() {
+        List<JSONObject> opArray = this.opArray;
+        this.opArray = this.opArrayStack.remove(this.opArrayStack.size() - 1);
+        return opArray;
     }
 }

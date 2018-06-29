@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
+import org.json.JSONObject;
+
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedConfigurationBlock;
 import de.fhg.iais.roberta.components.UsedSensor;
@@ -49,8 +51,8 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     protected Set<UsedConfigurationBlock> usedConfigurationBlocks;
     protected Set<UsedActor> usedActors;
     protected ArrayList<VarDeclaration<Void>> usedVars;
-    private boolean isTimerSensorUsed;
-    private Map<Integer, Boolean> loopsLabels;
+    private final boolean isTimerSensorUsed;
+    private final Map<Integer, Boolean> loopsLabels;
 
     private WeDoStackMachineVisitor(WeDoConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases) {
         super(brickConfiguration);
@@ -67,7 +69,7 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
         WeDoStackMachineVisitor<Void> astVisitor = new WeDoStackMachineVisitor<>(brickConfiguration, phrasesSet);
         astVisitor.generateCodeFromPhrases(phrasesSet);
-        return astVisitor.sb.toString();
+        return astVisitor.opArray.toString();
     }
 
     @Override
@@ -87,60 +89,51 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitLightAction(LightAction<V> lightAction) {
-        String end = createClosingBracket();
-        this.sb.append("createTurnLight(CONST." + lightAction.getColor() + ", CONST." + lightAction.getBlinkMode());
-        this.sb.append(end);
-        return null;
+        JSONObject o = mk(C.TURN_LIGHT).put(C.COLOR, lightAction.getColor()).put(C.MODE, lightAction.getBlinkMode());
+        return app(o);
     }
 
     @Override
     public V visitLightStatusAction(LightStatusAction<V> lightStatusAction) {
-        final String end = createClosingBracket();
-        this.sb.append("createStatusLight(CONST.OFF)");
-        this.sb.append(end);
+        //TODO:this.opArray.append("createStatusLight(CONST.OFF)");
         return null;
     }
 
     @Override
     public V visitMotorOnAction(MotorOnAction<V> motorOnAction) {
-        boolean isDuration = motorOnAction.getParam().getDuration() != null;
-        String actorName = motorOnAction.getPort().getOraName();
-        UsedConfigurationBlock confMotorBlock = getConfigurationBlock(actorName);
-        if ( confMotorBlock == null ) {
-            throw new DbcException("no motor declared in the configuration");
-        }
-        String brickName = confMotorBlock.getPins().size() >= 1 ? confMotorBlock.getPins().get(0) : null;
-        String port = confMotorBlock.getPins().size() >= 2 ? confMotorBlock.getPins().get(1) : null;
-        if ( brickName != null && port != null ) {
-            String end = createClosingBracket();
-            this.sb.append("createMotorOnAction('" + brickName + "', '" + port + "', ");
-            motorOnAction.getParam().getSpeed().visit(this);
-            if ( isDuration ) {
-                this.sb.append(", createDuration(CONST.TIME, ");
-                motorOnAction.getParam().getDuration().getValue().visit(this);
-                this.sb.append(")");
-            }
-            this.sb.append(end);
-            return null;
-        } else {
-            this.sb.append("null");
-        }
+        //        boolean isDuration = motorOnAction.getParam().getDuration() != null;
+        //        String actorName = motorOnAction.getPort().getOraName();
+        //        UsedConfigurationBlock confMotorBlock = getConfigurationBlock(actorName);
+        //        if ( confMotorBlock == null ) {
+        //            throw new DbcException("no motor declared in the configuration");
+        //        }
+        //        String brickName = confMotorBlock.getPins().size() >= 1 ? confMotorBlock.getPins().get(0) : null;
+        //        String port = confMotorBlock.getPins().size() >= 2 ? confMotorBlock.getPins().get(1) : null;
+        //        if ( brickName != null && port != null ) {
+        //            this.opArray.append("createMotorOnAction('" + brickName + "', '" + port + "', ");
+        //            motorOnAction.getParam().getSpeed().visit(this);
+        //            if ( isDuration ) {
+        //                this.opArray.append(", createDuration(CONST.TIME, ");
+        //                motorOnAction.getParam().getDuration().getValue().visit(this);
+        //                this.opArray.append(")");
+        //            }
+        //            this.opArray.append(end);
+        //            return null;
+        //        } else {
+        //            this.opArray.append("null");
+        //        }
         return null;
     }
 
     @Override
     public V visitMotorStopAction(MotorStopAction<V> motorStopAction) {
-        String end = createClosingBracket();
-        this.sb.append("createStopMotorAction(");
-        this.sb.append(end);
+        //TODO:this.opArray.append("createStopMotorAction(");
         return null;
     }
 
     @Override
     public V visitClearDisplayAction(ClearDisplayAction<V> clearDisplayAction) {
-        String end = createClosingBracket();
-        this.sb.append("createClearDisplayAction(");
-        this.sb.append(end);
+        //TODO:this.opArray.append("createClearDisplayAction(");
         return null;
     }
 
@@ -171,10 +164,8 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitShowTextAction(ShowTextAction<V> showTextAction) {
-        String end = createClosingBracket();
-        this.sb.append("createShowTextAction(");
+        //TODO:this.opArray.append("createShowTextAction(");
         showTextAction.getMsg().visit(this);
-        this.sb.append(end);
         return null;
     }
 
@@ -185,7 +176,7 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitBrickSensor(BrickSensor<V> brickSensor) {
-        this.sb.append("createGetSample(CONST.BUTTONS, CONST." + brickSensor.getPort() + ")");
+        //TODO:this.opArray.append("createGetSample(CONST.BUTTONS, CONST." + brickSensor.getPort() + ")");
         return null;
     }
 
@@ -210,8 +201,8 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         String port = confGyroSensor.getPins().size() >= 2 ? confGyroSensor.getPins().get(1) : null;
         String slot = gyroSensor.getSlot().toString();
 
-        if ( brickName != null && port != null ) {
-            this.sb.append("createGetSample(CONST.GYRO, '" + brickName + "', '" + port + "', '" + slot + "')");
+        if ( (brickName != null) && (port != null) ) {
+            //TODO:this.opArray.append("createGetSample(CONST.GYRO, '" + brickName + "', '" + port + "', '" + slot + "')");
         } else {
             throw new DbcException("operation not supported");
         }
@@ -227,10 +218,10 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         }
         String brickName = confInfraredSensor.getPins().size() >= 1 ? confInfraredSensor.getPins().get(0) : null;
         String port = confInfraredSensor.getPins().size() >= 2 ? confInfraredSensor.getPins().get(1) : null;
-        if ( brickName != null && port != null ) {
-            this.sb.append("createGetSample(CONST.INFRARED, '" + brickName + "', '" + port + "')");
+        if ( (brickName != null) && (port != null) ) {
+            //TODO:this.opArray.append("createGetSample(CONST.INFRARED, '" + brickName + "', '" + port + "')");
         } else {
-            this.sb.append("null");
+            //TODO: this.opArray.append("null");
         }
         return null;
     }
@@ -281,25 +272,23 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitLedColor(LedColor<V> ledColor) {
-        this.sb.append(
-            "createConstant(CONST."
-                + ledColor.getKind().getName()
-                + ", ["
-                + ledColor.getRedChannel()
-                + ", "
-                + ledColor.getGreenChannel()
-                + ", "
-                + ledColor.getBlueChannel()
-                + "])");
+        //TODO: this.opArray.append(
+        //            "createConstant(CONST."
+        //                + ledColor.getKind().getName()
+        //                + ", ["
+        //                + ledColor.getRedChannel()
+        //                + ", "
+        //                + ledColor.getGreenChannel()
+        //                + ", "
+        //                + ledColor.getBlueChannel()
+        //                + "])");
         return null;
     }
 
     @Override
     public V visitLedOnAction(LedOnAction<V> ledOnAction) {
-        final String end = createClosingBracket();
-        this.sb.append("createLedOnAction(");
+        //TODO:this.opArray.append("createLedOnAction(");
         ledOnAction.getLedColor().visit(this);
-        this.sb.append(end);
         return null;
     }
 }
