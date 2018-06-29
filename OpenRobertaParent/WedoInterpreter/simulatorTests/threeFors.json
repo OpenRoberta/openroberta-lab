@@ -1,119 +1,128 @@
 [
 	{
 		"opc": "expr",
-		"expr": "NumConst",
-		"value": 0
+		"expr": "NUM_CONST",
+		"value": "0"
 	},
 	{
 		"opc": "VarDeclaration",
-		"type": "NUMBER",
-		"name": "s"
+		"name": "s",
+		"type": "NUMBER"
 	},
 	{
-		"opc": "expr",
-		"expr": "NumConst",
-		"value": 1
-	},
-	{
-		"opc": "VarDeclaration",
-		"type": "NUMBER",
-		"name": "i"
-	},
-	{
-		"opc": "expr",
-		"expr": "NumConst",
-		"value": 3
-	},
-	{
-		"opc": "expr",
-		"expr": "NumConst",
-		"value": 1
-	},
-	{
-		"opc": "RepeatStmt",
 		"mode": "FOR",
-		"loopNumber": "loop_1",
-		"Var": "i",
+		"opc": "RepeatStmt",
 		"stmtList": [
 			{
 				"opc": "expr",
-				"expr": "NumConst",
-				"value": 1
-			},
-			{
-				"opc": "VarDeclaration",
-				"type": "NUMBER",
-				"name": "j"
+				"name": "i",
+				"expr": "Var"
 			},
 			{
 				"opc": "expr",
-				"expr": "NumConst",
-				"value": 3
+				"expr": "NUM_CONST",
+				"value": "1"
 			},
 			{
 				"opc": "expr",
-				"expr": "NumConst",
-				"value": 1
+				"expr": "NUM_CONST",
+				"value": "3"
 			},
 			{
-				"opc": "RepeatStmt",
+				"opc": "expr",
+				"expr": "NUM_CONST",
+				"value": "1"
+			},
+			{
+				"opc": "flowControl",
+				"break": true,
+				"createMethodIfReturn": true,
+				"loopNumber": 1
+			},
+			{
 				"mode": "FOR",
-				"loopNumber": "loop_2",
-				"Var": "j",
+				"opc": "RepeatStmt",
 				"stmtList": [
 					{
 						"opc": "expr",
-						"expr": "NumConst",
-						"value": 1
-					},
-					{
-						"opc": "VarDeclaration",
-						"type": "NUMBER",
-						"name": "k"
+						"name": "j",
+						"expr": "Var"
 					},
 					{
 						"opc": "expr",
-						"expr": "NumConst",
-						"value": 3
+						"expr": "NUM_CONST",
+						"value": "1"
 					},
 					{
 						"opc": "expr",
-						"expr": "NumConst",
-						"value": 1
+						"expr": "NUM_CONST",
+						"value": "3"
 					},
 					{
-						"opc": "RepeatStmt",
+						"opc": "expr",
+						"expr": "NUM_CONST",
+						"value": "1"
+					},
+					{
+						"opc": "flowControl",
+						"break": true,
+						"createMethodIfReturn": true,
+						"loopNumber": 2
+					},
+					{
 						"mode": "FOR",
-						"loopNumber": "loop_3",
-						"Var": "k",
+						"opc": "RepeatStmt",
 						"stmtList": [
 							{
 								"opc": "expr",
-								"expr": "Var",
-								"type": "NUMBER",
-								"name": "i"
+								"name": "k",
+								"expr": "Var"
 							},
 							{
 								"opc": "expr",
-								"expr": "Var",
-								"type": "NUMBER",
-								"name": "j"
+								"expr": "NUM_CONST",
+								"value": "1"
 							},
 							{
 								"opc": "expr",
-								"expr": "Var",
-								"type": "NUMBER",
-								"name": "k"
+								"expr": "NUM_CONST",
+								"value": "3"
 							},
 							{
 								"opc": "expr",
-								"expr": "Binary",
-								"op": "ADD"
+								"expr": "NUM_CONST",
+								"value": "1"
+							},
+							{
+								"opc": "flowControl",
+								"break": true,
+								"createMethodIfReturn": true,
+								"loopNumber": 3
 							},
 							{
 								"opc": "expr",
-								"expr": "Binary",
-								"op": "ADD"
+								"name": "i",
+								"expr": "Var"
+							},
+							{
+								"opc": "expr",
+								"name": "j",
+								"expr": "Var"
+							},
+							{
+								"opc": "expr",
+								"name": "k",
+								"expr": "Var"
+							},
+							{
+								"op": "ADD",
+								"opc": "expr",
+								"expr": "Binary"
+							},
+							{
+								"op": "ADD",
+								"opc": "expr",
+								"expr": "Binary"
 							},
 							{
 								"opc": "AssignStmt",
@@ -121,32 +130,16 @@
 							},
 							{
 								"opc": "expr",
-								"expr": "Var",
-								"type": "NUMBER",
-								"name": "s"
-							},
-							{
-								"opc": "expr",
-								"expr": "Var",
-								"type": "NUMBER",
-								"name": "i"
-							},
-							{
-								"opc": "expr",
-								"expr": "Var",
-								"type": "NUMBER",
-								"name": "j"
-							},
-							{
-								"opc": "ShowTextAction"
+								"name": "s",
+								"expr": "Var"
 							}
 						],
-						"eachcounter": 0
+						"loopNumber": 3
 					}
 				],
-				"eachcounter": 0
+				"loopNumber": 3
 			}
 		],
-		"eachcounter": 0
+		"loopNumber": 3
 	}
 ]

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import javax.ws.rs.core.Response;
@@ -32,6 +33,7 @@ import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
 /**
@@ -44,6 +46,16 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 public class GenerateJsonFromSimIT {
     private static final Logger LOG = LoggerFactory.getLogger(GenerateJsonFromSimIT.class);
     private static final String TEST_BASE = "simulatorTests/";
+    private static final String ROBOT = "wedo";
+
+    private static final String[] NAME_OF_TESTS =
+        {
+            "assign-add-2",
+            "assign-add",
+            "simple",
+            "threeFors",
+            "while-assign"
+        };
 
     private static RobotCommunicator robotCommunicator;
     private static RobertaProperties robertaProperties;
@@ -74,18 +86,24 @@ public class GenerateJsonFromSimIT {
 
     @Test
     public void testNepo() throws Exception {
-        String base = "assign-add-2";
-        String robot = "wedo";
-        String fullResource = TEST_BASE + base + ".xml";
-        LOG.info("robot: " + robot + ", xml: " + fullResource);
-        setRobotTo(robot);
-        JSONObject cmd = mkD("{'cmd':'runPsim','name':'prog','language':'de'}");
-        cmd.getJSONObject("data").put("programText", Util1.readFileContent(fullResource));
-        response = this.restProgram.command(httpSessionState, cmd);
-        JSONObject entity = (JSONObject) response.getEntity();
-        assertEquals("ok", entity.optString("rc", ""));
-        String javaScriptProgram = entity.getString("javaScriptProgram");
-        Util1.writeFile(TEST_BASE + base + ".sim", javaScriptProgram);
+        setRobotTo(ROBOT);
+        Arrays.stream(NAME_OF_TESTS).forEach(s -> runNepo(s));
+    }
+
+    public void runNepo(String nameOfTest) {
+        try {
+            String fullResource = TEST_BASE + nameOfTest + ".xml";
+            LOG.info("robot: " + ROBOT + ", xml: " + fullResource);
+            JSONObject cmd = mkD("{'cmd':'runPsim','name':'prog','language':'de'}");
+            cmd.getJSONObject("data").put("programText", Util1.readFileContent(fullResource));
+            response = this.restProgram.command(httpSessionState, cmd);
+            JSONObject entity = (JSONObject) response.getEntity();
+            assertEquals("ok", entity.optString("rc", ""));
+            String javaScriptProgram = entity.getString("javaScriptProgram");
+            Util1.writeFile(TEST_BASE + nameOfTest + ".json", javaScriptProgram);
+        } catch ( Exception e ) {
+            throw new DbcException("Test failed for " + nameOfTest, e);
+        }
     }
 
     private void setRobotTo(String robot) throws Exception, JSONException {

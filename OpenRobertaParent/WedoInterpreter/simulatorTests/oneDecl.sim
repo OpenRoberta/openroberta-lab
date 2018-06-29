@@ -1,2 +1,0 @@
-blocklyProgram =
-createStmtList( [ createVarDeclaration(CONST.NUMBER, "s", createConstant(CONST.NUM_CONST, 0)) ] );

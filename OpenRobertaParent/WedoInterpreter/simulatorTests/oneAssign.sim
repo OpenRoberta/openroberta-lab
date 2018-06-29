@@ -1,9 +1,0 @@
-blocklyProgram =
-createStmtList([ createVarDeclaration(C.NUMBER, "s", createConstant(C.NUM_CONST, 0)),
-                 createAssignStmt("s",
-                                  createBinaryExpr(C.ADD,
-                                                   createConstant(C.NUM_CONST, 1),
-                                                   createBinaryExpr(C.ADD,
-                                                                    createConstant(C.NUM_CONST, 2),
-                                                                    createConstant(C.NUM_CONST, 3))))
-               ])

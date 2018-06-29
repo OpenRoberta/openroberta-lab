@@ -1,3 +1,0 @@
-var stmt0 = createVarDeclaration(CONST.NUMBER, "v", ,{"opc":"expr","expr":"NUM_CONST","value":"0"});
-var stmt1 = createAssignStmt("v", createBinaryExpr(CONST.ADD, createVarReference(CONST.NUMBER, "v"), ,{"opc":"expr","expr":"NUM_CONST","value":"1"}));
-var blocklyProgram = {'programStmts': [stmt0,stmt1]};

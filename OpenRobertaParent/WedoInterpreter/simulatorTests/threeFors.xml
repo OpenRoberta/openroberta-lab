@@ -1,4 +1,3 @@
-
 <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="2.0" description="" tags="">
 	<instance x="370" y="50">
 		<block type="robControls_start" id="+LH/W%-u#6Y]TAHS%XV#" intask="true" deletable="false">

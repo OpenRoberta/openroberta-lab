@@ -6,7 +6,7 @@
 	},
 	{
 		"opc": "VarDeclaration",
-		"name": "x",
+		"name": "v",
 		"type": "NUMBER"
 	},
 	{
@@ -21,7 +21,7 @@
 			{
 				"opc": "expr",
 				"expr": "NUM_CONST",
-				"value": "1"
+				"value": "0"
 			},
 			{
 				"opc": "expr",
@@ -41,13 +41,13 @@
 			},
 			{
 				"opc": "expr",
-				"name": "x",
+				"name": "v",
 				"expr": "Var"
 			},
 			{
 				"opc": "expr",
-				"name": "i",
-				"expr": "Var"
+				"expr": "NUM_CONST",
+				"value": "1"
 			},
 			{
 				"op": "ADD",
@@ -56,47 +56,9 @@
 			},
 			{
 				"opc": "AssignStmt",
-				"name": "x"
-			},
-			{
-				"mode": "TIMES",
-				"opc": "RepeatStmt",
-				"stmtList": [
-					{
-						"opc": "expr",
-						"name": "k0",
-						"expr": "Var"
-					},
-					{
-						"opc": "expr",
-						"expr": "NUM_CONST",
-						"value": "0"
-					},
-					{
-						"opc": "expr",
-						"expr": "NUM_CONST",
-						"value": "3"
-					},
-					{
-						"opc": "expr",
-						"expr": "NUM_CONST",
-						"value": "1"
-					},
-					{
-						"opc": "flowControl",
-						"break": true,
-						"createMethodIfReturn": true,
-						"loopNumber": 2
-					},
-					{
-						"opc": "expr",
-						"name": "x",
-						"expr": "Var"
-					}
-				],
-				"loopNumber": 2
+				"name": "v"
 			}
 		],
-		"loopNumber": 2
+		"loopNumber": 1
 	}
 ]
