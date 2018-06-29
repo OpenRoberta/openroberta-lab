@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.codegen.wedo;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -95,46 +96,47 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitLightStatusAction(LightStatusAction<V> lightStatusAction) {
-        //TODO:this.opArray.append("createStatusLight(CONST.OFF)");
-        return null;
+        JSONObject o = mk(C.STATUS_LIGHT_ACTION).put(C.MODE, LightStatusAction.Status.OFF);
+        return app(o);
     }
 
     @Override
     public V visitMotorOnAction(MotorOnAction<V> motorOnAction) {
-        //        boolean isDuration = motorOnAction.getParam().getDuration() != null;
-        //        String actorName = motorOnAction.getPort().getOraName();
-        //        UsedConfigurationBlock confMotorBlock = getConfigurationBlock(actorName);
-        //        if ( confMotorBlock == null ) {
-        //            throw new DbcException("no motor declared in the configuration");
-        //        }
-        //        String brickName = confMotorBlock.getPins().size() >= 1 ? confMotorBlock.getPins().get(0) : null;
-        //        String port = confMotorBlock.getPins().size() >= 2 ? confMotorBlock.getPins().get(1) : null;
-        //        if ( brickName != null && port != null ) {
-        //            this.opArray.append("createMotorOnAction('" + brickName + "', '" + port + "', ");
-        //            motorOnAction.getParam().getSpeed().visit(this);
-        //            if ( isDuration ) {
-        //                this.opArray.append(", createDuration(CONST.TIME, ");
-        //                motorOnAction.getParam().getDuration().getValue().visit(this);
-        //                this.opArray.append(")");
-        //            }
-        //            this.opArray.append(end);
-        //            return null;
-        //        } else {
-        //            this.opArray.append("null");
-        //        }
-        return null;
+        boolean isDuration = motorOnAction.getParam().getDuration() != null;
+        String actorName = motorOnAction.getPort().getOraName();
+        UsedConfigurationBlock confMotorBlock = getConfigurationBlock(actorName);
+        if ( confMotorBlock == null ) {
+            throw new DbcException("no motor declared in the configuration");
+        }
+        String brickName = confMotorBlock.getPins().size() >= 1 ? confMotorBlock.getPins().get(0) : null;
+        String port = confMotorBlock.getPins().size() >= 2 ? confMotorBlock.getPins().get(1) : null;
+        JSONObject o;
+        if ( (brickName != null) && (port != null) ) {
+            motorOnAction.getParam().getSpeed().visit(this);
+            o = mk(C.MOTOR_ON_ACTION).put(C.NAME, brickName).put(C.PORT, port);
+            if ( isDuration ) {
+                pushOpArray();
+                motorOnAction.getParam().getDuration().getValue().visit(this);
+                this.opArray.add(mk(C.DURATION).put(C.EXPR, C.TIME));
+                List<JSONObject> duration = popOpArray();
+                o.put(C.DURATION, duration);
+            }
+        } else {
+            o = mk(C.NULL_CONST);
+        }
+        return app(o);
     }
 
     @Override
     public V visitMotorStopAction(MotorStopAction<V> motorStopAction) {
-        //TODO:this.opArray.append("createStopMotorAction(");
-        return null;
+        JSONObject o = mk(C.MOTOR_STOP);
+        return app(o);
     }
 
     @Override
     public V visitClearDisplayAction(ClearDisplayAction<V> clearDisplayAction) {
-        //TODO:this.opArray.append("createClearDisplayAction(");
-        return null;
+        JSONObject o = mk(C.CLEAR_DISPLAY_ACTION);
+        return app(o);
     }
 
     @Override
@@ -164,9 +166,9 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitShowTextAction(ShowTextAction<V> showTextAction) {
-        //TODO:this.opArray.append("createShowTextAction(");
         showTextAction.getMsg().visit(this);
-        return null;
+        JSONObject o = mk(C.SHOW_TEXT_ACTION);
+        return app(o);
     }
 
     @Override
@@ -176,8 +178,8 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitBrickSensor(BrickSensor<V> brickSensor) {
-        //TODO:this.opArray.append("createGetSample(CONST.BUTTONS, CONST." + brickSensor.getPort() + ")");
-        return null;
+        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.PORT, brickSensor.getPort());
+        return app(o);
     }
 
     @Override
@@ -200,13 +202,12 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         String brickName = confGyroSensor.getPins().size() >= 1 ? confGyroSensor.getPins().get(0) : null;
         String port = confGyroSensor.getPins().size() >= 2 ? confGyroSensor.getPins().get(1) : null;
         String slot = gyroSensor.getSlot().toString();
-
         if ( (brickName != null) && (port != null) ) {
-            //TODO:this.opArray.append("createGetSample(CONST.GYRO, '" + brickName + "', '" + port + "', '" + slot + "')");
+            JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.GYRO).put(C.NAME, brickName).put(C.PORT, port).put(C.SLOT, slot);
+            return app(o);
         } else {
             throw new DbcException("operation not supported");
         }
-        return null;
     }
 
     @Override
@@ -218,12 +219,13 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         }
         String brickName = confInfraredSensor.getPins().size() >= 1 ? confInfraredSensor.getPins().get(0) : null;
         String port = confInfraredSensor.getPins().size() >= 2 ? confInfraredSensor.getPins().get(1) : null;
+        JSONObject o;
         if ( (brickName != null) && (port != null) ) {
-            //TODO:this.opArray.append("createGetSample(CONST.INFRARED, '" + brickName + "', '" + port + "')");
+            o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.INFRARED).put(C.NAME, brickName).put(C.PORT, port);
         } else {
-            //TODO: this.opArray.append("null");
+            o = mk(C.NULL_CONST);
         }
-        return null;
+        return app(o);
     }
 
     @Override
@@ -272,23 +274,19 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitLedColor(LedColor<V> ledColor) {
-        //TODO: this.opArray.append(
-        //            "createConstant(CONST."
-        //                + ledColor.getKind().getName()
-        //                + ", ["
-        //                + ledColor.getRedChannel()
-        //                + ", "
-        //                + ledColor.getGreenChannel()
-        //                + ", "
-        //                + ledColor.getBlueChannel()
-        //                + "])");
-        return null;
+        int[] colors = {
+            ledColor.getRedChannel(),
+            ledColor.getGreenChannel(),
+            ledColor.getBlueChannel()
+        };
+        JSONObject o = mk(C.EXPR).put(C.EXPR, ledColor.getKind().getName()).put(C.VALUE, colors);
+        return app(o);
     }
 
     @Override
     public V visitLedOnAction(LedOnAction<V> ledOnAction) {
-        //TODO:this.opArray.append("createLedOnAction(");
         ledOnAction.getLedColor().visit(this);
-        return null;
+        JSONObject o = mk(C.LED_ON_ACTION);
+        return app(o);
     }
 }

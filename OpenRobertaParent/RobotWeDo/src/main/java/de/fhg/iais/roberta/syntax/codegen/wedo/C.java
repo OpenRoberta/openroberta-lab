@@ -186,6 +186,7 @@ public class C {
     public static final String PLAY_FILE_ACTION = "PlayFileAction";
     public static final String POSITION = "position";
     public static final String POWER = "POWER";
+    public static final String PORT = "port";
     public static final String PRESENCE = "presence";
     public static final String RANDOM = "random";
     public static final String RANDOM_DOUBLE = "randDouble";
@@ -214,6 +215,7 @@ public class C {
     public static final String SHOW_TEXT_ACTION = "ShowTextAction";
     public static final String SINGLE_FUNCTION = "SingleFunction";
     public static final String SIZE = "size";
+    public static final String SLOT = "slot";
     public static final String SOUND = "sound";
     public static final String SPEED = "speed";
     public static final String SPEED_L = "speedL";
