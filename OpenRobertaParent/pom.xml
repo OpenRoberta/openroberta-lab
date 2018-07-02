@@ -60,6 +60,7 @@
 		<module>RobotVorwerk</module>
         <module>RobotWeDo</module>
 		<module>OpenRobertaServer</module>
+        <module>WedoInterpreter</module>
 	</modules>
 	<repositories>
 		<repository>

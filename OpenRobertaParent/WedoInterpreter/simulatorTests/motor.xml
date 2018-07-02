@@ -1,0 +1,22 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="2.0" description="" tags="">
+  <instance x="384" y="50">
+    <block type="robControls_start" id="2JMa8h;`XH51:)P7Wr99" intask="true" deletable="false">
+      <mutation declare="false">
+      </mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robActions_motor_on_for" id="%VaANe2Z[JywIS6r[Pf6" intask="true">
+      <field name="MOTORPORT">PORT1</field>
+      <value name="POWER">
+        <block type="math_number" id="cSk**S=`RWLohrFx:p6." intask="true">
+          <field name="NUM">30</field>
+        </block>
+      </value>
+      <value name="VALUE">
+        <block type="math_number" id="P8W_Dq/rQSjrj~w3-fm)" intask="true">
+          <field name="NUM">1000</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

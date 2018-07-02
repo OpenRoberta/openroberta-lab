@@ -29,7 +29,6 @@ import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
-import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
@@ -48,14 +47,20 @@ public class GenerateJsonFromSimIT {
     private static final String TEST_BASE = "simulatorTests/";
     private static final String ROBOT = "wedo";
 
-    private static final String[] NAME_OF_TESTS =
-        {
-            "assign-add-2",
-            "assign-add",
-            "simple",
-            "threeFors",
-            "while-assign"
-        };
+    private static final String[] NAME_OF_TESTS = {
+        "assign-add-2",
+        "assign-add",
+        "simple",
+        "threeFors",
+        "while-assign",
+        "motor",
+        "motor-null",
+        "motor-stop",
+        "LED",
+        "LED-off",
+        "play-note",
+        "play-tone"
+    };
 
     private static RobotCommunicator robotCommunicator;
     private static RobertaProperties robertaProperties;
@@ -80,8 +85,8 @@ public class GenerateJsonFromSimIT {
         httpSessionState = HttpSessionState.init(robotCommunicator, pluginMap, robertaProperties, 1);
         this.restProgram = new ClientProgram(this.sessionFactoryWrapper, robotCommunicator, robertaProperties);
         this.restAdmin = new ClientAdmin(robotCommunicator, robertaProperties);
-        when(sessionFactoryWrapper.getSession()).thenReturn(dbSession);
-        doNothing().when(dbSession).commit();
+        when(this.sessionFactoryWrapper.getSession()).thenReturn(this.dbSession);
+        doNothing().when(this.dbSession).commit();
     }
 
     @Test
@@ -96,8 +101,8 @@ public class GenerateJsonFromSimIT {
             LOG.info("robot: " + ROBOT + ", xml: " + fullResource);
             JSONObject cmd = mkD("{'cmd':'runPsim','name':'prog','language':'de'}");
             cmd.getJSONObject("data").put("programText", Util1.readFileContent(fullResource));
-            response = this.restProgram.command(httpSessionState, cmd);
-            JSONObject entity = (JSONObject) response.getEntity();
+            this.response = this.restProgram.command(httpSessionState, cmd);
+            JSONObject entity = (JSONObject) this.response.getEntity();
             assertEquals("ok", entity.optString("rc", ""));
             String javaScriptProgram = entity.getString("javaScriptProgram");
             Util1.writeFile(TEST_BASE + nameOfTest + ".json", javaScriptProgram);
@@ -107,12 +112,12 @@ public class GenerateJsonFromSimIT {
     }
 
     private void setRobotTo(String robot) throws Exception, JSONException {
-        response = this.restAdmin.command(httpSessionState, dbSession, mkD("{'cmd':'setRobot','robot':'" + robot + "'}"));
+        this.response = this.restAdmin.command(httpSessionState, this.dbSession, mkD("{'cmd':'setRobot','robot':'" + robot + "'}"));
         assertEntityRc(this.response, "ok", Key.ROBOT_SET_SUCCESS);
     }
 
     /**
-     * see {@link JSONUtilForServer}
+     * see {JSONUtilForServer}
      */
     public static JSONObject mkD(String s) throws JSONException {
         return new JSONObject("{'data':" + s + ",'log':[]}".replaceAll("'", "\""));

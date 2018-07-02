@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.syntax.codegen.wedo;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -90,13 +89,14 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitLightAction(LightAction<V> lightAction) {
-        JSONObject o = mk(C.TURN_LIGHT).put(C.COLOR, lightAction.getColor()).put(C.MODE, lightAction.getBlinkMode());
-        return app(o);
+        throw new DbcException("operation not supported");
+        //        JSONObject o = mk(C.TURN_LIGHT).put(C.COLOR, lightAction.getColor()).put(C.MODE, lightAction.getBlinkMode());
+        //        return app(o);
     }
 
     @Override
     public V visitLightStatusAction(LightStatusAction<V> lightStatusAction) {
-        JSONObject o = mk(C.STATUS_LIGHT_ACTION).put(C.MODE, LightStatusAction.Status.OFF);
+        JSONObject o = mk(C.STATUS_LIGHT_ACTION);//.put(C.MODE, LightStatusAction.Status.OFF);
         return app(o);
     }
 
@@ -110,26 +110,27 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         }
         String brickName = confMotorBlock.getPins().size() >= 1 ? confMotorBlock.getPins().get(0) : null;
         String port = confMotorBlock.getPins().size() >= 2 ? confMotorBlock.getPins().get(1) : null;
-        JSONObject o;
         if ( (brickName != null) && (port != null) ) {
             motorOnAction.getParam().getSpeed().visit(this);
-            o = mk(C.MOTOR_ON_ACTION).put(C.NAME, brickName).put(C.PORT, port);
             if ( isDuration ) {
-                pushOpArray();
                 motorOnAction.getParam().getDuration().getValue().visit(this);
-                this.opArray.add(mk(C.DURATION).put(C.EXPR, C.TIME));
-                List<JSONObject> duration = popOpArray();
-                o.put(C.DURATION, duration);
+            } else {
+                JSONObject nullDuration = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, -1);
+                this.opArray.add(nullDuration);
             }
+            JSONObject o = mk(C.MOTOR_ON_ACTION).put(C.NAME, brickName).put(C.PORT, port);
+            return app(o);
         } else {
-            o = mk(C.NULL_CONST);
+            throw new DbcException("No robot name or no port!");
         }
-        return app(o);
     }
 
     @Override
     public V visitMotorStopAction(MotorStopAction<V> motorStopAction) {
-        JSONObject o = mk(C.MOTOR_STOP);
+        String actorName = motorStopAction.getPort().getOraName();
+        UsedConfigurationBlock confMotorBlock = getConfigurationBlock(actorName);
+        String port = confMotorBlock.getPins().size() >= 2 ? confMotorBlock.getPins().get(1) : null;
+        JSONObject o = mk(C.MOTOR_STOP).put(C.PORT, port);
         return app(o);
     }
 
@@ -219,13 +220,12 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         }
         String brickName = confInfraredSensor.getPins().size() >= 1 ? confInfraredSensor.getPins().get(0) : null;
         String port = confInfraredSensor.getPins().size() >= 2 ? confInfraredSensor.getPins().get(1) : null;
-        JSONObject o;
         if ( (brickName != null) && (port != null) ) {
-            o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.INFRARED).put(C.NAME, brickName).put(C.PORT, port);
+            JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.INFRARED).put(C.NAME, brickName).put(C.PORT, port);
+            return app(o);
         } else {
-            o = mk(C.NULL_CONST);
+            throw new DbcException("No robot name or no port!");
         }
-        return app(o);
     }
 
     @Override
