@@ -54,6 +54,7 @@ require.config({
         'socket.controller' : '../app/roberta/controller/socket.controller',
         'cookieDisclaimer.controller' : '../app/roberta/controller/cookieDisclaimer.controller',
         'webview.controller' : '../app/roberta/controller/webview.controller',
+        'wedo.model' : '../app/roberta/models/wedo.model',
 
         'simulation.constants' : '../app/simulation/simulationLogic/constants',
         'simulation.math' : '../app/simulation/simulationLogic/math',

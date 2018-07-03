@@ -1,4 +1,4 @@
-define([ 'exports', 'util', 'log', 'message', 'jquery' ], function(exports, UTIL, LOG, MSG, $) {
+define([ 'exports', 'guiState.controller', 'wedo.model', 'util', 'log', 'message', 'jquery' ], function(exports, GUISTATE_C, WEDO_M, UTIL, LOG, MSG, $) {
 
     var ready;
     var aLanguage;
@@ -10,7 +10,8 @@ define([ 'exports', 'util', 'log', 'message', 'jquery' ], function(exports, UTIL
         ready = $.Deferred();
         var a = {};
         a.target = 'internal';
-        a.op = 'identify';
+        a.op = {};
+        a.op.type = 'identify';
         if (jsToAppInterface(a) !== "ok") {
             // Obviously not in an Open Roberta webview
             ready.resolve(language);
@@ -23,57 +24,43 @@ define([ 'exports', 'util', 'log', 'message', 'jquery' ], function(exports, UTIL
     function appToJsInterface(jsonData) {
         try {
             var data = JSON.parse(jsonData);
-            switch (data.target) {
-            case "peripheral":
-                switch (data.op) {
-                case "message":
-                    LOG.error(data.val1 + " " + data.val2);
-                    break;
-                case "scan":
-                    if (data.val1 == "detected") {
-                        $('#show-available-connections').trigger('add', data.val2);
-                    } else if (data.val1 == "disappeared") {
-                        console.log(data.val2);
-                    } else if (data.val1 == "started") {
-                        console.log(data.val2);
-                    }
-                    break;
-                case "name":
-                    // robot connected!      
-                    $('#show-available-connections').trigger('connect', data);
-                    break;
-                default:
-                    break;
+            if (!data.target || !data.op || !data.op.type) {
+                throw "invalid arguments";
+            }
+            if (data.target == "internal") {
+                if (data.op.type == "identify") {
+                    ready.resolve(aLanguage, data.op.app.name);
+                } else {
+                    throw "invalid arguments";
                 }
-                break;
-            case "internal":
-                switch (data.op) {
-                case "identify":
-                    console.log(data.app);
-                    console.log(data.type);
-                    console.log(data.version);
-                    ready.resolve(aLanguage, data);
-                    break;
-                default:
-                    break;
+            } else if (data.target == "wedo" && GUISTATE_C.getRobot() == "wedo") {
+                if (data.op.type == "scan" && data.op.state == "appeared") {
+                    $('#show-available-connections').trigger('add', data.op);
+                } else if (data.op.type == "scan" && data.op.state == "error") {
+                    $('#show-available-connections').modal('hide');
+                } else if (data.op.type == "scan" && data.op.state == "disappeared") {
+                    console.log(data);
+                } else if (data.op.type == "connect" && data.op.state == "connected") {
+                    $('#show-available-connections').trigger('connect', data.op);
+                    WEDO_M.update(data);
+                } else {
+                    WEDO_M.update(data);
                 }
-                break;
-            default:
-                console.log("Received from webview: " + jsonData);
-                break;
+            } else {
+                throw "invalid arguments";
             }
         } catch (error) {
-            LOG.error(error);
+            LOG.error("appToJsInterface >" + error + " caused by: " + jsonData);
         }
     }
     exports.appToJsInterface = appToJsInterface;
 
     function jsToAppInterface(data) {
-        console.log("Send to vewbview: " + JSON.stringify(data));
         try {
             OpenRoberta.jsToAppInterface(JSON.stringify(data));
             return "ok";
-        } catch (err) {
+        } catch (error) {
+            LOG.error("jsToAppInterface >" + error + " caused by: " + data);
             return "error";
         }
     }

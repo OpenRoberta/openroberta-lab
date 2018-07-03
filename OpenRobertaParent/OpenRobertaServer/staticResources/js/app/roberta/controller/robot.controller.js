@@ -85,35 +85,46 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                 // TODO: translations
                 title : 'Name',
                 field : 'name',
+            }, {
+                visible : false,
+                field : 'id'
             } ]
         });
         $('#connectionsTable').onWrap('dbl-click-row.bs.table', function(e, row) {
             WEBVIEW_C.jsToAppInterface({
-                'target' : 'peripheral',
-                'op' : 'connect',
-                'val1' : row.name
+                'target' : GUISTATE_C.getRobot(),
+                'op' : {
+                    'type' : 'connect',
+                    'robot' : row.id
+                }
             });
         }, "connect to robot");
-        $('#show-available-connections').onWrap('hide.bs.modal', function(e) {
-            WEBVIEW_C.jsToAppInterface({
-                'target' : 'peripheral',
-                'op' : 'stopScan'
-            });
-        }, "");
+        $('#show-available-connections').on('hide.bs.modal', function(e) {
+            //TODO check why this is not fired as expected           
+        });
 
         $('#show-available-connections').onWrap('add', function(event, data) {
             $('#connectionsTable').bootstrapTable('insertRow', {
                 index : 999,
                 row : {
-                    name : data
+                    name : data.brickname,
+                    id : data.brickid
                 }
             });
         });
+
         $('#show-available-connections').onWrap('connect', function(event, data) {
             var result = {};
             result["robot.name"] = data;
             result["robot.state"] = 'wait';
             GUISTATE_C.setState(result);
+            console.log("stopScan");
+            WEBVIEW_C.jsToAppInterface({
+                'target' : GUISTATE_C.getRobot(),
+                'op' : {
+                    'type' : 'stopScan'
+                }
+            });
             $('#show-available-connections').hide();
         }, "");
     }
@@ -154,10 +165,15 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
     exports.showSetTokenModal = showSetTokenModal;
 
     function showScanModal() {
+        if ($('#show-available-connections').is(':visible')) {
+            return;
+        }
         $('#connectionsTable').bootstrapTable('removeAll');
         WEBVIEW_C.jsToAppInterface({
-            'target' : 'peripheral',
-            'op' : 'startScan'
+            'target' : GUISTATE_C.getRobot(),
+            'op' : {
+                'type' : 'startScan'
+            }
         });
         $('#show-available-connections').modal('show');
     }
@@ -284,10 +300,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                     if ($('.rightMenuButton.rightActive')) {
                         $('.rightMenuButton.rightActive').trigger('click');
                     }
-                    WEBVIEW_C.jsToAppInterface({
-                        'target' : 'peripheral',
-                        'op' : 'disconnect'
-                    });
+                    //TODO inform app if one is there
+//                    WEBVIEW_C.jsToAppInterface({
+//                        'target' : 'wedo',
+//                        'op' : {'type''disconnect'
+//                    });
                     typeof opt_callback === "function" && opt_callback();
 
                 }

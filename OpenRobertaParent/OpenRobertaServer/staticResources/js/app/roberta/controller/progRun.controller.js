@@ -1,5 +1,5 @@
-define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.model', 'socket.controller', 'guiState.controller', 'webview.controller', 'jquery' ], function(
-        exports, UTIL, LOG, MSG, PROG_C, PROGRAM, SOCKET_C, GUISTATE_C, WEBVIEW_C, $) {
+define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.model', 'socket.controller', 'guiState.controller', 'webview.controller',
+        'wedo.model', 'jquery' ], function(exports, UTIL, LOG, MSG, PROG_C, PROGRAM, SOCKET_C, GUISTATE_C, WEBVIEW_C, WEDO, $) {
 
     var blocklyWorkspace;
     /**
@@ -18,7 +18,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             runOnBrick();
             return false;
         });
-        if (GUISTATE_C.getConnection() == 'token') {
+        if (GUISTATE_C.getConnection() != 'auto') {
             blocklyWorkspace.robControls.disable('runOnBrick');
         }
     }
@@ -143,49 +143,67 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
 
     function runForWebviewConnection() {
         // TODO: implement here something to start a program from the server and not the simple test ;-)
-        var command = {};
-        command.target = "motor";
-        command.op = "speed";
-        command.id = 1;
-        command.val1 = 50;
+        var command = {
+            "target" : "wedo",
+            "op" : {
+                "type" : "command",
+                "device" : "0C:61:CF:C9:CA:45",
+                "actuator" : "motor",
+                "id" : 1,
+                "action" : "on",
+                "direction" : 1,
+                "power" : 30
+            }
+        };
         WEBVIEW_C.jsToAppInterface(command);
-        WEBVIEW_C.jsToAppInterface({
-            "target" : "light",
-            "op" : "discrete",
-            "id" : 0,
-            "val1" : 0
-        });
-        WEBVIEW_C.jsToAppInterface({
-            "target" : "light",
-            "op" : "discrete",
-            "id" : 0,
-            "val1" : 1
-        });
+        WEBVIEW_C.jsToAppInterface(999);
+
+        command = {
+            "target" : "wedo",
+            "op" : {
+                "type" : "command",
+                "device" : "0C:61:CF:C9:CA:45",
+                "actuator" : "light",
+                "color" : 6
+            }
+        };
+        WEBVIEW_C.jsToAppInterface(command);
+
         setTimeout(function() {
-            WEBVIEW_C.jsToAppInterface({
-                "target" : "light",
-                "op" : "discrete",
-                "id" : 0,
-                "val1" : 2
-            });
-        }, 1000);
-        setTimeout(function() {
-            WEBVIEW_C.jsToAppInterface({
-                "target" : "light",
-                "op" : "discrete",
-                "id" : 0,
-                "val1" : 4
-            });
-        }, 2000);
-        setTimeout(function() {
-            command.val1 = 0;
+            command = {
+                "target" : "wedo",
+                "op" : {
+                    "type" : "command",
+                    "device" : "0C:61:CF:C9:CA:45",
+                    "actuator" : "light",
+                    "color" : 9
+                }
+            };
             WEBVIEW_C.jsToAppInterface(command);
-            WEBVIEW_C.jsToAppInterface({
-                "target" : "light",
-                "op" : "discrete",
-                "id" : 0,
-                "val1" : 9
-            });
+            command = {
+                "target" : "wedo",
+                "op" : {
+                    "type" : "command",
+                    "device" : "0C:61:CF:C9:CA:45",
+                    "actuator" : "motor",
+                    "id" : 1,
+                    "action" : "stop"
+                }
+            };
+            WEBVIEW_C.jsToAppInterface(command);
+        }, 2000);
+
+        setTimeout(function() {
+            command = {
+                "target" : "wedo",
+                "op" : {
+                    "type" : "command",
+                    "device" : "0C:61:CF:C9:CA:45",
+                    "actuator" : "light",
+                    "color" : 3
+                }
+            };
+            WEBVIEW_C.jsToAppInterface(command);
             GUISTATE_C.setConnectionBusy(false);
         }, 3000);
     }

@@ -365,7 +365,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             $('#menuRunProg').parent().addClass('disabled');
             $('#menuConnect').parent().removeClass('disabled');
             // are we in an Open Roberta Webview
-            if (GUISTATE.gui.webview.app !== "OpenRoberta") {
+            if (inWebview()) {
+                $('#robotConnect').removeClass('disabled');
+            } else {
                 $('#robotConnect').addClass('disabled');
             }
             break;
@@ -395,8 +397,10 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             updateTutorialMenu();
             WEBVIEW_C.jsToAppInterface({
                 'target' : 'internal',
-                'op' : 'setRobot',
-                'robot' : robotGroup
+                'op' : {
+                    'type' : 'setRobot',
+                    'robot' : robotGroup
+                }
             });
         }
     }
@@ -1037,6 +1041,16 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         return GUISTATE.server.theme;
     }
     exports.getTheme = getTheme;
+
+    function inWebview() {
+        return GUISTATE.gui.webview || false;
+    }
+    exports.inWebview = inWebview;
+
+    function setWebview(webview) {
+        GUISTATE.gui.webview = webview;
+    }
+    exports.setWebview = setWebview;
 
     function updateMenuStatus() {
         // TODO revice this function, because isAgent is the exception
