@@ -73,6 +73,46 @@ define(['exports','util', 'progList.model', 'program.model','guiState.controller
                             console.log("Selections will be executed");
                             console.log('Selections obtained via getSelections: are ' + JSON.stringify($("#mtable").bootstrapTable('getSelections')));
                             alert("The following programs would be executed: "+ JSON.stringify($("#mtable").bootstrapTable('getSelections')));
+                            var extractedprograms =[];
+                            selectedprograms.forEach(function(item,i,oriarray){
+                                PROGRAM_M.loadProgramFromListing(item[0], item[1],item[3], function(dat){
+                                    extractedprograms.push(dat);
+                                    if(i===oriarray.length -1 ){
+                                        console.log("finished");
+                                        var jslist = [];
+                                        extractedprograms.forEach(function(item,i,oriarray){
+                                            var xmlTextProgram = item.programText;
+                                            var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
+                                            var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
+                                            var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
+
+                                            var language = GUISTATE_C.getLanguage();
+                                            
+                                            PROGRAM_M.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
+                                                console.log("lets see the result");
+                                                console.log(result);
+                                                if (result.rc == "ok") {
+                                                    //                    MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
+                                                    var robotgroup = GUISTATE_C.getRobotGroup();
+                                                    SIM.init(result.javaScriptProgram, true, GUISTATE_C.getRobotGroup());
+                                                    $(".sim").removeClass('hide');
+                                                    $('#simButtonsCollapse').collapse({
+                                                        'toggle' : false
+                                                    });
+//                                                    if (TOUR_C.getInstance() && TOUR_C.getInstance().trigger) {
+//                                                        TOUR_C.getInstance().trigger('startSim');
+//                                                    }
+                                                    $('#blockly').openRightView('sim', INITIAL_WIDTH);
+                                                } else {
+                                                    MSG.displayInformation(result, "", result.message, "");
+                                                }
+                                                PROGRAM_C.reloadProgram(result);
+                                            });
+                                            
+                                        });
+                                    }
+                                });
+                            });
                         });
                     }
                 });

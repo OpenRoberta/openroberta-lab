@@ -131,6 +131,9 @@ define([ 'exports', 'message', 'log', 'util', 'simulation.simulation', 'guiState
             var language = GUISTATE_C.getLanguage();
 
             PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
+
+                console.log("what is progname");
+                console.log(GUISTATE_C.getProgramName());
                 if (result.rc == "ok") {
                     //                    MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
                     SIM.init(result.javaScriptProgram, true, GUISTATE_C.getRobotGroup());
