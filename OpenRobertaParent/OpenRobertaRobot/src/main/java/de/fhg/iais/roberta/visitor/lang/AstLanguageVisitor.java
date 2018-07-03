@@ -343,14 +343,14 @@ public interface AstLanguageVisitor<V> extends AstVisitor<V> {
     V visitTextJoinFunct(TextJoinFunct<V> textJoinFunct);
 
     /**
-     * visit a {@link MethodVoid}.
+     * visit a {@link MethodVoid}. This is a declaration of a void method (not a call of the method)
      *
      * @param methodVoid to be visited
      */
     V visitMethodVoid(MethodVoid<V> methodVoid);
 
     /**
-     * visit a {@link MethodReturn}.
+     * visit a {@link MethodReturn}. This is a declaration of a method with a return value (not a call of the method)
      *
      * @param methodReturn to be visited
      */

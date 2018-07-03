@@ -1,13 +1,13 @@
 package de.fhg.iais.roberta.syntax.codegen.wedo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.JSONObject;
+
+import com.google.common.collect.Lists;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
@@ -77,6 +77,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
@@ -102,7 +103,7 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
     protected int stmtsNumber = 0;
     protected int methodsNumber = 0;
 
-    protected Map<String, JSONObject> fctDecls = new HashMap<>();
+    protected JSONObject fctDecls = new JSONObject();
     protected List<JSONObject> opArray = new ArrayList<>();
     protected final List<List<JSONObject>> opArrayStack = new ArrayList<>();
     protected final Configuration brickConfiguration;
@@ -304,15 +305,13 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
     @Override
     public V visitStmtExpr(StmtExpr<V> stmtExpr) {
         stmtExpr.getStmt().visit(this);
-        JSONObject o = mk(C.POP);
-        return app(o);
+        return null;
     }
 
     @Override
     public V visitActionStmt(ActionStmt<V> actionStmt) {
         actionStmt.getAction().visit(this);
-        JSONObject o = mk(C.POP);
-        return app(o);
+        return null;
     }
 
     @Override
@@ -335,7 +334,8 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
         } else {
             pushOpArray();
             int numberOfThens = ifStmt.getExpr().size();
-            JSONObject stmtListEnd = mk(C.FLOW_CONTROL).put(C.KIND, C.IF_STMT).put(C.IF_RETURN, false).put(C.BREAK, true);
+            JSONObject stmtListEnd = mk(C.FLOW_CONTROL).put(C.KIND, C.IF_STMT).put(C.CONDITIONAL, false).put(C.BREAK, true);
+            // TODO: better a list of pairs. pair of lists needs this kind of for
             for ( int i = 0; i < numberOfThens; i++ ) {
                 ifStmt.getExpr().get(i).visit(this);
                 pushOpArray();
@@ -358,6 +358,16 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
     @Override
     public V visitRepeatStmt(RepeatStmt<V> repeatStmt) {
         switch ( repeatStmt.getMode() ) {
+            case WAIT: {
+                repeatStmt.getExpr().visit(this);
+                pushOpArray();
+                repeatStmt.getList().visit(this);
+                JSONObject stmtListEnd = mk(C.FLOW_CONTROL).put(C.KIND, C.WAIT_STMT).put(C.CONDITIONAL, false).put(C.BREAK, true);
+                opArray.add(stmtListEnd);
+                List<JSONObject> waitBody = popOpArray();
+                JSONObject o = mk(C.IF_TRUE_STMT).put(C.STMT_LIST, waitBody);
+                return app(o);
+            }
             case TIMES: {
                 repeatStmt.getExpr().visit(this);
                 pushOpArray();
@@ -379,7 +389,7 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
             case UNTIL: {
                 pushOpArray();
                 repeatStmt.getExpr().visit(this);
-                JSONObject ifBreak = mk(C.FLOW_CONTROL).put(C.KIND, C.REPEAT_STMT).put(C.IF_RETURN, true).put(C.BREAK, true);
+                JSONObject ifBreak = mk(C.FLOW_CONTROL).put(C.KIND, C.REPEAT_STMT).put(C.CONDITIONAL, true).put(C.BREAK, true);
                 this.opArray.add(ifBreak);
                 repeatStmt.getList().visit(this);
                 List<JSONObject> whileBody = popOpArray();
@@ -395,23 +405,19 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
     @Override
     public V visitSensorStmt(SensorStmt<V> sensorStmt) {
         sensorStmt.getSensor().visit(this);
-        JSONObject o = mk(C.POP);
-        return app(o);
+        return null;
     }
 
     @Override
     public V visitStmtFlowCon(StmtFlowCon<V> stmtFlowCon) {
-        JSONObject o = mk(C.FLOW_CONTROL).put(C.LOOP_NUMBER, this.currentLoop).put(C.IF_RETURN, false).put(C.BREAK, stmtFlowCon.getFlow() == Flow.BREAK);
+        JSONObject o = mk(C.FLOW_CONTROL).put(C.KIND, C.REPEAT_STMT).put(C.CONDITIONAL, false).put(C.BREAK, stmtFlowCon.getFlow() == Flow.BREAK);
         return app(o);
     }
 
     @Override
     public V visitStmtList(StmtList<V> stmtList) {
-        if ( stmtList.get().size() == 0 ) {
-            return null;
-        }
-        for ( int i = 0; i < stmtList.get().size(); i++ ) {
-            stmtList.get().get(i).visit(this);
+        for ( Stmt<V> stmt : stmtList.get() ) {
+            stmt.visit(this);
         }
         return null;
     }
@@ -461,8 +467,17 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
 
     @Override
     public V visitWaitStmt(WaitStmt<V> waitStmt) {
-        visitStmtList(waitStmt.getStatements());
-        JSONObject o = mk(C.WAIT_STMT);
+        pushOpArray();
+        List<Stmt<V>> repeatStmts = waitStmt.getStatements().get();
+        for ( Stmt<V> repeatStmt : repeatStmts ) {
+            repeatStmt.visit(this);
+        }
+        JSONObject push10 = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 10);
+        opArray.add(push10);
+        JSONObject wait10 = mk(C.WAIT_TIME_STMT);
+        opArray.add(wait10);
+        List<JSONObject> waitBlocks = popOpArray();
+        JSONObject o = mk(C.WAIT_STMT).put(C.STMT_LIST, waitBlocks);
         return app(o);
     }
 
@@ -485,8 +500,7 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
 
     @Override
     public V visitStmtTextComment(StmtTextComment<V> textComment) {
-        JSONObject o = mk(C.NOOP_STMT);
-        return app(o);
+        return null;
     }
 
     @Override
@@ -592,6 +606,8 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
     public V visitMethodVoid(MethodVoid<V> methodVoid) {
         pushOpArray();
         methodVoid.getParameters().visit(this);
+        popOpArray();
+        pushOpArray();
         methodVoid.getBody().visit(this);
         List<JSONObject> methodBody = popOpArray();
         JSONObject o = mk(C.METHOD_VOID).put(C.NAME, methodVoid.getMethodName()).put(C.STATEMENTS, methodBody);
@@ -603,6 +619,8 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
     public V visitMethodReturn(MethodReturn<V> methodReturn) {
         pushOpArray();
         methodReturn.getParameters().visit(this);
+        popOpArray();
+        pushOpArray();
         methodReturn.getBody().visit(this);
         methodReturn.getReturnValue().visit(this);
         List<JSONObject> methodBody = popOpArray();
@@ -614,8 +632,12 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
     @Override
     public V visitMethodIfReturn(MethodIfReturn<V> methodIfReturn) {
         methodIfReturn.getCondition().visit(this);
+        pushOpArray();
         methodIfReturn.getReturnValue().visit(this);
-        JSONObject o = mk(C.IF_RETURN).put(C.TYPE, methodIfReturn.getReturnType().toString());
+        JSONObject terminateMethodCall = mk(C.FLOW_CONTROL).put(C.KIND, C.METHOD_CALL_RETURN).put(C.CONDITIONAL, false).put(C.BREAK, true);
+        this.opArray.add(terminateMethodCall);
+        List<JSONObject> returnValueExpr = popOpArray();
+        JSONObject o = mk(C.IF_RETURN).put(C.STMT_LIST, returnValueExpr);
         return app(o);
     }
 
@@ -628,12 +650,17 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
     @Override
     public V visitMethodCall(MethodCall<V> methodCall) {
         List<Expr<V>> parametersNames = methodCall.getParameters().get();
-        List<Expr<V>> parametersValues = methodCall.getParametersValues().get();
-        parametersValues.stream().forEach(p -> p.visit(this));
         pushOpArray();
-        parametersNames.stream().forEach(p -> p.visit(this));
+        parametersNames.stream().forEach(n -> n.visit(this));
         List<String> names = this.opArray.stream().map(d -> d.getString(C.NAME)).collect(Collectors.toList());
+        names = Lists.reverse(names);
         popOpArray();
+        List<Expr<V>> parametersValues = methodCall.getParametersValues().get();
+        parametersValues.stream().forEach(v -> {
+            System.out.println(v);
+            v.visit(this);
+        });
+        // TODO: better AST needed. Push and pop used only to get the parameter names
         JSONObject o =
             mk(methodCall.getReturnType() == BlocklyType.VOID ? C.METHOD_CALL_VOID : C.METHOD_CALL_RETURN)
                 .put(C.NAME, methodCall.getMethodName())

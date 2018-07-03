@@ -1,6 +1,1 @@
-[
-	{
-		"opc": "motorStop",
-		"PORT": "1"
-	}
-]
+{"ops":[{"opc":"motorStop","PORT":"1"}],"functionDeclaration":{}}

@@ -1,48 +1,66 @@
 import * as C from "./constants";
+import * as N from "./native";
 import * as S from "./state";
 import * as U from "./util";
 
-export function run( stmts: any[] ) {
+var terminated = false;
+
+export function run( generatedCode: any ) {
+    terminated = false;
     S.reset();
+    const stmts = generatedCode[C.OPS];
+    const functions = generatedCode[C.FUNCTION_DECLARATION];
     var stop = {};
     stop[C.OPCODE] = "stop";
     stmts.push( stop );
-    S.storeOps( stmts );
-    evalOperation();
+    S.storeCode( stmts, functions );
+    setTimeout(() => { evalOperation() }, 0 ); // return to caller. Don't block the UI.
+}
+
+export function isTerminated() {
+    return terminated;
+}
+
+export function terminate() {
+    terminated = true;
 }
 
 export function evalOperation() {
-    while ( true ) {
+    while ( !terminated ) {
         S.opLog( 'actual ops: ' );
         let stmt = S.getOp();
         if ( stmt === undefined ) {
-            p( "PROGRAM TERMINATED. No ops remaining" );
+            U.p( "PROGRAM TERMINATED. No ops remaining" );
+            terminated = true;
             return;
         }
         const opCode = stmt[C.OPCODE];
-        // p( '*** ' + opCode );
         switch ( opCode ) {
             case C.ASSIGN_STMT: {
                 const name = stmt[C.NAME];
                 S.setVar( name, S.pop() );
                 break;
             }
+            case C.CLEAR_DISPLAY_ACTION: {
+                N.clearDisplay();
+                break;
+            }
             case C.CREATE_DEBUG_ACTION: {
-                p( 'NYI' );
+                U.p( 'NYI' );
                 break;
             }
             case C.DRIVE_ACTION: {
                 const distance = S.pop();
                 const speed = S.pop();
                 const driveDirection = stmt[C.DRIVE_DIRECTION];
-                p( "drive, dir: " + driveDirection + ", dist: " + distance + ", speed: " + speed );
+                N.driveAction( driveDirection, distance, speed );
                 break;
             }
             case C.EXPR:
                 evalExpr( stmt );
                 break;
-            case C.FLOW_CONTROL:
-                const conditional = stmt[C.IF_RETURN];
+            case C.FLOW_CONTROL: {
+                const conditional = stmt[C.CONDITIONAL];
                 const doIt = conditional ? S.pop() : true;
                 if ( doIt ) {
                     S.popOpsUntil( stmt[C.KIND] );
@@ -51,29 +69,75 @@ export function evalOperation() {
                     }
                 }
                 break;
-            case C.GET_SAMPLE:
-                p( 'NYI' );
+            }
+            case C.GET_SAMPLE: {
+                N.getSample( stmt[C.NAME], stmt[C.PORT], stmt[C.GET_SAMPLE] )
                 break;
+            }
             case C.IF_STMT:
-                evalIf( stmt );
+                S.pushOps( true, stmt[C.STMT_LIST] )
                 break;
-            case C.POP:
-                S.pop(); // some expr are used as stmts. Clear stack
+            case C.IF_TRUE_STMT:
+                if ( S.pop() ) {
+                    S.pushOps( false, stmt[C.STMT_LIST] )
+                }
                 break;
+            case C.IF_RETURN:
+                if ( S.pop() ) {
+                    S.pushOps( false, stmt[C.STMT_LIST] )
+                }
+                break;
+            case C.LED_ON_ACTION: {
+                const color = S.pop();
+                N.ledOnAction( stmt[C.NAME], stmt[C.PORT], color )
+                break;
+            }
+            case C.METHOD_CALL_VOID:
+            case C.METHOD_CALL_RETURN: {
+                if ( stmt[C.RETURN] === undefined ) {
+                    stmt[C.RETURN] = true;
+                    for ( let parameterName of stmt[C.NAMES] ) {
+                        S.bindVar( parameterName, S.pop() )
+                    }
+                    const body = S.getFunction( stmt[C.NAME] )[C.STATEMENTS];
+                    S.pushOps( true, body );
+                } else {
+                    S.clearDangerousProperties( stmt );
+                }
+                break;
+            }
+            case C.MOTOR_ON_ACTION: {
+                const duration = S.pop();
+                const speed = S.pop();
+                N.motorOnAction( stmt[C.NAME], stmt[C.PORT], duration, speed );
+                break;
+            }
+            case C.MOTOR_STOP: {
+                N.motorStopAction( stmt[C.NAME], stmt[C.PORT] );
+                break;
+            }
             case C.REPEAT_STMT:
                 evalRepeat( stmt );
                 break;
             case C.SHOW_TEXT_ACTION: {
-                const showText = "" + S.pop();
-                p( 'show "' + showText + '"' );
+                N.showTextAction( S.pop() );
                 break;
             }
+            case C.STATUS_LIGHT_ACTION:
+                N.statusLightOffAction( '-', '-' )
+                return;
             case C.STOP:
-                p( "PROGRAM TERMINATED. stop op" );
+                U.p( "PROGRAM TERMINATED. stop op" );
+                terminated = true;
                 return;
+            case C.TEXT_JOIN:
+                const second = S.pop();
+                const first = S.pop();
+                S.push( '' + first + second );
+                break;
             case C.TIMER_SENSOR_RESET:
-                p( 'NYI' );
-                return;
+                N.timerReset();
+                break;
             case C.VAR_DECLARATION: {
                 const name = stmt[C.NAME];
                 S.bindVar( name, S.pop() );
@@ -82,8 +146,19 @@ export function evalOperation() {
             case C.TONE_ACTION: {
                 const duration = S.pop();
                 const frequency = S.pop();
-                p( "tone, duration: " + duration + ", frequency: " + frequency );
+                U.p( "tone, duration: " + duration + ", frequency: " + frequency );
                 break;
+            }
+            case C.WAIT_STMT: {
+                U.p( 'waitstmt started' );
+                S.pushOps( true, stmt[C.STMT_LIST] );
+                break;
+            }
+            case C.WAIT_TIME_STMT: {
+                const time = S.pop();
+                U.p( 'waiting ' + time + ' msec' );
+                setTimeout(() => { evalOperation() }, time );
+                return; // wait for handler being called
             }
             default:
                 U.dbcException( "invalid stmt op: " + opCode );
@@ -98,7 +173,12 @@ function evalExpr( expr ) {
             S.push( S.getVar( expr[C.NAME] ) );
             break;
         case C.NUM_CONST:
+            S.push( +expr[C.VALUE] );
+            break;
         case C.STRING_CONST:
+            S.push( expr[C.VALUE] );
+            break;
+        case C.COLOR_CONST:
             S.push( expr[C.VALUE] );
             break;
         case C.UNARY: {
@@ -168,9 +248,6 @@ function evalExpr( expr ) {
         case C.RANDOM_DOUBLE:
             S.push( Math.random() );
             break;
-        case C.TEXT_JOIN:
-            S.push( '' + S.pop() + S.pop() );
-            break;
         case C.MATH_PROP_FUNCT: {
             const subOp = expr[C.OP];
             const value = S.pop();
@@ -193,6 +270,7 @@ function evalExpr( expr ) {
             const right = S.pop();
             const left = S.pop();
             switch ( subOp ) {
+                case C.EQ: S.push( left === right ); break;
                 case C.NEQ: S.push( left !== right ); break;
                 case C.LT: S.push( left < right ); break;
                 case C.LTE: S.push( left <= right ); break;
@@ -200,10 +278,10 @@ function evalExpr( expr ) {
                 case C.GTE: S.push( left >= right ); break;
                 case C.AND: S.push( left && right ); break;
                 case C.OR: S.push( left || right ); break;
-                case C.ADD: S.push( left + right ); break;
-                case C.MINUS: S.push( left - right ); break;
-                case C.MULTIPLY: S.push( left * right ); break;
-                case C.DIVIDE: S.push( left / right ); break;
+                case C.ADD: S.push( 0 + left + right ); break;
+                case C.MINUS: S.push( 0 + left - right ); break;
+                case C.MULTIPLY: S.push( 0 + left * right ); break;
+                case C.DIVIDE: S.push( 0 + left / right ); break;
                 case C.POWER: S.push( Math.pow( left, right ) ); break;
                 default:
                     U.dbcException( "invalid binary expr supOp: " + subOp );
@@ -213,10 +291,6 @@ function evalExpr( expr ) {
         default:
             U.dbcException( "invalid expr op: " + kind );
     }
-}
-
-function evalIf( stmt: any ) {
-    S.pushOps( true, stmt[C.STMT_LIST] )
 }
 
 function evalRepeat( stmt: any ) {
@@ -232,8 +306,7 @@ function evalRepeat( stmt: any ) {
         if ( value < end ) {
             S.pushOps( true, stmt[C.STMT_LIST] );
         } else {
-            stmt[C.VALUE] = undefined;
-            stmt[C.END] = undefined;
+            S.clearDangerousProperties( stmt );
         }
     } else if ( mode === C.UNTIL ) {
         if ( !S.pop() ) {
@@ -255,7 +328,7 @@ function evalRepeat( stmt: any ) {
             actual += step;
             S.setVar( variable, actual );
         }
-        // p( 'actual:' + actual + ' step:' + step + ' end:' + end );
+        // U.p( 'actual:' + actual + ' step:' + step + ' end:' + end );
         if ( actual <= end ) {
             S.pushOps( true, stmt[C.STMT_LIST] );
         } else {
@@ -277,7 +350,3 @@ function isPrime( n: number ) {
     }
     return true;
 };
-
-function p( s ) {
-    console.log( s );
-}

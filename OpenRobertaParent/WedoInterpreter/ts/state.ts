@@ -1,8 +1,10 @@
+import * as C from "./constants";
 import * as U from './util';
 
 var bindings = {};
 var stack = [];
 var operations = [];
+var functions = {};
 var pc: number = 0;
 var operationsStack = [];
 
@@ -14,7 +16,11 @@ export function reset() {
     // p( 'state reset' );
 }
 
-export function bindVar( name: string, value: any ) {
+export function getFunction( name: string ) {
+    return functions[name];
+}
+
+export function bindVar( name: string, value ) {
     if ( name === undefined || name === null ) {
         dbcException( "bindVar name invalid" );
     }
@@ -24,10 +30,10 @@ export function bindVar( name: string, value: any ) {
     var nameBindings = bindings[name];
     if ( nameBindings === undefined || nameBindings === null || nameBindings === [] ) {
         bindings[name] = [value];
-        // p( 'bind new ' + name + ' = ' + value );
+        p( 'bind new ' + name + ' with ' + value + ' of type ' + typeof value );
     } else {
         nameBindings.unshift( value );
-        // p( 'hide old ' + name + ' = ' + value );
+        p( 'bind&hide ' + name + ' with ' + value + ' of type ' + typeof value );
     }
 }
 
@@ -40,7 +46,7 @@ export function unbindVar( name: string ) {
         dbcException( "unbind failed for: " + name );
     }
     oldBindings.shift();
-    // p( 'unbind ' + name + '. Number of remaining bindings: ' + oldBindings.length );
+    p( 'unbind ' + name + ' remaining bindings are ' + oldBindings.length );
 }
 
 export function getVar( name: string ) {
@@ -70,12 +76,12 @@ export function setVar( name: string, value: any ) {
     // p( 'set ' + name + ': ' + nameBindings[0] );
 }
 
-export function push( value: any ) {
+export function push( value ) {
     if ( value === undefined || value === null ) {
         dbcException( "push value invalid" );
     }
     stack.push( value );
-    // p( 'push ' + value );
+    p( 'push ' + value + ' of type ' + typeof value );
 }
 
 export function pop() {
@@ -87,14 +93,19 @@ export function pop() {
     return value;
 }
 
-export function storeOps( ops ) {
+export function storeCode( ops: any[], fct: any ) {
     operations = ops;
+    functions = fct;
     pc = 0;
 }
 
 // only for debugging!
 export function getOps() {
-    return { 'ops': operations, 'pc': pc };
+    const state = {};
+    state[C.OPS] = operations;
+    state[C.PC] = pc;
+
+    return state;
 }
 
 export function getOp() {
@@ -113,17 +124,18 @@ export function pushOps( reenable: boolean, ops: any[] ) {
         pc--;
     }
     const opsWrapper = {};
-    opsWrapper["ops"] = operations;
-    opsWrapper["pc"] = pc;
+    opsWrapper[C.OPS] = operations;
+    opsWrapper[C.PC] = pc;
     operationsStack.unshift( opsWrapper );
     operations = ops;
     pc = 0;
+    opLog( 'PUSHING STMTS' );
 }
 
 export function popOps() {
     const opsWrapper = operationsStack.shift();
-    operations = opsWrapper === undefined ? undefined : opsWrapper["ops"];
-    pc = opsWrapper === undefined ? 0 : opsWrapper["pc"];
+    operations = opsWrapper === undefined ? undefined : opsWrapper[C.OPS];
+    pc = opsWrapper === undefined ? 0 : opsWrapper[C.PC];
 }
 
 export function popOpsUntil( target: string ) {
@@ -132,18 +144,39 @@ export function popOpsUntil( target: string ) {
         if ( opsWrapper === undefined ) {
             throw "pop ops until " + target + "-stmt failed";
         }
-        if ( opsWrapper["ops"][opsWrapper["pc"]]["opc"] === target ) {
-            operations = opsWrapper["ops"];
-            pc = opsWrapper["pc"];
+        const suspendedStmt = opsWrapper[C.OPS][opsWrapper[C.PC]];
+        clearDangerousProperties( suspendedStmt );
+        if ( suspendedStmt[C.OPCODE] === target ) {
+            operations = opsWrapper[C.OPS];
+            pc = opsWrapper[C.PC];
             return;
         }
     }
 }
 
+export function clearDangerousProperties( stmt ) {
+    const opc: string = stmt[C.OPCODE];
+    if ( opc === C.REPEAT_STMT ) {
+        stmt[C.VALUE] = undefined;
+        stmt[C.END] = undefined;
+    } else if ( opc === C.METHOD_CALL_VOID || opc === C.METHOD_CALL_RETURN ) {
+        stmt[C.RETURN] = undefined;
+    }
+}
+
 export function opLog( msg: string ) {
-    var opl = ''
+    var opl = '';
+    var counter = 0;
     for ( let op of operations ) {
-        opl = opl + op["opc"] + ' '
+        var opc = op[C.OPCODE];
+        if ( op[C.OPCODE] === C.EXPR ) {
+            opc = opc + '[' + op[C.EXPR];
+            if ( op[C.EXPR] === C.BINARY ) {
+                opc = opc + '-' + op[C.OP];
+            }
+            opc = opc + ']';
+        }
+        opl = opl + ( counter++ == pc ? '*' : '' ) + opc + ' '
     }
     p( msg + ' pc:' + pc + ' ' + opl );
 }

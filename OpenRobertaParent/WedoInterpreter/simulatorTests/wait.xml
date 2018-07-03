@@ -1,0 +1,62 @@
+
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="2.0" description="" tags="">
+	<instance x="368" y="50">
+		<block type="robControls_start" id="u,zct#%E}YND=CyoIG+~" intask="true" deletable="false">
+			<mutation declare="false"></mutation>
+			<field name="DEBUG">FALSE</field>
+		</block>
+		<block type="robControls_wait_for" id="IZxQQ7[l#qDw9jS9z*T3" intask="true">
+			<mutation wait="1"></mutation>
+			<repetitions>
+				<value name="WAIT0">
+					<block type="logic_compare" id="N`8o@TgjX:.n=BX:XW~D" intask="true">
+						<field name="OP">EQ</field>
+						<value name="A">
+							<block type="math_number" id="X+~zaV,nk%wGI*Jd7l6I" intask="true">
+								<field name="NUM">1</field>
+							</block>
+						</value>
+						<value name="B">
+							<block type="math_number" id="}l/JY=tzas*}A#fb7JYT" intask="true">
+								<field name="NUM">0</field>
+							</block>
+						</value>
+					</block>
+				</value>
+				<statement name="DO0">
+					<block type="robActions_display_text" id="kR]2ojEJ|i{V-Y4Sh:f%" intask="true">
+						<value name="OUT">
+							<block type="text" id="A~7[Np^=jD@mcl*-TidV" intask="true">
+								<field name="TEXT">1</field>
+							</block>
+						</value>
+					</block>
+				</statement>
+				<value name="WAIT1">
+					<block type="logic_compare" id="fMi{Xlh]0TodUw{!mn8j" intask="true">
+						<field name="OP">EQ</field>
+						<value name="A">
+							<block type="math_number" id="T!49w_TeY^Q_S0r1#uv-" intask="true">
+								<field name="NUM">0</field>
+							</block>
+						</value>
+						<value name="B">
+							<block type="math_number" id="vtSItS!b@eg.n`xes6ls" intask="true">
+								<field name="NUM">0</field>
+							</block>
+						</value>
+					</block>
+				</value>
+				<statement name="DO1">
+					<block type="robActions_display_text" id="zzW4CMUgaPf:l9J|;!S*" intask="true">
+						<value name="OUT">
+							<block type="text" id="n!wxZfrM.jtbcqFpY}V[" intask="true">
+								<field name="TEXT">2</field>
+							</block>
+						</value>
+					</block>
+				</statement>
+			</repetitions>
+		</block>
+	</instance>
+</block_set>

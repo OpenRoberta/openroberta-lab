@@ -1,0 +1,110 @@
+
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="2.0" description="" tags="">
+	<instance x="229" y="20">
+		<block type="robControls_start" id="g:X^He(9A[brQ;M{I/[g" intask="true" deletable="false">
+			<mutation declare="true"></mutation>
+			<field name="DEBUG">FALSE</field>
+			<statement name="ST">
+				<block type="robGlobalVariables_declare" id=";0j?c;5n=2yj8gjvF;XQ" intask="true" deletable="false" movable="false">
+					<mutation next="false" declaration_type="Number"></mutation>
+					<field name="VAR">x</field>
+					<field name="TYPE">Number</field>
+					<value name="VALUE">
+						<block type="math_number" id="+g=vB?qGg|np#{+V=;tb" intask="true">
+							<field name="NUM">1</field>
+						</block>
+					</value>
+				</block>
+			</statement>
+		</block>
+		<block type="robControls_ifElse" id="#b!N8Fu6_bohs9pph54U" intask="true">
+			<mutation elseif="2" else="1"></mutation>
+			<repetitions>
+				<value name="IF0">
+					<block type="logic_compare" id="z;@J,YE]miO3V4!1^lA(" intask="true">
+						<field name="OP">EQ</field>
+						<value name="A">
+							<block type="variables_get" id="~m3I:!#)F,cI9s?ga/gZ" intask="true">
+								<mutation datatype="Number"></mutation>
+								<field name="VAR">x</field>
+							</block>
+						</value>
+						<value name="B">
+							<block type="math_number" id="v9W-?X?_j?e;f#4Ze]01" intask="true">
+								<field name="NUM">1</field>
+							</block>
+						</value>
+					</block>
+				</value>
+				<statement name="DO0">
+					<block type="robActions_display_text" id="4YjNiylXvppZnvu+fl:2" intask="true">
+						<value name="OUT">
+							<block type="text" id="rEpCvus9t57Ei]yoQ*7#" intask="true">
+								<field name="TEXT">1.then</field>
+							</block>
+						</value>
+					</block>
+				</statement>
+				<value name="IF1">
+					<block type="logic_compare" id="1OWPtfA[cC~{)59%hhnn" intask="true">
+						<field name="OP">EQ</field>
+						<value name="A">
+							<block type="variables_get" id=".KZ[18SQ5`v-}8T:Q9T*" intask="true">
+								<mutation datatype="Number"></mutation>
+								<field name="VAR">x</field>
+							</block>
+						</value>
+						<value name="B">
+							<block type="math_number" id="_f8[XKL:7qZ3a1clp:[j" intask="true">
+								<field name="NUM">2</field>
+							</block>
+						</value>
+					</block>
+				</value>
+				<statement name="DO1">
+					<block type="robActions_display_text" id="_Wj0TpBO5Dv+W9zS`}rz" intask="true">
+						<value name="OUT">
+							<block type="text" id="R`2BW/]%|t=KQZPJJUJo" intask="true">
+								<field name="TEXT">2.then</field>
+							</block>
+						</value>
+					</block>
+				</statement>
+				<value name="IF2">
+					<block type="logic_compare" id="L/3JBf!2Oq8Qu!(`xlk=" intask="true">
+						<field name="OP">EQ</field>
+						<value name="A">
+							<block type="variables_get" id="0.*+),*Q]Ola(*YF/5AL" intask="true">
+								<mutation datatype="Number"></mutation>
+								<field name="VAR">x</field>
+							</block>
+						</value>
+						<value name="B">
+							<block type="math_number" id="EHE;@PHmP~{UXtmLNXAj" intask="true">
+								<field name="NUM">3</field>
+							</block>
+						</value>
+					</block>
+				</value>
+				<statement name="DO2">
+					<block type="robActions_display_text" id="4%RRLniU4A^FMgZ4k;F5" intask="true">
+						<value name="OUT">
+							<block type="text" id="EU)t44Mj7^vBo[GE`C`~" intask="true">
+								<field name="TEXT">3.then</field>
+							</block>
+						</value>
+					</block>
+				</statement>
+				<statement name="ELSE">
+					<block type="robActions_display_text" id="W!kOMVQpatKE9DO@M/8;" intask="true">
+						<value name="OUT">
+							<block type="text" id="v46fm0P},y?(V-qcPd3b" intask="true">
+								<field name="TEXT">else</field>
+							</block>
+						</value>
+					</block>
+				</statement>
+			</repetitions>
+		</block>
+	</instance>
+</block_set>

@@ -37,6 +37,7 @@ public class C {
     public static final String CLEAR_DISPLAY_ACTION = "ClearDisplay";
     public static final String COLOR = "color";
     public static final String COLOR_CONST = "COLOR_CONST";
+    public static final String CONDITIONAL = "conditional";
     public static final String COLOUR = "colorValue";
     public static final String COMPASS = "compass";
     public static final String CONTINUE = "continue";
@@ -174,12 +175,15 @@ public class C {
     public static final String OFF = "OFF";
     public static final String ON = "ON";
     public static final String OP = "op";
+    public static final String OPS = "ops";
+    public static final String PROGRAM_COUNTER = "pc";
     public static final String STEP = "step";
     public static final String END = "end";
     public static final String OPCODE = "opc";
     public static final String OR = "OR";
     public static final String ORANGE = "ORANGE";
     public static final String PARAMETERS = "parameters";
+    public static final String PC = "pc";
     public static final String PICTURE = "picture";
     public static final String PILOT = "pilot";
     public static final String PIN = "pin";
@@ -189,7 +193,6 @@ public class C {
     public static final String PITCH = "pitch";
     public static final String PIXEL = "pixel";
     public static final String PLAY_FILE_ACTION = "PlayFileAction";
-    public static final String POP = "pop";
     public static final String PORT = "PORT";
     public static final String POSITION = "position";
     public static final String POWER = "POWER";

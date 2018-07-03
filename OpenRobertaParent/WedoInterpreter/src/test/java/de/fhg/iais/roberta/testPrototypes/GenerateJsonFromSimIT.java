@@ -47,23 +47,34 @@ public class GenerateJsonFromSimIT {
     private static final String TEST_BASE = "simulatorTests/";
     private static final String ROBOT = "wedo";
 
-    private static final String[] NAME_OF_TESTS = {
-    	"show-add",
-        "if-then-else",
-        //"wait-if",
-        "assign-add-2",
-        "assign-add",
-        "simple",
-        "threeFors",
-        "while-assign",
-        "motor",
-        "motor-null",
-        "motor-stop",
-        "LED",
-        "LED-off",
-        "play-note",
-        "play-tone"
-    };
+    private static final String[] NAME_OF_TESTS =
+        {
+            "sensoren",
+            "aktoren",
+            "fac"
+        };
+    private static final String[] NAME_OF_TESTS1 =
+        {
+            "zeige-if",
+            "show-add",
+            "if-then-else",
+            "assign-add-2",
+            "assign-add",
+            "simple",
+            "threeFors",
+            "while-assign",
+            "motor",
+            "motor-null",
+            "motor-stop",
+            "LED",
+            "LED-off",
+            "play-note",
+            "play-tone",
+            "wait",
+            "wait-if",
+            "function",
+            "function-rec-simple"
+        };
 
     private static RobotCommunicator robotCommunicator;
     private static RobertaProperties robertaProperties;

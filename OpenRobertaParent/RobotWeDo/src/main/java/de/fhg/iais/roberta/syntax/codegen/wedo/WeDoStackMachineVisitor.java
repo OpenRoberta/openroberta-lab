@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.syntax.codegen.wedo;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Set;
 
 import org.json.JSONObject;
@@ -51,16 +50,12 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     protected Set<UsedConfigurationBlock> usedConfigurationBlocks;
     protected Set<UsedActor> usedActors;
     protected ArrayList<VarDeclaration<Void>> usedVars;
-    private final boolean isTimerSensorUsed;
-    private final Map<Integer, Boolean> loopsLabels;
 
     private WeDoStackMachineVisitor(WeDoConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases) {
         super(brickConfiguration);
         UsedHardwareCollectorVisitor codePreprocessVisitor = new UsedHardwareCollectorVisitor(phrases, brickConfiguration);
         this.usedVars = codePreprocessVisitor.getVisitedVars();
         this.usedConfigurationBlocks = codePreprocessVisitor.getUsedConfigurationBlocks();
-        this.isTimerSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
-        this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
     }
 
     public static String generate(WeDoConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
@@ -69,7 +64,9 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
         WeDoStackMachineVisitor<Void> astVisitor = new WeDoStackMachineVisitor<>(brickConfiguration, phrasesSet);
         astVisitor.generateCodeFromPhrases(phrasesSet);
-        return astVisitor.opArray.toString();
+        JSONObject generatedCode = new JSONObject();
+        generatedCode.put(C.OPS, astVisitor.opArray).put(C.FUNCTION_DECLARATION, astVisitor.fctDecls);
+        return generatedCode.toString();
     }
 
     @Override
@@ -90,13 +87,11 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     @Override
     public V visitLightAction(LightAction<V> lightAction) {
         throw new DbcException("operation not supported");
-        //        JSONObject o = mk(C.TURN_LIGHT).put(C.COLOR, lightAction.getColor()).put(C.MODE, lightAction.getBlinkMode());
-        //        return app(o);
     }
 
     @Override
     public V visitLightStatusAction(LightStatusAction<V> lightStatusAction) {
-        JSONObject o = mk(C.STATUS_LIGHT_ACTION);//.put(C.MODE, LightStatusAction.Status.OFF);
+        JSONObject o = mk(C.STATUS_LIGHT_ACTION).put(C.MODE, C.OFF);
         return app(o);
     }
 
@@ -121,7 +116,7 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
             JSONObject o = mk(C.MOTOR_ON_ACTION).put(C.NAME, brickName).put(C.PORT, port);
             return app(o);
         } else {
-            throw new DbcException("No robot name or no port!");
+            throw new DbcException("No robot name or no port");
         }
     }
 
@@ -129,9 +124,17 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     public V visitMotorStopAction(MotorStopAction<V> motorStopAction) {
         String actorName = motorStopAction.getPort().getOraName();
         UsedConfigurationBlock confMotorBlock = getConfigurationBlock(actorName);
+        if ( confMotorBlock == null ) {
+            throw new DbcException("no motor declared in the configuration");
+        }
+        String brickName = confMotorBlock.getPins().size() >= 1 ? confMotorBlock.getPins().get(0) : null;
         String port = confMotorBlock.getPins().size() >= 2 ? confMotorBlock.getPins().get(1) : null;
-        JSONObject o = mk(C.MOTOR_STOP).put(C.PORT, port);
-        return app(o);
+        if ( (brickName != null) && (port != null) ) {
+            JSONObject o = mk(C.MOTOR_STOP).put(C.PORT, port);
+            return app(o);
+        } else {
+            throw new DbcException("No robot name or no port");
+        }
     }
 
     @Override
@@ -179,7 +182,8 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitBrickSensor(BrickSensor<V> brickSensor) {
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.PORT, brickSensor.getPort());
+        String brickName = "??? NYI ???";
+        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.NAME, brickName).put(C.PORT, brickSensor.getPort());
         return app(o);
     }
 
@@ -274,11 +278,12 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitLedColor(LedColor<V> ledColor) {
-        int[] colors = {
-            ledColor.getRedChannel(),
-            ledColor.getGreenChannel(),
-            ledColor.getBlueChannel()
-        };
+        int[] colors =
+            {
+                ledColor.getRedChannel(),
+                ledColor.getGreenChannel(),
+                ledColor.getBlueChannel()
+            };
         JSONObject o = mk(C.EXPR).put(C.EXPR, ledColor.getKind().getName()).put(C.VALUE, colors);
         return app(o);
     }
