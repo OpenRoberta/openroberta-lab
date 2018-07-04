@@ -1,8 +1,26 @@
-1. precondition of my project:
+USING THIS PROJECT
+
+1. preconditions:
     * Java project with pom and some Java test classes (that generate JSON for later consumption by Javascript)
     * node is installed
     
-2. import as maven project
+2. import this project as maven project
+
+3. create a wedo program, export as XML and remove all XML elements but the <block_set /> of the program (usually starting from line 3) and store it in
+   directory 'simulatorTests'
+
+4. run the JUnit test class 'GenerateJsonFromSimIT' after setting the array of XML files to be compiled (constant NAME_OF_TESTS) as needed, e.g. 'myTest'.
+
+5. after refresh 'mytest.json' appears. After formatting the operations can be inspected
+
+6. in a run-configuration (run 'jsGenerated/main.js' as node application!) set 'myTest' as parameter (lists are possible, too) and run.
+   The operations are executed. Watch the console.
+
+TYPESCRIPT SUPPORT
+
+to be written
+
+JAVASCRIPT SUPPORT (OUTDATED!)
 
 3. project -> right click -> properties
     * convert to faceted form
