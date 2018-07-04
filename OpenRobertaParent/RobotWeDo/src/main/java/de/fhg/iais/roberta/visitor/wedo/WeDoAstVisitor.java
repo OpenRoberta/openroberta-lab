@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.visitor.wedo;
 
 import de.fhg.iais.roberta.syntax.action.wedo.LedOnAction;
-import de.fhg.iais.roberta.syntax.expr.wedo.LedColor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 
 /**
@@ -16,7 +15,5 @@ public interface WeDoAstVisitor<V> {
      * @param gestureSensor phrase to be visited
      */
     V visitLedOnAction(LedOnAction<V> ledOnAction);
-
-    V visitLedColor(LedColor<V> ledColor);
 
 }

@@ -1,5 +1,5 @@
 define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.model', 'socket.controller', 'guiState.controller', 'webview.controller',
-        'wedo.model', 'jquery' ], function(exports, UTIL, LOG, MSG, PROG_C, PROGRAM, SOCKET_C, GUISTATE_C, WEBVIEW_C, WEDO, $) {
+        'interpreter.interpreter', 'jquery' ], function(exports, UTIL, LOG, MSG, PROG_C, PROGRAM, SOCKET_C, GUISTATE_C, WEBVIEW_C, WEDO_I, $) {
 
     var blocklyWorkspace;
     /**
@@ -57,9 +57,10 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
                 PROG_C.reloadProgram(result);
             });
         } else if (GUISTATE_C.getConnection() == connectionType.WEBVIEW) {
-            // test program execution :-)
-            runForWebviewConnection();
-
+            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
+                runForWebviewConnection(result);
+                PROG_C.reloadProgram(result);
+            });
         } else {
             PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
                 runForToken(result);
@@ -141,71 +142,24 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
         }
     }
 
-    function runForWebviewConnection() {
-        // TODO: implement here something to start a program from the server and not the simple test ;-)
-        var command = {
-            "target" : "wedo",
-            "op" : {
-                "type" : "command",
-                "device" : "0C:61:CF:C9:CA:45",
-                "actuator" : "motor",
-                "id" : 1,
-                "action" : "on",
-                "direction" : 1,
-                "power" : 30
+    function callbackOnTermination() {
+        alert("terminated");
+        GUISTATE_C.setConnectionBusy(false);
+
+    }
+
+    function runForWebviewConnection(result) {
+        if (result.rc === "ok") {
+            var programSrc = result.compiledCode;
+            var program = JSON.parse(programSrc);
+            var ops = program.ops;
+            var functionDeclaration = program.functionDeclaration;
+            if (GUISTATE_C.getRobot() === "wedo") {
+                GUISTATE_C.setConnectionBusy(true);
+                WEDO_I.run(program, callbackOnTermination);
             }
-        };
-        WEBVIEW_C.jsToAppInterface(command);
-        WEBVIEW_C.jsToAppInterface(999);
-
-        command = {
-            "target" : "wedo",
-            "op" : {
-                "type" : "command",
-                "device" : "0C:61:CF:C9:CA:45",
-                "actuator" : "light",
-                "color" : 6
-            }
-        };
-        WEBVIEW_C.jsToAppInterface(command);
-
-        setTimeout(function() {
-            command = {
-                "target" : "wedo",
-                "op" : {
-                    "type" : "command",
-                    "device" : "0C:61:CF:C9:CA:45",
-                    "actuator" : "light",
-                    "color" : 9
-                }
-            };
-            WEBVIEW_C.jsToAppInterface(command);
-            command = {
-                "target" : "wedo",
-                "op" : {
-                    "type" : "command",
-                    "device" : "0C:61:CF:C9:CA:45",
-                    "actuator" : "motor",
-                    "id" : 1,
-                    "action" : "stop"
-                }
-            };
-            WEBVIEW_C.jsToAppInterface(command);
-        }, 2000);
-
-        setTimeout(function() {
-            command = {
-                "target" : "wedo",
-                "op" : {
-                    "type" : "command",
-                    "device" : "0C:61:CF:C9:CA:45",
-                    "actuator" : "light",
-                    "color" : 3
-                }
-            };
-            WEBVIEW_C.jsToAppInterface(command);
-            GUISTATE_C.setConnectionBusy(false);
-        }, 3000);
+            MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
+        }
     }
 
     function fillDownloadModal(fileName, content) {

@@ -1,14 +1,5 @@
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
-    }
-})(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+define([ 'exports' ], function(exports) {
+
     function dbc(expected, actual) {
         if (expected !== actual) {
             var msg = 'DBC. Expected: ' + expected + ' but got: ' + actual;
@@ -28,12 +19,10 @@
             var msg = 'DBC. Expected exception was not thrown';
             console.trace(msg);
             throw msg;
-        }
-        catch (e) {
+        } catch (e) {
             if (cause === undefined) {
                 console.log('expected exception suppressed');
-            }
-            else {
+            } else {
                 dbc(cause, e);
             }
         }

@@ -21,7 +21,7 @@ import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 public class Factory extends AbstractRobotFactory {
-    private final WeDoSimCompilerWorkflow compilerWorkflow;
+    private final WeDoCompilerWorkflow compilerWorkflow;
     private final Properties wedoProperties;
     private final String name;
     private final int robotPropertyNumber;
@@ -31,7 +31,7 @@ public class Factory extends AbstractRobotFactory {
         this.wedoProperties = Util1.loadProperties("classpath:WeDo.properties");
         this.name = this.wedoProperties.getProperty("robot.name");
         this.robotPropertyNumber = robertaProperties.getRobotNumberFromProperty(this.name);
-        this.compilerWorkflow = new WeDoSimCompilerWorkflow();
+        this.compilerWorkflow = new WeDoCompilerWorkflow();
         addBlockTypesFromProperties("wedo.properties", this.wedoProperties);
     }
 

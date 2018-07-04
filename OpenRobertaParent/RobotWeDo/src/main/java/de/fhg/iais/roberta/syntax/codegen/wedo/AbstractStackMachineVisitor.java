@@ -145,7 +145,7 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
 
     @Override
     public V visitColorConst(ColorConst<V> colorConst) {
-        JSONObject o = mk(C.EXPR).put(C.EXPR, colorConst.getKind().getName()).put(C.VALUE, colorConst.getValue());
+        JSONObject o = mk(C.EXPR).put(C.EXPR, "COLOR_CONST").put(C.VALUE, colorConst.getValue().getColorID());
         return app(o);
     }
 

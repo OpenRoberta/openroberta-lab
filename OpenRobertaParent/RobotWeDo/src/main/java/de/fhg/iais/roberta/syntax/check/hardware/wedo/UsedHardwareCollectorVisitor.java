@@ -21,7 +21,6 @@ import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.wedo.LedOnAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
-import de.fhg.iais.roberta.syntax.expr.wedo.LedColor;
 import de.fhg.iais.roberta.util.Quadruplet;
 import de.fhg.iais.roberta.visitor.wedo.WeDoAstVisitor;
 
@@ -92,8 +91,4 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
         return null;
     }
 
-    @Override
-    public Void visitLedColor(LedColor<Void> ledColor) {
-        return null;
-    }
 }

@@ -30,7 +30,6 @@ import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.wedo.LedOnAction;
 import de.fhg.iais.roberta.syntax.check.hardware.wedo.UsedHardwareCollectorVisitor;
-import de.fhg.iais.roberta.syntax.expr.wedo.LedColor;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -277,21 +276,10 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitLedColor(LedColor<V> ledColor) {
-        int[] colors =
-            {
-                ledColor.getRedChannel(),
-                ledColor.getGreenChannel(),
-                ledColor.getBlueChannel()
-            };
-        JSONObject o = mk(C.EXPR).put(C.EXPR, ledColor.getKind().getName()).put(C.VALUE, colors);
-        return app(o);
-    }
-
-    @Override
     public V visitLedOnAction(LedOnAction<V> ledOnAction) {
         ledOnAction.getLedColor().visit(this);
         JSONObject o = mk(C.LED_ON_ACTION);
         return app(o);
     }
+
 }

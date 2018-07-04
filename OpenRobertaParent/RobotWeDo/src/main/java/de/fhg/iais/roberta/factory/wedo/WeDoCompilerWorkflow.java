@@ -15,11 +15,13 @@ import de.fhg.iais.roberta.transformer.wedo.Jaxb2WeDoConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
-public class WeDoSimCompilerWorkflow extends AbstractCompilerWorkflow {
+public class WeDoCompilerWorkflow extends AbstractCompilerWorkflow {
 
-    private static final Logger LOG = LoggerFactory.getLogger(WeDoSimCompilerWorkflow.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WeDoCompilerWorkflow.class);
+    
+    private String compiledStackOps = "";
 
-    public WeDoSimCompilerWorkflow() {
+    public WeDoCompilerWorkflow() {
     }
 
     @Override
@@ -29,18 +31,14 @@ public class WeDoSimCompilerWorkflow extends AbstractCompilerWorkflow {
             return null;
         }
         String sourceCode = WeDoStackMachineVisitor.generate((WeDoConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree());
-        WeDoSimCompilerWorkflow.LOG.info("generating javascript code");
+        WeDoCompilerWorkflow.LOG.info("generating javascript code");
         return sourceCode;
     }
 
     @Override
     public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
-        return null;
-    }
-
-    @Override
-    public Key generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language) {
-        return null;
+        this.compiledStackOps = sourceCode;
+        return Key.COMPILERWORKFLOW_SUCCESS;
     }
 
     @Override
@@ -52,6 +50,6 @@ public class WeDoSimCompilerWorkflow extends AbstractCompilerWorkflow {
 
     @Override
     public String getCompiledCode() {
-        return null;
+        return this.compiledStackOps;
     }
 }
