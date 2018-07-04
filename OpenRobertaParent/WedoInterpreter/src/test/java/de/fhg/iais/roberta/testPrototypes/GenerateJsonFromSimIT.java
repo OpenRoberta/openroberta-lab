@@ -49,6 +49,7 @@ public class GenerateJsonFromSimIT {
 
     private static final String[] NAME_OF_TESTS =
         {
+            "simple",
             "sensoren",
             "aktoren",
             "fac"

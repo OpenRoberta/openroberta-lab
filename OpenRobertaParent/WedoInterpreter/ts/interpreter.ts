@@ -4,9 +4,11 @@ import * as S from "./state";
 import * as U from "./util";
 
 var terminated = false;
+var callbackOnTermination = undefined;
 
-export function run( generatedCode: any ) {
+export function run( generatedCode: any, cbOnTermination: () => void ) {
     terminated = false;
+    callbackOnTermination = cbOnTermination;
     S.reset();
     const stmts = generatedCode[C.OPS];
     const functions = generatedCode[C.FUNCTION_DECLARATION];
@@ -26,13 +28,13 @@ export function terminate() {
 }
 
 export function evalOperation() {
-    while ( !terminated ) {
+    topLevelLoop: while ( !terminated ) {
         S.opLog( 'actual ops: ' );
         let stmt = S.getOp();
         if ( stmt === undefined ) {
             U.p( "PROGRAM TERMINATED. No ops remaining" );
             terminated = true;
-            return;
+            break topLevelLoop;
         }
         const opCode = stmt[C.OPCODE];
         switch ( opCode ) {
@@ -129,7 +131,7 @@ export function evalOperation() {
             case C.STOP:
                 U.p( "PROGRAM TERMINATED. stop op" );
                 terminated = true;
-                return;
+                break topLevelLoop;
             case C.TEXT_JOIN:
                 const second = S.pop();
                 const first = S.pop();
@@ -164,6 +166,8 @@ export function evalOperation() {
                 U.dbcException( "invalid stmt op: " + opCode );
         }
     }
+    // termination either requested by the client or by executing 'stop' or after last statement
+    callbackOnTermination();
 }
 
 function evalExpr( expr ) {
