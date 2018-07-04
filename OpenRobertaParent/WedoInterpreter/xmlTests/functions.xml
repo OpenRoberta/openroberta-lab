@@ -1,0 +1,167 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+    robottype="wedo" xmlversion="2.0" description="" tags="">
+    <instance x="74" y="115">
+        <block type="robControls_start" id="aR0!L0j7-ZXQB0|F;!xO"
+            intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG">FALSE</field>
+        </block>
+        <block type="robActions_display_text" id="*XhJ.xBc*.[x)l(~}0=s"
+            intask="true">
+            <value name="OUT">
+                <block type="robProcedures_callreturn" id="HYRKb~d|I1R?R~u?Az:#"
+                    intask="true">
+                    <mutation name="doSomething2"
+                        output_type="Number">
+                        <arg name="x" type="Number"></arg>
+                        <arg name="x2" type="Number"></arg>
+                    </mutation>
+                    <value name="ARG0">
+                        <block type="math_random_int" id="js3w_mWo35n4Xv75At~C"
+                            intask="true">
+                            <value name="FROM">
+                                <block type="math_number"
+                                    id="hdZm?=4s@ev,:0G~*4|="
+                                    intask="true">
+                                    <field name="NUM">1</field>
+                                </block>
+                            </value>
+                            <value name="TO">
+                                <block type="math_number"
+                                    id="/T(J/1hYW~bgawW;h^an"
+                                    intask="true">
+                                    <field name="NUM">100
+                                    </field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                    <value name="ARG1">
+                        <block type="math_random_int" id="L+pW~1b/l1,4,qy!A}yS"
+                            intask="true">
+                            <value name="FROM">
+                                <block type="math_number"
+                                    id="mU,m)XtaRA=s]?EWeF2o"
+                                    intask="true">
+                                    <field name="NUM">1</field>
+                                </block>
+                            </value>
+                            <value name="TO">
+                                <block type="math_number"
+                                    id="oAwi~.ZlVCr,+!J:7Pl)"
+                                    intask="true">
+                                    <field name="NUM">100
+                                    </field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </instance>
+    <instance x="423" y="288">
+        <block type="robProcedures_defnoreturn" id="?B}hd7{?EkgkE-#%6S*v"
+            intask="true">
+            <mutation declare="false"></mutation>
+            <field name="NAME">doSomething</field>
+            <statement name="STACK">
+                <block type="robActions_play_tone" id="R|9I5+B^t(RV[hu#I9~]"
+                    intask="true">
+                    <value name="FREQUENCE">
+                        <block type="math_number" id="^-)8%6AO8ew.!euJHIc,"
+                            intask="true">
+                            <field name="NUM">300</field>
+                        </block>
+                    </value>
+                    <value name="DURATION">
+                        <block type="math_number" id=".0pL6[0r4{{p9(Meo1`Y"
+                            intask="true">
+                            <field name="NUM">100</field>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+    </instance>
+    <instance x="135" y="304">
+        <block type="robProcedures_defreturn" id="RZ7(N:eIyt,B5ZOg1:c["
+            intask="true">
+            <mutation declare="true" return_type="Number"></mutation>
+            <field name="NAME">doSomething2</field>
+            <field name="TYPE">Number</field>
+            <repetitions>
+                <statement name="ST">
+                    <block type="robLocalVariables_declare"
+                        id="=-|g6%qc8#|?sP-y^EDZ" intask="true"
+                        deletable="false" movable="false">
+                        <mutation next="true"
+                            declaration_type="Number"></mutation>
+                        <field name="VAR">x</field>
+                        <field name="TYPE">Number</field>
+                    </block>
+                    <block type="robLocalVariables_declare"
+                        id="uHy]dErlH_%l6o[IwH#r" intask="true"
+                        deletable="false" movable="false">
+                        <mutation next="false"
+                            declaration_type="Number"></mutation>
+                        <field name="VAR">x2</field>
+                        <field name="TYPE">Number</field>
+                    </block>
+                </statement>
+                <statement name="STACK">
+                    <block type="robProcedures_callnoreturn"
+                        id="-ZklPtVfOg2bQa^?mlU^" intask="true">
+                        <mutation name="doSomething"></mutation>
+                    </block>
+                    <block type="robProcedures_ifreturn"
+                        id="x}s.3CYXdJk-ItqF5YHI" intask="true">
+                        <mutation value="1"
+                            return_type="Number"></mutation>
+                        <value name="CONDITION">
+                            <block type="logic_compare"
+                                id="(gPe:o6[!#d/JC+.C,R5"
+                                intask="true">
+                                <field name="OP">EQ</field>
+                                <value name="A">
+                                    <block type="variables_get"
+                                        id=",kBk)FuYGo@f/~F=8?]R"
+                                        intask="true">
+                                        <mutation
+                                            datatype="Number"></mutation>
+                                        <field name="VAR">x
+                                        </field>
+                                    </block>
+                                </value>
+                                <value name="B">
+                                    <block type="variables_get"
+                                        id="xJC}|EY%_H7.`|Vhys*5"
+                                        intask="true">
+                                        <mutation
+                                            datatype="Number"></mutation>
+                                        <field name="VAR">x2
+                                        </field>
+                                    </block>
+                                </value>
+                            </block>
+                        </value>
+                        <value name="VALUE">
+                            <block type="math_number"
+                                id="XDjtbpvuGK%0y;Se:|E)"
+                                intask="true">
+                                <field name="NUM">57</field>
+                            </block>
+                        </value>
+                    </block>
+                </statement>
+                <value name="RETURN">
+                    <block type="variables_get" id="-@!9X)?)VJdB|.Yi1foi"
+                        intask="true">
+                        <mutation datatype="Number"></mutation>
+                        <field name="VAR">x</field>
+                    </block>
+                </value>
+            </repetitions>
+        </block>
+    </instance>
+</block_set>

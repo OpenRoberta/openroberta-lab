@@ -1,0 +1,1 @@
+{"ops":[{"opc":"expr","expr":"NUM_CONST","value":"57"},{"opc":"createMethodCallReturn","names":["x"],"name":"doSomething"},{"opc":"VarDeclaration","name":"item","type":"NUMBER"}],"functionDeclaration":{"doSomething":{"opc":"createMethodReturn","name":"doSomething","statements":[{"opc":"expr","name":"x","expr":"Var"},{"opc":"SingleFunction","name":"SIN"}],"type":"NUMBER"}}}

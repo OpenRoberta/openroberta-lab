@@ -1,0 +1,252 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+    robottype="wedo" xmlversion="2.0" description="" tags="">
+    <instance x="140" y="131">
+        <block type="robControls_start" id="aR0!L0j7-ZXQB0|F;!xO"
+            intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG">FALSE</field>
+        </block>
+        <block type="robControls_if" id="u!QYP2B^ciW*pBIT*rf;"
+            intask="true">
+            <mutation elseif="3"></mutation>
+            <repetitions>
+                <value name="IF0">
+                    <block type="logic_compare" id="K6FWk{x)`~l%89q?E}D_"
+                        intask="true">
+                        <field name="OP">EQ</field>
+                        <value name="A">
+                            <block type="robSensors_gyro_getSample"
+                                id="gJ)m)7pxSk`yX)`]e|8_"
+                                intask="true">
+                                <mutation mode="TILTED"></mutation>
+                                <field name="MODE">TILTED</field>
+                                <field name="SENSORPORT">PORT1</field>
+                                <field name="SLOT">UP</field>
+                            </block>
+                        </value>
+                        <value name="B">
+                            <block type="logic_operation"
+                                id="A7-G6x^w-_%9IHGsA|;V"
+                                intask="true">
+                                <field name="OP">AND</field>
+                                <value name="A">
+                                    <block
+                                        type="robSensors_gyro_getSample"
+                                        id="=Y1X.eu`vRV{M,o,WQB,"
+                                        intask="true">
+                                        <mutation mode="TILTED"></mutation>
+                                        <field name="MODE">TILTED
+                                        </field>
+                                        <field name="SENSORPORT">PORT3
+                                        </field>
+                                        <field name="SLOT">NO
+                                        </field>
+                                    </block>
+                                </value>
+                                <value name="B">
+                                    <block
+                                        type="robSensors_gyro_getSample"
+                                        id="RSu9nALYngR~+]N=Wkyu"
+                                        intask="true">
+                                        <mutation mode="TILTED"></mutation>
+                                        <field name="MODE">TILTED
+                                        </field>
+                                        <field name="SENSORPORT">PORT1
+                                        </field>
+                                        <field name="SLOT">DOWN
+                                        </field>
+                                    </block>
+                                </value>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+                <statement name="DO0">
+                    <block type="robActions_motor_on_for"
+                        id="o}svREi5Lu?]}uIr67ry" intask="true">
+                        <field name="MOTORPORT">NO PORT</field>
+                        <value name="POWER">
+                            <block type="math_number"
+                                id="-C+.(=ZCVV5:HC?!X?VI"
+                                intask="true">
+                                <field name="NUM">30</field>
+                            </block>
+                        </value>
+                        <value name="VALUE">
+                            <block type="math_number"
+                                id="*`*3la[*9M_oftyCAr6F"
+                                intask="true">
+                                <field name="NUM">1000</field>
+                            </block>
+                        </value>
+                    </block>
+                </statement>
+                <value name="IF1">
+                    <block type="logic_compare" id="SMF{5)fv]^#Ruc9FMX:Q"
+                        intask="true">
+                        <field name="OP">GT</field>
+                        <value name="A">
+                            <block type="math_single"
+                                id="giPOM123hcHF?Y+q,W;4"
+                                intask="true">
+                                <field name="OP">ROOT</field>
+                                <value name="NUM">
+                                    <block type="math_trig"
+                                        id="U=|aR%6O.Zy4/(cD3Hgm"
+                                        intask="true">
+                                        <field name="OP">SIN
+                                        </field>
+                                        <value name="NUM">
+                                            <block
+                                                type="math_arithmetic"
+                                                id="VJ5DDce[S((MWj-fjkrG"
+                                                intask="true">
+                                                <field
+                                                    name="OP">DIVIDE
+                                                </field>
+                                                <value
+                                                    name="A">
+                                                    <block
+                                                        type="math_constant"
+                                                        id="6hwNPHNsqj;`3cgO_S2?"
+                                                        intask="true">
+                                                        <field
+                                                            name="CONSTANT">
+                                                            PI
+                                                        </field>
+                                                    </block>
+                                                </value>
+                                                <value
+                                                    name="B">
+                                                    <block
+                                                        type="math_number"
+                                                        id="^9j*0Wk9+%3[ptZZT!*J"
+                                                        intask="true">
+                                                        <field
+                                                            name="NUM">
+                                                            3
+                                                        </field>
+                                                    </block>
+                                                </value>
+                                            </block>
+                                        </value>
+                                    </block>
+                                </value>
+                            </block>
+                        </value>
+                        <value name="B">
+                            <block
+                                type="robSensors_infrared_getSample"
+                                id="2?Y+5Ek~~#BUXi{}FL.Y"
+                                intask="true">
+                                <mutation mode="DISTANCE"></mutation>
+                                <field name="MODE">DISTANCE
+                                </field>
+                                <field name="SENSORPORT">PORT2</field>
+                                <field name="SLOT"></field>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+                <statement name="DO1">
+                    <block type="mbedActions_play_note"
+                        id="(-t1tqpr1JD!6,*H|K:4" intask="true">
+                        <field name="DURATION">2000</field>
+                        <field name="FREQUENCE">261.626</field>
+                    </block>
+                </statement>
+                <value name="IF2">
+                    <block type="logic_operation" id=";mXYw;~3^Cd?zuaD?6DE"
+                        intask="true">
+                        <field name="OP">OR</field>
+                        <value name="A">
+                            <block type="logic_compare"
+                                id=")y5X9uoKJE7-6[)CseIp"
+                                intask="true">
+                                <field name="OP">EQ</field>
+                                <value name="A">
+                                    <block type="math_number"
+                                        id="dyS8Y{zGuQ((`#Sav+o^"
+                                        intask="true">
+                                        <field name="NUM">2000
+                                        </field>
+                                    </block>
+                                </value>
+                                <value name="B">
+                                    <block
+                                        type="robSensors_timer_getSample"
+                                        id="iHQEP)8HFy5=ilnqFSRh"
+                                        intask="true">
+                                        <mutation mode="VALUE"></mutation>
+                                        <field name="MODE">VALUE
+                                        </field>
+                                        <field name="SENSORPORT">1
+                                        </field>
+                                        <field name="SLOT"></field>
+                                    </block>
+                                </value>
+                            </block>
+                        </value>
+                        <value name="B">
+                            <block type="logic_negate"
+                                id="D}v0}~hKi2Jp(s:C_3P2"
+                                intask="true">
+                                <value name="BOOL">
+                                    <block
+                                        type="robSensors_gyro_getSample"
+                                        id="Uyhk/5;ZS|Qr27{+U.9Z"
+                                        intask="true">
+                                        <mutation mode="TILTED"></mutation>
+                                        <field name="MODE">TILTED
+                                        </field>
+                                        <field name="SENSORPORT">PORT3
+                                        </field>
+                                        <field name="SLOT">BACK
+                                        </field>
+                                    </block>
+                                </value>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+                <statement name="DO2">
+                    <block type="mbedActions_play_note"
+                        id="+8^`S(Bk{Y_)8nMoAx?Z" intask="true">
+                        <field name="DURATION">2000</field>
+                        <field name="FREQUENCE">293.665</field>
+                    </block>
+                    <block type="mbedActions_play_note"
+                        id="9],wZGd!QpxJY^oA#TM." intask="true">
+                        <field name="DURATION">2000</field>
+                        <field name="FREQUENCE">659.255</field>
+                    </block>
+                </statement>
+                <value name="IF3">
+                    <block type="logic_boolean" id="0GAhBJQ?)EoJwviV4,d6"
+                        intask="true">
+                        <field name="BOOL">TRUE</field>
+                    </block>
+                </value>
+                <statement name="DO3">
+                    <block type="robActions_play_tone" id="0[Z*W1zBHnW0Vp9VS18R"
+                        intask="true">
+                        <value name="FREQUENCE">
+                            <block type="math_number"
+                                id="YP=p/Hn1]K|PA7k46OUS"
+                                intask="true">
+                                <field name="NUM">300</field>
+                            </block>
+                        </value>
+                        <value name="DURATION">
+                            <block type="math_number"
+                                id="T6[vBP(}]HoT_zYIR=JA"
+                                intask="true">
+                                <field name="NUM">100</field>
+                            </block>
+                        </value>
+                    </block>
+                </statement>
+            </repetitions>
+        </block>
+    </instance>
+</block_set>

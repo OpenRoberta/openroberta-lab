@@ -1,0 +1,83 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+    robottype="wedo" xmlversion="2.0" description="" tags="">
+    <instance x="128" y="210">
+        <block type="robControls_start" id="aR0!L0j7-ZXQB0|F;!xO"
+            intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG">FALSE</field>
+        </block>
+        <block type="robControls_ifElse" id="~xIwqGIuJvJgjQ|6({SV"
+            intask="true">
+            <mutation elseif="2" else="1"></mutation>
+            <repetitions>
+                <value name="IF0">
+                    <block type="logic_compare" id="v_W3?sDo1)~b3hM?9hHz"
+                        intask="true">
+                        <field name="OP">EQ</field>
+                        <value name="A">
+                            <block type="math_number"
+                                id="hk)7Vn@FE!7FJMWp3veU"
+                                intask="true">
+                                <field name="NUM">0</field>
+                            </block>
+                        </value>
+                        <value name="B">
+                            <block type="math_number"
+                                id="?_|n~4:|Ze1aUG/)i(;~"
+                                intask="true">
+                                <field name="NUM">56</field>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+                <statement name="DO0">
+                    <block type="mbedActions_play_note"
+                        id="%B%FN1Q^^+riB1(qkr@C" intask="true">
+                        <field name="DURATION">2000</field>
+                        <field name="FREQUENCE">587.33</field>
+                    </block>
+                </statement>
+                <value name="IF1">
+                    <block type="logic_operation" id="OAQwe.`y%5pYV4(0n1kx"
+                        intask="true">
+                        <field name="OP">AND</field>
+                        <value name="A">
+                            <block type="logic_boolean"
+                                id="V,VZO66GIk3N!p:+(=N="
+                                intask="true">
+                                <field name="BOOL">TRUE</field>
+                            </block>
+                        </value>
+                        <value name="B">
+                            <block type="logic_boolean"
+                                id="iangZA@UU:_K%0mt6hQQ"
+                                intask="true">
+                                <field name="BOOL">FALSE</field>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+                <statement name="DO1">
+                    <block type="mbedActions_play_note"
+                        id="-_Y8JLnv2QqzAE!mHIMb" intask="true">
+                        <field name="DURATION">2000</field>
+                        <field name="FREQUENCE">587.33</field>
+                    </block>
+                </statement>
+                <value name="IF2">
+                    <block type="logic_boolean" id="-=XgTi8f#k#OG6+/3,}="
+                        intask="true">
+                        <field name="BOOL">TRUE</field>
+                    </block>
+                </value>
+                <statement name="ELSE">
+                    <block type="mbedActions_play_note"
+                        id="TBG]yEFqdS7CoBam.mJ0" intask="true">
+                        <field name="DURATION">2000</field>
+                        <field name="FREQUENCE">261.626</field>
+                    </block>
+                </statement>
+            </repetitions>
+        </block>
+    </instance>
+</block_set>

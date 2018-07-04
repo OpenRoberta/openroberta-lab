@@ -1,0 +1,38 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+    robottype="wedo" xmlversion="2.0" description="" tags="">
+    <instance x="74" y="115">
+        <block type="robControls_start" id="aR0!L0j7-ZXQB0|F;!xO"
+            intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG">FALSE</field>
+        </block>
+        <block type="robProcedures_callnoreturn" id="!is,q7G~Ki-~rF]Pg%G8"
+            intask="true">
+            <mutation name="doSomething"></mutation>
+        </block>
+    </instance>
+    <instance x="76" y="244">
+        <block type="robProcedures_defnoreturn" id="~e0,[8N]+o^xGEPC|{E1"
+            intask="true">
+            <mutation declare="false"></mutation>
+            <field name="NAME">doSomething</field>
+            <statement name="STACK">
+                <block type="robActions_play_tone" id="{-Yk6UblfJYJbXyXSV^E"
+                    intask="true">
+                    <value name="FREQUENCE">
+                        <block type="math_number" id="mF81snkYWB*uq8uGF{[D"
+                            intask="true">
+                            <field name="NUM">300</field>
+                        </block>
+                    </value>
+                    <value name="DURATION">
+                        <block type="math_number" id="9?L(Ml~v=N44syYH6-{}"
+                            intask="true">
+                            <field name="NUM">100</field>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+    </instance>
+</block_set>

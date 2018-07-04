@@ -1,0 +1,70 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+    robottype="wedo" xmlversion="2.0" description="" tags="">
+    <instance x="74" y="115">
+        <block type="robControls_start" id="aR0!L0j7-ZXQB0|F;!xO"
+            intask="true" deletable="false">
+            <mutation declare="true"></mutation>
+            <field name="DEBUG">FALSE</field>
+            <statement name="ST">
+                <block type="robGlobalVariables_declare"
+                    id="mBK+~a=Q5SFfd5[``oHn" intask="true"
+                    deletable="false" movable="false">
+                    <mutation next="false"
+                        declaration_type="Number"></mutation>
+                    <field name="VAR">item</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
+                        <block type="robProcedures_callreturn"
+                            id="sGcIluop7mwOJu@Z{XJ7" intask="true">
+                            <mutation name="doSomething"
+                                output_type="Number">
+                                <arg name="x" type="Number"></arg>
+                            </mutation>
+                            <value name="ARG0">
+                                <block type="math_number"
+                                    id="Y6]o4vhb0U%Qb`^f3s:*"
+                                    intask="true">
+                                    <field name="NUM">57</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+    </instance>
+    <instance x="101" y="254">
+        <block type="robProcedures_defreturn" id="lF!eW]*3rw+vojW8Y%lj"
+            intask="true">
+            <mutation declare="true" return_type="Number"></mutation>
+            <field name="NAME">doSomething</field>
+            <field name="TYPE">Number</field>
+            <repetitions>
+                <statement name="ST">
+                    <block type="robLocalVariables_declare"
+                        id="MZU.=O?e7443!,phH+M1" intask="true"
+                        deletable="false" movable="false">
+                        <mutation next="false"
+                            declaration_type="Number"></mutation>
+                        <field name="VAR">x</field>
+                        <field name="TYPE">Number</field>
+                    </block>
+                </statement>
+                <value name="RETURN">
+                    <block type="math_trig" id="W-#%VPBA7lsZ]pP|Fs8!"
+                        intask="true">
+                        <field name="OP">SIN</field>
+                        <value name="NUM">
+                            <block type="variables_get"
+                                id="QZ{C)Qi~)E?;-un4zcOU"
+                                intask="true">
+                                <mutation datatype="Number"></mutation>
+                                <field name="VAR">x</field>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+            </repetitions>
+        </block>
+    </instance>
+</block_set>

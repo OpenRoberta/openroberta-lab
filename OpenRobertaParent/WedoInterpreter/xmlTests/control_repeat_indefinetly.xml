@@ -1,0 +1,20 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+    robottype="wedo" xmlversion="2.0" description="" tags="">
+    <instance x="128" y="210">
+        <block type="robControls_start" id="aR0!L0j7-ZXQB0|F;!xO"
+            intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG">FALSE</field>
+        </block>
+        <block type="robControls_loopForever" id=".*W0K{.F)T9A]t];K,k-"
+            intask="true">
+            <statement name="DO">
+                <block type="mbedActions_play_note" id=",W|vh:cdKTr5ih5Qk7{o"
+                    intask="true">
+                    <field name="DURATION">2000</field>
+                    <field name="FREQUENCE">261.626</field>
+                </block>
+            </statement>
+        </block>
+    </instance>
+</block_set>

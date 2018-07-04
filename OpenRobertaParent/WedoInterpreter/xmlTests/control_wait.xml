@@ -1,0 +1,38 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+    robottype="wedo" xmlversion="2.0" description="" tags="">
+    <instance x="188" y="127">
+        <block type="robControls_start" id="#*u4`Y^[j9UzfA!gLV1B"
+            intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG">FALSE</field>
+        </block>
+        <block type="robControls_wait_time" id="{mJwad)ee~(@]s~YpV8;"
+            intask="true">
+            <value name="WAIT">
+                <block type="math_number" id="hQ6H=.yrziNi7BU+Fsw}"
+                    intask="true">
+                    <field name="NUM">500</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_play_note" id=")`0_jd5%n`!?oqJXW~xI"
+            intask="true">
+            <field name="DURATION">2000</field>
+            <field name="FREQUENCE">261.626</field>
+        </block>
+        <block type="robControls_wait" id="74~8?u/zJWEFmt6W|k{E"
+            intask="true">
+            <value name="WAIT0">
+                <block type="logic_boolean" id="?r#4PMNShFiEG:Q/Lo{N"
+                    intask="true">
+                    <field name="BOOL">TRUE</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_play_note" id="YCaF4g*x;6EVMn!PfI7{"
+            intask="true">
+            <field name="DURATION">2000</field>
+            <field name="FREQUENCE">246.942</field>
+        </block>
+    </instance>
+</block_set>

@@ -1,0 +1,1 @@
+{"ops":[{"opc":"createMethodCallVoid","names":[],"name":"doSomething"}],"functionDeclaration":{"doSomething":{"opc":"createMethodVoid","name":"doSomething","statements":[{"opc":"expr","expr":"NUM_CONST","value":"300"},{"opc":"expr","expr":"NUM_CONST","value":"100"},{"opc":"ToneAction"}]}}}

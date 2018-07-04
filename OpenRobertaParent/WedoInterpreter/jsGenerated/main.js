@@ -11,7 +11,7 @@
     Object.defineProperty(exports, "__esModule", { value: true });
     var INTERPRETER = require("./interpreter");
     var FS = require("fs");
-    var BASEDIR = 'D:/git/robertalab/OpenRobertaParent/WedoInterpreter/simulatorTests/';
+    var BASEDIR = '../xmlTests/';
     var DEFAULT = 'simple';
     process.argv.shift();
     process.argv.shift();

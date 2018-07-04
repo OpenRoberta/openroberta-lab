@@ -44,38 +44,46 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 @RunWith(MockitoJUnitRunner.class)
 public class GenerateJsonFromSimIT {
     private static final Logger LOG = LoggerFactory.getLogger(GenerateJsonFromSimIT.class);
-    private static final String TEST_BASE = "simulatorTests/";
+    private static final String TEST_BASE = "xmlTests/";
     private static final String ROBOT = "wedo";
 
-    private static final String[] NAME_OF_TESTS =
-        {
-            "simple",
-            "sensoren",
-            "aktoren",
-            "fac"
-        };
-    private static final String[] NAME_OF_TESTS1 =
-        {
-            "zeige-if",
-            "show-add",
-            "if-then-else",
-            "assign-add-2",
-            "assign-add",
-            "simple",
-            "threeFors",
-            "while-assign",
-            "motor",
-            "motor-null",
-            "motor-stop",
-            "LED",
-            "LED-off",
-            "play-note",
-            "play-tone",
-            "wait",
-            "wait-if",
-            "function",
-            "function-rec-simple"
-        };
+    private static final String[] NAME_OF_TESTS = {
+        //        "sensoren",
+        //        "aktoren",
+        //        "fac",
+        //"control_if_elseif",
+        "control_if_else",
+        "control_repeat_indefinetly",
+        "control_repeat_n_times_break_continue",
+        "control_repeat_until_break",
+        "control_wait",
+        "control_all",
+        "functions",
+        "function_return",
+        "function_no_return"
+    };
+
+    private static final String[] NAME_OF_TESTS1 = {
+        "zeige-if",
+        "show-add",
+        "if-then-else",
+        "assign-add-2",
+        "assign-add",
+        "simple",
+        "threeFors",
+        "while-assign",
+        "motor",
+        "motor-null",
+        "motor-stop",
+        "LED",
+        "LED-off",
+        "play-note",
+        "play-tone",
+        "wait",
+        "wait-if",
+        "function",
+        "function-rec-simple"
+    };
 
     private static RobotCommunicator robotCommunicator;
     private static RobertaProperties robertaProperties;
