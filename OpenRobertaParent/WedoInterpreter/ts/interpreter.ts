@@ -9,7 +9,6 @@ var callbackOnTermination = undefined;
 export function run( generatedCode: any, cbOnTermination: () => void ) {
     terminated = false;
     callbackOnTermination = cbOnTermination;
-    S.reset();
     const stmts = generatedCode[C.OPS];
     const functions = generatedCode[C.FUNCTION_DECLARATION];
     var stop = {};
@@ -63,7 +62,8 @@ export function evalOperation() {
                 break;
             case C.FLOW_CONTROL: {
                 const conditional = stmt[C.CONDITIONAL];
-                const doIt = conditional ? S.pop() : true;
+                const activatedBy: boolean = stmt[C.BOOLEAN] === undefined ? true : stmt[C.BOOLEAN];
+                const doIt: boolean = conditional ? ( S.pop() === activatedBy ) : true;
                 if ( doIt ) {
                     S.popOpsUntil( stmt[C.KIND] );
                     if ( stmt[C.BREAK] ) {
@@ -77,16 +77,16 @@ export function evalOperation() {
                 break;
             }
             case C.IF_STMT:
-                S.pushOps( true, stmt[C.STMT_LIST] )
+                S.pushOps( stmt[C.STMT_LIST] )
                 break;
             case C.IF_TRUE_STMT:
                 if ( S.pop() ) {
-                    S.pushOps( false, stmt[C.STMT_LIST] )
+                    S.pushOps( stmt[C.STMT_LIST] )
                 }
                 break;
             case C.IF_RETURN:
                 if ( S.pop() ) {
-                    S.pushOps( false, stmt[C.STMT_LIST] )
+                    S.pushOps( stmt[C.STMT_LIST] )
                 }
                 break;
             case C.LED_ON_ACTION: {
@@ -96,23 +96,21 @@ export function evalOperation() {
             }
             case C.METHOD_CALL_VOID:
             case C.METHOD_CALL_RETURN: {
-                if ( stmt[C.RETURN] === undefined ) {
-                    stmt[C.RETURN] = true;
-                    for ( let parameterName of stmt[C.NAMES] ) {
-                        S.bindVar( parameterName, S.pop() )
-                    }
-                    const body = S.getFunction( stmt[C.NAME] )[C.STATEMENTS];
-                    S.pushOps( true, body );
-                } else {
-                    S.clearDangerousProperties( stmt );
+                for ( let parameterName of stmt[C.NAMES] ) {
+                    S.bindVar( parameterName, S.pop() )
                 }
+                const body = S.getFunction( stmt[C.NAME] )[C.STATEMENTS];
+                S.pushOps( body );
                 break;
             }
             case C.MOTOR_ON_ACTION: {
                 const duration = S.pop();
                 const speed = S.pop();
-                N.motorOnAction( stmt[C.NAME], stmt[C.PORT], duration, speed );
-                break;
+                const name = stmt[C.NAME];
+                const port = stmt[C.PORT];
+                N.motorOnAction( name, port, duration, speed );
+                setTimeout(() => { N.motorStopAction( name, port ); evalOperation() }, duration );
+                return; // wait for handler being called
             }
             case C.MOTOR_STOP: {
                 N.motorStopAction( stmt[C.NAME], stmt[C.PORT] );
@@ -120,6 +118,21 @@ export function evalOperation() {
             }
             case C.REPEAT_STMT:
                 evalRepeat( stmt );
+                break;
+            case C.REPEAT_STMT_CONTINUATION:
+                if ( stmt[C.MODE] === C.FOR || stmt[C.MODE] === C.TIMES ) {
+                    const runVariableName = stmt[C.NAME];
+                    const end = S.get1();
+                    const incr = S.get0();
+                    const value = S.getVar( runVariableName ) + incr;
+                    if ( +value >= +end ) {
+                        S.popOpsUntil( C.REPEAT_STMT );
+                        S.getOp(); // the repeat has terminated
+                    } else {
+                        S.setVar( runVariableName, value );
+                        S.pushOps( stmt[C.STMT_LIST] );
+                    }
+                }
                 break;
             case C.SHOW_TEXT_ACTION: {
                 N.showTextAction( S.pop() );
@@ -140,20 +153,21 @@ export function evalOperation() {
             case C.TIMER_SENSOR_RESET:
                 N.timerReset();
                 break;
+            case C.TONE_ACTION: {
+                const duration = S.pop();
+                const frequency = S.pop();
+                N.toneAction( stmt[C.NAME], stmt[C.PORT], frequency, duration, );
+                setTimeout(() => { evalOperation() }, duration );
+                return; // wait for handler being called
+            }
             case C.VAR_DECLARATION: {
                 const name = stmt[C.NAME];
                 S.bindVar( name, S.pop() );
                 break;
             }
-            case C.TONE_ACTION: {
-                const duration = S.pop();
-                const frequency = S.pop();
-                U.p( "tone, duration: " + duration + ", frequency: " + frequency );
-                break;
-            }
             case C.WAIT_STMT: {
                 U.p( 'waitstmt started' );
-                S.pushOps( true, stmt[C.STMT_LIST] );
+                S.pushOps( stmt[C.STMT_LIST] );
                 break;
             }
             case C.WAIT_TIME_STMT: {
@@ -299,49 +313,35 @@ function evalExpr( expr ) {
 
 function evalRepeat( stmt: any ) {
     const mode = stmt[C.MODE];
-    if ( mode === C.TIMES ) {
-        if ( stmt[C.VALUE] === undefined ) {
-            stmt[C.VALUE] = 0;
-            stmt[C.END] = S.pop();
+    const contl: any[] = stmt[C.STMT_LIST];
+    if ( contl.length !== 1 || contl[0][C.OPCODE] !== C.REPEAT_STMT_CONTINUATION ) {
+        U.dbcException( "repeat expects an embedded continuation statement" );
+    }
+    const cont = contl[0];
+    switch ( mode ) {
+        case C.FOREVER:
+        case C.UNTIL:
+        case C.WHILE:
+            S.pushOps( contl ); S.getOp(); // pseudo excution. Init is already done. Continuation is for termination only.
+            S.pushOps( cont[C.STMT_LIST] );
+            break;
+        case C.TIMES:
+        case C.FOR: {
+            const runVariableName = stmt[C.NAME];
+            const start = S.get2();
+            const end = S.get1();
+            if ( +start >= +end ) {
+                S.pop(); S.pop(); S.pop();
+            } else {
+                S.bindVar( runVariableName, start );
+                S.pushOps( contl ); S.getOp(); // pseudo excution. Init is already done. Continuation is for termination only.
+                S.pushOps( cont[C.STMT_LIST] );
+                break;
+            }
+            break;
         }
-        const value = stmt[C.VALUE] + 1;
-        const end = [C.END];
-        stmt[C.VALUE] = value;
-        if ( value < end ) {
-            S.pushOps( true, stmt[C.STMT_LIST] );
-        } else {
-            S.clearDangerousProperties( stmt );
-        }
-    } else if ( mode === C.UNTIL ) {
-        if ( !S.pop() ) {
-            S.pushOps( true, stmt[C.STMT_LIST] );
-        }
-    } else if ( mode === C.FOR ) {
-        const variable = stmt[C.VAR];
-        var actual = S.getVar( variable );
-        var step;
-        var end;
-        if ( stmt[C.STEP] === undefined ) {
-            step = S.pop();
-            end = S.pop();
-            stmt[C.STEP] = step;
-            stmt[C.END] = end;
-        } else {
-            step = stmt[C.STEP];
-            end = stmt[C.END];
-            actual += step;
-            S.setVar( variable, actual );
-        }
-        // U.p( 'actual:' + actual + ' step:' + step + ' end:' + end );
-        if ( actual <= end ) {
-            S.pushOps( true, stmt[C.STMT_LIST] );
-        } else {
-            S.unbindVar( variable );
-            stmt[C.STEP] = undefined;
-            stmt[C.END] = undefined;
-        }
-    } else {
-        U.dbcException( "invalid repeat mode: " + mode );
+        default:
+            U.dbcException( "invalid repeat mode: " + mode );
     }
 }
 

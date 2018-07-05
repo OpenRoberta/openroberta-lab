@@ -20,13 +20,13 @@ import de.fhg.iais.roberta.syntax.codegen.wedo.WeDoStackMachineVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
-public class Factory extends AbstractRobotFactory {
+public class WeDoFactory extends AbstractRobotFactory {
     private final WeDoCompilerWorkflow compilerWorkflow;
     private final Properties wedoProperties;
     private final String name;
     private final int robotPropertyNumber;
 
-    public Factory(RobertaProperties robertaProperties) {
+    public WeDoFactory(RobertaProperties robertaProperties) {
         super(robertaProperties);
         this.wedoProperties = Util1.loadProperties("classpath:WeDo.properties");
         this.name = this.wedoProperties.getProperty("robot.name");
@@ -65,7 +65,7 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getSimCompilerWorkflow() {
-        return this.compilerWorkflow;
+        return null;
     }
 
     @Override

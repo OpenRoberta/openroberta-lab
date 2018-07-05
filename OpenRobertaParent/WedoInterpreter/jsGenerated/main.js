@@ -11,18 +11,8 @@
     Object.defineProperty(exports, "__esModule", { value: true });
     var INTERPRETER = require("./interpreter");
     var FS = require("fs");
-    var BASEDIR = '../xmlTests/';
-    var DEFAULT = 'simple';
-    process.argv.shift();
-    process.argv.shift();
-    if (process.argv.length == 0) {
-        processOps(DEFAULT);
-    }
-    else {
-        process.argv.forEach(function (val, index, array) {
-            processOps(val);
-        });
-    }
+    var BASEDIR = './xmlTests/';
+    processOps(process.argv[2]);
     function callbackOnTermination() {
         console.log('program has terminated');
     }

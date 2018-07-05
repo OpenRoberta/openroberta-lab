@@ -31,7 +31,7 @@ export function statusLightOffAction( name, port ) {
 
 export function motorOnAction( name, port, duration, speed ) {
     const robotText = 'robot: ' + name + ', port: ' + port;
-    const durText = duration === -1 ? ' w.o. duration' : ( ' for ' + duration + ' msec' );
+    const durText = duration <= 0 ? ' w.o. duration' : ( ' for ' + duration + ' msec' );
     U.p( robotText + ' motor speed ' + speed + durText );
 }
 
@@ -44,4 +44,12 @@ export function showTextAction( text ) {
     const showText = "" + text;
     U.p( '***** show "' + showText + '" *****' );
 }
+
+export function toneAction( name, port, frequency, duration ) {
+    U.p( "tone, duration: " + duration + ", frequency: " + frequency );
+    const robotText = 'robot: ' + name + ', port: ' + port;
+    const durText = duration <= 0 ? ' w.o. duration' : ( ' for ' + duration + ' msec' );
+    U.p( robotText + ' tone ' + frequency + durText );
+}
+
 

@@ -207,6 +207,7 @@ export const RATE: string = "rate";
 export const RED: string = "red";
 export const REMOVE: string = "remove";
 export const REPEAT_STMT: string = "RepeatStmt";
+export const REPEAT_STMT_CONTINUATION: string = "RepeatStmtCont";
 export const RESET: string = "reset";
 export const RETURN: string = "return";
 export const RETURN_TYPE: string = "returnType";

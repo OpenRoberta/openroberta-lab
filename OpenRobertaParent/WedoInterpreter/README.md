@@ -1,46 +1,51 @@
-USING THIS PROJECT
+### overview
 
-1. preconditions:
-    * Java project with pom and some Java test classes (that generate JSON for later consumption by Javascript)
-    * node is installed
+This project should make testing of WeDo programs a lot easier. You can export any WeDo program (using the lab), generate interpreter code (using a Java Junit class)
+and run the interpreter code (using node). Requirements:
+ 
+* an IDE (as eclipse)
+* node is installed
     
-2. import this project as maven project
+* this project is imported as maven project
 
-3. create a wedo program, export as XML and remove all XML elements but the <block_set /> of the program (usually starting from line 3) and store it in
-   directory 'simulatorTests'
+* a run-configuration for 'jsGenerated/main.js' as node application is created. The working directory in the run configuration is the project's base.
 
-4. run the JUnit test class 'GenerateJsonFromSimIT' after setting the array of XML files to be compiled (constant NAME_OF_TESTS) as needed, e.g. 'myTest'.
+### using this project
 
-5. after refresh 'mytest.json' appears. After formatting the operations can be inspected
+1. use the lab to create a wedo program, export it as XML into the directory 'xmlTests', e.g. using the name 'y-assign'. The file 'y-assign.xml' is created.
 
-6. in a run-configuration (run 'jsGenerated/main.js' as node application!) set 'myTest' as parameter (lists are possible, too) and run.
+2. run the JUnit test class 'GenerateJsonFromSimIT' after adding 'y-assign' to the constant NAME_OF_TESTS (a run configuration is handy here).
+
+3. after refresh 'y-assign.json' appears. After formatting the operations can be inspected.
+
+4. in the run-configuration of 'jsGenerated/main.js' set 'y-assign' as parameter and run.
    The operations are executed. Watch the console.
 
-TYPESCRIPT SUPPORT
+### typescript support for developing the WeDo interpreter
 
 to be written
 
-JAVASCRIPT SUPPORT (OUTDATED!)
+### javascript support  for developing the WeDo interpreter (OUTDATED! WE USE TYPESCRIPT!)
 
-3. project -> right click -> properties
+1. project -> right click -> properties
     * convert to faceted form
     * add Javascript facet
     * activate Javascript builder in facets
     * in Javascript add formatter + save actions (tbd)
     * add the base directory /js to the include path, add **/*.js as inclusion pattern
     
-4. in preferences -> Javascript -> Runtimes
+2. in preferences -> Javascript -> Runtimes
     * add the node location
     * select the node.js runtime
     * error: this is resetted to chromium by eclipse
 
-5. open a js file with the Javascript editor
+3. open a js file with the Javascript editor
     * outline ok
     * call hierarchy ok
     * completion ok
     * goto definition fails
 
-6. debug/run
+4. debug/run
     * run as ... ok
     * debug as ... ok when stepping or hitting a breakpoint in the "main" file
     * showing variables etc is ok

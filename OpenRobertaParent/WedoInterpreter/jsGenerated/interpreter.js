@@ -18,7 +18,6 @@
     function run(generatedCode, cbOnTermination) {
         terminated = false;
         callbackOnTermination = cbOnTermination;
-        S.reset();
         var stmts = generatedCode[C.OPS];
         var functions = generatedCode[C.FUNCTION_DECLARATION];
         var stop = {};
@@ -37,13 +36,13 @@
     }
     exports.terminate = terminate;
     function evalOperation() {
-        topLevelLoop: while (!terminated) {
+        var _loop_1 = function () {
             S.opLog('actual ops: ');
             var stmt = S.getOp();
             if (stmt === undefined) {
                 U.p("PROGRAM TERMINATED. No ops remaining");
                 terminated = true;
-                break topLevelLoop;
+                return "break-topLevelLoop";
             }
             var opCode = stmt[C.OPCODE];
             switch (opCode) {
@@ -72,7 +71,8 @@
                     break;
                 case C.FLOW_CONTROL: {
                     var conditional = stmt[C.CONDITIONAL];
-                    var doIt = conditional ? S.pop() : true;
+                    var activatedBy = stmt[C.BOOLEAN] === undefined ? true : stmt[C.BOOLEAN];
+                    var doIt = conditional ? (S.pop() === activatedBy) : true;
                     if (doIt) {
                         S.popOpsUntil(stmt[C.KIND]);
                         if (stmt[C.BREAK]) {
@@ -86,16 +86,16 @@
                     break;
                 }
                 case C.IF_STMT:
-                    S.pushOps(true, stmt[C.STMT_LIST]);
+                    S.pushOps(stmt[C.STMT_LIST]);
                     break;
                 case C.IF_TRUE_STMT:
                     if (S.pop()) {
-                        S.pushOps(false, stmt[C.STMT_LIST]);
+                        S.pushOps(stmt[C.STMT_LIST]);
                     }
                     break;
                 case C.IF_RETURN:
                     if (S.pop()) {
-                        S.pushOps(false, stmt[C.STMT_LIST]);
+                        S.pushOps(stmt[C.STMT_LIST]);
                     }
                     break;
                 case C.LED_ON_ACTION: {
@@ -105,25 +105,22 @@
                 }
                 case C.METHOD_CALL_VOID:
                 case C.METHOD_CALL_RETURN: {
-                    if (stmt[C.RETURN] === undefined) {
-                        stmt[C.RETURN] = true;
-                        for (var _i = 0, _a = stmt[C.NAMES]; _i < _a.length; _i++) {
-                            var parameterName = _a[_i];
-                            S.bindVar(parameterName, S.pop());
-                        }
-                        var body = S.getFunction(stmt[C.NAME])[C.STATEMENTS];
-                        S.pushOps(true, body);
+                    for (var _i = 0, _a = stmt[C.NAMES]; _i < _a.length; _i++) {
+                        var parameterName = _a[_i];
+                        S.bindVar(parameterName, S.pop());
                     }
-                    else {
-                        S.clearDangerousProperties(stmt);
-                    }
+                    var body = S.getFunction(stmt[C.NAME])[C.STATEMENTS];
+                    S.pushOps(body);
                     break;
                 }
                 case C.MOTOR_ON_ACTION: {
                     var duration = S.pop();
                     var speed = S.pop();
-                    N.motorOnAction(stmt[C.NAME], stmt[C.PORT], duration, speed);
-                    break;
+                    var name_2 = stmt[C.NAME];
+                    var port_1 = stmt[C.PORT];
+                    N.motorOnAction(name_2, port_1, duration, speed);
+                    setTimeout(function () { N.motorStopAction(name_2, port_1); evalOperation(); }, duration);
+                    return { value: void 0 };
                 }
                 case C.MOTOR_STOP: {
                     N.motorStopAction(stmt[C.NAME], stmt[C.PORT]);
@@ -132,17 +129,33 @@
                 case C.REPEAT_STMT:
                     evalRepeat(stmt);
                     break;
+                case C.REPEAT_STMT_CONTINUATION:
+                    if (stmt[C.MODE] === C.FOR || stmt[C.MODE] === C.TIMES) {
+                        var runVariableName = stmt[C.NAME];
+                        var end = S.get1();
+                        var incr = S.get0();
+                        var value = S.getVar(runVariableName) + incr;
+                        if (+value >= +end) {
+                            S.popOpsUntil(C.REPEAT_STMT);
+                            S.getOp(); // the repeat has terminated
+                        }
+                        else {
+                            S.setVar(runVariableName, value);
+                            S.pushOps(stmt[C.STMT_LIST]);
+                        }
+                    }
+                    break;
                 case C.SHOW_TEXT_ACTION: {
                     N.showTextAction(S.pop());
                     break;
                 }
                 case C.STATUS_LIGHT_ACTION:
                     N.statusLightOffAction('-', '-');
-                    return;
+                    return { value: void 0 };
                 case C.STOP:
                     U.p("PROGRAM TERMINATED. stop op");
                     terminated = true;
-                    break topLevelLoop;
+                    return "break-topLevelLoop";
                 case C.TEXT_JOIN:
                     var second = S.pop();
                     var first = S.pop();
@@ -151,30 +164,39 @@
                 case C.TIMER_SENSOR_RESET:
                     N.timerReset();
                     break;
-                case C.VAR_DECLARATION: {
-                    var name_2 = stmt[C.NAME];
-                    S.bindVar(name_2, S.pop());
-                    break;
-                }
                 case C.TONE_ACTION: {
                     var duration = S.pop();
                     var frequency = S.pop();
-                    U.p("tone, duration: " + duration + ", frequency: " + frequency);
+                    N.toneAction(stmt[C.NAME], stmt[C.PORT], frequency, duration);
+                    setTimeout(function () { evalOperation(); }, duration);
+                    return { value: void 0 };
+                }
+                case C.VAR_DECLARATION: {
+                    var name_3 = stmt[C.NAME];
+                    S.bindVar(name_3, S.pop());
                     break;
                 }
                 case C.WAIT_STMT: {
                     U.p('waitstmt started');
-                    S.pushOps(true, stmt[C.STMT_LIST]);
+                    S.pushOps(stmt[C.STMT_LIST]);
                     break;
                 }
                 case C.WAIT_TIME_STMT: {
                     var time = S.pop();
                     U.p('waiting ' + time + ' msec');
                     setTimeout(function () { evalOperation(); }, time);
-                    return; // wait for handler being called
+                    return { value: void 0 };
                 }
                 default:
                     U.dbcException("invalid stmt op: " + opCode);
+            }
+        };
+        topLevelLoop: while (!terminated) {
+            var state_1 = _loop_1();
+            if (typeof state_1 === "object")
+                return state_1.value;
+            switch (state_1) {
+                case "break-topLevelLoop": break topLevelLoop;
             }
         }
         // termination either requested by the client or by executing 'stop' or after last statement
@@ -391,55 +413,40 @@
     }
     function evalRepeat(stmt) {
         var mode = stmt[C.MODE];
-        if (mode === C.TIMES) {
-            if (stmt[C.VALUE] === undefined) {
-                stmt[C.VALUE] = 0;
-                stmt[C.END] = S.pop();
-            }
-            var value = stmt[C.VALUE] + 1;
-            var end_1 = [C.END];
-            stmt[C.VALUE] = value;
-            if (value < end_1) {
-                S.pushOps(true, stmt[C.STMT_LIST]);
-            }
-            else {
-                S.clearDangerousProperties(stmt);
-            }
+        var contl = stmt[C.STMT_LIST];
+        if (contl.length !== 1 || contl[0][C.OPCODE] !== C.REPEAT_STMT_CONTINUATION) {
+            U.dbcException("repeat expects an embedded continuation statement");
         }
-        else if (mode === C.UNTIL) {
-            if (!S.pop()) {
-                S.pushOps(true, stmt[C.STMT_LIST]);
+        var cont = contl[0];
+        switch (mode) {
+            case C.FOREVER:
+            case C.UNTIL:
+            case C.WHILE:
+                S.pushOps(contl);
+                S.getOp(); // pseudo excution. Init is already done. Continuation is for termination only.
+                S.pushOps(cont[C.STMT_LIST]);
+                break;
+            case C.TIMES:
+            case C.FOR: {
+                var runVariableName = stmt[C.NAME];
+                var start = S.get2();
+                var end = S.get1();
+                if (+start >= +end) {
+                    S.pop();
+                    S.pop();
+                    S.pop();
+                }
+                else {
+                    S.bindVar(runVariableName, start);
+                    S.pushOps(contl);
+                    S.getOp(); // pseudo excution. Init is already done. Continuation is for termination only.
+                    S.pushOps(cont[C.STMT_LIST]);
+                    break;
+                }
+                break;
             }
-        }
-        else if (mode === C.FOR) {
-            var variable = stmt[C.VAR];
-            var actual = S.getVar(variable);
-            var step;
-            var end;
-            if (stmt[C.STEP] === undefined) {
-                step = S.pop();
-                end = S.pop();
-                stmt[C.STEP] = step;
-                stmt[C.END] = end;
-            }
-            else {
-                step = stmt[C.STEP];
-                end = stmt[C.END];
-                actual += step;
-                S.setVar(variable, actual);
-            }
-            // U.p( 'actual:' + actual + ' step:' + step + ' end:' + end );
-            if (actual <= end) {
-                S.pushOps(true, stmt[C.STMT_LIST]);
-            }
-            else {
-                S.unbindVar(variable);
-                stmt[C.STEP] = undefined;
-                stmt[C.END] = undefined;
-            }
-        }
-        else {
-            U.dbcException("invalid repeat mode: " + mode);
+            default:
+                U.dbcException("invalid repeat mode: " + mode);
         }
     }
     function isPrime(n) {

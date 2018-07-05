@@ -204,6 +204,7 @@ public class C {
     public static final String RED = "red";
     public static final String REMOVE = "remove";
     public static final String REPEAT_STMT = "RepeatStmt";
+    public static final String REPEAT_STMT_CONTINUATION = "RepeatStmtCont";
     public static final String RESET = "reset";
     public static final String RETURN = "return";
     public static final String RETURN_TYPE = "returnType";

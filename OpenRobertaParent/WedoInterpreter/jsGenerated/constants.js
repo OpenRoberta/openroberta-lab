@@ -218,6 +218,7 @@
     exports.RED = "red";
     exports.REMOVE = "remove";
     exports.REPEAT_STMT = "RepeatStmt";
+    exports.REPEAT_STMT_CONTINUATION = "RepeatStmtCont";
     exports.RESET = "reset";
     exports.RETURN = "return";
     exports.RETURN_TYPE = "returnType";

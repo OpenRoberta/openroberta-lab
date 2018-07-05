@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.codegen.wedo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,6 +78,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
@@ -368,49 +370,66 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
 
     @Override
     public V visitRepeatStmt(RepeatStmt<V> repeatStmt) {
-        switch ( repeatStmt.getMode() ) {
-            case WAIT: {
-                repeatStmt.getExpr().visit(this);
+        Mode mode = repeatStmt.getMode();
+
+        // TODO: the very special case of a wait stmt. The AST is badly designed for this case
+        if ( mode == Mode.WAIT ) {
+            repeatStmt.getExpr().visit(this);
+            pushOpArray();
+            repeatStmt.getList().visit(this);
+            JSONObject stmtListEnd = mk(C.FLOW_CONTROL).put(C.KIND, C.WAIT_STMT).put(C.CONDITIONAL, false).put(C.BREAK, true);
+            opArray.add(stmtListEnd);
+            List<JSONObject> waitBody = popOpArray();
+            JSONObject o = mk(C.IF_TRUE_STMT).put(C.STMT_LIST, waitBody);
+            return app(o);
+        }
+
+        // The "real" repeat cases
+        if ( mode == Mode.FOREVER || mode == Mode.TIMES || mode == Mode.FOR ) {
+            pushOpArray();
+            repeatStmt.getList().visit(this);
+            List<JSONObject> repeatBody = popOpArray();
+            JSONObject cont = mk(C.REPEAT_STMT_CONTINUATION).put(C.MODE, mode).put(C.STMT_LIST, repeatBody);
+            JSONObject repeat = mk(C.REPEAT_STMT).put(C.MODE, mode).put(C.STMT_LIST, Arrays.asList(cont));
+            if ( mode == Mode.FOREVER ) {
+                return app(repeat);
+            } else {
                 pushOpArray();
-                repeatStmt.getList().visit(this);
-                JSONObject stmtListEnd = mk(C.FLOW_CONTROL).put(C.KIND, C.WAIT_STMT).put(C.CONDITIONAL, false).put(C.BREAK, true);
-                opArray.add(stmtListEnd);
-                List<JSONObject> waitBody = popOpArray();
-                JSONObject o = mk(C.IF_TRUE_STMT).put(C.STMT_LIST, waitBody);
-                return app(o);
-            }
-            case TIMES: {
-                repeatStmt.getExpr().visit(this);
-                pushOpArray();
-                repeatStmt.getList().visit(this);
-                List<JSONObject> whileBody = popOpArray();
-                JSONObject o = mk(C.REPEAT_STMT).put(C.MODE, repeatStmt.getMode()).put(C.STMT_LIST, whileBody);
-                return app(o);
-            }
-            case FOR: {
-                repeatStmt.getExpr().visit(this); // expected: stmt list length 3
-                pushOpArray();
-                repeatStmt.getList().visit(this);
-                List<JSONObject> whileBody = popOpArray();
-                JSONObject o = mk(C.REPEAT_STMT).put(C.MODE, repeatStmt.getMode()).put(C.STMT_LIST, whileBody);
-                return app(o);
-            }
-            case FOREVER:
-            case WHILE:
-            case UNTIL: {
-                pushOpArray();
-                repeatStmt.getExpr().visit(this);
-                JSONObject ifBreak = mk(C.FLOW_CONTROL).put(C.KIND, C.REPEAT_STMT).put(C.CONDITIONAL, true).put(C.BREAK, true);
-                this.opArray.add(ifBreak);
-                repeatStmt.getList().visit(this);
-                List<JSONObject> whileBody = popOpArray();
-                JSONObject o = mk(C.REPEAT_STMT).put(C.MODE, repeatStmt.getMode()).put(C.STMT_LIST, whileBody);
-                return app(o);
-            }
-            default: {
-                throw new DbcException("invalid repeat mode: " + repeatStmt.getMode());
+                repeatStmt.getExpr().visit(this); // expected: expr list length 4: var, start, end, incr
+                List<JSONObject> timesExprs = popOpArray();
+                JSONObject decl = timesExprs.remove(0);
+                this.opArray.addAll(timesExprs);
+                String runVarName = decl.getString(C.NAME);
+                cont.put(C.NAME, runVarName);
+                repeat.put(C.NAME, runVarName);
+                return app(repeat);
             }
         }
+
+        if ( mode == Mode.WHILE || mode == Mode.UNTIL ) {
+            pushOpArray();
+            repeatStmt.getExpr().visit(this);
+            List<JSONObject> expr = popOpArray();
+            pushOpArray();
+            repeatStmt.getList().visit(this);
+            List<JSONObject> body = popOpArray();
+            JSONObject cont = mk(C.REPEAT_STMT_CONTINUATION).put(C.MODE, mode);
+            JSONObject repeat = mk(C.REPEAT_STMT).put(C.MODE, mode).put(C.STMT_LIST, Arrays.asList(cont));
+            List<JSONObject> bodyAndExpr = new ArrayList<>();
+            if ( mode == Mode.WHILE ) {
+                bodyAndExpr.addAll(expr);
+                bodyAndExpr.add(mk(C.FLOW_CONTROL).put(C.KIND, C.REPEAT_STMT).put(C.CONDITIONAL, true).put(C.BOOLEAN, false).put(C.BREAK, true));
+                bodyAndExpr.addAll(body);
+            } else {
+                bodyAndExpr.addAll(body);
+                bodyAndExpr.addAll(expr);
+                bodyAndExpr.add(mk(C.FLOW_CONTROL).put(C.KIND, C.REPEAT_STMT).put(C.CONDITIONAL, true).put(C.BREAK, true));
+            }
+            cont.put(C.STMT_LIST, bodyAndExpr);
+            return app(repeat);
+        }
+
+        throw new DbcException("invalid repeat mode: " + mode);
     }
 
     @Override
@@ -421,7 +440,9 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
 
     @Override
     public V visitStmtFlowCon(StmtFlowCon<V> stmtFlowCon) {
-        JSONObject o = mk(C.FLOW_CONTROL).put(C.KIND, C.REPEAT_STMT).put(C.CONDITIONAL, false).put(C.BREAK, stmtFlowCon.getFlow() == Flow.BREAK);
+        boolean breakAndNotContinue = stmtFlowCon.getFlow() == Flow.BREAK;
+        String targetStmt = breakAndNotContinue ? C.REPEAT_STMT : C.REPEAT_STMT_CONTINUATION;
+        JSONObject o = mk(C.FLOW_CONTROL).put(C.KIND, targetStmt).put(C.CONDITIONAL, false).put(C.BREAK, breakAndNotContinue);
         return app(o);
     }
 
@@ -483,10 +504,8 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
         for ( Stmt<V> repeatStmt : repeatStmts ) {
             repeatStmt.visit(this);
         }
-        JSONObject push10 = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 10);
-        opArray.add(push10);
-        JSONObject wait10 = mk(C.WAIT_TIME_STMT);
-        opArray.add(wait10);
+        opArray.add(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 1));
+        opArray.add(mk(C.WAIT_TIME_STMT));
         List<JSONObject> waitBlocks = popOpArray();
         JSONObject o = mk(C.WAIT_STMT).put(C.STMT_LIST, waitBlocks);
         return app(o);
@@ -620,6 +639,8 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
         popOpArray();
         pushOpArray();
         methodVoid.getBody().visit(this);
+        JSONObject terminateMethodCall = mk(C.FLOW_CONTROL).put(C.KIND, C.METHOD_CALL_VOID).put(C.CONDITIONAL, false).put(C.BREAK, true);
+        opArray.add(terminateMethodCall);
         List<JSONObject> methodBody = popOpArray();
         JSONObject o = mk(C.METHOD_VOID).put(C.NAME, methodVoid.getMethodName()).put(C.STATEMENTS, methodBody);
         fctDecls.put(methodVoid.getMethodName(), o);
@@ -634,6 +655,8 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
         pushOpArray();
         methodReturn.getBody().visit(this);
         methodReturn.getReturnValue().visit(this);
+        JSONObject terminateMethodCall = mk(C.FLOW_CONTROL).put(C.KIND, C.METHOD_CALL_RETURN).put(C.CONDITIONAL, false).put(C.BREAK, true);
+        opArray.add(terminateMethodCall);
         List<JSONObject> methodBody = popOpArray();
         JSONObject o = mk(C.METHOD_RETURN).put(C.TYPE, methodReturn.getReturnType()).put(C.NAME, methodReturn.getMethodName()).put(C.STATEMENTS, methodBody);
         fctDecls.put(methodReturn.getMethodName(), o);
@@ -667,16 +690,11 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
         names = Lists.reverse(names);
         popOpArray();
         List<Expr<V>> parametersValues = methodCall.getParametersValues().get();
-        parametersValues.stream().forEach(v -> {
-            System.out.println(v);
-            v.visit(this);
-        });
+        parametersValues.stream().forEach(v -> v.visit(this));
         // TODO: better AST needed. Push and pop used only to get the parameter names
-        JSONObject o =
-            mk(methodCall.getReturnType() == BlocklyType.VOID ? C.METHOD_CALL_VOID : C.METHOD_CALL_RETURN)
-                .put(C.NAME, methodCall.getMethodName())
-                .put(C.NAMES, names);
-        return app(o);
+        String methodKind = methodCall.getReturnType() == BlocklyType.VOID ? C.METHOD_CALL_VOID : C.METHOD_CALL_RETURN;
+        JSONObject call = mk(methodKind).put(C.NAME, methodCall.getMethodName()).put(C.NAMES, names);
+        return app(call);
     }
 
     @Override

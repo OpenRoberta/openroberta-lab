@@ -1,18 +1,9 @@
 import * as INTERPRETER from './interpreter';
 import * as FS from 'fs';
 
-const BASEDIR: string = 'D:/git/robertalab/OpenRobertaParent/WedoInterpreter/simulatorTests/';
-const DEFAULT = 'simple';
+const BASEDIR: string = './xmlTests/';
 
-process.argv.shift();
-process.argv.shift();
-if ( process.argv.length == 0 ) {
-    processOps( DEFAULT );
-} else {
-    process.argv.forEach( function( val, index, array ) {
-        processOps( val );
-    } );
-}
+processOps( process.argv[2] );
 
 function callbackOnTermination() {
     console.log( 'program has terminated' );

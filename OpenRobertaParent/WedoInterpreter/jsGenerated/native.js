@@ -41,7 +41,7 @@
     exports.statusLightOffAction = statusLightOffAction;
     function motorOnAction(name, port, duration, speed) {
         var robotText = 'robot: ' + name + ', port: ' + port;
-        var durText = duration === -1 ? ' w.o. duration' : (' for ' + duration + ' msec');
+        var durText = duration <= 0 ? ' w.o. duration' : (' for ' + duration + ' msec');
         U.p(robotText + ' motor speed ' + speed + durText);
     }
     exports.motorOnAction = motorOnAction;
@@ -55,4 +55,11 @@
         U.p('***** show "' + showText + '" *****');
     }
     exports.showTextAction = showTextAction;
+    function toneAction(name, port, frequency, duration) {
+        U.p("tone, duration: " + duration + ", frequency: " + frequency);
+        var robotText = 'robot: ' + name + ', port: ' + port;
+        var durText = duration <= 0 ? ' w.o. duration' : (' for ' + duration + ' msec');
+        U.p(robotText + ' tone ' + frequency + durText);
+    }
+    exports.toneAction = toneAction;
 });

@@ -11,31 +11,19 @@
     Object.defineProperty(exports, "__esModule", { value: true });
     var C = require("./constants");
     var U = require("./util");
-    var bindings = {};
-    var stack = [];
-    var operations = [];
     var functions = {};
+    var operations = [];
     var pc = 0;
     var operationsStack = [];
-    function reset() {
-        bindings = {};
-        stack = [];
-        operations = [];
-        pc = 0;
-        // p( 'state reset' );
-    }
-    exports.reset = reset;
+    var bindings = {};
+    var stack = [];
     function getFunction(name) {
         return functions[name];
     }
     exports.getFunction = getFunction;
     function bindVar(name, value) {
-        if (name === undefined || name === null) {
-            dbcException("bindVar name invalid");
-        }
-        if (value === undefined || value === null) {
-            dbcException("bindVar value invalid");
-        }
+        checkValidName(name);
+        checkValidValue(value);
         var nameBindings = bindings[name];
         if (nameBindings === undefined || nameBindings === null || nameBindings === []) {
             bindings[name] = [value];
@@ -48,65 +36,80 @@
     }
     exports.bindVar = bindVar;
     function unbindVar(name) {
-        if (name === undefined || name === null) {
-            dbcException("unbindVar name invalid");
-        }
+        checkValidName(name);
         var oldBindings = bindings[name];
         if (oldBindings.length < 1) {
-            dbcException("unbind failed for: " + name);
+            U.dbcException("unbind failed for: " + name);
         }
         oldBindings.shift();
         p('unbind ' + name + ' remaining bindings are ' + oldBindings.length);
     }
     exports.unbindVar = unbindVar;
     function getVar(name) {
-        if (name === undefined || name === null) {
-            dbcException("getVar name invalid");
-        }
+        checkValidName(name);
         var nameBindings = bindings[name];
         if (nameBindings === undefined || nameBindings === null || nameBindings.length < 1) {
-            dbcException("getVar failed for: " + name);
+            U.dbcException("getVar failed for: " + name);
         }
         // p( 'get ' + name + ': ' + nameBindings[0] );
         return nameBindings[0];
     }
     exports.getVar = getVar;
     function setVar(name, value) {
-        if (name === undefined || name === null) {
-            dbcException("setVar name invalid");
-        }
+        checkValidName(name);
+        checkValidValue(value);
         if (value === undefined || value === null) {
-            dbcException("setVar value invalid");
+            U.dbcException("setVar value invalid");
         }
         var nameBindings = bindings[name];
         if (nameBindings === undefined || nameBindings === null || nameBindings.length < 1) {
-            dbcException("setVar failed for: " + name);
+            U.dbcException("setVar failed for: " + name);
         }
         nameBindings[0] = value;
         // p( 'set ' + name + ': ' + nameBindings[0] );
     }
     exports.setVar = setVar;
     function push(value) {
-        if (value === undefined || value === null) {
-            dbcException("push value invalid");
-        }
+        checkValidValue(value);
         stack.push(value);
         p('push ' + value + ' of type ' + typeof value);
     }
     exports.push = push;
     function pop() {
         if (stack.length < 1) {
-            dbcException("pop failed with empty stack");
+            U.dbcException("pop failed with empty stack");
         }
         var value = stack.pop();
         // p( 'pop ' + value );
         return value;
     }
     exports.pop = pop;
+    function get(i) {
+        if (stack.length === 0) {
+            U.dbcException("get failed with empty stack");
+        }
+        return stack[stack.length - 1 - i];
+    }
+    function get0() {
+        return get(0);
+    }
+    exports.get0 = get0;
+    function get1() {
+        return get(1);
+    }
+    exports.get1 = get1;
+    function get2() {
+        return get(2);
+    }
+    exports.get2 = get2;
     function storeCode(ops, fct) {
-        operations = ops;
         functions = fct;
+        operations = ops;
         pc = 0;
+        operationsStack = [];
+        bindings = {};
+        stack = [];
+        // p( 'storeCode with state reset' );
     }
     exports.storeCode = storeCode;
     // only for debugging!
@@ -117,22 +120,11 @@
         return state;
     }
     exports.getOps = getOps;
-    function getOp() {
-        while (operations !== undefined && pc >= operations.length) {
-            popOps();
+    function pushOps(ops) {
+        if (pc <= 0) {
+            U.dbcException('pc must be > 0, but is ' + pc);
         }
-        if (operations === undefined) {
-            return undefined;
-        }
-        else {
-            return operations[pc++];
-        }
-    }
-    exports.getOp = getOp;
-    function pushOps(reenable, ops) {
-        if (reenable && pc > 0) {
-            pc--;
-        }
+        pc--;
         var opsWrapper = {};
         opsWrapper[C.OPS] = operations;
         opsWrapper[C.PC] = pc;
@@ -142,12 +134,13 @@
         opLog('PUSHING STMTS');
     }
     exports.pushOps = pushOps;
-    function popOps() {
-        var opsWrapper = operationsStack.shift();
-        operations = opsWrapper === undefined ? undefined : opsWrapper[C.OPS];
-        pc = opsWrapper === undefined ? 0 : opsWrapper[C.PC];
+    function getOp() {
+        if (operations !== undefined && pc >= operations.length) {
+            popOpsUntil();
+        }
+        return operations[pc++];
     }
-    exports.popOps = popOps;
+    exports.getOp = getOp;
     function popOpsUntil(target) {
         while (true) {
             var opsWrapper = operationsStack.shift();
@@ -155,26 +148,22 @@
                 throw "pop ops until " + target + "-stmt failed";
             }
             var suspendedStmt = opsWrapper[C.OPS][opsWrapper[C.PC]];
-            clearDangerousProperties(suspendedStmt);
-            if (suspendedStmt[C.OPCODE] === target) {
-                operations = opsWrapper[C.OPS];
-                pc = opsWrapper[C.PC];
-                return;
+            if (suspendedStmt !== undefined) {
+                if (suspendedStmt[C.OPCODE] === C.REPEAT_STMT && (suspendedStmt[C.MODE] === C.TIMES || suspendedStmt[C.MODE] === C.FOR)) {
+                    unbindVar(suspendedStmt[C.NAME]);
+                    pop();
+                    pop();
+                    pop();
+                }
+                if (target === undefined || suspendedStmt[C.OPCODE] === target) {
+                    operations = opsWrapper[C.OPS];
+                    pc = opsWrapper[C.PC];
+                    return;
+                }
             }
         }
     }
     exports.popOpsUntil = popOpsUntil;
-    function clearDangerousProperties(stmt) {
-        var opc = stmt[C.OPCODE];
-        if (opc === C.REPEAT_STMT) {
-            stmt[C.VALUE] = undefined;
-            stmt[C.END] = undefined;
-        }
-        else if (opc === C.METHOD_CALL_VOID || opc === C.METHOD_CALL_RETURN) {
-            stmt[C.RETURN] = undefined;
-        }
-    }
-    exports.clearDangerousProperties = clearDangerousProperties;
     function opLog(msg) {
         var opl = '';
         var counter = 0;
@@ -193,10 +182,17 @@
         p(msg + ' pc:' + pc + ' ' + opl);
     }
     exports.opLog = opLog;
+    function checkValidName(name) {
+        if (name === undefined || name === null) {
+            U.dbcException("invalid name");
+        }
+    }
+    function checkValidValue(value) {
+        if (value === undefined || value === null) {
+            U.dbcException("bindVar value invalid");
+        }
+    }
     function p(s) {
         U.p(s);
-    }
-    function dbcException(s) {
-        U.dbcException(s);
     }
 });
