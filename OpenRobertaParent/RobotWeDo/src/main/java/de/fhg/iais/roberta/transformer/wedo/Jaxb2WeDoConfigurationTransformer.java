@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.components.ConfigurationBlockType;
 import de.fhg.iais.roberta.components.wedo.WeDoConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.util.Quadruplet;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
@@ -72,7 +73,9 @@ public class Jaxb2WeDoConfigurationTransformer {
                 for ( int i = 1; i < blocks.size(); i++ ) {
                     configurationBlocks.add(extractConfigurationBlockComponents(blocks.get(i)));
                 }
-                return new WeDoConfiguration(configurationBlocks).getConfiguration();
+                List<Field> fields = extractFields(blocks.get(0).get(0), (short) 1);
+                String brickName = extractField(fields, "VAR", (short) 0);
+                return new WeDoConfiguration(brickName, configurationBlocks).getConfiguration();
             default:
                 throw new DbcException("There was no correct configuration block found! " + blocks.get(0).get(0).getType());
         }
@@ -88,5 +91,18 @@ public class Jaxb2WeDoConfigurationTransformer {
             pinNumbers.add(block.get(0).getField().get(i).getValue());
         }
         return Quadruplet.of(confBlock, name, portNames, pinNumbers);
+    }
+
+    private List<Field> extractFields(Block block, int numOfFields) {
+        List<Field> fields;
+        fields = block.getField();
+        Assert.isTrue(fields.size() == numOfFields, "Number of fields is not equal to " + numOfFields + "!");
+        return fields;
+    }
+
+    private String extractField(List<Field> fields, String name, int fieldLocation) {
+        Field field = fields.get(fieldLocation);
+        Assert.isTrue(field.getName().equals(name), "Field name is not equal to " + name + "!");
+        return field.getValue();
     }
 }

@@ -254,7 +254,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
     }
     exports.setBlocklyWorkspace = setBlocklyWorkspace;
 
-    function getBricklyWorkspace(workspace) {
+    function getBricklyWorkspace() {
         return GUISTATE.gui.bricklyWorkspace;
     }
     exports.getBricklyWorkspace = getBricklyWorkspace;

@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import com.google.common.collect.Lists;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.wedo.WeDoConfiguration;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
@@ -219,20 +220,30 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
 
     @Override
     public V visitToneAction(ToneAction<V> toneAction) {
-        toneAction.getFrequency().visit(this);
-        toneAction.getDuration().visit(this);
-        JSONObject o = mk(C.TONE_ACTION);
-        return app(o);
+        String brickName = ((WeDoConfiguration) brickConfiguration).getRobotIdentName();
+        if ( (brickName != null) ) {
+            toneAction.getFrequency().visit(this);
+            toneAction.getDuration().visit(this);
+            JSONObject o = mk(C.TONE_ACTION).put(C.NAME, brickName);
+            return app(o);
+        } else {
+            throw new DbcException("No robot name or no port!");
+        }
     }
 
     @Override
     public V visitPlayNoteAction(PlayNoteAction<V> playNoteAction) {
-        JSONObject frequency = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, playNoteAction.getFrequency());
-        app(frequency);
-        JSONObject duration = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, playNoteAction.getDuration());
-        app(duration);
-        JSONObject o = mk(C.TONE_ACTION);
-        return app(o);
+        String brickName = ((WeDoConfiguration) brickConfiguration).getRobotIdentName();
+        if ( (brickName != null) ) {
+            JSONObject frequency = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, playNoteAction.getFrequency());
+            app(frequency);
+            JSONObject duration = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, playNoteAction.getDuration());
+            app(duration);
+            JSONObject o = mk(C.TONE_ACTION).put(C.NAME, brickName);
+            return app(o);
+        } else {
+            throw new DbcException("No robot name or no port!");
+        }
     }
 
     @Override

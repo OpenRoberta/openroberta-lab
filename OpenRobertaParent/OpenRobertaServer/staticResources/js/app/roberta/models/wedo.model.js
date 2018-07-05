@@ -15,9 +15,11 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         switch (data.op.type) {
         case "connect":
             wedo[data.op.brickid] = {};
-            wedo[data.op.brickid]["brickname"] = data.op.brickname;
+            wedo[data.op.brickid]["brickname"] = data.op.brickname.replace(/\s/g, '');
             // for some reason we do not get the inital state of the button, so here it is hardcoded
             wedo[data.op.brickid]["button"] = 'false';
+            // update configuration for brickname
+
             break;
         case "disconnect":
             delete exports.wedo[data.op.brickid];
@@ -62,10 +64,11 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     exports.update = update;
 
     function getSensorValue(brickid, sensor, opt_id) {
+        console.log(brickid + ' ' + sensor + ' ' + opt_id);
         var returnValue = undefined;
         try {
             if (opt_id) {
-                returnValue = wedo[brickid][op_id][sensor];
+                returnValue = wedo[brickid][opt_id][sensor];
             } else {
                 returnValue = wedo[brickid][sensor];
             }
@@ -89,5 +92,17 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
 
     }
     exports.getConnectedBricks = getConnectedBricks;
+
+    function getBrickIdByName(name) {
+        for ( var brickid in wedo) {
+            if (wedo.hasOwnProperty(brickid)) {
+                if (wedo[brickid].brickname === name) {
+                    return brickid;
+                }
+            }
+        }
+        return null;
+    }
+    exports.getBrickIdByName = getBrickIdByName;
 
 });

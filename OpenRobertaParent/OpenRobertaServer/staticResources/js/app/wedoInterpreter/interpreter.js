@@ -149,7 +149,8 @@ define([ 'exports', 'log', 'message', 'constants.interpreter', 'native.interpret
             case CONST_I.TONE_ACTION: {
                 var duration = STATE_I.pop();
                 var frequency = STATE_I.pop();
-                UTIL_I.p("tone, duration: " + duration + ", frequency: " + frequency);
+                NATIVE_I.toneAction(stmt[CONST_I.NAME], frequency, duration);
+               // UTIL_I.p("tone, duration: " + duration + ", frequency: " + frequency);
                 break;
             }
             case CONST_I.WAIT_STMT: {

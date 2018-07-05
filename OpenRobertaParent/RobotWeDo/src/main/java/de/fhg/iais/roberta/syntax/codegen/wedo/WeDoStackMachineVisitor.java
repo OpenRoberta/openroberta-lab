@@ -129,7 +129,7 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         String brickName = confMotorBlock.getPins().size() >= 1 ? confMotorBlock.getPins().get(0) : null;
         String port = confMotorBlock.getPins().size() >= 2 ? confMotorBlock.getPins().get(1) : null;
         if ( (brickName != null) && (port != null) ) {
-            JSONObject o = mk(C.MOTOR_STOP).put(C.PORT, port);
+            JSONObject o = mk(C.MOTOR_STOP).put(C.NAME, brickName).put(C.PORT, port);
             return app(o);
         } else {
             throw new DbcException("No robot name or no port");
@@ -181,9 +181,13 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitBrickSensor(BrickSensor<V> brickSensor) {
-        String brickName = "??? NYI ???";
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.NAME, brickName).put(C.PORT, brickSensor.getPort());
-        return app(o);
+        String brickName = ((WeDoConfiguration) brickConfiguration).getRobotIdentName();
+        if ( (brickName != null) ) {
+            JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.NAME, brickName).put(C.PORT, brickSensor.getPort());
+            return app(o);
+        } else {
+            throw new DbcException("operation not supported");
+        }
     }
 
     @Override
@@ -277,9 +281,15 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitLedOnAction(LedOnAction<V> ledOnAction) {
-        ledOnAction.getLedColor().visit(this);
-        JSONObject o = mk(C.LED_ON_ACTION);
-        return app(o);
+        String brickName = ((WeDoConfiguration) brickConfiguration).getRobotIdentName();
+        if ( (brickName != null) ) {
+            ledOnAction.getLedColor().visit(this);
+            JSONObject o = mk(C.LED_ON_ACTION).put(C.NAME, brickName).put(C.VALUE, ledOnAction.getLedColor().visit(this));
+            return app(o);
+        } else {
+            throw new DbcException("No robot name or no port!");
+        }
+
     }
 
 }

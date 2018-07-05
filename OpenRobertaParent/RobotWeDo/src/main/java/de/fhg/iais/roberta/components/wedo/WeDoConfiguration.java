@@ -7,11 +7,13 @@ import de.fhg.iais.roberta.components.ConfigurationBlockType;
 import de.fhg.iais.roberta.util.Quadruplet;
 
 public class WeDoConfiguration extends Configuration {
+    String robotIdentName = "";
 
     protected final List<Quadruplet<ConfigurationBlock, String, List<String>, List<String>>> configurationBlocks;
 
-    public WeDoConfiguration(List<Quadruplet<ConfigurationBlock, String, List<String>, List<String>>> configurationBlocks) {
+    public WeDoConfiguration(String robotIdentName, List<Quadruplet<ConfigurationBlock, String, List<String>, List<String>>> configurationBlocks) {
         super(null, null, -1, -1);
+        this.robotIdentName = robotIdentName;
         this.configurationBlocks = configurationBlocks;
     }
 
@@ -69,6 +71,10 @@ public class WeDoConfiguration extends Configuration {
     }
 
     public Configuration getConfiguration() {
-        return new WeDoConfiguration(this.configurationBlocks);
+        return new WeDoConfiguration(this.robotIdentName, this.configurationBlocks);
+    }
+
+    public String getRobotIdentName() {
+        return this.robotIdentName;
     }
 }
