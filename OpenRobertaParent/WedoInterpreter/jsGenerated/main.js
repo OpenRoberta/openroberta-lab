@@ -11,7 +11,7 @@
     Object.defineProperty(exports, "__esModule", { value: true });
     var INTERPRETER = require("./interpreter");
     var FS = require("fs");
-    var BASEDIR = './xmlTests/';
+    var BASEDIR = '../xmlTests/';
     processOps(process.argv[2]);
     function callbackOnTermination() {
         console.log('program has terminated');

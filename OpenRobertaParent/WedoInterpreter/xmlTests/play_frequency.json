@@ -1,0 +1,26 @@
+{
+	"ops": 
+	[
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "300"
+		},
+
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "100"
+		},
+
+		{
+			"opc": "ToneAction",
+			"name": "Brick1"
+		}
+	],
+
+	"functionDeclaration": 
+	{
+		
+	}
+}

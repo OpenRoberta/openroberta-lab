@@ -1,0 +1,20 @@
+{
+	"ops": 
+	[
+		{
+			"opc": "expr",
+			"expr": "COLOR_CONST",
+			"value": 9
+		},
+
+		{
+			"opc": "ledOnAction",
+			"name": "Brick1"
+		}
+	],
+
+	"functionDeclaration": 
+	{
+		
+	}
+}

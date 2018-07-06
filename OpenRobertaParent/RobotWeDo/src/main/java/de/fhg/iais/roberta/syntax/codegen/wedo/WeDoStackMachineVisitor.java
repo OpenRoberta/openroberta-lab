@@ -181,7 +181,7 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitBrickSensor(BrickSensor<V> brickSensor) {
-        String brickName = ((WeDoConfiguration) brickConfiguration).getRobotIdentName();
+        String brickName = ((WeDoConfiguration) this.brickConfiguration).getRobotIdentName();
         if ( (brickName != null) ) {
             JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.NAME, brickName).put(C.PORT, brickSensor.getPort());
             return app(o);
@@ -281,10 +281,10 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitLedOnAction(LedOnAction<V> ledOnAction) {
-        String brickName = ((WeDoConfiguration) brickConfiguration).getRobotIdentName();
+        String brickName = ((WeDoConfiguration) this.brickConfiguration).getRobotIdentName();
         if ( (brickName != null) ) {
             ledOnAction.getLedColor().visit(this);
-            JSONObject o = mk(C.LED_ON_ACTION).put(C.NAME, brickName).put(C.VALUE, ledOnAction.getLedColor().visit(this));
+            JSONObject o = mk(C.LED_ON_ACTION).put(C.NAME, brickName);
             return app(o);
         } else {
             throw new DbcException("No robot name or no port!");

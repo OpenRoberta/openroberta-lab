@@ -1,0 +1,14 @@
+{
+	"ops": 
+	[
+		{
+			"mode": "OFF",
+			"opc": "statusLightAction"
+		}
+	],
+
+	"functionDeclaration": 
+	{
+		
+	}
+}

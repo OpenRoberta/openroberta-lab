@@ -1,0 +1,27 @@
+{
+	"ops": 
+	[
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "30"
+		},
+
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": -1
+		},
+
+		{
+			"opc": "motorOnAction",
+			"PORT": "1",
+			"name": "Brick1"
+		}
+	],
+
+	"functionDeclaration": 
+	{
+		
+	}
+}
