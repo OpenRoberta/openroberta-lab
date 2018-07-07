@@ -292,6 +292,74 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         }
     }
     exports.init = init;
+    
+    var robots = [];
+    var readymultiple =[];
+    var isDownRobotmul = [];
+    function initMultiple(programs, refresh, robotType){
+        var numprogs = programs.length;
+        reset = false;
+        simRobotType = robotType;
+        console.log("simRobottype is ", simRobotType);
+        if (robotType.indexOf("calliope") >= 0) {
+            currentBackground = 0;
+            $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simButtonsHead').hide();
+        } else if (robotType === 'microbit') {
+            $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simButtonsHead').hide();
+            currentBackground = 1;
+        } else if (currentBackground == 0 || currentBackground == 1) {
+            currentBackground = 2;
+        }
+        if (currentBackground > 1) {
+            if (isIE() || isEdge()) { // TODO IE and Edge: Input event not firing for file type of input
+                $('.dropdown.sim, .simScene').show();
+                $('#simImport').hide();
+            } else {
+                $('.dropdown.sim, .simScene, #simImport, #simResetPose').show();
+            }
+            if ($('#device-size').find('div:visible').first().attr('id')) {
+                $('#simButtonsHead').show();
+            }
+        }
+        var blocklyprograms = programs.map(x => BUILDER.build(x.result.javaScriptProgram));
+        var programEvals = programs.map(x => new ProgramEval());
+        for(var i=0;i<numprogs;i++){
+            programEvals[i].initProgram(blocklyprograms[i]);
+        }
+        if (refresh) {
+            console.log("was refresh executed? ");
+            require([ 'simulation.robot.' + simRobotType ], function(reqRobot) {
+                createRobots(reqRobot, numprogs);
+                for(var i=0;i<numprogs;i++){
+                    robots[i].reset();
+                    robots[i].resetPose();
+                    readymultiple.push(false);
+                    isDownRobotmul.push(false);
+                    
+                }
+                removeMouseEvents();
+                cancel = false;
+                isDownObstacle = false;
+                isDownRuler = false;
+                stepCounter = 0;
+                pause= true;
+                info = false;
+                setObstacle();
+                setRuler();
+                initSceneMultiple();
+            });
+
+        } else {
+            for(var i=0;i<numprogs;i++){
+                if(robots[i].endless){
+                    robots[i].reset();
+                }
+            }
+            reloadProgram();
+        }
+        
+    }
+    exports.initMultiple = initMultiple;
 
     function cancel() {
         //$(window).off("resize");
@@ -685,6 +753,21 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         $('#backgroundDiv').on("resize", resizeAll);
         render();
     }
+    
+    
+    function initSceneMultiple(){
+        scene = new Scene(imgObjectList[currentBackground], robots, imgPattern, ruler);
+//        scene.updateBackgrounds();
+//        scene.drawObjects();
+//        scene.drawRuler();
+//        scene.drawRobots();
+//        addMouseEvents();
+//        ready = true;
+//        resizeAll();
+//        $(window).on("resize", resizeAll);
+//        $('#backgroundDiv').on("resize", resizeAll);
+//        render();
+    }
 
     function getScale() {
         return scale;
@@ -755,6 +838,22 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     }
     exports.importImage = importImage;
 
+    function createRobots(reqRobot, numprogs){
+        for(var i=0; i<numprogs;i++){
+            var temprobot = new reqRobot({
+                x : 240,
+                y : 200,
+                theta : 0,
+                xOld : 240,
+                yOld : 200,
+                transX : 0,
+                transY : 0
+            });
+            temprobot.canDraw = false;
+            robots.push(temprobot);
+        }
+    }
+    
     function createRobot(reqRobot) {
         if (currentBackground == 2) {
             robot = new reqRobot({

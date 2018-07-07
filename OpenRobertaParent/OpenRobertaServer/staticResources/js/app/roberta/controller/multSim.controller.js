@@ -1,7 +1,8 @@
 /**
  * Controller for multiple simulation part of the project
  */
-define(['exports','util', 'progList.model', 'program.model','guiState.controller','guiState.model', 'jquery'],function(exports, UTIL, PROGLIST, PROGRAM_M,GUISTATE_C, GUISTATE_M, $){
+define(['exports','util', 'progList.model','program.controller', 'program.model','guiState.controller','guiState.model','simulation.simulation', 'jquery'],
+        function(exports, UTIL, PROGLIST,PROG_C, PROGRAM_M,GUISTATE_C, GUISTATE_M, SIM,  $){
     function init(){
         //currently does nothing
     }
@@ -72,15 +73,21 @@ define(['exports','util', 'progList.model', 'program.model','guiState.controller
                         $("#simModal .btn-primary").on("click",function(){
                             console.log("Selections will be executed");
                             console.log('Selections obtained via getSelections: are ' + JSON.stringify($("#mtable").bootstrapTable('getSelections')));
-                            alert("The following programs would be executed: "+ JSON.stringify($("#mtable").bootstrapTable('getSelections')));
+//                            alert("The following programs would be executed: "+ JSON.stringify($("#mtable").bootstrapTable('getSelections')));
                             var extractedprograms =[];
                             selectedprograms.forEach(function(item,i,oriarray){
                                 PROGRAM_M.loadProgramFromListing(item[0], item[1],item[3], function(dat){
+                                    if(dat.rc != "ok"){
+                                        alert("failed loading program for item "+ i+", check console");
+                                        console.log("failed item is ", item);
+                                    }
                                     extractedprograms.push(dat);
                                     if(i===oriarray.length -1 ){
                                         console.log("finished");
                                         var jslist = [];
+//                                        console.log(extractedprograms);
                                         extractedprograms.forEach(function(item,i,oriarray){
+                                            
                                             var xmlTextProgram = item.programText;
                                             var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
                                             var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
@@ -89,24 +96,34 @@ define(['exports','util', 'progList.model', 'program.model','guiState.controller
                                             var language = GUISTATE_C.getLanguage();
                                             
                                             PROGRAM_M.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
-                                                console.log("lets see the result");
-                                                console.log(result);
+//                                                console.log("lets see the result");
+//                                                console.log(result);
                                                 if (result.rc == "ok") {
                                                     //                    MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
-                                                    var robotgroup = GUISTATE_C.getRobotGroup();
-                                                    SIM.init(result.javaScriptProgram, true, GUISTATE_C.getRobotGroup());
-                                                    $(".sim").removeClass('hide');
-                                                    $('#simButtonsCollapse').collapse({
-                                                        'toggle' : false
-                                                    });
-//                                                    if (TOUR_C.getInstance() && TOUR_C.getInstance().trigger) {
-//                                                        TOUR_C.getInstance().trigger('startSim');
-//                                                    }
-                                                    $('#blockly').openRightView('sim', INITIAL_WIDTH);
+                                                    extractedprograms[i]["result"] = result;
+                                                    if(i===oriarray.length-1){
+                                                        console.log("reached end");
+                                                        alert("simulate");
+                                                        console.log(extractedprograms);
+                                                        simulateMultiple(extractedprograms);
+                                                    }
+//                                                    console.log(extractedprograms);
+//                                                    var robotgroup = GUISTATE_C.getRobotGroup();
+//                                                    SIM.init(result.javaScriptProgram, true, GUISTATE_C.getRobotGroup());
+//                                                    $(".sim").removeClass('hide');
+//                                                    $('#simButtonsCollapse').collapse({
+//                                                        'toggle' : false
+//                                                    });
+////                                                    if (TOUR_C.getInstance() && TOUR_C.getInstance().trigger) {
+////                                                        TOUR_C.getInstance().trigger('startSim');
+////                                                    }
+//                                                    $('#blockly').openRightView('sim', INITIAL_WIDTH);
                                                 } else {
                                                     MSG.displayInformation(result, "", result.message, "");
+                                                    alert("failed loading js for item "+i+" check console");
+                                                    console.log("failed loading js for item ", item);
                                                 }
-                                                PROGRAM_C.reloadProgram(result);
+//                                                PROGRAM_C.reloadProgram(result);
                                             });
                                             
                                         });
@@ -125,6 +142,26 @@ define(['exports','util', 'progList.model', 'program.model','guiState.controller
         });
     }
     exports.showListProg = showListProg;
+    
+    function simulateMultiple(programs){
+        console.log("function is called");
+        console.log(programs);
+        $("#simModal").modal('toggle');
+        
+        //lets try running first program
+//        var jsprog = programs[0].result.javaScriptProgram;
+//        var robotgroup = GUISTATE_C.getRobotGroup();
+//        SIM.init(jsprog, true, robotgroup);
+//        $(".sim").removeClass('hide');
+//        $('#simButtonsCollapse').collapse({
+//            'toggle' : false
+//        });
+//        const INITIAL_WIDTH = 0.5;
+//        $('#blockly').openRightView('sim', INITIAL_WIDTH);
+//        PROG_C.reloadProgram(programs[0].result);
+        SIM.initMultiple(programs, true, GUISTATE_C.getRobotGroup());
+        
+    }
 
     //deprecated as previously information about the robottype was fetched from the database but it was understood later that it can be directly extracted from guistate.model.js
     function showListProgOld(){

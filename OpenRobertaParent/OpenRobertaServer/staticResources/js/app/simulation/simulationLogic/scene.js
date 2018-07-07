@@ -10,7 +10,27 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
      * @constructor
      */
     function Scene(backgroundImg, robot,  pattern, ruler) {
-
+        if(robot.constructor != Array){
+            this.backgroundImg = backgroundImg;
+            this.robot = robot;
+//            this.obstacle = obstacle;
+            this.ruler = ruler;
+            this.pattern = pattern;
+            this.uCtx = $('#unitBackgroundLayer')[0].getContext('2d'); // unit context
+            this.bCtx = $('#backgroundLayer')[0].getContext('2d'); // background context
+            this.mCtx = $('#rulerLayer')[0].getContext('2d'); // ruler == *m*easurement context
+            this.oCtx = $('#objectLayer')[0].getContext('2d'); // object context
+            this.rCtx = $('#robotLayer')[0].getContext('2d'); // robot context
+            this.playground = {
+                x : 0,
+                y : 0,
+                w : 0,
+                h : 0
+            };
+            this.wave = 0.0;
+        }else if(robot.constructor === Array){
+            alert("robot is multiple");
+        }
         this.backgroundImg = backgroundImg;
         this.robot = robot;
 //        this.obstacle = obstacle;
