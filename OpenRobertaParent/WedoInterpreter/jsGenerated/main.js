@@ -11,11 +11,11 @@
     Object.defineProperty(exports, "__esModule", { value: true });
     var INTERPRETER = require("./interpreter");
     var FS = require("fs");
-    var BASEDIR = '../xmlTests/';
-    processOps(process.argv[2]);
-    function callbackOnTermination() {
-        console.log('program has terminated');
-    }
+    var BASEDIR = './xmlTests/'; // basedir should be the project directory (in eclipse: edit the run configuration :-)
+    processOps(process.argv[2]); // 0: node 1: js-filename 2: fileName parameter
+    /**
+    * run the operations, that are stored in file '<fileName>.json'
+    */
     function processOps(fileName) {
         console.log('***** running program ' + fileName + ' *****');
         FS.readFile(BASEDIR + fileName + '.json', 'utf8', function (err, generatedCodeAsString) {
@@ -27,5 +27,11 @@
                 INTERPRETER.run(generatedCode, callbackOnTermination);
             }
         });
+    }
+    /**
+    * called, when the program has terminated
+    */
+    function callbackOnTermination() {
+        console.log('program has terminated');
     }
 });

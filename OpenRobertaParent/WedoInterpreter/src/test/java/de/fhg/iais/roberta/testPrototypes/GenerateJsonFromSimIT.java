@@ -51,11 +51,14 @@ public class GenerateJsonFromSimIT {
     private static final String ROBOT = "wedo";
 
     private static final String[] NAME_OF_TESTS = {
-        "gyroscope"
-        //"x-fac",
-        //                    "sensoren",
-        //                    "aktoren",
-        //                    "fac",
+        "gyroscope",
+        "x-fct-mthd-repeat",
+        "x-motor-tone",
+        "x-if",
+        "x-fac"
+        //"sensoren",
+        //"aktoren",
+        //"fac",
         //"control_if_elseif"
     };
 

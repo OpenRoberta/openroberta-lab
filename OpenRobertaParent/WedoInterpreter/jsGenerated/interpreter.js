@@ -15,6 +15,12 @@
     var U = require("./util");
     var terminated = false;
     var callbackOnTermination = undefined;
+    /**
+     * run the operations.
+     *
+     * . @param generatedCode argument contains the operations and the function definitions
+     * . @param cbOnTermination is called when the program has terminated
+     */
     function run(generatedCode, cbOnTermination) {
         terminated = false;
         callbackOnTermination = cbOnTermination;
@@ -24,24 +30,66 @@
         stop[C.OPCODE] = "stop";
         stmts.push(stop);
         S.storeCode(stmts, functions);
-        setTimeout(function () { evalOperation(); }, 0); // return to caller. Don't block the UI.
+        timeout(function () { evalOperation(); }, 0); // return to caller. Don't block the UI.
     }
     exports.run = run;
+    /**
+     * return true, if the program is terminated
+     */
     function isTerminated() {
         return terminated;
     }
     exports.isTerminated = isTerminated;
+    /**
+     * force the termination of the program. The termination takes place, when the NEXT operation should be executed. The delay is not significant.
+     * The callbackOnTermination function is called
+     */
     function terminate() {
         terminated = true;
     }
     exports.terminate = terminate;
+    /**
+     * the central interpreter. It is a stack machine interpreting operations given as JSON objects. The operations are all IMMUTABLE. It
+     * - uses the S (state) component to store the state of the interpretation.
+     * - uses the N (native) component for accessing hardware sensors and actors
+     *
+     * if the program is not terminated, it will take one operation after the other and execute it. The property C.OPCODE contains the
+     * operation code and is used for switching to the various operations implementations. For some operation codes the implementations is extracted to
+     * special functions (repeat, expression) for better readability.
+     *
+     * The state of the interpreter consists of
+     * - a stack of computed values
+     * - the actual array of operations to be executed now, including a program counter as index into the array
+     * - a stack of operations-arrays (including their program counters), that are actually frozen until the actual array has been interpreted.
+     * - a hash map of bindings. A binding map a name as key to an array of values. This implements hiding of variables.
+     *
+     * The stack of operations-arrays is used to store the history of complex operation as
+     *   - function call
+     *   - if-then-else
+     *   - repeat
+     *   - wait
+     * - If such an operation is executed, it pushes the actual array of operations (including itself) onto the stack of operations-arrays,
+     *   set the actual array of operations to a new array of own operations (found at the property C.STMT_LIST) and set the program counter to 0
+     * - The program counter of the pushed array of operations keeps pointing to the operation that effected the push. Thus some operations as break
+     *   have to increase the program counter (to avoid an endless loop)
+     * - if the actual array of operations is exhausted, the last array of operations pushed to the stack of operations-arrays is re-activated
+     *
+     * The statement C.FLOW_CONTROL is rather complex:
+     * - it is used explicitly by 'continue' and 'break' and know about the repeat-statement / repeat-continuation structure (@see eval_repeat())
+     * - it is used implicitly by if-then-else, if one branch is selected and is exhausted. It forces the continuation after the if-then-else
+     *
+     * Each operation code implementation may
+     * - create new bindings of values to names (variable declaration)
+     * - change the values of the binding (assign)
+     * - push and pop values to the stack (expressions)
+     * - push and pop to the stack of operations-arrays
+     */
     function evalOperation() {
         var _loop_1 = function () {
             S.opLog('actual ops: ');
             var stmt = S.getOp();
             if (stmt === undefined) {
-                U.p("PROGRAM TERMINATED. No ops remaining");
-                terminated = true;
+                U.p('PROGRAM TERMINATED. No ops remaining');
                 return "break-topLevelLoop";
             }
             var opCode = stmt[C.OPCODE];
@@ -119,8 +167,11 @@
                     var name_2 = stmt[C.NAME];
                     var port_1 = stmt[C.PORT];
                     N.motorOnAction(name_2, port_1, duration, speed);
-                    setTimeout(function () { N.motorStopAction(name_2, port_1); evalOperation(); }, duration);
-                    return { value: void 0 };
+                    if (duration >= 0) {
+                        timeout(function () { N.motorStopAction(name_2, port_1); evalOperation(); }, duration);
+                        return { value: void 0 };
+                    }
+                    break;
                 }
                 case C.MOTOR_STOP: {
                     N.motorStopAction(stmt[C.NAME], stmt[C.PORT]);
@@ -154,7 +205,6 @@
                     return { value: void 0 };
                 case C.STOP:
                     U.p("PROGRAM TERMINATED. stop op");
-                    terminated = true;
                     return "break-topLevelLoop";
                 case C.TEXT_JOIN:
                     var second = S.pop();
@@ -168,7 +218,7 @@
                     var duration = S.pop();
                     var frequency = S.pop();
                     N.toneAction(stmt[C.NAME], stmt[C.PORT], frequency, duration);
-                    setTimeout(function () { evalOperation(); }, duration);
+                    timeout(function () { evalOperation(); }, duration);
                     return { value: void 0 };
                 }
                 case C.VAR_DECLARATION: {
@@ -183,8 +233,7 @@
                 }
                 case C.WAIT_TIME_STMT: {
                     var time = S.pop();
-                    U.p('waiting ' + time + ' msec');
-                    setTimeout(function () { evalOperation(); }, time);
+                    timeout(function () { evalOperation(); }, time);
                     return { value: void 0 };
                 }
                 default:
@@ -200,9 +249,15 @@
             }
         }
         // termination either requested by the client or by executing 'stop' or after last statement
+        terminated = true;
         callbackOnTermination();
     }
     exports.evalOperation = evalOperation;
+    /**
+     *  called from @see evalOperation() to evaluate all kinds of expressions
+     *
+     * . @param expr to be evaluated
+     */
     function evalExpr(expr) {
         var kind = expr[C.EXPR];
         switch (kind) {
@@ -411,6 +466,21 @@
         }
         var _a;
     }
+    /**
+     * called from @see evalOperation() to run a repeat statement
+     *
+     * a repeat-statement ALWAYS contains a single repeat-continuation statement. That in turn contains the body statements written by the programmer.
+     * The repeat-statement does initialization of init, end, step and the run variable for the FOR and TIMES variant (other variants don't need that)
+     * The repeat-continuation is for updating the run variable in the FOR and TIMES variant.
+     *
+     * A continue statement pops the stack until a repeat-continuation is found and re-executes it
+     * A break statement pops the stack until a repeat-statement is found and skips that
+     *
+     * Have a look at the functions for push and pop of operations in the STATE component. The cleanup of the run variable is done there.
+     * This is not optimal, as design decisions are distributed over two components.
+     *
+     * . @param stmt the repeat statement
+     */
     function evalRepeat(stmt) {
         var mode = stmt[C.MODE];
         var contl = stmt[C.STMT_LIST];
@@ -423,7 +493,7 @@
             case C.UNTIL:
             case C.WHILE:
                 S.pushOps(contl);
-                S.getOp(); // pseudo excution. Init is already done. Continuation is for termination only.
+                S.getOp(); // pseudo execution. Init is already done. Continuation is for termination only.
                 S.pushOps(cont[C.STMT_LIST]);
                 break;
             case C.TIMES:
@@ -449,6 +519,11 @@
                 U.dbcException("invalid repeat mode: " + mode);
         }
     }
+    /**
+     * return true if the parameter is prime
+     *
+     * . @param n to be checked for primality
+     */
     function isPrime(n) {
         if (n < 2) {
             return false;
@@ -466,5 +541,26 @@
         }
         return true;
     }
-    ;
+    /**
+     * after the duration specified, call the callback function given. The duration is partitioned into 100 millisec intervals to allow termination of the running interpreter during
+     * a timeout. Be careful: the termination is NOT effected here, but by the callback function (this should be @see evalOperation() in ALMOST ALL cases)
+     *
+     * . @param callback called when the time has elapsed
+     *
+     * . @param durationInMilliSec time that should elapse before the callback is called
+     */
+    function timeout(callback, durationInMilliSec) {
+        if (terminated) {
+            callback();
+        }
+        else if (durationInMilliSec > 100) {
+            // U.p( 'waiting for 100 msec from ' + durationInMilliSec + ' msec' );
+            durationInMilliSec -= 100;
+            setTimeout(function () { timeout(callback, durationInMilliSec); }, 100);
+        }
+        else {
+            // U.p( 'waiting for ' + durationInMilliSec + ' msec' );
+            setTimeout(function () { callback(); }, durationInMilliSec);
+        }
+    }
 });
