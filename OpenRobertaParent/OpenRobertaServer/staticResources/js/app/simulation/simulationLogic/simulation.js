@@ -296,10 +296,14 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     var robots = [];
     var readymultiple =[];
     var isDownRobotmul = [];
+    var programEvals;
+    var sensorValuesMultiple = [];
+    var numprogs;
     function initMultiple(programs, refresh, robotType){
-        var numprogs = programs.length;
+        numprogs = programs.length;
         reset = false;
         simRobotType = robotType;
+        userProgram = programs;
         console.log("simRobottype is ", simRobotType);
         if (robotType.indexOf("calliope") >= 0) {
             currentBackground = 0;
@@ -322,7 +326,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             }
         }
         var blocklyprograms = programs.map(x => BUILDER.build(x.result.javaScriptProgram));
-        var programEvals = programs.map(x => new ProgramEval());
+        programEvals = programs.map(x => new ProgramEval());
         for(var i=0;i<numprogs;i++){
             programEvals[i].initProgram(blocklyprograms[i]);
         }
@@ -411,6 +415,49 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         reset = robot.buttons.Reset;
         sensorValues = scene.updateSensorValues(!pause);
         scene.drawRobot();
+    }
+    
+    function renderMultiple(){
+        if (canceled) {
+            cancelAnimationFrame(globalID);
+            return;
+        }
+        var actionValuesarr = [];
+        globalID = requestAnimationFrame(renderMultiple);
+        var now = new Date().getTime();
+        dt = now - (time || now);
+        dt /= 1000;
+        time = now;
+
+        stepCounter += 1;
+        for(var i=0;i<numprogs;i++){
+            if (!programEvals[i].getProgram().isTerminated() && !pause && !reset) {
+                actionValuesarr.push(programEvals[i].step(sensorValuesMultiple[i]));
+            } else if (programEvals[i].getProgram().isTerminated() && !pause && !robot.endless) {
+                setPause(true);
+                robots[i].reset();
+            } else if (reset && !pause) {
+                reset = false;
+                robots[i].buttons.Reset = false;
+                removeMouseEvents();
+                setPause(true);
+                robots[i].reset();
+                scene.drawRobots();
+                // some time to cancel all timeouts
+                setTimeout(function() {
+                    initMultiple(userProgram, false, simRobotType);
+                    addMouseEvents();
+                }, 205);
+                setTimeout(function() {
+                    //delete robot.button.Reset;
+                    setPause(false);
+                }, 1000);
+            }
+            robots[i].update(actionValuesarr[i]);
+        }   
+        reset = robots[0].buttons.Reset;
+        sensorValuesMultiple = scene.updateSensorValuesMultiple(!pause);
+        scene.drawRobots();
     }
 
     function reloadProgram() {
@@ -757,16 +804,20 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     
     function initSceneMultiple(){
         scene = new Scene(imgObjectList[currentBackground], robots, imgPattern, ruler);
-//        scene.updateBackgrounds();
-//        scene.drawObjects();
-//        scene.drawRuler();
-//        scene.drawRobots();
+        scene.updateBackgrounds();
+        scene.drawObjects();
+        scene.drawRuler();
+        scene.drawRobots();
+        //todo addmouseevents
 //        addMouseEvents();
-//        ready = true;
-//        resizeAll();
-//        $(window).on("resize", resizeAll);
-//        $('#backgroundDiv').on("resize", resizeAll);
-//        render();
+        for(var i=0;i<numprogs;i++){
+            readymultiple[i] = true;
+        }
+        
+        resizeAll();
+        $(window).on("resize", resizeAll);
+        $('#backgroundDiv').on("resize", resizeAll);
+        renderMultiple();
     }
 
     function getScale() {
