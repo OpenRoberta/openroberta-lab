@@ -21,9 +21,27 @@ and run the interpreter code (using node). Requirements:
 4. in the run-configuration of 'jsGenerated/main.js' set 'y-assign' as parameter and run.
    The operations are executed. Watch the console.
 
-### typescript support for developing the WeDo interpreter
+### typescript support for developing the WeDo interpreter (Eclipse)
 
-to be written
+1. install the plugin 'TypeScript IDE' (strange name). It includes an editor and ts compiler. Restart eclipse.
+2. the settings are ok (including format + save options)
+3. the tsconfig.json contains settings for tsc.
+4. right click the project -> Typescript and add the 'tsconfig.json' to the typescript build path. On every save the compiler runs (incrementally).
+5. for compilation of all files ('clean update' right click on the file 'tsconfig.json' and 'run as compile typescript'.
+6. https://github.com/angelozerr/typescript.java/wiki/Getting-Started contains a lot of valuable information about the plugin
+
+7. the editor supports 'goto dec', 'completion' and much more (see the wiki). Note (again): On every save the compiler runs (incrementally) and shows all errors
+   in the 'problem view'. Click and analyse.
+8. sometimes for consolidation of run the tsc-configuration for compilation
+
+9. PITFALL 1: 'goto dec' and others may opens a NEW editor. Thus a file may be accessed by more than one editor.
+   BE CAREFUL: NEVER edit the same source at the same time with two editors. Changes will be LOST in almost allcases!
+10. PITFALL 2: as with Java nature, if you open a .ts-file as simple resource (i.e. OpenRobertaParent/WeDoInterpreter/ts/main.ts) instead as a ts resource
+   (i.e. OpenRobertaParent/WeDoInterpreter/ts/main.ts), on save the incrementaop compilation will NOT be done.
+10. PERSONAL REMARK: I have activated 'codelens'. It is EXPERIMENTAL. It gives reference counts of components and a used-by functionality when clicking on the
+   references (small italic font).
+   
+The 'TypeScript IDE' is a nice and really fast ts editor and tsc plugin
 
 ### javascript support  for developing the WeDo interpreter (OUTDATED! WE USE TYPESCRIPT!)
 

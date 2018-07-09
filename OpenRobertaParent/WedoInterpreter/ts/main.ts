@@ -17,7 +17,6 @@ function processOps( fileName: string ) {
             INTERPRETER.run( generatedCode, callbackOnTermination );
         }
     } )
-
 }
 
 /**
