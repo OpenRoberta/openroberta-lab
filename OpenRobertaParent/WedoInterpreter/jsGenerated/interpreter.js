@@ -217,7 +217,7 @@
                 case C.TONE_ACTION: {
                     var duration = S.pop();
                     var frequency = S.pop();
-                    N.toneAction(stmt[C.NAME], stmt[C.PORT], frequency, duration);
+                    N.toneAction(stmt[C.NAME], frequency, duration);
                     timeout(function () { evalOperation(); }, duration);
                     return { value: void 0 };
                 }

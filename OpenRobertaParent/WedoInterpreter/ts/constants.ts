@@ -1,13 +1,3 @@
-export const Colors = {
-    NONE: "NONE",
-    BLACK: "BLACK",
-    BLUE: "BLUE",
-    GREEN: "GREEN",
-    YELLOW: "YELLOW",
-    RED: "RED",
-    WHITE: "WHITE",
-    BROWN: "BROWN"
-}
 export const ADD: string = "ADD";
 export const AMBIENTLIGHT: string = "ambientlight";
 export const ANALOG: string = "analog";

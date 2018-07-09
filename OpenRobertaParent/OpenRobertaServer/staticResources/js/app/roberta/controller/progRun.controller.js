@@ -34,7 +34,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             MSG.displayMessage("POPUP_ROBOT_BUSY", "POPUP", "");
             return;
         }
-        GUISTATE_C.setConnectionBusy(true);
+        GUISTATE_C.setConnectionState("busy");
         LOG.info('run ' + GUISTATE_C.getProgramName() + 'on brick');
         var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
@@ -78,12 +78,12 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
                 // either the user doesn't want to see the modal anymore or he uses a smartphone / tablet, where you cannot choose the download folder.
                 UTIL.download(filename + '.hex', result.compiledCode);
                 setTimeout(function() {
-                    GUISTATE_C.setConnectionBusy(false);
+                    GUISTATE_C.setConnectionState("wait");
                 }, 5000);
                 MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
             } else if (GUISTATE_C.getConnection() == GUISTATE_C.getConnectionTypeEnum().LOCAL) {
                 setTimeout(function() {
-                    GUISTATE_C.setConnectionBusy(false);
+                    GUISTATE_C.setConnectionState("wait");
                 }, 5000);
                 MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
             } else {
@@ -104,13 +104,13 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
                     $('#download-instructions tr').each(function(i) {
                         $(this).css('opacity', '0');
                     });
-                    GUISTATE_C.setConnectionBusy(false);
+                    GUISTATE_C.setConnectionState("wait");
                     MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
                 });
                 $('#save-client-compiled-program').modal('show');
             }
         } else {
-            GUISTATE_C.setConnectionBusy(false);
+            GUISTATE_C.setConnectionState("error");
             MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
         }
     }
@@ -122,10 +122,10 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
         if (result.rc == "ok") {
             SOCKET_C.uploadProgram(result.compiledCode, GUISTATE_C.getRobotPort());
             setTimeout(function() {
-                GUISTATE_C.setConnectionBusy(false);
+                GUISTATE_C.setConnectionState("error");
             }, 5000);
         } else {
-            GUISTATE_C.setConnectionBusy(false);
+            GUISTATE_C.setConnectionState("error");
         }
         MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
     }
@@ -138,14 +138,12 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
                 MSG.displayMessage('MENU_ROBOT_STOP_HINT_' + GUISTATE_C.getRobotGroup().toUpperCase(), 'TOAST');
             }
         } else {
-            GUISTATE_C.setConnectionBusy(false);
+            GUISTATE_C.setConnectionState("error");
         }
     }
 
     function callbackOnTermination() {
-        alert("terminated");
-        GUISTATE_C.setConnectionBusy(false);
-
+        GUISTATE_C.setConnectionState("wait");
     }
 
     function runForWebviewConnection(result) {
@@ -155,7 +153,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             var ops = program.ops;
             var functionDeclaration = program.functionDeclaration;
             if (GUISTATE_C.getRobot() === "wedo") {
-                GUISTATE_C.setConnectionBusy(true);
+                GUISTATE_C.setConnectionState("busy");
                 WEDO_I.run(program, callbackOnTermination);
             }
             MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
@@ -169,7 +167,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
         } else {
             $('#trA').addClass('hidden');
             UTIL.download(fileName + '.hex', content);
-            GUISTATE_C.setConnectionBusy(false);
+            GUISTATE_C.setConnectionState("error");
         }
 
         if ('Blob' in window) {

@@ -44,6 +44,7 @@ define([ 'exports', 'guiState.controller', 'wedo.model', 'util', 'log', 'message
                 } else if (data.op.type == "connect" && data.op.state == "connected") {
                     $('#show-available-connections').trigger('connect', data.op);
                     WEDO_M.update(data);
+                    GUISTATE_C.setConnectionState("wait");     
                     var bricklyWorkspace = GUISTATE_C.getBricklyWorkspace();
                     var blocks = bricklyWorkspace.getAllBlocks();
                     for (var i = 0; i < blocks.length; i++) {
@@ -58,6 +59,23 @@ define([ 'exports', 'guiState.controller', 'wedo.model', 'util', 'log', 'message
                             break;
                         }
                     }
+                } else if (data.op.type == "connect" && data.op.state == "disconnected") {
+                    WEDO_M.update(data);
+                    var bricklyWorkspace = GUISTATE_C.getBricklyWorkspace();
+                    var blocks = bricklyWorkspace.getAllBlocks();
+                    for (var i = 0; i < blocks.length; i++) {
+                        if (blocks[i].type === "robBrick_WeDo-Brick") {
+                            var field = blocks[i].getField("VAR");
+                            field.setValue(Blockly.Msg.ROBOT_DEFAULT_NAME_WEDO || Blockly.Msg.ROBOT_DEFAULT_NAME || "Brick1");
+                            blocks[i].render();
+                            var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
+                            var xml = Blockly.Xml.domToText(dom);
+                            GUISTATE_C.setConfigurationXML(xml);
+                            bricklyWorkspace.setVisible(false);
+                            break;
+                        }
+                    }
+                    GUISTATE_C.setConnectionState("error");
                 } else {
                     WEDO_M.update(data);
                 }

@@ -19,10 +19,12 @@ define([ 'exports' ], function(exports) {
             var msg = 'DBC. Expected exception was not thrown';
             console.trace(msg);
             throw msg;
-        } catch (e) {
+        }
+        catch (e) {
             if (cause === undefined) {
                 console.log('expected exception suppressed');
-            } else {
+            }
+            else {
                 dbc(cause, e);
             }
         }

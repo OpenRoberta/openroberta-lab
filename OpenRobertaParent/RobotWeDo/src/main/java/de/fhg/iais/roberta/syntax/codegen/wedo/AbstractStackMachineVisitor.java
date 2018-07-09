@@ -294,7 +294,7 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
                 o = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0);
                 break;
             case COLOR:
-                o = mk(C.EXPR).put(C.EXPR, C.LED_COLOR_CONST).put(C.VALUE, C.Colors.GREEN);
+                o = mk(C.EXPR).put(C.EXPR, C.LED_COLOR_CONST).put(C.VALUE, 3);
                 break;
             case NULL:
                 o = mk(C.EXPR).put(C.EXPR, C.NULL_CONST);

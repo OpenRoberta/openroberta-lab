@@ -13,17 +13,17 @@ define([ 'exports', 'state.interpreter', 'util.interpreter', 'webview.controller
         var robotText = 'robot: ' + name + ', port: ' + port;
         U.p(robotText + ' getsample from ' + sensor);
         switch (sensor) {
-        case "infrared":
-            sensor = "motionsensor";
-            break;
-        case "gyro":
-            sensor = "tiltsensor";
-            break;
-        case "button":
-            break;
-        default:
-            //TODO throw exeption?
-            break;
+            case "infrared":
+                sensor = "motionsensor";
+                break;
+            case "gyro":
+                sensor = "tiltsensor";
+                break;
+            case "button":
+                break;
+            default:
+                //TODO throw exeption?
+                break;
         }
         S.push(WEDO.getSensorValue(name, "motionsensor", port));
     }
@@ -34,7 +34,6 @@ define([ 'exports', 'state.interpreter', 'util.interpreter', 'webview.controller
     exports.timerReset = timerReset;
     function ledOnAction(name, port, color) {
         name = WEDO.getBrickIdByName(name);
-        console.log(name);
         var robotText = 'robot: ' + name + ', port: ' + port;
         U.p(robotText + ' led on color ' + color);
         var command = {};

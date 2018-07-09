@@ -90,7 +90,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                 field : 'id'
             } ]
         });
-        $('#connectionsTable').onWrap('dbl-click-row.bs.table', function(e, row) {
+        $('#connectionsTable').onWrap('click-row.bs.table', function(e, row) {
             WEBVIEW_C.jsToAppInterface({
                 'target' : GUISTATE_C.getRobot(),
                 'op' : {
@@ -99,8 +99,13 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                 }
             });
         }, "connect to robot");
-        $('#show-available-connections').on('hide.bs.modal', function(e) {
-            //TODO check why this is not fired as expected           
+        $('#show-available-connections').on('hidden.bs.modal', function(e) {
+            WEBVIEW_C.jsToAppInterface({
+                'target' : GUISTATE_C.getRobot(),
+                'op' : {
+                    'type' : 'stopScan'
+                }
+            });   
         });
 
         $('#show-available-connections').onWrap('add', function(event, data) {
@@ -117,15 +122,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
             var result = {};
             result["robot.name"] = data;
             result["robot.state"] = 'wait';
-            GUISTATE_C.setState(result);
-            console.log("stopScan");
-            WEBVIEW_C.jsToAppInterface({
-                'target' : GUISTATE_C.getRobot(),
-                'op' : {
-                    'type' : 'stopScan'
-                }
-            });
-            $('#show-available-connections').hide();
+            GUISTATE_C.setState(result);           
+            $('#show-available-connections').modal('hide');
         }, "");
     }
 

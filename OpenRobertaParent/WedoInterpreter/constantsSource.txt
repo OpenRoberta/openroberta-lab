@@ -1,5 +1,3 @@
-Colors = { NONE, BLACK, BLUE, GREEN, YELLOW, RED, WHITE, BROWN }
-
 ADD = "ADD"
 AMBIENTLIGHT = "ambientlight"
 ANALOG = "analog"

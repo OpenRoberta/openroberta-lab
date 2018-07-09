@@ -14,15 +14,14 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         }
         switch (data.op.type) {
         case "connect":
-            wedo[data.op.brickid] = {};
-            wedo[data.op.brickid]["brickname"] = data.op.brickname.replace(/\s/g, '');
-            // for some reason we do not get the inital state of the button, so here it is hardcoded
-            wedo[data.op.brickid]["button"] = 'false';
-            // update configuration for brickname
-
-            break;
-        case "disconnect":
-            delete exports.wedo[data.op.brickid];
+            if (data.op.state == "connected") {
+                wedo[data.op.brickid] = {};
+                wedo[data.op.brickid]["brickname"] = data.op.brickname.replace(/\s/g, '');
+                // for some reason we do not get the inital state of the button, so here it is hardcoded
+                wedo[data.op.brickid]["button"] = 'false';
+            } else if (data.op.state == "disconnected") {
+                delete wedo[data.op.brickid];
+            }
             break;
         case "didAddService":
             if (data.op.state == "connected") {

@@ -206,7 +206,7 @@ export function evalOperation() {
             case C.TONE_ACTION: {
                 const duration = S.pop();
                 const frequency = S.pop();
-                N.toneAction( stmt[C.NAME], stmt[C.PORT], frequency, duration, );
+                N.toneAction( stmt[C.NAME], frequency, duration );
                 timeout(() => { evalOperation() }, duration );
                 return; // wait for handler being called
             }

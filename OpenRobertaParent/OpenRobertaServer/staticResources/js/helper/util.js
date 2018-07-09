@@ -340,7 +340,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
     }
 
     function download(fileName, content) {
-        if ('Blob' in window && navigator.userAgent.toLowerCase().match(/iPad|iPhone/i) == null) {
+        if ('Blob' in window && navigator.userAgent.toLowerCase().match(/iPad|iPhone|Android/i) == null) {
             var contentAsBlob = new Blob([ content ], {
                 type : 'application/octet-stream'
             });
@@ -358,7 +358,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
             }
         } else {
             var downloadLink = document.createElement('a');
-            downloadLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+            downloadLink.setAttribute('href', 'data:text/' + fileName.substring(fileName.indexOf('.')+1) +';charset=utf-8,' + encodeURIComponent(content));
             downloadLink.setAttribute('download', fileName);
             downloadLink.style.display = 'none';
             document.body.appendChild(downloadLink);

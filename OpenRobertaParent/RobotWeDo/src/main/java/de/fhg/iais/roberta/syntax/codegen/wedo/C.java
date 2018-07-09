@@ -2,9 +2,6 @@ package de.fhg.iais.roberta.syntax.codegen.wedo;
 
 public class C {
 
-    public static enum Colors {
-        NONE, BLACK, BLUE, GREEN, YELLOW, RED, WHITE, BROWN
-    }
     public static final String ADD = "ADD";
     public static final String AMBIENTLIGHT = "ambientlight";
     public static final String ANALOG = "analog";

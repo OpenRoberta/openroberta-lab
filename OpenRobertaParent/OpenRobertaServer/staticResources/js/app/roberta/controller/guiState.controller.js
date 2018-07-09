@@ -1,5 +1,5 @@
-define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.controller', 'webview.controller', 'socket.controller', 'jquery' ], function(exports,
-        UTIL, LOG, MSG, GUISTATE, HELP_C, WEBVIEW_C, SOCKET_C, $) {
+define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.controller', 'webview.controller', 'socket.controller', 'wedo.model', 'jquery' ], function(
+        exports, UTIL, LOG, MSG, GUISTATE, HELP_C, WEBVIEW_C, SOCKET_C, WEDO, $) {
 
     /**
      * Init robot
@@ -8,6 +8,12 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         var ready = $.Deferred();
         $.when(GUISTATE.init()).then(function() {
             GUISTATE.gui.webview = opt_data || false;
+            if (GUISTATE.gui.webview) {
+                $('.logo').css({
+                    'right' : '32px',
+                });
+
+            }
             var cookieName = "OpenRoberta_" + GUISTATE.server.version;
 
             if ($.cookie(cookieName)) {
@@ -220,13 +226,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         case GUISTATE.gui.connectionType.AGENT:
             break;
         case GUISTATE.gui.connectionType.WEBVIEW:
-            if (GUISTATE.robot.state === 'wait') {
-                $('#head-navi-icon-robot').removeClass('error');
-                $('#head-navi-icon-robot').removeClass('busy');
-                $('#head-navi-icon-robot').addClass('wait');
-                GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
-                $('#menuRunProg').parent().removeClass('disabled');
-            }
             break;
         default:
             break;
@@ -308,7 +307,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         $('#simRobot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
         $('#simRobot').addClass('typcn-' + robotGroup);
 
-        connectionType = getConnection();
+        var connectionType = getConnection();
         $('#robotConnect').removeClass('disabled');
         switch (getConnection()) {
         case GUISTATE.gui.connectionType.TOKEN:
@@ -431,18 +430,38 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
     }
     exports.findRobot = findRobot;
 
-    function setConnectionBusy(busy) {
-        if (busy) {
+    function setConnectionState(state) {
+        switch (state) {
+        case "busy":
+            $('#head-navi-icon-robot').removeClass('error');
+            $('#head-navi-icon-robot').removeClass('wait');
             $('#head-navi-icon-robot').addClass('busy');
             GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
             $('#menuRunProg').parent().addClass('disabled');
-        } else {
+            break;
+        case "error":
             $('#head-navi-icon-robot').removeClass('busy');
-            GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
-            $('#menuRunProg').parent().removeClass('disabled');
+            $('#head-navi-icon-robot').removeClass('wait');
+            $('#head-navi-icon-robot').addClass('error');
+            GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+            $('#menuRunProg').parent().addClass('disabled');
+            break;
+        case "wait":
+            if (isRobotConnected()) {
+                $('#head-navi-icon-robot').removeClass('busy');
+                $('#head-navi-icon-robot').removeClass('error');
+                $('#head-navi-icon-robot').addClass('wait');
+                GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
+                $('#menuRunProg').parent().removeClass('disabled');
+            } else {
+                setConnectionState('error');
+            }
+            break;
+        default:
+            break;
         }
     }
-    exports.setConnectionBusy = setConnectionBusy;
+    exports.setConnectionState = setConnectionState;
 
     function getRobot() {
         return GUISTATE.gui.robot;
@@ -517,7 +536,16 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
     exports.getRobotInfo = getRobotInfo;
 
     function isRobotConnected() {
-        return GUISTATE.robot.time > 0 || GUISTATE.gui.connection;
+        if (GUISTATE.robot.time > 0) {
+            return true;
+        }
+        if (GUISTATE.gui.connection === "auto") {
+            return true;
+        }
+        if (GUISTATE.gui.connection === "webview" && WEDO.getConnectedBricks().length > 0) {
+            return true;
+        }
+        return false;
     }
     exports.isRobotConnected = isRobotConnected;
 
