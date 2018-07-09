@@ -30,7 +30,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             this.wave = 0.0;
             this.isMultiple = false;
         }else if(robot.constructor === Array){
-            alert("robot is multiple");
+            console.log("robot is multiple");
             this.backgroundImg = backgroundImg;
             this.robots = robot;
             this.numprogs = robot.length;
@@ -370,127 +370,127 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
 //        $('#valuesContent').html('');
 //        $("#valuesContent").append('<div><label>FPS</label><span>' + UTIL.round(1 / SIM.getDt(), 0) + '</span></div>');
 //        $("#valuesContent").append('<div><label>Time</label><span>' + UTIL.round(this.robot.time, 3) + 's</span></div>');
-        for(var i=0;i<this.numprogs;i++){
-            $("#valuesContent").append('<div><label>Time</label><span>' + UTIL.round(this.robots[i].time, 3) + 's</span></div>');
+        for(var iterrobot=0;iterrobot<this.numprogs;iterrobot++){
+            $("#valuesContent").append('<div><label>Time</label><span>' + UTIL.round(this.robots[iterrobot].time, 3) + 's</span></div>');
             if (SIM.getBackground() === 7) {
-                  x = UTIL.round((this.robots[i].pose.x + this.robots[i].pose.transX) / 3, 1);
-                  y = UTIL.round((-this.robots[i].pose.y - this.robots[i].pose.transY) / 3, 1);
+                  x = UTIL.round((this.robots[iterrobot].pose.x + this.robots[iterrobot].pose.transX) / 3, 1);
+                  y = UTIL.round((-this.robots[iterrobot].pose.y - this.robots[iterrobot].pose.transY) / 3, 1);
                   this.rCtx.fillStyle = "#ffffff";
         
               } else {
-                  x = this.robots[i].pose.x + this.robots[i].pose.transX;
-                  y = +this.robots[i].pose.y + this.robots[i].pose.transY;
+                  x = this.robots[iterrobot].pose.x + this.robots[iterrobot].pose.transX;
+                  y = +this.robots[iterrobot].pose.y + this.robots[iterrobot].pose.transY;
                   this.rCtx.fillStyle = "#333333";
               }
             $("#valuesContent").append('<div><label>Robot X</label><span>' + UTIL.round(x, 0) + '</span></div>');
             $("#valuesContent").append('<div><label>Robot Y</label><span>' + UTIL.round(y, 0) + '</span></div>');
-            $("#valuesContent").append('<div><label>Robot θ</label><span>' + UTIL.round(SIMATH.toDegree(this.robots[i].pose.theta), 0) + '°</span></div>');
-            $("#valuesContent").append('<div><label>Motor left</label><span>' + UTIL.round(this.robots[i].encoder.left * CONSTANTS.ENC, 0) + '°</span></div>');
-            $("#valuesContent").append('<div><label>Motor right</label><span>' + UTIL.round(this.robots[i].encoder.right * CONSTANTS.ENC, 0) + '°</span></div>');
-            $("#valuesContent").append('<div><label>Touch Sensor</label><span>' + UTIL.round(this.robots[i].touchSensor.value, 0) + '</span></div>');
-            $("#valuesContent").append('<div><label>Light Sensor</label><span>' + UTIL.round(this.robots[i].colorSensor.lightValue, 0) + '%</span></div>');
-            $("#valuesContent").append('<div><label>Ultra Sensor</label><span>' + UTIL.round(this.robots[i].ultraSensor.distance / 3.0, 0) + 'cm</span></div>');
-            if (this.robots[i].sound) {
-                $("#valuesContent").append('<div><label>Sound Sensor</label><span>' + UTIL.round(this.robots[i].sound.volume * 100, 0) + '%</span></div>');
+            $("#valuesContent").append('<div><label>Robot θ</label><span>' + UTIL.round(SIMATH.toDegree(this.robots[iterrobot].pose.theta), 0) + '°</span></div>');
+            $("#valuesContent").append('<div><label>Motor left</label><span>' + UTIL.round(this.robots[iterrobot].encoder.left * CONSTANTS.ENC, 0) + '°</span></div>');
+            $("#valuesContent").append('<div><label>Motor right</label><span>' + UTIL.round(this.robots[iterrobot].encoder.right * CONSTANTS.ENC, 0) + '°</span></div>');
+            $("#valuesContent").append('<div><label>Touch Sensor</label><span>' + UTIL.round(this.robots[iterrobot].touchSensor.value, 0) + '</span></div>');
+            $("#valuesContent").append('<div><label>Light Sensor</label><span>' + UTIL.round(this.robots[iterrobot].colorSensor.lightValue, 0) + '%</span></div>');
+            $("#valuesContent").append('<div><label>Ultra Sensor</label><span>' + UTIL.round(this.robots[iterrobot].ultraSensor.distance / 3.0, 0) + 'cm</span></div>');
+            if (this.robots[iterrobot].sound) {
+                $("#valuesContent").append('<div><label>Sound Sensor</label><span>' + UTIL.round(this.robots[iterrobot].sound.volume * 100, 0) + '%</span></div>');
             }
-            $("#valuesContent").append('<div><label>Color Sensor</label><span style="margin-left:6px; width: 20px; background-color:' + this.robots[i].colorSensor.color + '">&nbsp;</span></div>');
+            $("#valuesContent").append('<div><label>Color Sensor</label><span style="margin-left:6px; width: 20px; background-color:' + this.robots[iterrobot].colorSensor.color + '">&nbsp;</span></div>');
             this.rCtx.scale(SIM.getScale(), SIM.getScale());
             this.rCtx.save();
-            this.rCtx.translate(this.robots[i].pose.x, this.robots[i].pose.y);
-            this.rCtx.rotate(SIMATH.toRadians(SIMATH.toDegree(this.robots[i].pose.theta) - 90));
+            this.rCtx.translate(this.robots[iterrobot].pose.x, this.robots[iterrobot].pose.y);
+            this.rCtx.rotate(SIMATH.toRadians(SIMATH.toDegree(this.robots[iterrobot].pose.theta) - 90));
             this.rCtx.scale(1, -1);
             //axis
             this.rCtx.lineWidth = "2.5";
-            this.rCtx.strokeStyle = this.robots[i].wheelLeft.color;
+            this.rCtx.strokeStyle = this.robots[iterrobot].wheelLeft.color;
             this.rCtx.beginPath();
-            this.rCtx.moveTo(this.robots[i].geom.x - 5, 0);
-            this.rCtx.lineTo(this.robots[i].geom.x + this.robots[i].geom.w + 5, 0);
+            this.rCtx.moveTo(this.robots[iterrobot].geom.x - 5, 0);
+            this.rCtx.lineTo(this.robots[iterrobot].geom.x + this.robots[iterrobot].geom.w + 5, 0);
             this.rCtx.stroke();
             //back wheel
-            this.rCtx.fillStyle = this.robots[i].wheelBack.color;
-            this.rCtx.fillRect(this.robots[i].wheelBack.x, this.robots[i].wheelBack.y, this.robots[i].wheelBack.w, this.robots[i].wheelBack.h);
-            //this.robots[i]
+            this.rCtx.fillStyle = this.robots[iterrobot].wheelBack.color;
+            this.rCtx.fillRect(this.robots[iterrobot].wheelBack.x, this.robots[iterrobot].wheelBack.y, this.robots[iterrobot].wheelBack.w, this.robots[iterrobot].wheelBack.h);
+            //this.robots[iterrobot]
             this.rCtx.shadowBlur = 0;
             this.rCtx.shadowOffsetX = 0;
-            this.rCtx.fillStyle = this.robots[i].touchSensor.color;
-            this.rCtx.fillRect(this.robots[i].frontRight.x + 12.5, this.robots[i].frontRight.y, 20, 10);
-            if (this.robots[i].led) {
-                this.rCtx.fillStyle = this.robots[i].led.color;
-                var grd = this.rCtx.createRadialGradient(this.robots[i].led.x, this.robots[i].led.y, 1, this.robots[i].led.x, this.robots[i].led.y, 15);
-                grd.addColorStop(0, this.robots[i].led.color);
-                grd.addColorStop(0.5, this.robots[i].geom.color);
+            this.rCtx.fillStyle = this.robots[iterrobot].touchSensor.color;
+            this.rCtx.fillRect(this.robots[iterrobot].frontRight.x + 12.5, this.robots[iterrobot].frontRight.y, 20, 10);
+            if (this.robots[iterrobot].led) {
+                this.rCtx.fillStyle = this.robots[iterrobot].led.color;
+                var grd = this.rCtx.createRadialGradient(this.robots[iterrobot].led.x, this.robots[iterrobot].led.y, 1, this.robots[iterrobot].led.x, this.robots[iterrobot].led.y, 15);
+                grd.addColorStop(0, this.robots[iterrobot].led.color);
+                grd.addColorStop(0.5, this.robots[iterrobot].geom.color);
                 this.rCtx.fillStyle = grd;
             } else {
-                this.rCtx.fillStyle = this.robots[i].geom.color;
+                this.rCtx.fillStyle = this.robots[iterrobot].geom.color;
             }
 
           this.rCtx.shadowBlur = 5;
           this.rCtx.shadowColor = "black";
   
           this.rCtx.beginPath();
-          this.rCtx.moveTo(this.robots[i].geom.x + 2.5, this.robots[i].geom.y);
-          this.rCtx.lineTo(this.robots[i].geom.x + this.robots[i].geom.w - 2.5, this.robots[i].geom.y);
-          this.rCtx.quadraticCurveTo(this.robots[i].geom.x + this.robots[i].geom.w, this.robots[i].geom.y, this.robots[i].geom.x + this.robots[i].geom.w, this.robots[i].geom.y + 2.5);
-          this.rCtx.lineTo(this.robots[i].geom.x + this.robots[i].geom.w, this.robots[i].geom.y + this.robots[i].geom.h - 2.5);
-          this.rCtx.quadraticCurveTo(this.robots[i].geom.x + this.robots[i].geom.w, this.robots[i].geom.y + this.robots[i].geom.h, this.robots[i].geom.x + this.robots[i].geom.w - 2.5, this.robots[i].geom.y + this.robots[i].geom.h);
-          this.rCtx.lineTo(this.robots[i].geom.x + 2.5, this.robots[i].geom.y + this.robots[i].geom.h);
-          this.rCtx.quadraticCurveTo(this.robots[i].geom.x, this.robots[i].geom.y + this.robots[i].geom.h, this.robots[i].geom.x, this.robots[i].geom.y + this.robots[i].geom.h - 2.5);
-          this.rCtx.lineTo(this.robots[i].geom.x, this.robots[i].geom.y + 2.5);
-          this.rCtx.quadraticCurveTo(this.robots[i].geom.x, this.robots[i].geom.y, this.robots[i].geom.x + 2.5, this.robots[i].geom.y);
+          this.rCtx.moveTo(this.robots[iterrobot].geom.x + 2.5, this.robots[iterrobot].geom.y);
+          this.rCtx.lineTo(this.robots[iterrobot].geom.x + this.robots[iterrobot].geom.w - 2.5, this.robots[iterrobot].geom.y);
+          this.rCtx.quadraticCurveTo(this.robots[iterrobot].geom.x + this.robots[iterrobot].geom.w, this.robots[iterrobot].geom.y, this.robots[iterrobot].geom.x + this.robots[iterrobot].geom.w, this.robots[iterrobot].geom.y + 2.5);
+          this.rCtx.lineTo(this.robots[iterrobot].geom.x + this.robots[iterrobot].geom.w, this.robots[iterrobot].geom.y + this.robots[iterrobot].geom.h - 2.5);
+          this.rCtx.quadraticCurveTo(this.robots[iterrobot].geom.x + this.robots[iterrobot].geom.w, this.robots[iterrobot].geom.y + this.robots[iterrobot].geom.h, this.robots[iterrobot].geom.x + this.robots[iterrobot].geom.w - 2.5, this.robots[iterrobot].geom.y + this.robots[iterrobot].geom.h);
+          this.rCtx.lineTo(this.robots[iterrobot].geom.x + 2.5, this.robots[iterrobot].geom.y + this.robots[iterrobot].geom.h);
+          this.rCtx.quadraticCurveTo(this.robots[iterrobot].geom.x, this.robots[iterrobot].geom.y + this.robots[iterrobot].geom.h, this.robots[iterrobot].geom.x, this.robots[iterrobot].geom.y + this.robots[iterrobot].geom.h - 2.5);
+          this.rCtx.lineTo(this.robots[iterrobot].geom.x, this.robots[iterrobot].geom.y + 2.5);
+          this.rCtx.quadraticCurveTo(this.robots[iterrobot].geom.x, this.robots[iterrobot].geom.y, this.robots[iterrobot].geom.x + 2.5, this.robots[iterrobot].geom.y);
           this.rCtx.closePath();
           this.rCtx.fill();
           this.rCtx.shadowBlur = 5;
           this.rCtx.shadowColor = "black";
 
           this.rCtx.beginPath();
-          this.rCtx.moveTo(this.robots[i].geom.x + 2.5, this.robots[i].geom.y);
-          this.rCtx.lineTo(this.robots[i].geom.x + this.robots[i].geom.w - 2.5, this.robots[i].geom.y);
-          this.rCtx.quadraticCurveTo(this.robots[i].geom.x + this.robots[i].geom.w, this.robots[i].geom.y, this.robots[i].geom.x + this.robots[i].geom.w, this.robots[i].geom.y + 2.5);
-          this.rCtx.lineTo(this.robots[i].geom.x + this.robots[i].geom.w, this.robots[i].geom.y + this.robots[i].geom.h - 2.5);
-          this.rCtx.quadraticCurveTo(this.robots[i].geom.x + this.robots[i].geom.w, this.robots[i].geom.y + this.robots[i].geom.h, this.robots[i].geom.x + this.robots[i].geom.w - 2.5, this.robots[i].geom.y + this.robots[i].geom.h);
-          this.rCtx.lineTo(this.robots[i].geom.x + 2.5, this.robots[i].geom.y + this.robots[i].geom.h);
-          this.rCtx.quadraticCurveTo(this.robots[i].geom.x, this.robots[i].geom.y + this.robots[i].geom.h, this.robots[i].geom.x, this.robots[i].geom.y + this.robots[i].geom.h - 2.5);
-          this.rCtx.lineTo(this.robots[i].geom.x, this.robots[i].geom.y + 2.5);
-          this.rCtx.quadraticCurveTo(this.robots[i].geom.x, this.robots[i].geom.y, this.robots[i].geom.x + 2.5, this.robots[i].geom.y);
+          this.rCtx.moveTo(this.robots[iterrobot].geom.x + 2.5, this.robots[iterrobot].geom.y);
+          this.rCtx.lineTo(this.robots[iterrobot].geom.x + this.robots[iterrobot].geom.w - 2.5, this.robots[iterrobot].geom.y);
+          this.rCtx.quadraticCurveTo(this.robots[iterrobot].geom.x + this.robots[iterrobot].geom.w, this.robots[iterrobot].geom.y, this.robots[iterrobot].geom.x + this.robots[iterrobot].geom.w, this.robots[iterrobot].geom.y + 2.5);
+          this.rCtx.lineTo(this.robots[iterrobot].geom.x + this.robots[iterrobot].geom.w, this.robots[iterrobot].geom.y + this.robots[iterrobot].geom.h - 2.5);
+          this.rCtx.quadraticCurveTo(this.robots[iterrobot].geom.x + this.robots[iterrobot].geom.w, this.robots[iterrobot].geom.y + this.robots[iterrobot].geom.h, this.robots[iterrobot].geom.x + this.robots[iterrobot].geom.w - 2.5, this.robots[iterrobot].geom.y + this.robots[iterrobot].geom.h);
+          this.rCtx.lineTo(this.robots[iterrobot].geom.x + 2.5, this.robots[iterrobot].geom.y + this.robots[iterrobot].geom.h);
+          this.rCtx.quadraticCurveTo(this.robots[iterrobot].geom.x, this.robots[iterrobot].geom.y + this.robots[iterrobot].geom.h, this.robots[iterrobot].geom.x, this.robots[iterrobot].geom.y + this.robots[iterrobot].geom.h - 2.5);
+          this.rCtx.lineTo(this.robots[iterrobot].geom.x, this.robots[iterrobot].geom.y + 2.5);
+          this.rCtx.quadraticCurveTo(this.robots[iterrobot].geom.x, this.robots[iterrobot].geom.y, this.robots[iterrobot].geom.x + 2.5, this.robots[iterrobot].geom.y);
           this.rCtx.closePath();
           this.rCtx.fill();
           //touch
           this.rCtx.shadowBlur = 5;
           this.rCtx.shadowOffsetX = 2;
-          if (this.robots[i].touchSensor.value === 1) {
+          if (this.robots[iterrobot].touchSensor.value === 1) {
               this.rCtx.fillStyle = 'red';
-              this.rCtx.fillRect(this.robots[i].frontRight.x, this.robots[i].frontRight.y, this.robots[i].frontLeft.x - this.robots[i].frontRight.x, 3.5);
+              this.rCtx.fillRect(this.robots[iterrobot].frontRight.x, this.robots[iterrobot].frontRight.y, this.robots[iterrobot].frontLeft.x - this.robots[iterrobot].frontRight.x, 3.5);
           } else {
-              this.rCtx.fillStyle = this.robots[i].touchSensor.color;
-              this.rCtx.fillRect(this.robots[i].frontRight.x, this.robots[i].frontRight.y, this.robots[i].frontLeft.x - this.robots[i].frontRight.x, 3.5);
+              this.rCtx.fillStyle = this.robots[iterrobot].touchSensor.color;
+              this.rCtx.fillRect(this.robots[iterrobot].frontRight.x, this.robots[iterrobot].frontRight.y, this.robots[iterrobot].frontLeft.x - this.robots[iterrobot].frontRight.x, 3.5);
           }
           this.rCtx.shadowBlur = 0;
           this.rCtx.shadowOffsetX = 0;
           //LED
-          if (this.robots[i].led) {
-              this.rCtx.fillStyle = this.robots[i].led.color;
+          if (this.robots[iterrobot].led) {
+              this.rCtx.fillStyle = this.robots[iterrobot].led.color;
               this.rCtx.beginPath();
-              this.rCtx.arc(this.robots[i].led.x, this.robots[i].led.y, 2.5, 0, Math.PI * 2);
+              this.rCtx.arc(this.robots[iterrobot].led.x, this.robots[iterrobot].led.y, 2.5, 0, Math.PI * 2);
               this.rCtx.fill();
           }
           //wheels
-          this.rCtx.fillStyle = this.robots[i].wheelLeft.color;
-          this.rCtx.fillRect(this.robots[i].wheelLeft.x, this.robots[i].wheelLeft.y, this.robots[i].wheelLeft.w, this.robots[i].wheelLeft.h);
-          this.rCtx.fillStyle = this.robots[i].wheelRight.color;
-          this.rCtx.fillRect(this.robots[i].wheelRight.x, this.robots[i].wheelRight.y, this.robots[i].wheelRight.w, this.robots[i].wheelRight.h);
+          this.rCtx.fillStyle = this.robots[iterrobot].wheelLeft.color;
+          this.rCtx.fillRect(this.robots[iterrobot].wheelLeft.x, this.robots[iterrobot].wheelLeft.y, this.robots[iterrobot].wheelLeft.w, this.robots[iterrobot].wheelLeft.h);
+          this.rCtx.fillStyle = this.robots[iterrobot].wheelRight.color;
+          this.rCtx.fillRect(this.robots[iterrobot].wheelRight.x, this.robots[iterrobot].wheelRight.y, this.robots[iterrobot].wheelRight.w, this.robots[iterrobot].wheelRight.h);
           this.rCtx.lineWidth = "0.5";
           //color
           this.rCtx.beginPath();
-          this.rCtx.arc(0, -15, this.robots[i].colorSensor.r, 0, Math.PI * 2);
-          this.rCtx.fillStyle = this.robots[i].colorSensor.color;
+          this.rCtx.arc(0, -15, this.robots[iterrobot].colorSensor.r, 0, Math.PI * 2);
+          this.rCtx.fillStyle = this.robots[iterrobot].colorSensor.color;
           this.rCtx.fill();
           this.rCtx.strokeStyle = "black";
           this.rCtx.stroke();
           //ledSensor
-          if (this.robots[i].ledSensor && this.robots[i].ledSensor.color) {
-              this.rCtx.fillStyle = this.robots[i].ledSensor.color;
+          if (this.robots[iterrobot].ledSensor && this.robots[iterrobot].ledSensor.color) {
+              this.rCtx.fillStyle = this.robots[iterrobot].ledSensor.color;
               this.rCtx.beginPath();
-              this.rCtx.arc(this.robots[i].ledSensor.x, this.robots[i].ledSensor.y, 2.5, 0, Math.PI * 2);
+              this.rCtx.arc(this.robots[iterrobot].ledSensor.x, this.robots[iterrobot].ledSensor.y, 2.5, 0, Math.PI * 2);
               this.rCtx.fill();
           }
           this.rCtx.restore();
@@ -503,37 +503,37 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
 
           this.rCtx.lineWidth = "0.5";
           this.rCtx.strokeStyle = "#555555";
-          for (var i = 0; i < this.robots[i].ultraSensor.u.length; i++) {
-              this.rCtx.moveTo(this.robots[i].ultraSensor.rx, this.robots[i].ultraSensor.ry);
-              if (this.robots[i].ultraSensor.u[i]) {
-                  this.rCtx.lineTo(this.robots[i].ultraSensor.u[i].x, this.robots[i].ultraSensor.u[i].y);
+          for (var i = 0; i < this.robots[iterrobot].ultraSensor.u.length; i++) {
+              this.rCtx.moveTo(this.robots[iterrobot].ultraSensor.rx, this.robots[iterrobot].ultraSensor.ry);
+              if (this.robots[iterrobot].ultraSensor.u[i]) {
+                  this.rCtx.lineTo(this.robots[iterrobot].ultraSensor.u[i].x, this.robots[iterrobot].ultraSensor.u[i].y);
               }
           }
           this.rCtx.stroke();
           this.rCtx.beginPath();
           this.rCtx.strokeStyle = "black";
-          this.rCtx.moveTo(this.robots[i].ultraSensor.rx, this.robots[i].ultraSensor.ry);
-          this.rCtx.lineTo(this.robots[i].ultraSensor.cx, this.robots[i].ultraSensor.cy);
+          this.rCtx.moveTo(this.robots[iterrobot].ultraSensor.rx, this.robots[iterrobot].ultraSensor.ry);
+          this.rCtx.lineTo(this.robots[iterrobot].ultraSensor.cx, this.robots[iterrobot].ultraSensor.cy);
           this.rCtx.stroke();
           this.rCtx.lineDashOffset = 0;
           this.rCtx.setLineDash([]);
-          if (this.robots[i].canDraw) {
+          if (this.robots[iterrobot].canDraw) {
               this.bCtx.lineCap = 'round';
               this.bCtx.beginPath();
-              this.bCtx.lineWidth = this.robots[i].drawWidth;
-              this.bCtx.strokeStyle = this.robots[i].drawColor;
-              this.bCtx.moveTo(this.robots[i].pose.xOld, this.robots[i].pose.yOld);
-              this.bCtx.lineTo(this.robots[i].pose.x, this.robots[i].pose.y);
+              this.bCtx.lineWidth = this.robots[iterrobot].drawWidth;
+              this.bCtx.strokeStyle = this.robots[iterrobot].drawColor;
+              this.bCtx.moveTo(this.robots[iterrobot].pose.xOld, this.robots[iterrobot].pose.yOld);
+              this.bCtx.lineTo(this.robots[iterrobot].pose.x, this.robots[iterrobot].pose.y);
               this.bCtx.stroke();
               this.uCtx.beginPath();
               this.uCtx.lineCap = 'round';
-              this.uCtx.lineWidth = this.robots[i].drawWidth;
-              this.uCtx.strokeStyle = this.robots[i].drawColor;
-              this.uCtx.moveTo(this.robots[i].pose.xOld, this.robots[i].pose.yOld);
-              this.uCtx.lineTo(this.robots[i].pose.x, this.robots[i].pose.y);
+              this.uCtx.lineWidth = this.robots[iterrobot].drawWidth;
+              this.uCtx.strokeStyle = this.robots[iterrobot].drawColor;
+              this.uCtx.moveTo(this.robots[iterrobot].pose.xOld, this.robots[iterrobot].pose.yOld);
+              this.uCtx.lineTo(this.robots[iterrobot].pose.x, this.robots[iterrobot].pose.y);
               this.uCtx.stroke();
-              this.robots[i].pose.xOld = this.robots[i].pose.x;
-              this.robots[i].pose.yOld = this.robots[i].pose.y;
+              this.robots[iterrobot].pose.xOld = this.robots[iterrobot].pose.x;
+              this.robots[iterrobot].pose.yOld = this.robots[iterrobot].pose.y;
           }
         }
 

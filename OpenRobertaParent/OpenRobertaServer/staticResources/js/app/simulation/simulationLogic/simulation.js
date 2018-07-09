@@ -346,7 +346,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                 isDownObstacle = false;
                 isDownRuler = false;
                 stepCounter = 0;
-                pause= true;
+                pause= false;
                 info = false;
                 setObstacle();
                 setRuler();

@@ -75,17 +75,21 @@ define(['exports','util', 'progList.model','program.controller', 'program.model'
                             console.log('Selections obtained via getSelections: are ' + JSON.stringify($("#mtable").bootstrapTable('getSelections')));
 //                            alert("The following programs would be executed: "+ JSON.stringify($("#mtable").bootstrapTable('getSelections')));
                             var extractedprograms =[];
+                            var numprogs = selectedprograms.length;
+                            var numloadprogs =0;
                             selectedprograms.forEach(function(item,i,oriarray){
                                 PROGRAM_M.loadProgramFromListing(item[0], item[1],item[3], function(dat){
                                     if(dat.rc != "ok"){
                                         alert("failed loading program for item "+ i+", check console");
                                         console.log("failed item is ", item);
                                     }
-                                    extractedprograms.push(dat);
-                                    if(i===oriarray.length -1 ){
+                                    extractedprograms[i] = dat;
+                                    numloadprogs++;
+                                    if(numloadprogs===oriarray.length ){
                                         console.log("finished");
                                         var jslist = [];
-//                                        console.log(extractedprograms);
+//                                        console.log(extractedprograms);;
+                                        var programsfetched = 0
                                         extractedprograms.forEach(function(item,i,oriarray){
                                             
                                             var xmlTextProgram = item.programText;
@@ -98,12 +102,15 @@ define(['exports','util', 'progList.model','program.controller', 'program.model'
                                             PROGRAM_M.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
 //                                                console.log("lets see the result");
 //                                                console.log(result);
-                                                if (result.rc == "ok") {
+                                                if (result.rc === "ok") {
                                                     //                    MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
                                                     extractedprograms[i]["result"] = result;
-                                                    if(i===oriarray.length-1){
+                                                    console.log("added result for ", i);
+                                                    programsfetched++;
+                                                    if(programsfetched === oriarray.length){
                                                         console.log("reached end");
                                                         alert("simulate");
+                                                        
                                                         console.log(extractedprograms);
                                                         simulateMultiple(extractedprograms);
                                                     }
@@ -123,6 +130,7 @@ define(['exports','util', 'progList.model','program.controller', 'program.model'
                                                     alert("failed loading js for item "+i+" check console");
                                                     console.log("failed loading js for item ", item);
                                                 }
+                                                console.log("ran fetching for", i);
 //                                                PROGRAM_C.reloadProgram(result);
                                             });
                                             
@@ -160,6 +168,15 @@ define(['exports','util', 'progList.model','program.controller', 'program.model'
 //        $('#blockly').openRightView('sim', INITIAL_WIDTH);
 //        PROG_C.reloadProgram(programs[0].result);
         SIM.initMultiple(programs, true, GUISTATE_C.getRobotGroup());
+        $(".sim").removeClass('hide');
+        $('#simButtonsCollapse').collapse({
+            'toggle' : false
+        });
+//        if (TOUR_C.getInstance() && TOUR_C.getInstance().trigger) {
+//            TOUR_C.getInstance().trigger('startSim');
+//        }
+        $('#blockly').openRightView('sim', INITIAL_WIDTH);
+        
         
     }
 
