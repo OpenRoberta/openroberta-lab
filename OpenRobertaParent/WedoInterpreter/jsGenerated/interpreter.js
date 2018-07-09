@@ -212,7 +212,8 @@
                     S.push('' + first + second);
                     break;
                 case C.TIMER_SENSOR_RESET:
-                    N.timerReset();
+                    var port = stmt[C.PORT];
+                    N.timerReset(port);
                     break;
                 case C.TONE_ACTION: {
                     var duration = S.pop();

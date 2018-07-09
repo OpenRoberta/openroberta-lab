@@ -23,9 +23,24 @@ and run the interpreter code (using node). Requirements:
 
 ### typescript support for developing the WeDo interpreter (Eclipse)
 
-1. install the plugin 'TypeScript IDE' (strange name). It includes an editor and ts compiler. Restart eclipse.
+1. install the plugin 'TypeScript IDE' (in spite of its strange name it is a plugin). It includes an editor and ts compiler. Restart eclipse.
 2. the settings are ok (including format + save options)
-3. the tsconfig.json contains settings for tsc.
+3. the tsconfig.json contains settings for tsc. For the fullpower of this config file see https://www.typescriptlang.org/docs/handbook/tsconfig-json.html .
+Simple settings are, e.g.:
+```javascript
+{
+    "compilerOptions": {
+        "outDir": "<directory-for-generated-js-sources>",
+        "rootDir": "<directory-with-ts-sources>",
+        "target": "es5",
+        "moduleResolution": "node",
+        "noUnusedLocals": true,
+        "module": "umd"
+    },
+    "compileOnSave": true,
+    "buildOnSave": true
+}
+```
 4. right click the project -> Typescript and add the 'tsconfig.json' to the typescript build path. On every save the compiler runs (incrementally).
 5. for compilation of all files ('clean update' right click on the file 'tsconfig.json' and 'run as compile typescript'.
 6. https://github.com/angelozerr/typescript.java/wiki/Getting-Started contains a lot of valuable information about the plugin

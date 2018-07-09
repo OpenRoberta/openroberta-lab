@@ -460,10 +460,10 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
             case DEFAULT:
             case VALUE:
-                o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TIMER).put(C.NAME, "timer" + timerSensor.getPort().getOraName());
+                o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, timerSensor.getPort().getOraName());
                 break;
             case RESET:
-                o = mk(C.TIMER_SENSOR_RESET).put(C.NAME, "timer" + timerSensor.getPort().getOraName());
+                o = mk(C.TIMER_SENSOR_RESET).put(C.PORT, timerSensor.getPort().getOraName());
                 break;
             default:
                 throw new DbcException("Invalid Time Mode!");

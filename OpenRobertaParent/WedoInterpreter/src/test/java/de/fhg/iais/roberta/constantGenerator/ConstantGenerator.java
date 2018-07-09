@@ -22,6 +22,7 @@ public class ConstantGenerator {
     }
 
     private void generateConstants(String in, String javaOut, String typescriptOut) throws Exception {
+        typescriptPrefix();
         javaPrefix();
         for ( String line : Util1.readFileLines(in) ) {
             line = line.trim();
@@ -58,9 +59,17 @@ public class ConstantGenerator {
                 typescriptConstants.add("export const " + name + ": number = " + value + ";");
             }
         }
+        typescriptSuffix();
         javaSuffix();
         Util1.writeFile(javaOut, javaConstants.stream().collect(Collectors.joining("\n")));
         Util1.writeFile(typescriptOut, typescriptConstants.stream().collect(Collectors.joining("\n")));
+    }
+
+    private void typescriptPrefix() {
+        typescriptConstants.add(""); // codelens doesn't work for the first line
+    }
+
+    private void typescriptSuffix() {
     }
 
     private void javaPrefix() {

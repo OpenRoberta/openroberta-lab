@@ -201,7 +201,8 @@ export function evalOperation() {
                 S.push( '' + first + second );
                 break;
             case C.TIMER_SENSOR_RESET:
-                N.timerReset();
+                const port = stmt[C.PORT];
+                N.timerReset( port );
                 break;
             case C.TONE_ACTION: {
                 const duration = S.pop();

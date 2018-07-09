@@ -9,16 +9,6 @@
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Colors = {
-        NONE: "NONE",
-        BLACK: "BLACK",
-        BLUE: "BLUE",
-        GREEN: "GREEN",
-        YELLOW: "YELLOW",
-        RED: "RED",
-        WHITE: "WHITE",
-        BROWN: "BROWN"
-    };
     exports.ADD = "ADD";
     exports.AMBIENTLIGHT = "ambientlight";
     exports.ANALOG = "analog";

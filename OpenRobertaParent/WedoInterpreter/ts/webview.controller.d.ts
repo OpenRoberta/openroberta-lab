@@ -1,3 +1,4 @@
+
 export function init( language )
 
 export function appToJsInterface( jsonData )
