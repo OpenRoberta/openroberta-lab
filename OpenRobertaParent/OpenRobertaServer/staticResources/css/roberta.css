@@ -1673,12 +1673,12 @@ img.img-responsive {
 #cookieDisclaimer {
 	position: fixed;
 	left: 0;
-	right: 0;
+	right: 216px;
 	bottom: 0;
 	z-index: 2999;
 	padding: 16px;
 	background-color: #fff;
-	border-top: 1px solid #d8d8d8;
+	border: 1px solid #d8d8d8;
 	transition: bottom 1s ease-in-out;
 }
 
@@ -1716,9 +1716,11 @@ img.img-responsive {
 	display: none;
 }
 
-@media (max-width: 30em) {
+@media (max-width: 40em), (max-width: 640px) {
 	#cookieDisclaimer {
 		padding-top: 28px;
+		right: 0;
+		bottom: 58px;
 	}
 	#cookieDisclaimer > span,
 	#cookieDisclaimer > .ok-button {
