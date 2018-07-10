@@ -291,10 +291,10 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         $('#head-navi-icon-robot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
         $('#head-navi-icon-robot').addClass('typcn-' + robotGroup);
 
+        checkSim();        
         if (!opt_init) {
             setProgramSaved(true);
             setConfigurationSaved(true);
-            checkSim();
             if (findGroup(robot) != getRobotGroup()) {
                 setConfigurationName(robotGroup.toUpperCase() + 'basis');
                 setProgramName('NEPOprog');

@@ -1,5 +1,5 @@
-define([ 'exports', 'guiState.controller', 'wedo.model', 'util', 'log', 'message', 'blocks', 'jquery' ], function(exports, GUISTATE_C, WEDO_M, UTIL, LOG, MSG,
-        Blockly, $) {
+define([ 'exports', 'guiState.controller', 'wedo.model', 'interpreter.interpreter', 'util', 'log', 'message', 'blocks', 'jquery' ], function(exports,
+        GUISTATE_C, WEDO_M, WEDO_I, UTIL, LOG, MSG, Blockly, $) {
 
     var ready;
     var aLanguage;
@@ -65,6 +65,7 @@ define([ 'exports', 'guiState.controller', 'wedo.model', 'util', 'log', 'message
                     }
                 } else if (data.op.type == "connect" && data.op.state == "disconnected") {
                     WEDO_M.update(data);
+                    WEDO_I.terminate();
                     var bricklyWorkspace = GUISTATE_C.getBricklyWorkspace();
                     var blocks = bricklyWorkspace.getAllBlocks();
                     for (var i = 0; i < blocks.length; i++) {
@@ -127,4 +128,19 @@ define([ 'exports', 'guiState.controller', 'wedo.model', 'util', 'log', 'message
         }
     }
 
+    function jsToDisplay(action) {
+        if (action.show !== undefined) {
+            $("#showDisplayText").append("<div>" + action.show + "</div>");
+            if (!$('#showDisplayText').is(':visible')) {
+                $('#showDisplay').one('hidden.bs.modal', function() {
+                    $("#showDisplayText").empty();
+                })
+                $("#showDisplay").modal("show");
+            }
+            $('#showDisplayText').scrollTop($('#showDisplayText').prop("scrollHeight"));
+        } else if (action.clear !== undefined) {
+            $("#showDisplayText").empty();
+        }
+    }
+    exports.jsToDisplay = jsToDisplay;
 });

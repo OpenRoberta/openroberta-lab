@@ -90,6 +90,7 @@
             var stmt = S.getOp();
             if (stmt === undefined) {
                 U.p('PROGRAM TERMINATED. No ops remaining');
+                N.close();
                 return "break-topLevelLoop";
             }
             var opCode = stmt[C.OPCODE];

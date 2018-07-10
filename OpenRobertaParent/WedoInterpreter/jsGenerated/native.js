@@ -16,6 +16,7 @@
     var WEBVIEW_C = require("./webview.controller");
     function clearDisplay() {
         U.p('clear display');
+        WEBVIEW_C.jsToDisplay({ "clear": true });
     }
     exports.clearDisplay = clearDisplay;
     function driveAction(driveDirection, distance, speed) {
@@ -74,29 +75,18 @@
         name = WEDO.getBrickIdByName(name);
         var robotText = 'robot: ' + name + ', port: ' + port;
         U.p(robotText + ' led off');
-        var command = {};
-        command.target = "wedo";
-        command.op = {};
-        command.op.type = "command";
-        command.op.actuator = "light";
-        command.op.device = name;
-        command.op.color = 0;
-        WEBVIEW_C.jsToAppInterface(command);
+        var op = { 'type': 'command', 'actuator': 'light', 'device': name, 'color': 0 };
+        var cmd = { 'target': 'wedo', 'op': op };
+        WEBVIEW_C.jsToAppInterface(cmd);
     }
     exports.statusLightOffAction = statusLightOffAction;
     function toneAction(name, frequency, duration) {
         name = WEDO.getBrickIdByName(name); // TODO: better style
         var robotText = 'robot: ' + name;
         U.p(robotText + ' piezo: ' + ', frequency: ' + frequency + ', duration: ' + duration);
-        var command = {};
-        command.target = "wedo";
-        command.op = {};
-        command.op.type = "command";
-        command.op.actuator = "piezo";
-        command.op.device = name;
-        command.op.frequency = frequency;
-        command.op.duration = duration;
-        WEBVIEW_C.jsToAppInterface(command);
+        var op = { 'type': 'command', 'actuator': 'piezo', 'device': name, 'frequency': frequency, 'duration': duration };
+        var cmd = { 'target': 'wedo', 'op': op };
+        WEBVIEW_C.jsToAppInterface(cmd);
     }
     exports.toneAction = toneAction;
     function motorOnAction(name, port, duration, speed) {
@@ -104,37 +94,33 @@
         var robotText = 'robot: ' + name + ', port: ' + port;
         var durText = duration === -1 ? ' w.o. duration' : (' for ' + duration + ' msec');
         U.p(robotText + ' motor speed ' + speed + durText);
-        var command = {};
-        command.target = "wedo";
-        command.op = {};
-        command.op.type = "command";
-        command.op.actuator = "motor";
-        command.op.device = name;
-        command.op.action = "on";
-        command.op.id = port;
-        command.op.direction = speed < 0 ? 1 : 0;
-        command.op.power = Math.abs(speed);
-        WEBVIEW_C.jsToAppInterface(command);
+        var op = { 'type': 'command', 'actuator': 'motor', 'device': name, 'action': 'on', 'id': port, 'direction': speed < 0 ? 1 : 0, 'power': Math.abs(speed) };
+        var cmd = { 'target': 'wedo', 'op': op };
+        WEBVIEW_C.jsToAppInterface(cmd);
     }
     exports.motorOnAction = motorOnAction;
     function motorStopAction(name, port) {
         name = WEDO.getBrickIdByName(name); // TODO: better style
         var robotText = 'robot: ' + name + ', port: ' + port;
         U.p(robotText + ' motor stop');
-        var command = {};
-        command.target = "wedo";
-        command.op = {};
-        command.op.type = "command";
-        command.op.actuator = "motor";
-        command.op.device = name;
-        command.op.action = "stop";
-        command.op.id = port;
-        WEBVIEW_C.jsToAppInterface(command);
+        var op = { 'type': 'command', 'actuator': 'motor', 'device': name, 'action': 'stop', 'id': port };
+        var cmd = { 'target': 'wedo', 'op': op };
+        WEBVIEW_C.jsToAppInterface(cmd);
     }
     exports.motorStopAction = motorStopAction;
     function showTextAction(text) {
         var showText = "" + text;
         U.p('***** show "' + showText + '" *****');
+        WEBVIEW_C.jsToDisplay({ "show": text });
     }
     exports.showTextAction = showTextAction;
+    function close() {
+        var names = WEDO.getConnectedBricks();
+        for (var name_1 in names) {
+            motorStopAction(name_1, 1);
+            motorStopAction(name_1, 2);
+            ledOnAction(name_1, 99, 3);
+        }
+    }
+    exports.close = close;
 });

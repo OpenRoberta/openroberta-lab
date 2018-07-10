@@ -6,6 +6,7 @@ import * as WEBVIEW_C from "./webview.controller";
 
 export function clearDisplay() {
     U.p( 'clear display' );
+    WEBVIEW_C.jsToDisplay( { "clear": true } );
 }
 
 export function driveAction( driveDirection, distance, speed ) {
@@ -65,29 +66,18 @@ export function statusLightOffAction( name, port ) {
     name = WEDO.getBrickIdByName( name );
     const robotText = 'robot: ' + name + ', port: ' + port;
     U.p( robotText + ' led off' );
-    const command: any = {};
-    command.target = "wedo";
-    command.op = {};
-    command.op.type = "command";
-    command.op.actuator = "light";
-    command.op.device = name;
-    command.op.color = 0;
-    WEBVIEW_C.jsToAppInterface( command );
+    const op = { 'type': 'command', 'actuator': 'light', 'device': name, 'color': 0 };
+    const cmd = { 'target': 'wedo', 'op': op };
+    WEBVIEW_C.jsToAppInterface( cmd );
 }
 
 export function toneAction( name, frequency, duration ) {
     name = WEDO.getBrickIdByName( name ); // TODO: better style
     const robotText = 'robot: ' + name;
     U.p( robotText + ' piezo: ' + ', frequency: ' + frequency + ', duration: ' + duration );
-    const command: any = {};
-    command.target = "wedo";
-    command.op = {};
-    command.op.type = "command";
-    command.op.actuator = "piezo";
-    command.op.device = name;
-    command.op.frequency = frequency;
-    command.op.duration = duration;
-    WEBVIEW_C.jsToAppInterface( command );
+    const op = { 'type': 'command', 'actuator': 'piezo', 'device': name, 'frequency': frequency, 'duration': duration };
+    const cmd = { 'target': 'wedo', 'op': op };
+    WEBVIEW_C.jsToAppInterface( cmd );
 }
 
 export function motorOnAction( name, port, duration, speed ) {
@@ -95,35 +85,31 @@ export function motorOnAction( name, port, duration, speed ) {
     const robotText = 'robot: ' + name + ', port: ' + port;
     const durText = duration === -1 ? ' w.o. duration' : ( ' for ' + duration + ' msec' );
     U.p( robotText + ' motor speed ' + speed + durText );
-    const command: any = {};
-    command.target = "wedo";
-    command.op = {};
-    command.op.type = "command";
-    command.op.actuator = "motor";
-    command.op.device = name;
-    command.op.action = "on";
-    command.op.id = port;
-    command.op.direction = speed < 0 ? 1 : 0;
-    command.op.power = Math.abs( speed );
-    WEBVIEW_C.jsToAppInterface( command );
+    const op = { 'type': 'command', 'actuator': 'motor', 'device': name, 'action': 'on', 'id': port, 'direction': speed < 0 ? 1 : 0, 'power': Math.abs( speed ) };
+    const cmd = { 'target': 'wedo', 'op': op };
+    WEBVIEW_C.jsToAppInterface( cmd );
 }
 
 export function motorStopAction( name, port ) {
     name = WEDO.getBrickIdByName( name ); // TODO: better style
     const robotText = 'robot: ' + name + ', port: ' + port;
     U.p( robotText + ' motor stop' );
-    const command: any = {};
-    command.target = "wedo";
-    command.op = {};
-    command.op.type = "command";
-    command.op.actuator = "motor";
-    command.op.device = name;
-    command.op.action = "stop";
-    command.op.id = port;
-    WEBVIEW_C.jsToAppInterface( command );
+    const op = { 'type': 'command', 'actuator': 'motor', 'device': name, 'action': 'stop', 'id': port };
+    const cmd = { 'target': 'wedo', 'op': op };
+    WEBVIEW_C.jsToAppInterface( cmd );
 }
 
 export function showTextAction( text ) {
     const showText = "" + text;
     U.p( '***** show "' + showText + '" *****' );
+    WEBVIEW_C.jsToDisplay( { "show": text } );
+}
+
+export function close() {
+    const names = WEDO.getConnectedBricks();
+    for ( let name in names ) {
+        motorStopAction( name, 1 );
+        motorStopAction( name, 2 );
+        ledOnAction( name, 99, 3 );
+    }
 }

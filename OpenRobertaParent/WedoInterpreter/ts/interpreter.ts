@@ -81,6 +81,7 @@ export function evalOperation() {
         let stmt = S.getOp();
         if ( stmt === undefined ) {
             U.p( 'PROGRAM TERMINATED. No ops remaining' );
+            N.close();
             break topLevelLoop;
         }
         const opCode = stmt[C.OPCODE];
