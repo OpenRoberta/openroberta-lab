@@ -3,6 +3,7 @@ define([ 'exports', 'guiState.controller', 'wedo.model', 'util', 'log', 'message
 
     var ready;
     var aLanguage;
+    var webViewType;
     /**
      * Init webview
      */
@@ -13,10 +14,13 @@ define([ 'exports', 'guiState.controller', 'wedo.model', 'util', 'log', 'message
         a.target = 'internal';
         a.op = {};
         a.op.type = 'identify';
-        if (jsToAppInterface(a) !== "ok") {
+        if (tryAndroid(a)) {
+            webViewType = "Android";
+        } else if (tryIOS(a)) {
+            webViewType = "IOS";
+        } else {
             // Obviously not in an Open Roberta webview
             ready.resolve(language);
-            console.log("No webview detected!")
         }
         return ready.promise();
     }
@@ -44,7 +48,7 @@ define([ 'exports', 'guiState.controller', 'wedo.model', 'util', 'log', 'message
                 } else if (data.op.type == "connect" && data.op.state == "connected") {
                     $('#show-available-connections').trigger('connect', data.op);
                     WEDO_M.update(data);
-                    GUISTATE_C.setConnectionState("wait");     
+                    GUISTATE_C.setConnectionState("wait");
                     var bricklyWorkspace = GUISTATE_C.getBricklyWorkspace();
                     var blocks = bricklyWorkspace.getAllBlocks();
                     for (var i = 0; i < blocks.length; i++) {
@@ -90,12 +94,37 @@ define([ 'exports', 'guiState.controller', 'wedo.model', 'util', 'log', 'message
 
     function jsToAppInterface(data) {
         try {
-            OpenRoberta.jsToAppInterface(JSON.stringify(data));
-            return "ok";
+            if (webViewType === "Android") {
+                OpenRoberta.jsToAppInterface(JSON.stringify(data));
+            } else if (webViewType === "IOS") {
+                window.webkit.messageHandlers.OpenRoberta.postMessage(JSON.stringify(data));
+            } else {
+                throw "invalid webview type";
+            }
         } catch (error) {
             LOG.error("jsToAppInterface >" + error + " caused by: " + data);
-            return "error";
         }
     }
     exports.jsToAppInterface = jsToAppInterface;
+
+    function tryAndroid(data) {
+        try {
+            OpenRoberta.jsToAppInterface(JSON.stringify(data));
+            return true;
+        } catch (error) {
+            LOG.error("no Android Webview: " + error);
+            return false;
+        }
+    }
+
+    function tryIOS(data) {
+        try {
+            window.webkit.messageHandlers.OpenRoberta.postMessage(JSON.stringify(data));
+            return true;
+        } catch (error) {
+            LOG.error("no IOS Webview: " + error);
+            return false;
+        }
+    }
+
 });
