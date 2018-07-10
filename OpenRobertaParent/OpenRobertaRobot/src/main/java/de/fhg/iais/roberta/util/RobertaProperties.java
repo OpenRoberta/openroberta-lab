@@ -17,12 +17,12 @@ public class RobertaProperties {
     public static final String ROBOT_WHITE_LIST_PROPERTY_KEY = "robot.whitelist";
     public static final String ROBOT_DEFAULT_PROPERTY_KEY = "robot.default";
     public static final String PLUGIN_TEMPDIR_PROPERTY_KEY = "plugin.tempdir";
-   
+
     private final Properties robertaProperties;
     private final String defaultRobot;
     private final List<String> robotsOnWhiteList;
     private final String tempDir;
- 
+
     /**
      * store the final set of properties, that control the OpenRoberta system.<br>
      * <br>
@@ -41,7 +41,10 @@ public class RobertaProperties {
         Assert.notNull(whiteList, "Property \"" + ROBOT_WHITE_LIST_PROPERTY_KEY + "\" not found");
         String[] whiteListItems = whiteList.split("\\s*,\\s*");
         Assert.isTrue(whiteListItems.length >= 1, "Property \"" + ROBOT_WHITE_LIST_PROPERTY_KEY + "\" must contain at least one real robot");
-        if ( whiteListItems[0].equals(NAME_OF_SIM) ) {
+        String defaultRobot = getStringProperty(ROBOT_DEFAULT_PROPERTY_KEY);
+        if ( defaultRobot != null ) {
+            this.defaultRobot = defaultRobot;
+        } else if ( whiteListItems[0].equals(NAME_OF_SIM) ) {
             Assert.isTrue(
                 whiteListItems.length >= 2,
                 "Property \"" + ROBOT_WHITE_LIST_PROPERTY_KEY + "\" must contain at least one robot different from \"" + NAME_OF_SIM + "\"");

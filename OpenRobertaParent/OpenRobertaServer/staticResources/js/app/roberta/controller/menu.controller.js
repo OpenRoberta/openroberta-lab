@@ -131,21 +131,27 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         for (var i = 0; i < length; i++) {
             if (robots[i].name == 'sim') {
                 i++;
-                proto.attr('data-type', robots[i].name);
+                // TODO check this hardcoded Open Roberta Sim again (maybe some day there is a better choise for us)
+                proto.attr('data-type', GUISTATE_C.getGuiRobot());
             }
             addPair(robots[i].group, robots[i].name);
         }
         for ( var key in groupsDict) {
             if (groupsDict.hasOwnProperty(key)) {
-                if (groupsDict[key].length == 1) { //this means that a robot has no subgroup
+                if (groupsDict[key].length == 1 || key === "calliope") { //this means that a robot has no subgroup
+
                     var robotName = key; // robot name is the same as robot group
+                    var robotRName = key;
+                    if (key === "calliope") {
+                        robotRName = "calliope2017";
+                    }
                     var clone = proto.clone().prop('id', 'menu-' + robotName);
-                    clone.attr('data-type', robotName);
+                    clone.attr('data-type', robotRName);
                     clone.find('span:eq( 0 )').removeClass('typcn-open');
                     clone.find('span:eq( 0 )').addClass('typcn-' + robotName);
-                    clone.find('span:eq( 1 )').text(GUISTATE_C.getMenuRobotRealName(robotName));
+                    clone.find('span:eq( 1 )').text(GUISTATE_C.getMenuRobotRealName(robotRName));
                     addInfoLink(clone, robotName);
-                    if (!GUISTATE_C.getIsRobotBeta(robotName)) {
+                    if (!GUISTATE_C.getIsRobotBeta(robotRName)) {
                         clone.find('img.img-beta').css('visibility', 'hidden');
                     }
                     $("#popup-robot-main").append(clone);
@@ -340,7 +346,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                             i++;
                         });
                         ROBOT_C.showListModal();
-                    } else if (GUISTATE_C.getConnection() == 'webview'){
+                    } else if (GUISTATE_C.getConnection() == 'webview') {
                         ROBOT_C.showScanModal();
                     } else {
                         $('#buttonCancelFirmwareUpdate').css('display', 'inline');
