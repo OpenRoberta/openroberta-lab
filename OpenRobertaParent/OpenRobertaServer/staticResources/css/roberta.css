@@ -1718,23 +1718,7 @@ img.img-responsive {
 
 @media (max-width: 40em), (max-width: 640px) {
 	#cookieDisclaimer {
-		padding-top: 28px;
 		right: 0;
-		bottom: 58px;
-	}
-	#cookieDisclaimer > span,
-	#cookieDisclaimer > .ok-button {
-		display: block !important;
-	}
-	
-	#cookieDisclaimer > span {
-		width: 100%;
-		padding-bottom: 16px;
-		padding-right: 0;
-	}
-	
-	#cookieDisclaimer > .ok-button {
-		margin-left: auto;
 	}
 }
 @media print {
