@@ -539,10 +539,10 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         if (GUISTATE.robot.time > 0) {
             return true;
         }
-        if (GUISTATE.gui.connection === "auto") {
+        if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AUTO) {
             return true;
         }
-        if (GUISTATE.gui.connection === "webview" && WEDO.getConnectedBricks().length > 0) {
+        if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.WEBVIEW && WEDO.getConnectedBricks().length > 0) {
             return true;
         }
         return false;
