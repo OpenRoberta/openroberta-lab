@@ -1,0 +1,26 @@
+{
+	"ops": [
+		{
+			"GetSample": "gyro",
+			"opc": "GetSample",
+			"PORT": "1",
+			"name": "Brick1",
+			"slot": "UP"
+		},
+		{
+			"opc": "ShowTextAction"
+		},
+		{
+			"GetSample": "infrared",
+			"opc": "GetSample",
+			"PORT": "2",
+			"name": "Brick1"
+		},
+		{
+			"opc": "ShowTextAction"
+		}
+	],
+	"functionDeclaration": {
+		
+	}
+}

@@ -49,6 +49,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
             break;
         case "update":
             if (data.op.id) {
+                console.log(data.op.sensor.replace(/\s/g, '').toLowerCase());
                 wedo[data.op.brickid][data.op.id][data.op.sensor.replace(/\s/g, '').toLowerCase()] = data.op.state;
             } else {
                 wedo[data.op.brickid][data.op.sensor.replace(/\s/g, '').toLowerCase()] = data.op.state;
@@ -103,5 +104,10 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         return null;
     }
     exports.getBrickIdByName = getBrickIdByName;
+    
+    function getBrickById(id) {
+        return wedo[id];
+        }
+    exports.getBrickById = getBrickById;
 
 });

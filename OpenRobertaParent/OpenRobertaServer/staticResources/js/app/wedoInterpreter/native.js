@@ -16,21 +16,23 @@ define([ 'exports', 'constants.interpreter', 'state.interpreter', 'util.interpre
         name = WEDO.getBrickIdByName(name);
         var robotText = 'robot: ' + name + ', port: ' + port;
         U.p(robotText + ' getsample from ' + sensor);
+        var sensorWedo;
         switch (sensor) {
         case "infrared":
-            sensor = "motionsensor";
+            sensorWedo = "motionsensor";
             break;
         case "gyro":
-            sensor = "tiltsensor";
+            sensorWedo = "tiltsensor";
             break;
         case "button":
+            sensorWedo = "button";
             break;
         case C.TIMER:
             return timerGet(port); // RETURN timer value
         default:
             throw 'invalid get sample for ' + name + ' - ' + port + ' - ' + sensor;
         }
-        S.push(WEDO.getSensorValue(name, "motionsensor", port));
+        S.push(WEDO.getSensorValue(name, sensorWedo, port));
     }
     exports.getSample = getSample;
     var timers = {};
@@ -151,11 +153,14 @@ define([ 'exports', 'constants.interpreter', 'state.interpreter', 'util.interpre
     }
     exports.showTextAction = showTextAction;
     function close() {
-        var names = WEDO.getConnectedBricks();
-        for ( var name_1 in names) {
-            motorStopAction(name_1, 1);
-            motorStopAction(name_1, 2);
-            ledOnAction(name_1, 99, 3);
+        var ids = WEDO.getConnectedBricks();
+        for ( var id in ids) {
+            if (ids.hasOwnProperty(id)) {
+                var name = WEDO.getBrickById(ids[id]).brickname;
+                motorStopAction(name, 1);
+                motorStopAction(name, 2);
+                ledOnAction(name, 99, 3);
+            }
         }
     }
     exports.close = close;

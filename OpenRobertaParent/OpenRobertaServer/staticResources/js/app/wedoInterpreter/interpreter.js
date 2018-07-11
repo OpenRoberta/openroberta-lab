@@ -89,7 +89,7 @@ define([ 'exports', 'log', 'message', 'constants.interpreter', 'native.interpret
             var stmt = S.getOp();
             if (stmt === undefined) {
                 U.p('PROGRAM TERMINATED. No ops remaining');
-                N.close();
+                //N.close();
                 return "break-topLevelLoop";
             }
             var opCode = stmt[C.OPCODE];
@@ -211,6 +211,7 @@ define([ 'exports', 'log', 'message', 'constants.interpreter', 'native.interpret
                 };
             case C.STOP:
                 U.p("PROGRAM TERMINATED. stop op");
+               
                 return "break-topLevelLoop";
             case C.TEXT_JOIN:
                 var second = S.pop();
@@ -257,6 +258,7 @@ define([ 'exports', 'log', 'message', 'constants.interpreter', 'native.interpret
         };
         topLevelLoop: while (!terminated) {
             var state_1 = _loop_1();
+            console.log(state_1);
             if (state_1 === "break-topLevelLoop") {
                 break topLevelLoop;
             } else if (typeof state_1 === "object") {
@@ -265,6 +267,7 @@ define([ 'exports', 'log', 'message', 'constants.interpreter', 'native.interpret
         }
         // termination either requested by the client or by executing 'stop' or after last statement
         terminated = true;
+        N.close();
         callbackOnTermination();
     }
     exports.evalOperation = evalOperation;
