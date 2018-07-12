@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.components.wedo;
 
 import java.util.List;
+
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationBlock;
 import de.fhg.iais.roberta.components.ConfigurationBlockType;
@@ -32,7 +33,7 @@ public class WeDoConfiguration extends Configuration {
     private void generateConfigurationBlocks(StringBuilder sb) {
         if ( this.configurationBlocks.size() > 1 ) {
             sb.append(" configuration blocks {\n");
-            for ( int i = 1; i < this.configurationBlocks.size(); i++ ) {
+            for ( int i = 0; i < this.configurationBlocks.size(); i++ ) {
                 Quadruplet<ConfigurationBlock, String, List<String>, List<String>> block = this.configurationBlocks.get(i);
                 sb.append("    ").append(block.getFirst()).append(", ").append("Name: ").append(block.getSecond());
                 sb.append(", port list: ").append(block.getThird()).append(", pin list: ").append(block.getFourth()).append(";\n");
@@ -63,6 +64,15 @@ public class WeDoConfiguration extends Configuration {
 
     public List<String> getPins(Quadruplet<ConfigurationBlock, String, List<String>, List<String>> configurationBlock) {
         return configurationBlock.getFourth();
+    }
+
+    public ConfigurationBlock getConfigurationBlockOnPort(String port) {
+        for ( int i = 0; i < this.configurationBlocks.size(); i++ ) {
+            if ( this.configurationBlocks.get(i).getSecond().toUpperCase().equals(port) ) {
+                return this.configurationBlocks.get(i).getFirst();
+            }
+        }
+        return null;
     }
 
     @Override

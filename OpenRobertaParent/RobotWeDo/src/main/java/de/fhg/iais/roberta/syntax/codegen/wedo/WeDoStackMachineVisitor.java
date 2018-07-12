@@ -290,7 +290,7 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         String sensorName = ledOnAction.getPort().getOraName();
         UsedConfigurationBlock confInfraredSensor = getConfigurationBlock(sensorName);
         if ( confInfraredSensor == null ) {
-            throw new DbcException("no infrared sensor declared in the configuration");
+            throw new DbcException("no LED declared in the configuration");
         }
         String brickName = confInfraredSensor.getPins().size() >= 1 ? confInfraredSensor.getPins().get(0) : null;
         String port = confInfraredSensor.getPins().size() >= 2 ? confInfraredSensor.getPins().get(1) : null;

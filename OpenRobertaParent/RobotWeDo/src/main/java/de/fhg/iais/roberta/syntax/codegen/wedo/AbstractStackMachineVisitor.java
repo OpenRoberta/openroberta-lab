@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import com.google.common.collect.Lists;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.ConfigurationBlock;
 import de.fhg.iais.roberta.components.wedo.WeDoConfiguration;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
@@ -222,7 +223,7 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
 
     @Override
     public V visitToneAction(ToneAction<V> toneAction) {
-        String brickName = ((WeDoConfiguration) brickConfiguration).getRobotIdentName();
+        String brickName = ((WeDoConfiguration) this.brickConfiguration).getRobotIdentName();
         if ( (brickName != null) ) {
             toneAction.getFrequency().visit(this);
             toneAction.getDuration().visit(this);
@@ -235,8 +236,12 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
 
     @Override
     public V visitPlayNoteAction(PlayNoteAction<V> playNoteAction) {
-        String brickName = ((WeDoConfiguration) brickConfiguration).getRobotIdentName();
-        if ( (brickName != null) ) {
+        String brickName = ((WeDoConfiguration) this.brickConfiguration).getRobotIdentName();
+        ConfigurationBlock confPlayBlock = ((WeDoConfiguration) this.brickConfiguration).getConfigurationBlockOnPort(playNoteAction.getPort().toString());
+        if ( brickName != null ) {
+            if ( confPlayBlock == null ) {
+                throw new DbcException("no buzzer declared in the configuration");
+            }
             JSONObject frequency = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, playNoteAction.getFrequency());
             app(frequency);
             JSONObject duration = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, playNoteAction.getDuration());
@@ -378,14 +383,14 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
             pushOpArray();
             repeatStmt.getList().visit(this);
             JSONObject stmtListEnd = mk(C.FLOW_CONTROL).put(C.KIND, C.WAIT_STMT).put(C.CONDITIONAL, false).put(C.BREAK, true);
-            opArray.add(stmtListEnd);
+            this.opArray.add(stmtListEnd);
             List<JSONObject> waitBody = popOpArray();
             JSONObject o = mk(C.IF_TRUE_STMT).put(C.STMT_LIST, waitBody);
             return app(o);
         }
 
         // The "real" repeat cases
-        if ( mode == Mode.FOREVER || mode == Mode.TIMES || mode == Mode.FOR ) {
+        if ( (mode == Mode.FOREVER) || (mode == Mode.TIMES) || (mode == Mode.FOR) ) {
             pushOpArray();
             repeatStmt.getList().visit(this);
             List<JSONObject> repeatBody = popOpArray();
@@ -406,7 +411,7 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
             }
         }
 
-        if ( mode == Mode.WHILE || mode == Mode.UNTIL ) {
+        if ( (mode == Mode.WHILE) || (mode == Mode.UNTIL) ) {
             pushOpArray();
             repeatStmt.getExpr().visit(this);
             List<JSONObject> expr = popOpArray();
@@ -504,8 +509,8 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
         for ( Stmt<V> repeatStmt : repeatStmts ) {
             repeatStmt.visit(this);
         }
-        opArray.add(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 1));
-        opArray.add(mk(C.WAIT_TIME_STMT));
+        this.opArray.add(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 1));
+        this.opArray.add(mk(C.WAIT_TIME_STMT));
         List<JSONObject> waitBlocks = popOpArray();
         JSONObject o = mk(C.WAIT_STMT).put(C.STMT_LIST, waitBlocks);
         return app(o);
@@ -640,10 +645,10 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
         pushOpArray();
         methodVoid.getBody().visit(this);
         JSONObject terminateMethodCall = mk(C.FLOW_CONTROL).put(C.KIND, C.METHOD_CALL_VOID).put(C.CONDITIONAL, false).put(C.BREAK, true);
-        opArray.add(terminateMethodCall);
+        this.opArray.add(terminateMethodCall);
         List<JSONObject> methodBody = popOpArray();
         JSONObject o = mk(C.METHOD_VOID).put(C.NAME, methodVoid.getMethodName()).put(C.STATEMENTS, methodBody);
-        fctDecls.put(methodVoid.getMethodName(), o);
+        this.fctDecls.put(methodVoid.getMethodName(), o);
         return null;
     }
 
@@ -656,10 +661,10 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
         methodReturn.getBody().visit(this);
         methodReturn.getReturnValue().visit(this);
         JSONObject terminateMethodCall = mk(C.FLOW_CONTROL).put(C.KIND, C.METHOD_CALL_RETURN).put(C.CONDITIONAL, false).put(C.BREAK, true);
-        opArray.add(terminateMethodCall);
+        this.opArray.add(terminateMethodCall);
         List<JSONObject> methodBody = popOpArray();
         JSONObject o = mk(C.METHOD_RETURN).put(C.TYPE, methodReturn.getReturnType()).put(C.NAME, methodReturn.getMethodName()).put(C.STATEMENTS, methodBody);
-        fctDecls.put(methodReturn.getMethodName(), o);
+        this.fctDecls.put(methodReturn.getMethodName(), o);
         return null;
     }
 

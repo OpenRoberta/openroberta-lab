@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.wedo.BrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.codegen.wedo.WeDoStackMachineVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
@@ -135,7 +136,7 @@ public class WeDoFactory extends AbstractRobotFactory {
 
     @Override
     public RobotBrickCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
-        return null;
+        return new BrickCheckVisitor(brickConfiguration);
     }
 
     @Override

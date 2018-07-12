@@ -75,7 +75,7 @@ public class SimulationCheckVisitor extends RobotSimulationCheckVisitor implemen
     public Void visitImageInvertFunction(ImageInvertFunction<Void> imageInvertFunction) {
         imageInvertFunction.getImage().visit(this);
         return null;
-    } // TODO Auto-generated method stub
+    }
 
     @Override
     public Void visitImage(Image<Void> image) {
@@ -132,12 +132,13 @@ public class SimulationCheckVisitor extends RobotSimulationCheckVisitor implemen
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
+        pinValueSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 
     @Override
     public Void visitPinWriteValueSensor(PinWriteValue<Void> pinWriteValueSensor) {
-        pinWriteValueSensor.getValue().visit(this);
+        pinWriteValueSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 

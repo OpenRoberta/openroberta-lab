@@ -18,8 +18,8 @@ import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 public class WeDoCompilerWorkflow extends AbstractCompilerWorkflow {
 
     private static final Logger LOG = LoggerFactory.getLogger(WeDoCompilerWorkflow.class);
-    
-    private String compiledStackOps = "";
+
+    private String compiledStackOps = "error";
 
     public WeDoCompilerWorkflow() {
     }
@@ -30,15 +30,20 @@ public class WeDoCompilerWorkflow extends AbstractCompilerWorkflow {
         if ( data.getErrorMessage() != null ) {
             return null;
         }
-        String sourceCode = WeDoStackMachineVisitor.generate((WeDoConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree());
-        WeDoCompilerWorkflow.LOG.info("generating javascript code");
-        return sourceCode;
+        try {
+            String sourceCode = WeDoStackMachineVisitor.generate((WeDoConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree());
+            WeDoCompilerWorkflow.LOG.info("generating javascript code");
+            return sourceCode;
+        } catch ( Exception e ) {
+            LOG.error("generating source code failed", e);
+            return null;
+        }
     }
 
     @Override
     public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
         this.compiledStackOps = sourceCode;
-        return Key.COMPILERWORKFLOW_SUCCESS;
+        return sourceCode == null ? Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED : Key.COMPILERWORKFLOW_SUCCESS;
     }
 
     @Override
