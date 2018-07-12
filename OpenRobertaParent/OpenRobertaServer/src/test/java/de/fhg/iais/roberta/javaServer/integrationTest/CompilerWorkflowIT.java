@@ -222,7 +222,7 @@ public class CompilerWorkflowIT {
     }
 
     private void setRobotTo(String robot) throws Exception, JSONException {
-        response = this.restAdmin.command(httpSessionState, dbSession, JSONUtilForServer.mkD("{'cmd':'setRobot','robot':'" + robot + "'}"));
+        response = this.restAdmin.command(httpSessionState, dbSession, JSONUtilForServer.mkD("{'cmd':'setRobot','robot':'" + robot + "'}"), null);
         JSONUtilForServer.assertEntityRc(this.response, "ok", Key.ROBOT_SET_SUCCESS);
     }
 

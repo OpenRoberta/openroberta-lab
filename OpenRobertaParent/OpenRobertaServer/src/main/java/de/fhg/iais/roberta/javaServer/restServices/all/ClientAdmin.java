@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.javaServer.restServices.all;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -8,9 +9,14 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import de.fhg.iais.roberta.util.*;
+import de.fhg.iais.roberta.util.Statistics;
+import eu.bitwalker.useragentutils.UserAgent;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
@@ -24,13 +30,6 @@ import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
-import de.fhg.iais.roberta.util.AliveData;
-import de.fhg.iais.roberta.util.ClientLogger;
-import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.RandomUrlPostfix;
-import de.fhg.iais.roberta.util.RobertaProperties;
-import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.Util1;
 
 @Path("/admin")
 public class ClientAdmin {
@@ -57,7 +56,7 @@ public class ClientAdmin {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response command(@OraData HttpSessionState httpSessionState, @OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
+    public Response command(@OraData HttpSessionState httpSessionState, @OraData DbSession dbSession, JSONObject fullRequest, @Context HttpHeaders httpHeaders) throws Exception {
 
         AliveData.rememberClientCall();
         MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
@@ -69,8 +68,21 @@ public class ClientAdmin {
             JSONObject request = fullRequest.getJSONObject("data");
             String cmd = request.getString("cmd");
             LOG.info("command is: " + cmd);
+
             response.put("cmd", cmd);
             if ( cmd.equals("init") ) {
+                List<String> userAgentList = httpHeaders.getRequestHeader("User-Agent");
+                String userAgentString = "";
+                if (userAgentList != null) {
+                    userAgentString = userAgentList.get(0);
+                }
+                UserAgent userAgent = UserAgent.parseUserAgentString(userAgentString);
+                Statistics.info("Initialization",
+                    "Browser", userAgent.getBrowser() + "/" + userAgent.getBrowserVersion(),
+                    "OS", userAgent.getOperatingSystem().getName(),
+                    "DeviceType", userAgent.getOperatingSystem().getDeviceType().getName(),
+                    "ScreenSize", request.getString("screenSize"));
+
                 JSONObject server = new JSONObject();
                 server.put("defaultRobot", robertaProperties.getDefaultRobot());
                 JSONObject robots = new JSONObject();

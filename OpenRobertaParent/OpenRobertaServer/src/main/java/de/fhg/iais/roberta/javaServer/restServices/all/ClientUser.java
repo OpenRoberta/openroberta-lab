@@ -12,6 +12,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import de.fhg.iais.roberta.util.*;
+import de.fhg.iais.roberta.util.Statistics;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
@@ -31,12 +33,6 @@ import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
-import de.fhg.iais.roberta.util.AliveData;
-import de.fhg.iais.roberta.util.ClientLogger;
-import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.RobertaProperties;
-import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.Util1;
 
 @Path("/user")
 public class ClientUser {
@@ -99,6 +95,7 @@ public class ClientUser {
                     response.put("userName", name);
                     response.put("isAccountActivated", user.isActivated());
                     ClientUser.LOG.info("login: user {} (id {}) logged in", account, id);
+                    Statistics.info("UserLogin");
                     AliveData.rememberLogin();
                 }
 
@@ -123,6 +120,7 @@ public class ClientUser {
                 response.put("rc", "ok");
                 response.put("message", Key.USER_LOGOUT_SUCCESS.getKey());
                 ClientUser.LOG.info("logout of user " + userId);
+                Statistics.info("UserLogout");
             } else if ( cmd.equals("createUser") ) {
                 String account = request.getString("accountName");
                 String password = request.getString("password");
@@ -246,7 +244,7 @@ public class ClientUser {
                 JSONArray statusTextJSON = new JSONArray(Arrays.asList(statusText));
                 response.put("statustext", statusTextJSON);
                 response.put("rc", "ok");
-                Util.addResultInfo(response, up);
+                // Util.addResultInfo(response, up); // should not be necessary
 
             } else if ( cmd.equals("setStatusText") && userId == 1 ) {
                 statusText[0] = request.getString("english");

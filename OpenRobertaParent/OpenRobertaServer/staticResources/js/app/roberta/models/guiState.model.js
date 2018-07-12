@@ -85,7 +85,8 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
 
         var getInitFromServer = function() {
             return COMM.json("/admin", {
-                "cmd" : "init"
+                "cmd" : "init",
+                "screenSize" : [window.screen.availWidth, window.screen.availHeight]
             }, function(result) {
                 if (result.rc === 'ok') {
                     $.extend(exports.server, result.server);

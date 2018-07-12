@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 
+import de.fhg.iais.roberta.util.Statistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

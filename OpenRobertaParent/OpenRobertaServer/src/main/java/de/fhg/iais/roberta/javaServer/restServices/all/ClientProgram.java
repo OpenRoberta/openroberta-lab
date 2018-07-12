@@ -15,6 +15,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.UnmarshalException;
 
+import de.fhg.iais.roberta.util.*;
+import de.fhg.iais.roberta.util.Statistics;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -52,12 +54,6 @@ import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformerData;
-import de.fhg.iais.roberta.util.AliveData;
-import de.fhg.iais.roberta.util.ClientLogger;
-import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.RobertaProperties;
-import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 @Path("/program")
@@ -73,19 +69,18 @@ public class ClientProgram {
         this.sessionFactoryWrapper = sessionFactoryWrapper;
         this.brickCommunicator = brickCommunicator;
         this.isPublicServer = robertaProperties.getBooleanProperty("server.public");
-
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response command(@OraData HttpSessionState httpSessionState, JSONObject fullRequest) throws Exception {
-
         AliveData.rememberClientCall();
         MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
         MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
         MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
         new ClientLogger().log(ClientProgram.LOG, fullRequest);
+
         int userId = httpSessionState.getUserId();
         String robot =
             httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup() != ""
@@ -129,6 +124,7 @@ public class ClientProgram {
                     }
                 }
                 Util.addResultInfo(response, pp);
+                Statistics.info("ProgramSave");
 
             } else if ( cmd.equals("showSourceP") ) {
                 String token = httpSessionState.getToken();
@@ -162,6 +158,7 @@ public class ClientProgram {
                     }
                 }
                 Util.addResultInfo(response, forMessages);
+                Statistics.info("ProgramSource");
 
             } else if ( cmd.equals("loadP") ) {
                 if ( !httpSessionState.isUserLoggedIn() && !request.getString("owner").equals("Roberta") && !request.getString("owner").equals("Gallery") ) {
@@ -185,6 +182,7 @@ public class ClientProgram {
                         }
                     }
                     Util.addResultInfo(response, pp);
+                    Statistics.info("ProgramLoad");
                 }
             } else if ( cmd.equals("importXML") ) {
                 String xmlText = request.getString("program");
@@ -207,6 +205,7 @@ public class ClientProgram {
                         response.put("programText", JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet()));
                         response.put("configText", JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet()));
                         Util.addSuccessInfo(response, Key.PROGRAM_IMPORT_SUCCESS);
+                        Statistics.info("ProgramImport");
                     } else {
                         Util.addErrorInfo(response, Key.PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE);
                     }
@@ -225,6 +224,7 @@ public class ClientProgram {
                         String right = request.getString("right");
                         upp.shareToUser(userId, robot, programName, userId, userToShareName, right);
                         Util.addResultInfo(response, upp);
+                        Statistics.info("ProgramShare");
                     } else {
                         Util.addErrorInfo(response, Key.ACCOUNT_NOT_ACTIVATED_TO_SHARE);
                     }
@@ -268,6 +268,7 @@ public class ClientProgram {
                                     ClientProgram.LOG.error("TODO: check potential error: the saved program should never be null");
                                 }
                                 Util.addSuccessInfo(response, Key.GALLERY_UPLOAD_SUCCESS);
+                                Statistics.info("GalleryShare");
                             } else {
                                 Util.addErrorInfo(response, Key.GALLERY_UPLOAD_ERROR);
                             }
@@ -301,6 +302,7 @@ public class ClientProgram {
                     }
 
                     Util.addResultInfo(response, lp);
+                    Statistics.info("GalleryLike");
                 }
 
             } else if ( cmd.equals("shareDelete") ) {
@@ -313,6 +315,7 @@ public class ClientProgram {
                     String author = request.getString("author");
                     upp.shareDelete(owner, robot, programName, author, userId);
                     Util.addResultInfo(response, upp);
+                    Statistics.info("ProgramShareDelete");
                     // if this program was shared from the gallery we need to delete the copy of it as well
                     if ( owner.equals("Gallery") ) {
                         int ownerId = up.getUser(owner).getId();
@@ -330,6 +333,7 @@ public class ClientProgram {
                     String author = request.getString("author");
                     pp.deleteByName(programName, userId, robot, author);
                     Util.addResultInfo(response, pp);
+                    Statistics.info("ProgramDelete");
                 }
             } else if ( cmd.equals("loadPN") ) {
                 if ( !httpSessionState.isUserLoggedIn() ) {
@@ -345,7 +349,7 @@ public class ClientProgram {
                 final JSONArray programInfo = pp.getProgramGallery(userId);
                 response.put("programNames", programInfo);
                 Util.addResultInfo(response, pp);
-
+                Statistics.info("GalleryView");
             } else if ( cmd.equals("loadProgramEntity") ) {
                 if ( !httpSessionState.isUserLoggedIn() ) {
                     ClientProgram.LOG.error("Unauthorized");
@@ -408,6 +412,7 @@ public class ClientProgram {
                             robotFactory.getRobotCompilerWorkflow().generateSourceAndCompile(token, programName, programAndConfigTransformer, language);
                         if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS && token != null && !token.equals(ClientAdmin.NO_CONNECT) ) {
                             wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
+                            Statistics.info("ProgramRun", "LoggedIn", String.valueOf(httpSessionState.isUserLoggedIn()));
                         } else {
                             if ( messageKey != null ) {
                                 LOG.info(messageKey.toString());
@@ -427,6 +432,7 @@ public class ClientProgram {
                 LOG.info("compile user supplied native program. Result: " + messageKey);
                 if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
                     Util.addSuccessInfo(response, Key.COMPILERWORKFLOW_SUCCESS);
+                    Statistics.info("ProgramCompileNative");
                 } else {
                     Util.addErrorInfo(response, messageKey);
                 }
@@ -472,9 +478,10 @@ public class ClientProgram {
                     } else {
                         messageKey = Key.PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE;
                     }
-                    LOG.info("compileP terminated with " + messageKey);
+                    ClientProgram.LOG.info("compileP terminated with " + messageKey);
                     if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
                         Util.addSuccessInfo(response, Key.COMPILERWORKFLOW_SUCCESS);
+                        Statistics.info("ProgramCompile");
                     } else {
                         Util.addErrorInfo(response, messageKey);
                     }
@@ -511,6 +518,7 @@ public class ClientProgram {
                         if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
                             response.put("compiledCode", robotCompilerWorkflow.getCompiledCode());
                             response.put("rc", "ok");
+                            Statistics.info("ProgramRunBack", "LoggedIn", String.valueOf(httpSessionState.isUserLoggedIn()));
                         } else {
                             if ( messageKey != null ) {
                                 LOG.info(messageKey.toString());
@@ -549,6 +557,7 @@ public class ClientProgram {
                         response.put("javaScriptProgram", javaScriptCode);
                         wasRobotWaiting = true;
                         messageKey = Key.COMPILERWORKFLOW_SUCCESS;
+                        Statistics.info("SimulationRun", "LoggedIn", String.valueOf(httpSessionState.isUserLoggedIn()));
                     }
                 }
                 //TODO program checks should be in compiler workflow and should be thoroughly revised

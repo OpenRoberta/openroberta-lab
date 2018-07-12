@@ -127,7 +127,7 @@ public class GenerateJsonFromSimIT {
     }
 
     private void setRobotTo(String robot) throws Exception, JSONException {
-        this.response = this.restAdmin.command(httpSessionState, this.dbSession, mkD("{'cmd':'setRobot','robot':'" + robot + "'}"));
+        this.response = this.restAdmin.command(httpSessionState, this.dbSession, mkD("{'cmd':'setRobot','robot':'" + robot + "'}"), null);
         assertEntityRc(this.response, "ok", Key.ROBOT_SET_SUCCESS);
     }
 

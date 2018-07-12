@@ -31,6 +31,9 @@ public class ClientLogger {
             if ( logLength > 0 ) {
                 for ( int i = 0; i < logLength; i++ ) {
                     LOG.info("log entry: " + logs.getString(i));
+                    if (logs.getString(i).contains("simImport clicked")) {
+                        Statistics.info("SimulationBackgroundUploaded");
+                    }
                 }
                 LOG.info(logLength + (logLength == 1 ? " log entry" : " log entries") + " written");
             }
