@@ -93,19 +93,15 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
         $('#connectionsTable').onWrap('click-row.bs.table', function(e, row) {
             WEBVIEW_C.jsToAppInterface({
                 'target' : GUISTATE_C.getRobot(),
-                'op' : {
-                    'type' : 'connect',
-                    'robot' : row.id
-                }
+                'type' : 'connect',
+                'robot' : row.id
             });
         }, "connect to robot");
         $('#show-available-connections').on('hidden.bs.modal', function(e) {
             WEBVIEW_C.jsToAppInterface({
                 'target' : GUISTATE_C.getRobot(),
-                'op' : {
-                    'type' : 'stopScan'
-                }
-            });   
+                'type' : 'stopScan'
+            });
         });
 
         $('#show-available-connections').onWrap('add', function(event, data) {
@@ -122,7 +118,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
             var result = {};
             result["robot.name"] = data;
             result["robot.state"] = 'wait';
-            GUISTATE_C.setState(result);           
+            GUISTATE_C.setState(result);
             $('#show-available-connections').modal('hide');
         }, "");
     }
@@ -169,9 +165,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
         $('#connectionsTable').bootstrapTable('removeAll');
         WEBVIEW_C.jsToAppInterface({
             'target' : GUISTATE_C.getRobot(),
-            'op' : {
-                'type' : 'startScan'
-            }
+            'type' : 'startScan'
         });
         $('#show-available-connections').modal('show');
     }

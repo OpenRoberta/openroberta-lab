@@ -23,25 +23,27 @@
         U.p("drive, dir: " + driveDirection + ", dist: " + distance + ", speed: " + speed);
     }
     exports.driveAction = driveAction;
-    function getSample(name, port, sensor) {
+    function getSample(name, port, sensor, slot) {
         name = WEDO.getBrickIdByName(name);
         var robotText = 'robot: ' + name + ', port: ' + port;
         U.p(robotText + ' getsample from ' + sensor);
+        var sensorName;
         switch (sensor) {
             case "infrared":
-                sensor = "motionsensor";
+                sensorName = "motionsensor";
                 break;
             case "gyro":
-                sensor = "tiltsensor";
+                sensorName = "tiltsensor";
                 break;
             case "button":
+                sensorName = "buttons";
                 break;
             case C.TIMER:
                 return timerGet(port); // RETURN timer value
             default:
-                throw 'invalid get sample for ' + name + ' - ' + port + ' - ' + sensor;
+                throw 'invalid get sample for ' + name + ' - ' + port + ' - ' + sensor + ' - ' + slot;
         }
-        S.push(WEDO.getSensorValue(name, "motionsensor", port));
+        S.push(WEDO.getSensorValue(name, sensorName, port, slot));
     }
     exports.getSample = getSample;
     var timers = {};
@@ -115,11 +117,14 @@
     }
     exports.showTextAction = showTextAction;
     function close() {
-        var names = WEDO.getConnectedBricks();
-        for (var name_1 in names) {
-            motorStopAction(name_1, 1);
-            motorStopAction(name_1, 2);
-            ledOnAction(name_1, 99, 3);
+        var ids = WEDO.getConnectedBricks();
+        for (var id in ids) {
+            if (ids.hasOwnProperty(id)) {
+                var name = WEDO.getBrickById(ids[id]).brickname;
+                motorStopAction(name, 1);
+                motorStopAction(name, 2);
+                ledOnAction(name, 99, 3);
+            }
         }
     }
     exports.close = close;

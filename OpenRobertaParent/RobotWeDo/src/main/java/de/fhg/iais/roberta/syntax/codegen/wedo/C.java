@@ -11,11 +11,6 @@ public class C {
     public static final String ANY = "any";
     public static final String ARG1 = "arg1";
     public static final String ARG2 = "arg2";
-    public static final String ARRAY_BOOLEAN = "Array_Boolean";
-    public static final String ARRAY_COLOR = "Array_Colour";
-    public static final String ARRAY_IMAGE = "Array_Image";
-    public static final String ARRAY_NUMBER = "Array_Number";
-    public static final String ARRAY_STRING = "Array_String";
     public static final String ASSIGN_METHOD_PARAMETER_STMT = "AssignMethodParameter";
     public static final String ASSIGN_STMT = "AssignStmt";
     public static final String AT1 = "at1";
@@ -24,7 +19,7 @@ public class C {
     public static final String BACKWARD = "BACKWARD";
     public static final String BINARY = "Binary";
     public static final String BOOLEAN = "BOOLEAN";
-    public static final String BOOL_CONST = "BoolConst";
+    public static final String BOOL_CONST = "BOOL_CONST";
     public static final String BREAK = "break";
     public static final String BRIGHTNESS = "brightness";
     public static final String BUTTONS = "buttons";

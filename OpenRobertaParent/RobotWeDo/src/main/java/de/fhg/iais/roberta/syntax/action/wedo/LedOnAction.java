@@ -3,7 +3,12 @@ package de.fhg.iais.roberta.syntax.action.wedo;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.inter.mode.action.IActorPort;
+import de.fhg.iais.roberta.inter.mode.sensor.IPort;
+import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -31,11 +36,13 @@ import de.fhg.iais.roberta.visitor.wedo.WeDoAstVisitor;
  */
 public class LedOnAction<V> extends Action<V> {
     private final Expr<V> ledColor;
+    private final IActorPort port;
 
-    private LedOnAction(Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private LedOnAction(IActorPort port,Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("W_LED_ON_ACTION"), properties, comment);
         Assert.notNull(ledColor);
         this.ledColor = ledColor;
+        this.port = port;
         setReadOnly();
     }
 
@@ -47,8 +54,8 @@ public class LedOnAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link LedOnAction}
      */
-    private static <V> LedOnAction<V> make(Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LedOnAction<>(ledColor, properties, comment);
+    private static <V> LedOnAction<V> make(IActorPort port,Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new LedOnAction<>(port,ledColor, properties, comment);
     }
 
     /**
@@ -76,11 +83,16 @@ public class LedOnAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        List<Value> values = helper.extractValues(block, (short) 1);
-
+        String port;
+        List<Field> fields;
+        List<Value> values;
+        IRobotFactory factory = helper.getModeFactory();
+        fields = helper.extractFields(block, (short) 1);
+        values = helper.extractValues(block, (short) 1);
+        port = helper.extractField(fields, BlocklyConstants.ACTORPORT);
         Phrase<V> ledColor = helper.extractValue(values, new ExprParam(BlocklyConstants.COLOR, BlocklyType.COLOR));
-
-        return LedOnAction.make(helper.convertPhraseToExpr(ledColor), helper.extractBlockProperties(block), helper.extractComment(block));
+     
+        return LedOnAction.make(factory.getActorPort(port), helper.convertPhraseToExpr(ledColor), helper.extractBlockProperties(block), helper.extractComment(block));
 
     }
 
@@ -90,8 +102,13 @@ public class LedOnAction<V> extends Action<V> {
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.COLOR, this.ledColor);
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.ACTORPORT, getPort().getOraName());
 
         return jaxbDestination;
 
+    }
+
+    public IPort getPort() {
+        return this.port;
     }
 }

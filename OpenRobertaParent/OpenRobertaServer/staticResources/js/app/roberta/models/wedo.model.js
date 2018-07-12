@@ -7,52 +7,58 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      */
 
     var wedo = {};
+    var tiltMode = {
+        UP : '3.0',
+        DOWN : '9.0',
+        BACK : '5.0',
+        FRONT : '7.0',
+        NO : '0.0'
+    }
 
     function update(data) {
         if (data.target !== "wedo") {
             return;
         }
-        switch (data.op.type) {
+        switch (data.type) {
         case "connect":
-            if (data.op.state == "connected") {
-                wedo[data.op.brickid] = {};
-                wedo[data.op.brickid]["brickname"] = data.op.brickname.replace(/\s/g, '');
+            if (data.state == "connected") {
+                wedo[data.brickid] = {};
+                wedo[data.brickid]["brickname"] = data.brickname.replace(/\s/g, '');
                 // for some reason we do not get the inital state of the button, so here it is hardcoded
-                wedo[data.op.brickid]["button"] = 'false';
-            } else if (data.op.state == "disconnected") {
-                delete wedo[data.op.brickid];
+                wedo[data.brickid]["button"] = 'false';
+            } else if (data.state == "disconnected") {
+                delete wedo[data.brickid];
             }
             break;
         case "didAddService":
-            if (data.op.state == "connected") {
-                if (data.op.id && data.op.sensor) {
-                    wedo[data.op.brickid][data.op.id] = {};
-                    wedo[data.op.brickid][data.op.id][data.op.sensor.replace(/\s/g, '').toLowerCase()] = '';
-                } else if (data.op.id && data.op.actuator) {
-                    wedo[data.op.brickid][data.op.id] = {};
-                    wedo[data.op.brickid][data.op.id][data.op.actuator.replace(/\s/g, '').toLowerCase()] = '';
-                } else if (data.op.sensor) {
-                    wedo[data.op.brickid][data.op.sensor.replace(/\s/g, '').toLowerCase()] = '';
+            if (data.state == "connected") {
+                if (data.id && data.sensor) {
+                    wedo[data.brickid][data.id] = {};
+                    wedo[data.brickid][data.id][data.sensor.replace(/\s/g, '').toLowerCase()] = '';
+                } else if (data.id && data.actuator) {
+                    wedo[data.brickid][data.id] = {};
+                    wedo[data.brickid][data.id][data.actuator.replace(/\s/g, '').toLowerCase()] = '';
+                } else if (data.sensor) {
+                    wedo[data.brickid][data.sensor.replace(/\s/g, '').toLowerCase()] = '';
                 } else {
-                    wedo[data.op.brickid][data.op.actuator.replace(/\s/g, '').toLowerCase()] = '';
+                    wedo[data.brickid][data.actuator.replace(/\s/g, '').toLowerCase()] = '';
                 }
             }
             break;
         case "didRemoveService":
-            if (data.op.id) {
-                delete wedo[data.op.brickid][data.op.id];
-            } else if (data.op.sensor) {
-                delete wedo[data.op.brickid][data.op.sensor.replace(/\s/g, '').toLowerCase()]
+            if (data.id) {
+                delete wedo[data.brickid][data.id];
+            } else if (data.sensor) {
+                delete wedo[data.brickid][data.sensor.replace(/\s/g, '').toLowerCase()]
             } else {
-                delete wedo[data.op.brickid][data.op.actuator.replace(/\s/g, '').toLowerCase()]
+                delete wedo[data.brickid][data.actuator.replace(/\s/g, '').toLowerCase()]
             }
             break;
         case "update":
-            if (data.op.id) {
-                console.log(data.op.sensor.replace(/\s/g, '').toLowerCase());
-                wedo[data.op.brickid][data.op.id][data.op.sensor.replace(/\s/g, '').toLowerCase()] = data.op.state;
+            if (data.id) {
+                wedo[data.brickid][data.id][data.sensor.replace(/\s/g, '').toLowerCase()] = data.state;
             } else {
-                wedo[data.op.brickid][data.op.sensor.replace(/\s/g, '').toLowerCase()] = data.op.state;
+                wedo[data.brickid][data.sensor.replace(/\s/g, '').toLowerCase()] = data.state;
             }
             break;
         default:
@@ -63,20 +69,26 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     }
     exports.update = update;
 
-    function getSensorValue(brickid, sensor, opt_id) {
-        console.log(brickid + ' ' + sensor + ' ' + opt_id);
+    function getSensorValue(brickid, sensor, id, slot) {
         var returnValue = undefined;
         try {
-            if (opt_id) {
-                returnValue = wedo[brickid][opt_id][sensor];
+            if (id) {
+                if (sensor === "tiltsensor") {
+                    if (slot === tiltMode.ANY) {
+                        return wedo[brickid][id][sensor] !== tiltMode.NO;
+                    } else {
+                        return wedo[brickid][id][sensor] === tiltMode[slot];
+                    }
+                } else {
+                    return wedo[brickid][id][sensor];
+                }
             } else {
-                returnValue = wedo[brickid][sensor];
+                return wedo[brickid][sensor];
             }
-            return returnValue;
         } catch (error) {
-            // TODO check if we want to stop program execution here
-            return returnValue;
-            alert(error.message);
+            // handled in the caller!
+            // alert (error)
+            return false;
         }
     }
     exports.getSensorValue = getSensorValue;
@@ -108,6 +120,11 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     function getBrickById(id) {
         return wedo[id];
         }
+    exports.getBrickById = getBrickById;
+
+    function getBrickById(id) {
+        return wedo[id];
+    }
     exports.getBrickById = getBrickById;
 
 });

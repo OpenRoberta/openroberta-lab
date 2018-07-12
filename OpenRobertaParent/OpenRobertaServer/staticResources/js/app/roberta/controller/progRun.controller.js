@@ -154,7 +154,11 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             var functionDeclaration = program.functionDeclaration;
             if (GUISTATE_C.getRobot() === "wedo") {
                 GUISTATE_C.setConnectionState("busy");
-                WEDO_I.run(program, callbackOnTermination);
+                try{
+                WEDO_I.run(program, callbackOnTermination);}catch(error){
+                    WEDO_I.terminate();
+                    alert(error);
+                }
             }
             MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
         }

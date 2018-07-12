@@ -291,7 +291,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         $('#head-navi-icon-robot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
         $('#head-navi-icon-robot').addClass('typcn-' + robotGroup);
 
-        checkSim();        
+        checkSim();
         if (!opt_init) {
             setProgramSaved(true);
             setConfigurationSaved(true);
@@ -396,10 +396,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             updateTutorialMenu();
             WEBVIEW_C.jsToAppInterface({
                 'target' : 'internal',
-                'op' : {
-                    'type' : 'setRobot',
-                    'robot' : robotGroup
-                }
+                'type' : 'setRobot',
+                'robot' : robotGroup
             });
         }
     }
@@ -540,6 +538,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             return true;
         }
         if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AUTO) {
+            return true;
+        }
+        if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AGENTORTOKEN) {
             return true;
         }
         if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.WEBVIEW && WEDO.getConnectedBricks().length > 0) {

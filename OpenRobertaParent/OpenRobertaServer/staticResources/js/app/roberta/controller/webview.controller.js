@@ -12,8 +12,7 @@ define([ 'exports', 'guiState.controller', 'wedo.model', 'interpreter.interprete
         ready = $.Deferred();
         var a = {};
         a.target = 'internal';
-        a.op = {};
-        a.op.type = 'identify';
+        a.type = 'identify';
         if (tryAndroid(a)) {
             webViewType = "Android";
         } else if (tryIOS(a)) {
@@ -27,26 +26,27 @@ define([ 'exports', 'guiState.controller', 'wedo.model', 'interpreter.interprete
     exports.init = init;
 
     function appToJsInterface(jsonData) {
+        console.log(jsonData);
         try {
             var data = JSON.parse(jsonData);
-            if (!data.target || !data.op || !data.op.type) {
+            if (!data.target || !data.type) {
                 throw "invalid arguments";
             }
             if (data.target == "internal") {
-                if (data.op.type == "identify") {
-                    ready.resolve(aLanguage, data.op.app.name);
+                if (data.type == "identify") {
+                    ready.resolve(aLanguage, data.name);
                 } else {
                     throw "invalid arguments";
                 }
             } else if (data.target == "wedo" && GUISTATE_C.getRobot() == "wedo") {
-                if (data.op.type == "scan" && data.op.state == "appeared") {
-                    $('#show-available-connections').trigger('add', data.op);
-                } else if (data.op.type == "scan" && data.op.state == "error") {
+                if (data.type == "scan" && data.state == "appeared") {
+                    $('#show-available-connections').trigger('add', data);
+                } else if (data.type == "scan" && data.state == "error") {
                     $('#show-available-connections').modal('hide');
-                } else if (data.op.type == "scan" && data.op.state == "disappeared") {
+                } else if (data.type == "scan" && data.state == "disappeared") {
                     console.log(data);
-                } else if (data.op.type == "connect" && data.op.state == "connected") {
-                    $('#show-available-connections').trigger('connect', data.op);
+                } else if (data.type == "connect" && data.state == "connected") {
+                    $('#show-available-connections').trigger('connect', data);
                     WEDO_M.update(data);
                     GUISTATE_C.setConnectionState("wait");
                     var bricklyWorkspace = GUISTATE_C.getBricklyWorkspace();
@@ -54,7 +54,7 @@ define([ 'exports', 'guiState.controller', 'wedo.model', 'interpreter.interprete
                     for (var i = 0; i < blocks.length; i++) {
                         if (blocks[i].type === "robBrick_WeDo-Brick") {
                             var field = blocks[i].getField("VAR");
-                            field.setValue(data.op.brickname.replace(/\s/g, ''));
+                            field.setValue(data.brickname.replace(/\s/g, ''));
                             blocks[i].render();
                             var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
                             var xml = Blockly.Xml.domToText(dom);
@@ -63,7 +63,7 @@ define([ 'exports', 'guiState.controller', 'wedo.model', 'interpreter.interprete
                             break;
                         }
                     }
-                } else if (data.op.type == "connect" && data.op.state == "disconnected") {
+                } else if (data.type == "connect" && data.state == "disconnected") {
                     WEDO_M.update(data);
                     WEDO_I.terminate();
                     var bricklyWorkspace = GUISTATE_C.getBricklyWorkspace();
@@ -93,17 +93,17 @@ define([ 'exports', 'guiState.controller', 'wedo.model', 'interpreter.interprete
     }
     exports.appToJsInterface = appToJsInterface;
 
-    function jsToAppInterface(data) {
+    function jsToAppInterface(jsonData) {
         try {
             if (webViewType === "Android") {
-                OpenRoberta.jsToAppInterface(JSON.stringify(data));
+                OpenRoberta.jsToAppInterface(JSON.stringify(jsonData));
             } else if (webViewType === "IOS") {
-                window.webkit.messageHandlers.OpenRoberta.postMessage(JSON.stringify(data));
+                window.webkit.messageHandlers.OpenRoberta.postMessage(JSON.stringify(jsonData));
             } else {
                 throw "invalid webview type";
             }
         } catch (error) {
-            LOG.error("jsToAppInterface >" + error + " caused by: " + data);
+            LOG.error("jsToAppInterface >" + error + " caused by: " + jsonData);
         }
     }
     exports.jsToAppInterface = jsToAppInterface;

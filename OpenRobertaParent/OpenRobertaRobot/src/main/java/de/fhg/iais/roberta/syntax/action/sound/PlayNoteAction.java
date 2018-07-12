@@ -81,7 +81,7 @@ public class PlayNoteAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 2);
+        List<Field> fields = helper.extractFields(block, (short) 3);
         String duration = helper.extractField(fields, BlocklyConstants.DURATION);
         String frequency = helper.extractField(fields, BlocklyConstants.FREQUENCE);
         return PlayNoteAction.make(duration, frequency, helper.extractBlockProperties(block), helper.extractComment(block));

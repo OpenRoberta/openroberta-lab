@@ -181,9 +181,15 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitBrickSensor(BrickSensor<V> brickSensor) {
-        String brickName = ((WeDoConfiguration) this.brickConfiguration).getRobotIdentName();
+        String sensorName = brickSensor.getPort().getOraName();
+        UsedConfigurationBlock confInfraredSensor = getConfigurationBlock(sensorName);
+        if ( confInfraredSensor == null ) {
+            throw new DbcException("no infrared sensor declared in the configuration");
+        }
+        String brickName = confInfraredSensor.getPins().size() >= 1 ? confInfraredSensor.getPins().get(0) : null;
+        String port = confInfraredSensor.getPins().size() >= 2 ? confInfraredSensor.getPins().get(1) : null;
         if ( (brickName != null) ) {
-            JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.NAME, brickName).put(C.PORT, brickSensor.getPort());
+            JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.NAME, brickName).put(C.PORT, port);
             return app(o);
         } else {
             throw new DbcException("operation not supported");
@@ -281,7 +287,13 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitLedOnAction(LedOnAction<V> ledOnAction) {
-        String brickName = ((WeDoConfiguration) this.brickConfiguration).getRobotIdentName();
+        String sensorName = ledOnAction.getPort().getOraName();
+        UsedConfigurationBlock confInfraredSensor = getConfigurationBlock(sensorName);
+        if ( confInfraredSensor == null ) {
+            throw new DbcException("no infrared sensor declared in the configuration");
+        }
+        String brickName = confInfraredSensor.getPins().size() >= 1 ? confInfraredSensor.getPins().get(0) : null;
+        String port = confInfraredSensor.getPins().size() >= 2 ? confInfraredSensor.getPins().get(1) : null;
         if ( (brickName != null) ) {
             ledOnAction.getLedColor().visit(this);
             JSONObject o = mk(C.LED_ON_ACTION).put(C.NAME, brickName);

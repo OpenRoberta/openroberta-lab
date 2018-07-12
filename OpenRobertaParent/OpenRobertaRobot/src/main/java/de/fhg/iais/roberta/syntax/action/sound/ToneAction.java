@@ -95,7 +95,7 @@ public class ToneAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        List<Value> values = helper.extractValues(block, (short) 2);
+        List<Value> values = helper.extractValues(block, (short) 3);
         IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 1);
         Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.FREQUENCE, BlocklyType.NUMBER_INT));

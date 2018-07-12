@@ -1,15 +1,14 @@
-define([ 'exports' ], function(exports) {
-    
-    exports.Colors = {
-        NONE: "NONE",
-        BLACK: "BLACK",
-        BLUE: "BLUE",
-        GREEN: "GREEN",
-        YELLOW: "YELLOW",
-        RED: "RED",
-        WHITE: "WHITE",
-        BROWN: "BROWN"
-    };
+(function (factory) {
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
+    }
+    else if (typeof define === "function" && define.amd) {
+        define(["require", "exports"], factory);
+    }
+})(function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.ADD = "ADD";
     exports.AMBIENTLIGHT = "ambientlight";
     exports.ANALOG = "analog";
@@ -19,11 +18,6 @@ define([ 'exports' ], function(exports) {
     exports.ANY = "any";
     exports.ARG1 = "arg1";
     exports.ARG2 = "arg2";
-    exports.ARRAY_BOOLEAN = "Array_Boolean";
-    exports.ARRAY_COLOR = "Array_Colour";
-    exports.ARRAY_IMAGE = "Array_Image";
-    exports.ARRAY_NUMBER = "Array_Number";
-    exports.ARRAY_STRING = "Array_String";
     exports.ASSIGN_METHOD_PARAMETER_STMT = "AssignMethodParameter";
     exports.ASSIGN_STMT = "AssignStmt";
     exports.AT1 = "at1";

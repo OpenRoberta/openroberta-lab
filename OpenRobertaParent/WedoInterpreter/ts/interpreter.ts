@@ -81,7 +81,6 @@ export function evalOperation() {
         let stmt = S.getOp();
         if ( stmt === undefined ) {
             U.p( 'PROGRAM TERMINATED. No ops remaining' );
-            N.close();
             break topLevelLoop;
         }
         const opCode = stmt[C.OPCODE];
@@ -122,7 +121,7 @@ export function evalOperation() {
                 break;
             }
             case C.GET_SAMPLE: {
-                N.getSample( stmt[C.NAME], stmt[C.PORT], stmt[C.GET_SAMPLE] )
+                N.getSample( stmt[C.NAME], stmt[C.PORT], stmt[C.GET_SAMPLE], stmt[C.SLOT] )
                 break;
             }
             case C.IF_STMT:
@@ -233,6 +232,7 @@ export function evalOperation() {
     }
     // termination either requested by the client or by executing 'stop' or after last statement
     terminated = true;
+    N.close();
     callbackOnTermination();
 }
 
@@ -248,6 +248,9 @@ function evalExpr( expr ) {
             S.push( S.getVar( expr[C.NAME] ) );
             break;
         case C.NUM_CONST:
+            S.push( +expr[C.VALUE] );
+            break;
+        case C.BOOL_CONST:
             S.push( +expr[C.VALUE] );
             break;
         case C.STRING_CONST:

@@ -31,7 +31,7 @@
     exports.BACKWARD = "BACKWARD";
     exports.BINARY = "Binary";
     exports.BOOLEAN = "BOOLEAN";
-    exports.BOOL_CONST = "BoolConst";
+    exports.BOOL_CONST = "BOOL_CONST";
     exports.BREAK = "break";
     exports.BRIGHTNESS = "brightness";
     exports.BUTTONS = "buttons";

@@ -1,5 +1,5 @@
-define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.controller', 'program.model', 'prettify', 'blocks', 'jquery', 'blocks-msg' ], function(exports, MSG,
-    LOG, UTIL, GUISTATE_C, PROG_C, PROGRAM, Prettify, Blockly, $) {
+define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.controller', 'program.model', 'prettify', 'blocks', 'jquery', 'blocks-msg' ], function(
+        exports, MSG, LOG, UTIL, GUISTATE_C, PROG_C, PROGRAM, Prettify, Blockly, $) {
 
     const INITIAL_WIDTH = 0.5;
     var blocklyWorkspace;
@@ -35,12 +35,16 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.co
             var language = GUISTATE_C.getLanguage();
 
             PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function(result) {
-                GUISTATE_C.setState(result);
-                $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.sourceCode.escapeHTML(), null, true) + '</pre>');
-                // TODO change javaSource to source on server                   // TODO change javaSource to source on server
-                GUISTATE_C.setProgramSource(result.sourceCode);
-                GUISTATE_C.setProgramFileExtension(result.fileExtension);
-                PROG_C.reloadProgram(result);
+                if (result.rc == "ok") {
+                    GUISTATE_C.setState(result);
+                    $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.sourceCode.escapeHTML(), null, true) + '</pre>');
+                    // TODO change javaSource to source on server                   // TODO change javaSource to source on server
+                    GUISTATE_C.setProgramSource(result.sourceCode);
+                    GUISTATE_C.setProgramFileExtension(result.fileExtension);
+                    PROG_C.reloadProgram(result);
+                } else {
+                    MSG.displayInformation(result, result.message, result.message);
+                }
             });
         }, 'code refresh clicked');
     }
@@ -58,15 +62,19 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.co
             var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
 
             var language = GUISTATE_C.getLanguage();
-            
+
             PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function(result) {
-                GUISTATE_C.setState(result);
-                $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.sourceCode.escapeHTML(), null, true) + '</pre>');
-                // TODO change javaSource to source on server                   // TODO change javaSource to source on server
-                GUISTATE_C.setProgramSource(result.sourceCode);
-                GUISTATE_C.setProgramFileExtension(result.fileExtension);
-                PROG_C.reloadProgram(result);
-                $('#blockly').openRightView('code', INITIAL_WIDTH);
+                if (result.rc == "ok") {
+                    GUISTATE_C.setState(result);
+                    $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.sourceCode.escapeHTML(), null, true) + '</pre>');
+                    // TODO change javaSource to source on server                   // TODO change javaSource to source on server
+                    GUISTATE_C.setProgramSource(result.sourceCode);
+                    GUISTATE_C.setProgramFileExtension(result.fileExtension);
+                    PROG_C.reloadProgram(result);
+                    $('#blockly').openRightView('code', INITIAL_WIDTH);
+                } else {
+                    MSG.displayInformation(result, result.message, result.message);
+                }
             });
         }
     }
