@@ -74,8 +74,7 @@ public class Jaxb2WeDoConfigurationTransformer {
                     configurationBlocks.add(extractConfigurationBlockComponents(blocks.get(i)));
                 }
                 List<Field> fields = extractFields(blocks.get(0).get(0), (short) 1);
-                String brickName = extractField(fields, "VAR", (short) 0);
-                return new WeDoConfiguration(brickName, configurationBlocks).getConfiguration();
+                return new WeDoConfiguration(configurationBlocks).getConfiguration();
             default:
                 throw new DbcException("There was no correct configuration block found! " + blocks.get(0).get(0).getType());
         }

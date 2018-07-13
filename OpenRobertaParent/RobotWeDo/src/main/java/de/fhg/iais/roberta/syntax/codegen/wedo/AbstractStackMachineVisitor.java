@@ -11,8 +11,6 @@ import org.json.JSONObject;
 import com.google.common.collect.Lists;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.ConfigurationBlock;
-import de.fhg.iais.roberta.components.wedo.WeDoConfiguration;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
@@ -222,36 +220,10 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
     }
 
     @Override
-    public V visitToneAction(ToneAction<V> toneAction) {
-        String brickName = ((WeDoConfiguration) this.brickConfiguration).getRobotIdentName();
-        if ( (brickName != null) ) {
-            toneAction.getFrequency().visit(this);
-            toneAction.getDuration().visit(this);
-            JSONObject o = mk(C.TONE_ACTION).put(C.NAME, brickName);
-            return app(o);
-        } else {
-            throw new DbcException("No robot name or no port!");
-        }
-    }
+    public abstract V visitToneAction(ToneAction<V> toneAction);
 
     @Override
-    public V visitPlayNoteAction(PlayNoteAction<V> playNoteAction) {
-        String brickName = ((WeDoConfiguration) this.brickConfiguration).getRobotIdentName();
-        ConfigurationBlock confPlayBlock = ((WeDoConfiguration) this.brickConfiguration).getConfigurationBlockOnPort(playNoteAction.getPort().toString());
-        if ( brickName != null ) {
-            if ( confPlayBlock == null ) {
-                throw new DbcException("no buzzer declared in the configuration");
-            }
-            JSONObject frequency = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, playNoteAction.getFrequency());
-            app(frequency);
-            JSONObject duration = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, playNoteAction.getDuration());
-            app(duration);
-            JSONObject o = mk(C.TONE_ACTION).put(C.NAME, brickName);
-            return app(o);
-        } else {
-            throw new DbcException("No robot name or no port!");
-        }
-    }
+    public abstract V visitPlayNoteAction(PlayNoteAction<V> playNoteAction);
 
     @Override
     public V visitMathPowerFunct(MathPowerFunct<V> mathPowerFunct) {

@@ -35,13 +35,13 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.co
             var language = GUISTATE_C.getLanguage();
 
             PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function(result) {
+                PROG_C.reloadProgram(result);
                 if (result.rc == "ok") {
                     GUISTATE_C.setState(result);
                     $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.sourceCode.escapeHTML(), null, true) + '</pre>');
                     // TODO change javaSource to source on server                   // TODO change javaSource to source on server
                     GUISTATE_C.setProgramSource(result.sourceCode);
                     GUISTATE_C.setProgramFileExtension(result.fileExtension);
-                    PROG_C.reloadProgram(result);
                 } else {
                     MSG.displayInformation(result, result.message, result.message);
                 }
@@ -64,13 +64,13 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.co
             var language = GUISTATE_C.getLanguage();
 
             PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function(result) {
+                PROG_C.reloadProgram(result);
                 if (result.rc == "ok") {
                     GUISTATE_C.setState(result);
                     $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.sourceCode.escapeHTML(), null, true) + '</pre>');
                     // TODO change javaSource to source on server                   // TODO change javaSource to source on server
                     GUISTATE_C.setProgramSource(result.sourceCode);
                     GUISTATE_C.setProgramFileExtension(result.fileExtension);
-                    PROG_C.reloadProgram(result);
                     $('#blockly').openRightView('code', INITIAL_WIDTH);
                 } else {
                     MSG.displayInformation(result, result.message, result.message);

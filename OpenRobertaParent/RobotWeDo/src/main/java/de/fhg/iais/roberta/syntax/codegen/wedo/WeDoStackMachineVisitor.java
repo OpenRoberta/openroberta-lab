@@ -25,8 +25,10 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
+import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.wedo.LedOnAction;
 import de.fhg.iais.roberta.syntax.check.hardware.wedo.UsedHardwareCollectorVisitor;
@@ -182,12 +184,12 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     @Override
     public V visitBrickSensor(BrickSensor<V> brickSensor) {
         String sensorName = brickSensor.getPort().getOraName();
-        UsedConfigurationBlock confInfraredSensor = getConfigurationBlock(sensorName);
-        if ( confInfraredSensor == null ) {
+        UsedConfigurationBlock brickConfBlock = getConfigurationBlock(sensorName);
+        if ( brickConfBlock == null ) {
             throw new DbcException("no infrared sensor declared in the configuration");
         }
-        String brickName = confInfraredSensor.getPins().size() >= 1 ? confInfraredSensor.getPins().get(0) : null;
-        String port = confInfraredSensor.getPins().size() >= 2 ? confInfraredSensor.getPins().get(1) : null;
+        String brickName = brickConfBlock.getPins().size() >= 1 ? brickConfBlock.getPins().get(0) : null;
+        String port = brickConfBlock.getPins().size() >= 2 ? brickConfBlock.getPins().get(1) : null;
         if ( (brickName != null) ) {
             JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.NAME, brickName).put(C.PORT, port);
             return app(o);
@@ -276,24 +278,15 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         throw new DbcException("operation not supported");
     }
 
-    UsedConfigurationBlock getConfigurationBlock(String name) {
-        for ( UsedConfigurationBlock usedConfigurationBlock : this.usedConfigurationBlocks ) {
-            if ( usedConfigurationBlock.getBlockName().equals(name) ) {
-                return usedConfigurationBlock;
-            }
-        }
-        return null;
-    }
-
     @Override
     public V visitLedOnAction(LedOnAction<V> ledOnAction) {
-        String sensorName = ledOnAction.getPort().getOraName();
-        UsedConfigurationBlock confInfraredSensor = getConfigurationBlock(sensorName);
-        if ( confInfraredSensor == null ) {
-            throw new DbcException("no LED declared in the configuration");
+        String actorName = ledOnAction.getPort().getOraName();
+        UsedConfigurationBlock confLedBlock = getConfigurationBlock(actorName);
+        if ( confLedBlock == null ) {
+            throw new DbcException("no led actuator declared in the configuration");
         }
-        String brickName = confInfraredSensor.getPins().size() >= 1 ? confInfraredSensor.getPins().get(0) : null;
-        String port = confInfraredSensor.getPins().size() >= 2 ? confInfraredSensor.getPins().get(1) : null;
+        String brickName = confLedBlock.getPins().size() >= 1 ? confLedBlock.getPins().get(0) : null;
+        String port = confLedBlock.getPins().size() >= 2 ? confLedBlock.getPins().get(1) : null;
         if ( (brickName != null) ) {
             ledOnAction.getLedColor().visit(this);
             JSONObject o = mk(C.LED_ON_ACTION).put(C.NAME, brickName);
@@ -301,7 +294,55 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         } else {
             throw new DbcException("No robot name or no port!");
         }
+    }
 
+    @Override
+    public V visitPlayNoteAction(PlayNoteAction<V> playNoteAction) {
+        String actorName = playNoteAction.getPort().getOraName();
+        UsedConfigurationBlock confLedBlock = getConfigurationBlock(actorName);
+        if ( confLedBlock == null ) {
+            throw new DbcException("no led actuator declared in the configuration");
+        }
+        String brickName = confLedBlock.getPins().size() >= 1 ? confLedBlock.getPins().get(0) : null;
+        String port = confLedBlock.getPins().size() >= 2 ? confLedBlock.getPins().get(1) : null;
+        if ( (brickName != null) ) {
+            JSONObject frequency = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, playNoteAction.getFrequency());
+            app(frequency);
+            JSONObject duration = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, playNoteAction.getDuration());
+            app(duration);
+            JSONObject o = mk(C.TONE_ACTION).put(C.NAME, brickName);
+            return app(o);
+        } else {
+            throw new DbcException("No robot name or no port!");
+        }
+    }
+
+    @Override
+    public V visitToneAction(ToneAction<V> toneAction) {
+        String actorName = toneAction.getPort().getOraName();
+        UsedConfigurationBlock confLedBlock = getConfigurationBlock(actorName);
+        if ( confLedBlock == null ) {
+            throw new DbcException("no piezo actuator declared in the configuration");
+        }
+        String brickName = confLedBlock.getPins().size() >= 1 ? confLedBlock.getPins().get(0) : null;
+        String port = confLedBlock.getPins().size() >= 2 ? confLedBlock.getPins().get(1) : null;
+        if ( (brickName != null) ) {
+            toneAction.getFrequency().visit(this);
+            toneAction.getDuration().visit(this);
+            JSONObject o = mk(C.TONE_ACTION).put(C.NAME, brickName);
+            return app(o);
+        } else {
+            throw new DbcException("No robot name or no port!");
+        }
+    }
+
+    UsedConfigurationBlock getConfigurationBlock(String name) {
+        for ( UsedConfigurationBlock usedConfigurationBlock : this.usedConfigurationBlocks ) {
+            if ( usedConfigurationBlock.getBlockName().equals(name) ) {
+                return usedConfigurationBlock;
+            }
+        }
+        return null;
     }
 
 }

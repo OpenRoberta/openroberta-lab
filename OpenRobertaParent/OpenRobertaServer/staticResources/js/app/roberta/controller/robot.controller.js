@@ -77,7 +77,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
         $formSingleModal = $('#single-modal-form');
 
         $('#connectionsTable').bootstrapTable({
-            height : 160,
             formatNoMatches : function() {
                 return '<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>';
             },

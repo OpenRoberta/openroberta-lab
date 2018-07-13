@@ -207,14 +207,17 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
      * Initialize the navigation bar in the head of the page
      */
     function initMenuEvents() {
-        $('[rel="tooltip"]').not('.rightMenuButton').tooltip({
-            container : 'body',
-            placement : "right"
-        });
-        $('[rel="tooltip"].rightMenuButton').tooltip({
-            container : 'body',
-            placement : "left"
-        });
+        // TODO check if this prevents iPads and iPhones to only react on double clicks
+        if (!navigator.userAgent.match(/iPad/i) && !(navigator.userAgent.match(/iPhone/i))) {
+            $('[rel="tooltip"]').not('.rightMenuButton').tooltip({
+                container : 'body',
+                placement : "right"
+            });
+            $('[rel="tooltip"].rightMenuButton').tooltip({
+                container : 'body',
+                placement : "left"
+            });
+        }
         // prevent Safari 10. from zooming
         document.addEventListener('gesturestart', function(e) {
             e.preventDefault();
