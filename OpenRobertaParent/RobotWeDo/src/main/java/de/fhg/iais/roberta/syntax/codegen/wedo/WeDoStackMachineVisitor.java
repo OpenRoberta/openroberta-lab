@@ -92,6 +92,11 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitLightStatusAction(LightStatusAction<V> lightStatusAction) {
+        String actorName = lightStatusAction.getPort().getOraName();
+        UsedConfigurationBlock confLedBlock = getConfigurationBlock(actorName);
+        if ( confLedBlock == null ) {
+            throw new DbcException("no LED declared in the configuration");
+        }
         JSONObject o = mk(C.STATUS_LIGHT_ACTION).put(C.MODE, C.OFF);
         return app(o);
     }
@@ -186,7 +191,7 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         String sensorName = brickSensor.getPort().getOraName();
         UsedConfigurationBlock brickConfBlock = getConfigurationBlock(sensorName);
         if ( brickConfBlock == null ) {
-            throw new DbcException("no infrared sensor declared in the configuration");
+            throw new DbcException("no button sensor declared in the configuration");
         }
         String brickName = brickConfBlock.getPins().size() >= 1 ? brickConfBlock.getPins().get(0) : null;
         String port = brickConfBlock.getPins().size() >= 2 ? brickConfBlock.getPins().get(1) : null;
@@ -283,10 +288,9 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         String actorName = ledOnAction.getPort().getOraName();
         UsedConfigurationBlock confLedBlock = getConfigurationBlock(actorName);
         if ( confLedBlock == null ) {
-            throw new DbcException("no led actuator declared in the configuration");
+            throw new DbcException("no LED declared in the configuration");
         }
         String brickName = confLedBlock.getPins().size() >= 1 ? confLedBlock.getPins().get(0) : null;
-        String port = confLedBlock.getPins().size() >= 2 ? confLedBlock.getPins().get(1) : null;
         if ( (brickName != null) ) {
             ledOnAction.getLedColor().visit(this);
             JSONObject o = mk(C.LED_ON_ACTION).put(C.NAME, brickName);
@@ -301,10 +305,9 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         String actorName = playNoteAction.getPort().getOraName();
         UsedConfigurationBlock confLedBlock = getConfigurationBlock(actorName);
         if ( confLedBlock == null ) {
-            throw new DbcException("no led actuator declared in the configuration");
+            throw new DbcException("no piezo actuator declared in the configuration");
         }
         String brickName = confLedBlock.getPins().size() >= 1 ? confLedBlock.getPins().get(0) : null;
-        String port = confLedBlock.getPins().size() >= 2 ? confLedBlock.getPins().get(1) : null;
         if ( (brickName != null) ) {
             JSONObject frequency = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, playNoteAction.getFrequency());
             app(frequency);
@@ -325,7 +328,6 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
             throw new DbcException("no piezo actuator declared in the configuration");
         }
         String brickName = confLedBlock.getPins().size() >= 1 ? confLedBlock.getPins().get(0) : null;
-        String port = confLedBlock.getPins().size() >= 2 ? confLedBlock.getPins().get(1) : null;
         if ( (brickName != null) ) {
             toneAction.getFrequency().visit(this);
             toneAction.getDuration().visit(this);

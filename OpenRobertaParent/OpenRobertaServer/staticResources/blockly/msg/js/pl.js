@@ -90,6 +90,7 @@ Blockly.Msg.COMPASS_CALIBRATE_TOOLTIP = "Calibrates the compass. Turn the compas
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Reprezentuje czujnik kompasu";
 Blockly.Msg.COMPASS_TOOLTIP_EV3 = "Represents a HiTechnic NXT compass sensor.";  // untranslated
+Blockly.Msg.CONFIGURATION_ERROR_ACTOR_MISSING = "This actuator is not set to the port!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION = "Kierunek obrotów silnika z lewej i prawej strony jest inny!";
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_MISSING = "Brakuje konfiguracji dla lewego silnika";
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED = "Lewy silnik jest niewyregulowany";

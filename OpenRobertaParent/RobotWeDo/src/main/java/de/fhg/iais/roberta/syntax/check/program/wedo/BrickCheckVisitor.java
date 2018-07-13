@@ -6,11 +6,15 @@ import de.fhg.iais.roberta.components.ConfigurationBlock;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.wedo.WeDoConfiguration;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.wedo.LedOnAction;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.visitor.wedo.WeDoAstVisitor;
 
@@ -18,6 +22,12 @@ public class BrickCheckVisitor<V> extends RobotBrickCheckVisitor implements WeDo
 
     public BrickCheckVisitor(Configuration brickConfiguration) {
         super(brickConfiguration);
+    }
+
+    @Override
+    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
+        checkSensorPort(brickSensor);
+        return null;
     }
 
     @Override
@@ -63,6 +73,19 @@ public class BrickCheckVisitor<V> extends RobotBrickCheckVisitor implements WeDo
     }
 
     @Override
+    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+        if ( motorStopAction.getInfos().getErrorCount() == 0 ) {
+            ConfigurationBlock usedConfigurationBlock =
+                ((WeDoConfiguration) this.brickConfiguration).getConfigurationBlockOnPort(motorStopAction.getPort().toString());
+            if ( usedConfigurationBlock == null ) {
+                motorStopAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+                this.errorCount++;
+            }
+        }
+        return null;
+    }
+
+    @Override
     public V visitLedOnAction(LedOnAction<V> ledOnAction) {
         if ( ledOnAction.getInfos().getErrorCount() == 0 ) {
             ConfigurationBlock usedConfigurationBlock =
@@ -82,6 +105,32 @@ public class BrickCheckVisitor<V> extends RobotBrickCheckVisitor implements WeDo
                 ((WeDoConfiguration) this.brickConfiguration).getConfigurationBlockOnPort(playNoteAction.getPort().toString());
             if ( usedConfigurationBlock == null ) {
                 playNoteAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+                this.errorCount++;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+        if ( lightStatusAction.getInfos().getErrorCount() == 0 ) {
+            ConfigurationBlock usedConfigurationBlock =
+                ((WeDoConfiguration) this.brickConfiguration).getConfigurationBlockOnPort(lightStatusAction.getPort().toString());
+            if ( usedConfigurationBlock == null ) {
+                lightStatusAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+                this.errorCount++;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitToneAction(ToneAction<Void> toneAction) {
+        if ( toneAction.getInfos().getErrorCount() == 0 ) {
+            ConfigurationBlock usedConfigurationBlock =
+                ((WeDoConfiguration) this.brickConfiguration).getConfigurationBlockOnPort(toneAction.getPort().toString());
+            if ( usedConfigurationBlock == null ) {
+                toneAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
                 this.errorCount++;
             }
         }

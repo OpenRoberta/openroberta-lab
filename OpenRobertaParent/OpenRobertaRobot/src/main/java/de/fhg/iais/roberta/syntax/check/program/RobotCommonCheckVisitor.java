@@ -435,7 +435,7 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor implements As
     }
 
     private void checkLeftAndRightMotorRotationDirection(Phrase<Void> driveAction, Actor leftMotor, Actor rightMotor) {
-        if ( leftMotor != null && rightMotor != null && leftMotor.getRotationDirection() != rightMotor.getRotationDirection() ) {
+        if ( (leftMotor != null) && (rightMotor != null) && (leftMotor.getRotationDirection() != rightMotor.getRotationDirection()) ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION"));
             this.errorCount++;
         }
@@ -476,7 +476,7 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor implements As
             int signLeft = (int) Math.signum(speedLeftNumConst);
             int signRight = (int) Math.signum(speedRightNumConst);
             boolean sameSpeed = Math.abs(speedLeftNumConst) == Math.abs(speedRightNumConst); //NOSONAR : TODO: supply an delta of 0.1 (speed is in [0,100] ?
-            if ( sameSpeed && signLeft != signRight && signLeft != 0 && signRight != 0 ) {
+            if ( sameSpeed && (signLeft != signRight) && (signLeft != 0) && (signRight != 0) ) {
                 action.addInfo(NepoInfo.warning("BLOCK_NOT_EXECUTED"));
                 this.warningCount++;
             }
@@ -629,13 +629,13 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor implements As
     @Override
     public Void visitBinary(Binary<Void> binary) {
         super.visitBinary(binary);
-        if ( (binary.getOp() == Binary.Op.MATH_CHANGE || binary.getOp() == Binary.Op.TEXT_APPEND) && binary.getLeft() instanceof EmptyExpr ) {
+        if ( ((binary.getOp() == Binary.Op.MATH_CHANGE) || (binary.getOp() == Binary.Op.TEXT_APPEND)) && (binary.getLeft() instanceof EmptyExpr) ) {
             binary.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
             this.errorCount++;
         }
 
-        if ( (binary.getOp() == Binary.Op.AND || binary.getOp() == Binary.Op.OR)
-            && (binary.getLeft() instanceof EmptyExpr || binary.getRight() instanceof EmptyExpr) ) {
+        if ( ((binary.getOp() == Binary.Op.AND) || (binary.getOp() == Binary.Op.OR))
+            && ((binary.getLeft() instanceof EmptyExpr) || (binary.getRight() instanceof EmptyExpr)) ) {
             binary.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
             this.errorCount++;
         }

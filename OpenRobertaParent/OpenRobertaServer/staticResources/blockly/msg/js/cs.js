@@ -90,6 +90,7 @@ Blockly.Msg.COMPASS_CALIBRATE_TOOLTIP = "Calibrates the compass. Turn the compas
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Vrátí aktuální hodnodnotu kompasu.";
 Blockly.Msg.COMPASS_TOOLTIP = "Představuje kompas.";
 Blockly.Msg.COMPASS_TOOLTIP_EV3 = "Represents a HiTechnic NXT compass sensor.";  // untranslated
+Blockly.Msg.CONFIGURATION_ERROR_ACTOR_MISSING = "This actuator is not set to the port!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION = "Levý a pravý motor mají různé směry otáčení!";
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_MISSING = "Levý motor chybí v konfiguraci!";
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED = "Levý motor není regulovaný!";

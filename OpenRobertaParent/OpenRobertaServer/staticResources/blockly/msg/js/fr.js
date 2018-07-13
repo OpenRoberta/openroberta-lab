@@ -90,6 +90,7 @@ Blockly.Msg.COMPASS_CALIBRATE_TOOLTIP = "Calibrates the compass. Turn the compas
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "donne la valeur actuelle du capteur \"boussole\".";
 Blockly.Msg.COMPASS_TOOLTIP = "Bloc pour le capteur boussole.";
 Blockly.Msg.COMPASS_TOOLTIP_EV3 = "Represents a HiTechnic NXT compass sensor.";  // untranslated
+Blockly.Msg.CONFIGURATION_ERROR_ACTOR_MISSING = "This actuator is not set to the port!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION = "Le sens de rotation entre le moteur gauche et le moteur droit est différent.";
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_MISSING = "Le moteur gauche est manquant dans la configuration du robot !";
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED = "Le moteur gauche n'est pas ajusté!";

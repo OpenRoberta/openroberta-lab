@@ -1,6 +1,11 @@
 package de.fhg.iais.roberta.syntax.action.light;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -21,11 +26,13 @@ import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
  */
 public class LightStatusAction<V> extends Action<V> {
     private final Status status;
+    private final IActorPort port;
 
-    private LightStatusAction(Status status, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private LightStatusAction(IActorPort port, Status status, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("LIGHT_STATUS_ACTION"), properties, comment);
         Assert.isTrue(status != null);
         this.status = status;
+        this.port = port;
         setReadOnly();
     }
 
@@ -37,8 +44,8 @@ public class LightStatusAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link LightStatusAction}
      */
-    public static <V> LightStatusAction<V> make(Status status, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LightStatusAction<>(status, properties, comment);
+    public static <V> LightStatusAction<V> make(IActorPort port, Status status, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new LightStatusAction<>(port, status, properties, comment);
     }
 
     /**
@@ -51,6 +58,13 @@ public class LightStatusAction<V> extends Action<V> {
     @Override
     public String toString() {
         return "LightStatusAction [" + this.status + "]";
+    }
+
+    /**
+     * @return port.
+     */
+    public IActorPort getPort() {
+        return this.port;
     }
 
     @Override
@@ -66,11 +80,14 @@ public class LightStatusAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        Status statuss = LightStatusAction.Status.RESET;
+        IRobotFactory factory = helper.getModeFactory();
+        List<Field> fields = helper.extractFields(block, (short) 1);
+        String port = helper.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.NO_PORT);
+        Status status = LightStatusAction.Status.RESET;
         if ( block.getType().equals(BlocklyConstants.ROB_ACTIONS_BRICK_LIGHT_OFF) || block.getType().equals("mbedActions_leds_off") ) {
-            statuss = LightStatusAction.Status.OFF;
+            status = LightStatusAction.Status.OFF;
         }
-        return LightStatusAction.make(statuss, helper.extractBlockProperties(block), helper.extractComment(block));
+        return LightStatusAction.make(factory.getActorPort(port), status, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

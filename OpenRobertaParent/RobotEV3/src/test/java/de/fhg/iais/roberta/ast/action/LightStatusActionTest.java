@@ -29,7 +29,7 @@ public class LightStatusActionTest {
     public void invalidStatus() throws Exception {
         try {
             @SuppressWarnings("unused")
-            LightStatusAction<Void> lsa = LightStatusAction.make(Status.valueOf("invalid"), null, null);
+            LightStatusAction<Void> lsa = LightStatusAction.make(null, Status.valueOf("invalid"), null, null);
             Assert.fail();
         } catch ( Exception e ) {
             Assert.assertEquals("No enum constant de.fhg.iais.roberta.syntax.action.light.LightStatusAction.Status.invalid", e.getMessage());
