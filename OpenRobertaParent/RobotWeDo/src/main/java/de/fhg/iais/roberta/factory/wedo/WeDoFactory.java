@@ -71,7 +71,7 @@ public class WeDoFactory extends AbstractRobotFactory {
 
     @Override
     public String getFileExtension() {
-        return "ino";
+        return "json";
     }
 
     @Override

@@ -67,7 +67,7 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         astVisitor.generateCodeFromPhrases(phrasesSet);
         JSONObject generatedCode = new JSONObject();
         generatedCode.put(C.OPS, astVisitor.opArray).put(C.FUNCTION_DECLARATION, astVisitor.fctDecls);
-        return generatedCode.toString();
+        return generatedCode.toString(2);
     }
 
     @Override
