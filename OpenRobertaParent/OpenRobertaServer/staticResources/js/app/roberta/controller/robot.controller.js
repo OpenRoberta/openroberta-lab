@@ -115,7 +115,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
 
         $('#show-available-connections').onWrap('connect', function(event, data) {
             var result = {};
-            result["robot.name"] = data;
+            result["robot.name"] = data.brickname;
             result["robot.state"] = 'wait';
             GUISTATE_C.setState(result);
             $('#show-available-connections').modal('hide');

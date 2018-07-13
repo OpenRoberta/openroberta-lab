@@ -18,11 +18,6 @@
     exports.ANY = "any";
     exports.ARG1 = "arg1";
     exports.ARG2 = "arg2";
-    exports.ARRAY_BOOLEAN = "Array_Boolean";
-    exports.ARRAY_COLOR = "Array_Colour";
-    exports.ARRAY_IMAGE = "Array_Image";
-    exports.ARRAY_NUMBER = "Array_Number";
-    exports.ARRAY_STRING = "Array_String";
     exports.ASSIGN_METHOD_PARAMETER_STMT = "AssignMethodParameter";
     exports.ASSIGN_STMT = "AssignStmt";
     exports.AT1 = "at1";

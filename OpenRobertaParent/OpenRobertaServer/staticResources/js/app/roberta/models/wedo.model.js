@@ -74,7 +74,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         try {
             if (id) {
                 if (sensor === "tiltsensor") {
-                    if (slot === tiltMode.ANY) {
+                    if (slot === "ANY") {
                         return wedo[brickid][id][sensor] !== tiltMode.NO;
                     } else {
                         return wedo[brickid][id][sensor] === tiltMode[slot];
@@ -83,7 +83,11 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
                     return wedo[brickid][id][sensor];
                 }
             } else {
-                return wedo[brickid][sensor];
+                if (sensor === "button") {
+                    return wedo[brickid][sensor] === "true";
+                } else {
+                    return wedo[brickid][sensor];
+                }
             }
         } catch (error) {
             // handled in the caller!
@@ -116,10 +120,10 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         return null;
     }
     exports.getBrickIdByName = getBrickIdByName;
-    
+
     function getBrickById(id) {
         return wedo[id];
-        }
+    }
     exports.getBrickById = getBrickById;
 
     function getBrickById(id) {
