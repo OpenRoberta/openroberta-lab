@@ -346,7 +346,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                 isDownObstacle = false;
                 isDownRuler = false;
                 stepCounter = 0;
-                pause= false;
+                pause= true;
                 info = false;
                 setObstacle();
                 setRuler();
@@ -423,6 +423,9 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             return;
         }
         var actionValuesarr = [];
+        for(var i =0;i<numprogs;i++){
+            actionValuesarr.push({});
+        }
         globalID = requestAnimationFrame(renderMultiple);
         var now = new Date().getTime();
         dt = now - (time || now);
@@ -432,7 +435,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         stepCounter += 1;
         for(var i=0;i<numprogs;i++){
             if (!programEvals[i].getProgram().isTerminated() && !pause && !reset) {
-                actionValuesarr.push(programEvals[i].step(sensorValuesMultiple[i]));
+                actionValuesarr[i] = programEvals[i].step(sensorValuesMultiple[i]);
             } else if (programEvals[i].getProgram().isTerminated() && !pause && !robot.endless) {
                 setPause(true);
                 robots[i].reset();
@@ -890,6 +893,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     exports.importImage = importImage;
 
     function createRobots(reqRobot, numprogs){
+        robots = [];
         for(var i=0; i<numprogs;i++){
             var temprobot = new reqRobot({
                 x : 240,
