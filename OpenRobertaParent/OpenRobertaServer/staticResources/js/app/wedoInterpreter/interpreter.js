@@ -1,5 +1,5 @@
-define([ 'exports', 'log', 'message', 'constants.interpreter', 'native.interpreter', 'state.interpreter', 'util.interpreter' ], function(exports, LOG, MSG,
-        C, N, S, U) {
+define([ 'exports', 'log', 'message', 'constants.interpreter', 'native.interpreter', 'state.interpreter', 'util.interpreter' ], function(exports, LOG, MSG, C,
+        N, S, U) {
 
     var terminated = false;
     var callbackOnTermination = undefined;
@@ -411,7 +411,15 @@ define([ 'exports', 'log', 'message', 'constants.interpreter', 'native.interpret
                 var left = S.pop();
                 switch (subOp) {
                     case C.EQ:
-                        S.push(left === right);
+                        if (left === 1 && right === true) {
+                            S.push(true);
+                        }
+                        else if (left === true && right === 1) {
+                            S.push(true);
+                        }
+                        else {
+                            S.push(left === right);
+                        }
                         break;
                     case C.NEQ:
                         S.push(left !== right);

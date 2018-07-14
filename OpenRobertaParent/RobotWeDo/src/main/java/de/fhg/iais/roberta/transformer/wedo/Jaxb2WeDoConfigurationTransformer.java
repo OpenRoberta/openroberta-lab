@@ -64,20 +64,24 @@ public class Jaxb2WeDoConfigurationTransformer {
         return field;
     }
 
-    @SuppressWarnings("rawtypes")
     private Configuration blockToBrickConfiguration(List<List<Block>> blocks) {
-        switch ( blocks.get(0).get(0).getType() ) {
-            case "robBrick_WeDo-Brick":
-                // Quadruplet: block type; block name; list of block' port names; list of block's pin names
-                List<Quadruplet<ConfigurationBlock, String, List<String>, List<String>>> configurationBlocks = new ArrayList<>();
-                for ( int i = 1; i < blocks.size(); i++ ) {
-                    configurationBlocks.add(extractConfigurationBlockComponents(blocks.get(i)));
-                }
-                List<Field> fields = extractFields(blocks.get(0).get(0), (short) 1);
-                return new WeDoConfiguration(configurationBlocks).getConfiguration();
-            default:
-                throw new DbcException("There was no correct configuration block found! " + blocks.get(0).get(0).getType());
+        boolean confBrickFound = false;
+        // Quadruplet: block type; block name; list of block' port names; list of block's pin names
+        List<Quadruplet<ConfigurationBlock, String, List<String>, List<String>>> configurationBlocks = new ArrayList<>();
+
+        // List of blocks is unsorted so maybe the "brick" block is not the first!
+        for ( int i = 0; i < blocks.size(); i++ ) {
+            if ( blocks.get(i).get(0).getType().equals("robBrick_WeDo-Brick") ) {
+                confBrickFound = true;
+                continue;
+            } else {
+                configurationBlocks.add(extractConfigurationBlockComponents(blocks.get(i)));
+            }
         }
+        if ( !confBrickFound ) {
+            throw new DbcException("There was no correct configuration block found! ");
+        }
+        return new WeDoConfiguration(configurationBlocks).getConfiguration();
     }
 
     private Quadruplet<ConfigurationBlock, String, List<String>, List<String>> extractConfigurationBlockComponents(List<Block> block) {

@@ -745,4 +745,9 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
         this.opArray = this.opArrayStack.remove(this.opArrayStack.size() - 1);
         return opArray;
     }
+
+    protected void generateProgramPrefix(boolean withWrapping) {
+        // TODO Auto-generated method stub
+        
+    }
 }

@@ -5,7 +5,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
 
     var bricklyWorkspace;
     var listenToBricklyEvents = true;
-    var seen = false;
+    seen = false;
 
     function init() {
         initView();
@@ -64,10 +64,15 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
                 reloadConf();
             }
         }, 'tabConfiguration clicked');
+        
         $('#tabConfiguration').on('hide.bs.tab', function(e) {
-            Blockly.hideChaff();
+            Blockly.hideChaff(false);
         });
 
+        $('#tabConfiguration').on('hide.bs.tab', function(e) {
+           Blockly.hideChaff();
+        });
+        
         $('#tabConfiguration').on('hidden.bs.tab', function(e) {
             var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
             var xml = Blockly.Xml.domToText(dom);

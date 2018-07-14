@@ -85,6 +85,9 @@ public class GyroSensor<V> extends ExternalSensor<V> {
             mutation.setMode(getMode().toString());
             jaxbDestination.setMutation(mutation);
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().toString());
+        } else if (getMode().toString().equals("TILTED")) {
+            String fieldSlot = getSlot().toString();
+            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SLOT, fieldSlot);
         }
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
         return jaxbDestination;

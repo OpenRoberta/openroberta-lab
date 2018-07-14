@@ -1,23 +1,34 @@
 package de.fhg.iais.roberta.factory.wedo;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Properties;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.wedo.WeDoConfiguration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ActorPort;
+import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
+import de.fhg.iais.roberta.mode.sensor.wedo.Slot;
+import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.wedo.BrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.codegen.wedo.WeDoStackMachineVisitor;
+import de.fhg.iais.roberta.syntax.sensor.GetSampleType;
+import de.fhg.iais.roberta.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
@@ -136,7 +147,7 @@ public class WeDoFactory extends AbstractRobotFactory {
 
     @Override
     public RobotBrickCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
-        return new BrickCheckVisitor(brickConfiguration);
+        return new BrickCheckVisitor<Void>(brickConfiguration);
     }
 
     @Override
@@ -170,5 +181,28 @@ public class WeDoFactory extends AbstractRobotFactory {
     public ILightSensorActionMode getLightActionColor(String mode) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public Slot getSlot(String slot) {
+        return IRobotFactory.getModeValue(slot, Slot.class);
+    }
+
+    @Override
+    public Sensor<?> createSensor(
+        GetSampleType sensorType,
+        String port,
+        String slot,
+        boolean isPortInMutation,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment) {
+        SensorMetaDataBean sensorMetaDataBean;
+        switch ( sensorType.getSensorType() ) {
+            case BlocklyConstants.GYRO:
+                sensorMetaDataBean = new SensorMetaDataBean(getSensorPort(port), GyroSensorMode.TILTED, getSlot(slot), isPortInMutation);
+                return GyroSensor.make(sensorMetaDataBean, properties, comment);
+            default:
+                return super.createSensor(sensorType, port, slot, isPortInMutation, properties, comment);
+        }
     }
 }

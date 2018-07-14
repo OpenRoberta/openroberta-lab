@@ -23,7 +23,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         case "connect":
             if (data.state == "connected") {
                 wedo[data.brickid] = {};
-                wedo[data.brickid]["brickname"] = data.brickname.replace(/\s/g, '');
+                wedo[data.brickid]["brickname"] = data.brickname.replace(/\s/g, '').toUpperCase();
                 // for some reason we do not get the inital state of the button, so here it is hardcoded
                 wedo[data.brickid]["button"] = 'false';
             } else if (data.state == "disconnected") {
@@ -70,29 +70,17 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     exports.update = update;
 
     function getSensorValue(brickid, sensor, id, slot) {
-        var returnValue = undefined;
-        try {
-            if (id) {
-                if (sensor === "tiltsensor") {
-                    if (slot === "ANY") {
-                        return wedo[brickid][id][sensor] !== tiltMode.NO;
-                    } else {
-                        return wedo[brickid][id][sensor] === tiltMode[slot];
-                    }
-                } else {
-                    return wedo[brickid][id][sensor];
-                }
+        switch (sensor) {
+        case "tiltsensor":
+            if (slot === "ANY") {
+                return wedo[brickid][id][sensor] !== tiltMode.NO;
             } else {
-                if (sensor === "button") {
-                    return wedo[brickid][sensor] === "true";
-                } else {
-                    return wedo[brickid][sensor];
-                }
+                return wedo[brickid][id][sensor] === tiltMode[slot];
             }
-        } catch (error) {
-            // handled in the caller!
-            // alert (error)
-            return false;
+        case "motionsensor":
+            return parseInt(wedo[brickid][id][sensor]);
+        case "button":
+            return wedo[brickid][sensor] === "true";
         }
     }
     exports.getSensorValue = getSensorValue;
@@ -112,7 +100,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     function getBrickIdByName(name) {
         for ( var brickid in wedo) {
             if (wedo.hasOwnProperty(brickid)) {
-                if (wedo[brickid].brickname === name) {
+                if (wedo[brickid].brickname === name.toUpperCase()) {
                     return brickid;
                 }
             }
@@ -125,10 +113,4 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         return wedo[id];
     }
     exports.getBrickById = getBrickById;
-
-    function getBrickById(id) {
-        return wedo[id];
-    }
-    exports.getBrickById = getBrickById;
-
 });

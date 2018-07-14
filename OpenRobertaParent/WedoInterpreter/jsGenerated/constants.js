@@ -15,7 +15,7 @@
     exports.AND = "AND";
     exports.ANGLE = "angle";
     exports.ANIMATION = "animation";
-    exports.ANY = "any";
+    exports.ANY = "ANY";
     exports.ARG1 = "arg1";
     exports.ARG2 = "arg2";
     exports.ASSIGN_METHOD_PARAMETER_STMT = "AssignMethodParameter";
@@ -24,6 +24,7 @@
     exports.AT2 = "at2";
     exports.AVERAGE = "average";
     exports.BACKWARD = "BACKWARD";
+    exports.BACK = "BACK";
     exports.BINARY = "Binary";
     exports.BOOLEAN = "BOOLEAN";
     exports.BOOL_CONST = "BOOL_CONST";
@@ -62,7 +63,7 @@
     exports.DISTANCE = "distance";
     exports.DIVIDE = "DIVIDE";
     exports.DOUBLE_FLASH = "DOUBLE_FLASH";
-    exports.DOWN = "down";
+    exports.DOWN = "DOWN";
     exports.DRIVE_ACTION = "DriveAction";
     exports.DRIVE_DIRECTION = "driveDirection";
     exports.DURATION = "duration";
@@ -90,6 +91,7 @@
     exports.FREQUENCY = "frequency";
     exports.FROM_END = "fromEnd";
     exports.FROM_START = "fromStart";
+    exports.FRONT = "FRONT";
     exports.FUNCTION_DECLARATION = "functionDeclaration";
     exports.GESTURE = "gesture";
     exports.GET = "get";
@@ -167,6 +169,7 @@
     exports.NEQ = "NEQ";
     exports.NOOP_STMT = "createNoopStmt";
     exports.NOT = "NOT";
+    exports.NO = "NO";
     exports.NULL_CONST = "null";
     exports.NUMBER = "NUMBER";
     exports.NUMERIC = "Numeric";
@@ -260,7 +263,7 @@
     exports.ULTRASONIC = "ultrasonic";
     exports.UNARY = "Unary";
     exports.UNTIL = "UNTIL";
-    exports.UP = "up";
+    exports.UP = "UP";
     exports.VALUE = "value";
     exports.VALUES = "values";
     exports.VAR = "Var";

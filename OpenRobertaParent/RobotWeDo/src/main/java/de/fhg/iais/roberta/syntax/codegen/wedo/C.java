@@ -8,7 +8,7 @@ public class C {
     public static final String AND = "AND";
     public static final String ANGLE = "angle";
     public static final String ANIMATION = "animation";
-    public static final String ANY = "any";
+    public static final String ANY = "ANY";
     public static final String ARG1 = "arg1";
     public static final String ARG2 = "arg2";
     public static final String ASSIGN_METHOD_PARAMETER_STMT = "AssignMethodParameter";
@@ -17,6 +17,7 @@ public class C {
     public static final String AT2 = "at2";
     public static final String AVERAGE = "average";
     public static final String BACKWARD = "BACKWARD";
+    public static final String BACK = "BACK";
     public static final String BINARY = "Binary";
     public static final String BOOLEAN = "BOOLEAN";
     public static final String BOOL_CONST = "BOOL_CONST";
@@ -55,7 +56,7 @@ public class C {
     public static final String DISTANCE = "distance";
     public static final String DIVIDE = "DIVIDE";
     public static final String DOUBLE_FLASH = "DOUBLE_FLASH";
-    public static final String DOWN = "down";
+    public static final String DOWN = "DOWN";
     public static final String DRIVE_ACTION = "DriveAction";
     public static final String DRIVE_DIRECTION = "driveDirection";
     public static final String DURATION = "duration";
@@ -83,6 +84,7 @@ public class C {
     public static final String FREQUENCY = "frequency";
     public static final String FROM_END = "fromEnd";
     public static final String FROM_START = "fromStart";
+    public static final String FRONT = "FRONT";
     public static final String FUNCTION_DECLARATION = "functionDeclaration";
     public static final String GESTURE = "gesture";
     public static final String GET = "get";
@@ -160,6 +162,7 @@ public class C {
     public static final String NEQ = "NEQ";
     public static final String NOOP_STMT = "createNoopStmt";
     public static final String NOT = "NOT";
+    public static final String NO = "NO";
     public static final String NULL_CONST = "null";
     public static final String NUMBER = "NUMBER";
     public static final String NUMERIC = "Numeric";
@@ -253,7 +256,7 @@ public class C {
     public static final String ULTRASONIC = "ultrasonic";
     public static final String UNARY = "Unary";
     public static final String UNTIL = "UNTIL";
-    public static final String UP = "up";
+    public static final String UP = "UP";
     public static final String VALUE = "value";
     public static final String VALUES = "values";
     public static final String VAR = "Var";

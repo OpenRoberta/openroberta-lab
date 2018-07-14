@@ -24,7 +24,6 @@
     }
     exports.driveAction = driveAction;
     function getSample(name, port, sensor, slot) {
-        name = WEDO.getBrickIdByName(name);
         var robotText = 'robot: ' + name + ', port: ' + port;
         U.p(robotText + ' getsample from ' + sensor);
         var sensorName;
@@ -39,11 +38,13 @@
                 sensorName = "button";
                 break;
             case C.TIMER:
-                return timerGet(port); // RETURN timer value
+                S.push(timerGet(port));
+                return;
             default:
                 throw 'invalid get sample for ' + name + ' - ' + port + ' - ' + sensor + ' - ' + slot;
         }
-        S.push(WEDO.getSensorValue(name, sensorName, port, slot));
+        var brickid = WEDO.getBrickIdByName(name);
+        S.push(WEDO.getSensorValue(brickid, sensorName, port, slot));
     }
     exports.getSample = getSample;
     var timers = {};

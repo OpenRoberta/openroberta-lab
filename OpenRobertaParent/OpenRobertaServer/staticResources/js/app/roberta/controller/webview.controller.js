@@ -75,7 +75,6 @@ define([ 'exports', 'guiState.controller', 'wedo.model', 'interpreter.interprete
                             var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
                             var xml = Blockly.Xml.domToText(dom);
                             GUISTATE_C.setConfigurationXML(xml);
-                            bricklyWorkspace.setVisible(false);
                             break;
                         }
                     }
