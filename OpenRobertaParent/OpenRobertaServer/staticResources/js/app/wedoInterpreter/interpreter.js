@@ -411,15 +411,7 @@ define([ 'exports', 'log', 'message', 'constants.interpreter', 'native.interpret
                 var left = S.pop();
                 switch (subOp) {
                     case C.EQ:
-                        if (left === 1 && right === true) {
-                            S.push(true);
-                        }
-                        else if (left === true && right === 1) {
-                            S.push(true);
-                        }
-                        else {
-                            S.push(left === right);
-                        }
+                        S.push(left == right);
                         break;
                     case C.NEQ:
                         S.push(left !== right);
