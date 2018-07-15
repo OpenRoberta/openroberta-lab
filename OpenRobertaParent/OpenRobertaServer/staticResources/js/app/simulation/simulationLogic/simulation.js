@@ -897,10 +897,10 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         for(var i=0; i<numprogs;i++){
             var temprobot = new reqRobot({
                 x : 240,
-                y : 200,
+                y : 200 + 60*(Math.floor((i+1)/2))*((-1)**(i)),
                 theta : 0,
                 xOld : 240,
-                yOld : 200,
+                yOld : 200 + 60*(Math.floor((i+1)/2))*((-1)**(i)),
                 transX : 0,
                 transY : 0
             });

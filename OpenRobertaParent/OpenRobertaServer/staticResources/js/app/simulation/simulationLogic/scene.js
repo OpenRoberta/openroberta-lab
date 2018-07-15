@@ -364,13 +364,15 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
 //            return;
 //        }
         this.rCtx.clearRect(0, 0, CONSTANTS.MAX_WIDTH, CONSTANTS.MAX_HEIGHT);
-        this.rCtx.restore();
-        this.rCtx.save();
+        
 //        // provide new user information
 //        $('#valuesContent').html('');
 //        $("#valuesContent").append('<div><label>FPS</label><span>' + UTIL.round(1 / SIM.getDt(), 0) + '</span></div>');
 //        $("#valuesContent").append('<div><label>Time</label><span>' + UTIL.round(this.robot.time, 3) + 's</span></div>');
+        this.rCtx.();
         for(var iterrobot=0;iterrobot<this.numprogs;iterrobot++){
+            this.rCtx.restore();
+            this.rCtx.save();
             $("#valuesContent").append('<div><label>Time</label><span>' + UTIL.round(this.robots[iterrobot].time, 3) + 's</span></div>');
             if (SIM.getBackground() === 7) {
                   x = UTIL.round((this.robots[iterrobot].pose.x + this.robots[iterrobot].pose.transX) / 3, 1);

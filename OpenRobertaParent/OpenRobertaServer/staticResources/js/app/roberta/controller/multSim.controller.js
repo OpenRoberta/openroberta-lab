@@ -164,7 +164,7 @@ define(['exports','util', 'progList.model','program.controller', 'program.model'
 //        $('#simButtonsCollapse').collapse({
 //            'toggle' : false
 //        });
-//        const INITIAL_WIDTH = 0.5;
+        const INITIAL_WIDTH = 0.5;
 //        $('#blockly').openRightView('sim', INITIAL_WIDTH);
 //        PROG_C.reloadProgram(programs[0].result);
         SIM.initMultiple(programs, true, GUISTATE_C.getRobotGroup());
