@@ -190,8 +190,8 @@ export function evalOperation() {
                 break;
             }
             case C.STATUS_LIGHT_ACTION:
-                N.statusLightOffAction( '-', '-' )
-                return;
+                N.statusLightOffAction( stmt[C.NAME], stmt[C.PORT] )
+                break;
             case C.STOP:
                 U.p( "PROGRAM TERMINATED. stop op" );
                 break topLevelLoop;
@@ -348,7 +348,7 @@ function evalExpr( expr ) {
             const right = S.pop();
             const left = S.pop();
             switch ( subOp ) {
-                case C.EQ: S.push( left == right );
+                case C.EQ: S.push( left == right ); break;
                 case C.NEQ: S.push( left !== right ); break;
                 case C.LT: S.push( left < right ); break;
                 case C.LTE: S.push( left <= right ); break;

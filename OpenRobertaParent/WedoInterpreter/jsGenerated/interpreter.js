@@ -201,8 +201,8 @@
                     break;
                 }
                 case C.STATUS_LIGHT_ACTION:
-                    N.statusLightOffAction('-', '-');
-                    return { value: void 0 };
+                    N.statusLightOffAction(stmt[C.NAME], stmt[C.PORT]);
+                    break;
                 case C.STOP:
                     U.p("PROGRAM TERMINATED. stop op");
                     return "break-topLevelLoop";
@@ -422,7 +422,9 @@
                 var right = S.pop();
                 var left = S.pop();
                 switch (subOp) {
-                    case C.EQ: S.push(left == right);
+                    case C.EQ:
+                        S.push(left == right);
+                        break;
                     case C.NEQ:
                         S.push(left !== right);
                         break;

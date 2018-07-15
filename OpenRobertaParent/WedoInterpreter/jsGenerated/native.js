@@ -66,43 +66,43 @@
     }
     exports.timerGet = timerGet;
     function ledOnAction(name, port, color) {
-        name = WEDO.getBrickIdByName(name);
+        var brickid = WEDO.getBrickIdByName(name);
         var robotText = 'robot: ' + name + ', port: ' + port;
         U.p(robotText + ' led on color ' + color);
-        var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'light', 'device': name, 'color': color };
+        var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'light', 'brickid': brickid, 'color': color };
         WEBVIEW_C.jsToAppInterface(cmd);
     }
     exports.ledOnAction = ledOnAction;
     function statusLightOffAction(name, port) {
-        name = WEDO.getBrickIdByName(name);
+        var brickid = WEDO.getBrickIdByName(name);
         var robotText = 'robot: ' + name + ', port: ' + port;
         U.p(robotText + ' led off');
-        var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'light', 'device': name, 'color': 0 };
+        var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'light', 'brickid': brickid, 'color': 0 };
         WEBVIEW_C.jsToAppInterface(cmd);
     }
     exports.statusLightOffAction = statusLightOffAction;
     function toneAction(name, frequency, duration) {
-        name = WEDO.getBrickIdByName(name); // TODO: better style
+        var brickid = WEDO.getBrickIdByName(name); // TODO: better style
         var robotText = 'robot: ' + name;
         U.p(robotText + ' piezo: ' + ', frequency: ' + frequency + ', duration: ' + duration);
-        var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'piezo', 'device': name, 'frequency': frequency, 'duration': duration };
+        var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'piezo', 'brickid': brickid, 'frequency': frequency, 'duration': duration };
         WEBVIEW_C.jsToAppInterface(cmd);
     }
     exports.toneAction = toneAction;
     function motorOnAction(name, port, duration, speed) {
-        name = WEDO.getBrickIdByName(name); // TODO: better style
+        var brickid = WEDO.getBrickIdByName(name); // TODO: better style
         var robotText = 'robot: ' + name + ', port: ' + port;
         var durText = duration === -1 ? ' w.o. duration' : (' for ' + duration + ' msec');
         U.p(robotText + ' motor speed ' + speed + durText);
-        var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'motor', 'device': name, 'action': 'on', 'id': port, 'direction': speed < 0 ? 1 : 0, 'power': Math.abs(speed) };
+        var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'motor', 'brickid': brickid, 'action': 'on', 'id': port, 'direction': speed < 0 ? 1 : 0, 'power': Math.abs(speed) };
         WEBVIEW_C.jsToAppInterface(cmd);
     }
     exports.motorOnAction = motorOnAction;
     function motorStopAction(name, port) {
-        name = WEDO.getBrickIdByName(name); // TODO: better style
+        var brickid = WEDO.getBrickIdByName(name); // TODO: better style
         var robotText = 'robot: ' + name + ', port: ' + port;
         U.p(robotText + ' motor stop');
-        var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'motor', 'device': name, 'action': 'stop', 'id': port };
+        var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'motor', 'brickid': brickid, 'action': 'stop', 'id': port };
         WEBVIEW_C.jsToAppInterface(cmd);
     }
     exports.motorStopAction = motorStopAction;

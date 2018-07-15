@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-07-14 14:39:35.503498",
+		"lastupdated": "2018-07-15 20:45:50.948294",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -373,6 +373,7 @@
 	"MOTOR_ON_TOOLTIP_CALLIOPE": "Turns motor A, B or A+B on with a specific power.",
 	"SINGLE_MOTOR_ON_TOOLTIP_CALLIOPE": "Turns the single motor on with a specific power. Power can be positiv or negativ for reverse direction.",
 	"MOTOR_ON_FOR_TOOLTIP": "Turns motor on and stops motor after execution of rotations/degrees.",
+	"MOTOR_ON_FOR_TOOLTIP_MS": "Turns motor on and stops motor after execution after time has passed.",
 	"STEP_MOTOR_ON_TOOLTIP": "Turns motor on with a provided speed in rpm and stops motor after execution of provided number of rotations.",
 	"MOTOR_GETPOWER_TOOLTIP": "Gets current power of this motor.",
 	"MOTOR_SETPOWER_TOOLTIP": "Sets power of this motor.",
@@ -385,7 +386,7 @@
 	"DISPLAY_PICTURE_TOOLTIP": "Displays a picture on the screen.",
 	"DISPLAY_TEXT_TOOLTIP": "Displays a text on the screen.",
 	"DISPLAY_CLEAR_TOOLTIP": "Clears the display.",
-	"PLAY_TONE_TOOLTIP": "Plays a tone.",
+	"PLAY_TONE_TOOLTIP": "Plays a tone. Use frequency and duration to determin the tone pitch and duration.",
 	"PLAY_FILE_TOOLTIP": "Plays a sound file.",
 	"PLAY_SETVOLUME_TOOLTIP": "Sets volume.",
 	"PLAY_GETVOLUME_TOOLTIP": "Gets current volume.",
@@ -410,6 +411,7 @@
 	"ENCODER_GETSAMPLE_TOOLTIP": "Gets the current reading from the motor encoder.",
 	"GYRO_RESET_TOOLTIP": "Resets the gyro sensor.",
 	"GYRO_GETSAMPLE_TOOLTIP": "Gets the current reading from the gyro sensor.",
+	"SENSOR_GYRO_GETSAMPLE_TOOLTIP_WEDO": "Is the gyro sensor tilted in the indicated manner?",
 	"FLAME_GETSAMPLE_TOOLTIP": "Gets the current reading from the flame sensor.",
 	"TIMER_RESET_TOOLTIP": "Resets the timer.",
 	"TIMER_GETSAMPLE_TOOLTIP": "Gets the current reading from the timer.",
@@ -452,6 +454,7 @@
 	"BRICK_WHEEL_DIAMETER": "wheel diameter",
 	"BRICK_TRACK_WIDTH": "track width",
 	"ACTION_MOTOR": "motor",
+	"MOTOR": "motor",
 	"MOTOR_MIDDLE": "middle",
 	"MOTOR_BIG": "big",
 	"MOTOR_NONE": "none",
@@ -1272,6 +1275,7 @@
 	"MODE_TILTED": "tilted",
 	"MODE_CURRENT": "current",
 	"INFRARED_DISTANCE_GETSAMPLE_TOOLTIP": "Gets the current relative distance from the infrared sensor. The values are between 1 and 75 cm.",
+	"SENSOR_INFRARED_DISTANCE_GETSAMPLE_TOOLTIP_WEDO": "Gets the current relative distance from the infrared sensor. The values are between 1, close, and 10, further away.",
 	"INFRARED_PRESENCE_GETSAMPLE_TOOLTIP": "Returns an array of measurements for the presence of a beacon.",
 	"SENSOR_ACCELEROMETER": "accelerometer",
 	"SENSOR_PINTOUCH": "pin",
@@ -1414,5 +1418,5 @@
 	"SLOT_TILTED_BACK": "back",
 	"SLOT_TILTED_FRONT": "front",
 	"SLOT_TILTED_NO": "not",
-	"SLOT_TILTED_ANY": "shake"
+	"SLOT_TILTED_ANY": "any"
 }

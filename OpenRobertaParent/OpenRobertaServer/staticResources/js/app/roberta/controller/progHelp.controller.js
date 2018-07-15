@@ -17,7 +17,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
 
     function initView() {
         $('#helpContent').remove();
-        
+
         var loadHelpFile = function(helpFileName) {
             var url = '../help/' + helpFileName;
             $('#helpDiv').load(url, function(response, status, xhr) {
@@ -29,7 +29,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
                 }
             });
         };
-        
+
         var helpFileNameDefault = 'progHelp_' + GUISTATE_C.getRobotGroup() + '_en.html';
         var helpFileName = 'progHelp_' + GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getLanguage().toLowerCase() + '.html';
         if (GUISTATE_C.getAvailableHelp().indexOf(helpFileName) > -1) {
@@ -45,7 +45,9 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
     function initEvents() {
         $('#helpButton').off('click touchend');
         $('#helpButton').on('click touchend', function(event) {
-            toggleHelp();
+            if ($('#helpButton').is(":visible")) {
+                toggleHelp();
+            }
             return false;
         });
     }

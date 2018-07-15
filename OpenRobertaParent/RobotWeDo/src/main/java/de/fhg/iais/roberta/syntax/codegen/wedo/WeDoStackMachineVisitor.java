@@ -97,8 +97,15 @@ public class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         if ( confLedBlock == null ) {
             throw new DbcException("no LED declared in the configuration");
         }
-        JSONObject o = mk(C.STATUS_LIGHT_ACTION).put(C.MODE, C.OFF);
-        return app(o);
+        String brickName = confLedBlock.getPins().size() >= 1 ? confLedBlock.getPins().get(0) : null;
+        if ( (brickName != null) ) {
+            // for wedo this block is only for setting off the led, so no test for status required lightStatusAction.getStatus()
+
+            JSONObject o = mk(C.STATUS_LIGHT_ACTION).put(C.NAME, brickName);
+            return app(o);
+        } else {
+            throw new DbcException("No robot name or no port!");
+        }
     }
 
     @Override

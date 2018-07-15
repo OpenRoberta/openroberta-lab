@@ -189,8 +189,8 @@ define([ 'exports', 'log', 'message', 'constants.interpreter', 'native.interpret
                     break;
                 }
                 case C.STATUS_LIGHT_ACTION:
-                    N.statusLightOffAction('-', '-');
-                    return { value: void 0 };
+                    N.statusLightOffAction(stmt[C.NAME], stmt[C.PORT]);
+                    break;
                 case C.STOP:
                     U.p("PROGRAM TERMINATED. stop op");
                     return "break-topLevelLoop";
