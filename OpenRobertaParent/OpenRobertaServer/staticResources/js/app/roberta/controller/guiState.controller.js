@@ -387,7 +387,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         if (value.indexOf("$") >= 0) {
             value = value.replace("$", getRobotRealName());
         }
-        $('#menuRunProg').text(value);
+        $('#menuRunProg').html(value);
         if (GUISTATE.gui.blocklyWorkspace) {
             GUISTATE.gui.blocklyWorkspace.robControls.refreshTooltips(getRobotRealName());
         }

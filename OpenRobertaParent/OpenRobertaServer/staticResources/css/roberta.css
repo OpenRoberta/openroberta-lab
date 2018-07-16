@@ -1310,6 +1310,7 @@ legend {
 .bootstrap-table {
     margin: 0px 16px 0px 16px;
     color: #333;
+    cursor: pointer;
 }
 .bootstrap-table a {
     color: #333;
