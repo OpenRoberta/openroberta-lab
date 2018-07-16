@@ -1,0 +1,824 @@
+<!--?xml version="1.0" encoding="utf-8" standalone="yes"?-->
+<div id="helpContent">
+    <div id="robControls_start" class="help beginner">
+        <h3>
+            <span style="color: #000000;">&raquo;Start&laquo;</span>
+        </h3>
+        <p>Jedes Programm beginnt&nbsp;mit dem&nbsp;&raquo;Start&laquo;-Block, welcher nicht gel&ouml;scht werden kann. Den ersten Block, den
+            man&nbsp;verwenden m&ouml;chte, verbindet man direkt mit der&nbsp;&nbsp;&raquo;Sequenzverbindung&laquo;&nbsp;am &raquo;Start&laquo;-Block.</p>
+        <p>Einstellm&ouml;glichkeiten:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-plus">Erzeuge eine neue globale Variable.</li>
+            <li class="typcn typcn-minus">Entferne die globale Variable.</li>
+        </ul>
+        Wenn globale Variablen erzeugt wurden:
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-pen">Text, Name der Variablen.</li>
+            <li class="typcn typcn-arrow-down">Typ der Variablen.</li>
+            <li class="typcn typcn-arrow-left">Wert, Anfangswert der Variablen.</li>
+        </ul>
+        <h3>&raquo;Motor Port ... an Tempo ... Zeit&laquo;</h3>
+        <p>Mit dem Block &raquo;Motor Port ... an Tempo ... Umdrehungen/Grad&laquo; stellst du das Tempo (Geschwindigkeit) eines Motors ein. Dein Roboter
+            startet den gew&auml;hlten Motor und stellt ihn nach der verstrichenen Zeit wieder ab.</p>
+        <p>Einstellm&ouml;glichkeiten und Eingabewerte:</p>
+        <ul>
+            <li class="typcn typcn-arrow-down">Motor Port, w&auml;hle den Motorport aus, an dem der Motor angeschlossen ist.</li>
+            <li class="typcn typcn-arrow-left">Tempo,&nbsp; Wert zwischen -100 und 100. Wenn die Zahl negativ ist, dreht sich der Motor
+                r&uuml;ckw&auml;rts.</li>
+            <li class="typcn typcn-arrow-down">Zeit in Millisekunden, 1000 Milllisekunden sind 1 Sekunde.&nbsp;</li>
+        </ul>
+    </div>
+    <div id="robActions_motor_on" class="help expert">
+        <h3>
+            <span style="color: #000000;">&raquo;Motor Port ... an Tempo&laquo;</span>
+        </h3>
+        <p>Mit dem Block &raquo;Motor Port ... an Tempo&laquo; programmierst du das Tempo (Geschwindigkeit) eines Motors. Dein Roboter startet den
+            gew&auml;hlten Motor, bis er gestoppt wird oder ein anderer Block zum Fahren verwendet wird.</p>
+        <p>Einstellm&ouml;glichkeiten und Eingabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-down">Motor Port, w&auml;hle den Motor Port aus, an dem der Motor angeschlossen ist.</li>
+            <li class="typcn typcn-arrow-left">Tempo, Wert zwischen -100 und 100. Wenn die Zahl negativ ist, dreht sich der Motor r&uuml;anders herum.</li>
+        </ul>
+    </div>
+    <div id="robActions_motor_stop" class="help expert">
+        <h3>
+            <span style="color: #0000ff;"><span style="color: #000000;">&raquo;Stoppe Motor Port&laquo;</span></span>
+        </h3>
+        <p>
+            Der Block &raquo;<span style="color: #0000ff;"><span style="color: #000000;">Stoppe Motor Port</span></span><span style="color: #0000ff;"><span
+                style="color: #000000;">&laquo; schaltet den&nbsp;</span></span>Motor an einem ausgew&auml;hlten Motor-Port aus.
+        </p>
+        <p>Einstellm&ouml;glichkeiten:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-down">Motor, w&auml;hle den Motorport aus, der ausgeschaltet werden soll.</li>
+        </ul>
+    </div>
+    <div id="robActions_display_text" class="help beginner">
+        <h3>&raquo;Zeige Text&laquo;</h3>
+        <p>Mit dem Block &raquo;Zeige Text&laquo; kannst du Text und Zahlen direkt in einem Fenster im Display anzeigen lassen. Wenn du diesen Block
+            &ouml;fter verwendest, dann werden die Ausgaben untereinander geschrieben.</p>
+        <p>&nbsp;</p>
+        <p>Eingabewerte:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-left">Text, der im Display erscheinen soll.</li>
+        </ul>
+    </div>
+    <div id="robActions_display_clear" class="help beginner">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;L&ouml;scheBildschirm&laquo;">&raquo;L&ouml;sche Bildschirm&laquo;</h3>
+        <p>Mit dem Block &raquo;L&ouml;sche Bildschirm&laquo; kannst du alle Ausgaben aus dem Fenster im Display l&ouml;schen. Das Fenster kannst du mit
+            einem Klick auf&nbsp;&raquo;OK&laquo; schlie&szlig;en.</p>
+    </div>
+    <div id="mbedActions_play_note" class="help beginner">
+        <h3>»Spiele ...«</h3>
+        <p>Mit dem Block »Spiele ...« bringst du deinen Roboter dazu, einen ganze, halbe, viertel, achtel oder sechzehntel Note abzuspielen.</p>
+        <p>Einstellmöglichkeiten:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px">
+            <li class="typcn typcn-arrow-down">Länge der Note.</li>
+            <li class="typcn typcn-arrow-down">Note die gespielt werden soll.</li>
+        </ul>
+    </div>
+    <div id="robActions_play_tone" class="help expert">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;SpieleFrequenz...Dauer&laquo;">&raquo;Spiele Frequenz ... Dauer&laquo;</h3>
+        <p>Mit dem Block &raquo;Spiele Frequenz ... Dauer&laquo; kannst du die Frequenz (H&ouml;he eines Tons) und die Zeit (wie lange der Ton gespielt
+            wird) programmieren. Der Ton wird &uuml;ber den eingebauten Lautsprecher deines WeDo 2.0 abgespielt, bis die eingestellte Dauer erreicht ist.</p>
+        <div class="aui-message hint shadowed information-macro">
+            <div class="message-content">
+                <p>Bitte beachte, dass das menschliche Geh&ouml;r Frequenzen zwischen ca. 30 Hz bis ca. 15.000 Hz (15 kHz) wahrnehmen kann - je nach Mensch
+                    und Alter kann dies unterschiedlich sein.</p>
+            </div>
+        </div>
+        <p>Eingabewerte:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-left">Zahl, gew&uuml;nschte Frequenz in Hz (Hertz) eingeben.</li>
+            <li class="typcn typcn-arrow-left">&nbsp;Zahl, gew&uuml;nschte Dauer des Tons in Millisekunden (ms) eingeben.</li>
+        </ul>
+    </div>
+    <div id="mbedActions_leds_on" class="help beginner">
+        <h3>»Schalte LED an Farbe...«</h3>
+        <p>Mit dem Block »Schalte LED an Farbe...« kann die LED in einer bestimmten Farbe eingeschaltet werden.</p>
+        <p>Eingabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px">
+            <li class="typcn typcn-arrow-left">Farbe in der die LED leuchten soll.</li>
+        </ul>
+    </div>
+    <div id="robActions_brickLight_off" class="help beginner">
+        <h3>&raquo;Schalte LED aus&laquo;</h3>
+        <p>Mit dem Block &raquo;Schalte LED aus&laquo; kannst du die LED auf deinem WeDo 2.0 ausschalten.</p>
+    </div>
+    <h2 id="Programmier-Bl&ouml;ckeEV3-Sensoren">Sensoren</h2>
+    <p>Die Kategorie &raquo;Sensoren&laquo; beinhaltet Bl&ouml;cke f&uuml;r alle Standardsensoren des EV3-Systems:</p>
+    <ul>
+        <li>Tasten</li>
+        <li>Infrarotsensor</li>
+        <li>Kreiselsensor (Gyroskop)</li>
+        <li>Zeitgeber</li>
+    </ul>
+    <p>Eine Besonderheit der Sensor-Bl&ouml;cke im Unterschied zu den Aktion-Bl&ouml;cken ist, dass viele Sensor-Bl&ouml;cke einen &raquo;Wert&laquo;
+        zur&uuml;ckgeben. Den Wert-Typ, den ein Sensor-Block zur&uuml;ckgibt, erkennst du an der Farbe des Konnektors. Der Konnektor ist das
+        Verbindungsst&uuml;ck, mit dem NEPO-Bl&ouml;cke in andere Bl&ouml;cke eingef&uuml;gt werden k&ouml;nnen. Eine genaue Beschreibung findest du im
+        Abschnitt zu NEPO.</p>
+    <div id="robSensors_key_getSample" class="help beginner">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;Taste&laquo;">&raquo;Taste&laquo;</h3>
+        <p>
+            Mit dem Block &raquo;Taste&laquo; kannst du einem anderen Block &raquo;mitteilen&laquo; , ob die ausgew&auml;hlte Taste auf dem EV3 gedr&uuml;ckt
+            wurde oder nicht. Dieser Block gibt die logischen Werte&nbsp;<em>true = gedr&uuml;ckt</em>&nbsp;oder&nbsp;<em>false = nicht gedr&uuml;ckt</em>&nbsp;zur&uuml;ck.
+        </p>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">Logischer Wert, &raquo;true&laquo;, wenn die gew&auml;hlte Taste gedr&uuml;ckt ist, sonst
+                &raquo;false&laquo;.</li>
+        </ul>
+    </div>
+    <div id="robSensors_gyro_getSample" class="help beginner">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;GibWinkel/DrehrateKreiselsensor&laquo;">&raquo;Gib Winkel/Drehrate Kreiselsensor&laquo;</h3>
+        <p>Mit dem Block &raquo;Gib Winkel/Drehrate Kreiselsensor&laquo; kannst du einem anderen Block&nbsp;&raquo;mitteilen&laquo;, um welchen Winkel der
+            Kreiselsensor um seine vertikale Achse gedreht wurde. Der Winkel wird als Zahl &uuml;bermittelt. Zudem kann dieser Block im Auswahlmen&uuml; auf
+            &raquo;Drehrate&laquo; gestellt werden. Mit dieser Einstellung wird statt des Winkels die Drehung des Sensor in &raquo;Grad pro Sekunde&laquo;
+            &uuml;bermittelt.</p>
+        <div class="aui-message hint shadowed information-macro">
+            <div class="message-content">
+                <p>Im Modus Drehrate k&ouml;nnen maximal 440 Grad/Sekunde erfasst werden. Im Modus Winkel betr&auml;gt die Genauigkeit des Kreiselsensors
+                    +/- 3 Grad.</p>
+            </div>
+        </div>
+        <p>Einstellm&ouml;glichkeiten:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-down">Messmethode: &raquo;Winkel&laquo; oder &raquo;Drehrate&laquo;</li>
+            <li class="typcn typcn-arrow-down">Port, w&auml;hle den Port, an dem der Drehsensor angeschlossen ist.</li>
+        </ul>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">Zahl, die je nach eingestellter Messmethode entweder Winkelgrade oder die Grad pro Sekunde anzeigt.</li>
+        </ul>
+    </div>
+    <div id="robSensors_infrared_getSample" class="help beginner">
+        <h3>&raquo;Gib Abstand Infrarotsensor&laquo;</h3>
+        <p>Mit dem Block &raquo;Gib Abstand Infrarotsensor&laquo; kannst du einem anderen Block&nbsp;&raquo;mitteilen&laquo;, welchen Abstand der
+            Infrarotsensor misst.</p>
+        <p>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">
+                <p>Zahl, 0 -> sehr nah, - 10, weiter weg</p>
+            </li>
+        </ul>
+    </div>
+    <div id="robSensors_timer_getSample" class="help beginner">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;GibWertZeitgeber&laquo;">&raquo;Gib Wert Zeitgeber&laquo;</h3>
+        <p>Mit dem Block &raquo;Gib Wert Zeitgeber&laquo; kannst du einem anderen Block den aktuellen Stand des internen Zeitgebers in Millisekunden
+            &raquo;mitteilen&laquo;. Der Zeitgeber wird automatisch mit dem Beginn eines Programms gestartet. Es stehen 5 Zeitgeber zur Verf&uuml;gung.</p>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">Zahl, Anzahl Millisekunden, die seit dem Programmstart oder dem letzten Zur&uuml;cksetzen des Zeitgebers
+                vergangen sind.</li>
+        </ul>
+    </div>
+    <div id="robSensors_timer_reset" class="help beginner">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;SetzeZeitgeber&laquo;">&raquo;Setze Zeitgeber&laquo;</h3>
+        <p>Mit dem Block &raquo;Setze Zeitgeber&laquo;&nbsp;k&ouml;nnen die internen Zeitgeber (1 bis 5) auf den Wert 0 zur&uuml;ckgesetzt werden.</p>
+    </div>
+    <h2 id="Programmier-Bl&ouml;ckeEV3-Kontrolle" style="text-align: left;">Kontrolle</h2>
+    <p style="text-align: left;">Die Kategorie &raquo;Kontrolle&laquo; beinhaltet Bl&ouml;cke, mit denen der Programmablauf gesteuert werden kann. Die
+        Kategorie umfasst folgende Bl&ouml;cke:</p>
+    <ul style="text-align: left;">
+        <li>Wenn mache</li>
+        <li>Wenn mache sonst</li>
+        <li>Wiederhole n mal</li>
+        <li>Wiederhole solange/bis (Experten-Block)</li>
+        <li>Z&auml;hle von bis (Experten-Block)</li>
+        <li>Die Schleife abbrechen/mit der n&auml;chsten Iteration der Schleife fortfahren (Experten-Block)</li>
+        <li>Warte</li>
+        <li>Warte bis</li>
+    </ul>
+    <div id="robControls_if" class="help beginner">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;Wennmache&laquo;" style="text-align: left;">&raquo;Wenn mache&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;Wenn mache&laquo; kannst du gezielt Aktionen ausl&ouml;sen, die von einer Bedingung abh&auml;ngen.
+            Der &raquo;Wenn mache&laquo;-Block ben&ouml;tigt einen logischen Wert als Eingabewert. Falls die Bedingung in &raquo;Wenn&laquo; erf&uuml;llt (wahr)
+            ist, wird der eingef&uuml;gte Block (oder die Bl&ouml;cke) ausgef&uuml;hrt. Bei einem verschachtelten &raquo;Wenn mache&laquo; Block, also wenn eine
+            weitere Unterscheidung eingef&uuml;gt wurde, wird zuerst die erste &raquo;Wenn&laquo; Bedingung abgefragt und, falls diese nicht erf&uuml;llt ist
+            (Bedingung = falsch), wird die zweite &raquo;sonst wenn&laquo; Bedingung gepr&uuml;ft. Auch diese zweite Bedingung ben&ouml;tigt wieder einen
+            logischen Wert als Eingabewert.</p>
+        <p style="text-align: left;">Die Bedingungen k&ouml;nnen beliebig durch Anklicken des &raquo;+&laquo; Plus-Symbols erweitert und durch das
+            &raquo;-&laquo; Minus-Symbol wieder bis auf eine einzige Bedingung reduziert werden.</p>
+        <p style="text-align: left;">Einstellm&ouml;glichkeiten und Eingabewerte:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-plus">Eine weitere Bedingung am Ende anf&uuml;gen.</li>
+            <li class="typcn typcn-minus">Die letzte Bedingung l&ouml;schen.</li>
+            <li class="typcn typcn-arrow-left">Logischer Wert, &raquo;wahr&laquo; oder &raquo;falsch&laquo;.</li>
+            <li class="typcn typcn-arrow-left">Bl&ouml;cke, die nur dann ausgef&uuml;hrt werden, wenn die zugeh&ouml;rige Bedingung &raquo;wahr&laquo; ist.</li>
+        </ul>
+    </div>
+    <div id="robControls_ifElse" class="help beginner">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;Wennmachesonst&laquo;" style="text-align: left;">&raquo;Wenn mache sonst&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;Wenn mache sonst&laquo; kannst du gezielt Aktionen ausl&ouml;sen, die von einer Bedingung
+            abh&auml;ngen. Der &raquo;Wenn mache sonst&laquo;-Block ben&ouml;tigt hierf&uuml;r einen logischen Wert als Eingabewert. Falls die Bedingung&nbsp;
+            erf&uuml;llt (wahr) ist, wird der dort eingef&uuml;gte Block (oder die Bl&ouml;cke) ausgef&uuml;hrt, ansonsten (Bedingung nicht erf&uuml;llt =
+            falsch) wird der Block (bzw. die Bl&ouml;cke), der bei &raquo;sonst&laquo; eingef&uuml;gt wurde, ausgef&uuml;hrt. Bei einem verschachtelten
+            &raquo;Wenn mache sonst&laquo; Block, also wenn eine weitere Unterscheidung dazugef&uuml;gt wurde, wird zuerst die erste &raquo;Wenn&laquo;
+            Bedingung abgefragt und, falls diese nicht erf&uuml;llt ist, wird die zweite &raquo;sonst wenn&laquo; Bedingung gepr&uuml;ft. Auch diese zweite
+            Bedingung ben&ouml;tigt wieder einen logischen Wert als Eingabewert. Nur wenn beide Bedingungen nicht erf&uuml;llt sind, wird der Block
+            ausgef&uuml;hrt, der bei &raquo;sonst&laquo; eingef&uuml;gt wurde.</p>
+        <p style="text-align: left;">Die Bedingungen k&ouml;nnen beliebig durch anklicken des &raquo;+&laquo; Plus-Symbols erweitert und durch das
+            &raquo;-&laquo; Minus-Symbol wieder bis auf eine einzige Bedingung reduziert werden.</p>
+        <p style="text-align: left;">Einstellm&ouml;glichkeiten und Eingabewerte:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-plus">Eine weitere Bedingung am Ende anf&uuml;gen.</li>
+            <li class="typcn typcn-minus">Die letzte Bedingung l&ouml;schen.</li>
+            <li class="typcn typcn-arrow-left">Logischer Wert, &raquo;wahr&laquo; oder &raquo;falsch&laquo;.</li>
+            <li class="typcn typcn-arrow-left">Bl&ouml;cke, die nur dann ausgef&uuml;hrt werden, wenn die zugeh&ouml;rige Bedingung &raquo;wahr&laquo; ist.</li>
+            <li class="typcn typcn-arrow-left">Bl&ouml;cke, die nur dann ausgef&uuml;hrt werden, wenn die zugeh&ouml;rige Bedingung &raquo;falsch&laquo;
+                ist.</li>
+        </ul>
+    </div>
+    <div id="robControls_loopForever" class="help beginner">
+        <h3 style="text-align: left;">&raquo;Wiederhole unendlich oft&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;Wiederhole unendlich oft&laquo; kannst du Bl&ouml;cke endlos von deinem Roboter ausf&uuml;hren
+            lassen. Alle Bl&ouml;cke, die sich im &raquo;Wiederhole unendlich oft&laquo;-Block befinden, werden immer wieder ausgef&uuml;hrt. Die Bl&ouml;cke
+            werden dabei von oben nach unten ausgef&uuml;hrt. Sobald der letzte Block ausgef&uuml;hrt wurde, beginnt das Programm wieder mit dem ersten Block.
+            Deshalb wird dieser Block auch &raquo;Endlosschleife&laquo; genannt.</p>
+        <p style="text-align: left;">Eingaben:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-left">Bl&ouml;cke, die wiederholt ausgef&uuml;hrt werden.</li>
+        </ul>
+    </div>
+    <div id="controls_repeat_ext" class="help beginner">
+        <h3 style="text-align: left;">&raquo;Wiederhole n mal&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;Wiederhole n mal&laquo; kannst du andere Bl&ouml;cke beliebig oft von deinem Roboter
+            ausf&uuml;hren lassen. Alle Bl&ouml;cke, die sich im Block &raquo;Wiederhole n mal&laquo; befinden, werden so oft ausgef&uuml;hrt, wie im
+            Eingabefeld eingestellt ist. Die Bl&ouml;cke werden dabei von oben nach unten ausgef&uuml;hrt. Sobald der letzte Block ausgef&uuml;hrt wurde,
+            beginnt das Programm wieder mit dem ersten Block, bis die eingestellte Wiederholungszahl erreicht ist. Deshalb wird dieser Block auch
+            &raquo;Schleife&laquo; genannt.</p>
+        <div class="aui-message hint shadowed information-macro">
+            <div class="message-content">
+                <p>Nur ganzzahlige Werte k&ouml;nnen eingegeben werden.</p>
+            </div>
+        </div>
+        <p style="text-align: left;">Einstellm&ouml;glichkeiten und Eingabewerte:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-left">Zahl, wie oft die enthaltenen Bl&ouml;cke wiederholt werden sollen.</li>
+            <li class="typcn typcn-arrow-left">Bl&ouml;cke, die wiederholt ausgef&uuml;hrt werden.</li>
+        </ul>
+    </div>
+
+    <div id="controls_whileUntil" class="help expert">
+        <h3 style="text-align: left;">&raquo;Wiederhole solange/bis&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;Wiederhole solange/bis&laquo; kannst du andere Bl&ouml;cke beliebig oft von deinem Roboter
+            ausf&uuml;hren lassen. Alle Bl&ouml;cke, die sich im Block &raquo;Wiederhole solange/bis&laquo; befinden, werden immer wieder ausgef&uuml;hrt,
+            solange bzw. bis die Bedingung im Eingabefeld erf&uuml;llt ist. Die Bl&ouml;cke werden dabei von oben nach unten ausgef&uuml;hrt. Sobald der letzte
+            Block ausgef&uuml;hrt wurde, beginnt das Programm wieder mit dem ersten Block, solange bzw. bis die Bedingung im Eingabefeld erf&uuml;llt ist.
+            Deshalb wird dieser Block auch &raquo;bedingte Schleife&laquo; genannt.</p>
+        <p style="text-align: left;">Einstellm&ouml;glichkeiten und Eingabewerte:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-down">&raquo;solange&laquo; oder &raquo;bis&laquo;, um den Typ der bedingten Wiederholung zu bestimmen.</li>
+            <li class="typcn typcn-arrow-left">Logischer Wert, &raquo;wahr&laquo; oder &raquo;falsch&laquo;.</li>
+            <li class="typcn typcn-arrow-left">Bl&ouml;cke, die wiederholt ausgef&uuml;hrt werden.</li>
+        </ul>
+    </div>
+    <div id="robControls_for" class="help expert">
+        <h3 style="text-align: left;">&raquo;Z&auml;hle von bis&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;Z&auml;hle von bis&laquo; kannst du andere Bl&ouml;cke mehrfach von deinem Roboter ausf&uuml;hren
+            lassen. Alle Bl&ouml;cke, die sich im Block &raquo;Z&auml;hle von bis&laquo; befinden, werden so oft ausgef&uuml;hrt, bis die Z&auml;hlung im
+            Eingabefeld abgearbeitet ist. Die Bl&ouml;cke werden dabei von oben nach unten ausgef&uuml;hrt. Sobald der letzte Block ausgef&uuml;hrt wurde,
+            beginnt das Programm wieder mit dem ersten Block, solange die Z&auml;hlbedingung im Eingabefeld erf&uuml;llt ist, d.h. der Endwert der Z&auml;hlung
+            noch nicht erreicht ist. Die Werte der Z&auml;hlung werden jeweils an die Z&auml;hlvariable gebunden, deren Name frei eingestellt werden kann. Der
+            Wert der Z&auml;hlvariablen kann im den Bl&ouml;cken der Schleife verwendet werden. Der letzte Eingabewert gibt an, in welcher Schrittweite
+            gez&auml;hlt wird.</p>
+        <p style="text-align: left;">Einstellm&ouml;glichkeiten und Eingabewerte:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-pen">Variable, frei w&auml;hlbarer Name f&uuml;r die Z&auml;hlvariable.</li>
+            <li class="typcn typcn-arrow-left">Zahl, Anfangswert der Z&auml;hlschleife.</li>
+            <li class="typcn typcn-arrow-left">Zahl, Endwert der Z&auml;hlschleife.</li>
+            <li class="typcn typcn-arrow-left">Zahl, Schrittweite f&uuml;r die Z&auml;hlschleife.</li>
+            <li class="typcn typcn-arrow-left">Bl&ouml;cke, die wiederholt ausgef&uuml;hrt werden.</li>
+        </ul>
+    </div>
+
+    <div id="controls_flow_statements" class="help expert">
+        <h3 style="text-align: left;">&raquo;Die Schleife abbrechen/mit der n&auml;chsten Iteration der Schleife fortfahren&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;Die Schleife abbrechen/mit der n&auml;chsten Iteration der Schleife fortfahren&laquo; kann eine
+            Schleife vorzeitig beendet bzw. wieder zum Anfang der Schleife gesprungen werden. Sobald dieser Block in einer Reihe von Bl&ouml;cken erscheint,
+            werden alle nachfolgenden Bl&ouml;cke bis zum Ende der Schleife ignoriert.</p>
+        <p style="text-align: left;">Einstellm&ouml;glichkeiten:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-down">Abbruchverhalten, &raquo;Die Schleife abbrechen&laquo; oder &raquo;mit der n&auml;chsten Iteration der
+                Schleife fortfahren&laquo;.</li>
+        </ul>
+    </div>
+    <div id="robControls_wait_time" class="help beginner">
+        <h3 style="text-align: left;">&raquo;Warte&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;Warte&laquo; kannst du dein Programm an der Stelle "anhalten", an der du den Block eingef&uuml;gt
+            hast. Dein Programm bleibt dann f&uuml;r die angegebene Dauer an dieser Stelle stehen. Nach Ablauf der angegebenen Zeit wird dann der nachfolgende
+            Block ausgef&uuml;hrt. Beispielsweise kannst du dadurch einen Text in dem Display deines Roboters exakt f&uuml;r diese Zeit anzeigen lassen.</p>
+        <p style="text-align: left;">Einstellm&ouml;glichkeiten:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-left">Zahl, Wartezeit in Millisekunden.</li>
+        </ul>
+    </div>
+    <div id="robControls_wait_for" class="help beginner">
+        <h3 style="text-align: left;">&raquo;Warte bis&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;Warte bis&laquo; kannst du dein Programm an der Stelle "anhalten", an der du den &raquo;Warte
+            bis&laquo;-Block eingef&uuml;gt hast. Dein Programm wartet dann so lange, bis die Bedingung erf&uuml;llt (wahr) ist. Den &raquo;Warte
+            bis&laquo;-Block kannst du mit dem "+"-Zeichen um zus&auml;tzliche Bedingungen erweitern. Dein Programm wartet dann solange, bis (mindestens) eine
+            der Bedingung deines &raquo;Warte bis&laquo;-Blocks erf&uuml;llt ist.</p>
+        <p style="text-align: left;">Einstelm&ouml;glichkeiten und Eingabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-plus">Eine weitere Wartebedingung am Ende anf&uuml;gen.</li>
+            <li class="typcn typcn-minus">Die letzte Wartebedingung l&ouml;schen.</li>
+            <li class="typcn typcn-arrow-left">Logischer Wert, &raquo;wahr&laquo; oder &raquo;falsch&laquo;.</li>
+        </ul>
+    </div>
+    <h2>Logik</h2>
+    <p style="text-align: left;">Mit den &raquo;Logik&laquo;-Bl&ouml;cken kannst du Bedingungen selbst zusammenf&uuml;gen. Mit diesen Bedingungen kannst du
+        Zust&auml;nde, Werte und Ereignisse zueinander in Beziehung setzen, z.B. Sensorwerte miteinander vergleichen.</p>
+    <p style="text-align: left;">Folgende &raquo;Logik&laquo;-Bl&ouml;cke stehen dir bei NEPO zur Verf&uuml;gung:</p>
+    <ul style="text-align: left;">
+        <li>Vergleiche</li>
+        <li>und/oder</li>
+        <li>nicht (Experten-Block)</li>
+        <li>
+            <p>wahr/falsch</p>
+        </li>
+        <li>null (Experten-Block)</li>
+        <li>teste (Experten-Block)</li>
+    </ul>
+    <div id="logic_compare" class="help beginner">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;Vergleiche&laquo;" style="text-align: left;">&raquo;Vergleiche&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;Vergleiche&laquo; kannst du verschiedene Eingabewerte (Zahl, Farbe, logischer Wert, Text) gleichen
+            Typs miteinander vergleichen. Stimmt der Vergleich wird der logische Wert&nbsp;&raquo;wahr&laquo; zur&uuml;ckgegeben, sonst &raquo;falsch&laquo;.</p>
+        <p style="text-align: left;">Einstellm&ouml;glichkeiten und Eingabewerte:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-left">Linker Eingabewert f&uuml;r den Vergleich.</li>
+            <li class="typcn typcn-arrow-down">Vergleich, w&auml;hle aus, wie verglichen werden soll.</li>
+            <li class="typcn typcn-arrow-left">Rechter Eingabewert f&uuml;r den Vergleich.</li>
+        </ul>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">Logischer Wert, &raquo;wahr&laquo; oder &raquo;falsch&laquo;.</li>
+        </ul>
+    </div>
+    <div id="logic_operation" class="help beginner">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;und/oder&laquo;" style="text-align: left;">&raquo;und/oder&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;und/oder&laquo; kannst du logische Werte zueinander in Beziehung setzen. Der
+            &raquo;und/oder&laquo; Block liefert bei der Einstellung &raquo;und&laquo; nur dann den logischen Wert &raquo;wahr&laquo;, wenn beide Eingabewerte
+            des Blocks gleichzeitig &raquo;wahr&laquo; sind. Bei der Einstellung&nbsp;&raquo;oder&laquo; gen&uuml;gt es, wenn eine der beiden Eingabewerte
+            &raquo;wahr&laquo; ist, damit der &raquo;und/oder&laquo; Block als logischen Wert &raquo;wahr&laquo; liefert.</p>
+        <p style="text-align: left;">Einstellm&ouml;glichkeiten und Eingabewerte:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-left">Logischer Wert f&uuml;r die Verkn&uuml;pfung.</li>
+            <li class="typcn typcn-arrow-down">W&auml;hle die logische Verkn&uuml;pfung.</li>
+            <li class="typcn typcn-arrow-left">Logischer Wert f&uuml;r die Verkn&uuml;pfung.</li>
+        </ul>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">Logischer Wert, &raquo;wahr&laquo; oder &raquo;falsch&laquo;.</li>
+        </ul>
+    </div>
+    <div id="logic_negate" class="help expert">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;nicht&laquo;[Experten-Block]" style="text-align: left;">&raquo;nicht&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;nicht&laquo; kannst du einen logischen Wert umkehren. Der logische Wert ergibt sich aus der
+            logischen Umkehrung des Eingabewertes, aus &raquo;wahr&laquo; wird &raquo;falsch&laquo; und umgekehrt.</p>
+        <p style="text-align: left;">Eingabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-left">Logischer Wert f&uuml;r die Umkehrung.</li>
+        </ul>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">Logischer Wert, Ergebnis der Umkehrung.</li>
+        </ul>
+    </div>
+    <div id="logic_boolean" class="help beginner">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;wahr/falsch&laquo;" style="text-align: left;">&raquo;wahr/falsch&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;wahr/falsch&laquo; kannst du entweder den logischen Wert &raquo;wahr&laquo; oder
+            &raquo;falsch&laquo; an einen anderen Block &uuml;bermitteln.</p>
+        <p style="text-align: left;">&nbsp;Einstellm&ouml;glichkeiten:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-down">Logischer Wert, w&auml;hle den Wert, der ausgegeben werden soll.</li>
+        </ul>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">Logischer Wert.</li>
+        </ul>
+    </div>
+    <div id="logic_null" class="help expert">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;null&laquo;[Experten-Block]" style="text-align: left;">&raquo;null&laquo;</h3>
+        <p style="text-align: left;">Der Block &raquo;null&laquo; ist ein Platzhalter f&uuml;r eine Eingabe, die noch unbestimmt ist. Wenn z.B. eine neue
+            Verbindungsvariable f&uuml;r die Kommunikation erzeugt wird und noch nicht belegt ist, wird der Anfangswert auf &raquo;null&laquo; gesetzt.</p>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">Logischer Wert, &raquo;null&laquo;.</li>
+        </ul>
+    </div>
+    <div id="logic_ternary" class="help expert">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;teste&laquo;[Experten-Block]" style="text-align: left;">&raquo;teste&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;teste&laquo; kannst du einen Test durchf&uuml;hren und je nach Ergebnis unterschiedliche
+            Ergebnisse zur&uuml;ckgeben.</p>
+        <p style="text-align: left;">Eingabewerte:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-left">Logischer Wert f&uuml;r den Test; wenn kein Block angegeben wird, wird "wahr" angenommen.</li>
+            <li class="typcn typcn-arrow-left">Beliebiger Wert, der mit einem Block bestimmt werden kann.</li>
+            <li class="typcn typcn-arrow-left">Beliebiger Wert, der mit einem Block bestimmt werden kann.</li>
+        </ul>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">Wert von beliebigem Typ.</li>
+        </ul>
+    </div>
+    <h2 id="Programmier-Bl&ouml;ckeEV3-Mathematik" style="text-align: left;">Mathematik</h2>
+    <p style="text-align: left;">Mit den &raquo;Mathematik&laquo;-Bl&ouml;cken kannst du rechnen und Werte einstellen.</p>
+    <p style="text-align: left;">Folgende &raquo;Mathematik&laquo;-Bl&ouml;cke stehen dir bei NEPO zur Verf&uuml;gung:</p>
+    <ul style="text-align: left;">
+        <li>Wert</li>
+        <li>
+            <p>Rechnen</p>
+        </li>
+        <li>Mathematische Funktionen (Experten-Block)</li>
+        <li>Trigonometrische Funktionen (Experten-Block)</li>
+        <li>Konstanten (Experten-Block)</li>
+        <li>Zahleneigenschaft (Experten-Block)</li>
+        <li>Erh&ouml;he um x (Experten-Block)</li>
+        <li>runden (Experten-Block)</li>
+        <li>Liste auswerten (Experten-Block)</li>
+        <li>Rest von (Experten-Block)</li>
+        <li>Begrenze (Experten-Block)</li>
+        <li>Ganzzahlige Zufallswerte (Experten-Block)</li>
+        <li>Zufallszahl (Experten-Block)</li>
+    </ul>
+    <div id="math_number" class="help beginner">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;Wert&laquo;" style="text-align: left;">&raquo;Wert&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;Wert&laquo; kannst du Zahlen an einen anderen Block &uuml;bermitteln.</p>
+        <p style="text-align: left;">&nbsp;Eingabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-pen">Zahl</li>
+        </ul>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">&nbsp;Zahl</li>
+        </ul>
+    </div>
+    <div id="math_arithmetic" class="help beginner">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;Rechnen&laquo;" style="text-align: left;">&raquo;Rechnen&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;Rechnen&laquo; kannst du Zahlen addieren, subtrahieren, multiplizieren, dividieren oder
+            potenzieren. Dieser Block ist nur in Verbindung mit einem anderen Block nutzbar, der ein Zahl als Eingabewert ben&ouml;tigt.</p>
+        <p style="text-align: left;">&nbsp;Einstellm&ouml;glichkeiten und Eingabewerte:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-left">&nbsp;Zahl</li>
+            <li class="typcn typcn-arrow-down">&nbsp;Berechnung, w&auml;hle einen Operator aus.</li>
+            <li class="typcn typcn-arrow-left">Zahl</li>
+        </ul>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">&nbsp;Zahl, das Ergebnis der Berechnung.</li>
+        </ul>
+    </div>
+    <div id="math_single" class="help expert">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;MathematischeFunktionen&laquo;[Experten-Block]" style="text-align: left;">&raquo;Mathematische
+            Funktionen&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;Mathematische Funktionen&laquo; k&ouml;nnen einige elementare mathematische Funktionen berechnet
+            werden.</p>
+        <p style="text-align: left;">Einstellm&ouml;glichkeiten und Eingabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-down">Mathematische Funktion, Quadratwurzel, Absolutwert, Invertieren, ln (nat&uuml;rlicher Logarithmus), log10
+                (dekadischer Logarithmus), e^ (Exponentialfunktion) 10^ (Zehner-Exponent)</li>
+            <li class="typcn typcn-arrow-left">Zahl, auf die die mathematische Funktion angewandt wird.</li>
+        </ul>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">&nbsp;Zahl, das Ergebnis der Funktion.</li>
+        </ul>
+    </div>
+    <div id="math_trig" class="help expert">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;TrigonometrischeFunktionen&laquo;[Experten-Block]" style="text-align: left;">&raquo;Trigonometrische
+            Funktionen&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;Trigonometrische Funktionen&laquo; k&ouml;nnen Sinus, Cosinus, Tangens und die zugeh&ouml;rigen
+            Umkehrfunktionen berechnet werden. Die Eingabewerte werden im Bogenma&szlig; erwartet (siehe Hinweis oben).</p>
+        <p style="text-align: left;">Einstellm&ouml;glichkeiten und Eingabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-down">Trigonometrische Funktion, w&auml;hle eine Funktion aus.</li>
+            <li class="typcn typcn-arrow-left">Zahl, im Bogenma&szlig;</li>
+        </ul>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">&nbsp;Zahl, das Ergebnis der trigonometrischen Berechnung.</li>
+        </ul>
+    </div>
+    <div id="math_constant" class="help expert">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;Konstanten&laquo;[Experten-Block]" style="text-align: left;">&raquo;Konstanten&laquo;</h3>
+        <p style="text-align: left;">Der Block &raquo;Konstanten&laquo; stellt einige mathematische Konstanten bereit. &raquo;&pi;&laquo; (3,1415...),
+            &raquo;e&laquo; (2,718...), &raquo;&phi;&laquo; (1,618...), &raquo;sqrt(2)&laquo; (1,414...), &raquo;sqrt(&frac12;)&laquo; (0,7071...),
+            &raquo;&infin;&laquo;.</p>
+        <p style="text-align: left;">Einstellm&ouml;glichkeiten:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-down">Mathematische Konstanten, w&auml;hle eine Konstante aus.</li>
+        </ul>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">&nbsp;Zahl, Wert der mathematischen Konstante. Der Wert von Unendlich ist &raquo;infinity&laquo;.</li>
+        </ul>
+    </div>
+    <div id="math_number_property" class="help expert">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;Zahleneigenschaft&laquo;[Experten-Block]" style="text-align: left;">&raquo;Zahleneigenschaft&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;Zahleneigenschaft&laquo; wird gepr&uuml;ft, ob eine eingegebene Zahl eine bestimmte Eigenschaft
+            aufweist. &raquo;gerade&laquo;, &raquo;ungerade&laquo;, &raquo;ist Primzahl&laquo;, &raquo;ganze Zahl&laquo;, &raquo;positiv&laquo;,
+            &raquo;negativ&laquo;, &raquo;teilbar durch&laquo;.</p>
+        <p style="text-align: left;">Einstellm&ouml;glichkeiten und Eingabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-left">Zahl, die mit einem Block gepr&uuml;ft wird.</li>
+            <li class="typcn typcn-arrow-down">Zahleneigenschaft, w&auml;hle, was gepr&uuml;ft werden soll.</li>
+            <li class="typcn typcn-arrow-left">Zahl; ein zweiter Eingabewert ist nur bei der Wahl von &raquo;ist teilbar durch&laquo; erforderlich.</li>
+        </ul>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">Logischer Wert, &raquo;wahr&laquo; oder &raquo;falsch&laquo;, je nachdem, ob die gepr&uuml;fte Zahl die
+                untersuchte Eigenschaft hat.</li>
+        </ul>
+    </div>
+    <div id="robMath_change" class="help expert">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;Erh&ouml;heumx&laquo;[Experten-Block]" style="text-align: left;">&raquo;Erh&ouml;he um x&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;Erh&ouml;he um x&laquo; wird der Wert einer numerischen Variable um einen Betrag erh&ouml;ht.</p>
+        <p style="text-align: left;">Eingabewerte:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-down">Variable, deren Wert ver&auml;ndert werden soll.</li>
+            <li class="typcn typcn-arrow-left">Zahl.</li>
+        </ul>
+    </div>
+    <div id="math_round" class="help expert">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;runden&laquo;[Experten-Block]" style="text-align: left;">&raquo;runden&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;runden&laquo; k&ouml;nnen Werte gerundet werden. Beim Runden werden die Nachkommastellen auf 0
+            gesetzt. Es wird je nach Gr&ouml;&szlig;e der Nachkommastellen automatisch auf- oder abgerundet. Man kann jedoch auch einstellen, dass stets auf-
+            bzw. stets abgerundet werden soll.</p>
+        <p style="text-align: left;">Einstellm&ouml;glichkeiten und Eingabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-down">Art der Rundung, w&auml;hle, wie gerundet werden soll.</li>
+            <li class="typcn typcn-arrow-left">Zahl</li>
+        </ul>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">Zahl, gerundete Ganzzahl</li>
+        </ul>
+    </div>
+    <div id="math_on_list" class="help expert">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;Listeauswerten&laquo;[Experten-Block]" style="text-align: left;">&raquo;Liste auswerten&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;Liste auswerten&laquo; k&ouml;nnen verschiedene Analysen einer Liste vorgenommen werden:</p>
+        <ul style="text-align: left;">
+            <li>Summe - alle Werte der Liste werden zusammengez&auml;hlt</li>
+            <li>Minimalwert - der kleinste Wert der Liste wird ausgegeben</li>
+            <li>Maximalwert - der gr&ouml;&szlig;te Wert der Liste wird ausgegeben</li>
+            <li>Mittelwert - aus den Werten der Liste wird der Mittelwert bestimmt</li>
+            <li>Median - der Median (Zentralwert) einer Liste wird ausgegeben</li>
+            <li>Standardabweichung - die Standardabweichung (Varianz) der Listenwerte wird ausgegeben</li>
+            <li>Zufallswert - einer der Listenwerte wird per Zufall gew&auml;hlt und ausgegeben</li>
+        </ul>
+        <p style="text-align: left;">Einstellm&ouml;glichkeiten und Eingabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-down">Art der Listenauswertung</li>
+            <li class="typcn typcn-arrow-left">Liste mit Zahlen</li>
+        </ul>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">Zahl, Ergebnis der eingestellten Listenauswertung.</li>
+        </ul>
+    </div>
+    <div id="math_modulo" class="help expert">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;Restvon&laquo;[Experten-Block]" style="text-align: left;">&raquo;Rest von&laquo;</h3>
+        <p style="text-align: left;">Der Block &raquo;Rest von&laquo; f&uuml;hrt eine Division durch und liefert den Rest der Division, der nicht mehr durch
+            den Divisor geteilt werden konnte.</p>
+        <p style="text-align: left;">Eingabewerte:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-left">Zahl, die geteilt wird (Dividend)</li>
+            <li class="typcn typcn-arrow-left">Zahl, durch die geteilt wird (Divisor bzw. Teiler)</li>
+        </ul>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">Zahl, Rest der Division</li>
+        </ul>
+    </div>
+    <div id="math_constrain" class="help expert">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;Begrenze&laquo;[Experten-Block]" style="text-align: left;">&raquo;Begrenze&laquo;</h3>
+        <p style="text-align: left;">Der Block &raquo;Begrenze&laquo; sorgt daf&uuml;r, dass Grenzwerte nicht &uuml;berschritten werden. Er erfordert drei
+            Eingabewerte:</p>
+        <ol style="text-align: left;">
+            <li>zu pr&uuml;fender Wert</li>
+            <li>untere Grenze</li>
+            <li>obere Grenze</li>
+        </ol>
+        <p style="text-align: left;">Der R&uuml;ckgabewert ist</p>
+        <ul style="text-align: left;">
+            <li>der zu pr&uuml;fende Wert, wenn gilt: untere Grenze &le; zu pr&uuml;fender Wert &le; obere Grenze</li>
+            <li>untere Grenze, wenn zu pr&uuml;fender Wert&lt; untere Grenze</li>
+            <li>obere Grenze, wenn zu pr&uuml;fender Wert &gt;obere Grenze</li>
+        </ul>
+        <p style="text-align: left;">Eingabewerte:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-left">Zahl, die begrenzt wird.</li>
+            <li class="typcn typcn-arrow-left">Zahl, untere Grenze.</li>
+            <li class="typcn typcn-arrow-left">Zahl, obere Grenze.</li>
+        </ul>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">Zahl, die innerhalb der eingestellten Grenzen liegt.</li>
+        </ul>
+    </div>
+    <div id="math_random_int" class="help expert">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;GanzzahligeZufallswerte&laquo;[Experten-Block]" style="text-align: left;">&raquo;Ganzzahlige
+            Zufallswerte&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;Ganzzahlige Zufallswerte&laquo; k&ouml;nnen ganzzahlige Zufallswerte innerhalb selbst
+            gew&auml;hlter Grenzen erzeugt werden.</p>
+        <p style="text-align: left;">Eingabewerte:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-left">Zahl, untere Grenze</li>
+            <li class="typcn typcn-arrow-left">Zahl, obere Grenze</li>
+        </ul>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">Zahl, eine ganzzahlige Zufallszahl, die innerhalb der eingestellten Grenzen liegt</li>
+        </ul>
+    </div>
+    <div id="math_random_float" class="help expert">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;Zufallszahl&laquo;[Experten-Block]" style="text-align: left;">&raquo;Zufallszahl&laquo;</h3>
+        <p style="text-align: left;">Mit dem Block &raquo;Zufallszahl&laquo; wird eine Zufallszahl zwischen 0,0 und 1,0 bestimmt.</p>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">Zahl, eine positive Zufallszahl kleiner oder gleich 1.</li>
+        </ul>
+    </div>
+    <h2 id="Programmier-Bl&ouml;ckeEV3-Text" style="text-align: left;">Text</h2>
+    <p style="text-align: left;">Mit den &raquo;Text&laquo;-Bl&ouml;cken k&ouml;nnen einfache Operationen mit Texten durchgef&uuml;hrt werden.</p>
+    <p style="text-align: left;">Folgende &raquo;Text&laquo;-Bl&ouml;cke stehen dir bei NEPO zur Verf&uuml;gung:</p>
+    <ul style="text-align: left;">
+        <li>Text</li>
+        <li>Erstelle Text (Experten-Block)</li>
+        <li>Text anh&auml;ngen (Experten-Block)</li>
+    </ul>
+    <div id="text" class="help beginner">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;Text&laquo;" style="text-align: left;">&raquo;Text&laquo;</h3>
+        <p style="text-align: left;">Mit dem einfachen &raquo;Text&laquo;-Block wird ein St&uuml;ck Text bereitgestellt.</p>
+        <p style="text-align: left;">Eingabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-pen">Zeichenkette, bestehend aus beliebigen Zeichen</li>
+        </ul>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">Text, bestehend aus beliebigen Zeichen</li>
+        </ul>
+    </div>
+    <div id="robText_join" class="help expert">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;ErstelleText&laquo;[Experten-Block]" style="text-align: left;">&raquo;Erstelle Text&laquo;</h3>
+        <p style="text-align: left;">Mit dem &raquo;Erstelle Text&laquo;-Block wird ein St&uuml;ck Text aus verschiedenen Eingabewerten zusammengesetzt. Mit
+            dem +-Zeichen k&ouml;nnen weitere Eingabem&ouml;glichkeiten geschaffen werden. Alle Eingaben werden zu einer kontinuierlichen Zeichenkette
+            zusammengef&uuml;gt.&nbsp;</p>
+        <p style="text-align: left;">Eingabewerte:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-plus">Weitere Eingabem&ouml;glichkeiten bereitstellen.</li>
+            <li class="typcn typcn-minus">Letzte Eingabem&ouml;glichkeit entfernen (bei mehr als 2 Eingabem&ouml;glichkeiten).</li>
+            <li class="typcn typcn-arrow-left">Beliebiger Wert, Zahl, Text, logischer Wert, Farbe.</li>
+        </ul>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">Zeichenkette, bestehend aus beliebigen Zeichen.</li>
+        </ul>
+    </div>
+    <div id="robText_append" class="help expert">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;Textanh&auml;ngen&laquo;[Experten-Block]" style="text-align: left;">&raquo;Text anh&auml;ngen&laquo;</h3>
+        <p style="text-align: left;">Mit dem &raquo;Text anh&auml;ngen&laquo;-Block k&ouml;nnen Zeichenketten erweitert werden, z.B. indem an empfangene
+            Nachrichten eine Signatur angeh&auml;ngt wird.</p>
+        <p style="text-align: left;">Eingabem&ouml;glichkeiten:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-left">Text, Zeichenkette, an die Text angeh&auml;ngt werden soll</li>
+            <li class="typcn typcn-arrow-left">Text, Zeichenkette, die an einen Text angeh&auml;ngt werden soll</li>
+        </ul>
+    </div>
+    <h2 id="Programmier-Bl&ouml;ckeEV3-Variablen" style="text-align: left;">Variablen</h2>
+    <p style="text-align: left;">Mit den &raquo;Variablen&laquo;-Bl&ouml;cken k&ouml;nnen globale Variablen mit unterschiedlichen Wertetypen angelegt
+        werden. In diesen globalen Variablen k&ouml;nnen Werte abgespeichert werden, die an einer beliebigen Stelle im Programm verwendet werden k&ouml;nnen.
+        Jede Variable muss, bevor sie verwendet werden kann, angelegt werden. Dies erfolgt durch einen Klick auf das &raquo;+&laquo;-Zeichen im Block
+        &raquo;Start&laquo;. Einer Variablen muss ein Name und ein Werttyp zugewiesen werden. Durch einen erneuten Klick auf das &raquo;+&laquo;-Zeichen
+        k&ouml;nnen beliebig viele weitere Variablen angelegt werden.</p>
+    <p style="text-align: left;">Der Name einer Variablen kann im Programm nur einmal vergeben werden.</p>
+    <p style="text-align: left;">Einstellm&ouml;glichkeiten:</p>
+    <ul style="margin-top: 0; margin-bottom: 10px;">
+        <li class="typcn typcn-plus">F&uuml;ge eine neue Variable am Ende ein.</li>
+        <li class="typcn typcn-minus">L&ouml;sche diese Variable.</li>
+        <li class="typcn typcn-pen">Variablenname, Sonderzeichen und Leerzeichen sind nicht zugelassen.</li>
+        <li class="typcn typcn-arrow-down">Variablentyp, w&auml;hle den Typ deiner Variablen.</li>
+        <li class="typcn typcn-arrow-left">Anfangswert der Variablen.</li>
+    </ul>
+    <p style="text-align: left;">Folgende &raquo;Variablen&laquo;-Bl&ouml;cke stehen dir bei NEPO zur Verf&uuml;gung:</p>
+    <ul style="text-align: left;">
+        <li>Schreibe Variable</li>
+        <li>
+            <p>Lies Variable</p>
+        </li>
+    </ul>
+    <div id="variables_set" class="help beginner">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;SchreibeVariable&laquo;">&raquo;Schreibe Variable&laquo;</h3>
+        <p>Mit dem Block &raquo;Schreibe Variable&laquo; kannst du den Wert einer Variablen ver&auml;ndern. Je nach Typ der Variablen&nbsp;(Zahl,
+            Zeichenkette, logischer Wert, Liste, Farbe, Verbindung) kann der Variablen ein passender Wert &uuml;bergeben werden.</p>
+        <p>Einstellm&ouml;glichkeit und Eingabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-down">Variable, deren Wert ver&auml;ndert werden soll.</li>
+            <li class="typcn typcn-arrow-left">Wert, auf den die Variable gesetzt werden soll.</li>
+        </ul>
+    </div>
+    <div id="variables_get" class="help beginner">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-&raquo;LiesVariable&laquo;">&raquo;Lies Variable&laquo;</h3>
+        <p>Mit dem Block &raquo;lies Variable&laquo; kannst du den Wert einer Variablen an einen anderen Block &uuml;bergeben. Der Typ des Ausgabewertes
+            entspricht immer dem Typ, mit dem die Variablen im Block &raquo;Start&laquo;&nbsp;initialisiert wurde.</p>
+        <p>Einstellm&ouml;glichkeit:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-down">Variable, deren Wert gelesen werden soll.</li>
+        </ul>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">Wert, der in der Variablen gespeichert ist.</li>
+        </ul>
+    </div>
+    <h2 id="Programmier-Bl&ouml;ckeEV3-Funktionen[Experten-Bl&ouml;cke]">Funktionen</h2>
+    <p>Mit den Bl&ouml;cken der Kategorie &raquo;Funktion&laquo; (in Java auch Methode oder Teilprogramm genannt) kannst du dein Programm
+        &uuml;bersichtlicher gestalten. NEPO bietet verschiedene Funktionsbl&ouml;cke an:</p>
+    <ul>
+        <li>Funktionsblock ohne/mit Eingabe- und ohne R&uuml;ckgabewert</li>
+        <li>Funktionsblock ohne/mit Eingabe- und mit R&uuml;ckgabewert</li>
+        <li>Wenn-Abfrage innerhalb einer Funktion</li>
+    </ul>
+    <p>Mit elementaren Funktionsbl&ouml;cken lassen sich einfache und komplexe Funktionen programmieren, die &uuml;ber Funktionsaufrufe genutzt werden
+        k&ouml;nnen. Jede programmierte Funktion steht sofort als zus&auml;tzlich nutzbarer Block in der Kategorie &raquo;Funktion&laquo; zur Verf&uuml;gung.
+        Dies sind</p>
+    <ul>
+        <li>Funktionsaufrufe ohne/mit Eingabe- und ohne R&uuml;ckgabewert</li>
+        <li>Funktionsaufrufe ohne/mit Eingabe- und mit R&uuml;ckgabewert</li>
+    </ul>
+    <p>Je nach Anzahl der Eingabe- und R&uuml;ckgabewerte variiert die Auswahl an Funktionsbl&ouml;cken.</p>
+    <p>Jede Funktionen in NEPO erh&auml;lt automatisch einen eindeutigen Namen (macheEtwas1, macheEtwas2, ...). Dieser Name kann frei ver&auml;ndert werden.
+        Ein &Uuml;berschreiben einer einmal definierten Funktion ist nicht m&ouml;glich.</p>
+    <div id="robProcedures_defnoreturn" class="help expert">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-Funktionsblockohne/mitEingabe-undohneR&uuml;ckgabewert[Experten-Block]">Funktionsblock ohne/mit Eingabe- und
+            ohne R&uuml;ckgabewert</h3>
+        <p>In einem Funktionsblock ohne/mit Eingabe- und R&uuml;ckgabewert wird eine Folge von Anweisungen zusammengefasst. Die Eingabewerte werden durch
+            die lokalen Variablen im Funktionsblock festgelegt. Mit dem &raquo;+&laquo;-Zeichen k&ouml;nnen lokale Variablen als Eingabewerte f&uuml;r den
+            Funktionsblock erzeugt werden. Lokale Variablen werden nicht initialisiert.</p>
+        <p>Falls in einen Funktionsblock eine Wenn-Abfrage (siehe unten) eingebaut wird, kann es zu einem vorzeitigen Abbruch der Funktion kommen.</p>
+        <p>Der Funktionsblock steht nach seiner Definition als zus&auml;tzlicher Block in der Kategorie &raquo;Funktion&laquo; zur Verf&uuml;gung. Auf diese
+            Weise kann die Lesbarkeit komplexer Programme wesentlich vereinfacht werden.</p>
+        <p>Einstellm&ouml;glichkeiten:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-pen">Funktionsname, ohne Leer- und Sonderzeichen</li>
+            <li class="typcn typcn-plus">Erzeuge eine lokale Variable, der &uuml;ber den Funktionsaufruf ein Wert zugewiesen wird.</li>
+            <li class="typcn typcn-minus">L&ouml;sche eine lokale Variable.</li>
+        </ul>
+    </div>
+    <div id="robProcedures_defreturn" class="help expert">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-Funktionsblockohne/mitEingabe-undmitR&uuml;ckgabewerten[Experten-Block]">Funktionsblock ohne/mit Eingabe- und
+            mit R&uuml;ckgabewerten</h3>
+        <p>In einem Funktionsblock ohne/mit Eingabe- und mit R&uuml;ckgabewert wird eine Folge von Anweisungen zusammengefasst. Mit dem
+            &raquo;+&laquo;-Zeichen k&ouml;nnen lokale Variablen als Eingabewerte f&uuml;r den Funktionsblock erzeugt werden. Nachdem alle Anweisungen
+            durchlaufen wurden, wird abschlie&szlig;end ein Wert als Funktionswert zur&uuml;ckgegeben.</p>
+        <p>Falls in einen Funktionsblock eine Wenn-Abfrage eingebaut wird, kann es zu einem vorzeitigen Abbruch der Funktion kommen, und es kann ein
+            alternativer Funktionswert zur&uuml;ckgegeben werden.</p>
+        <p>Der Funktionsblock steht nach seiner Definition als zus&auml;tzlicher Block in der Kategorie &raquo;Funktion&laquo; zur Verf&uuml;gung. Auf diese
+            Weise kann die Lesbarkeit komplexer Programme wesentlich vereinfacht werden.</p>
+        <p>Einstellm&ouml;glichkeiten:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-pen">Funktionsname, ohne Leer- und Sonderzeichen</li>
+            <li class="typcn typcn-plus">Erzeuge eine lokale Variable, der &uuml;ber den Funktionsaufruf ein Wert zugewiesen wird.</li>
+            <li class="typcn typcn-minus">L&ouml;sche eine lokale Variable.</li>
+            <li class="typcn typcn-arrow-down">Datentyp f&uuml;r den R&uuml;ckgabewert. &raquo;Zahl&laquo;, &raquo;logischer Wert&laquo;,
+                &raquo;Zeichenkette&laquo;, &raquo;Farbe&laquo;, &raquo;Verbindung&laquo;, &raquo;Liste Zahl&laquo;, &raquo;Liste logischer Wert&laquo;,
+                &raquo;Liste Zeichenkette&laquo;, &raquo;Liste Verbindung&laquo;.</li>
+            <li class="typcn typcn-arrow-left">Wert, der dem eingestellten Datentyp des R&uuml;ckgabewertes entspricht.</li>
+        </ul>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">Wert, der im R&uuml;ckgabeblock berechnet wurde.</li>
+        </ul>
+    </div>
+    <div id="robProcedures_ifreturn" class="help expert">
+        <h3 id="Programmier-Bl&ouml;ckeEV3-Wenn-AbfrageinnerhalbeinerFunktion[Experten-Block]">Wenn-Abfrage innerhalb einer Funktion</h3>
+        <p>Die Wenn-Abfrage innerhalb einer Funktion ist von besonderer Bedeutung. Sobald der Funktionsablauf auf eine Wenn-Abfrage trifft, wird die
+            G&uuml;ltigkeit der Bedingung gepr&uuml;ft.</p>
+        <h4 id="Programmier-Bl&ouml;ckeEV3-Wenn-AbfrageinnerhalbeinerFunktionmitR&uuml;ckgabewert:">Wenn-Abfrage innerhalb einer Funktion mit
+            R&uuml;ckgabewert:</h4>
+        <ul>
+            <li>Wenn die Bedingung erf&uuml;llt ist, wird der weitere Funktionsablauf ignoriert und die Funktion wird beendet. Der zweite &uuml;bergebene
+                Wert wird als Funktionswert zur&uuml;ckgegeben. Ein eventuell mit der Funktion definierter R&uuml;ckgabewert wird nicht weiter
+                ber&uuml;cksichtig. Der R&uuml;ckgabewert-Typ wird durch den Typ des R&uuml;ckgabewerts der umgebenden Funktion festgelegt.</li>
+            <li>Wenn die Bedingung nicht erf&uuml;llt ist, wird der Funktionsablauf fortgesetzt. Ein eventuell mit der Funktion definierter
+                R&uuml;ckgabewert wird als Funktionswert zur&uuml;ckgegeben, wenn der Funktionsablauf das Funktionsende erreicht.</li>
+        </ul>
+        <h4 id="Programmier-Bl&ouml;ckeEV3-Wenn-AbfrageinnerhalbeinerFunktionohneR&uuml;ckgabewert:">Wenn-Abfrage innerhalb einer Funktion ohne
+            R&uuml;ckgabewert:</h4>
+        <ul>
+            <li>Eine Wenn-Abfrage innerhalb einer Funktion ohne R&uuml;ckgabewert hat nur die Bedingung als Eingabewert.</li>
+            <li>Wenn die Bedingung erf&uuml;llt ist, wird der weitere Funktionsablauf ignoriert und die Funktion wird beendet.</li>
+            <li>Wenn die Bedingung nicht erf&uuml;llt ist, wird der Funktionsablauf fortgesetzt.</li>
+        </ul>
+        <p>Einstellgabewerte:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-left">Logischer Wert, der aus einer Bedingung bestimmt wird.</li>
+            <li class="typcn typcn-arrow-left">Wert, dessen Typ am Ende des Funktionsblock eingestellt ist.</li>
+        </ul>
+        <p>R&uuml;ckgabewert:</p>
+        <ul style="margin-top: 0; margin-bottom: 10px;">
+            <li class="typcn typcn-arrow-right">Wert, dessen Typ am Ende des Funktionsblock eingestellt ist.</li>
+        </ul>
+    </div>
+</div>
