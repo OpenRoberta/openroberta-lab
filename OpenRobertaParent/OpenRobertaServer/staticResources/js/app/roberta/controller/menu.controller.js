@@ -95,7 +95,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             var robotName = robots[i].name;
             var robotGroup = robots[i].group;
             clone.find('.typcn').addClass('typcn-' + robotGroup);
-            clone.find('.typcn').text(robots[i].realName);
+            clone.find('.typcn').html(robots[i].realName);
             clone.find('.typcn').attr('id', 'menu-' + robotName);
             clone.attr('data-type', robotName);
             clone.addClass(robotName);
@@ -149,7 +149,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                     clone.attr('data-type', robotRName);
                     clone.find('span:eq( 0 )').removeClass('typcn-open');
                     clone.find('span:eq( 0 )').addClass('typcn-' + robotName);
-                    clone.find('span:eq( 1 )').text(GUISTATE_C.getMenuRobotRealName(robotRName));
+                    clone.find('span:eq( 1 )').html(GUISTATE_C.getMenuRobotRealName(robotRName));
                     addInfoLink(clone, robotName);
                     if (!GUISTATE_C.getIsRobotBeta(robotRName)) {
                         clone.find('img.img-beta').css('visibility', 'hidden');
@@ -160,7 +160,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                     var robotGroup = key;
                     var clone = proto.clone().prop('id', 'menu-' + robotGroup);
                     clone.attr('data-type', robotGroup);
-                    clone.find('span:eq( 1 )').text(robotGroup.charAt(0).toUpperCase() + robotGroup.slice(1)); // we have no real name for group
+                    clone.find('span:eq( 1 )').html(robotGroup.charAt(0).toUpperCase() + robotGroup.slice(1)); // we have no real name for group
                     clone.find('span:eq( 0 )').removeClass('typcn-open');
                     clone.find('span:eq( 0 )').addClass('typcn-' + robotGroup); // so we just capitalize the first letter + add typicon
                     clone.find('img.img-beta').css('visibility', 'hidden'); // groups do not have 'beta' labels
@@ -180,7 +180,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                         clone.attr('data-type', robotName);
                         clone.find('span:eq( 0 )').removeClass('typcn-open');
                         clone.find('span:eq( 0 )').addClass('img-' + robotName); // there are no typicons for robots
-                        clone.find('span:eq( 1 )').text(GUISTATE_C.getMenuRobotRealName(robotName)); // instead we use images
+                        clone.find('span:eq( 1 )').html(GUISTATE_C.getMenuRobotRealName(robotName)); // instead we use images
                         clone.attr('data-type', robotName);
                         $("#popup-robot-subgroup").append(clone);
                     }

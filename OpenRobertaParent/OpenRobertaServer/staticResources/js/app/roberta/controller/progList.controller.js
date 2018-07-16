@@ -99,7 +99,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
             return false;
         }, "refresh program list clicked");
 
-        $('#programNameTable').onWrap('dbl-click-row.bs.table', function($element, row) {
+        $('#programNameTable').onWrap('click-row.bs.table', function($element, row) {
             loadFromListing(row);
         }, "Load program from listing double clicked");
 
