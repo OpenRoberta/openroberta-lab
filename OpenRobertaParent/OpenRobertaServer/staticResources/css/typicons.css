@@ -465,7 +465,7 @@
 .typcn-power:before {
   content: "\e994";
 }
-.typcn-vorwerk3:before {
+.typcn-vorwerk:before {
   content: "\e995";
 }
 .typcn-point-of-interest:before {
@@ -666,7 +666,7 @@
 .typcn-info-large-outline:before {
   content: "\e9d7";
 }
-.typcn-infinity:before {
+.typcn-arduino:before {
   content: "\e9d8";
 }
 .typcn-infinity-outline:before {
