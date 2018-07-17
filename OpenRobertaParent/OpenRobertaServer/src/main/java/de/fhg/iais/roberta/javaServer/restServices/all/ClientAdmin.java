@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response;
 import de.fhg.iais.roberta.util.*;
 import de.fhg.iais.roberta.util.Statistics;
 import eu.bitwalker.useragentutils.UserAgent;
+
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
@@ -77,11 +78,7 @@ public class ClientAdmin {
                     userAgentString = userAgentList.get(0);
                 }
                 UserAgent userAgent = UserAgent.parseUserAgentString(userAgentString);
-                Statistics.info("Initialization",
-                    "Browser", userAgent.getBrowser() + "/" + userAgent.getBrowserVersion(),
-                    "OS", userAgent.getOperatingSystem().getName(),
-                    "DeviceType", userAgent.getOperatingSystem().getDeviceType().getName(),
-                    "ScreenSize", request.getString("screenSize"));
+                Statistics.infoUserAgent("Initialization",userAgent, request);
 
                 JSONObject server = new JSONObject();
                 server.put("defaultRobot", robertaProperties.getDefaultRobot());
