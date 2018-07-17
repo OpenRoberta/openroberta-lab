@@ -135,7 +135,7 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
     @Override
     public V visitStringConst(StringConst<V> stringConst) {
         JSONObject o = mk(C.EXPR).put(C.EXPR, stringConst.getKind().getName());
-        o.put(C.VALUE, StringEscapeUtils.escapeEcmaScript(stringConst.getValue().replaceAll("[<>\\$]", "")));
+        o.put(C.VALUE,stringConst.getValue().replaceAll("[<>\\$]", ""));
         return app(o);
     }
 
