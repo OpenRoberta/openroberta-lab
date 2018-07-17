@@ -59,20 +59,24 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
 
         $('#tabConfiguration').onWrap('shown.bs.tab', function(e) {
             bricklyWorkspace.markFocused();
-            bricklyWorkspace.setVisible(true);
+            if (GUISTATE_C.isConfigurationUsed()) {
+                bricklyWorkspace.setVisible(true);
+            } else {
+                bricklyWorkspace.setVisible(false);
+            }
             if (!seen) {
                 reloadConf();
             }
         }, 'tabConfiguration clicked');
-        
+
         $('#tabConfiguration').on('hide.bs.tab', function(e) {
             Blockly.hideChaff(false);
         });
 
         $('#tabConfiguration').on('hide.bs.tab', function(e) {
-           Blockly.hideChaff();
+            Blockly.hideChaff();
         });
-        
+
         $('#tabConfiguration').on('hidden.bs.tab', function(e) {
             var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
             var xml = Blockly.Xml.domToText(dom);
@@ -334,7 +338,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
         Blockly.svgResize(bricklyWorkspace);
         var dom = Blockly.Xml.textToDom(xml, bricklyWorkspace);
         Blockly.Xml.domToWorkspace(dom, bricklyWorkspace);
-        var name = xml == GUISTATE_C.getConfigurationConf()?GUISTATE_C.getRobotGroup().toUpperCase() + "basis" : '';
+        var name = xml == GUISTATE_C.getConfigurationConf() ? GUISTATE_C.getRobotGroup().toUpperCase() + "basis" : '';
         GUISTATE_C.setConfigurationName(name);
         GUISTATE_C.setConfigurationSaved(true);
         $('#tabConfigurationName').html(name);
@@ -345,6 +349,11 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
             seen = true;
         } else {
             seen = false;
+        }
+        if (GUISTATE_C.isConfigurationUsed()) {
+            bricklyWorkspace.setVisible(true);
+        } else {
+            bricklyWorkspace.setVisible(false);
         }
     }
     exports.configurationToBricklyWorkspace = configurationToBricklyWorkspace;
