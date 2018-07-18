@@ -155,7 +155,7 @@ public abstract class EV3AbstractFactory extends AbstractRobotFactory {
 
     @Override
     public Boolean hasConfiguration() {
-        return this.ev3Properties.getProperty("robot.configuration") != null ? false : true;
+        return Boolean.parseBoolean(this.ev3Properties.getProperty("robot.configuration"));
     }
 
     @Override

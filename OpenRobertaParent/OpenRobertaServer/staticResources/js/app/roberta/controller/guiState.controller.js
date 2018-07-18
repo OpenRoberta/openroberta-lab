@@ -26,6 +26,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             GUISTATE.gui.startWithoutPopup = false;
 
             GUISTATE.gui.robot = GUISTATE.gui.cookie || GUISTATE.server.defaultRobot;
+            GUISTATE.gui.defaultRobot = GUISTATE.server.defaultRobot;
 
             GUISTATE.user.id = -1;
             GUISTATE.user.accountName = '';
@@ -792,15 +793,15 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
     }
     exports.getConfToolbox = getConfToolbox;
 
-    function getGuiRobot() {
-        return GUISTATE.gui.robot;
+    function getDefaultRobot() {
+        return GUISTATE.gui.defaultRobot;
     }
-    exports.getGuiRobot = getGuiRobot;
+    exports.getDefaultRobot = getDefaultRobot;
 
-    function setGuiRobot(robot) {
-        GUISTATE.gui.robot = robot;
+    function setDefaultRobot(robot) {
+        GUISTATE.gui.defaultRobot = robot;
     }
-    exports.setGuiRobot = getGuiRobot;
+    exports.setDefaultRobot = setDefaultRobot;
 
     function getRobotFWName() {
         return GUISTATE.robot.fWName;

@@ -18,7 +18,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             runOnBrick();
             return false;
         });
-        if (GUISTATE_C.getConnection() != 'auto') {
+        if (GUISTATE_C.getConnection() != 'autoConnection') {
             blocklyWorkspace.robControls.disable('runOnBrick');
         }
     }
@@ -110,7 +110,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
                 $('#save-client-compiled-program').modal('show');
             }
         } else {
-            GUISTATE_C.setConnectionState("error");
+            GUISTATE_C.setConnectionState("wait");
             MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
         }
     }
@@ -208,10 +208,10 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
         $("#popupDownloadHeader").text(textH.replace("$", $.trim(GUISTATE_C.getRobotRealName())));
         var textC = $("#download-instructions").find("tr").eq(2).find("td").eq(1).html();
         var usb;
-        if (GUISTATE_C.getGuiRobot().indexOf("calliope") >= 0) {
+        if (GUISTATE_C.getRobot().indexOf("calliope") >= 0) {
             usb = "MINI";
         } else {
-            usb = GUISTATE_C.getGuiRobot().toUpperCase();
+            usb = GUISTATE_C.getRobot().toUpperCase();
         }
         $("#download-instructions").find("tr").eq(2).find("td").eq(1).html(textC.replace("$", usb));
     }

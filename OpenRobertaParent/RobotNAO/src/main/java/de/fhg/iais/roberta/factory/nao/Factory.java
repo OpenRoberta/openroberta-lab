@@ -163,7 +163,7 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public Boolean hasConfiguration() {
-        return this.naoProperties.getProperty("robot.configuration") != null ? false : true;
+        return Boolean.parseBoolean(this.naoProperties.getProperty("robot.configuration"));
     }
 
     @Override

@@ -1,26 +1,36 @@
 package de.fhg.iais.roberta.util;
 
-import de.fhg.iais.roberta.util.dbc.DbcException;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import eu.bitwalker.useragentutils.UserAgent;
+
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class Statistics {
-    private static final Logger LOG = LoggerFactory.getLogger("statistics");
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
-    private Statistics() {}
+public final class Statistics {
+    private static final Logger STAT = LoggerFactory.getLogger("statistics");
+    private static final Logger LOG = LoggerFactory.getLogger(Statistics.class);
+
+    private Statistics() {
+    }
 
     /**
      * Logs the action and its arguments to the statistics logger with the trace level.
      * The arguments must come in key value pairs, otherwise the internal toJsonString method
      * throws a DbcException.
      *
-     * @param  action  the general action or category of the log
-     * @param  args variable number of key value pairs, these are put in a json array
+     * @param action the general action or category of the log
+     * @param args variable number of key value pairs, these are put in a json array
      */
     public static void trace(String action, String... args) {
-        LOG.trace(toJsonString(action, args));
+        try {
+            STAT.trace(toJsonString(action, args));
+        } catch ( JSONException e ) {
+            LOG.error("Logging statistics failed for: " + action);
+        }
     }
 
     /**
@@ -28,11 +38,15 @@ public final class Statistics {
      * The arguments must come in key value pairs, otherwise the internal toJsonString method
      * throws a DbcException.
      *
-     * @param  action  the general action or category of the log
-     * @param  args variable number of key value pairs, these are put in a json array
+     * @param action the general action or category of the log
+     * @param args variable number of key value pairs, these are put in a json array
      */
     public static void debug(String action, String... args) {
-        LOG.debug(toJsonString(action, args));
+        try {
+            STAT.debug(toJsonString(action, args));
+        } catch ( JSONException e ) {
+            LOG.error("Logging statistics failed for: " + action);
+        }
     }
 
     /**
@@ -40,11 +54,42 @@ public final class Statistics {
      * The arguments must come in key value pairs, otherwise the internal toJsonString method
      * throws a DbcException.
      *
-     * @param  action  the general action or category of the log
-     * @param  args variable number of key value pairs, these are put in a json array
+     * @param action the general action or category of the log
+     * @param args variable number of key value pairs, these are put in a json array
      */
     public static void info(String action, String... args) {
-        LOG.info(toJsonString(action, args));
+        try {
+            STAT.info(toJsonString(action, args));
+        } catch ( JSONException e ) {
+            LOG.error("Logging statistics failed for: " + action);
+        }
+    }
+
+    /**
+     * Logs the action and its arguments to the statistics logger with the info level.
+     * The arguments must come in key value pairs, otherwise the internal toJsonString method
+     * throws a DbcException.
+     *
+     * @param action the general action or category of the log
+     * @param request
+     * @param args variable number of key value pairs, these are put in a json array
+     */
+    public static void infoUserAgent(String action, UserAgent userAgent, JSONObject request) {
+        try {
+            STAT.info(
+                toJsonString(
+                    action,
+                    "Browser",
+                    userAgent.getBrowser() + "/" + userAgent.getBrowserVersion(),
+                    "OS",
+                    userAgent.getOperatingSystem().getName(),
+                    "DeviceType",
+                    userAgent.getOperatingSystem().getDeviceType().getName(),
+                    "ScreenSize",
+                    request.getString("screenSize")));
+        } catch ( Exception e ) {
+            LOG.error("Logging statistics failed for: " + action);
+        }
     }
 
     /**
@@ -52,11 +97,15 @@ public final class Statistics {
      * The arguments must come in key value pairs, otherwise the internal toJsonString method
      * throws a DbcException.
      *
-     * @param  action  the general action or category of the log
-     * @param  args variable number of key value pairs, these are put in a json array
+     * @param action the general action or category of the log
+     * @param args variable number of key value pairs, these are put in a json array
      */
     public static void warn(String action, String... args) {
-        LOG.warn(toJsonString(action, args));
+        try {
+            STAT.warn(toJsonString(action, args));
+        } catch ( JSONException e ) {
+            LOG.error("Logging statistics failed for: " + action);
+        }
     }
 
     /**
@@ -64,15 +113,19 @@ public final class Statistics {
      * The arguments must come in key value pairs, otherwise the internal toJsonString method
      * throws a DbcException.
      *
-     * @param  action  the general action or category of the log
-     * @param  args variable number of key value pairs, these are put in a json array
+     * @param action the general action or category of the log
+     * @param args variable number of key value pairs, these are put in a json array
      */
     public static void error(String action, String... args) {
-        LOG.error(toJsonString(action, args));
+        try {
+            STAT.error(toJsonString(action, args));
+        } catch ( JSONException e ) {
+            LOG.error("Logging statistics failed for: " + action);
+        }
     }
 
-    private static String toJsonString(String action, String... args) {
-        if (args.length % 2 != 0) {
+    private static String toJsonString(String action, String... args) throws JSONException {
+        if ( args.length % 2 != 0 ) {
             throw new DbcException("Statistics logging arguments must come in pairs of two!");
         }
 
@@ -80,8 +133,8 @@ public final class Statistics {
         JSONObject jsonObjArgs = new JSONObject();
         JSONArray jsonArrArgs = new JSONArray();
 
-        for (int i = 0; i < args.length; i+=2) {
-            jsonObjArgs.put(args[i], args[i+1]);
+        for ( int i = 0; i < args.length; i += 2 ) {
+            jsonObjArgs.put(args[i], args[i + 1]);
         }
 
         jsonArrArgs.put(jsonObjArgs);
