@@ -89,6 +89,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
 
         for (var i = 0; i < length; i++) {
             if (robots[i].name == 'sim') {
+                proto.attr('data-type', GUISTATE_C.getDefaultRobot());
                 i++;
             }
             var clone = proto.clone();
@@ -132,7 +133,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             if (robots[i].name == 'sim') {
                 i++;
                 // TODO check this hardcoded Open Roberta Sim again (maybe some day there is a better choise for us)
-                proto.attr('data-type', GUISTATE_C.getGuiRobot());
+                proto.attr('data-type', GUISTATE_C.getDefaultRobot());
             }
             addPair(robots[i].group, robots[i].name);
         }

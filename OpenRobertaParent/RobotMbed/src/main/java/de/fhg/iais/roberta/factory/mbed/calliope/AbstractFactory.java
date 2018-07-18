@@ -138,7 +138,7 @@ public abstract class AbstractFactory extends AbstractRobotFactory {
 
     @Override
     public Boolean hasConfiguration() {
-        return this.calliopeProperties.getProperty("robot.configuration") != null ? false : true;
+        return Boolean.parseBoolean(this.calliopeProperties.getProperty("robot.configuration"));
     }
 
     @Override
