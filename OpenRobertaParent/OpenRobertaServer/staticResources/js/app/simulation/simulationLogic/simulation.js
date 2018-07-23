@@ -904,6 +904,15 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                 transX : 0,
                 transY : 0
             });
+//            var temprobot = Object.create(reqRobot.prototype({
+//                x : 240,
+//                y : 200 + 60*(Math.floor((i+1)/2))*((-1)**(i)),
+//                theta : 0,
+//                xOld : 240,
+//                yOld : 200 + 60*(Math.floor((i+1)/2))*((-1)**(i)),
+//                transX : 0,
+//                transY : 0
+//            }));
             temprobot.canDraw = false;
             robots.push(temprobot);
         }

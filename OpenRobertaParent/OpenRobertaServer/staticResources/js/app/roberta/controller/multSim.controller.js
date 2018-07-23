@@ -1,10 +1,23 @@
 /**
  * Controller for multiple simulation part of the project
  */
-define(['exports','util', 'progList.model','program.controller', 'program.model','guiState.controller','guiState.model','simulation.simulation', 'jquery'],
-        function(exports, UTIL, PROGLIST,PROG_C, PROGRAM_M,GUISTATE_C, GUISTATE_M, SIM,  $){
+define(['exports','util', 'progList.model','program.controller', 'program.model','guiState.controller','guiState.model','simulation.simulation','user.model', 'jquery'],
+        function(exports, UTIL, PROGLIST,PROG_C, PROGRAM_M,GUISTATE_C, GUISTATE_M, SIM, USER,  $){
     function init(){
-        //currently does nothing
+        //currently for debugging purpose logged in a default user
+//        debugger;
+        
+        USER.login("a","123456",function(result){
+            if (result.rc === "ok") {
+                GUISTATE_C.setLogin(result);
+                if (result.userId === 1) {
+                    $('#menuAddStatusTextWrap').removeClass('hidden');
+                }
+            }
+            MSG.displayInformation(result, "MESSAGE_USER_LOGIN", result.message, GUISTATE_C.getUserName());
+//            debugger;
+            alert("login");
+        });
     }
     exports.init = init;
     

@@ -12,6 +12,17 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot' ]
      */
     function Ev3(pose) {
         Robot.call(this, pose);
+        this.ultraSensor = {
+                x : 0,
+                y : -20,
+                rx : 0,
+                ry : 0,
+                distance : 0,
+                u : [],
+                cx : 0,
+                cy : 0,
+                color : '#FF69B4'
+            };
     }
 
     Ev3.prototype = Object.create(Robot.prototype);
@@ -96,17 +107,17 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot' ]
         lightValue : 0,
         color : 'grey'
     };
-    Ev3.prototype.ultraSensor = {
-        x : 0,
-        y : -20,
-        rx : 0,
-        ry : 0,
-        distance : 0,
-        u : [],
-        cx : 0,
-        cy : 0,
-        color : '#FF69B4'
-    };
+//    Ev3.prototype.ultraSensor = {
+//        x : 0,
+//        y : -20,
+//        rx : 0,
+//        ry : 0,
+//        distance : 0,
+//        u : [],
+//        cx : 0,
+//        cy : 0,
+//        color : '#FF69B4'
+//    };
     Ev3.prototype.touchSensor = {
         x : 0,
         y : -25,

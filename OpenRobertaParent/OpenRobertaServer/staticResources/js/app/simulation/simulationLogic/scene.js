@@ -53,6 +53,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
                 h : 0
             };
             this.wave = 0.0;
+            this.waves = Array(this.numprogs).fill(0.0);
             this.isMultiple = true;
         }
     }
@@ -369,7 +370,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
 //        $('#valuesContent').html('');
 //        $("#valuesContent").append('<div><label>FPS</label><span>' + UTIL.round(1 / SIM.getDt(), 0) + '</span></div>');
 //        $("#valuesContent").append('<div><label>Time</label><span>' + UTIL.round(this.robot.time, 3) + 's</span></div>');
-        this.rCtx.();
+//        this.rCtx.save();
         for(var iterrobot=0;iterrobot<this.numprogs;iterrobot++){
             this.rCtx.restore();
             this.rCtx.save();
@@ -497,9 +498,9 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
           }
           this.rCtx.restore();
           // ultra
-          this.wave += CONSTANTS.WAVE_LENGTH * SIM.getDt();
-          this.wave = this.wave % CONSTANTS.WAVE_LENGTH;
-          this.rCtx.lineDashOffset = CONSTANTS.WAVE_LENGTH - this.wave;
+          this.waves[iterrobot] += CONSTANTS.WAVE_LENGTH * SIM.getDt();
+          this.waves[iterrobot] = this.waves[iterrobot] % CONSTANTS.WAVE_LENGTH;
+          this.rCtx.lineDashOffset = CONSTANTS.WAVE_LENGTH - this.waves[iterrobot];
           this.rCtx.setLineDash([ 20, 40 ]);
           this.rCtx.beginPath();
 
