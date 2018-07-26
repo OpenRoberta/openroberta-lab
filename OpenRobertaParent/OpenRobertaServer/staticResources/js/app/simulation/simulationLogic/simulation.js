@@ -127,10 +127,22 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             }
             pause = value;
         }
-        if (robot.left)
-            robot.left = 0;
-        if (robot.right)
-            robot.right = 0;
+        if(!multipleSwitch){
+            if (robot.left)
+                robot.left = 0;
+            if (robot.right)
+                robot.right = 0;
+        }else{
+            for(var i=0;i<robots.length;i++){
+                if(robots[i].left){
+                    robots[i].left = 0;
+                }
+                if(robots[i].right){
+                    robots[i].right = 0;
+                }
+            }
+        }
+
     }
     exports.setPause = setPause;
 
@@ -299,7 +311,12 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     var programEvals;
     var sensorValuesMultiple = [];
     var numprogs;
+    var multipleSwitch = false;
+    var storedPrograms;
+//    exports.multipleSwitch = multipleSwitch;
     function initMultiple(programs, refresh, robotType){
+        storedPrograms = programs;
+        multipleSwitch = true;
         numprogs = programs.length;
         reset = false;
         simRobotType = robotType;
@@ -347,6 +364,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                 isDownRuler = false;
                 stepCounter = 0;
                 pause= true;
+                ready=false;
                 info = false;
                 setObstacle();
                 setRuler();
@@ -364,6 +382,16 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         
     }
     exports.initMultiple = initMultiple;
+    
+    function startMultiple(refresh, robotType){
+        initMultiple(storedPrograms, refresh, robotType);
+    }
+    exports.startMultiple = startMultiple;
+    
+    function isMultiple(){
+        return multipleSwitch;
+    }
+    exports.isMultiple = isMultiple;
 
     function cancel() {
         //$(window).off("resize");
@@ -436,7 +464,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         for(var i=0;i<numprogs;i++){
             if (!programEvals[i].getProgram().isTerminated() && !pause && !reset) {
                 actionValuesarr[i] = programEvals[i].step(sensorValuesMultiple[i]);
-            } else if (programEvals[i].getProgram().isTerminated() && !pause && !robot.endless) {
+            } else if (isAllTerminated() && !pause && !robots[i].endless) {
                 setPause(true);
                 robots[i].reset();
             } else if (reset && !pause) {
@@ -461,6 +489,15 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         reset = robots[0].buttons.Reset;
         sensorValuesMultiple = scene.updateSensorValuesMultiple(!pause);
         scene.drawRobots();
+    }
+    
+    function isAllTerminated(){
+        for(var i = 0; i<programEvals.length;i++){
+            if(!programEvals[i].getProgram().isTerminated()){
+                return false;
+            }
+        }
+        return true;
     }
 
     function reloadProgram() {
@@ -816,7 +853,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         for(var i=0;i<numprogs;i++){
             readymultiple[i] = true;
         }
-        
+        ready=true;
         resizeAll();
         $(window).on("resize", resizeAll);
         $('#backgroundDiv').on("resize", resizeAll);
