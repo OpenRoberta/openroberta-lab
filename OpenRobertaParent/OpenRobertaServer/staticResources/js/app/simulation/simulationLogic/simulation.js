@@ -313,6 +313,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     var numprogs;
     var multipleSwitch = false;
     var storedPrograms;
+    var isDownRobots = [];
 //    exports.multipleSwitch = multipleSwitch;
     function initMultiple(programs, refresh, robotType){
         storedPrograms = programs;
@@ -346,6 +347,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         programEvals = programs.map(x => new ProgramEval());
         for(var i=0;i<numprogs;i++){
             programEvals[i].initProgram(blocklyprograms[i]);
+            isDownRobots.push(false);
         }
         if (refresh) {
             console.log("was refresh executed? ");
@@ -619,6 +621,18 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             ruler.color = null;
         }
     }
+    
+    function isAnyRobotDown(){
+        if(!multipleSwitch){
+            return false;
+        }
+        for(var i=0;i<numprogs;i++){
+            if(isDownRobots[i]){
+                return true;
+            }
+        }
+        return false;
+    }
 
     function handleMouseDown(e) {
         // e.preventDefault();
@@ -634,6 +648,12 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         var dx = startX - robot.mouse.rx;
         var dy = startY - robot.mouse.ry;
         isDownRobot = (dx * dx + dy * dy < robot.mouse.r * robot.mouse.r);
+        if(multipleSwitch){
+            for(var i=0;i<numprogs;i++){
+                isDownRobots[i] = (dx * dx + dy * dy < robots[i].mouse.r * robots[i].mouse.r);
+            }
+        }
+        
         for(var i=0;i<obslist.length;i++){
             isDownObstacle = (startX > obslist[i].x && startX < obslist[i].x + obslist[i].w && startY > obslist[i].y && startY < obslist[i].y + obslist[i].h);
             if(isDownObstacle){
@@ -642,7 +662,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         }
 //        isDownObstacle = (startX > obslist[i].x && startX < obslist[i].x + obslist[i].w && startY > obslist[i].y && startY < obslist[i].y + obslist[i].h);
         isDownRuler = (startX > ruler.x && startX < ruler.x + ruler.w && startY > ruler.y && startY < ruler.y + ruler.h);
-        if (isDownRobot || isDownObstacle || isDownRuler) {
+        if (isDownRobot || isDownObstacle || isDownRuler || isAnyRobotDown()) {
             e.stopPropagation();
         }
     }
@@ -792,28 +812,48 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
 
     function addMouseEvents() {
         $("#robotLayer").on('mousedown touchstart', function(e) {
-            if (robot.handleMouseDown)
-                robot.handleMouseDown(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
-            else
+            if(multipleSwitch){
                 handleMouseDown(e);
+            }else{
+                if (robot.handleMouseDown)
+                    robot.handleMouseDown(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
+                else
+                    handleMouseDown(e);
+            }
+
         });
         $("#robotLayer").on('mousemove touchmove', function(e) {
-            if (robot.handleMouseMove)
-                robot.handleMouseMove(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
-            else
+            if(multipleSwitch){
                 handleMouseMove(e);
+            }else{
+                if (robot.handleMouseMove)
+                    robot.handleMouseMove(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
+                else
+                    handleMouseMove(e);
+            }
+
         });
         $("#robotLayer").mouseup(function(e) {
-            if (robot.handleMouseUp)
-                robot.handleMouseUp(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
-            else
+            if(multipleSwitch){
                 handleMouseUp(e);
+            }else{
+                if (robot.handleMouseUp)
+                    robot.handleMouseUp(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
+                else
+                    handleMouseUp(e);
+            }
+
         });
         $("#robotLayer").on('mouseout touchcancel', function(e) {
-            if (robot.handleMouseOut)
-                robot.handleMouseOut(e, offsetX, offsetY, scene.playground.w / 2, scene.playground.h / 2);
-            else
+            if(multipleSwitch){
                 handleMouseOut(e);
+            }else{
+                if (robot.handleMouseOut)
+                    robot.handleMouseOut(e, offsetX, offsetY, scene.playground.w / 2, scene.playground.h / 2);
+                else
+                    handleMouseOut(e);
+            }
+
         });
         $("#simDiv").on('wheel mousewheel touchmove', function(e) {
             handleMouseWheel(e);
@@ -848,8 +888,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         scene.drawObjects();
         scene.drawRuler();
         scene.drawRobots();
-        //todo addmouseevents
-//        addMouseEvents();
+        addMouseEvents();
         for(var i=0;i<numprogs;i++){
             readymultiple[i] = true;
         }
