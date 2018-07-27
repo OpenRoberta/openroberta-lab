@@ -1,3 +1,4 @@
+import { NativeTest } from './nativeTest';
 import * as INTERPRETER from './interpreter';
 import * as FS from 'fs';
 
@@ -14,7 +15,7 @@ function processOps( fileName: string ) {
             console.log( err );
         } else {
             var generatedCode = JSON.parse( generatedCodeAsString );
-            INTERPRETER.run( generatedCode, callbackOnTermination );
+            INTERPRETER.run( generatedCode, new NativeTest(), callbackOnTermination );
         }
     } )
 }

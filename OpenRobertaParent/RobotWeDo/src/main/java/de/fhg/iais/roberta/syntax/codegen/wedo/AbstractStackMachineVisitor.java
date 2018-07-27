@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.JSONObject;
 
 import com.google.common.collect.Lists;
@@ -135,7 +134,7 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
     @Override
     public V visitStringConst(StringConst<V> stringConst) {
         JSONObject o = mk(C.EXPR).put(C.EXPR, stringConst.getKind().getName());
-        o.put(C.VALUE,stringConst.getValue().replaceAll("[<>\\$]", ""));
+        o.put(C.VALUE, stringConst.getValue().replaceAll("[<>\\$]", ""));
         return app(o);
     }
 
@@ -349,7 +348,7 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
     public V visitRepeatStmt(RepeatStmt<V> repeatStmt) {
         Mode mode = repeatStmt.getMode();
 
-        // TODO: the very special case of a wait stmt. The AST is badly designed for this case
+        // the very special case of a wait stmt. The AST is not perfectly designed for this case
         if ( mode == Mode.WAIT ) {
             repeatStmt.getExpr().visit(this);
             pushOpArray();
@@ -392,20 +391,13 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
             List<JSONObject> body = popOpArray();
             JSONObject cont = mk(C.REPEAT_STMT_CONTINUATION).put(C.MODE, mode);
             JSONObject repeat = mk(C.REPEAT_STMT).put(C.MODE, mode).put(C.STMT_LIST, Arrays.asList(cont));
-            List<JSONObject> bodyAndExpr = new ArrayList<>();
-            if ( mode == Mode.WHILE ) {
-                bodyAndExpr.addAll(expr);
-                bodyAndExpr.add(mk(C.FLOW_CONTROL).put(C.KIND, C.REPEAT_STMT).put(C.CONDITIONAL, true).put(C.BOOLEAN, false).put(C.BREAK, true));
-                bodyAndExpr.addAll(body);
-            } else {
-                bodyAndExpr.addAll(body);
-                bodyAndExpr.addAll(expr);
-                bodyAndExpr.add(mk(C.FLOW_CONTROL).put(C.KIND, C.REPEAT_STMT).put(C.CONDITIONAL, true).put(C.BREAK, true));
-            }
-            cont.put(C.STMT_LIST, bodyAndExpr);
+            List<JSONObject> exprAndBody = new ArrayList<>();
+            exprAndBody.addAll(expr);
+            exprAndBody.add(mk(C.FLOW_CONTROL).put(C.KIND, C.REPEAT_STMT).put(C.CONDITIONAL, true).put(C.BREAK, true).put(C.BOOLEAN, false));
+            exprAndBody.addAll(body);
+            cont.put(C.STMT_LIST, exprAndBody);
             return app(repeat);
         }
-
         throw new DbcException("invalid repeat mode: " + mode);
     }
 
@@ -748,6 +740,6 @@ public abstract class AbstractStackMachineVisitor<V> implements AstLanguageVisit
 
     protected void generateProgramPrefix(boolean withWrapping) {
         // TODO Auto-generated method stub
-        
+
     }
 }

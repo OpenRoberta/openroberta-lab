@@ -4,28 +4,30 @@
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./constants", "./native", "./state", "./util"], factory);
+        define(["require", "exports", "./constants", "./state", "./util"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var C = require("./constants");
-    var N = require("./native");
     var S = require("./state");
     var U = require("./util");
     var terminated = false;
     var callbackOnTermination = undefined;
+    var n; // implementation of the NativeInterface to connect a real WeDo robot (or a test instance) to the interpreter
     /**
      * run the operations.
      *
      * . @param generatedCode argument contains the operations and the function definitions
+     * . @param native implementation of the native interface Native to connect a real WeDo robot (or a test instance) to the interpreter
      * . @param cbOnTermination is called when the program has terminated
      */
-    function run(generatedCode, cbOnTermination) {
+    function run(generatedCode, native, cbOnTermination) {
         terminated = false;
         callbackOnTermination = cbOnTermination;
         var stmts = generatedCode[C.OPS];
         var functions = generatedCode[C.FUNCTION_DECLARATION];
+        n = native;
         var stop = {};
         stop[C.OPCODE] = "stop";
         stmts.push(stop);
@@ -100,7 +102,7 @@
                     break;
                 }
                 case C.CLEAR_DISPLAY_ACTION: {
-                    N.clearDisplay();
+                    n.clearDisplay();
                     break;
                 }
                 case C.CREATE_DEBUG_ACTION: {
@@ -108,10 +110,7 @@
                     break;
                 }
                 case C.DRIVE_ACTION: {
-                    var distance = S.pop();
-                    var speed = S.pop();
-                    var driveDirection = stmt[C.DRIVE_DIRECTION];
-                    N.driveAction(driveDirection, distance, speed);
+                    U.p('NYI');
                     break;
                 }
                 case C.EXPR:
@@ -130,7 +129,7 @@
                     break;
                 }
                 case C.GET_SAMPLE: {
-                    N.getSample(stmt[C.NAME], stmt[C.PORT], stmt[C.GET_SAMPLE], stmt[C.SLOT]);
+                    n.getSample(stmt[C.NAME], stmt[C.PORT], stmt[C.GET_SAMPLE], stmt[C.SLOT]);
                     break;
                 }
                 case C.IF_STMT:
@@ -148,7 +147,7 @@
                     break;
                 case C.LED_ON_ACTION: {
                     var color = S.pop();
-                    N.ledOnAction(stmt[C.NAME], stmt[C.PORT], color);
+                    n.ledOnAction(stmt[C.NAME], stmt[C.PORT], color);
                     break;
                 }
                 case C.METHOD_CALL_VOID:
@@ -166,15 +165,15 @@
                     var speed = S.pop();
                     var name_2 = stmt[C.NAME];
                     var port_1 = stmt[C.PORT];
-                    N.motorOnAction(name_2, port_1, duration, speed);
+                    n.motorOnAction(name_2, port_1, duration, speed);
                     if (duration >= 0) {
-                        timeout(function () { N.motorStopAction(name_2, port_1); evalOperation(); }, duration);
+                        timeout(function () { n.motorStopAction(name_2, port_1); evalOperation(); }, duration);
                         return { value: void 0 };
                     }
                     break;
                 }
                 case C.MOTOR_STOP: {
-                    N.motorStopAction(stmt[C.NAME], stmt[C.PORT]);
+                    n.motorStopAction(stmt[C.NAME], stmt[C.PORT]);
                     break;
                 }
                 case C.REPEAT_STMT:
@@ -197,11 +196,11 @@
                     }
                     break;
                 case C.SHOW_TEXT_ACTION: {
-                    N.showTextAction(S.pop());
+                    n.showTextAction(S.pop());
                     break;
                 }
                 case C.STATUS_LIGHT_ACTION:
-                    N.statusLightOffAction(stmt[C.NAME], stmt[C.PORT]);
+                    n.statusLightOffAction(stmt[C.NAME], stmt[C.PORT]);
                     break;
                 case C.STOP:
                     U.p("PROGRAM TERMINATED. stop op");
@@ -213,12 +212,12 @@
                     break;
                 case C.TIMER_SENSOR_RESET:
                     var port = stmt[C.PORT];
-                    N.timerReset(port);
+                    n.timerReset(port);
                     break;
                 case C.TONE_ACTION: {
                     var duration = S.pop();
                     var frequency = S.pop();
-                    N.toneAction(stmt[C.NAME], frequency, duration);
+                    n.toneAction(stmt[C.NAME], frequency, duration);
                     timeout(function () { evalOperation(); }, duration);
                     return { value: void 0 };
                 }
@@ -251,7 +250,7 @@
         }
         // termination either requested by the client or by executing 'stop' or after last statement
         terminated = true;
-        N.close();
+        n.close();
         callbackOnTermination();
     }
     exports.evalOperation = evalOperation;
@@ -270,7 +269,7 @@
                 S.push(+expr[C.VALUE]);
                 break;
             case C.BOOL_CONST:
-                S.push(+expr[C.VALUE]);
+                S.push(expr[C.VALUE]);
                 break;
             case C.STRING_CONST:
                 S.push(expr[C.VALUE]);
@@ -282,8 +281,18 @@
                 var subOp = expr[C.OP];
                 switch (subOp) {
                     case C.NOT:
+                        var truthy;
                         var bool = S.pop();
-                        S.push(!bool);
+                        if (bool === 'true') {
+                            truthy = true;
+                        }
+                        else if (bool === 'false' || bool === '0' || bool === '') {
+                            truthy = false;
+                        }
+                        else {
+                            truthy = !!bool;
+                        }
+                        S.push(!truthy);
                         break;
                     default:
                         U.dbcException("invalid unary expr subOp: " + subOp);

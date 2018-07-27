@@ -45,22 +45,15 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
  */
 @Category(IntegrationTest.class)
 @RunWith(MockitoJUnitRunner.class)
-public class GenerateJsonFromSimIT {
-    private static final Logger LOG = LoggerFactory.getLogger(GenerateJsonFromSimIT.class);
+public class GenerateStackMachineJsonFromBlocklyXmlIT {
+    private static final Logger LOG = LoggerFactory.getLogger(GenerateStackMachineJsonFromBlocklyXmlIT.class);
     private static final String TEST_BASE = "xmlTests/";
     private static final String ROBOT = "wedo";
 
-    private static final String[] NAME_OF_TESTS = {
-        "gyroscope",
-        "x-fct-mthd-repeat",
-        "x-motor-tone",
-        "x-if",
-        "x-fac"
-        //"sensoren",
-        //"aktoren",
-        //"fac",
-        //"control_if_elseif"
-    };
+    private static final String[] NAME_OF_TESTS =
+        {
+            "x-while-until"
+        };
 
     private static RobotCommunicator robotCommunicator;
     private static RobertaProperties robertaProperties;

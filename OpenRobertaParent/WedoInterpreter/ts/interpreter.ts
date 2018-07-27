@@ -1,22 +1,27 @@
 import * as C from "./constants";
-import * as N from "./native";
+import { Native } from "./nativeInterface";
 import * as S from "./state";
 import * as U from "./util";
 
 var terminated = false;
 var callbackOnTermination = undefined;
 
+var n: Native; // implementation of the NativeInterface to connect a real WeDo robot (or a test instance) to the interpreter
+
 /**
  * run the operations.
  * 
  * . @param generatedCode argument contains the operations and the function definitions
+ * . @param native implementation of the native interface Native to connect a real WeDo robot (or a test instance) to the interpreter
  * . @param cbOnTermination is called when the program has terminated
  */
-export function run( generatedCode: any, cbOnTermination: () => void ) {
+export function run( generatedCode: any, native: Native, cbOnTermination: () => void ) {
     terminated = false;
     callbackOnTermination = cbOnTermination;
     const stmts = generatedCode[C.OPS];
     const functions = generatedCode[C.FUNCTION_DECLARATION];
+    n = native;
+
     var stop = {};
     stop[C.OPCODE] = "stop";
     stmts.push( stop );
@@ -91,7 +96,7 @@ export function evalOperation() {
                 break;
             }
             case C.CLEAR_DISPLAY_ACTION: {
-                N.clearDisplay();
+                n.clearDisplay();
                 break;
             }
             case C.CREATE_DEBUG_ACTION: {
@@ -99,10 +104,7 @@ export function evalOperation() {
                 break;
             }
             case C.DRIVE_ACTION: {
-                const distance = S.pop();
-                const speed = S.pop();
-                const driveDirection = stmt[C.DRIVE_DIRECTION];
-                N.driveAction( driveDirection, distance, speed );
+                U.p( 'NYI' );
                 break;
             }
             case C.EXPR:
@@ -121,7 +123,7 @@ export function evalOperation() {
                 break;
             }
             case C.GET_SAMPLE: {
-                N.getSample( stmt[C.NAME], stmt[C.PORT], stmt[C.GET_SAMPLE], stmt[C.SLOT] )
+                n.getSample( stmt[C.NAME], stmt[C.PORT], stmt[C.GET_SAMPLE], stmt[C.SLOT] )
                 break;
             }
             case C.IF_STMT:
@@ -139,7 +141,7 @@ export function evalOperation() {
                 break;
             case C.LED_ON_ACTION: {
                 const color = S.pop();
-                N.ledOnAction( stmt[C.NAME], stmt[C.PORT], color )
+                n.ledOnAction( stmt[C.NAME], stmt[C.PORT], color )
                 break;
             }
             case C.METHOD_CALL_VOID:
@@ -156,15 +158,15 @@ export function evalOperation() {
                 const speed = S.pop();
                 const name = stmt[C.NAME];
                 const port = stmt[C.PORT];
-                N.motorOnAction( name, port, duration, speed );
+                n.motorOnAction( name, port, duration, speed );
                 if ( duration >= 0 ) {
-                    timeout(() => { N.motorStopAction( name, port ); evalOperation() }, duration );
+                    timeout(() => { n.motorStopAction( name, port ); evalOperation() }, duration );
                     return; // wait for handler being called
                 }
                 break;
             }
             case C.MOTOR_STOP: {
-                N.motorStopAction( stmt[C.NAME], stmt[C.PORT] );
+                n.motorStopAction( stmt[C.NAME], stmt[C.PORT] );
                 break;
             }
             case C.REPEAT_STMT:
@@ -186,11 +188,11 @@ export function evalOperation() {
                 }
                 break;
             case C.SHOW_TEXT_ACTION: {
-                N.showTextAction( S.pop() );
+                n.showTextAction( S.pop() );
                 break;
             }
             case C.STATUS_LIGHT_ACTION:
-                N.statusLightOffAction( stmt[C.NAME], stmt[C.PORT] )
+                n.statusLightOffAction( stmt[C.NAME], stmt[C.PORT] )
                 break;
             case C.STOP:
                 U.p( "PROGRAM TERMINATED. stop op" );
@@ -202,12 +204,12 @@ export function evalOperation() {
                 break;
             case C.TIMER_SENSOR_RESET:
                 const port = stmt[C.PORT];
-                N.timerReset( port );
+                n.timerReset( port );
                 break;
             case C.TONE_ACTION: {
                 const duration = S.pop();
                 const frequency = S.pop();
-                N.toneAction( stmt[C.NAME], frequency, duration );
+                n.toneAction( stmt[C.NAME], frequency, duration );
                 timeout(() => { evalOperation() }, duration );
                 return; // wait for handler being called
             }
@@ -232,7 +234,7 @@ export function evalOperation() {
     }
     // termination either requested by the client or by executing 'stop' or after last statement
     terminated = true;
-    N.close();
+    n.close();
     callbackOnTermination();
 }
 
@@ -251,7 +253,7 @@ function evalExpr( expr ) {
             S.push( +expr[C.VALUE] );
             break;
         case C.BOOL_CONST:
-            S.push( +expr[C.VALUE] );
+            S.push( expr[C.VALUE] );
             break;
         case C.STRING_CONST:
             S.push( expr[C.VALUE] );
@@ -263,8 +265,16 @@ function evalExpr( expr ) {
             const subOp = expr[C.OP];
             switch ( subOp ) {
                 case C.NOT:
+                    var truthy;
                     const bool = S.pop();
-                    S.push( !bool );
+                    if ( bool === 'true' ) {
+                        truthy = true;
+                    } else if ( bool === 'false' || bool === '0' || bool === '' ) {
+                        truthy = false;
+                    } else {
+                        truthy = !!bool
+                    }
+                    S.push( !truthy );
                     break;
                 default:
                     U.dbcException( "invalid unary expr subOp: " + subOp );

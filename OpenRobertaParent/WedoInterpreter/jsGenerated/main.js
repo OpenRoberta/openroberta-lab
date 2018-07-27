@@ -4,11 +4,12 @@
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./interpreter", "fs"], factory);
+        define(["require", "exports", "./nativeTest", "./interpreter", "fs"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    var nativeTest_1 = require("./nativeTest");
     var INTERPRETER = require("./interpreter");
     var FS = require("fs");
     var BASEDIR = './xmlTests/'; // basedir should be the project directory (in eclipse: edit the run configuration :-)
@@ -24,7 +25,7 @@
             }
             else {
                 var generatedCode = JSON.parse(generatedCodeAsString);
-                INTERPRETER.run(generatedCode, callbackOnTermination);
+                INTERPRETER.run(generatedCode, new nativeTest_1.NativeTest(), callbackOnTermination);
             }
         });
     }
