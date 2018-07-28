@@ -314,8 +314,10 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     var multipleSwitch = false;
     var storedPrograms;
     var isDownRobots = [];
+    var mouseonrobot = -1;
 //    exports.multipleSwitch = multipleSwitch;
     function initMultiple(programs, refresh, robotType){
+        mouseonrobot =-1;
         storedPrograms = programs;
         multipleSwitch = true;
         numprogs = programs.length;
@@ -645,13 +647,22 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         var left = $('#robotLayer').offset().left;
         startX = (parseInt(X - left, 10)) / scale;
         startY = (parseInt(Y - top, 10)) / scale;
-        var dx = startX - robot.mouse.rx;
-        var dy = startY - robot.mouse.ry;
-        isDownRobot = (dx * dx + dy * dy < robot.mouse.r * robot.mouse.r);
+        var dx;
+        var dy;
         if(multipleSwitch){
             for(var i=0;i<numprogs;i++){
-                isDownRobots[i] = (dx * dx + dy * dy < robots[i].mouse.r * robots[i].mouse.r);
+                dx = startX - robots[i].mouse.rx;
+                dy = startY - robots[i].mouse.ry;
+                var boolDown = (dx * dx + dy * dy < robots[i].mouse.r * robots[i].mouse.r);
+                isDownRobots[i] = boolDown;
+                if(boolDown){
+                    mouseonrobot = i;
+                }
             }
+        }else{
+            dx = startX - robot.mouse.rx;
+            dy = startY - robot.mouse.ry;
+            isDownRobot = (dx * dx + dy * dy < robot.mouse.r * robot.mouse.r);
         }
         
         for(var i=0;i<obslist.length;i++){
@@ -669,19 +680,40 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
 
     function handleMouseUp(e) {
         $("#robotLayer").css('cursor', 'auto');
-        if (robot.drawWidth) {
-            robot.canDraw = true;
+        if(!multipleSwitch){
+            if (robot.drawWidth) {
+                robot.canDraw = true;
+            }
+            isDownRobot = false;
         }
-        isDownRobot = false;
+
+ 
         isDownObstacle = false;
         isDownRuler = false;
+        if(multipleSwitch){
+            for(var i=0;i<numprogs;i++){
+                if(isDownRobots[i]){
+                    isDownRobots[i] = false;
+                }
+            }
+            mouseonrobot = -1;
+        }
     }
 
     function handleMouseOut(e) {
         e.preventDefault();
-        isDownRobot = false;
         isDownObstacle = false;
         isDownRuler = false;
+        if(multipleSwitch){
+            for(var i=0;i<numprogs;i++){
+                if(isDownRobots[i]){
+                    isDownRobots[i] = false;
+                }
+            }
+            mouseonrobot = -1;
+        }else{
+            isDownRobot = false;
+        }
         e.stopPropagation();
     }
 
@@ -693,51 +725,111 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         var left = $('#robotLayer').offset().left;
         mouseX = (parseInt(X - left, 10)) / scale;
         mouseY = (parseInt(Y - top, 10)) / scale;
-        var dx = mouseX - robot.mouse.rx;
-        var dy = mouseY - robot.mouse.ry;
-        if (!isDownRobot && !isDownObstacle && !isDownRuler) {
-            var hoverRobot = (dx * dx + dy * dy < robot.mouse.r * robot.mouse.r);
-            var hoverRuler = (mouseX > ruler.x && mouseX < ruler.x + ruler.w && mouseY > ruler.y && mouseY < ruler.y + ruler.h);
-            if (hoverRobot || hoverRuler)
-                $("#robotLayer").css('cursor', 'pointer');
-            var hoverObstacle;
-            for(var i=1;i<obslist.length;i++){
-                hoverObstacle = (mouseX > obslist[i].x && mouseX < obslist[i].x + obslist[i].w && mouseY > obslist[i].y && mouseY < obslist[i].y + obslist[i].h);
-                if(hoverObstacle){
+        if(!multipleSwitch){
+            var dx = mouseX - robot.mouse.rx;
+            var dy = mouseY - robot.mouse.ry;
+            if (!isDownRobot && !isDownObstacle && !isDownRuler) {
+                var hoverRobot = (dx * dx + dy * dy < robot.mouse.r * robot.mouse.r);
+                var hoverRuler = (mouseX > ruler.x && mouseX < ruler.x + ruler.w && mouseY > ruler.y && mouseY < ruler.y + ruler.h);
+                if (hoverRobot || hoverRuler)
                     $("#robotLayer").css('cursor', 'pointer');
-                    hoverindex =i;
-//                    console.log("hoverindex now is "+ i);
-                    return;
+                var hoverObstacle;
+                for(var i=1;i<obslist.length;i++){
+                    hoverObstacle = (mouseX > obslist[i].x && mouseX < obslist[i].x + obslist[i].w && mouseY > obslist[i].y && mouseY < obslist[i].y + obslist[i].h);
+                    if(hoverObstacle){
+                        $("#robotLayer").css('cursor', 'pointer');
+                        hoverindex =i;
+//                        console.log("hoverindex now is "+ i);
+                        return;
+                    }
                 }
+                $("#robotLayer").css('cursor', 'auto');
+                return;
             }
-            $("#robotLayer").css('cursor', 'auto');
-            return;
-        }
-        $("#robotLayer").css('cursor', 'pointer');
-        dx = (mouseX - startX);
-        dy = (mouseY - startY);
-        startX = mouseX;
-        startY = mouseY;
-        if (isDownRobot) {
-            if (robot.drawWidth) {
-                robot.canDraw = false;
+            
+
+            $("#robotLayer").css('cursor', 'pointer');
+            dx = (mouseX - startX);
+            dy = (mouseY - startY);
+            startX = mouseX;
+            startY = mouseY;
+            if (isDownRobot) {
+                if (robot.drawWidth) {
+                    robot.canDraw = false;
+                }
+                robot.pose.xOld = robot.pose.x;
+                robot.pose.yOld = robot.pose.y;
+                robot.pose.x += dx;
+                robot.pose.y += dy;
+                robot.mouse.rx += dx;
+                robot.mouse.ry += dy;
+            } else if (isDownObstacle) {
+                console.log("when does this isDownObstacle occur");
+                console.log(hoverindex);
+                obslist[hoverindex].x += dx;
+                obslist[hoverindex].y += dy;
+                scene.drawObjects();
+            } else if (isDownRuler) {
+                ruler.x += dx;
+                ruler.y += dy;
+                scene.drawRuler();
             }
-            robot.pose.xOld = robot.pose.x;
-            robot.pose.yOld = robot.pose.y;
-            robot.pose.x += dx;
-            robot.pose.y += dy;
-            robot.mouse.rx += dx;
-            robot.mouse.ry += dy;
-        } else if (isDownObstacle) {
-            console.log("when does this isDownObstacle occur");
-            console.log(hoverindex);
-            obslist[hoverindex].x += dx;
-            obslist[hoverindex].y += dy;
-            scene.drawObjects();
-        } else if (isDownRuler) {
-            ruler.x += dx;
-            ruler.y += dy;
-            scene.drawRuler();
+        }else if(multipleSwitch){
+            var dx;
+            var dy;
+            if (!isAnyRobotDown() && !isDownObstacle && !isDownRuler) {
+                var hoverRobot=false;
+                for(var i =0;i<numprogs;i++){
+                    dx = mouseX - robots[i].mouse.rx;
+                    dy = mouseY - robots[i].mouse.ry;
+                    var tempcheckhover = (dx * dx + dy * dy < robots[i].mouse.r * robots[i].mouse.r);
+                    if(tempcheckhover){
+                        hoverRobot = true;
+                        break;
+                    }
+                }   
+                var hoverRuler = (mouseX > ruler.x && mouseX < ruler.x + ruler.w && mouseY > ruler.y && mouseY < ruler.y + ruler.h);
+                if (hoverRobot || hoverRuler)
+                    $("#robotLayer").css('cursor', 'pointer');
+                var hoverObstacle;
+                for(var i=1;i<obslist.length;i++){
+                    hoverObstacle = (mouseX > obslist[i].x && mouseX < obslist[i].x + obslist[i].w && mouseY > obslist[i].y && mouseY < obslist[i].y + obslist[i].h);
+                    if(hoverObstacle){
+                        $("#robotLayer").css('cursor', 'pointer');
+                        hoverindex =i;
+//                        console.log("hoverindex now is "+ i);
+                        return;
+                    }
+                }
+                $("#robotLayer").css('cursor', 'auto');
+                return;
+            }
+            $("#robotLayer").css('cursor', 'pointer');
+            dx = (mouseX - startX);
+            dy = (mouseY - startY);
+            startX = mouseX;
+            startY = mouseY;
+            if(isAnyRobotDown()){
+                if (robots[mouseonrobot].drawWidth) {
+                    robots[mouseonrobot].canDraw = false;
+                }
+                robots[mouseonrobot].pose.xOld = robots[mouseonrobot].pose.x;
+                robots[mouseonrobot].pose.yOld = robots[mouseonrobot].pose.y;
+                robots[mouseonrobot].pose.x += dx;
+                robots[mouseonrobot].pose.y += dy;
+                robots[mouseonrobot].mouse.rx += dx;
+                robots[mouseonrobot].mouse.ry += dy;
+            } else if (isDownObstacle) {
+                console.log("when does this isDownObstacle occur");
+                console.log(hoverindex);
+                obslist[hoverindex].x += dx;
+                obslist[hoverindex].y += dy;
+                scene.drawObjects();
+            } else if (isDownRuler) {
+                ruler.x += dx;
+                ruler.y += dy;
+                scene.drawRuler();
+            }
         }
     }
 
