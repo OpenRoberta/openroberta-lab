@@ -895,6 +895,8 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
                 this.robots[progiter].backRight.bumped = false;
     //            console.log("obstacle list is ");
     //            console.log(SIM.obstacleList);
+//                var personalObstacleList = SIM.obstacleList;
+//                for(var i=0;i<)
                 for (var i = 0; i < SIM.obstacleList.length; i++) {
                     var p = SIM.obstacleList[i];
                     if (i == 0) {
