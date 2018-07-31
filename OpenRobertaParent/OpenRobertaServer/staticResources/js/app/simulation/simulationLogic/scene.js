@@ -895,10 +895,23 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
                 this.robots[progiter].backRight.bumped = false;
     //            console.log("obstacle list is ");
     //            console.log(SIM.obstacleList);
-//                var personalObstacleList = SIM.obstacleList;
-//                for(var i=0;i<)
-                for (var i = 0; i < SIM.obstacleList.length; i++) {
-                    var p = SIM.obstacleList[i];
+                var personalObstacleList = SIM.obstacleList.slice();
+                for(var i=0;i<this.numprogs;i++){
+                    if(i===progiter){
+                        continue;
+                    }else{
+                        var tempobstacle = {
+                                isParallelToAxis : false,
+                                backLeft : this.robots[i].backLeft,
+                                backRight : this.robots[i].backRight,
+                                frontLeft : this.robots[i].frontLeft,
+                                frontRight : this.robots[i].frontRight
+                        }
+                        personalObstacleList.push(tempobstacle);
+                    }
+                }
+                for (var i = 0; i < personalObstacleList.length; i++) {
+                    var p = personalObstacleList[i];
                     if (i == 0) {
                         var x = this.robots[progiter].frontLeft.rx;
                         var y = this.robots[progiter].frontLeft.ry;
@@ -923,30 +936,73 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
                             this.robots[progiter].backRight.bumped = true;
                         }
                     } else {
-                        var x = this.robots[progiter].frontLeft.rx;
-                        var y = this.robots[progiter].frontLeft.ry;
-                        if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
-                            this.robots[progiter].frontLeft.bumped = true;
-                            this.robots[progiter].touchSensor.value = 1;
-                        }
-                        x = this.robots[progiter].frontRight.rx;
-                        y = this.robots[progiter].frontRight.ry;
-                        if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
-                            this.robots[progiter].frontRight.bumped = true;
-                            this.robots[progiter].touchSensor.value = 1;
-                        }
-                        x = this.robots[progiter].backLeft.rx;
-                        y = this.robots[progiter].backLeft.ry;
-                        if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
-                            this.robots[progiter].backLeft.bumped = true;
-                        }
-                        x = this.robots[progiter].backRight.rx;
-                        y = this.robots[progiter].backRight.ry;
-                        if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
-                            this.robots[progiter].backRight.bumped = true;
+                        if(p.isParallelToAxis){
+                            var x = this.robots[progiter].frontLeft.rx;
+                            var y = this.robots[progiter].frontLeft.ry;
+                            if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
+                                this.robots[progiter].frontLeft.bumped = true;
+                                this.robots[progiter].touchSensor.value = 1;
+                            }
+                            x = this.robots[progiter].frontRight.rx;
+                            y = this.robots[progiter].frontRight.ry;
+                            if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
+                                this.robots[progiter].frontRight.bumped = true;
+                                this.robots[progiter].touchSensor.value = 1;
+                            }
+                            x = this.robots[progiter].backLeft.rx;
+                            y = this.robots[progiter].backLeft.ry;
+                            if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
+                                this.robots[progiter].backLeft.bumped = true;
+                            }
+                            x = this.robots[progiter].backRight.rx;
+                            y = this.robots[progiter].backRight.ry;
+                            if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
+                                this.robots[progiter].backRight.bumped = true;
+                            }
+                        }else{
+                            var rectobj = {
+                                    p1 : {
+                                        x: p.backLeft.rx,
+                                        y: p.backLeft.ry
+                                    },
+                                    p2 : {
+                                        x: p.frontLeft.rx,
+                                        y: p.frontLeft.ry
+                                    },
+                                    p3 : {
+                                        x: p.frontRight.rx,
+                                        y: p.frontRight.ry
+                                    },
+                                    p4 : {
+                                        x: p.backRight.rx,
+                                        y: p.backRight.ry
+                                    }
+                                }
+                                var x = this.robots[progiter].frontLeft.rx;
+                                var y = this.robots[progiter].frontLeft.ry;
+                                if (SIMATH.isPointInsideRectangle({x:x, y:y}, rectobj)) {
+                                    this.robots[progiter].frontLeft.bumped = true;
+                                    this.robots[progiter].touchSensor.value = 1;
+                                }
+                                x = this.robots[progiter].frontRight.rx;
+                                y = this.robots[progiter].frontRight.ry;
+                                if (SIMATH.isPointInsideRectangle({x:x, y:y}, rectobj)) {
+                                    this.robots[progiter].frontRight.bumped = true;
+                                    this.robots[progiter].touchSensor.value = 1;
+                                }
+                                x = this.robots[progiter].backLeft.rx;
+                                y = this.robots[progiter].backLeft.ry;
+                                if (SIMATH.isPointInsideRectangle({x:x, y:y}, rectobj)) {
+                                    this.robots[progiter].backLeft.bumped = true;
+                                }
+                                x = this.robots[progiter].backRight.rx;
+                                y = this.robots[progiter].backRight.ry;
+                                if (SIMATH.isPointInsideRectangle({x:x, y:y}, rectobj)) {
+                                    this.robots[progiter].backRight.bumped = true;
+                                }
                         }
                         if (this.robots[progiter].touchSensor.value == 0) {
-                            var obstacleLines = SIMATH.getLinesFromRect(SIM.obstacleList[i]);
+                            var obstacleLines = SIMATH.getLinesFromRect(personalObstacleList[i]);
                             for (var k = 0; k < obstacleLines.length; k++) {
                                 var interPoint = SIMATH.getIntersectionPoint({
                                     x1 : this.robots[progiter].frontLeft.rx,

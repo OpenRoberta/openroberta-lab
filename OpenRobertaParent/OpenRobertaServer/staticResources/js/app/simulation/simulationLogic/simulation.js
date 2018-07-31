@@ -198,7 +198,8 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         x : 0,
         y : 0,
         w : 500,
-        h : 500
+        h : 500,
+        isParallelToAxis : true
     };
 
     var obstacle = {
@@ -209,8 +210,9 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         w : 0,
         h : 0,
         wOld : 0,
-        hOld : 0
-    };
+        hOld : 0,
+        isParallelToAxis : true
+    }; 
     var obslist= [ground, obstacle];
     for(var i=0;i<20;i++){
         var tempobs= {
@@ -221,7 +223,8 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                 w : 0,
                 h : 0,
                 wOld : 0,
-                hOld : 0
+                hOld : 0,
+                isParallelToAxis : true
             };
         obslist.push(tempobs);
     }
