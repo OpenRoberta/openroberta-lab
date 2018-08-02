@@ -84,7 +84,4 @@ public class ArduinoConfiguration extends Configuration {
         return "BrickConfiguration [configuration blocks=" + this.configurationBlocks + "]";
     }
 
-    public Configuration getConfiguration() {
-        return new ArduinoConfiguration(this.configurationBlocks, this.type);
-    }
 }

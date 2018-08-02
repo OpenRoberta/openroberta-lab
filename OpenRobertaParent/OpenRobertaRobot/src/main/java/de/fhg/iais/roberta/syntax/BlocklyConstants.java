@@ -350,4 +350,11 @@ public final class BlocklyConstants {
     public static final String ACTORPORT = "ACTORPORT";
     public static final String LEDSTATE = "LEDSTATE";
     public static final String RELAYSTATE = "RELAYSTATE";
+    public static final String MOISTURE = "MOISTURE";
+    public static final String POTENTIOMETER = "POTENTIOMETER";
+    public static final String HUMIDITY = "HUMIDITY";
+    public static final String MOTION = "MOTION";
+    public static final String PULSE = "PULSE";
+    public static final String DROP = "DROP";
+    public static final String RFID = "RFID";
 }

@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.syntax.sensor;
 
 import java.util.Locale;
 
-import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
@@ -64,8 +63,17 @@ public enum GetSampleType {
     FSR_VALUE( "SENSORPORT", "FSR", "VALUE", "SLOT" ),
     WALL_DISTANCE( "SENSORPORT", "WALL", "DISTANCE", "SLOT" ),
     DROP_OFF_DISTANCE( "SENSORPORT", "DROP_OFF", "DISTANCE", "SLOT" ),
-    INFRARED_AMBIENTLIGHT( "SENSORPORT", "LIGHT", "AMBIENTLIGHT", "SLOT" );
-
+    INFRARED_AMBIENTLIGHT( "SENSORPORT", "LIGHT", "AMBIENTLIGHT", "SLOT" ),
+    MOISTURE_VALUE( "SENSORPORT", "MOISTURE", "VALUE", "SLOT" ),
+    POTENTIOMETER_VALUE( "SENSORPORT", "POTENTIOMETER", "VALUE", "SLOT" ),
+    INFRARED_VALUE( "SENSORPORT", "INFRARED", "VALUE", "SLOT" ),
+    HUMIDITY_HUMIDITY( "SENSORPORT", "HUMIDITY", "HUMIDITY", "SLOT" ),
+    HUMIDITY_TEMPERATURE( "SENSORPORT", "HUMIDITY", "TEMPERATURE", "SLOT" ),
+    MOTION_PRESENCE( "SENSORPORT", "MOTION", "PRESENCE", "SLOT" ),
+    PULSE_VALUE( "SENSORPORT", "PULSE", "VALUE", "SLOT" ),
+    DROP_VALUE( "SENSORPORT", "DROP", "VALUE", "SLOT" ),
+    RFID_SERIAL( "SENSORPORT", "RFID", "SERIAL", "SLOT" ),
+    RFID_PRESENCE( "SENSORPORT", "RFID", "PRESENCE", "SLOT" );
     private final String portTypeName;
     private final String sensorType;
     private final String sensorMode;
@@ -101,11 +109,11 @@ public enum GetSampleType {
     }
 
     /**
-     * get mode from {@link MotorTachoMode} from string parameter. It is possible for one mode to have multiple string mappings. Throws exception if the mode
+     * get mode from {@link GetSampleType} from string parameter. It is possible for one mode to have multiple string mappings. Throws exception if the mode
      * does not exists.
      *
      * @param name of the mode
-     * @return mode from the enum {@link MotorTachoMode}
+     * @return mode from the enum {@link GetSampleType}
      */
     public static GetSampleType get(String s) {
         if ( (s == null) || s.isEmpty() ) {

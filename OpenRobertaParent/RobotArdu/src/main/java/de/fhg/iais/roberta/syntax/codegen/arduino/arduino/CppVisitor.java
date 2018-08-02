@@ -296,7 +296,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        this.sb.append("encoder");
+        this.sb.append("meinEncoder.read()");
         return null;
     }
 
@@ -361,7 +361,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
             case PRESENCE:
-                this.sb.append("irrecv" + infraredSensor.getPort().getOraName() + ".decode(&_results_" + infraredSensor.getPort().getOraName() + ");");
+                this.sb.append("_irrecv_" + infraredSensor.getPort().getOraName() + ".decode(&_results_" + infraredSensor.getPort().getOraName() + ");");
                 break;
             case VALUE:
                 this.sb.append("(_results_" + infraredSensor.getPort().getOraName() + ", DEC);");
@@ -370,7 +370,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                 throw new DbcException("Invalide mode for Humidity Sensor!");
         }
         nlIndent();
-        this.sb.append("irrecv.resume()");
+        this.sb.append("_irrecv_" + infraredSensor.getPort().getOraName() + ".resume()");
         return null;
     }
 
@@ -426,20 +426,51 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
             return;
         }
         this.sb.append("#include <math.h> \n");
-        //TODO: only include if needed:
-        //if IR is used
-        this.sb.append("#include <IRremote.h> \n");
-        //if humidity is used
-        this.sb.append("#include <DHT.h> \n");
-        //if RFID is used
-        this.sb.append("#include <SPI.h> \n");
-        this.sb.append("#include <MFRC522.h> \n");
-        //if LCD I2C is used
-        this.sb.append("#include <LiquidCrystal_I2C.h> \n");
-        //if LCD is used
-        this.sb.append("#include <LiquidCrystal.h> \n");
-        this.sb.append("#include <Stepper.h> \n");
-        this.sb.append("#include <Servo.h> \n");
+        for ( UsedConfigurationBlock usedConfigurationBlock : this.usedConfigurationBlocks ) {
+            switch ( (ConfigurationBlockType) usedConfigurationBlock.getType() ) {
+                case HUMIDITY:
+                    this.sb.append("#include <DHT.h> \n");
+                    break;
+                case INFRARED:
+                    this.sb.append("#include <IRremote.h> \n");
+                    break;
+                case ENCODER:
+                    this.sb.append("#include <Encoder.h>  \n");
+                    break;
+                case RFID:
+                    this.sb.append("#include <SPI.h> \n");
+                    this.sb.append("#include <MFRC522.h> \n");
+                    break;
+                case LCD:
+                    this.sb.append("#include <LiquidCrystal.h> \n");
+                    break;
+                case LCDI2C:
+                    this.sb.append("#include <LiquidCrystal_I2C.h> \n");
+                    break;
+                case STEPMOTOR:
+                    this.sb.append("#include <Stepper.h> \n");
+                    break;
+                case SERVOMOTOR:
+                    this.sb.append("#include <Servo.h> \n");
+                    break;
+                case ULTRASONIC:
+                case MOTION:
+                case MOISTURE:
+                case KEY:
+                case LIGHT:
+                case POTENTIOMETER:
+                case TEMPERATURE:
+                case DROP:
+                case PULSE:
+                case LED:
+                case RGBLED:
+                case BUZZER:
+                case RELAY:
+                    break;
+                default:
+                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getType());
+            }
+        }
         this.sb.append("#include <RobertaFunctions.h>   // Open Roberta library \n");
         this.sb.append("RobertaFunctions rob;  \n");
     }
@@ -473,7 +504,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                 case INFRARED:
                     this.sb.append("pinMode(13, OUTPUT);");
                     nlIndent();
-                    this.sb.append("irrecv" + usedConfigurationBlock.getBlockName() + ".enableIRIn();");
+                    this.sb.append("_irrecv_" + usedConfigurationBlock.getBlockName() + ".enableIRIn();");
                     nlIndent();
                     break;
                 case KEY:
@@ -486,6 +517,10 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                 case TEMPERATURE:
                     break;
                 case ENCODER:
+                    this.sb.append("pinMode(_SW_" + usedConfigurationBlock.getBlockName() + ", INPUT);");
+                    nlIndent();
+                    this.sb.append("attachInterrupt(digitalPinToInterrupt(_SW_" + usedConfigurationBlock.getBlockName() + "), Interrupt, CHANGE);");
+                    nlIndent();
                     break;
                 case DROP:
                     break;
@@ -526,7 +561,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                 case STEPMOTOR:
                     break;
                 case SERVOMOTOR:
-                    this.sb.append("_servo_" + usedConfigurationBlock.getBlockName() + ".attach(" + usedConfigurationBlock.getPins().get(0) + ")");
+                    this.sb.append("_servo_" + usedConfigurationBlock.getBlockName() + ".attach(" + usedConfigurationBlock.getPins().get(0) + ");");
                     nlIndent();
                     break;
                 default:
@@ -563,7 +598,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                 case INFRARED:
                     this.sb.append("int _RECV_PIN_" + blockName + " = ").append(usedConfigurationBlock.getPins().get(0)).append(";");
                     nlIndent();
-                    this.sb.append("IRrecv(_RECV_PIN_" + blockName + ");");
+                    this.sb.append("IRrecv _irrecv_" + blockName + "(_RECV_PIN_" + blockName + ");");
                     nlIndent();
                     this.sb.append("decode_results _results_" + blockName + ";");
                     nlIndent();
@@ -585,6 +620,14 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                     nlIndent();
                     break;
                 case ENCODER:
+                    this.sb.append("int _CLK_" + blockName + " = 6;");
+                    nlIndent();
+                    this.sb.append("int _DT_" + blockName + " = 5;");
+                    nlIndent();
+                    this.sb.append("int _SW_" + blockName + " = ").append(usedConfigurationBlock.getPins().get(0)).append(";");
+                    nlIndent();
+                    this.sb.append("Encoder _myEncoder_" + blockName + "(_DT_" + blockName + ", _CLK_" + blockName + ");");
+                    nlIndent();
                     break;
                 case DROP:
                     this.sb.append("int _S_" + blockName + " = ").append(usedConfigurationBlock.getPins().get(0)).append(";");
@@ -648,7 +691,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                     nlIndent();
                     break;
                 case STEPMOTOR:
-                    this.sb.append("int _SPU_" + blockName + " = ").append("2048"); //TODO: change 2048 to customized
+                    this.sb.append("int _SPU_" + blockName + " = ").append("2048;"); //TODO: change 2048 to customized
                     nlIndent();
                     this.sb
                         .append("Stepper Motor_" + blockName + "(_SPU_" + blockName + ", ")
