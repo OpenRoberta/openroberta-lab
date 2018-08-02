@@ -95,6 +95,7 @@ define(['exports','util', 'progList.model','program.controller', 'program.model'
                                         alert("failed loading program for item "+ i+", check console");
                                         console.log("failed item is ", item);
                                     }
+                                    dat.savedName = item[0];
                                     extractedprograms[i] = dat;
                                     numloadprogs++;
                                     if(numloadprogs===oriarray.length ){

@@ -165,18 +165,36 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     exports.setInfo = setInfo;
     
     function resetPose() {
-        if (robot.resetPose) {
-            robot.resetPose();
+        if(!multipleSwitch){
+            if (robot.resetPose) {
+                robot.resetPose();
+            }
+            if (robot.time) {
+                robot.time = 0;
+            }
+        }else{
+            for(var i=0;i<numprogs;i++){
+                if (robots[i].resetPose) {
+                    robots[i].resetPose();
+                }
+                if (robots[i].time) {
+                    robots[i].time = 0;
+                }
+            }
         }
-        if (robot.time) {
-            robot.time = 0;
-        }
+
     }
     exports.resetPose = resetPose;
 
     function stopProgram() {
         setPause(true);
-        robot.reset();
+        if(!multipleSwitch){
+            robot.reset();
+        }else{
+            for(var i=0;i<numprogs;i++){
+                robots[i].reset();
+            }
+        }
         //scene.updateBackgrounds();
         reloadProgram();
     }
@@ -214,7 +232,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         isParallelToAxis : true
     }; 
     var obslist= [ground, obstacle];
-    for(var i=0;i<20;i++){
+    for(var i=0;i<7;i++){
         var tempobs= {
                 x : 0,
                 y : 0,
@@ -258,6 +276,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         reset = false;
         simRobotType = robotType;
         userProgram = program;
+        multipleSwitch = false;
         if (robotType.indexOf("calliope") >= 0) {
             currentBackground = 0;
             $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simButtonsHead').hide();
@@ -318,6 +337,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     var storedPrograms;
     var isDownRobots = [];
     var mouseonrobot = -1;
+    var robotOfConsideration = -1;
 //    exports.multipleSwitch = multipleSwitch;
     function initMultiple(programs, refresh, robotType){
         mouseonrobot =-1;
@@ -327,6 +347,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         reset = false;
         simRobotType = robotType;
         userProgram = programs;
+        robotOfConsideration =0;
         console.log("simRobottype is ", simRobotType);
         if (robotType.indexOf("calliope") >= 0) {
             currentBackground = 0;
@@ -400,6 +421,11 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     }
     exports.isMultiple = isMultiple;
 
+    function getRobotOfConsideration(){
+        return robotOfConsideration;
+    }
+    exports.getRobotOfConsideration = getRobotOfConsideration;
+    
     function cancel() {
         //$(window).off("resize");
         canceled = true;
@@ -680,7 +706,32 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             e.stopPropagation();
         }
     }
-
+    
+    function handleDoubleMouseClick(e){
+        if(multipleSwitch){
+            var X = e.clientX || e.originalEvent.touches[0].pageX;
+            var Y = e.clientY || e.originalEvent.touches[0].pageY;
+            var dx;
+            var dy;
+            var top = $('#robotLayer').offset().top;
+            var left = $('#robotLayer').offset().left;
+            startX = (parseInt(X - left, 10)) / scale;
+            startY = (parseInt(Y - top, 10)) / scale;
+            for(var i=0;i<numprogs;i++){
+                dx = startX - robots[i].mouse.rx;
+                dy = startY - robots[i].mouse.ry;
+                var boolDown = (dx * dx + dy * dy < robots[i].mouse.r * robots[i].mouse.r);
+//                isDownRobots[i] = boolDown;
+                if(boolDown){
+                    robotOfConsideration=i;
+                    break;
+                }
+            }
+        }else{
+            //do nothing
+        }
+    }
+    
     function handleMouseUp(e) {
         $("#robotLayer").css('cursor', 'auto');
         if(!multipleSwitch){
@@ -954,6 +1005,9 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             handleMouseWheel(e);
         });
         $("#canvasDiv").draggable();
+        $("#robotLayer").on("dblclick", function(e){
+            handleDoubleMouseClick(e);
+        });
     }
 
     function removeMouseEvents() {
@@ -1065,13 +1119,18 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
 
     function createRobots(reqRobot, numprogs){
         robots = [];
+        var posvec = []
+        for(var i=0;i<numprogs;i++){
+            posvec.push(200 + 60*(Math.floor((i+1)/2))*((-1)**(i)));
+        }
+        posvec.sort(function(a, b){return a - b});
         for(var i=0; i<numprogs;i++){
             var temprobot = new reqRobot({
                 x : 240,
-                y : 200 + 60*(Math.floor((i+1)/2))*((-1)**(i)),
+                y : posvec[i],
                 theta : 0,
                 xOld : 240,
-                yOld : 200 + 60*(Math.floor((i+1)/2))*((-1)**(i)),
+                yOld : posvec[i],
                 transX : 0,
                 transY : 0
             });
@@ -1084,6 +1143,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
 //                transX : 0,
 //                transY : 0
 //            }));
+            temprobot.savedName = userProgram[i].savedName;
             temprobot.canDraw = false;
             robots.push(temprobot);
         }

@@ -96,6 +96,10 @@ define([ 'exports', 'message', 'log', 'util', 'simulation.simulation', 'guiState
                     setTimeout(function() {
                         SIM.setPause(false);
                     }, 500);
+                }else{
+                    $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
+                    $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+                    SIM.stopProgram();
                 }
 
             }

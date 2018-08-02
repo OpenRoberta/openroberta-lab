@@ -374,7 +374,6 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         for(var iterrobot=0;iterrobot<this.numprogs;iterrobot++){
             this.rCtx.restore();
             this.rCtx.save();
-            $("#valuesContent").append('<div><label>Time</label><span>' + UTIL.round(this.robots[iterrobot].time, 3) + 's</span></div>');
             if (SIM.getBackground() === 7) {
                   x = UTIL.round((this.robots[iterrobot].pose.x + this.robots[iterrobot].pose.transX) / 3, 1);
                   y = UTIL.round((-this.robots[iterrobot].pose.y - this.robots[iterrobot].pose.transY) / 3, 1);
@@ -385,18 +384,26 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
                   y = +this.robots[iterrobot].pose.y + this.robots[iterrobot].pose.transY;
                   this.rCtx.fillStyle = "#333333";
               }
-            $("#valuesContent").append('<div><label>Robot X</label><span>' + UTIL.round(x, 0) + '</span></div>');
-            $("#valuesContent").append('<div><label>Robot Y</label><span>' + UTIL.round(y, 0) + '</span></div>');
-            $("#valuesContent").append('<div><label>Robot θ</label><span>' + UTIL.round(SIMATH.toDegree(this.robots[iterrobot].pose.theta), 0) + '°</span></div>');
-            $("#valuesContent").append('<div><label>Motor left</label><span>' + UTIL.round(this.robots[iterrobot].encoder.left * CONSTANTS.ENC, 0) + '°</span></div>');
-            $("#valuesContent").append('<div><label>Motor right</label><span>' + UTIL.round(this.robots[iterrobot].encoder.right * CONSTANTS.ENC, 0) + '°</span></div>');
-            $("#valuesContent").append('<div><label>Touch Sensor</label><span>' + UTIL.round(this.robots[iterrobot].touchSensor.value, 0) + '</span></div>');
-            $("#valuesContent").append('<div><label>Light Sensor</label><span>' + UTIL.round(this.robots[iterrobot].colorSensor.lightValue, 0) + '%</span></div>');
-            $("#valuesContent").append('<div><label>Ultra Sensor</label><span>' + UTIL.round(this.robots[iterrobot].ultraSensor.distance / 3.0, 0) + 'cm</span></div>');
-            if (this.robots[iterrobot].sound) {
-                $("#valuesContent").append('<div><label>Sound Sensor</label><span>' + UTIL.round(this.robots[iterrobot].sound.volume * 100, 0) + '%</span></div>');
+            if(SIM.getRobotOfConsideration()===iterrobot){
+                $('#valuesContent').html('');
+                $("#valuesContent").append('<div><label>Robot</label><span>' + (iterrobot +1) + '</span></div>');
+                $("#valuesContent").append('<div><label>Saved Name</label><span>' + this.robots[iterrobot].savedName+ '</span></div>');
+                $("#valuesContent").append('<div><label>FPS</label><span>' + UTIL.round(1 / SIM.getDt(), 0) + '</span></div>');
+                $("#valuesContent").append('<div><label>Time</label><span>' + UTIL.round(this.robots[iterrobot].time, 3) + 's</span></div>');
+                $("#valuesContent").append('<div><label>Robot X</label><span>' + UTIL.round(x, 0) + '</span></div>');
+                $("#valuesContent").append('<div><label>Robot Y</label><span>' + UTIL.round(y, 0) + '</span></div>');
+                $("#valuesContent").append('<div><label>Robot θ</label><span>' + UTIL.round(SIMATH.toDegree(this.robots[iterrobot].pose.theta), 0) + '°</span></div>');
+                $("#valuesContent").append('<div><label>Motor left</label><span>' + UTIL.round(this.robots[iterrobot].encoder.left * CONSTANTS.ENC, 0) + '°</span></div>');
+                $("#valuesContent").append('<div><label>Motor right</label><span>' + UTIL.round(this.robots[iterrobot].encoder.right * CONSTANTS.ENC, 0) + '°</span></div>');
+                $("#valuesContent").append('<div><label>Touch Sensor</label><span>' + UTIL.round(this.robots[iterrobot].touchSensor.value, 0) + '</span></div>');
+                $("#valuesContent").append('<div><label>Light Sensor</label><span>' + UTIL.round(this.robots[iterrobot].colorSensor.lightValue, 0) + '%</span></div>');
+                $("#valuesContent").append('<div><label>Ultra Sensor</label><span>' + UTIL.round(this.robots[iterrobot].ultraSensor.distance / 3.0, 0) + 'cm</span></div>');
+                if (this.robots[iterrobot].sound) {
+                    $("#valuesContent").append('<div><label>Sound Sensor</label><span>' + UTIL.round(this.robots[iterrobot].sound.volume * 100, 0) + '%</span></div>');
+                }
+                $("#valuesContent").append('<div><label>Color Sensor</label><span style="margin-left:6px; width: 20px; background-color:' + this.robots[iterrobot].colorSensor.color + '">&nbsp;</span></div>');
+
             }
-            $("#valuesContent").append('<div><label>Color Sensor</label><span style="margin-left:6px; width: 20px; background-color:' + this.robots[iterrobot].colorSensor.color + '">&nbsp;</span></div>');
             this.rCtx.scale(SIM.getScale(), SIM.getScale());
             this.rCtx.save();
             this.rCtx.translate(this.robots[iterrobot].pose.x, this.robots[iterrobot].pose.y);
@@ -445,18 +452,6 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
           this.rCtx.shadowBlur = 5;
           this.rCtx.shadowColor = "black";
 
-          this.rCtx.beginPath();
-          this.rCtx.moveTo(this.robots[iterrobot].geom.x + 2.5, this.robots[iterrobot].geom.y);
-          this.rCtx.lineTo(this.robots[iterrobot].geom.x + this.robots[iterrobot].geom.w - 2.5, this.robots[iterrobot].geom.y);
-          this.rCtx.quadraticCurveTo(this.robots[iterrobot].geom.x + this.robots[iterrobot].geom.w, this.robots[iterrobot].geom.y, this.robots[iterrobot].geom.x + this.robots[iterrobot].geom.w, this.robots[iterrobot].geom.y + 2.5);
-          this.rCtx.lineTo(this.robots[iterrobot].geom.x + this.robots[iterrobot].geom.w, this.robots[iterrobot].geom.y + this.robots[iterrobot].geom.h - 2.5);
-          this.rCtx.quadraticCurveTo(this.robots[iterrobot].geom.x + this.robots[iterrobot].geom.w, this.robots[iterrobot].geom.y + this.robots[iterrobot].geom.h, this.robots[iterrobot].geom.x + this.robots[iterrobot].geom.w - 2.5, this.robots[iterrobot].geom.y + this.robots[iterrobot].geom.h);
-          this.rCtx.lineTo(this.robots[iterrobot].geom.x + 2.5, this.robots[iterrobot].geom.y + this.robots[iterrobot].geom.h);
-          this.rCtx.quadraticCurveTo(this.robots[iterrobot].geom.x, this.robots[iterrobot].geom.y + this.robots[iterrobot].geom.h, this.robots[iterrobot].geom.x, this.robots[iterrobot].geom.y + this.robots[iterrobot].geom.h - 2.5);
-          this.rCtx.lineTo(this.robots[iterrobot].geom.x, this.robots[iterrobot].geom.y + 2.5);
-          this.rCtx.quadraticCurveTo(this.robots[iterrobot].geom.x, this.robots[iterrobot].geom.y, this.robots[iterrobot].geom.x + 2.5, this.robots[iterrobot].geom.y);
-          this.rCtx.closePath();
-          this.rCtx.fill();
           //touch
           this.rCtx.shadowBlur = 5;
           this.rCtx.shadowOffsetX = 2;
@@ -476,6 +471,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
               this.rCtx.arc(this.robots[iterrobot].led.x, this.robots[iterrobot].led.y, 2.5, 0, Math.PI * 2);
               this.rCtx.fill();
           }
+          
           //wheels
           this.rCtx.fillStyle = this.robots[iterrobot].wheelLeft.color;
           this.rCtx.fillRect(this.robots[iterrobot].wheelLeft.x, this.robots[iterrobot].wheelLeft.y, this.robots[iterrobot].wheelLeft.w, this.robots[iterrobot].wheelLeft.h);
@@ -488,7 +484,16 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
           this.rCtx.fillStyle = this.robots[iterrobot].colorSensor.color;
           this.rCtx.fill();
           this.rCtx.strokeStyle = "black";
+          
           this.rCtx.stroke();
+          
+          //number on robot
+          this.rCtx.save();
+          this.rCtx.scale(1,-1);
+          this.rCtx.font = "30px Arial";
+          this.rCtx.fillStyle = "black";
+          this.rCtx.fillText(iterrobot+1,-10,0);
+          this.rCtx.restore();
           //ledSensor
           if (this.robots[iterrobot].ledSensor && this.robots[iterrobot].ledSensor.color) {
               this.rCtx.fillStyle = this.robots[iterrobot].ledSensor.color;
