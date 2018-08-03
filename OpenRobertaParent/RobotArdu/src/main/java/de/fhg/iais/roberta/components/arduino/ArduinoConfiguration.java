@@ -9,13 +9,12 @@ import de.fhg.iais.roberta.util.Quadruplet;
 
 public class ArduinoConfiguration extends Configuration {
 
-    private final String type;
     protected final List<Quadruplet<ConfigurationBlock, String, List<String>, List<String>>> configurationBlocks;
 
     public ArduinoConfiguration(List<Quadruplet<ConfigurationBlock, String, List<String>, List<String>>> configurationBlocks, String arduinoType) {
         super(null, null, -1, -1);
         this.configurationBlocks = configurationBlocks;
-        this.type = arduinoType;
+        this.subtype = arduinoType;
     }
 
     /**
@@ -73,10 +72,6 @@ public class ArduinoConfiguration extends Configuration {
             }
         }
         return null;
-    }
-
-    public String getType() {
-        return this.type;
     }
 
     @Override

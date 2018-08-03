@@ -25,6 +25,8 @@ public class RobotCommunicator {
 
     private final Map<String, RobotCommunicationData> allStates = new ConcurrentHashMap<>();
 
+    private String subtype = ""; // The robot subtype, currently used for Arduino type differentiation
+
     public RobotCommunicator() {
         Runnable pushTimerThread = () -> pushTimerRunner();
         new Thread(null, pushTimerThread, "PushTimer").start();
@@ -171,4 +173,11 @@ public class RobotCommunicator {
         }
     }
 
+    public String getSubtype() {
+        return this.subtype;
+    }
+
+    public void setSubtype(String subtype) {
+        this.subtype = subtype;
+    }
 }

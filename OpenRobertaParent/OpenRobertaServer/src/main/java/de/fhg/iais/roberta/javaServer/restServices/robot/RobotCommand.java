@@ -32,6 +32,7 @@ public class RobotCommand {
     private static final String CMD_PUSH = "push";
     private static final String CMD_REPEAT = "repeat";
     private static final String CMD_ABORT = "abort";
+    private static final String SUBTYPE = "subtype";
 
     private final RobotCommunicator brickCommunicator;
 
@@ -93,6 +94,7 @@ public class RobotCommand {
                         LOG.info("the command " + command + " is pushed to the robot [count:" + counter + "]");
                     }
                     response = new JSONObject().put(CMD, command);
+                    response.put(SUBTYPE, this.brickCommunicator.getSubtype());
                     return Response.ok(response).build();
                 }
             default:

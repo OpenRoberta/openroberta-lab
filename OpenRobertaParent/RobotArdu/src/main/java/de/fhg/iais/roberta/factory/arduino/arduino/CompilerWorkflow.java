@@ -49,7 +49,7 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
         }
         try {
             ArduinoConfiguration configuration = ((ArduinoConfiguration) data.getBrickConfiguration());
-            this.arduinoType = configuration.getType();
+            this.arduinoType = configuration.getSubtype();
             String sourceCode = CppVisitor.generate(configuration, data.getProgramTransformer().getTree(), true);
             CompilerWorkflow.LOG.info("generating arduino c++ code");
             return sourceCode;

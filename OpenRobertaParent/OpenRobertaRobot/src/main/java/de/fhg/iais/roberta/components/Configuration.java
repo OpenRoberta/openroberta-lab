@@ -20,6 +20,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  */
 public abstract class Configuration {
     protected String robotName;
+    protected String subtype;
 
     protected final Map<IActorPort, Actor> actors;
     protected final Map<ISensorPort, Sensor> sensors;
@@ -40,6 +41,7 @@ public abstract class Configuration {
     public Configuration(Map<IActorPort, Actor> actors, Map<ISensorPort, Sensor> sensors, double wheelDiameterCM, double trackWidthCM) {
         super();
         this.robotName = "";
+        this.subtype = "";
         this.actors = actors;
         this.sensors = sensors;
         this.wheelDiameterCM = wheelDiameterCM;
@@ -52,6 +54,12 @@ public abstract class Configuration {
 
     public String getRobotName() {
         return this.robotName;
+    }
+
+    public void setSubtype(String subtype) { this.subtype = subtype; }
+
+    public String getSubtype() {
+        return this.subtype;
     }
 
     /**
