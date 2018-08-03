@@ -2,12 +2,12 @@ package de.fhg.iais.roberta.syntax.sensors.arduino.mbot;
 
 import java.util.List;
 
-import de.fag.iais.roberta.mode.sensor.arduino.mbot.GetSampleType;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.mode.sensor.arduino.mbot.GetSampleType;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;

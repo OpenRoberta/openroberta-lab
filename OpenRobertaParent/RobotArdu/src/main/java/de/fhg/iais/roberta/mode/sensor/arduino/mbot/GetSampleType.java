@@ -1,4 +1,4 @@
-package de.fag.iais.roberta.mode.sensor.arduino.mbot;
+package de.fhg.iais.roberta.mode.sensor.arduino.mbot;
 
 import java.util.Locale;
 
