@@ -1334,8 +1334,11 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         for ( final Method<Void> phrase : this.userDefinedMethods ) {
             appendTemplateIfArrayParameter(phrase.getParameters().get());
             nlIndent();
-            this.sb.append(getLanguageVarTypeFromBlocklyType(phrase.getReturnType()) + " ");
-            this.sb.append(phrase.getMethodName() + "(");
+            this.sb.append(getLanguageVarTypeFromBlocklyType(phrase.getReturnType()));
+            if ( getLanguageVarTypeFromBlocklyType(phrase.getReturnType()).toString().contains("array") ) {
+                this.sb.append("M>");
+            }
+            this.sb.append(" " + phrase.getMethodName() + "(");
             phrase.getParameters().visit(this);
             this.sb.append(");");
             nlIndent();
