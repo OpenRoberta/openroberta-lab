@@ -7,16 +7,16 @@ define(['exports','util', 'progList.model','program.controller', 'program.model'
         //currently for debugging purpose logged in a default user
 //        debugger;
    //un comment following lines to switch default login on     
-//        USER.login("a","123456",function(result){
-//            if (result.rc === "ok") {
-//                GUISTATE_C.setLogin(result);
-//                if (result.userId === 1) {
-//                    $('#menuAddStatusTextWrap').removeClass('hidden');
-//                }
-//            }
-//            MSG.displayInformation(result, "MESSAGE_USER_LOGIN", result.message, GUISTATE_C.getUserName());
-////            debugger;
-//        });
+        USER.login("a","123456",function(result){
+            if (result.rc === "ok") {
+                GUISTATE_C.setLogin(result);
+                if (result.userId === 1) {
+                    $('#menuAddStatusTextWrap').removeClass('hidden');
+                }
+            }
+            MSG.displayInformation(result, "MESSAGE_USER_LOGIN", result.message, GUISTATE_C.getUserName());
+//            debugger;
+        });
     }
     exports.init = init;
     
@@ -118,10 +118,10 @@ define(['exports','util', 'progList.model','program.controller', 'program.model'
                                                 if (result.rc === "ok") {
                                                     //                    MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
                                                     extractedprograms[i]["result"] = result;
-                                                    console.log("added result for ", i);
+//                                                    console.log("added result for ", i);
                                                     programsfetched++;
                                                     if(programsfetched === oriarray.length){
-                                                        console.log("reached end");
+//                                                        console.log("reached end");
                                                         
                                                         console.log(extractedprograms);
                                                         simulateMultiple(extractedprograms);
@@ -142,7 +142,7 @@ define(['exports','util', 'progList.model','program.controller', 'program.model'
                                                     alert("failed loading js for item "+i+" check console");
                                                     console.log("failed loading js for item ", item);
                                                 }
-                                                console.log("ran fetching for", i);
+//                                                console.log("ran fetching for", i);
 //                                                PROGRAM_C.reloadProgram(result);
                                             });
                                             

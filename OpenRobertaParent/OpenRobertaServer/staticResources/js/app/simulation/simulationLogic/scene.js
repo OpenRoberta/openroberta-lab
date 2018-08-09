@@ -55,6 +55,18 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             this.wave = 0.0;
             this.waves = Array(this.numprogs).fill(0.0);
             this.isMultiple = true;
+            $("#constantValue").html("");
+            var pagistr = "<select class=\"form-control\" id=\"robotOfConsideration\">";
+            for(var pagirobot = 0; pagirobot<this.numprogs; pagirobot++){
+                if(SIM.getRobotOfConsideration()===pagirobot){
+                    pagistr += "<option selected>"+(pagirobot+1)+"</option>";
+                }else{
+                    pagistr += "<option >"+(pagirobot+1)+"</option>"
+                }
+            }
+            pagistr += "</select>";
+            $("#constantValue").append('<div><label>Robot</label><span style=\"width:64px\">' + pagistr + '</span></div>');
+
         }
     }
 
@@ -385,23 +397,40 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
                   this.rCtx.fillStyle = "#333333";
               }
             if(SIM.getRobotOfConsideration()===iterrobot){
-                $('#valuesContent').html('');
-                $("#valuesContent").append('<div><label>Robot</label><span>' + (iterrobot +1) + '</span></div>');
-                $("#valuesContent").append('<div><label>Saved Name</label><span>' + this.robots[iterrobot].savedName+ '</span></div>');
-                $("#valuesContent").append('<div><label>FPS</label><span>' + UTIL.round(1 / SIM.getDt(), 0) + '</span></div>');
-                $("#valuesContent").append('<div><label>Time</label><span>' + UTIL.round(this.robots[iterrobot].time, 3) + 's</span></div>');
-                $("#valuesContent").append('<div><label>Robot X</label><span>' + UTIL.round(x, 0) + '</span></div>');
-                $("#valuesContent").append('<div><label>Robot Y</label><span>' + UTIL.round(y, 0) + '</span></div>');
-                $("#valuesContent").append('<div><label>Robot θ</label><span>' + UTIL.round(SIMATH.toDegree(this.robots[iterrobot].pose.theta), 0) + '°</span></div>');
-                $("#valuesContent").append('<div><label>Motor left</label><span>' + UTIL.round(this.robots[iterrobot].encoder.left * CONSTANTS.ENC, 0) + '°</span></div>');
-                $("#valuesContent").append('<div><label>Motor right</label><span>' + UTIL.round(this.robots[iterrobot].encoder.right * CONSTANTS.ENC, 0) + '°</span></div>');
-                $("#valuesContent").append('<div><label>Touch Sensor</label><span>' + UTIL.round(this.robots[iterrobot].touchSensor.value, 0) + '</span></div>');
-                $("#valuesContent").append('<div><label>Light Sensor</label><span>' + UTIL.round(this.robots[iterrobot].colorSensor.lightValue, 0) + '%</span></div>');
-                $("#valuesContent").append('<div><label>Ultra Sensor</label><span>' + UTIL.round(this.robots[iterrobot].ultraSensor.distance / 3.0, 0) + 'cm</span></div>');
-                if (this.robots[iterrobot].sound) {
-                    $("#valuesContent").append('<div><label>Sound Sensor</label><span>' + UTIL.round(this.robots[iterrobot].sound.volume * 100, 0) + '%</span></div>');
+                $('#notConstantValue').html('');
+//                $('#notConstantValue').append("<ul class=\"pagination\"><li><a href=\"#\">1</a></li><li><a href=\"#\">2</a></li></ul>");
+                var pagistr = "<select class=\"form-control\" id=\"exampleFormControlSelect1\">";
+//                $('#notConstantValue').append("<ul class=\"pagination\">");
+                for(var pagirobot = 0; pagirobot<this.numprogs; pagirobot++){
+                    if(iterrobot===pagirobot){
+//                        $('#notConstantValue').append("<li class=\"active\"><a href=\"#\">"+pagirobot+"</a></li>");
+                        pagistr += "<option >"+(pagirobot+1)+"</option>";
+                    }else{
+//                        $('#notConstantValue').append("<li><a href=\"#\">"+pagirobot+"</a></li>");
+                        pagistr += "<option >"+(pagirobot+1)+"</option>"
+                    }
                 }
-                $("#valuesContent").append('<div><label>Color Sensor</label><span style="margin-left:6px; width: 20px; background-color:' + this.robots[iterrobot].colorSensor.color + '">&nbsp;</span></div>');
+                pagistr += "</select>";
+//                $('#notConstantValue').append(pagistr);
+//                $(".robotsel").off("click");
+//                $(".robotsel").on("click", function(){
+//                    console.log("clicked");
+//                });
+                $("#notConstantValue").append('<div><label>Saved Name</label><span>' + this.robots[iterrobot].savedName+ '</span></div>');
+                $("#notConstantValue").append('<div><label>FPS</label><span>' + UTIL.round(1 / SIM.getDt(), 0) + '</span></div>');
+                $("#notConstantValue").append('<div><label>Time</label><span>' + UTIL.round(this.robots[iterrobot].time, 3) + 's</span></div>');
+                $("#notConstantValue").append('<div><label>Robot X</label><span>' + UTIL.round(x, 0) + '</span></div>');
+                $("#notConstantValue").append('<div><label>Robot Y</label><span>' + UTIL.round(y, 0) + '</span></div>');
+                $("#notConstantValue").append('<div><label>Robot θ</label><span>' + UTIL.round(SIMATH.toDegree(this.robots[iterrobot].pose.theta), 0) + '°</span></div>');
+                $("#notConstantValue").append('<div><label>Motor left</label><span>' + UTIL.round(this.robots[iterrobot].encoder.left * CONSTANTS.ENC, 0) + '°</span></div>');
+                $("#notConstantValue").append('<div><label>Motor right</label><span>' + UTIL.round(this.robots[iterrobot].encoder.right * CONSTANTS.ENC, 0) + '°</span></div>');
+                $("#notConstantValue").append('<div><label>Touch Sensor</label><span>' + UTIL.round(this.robots[iterrobot].touchSensor.value, 0) + '</span></div>');
+                $("#notConstantValue").append('<div><label>Light Sensor</label><span>' + UTIL.round(this.robots[iterrobot].colorSensor.lightValue, 0) + '%</span></div>');
+                $("#notConstantValue").append('<div><label>Ultra Sensor</label><span>' + UTIL.round(this.robots[iterrobot].ultraSensor.distance / 3.0, 0) + 'cm</span></div>');
+                if (this.robots[iterrobot].sound) {
+                    $("#notConstantValue").append('<div><label>Sound Sensor</label><span>' + UTIL.round(this.robots[iterrobot].sound.volume * 100, 0) + '%</span></div>');
+                }
+                $("#notConstantValue").append('<div><label>Color Sensor</label><span style="margin-left:6px; width: 20px; background-color:' + this.robots[iterrobot].colorSensor.color + '">&nbsp;</span></div>');
 
             }
             this.rCtx.scale(SIM.getScale(), SIM.getScale());
@@ -488,12 +517,12 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
           this.rCtx.stroke();
           
           //number on robot
-          this.rCtx.save();
-          this.rCtx.scale(1,-1);
-          this.rCtx.font = "30px Arial";
-          this.rCtx.fillStyle = "black";
-          this.rCtx.fillText(iterrobot+1,-10,0);
-          this.rCtx.restore();
+//          this.rCtx.save();
+//          this.rCtx.scale(1,-1);
+//          this.rCtx.font = "30px Arial";
+//          this.rCtx.fillStyle = "black";
+//          this.rCtx.fillText(iterrobot+1,-10,0);
+//          this.rCtx.restore();
           //ledSensor
           if (this.robots[iterrobot].ledSensor && this.robots[iterrobot].ledSensor.color) {
               this.rCtx.fillStyle = this.robots[iterrobot].ledSensor.color;
