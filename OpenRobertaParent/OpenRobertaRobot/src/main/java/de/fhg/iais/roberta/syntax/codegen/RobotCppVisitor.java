@@ -329,13 +329,13 @@ public abstract class RobotCppVisitor extends CommonLanguageVisitor {
 
     @Override
     protected void generateCodeFromTernary(IfStmt<Void> ifStmt) { 
-        this.sb.append("((" + whitespace());
+        this.sb.append("(" + whitespace() + "(" + whitespace());
         ifStmt.getExpr().get(0).visit(this);
         this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace() + "(" + whitespace());
         ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
         this.sb.append(whitespace() + ")" + whitespace() + ":" + whitespace() + "(" + whitespace());
         ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
-        this.sb.append("))");
+        this.sb.append(")" + whitespace() + ")");
     }
 
     @Override
