@@ -2,7 +2,7 @@
  * @fileOverview Scene for a robot simulation
  * @author canvasDiv Jost <canvasDiv.jost@iais.fraunhofer.de>
  */
-define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.constants', 'jquery' ], function(SIM, SIMATH, UTIL, CONSTANTS, $) {
+define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.constants', 'program.controller','jquery' ], function(SIM, SIMATH, UTIL, CONSTANTS,PROGRAM_C, $) {
 
     /**
      * Creates a new Scene.
@@ -29,6 +29,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             };
             this.wave = 0.0;
             this.isMultiple = false;
+            $("#constantValue").html("");
         }else if(robot.constructor === Array){
             console.log("robot is multiple");
             this.backgroundImg = backgroundImg;
@@ -170,26 +171,26 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.rCtx.restore();
         this.rCtx.save();
         // provide new user information
-        $('#valuesContent').html('');
-        $("#valuesContent").append('<div><label>FPS</label><span>' + UTIL.round(1 / SIM.getDt(), 0) + '</span></div>');
-        $("#valuesContent").append('<div><label>Time</label><span>' + UTIL.round(this.robot.time, 3) + 's</span></div>');
-        $("#valuesContent").append('<div><label>Compass</label><span>' + UTIL.round(this.robot.compass.degree, 0) + '°</span></div>');
-        $("#valuesContent").append('<div><label>Light Sensor</label><span>' + UTIL.round(this.robot.display.lightLevel, 0) + '%</span></div>');
-        $("#valuesContent").append('<div><label>Temperature</label><span>' + UTIL.round(this.robot.temperature.degree, 2) + '°</span></div>');
+        $('#notConstantValue').html('');
+        $("#notConstantValue").append('<div><label>FPS</label><span>' + UTIL.round(1 / SIM.getDt(), 0) + '</span></div>');
+        $("#notConstantValue").append('<div><label>Time</label><span>' + UTIL.round(this.robot.time, 3) + 's</span></div>');
+        $("#notConstantValue").append('<div><label>Compass</label><span>' + UTIL.round(this.robot.compass.degree, 0) + '°</span></div>');
+        $("#notConstantValue").append('<div><label>Light Sensor</label><span>' + UTIL.round(this.robot.display.lightLevel, 0) + '%</span></div>');
+        $("#notConstantValue").append('<div><label>Temperature</label><span>' + UTIL.round(this.robot.temperature.degree, 2) + '°</span></div>');
         var gesture;
         for ( var i in this.robot.gesture) {
             gesture = i;
             break;
         }
-        $("#valuesContent").append('<div><label>Gesture</label><span>' + gesture + '</span></div>');
+        $("#notConstantValue").append('<div><label>Gesture</label><span>' + gesture + '</span></div>');
         for (var i = 0; i < 4; i++) {
             if (this.robot['pin' + i]) {
                 if (this.robot['pin' + i].touched) {
-                    $("#valuesContent").append('<div><label>Pin ' + i + '</label><span>' + this.robot['pin' + i].touched + '</span></div>');
+                    $("#notConstantValue").append('<div><label>Pin ' + i + '</label><span>' + this.robot['pin' + i].touched + '</span></div>');
                 } else if (this.robot['pin' + i].digitalIn != undefined) {
-                    $("#valuesContent").append('<div><label>Pin ' + i + '</label><span>' + this.robot['pin' + i].digitalIn + ' \u2293</span></div>');
+                    $("#notConstantValue").append('<div><label>Pin ' + i + '</label><span>' + this.robot['pin' + i].digitalIn + ' \u2293</span></div>');
                 } else if (this.robot['pin' + i].analogIn != undefined) {
-                    $("#valuesContent").append('<div><label>Pin ' + i + '</label><span>' + this.robot['pin' + i].analogIn + ' \u223F</span></div>');
+                    $("#notConstantValue").append('<div><label>Pin ' + i + '</label><span>' + this.robot['pin' + i].analogIn + ' \u223F</span></div>');
                 }
             }
         }
@@ -217,9 +218,9 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.rCtx.restore();
         this.rCtx.save();
         // provide new user information
-        $('#valuesContent').html('');
-        $("#valuesContent").append('<div><label>FPS</label><span>' + UTIL.round(1 / SIM.getDt(), 0) + '</span></div>');
-        $("#valuesContent").append('<div><label>Time</label><span>' + UTIL.round(this.robot.time, 3) + 's</span></div>');
+        $('#notConstantValue').html('');
+        $("#notConstantValue").append('<div><label>FPS</label><span>' + UTIL.round(1 / SIM.getDt(), 0) + '</span></div>');
+        $("#notConstantValue").append('<div><label>Time</label><span>' + UTIL.round(this.robot.time, 3) + 's</span></div>');
         if (SIM.getBackground() === 7) {
             x = UTIL.round((this.robot.pose.x + this.robot.pose.transX) / 3, 1);
             y = UTIL.round((-this.robot.pose.y - this.robot.pose.transY) / 3, 1);
@@ -230,18 +231,18 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             y = +this.robot.pose.y + this.robot.pose.transY;
             this.rCtx.fillStyle = "#333333";
         }
-        $("#valuesContent").append('<div><label>Robot X</label><span>' + UTIL.round(x, 0) + '</span></div>');
-        $("#valuesContent").append('<div><label>Robot Y</label><span>' + UTIL.round(y, 0) + '</span></div>');
-        $("#valuesContent").append('<div><label>Robot θ</label><span>' + UTIL.round(SIMATH.toDegree(this.robot.pose.theta), 0) + '°</span></div>');
-        $("#valuesContent").append('<div><label>Motor left</label><span>' + UTIL.round(this.robot.encoder.left * CONSTANTS.ENC, 0) + '°</span></div>');
-        $("#valuesContent").append('<div><label>Motor right</label><span>' + UTIL.round(this.robot.encoder.right * CONSTANTS.ENC, 0) + '°</span></div>');
-        $("#valuesContent").append('<div><label>Touch Sensor</label><span>' + UTIL.round(this.robot.touchSensor.value, 0) + '</span></div>');
-        $("#valuesContent").append('<div><label>Light Sensor</label><span>' + UTIL.round(this.robot.colorSensor.lightValue, 0) + '%</span></div>');
-        $("#valuesContent").append('<div><label>Ultra Sensor</label><span>' + UTIL.round(this.robot.ultraSensor.distance / 3.0, 0) + 'cm</span></div>');
+        $("#notConstantValue").append('<div><label>Robot X</label><span>' + UTIL.round(x, 0) + '</span></div>');
+        $("#notConstantValue").append('<div><label>Robot Y</label><span>' + UTIL.round(y, 0) + '</span></div>');
+        $("#notConstantValue").append('<div><label>Robot θ</label><span>' + UTIL.round(SIMATH.toDegree(this.robot.pose.theta), 0) + '°</span></div>');
+        $("#notConstantValue").append('<div><label>Motor left</label><span>' + UTIL.round(this.robot.encoder.left * CONSTANTS.ENC, 0) + '°</span></div>');
+        $("#notConstantValue").append('<div><label>Motor right</label><span>' + UTIL.round(this.robot.encoder.right * CONSTANTS.ENC, 0) + '°</span></div>');
+        $("#notConstantValue").append('<div><label>Touch Sensor</label><span>' + UTIL.round(this.robot.touchSensor.value, 0) + '</span></div>');
+        $("#notConstantValue").append('<div><label>Light Sensor</label><span>' + UTIL.round(this.robot.colorSensor.lightValue, 0) + '%</span></div>');
+        $("#notConstantValue").append('<div><label>Ultra Sensor</label><span>' + UTIL.round(this.robot.ultraSensor.distance / 3.0, 0) + 'cm</span></div>');
         if (this.robot.sound) {
-            $("#valuesContent").append('<div><label>Sound Sensor</label><span>' + UTIL.round(this.robot.sound.volume * 100, 0) + '%</span></div>');
+            $("#notConstantValue").append('<div><label>Sound Sensor</label><span>' + UTIL.round(this.robot.sound.volume * 100, 0) + '%</span></div>');
         }
-        $("#valuesContent").append('<div><label>Color Sensor</label><span style="margin-left:6px; width: 20px; background-color:' + this.robot.colorSensor.color + '">&nbsp;</span></div>');
+        $("#notConstantValue").append('<div><label>Color Sensor</label><span style="margin-left:6px; width: 20px; background-color:' + this.robot.colorSensor.color + '">&nbsp;</span></div>');
         this.rCtx.scale(SIM.getScale(), SIM.getScale());
         this.rCtx.save();
         this.rCtx.translate(this.robot.pose.x, this.robot.pose.y);
@@ -379,9 +380,9 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.rCtx.clearRect(0, 0, CONSTANTS.MAX_WIDTH, CONSTANTS.MAX_HEIGHT);
         
 //        // provide new user information
-//        $('#valuesContent').html('');
-//        $("#valuesContent").append('<div><label>FPS</label><span>' + UTIL.round(1 / SIM.getDt(), 0) + '</span></div>');
-//        $("#valuesContent").append('<div><label>Time</label><span>' + UTIL.round(this.robot.time, 3) + 's</span></div>');
+//        $('#notConstantValue').html('');
+//        $("#notConstantValue").append('<div><label>FPS</label><span>' + UTIL.round(1 / SIM.getDt(), 0) + '</span></div>');
+//        $("#notConstantValue").append('<div><label>Time</label><span>' + UTIL.round(this.robot.time, 3) + 's</span></div>');
 //        this.rCtx.save();
         for(var iterrobot=0;iterrobot<this.numprogs;iterrobot++){
             this.rCtx.restore();
@@ -397,6 +398,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
                   this.rCtx.fillStyle = "#333333";
               }
             if(SIM.getRobotOfConsideration()===iterrobot){
+                
                 $('#notConstantValue').html('');
 //                $('#notConstantValue').append("<ul class=\"pagination\"><li><a href=\"#\">1</a></li><li><a href=\"#\">2</a></li></ul>");
                 var pagistr = "<select class=\"form-control\" id=\"exampleFormControlSelect1\">";

@@ -7,7 +7,7 @@
  * @namespace SIM
  */
 
-define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.math', 'program.controller', 'robertaLogic.constants', 'simulation.program.builder', 'util', 'jquery' ], function(exports, Scene, ProgramEval, SIMATH, ROBERTA_PROGRAM, CONST, BUILDER, UTIL, $) {
+define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.math', 'program.controller', 'robertaLogic.constants', 'simulation.program.builder', 'util', 'program.controller', 'jquery' ], function(exports, Scene, ProgramEval, SIMATH, ROBERTA_PROGRAM, CONST, BUILDER, UTIL, PROGRAM_C, $) {
 
     var programEval = new ProgramEval();
 
@@ -194,6 +194,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             for(var i=0;i<numprogs;i++){
                 robots[i].reset();
             }
+            removeKeyEvents();
         }
         //scene.updateBackgrounds();
         reloadProgram();
@@ -500,8 +501,14 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         dt = now - (time || now);
         dt /= 1000;
         time = now;
-
+        var temprobotOfConsideration = robotOfConsideration;
+        robotOfConsideration = getRobotOfConsideration();
+        if(temprobotOfConsideration!=robotOfConsideration){
+            var blockxml = userProgram[getRobotOfConsideration()].programText;
+            PROGRAM_C.programToBlocklyWorkspace(blockxml);
+        }
         stepCounter += 1;
+        addKeyEvents();
         for(var i=0;i<numprogs;i++){
             if (!programEvals[i].getProgram().isTerminated() && !pause && !reset) {
                 actionValuesarr[i] = programEvals[i].step(sensorValuesMultiple[i]);
@@ -672,7 +679,27 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         }
         return false;
     }
-
+    function addKeyEvents(){
+        if(multipleSwitch){
+            document.addEventListener('keydown', (event) => {
+                const keyName = event.key;
+                if(keyName=== "ArrowUp" && multipleSwitch){
+                    robots[getRobotOfConsideration()].pose.theta -= Math.PI/18000;
+                }
+                if(keyName=== "ArrowDown" && multipleSwitch){
+                    robots[getRobotOfConsideration()].pose.theta += Math.PI/18000;
+                }
+//                console.log('keydown event\n\n' + 'key: ' + keyName);
+              });
+//            document.addEventListener('keyup', (event) => {
+//                document.off
+//              });
+//            
+        }
+    }
+    function removeKeyEvents(){
+        document.off('keydown');
+    }
     function handleMouseDown(e) {
         // e.preventDefault();
         var X = e.clientX || e.originalEvent.touches[0].pageX;
@@ -731,7 +758,6 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                 var boolDown = (dx * dx + dy * dy < robots[i].mouse.r * robots[i].mouse.r);
 //                isDownRobots[i] = boolDown;
                 if(boolDown){
-                    robotOfConsideration=i;
                     $("#robotOfConsideration")[0][i].selected = true;
                     break;
                 }
