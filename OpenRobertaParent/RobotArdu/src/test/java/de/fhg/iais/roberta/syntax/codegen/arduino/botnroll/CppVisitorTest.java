@@ -89,7 +89,7 @@ public class CppVisitorTest {
             + "    delay(1);"
             + "}"
             + "while (true) {"
-            + "    if (( bnr.buttonIsPressed(2) ) ? bnr.buttonIsPressed(123) : bnr.buttonIsPressed(3)) {"
+            + "    if ((( bnr.buttonIsPressed(2) ) ? (bnr.buttonIsPressed(123)) : (bnr.buttonIsPressed(3)))) {"
             + "        break;"
             + "    }"
             + "    delay(1);}"
