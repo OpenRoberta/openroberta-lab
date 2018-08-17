@@ -1,6 +1,8 @@
+import { State } from "./state";
+
 export interface Native {
     clearDisplay(): void;
-    getSample( name: string, port: number, sensor: string, slot: string ): void;
+    getSample( s: State, name: string, port: number, sensor: string, slot: string ): void;
     timerReset( port: number ): void;
     timerGet( port: number ): number;
     ledOnAction( name: string, port: number, color: number ): void;

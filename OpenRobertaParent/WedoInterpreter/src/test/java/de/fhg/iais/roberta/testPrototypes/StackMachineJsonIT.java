@@ -5,8 +5,13 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
-import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Stream;
 
 import javax.ws.rs.core.Response;
 
@@ -14,6 +19,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -34,7 +40,6 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
@@ -45,15 +50,14 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
  */
 @Category(IntegrationTest.class)
 @RunWith(MockitoJUnitRunner.class)
-public class GenerateStackMachineJsonFromBlocklyXmlIT {
-    private static final Logger LOG = LoggerFactory.getLogger(GenerateStackMachineJsonFromBlocklyXmlIT.class);
-    private static final String TEST_BASE = "xmlTests/";
-    private static final String ROBOT = "wedo";
+public class StackMachineJsonIT {
+    private static final Logger LOG = LoggerFactory.getLogger(StackMachineJsonIT.class);
 
-    private static final String[] NAME_OF_TESTS =
-        {
-            "x-while-until"
-        };
+    private static final String ROBOT = "wedo";
+    private static final String MARK = "**********";
+
+    private static final String TEST_BASE = "./WeDoCI/";
+    private static final String NODE_CALL = "node ./jsGenerated/runStackMachineJson.js" + " -d " + TEST_BASE;
 
     private static RobotCommunicator robotCommunicator;
     private static RobertaProperties robertaProperties;
@@ -70,6 +74,9 @@ public class GenerateStackMachineJsonFromBlocklyXmlIT {
     private ClientProgram restProgram;
     private ClientAdmin restAdmin;
 
+    private Map<String, Boolean> resultsOfCompilation = new HashMap<>();
+    private boolean successForCompilation = false;
+
     @Before
     public void setup() throws Exception {
         robertaProperties = new RobertaProperties(Util1.loadProperties("classpath:wedoOpenRoberta.properties"));
@@ -83,29 +90,54 @@ public class GenerateStackMachineJsonFromBlocklyXmlIT {
     }
 
     @Test
-    public void testNepo() throws Exception {
-        setRobotTo(ROBOT);
-        Arrays.stream(NAME_OF_TESTS).forEach(s -> runNepo(s));
+    public void testDirectory() throws Exception {
+        testGenerateStackMachineJsonFromBlocklyXmlIT();
+        runInterpretStackMachineJsonInterpreter(NODE_CALL);
+        showCompilationResultOverview(true); // a second call at the end to have a better overview
     }
 
-    public void runNepo(String programName) {
+    //@Ignore
+    @Test
+    public void testOneFile() throws Exception {
+        String directory = "./WeDoCI/";
+        String file = "functions";
+        successForCompilation = runCompilation(directory, file);
+        String nodeCall = "node ./jsGenerated/runStackMachineJson.js" + " " + directory + " " + file;
+        runInterpretStackMachineJsonInterpreter(nodeCall);
+        showCompilationResultOverview(true);
+    }
+
+    @Test
+    @Ignore
+    public void testGenerateStackMachineJsonFromBlocklyXmlIT() throws Exception {
+        setRobotTo(ROBOT);
+        Stream<String> filesFromDirectory = Util1.fileStreamOfFileDirectory(TEST_BASE);
+        successForCompilation =
+            filesFromDirectory.filter(f -> f.endsWith(".xml")).map(f -> f.substring(0, f.length() - 4)).map(s -> runCompilation(TEST_BASE, s)).reduce(
+                true,
+                (a, b) -> a && b);
+        showCompilationResultOverview(false);
+    }
+
+    private void runInterpretStackMachineJsonInterpreter(String nodeCall) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec(nodeCall).getInputStream(), Charset.forName("UTF-8")));
+        br.lines().forEach(System.out::println);
+    }
+
+    private boolean runCompilation(String directory, String programName) {
         try {
-            String fullResource = TEST_BASE + programName + ".xml";
-            LOG.info("***** robot: " + ROBOT + ", xml: " + fullResource + " *****");
+            resultsOfCompilation.put(programName, false);
+            String fullResource = directory + programName + ".xml";
+            LOG.info(MARK + " robot: " + ROBOT + ", xml: " + fullResource + " " + MARK);
             String xmlText = Util1.readFileContent(fullResource);
             String programText = null;
             String configText = null;
-            try {
-                Export jaxbImportExport = JaxbHelper.xml2Element(xmlText, Export.class);
-                String robotType1 = jaxbImportExport.getProgram().getBlockSet().getRobottype();
-                String robotType2 = jaxbImportExport.getConfig().getBlockSet().getRobottype();
-                assertTrue(robotType1.equals(ROBOT) && robotType2.equals(ROBOT));
-                programText = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
-                configText = JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet());
-            } catch ( Exception e ) {
-                LOG.info("got outdated xml: only blockset found. Please re-export the program from the lab");
-                programText = xmlText;
-            }
+            Export jaxbImportExport = JaxbHelper.xml2Element(xmlText, Export.class);
+            String robotType1 = jaxbImportExport.getProgram().getBlockSet().getRobottype();
+            String robotType2 = jaxbImportExport.getConfig().getBlockSet().getRobottype();
+            assertTrue(robotType1.equals(ROBOT) && robotType2.equals(ROBOT));
+            programText = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
+            configText = JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet());
             JSONObject cmd = mkD("{'cmd':'runPBack','name':" + programName + "','language':'de'}");
             cmd.getJSONObject("data").put("programText", programText);
             cmd.getJSONObject("data").put("configText", configText);
@@ -113,9 +145,12 @@ public class GenerateStackMachineJsonFromBlocklyXmlIT {
             JSONObject entity = (JSONObject) this.response.getEntity();
             assertEquals("ok", entity.optString("rc", ""));
             String javaScriptProgram = entity.getString("compiledCode");
-            Util1.writeFile(TEST_BASE + programName + ".json", javaScriptProgram);
+            Util1.writeFile(directory + programName + ".json", javaScriptProgram);
+            resultsOfCompilation.put(programName, true);
+            return true;
         } catch ( Exception e ) {
-            throw new DbcException("***** Test failed for " + programName + " *****", e);
+            LOG.error(MARK + " Test failed for " + programName + " " + MARK, e);
+            return false;
         }
     }
 
@@ -124,21 +159,32 @@ public class GenerateStackMachineJsonFromBlocklyXmlIT {
         assertEntityRc(this.response, "ok", Key.ROBOT_SET_SUCCESS);
     }
 
+    private void showCompilationResultOverview(boolean syso) {
+        assertTrue("some programs failed when being compiled", successForCompilation);
+        for ( Entry<String, Boolean> e : resultsOfCompilation.entrySet() ) {
+            String result = String.format(MARK + " compilation of %-30s : %-8s " + MARK, '"' + e.getKey() + '"', e.getValue() ? "success" : "ERROR");
+            if ( syso ) {
+                System.out.println(result);
+            } else {
+                LOG.info(result);
+            }
+        }
+    }
+
     /**
      * see {JSONUtilForServer}
      */
-    public static JSONObject mkD(String s) throws JSONException {
+    private static JSONObject mkD(String s) throws JSONException {
         return new JSONObject("{'data':" + s + ",'log':[]}".replaceAll("'", "\""));
     }
 
     /**
      * copy from JSONUtilForServer
      */
-    public static void assertEntityRc(Response response, String rc, Key message) throws JSONException {
+    private static void assertEntityRc(Response response, String rc, Key message) throws JSONException {
         JSONObject entity = (JSONObject) response.getEntity();
         Assert.assertEquals(rc, entity.getString("rc"));
         String responseKey = entity.optString("message");
         Assert.assertEquals(message.getKey(), responseKey);
     }
-
 }

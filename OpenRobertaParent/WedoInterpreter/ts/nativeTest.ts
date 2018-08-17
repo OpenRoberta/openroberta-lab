@@ -1,36 +1,37 @@
 import { Native } from "./nativeInterface";
+import { State } from "./state";
 import * as C from "./constants";
-import * as S from "./state";
 import * as U from "./util";
 
 export class NativeTest implements Native {
-
     private timers;
 
-    constructor() {
+    constructor( opLog, debug ) {
         this.timers = {};
         this.timers['start'] = Date.now();
+
+        U.loggingEnabled( opLog, debug );
     }
 
     public clearDisplay() {
-        U.p( 'clear display' );
+        U.debug( 'clear display' );
     }
 
-    public getSample( name: string, port: number, sensor: string, slot: string ) {
+    public getSample( s: State, name: string, port: number, sensor: string, slot: string ) {
         var robotText = 'robot: ' + name + ', port: ' + port;
-        U.p( robotText + ' getsample from ' + sensor );
+        U.debug( robotText + ' getsample from ' + sensor );
         switch ( sensor ) {
             case "infrared":
-                S.push( 5 );
+                s.push( 5 );
                 break;
             case "gyro":
-                S.push( 3 );
+                s.push( 3 );
                 break;
             case "buttons":
-                S.push( true );
+                s.push( true );
                 break;
             case C.TIMER:
-                S.push( this.timerGet( port ) );
+                s.push( this.timerGet( port ) );
                 break;
             default:
                 throw 'invalid get sample for ' + name + ' - ' + port + ' - ' + sensor + ' - ' + slot;
@@ -39,7 +40,7 @@ export class NativeTest implements Native {
 
     public timerReset( port: number ) {
         this.timers[port] = Date.now();
-        U.p( 'timerReset for ' + port );
+        U.debug( 'timerReset for ' + port );
     }
 
     public timerGet( port: number ) {
@@ -49,39 +50,39 @@ export class NativeTest implements Native {
             startTime = this.timers['start'];
         }
         const delta = now - startTime;
-        U.p( 'timerGet for ' + port + ' returned ' + delta );
+        U.debug( 'timerGet for ' + port + ' returned ' + delta );
         return delta;
     }
 
     public ledOnAction( name: string, port: number, color: number ) {
         const robotText = 'robot: ' + name + ', port: ' + port;
-        U.p( robotText + ' led on color ' + color );
+        U.info( robotText + ' led on color ' + color );
     }
 
     public statusLightOffAction( name: string, port: number ) {
         const robotText = 'robot: ' + name + ', port: ' + port;
-        U.p( robotText + ' led off' );
+        U.info( robotText + ' led off' );
     }
 
     public toneAction( name: string, frequency: number, duration: number ) {
         const robotText = 'robot: ' + name;
-        U.p( robotText + ' piezo: ' + ', frequency: ' + frequency + ', duration: ' + duration );
+        U.info( robotText + ' piezo: ' + ', frequency: ' + frequency + ', duration: ' + duration );
     }
 
     public motorOnAction( name: string, port: number, duration: number, speed: number ) {
         const robotText = 'robot: ' + name + ', port: ' + port;
         const durText = duration === -1 ? ' w.o. duration' : ( ' for ' + duration + ' msec' );
-        U.p( robotText + ' motor speed ' + speed + durText );
+        U.info( robotText + ' motor speed ' + speed + durText );
     }
 
     public motorStopAction( name: string, port: number ) {
         const robotText = 'robot: ' + name + ', port: ' + port;
-        U.p( robotText + ' motor stop' );
+        U.info( robotText + ' motor stop' );
     }
 
     public showTextAction( text: any ) {
         const showText = "" + text;
-        U.p( '***** show "' + showText + '" *****' );
+        U.info( 'show "' + showText + '"' );
     }
 
     public close() {

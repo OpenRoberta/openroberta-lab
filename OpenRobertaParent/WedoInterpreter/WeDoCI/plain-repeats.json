@@ -1,0 +1,336 @@
+{
+  "ops": [
+    {
+      "mode": "FOREVER",
+      "opc": "RepeatStmt",
+      "stmtList": [{
+        "mode": "FOREVER",
+        "opc": "RepeatStmtCont",
+        "stmtList": [
+          {
+            "opc": "expr",
+            "expr": "NUM_CONST",
+            "value": "0"
+          },
+          {"opc": "ShowTextAction"},
+          {
+            "opc": "flowControl",
+            "conditional": false,
+            "break": true,
+            "kind": "RepeatStmt"
+          }
+        ]
+      }]
+    },
+    {
+      "mode": "UNTIL",
+      "opc": "RepeatStmt",
+      "stmtList": [{
+        "mode": "UNTIL",
+        "opc": "RepeatStmtCont",
+        "stmtList": [
+          {
+            "opc": "expr",
+            "expr": "NUM_CONST",
+            "value": "0"
+          },
+          {
+            "opc": "expr",
+            "expr": "NUM_CONST",
+            "value": "0"
+          },
+          {
+            "op": "NEQ",
+            "opc": "expr",
+            "expr": "Binary"
+          },
+          {
+            "op": "NOT",
+            "opc": "expr",
+            "expr": "Unary"
+          },
+          {
+            "opc": "flowControl",
+            "conditional": true,
+            "break": true,
+            "kind": "RepeatStmt",
+            "BOOLEAN": false
+          },
+          {
+            "opc": "expr",
+            "expr": "NUM_CONST",
+            "value": "1"
+          },
+          {"opc": "ShowTextAction"},
+          {
+            "opc": "flowControl",
+            "conditional": false,
+            "break": true,
+            "kind": "RepeatStmt"
+          }
+        ]
+      }]
+    },
+    {
+      "mode": "WHILE",
+      "opc": "RepeatStmt",
+      "stmtList": [{
+        "mode": "WHILE",
+        "opc": "RepeatStmtCont",
+        "stmtList": [
+          {
+            "opc": "expr",
+            "expr": "NUM_CONST",
+            "value": "0"
+          },
+          {
+            "opc": "expr",
+            "expr": "NUM_CONST",
+            "value": "0"
+          },
+          {
+            "op": "EQ",
+            "opc": "expr",
+            "expr": "Binary"
+          },
+          {
+            "opc": "flowControl",
+            "conditional": true,
+            "break": true,
+            "kind": "RepeatStmt",
+            "BOOLEAN": false
+          },
+          {
+            "opc": "expr",
+            "expr": "NUM_CONST",
+            "value": "2"
+          },
+          {"opc": "ShowTextAction"},
+          {
+            "opc": "flowControl",
+            "conditional": false,
+            "break": true,
+            "kind": "RepeatStmt"
+          }
+        ]
+      }]
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "0"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "3"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "1"
+    },
+    {
+      "mode": "TIMES",
+      "opc": "RepeatStmt",
+      "stmtList": [{
+        "mode": "TIMES",
+        "opc": "RepeatStmtCont",
+        "stmtList": [
+          {
+            "opc": "expr",
+            "expr": "NUM_CONST",
+            "value": "3"
+          },
+          {"opc": "ShowTextAction"},
+          {
+            "opc": "flowControl",
+            "conditional": false,
+            "break": false,
+            "kind": "RepeatStmtCont"
+          }
+        ],
+        "name": "k0"
+      }],
+      "name": "k0"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "0"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "4"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "1"
+    },
+    {
+      "mode": "TIMES",
+      "opc": "RepeatStmt",
+      "stmtList": [{
+        "mode": "TIMES",
+        "opc": "RepeatStmtCont",
+        "stmtList": [
+          {
+            "opc": "expr",
+            "expr": "NUM_CONST",
+            "value": "4"
+          },
+          {"opc": "ShowTextAction"}
+        ],
+        "name": "k1"
+      }],
+      "name": "k1"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "0"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "0"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "4"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "2"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "1"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "0"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "mode": "FOR",
+      "opc": "RepeatStmt",
+      "stmtList": [{
+        "mode": "FOR",
+        "opc": "RepeatStmtCont",
+        "stmtList": [
+          {
+            "opc": "expr",
+            "name": "i",
+            "expr": "Var"
+          },
+          {"opc": "ShowTextAction"},
+          {
+            "opc": "flowControl",
+            "conditional": false,
+            "break": false,
+            "kind": "RepeatStmtCont"
+          }
+        ],
+        "name": "i"
+      }],
+      "name": "i"
+    },
+    {
+      "opc": "WaitStmt",
+      "stmtList": [
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": "8"
+        },
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": "0"
+        },
+        {
+          "op": "EQ",
+          "opc": "expr",
+          "expr": "Binary"
+        },
+        {
+          "opc": "IfTrueStatement",
+          "stmtList": [
+            {
+              "opc": "expr",
+              "expr": "NUM_CONST",
+              "value": "8"
+            },
+            {"opc": "ShowTextAction"},
+            {
+              "opc": "flowControl",
+              "conditional": false,
+              "break": true,
+              "kind": "WaitStmt"
+            }
+          ]
+        },
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": "9"
+        },
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": "9"
+        },
+        {
+          "op": "EQ",
+          "opc": "expr",
+          "expr": "Binary"
+        },
+        {
+          "opc": "IfTrueStatement",
+          "stmtList": [
+            {
+              "opc": "expr",
+              "expr": "NUM_CONST",
+              "value": "9"
+            },
+            {"opc": "ShowTextAction"},
+            {
+              "opc": "flowControl",
+              "conditional": false,
+              "break": true,
+              "kind": "WaitStmt"
+            }
+          ]
+        },
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": 1
+        },
+        {"opc": "WaitTimeSTMT"}
+      ]
+    }
+  ],
+  "functionDeclaration": {}
+}
