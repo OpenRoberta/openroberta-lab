@@ -1,8 +1,8 @@
 package de.fhg.iais.roberta.syntax.codegen.arduino.arduino;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.fhg.iais.roberta.components.ConfigurationBlockType;
 import de.fhg.iais.roberta.components.SensorType;
@@ -42,6 +42,8 @@ import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.check.hardware.arduino.arduino.UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.codegen.arduino.ArduinoVisitor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
@@ -146,32 +148,29 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
         if ( !lightAction.getMode().toString().equals(BlocklyConstants.DEFAULT) ) {
             this.sb.append("digitalWrite(_led_" + lightAction.getPort().getOraName() + ", " + lightAction.getMode().getValues()[0] + ");");
         } else {
-            String in = lightAction.getRgbLedColor().toString();
-            String regexString = Pattern.quote("NumConst [") + "(.*?)" + Pattern.quote("],");
-            Pattern p = Pattern.compile(regexString);
-            Matcher m = p.matcher(in);
-            String[] colors = {
-                "red",
-                "green",
-                "blue"
-            };
-            int color_index = 0;
-            while ( m.find() ) {
-                this.sb.append("analogWrite(_led_" + colors[color_index] + "_" + lightAction.getPort().getOraName() + ", " + m.group(1) + ");");
+            Map<String, Expr<Void>> Channels = new HashMap<>();
+            Channels.put("red", ((RgbColor<Void>) lightAction.getRgbLedColor()).getR());
+            Channels.put("green", ((RgbColor<Void>) lightAction.getRgbLedColor()).getG());
+            Channels.put("blue", ((RgbColor<Void>) lightAction.getRgbLedColor()).getB());
+            Channels.forEach((k, v) -> {
+                this.sb.append("analogWrite(_led_" + k + "_" + lightAction.getPort().getOraName() + ", ");
+                v.visit(this);
+                this.sb.append(");");
                 nlIndent();
-                color_index++;
-            }
+            });
+            //")
         }
         return null;
     }
 
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        String[] colors = {
-            "red",
-            "green",
-            "blue"
-        };
+        String[] colors =
+            {
+                "red",
+                "green",
+                "blue"
+            };
         for ( int i = 0; i < 3; i++ ) {
             this.sb.append("analogWrite(_led_" + colors[i] + "_" + lightStatusAction.getPort().getOraName() + ", 0);");
             nlIndent();
@@ -224,12 +223,8 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitRelayAction(RelayAction<Void> relayAction) {
-        this.sb
-            .append("digitalWrite(_relay_")
-            .append(relayAction.getPort().getOraName())
-            .append(", ")
-            .append(relayAction.getMode().getValues()[0])
-            .append(");");
+        this.sb.append("digitalWrite(_relay_").append(relayAction.getPort().getOraName()).append(", ").append(relayAction.getMode().getValues()[0]).append(
+            ");");
         return null;
     }
 
@@ -276,7 +271,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> button) {
-        this.sb.append("digitalRead(_taster_" + button.getPort().getOraName() + ") == HIGH");
+        this.sb.append("digitalRead(_taster_" + button.getPort().getOraName() + ")");
         return null;
     }
 
@@ -463,7 +458,7 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitMotionSensor(MotionSensor<Void> motionSensor) {
-        this.sb.append("digitalRead(_output_" + motionSensor.getPort().getOraName() + ") == HIGH");
+        this.sb.append("digitalRead(_output_" + motionSensor.getPort().getOraName() + ")");
         return null;
     }
 
