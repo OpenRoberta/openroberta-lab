@@ -1,7 +1,7 @@
-import { Native } from "./nativeInterface";
-import { State } from "./state";
-import * as C from "./constants";
-import * as U from "./util";
+import { Native } from "interpreter.nativeInterface";
+import { State } from "interpreter.state";
+import * as C from "interpreter.constants";
+import * as U from "interpreter.util";
 
 export class NativeTest implements Native {
     private timers;
@@ -86,8 +86,6 @@ export class NativeTest implements Native {
     }
 
     public close() {
-        this.motorStopAction( "wedo", 1 );
-        this.motorStopAction( "wedo", 2 );
-        this.ledOnAction( "wedo", 99, 3 );
+        // CI implementation. No real robot. No motor off, etc.
     }
 }

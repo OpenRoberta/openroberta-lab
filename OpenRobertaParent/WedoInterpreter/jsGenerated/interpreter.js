@@ -4,14 +4,14 @@
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./state", "./constants", "./util"], factory);
+        define(["require", "exports", "interpreter.state", "interpreter.constants", "interpreter.util"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var state_1 = require("./state");
-    var C = require("./constants");
-    var U = require("./util");
+    var interpreter_state_1 = require("interpreter.state");
+    var C = require("interpreter.constants");
+    var U = require("interpreter.util");
     var Interpreter = (function () {
         function Interpreter() {
             this.terminated = false;
@@ -34,7 +34,7 @@
             var stop = {};
             stop[C.OPCODE] = "stop";
             stmts.push(stop);
-            this.s = new state_1.State(stmts, functions);
+            this.s = new interpreter_state_1.State(stmts, functions);
             this.timeout(function () { _this.evalOperation(); }, 0); // return to caller. Don't block the UI.
         };
         /**
@@ -245,10 +245,10 @@
             };
             var this_1 = this;
             topLevelLoop: while (!this.terminated) {
-                var state_2 = _loop_1();
-                if (typeof state_2 === "object")
-                    return state_2.value;
-                switch (state_2) {
+                var state_1 = _loop_1();
+                if (typeof state_1 === "object")
+                    return state_1.value;
+                switch (state_1) {
                     case "break-topLevelLoop": break topLevelLoop;
                 }
             }

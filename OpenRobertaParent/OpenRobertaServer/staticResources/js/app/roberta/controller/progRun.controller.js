@@ -1,5 +1,5 @@
 define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.model', 'socket.controller', 'guiState.controller', 'webview.controller',
-        'interpreter.interpreter', 'jquery' ], function(exports, UTIL, LOG, MSG, PROG_C, PROGRAM, SOCKET_C, GUISTATE_C, WEBVIEW_C, WEDO_I, $) {
+        'interpreter.interpreter', 'interpreter.nativeWeDo', 'jquery' ], function(exports, UTIL, LOG, MSG, PROG_C, PROGRAM, SOCKET_C, GUISTATE_C, WEBVIEW_C, WEDO_I, WEDO_N, $) {
 
     var blocklyWorkspace;
     /**
@@ -154,9 +154,11 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             var functionDeclaration = program.functionDeclaration;
             if (GUISTATE_C.getRobot() === "wedo") {
                 GUISTATE_C.setConnectionState("busy");
+                var weDoInterpreter = new WEDO_I.Interpreter();
                 try{
-                WEDO_I.run(program, callbackOnTermination);}catch(error){
-                    WEDO_I.terminate();
+	                weDoInterpreter.runNativeWeDo(program, new WEDO_N.NativeWeDo(), callbackOnTermination);
+	             } catch(error) {
+	            	weDoInterpreter.terminate();
                     alert(error);
                 }
             }

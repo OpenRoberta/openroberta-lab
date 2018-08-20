@@ -1,0 +1,124 @@
+{
+  "ops": [
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "5"
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "fuenf",
+      "type": "NUMBER"
+    },
+    {
+      "opc": "expr",
+      "name": "fuenf",
+      "expr": "Var"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "1"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "createMethodCallReturn",
+      "names": ["n"],
+      "name": "fac"
+    },
+    {"opc": "ShowTextAction"},
+    {
+      "opc": "expr",
+      "name": "fuenf",
+      "expr": "Var"
+    },
+    {"opc": "ShowTextAction"}
+  ],
+  "functionDeclaration": {"fac": {
+    "opc": "createMethodReturn",
+    "name": "fac",
+    "statements": [
+      {
+        "opc": "expr",
+        "name": "n",
+        "expr": "Var"
+      },
+      {
+        "opc": "expr",
+        "expr": "NUM_CONST",
+        "value": "1"
+      },
+      {
+        "op": "LTE",
+        "opc": "expr",
+        "expr": "Binary"
+      },
+      {
+        "opc": "createMethodIfReturn",
+        "stmtList": [
+          {
+            "opc": "expr",
+            "expr": "NUM_CONST",
+            "value": "1"
+          },
+          {
+            "opc": "flowControl",
+            "conditional": false,
+            "break": true,
+            "kind": "createMethodCallReturn"
+          }
+        ]
+      },
+      {
+        "opc": "expr",
+        "expr": "NUM_CONST",
+        "value": "0"
+      },
+      {
+        "opc": "AssignStmt",
+        "name": "fuenf"
+      },
+      {
+        "opc": "expr",
+        "name": "n",
+        "expr": "Var"
+      },
+      {
+        "opc": "expr",
+        "name": "n",
+        "expr": "Var"
+      },
+      {
+        "opc": "expr",
+        "expr": "NUM_CONST",
+        "value": "1"
+      },
+      {
+        "op": "MINUS",
+        "opc": "expr",
+        "expr": "Binary"
+      },
+      {
+        "opc": "createMethodCallReturn",
+        "names": ["n"],
+        "name": "fac"
+      },
+      {
+        "op": "MULTIPLY",
+        "opc": "expr",
+        "expr": "Binary"
+      },
+      {
+        "opc": "flowControl",
+        "conditional": false,
+        "break": true,
+        "kind": "createMethodCallReturn"
+      }
+    ],
+    "type": "NUMBER"
+  }}
+}

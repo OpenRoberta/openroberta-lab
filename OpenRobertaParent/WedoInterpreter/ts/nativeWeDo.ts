@@ -1,7 +1,7 @@
-import { Native } from "./nativeInterface";
-import { State } from "./state";
-import * as C from "./constants";
-import * as U from "./util";
+import { Native } from "interpreter.nativeInterface";
+import { State } from "interpreter.state";
+import * as C from "interpreter.constants";
+import * as U from "interpreter.util";
 import * as WEDO from "./wedo.model";
 import * as WEBVIEW_C from "./webview.controller";
 

@@ -4,13 +4,13 @@
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./constants", "./util"], factory);
+        define(["require", "exports", "interpreter.constants", "interpreter.util"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var C = require("./constants");
-    var U = require("./util");
+    var C = require("interpreter.constants");
+    var U = require("interpreter.util");
     var State = (function () {
         /**
          * initialization of the state.

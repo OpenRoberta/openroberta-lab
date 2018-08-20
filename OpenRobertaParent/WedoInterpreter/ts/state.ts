@@ -1,5 +1,5 @@
-import * as C from './constants';
-import * as U from './util';
+import * as C from 'interpreter.constants';
+import * as U from 'interpreter.util';
 
 export class State {
     /**

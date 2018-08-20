@@ -1,4 +1,4 @@
-import { State } from "./state";
+import { State } from "interpreter.state";
 
 export interface Native {
     clearDisplay(): void;

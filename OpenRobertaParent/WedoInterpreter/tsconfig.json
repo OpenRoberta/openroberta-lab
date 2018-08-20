@@ -1,11 +1,15 @@
 {
 	"compilerOptions": {
 		"outDir": "./jsGenerated",
-		"rootDir": "./ts",
 		"target": "es5",
-		"moduleResolution": "node",
+		"rootDir": "./ts",
 		"noUnusedLocals": true,
-		"module": "umd"
+		
+		"module": "umd",
+		"baseUrl": "./ts",
+		"paths": {
+			"interpreter.*": ["*"]
+		}
 	},
 	"compileOnSave": true,
 	"buildOnSave": true

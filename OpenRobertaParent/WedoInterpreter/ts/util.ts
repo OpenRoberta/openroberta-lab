@@ -1,4 +1,4 @@
-import * as C from './constants';
+import * as C from 'interpreter.constants';
 
 export function dbc( expected, actual ) {
     if ( expected !== actual ) {

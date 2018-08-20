@@ -1,140 +1,101 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly"
-    robottype="wedo" xmlversion="2.0" description="" tags="">
+<?xml version="1.0"?>
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="2.0" description="" tags="">
     <instance x="140" y="131">
-        <block type="robControls_start" id="aR0!L0j7-ZXQB0|F;!xO"
-            intask="true" deletable="false">
-            <mutation declare="true"></mutation>
+        <block type="robControls_start" id="aR0!L0j7-ZXQB0|F;!xO" intask="true" deletable="false">
+            <mutation declare="true"/>
             <field name="DEBUG">FALSE</field>
             <statement name="ST">
-                <block type="robGlobalVariables_declare"
-                    id="v,R,X+d@u]]`OTN~wqV." intask="true"
-                    deletable="false" movable="false">
-                    <mutation next="true"
-                        declaration_type="Number"></mutation>
+                <block type="robGlobalVariables_declare" id="v,R,X+d@u]]`OTN~wqV." intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="Number"/>
                     <field name="VAR">item</field>
                     <field name="TYPE">Number</field>
                     <value name="VALUE">
-                        <block type="math_number" id=".BPGBY1om7.]f_#A7+Op"
-                            intask="true">
+                        <block type="math_number" id=".BPGBY1om7.]f_#A7+Op" intask="true">
                             <field name="NUM">0</field>
                         </block>
                     </value>
                 </block>
-                <block type="robGlobalVariables_declare"
-                    id="=kNZ5-HrgIP_t;^w8]f9" intask="true"
-                    deletable="false" movable="false">
-                    <mutation next="true"
-                        declaration_type="String"></mutation>
+                <block type="robGlobalVariables_declare" id="=kNZ5-HrgIP_t;^w8]f9" intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="String"/>
                     <field name="VAR">item2</field>
                     <field name="TYPE">String</field>
                     <value name="VALUE">
-                        <block type="text" id="lRN!j6KxVqQ,rrFiDg4i"
-                            intask="true">
+                        <block type="text" id="lRN!j6KxVqQ,rrFiDg4i" intask="true">
                             <field name="TEXT">qwerty</field>
                         </block>
                     </value>
                 </block>
-                <block type="robGlobalVariables_declare"
-                    id="@~jZjEpCD37NvVb~WN|R" intask="true"
-                    deletable="false" movable="false">
-                    <mutation next="false"
-                        declaration_type="Number"></mutation>
+                <block type="robGlobalVariables_declare" id="@~jZjEpCD37NvVb~WN|R" intask="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="Number"/>
                     <field name="VAR">item3</field>
                     <field name="TYPE">Number</field>
                     <value name="VALUE">
-                        <block type="variables_get" id="wt9p-:oq,my[,XH0~PP8"
-                            intask="true">
-                            <mutation datatype="Number"></mutation>
+                        <block type="variables_get" id="wt9p-:oq,my[,XH0~PP8" intask="true">
+                            <mutation datatype="Number"/>
                             <field name="VAR">item</field>
                         </block>
                     </value>
                 </block>
             </statement>
         </block>
-        <block type="controls_whileUntil" id="aK.lQta_m.z/+F%kg}q:"
-            intask="true">
+        <block type="controls_whileUntil" id="aK.lQta_m.z/+F%kg}q:" intask="true">
             <field name="MODE">UNTIL</field>
             <value name="BOOL">
-                <block type="logic_compare" id="253Tq#3r%l0ygCZc|x8n"
-                    intask="true">
+                <block type="logic_compare" id="253Tq#3r%l0ygCZc|x8n" intask="true">
                     <field name="OP">EQ</field>
                     <value name="A">
-                        <block type="variables_get" id="pZ7oS^Z1c;YU[l=hm+wq"
-                            intask="true">
-                            <mutation datatype="String"></mutation>
+                        <block type="variables_get" id="pZ7oS^Z1c;YU[l=hm+wq" intask="true">
+                            <mutation datatype="String"/>
                             <field name="VAR">item2</field>
                         </block>
                     </value>
                     <value name="B">
-                        <block type="text" id="|w![E#A6^kV_EJgg@*md"
-                            intask="true">
+                        <block type="text" id="|w![E#A6^kV_EJgg@*md" intask="true">
                             <field name="TEXT">ytrewq</field>
                         </block>
                     </value>
                 </block>
             </value>
             <statement name="DO">
-                <block type="robControls_for" id="xlTv5`F~Zj85kmjssA;)"
-                    intask="true">
+                <block type="robControls_for" id="xlTv5`F~Zj85kmjssA;)" intask="true">
                     <field name="VAR">i</field>
                     <value name="FROM">
-                        <block type="variables_get" id="tiQA?oMA:Zl%8G.F4a]u"
-                            intask="true">
-                            <mutation datatype="Number"></mutation>
+                        <block type="variables_get" id="tiQA?oMA:Zl%8G.F4a]u" intask="true">
+                            <mutation datatype="Number"/>
                             <field name="VAR">item</field>
                         </block>
                     </value>
                     <value name="TO">
-                        <block type="math_number" id="K8nh.^/ThKzLq`=]N]6)"
-                            intask="true">
+                        <block type="math_number" id="K8nh.^/ThKzLq`=]N]6)" intask="true">
                             <field name="NUM">5</field>
                         </block>
                     </value>
                     <value name="BY">
-                        <block type="math_number" id="n)Yrj*^4Rvxv%wlt72T:"
-                            intask="true">
+                        <block type="math_number" id="n)Yrj*^4Rvxv%wlt72T:" intask="true">
                             <field name="NUM">1</field>
                         </block>
                     </value>
                     <statement name="DO">
-                        <block type="robControls_if" id="@fzB{@5AOB:KB2E{Gi~@"
-                            intask="true">
-                            <mutation elseif="1"></mutation>
+                        <block type="robControls_if" id="@fzB{@5AOB:KB2E{Gi~@" intask="true">
+                            <mutation elseif="1"/>
                             <repetitions>
                                 <value name="IF0">
-                                    <block type="logic_operation"
-                                        id="oHmhO?vi}#s)#w1q{Hd("
-                                        intask="true">
+                                    <block type="logic_operation" id="oHmhO?vi}#s)#w1q{Hd(" intask="true">
                                         <field name="OP">AND
                                         </field>
                                         <value name="A">
-                                            <block
-                                                type="logic_compare"
-                                                id="t%So;T?yeW[X=jgd3NM*"
-                                                intask="true">
-                                                <field
-                                                    name="OP">EQ
-                                                </field>
-                                                <value
-                                                    name="A">
-                                                    <block
-                                                        type="math_number"
-                                                        id="H[lSTNfK4C1,KR|1=@Ce"
-                                                        intask="true">
-                                                        <field
-                                                            name="NUM">
+                                            <block type="logic_compare" id="t%So;T?yeW[X=jgd3NM*" intask="true">
+                                                <field name="OP">EQ-beate</field>
+                                                <value name="A">
+                                                    <block type="math_number" id="H[lSTNfK4C1,KR|1=@Ce" intask="true">
+                                                        <field name="NUM">
                                                             151
                                                         </field>
                                                     </block>
                                                 </value>
-                                                <value
-                                                    name="B">
-                                                    <block
-                                                        type="math_number"
-                                                        id="n{X|/{_n~v%#+Zux*]Vw"
-                                                        intask="true">
-                                                        <field
-                                                            name="NUM">
+                                                <value name="B">
+                                                    <block type="math_number" id="n{X|/{_n~v%#+Zux*]Vw" intask="true">
+                                                        <field name="NUM">
                                                             151
                                                         </field>
                                                     </block>
@@ -142,33 +103,19 @@
                                             </block>
                                         </value>
                                         <value name="B">
-                                            <block
-                                                type="logic_compare"
-                                                id="{E_Z4`_1BFysqs-HzHF["
-                                                intask="true">
-                                                <field
-                                                    name="OP">GT
+                                            <block type="logic_compare" id="{E_Z4`_1BFysqs-HzHF[" intask="true">
+                                                <field name="OP">GT
                                                 </field>
-                                                <value
-                                                    name="A">
-                                                    <block
-                                                        type="math_number"
-                                                        id="DwcfdUhNr8hu,w`ARa!0"
-                                                        intask="true">
-                                                        <field
-                                                            name="NUM">
+                                                <value name="A">
+                                                    <block type="math_number" id="DwcfdUhNr8hu,w`ARa!0" intask="true">
+                                                        <field name="NUM">
                                                             215
                                                         </field>
                                                     </block>
                                                 </value>
-                                                <value
-                                                    name="B">
-                                                    <block
-                                                        type="math_number"
-                                                        id="1Oi76q8QWYWx52*FDeq}"
-                                                        intask="true">
-                                                        <field
-                                                            name="NUM">
+                                                <value name="B">
+                                                    <block type="math_number" id="1Oi76q8QWYWx52*FDeq}" intask="true">
+                                                        <field name="NUM">
                                                             151
                                                         </field>
                                                     </block>
@@ -178,37 +125,21 @@
                                     </block>
                                 </value>
                                 <statement name="DO0">
-                                    <block type="robControls_wait"
-                                        id="?}%M.ZXyX0yixP-[NiT?"
-                                        intask="true">
+                                    <block type="robControls_wait" id="?}%M.ZXyX0yixP-[NiT?" intask="true">
                                         <value name="WAIT0">
-                                            <block
-                                                type="logic_compare"
-                                                id="@8BMp+f?Ubfunq5.Nuo!"
-                                                intask="true">
-                                                <field
-                                                    name="OP">GT
+                                            <block type="logic_compare" id="@8BMp+f?Ubfunq5.Nuo!" intask="true">
+                                                <field name="OP">GT
                                                 </field>
-                                                <value
-                                                    name="A">
-                                                    <block
-                                                        type="math_number"
-                                                        id="kUYSw^8K}loGJN5fe@bK"
-                                                        intask="true">
-                                                        <field
-                                                            name="NUM">
+                                                <value name="A">
+                                                    <block type="math_number" id="kUYSw^8K}loGJN5fe@bK" intask="true">
+                                                        <field name="NUM">
                                                             215
                                                         </field>
                                                     </block>
                                                 </value>
-                                                <value
-                                                    name="B">
-                                                    <block
-                                                        type="math_number"
-                                                        id="^sgS:9hwS)aR]Q~Wf#f7"
-                                                        intask="true">
-                                                        <field
-                                                            name="NUM">
+                                                <value name="B">
+                                                    <block type="math_number" id="^sgS:9hwS)aR]Q~Wf#f7" intask="true">
+                                                        <field name="NUM">
                                                             151
                                                         </field>
                                                     </block>
@@ -218,48 +149,34 @@
                                     </block>
                                 </statement>
                                 <value name="IF1">
-                                    <block type="logic_compare"
-                                        id="!WyTEP(4#vG24uE8-e@m"
-                                        intask="true">
+                                    <block type="logic_compare" id="!WyTEP(4#vG24uE8-e@m" intask="true">
                                         <field name="OP">EQ
                                         </field>
                                         <value name="A">
-                                            <block type="math_number"
-                                                id="X=MwuB;;iO~^=U+j2OM!"
-                                                intask="true">
-                                                <field
-                                                    name="NUM">151
+                                            <block type="math_number" id="X=MwuB;;iO~^=U+j2OM!" intask="true">
+                                                <field name="NUM">151
                                                 </field>
                                             </block>
                                         </value>
                                         <value name="B">
-                                            <block type="math_number"
-                                                id="r{+^oQTTlLIge+@sbK;L"
-                                                intask="true">
-                                                <field
-                                                    name="NUM">151
+                                            <block type="math_number" id="r{+^oQTTlLIge+@sbK;L" intask="true">
+                                                <field name="NUM">151
                                                 </field>
                                             </block>
                                         </value>
                                     </block>
                                 </value>
                                 <statement name="DO1">
-                                    <block
-                                        type="controls_flow_statements"
-                                        id="w=T8;pMazneowv0y:Ews"
-                                        intask="true">
+                                    <block type="controls_flow_statements" id="w=T8;pMazneowv0y:Ews" intask="true">
                                         <field name="FLOW">BREAK
                                         </field>
                                     </block>
                                 </statement>
                             </repetitions>
                         </block>
-                        <block type="robControls_wait_time"
-                            id=";Hs)q?a-XA_dfts6J]G[" intask="true">
+                        <block type="robControls_wait_time" id=";Hs)q?a-XA_dfts6J]G[" intask="true">
                             <value name="WAIT">
-                                <block type="math_number"
-                                    id="0nvUmMoG}l_V0WQJ~meG"
-                                    intask="true">
+                                <block type="math_number" id="0nvUmMoG}l_V0WQJ~meG" intask="true">
                                     <field name="NUM">500
                                     </field>
                                 </block>
@@ -267,13 +184,11 @@
                         </block>
                     </statement>
                 </block>
-                <block type="variables_set" id="9U3c#?AatKZrT)K0m,2b"
-                    intask="true">
-                    <mutation datatype="String"></mutation>
+                <block type="variables_set" id="9U3c#?AatKZrT)K0m,2b" intask="true">
+                    <mutation datatype="String"/>
                     <field name="VAR">item2</field>
                     <value name="VALUE">
-                        <block type="text" id=";pf:*w94t{uNKvlSrUZK"
-                            intask="true">
+                        <block type="text" id=";pf:*w94t{uNKvlSrUZK" intask="true">
                             <field name="TEXT">ytrewq</field>
                         </block>
                     </value>

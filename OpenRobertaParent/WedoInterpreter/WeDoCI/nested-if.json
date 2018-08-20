@@ -1,0 +1,192 @@
+{
+  "ops": [
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "0"
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "x",
+      "type": "NUMBER"
+    },
+    {
+      "opc": "IfStatement",
+      "stmtList": [
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": "1"
+        },
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": "0"
+        },
+        {
+          "op": "EQ",
+          "opc": "expr",
+          "expr": "Binary"
+        },
+        {
+          "opc": "IfTrueStatement",
+          "stmtList": [
+            {
+              "opc": "expr",
+              "expr": "NUM_CONST",
+              "value": "-1"
+            },
+            {
+              "opc": "AssignStmt",
+              "name": "x"
+            },
+            {
+              "opc": "flowControl",
+              "conditional": false,
+              "break": true,
+              "kind": "IfStatement"
+            }
+          ]
+        },
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": "0"
+        },
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": "0"
+        },
+        {
+          "op": "EQ",
+          "opc": "expr",
+          "expr": "Binary"
+        },
+        {
+          "opc": "IfTrueStatement",
+          "stmtList": [
+            {
+              "opc": "IfStatement",
+              "stmtList": [
+                {
+                  "opc": "expr",
+                  "expr": "NUM_CONST",
+                  "value": "1"
+                },
+                {
+                  "opc": "expr",
+                  "expr": "NUM_CONST",
+                  "value": "0"
+                },
+                {
+                  "op": "EQ",
+                  "opc": "expr",
+                  "expr": "Binary"
+                },
+                {
+                  "opc": "IfTrueStatement",
+                  "stmtList": [
+                    {
+                      "opc": "expr",
+                      "expr": "NUM_CONST",
+                      "value": "-1"
+                    },
+                    {
+                      "opc": "AssignStmt",
+                      "name": "x"
+                    },
+                    {
+                      "opc": "flowControl",
+                      "conditional": false,
+                      "break": true,
+                      "kind": "IfStatement"
+                    }
+                  ]
+                },
+                {
+                  "opc": "expr",
+                  "expr": "NUM_CONST",
+                  "value": "0"
+                },
+                {
+                  "opc": "expr",
+                  "expr": "NUM_CONST",
+                  "value": "0"
+                },
+                {
+                  "op": "EQ",
+                  "opc": "expr",
+                  "expr": "Binary"
+                },
+                {
+                  "opc": "IfTrueStatement",
+                  "stmtList": [
+                    {
+                      "opc": "expr",
+                      "expr": "NUM_CONST",
+                      "value": "1"
+                    },
+                    {
+                      "opc": "AssignStmt",
+                      "name": "x"
+                    },
+                    {
+                      "opc": "flowControl",
+                      "conditional": false,
+                      "break": true,
+                      "kind": "IfStatement"
+                    }
+                  ]
+                },
+                {
+                  "opc": "expr",
+                  "expr": "NUM_CONST",
+                  "value": "-1"
+                },
+                {
+                  "opc": "AssignStmt",
+                  "name": "x"
+                },
+                {
+                  "opc": "flowControl",
+                  "conditional": false,
+                  "break": true,
+                  "kind": "IfStatement"
+                }
+              ]
+            },
+            {
+              "opc": "flowControl",
+              "conditional": false,
+              "break": true,
+              "kind": "IfStatement"
+            }
+          ]
+        },
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": "-1"
+        },
+        {
+          "opc": "AssignStmt",
+          "name": "x"
+        },
+        {
+          "opc": "flowControl",
+          "conditional": false,
+          "break": true,
+          "kind": "IfStatement"
+        }
+      ]
+    },
+    {
+      "opc": "expr",
+      "name": "x",
+      "expr": "Var"
+    },
+    {"opc": "ShowTextAction"}
+  ],
+  "functionDeclaration": {}
+}

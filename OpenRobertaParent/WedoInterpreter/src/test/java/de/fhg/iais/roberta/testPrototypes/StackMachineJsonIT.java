@@ -1,16 +1,21 @@
 package de.fhg.iais.roberta.testPrototypes;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.ws.rs.core.Response;
@@ -40,11 +45,34 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
 /**
- * <b>Testing the generation of simulator code</b><br>
+ * <b>Testing the generation and execution of code.</b> At the moment exclusively for the WeDo robot. To be extended at least to the simulation.<br>
+ * <br>
+ * <i>Usage:</i><br>
+ * Create a program in the lab. Put the expected result into the program documentation tab, e.g.<br>
+ * <br>
+ * <code>
+ * ROBOT<br>
+ * wedo<br>
+ * START-RESULT<br>
+ * show "1"<br><br>show "2"<br>
+ * END-RESULT<br><br>
+ * </code> The string after "show" refers to the string written by the "show text"/"zeige Text"-blockly-block in the program. Empty lines are ignored.<br>
+ * Export the program into the directory "WedoInterpreter/WeDoCI".<br>
+ * <br>
+ * If this class {@linkplain StackMachineJsonIT} is run as an Junit4 test, first all blockly-xml-files found in the directory mentioned above are compiled.
+ * Dependent on the robot this generates Java, Python, C(++) or a byte code in the ORA-format "StackMachineJson". The generated code is compiled using the
+ * robot-dependent crosscompiler-chain.<br>
+ * <br>
+ * If the robot is "wedo", more is done: the JavaScript found in "WedoInterpreter/jsGenerated/runStackMachineJson.js" is executed with "node" (must be on the
+ * path!). This runs the interpreter for "StackMachineJson". The results of this interpretation are assembled and compared with the expected results from the
+ * program tab. Success and failure are logged.<br>
+ * <i>Note:</i> all sources used for this interpretation are found in directory "WedoInterpreter/ts". They are written in TypeScript, transpiled to JavaScript
+ * and saved into the directory "WedoInterpreter/jsGenerated". From this directory they are used by "node".
  *
  * @author rbudde
  */
@@ -53,7 +81,8 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 public class StackMachineJsonIT {
     private static final Logger LOG = LoggerFactory.getLogger(StackMachineJsonIT.class);
 
-    private static final String ROBOT = "wedo";
+    private static final String ROBOT_DEFAULT = "wedo";
+    private static final Pattern ROBOT_PATTERN = Pattern.compile(".*ROBOT(.*)START-RESULT");
     private static final String MARK = "**********";
 
     private static final String TEST_BASE = "./WeDoCI/";
@@ -74,8 +103,11 @@ public class StackMachineJsonIT {
     private ClientProgram restProgram;
     private ClientAdmin restAdmin;
 
-    private Map<String, Boolean> resultsOfCompilation = new HashMap<>();
+    private Map<String, Boolean> resultsOfCompilation = new TreeMap<>();
+    List<String> resultsOfInterpretation = new ArrayList<>();
+
     private boolean successForCompilation = false;
+    private boolean successForInterpretation = false;
 
     @Before
     public void setup() throws Exception {
@@ -91,67 +123,90 @@ public class StackMachineJsonIT {
 
     @Test
     public void testDirectory() throws Exception {
-        testGenerateStackMachineJsonFromBlocklyXmlIT();
+        generateStackMachineJsonFromBlocklyXmlIT();
         runInterpretStackMachineJsonInterpreter(NODE_CALL);
-        showCompilationResultOverview(true); // a second call at the end to have a better overview
+        showInterpretationResultOverview(); // must be the first "show" (otherwise refactor full output from overview output)
+        showCompilationResultOverview();
+        showAndEvaluateResult();
     }
 
-    //@Ignore
+    @Ignore
     @Test
     public void testOneFile() throws Exception {
-        String directory = "./WeDoCI/";
-        String file = "functions";
-        successForCompilation = runCompilation(directory, file);
+        String directory = "./WeDoCI/"; // change as needed
+        String file = "almost-all-blocks"; // change as needed
+
         String nodeCall = "node ./jsGenerated/runStackMachineJson.js" + " " + directory + " " + file;
+        runCompilation(directory, file);
         runInterpretStackMachineJsonInterpreter(nodeCall);
-        showCompilationResultOverview(true);
+        showAndEvaluateResult();
     }
 
     @Test
     @Ignore
-    public void testGenerateStackMachineJsonFromBlocklyXmlIT() throws Exception {
-        setRobotTo(ROBOT);
+    public void testGenerateStackMachineJsonFromBlocklyXmlITtest() throws Exception {
+        generateStackMachineJsonFromBlocklyXmlIT();
+        showCompilationResultOverview();
+    }
+
+    private void generateStackMachineJsonFromBlocklyXmlIT() throws Exception {
         Stream<String> filesFromDirectory = Util1.fileStreamOfFileDirectory(TEST_BASE);
         successForCompilation =
-            filesFromDirectory.filter(f -> f.endsWith(".xml")).map(f -> f.substring(0, f.length() - 4)).map(s -> runCompilation(TEST_BASE, s)).reduce(
-                true,
-                (a, b) -> a && b);
-        showCompilationResultOverview(false);
+            filesFromDirectory
+                .filter(f -> f.endsWith(".xml"))
+                .map(f -> f.substring(0, f.length() - 4))
+                .sorted() //
+                .map(s -> {
+                    runCompilation(TEST_BASE, s);
+                    return successForCompilation;
+                })
+                .reduce(true, (a, b) -> a && b);
     }
 
-    private void runInterpretStackMachineJsonInterpreter(String nodeCall) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec(nodeCall).getInputStream(), Charset.forName("UTF-8")));
-        br.lines().forEach(System.out::println);
-    }
-
-    private boolean runCompilation(String directory, String programName) {
+    private void runCompilation(String directory, String programName) {
+        successForCompilation = false;
         try {
             resultsOfCompilation.put(programName, false);
             String fullResource = directory + programName + ".xml";
-            LOG.info(MARK + " robot: " + ROBOT + ", xml: " + fullResource + " " + MARK);
             String xmlText = Util1.readFileContent(fullResource);
+            Matcher lookupRobot = ROBOT_PATTERN.matcher(xmlText);
+            String robot = lookupRobot.matches() ? lookupRobot.group(1) : ROBOT_DEFAULT;
+            LOG.info(MARK + " robot: " + robot + ", xml: " + fullResource + " " + MARK);
+            setRobotTo(robot);
             String programText = null;
             String configText = null;
             Export jaxbImportExport = JaxbHelper.xml2Element(xmlText, Export.class);
             String robotType1 = jaxbImportExport.getProgram().getBlockSet().getRobottype();
             String robotType2 = jaxbImportExport.getConfig().getBlockSet().getRobottype();
-            assertTrue(robotType1.equals(ROBOT) && robotType2.equals(ROBOT));
+            assertTrue(robotType1.equals(robot) && robotType2.equals(robot));
             programText = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
             configText = JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet());
             JSONObject cmd = mkD("{'cmd':'runPBack','name':" + programName + "','language':'de'}");
             cmd.getJSONObject("data").put("programText", programText);
-            cmd.getJSONObject("data").put("configText", configText);
+            cmd.getJSONObject("data").put("configurationText", configText);
             this.response = this.restProgram.command(httpSessionState, cmd);
             JSONObject entity = (JSONObject) this.response.getEntity();
-            assertEquals("ok", entity.optString("rc", ""));
+            if ( !"ok".equals(entity.optString("rc", "")) ) {
+                String rc = entity.optString("rc", "???");
+                String errorCounter = entity.optString("errorCounter", "???");
+                String message = entity.optString("message", "???");
+                String cause = entity.optString("cause", "???");
+                LOG.error("compilation fails. rc: " + rc + ", errorCounter: " + errorCounter + ", message: " + message + ", cause: " + cause);
+                throw new DbcException("compilation fails");
+            }
             String javaScriptProgram = entity.getString("compiledCode");
             Util1.writeFile(directory + programName + ".json", javaScriptProgram);
             resultsOfCompilation.put(programName, true);
-            return true;
+            successForCompilation = true;
         } catch ( Exception e ) {
-            LOG.error(MARK + " Test failed for " + programName + " " + MARK, e);
-            return false;
+            LOG.error(MARK + " compilation failed for " + programName + " " + MARK); // stacktrace is unusable
+            successForCompilation = false;
         }
+    }
+
+    private void runInterpretStackMachineJsonInterpreter(String nodeCall) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec(nodeCall).getInputStream(), Charset.forName("UTF-8")));
+        resultsOfInterpretation = br.lines().collect(Collectors.toList());
     }
 
     private void setRobotTo(String robot) throws Exception, JSONException {
@@ -159,16 +214,34 @@ public class StackMachineJsonIT {
         assertEntityRc(this.response, "ok", Key.ROBOT_SET_SUCCESS);
     }
 
-    private void showCompilationResultOverview(boolean syso) {
-        assertTrue("some programs failed when being compiled", successForCompilation);
+    private void showCompilationResultOverview() {
         for ( Entry<String, Boolean> e : resultsOfCompilation.entrySet() ) {
-            String result = String.format(MARK + " compilation of %-30s : %-8s " + MARK, '"' + e.getKey() + '"', e.getValue() ? "success" : "ERROR");
-            if ( syso ) {
-                System.out.println(result);
-            } else {
-                LOG.info(result);
-            }
+            String result = String.format(MARK + "    compilation of %-30s : %-10s " + MARK, '"' + e.getKey() + '"', e.getValue() ? "success" : "ERROR");
+            LOG.info(result);
         }
+    }
+
+    private void showInterpretationResultOverview() {
+        successForInterpretation = false;
+        for ( String line : resultsOfInterpretation ) {
+            if ( line.equals("********** result of all interpretations: success **********") ) {
+                successForInterpretation = true;
+            }
+            LOG.info(line);
+        }
+    }
+
+    private void showAndEvaluateResult() {
+        if ( !successForCompilation ) {
+            LOG.error("some programs failed when being compiled");
+        }
+        if ( !successForInterpretation ) {
+            LOG.error("some programs failed when being interpreted");
+        }
+        if ( !successForCompilation || !successForInterpretation ) {
+            fail();
+        }
+
     }
 
     /**

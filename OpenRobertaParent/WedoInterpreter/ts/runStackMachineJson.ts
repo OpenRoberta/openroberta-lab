@@ -1,6 +1,6 @@
-import { NativeTest } from './nativeTest';
-import { Interpreter } from './interpreter';
-import * as U from './util';
+import { NativeTest } from 'interpreter.nativeTest';
+import { Interpreter } from 'interpreter.interpreter';
+import * as U from 'interpreter.util';
 import * as FS from 'fs';
 
 // general settings: directory with test files, extent of debugging (opLog is VERY gossipy)
@@ -23,7 +23,7 @@ if ( arg1 === '-d' ) {
         baseDirectory = arg2;
         processDirectory();
     } else {
-        console.log( MARK + ' -d needs a dir name (terminated by /) as second parameter - call aborted ' + MARK );
+        p( MARK + ' -d needs a dir name (terminated by /) as second parameter - call aborted ' + MARK );
     }
 } else if ( arg1 !== null && arg1 !== undefined && arg1.charAt( arg1.length - 1 ) === '/' && arg2 !== null && arg2 !== undefined ) {
     directory = false;
@@ -32,15 +32,18 @@ if ( arg1 === '-d' ) {
     allXmlFiles.unshift( fileName );
     processOps( allXmlFiles.pop() );
 } else {
-    console.log( MARK + ' either use "-d <dir terminated by />" for all files from a dir or "<dir terminated by /> <file> for one file. Call aborted ' + MARK );
+    p( MARK + ' either use "-d <dir terminated by />" for all files from a dir or "<dir terminated by /> <file> for one file. Call aborted ' + MARK );
 }
 
 function processDirectory() {
     FS.readdir( baseDirectory, function( err, files: string[] ) {
         for ( let file of files ) {
-            if ( file.match( /.*\.xml/ ) ) {
+            if ( file.match( /^.*\.xml$/ ) ) {
                 allXmlFiles.unshift( file.substring( 0, file.length - 4 ) );
             }
+        }
+        for ( let xmlFile of allXmlFiles ) {
+            p( 'to test: ' + xmlFile );
         }
         processOps( allXmlFiles.pop() );
     } );
@@ -55,29 +58,44 @@ function processOps( fileName: string ) {
         printResult();
         return;
     }
-    console.log( MARK + ' running program ' + fileName + ' ' + MARK );
-    const generatedCodeAsString = FS.readFileSync( baseDirectory + fileName + '.json', 'utf8' );
-    const generatedCode = JSON.parse( generatedCodeAsString );
-    new Interpreter().run( generatedCode, new NativeTest( showOpLog, showDebug ), function() { callbackOnTermination( fileName ); } );
+    p( MARK + ' running program ' + fileName + ' ' + MARK );
+    try {
+        const generatedCodeAsString = FS.readFileSync( baseDirectory + fileName + '.json', 'utf8' );
+        const generatedCode = JSON.parse( generatedCodeAsString );
+        new Interpreter().run( generatedCode, new NativeTest( showOpLog, showDebug ), function() { callbackOnTermination( fileName ); } );
+    } catch ( e ) {
+        p( MARK + ' ' + fileName + '.json not readable. Compilation error? ' + MARK );
+        allResults[fileName] = 'NOT_FOUND';
+        processOps( allXmlFiles.pop() );
+    }
 }
 
 /**
 * called, when the program has terminated
 */
 function callbackOnTermination( fileName: string ) {
-    console.log( 'program has terminated' );
+    p( 'program has terminated' );
     const resultLines = U.getInfoResult().trim().split( /[\r\n]+/ );
     const xmlAsString = FS.readFileSync( baseDirectory + fileName + '.xml', 'utf8' );
     const matchArray = xmlAsString.match( /START-RESULT(.*)END-RESULT/ );
+
     if ( matchArray === null || showResult ) {
         const headerMsg = MARK + ( matchArray === null ? ' no expected results found in the blockly program description. ' : ' ' ) + 'The results assembled are: ' + MARK;
-        console.log( headerMsg );
+        p( headerMsg );
+        p( 'ROBOT' );
+        p( 'WeDo' );
+        p( 'START-RESULT' );
         for ( var r of resultLines ) {
-            console.log( r );
+            p( r );
         }
-        console.log( MARK + ' end of results assembled ' + MARK );
+        p( 'END-RESULT' );
+        p( MARK + ' end of results assembled ' + MARK );
     };
-    if ( matchArray !== null ) {
+
+    var result = 'ok';
+    if ( matchArray === null ) {
+        result = "NO-DATA";
+    } else {
         const Entities = require( 'html-entities' ).AllHtmlEntities;
         const entities = new Entities();
         const expectedResult = entities.decode( matchArray[1] ).replace( /<.[a-z\/]*>/g, '\n' ).replace( /&nbsp;/g, ' ' );
@@ -89,45 +107,51 @@ function callbackOnTermination( fileName: string ) {
                 expectedLines.push( line );
             }
         }
-        var result = 'ok';
         if ( expectedLines.length !== resultLines.length ) {
-            console.log( 'expected ' + expectedLines.length + ' lines, but got ' + resultLines.length + ' lines' );
+            p( 'expected ' + expectedLines.length + ' lines, but got ' + resultLines.length + ' lines' );
             result = 'ERROR';
         }
         for ( var i = 0; i < expectedLines.length; i++ ) {
             if ( expectedLines[i] !== resultLines[i] ) {
-                console.log( 'difference found in line ' + i + '. First expected result, then result found:' );
-                console.log( expectedLines[i] );
-                console.log( resultLines[i] );
+                p( 'difference found in line ' + i + '. First expected result, then result found:' );
+                p( expectedLines[i] );
+                p( resultLines[i] );
                 result = 'ERROR';
             }
         }
-        console.log( 'TEST ' + result );
-        allResults[fileName] = result;
-        processOps( allXmlFiles.pop() );
     }
-
+    p( 'TEST ' + result );
+    allResults[fileName] = result;
+    processOps( allXmlFiles.pop() );
 }
 
 function printResult() {
     if ( directory ) {
         // all programs have been run. Show the overall result
         var summary = 'success';
-        console.log( '' );
+        p( '' );
         for ( let f in allResults ) {
             const result = allResults[f];
-            console.log( MARK + ' interpretation of ' + f + ' : ' + result + ' ' + MARK );
+            p( MARK + ' interpretation of ' + padEnd( f, 30 ) + ' : ' + padEnd( result, 11 ) + MARK );
             if ( result !== 'ok' ) {
                 summary = 'ERROR';
             }
         }
-        console.log( MARK + ' result of all interpretations: ' + summary + ' ' + MARK );
+        p( MARK + ' result of all interpretations: ' + summary + ' ' + MARK );
     } else {
         // one program has run. Show the result
         for ( let f in allResults ) {
             const result = allResults[f];
-            console.log( MARK + ' interpretation of ' + f + ' : ' + result + ' ' + MARK );
+            p( MARK + ' interpretation of ' + f + ' : ' + result + ' ' + MARK );
         }
 
     }
+}
+
+function padEnd( s: string, len: number ) {
+    return ( s + '                              ' ).substring( 0, len );
+}
+
+function p( msg ) {
+    console.log( msg );
 }
