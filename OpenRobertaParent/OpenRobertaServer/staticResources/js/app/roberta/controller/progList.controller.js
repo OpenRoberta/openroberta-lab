@@ -194,6 +194,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
 
     var eventsDeleteShareLoad = {
         'click .delete' : function(e, value, row, index) {
+            e.stopPropagation();
             var selectedRows = [ row ];
             var names = '';
             for (var i = 0; i < selectedRows.length; i++) {
@@ -208,19 +209,22 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
             return false;
         },
         'click .share' : function(e, value, row, index) {
+            e.stopPropagation();
             if (!row[2].sharedFrom) {
                 $('#show-relations').trigger('updateAndShow', [ row ]);
             }
             return false;
         },
         'click .gallery' : function(e, value, row, index) {
+            e.stopPropagation();
             if (!row[2].sharedFrom) {
                 $('#share-with-gallery').trigger('updateAndShow', [ row ]);
             }
             return false;
         },
         'click .load' : function(e, value, row, index) {
-            PROGRAM_C.loadFromListing(row);
+            e.stopPropagation();
+            loadFromListing(row);
         }
     };
 
