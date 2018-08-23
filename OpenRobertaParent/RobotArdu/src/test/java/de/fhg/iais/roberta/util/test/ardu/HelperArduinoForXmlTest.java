@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.components.ConfigurationBlock;
 import de.fhg.iais.roberta.components.ConfigurationBlockType;
 import de.fhg.iais.roberta.components.arduino.ArduinoConfiguration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
-import de.fhg.iais.roberta.factory.arduino.arduino.Factory;
+import de.fhg.iais.roberta.factory.arduino.uno.Factory;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;

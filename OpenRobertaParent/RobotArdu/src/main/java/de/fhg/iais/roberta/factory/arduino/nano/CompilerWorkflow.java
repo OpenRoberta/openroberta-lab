@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.factory.arduino.arduino;
+package de.fhg.iais.roberta.factory.arduino.nano;
 
 import java.io.File;
 import java.lang.ProcessBuilder.Redirect;

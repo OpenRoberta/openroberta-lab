@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.factory.arduino.mbot;
+package de.fhg.iais.roberta.factory.arduino.mega;
 
 import java.io.File;
 import java.lang.ProcessBuilder.Redirect;
@@ -13,38 +13,50 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.arduino.MbotConfiguration;
+import de.fhg.iais.roberta.components.arduino.ArduinoConfiguration;
 import de.fhg.iais.roberta.factory.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.syntax.codegen.arduino.mbot.CppVisitor;
+import de.fhg.iais.roberta.syntax.codegen.arduino.arduino.CppVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
-import de.fhg.iais.roberta.transformers.arduino.Jaxb2MakeBlockConfigurationTransformer;
+import de.fhg.iais.roberta.transformers.arduino.Jaxb2ArduinoConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 public class CompilerWorkflow extends AbstractCompilerWorkflow {
+
     private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflow.class);
 
     public final String pathToCrosscompilerBaseDir;
     public final String robotCompilerResourcesDir;
     public final String robotCompilerDir;
 
-    private String compiledHex = "";
+    private String arduinoType = "Uno";
+
+    private String compiledHex = "error";
 
     public CompilerWorkflow(String pathToCrosscompilerBaseDir, String robotCompilerResourcesDir, String robotCompilerDir) {
         this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
         this.robotCompilerResourcesDir = robotCompilerResourcesDir;
         this.robotCompilerDir = robotCompilerDir;
+
     }
 
     @Override
-    public String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) //
-    {
+    public String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
         if ( data.getErrorMessage() != null ) {
             return null;
         }
-        return CppVisitor.generate((MbotConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        try {
+            ArduinoConfiguration configuration = ((ArduinoConfiguration) data.getBrickConfiguration());
+            this.arduinoType = configuration.getSubtype();
+            String sourceCode = CppVisitor.generate(configuration, data.getProgramTransformer().getTree(), true);
+            CompilerWorkflow.LOG.info("generating arduino c++ code");
+            return sourceCode;
+        } catch ( Exception e ) {
+            LOG.error("generating source code failed", e);
+            return null;
+        }
     }
 
     @Override
@@ -52,22 +64,23 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
         try {
             storeGeneratedProgram(token, programName, sourceCode, this.pathToCrosscompilerBaseDir, ".ino");
         } catch ( Exception e ) {
-            LOG.error("Storing the generated program into directory " + token + " failed", e);
+            CompilerWorkflow.LOG.error("Storing the generated program into directory " + token + " failed", e);
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
         }
+
         Key messageKey = runBuild(token, programName, "generated.main");
         if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
             CompilerWorkflow.LOG.info("hex for program {} generated successfully", programName);
         } else {
             CompilerWorkflow.LOG.info(messageKey.toString());
         }
-        return messageKey;
+        return sourceCode == null ? Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED : messageKey;
     }
 
     @Override
     public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2MakeBlockConfigurationTransformer transformer = new Jaxb2MakeBlockConfigurationTransformer(factory);
+        Jaxb2ArduinoConfigurationTransformer transformer = new Jaxb2ArduinoConfigurationTransformer(factory);
         return transformer.transform(project);
     }
 
@@ -104,19 +117,25 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
         Path base = Paths.get("");
 
         try {
-            ProcessBuilder procBuilder =
-                new ProcessBuilder(
-                    new String[] {
-                        scriptName,
-                        "-hardware=" + this.robotCompilerResourcesDir + "/hardware",
-                        "-tools=" + this.robotCompilerResourcesDir + "/" + os + "/tools-builder",
-                        "-libraries=" + this.robotCompilerResourcesDir + "/libraries",
-                        "-fqbn=arduino:avr:uno",
-                        "-prefs=compiler.path=" + this.robotCompilerDir,
-                        "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
-                        "-verbose",
-                        base.resolve(path).toAbsolutePath().normalize().toString() + "/src/" + mainFile + ".ino"
-                    });
+            String fqbnArg = "";
+            if (this.arduinoType.equals("Uno")) {
+                fqbnArg = "-fqbn=arduino:avr:uno";
+            } else if (this.arduinoType.equals("Mega")) {
+                fqbnArg = "-fqbn=arduino:avr:mega:cpu=atmega2560";
+            } else if (this.arduinoType.equals("Nano")) {
+                fqbnArg = "-fqbn=arduino:avr:nano:cpu=atmega328";
+            }
+
+            ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
+                scriptName,
+                "-hardware=" + this.robotCompilerResourcesDir + "/hardware",
+                "-tools=" + this.robotCompilerResourcesDir + "/" + os + "/tools-builder",
+                "-libraries=" + this.robotCompilerResourcesDir + "/libraries",
+                fqbnArg,
+                "-prefs=compiler.path=" + this.robotCompilerDir,
+                "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
+                base.resolve(path).toAbsolutePath().normalize().toString() + "/src/" + mainFile + ".ino"
+            });
 
             procBuilder.redirectInput(Redirect.INHERIT);
             procBuilder.redirectOutput(Redirect.INHERIT);

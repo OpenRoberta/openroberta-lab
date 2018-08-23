@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.factory.arduino.arduino;
+package de.fhg.iais.roberta.factory.arduino.nano;
 
 import java.util.ArrayList;
 import java.util.Properties;
@@ -34,7 +34,7 @@ public class Factory extends AbstractRobotFactory {
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";
         }
-        this.arduinoProperties = Util1.loadProperties("classpath:arduino.properties");
+        this.arduinoProperties = Util1.loadProperties("classpath:nano.properties");
         this.name = this.arduinoProperties.getProperty("robot.name");
         this.robotPropertyNumber = robertaProperties.getRobotNumberFromProperty(this.name);
         this.compilerWorkflow =
@@ -42,7 +42,7 @@ public class Factory extends AbstractRobotFactory {
                 robertaProperties.getTempDirForUserProjects(),
                 robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"),
                 robertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler." + os + ".dir"));
-        addBlockTypesFromProperties("arduino.properties", this.arduinoProperties);
+        addBlockTypesFromProperties("nano.properties", this.arduinoProperties);
     }
 
     public SensorPort getSensorName(String port) {
