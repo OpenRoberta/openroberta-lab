@@ -121,6 +121,8 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     AstActorDisplayVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
     private final UsedHardwareCollectorVisitor codePreprocess;
     ArrayList<VarDeclaration<Void>> usedVars;
+    private int numberOfArraysUsedInTemplate;
+    private int currentArrayInTemplate;
 
     /**
      * initialize the C++ code generator visitor.
@@ -198,7 +200,14 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
                 final ListCreate<Void> list = (ListCreate<Void>) var.getValue();
                 this.sb.append(list.getValue().get().size() + ">");
             } else {
-                this.sb.append("N>");
+                if ( this.numberOfArraysUsedInTemplate != this.currentArrayInTemplate ) {
+                    this.sb.append("N" + this.currentArrayInTemplate + "> ");
+                    this.currentArrayInTemplate++;
+                } else {
+                    this.currentArrayInTemplate = 0;
+                    this.sb.append("N" + this.currentArrayInTemplate + "> ");
+                    this.currentArrayInTemplate++;
+                }
             }
         }
         this.sb.append(whitespace() + var.getName());
@@ -972,8 +981,17 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     private void appendTemplateIfArrayParameter(List<Expr<Void>> parameters) {
         final boolean isContainedArrayParameter = parameters.stream().filter(p -> p.getVarType().isArray()).findFirst().isPresent();
         if ( isContainedArrayParameter ) {
-            this.sb.append("\ntemplate<size_t N>");
+            this.sb.append("\ntemplate<");
         }
+        int i = 0;
+        for ( Expr<Void> expr : parameters ) {
+            if ( expr.getVarType().isArray() ) {
+                this.sb.append("size_t N" + i++ + ", ");
+            }
+        }
+        this.sb.delete(this.sb.length() - 2, this.sb.length());
+        this.sb.append(">");
+        this.numberOfArraysUsedInTemplate = i;
     }
 
     @Override

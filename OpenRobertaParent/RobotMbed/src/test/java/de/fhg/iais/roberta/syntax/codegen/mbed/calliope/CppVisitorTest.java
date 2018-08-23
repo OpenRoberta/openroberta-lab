@@ -673,15 +673,15 @@ public class CppVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "template<size_t N>"
-                + "void doSomething(array<MicroBitImage,N> x);"
+                + "template<size_t N0>"
+                + "void doSomething(array<MicroBitImage,N0> x);"
                 + "array<MicroBitImage,3> item;\n"
                 + MAIN
                 + "item={MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\"),MicroBitImage(\"0,0,0,0,0\\n0,255,0,255,0\\n0,255,255,255,0\\n0,0,255,0,0\\n0,0,0,0,0\\n\"),MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\")};"
                 + "doSomething(item);"
                 + END
-                + "template<size_t N>"
-                + "void doSomething(array<MicroBitImage, N> x) {"
+                + "template<size_t N0>"
+                + "void doSomething(array<MicroBitImage, N0> x) {"
                 + "_uBit.display.animateImages(x,200);"
                 + "}";
 
