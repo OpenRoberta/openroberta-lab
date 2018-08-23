@@ -44,7 +44,10 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
             robControls : true,
             theme : GUISTATE_C.getTheme()
         });
-        bricklyWorkspace.setDevice(GUISTATE_C.getRobotGroup());
+        bricklyWorkspace.setDevice({
+            group : GUISTATE_C.getRobotGroup(),
+            robot : GUISTATE_C.getRobot()
+        });
         bricklyWorkspace.setVersion('2.0');
         // Configurations can't be executed
         bricklyWorkspace.robControls.runOnBrick.setAttribute("style", "display : none");
@@ -318,7 +321,10 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
     exports.reloadView = reloadView;
 
     function resetView() {
-        bricklyWorkspace.setDevice(GUISTATE_C.getRobotGroup());
+        bricklyWorkspace.setDevice({
+            group : GUISTATE_C.getRobotGroup(),
+            robot : GUISTATE_C.getRobot()
+        });
         bricklyWorkspace.setVersion('2.0');
         initConfigurationEnvironment();
         var toolbox = GUISTATE_C.getConfigurationToolbox();

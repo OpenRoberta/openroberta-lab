@@ -40,7 +40,10 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
             theme : GUISTATE_C.getTheme()
         });
         $(window).resize();
-        blocklyWorkspace.setDevice(GUISTATE_C.getRobotGroup());
+        blocklyWorkspace.setDevice({
+            group : GUISTATE_C.getRobotGroup(),
+            robot : GUISTATE_C.getRobot()
+        });
         //TODO: add the version information in the Parent POM!.
         blocklyWorkspace.setVersion('2.0');
         GUISTATE_C.setBlocklyWorkspace(blocklyWorkspace);
@@ -411,7 +414,10 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
     exports.reloadView = reloadView;
 
     function resetView() {
-        blocklyWorkspace.setDevice(GUISTATE_C.getRobotGroup());
+        blocklyWorkspace.setDevice({
+            group : GUISTATE_C.getRobotGroup(),
+            robot : GUISTATE_C.getRobot()
+        });
         //TODO: add the version information in the Parent POM!.
         blocklyWorkspace.setVersion('2.0');
         initProgramEnvironment();
