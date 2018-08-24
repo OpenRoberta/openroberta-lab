@@ -72,12 +72,12 @@ public class Jaxb2ArduinoConfigurationTransformer {
                     configurationBlocks.add(extractConfigurationBlockComponents(blocks.get(i)));
                 }
                 // TODO pass the board type in a more sensible way
-                return new ArduinoConfiguration(configurationBlocks, blocks.get(0).get(0).getField().get(0).getValue());
+                return new ArduinoConfiguration(configurationBlocks);
             default:
                 for ( int i = 0; i < blocks.size(); i++ ) {
                     configurationBlocks.add(extractConfigurationBlockComponents(blocks.get(i)));
                 }
-                return new ArduinoConfiguration(configurationBlocks, "ArduinoWithoutConfigurationBlock");
+                return new ArduinoConfiguration(configurationBlocks);
             //throw new DbcException("There was no correct configuration block found! " + blocks.get(0).get(0).getType());
         }
     }

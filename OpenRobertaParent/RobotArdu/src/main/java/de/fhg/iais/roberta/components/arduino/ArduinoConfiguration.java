@@ -12,10 +12,9 @@ public class ArduinoConfiguration extends Configuration {
 
     protected final List<Quadruplet<ConfigurationBlock, String, List<String>, List<String>>> configurationBlocks;
 
-    public ArduinoConfiguration(List<Quadruplet<ConfigurationBlock, String, List<String>, List<String>>> configurationBlocks, String arduinoType) {
+    public ArduinoConfiguration(List<Quadruplet<ConfigurationBlock, String, List<String>, List<String>>> configurationBlocks) {
         super(null, null, -1, -1);
         this.configurationBlocks = configurationBlocks;
-        this.subtype = arduinoType;
     }
 
     /**
@@ -51,7 +50,7 @@ public class ArduinoConfiguration extends Configuration {
 
         @Override
         public Configuration build() {
-            return new ArduinoConfiguration(this.confBlocks, "Uno");
+            return new ArduinoConfiguration(this.confBlocks);
         }
     }
 
