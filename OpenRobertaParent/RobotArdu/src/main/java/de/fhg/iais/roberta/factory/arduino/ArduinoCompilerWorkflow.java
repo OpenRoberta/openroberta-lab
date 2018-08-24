@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.factory.arduino.nano;
+package de.fhg.iais.roberta.factory.arduino;
 
 import java.io.File;
 import java.lang.ProcessBuilder.Redirect;
@@ -23,23 +23,22 @@ import de.fhg.iais.roberta.transformers.arduino.Jaxb2ArduinoConfigurationTransfo
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
-public class CompilerWorkflow extends AbstractCompilerWorkflow {
+public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflow.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ArduinoCompilerWorkflow.class);
 
     public final String pathToCrosscompilerBaseDir;
     public final String robotCompilerResourcesDir;
     public final String robotCompilerDir;
-
-    private String arduinoType = "Uno";
+    private final String robot;
 
     private String compiledHex = "error";
 
-    public CompilerWorkflow(String pathToCrosscompilerBaseDir, String robotCompilerResourcesDir, String robotCompilerDir) {
+    public ArduinoCompilerWorkflow(String pathToCrosscompilerBaseDir, String robotCompilerResourcesDir, String robotCompilerDir, String robot) {
         this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
         this.robotCompilerResourcesDir = robotCompilerResourcesDir;
         this.robotCompilerDir = robotCompilerDir;
-
+        this.robot = robot;
     }
 
     @Override
@@ -49,9 +48,8 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
         }
         try {
             ArduinoConfiguration configuration = ((ArduinoConfiguration) data.getBrickConfiguration());
-            this.arduinoType = configuration.getSubtype();
             String sourceCode = CppVisitor.generate(configuration, data.getProgramTransformer().getTree(), true);
-            CompilerWorkflow.LOG.info("generating arduino c++ code");
+            ArduinoCompilerWorkflow.LOG.info("generating arduino c++ code");
             return sourceCode;
         } catch ( Exception e ) {
             LOG.error("generating source code failed", e);
@@ -64,15 +62,15 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
         try {
             storeGeneratedProgram(token, programName, sourceCode, this.pathToCrosscompilerBaseDir, ".ino");
         } catch ( Exception e ) {
-            CompilerWorkflow.LOG.error("Storing the generated program into directory " + token + " failed", e);
+            ArduinoCompilerWorkflow.LOG.error("Storing the generated program into directory " + token + " failed", e);
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
         }
 
         Key messageKey = runBuild(token, programName, "generated.main");
         if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
-            CompilerWorkflow.LOG.info("hex for program {} generated successfully", programName);
+            ArduinoCompilerWorkflow.LOG.info("hex for program {} generated successfully", programName);
         } else {
-            CompilerWorkflow.LOG.info(messageKey.toString());
+            ArduinoCompilerWorkflow.LOG.info(messageKey.toString());
         }
         return sourceCode == null ? Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED : messageKey;
     }
@@ -118,24 +116,26 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
 
         try {
             String fqbnArg = "";
-            if (this.arduinoType.equals("Uno")) {
+            if ( this.robot.equals("uno") ) {
                 fqbnArg = "-fqbn=arduino:avr:uno";
-            } else if (this.arduinoType.equals("Mega")) {
+            } else if ( this.robot.equals("mega") ) {
                 fqbnArg = "-fqbn=arduino:avr:mega:cpu=atmega2560";
-            } else if (this.arduinoType.equals("Nano")) {
+            } else if ( this.robot.equals("nano") ) {
                 fqbnArg = "-fqbn=arduino:avr:nano:cpu=atmega328";
             }
 
-            ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
-                scriptName,
-                "-hardware=" + this.robotCompilerResourcesDir + "/hardware",
-                "-tools=" + this.robotCompilerResourcesDir + "/" + os + "/tools-builder",
-                "-libraries=" + this.robotCompilerResourcesDir + "/libraries",
-                fqbnArg,
-                "-prefs=compiler.path=" + this.robotCompilerDir,
-                "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
-                base.resolve(path).toAbsolutePath().normalize().toString() + "/src/" + mainFile + ".ino"
-            });
+            ProcessBuilder procBuilder =
+                new ProcessBuilder(
+                    new String[] {
+                        scriptName,
+                        "-hardware=" + this.robotCompilerResourcesDir + "/hardware",
+                        "-tools=" + this.robotCompilerResourcesDir + "/" + os + "/tools-builder",
+                        "-libraries=" + this.robotCompilerResourcesDir + "/libraries",
+                        fqbnArg,
+                        "-prefs=compiler.path=" + this.robotCompilerDir,
+                        "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
+                        base.resolve(path).toAbsolutePath().normalize().toString() + "/src/" + mainFile + ".ino"
+                    });
 
             procBuilder.redirectInput(Redirect.INHERIT);
             procBuilder.redirectOutput(Redirect.INHERIT);
@@ -153,9 +153,9 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
             return Key.COMPILERWORKFLOW_SUCCESS;
         } catch ( Exception e ) {
             if ( sb.length() > 0 ) {
-                CompilerWorkflow.LOG.error("build exception. Messages from the build script are:\n" + sb.toString(), e);
+                ArduinoCompilerWorkflow.LOG.error("build exception. Messages from the build script are:\n" + sb.toString(), e);
             } else {
-                CompilerWorkflow.LOG.error("exception when preparing the build", e);
+                ArduinoCompilerWorkflow.LOG.error("exception when preparing the build", e);
             }
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         }
