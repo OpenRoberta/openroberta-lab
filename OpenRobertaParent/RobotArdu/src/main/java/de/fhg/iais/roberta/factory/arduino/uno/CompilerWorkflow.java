@@ -79,7 +79,6 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
 
     @Override
     public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
-        System.out.println(blocklyXml);
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
         Jaxb2ArduinoConfigurationTransformer transformer = new Jaxb2ArduinoConfigurationTransformer(factory);
         return transformer.transform(project);

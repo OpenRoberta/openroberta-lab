@@ -31,7 +31,7 @@ public class PinWriteValueAction<V> extends Action<V> {
     private final Expr<V> value;
 
     private PinWriteValueAction(IPinValue pinValue, IActorPort port, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("PIN_WRITE_VALUE"), properties, comment);
+        super(BlockTypeContainer.getByName("WRITE_TO_PIN"), properties, comment);
         Assert.notNull(pinValue);
         Assert.notNull(port);
         Assert.notNull(value);
@@ -84,7 +84,6 @@ public class PinWriteValueAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        System.out.println("testing");
         IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 2);
         List<Value> values = helper.extractValues(block, (short) 1);
@@ -102,18 +101,13 @@ public class PinWriteValueAction<V> extends Action<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-
         Mutation mutation = new Mutation();
         mutation.setProtocol(this.pinValue.toString());
         jaxbDestination.setMutation(mutation);
-
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, this.value);
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VALUETYPE, this.pinValue.toString());
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PIN, this.port.getOraName());
-        System.out.println(this.value);
-        System.out.println(this.pinValue.toString());
-        System.out.println(this.port.getOraName());
         return jaxbDestination;
     }
 
