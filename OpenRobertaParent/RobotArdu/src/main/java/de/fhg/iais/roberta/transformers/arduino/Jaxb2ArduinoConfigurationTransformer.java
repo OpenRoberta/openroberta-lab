@@ -13,7 +13,6 @@ import de.fhg.iais.roberta.components.ConfigurationBlockType;
 import de.fhg.iais.roberta.components.arduino.ArduinoConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.util.Quadruplet;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
  * JAXB to brick configuration. Client should provide a tree of jaxb objects. Generates a BrickConfiguration object.
@@ -65,17 +64,21 @@ public class Jaxb2ArduinoConfigurationTransformer {
 
     @SuppressWarnings("rawtypes")
     private Configuration blockToBrickConfiguration(List<List<Block>> blocks) {
+        // Quadruplet: block type; block name; list of block' port names; list of block's pin names
+        List<Quadruplet<ConfigurationBlock, String, List<String>, List<String>>> configurationBlocks = new ArrayList<>();
         switch ( blocks.get(0).get(0).getType() ) {
             case "robBrick_Arduino-Brick":
-                // Quadruplet: block type; block name; list of block' port names; list of block's pin names
-                List<Quadruplet<ConfigurationBlock, String, List<String>, List<String>>> configurationBlocks = new ArrayList<>();
                 for ( int i = 1; i < blocks.size(); i++ ) {
                     configurationBlocks.add(extractConfigurationBlockComponents(blocks.get(i)));
                 }
                 // TODO pass the board type in a more sensible way
                 return new ArduinoConfiguration(configurationBlocks, blocks.get(0).get(0).getField().get(0).getValue());
             default:
-                throw new DbcException("There was no correct configuration block found! " + blocks.get(0).get(0).getType());
+                for ( int i = 0; i < blocks.size(); i++ ) {
+                    configurationBlocks.add(extractConfigurationBlockComponents(blocks.get(i)));
+                }
+                return new ArduinoConfiguration(configurationBlocks, "ArduinoWithoutConfigurationBlock");
+            //throw new DbcException("There was no correct configuration block found! " + blocks.get(0).get(0).getType());
         }
     }
 

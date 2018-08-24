@@ -5,13 +5,16 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.ConfigurationBlock;
+import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedConfigurationBlock;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.arduino.ArduinoConfiguration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.control.RelayAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
@@ -97,6 +100,12 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     @Override
     public Void visitRelayAction(RelayAction<Void> relayAction) {
         // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
+        this.usedActors.add(new UsedActor(pinWriteValueSensor.getPort(), ActorType.ANALOG_PIN));
         return null;
     }
 }

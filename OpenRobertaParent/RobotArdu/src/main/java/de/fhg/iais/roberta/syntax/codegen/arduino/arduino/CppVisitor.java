@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.components.arduino.ArduinoConfiguration;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.sensor.HumiditySensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
+import de.fhg.iais.roberta.mode.sensor.PinValue;
 import de.fhg.iais.roberta.mode.sensor.RfidSensorMode;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -35,6 +36,7 @@ import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
@@ -814,6 +816,27 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
+        this.sb.append("pinMode(" + pinWriteValueSensor.getPort() + ", OUTPUT);");
+        nlIndent();
+        switch ( (PinValue) pinWriteValueSensor.getMode() ) {
+            case ANALOG:
+                this.sb.append("analogWrite(" + pinWriteValueSensor.getPort() + ", ");
+                pinWriteValueSensor.getValue().visit(this);
+                this.sb.append(");");
+                break;
+            case DIGITAL:
+                this.sb.append("digitalWrite(" + pinWriteValueSensor.getPort() + ", ");
+                pinWriteValueSensor.getValue().visit(this);
+                this.sb.append(");");
+                break;
+            default:
+                break;
+        }
         return null;
     }
 }

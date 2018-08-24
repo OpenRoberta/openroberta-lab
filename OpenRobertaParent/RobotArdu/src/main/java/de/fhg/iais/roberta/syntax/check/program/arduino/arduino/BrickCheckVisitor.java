@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
@@ -255,6 +256,12 @@ public class BrickCheckVisitor extends RobotBrickCheckVisitor implements Arduino
 
     @Override
     public Void visitExternalLedOffAction(ExternalLedOffAction<Void> externalLedOffAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
+        // TODO Auto-generated method stub
         return null;
     }
 

@@ -79,6 +79,7 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
 
     @Override
     public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
+        System.out.println(blocklyXml);
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
         Jaxb2ArduinoConfigurationTransformer transformer = new Jaxb2ArduinoConfigurationTransformer(factory);
         return transformer.transform(project);
@@ -118,24 +119,26 @@ public class CompilerWorkflow extends AbstractCompilerWorkflow {
 
         try {
             String fqbnArg = "";
-            if (this.arduinoType.equals("Uno")) {
+            if ( this.arduinoType.equals("Uno") ) {
                 fqbnArg = "-fqbn=arduino:avr:uno";
-            } else if (this.arduinoType.equals("Mega")) {
+            } else if ( this.arduinoType.equals("Mega") ) {
                 fqbnArg = "-fqbn=arduino:avr:mega:cpu=atmega2560";
-            } else if (this.arduinoType.equals("Nano")) {
+            } else if ( this.arduinoType.equals("Nano") ) {
                 fqbnArg = "-fqbn=arduino:avr:nano:cpu=atmega328";
             }
 
-            ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
-                scriptName,
-                "-hardware=" + this.robotCompilerResourcesDir + "/hardware",
-                "-tools=" + this.robotCompilerResourcesDir + "/" + os + "/tools-builder",
-                "-libraries=" + this.robotCompilerResourcesDir + "/libraries",
-                fqbnArg,
-                "-prefs=compiler.path=" + this.robotCompilerDir,
-                "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
-                base.resolve(path).toAbsolutePath().normalize().toString() + "/src/" + mainFile + ".ino"
-            });
+            ProcessBuilder procBuilder =
+                new ProcessBuilder(
+                    new String[] {
+                        scriptName,
+                        "-hardware=" + this.robotCompilerResourcesDir + "/hardware",
+                        "-tools=" + this.robotCompilerResourcesDir + "/" + os + "/tools-builder",
+                        "-libraries=" + this.robotCompilerResourcesDir + "/libraries",
+                        fqbnArg,
+                        "-prefs=compiler.path=" + this.robotCompilerDir,
+                        "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
+                        base.resolve(path).toAbsolutePath().normalize().toString() + "/src/" + mainFile + ".ino"
+                    });
 
             procBuilder.redirectInput(Redirect.INHERIT);
             procBuilder.redirectOutput(Redirect.INHERIT);
