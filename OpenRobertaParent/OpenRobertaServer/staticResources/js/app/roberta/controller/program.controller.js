@@ -388,13 +388,13 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
         blocklyWorkspace.robControls.disable('saveProgram');
     }
 
-    function reloadProgram(opt_result) {
+    function reloadProgram(opt_result, opt_fromShowSource) {
         if (opt_result) {
             program = opt_result.data;
         } else {
             program = GUISTATE_C.getProgramXML();
         }
-        programToBlocklyWorkspace(program);
+        programToBlocklyWorkspace(program, opt_fromShowSource);
     }
     exports.reloadProgram = reloadProgram;
 
@@ -453,7 +453,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
         return GUISTATE_C.getView() == 'tabProgram';
     }
 
-    function programToBlocklyWorkspace(xml) {
+    function programToBlocklyWorkspace(xml, opt_fromShowSource) {
         listenToBlocklyEvents = false;
         Blockly.hideChaff();
         blocklyWorkspace.clear();
@@ -478,7 +478,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
         var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
 
         var language = GUISTATE_C.getLanguage();
-        if ($('#codeDiv').hasClass('rightActive')) {
+        if ($('#codeDiv').hasClass('rightActive') && !opt_fromShowSource) {
             PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function(result) {
                 $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.sourceCode.escapeHTML(), null, true) + '</pre>');
             });

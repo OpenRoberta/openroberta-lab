@@ -24,6 +24,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.co
             MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", filename);
         }, 'codeDownload clicked');
         $('#codeRefresh').onWrap('click', function(event) {
+            event.stopPropagation();
             var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
             var xmlProgram = Blockly.Xml.domToText(dom);
             var xmlConfiguration = GUISTATE_C.getConfigurationXML();
@@ -35,7 +36,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.co
             var language = GUISTATE_C.getLanguage();
 
             PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function(result) {
-                PROG_C.reloadProgram(result);
+                PROG_C.reloadProgram(result, true);
                 if (result.rc == "ok") {
                     GUISTATE_C.setState(result);
                     $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.sourceCode.escapeHTML(), null, true) + '</pre>');
@@ -60,7 +61,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.co
             var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
             var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
             var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
-
+console.log(xmlConfigText);
             var language = GUISTATE_C.getLanguage();
 
             PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function(result) {
