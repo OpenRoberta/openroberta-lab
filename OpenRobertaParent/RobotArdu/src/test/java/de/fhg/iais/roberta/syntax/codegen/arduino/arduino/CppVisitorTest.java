@@ -9,6 +9,7 @@ public class CppVisitorTest {
 
     private static final String INCLUDE =
         ""
+            + "//ThisfileisautomaticallygeneratedbytheOpenRobertaLab.\n"
             + "#include<math.h>\n"
             + "#include<Encoder.h>"
             + "#include<DHT.h>"

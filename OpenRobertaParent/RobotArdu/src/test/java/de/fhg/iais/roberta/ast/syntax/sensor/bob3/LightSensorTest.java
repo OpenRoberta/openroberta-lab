@@ -10,7 +10,7 @@ public class LightSensorTest {
 
     @Test
     public void getAmbientLight() throws Exception {
-        final String a = "double item; void setup() {Serial.begin(9600); item=0;} void loop() {item=myBob.getIRLight();";
+        final String a = "double item; void setup() {Serial.begin(9600); item=0;} void loop() {item=myBob.getIRLight();}";
 
         this.h.assertCodeIsOk(a, "/ast/sensors/sensor_bob3AmbientLight.xml", false);
     }

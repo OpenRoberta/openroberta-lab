@@ -545,11 +545,6 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
         nlIndent();
         this.sb.append("}");
         nlIndent();
-        nlIndent();
-        this.sb.append("void loop()");
-        nlIndent();
-        this.sb.append("{");
-        incrIndentation();
         return null;
     }
 
@@ -584,9 +579,9 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     protected void generateProgramSuffix(boolean withWrapping) {
-        if ( withWrapping ) {
-            this.sb.append("\n}\n");
-        }
+//        if ( withWrapping ) {
+//            this.sb.append("\n}\n");
+//        }
     }
 
     private void generateSensors() {

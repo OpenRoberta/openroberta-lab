@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationBlockType;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedConfigurationBlock;
@@ -279,8 +280,11 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
     }
 
     public void measureDistanceUltrasonicSensor(String sensorName) {
-        this.sb.append("double _getUltrasonicDistance()\n{");
-        nlIndent();
+        this.sb.append("double _getUltrasonicDistance()");
+        this.nlIndent();
+        this.sb.append("{");
+        this.incrIndentation();
+        this.nlIndent();
         this.sb.append("digitalWrite(_trigger_" + sensorName + ", LOW);");
         nlIndent();
         this.sb.append("delay(5);");
@@ -293,7 +297,9 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
         nlIndent();
         this.sb.append("return pulseIn(_echo_" + sensorName + ", HIGH)*_signalToDistance;");
         this.decrIndentation();
-        this.sb.append("\n}");
+        this.nlIndent();
+        this.sb.append("}");
+        this.nlIndent();
     }
 
     @Override
@@ -355,7 +361,8 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     public Void readRFIDData(String sensorName) {
         this.sb.append("String _readRFIDData()");
-        this.sb.append("\n{");
+        this.nlIndent();
+        this.sb.append("{");
         incrIndentation();
         nlIndent();
         this.sb.append("if(!_mfrc522_" + sensorName + ".PICC_IsNewCardPresent()) ");
@@ -390,7 +397,9 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                 + ".uid.uidByte[3]), HEX);");
 
         decrIndentation();
-        this.sb.append("\n}");
+        this.nlIndent();
+        this.sb.append("}");
+        this.nlIndent();
         return null;
 
     }
@@ -450,7 +459,9 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
         nlIndent();
         this.sb.append("return results;");
         decrIndentation();
-        this.sb.append("\n}");
+        nlIndent();
+        this.sb.append("}");
+        nlIndent();
     }
 
     @Override
@@ -467,47 +478,61 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        decrIndentation();
+
         mainTask.getVariables().visit(this);
         nlIndent();
         generateConfigurationVariables();
         if ( this.isTimerSensorUsed ) {
-            nlIndent();
-            this.sb.append("unsigned long __time = millis(); \n");
+            this.sb.append("unsigned long __time = millis();");
+            this.nlIndent();
+        }
+        long numberConf =
+            this.programPhrases
+                .stream()
+                .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
+                .count();
+        if ( (this.usedConfigurationBlocks.size() != 0 || this.isTimerSensorUsed) && numberConf == 0 ) {
+            this.nlIndent();
         }
         generateUserDefinedMethods();
+        if ( numberConf != 0 ) {
+            nlIndent();
+        }
         for ( UsedSensor usedSensor : this.usedSensors ) {
             if ( usedSensor.getType().equals(SensorType.INFRARED) ) {
-                this.sb.append("\n");
                 this.measureIRValue(usedSensor);
+                this.nlIndent();
                 break;
             }
         }
         for ( UsedConfigurationBlock usedConfigurationBlock : this.usedConfigurationBlocks ) {
             if ( usedConfigurationBlock.getType().equals(ConfigurationBlockType.ULTRASONIC) ) {
-                this.sb.append("\n");
                 this.measureDistanceUltrasonicSensor(usedConfigurationBlock.getBlockName());
+                this.nlIndent();
                 break;
             }
         }
         for ( UsedConfigurationBlock usedConfigurationBlock : this.usedConfigurationBlocks ) {
             if ( usedConfigurationBlock.getType().equals(ConfigurationBlockType.RFID) ) {
-                this.sb.append("\n");
                 this.readRFIDData(usedConfigurationBlock.getBlockName());
+                this.nlIndent();
                 break;
             }
         }
-        this.sb.append("\n \nvoid setup() \n");
+        this.sb.append("void setup()");
+        this.nlIndent();
         this.sb.append("{");
         incrIndentation();
         nlIndent();
         this.sb.append("Serial.begin(9600); ");
         nlIndent();
         this.generateConfigurationSetup();
-        generateUsedVars();
-        this.sb.append("\n}\n");
-        this.sb.append("\n").append("void loop() \n");
-        this.sb.append("{");
+        this.generateUsedVars();
+        this.sb.delete(this.sb.lastIndexOf("\n"), this.sb.length());
+        this.decrIndentation();
+        this.nlIndent();
+        this.sb.append("}");
+        this.nlIndent();
         return null;
     }
 
@@ -515,34 +540,49 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
     protected void generateProgramPrefix(boolean withWrapping) {
         if ( !withWrapping ) {
             return;
+        } else {
+            this.decrIndentation();
         }
-        this.sb.append("#include <math.h> \n");
+        this.sb.append("// This file is automatically generated by the Open Roberta Lab.");
+        this.nlIndent();
+        this.nlIndent();
+        this.sb.append("#include <math.h>");
+        this.nlIndent();
         for ( UsedConfigurationBlock usedConfigurationBlock : this.usedConfigurationBlocks ) {
             switch ( (ConfigurationBlockType) usedConfigurationBlock.getType() ) {
                 case HUMIDITY:
-                    this.sb.append("#include <DHT.h> \n");
+                    this.sb.append("#include <DHT.h>");
+                    this.nlIndent();
                     break;
                 case INFRARED:
-                    this.sb.append("#include <IRremote.h> \n");
+                    this.sb.append("#include <IRremote.h>");
+                    this.nlIndent();
                     break;
                 case ENCODER:
-                    this.sb.append("#include <Encoder.h>  \n");
+                    this.sb.append("#include <Encoder.h>");
+                    this.nlIndent();
                     break;
                 case RFID:
-                    this.sb.append("#include <SPI.h> \n");
-                    this.sb.append("#include <MFRC522.h> \n");
+                    this.sb.append("#include <SPI.h>");
+                    this.nlIndent();
+                    this.sb.append("#include <MFRC522.h>");
+                    this.nlIndent();
                     break;
                 case LCD:
-                    this.sb.append("#include <LiquidCrystal.h> \n");
+                    this.sb.append("#include <LiquidCrystal.h>");
+                    this.nlIndent();
                     break;
                 case LCDI2C:
-                    this.sb.append("#include <LiquidCrystal_I2C.h> \n");
+                    this.sb.append("#include <LiquidCrystal_I2C.h>");
+                    this.nlIndent();
                     break;
                 case STEPMOTOR:
-                    this.sb.append("#include <Stepper.h> \n");
+                    this.sb.append("#include <Stepper.h>");
+                    this.nlIndent();
                     break;
                 case SERVOMOTOR:
-                    this.sb.append("#include <Servo.h> \n");
+                    this.sb.append("#include <Servo.h>");
+                    this.nlIndent();
                     break;
                 case ULTRASONIC:
                 case MOTION:
@@ -562,15 +602,15 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                     throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getType());
             }
         }
-        this.sb.append("#include <RobertaFunctions.h>   // Open Roberta library \n");
-        this.sb.append("RobertaFunctions rob;  \n");
+        this.sb.append("#include <RobertaFunctions.h>   // Open Roberta library");
+        this.nlIndent();
+        this.nlIndent();
+        this.sb.append("RobertaFunctions rob;");
     }
 
     @Override
     protected void generateProgramSuffix(boolean withWrapping) {
-        if ( withWrapping ) {
-            this.sb.append("\n}\n");
-        }
+        // nothing to do because the arduino loop closes the program
     }
 
     private void generateConfigurationSetup() {

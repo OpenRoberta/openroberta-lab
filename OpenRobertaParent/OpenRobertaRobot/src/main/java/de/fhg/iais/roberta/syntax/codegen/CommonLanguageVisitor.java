@@ -95,7 +95,7 @@ public abstract class CommonLanguageVisitor implements AstLanguageVisitor<Void> 
     private void generateProgramMainBody() {
         this.programPhrases.stream().filter(phrase -> phrase.getKind().getCategory() != Category.METHOD || phrase.getKind().hasName("METHOD_CALL")).forEach(
             p -> {
-                nlIndent();
+                this.nlIndent();
                 p.visit(this);
             });
     }

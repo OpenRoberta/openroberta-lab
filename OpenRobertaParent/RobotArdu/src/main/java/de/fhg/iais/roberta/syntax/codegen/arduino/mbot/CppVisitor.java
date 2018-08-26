@@ -413,8 +413,6 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
         nlIndent();
         generateUsedVars();
         this.sb.append("\n}");
-        this.sb.append("\n").append("void loop() \n");
-        this.sb.append("{");
         for ( final UsedSensor usedSensor : this.usedSensors ) {
             switch ( (SensorType) usedSensor.getType() ) {
                 case GYRO:
@@ -456,9 +454,9 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
 
     @Override
     protected void generateProgramSuffix(boolean withWrapping) {
-        if ( withWrapping ) {
-            this.sb.append("\n}\n");
-        }
+//        if ( withWrapping ) {
+//            this.sb.append("\n}\n");
+//        }
     }
 
     private void generateSensors() {
