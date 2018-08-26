@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-08-24 11:04:26.477617",
+		"lastupdated": "2018-08-26 22:47:36.219764",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -509,6 +509,7 @@
 	"WAIT": "wait ms",
 	"WAIT_OR": "or wait for",
 	"SENSOR_ULTRASONIC": "ultrasonic sensor",
+	"SENSOR_ULTRASONIC_ARDUINO": "ultrasonic sensor HC-SR04",
 	"SENSOR_TOUCH": "touch sensor",
 	"SENSOR_TIME": "time",
 	"SENSOR_MS_TIMER": "in ms",
@@ -1319,8 +1320,8 @@
 	"SENSOR_DROP": "drop sensor",
 	"SENSOR_DROP_OFF": "drop-off sensor",
 	"SENSOR_RFID": "RFID reader",
-	"ACTION_LCD": "LCD",
-	"ACTION_LCDI2C": "LCD I2C",
+	"ACTION_LCD": "LCD 1602",
+	"ACTION_LCDI2C": "LCD 1602 I²C",
 	"ACTION_LED": "LED",
 	"ACTION_PLAY": "play",
 	"ACTION_RELAY": "relay",
@@ -1338,7 +1339,7 @@
 	"RFID_TOOLTIP": "Represents an RFID reader.",
 	"KEY_TOOLTIP": "Represents a button.",
 	"LCD_TOOLTIP": "Represents an LCD display.",
-	"LCDI2C_TOOLTIP": "Represents an LCD I2C display.",
+	"LCDI2C_TOOLTIP": "Represents an LCD 1602 display with a soldered I²C module.",
 	"PLAY_TOOLTIP": "Represents a buzzer.",
 	"RELAY_TOOLTIP": "Represents a relay.",
 	"RGBLED_TOOLTIP": "Represents an RGB LED.",
