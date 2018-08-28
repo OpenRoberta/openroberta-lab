@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-08-26 22:47:36.219764",
+		"lastupdated": "2018-08-28 22:11:20.878601",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -664,6 +664,9 @@
 	"MENU_ZOOM_OUT": "zoom out",
 	"MENU_SIM_SCENE_TOOLTIP": "change the scene",
 	"MENU_SIM_ROBOT_TOOLTIP": "open/close the robot's view",
+	"MENU_RIGHT_TUTORIAL_TOOLTIP": "open/close the tutorial's view",
+	"MENU_TUTORIAL": "tutorials",
+	"MENU_TUTORIAL_TOOLTIP": "tutorials",
 	"TAB_PROGRAM": "Program",
 	"TAB_CONFIGURATION": "Robot configuration",
 	"POPUP_ABOUT_TEXT": "The Open Roberta Lab is a cloud-based integrated programming environment that enables children and adolescents to program easily different robot/microcontroller systems. This platform is completely open source so taking part is desirable! Both the software and the open source developer tools are available via Fraunhofer servers.",
@@ -726,6 +729,8 @@
 	"MESSAGE_RESTART_ROBOT": "Please reconnect the robot to the Open Roberta Lab.",
 	"MESSAGE_FIRMWARE_ERROR": "There is a conflict with the firmware version of your robot and the Open Roberta Lab. Please contact us.",
 	"ORA_TOKEN_SET_SUCCESS": "Token set",
+	"ORA_ACCESS_RIGHT_CHANGED": "The shared right is updated!",
+	"ORA_ACCESS_RIGHT_DELETED": "The shared right is deleted!",
 	"ORA_TOKEN_SET_ERROR_NO_ROBOT_WAITING": "Check if your robot is switched on and connected to the server. <br />If you have problems to do this, please have a look at our help pages.",
 	"ORA_TOOLBOX_ERROR_ID_INVALID": "Toolbox name is not a valid identifier.",
 	"ORA_TOOLBOX_GET_ONE_ERROR_NOT_FOUND": "The toolbox could not be found in the database.",
@@ -1133,7 +1138,6 @@
 	"NAO_GYROMETER_TOOLTIP": "Get the current reading from the gyrometer in the given direction.",
 	"NAO_ACCELEROMETER_TOOLTIP": "Get the current reading from the accelerometer in the given direction",
 	"FSR_TOOLTIP": "Get the current reading from the force sensitive resistor under the feet of the robot.",
-	"NAO_RECOGNIZEWORD_TOOLTIP": "Returns the last word the robot recognized.",
 	"NAO_RECOGNIZEWORD": "speech recognizer of",
 	"NAO_LEARNFACE_TOOLTIP": "Learn and save a face under a given name in the vision recognition database on the robot.",
 	"NAO_FORGETFACE_TOOLTIP": "Delete a face previously saved under a given name from the vision recognition database on the robot. ",
@@ -1412,8 +1416,6 @@
 	"VACUUM_ON_TOOLTIP": "Turns on the vacuum speed in procent",
 	"VACUUM_OFF": "turn vacuum off",
 	"VACUUM_OFF_TOOLTIP": "Turns the vacuum off.",
-	"VACUUM_OFF": "Turn Vacuum Off",
-	"VACUUM_OFF_TOOLTIP": "Turn the vacuum off.",
 	"SLOT_TILTED_UP": "up",
 	"SLOT_TILTED_DOWN": "down",
 	"SLOT_TILTED_BACK": "back",
@@ -1422,7 +1424,6 @@
 	"SLOT_TILTED_ANY": "any",
 	"CONNECTOR": "connection",
 	"BRICKNAME_WEDO": "WeDo",
-	"SLOT_TILTED_ANY": "shake",
 	"STEPS_PER_REVOLUTION": "steps per revolution",
 	"ROTATIONS_PER_MINUTE": "rotations per minute"
 }

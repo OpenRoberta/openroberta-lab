@@ -16,7 +16,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
         for ( var tutorial in tutorialList) {
             if (tutorialList.hasOwnProperty(tutorial)) {
                 $("#head-navigation-tutorial-dropdown").append("<li class='" + tutorialList[tutorial].language + " " + tutorialList[tutorial].robot
-                        + "'><a href='#' id='" + tutorial + "' class='menu tutorial typcn typcn-contacts'>" + tutorialList[tutorial].name + "</a></li>");
+                        + "'><a href='#' id='" + tutorial + "' class='menu tutorial typcn typcn-mortar-board'>" + tutorialList[tutorial].name + "</a></li>");
             }
         }
         GUISTATE_C.updateTutorialMenu();

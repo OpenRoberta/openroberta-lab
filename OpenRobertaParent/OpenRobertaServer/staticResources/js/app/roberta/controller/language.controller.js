@@ -148,6 +148,10 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
                 $('#codeDownload').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_CODE_REFRESH_TOOLTIP') {
                 $('#codeRefresh').attr('data-original-title', value);
+            } else if (lkey == 'Blockly.Msg.MENU_TUTORIAL_TOOLTIP') {
+                $('#head-navi-tooltip-tutorials').attr('data-original-title', value);
+            } else if (lkey == 'Blockly.Msg.MENU_RIGHT_TUTORIAL_TOOLTIP') {
+                $('#tutorialButton').attr('data-original-title', value);
             } else if (lkey === "Blockly.Msg.BUTTON_EMPTY_LIST") {
                 $('#logList>.bootstrap-table').find('button[name="refresh"]').attr('data-original-title', value);
             } else if (lkey === "Blockly.Msg.LIST_BACK_TOOLTIP") {
