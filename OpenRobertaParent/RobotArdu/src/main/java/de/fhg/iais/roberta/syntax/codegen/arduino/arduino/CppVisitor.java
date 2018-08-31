@@ -56,6 +56,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PulseSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.RfidSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
@@ -169,12 +170,11 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        String[] colors =
-            {
-                "red",
-                "green",
-                "blue"
-            };
+        String[] colors = {
+            "red",
+            "green",
+            "blue"
+        };
         for ( int i = 0; i < 3; i++ ) {
             this.sb.append("analogWrite(_led_" + colors[i] + "_" + lightStatusAction.getPort().getOraName() + ", 0);");
             nlIndent();
@@ -227,8 +227,12 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitRelayAction(RelayAction<Void> relayAction) {
-        this.sb.append("digitalWrite(_relay_").append(relayAction.getPort().getOraName()).append(", ").append(relayAction.getMode().getValues()[0]).append(
-            ");");
+        this.sb
+            .append("digitalWrite(_relay_")
+            .append(relayAction.getPort().getOraName())
+            .append(", ")
+            .append(relayAction.getMode().getValues()[0])
+            .append(");");
         return null;
     }
 
@@ -350,6 +354,45 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
     @Override
     public Void visitDropSensor(DropSensor<Void> dropSensor) {
         this.sb.append("analogRead(_S_" + dropSensor.getPort().getOraName() + ")/10.24");
+        return null;
+    }
+
+    private void generatePinGetValue(UsedSensor usedSensor) {
+        this.sb.append("double _pinGetValue(int pinName, int mode) {");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("pinMode(pinName, INPUT);");
+        nlIndent();
+        this.sb.append("switch ( mode ) {");
+        nlIndent();
+        incrIndentation();
+        this.sb.append("case _ANALOG:");
+        nlIndent();
+        this.sb.append("return (double) analogRead(pinName);");
+        decrIndentation();
+        nlIndent();
+        incrIndentation();
+        this.sb.append("case _DIGITAL:");
+        nlIndent();
+        this.sb.append("return (double) digitalRead(pinName);");
+        decrIndentation();
+        nlIndent();
+        this.sb.append("default:");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("return -1.0;");
+        decrIndentation();
+        nlIndent();
+        decrIndentation();
+        this.sb.append("}");
+        nlIndent();
+        this.sb.append("}");
+        nlIndent();
+    }
+
+    @Override
+    public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
+        this.sb.append("_pinGetValue(" + pinGetValueSensor.getPort() + ", _" + pinGetValueSensor.getMode() + ")");
         return null;
     }
 
@@ -489,9 +532,9 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
         long numberConf =
             this.programPhrases
                 .stream()
-                .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
+                .filter(phrase -> (phrase.getKind().getCategory() == Category.METHOD) && !phrase.getKind().hasName("METHOD_CALL"))
                 .count();
-        if ( (this.usedConfigurationBlocks.size() != 0 || this.isTimerSensorUsed) && numberConf == 0 ) {
+        if ( ((this.usedConfigurationBlocks.size() != 0) || this.isTimerSensorUsed) && (numberConf == 0) ) {
             this.nlIndent();
         }
         generateUserDefinedMethods();
@@ -501,6 +544,13 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
         for ( UsedSensor usedSensor : this.usedSensors ) {
             if ( usedSensor.getType().equals(SensorType.INFRARED) ) {
                 this.measureIRValue(usedSensor);
+                this.nlIndent();
+                break;
+            }
+        }
+        for ( UsedSensor usedSensor : this.usedSensors ) {
+            if ( usedSensor.getType().equals(SensorType.PIN_VALUE) ) {
+                this.generatePinGetValue(usedSensor);
                 this.nlIndent();
                 break;
             }
@@ -600,6 +650,15 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                     break;
                 default:
                     throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getType());
+            }
+        }
+        for ( UsedSensor usedSensor : this.usedSensors ) {
+            switch ( (SensorType) usedSensor.getType() ) {
+                case PIN_VALUE:
+                    this.sb.append("#define _ANALOG 0\n#define _DIGITAL 1\n");
+                    break;
+                default:
+                    break;
             }
         }
         this.sb.append("#include <RobertaFunctions.h>   // Open Roberta library");

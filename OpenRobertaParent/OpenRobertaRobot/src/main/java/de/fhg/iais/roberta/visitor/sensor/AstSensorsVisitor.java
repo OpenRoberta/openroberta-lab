@@ -179,7 +179,7 @@ public interface AstSensorsVisitor<V> extends AstVisitor<V> {
      * @param PinGetValueSensor to be visited
      */
     default V visitPinGetValueSensor(PinGetValueSensor<V> pinGetValueSensor) {
-        throw new DbcException("GestureSensor not implemented!");
+        throw new DbcException("PinGetValueSensor not implemented!");
     };
 
     /**

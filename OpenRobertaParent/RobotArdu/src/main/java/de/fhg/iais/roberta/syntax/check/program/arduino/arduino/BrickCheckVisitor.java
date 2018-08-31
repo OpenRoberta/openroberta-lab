@@ -28,6 +28,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PulseSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.RfidSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
@@ -261,14 +262,17 @@ public class BrickCheckVisitor extends RobotBrickCheckVisitor implements Arduino
     }
 
     @Override
+    public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
+        return null;
+    }
+
+    @Override
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 

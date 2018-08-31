@@ -7,10 +7,12 @@ import java.util.Set;
 
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.ConfigurationBlock;
+import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedConfigurationBlock;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.arduino.ArduinoConfiguration;
+import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.control.RelayAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
@@ -22,6 +24,7 @@ import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.util.Quadruplet;
 import de.fhg.iais.roberta.visitors.arduino.ArduinoAstVisitor;
 
@@ -100,18 +103,25 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitRelayAction(RelayAction<Void> relayAction) {
-        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
+        this.usedSensors.add(new UsedSensor((ISensorPort) pinGetValueSensor.getPort(), SensorType.PIN_VALUE, pinGetValueSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
+        pinWriteValueSensor.getValue().visit(this);
         this.usedActors.add(new UsedActor(pinWriteValueSensor.getPort(), ActorType.ANALOG_PIN));
         return null;
     }
 
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
+        serialWriteAction.getValue().visit(this);
         return null;
     }
 }

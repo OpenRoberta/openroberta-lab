@@ -33,6 +33,7 @@ public enum SensorType implements ISensorType {
     DROP( "robBrick_drop" ),
     PULSE( "robBrick_pulse" ),
     RFID( "robBrick_rfide" ),
+    PIN_VALUE( "robSensors_pin_getSample" ),
     NONE( "" );
 
     private final String[] values;
@@ -54,7 +55,7 @@ public enum SensorType implements ISensorType {
      * @return name of the direction from the enum {@link DriveDirection}
      */
     public static SensorType get(String s) {
-        if ( s == null || s.isEmpty() ) {
+        if ( (s == null) || s.isEmpty() ) {
             throw new DbcException("Invalid sensor type: " + s);
         }
         String sUpper = s.trim().toUpperCase(Locale.GERMAN);
