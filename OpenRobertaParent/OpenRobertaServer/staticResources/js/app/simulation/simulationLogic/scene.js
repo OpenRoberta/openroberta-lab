@@ -1202,8 +1202,23 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
     
                 var uA = new Array(u1, u2, u3, u4, u5);
                 this.robots[progiter].ultraSensor.distance = CONSTANTS.MAXDIAG;
-                for (var i = 0; i < SIM.obstacleList.length; i++) {
-                    var obstacleLines = (SIMATH.getLinesFromRect(SIM.obstacleList[i]));
+                var personalObstacleList = SIM.obstacleList.slice();
+                for(var i=0;i<this.numprogs;i++){
+                    if(i===progiter){
+                        continue;
+                    }else{
+                        var tempobstacle = {
+                                isParallelToAxis : false,
+                                backLeft : this.robots[i].backLeft,
+                                backRight : this.robots[i].backRight,
+                                frontLeft : this.robots[i].frontLeft,
+                                frontRight : this.robots[i].frontRight
+                        }
+                        personalObstacleList.push(tempobstacle);
+                    }
+                }
+                for (var i = 0; i < personalObstacleList.length; i++) {
+                    var obstacleLines = (SIMATH.getLinesFromRect(personalObstacleList[i]));
                     var uDis = [ CONSTANTS.MAXDIAG, CONSTANTS.MAXDIAG, CONSTANTS.MAXDIAG, CONSTANTS.MAXDIAG, CONSTANTS.MAXDIAG ];
                     for (var k = 0; k < obstacleLines.length; k++) {
                         for (var j = 0; j < uA.length; j++) {
