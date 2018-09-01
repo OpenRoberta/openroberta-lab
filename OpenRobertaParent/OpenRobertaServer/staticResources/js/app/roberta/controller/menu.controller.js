@@ -49,6 +49,25 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         $('#show-startup-message').on('shown.bs.modal', function(e) {
             $(function() {
                 if (firsttime) {
+                    // *******************
+                    // This is a draft to make other/more robots visible.
+                    var autoplaySpeed = 2000;
+                    var autoplayOn = true;
+                    $('#popup-robot-main').on('init', function() {
+                        $('#slick-container').mouseenter(function() {
+                            autoplayOn = false;
+                        });
+                        $('#slick-container').mouseleave(function() {
+                            autoplayOn = true;
+                        });
+
+                        window.setInterval(function() {
+                            if (!autoplayOn)
+                                return;
+                            $('#popup-robot-main').slick('slickPrev');
+                        }, autoplaySpeed);
+                    });
+                    // ******************
                     $('#popup-robot-main').slick({
                         centerMode : true,
                         dots : true,
