@@ -70,6 +70,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
             if (!seen) {
                 reloadConf();
             }
+            $(window).resize();
         }, 'tabConfiguration clicked');
 
         $('#tabConfiguration').on('hide.bs.tab', function(e) {

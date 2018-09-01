@@ -123,7 +123,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
 
     var eventsLike = {
         'click .like' : function(e, value, row, index) {
-            e.preventDefault();
+            e.stopPropagation();
             PROGRAM.likeProgram(true, row[1], row[3], row[0], function(result) {
                 if (result.rc == "ok") {
                     $('#galleryList').find('button[name="refresh"]').trigger('click');
@@ -133,7 +133,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
             return false;
         },
         'click .dislike' : function(e, value, row, index) {
-            e.preventDefault();
+            e.stopPropagation();
             PROGRAM.likeProgram(false, row[1], row[3], row[0], function(result) {
                 if (result.rc == "ok") {
                     $('#galleryList').find('button[name="refresh"]').trigger('click');
@@ -187,7 +187,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
     var formatProgramDescription = function(value, row, index) {
         var xmlDoc = Blockly.Xml.textToDom(value, Blockly.getMainWorkspace());
         var description = xmlDoc.getAttribute("description");
-        if (!description) {           
+        if (!description) {
             description = "&nbsp;";
         }
         return '<div class="galleryDescription">' + description + '</div>';

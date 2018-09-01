@@ -95,6 +95,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
             if (!seen) {
                 reloadView();
             }
+            $(window).resize();
         });
         $('#tabProgram').on('hide.bs.tab', function(e) {
             Blockly.hideChaff();
