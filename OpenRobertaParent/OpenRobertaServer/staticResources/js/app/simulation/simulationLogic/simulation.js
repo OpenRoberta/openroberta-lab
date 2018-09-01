@@ -64,7 +64,12 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         if (num == undefined) {
             setObstacle();
             setRuler();
-            scene = new Scene(imgObjectList[currentBackground], robot, imgPattern, ruler);
+            if(!multipleSwitch){
+                scene = new Scene(imgObjectList[currentBackground], robot, imgPattern, ruler);
+            }else{
+                scene = new Scene(imgObjectList[currentBackground], robots, imgPattern, ruler);
+            }
+//            scene = new Scene(imgObjectList[currentBackground], robot, imgPattern, ruler);
             scene.updateBackgrounds();
             scene.drawObjects();
             scene.drawRuler();
@@ -84,11 +89,25 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         } else {
             currentBackground = num;
         }
-        var debug = robot.debug;
+        if(!multipleSwitch){
+            var debug = robot.debug;
+        }else{
+            var debug = robots[0].debug;
+        }
+//        var debug = robot.debug;
         var moduleName = 'simulation.robot.' + simRobotType;
         require([ moduleName ], function(ROBOT) {
-            createRobot(ROBOT);
-            robot.debug = debug;
+            if(!multipleSwitch){
+                createRobot(ROBOT);
+                robot.debug = debug;
+            }else{
+                createRobots(ROBOT, numprogs);
+                for(var i=0;i<robots.length;i++){
+                    robots[i].debug = debug;
+                }
+            }
+//            createRobot(ROBOT);
+//            robot.debug = debug;
             callback();
         });
 
@@ -233,6 +252,10 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         isParallelToAxis : true
     }; 
     var obslist= [ground, obstacle];
+    /*
+     * The below code if uncommented will give multiple obstacles
+     * 
+     * 
     for(var i=0;i<7;i++){
         var tempobs= {
                 x : 0,
@@ -247,6 +270,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             };
         obslist.push(tempobs);
     }
+    */
     var hoverindex =1;
     
     exports.hoverindex = hoverindex;
@@ -565,6 +589,15 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             obstacle.img = null;
             obstacle.color = "#33B8CA";
         } else if (currentBackground == 2) {
+            obstacle.x = 580;
+            obstacle.y = 290;
+            obstacle.w = 100;
+            obstacle.h = 100;
+            obstacle.img = null;
+            obstacle.color = "#33B8CA";
+            /*
+             * The below commentated code if uncommented will generate multiple obstacles
+             * 
             for(var i=1;i<obslist.length; i++){
                 var batchx;
                 var prevy;
@@ -594,6 +627,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                 obslist[i].h = 30;
                 obslist[i].img = null;
             }
+            */
         } else if (currentBackground == 4) {
             obstacle.x = 500;
             obstacle.y = 260;
@@ -853,8 +887,8 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                 robot.mouse.rx += dx;
                 robot.mouse.ry += dy;
             } else if (isDownObstacle) {
-                console.log("when does this isDownObstacle occur");
-                console.log(hoverindex);
+//                console.log("when does this isDownObstacle occur");
+//                console.log(hoverindex);
                 obslist[hoverindex].x += dx;
                 obslist[hoverindex].y += dy;
                 scene.drawObjects();
