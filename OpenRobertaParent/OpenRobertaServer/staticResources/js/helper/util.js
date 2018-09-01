@@ -358,7 +358,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
             }
         } else {
             var downloadLink = document.createElement('a');
-            downloadLink.setAttribute('href', 'data:text/' + fileName.substring(fileName.indexOf('.')+1) +';charset=utf-8,' + encodeURIComponent(content));
+            downloadLink.setAttribute('href', 'data:text/' + fileName.substring(fileName.indexOf('.') + 1) + ';charset=utf-8,' + encodeURIComponent(content));
             downloadLink.setAttribute('download', fileName);
             downloadLink.style.display = 'none';
             document.body.appendChild(downloadLink);
@@ -487,7 +487,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
         Blockly.hideChaff();
         $('.fromRight.rightActive').addClass('shifting');
         $('.blocklyToolboxDiv').css('display', 'inherit');
-        var that = this;
+        var that = this; //$('#blockly')
         $('.fromRight.rightActive').animate({
             width : 0
         }, {
@@ -496,20 +496,21 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
                 $(".modal").modal("hide");
             },
             step : function(now) {
-                that.width($(window).width() - now);
+                that.width($('#main-section').outerWidth() - now);
                 $('.rightMenuButton.rightActive').css('right', now);
+                ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
                 $(window).resize();
             },
             done : function() {
-                that.width($(window).width());
+                that.width($('#main-section').outerWidth());
                 $('.rightMenuButton.rightActive').css('right', 0);
-                $(window).resize();
                 $('.fromRight.rightActive.shifting').removeClass('shifting');
                 ratioWorkspace = 1;
                 that.removeClass('rightActive');
                 $('.fromRight.rightActive').removeClass('rightActive');
                 $('.rightMenuButton.rightActive').removeClass('rightActive');
                 $('#sliderDiv').hide();
+                $(window).resize();
                 if (typeof opt_callBack == 'function') {
                     opt_callBack();
                 }
@@ -539,17 +540,18 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
                 $('#' + viewName + 'Div').addClass('shifting');
             },
             step : function(now) {
-                that.width($(window).width() - now);
+                that.width($('#main-section').outerWidth() - now);
                 $('.rightMenuButton.rightActive').css('right', now);
+                ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
                 $(window).resize();
             },
             done : function() {
                 $('#sliderDiv').show();
-                that.width($(window).width() - $('.fromRight.rightActive').width());
+                that.width($('#main-section').outerWidth() - $('.fromRight.rightActive').width());
                 $('.rightMenuButton.rightActive').css('right', $('.fromRight.rightActive').width());
-                $(window).resize();
                 $('#' + viewName + 'Div').removeClass('shifting');
                 ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
+                $(window).resize();
                 if (smallScreen) {
                     $('.blocklyToolboxDiv').css('display', 'none');
                 }
@@ -565,11 +567,11 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
 
     $(window).resize(function() {
         var parentWidth = $('#main-section').outerWidth();
-        var height = Math.max($('#blockly').outerHeight(),$('#brickly').outerHeight());
+        var height = Math.max($('#blockly').outerHeight(), $('#brickly').outerHeight());
 
         var rightWidth = (1 - ratioWorkspace) * parentWidth;
         var leftWidth = ratioWorkspace * parentWidth;
-        
+
         if (!$('.fromRight.rightActive.shifting').length > 0) {
             if ($('.fromRight.rightActive').length > 0) {
                 $('.fromRight.rightActive').width(rightWidth);
@@ -589,7 +591,11 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
             $('#bricklyDiv').width(parentWidth);
             $('#bricklyDiv').height(height);
         }
-        Blockly.svgResize(Blockly.getMainWorkspace());
+        var diff = $('#main-section').outerWidth() - $('#blocklyDiv').outerWidth() - rightWidth;
+        if (diff != 0) {
+            $('#blocklyDiv').width(leftWidth - 4 + diff);
+        }
+        Blockly.svgResize(Blockly.Workspace.getByContainer("blocklyDiv"));
     });
 
 });
