@@ -510,7 +510,20 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         sensorValues = scene.updateSensorValues(!pause);
         scene.drawRobot();
     }
-    
+/*
+ * The below Colors are picked from the toolkit and should be used to color the robots
+ */
+    const colorsAdmissible = 
+        [
+            [242, 148, 0],
+            [143, 164, 2],
+            [235, 106, 10],
+            [51, 184, 202],
+            [0, 90, 148],
+            [186, 204, 30],
+            [235, 195, 0],
+            [144, 133, 186]
+        ];    
     function renderMultiple(){
         if (canceled) {
             cancelAnimationFrame(globalID);
@@ -1186,6 +1199,9 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     }
     exports.importImage = importImage;
 
+    function arrToRgb(values) {
+        return 'rgb(' + values.join(', ') + ')';
+    }
     function createRobots(reqRobot, numprogs){
         robots = [];
         var posvec = []
@@ -1205,6 +1221,9 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             });
             temprobot.savedName = userProgram[i].savedName;
             temprobot.canDraw = false;
+            /*
+             * The below code gives random color to robots
+             * 
             var letters = '0123456789ABCDEF';
             if(i!=0){
                 var tempcol= "#";
@@ -1214,7 +1233,13 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                 temprobot.geom.color = tempcol;
                 temprobot.touchSensor.color = tempcol;
             }
-
+            */
+            if(i!=0){
+                var tempcolor = arrToRgb(colorsAdmissible[((i-1)%(colorsAdmissible.length))]);
+                temprobot.geom.color = tempcolor;
+                temprobot.touchSensor.color = tempcolor;
+                
+            }
             robots.push(temprobot);
         }
     }
