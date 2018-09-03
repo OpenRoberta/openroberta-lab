@@ -180,7 +180,11 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                     var robotGroup = key;
                     var clone = proto.clone().prop('id', 'menu-' + robotGroup);
                     clone.attr('data-type', robotGroup);
-                    clone.find('span:eq( 1 )').html(robotGroup.charAt(0).toUpperCase() + robotGroup.slice(1)); // we have no real name for group
+                    if (robotGroup == "arduino") {
+                        clone.find('span:eq( 1 )').html("Nepo4Arduino");
+                    } else {
+                        clone.find('span:eq( 1 )').html(robotGroup.charAt(0).toUpperCase() + robotGroup.slice(1)); // we have no real name for group
+                    }
                     clone.find('span:eq( 0 )').removeClass('typcn-open');
                     clone.find('span:eq( 0 )').addClass('typcn-' + robotGroup); // so we just capitalize the first letter + add typicon
                     clone.find('img.img-beta').css('visibility', 'hidden'); // groups do not have 'beta' labels
