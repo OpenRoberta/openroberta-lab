@@ -1,17 +1,17 @@
 define(["require", "exports", "interpreter.constants", "interpreter.util", "./wedo.model", "./webview.controller"], function (require, exports, C, U, WEDO, WEBVIEW_C) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var NativeWedo = (function () {
-        function NativeWedo() {
+    var NativeWeDo = (function () {
+        function NativeWeDo() {
             this.timers = {};
             this.timers['start'] = Date.now();
             U.loggingEnabled(false, false);
         }
-        NativeWedo.prototype.clearDisplay = function () {
+        NativeWeDo.prototype.clearDisplay = function () {
             U.debug('clear display');
             WEBVIEW_C.jsToDisplay({ "clear": true });
         };
-        NativeWedo.prototype.getSample = function (s, name, port, sensor, slot) {
+        NativeWeDo.prototype.getSample = function (s, name, port, sensor, slot) {
             var robotText = 'robot: ' + name + ', port: ' + port;
             U.debug(robotText + ' getsample from ' + sensor);
             var sensorName;
@@ -34,11 +34,11 @@ define(["require", "exports", "interpreter.constants", "interpreter.util", "./we
             var brickid = WEDO.getBrickIdByName(name);
             s.push(WEDO.getSensorValue(brickid, sensorName, port, slot));
         };
-        NativeWedo.prototype.timerReset = function (port) {
+        NativeWeDo.prototype.timerReset = function (port) {
             this.timers[port] = Date.now();
             U.debug('timerReset for ' + port);
         };
-        NativeWedo.prototype.timerGet = function (port) {
+        NativeWeDo.prototype.timerGet = function (port) {
             var now = Date.now();
             var startTime = this.timers[port];
             if (startTime === undefined) {
@@ -48,28 +48,28 @@ define(["require", "exports", "interpreter.constants", "interpreter.util", "./we
             U.debug('timerGet for ' + port + ' returned ' + delta);
             return delta;
         };
-        NativeWedo.prototype.ledOnAction = function (name, port, color) {
+        NativeWeDo.prototype.ledOnAction = function (name, port, color) {
             var brickid = WEDO.getBrickIdByName(name);
             var robotText = 'robot: ' + name + ', port: ' + port;
             U.debug(robotText + ' led on color ' + color);
             var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'light', 'brickid': brickid, 'color': color };
             WEBVIEW_C.jsToAppInterface(cmd);
         };
-        NativeWedo.prototype.statusLightOffAction = function (name, port) {
+        NativeWeDo.prototype.statusLightOffAction = function (name, port) {
             var brickid = WEDO.getBrickIdByName(name);
             var robotText = 'robot: ' + name + ', port: ' + port;
             U.debug(robotText + ' led off');
             var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'light', 'brickid': brickid, 'color': 0 };
             WEBVIEW_C.jsToAppInterface(cmd);
         };
-        NativeWedo.prototype.toneAction = function (name, frequency, duration) {
+        NativeWeDo.prototype.toneAction = function (name, frequency, duration) {
             var brickid = WEDO.getBrickIdByName(name); // TODO: better style
             var robotText = 'robot: ' + name;
             U.debug(robotText + ' piezo: ' + ', frequency: ' + frequency + ', duration: ' + duration);
             var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'piezo', 'brickid': brickid, 'frequency': frequency, 'duration': duration };
             WEBVIEW_C.jsToAppInterface(cmd);
         };
-        NativeWedo.prototype.motorOnAction = function (name, port, duration, speed) {
+        NativeWeDo.prototype.motorOnAction = function (name, port, duration, speed) {
             var brickid = WEDO.getBrickIdByName(name); // TODO: better style
             var robotText = 'robot: ' + name + ', port: ' + port;
             var durText = duration === -1 ? ' w.o. duration' : (' for ' + duration + ' msec');
@@ -77,19 +77,19 @@ define(["require", "exports", "interpreter.constants", "interpreter.util", "./we
             var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'motor', 'brickid': brickid, 'action': 'on', 'id': port, 'direction': speed < 0 ? 1 : 0, 'power': Math.abs(speed) };
             WEBVIEW_C.jsToAppInterface(cmd);
         };
-        NativeWedo.prototype.motorStopAction = function (name, port) {
+        NativeWeDo.prototype.motorStopAction = function (name, port) {
             var brickid = WEDO.getBrickIdByName(name); // TODO: better style
             var robotText = 'robot: ' + name + ', port: ' + port;
             U.debug(robotText + ' motor stop');
             var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'motor', 'brickid': brickid, 'action': 'stop', 'id': port };
             WEBVIEW_C.jsToAppInterface(cmd);
         };
-        NativeWedo.prototype.showTextAction = function (text) {
+        NativeWeDo.prototype.showTextAction = function (text) {
             var showText = "" + text;
             U.debug('***** show "' + showText + '" *****');
             WEBVIEW_C.jsToDisplay({ "show": text });
         };
-        NativeWedo.prototype.close = function () {
+        NativeWeDo.prototype.close = function () {
             var ids = WEDO.getConnectedBricks();
             for (var id in ids) {
                 if (ids.hasOwnProperty(id)) {
@@ -100,7 +100,7 @@ define(["require", "exports", "interpreter.constants", "interpreter.util", "./we
                 }
             }
         };
-        return NativeWedo;
+        return NativeWeDo;
     }());
-    exports.NativeWedo = NativeWedo;
+    exports.NativeWeDo = NativeWeDo;
 });

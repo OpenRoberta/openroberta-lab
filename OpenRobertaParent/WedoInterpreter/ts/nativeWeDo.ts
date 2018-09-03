@@ -5,7 +5,7 @@ import * as U from "interpreter.util";
 import * as WEDO from "./wedo.model";
 import * as WEBVIEW_C from "./webview.controller";
 
-export class NativeWedo implements Native {
+export class NativeWeDo implements Native {
     private timers;
 
     constructor() {
