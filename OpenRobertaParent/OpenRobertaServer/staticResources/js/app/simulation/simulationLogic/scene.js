@@ -427,7 +427,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
 //                $(".robotsel").on("click", function(){
 //                    console.log("clicked");
 //                });
-                $("#notConstantValue").append('<div><label>Saved Name</label><span>' + this.robots[iterrobot].savedName+ '</span></div>');
+                $("#notConstantValue").append('<div><label>Program Name</label><span>' + this.robots[iterrobot].savedName+ '</span></div>');
                 $("#notConstantValue").append('<div><label>FPS</label><span>' + UTIL.round(1 / SIM.getDt(), 0) + '</span></div>');
                 $("#notConstantValue").append('<div><label>Time</label><span>' + UTIL.round(this.robots[iterrobot].time, 3) + 's</span></div>');
                 $("#notConstantValue").append('<div><label>Robot X</label><span>' + UTIL.round(x, 0) + '</span></div>');

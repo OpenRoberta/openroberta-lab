@@ -7,16 +7,16 @@ define(['exports','util', 'progList.model','program.controller', 'program.model'
         //currently for debugging purpose logged in a default user
 //        debugger;
    //un comment following lines to switch default login on     
-        USER.login("a","123456",function(result){
-            if (result.rc === "ok") {
-                GUISTATE_C.setLogin(result);
-                if (result.userId === 1) {
-                    $('#menuAddStatusTextWrap').removeClass('hidden');
-                }
-            }
-            MSG.displayInformation(result, "MESSAGE_USER_LOGIN", result.message, GUISTATE_C.getUserName());
-//            debugger;
-        });
+//        USER.login("a","123456",function(result){
+//            if (result.rc === "ok") {
+//                GUISTATE_C.setLogin(result);
+//                if (result.userId === 1) {
+//                    $('#menuAddStatusTextWrap').removeClass('hidden');
+//                }
+//            }
+//            MSG.displayInformation(result, "MESSAGE_USER_LOGIN", result.message, GUISTATE_C.getUserName());
+////            debugger;
+//        });
     }
     exports.init = init;
     
