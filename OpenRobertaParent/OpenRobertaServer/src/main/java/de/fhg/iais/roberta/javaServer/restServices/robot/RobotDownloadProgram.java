@@ -73,6 +73,7 @@ public class RobotDownloadProgram {
                     fileName = programName + ".rxe";
                     filePath = pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
+                case "ardu":
                 case "bob3":
                 case "uno":
                 case "mega":
