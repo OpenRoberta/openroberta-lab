@@ -591,11 +591,14 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
             $('#bricklyDiv').width(parentWidth);
             $('#bricklyDiv').height(height);
         }
+        // here comes a fix for a strange browser behavior while zoom is not 100%. It is just in case (e.g. chrome 125% works fine, 110% not). 
+        // Seems that either the returned sizes from the browser sometimes include margins/borders and sometimes not or that the assigned sizes behave 
+        // different (with and without margins/borders).
         var diff = $('#main-section').outerWidth() - $('#blocklyDiv').outerWidth() - rightWidth;
         if (diff != 0) {
             $('#blocklyDiv').width(leftWidth - 4 + diff);
         }
-        Blockly.svgResize(Blockly.Workspace.getByContainer("blocklyDiv"));
+        Blockly.svgResize(Blockly.getMainWorkspace());
     });
 
 });

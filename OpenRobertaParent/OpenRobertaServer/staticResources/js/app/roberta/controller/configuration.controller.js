@@ -67,10 +67,10 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
             } else {
                 bricklyWorkspace.setVisible(false);
             }
+            $(window).resize();
             if (!seen) {
                 reloadConf();
             }
-            $(window).resize();
         }, 'tabConfiguration clicked');
 
         $('#tabConfiguration').on('hide.bs.tab', function(e) {
@@ -194,7 +194,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
             }
             var blocks = bricklyWorkspace.getTopBlocks(true);
             if (blocks[0]) {
-                var coord = blocks[0].getRelativeToSurfaceXY();
+                var coord = Blockly.getSvgXY_(blocks[0].svgGroup_, bricklyWorkspace);
                 blocks[0].moveBy(x - coord.x, y - coord.y);
             }
             seen = true;
@@ -304,7 +304,24 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
         } else {
             conf = GUISTATE_C.getConfigurationXML();
         }
-        configurationToBricklyWorkspace(conf);
+        if (!seen) {
+            configurationToBricklyWorkspace(conf);
+            var x, y;
+            if ($(window).width() < 768) {
+                x = $(window).width() / 50;
+                y = 25;
+            } else {
+                x = $(window).width() / 5;
+                y = 50;
+            }
+            var blocks = bricklyWorkspace.getTopBlocks(true);
+            if (blocks[0]) {
+                var coord = Blockly.getSvgXY_(blocks[0].svgGroup_, bricklyWorkspace);
+                blocks[0].moveBy(x - coord.x, y - coord.y);
+            }
+        } else {
+            configurationToBricklyWorkspace(conf);
+        }
     }
     exports.reloadConf = reloadConf;
 

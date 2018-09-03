@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-08-31 11:50:47.858363",
+		"lastupdated": "2018-09-03 16:35:50.071596",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -371,6 +371,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Warning: This block may be used only within a function definition.",
 	"MOTOR_ON_TOOLTIP": "Turns motor on with specific power.",
 	"MOTOR_ON_TOOLTIP_CALLIOPE": "Turns motor A, B or A+B on with a specific power.",
+	"MOTORS_ON_TOOLTIP_CALLIOPE": "Turns motor A and B on with a specific power.",
 	"SINGLE_MOTOR_ON_TOOLTIP_CALLIOPE": "Turns the single motor on with a specific power. Power can be positiv or negativ for reverse direction.",
 	"MOTOR_ON_FOR_TOOLTIP": "Turns motor on and stops motor after execution of rotations/degrees.",
 	"MOTOR_ON_FOR_TOOLTIP_MS": "Turns motor on and stops motor after execution after time has passed.",
@@ -378,6 +379,7 @@
 	"MOTOR_GETPOWER_TOOLTIP": "Gets current power of this motor.",
 	"MOTOR_SETPOWER_TOOLTIP": "Sets power of this motor.",
 	"MOTOR_STOP_TOOLTIP": "Stops this motor.",
+	"MOTORS_STOP_TOOLTIP": "Stops both motors, A and B.",
 	"MOTORDIFF_ON_TOOLTIP": "Starts the robot with specific speed.",
 	"MOTORDIFF_ON_FOR_TOOLTIP": "Starts the robot with specific speed and stops after specific distance.",
 	"MOTORDIFF_STOP_TOOLTIP": "Stops the robot.",
@@ -1422,8 +1424,10 @@
 	"SLOT_TILTED_FRONT": "front",
 	"SLOT_TILTED_NO": "not",
 	"SLOT_TILTED_ANY": "any",
-	"CONNECTOR": "connection",
+	"CONNECTOR": "hub",
 	"BRICKNAME_WEDO": "WeDo",
 	"STEPS_PER_REVOLUTION": "steps per revolution",
-	"ROTATIONS_PER_MINUTE": "rotations per minute"
+	"ROTATIONS_PER_MINUTE": "rotations per minute",
+	"ACTION_SERIAL_PRINT": "show on Serial Monitor",
+	"ACTION_SERIAL_PRINT_TOOLTIP": "Show data on Serial Monitor. You can find the Serial Monitor in the USB Programm on top, under View."
 }
