@@ -454,8 +454,16 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     exports.isMultiple = isMultiple;
 
     function getRobotOfConsideration(){
-        var temp = parseInt($("#robotOfConsideration").find(":selected").text());
-        return temp-1;
+        if($("#robotOfConsideration")[0]==null){
+            return 0;
+        }else{
+            var temp = $("#robotOfConsideration")[0].selectedIndex;
+            return temp;
+
+        }
+//        var temp = $("#robotOfConsideration")[0].selectedIndex;
+////        return 0;
+//        return temp;
     }
     exports.getRobotOfConsideration = getRobotOfConsideration;
     
@@ -543,6 +551,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         if(temprobotOfConsideration!=robotOfConsideration){
             var blockxml = userProgram[getRobotOfConsideration()].programText;
             PROGRAM_C.programToBlocklyWorkspace(blockxml);
+            $("#robotOfConsideration").css('background-color',robots[robotOfConsideration].geom.color);
         }
         stepCounter += 1;
         addKeyEvents();

@@ -57,16 +57,25 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             this.waves = Array(this.numprogs).fill(0.0);
             this.isMultiple = true;
             $("#constantValue").html("");
-            var pagistr = "<select class=\"form-control\" id=\"robotOfConsideration\">";
+            var pagistr = "<select class=\"form-control\" style=\"background-color:"+this.robots[SIM.getRobotOfConsideration()].geom.color +"\" id=\"robotOfConsideration\">";
             for(var pagirobot = 0; pagirobot<this.numprogs; pagirobot++){
+                /*
                 if(SIM.getRobotOfConsideration()===pagirobot){
-                    pagistr += "<option selected>"+(pagirobot+1)+"</option>";
+                    pagistr += "<option selected style=\"background-color:"+this.robots[pagirobot].geom.color+'">&nbsp'+"</option>";
+//                    pagistr += "<option selected>"+(pagirobot+1)+"</option>";
+
                 }else{
-                    pagistr += "<option >"+(pagirobot+1)+"</option>"
+                    pagistr += "<option style=\"background-color:"+this.robots[pagirobot].geom.color+'">&nbsp'+"</option>";
+//                    pagistr += "<option >"+(pagirobot+1)+"</option>";
+
                 }
+                */
+                pagistr += "<option class=\"robotOfConsiderationOptions\" style=\"background-color:"+this.robots[pagirobot].geom.color+'">&nbsp'+"</option>";
+
             }
             pagistr += "</select>";
-            $("#constantValue").append('<div><label>Robot</label><span style=\"width:64px\">' + pagistr + '</span></div>');
+            $("#constantValue").append('<div><label>Robot</label><span style=\"width:auto\">' + pagistr + '</span></div>');
+//            $("#notConstantValue").append('<div><label>Color Sensor</label><span style="margin-left:6px; width: 20px; background-color:' + this.robot.geom.color + '">&nbsp;</span></div>');
 
         }
     }
