@@ -60,10 +60,6 @@ define(['exports','util', 'progList.model','program.controller', 'program.model'
                                 field: 'name',
                                 title: 'Program Name',
                                 sortable: true
-                            }, {
-                                field: 'robot',
-                                title: 'Robot Name',
-                                sortable: true
                             },{
                                 field: 'creator',
                                 title: 'Creator',

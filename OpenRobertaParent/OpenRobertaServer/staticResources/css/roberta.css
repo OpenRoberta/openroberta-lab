@@ -1970,7 +1970,11 @@ label.quiz.answer.fail {
 #simModal .fixed-table-header{
 	background-color:rgb(137,137,137);
 	color: white;
-}.lds-ellipsis {
+}
+#simModal .fixed-table-header table{
+	color: white;
+}
+.lds-ellipsis {
   display: inline-block;
   position: relative;
   width: 64px;
