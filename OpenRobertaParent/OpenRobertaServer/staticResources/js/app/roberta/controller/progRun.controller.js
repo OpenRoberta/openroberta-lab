@@ -156,7 +156,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
                 GUISTATE_C.setConnectionState("busy");
                 var weDoInterpreter = new WEDO_I.Interpreter();
                 try{
-	                weDoInterpreter.runNativeWeDo(program, new WEDO_N.NativeWeDo(), callbackOnTermination);
+	                weDoInterpreter.run(program, new WEDO_N.NativeWeDo(), callbackOnTermination);
 	             } catch(error) {
 	            	weDoInterpreter.terminate();
                     alert(error);
