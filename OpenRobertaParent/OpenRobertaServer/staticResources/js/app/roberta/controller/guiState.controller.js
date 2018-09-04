@@ -93,8 +93,10 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         // View?
         if (GUISTATE.gui.view === 'tabProgram') {
             $('#head-navigation-configuration-edit').css('display', 'none');
+            GUISTATE.gui.blocklyWorkspace.markFocused();
         } else if (GUISTATE.gui.view === 'tabConfiguration') {
             $('#head-navigation-program-edit').css('display', 'none');
+            GUISTATE.gui.bricklyWorkspace.markFocused();
         }
         // Robot?
         $('#menu-' + GUISTATE.gui.robot).parent().addClass('disabled');

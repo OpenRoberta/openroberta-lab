@@ -193,9 +193,10 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
                 y = 50;
             }
             var blocks = bricklyWorkspace.getTopBlocks(true);
-            if (blocks[0]) {
-                var coord = Blockly.getSvgXY_(blocks[0].svgGroup_, bricklyWorkspace);
-                blocks[0].moveBy(x - coord.x, y - coord.y);
+            for (var i = 0; i < blocks.length; i++) {
+                var coord = Blockly.getSvgXY_(blocks[i].svgGroup_, bricklyWorkspace);
+                var coordBlock = blocks[i].getRelativeToSurfaceXY();
+                blocks[i].moveBy(coordBlock.x - coord.x + x, coordBlock.y - coord.y + y);
             }
             seen = true;
         } else {
@@ -315,9 +316,10 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
                 y = 50;
             }
             var blocks = bricklyWorkspace.getTopBlocks(true);
-            if (blocks[0]) {
-                var coord = Blockly.getSvgXY_(blocks[0].svgGroup_, bricklyWorkspace);
-                blocks[0].moveBy(x - coord.x, y - coord.y);
+            for (var i = 0; i < blocks.length; i++) {
+                var coord = Blockly.getSvgXY_(blocks[i].svgGroup_, bricklyWorkspace);
+                var coordBlock = blocks[i].getRelativeToSurfaceXY();
+                blocks[i].moveBy(coordBlock.x - coord.x + x, coordBlock.y - coord.y + y);
             }
         } else {
             configurationToBricklyWorkspace(conf);
