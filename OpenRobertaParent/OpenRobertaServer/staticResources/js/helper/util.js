@@ -598,7 +598,10 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
         if (diff != 0) {
             $('#blocklyDiv').width(leftWidth - 4 + diff);
         }
-        Blockly.svgResize(Blockly.getMainWorkspace());
+        var workspace = Blockly.getMainWorkspace();
+        if (workspace) {
+            Blockly.svgResize(workspace);
+        }
     });
 
 });

@@ -61,7 +61,6 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.co
             var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
             var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
             var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
-console.log(xmlConfigText);
             var language = GUISTATE_C.getLanguage();
 
             PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function(result) {
