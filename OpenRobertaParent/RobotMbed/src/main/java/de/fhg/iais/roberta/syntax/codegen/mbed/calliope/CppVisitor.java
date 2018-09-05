@@ -171,16 +171,16 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
                 this.sb.append("PI");
                 break;
             case E:
-                this.sb.append("E");
+                this.sb.append("M_E");
                 break;
             case GOLDEN_RATIO:
                 this.sb.append("1.61803398875");
                 break;
             case SQRT2:
-                this.sb.append("SQRT2");
+                this.sb.append("M_SQRT2");
                 break;
             case SQRT1_2:
-                this.sb.append("SQRT1_2");
+                this.sb.append("M_SQRT1_2");
                 break;
             case INFINITY:
                 this.sb.append("INFINITY");
