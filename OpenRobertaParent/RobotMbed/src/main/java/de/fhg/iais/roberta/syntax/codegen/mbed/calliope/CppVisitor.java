@@ -168,7 +168,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     public Void visitMathConst(MathConst<Void> mathConst) {
         switch ( mathConst.getMathConst() ) {
             case PI:
-                this.sb.append("M_PI");
+                this.sb.append("PI");
                 break;
             case E:
                 this.sb.append("M_E");
@@ -979,19 +979,20 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     }
 
     private void appendTemplateIfArrayParameter(List<Expr<Void>> parameters) {
+        this.numberOfArraysUsedInTemplate = 0;
         final boolean isContainedArrayParameter = parameters.stream().filter(p -> p.getVarType().isArray()).findFirst().isPresent();
         if ( isContainedArrayParameter ) {
             this.sb.append("\ntemplate<");
-        }
-        int i = 0;
-        for ( Expr<Void> expr : parameters ) {
-            if ( expr.getVarType().isArray() ) {
-                this.sb.append("size_t N" + i++ + ", ");
+            int i = 0;
+            for ( Expr<Void> expr : parameters ) {
+                if ( expr.getVarType().isArray() ) {
+                    this.sb.append("size_t N" + i++ + ", ");
+                }
             }
+            this.sb.delete(this.sb.length() - 2, this.sb.length());
+            this.sb.append(">");
+            this.numberOfArraysUsedInTemplate = i;
         }
-        this.sb.delete(this.sb.length() - 2, this.sb.length());
-        this.sb.append(">");
-        this.numberOfArraysUsedInTemplate = i;
     }
 
     @Override
