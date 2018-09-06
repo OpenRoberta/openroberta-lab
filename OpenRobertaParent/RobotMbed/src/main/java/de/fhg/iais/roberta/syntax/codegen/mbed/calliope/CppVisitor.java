@@ -168,13 +168,13 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     public Void visitMathConst(MathConst<Void> mathConst) {
         switch ( mathConst.getMathConst() ) {
             case PI:
-                this.sb.append("PI");
+                this.sb.append("M_PI");
                 break;
             case E:
                 this.sb.append("M_E");
                 break;
             case GOLDEN_RATIO:
-                this.sb.append("1.61803398875");
+                this.sb.append("M_GOLDEN_RATIO");
                 break;
             case SQRT2:
                 this.sb.append("M_SQRT2");
@@ -183,7 +183,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
                 this.sb.append("M_SQRT1_2");
                 break;
             case INFINITY:
-                this.sb.append("INFINITY");
+                this.sb.append("M_INFINITY");
                 break;
             default:
                 break;
