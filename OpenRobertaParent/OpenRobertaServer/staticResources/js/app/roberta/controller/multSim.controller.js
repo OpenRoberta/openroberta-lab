@@ -1,4 +1,8 @@
 /**
+ * @fileOverview Multiple Simulate robots
+ * @author Akshat Khare <akshat.khare08@gmail.com>
+ */
+/**
  * Controller for multiple simulation part of the project
  */
 define(['exports','util', 'progList.model','program.controller', 'program.model','guiState.controller','guiState.model','simulation.simulation','user.model', 'jquery'],
@@ -80,6 +84,15 @@ define(['exports','util', 'progList.model','program.controller', 'program.model'
 //                        $("#simModal .fixed-table-header").css({"background-color": "#B3BFB8"});
                         $("#simModal .btn-primary").on("click",function(){
                             console.log("Selections will be executed");
+                            var selections = $("#mtable").bootstrapTable('getSelections');
+                            var selectedprograms = [];
+                            for(var i=0;i<selections.length;i++){
+                                var tempfind = oriarray.find(function(ele){
+                                    var thisarrm = oriarray;
+                                    return selections[i].name=== ele[0];
+                                });
+                                selectedprograms.push(tempfind);
+                            }
                             console.log('Selections obtained via getSelections: are ' + JSON.stringify($("#mtable").bootstrapTable('getSelections')));
 //                            alert("The following programs would be executed: "+ JSON.stringify($("#mtable").bootstrapTable('getSelections')));
                             var extractedprograms =[];
