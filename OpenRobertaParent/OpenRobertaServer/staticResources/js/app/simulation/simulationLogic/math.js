@@ -80,28 +80,54 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONSTANTS) {
      * @returns {Array} four lines
      */
     exports.getLinesFromRect = function(rect) {
-        return [ {
-            x1 : rect.x,
-            x2 : rect.x,
-            y1 : rect.y,
-            y2 : rect.y + rect.h
-        }, {
+        if(rect.isParallelToAxis){
+            return [ {
+                x1 : rect.x,
+                x2 : rect.x,
+                y1 : rect.y,
+                y2 : rect.y + rect.h
+            }, {
 
-            x1 : rect.x,
-            x2 : rect.x + rect.w,
-            y1 : rect.y,
-            y2 : rect.y
-        }, {
-            x1 : rect.x + rect.w,
-            x2 : rect.x,
-            y1 : rect.y + rect.h,
-            y2 : rect.y + rect.h
-        }, {
-            x1 : rect.x + rect.w,
-            x2 : rect.x + rect.w,
-            y1 : rect.y + rect.h,
-            y2 : rect.y
-        } ];
+                x1 : rect.x,
+                x2 : rect.x + rect.w,
+                y1 : rect.y,
+                y2 : rect.y
+            }, {
+                x1 : rect.x + rect.w,
+                x2 : rect.x,
+                y1 : rect.y + rect.h,
+                y2 : rect.y + rect.h
+            }, {
+                x1 : rect.x + rect.w,
+                x2 : rect.x + rect.w,
+                y1 : rect.y + rect.h,
+                y2 : rect.y
+            } ];
+        }else{
+            return [ {
+                x1 : rect.backLeft.rx,
+                x2 : rect.frontLeft.rx,
+                y1 : rect.backLeft.ry,
+                y2 : rect.frontLeft.ry
+            }, {
+
+                x1 : rect.frontLeft.rx,
+                x2 : rect.frontRight.rx,
+                y1 : rect.frontLeft.ry,
+                y2 : rect.frontRight.ry
+            }, {
+                x1 : rect.frontRight.rx,
+                x2 : rect.backRight.rx,
+                y1 : rect.frontRight.ry,
+                y2 : rect.backRight.ry
+            }, {
+                x1 : rect.backRight.rx,
+                x2 : rect.backLeft.rx,
+                y1 : rect.backRight.ry,
+                y2 : rect.backLeft.ry
+            } ];
+        }
+
     };
     /**
      * Calculate the square of a number.
@@ -124,9 +150,10 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONSTANTS) {
      *            x another point
      * @returns {distance}
      */
-    exports.getDistance = function(p1, p2) {
+    function getDistance(p1, p2) {
         return exports.sqr(p1.x - p2.x) + exports.sqr(p1.y - p2.y);
     };
+    exports.getDistance = getDistance;
     /**
      * Get the shortest distance from a point to a line as a vector.
      * 
@@ -139,7 +166,7 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONSTANTS) {
      *            p2 end point of line
      * @returns {distance}
      */
-    exports.getDistanceToLine = function(p, p1, p2) {
+    function getDistanceToLine(p, p1, p2) {
         var d = exports.getDistance(p1, p2);
         if (d == 0) {
             return p1;
@@ -156,6 +183,25 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONSTANTS) {
             y : p1.y + t * (p2.y - p1.y)
         });
     };
+    exports.getDistanceToLine = getDistanceToLine;
+    
+    exports.isPointInsideRectangle = function(p, rect){
+        var p1 = rect.p1;
+        var p2 = rect.p2;
+        var p3 = rect.p3;
+        var p4 = rect.p4;
+        var t1 = getDistance(p, getDistanceToLine(p, p1, p2));
+        var t2 = getDistance(p, getDistanceToLine(p, p2, p3));
+        var t3 = getDistance(p, getDistanceToLine(p, p3, p4));
+        var t4 = getDistance(p, getDistanceToLine(p, p4, p1));
+        var s1 = getDistance(p1, p2);
+        var s2 = getDistance(p2, p3);
+        if(t1<=s2 && t3<=s2 && t2<=s1 && t4<=s1){
+            return true;
+        }else{
+            return false;
+        }
+    }
     /**
      * Convert a rgb value to hsv value.
      * 

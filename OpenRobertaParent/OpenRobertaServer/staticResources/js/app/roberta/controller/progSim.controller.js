@@ -18,40 +18,90 @@ define([ 'exports', 'message', 'log', 'util', 'simulation.simulation', 'guiState
         $('#simButton').off('click touchend');
         $('#simButton').on('click touchend', function(event) {
             toggleSim();
+
             return false;
         });
 
         $('#simRobotModal').removeClass("modal-backdrop");
         $('#simControl').onWrap('click', function(event) {
-            if ($('#simControl').hasClass('typcn-media-play-outline')) {
-                Blockly.hideChaff();
-                var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-                var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
+            if(SIM.isMultiple() ===false){
+                if ($('#simControl').hasClass('typcn-media-play-outline')) {
+                    Blockly.hideChaff();
+                    var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+                    var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
+    
+                    var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
+                    var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
+                    var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
+    
+                    var language = GUISTATE_C.getLanguage();
+    
+                    PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
+                        if (result.rc == "ok") {
+                            MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
+                            $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
+                            $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
+                            SIM.init(result.javaScriptProgram, false, GUISTATE_C.getRobotGroup());
+                            setTimeout(function() {
+                                SIM.setPause(false);
+                            }, 500);
+                        } else {
+                            MSG.displayInformation(result, "", result.message, "");
+                        }
+                        PROG_C.reloadProgram(result);
+                    });
+                } else {
+                    $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
+                    $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+                    SIM.stopProgram();
 
-                var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
-                var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
-                var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
+                }
+            }else{
+//                if ($('#simControl').hasClass('typcn-media-play-outline')) {
+//                    Blockly.hideChaff();
+//                    var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+//                    var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
+//    
+//                    var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
+//                    var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
+//                    var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
+//    
+//                    var language = GUISTATE_C.getLanguage();
+//    
+//                    PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
+//                        if (result.rc == "ok") {
+//                            MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
+//                            $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
+//                            $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
+//                            SIM.init(result.javaScriptProgram, false, GUISTATE_C.getRobotGroup());
+//                            setTimeout(function() {
+//                                SIM.setPause(false);
+//                            }, 500);
+//                        } else {
+//                            MSG.displayInformation(result, "", result.message, "");
+//                        }
+//                        PROG_C.reloadProgram(result);
+//                    });
+//                } else {
+//                    $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
+//                    $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+//                    SIM.stopProgram();
+//
+//                }
+                if ($('#simControl').hasClass('typcn-media-play-outline')) {
+                    MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", "multiple simulation");
+                    $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
+                    $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
+                    SIM.startMultiple(false, GUISTATE_C.getRobotGroup());
+                    setTimeout(function() {
+                        SIM.setPause(false);
+                    }, 500);
+                }else{
+                    $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
+                    $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+                    SIM.stopProgram();
+                }
 
-                var language = GUISTATE_C.getLanguage();
-
-                PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
-                    if (result.rc == "ok") {
-                        MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
-                        $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
-                        $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
-                        SIM.init(result.javaScriptProgram, false, GUISTATE_C.getRobotGroup());
-                        setTimeout(function() {
-                            SIM.setPause(false);
-                        }, 500);
-                    } else {
-                        MSG.displayInformation(result, "", result.message, "");
-                    }
-                    PROG_C.reloadProgram(result);
-                });
-            } else {
-                $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
-                $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
-                SIM.stopProgram();
             }
         });
         $('#simImport').onWrap('click', function(event) {
@@ -130,6 +180,9 @@ define([ 'exports', 'message', 'log', 'util', 'simulation.simulation', 'guiState
             var language = GUISTATE_C.getLanguage();
 
             PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
+
+                console.log("what is progname");
+                console.log(GUISTATE_C.getProgramName());
                 if (result.rc == "ok") {
                     //                    MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
                     SIM.init(result.javaScriptProgram, true, GUISTATE_C.getRobotGroup());

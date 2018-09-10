@@ -1966,6 +1966,14 @@ label.quiz.answer.fail {
 #welcomeHaribo .modal-dialog {
 	width: 40vw;
 }
+/*CSS FOR MULTIPLE SIMULATION POPUP*/
+#simModal .fixed-table-header{
+	background-color:rgb(137,137,137);
+	color: white;
+}
+#simModal .fixed-table-header table{
+	color: white;
+}
 .lds-ellipsis {
   display: inline-block;
   position: relative;
@@ -2020,4 +2028,8 @@ label.quiz.answer.fail {
   100% {
     transform: translate(19px, 0);
   }
+}
+/*CSS FOR MULTIPLE SIMULATION POPUP*/
+#simModal .fixed-table-header{
+	background-color:#B3BFB8;
 }

@@ -31,6 +31,13 @@ define([ 'simulation.simulation', 'robertaLogic.constants' ], function(SIM, CONS
             this.pose.transY = initialPose.transY;
             this.debug = false;
         };
+        this.mouse = {
+                x : 0,
+                y : 5,
+                rx : 0,
+                ry : 0,
+                r : 30
+            };
     }
     var AudioContext = window.AudioContext // Default
             || window.webkitAudioContext // Safari and old versions of Chrome
@@ -59,13 +66,6 @@ define([ 'simulation.simulation', 'robertaLogic.constants' ], function(SIM, CONS
         gainNode : gainNode,
         volume : 0.5,
     }
-    Robot.prototype.mouse = {
-        x : 0,
-        y : 5,
-        rx : 0,
-        ry : 0,
-        r : 30
-    };
     Robot.prototype.time = 0;
     Robot.prototype.timer = {};
     Robot.prototype.debug = false;
