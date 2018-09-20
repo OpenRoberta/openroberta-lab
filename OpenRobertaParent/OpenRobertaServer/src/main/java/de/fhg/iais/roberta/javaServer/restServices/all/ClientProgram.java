@@ -560,7 +560,7 @@ public class ClientProgram {
                 if ( messageKey == null ) {
                     final RobotSimulationCheckVisitor programChecker = robotFactory.getSimProgramCheckVisitor(transformer.getBrickConfiguration());
                     messageKey = programConfigurationCompatibilityCheck(response, transformer, programChecker);
-                    final Jaxb2AstTransformerData<Void> data = transformer.getProgramTransformer().getData();
+                    transformer.getProgramTransformer().getData();
                     if ( messageKey == null ) {
                         ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
                         final String javaScriptCode = robotFactory.getSimCompilerWorkflow().generateSourceCode(token, programName, transformer, language);
