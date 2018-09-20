@@ -4,10 +4,15 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +33,7 @@ public class Util {
 
     /**
      * TODO: remove this global setting. Injected from the <b>ServerStarter</b> to add version info to all frontend JSON objects. But not nice ... .
-     * 
+     *
      * @param serverVersion the version to set.
      */
     public static void setServerVersion(String serverVersion) {
@@ -131,22 +136,63 @@ public class Util {
 
         return Integer.signum(vals1.length - vals2.length);
     }
-    
-    
+
     /**
      * Look up file names with specific file extensions in a specific directory.
-     * 
+     *
      * @param path The path to the directory where to look for the files.
      * @param extension The file extension(s).
      * @return a list of files names or an empty list.
      */
-    public static List<String> getListOfFileNames (String path, String... extensions) {
-        File dir = new File(path);  
-        List<File> listOfFiles = (List<File>)FileUtils.listFiles(dir, extensions, true);
-        List<String> listOfFileNames = new ArrayList<String>();
-        for ( File file : listOfFiles) {
+    public static List<String> getListOfFileNames(String path, String... extensions) {
+        File dir = new File(path);
+        List<File> listOfFiles = (List<File>) FileUtils.listFiles(dir, extensions, true);
+        List<String> listOfFileNames = new ArrayList<>();
+        for ( File file : listOfFiles ) {
             listOfFileNames.add(file.getName());
         }
         return listOfFileNames;
+    }
+
+    /**
+     * Remove unwanted tags and tag/attribute combinations from a string to prevent XSS
+     *
+     * @param input XML code containing description attribute that contains code with unwanted tags
+     * @return output XML code without unwanted tags in description attribute
+     */
+    public static String removeUnwantedDescriptionHTMLTags(String input) {
+        String[] tagWhiteList =
+            {
+                "b",
+                "i",
+                "u",
+                "strike",
+                "div",
+                "font",
+                "br",
+                "ul",
+                "ol",
+                "li"
+            };
+        String[] attributeWhiteList =
+            {
+                "size",
+                "style",
+                "color"
+            };
+        String DESCRIPTION = "description=\".*?\"";
+        Pattern pattern = Pattern.compile(DESCRIPTION);
+        Matcher matcher = pattern.matcher(input);
+        matcher.find();
+        String description = matcher.group();
+
+        String newDescription = description.split("description=\"")[1];
+        newDescription = newDescription.substring(0, newDescription.length() - 1);
+        newDescription = StringEscapeUtils.unescapeHtml4(newDescription);
+
+        PolicyFactory policy = new HtmlPolicyBuilder().allowElements(tagWhiteList).allowAttributes(attributeWhiteList).onElements(tagWhiteList).toFactory();
+        String safeHTML = policy.sanitize(newDescription);
+
+        return input.replace(description, "description=\"" + StringEscapeUtils.escapeHtml4(safeHTML) + "\"");
     }
 }
