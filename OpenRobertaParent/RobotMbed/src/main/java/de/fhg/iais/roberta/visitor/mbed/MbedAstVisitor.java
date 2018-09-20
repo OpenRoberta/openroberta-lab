@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.visitor.mbed;
 
+import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
@@ -238,4 +240,8 @@ public interface MbedAstVisitor<V> extends AstVisitor<V> {
      * @param LedBarSetAction phrase to be visited
      */
     V visitLedBarSetAction(LedBarSetAction<V> ledBarSetAction);
+
+    V visitBothMotorsOnAction(BothMotorsOnAction<V> bothMotorsOnAction);
+
+    V visitBothMotorsStopAction(BothMotorsStopAction<V> bothMotorsStopAction);
 }

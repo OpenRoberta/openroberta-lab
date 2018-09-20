@@ -17,6 +17,8 @@ import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
@@ -1361,5 +1363,25 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
             this.sb.append(");");
             nlIndent();
         }
+    }
+
+    @Override
+    public Void visitBothMotorsOnAction(BothMotorsOnAction<Void> bothMotorsOnAction) {
+        this.sb.append("_uBit.soundmotor.motorAOn(");
+        bothMotorsOnAction.getSpeedA().visit(this);
+        this.sb.append(");");
+        nlIndent();
+        this.sb.append("_uBit.soundmotor.motorBOn(");
+        bothMotorsOnAction.getSpeedB().visit(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitBothMotorsStopAction(BothMotorsStopAction<Void> bothMotorsStopAction) {
+        this.sb.append("_uBit.soundmotor.motorAOff();");
+        nlIndent();
+        this.sb.append("_uBit.soundmotor.motorBOff();");
+        return null;
     }
 }

@@ -16,6 +16,8 @@ import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
@@ -945,6 +947,18 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
 
     @Override
     public Void visitLedBarSetAction(LedBarSetAction<Void> ledBarSetAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitBothMotorsOnAction(BothMotorsOnAction<Void> bothMotorsOnAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitBothMotorsStopAction(BothMotorsStopAction<Void> bothMotorsStopAction) {
+        // TODO Auto-generated method stub
         return null;
     }
 

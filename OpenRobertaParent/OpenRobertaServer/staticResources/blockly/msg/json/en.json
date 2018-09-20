@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-09-03 16:35:50.071596",
+		"lastupdated": "2018-09-20 15:24:33.495391",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -986,7 +986,7 @@
 	"IMAGE_GET_TOOLTIP_UMBRELLA": "umbrella",
 	"IMAGE_GET_TOOLTIP_SNAKE": "snake",
 	"IMAGE_GET_TOOLTIP_SAD": "sad",
-	"ACCELERATION_TOOLTIP": "Get the acceleration value in milli-gravitys.",
+	"ACCELERATION_TOOLTIP": "Get the acceleration value in milli-gravities.",
 	"ACCELEROMETER_ROTATION_TOOLTIP": "Get the tilt or rotations in degrees.",
 	"POPUP_DOWNLOAD": "Download your program to »$«",
 	"POPUP_DOWNLOAD_STEP_A": "Right click on your program link below and",

@@ -7,7 +7,7 @@ goog.provide('Blockly.Msg.ja');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ABOUT = "about";  // untranslated
-Blockly.Msg.ACCELERATION_TOOLTIP = "Get the acceleration value in milli-gravitys.";  // untranslated
+Blockly.Msg.ACCELERATION_TOOLTIP = "Get the acceleration value in milli-gravities.";  // untranslated
 Blockly.Msg.ACCELEROMETER_ROTATION_TOOLTIP = "Get the tilt or rotations in degrees.";  // untranslated
 Blockly.Msg.ACTION_BUZZER = "buzzer";  // untranslated
 Blockly.Msg.ACTION_LCD = "LCD 1602";  // untranslated

@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.syntax.check.program.mbed.calliope;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
@@ -252,6 +254,18 @@ public class SimulationCheckVisitor extends RobotSimulationCheckVisitor implemen
     @Override
     public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPull) {
         pinSetPull.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        return null;
+    }
+
+    @Override
+    public Void visitBothMotorsOnAction(BothMotorsOnAction<Void> bothMotorsOnAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitBothMotorsStopAction(BothMotorsStopAction<Void> bothMotorsStopAction) {
+        // TODO Auto-generated method stub
         return null;
     }
 }
