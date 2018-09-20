@@ -60,6 +60,7 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
+import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
@@ -892,7 +893,8 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
         }
         this.sb.append("import microbit\n");
         this.sb.append("import random\n");
-        this.sb.append("import math\n");
+        this.sb.append("import math\n\n");
+        this.sb.append("_GOLDEN_RATIO = (1 + 5 ** 0.5) / 2");
 
         if ( this.usedHardwareVisitor.isRadioUsed() ) {
             this.sb.append("import radio\n\n");
@@ -959,6 +961,33 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
     @Override
     public Void visitBothMotorsStopAction(BothMotorsStopAction<Void> bothMotorsStopAction) {
         // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitMathConst(MathConst<Void> mathConst) {
+        switch ( mathConst.getMathConst() ) {
+            case PI:
+                this.sb.append("math.pi");
+                break;
+            case E:
+                this.sb.append("math.e");
+                break;
+            case GOLDEN_RATIO:
+                this.sb.append("_GOLDEN_RATIO");
+                break;
+            case SQRT2:
+                this.sb.append("math.sqrt(2)");
+                break;
+            case SQRT1_2:
+                this.sb.append("math.sqrt(0.5)");
+                break;
+            case INFINITY:
+                this.sb.append("math.inf");
+                break;
+            default:
+                break;
+        }
         return null;
     }
 
