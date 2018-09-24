@@ -139,6 +139,7 @@ public abstract class RobotCppVisitor extends CommonLanguageVisitor {
 
     @Override
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
+        boolean extraPar = false;
         switch ( mathSingleFunct.getFunctName() ) {
             case ROOT:
                 this.sb.append("sqrt(");
@@ -159,13 +160,16 @@ public abstract class RobotCppVisitor extends CommonLanguageVisitor {
                 this.sb.append("pow(10.0, ");
                 break;
             case SIN:
-                this.sb.append("sin(PI / 180.0 * ");
+                extraPar = true;
+                this.sb.append("sin(PI / 180.0 * (");
                 break;
             case COS:
-                this.sb.append("cos(PI / 180.0 * ");
+                extraPar = true;
+                this.sb.append("cos(PI / 180.0 * (");
                 break;
             case TAN:
-                this.sb.append("tan(PI / 180.0 * ");
+                extraPar = true;
+                this.sb.append("tan(PI / 180.0 * (");
                 break;
             case ASIN:
                 this.sb.append("180.0 / PI * asin(");
@@ -182,7 +186,6 @@ public abstract class RobotCppVisitor extends CommonLanguageVisitor {
             case ROUNDUP:
                 this.sb.append("ceil(");
                 break;
-            //check why there are double brackets
             case ROUNDDOWN:
                 this.sb.append("floor(");
                 break;
@@ -190,6 +193,9 @@ public abstract class RobotCppVisitor extends CommonLanguageVisitor {
                 break;
         }
         mathSingleFunct.getParam().get(0).visit(this);
+        if ( extraPar ) {
+            this.sb.append(")");
+        }
         this.sb.append(")");
 
         return null;
@@ -331,7 +337,7 @@ public abstract class RobotCppVisitor extends CommonLanguageVisitor {
     }
 
     @Override
-    protected void generateCodeFromTernary(IfStmt<Void> ifStmt) { 
+    protected void generateCodeFromTernary(IfStmt<Void> ifStmt) {
         this.sb.append("(" + whitespace() + "(" + whitespace());
         ifStmt.getExpr().get(0).visit(this);
         this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace() + "(" + whitespace());
