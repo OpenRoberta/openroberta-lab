@@ -26,7 +26,10 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
+import de.fhg.iais.roberta.persistence.bo.Program;
+import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 import de.fhg.iais.roberta.persistence.util.DbExecutor;
+import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.persistence.util.Upgrader;
@@ -70,7 +73,7 @@ public class Administration {
 
     private void run() {
         expectArgs(1);
-        String cmd = args[0];
+        String cmd = this.args[0];
         switch ( cmd ) {
             case "version":
                 System.out.println(version(false));
@@ -94,6 +97,9 @@ public class Administration {
             case "dbCheckpoint":
                 dbCheckpoint();
                 break;
+            case "checkXSS":
+                checkAndPatchAllProgramsForXSS();
+                break;
             case "sqlclient":
                 sqlclient();
                 break;
@@ -114,7 +120,7 @@ public class Administration {
                 // update_db();
                 break;
             default:
-                Administration.LOG.error("invalid argument: " + args[0] + " - exit 4");
+                Administration.LOG.error("invalid argument: " + this.args[0] + " - exit 4");
                 System.exit(4);
         }
     }
@@ -204,7 +210,7 @@ public class Administration {
     private void upgrade() {
         expectArgs(2);
         String versionForDb = version(true);
-        Upgrader.checkForUpgrade(versionForDb, new File(args[1]));
+        Upgrader.checkForUpgrade(versionForDb, new File(this.args[1]));
     }
 
     private void runSql() {
@@ -321,6 +327,21 @@ public class Administration {
             program = replaceWord(program, entry.getKey(), entry.getValue());
         }
         return program;
+    }
+
+    /*
+     * This method loads _all_ programs from the database (potentially slow or takes too much memory?)
+     * using the unchecked version of the getter and then saves them back with the setter that checks
+     * for XSS. That setter will also print the relevant information about the author.
+     */
+    public void checkAndPatchAllProgramsForXSS() {
+        SessionFactoryWrapper sessionFactory = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
+        DbSession session = sessionFactory.getSession();
+        ProgramDao programDao = new ProgramDao(session);
+        List<Program> programList = programDao.loadAll();
+        for ( Program program : programList ) {
+            program.setProgramText(program.getUncheckedProgramText());
+        }
     }
 
     private String replaceWord(String source, String oldWord, String newWord) {

@@ -160,7 +160,7 @@ public class Util {
      * @param input XML code containing description attribute that contains code with unwanted tags
      * @return output XML code without unwanted tags in description attribute
      */
-    public static String removeUnwantedDescriptionHTMLTags(String input) {
+    public static String removeUnwantedDescriptionHTMLTags(String input, String... args) {
         String[] tagWhiteList =
             {
                 "b",
@@ -183,16 +183,32 @@ public class Util {
         String DESCRIPTION = "description=\".*?\"";
         Pattern pattern = Pattern.compile(DESCRIPTION);
         Matcher matcher = pattern.matcher(input);
-        matcher.find();
-        String description = matcher.group();
-
+        String description;
+        try {
+            matcher.find();
+            description = matcher.group();
+        } catch ( IllegalStateException e ) {
+            LOG.warn("No description found for the program");
+            return input;
+        }
         String newDescription = description.split("description=\"")[1];
         newDescription = newDescription.substring(0, newDescription.length() - 1);
         newDescription = StringEscapeUtils.unescapeHtml4(newDescription);
 
         PolicyFactory policy = new HtmlPolicyBuilder().allowElements(tagWhiteList).allowAttributes(attributeWhiteList).onElements(tagWhiteList).toFactory();
         String safeHTML = policy.sanitize(newDescription);
-
+        if ( !newDescription.equals(safeHTML) ) {
+            String additionalInfo = "Info: ";
+            if ( args.length > 0 ) {
+                for ( String arg : args ) {
+                    additionalInfo += arg;
+                    additionalInfo += " ";
+                }
+            } else {
+                additionalInfo += "no info available / user not logged in";
+            }
+            LOG.error("Possible XSS: program description does not match sanitised value. " + additionalInfo);
+        }
         return input.replace(description, "description=\"" + StringEscapeUtils.escapeHtml4(safeHTML) + "\"");
     }
 }

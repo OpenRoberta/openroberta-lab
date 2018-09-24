@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
@@ -104,12 +105,30 @@ public class Program implements WithSurrogateId {
         return this.name;
     }
 
-    public String getProgramText() {
+    /*
+     * This method is used _solely_ for checking all the programs in the database for XSS
+     * if you need to obtain the text of the program, please use getProgramText instead
+     */
+    public String getUncheckedProgramText() {
         return this.programText;
     }
 
+    public String getProgramText() {
+        String[] additionalInfo =
+            {
+                getAuthor().getUserName(),
+                getAuthor().getEmail()
+            };
+        return Util.removeUnwantedDescriptionHTMLTags(this.programText, additionalInfo);
+    }
+
     public void setProgramText(String programText) {
-        this.programText = programText;
+        String[] additionalInfo =
+            {
+                getAuthor().getUserName(),
+                getAuthor().getEmail()
+            };
+        this.programText = Util.removeUnwantedDescriptionHTMLTags(programText, additionalInfo);
         this.lastChanged = Util1.getNow();
     }
 
@@ -215,9 +234,9 @@ public class Program implements WithSurrogateId {
     @Override
     public String toString() {
         return "Program [id="
-            + id
+            + this.id
             + ", name="
-            + name
+            + this.name
             + ", ownerId="
             + (this.owner == null ? "???" : this.owner.getId())
             + ", robotId="
@@ -225,13 +244,13 @@ public class Program implements WithSurrogateId {
             + ", authorId="
             + (this.author == null ? "???" : this.author.getId())
             + ", configName="
-            + configName
+            + this.configName
             + ", configHash="
-            + configHash
+            + this.configHash
             + ", created="
-            + created
+            + this.created
             + ", lastChanged="
-            + lastChanged
+            + this.lastChanged
             + "]";
     }
 }
