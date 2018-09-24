@@ -518,7 +518,7 @@ public class Ast2Ev3SimVisitorTest {
     @Test
     public void createListsInsertRandom() throws Exception {
         String a =
-            "var stmt0 = createListsSetIndex(createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 55), createConstant(CONST.NUM_CONST, 66), createConstant(CONST.NUM_CONST, 11)]), CONST.INSERT, createConstant(CONST.NUM_CONST, 99), CONST.RANDOM);\n"
+            "var stmt0 = createListsSetIndex(createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 55), createConstant(CONST.NUM_CONST, 66), createConstant(CONST.NUM_CONST, 11)]), CONST.INSERT, createConstant(CONST.NUM_CONST, 99), CONST.LAST);\n"
                 + "var blocklyProgram = {'programStmts': [stmt0]};";
         assertCodeIsOk(a, "/syntax/lists/lists_set_index2.xml");
     }

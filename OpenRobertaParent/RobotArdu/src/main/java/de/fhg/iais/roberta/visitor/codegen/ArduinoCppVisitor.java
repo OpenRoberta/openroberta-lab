@@ -54,6 +54,7 @@ import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
  */
 public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implements IArduinoVisitor<Void> {
     private final boolean isTimerSensorUsed;
+    private final boolean isListsUsed;
 
     /**
      * Initialize the C++ code generator visitor.
@@ -70,6 +71,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         //TODO: fix how the timer is detected for all robots
         this.isTimerSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
         this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
+        this.isListsUsed = codePreprocessVisitor.isListsUsed();
     }
 
     /**
@@ -570,6 +572,14 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
             }
         }
         this.sb.append("#include <RobertaFunctions.h>   // Open Roberta library");
+        this.nlIndent();
+        if ( this.isListsUsed ) {
+            this.sb.append("#include <ArduinoSTL.h>");
+            nlIndent();
+            this.sb.append("#include <list>");
+            nlIndent();
+        }
+        this.sb.append("#include <NEPODefs.h>");
         this.nlIndent();
         this.nlIndent();
         this.sb.append("RobertaFunctions rob;");

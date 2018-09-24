@@ -16,6 +16,7 @@ public class CppVisitorTest {
         "#define_GNU_SOURCE\n\n"
             + "#include \"MicroBit.h\"" //
             + "#include \"NEPODefs.h\""
+            + "#include <list>\n"
             + "#include <array>\n"
             + "#include <stdlib.h>\n"
             + "MicroBit_uBit;";
@@ -98,15 +99,10 @@ public class CppVisitorTest {
                 + "255,255,255,255,255\\n"
                 + "0,255,255,255,0\\n"
                 + "0,0,255,0,0\\n\"));"
-                + "_uBit.display.animateImages({MicroBitImage(\"0,0,0,0,0\\n"
-                + "0,255,0,255,0\\n"
-                + "0,255,255,255,0\\n"
-                + "0,0,255,0,0\\n"
-                + "0,0,0,0,0\\n\"), MicroBitImage(\"0,0,0,0,0\\n"
-                + "255,255,0,255,255\\n"
-                + "0,0,0,0,0\\n"
-                + "0,255,255,255,0\\n"
-                + "0,0,0,0,0\\n\")}, 200);"
+                + "std::array<MicroBitImage,2>_animation=_convertToArray<MicroBitImage,2>"
+                + "({MicroBitImage(\"0,0,0,0,0\\n0,255,0,255,0\\n0,255,255,255,0\\n0,0,255,0,0\\n0,0,0,0,0\\n\"),"
+                + "MicroBitImage(\"0,0,0,0,0\\n255,255,0,255,255\\n0,0,0,0,0\\n0,255,255,255,0\\n0,0,0,0,0\\n\")});"
+                + "_uBit.display.animateImages(_animation, 200);"
                 + END;
 
         assertCodeIsOk(expectedResult, "/action/display_image_show_imag_and_animation.xml");
@@ -654,7 +650,7 @@ public class CppVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "array<double, 4> item;"
+                + "std::list<double> item;"
                 + MAIN
                 + "item = {1, 2, 3, 4};"
                 + "_uBit.display.scroll(ManagedString(sum(item)));\n"
@@ -673,15 +669,13 @@ public class CppVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "template<size_t N0>"
-                + "void doSomething(array<MicroBitImage,N0> x);"
-                + "array<MicroBitImage,3> item;\n"
+                + "void doSomething(std::list<MicroBitImage> & x);"
+                + "std::list<MicroBitImage> item;\n"
                 + MAIN
                 + "item={MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\"),MicroBitImage(\"0,0,0,0,0\\n0,255,0,255,0\\n0,255,255,255,0\\n0,0,255,0,0\\n0,0,0,0,0\\n\"),MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\")};"
                 + "doSomething(item);"
                 + END
-                + "template<size_t N0>"
-                + "void doSomething(array<MicroBitImage, N0> x) {"
+                + "void doSomething(std::list<MicroBitImage> & x) {"
                 + "_uBit.display.animateImages(x,200);"
                 + "}";
 
@@ -738,7 +732,7 @@ public class CppVisitorTest {
         String a =
             "" //
                 + IMPORTS
-                + "array<double, 3> item2;"
+                + "std::list<double> item2;"
                 + MAIN
                 + "item2 = {0, 0, 0};"
                 + "while (true) {"

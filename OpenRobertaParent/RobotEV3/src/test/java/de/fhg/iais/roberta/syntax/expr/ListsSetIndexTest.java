@@ -25,7 +25,7 @@ public class ListsSetIndexTest {
 
     @Test
     public void Test2() throws Exception {
-        String a = "BlocklyMethods.listsIndex(BlocklyMethods.createListWithNumber(55,66,11), ListElementOperations.INSERT, (float) 99, IndexLocation.RANDOM);}";
+        String a = "BlocklyMethods.listsIndex(BlocklyMethods.createListWithNumber(55,66,11), ListElementOperations.INSERT, (float) 99, IndexLocation.LAST);}";
 
         this.h.assertCodeIsOk(a, "/syntax/lists/lists_set_index2.xml");
     }

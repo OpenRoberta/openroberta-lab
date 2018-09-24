@@ -60,17 +60,18 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void> {
 
-    protected final List<String> globalVariables = new ArrayList<String>();
-    protected final List<String> declaredVariables = new ArrayList<String>();
-    protected ArrayList<VarDeclaration<Void>> visitedVars = new ArrayList<VarDeclaration<Void>>();
-    private final List<Method<Void>> userDefinedMethods = new ArrayList<Method<Void>>();
-    private final Set<String> markedVariablesAsGlobal = new HashSet<String>();
+    protected final List<String> globalVariables = new ArrayList<>();
+    protected final List<String> declaredVariables = new ArrayList<>();
+    protected ArrayList<VarDeclaration<Void>> visitedVars = new ArrayList<>();
+    private final List<Method<Void>> userDefinedMethods = new ArrayList<>();
+    private final Set<String> markedVariablesAsGlobal = new HashSet<>();
 
     private boolean isProgramEmpty = false;
+    private boolean isListsUsed = false;
 
     private int loopCounter = 0;
     private int currenLoop = 0;
-    private final HashMap<Integer, Boolean> loopsLabelContainer = new HashMap<Integer, Boolean>();
+    private final HashMap<Integer, Boolean> loopsLabelContainer = new HashMap<>();
     private final HashMap<Integer, Integer> waitsInLoops = new HashMap<>();
 
     /**
@@ -220,6 +221,7 @@ public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void>
 
     @Override
     public Void visitExprList(ExprList<Void> exprList) {
+        this.setListsUsed(true);
         exprList.get().stream().forEach(expr -> expr.visit(this));
         return null;
     }
@@ -451,6 +453,20 @@ public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void>
         int count;
         count = this.waitsInLoops.get(this.loopCounter);
         this.waitsInLoops.put(this.loopCounter, ++count);
+    }
+
+    /**
+     * @return the isListsUsed
+     */
+    public boolean isListsUsed() {
+        return isListsUsed;
+    }
+
+    /**
+     * @param isListsUsed the isListsUsed to set
+     */
+    public void setListsUsed(boolean isListsUsed) {
+        this.isListsUsed = isListsUsed;
     }
 
 }

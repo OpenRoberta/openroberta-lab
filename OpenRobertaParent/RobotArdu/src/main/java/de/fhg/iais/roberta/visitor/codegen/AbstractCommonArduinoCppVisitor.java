@@ -7,11 +7,11 @@ import de.fhg.iais.roberta.components.ConfigurationBlock;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
-import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
@@ -29,7 +29,6 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
-import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
@@ -51,47 +50,11 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
 
     protected void generateUsedVars() {
         for ( VarDeclaration<Void> var : this.usedVars ) {
-            if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-                if ( var.getTypeVar().isArray() && !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-                    int size = 0;
-                    if ( var.getValue().getKind().hasName("SENSOR_EXPR") ) {
-                        size = 3;
-                    } else {
-                        ListCreate<Void> list = (ListCreate<Void>) var.getValue();
-                        size = list.getValue().get().size();
-                    }
-                    this.sb.append("__" + var.getName() + "Len = ").append(size).append(";");
-                    this.nlIndent();
-                    this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
-                    this.sb.append("__" + var.getName()).append("[]").append(" = ");
-                    var.getValue().visit(this);
-                    this.sb.append(";");
-                    this.nlIndent();
-                }
-                this.sb.append(var.getName());
-                if ( var.getTypeVar().isArray() ) {
-                    this.sb.append(" = (");
-                    this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append("*)malloc(");
-                    this.sb.append("sizeof(");
-                    this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(")*");
-                    this.sb.append("__" + var.getName() + "Len").append(")").append(";");
-                    this.nlIndent();
-                    this.sb.append("rob.createArray(").append(var.getName()).append(", ");
-                    this.sb.append("__" + var.getName() + "Len").append(", ").append("__" + var.getName());
-                    this.sb.append(")");
-                } else {
-                    this.sb.append(" = ");
-                    var.getValue().visit(this);
-                }
-                this.sb.append(";");
-                this.nlIndent();
-            } else {
-                if ( var.getTypeVar().isArray() ) {
-                    this.sb.append("__" + var.getName() + "Len = ").append(0);
-                    this.sb.append(";");
-                    this.nlIndent();
-                }
-            }
+            this.sb.append(var.getName());
+            this.sb.append(" = ");
+            var.getValue().visit(this);
+            this.sb.append(";");
+            this.nlIndent();
         }
     }
 
@@ -102,65 +65,9 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
             this.sb.append(var.getName());
             this.sb.append(var.getTypeVar().isArray() ? "[]" : "");
         } else {
-            if ( var.getTypeVar().isArray() ) {
-                this.sb.append("int " + "__" + var.getName() + "Len;");
-                this.nlIndent();
-            }
             this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
-            this.sb.append(var.getTypeVar().isArray() ? "*" : "");
             this.sb.append(var.getName());
         }
-        return null;
-    }
-
-    @Override
-    public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
-        if ( assignStmt.getExpr().getKind().hasName("LIST_CREATE") && !assignStmt.getExpr().getKind().hasName("EMPTY_EXPR") ) {
-            int size = 0;
-            this.sb.append(getLanguageVarTypeFromBlocklyType(assignStmt.getExpr().getVarType())).append(" ");
-            this.sb.append("__");
-            assignStmt.getName().visit(this);
-            this.sb.append(assignStmt.getProperty().getBlocklyId().replaceAll("[^A-Za-z]+", "")).append("[]").append(" = ");
-            assignStmt.getExpr().visit(this);
-            this.sb.append(";");
-            this.nlIndent();
-            if ( assignStmt.getExpr().getKind().hasName("SENSOR_EXPR") ) {
-                size = 3;
-            } else {
-                ListCreate<Void> list = (ListCreate<Void>) assignStmt.getExpr();
-                size = assignStmt.getExpr().getKind().hasName("SENSOR_EXPR") ? 3 : list.getValue().get().size();
-            }
-            this.sb.append("__");
-            assignStmt.getName().visit(this);
-            this.sb.append("Len = ").append(size).append(";");
-            this.nlIndent();
-        }
-        assignStmt.getName().visit(this);
-
-        this.sb.append(" = ");
-        if ( !assignStmt.getExpr().getKind().hasName("EMPTY_EXPR") ) {
-            if ( assignStmt.getExpr().getKind().hasName("LIST_CREATE") ) {
-                this.sb.append("(").append(getLanguageVarTypeFromBlocklyType(assignStmt.getExpr().getVarType())).append("*)realloc(");
-                assignStmt.getName().visit(this);
-                this.sb.append(", ").append("sizeof(");
-                this.sb.append(getLanguageVarTypeFromBlocklyType(assignStmt.getExpr().getVarType())).append(")*");
-                this.sb.append("__");
-                assignStmt.getName().visit(this);
-                this.sb.append("Len);");
-                this.nlIndent();
-                this.sb.append("rob.createArray(");
-                assignStmt.getName().visit(this);
-                this.sb.append(", ");
-                this.sb.append("__");
-                assignStmt.getName().visit(this);
-                this.sb.append("Len, ").append("__");
-                assignStmt.getName().visit(this);
-                this.sb.append(assignStmt.getProperty().getBlocklyId().replaceAll("[^A-Za-z]+", "")).append(")");
-            } else {
-                assignStmt.getExpr().visit(this);
-            }
-        }
-        this.sb.append(";");
         return null;
     }
 
@@ -359,10 +266,8 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
             this.sb.append("null");
             return null;
         }
-        String methodName = indexOfFunct.getLocation() == IndexLocation.LAST ? "rob.arrFindLast(" : "rob.arrFindFirst(";
+        String methodName = indexOfFunct.getLocation() == IndexLocation.LAST ? "_getLastOccuranceOfElement(" : "_getFirstOccuranceOfElement(";
         this.sb.append(methodName);
-        arrayLen((Var<Void>) indexOfFunct.getParam().get(0));
-        this.sb.append(", ");
         indexOfFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
         indexOfFunct.getParam().get(1).visit(this);
@@ -378,10 +283,13 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
         }
         if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
             this.sb.append("(");
-            arrayLen((Var<Void>) lengthOfIsEmptyFunct.getParam().get(0));
+            lengthOfIsEmptyFunct.getParam().get(0).visit(this);
+            this.sb.append(".size()");
             this.sb.append(" == 0)");
         } else {
-            arrayLen((Var<Void>) lengthOfIsEmptyFunct.getParam().get(0));
+            this.sb.append("((int) ");
+            lengthOfIsEmptyFunct.getParam().get(0).visit(this);
+            this.sb.append(".size())");
         }
         return null;
     }
@@ -392,31 +300,54 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
             this.sb.append("null");
             return null;
         }
-        listGetIndex.getParam().get(0).visit(this);
-        this.sb.append("[");
-        switch ( (IndexLocation) listGetIndex.getLocation() ) {
-            case FROM_START:
-                listGetIndex.getParam().get(1).visit(this);
+        String operation = "";
+        System.out.println(listGetIndex.getElementOperation());
+        switch ( (ListElementOperations) listGetIndex.getElementOperation() ) {
+            case GET:
+                operation = "_getListElementByIndex(";
                 break;
-            case FROM_END:
-                arrayLen((Var<Void>) listGetIndex.getParam().get(0));
-                this.sb.append(" - 1 - ");
-                listGetIndex.getParam().get(1).visit(this);
+            case GET_REMOVE:
+                operation = "_getAndRemoveListElementByIndex(";
                 break;
-            case FIRST:
-                this.sb.append("0");
+            case INSERT:
                 break;
-            case LAST:
-                arrayLen((Var<Void>) listGetIndex.getParam().get(0));
-                this.sb.append(" - 1");
+            case REMOVE:
+                operation = "_removeListElementByIndex(";
                 break;
-            case RANDOM:
-                this.sb.append("rob.randomIntegerInRange(0, ");
-                arrayLen((Var<Void>) listGetIndex.getParam().get(0));
-                this.sb.append(")");
+            case SET:
+                break;
+            default:
                 break;
         }
-        this.sb.append("]");
+        this.sb.append(operation);
+        switch ( (IndexLocation) listGetIndex.getLocation() ) {
+            case FIRST:
+                listGetIndex.getParam().get(0).visit(this);
+                this.sb.append(", 0)");
+                break;
+            case FROM_END:
+                listGetIndex.getParam().get(0).visit(this);
+                this.sb.append(", ");
+                listGetIndex.getParam().get(0).visit(this);
+                this.sb.append(".size() - 1 - ");
+                listGetIndex.getParam().get(1).visit(this);
+                this.sb.append(")");
+                break;
+            case FROM_START:
+                listGetIndex.getParam().get(0).visit(this);
+                this.sb.append(", ");
+                listGetIndex.getParam().get(1).visit(this);
+                this.sb.append(")");
+                break;
+            case LAST:
+                listGetIndex.getParam().get(0).visit(this);
+                this.sb.append(", ");
+                listGetIndex.getParam().get(0).visit(this);
+                this.sb.append(".size() - 1)");
+                break;
+            default:
+                break;
+        }
         return null;
     }
 
@@ -425,33 +356,61 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
         if ( listSetIndex.getParam().get(0).toString().contains("ListCreate ") ) {
             return null;
         }
-        listSetIndex.getParam().get(0).visit(this);
-        this.sb.append("[");
-        switch ( (IndexLocation) listSetIndex.getLocation() ) {
-            case FROM_START:
-                listSetIndex.getParam().get(2).visit(this);
+        String operation = "";
+        System.out.println(listSetIndex.getElementOperation());
+        switch ( (ListElementOperations) listSetIndex.getElementOperation() ) {
+            case GET:
                 break;
-            case FROM_END:
-                arrayLen((Var<Void>) listSetIndex.getParam().get(0));
-                this.sb.append(" - 1 - ");
-                listSetIndex.getParam().get(2).visit(this);
+            case GET_REMOVE:
                 break;
-            case FIRST:
-                this.sb.append("0");
+            case INSERT:
+                operation = "_insertListElementBeforeIndex(";
                 break;
-            case LAST:
-                arrayLen((Var<Void>) listSetIndex.getParam().get(0));
-                this.sb.append(" - 1");
+            case REMOVE:
                 break;
-            case RANDOM:
-                this.sb.append("rob.randomIntegerInRange(0, ");
-                arrayLen((Var<Void>) listSetIndex.getParam().get(0));
-                this.sb.append(")");
+            case SET:
+                operation = "_setListElementByIndex(";
+                break;
+            default:
                 break;
         }
-        this.sb.append("]");
-        this.sb.append(" = ");
-        listSetIndex.getParam().get(1).visit(this);
+        this.sb.append(operation);
+        switch ( (IndexLocation) listSetIndex.getLocation() ) {
+            case FIRST:
+                listSetIndex.getParam().get(0).visit(this);
+                this.sb.append(", 0, ");
+                listSetIndex.getParam().get(1).visit(this);
+                this.sb.append(")");
+                break;
+            case FROM_END:
+                listSetIndex.getParam().get(0).visit(this);
+                this.sb.append(", ");
+                listSetIndex.getParam().get(0).visit(this);
+                this.sb.append(".size() - 1 - ");
+                listSetIndex.getParam().get(2).visit(this);
+                this.sb.append(", ");
+                listSetIndex.getParam().get(1).visit(this);
+                this.sb.append(")");
+                break;
+            case FROM_START:
+                listSetIndex.getParam().get(0).visit(this);
+                this.sb.append(", ");
+                listSetIndex.getParam().get(2).visit(this);
+                this.sb.append(", ");
+                listSetIndex.getParam().get(1).visit(this);
+                this.sb.append(")");
+                break;
+            case LAST:
+                listSetIndex.getParam().get(0).visit(this);
+                this.sb.append(", ");
+                listSetIndex.getParam().get(0).visit(this);
+                this.sb.append(".size() - 1, ");
+                listSetIndex.getParam().get(1).visit(this);
+                this.sb.append(")");
+                break;
+            default:
+                break;
+        }
         return null;
     }
 

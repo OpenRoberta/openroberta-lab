@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.ast;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
+import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
 
 public class ListsTest<V> {
     AbstractHelperForXmlTest h = new GenericHelperForXmlTest();
@@ -95,7 +95,7 @@ public class ListsTest<V> {
 
     @Test
     public void listGetIndex1() throws Exception {
-        String a = "BlockAST [project=[[Location [x=53, y=245], ListGetIndex [GET, RANDOM, [Var [liste]]]]]]";
+        String a = "BlockAST [project=[[Location [x=53, y=245], ListGetIndex [GET, LAST, [Var [liste]]]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/lists/list_getIndex1.xml"));
     }
@@ -131,7 +131,7 @@ public class ListsTest<V> {
 
     @Test
     public void listSetIndex1() throws Exception {
-        String a = "BlockAST [project=[[Location [x=18, y=289], ListSetIndex [SET, RANDOM, [Var [liste], NumConst [12]]]]]]";
+        String a = "BlockAST [project=[[Location [x=18, y=289], ListSetIndex [SET, LAST, [Var [liste], NumConst [12]]]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/lists/list_setIndex1.xml"));
     }

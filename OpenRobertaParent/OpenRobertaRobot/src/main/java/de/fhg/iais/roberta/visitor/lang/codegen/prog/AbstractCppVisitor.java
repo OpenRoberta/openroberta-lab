@@ -309,15 +309,15 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
             case T:
                 return "";
             case ARRAY:
-                return "double";
+                return "std::list<double>";
             case ARRAY_NUMBER:
-                return "double";
+                return "std::list<double>";
             case ARRAY_STRING:
-                return "String";
+                return "std::list<String>";
             case ARRAY_BOOLEAN:
-                return "bool";
+                return "std::list<bool>";
             case ARRAY_COLOUR:
-                return "String";
+                return "std::list<String>";
             case BOOLEAN:
                 return "bool";
             case NUMBER:
