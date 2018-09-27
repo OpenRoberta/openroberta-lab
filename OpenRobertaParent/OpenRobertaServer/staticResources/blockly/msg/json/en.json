@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-09-26 16:31:03.196345",
+		"lastupdated": "2018-10-10 10:55:20.155257",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -575,6 +575,11 @@
 	"MODE_HUMIDITY": "humidity",
 	"MODE_TEMPERATURE": "temperature",
 	"MODE_SERIAL": "card serial",
+	"MODE_X": "X-value",
+	"MODE_Y": "Y-value",
+	"MODE_Z": "Z-value",
+	"MODE_SENSOR1": "Light Sensor1",
+	"MODE_SENSOR2": "Light Sensor2",
 	"LOOP": "repeat until",
 	"LOOP_FOREVER": "repeat indefinitely",
 	"CONNECTION_SEND_DATA": "send message",
@@ -1447,5 +1452,7 @@
 	"ROTATIONS_PER_MINUTE": "rpm",
 	"ACTION_SERIAL_PRINT": "show on Serial Monitor",
 	"ACTION_SERIAL_PRINT_TOOLTIP": "Show data on Serial Monitor. You can find the Serial Monitor in the USB Programm on top, under View.",
-	"TO": "to"
+	"TO": "to",
+	"GEARED_MOTOR": "grared motor",
+	"LED_MATRIX": "LED matrix"
 }

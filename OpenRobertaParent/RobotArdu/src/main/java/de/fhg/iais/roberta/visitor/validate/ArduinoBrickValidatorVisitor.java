@@ -15,8 +15,6 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.SerialWriteAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOffAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
@@ -34,7 +32,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.visitor.hardware.ICommonArduinoVisitor;
-import de.fhg.iais.roberta.visitor.validate.AbstractBrickValidatorVisitor;
 
 public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVisitor implements ICommonArduinoVisitor<Void> {
 
@@ -242,26 +239,6 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
     }
 
     @Override
-    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitExternalLedOnAction(ExternalLedOnAction<Void> externalLedOnAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitExternalLedOffAction(ExternalLedOffAction<Void> externalLedOffAction) {
-        return null;
-    }
-
-    @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
         return null;
     }
@@ -273,6 +250,18 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
 
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+        // TODO Auto-generated method stub
         return null;
     }
 

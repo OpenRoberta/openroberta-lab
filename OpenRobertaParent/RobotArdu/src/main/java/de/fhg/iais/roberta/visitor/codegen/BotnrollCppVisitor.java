@@ -36,13 +36,10 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.SerialWriteAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOffAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -97,7 +94,6 @@ public final class BotnrollCppVisitor extends AbstractArduinoVisitor implements 
      */
     public static String generate(BotNrollConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
         Assert.notNull(brickConfiguration);
-
         BotnrollCppVisitor astVisitor = new BotnrollCppVisitor(brickConfiguration, programPhrases, withWrapping ? 1 : 0);
         astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
@@ -617,12 +613,17 @@ public final class BotnrollCppVisitor extends AbstractArduinoVisitor implements 
     }
 
     @Override
-    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+    public Void visitRelayAction(RelayAction<Void> relayAction) {
         return null;
     }
 
     @Override
-    public Void visitRgbColor(RgbColor<Void> rgbColor) {
+    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
         return null;
     }
 
@@ -632,29 +633,7 @@ public final class BotnrollCppVisitor extends AbstractArduinoVisitor implements 
     }
 
     @Override
-    public Void visitExternalLedOnAction(ExternalLedOnAction<Void> externalLedOnAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitExternalLedOffAction(ExternalLedOffAction<Void> externalLedOffAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitRelayAction(RelayAction<Void> relayAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
-        // TODO Auto-generated method stub
+    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
         return null;
     }
 }

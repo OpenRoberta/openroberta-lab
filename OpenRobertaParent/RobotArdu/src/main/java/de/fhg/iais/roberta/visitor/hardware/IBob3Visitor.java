@@ -5,6 +5,8 @@ import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RecallAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.GetSampleSensor;
 
@@ -23,5 +25,9 @@ public interface IBob3Visitor<V> extends ICommonArduinoVisitor<V> {
     V visitRememberAction(RememberAction<V> rememberAction);
 
     V visitRecallAction(RecallAction<V> recallAction);
+
+    V visitLedOnAction(LedOnAction<V> ledOnAction);
+
+    V visitLedOffAction(LedOffAction<V> ledOffAction);
 
 }

@@ -20,7 +20,6 @@ import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.util.Pair;
-import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -50,9 +49,9 @@ public class Jaxb2MakeBlockConfigurationTransformer {
         Block block = mkBlock(idCount++);
         block.setType("robBrick_makeBlock-Brick");
         instance.getBlock().add(block);
-        List<Field> fields = block.getField();
-        fields.add(mkField("WHEEL_DIAMETER", Util1.formatDouble1digit(conf.getWheelDiameterCM())));
-        fields.add(mkField("TRACK_WIDTH", Util1.formatDouble1digit(conf.getTrackWidthCM())));
+        //        List<Field> fields = block.getField();
+        //        fields.add(mkField("WHEEL_DIAMETER", Util1.formatDouble1digit(conf.getWheelDiameterCM())));
+        //        fields.add(mkField("TRACK_WIDTH", Util1.formatDouble1digit(conf.getTrackWidthCM())));
         List<Value> values = block.getValue();
         {
             Map<ISensorPort, Sensor> sensors = conf.getSensors();
@@ -124,6 +123,7 @@ public class Jaxb2MakeBlockConfigurationTransformer {
                     // Extract sensor/actor on port
                     sensors.add(Pair.of(this.factory.getSensorPort(value.getName()), new Sensor(SensorType.get(value.getBlock().getType()))));
                 } catch ( DbcException e ) {
+                    System.out.println(e);
                     switch ( value.getBlock().getType() ) {
                         case "robBrick_led":
                             actors.add(

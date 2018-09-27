@@ -32,8 +32,6 @@ import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RecallAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOffAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
@@ -383,16 +381,6 @@ public final class Bob3CppVisitor extends AbstractArduinoVisitor implements IBob
     @Override
     public Void visitBob3GetSampleSensor(GetSampleSensor<Void> getSampleSensor) {
         getSampleSensor.getSensor().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitExternalLedOnAction(ExternalLedOnAction<Void> externalLedOnAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitExternalLedOffAction(ExternalLedOffAction<Void> externalLedOffAction) {
         return null;
     }
 

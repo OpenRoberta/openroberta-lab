@@ -19,8 +19,8 @@ public class HelperMBotForXmlTest extends de.fhg.iais.roberta.util.test.Abstract
         super(
             new MbotFactory(new RobertaProperties(Util1.loadProperties(null))),
             new MbotConfiguration.Builder()
-                .addActor(new ActorPort("motor2", "M2"), new Actor(ActorType.GEARED_MOTOR, true, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(new ActorPort("motor1", "M1"), new Actor(ActorType.GEARED_MOTOR, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
+                .addActor(new ActorPort("M2", "motor2"), new Actor(ActorType.GEARED_MOTOR, true, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(new ActorPort("M1", "motor1"), new Actor(ActorType.GEARED_MOTOR, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
                 .build());
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
         AbstractRobotFactory.addBlockTypesFromProperties("Robot.properties", robotProperties);

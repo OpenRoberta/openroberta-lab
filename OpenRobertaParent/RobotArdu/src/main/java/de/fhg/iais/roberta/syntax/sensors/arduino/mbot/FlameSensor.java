@@ -56,7 +56,7 @@ public final class FlameSensor<V> extends Sensor<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         final IRobotFactory factory = helper.getModeFactory();
-        final List<Field> fields = helper.extractFields(block, (short) 2);
+        final List<Field> fields = helper.extractFields(block, (short) 3);
         final String port = helper.extractField(fields, BlocklyConstants.SENSORPORT);
         return FlameSensor.make(factory.getSensorPort(port), helper.extractBlockProperties(block), helper.extractComment(block));
     }

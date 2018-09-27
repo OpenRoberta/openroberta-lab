@@ -25,7 +25,7 @@ import de.fhg.iais.roberta.visitor.hardware.ICommonArduinoVisitor;
  * To create an instance from this class use the method {@link #make(ColorConst, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class LedOffAction<V> extends Action<V> {
-    private String side;
+    private final String side;
 
     private LedOffAction(String side, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("MAKEBLOCK_RGB_LED_OFF"), properties, comment);

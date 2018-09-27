@@ -39,8 +39,6 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.SerialWriteAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOffAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
@@ -128,11 +126,6 @@ public final class ArduinoCppVisitor extends AbstractArduinoVisitor implements I
     }
 
     @Override
-    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
-        return null;
-    }
-
-    @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         return null;
     }
@@ -162,19 +155,17 @@ public final class ArduinoCppVisitor extends AbstractArduinoVisitor implements I
                 this.sb.append(");");
                 nlIndent();
             });
-            //")
         }
         return null;
     }
 
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        String[] colors =
-            {
-                "red",
-                "green",
-                "blue"
-            };
+        String[] colors = {
+            "red",
+            "green",
+            "blue"
+        };
         for ( int i = 0; i < 3; i++ ) {
             this.sb.append("analogWrite(_led_" + colors[i] + "_" + lightStatusAction.getPort().getOraName() + ", 0);");
             nlIndent();
@@ -428,17 +419,16 @@ public final class ArduinoCppVisitor extends AbstractArduinoVisitor implements I
         nlIndent();
         this.sb.append("}");
         nlIndent();
-        this.sb
-            .append(
-                "return String(((long)(_mfrc522_"
-                    + sensorName
-                    + ".uid.uidByte[0])<<24)\n    |((long)(_mfrc522_"
-                    + sensorName
-                    + ".uid.uidByte[1])<<16)\n    | ((long)(_mfrc522_"
-                    + sensorName
-                    + ".uid.uidByte[2])<<8)\n    | ((long)_mfrc522_"
-                    + sensorName
-                    + ".uid.uidByte[3]), HEX);");
+        this.sb.append(
+            "return String(((long)(_mfrc522_"
+                + sensorName
+                + ".uid.uidByte[0])<<24)\n    |((long)(_mfrc522_"
+                + sensorName
+                + ".uid.uidByte[1])<<16)\n    | ((long)(_mfrc522_"
+                + sensorName
+                + ".uid.uidByte[2])<<8)\n    | ((long)_mfrc522_"
+                + sensorName
+                + ".uid.uidByte[3]), HEX);");
 
         decrIndentation();
         this.nlIndent();
@@ -906,21 +896,6 @@ public final class ArduinoCppVisitor extends AbstractArduinoVisitor implements I
     }
 
     @Override
-    public Void visitExternalLedOnAction(ExternalLedOnAction<Void> externalLedOnAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitExternalLedOffAction(ExternalLedOffAction<Void> externalLedOffAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        return null;
-    }
-
-    @Override
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
         this.sb.append("pinMode(" + pinWriteValueSensor.getPort() + ", OUTPUT);");
         nlIndent();
@@ -948,4 +923,15 @@ public final class ArduinoCppVisitor extends AbstractArduinoVisitor implements I
         this.sb.append(");");
         return null;
     }
+
+    @Override
+    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+        return null;
+    }
+
 }

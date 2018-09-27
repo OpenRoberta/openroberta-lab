@@ -569,6 +569,11 @@
 	"MODE_HUMIDITY": "",
 	"MODE_TEMPERATURE": "",
 	"MODE_SERIAL": "",
+	"MODE_X": "",
+	"MODE_Y": "",
+	"MODE_Z": "",
+	"MODE_SENSOR1": "",
+	"MODE_SENSOR2": "",
 	"LOOP": "",
 	"LOOP_FOREVER": "",
 	"CONNECTION_SEND_DATA": "",
@@ -1441,5 +1446,7 @@
 	"ROTATIONS_PER_MINUTE": "",
 	"ACTION_SERIAL_PRINT": "",
 	"ACTION_SERIAL_PRINT_TOOLTIP": "",
-	"TO": ""
+	"TO": "",
+	"GEARED_MOTOR": "",
+	"LED_MATRIX": ""
 }

@@ -18,14 +18,11 @@ import de.fhg.iais.roberta.syntax.action.control.RelayAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.SerialWriteAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOffAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.util.Quadruplet;
-import de.fhg.iais.roberta.visitor.collect.AbstractUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
 /**
@@ -51,13 +48,12 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
 
     public Set<UsedConfigurationBlock> getUsedConfigurationBlocks() {
         for ( Quadruplet<ConfigurationBlock, String, List<String>, List<String>> configurationBlock : this.configuration.getConfigurationBlocks() ) {
-            this.usedConfigurationBlocks
-                .add(
-                    new UsedConfigurationBlock(
-                        this.configuration.getConfigurationBlockType(configurationBlock),
-                        this.configuration.getBlockName(configurationBlock),
-                        this.configuration.getPorts(configurationBlock),
-                        this.configuration.getPins(configurationBlock)));
+            this.usedConfigurationBlocks.add(
+                new UsedConfigurationBlock(
+                    this.configuration.getConfigurationBlockType(configurationBlock),
+                    this.configuration.getBlockName(configurationBlock),
+                    this.configuration.getPorts(configurationBlock),
+                    this.configuration.getPins(configurationBlock)));
         }
         return this.usedConfigurationBlocks;
     }
@@ -74,26 +70,6 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
             //    this.usedActors.add(new UsedActor(motorOnAction.getPort(), actor.getName()));
             //}
         }
-        return null;
-    }
-
-    @Override
-    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitExternalLedOnAction(ExternalLedOnAction<Void> externalLedOnAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitExternalLedOffAction(ExternalLedOffAction<Void> externalLedOffAction) {
         return null;
     }
 
@@ -123,6 +99,18 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
         serialWriteAction.getValue().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+        // TODO Auto-generated method stub
         return null;
     }
 }

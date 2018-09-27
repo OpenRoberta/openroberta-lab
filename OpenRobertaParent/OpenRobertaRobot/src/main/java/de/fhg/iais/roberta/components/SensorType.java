@@ -15,14 +15,9 @@ public enum SensorType implements ISensorType {
     GYRO( "robBrick_gyro", "makeblockSensors_gyroscope_getSample" ),
     SOUND( "robBrick_sound" ),
     LIGHT( "robBrick_light" ),
-    LINE_FOLLOWER( "makeblockSensors_light" ),
-    AMBIENT_LIGHT( "makeblockSensors_ambientlight" ),
     COMPASS( "robBrick_compass" ),
     TEMPERATURE( "robBrick_temperature" ),
-    FLAMESENSOR( "makeblockSensors_flameSensor_getSample" ),
-    ACCELEROMETER( "makeblockSensors_accelerometer_getSample" ),
     JOYSTICK( "arduSensors_joystick_getSample" ),
-    PIR_MOTION( "makeblockSensors_motionSensor_getSample" ),
     DETECT_MARK( "naoSensors_naoMark" ),
     VOLTAGE( "" ),
     TIMER( "" ),
@@ -34,6 +29,9 @@ public enum SensorType implements ISensorType {
     PULSE( "robBrick_pulse" ),
     RFID( "robBrick_rfide" ),
     PIN_VALUE( "robSensors_pin_getSample" ),
+    BUTTON( "robSensors_key_getSample" ),
+    ACCELEROMETER( "robSensors_accelerometer_getSample" ),
+    FLAMESENSOR( "robSensors_flame_getSample" ),
     NONE( "" );
 
     private final String[] values;

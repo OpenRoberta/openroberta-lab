@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.mode.sensor;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 
 public enum LightSensorMode implements ILightSensorMode {
-    DEFAULT, LIGHT( "Red" ), RED ("Red"), AMBIENTLIGHT( "Ambientlight" ), LEFT( "Left" ), RIGHT( "Right" ), LIGHT_VALUE(), VALUE();
+    DEFAULT, LIGHT( "Red" ), RED( "Red" ), AMBIENTLIGHT( "Ambientlight" ), LEFT( "Left" ), RIGHT( "Right" ), LIGHT_VALUE(), VALUE();
 
     private final String[] values;
 

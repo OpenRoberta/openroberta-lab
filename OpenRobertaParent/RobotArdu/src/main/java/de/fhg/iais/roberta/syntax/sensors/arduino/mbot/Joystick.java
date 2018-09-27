@@ -61,11 +61,11 @@ public class Joystick<V> extends ExternalSensor<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         IRobotFactory factory = helper.getModeFactory();
-        List<Field> fields = helper.extractFields(block, (short) 2);
+        List<Field> fields = helper.extractFields(block, (short) 3);
 
         String port = helper.extractField(fields, BlocklyConstants.SENSORPORT);
-        String mode = helper.extractField(fields, BlocklyConstants.JOYSTICKAXIS);
-        boolean isPortInMutation = block.getMutation() != null && block.getMutation().getPort() != null;
+        String mode = helper.extractField(fields, BlocklyConstants.MODE);
+        boolean isPortInMutation = (block.getMutation() != null) && (block.getMutation().getPort() != null);
         SensorMetaDataBean sensorData =
             new SensorMetaDataBean(
                 factory.getSensorPort(port),
