@@ -145,7 +145,7 @@ public abstract class RobotCppVisitor extends CommonLanguageVisitor {
                 this.sb.append("sqrt(");
                 break;
             case ABS:
-                this.sb.append("abs(");
+                this.sb.append("absD(");
                 break;
             case LN:
                 this.sb.append("log(");

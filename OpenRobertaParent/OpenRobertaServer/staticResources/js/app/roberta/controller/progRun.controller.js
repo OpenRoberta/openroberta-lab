@@ -27,13 +27,6 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
      * Start the program on the brick
      */
     function runOnBrick() {
-        if (!GUISTATE_C.isRobotConnected()) {
-            MSG.displayMessage("POPUP_ROBOT_NOT_CONNECTED", "POPUP", "");
-            return;
-        } else if (GUISTATE_C.robotState === 'busy' && GUISTATE_C.getConnection() === 'token') {
-            MSG.displayMessage("POPUP_ROBOT_BUSY", "POPUP", "");
-            return;
-        }
         GUISTATE_C.setConnectionState("busy");
         LOG.info('run ' + GUISTATE_C.getProgramName() + 'on brick');
         var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);

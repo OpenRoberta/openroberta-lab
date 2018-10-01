@@ -460,7 +460,7 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "_uBit.display.scroll(ManagedString(isWhole(2)));\n"
+                + "_uBit.display.scroll(ManagedString(isWholeD(2)));\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/function/is_whole_number.xml");
@@ -472,7 +472,7 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "_uBit.display.scroll(ManagedString(isPrime(2)));\n"
+                + "_uBit.display.scroll(ManagedString(isPrimeD(2)));\n"
                 + END;
 
         assertCodeIsOk(expectedResult, "/function/is_prime_number.xml");
