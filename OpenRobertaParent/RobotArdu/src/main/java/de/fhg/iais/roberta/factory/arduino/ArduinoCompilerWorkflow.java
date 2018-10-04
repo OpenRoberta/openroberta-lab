@@ -99,18 +99,24 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
      */
     private Key runBuild(String token, String mainFile, String mainPackage) {
         final StringBuilder sb = new StringBuilder();
-
-        String scriptName = this.robotCompilerResourcesDir + "/linux/arduino-builder";
-        String os = "linux";
-
-        if ( SystemUtils.IS_OS_WINDOWS ) {
+        String scriptName = "";
+        String os = "";
+        System.out.println(System.getProperty("os.arch"));
+        if ( SystemUtils.IS_OS_LINUX ) {
+            if ( System.getProperty("os.arch").equals("amd64") ) {
+                scriptName = this.robotCompilerResourcesDir + "/linux/arduino-builder";
+                os = "linux";
+            } else {
+                scriptName = this.robotCompilerResourcesDir + "/linux-arm/arduino-builder";
+                os = "linux-arm";
+            }
+        } else if ( SystemUtils.IS_OS_WINDOWS ) {
             scriptName = this.robotCompilerResourcesDir + "/windows/arduino-builder.exe";
             os = "windows";
         } else if ( SystemUtils.IS_OS_MAC ) {
             scriptName = this.robotCompilerResourcesDir + "/osx/arduino-builder";
             os = "osx";
         }
-
         Path path = Paths.get(this.pathToCrosscompilerBaseDir + token + "/" + mainFile);
         Path base = Paths.get("");
 
