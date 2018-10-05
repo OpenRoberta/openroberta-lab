@@ -877,11 +877,11 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
                 this.sb.append(", 2) != 0");
                 break;
             case PRIME:
-                this.sb.append("isPrime(");
+                this.sb.append("isPrimeD(");
                 mathNumPropFunct.getParam().get(0).visit(this);
                 break;
             case WHOLE:
-                this.sb.append("isWhole(");
+                this.sb.append("isWholeD(");
                 mathNumPropFunct.getParam().get(0).visit(this);
                 break;
             case POSITIVE:
@@ -1186,9 +1186,9 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         displaySetPixelAction.getX().visit(this);
         this.sb.append(", ");
         displaySetPixelAction.getY().visit(this);
-        this.sb.append(", ");
+        this.sb.append(", (");
         displaySetPixelAction.getBrightness().visit(this);
-        this.sb.append(" * _SET_BRIGHTNESS_MULTIPLIER);");
+        this.sb.append(") * _SET_BRIGHTNESS_MULTIPLIER);");
         return null;
     }
 
