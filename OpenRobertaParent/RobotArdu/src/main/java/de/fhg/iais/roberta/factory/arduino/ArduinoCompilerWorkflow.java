@@ -103,12 +103,12 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
         String os = "";
         System.out.println(System.getProperty("os.arch"));
         if ( SystemUtils.IS_OS_LINUX ) {
-            if ( System.getProperty("os.arch").equals("amd64") ) {
-                scriptName = this.robotCompilerResourcesDir + "/linux/arduino-builder";
-                os = "linux";
-            } else {
+            if ( System.getProperty("os.arch").contains("arm") ) {
                 scriptName = this.robotCompilerResourcesDir + "/linux-arm/arduino-builder";
                 os = "linux-arm";
+            } else {
+                scriptName = this.robotCompilerResourcesDir + "/linux/arduino-builder";
+                os = "linux";
             }
         } else if ( SystemUtils.IS_OS_WINDOWS ) {
             scriptName = this.robotCompilerResourcesDir + "/windows/arduino-builder.exe";
