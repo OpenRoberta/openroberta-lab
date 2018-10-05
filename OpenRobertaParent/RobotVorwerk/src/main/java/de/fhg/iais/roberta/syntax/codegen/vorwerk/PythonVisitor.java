@@ -301,7 +301,11 @@ public class PythonVisitor extends RobotPythonVisitor
         this.sb.append("hal.drive_distance(" + getEnumCode(driveAction.getDirection()) + ", ");
         driveAction.getParam().getSpeed().visit(this);
         this.sb.append(", ");
-        driveAction.getParam().getDuration().getValue().visit(this);
+        if ( driveAction.getParam().getDuration() == null ) {
+            this.sb.append("100");
+        } else {
+            driveAction.getParam().getDuration().getValue().visit(this);
+        }
         this.sb.append(")");
         return null;
     }
