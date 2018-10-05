@@ -211,14 +211,23 @@ public class Factory extends AbstractRobotFactory {
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";
         }
+<<<<<<< HEAD
         this.arduinoProperties = Util1.loadProperties("classpath:arduino.properties");
         this.name = this.arduinoProperties.getProperty("robot.name");
+=======
+>>>>>>> issue #942: 'RestInterfaceTest' + 'ArduinoAbstractFactory'corrected, 'Update' classes adapted
         this.compilerWorkflow =
             new CompilerWorkflow(
                 robertaProperties.getTempDirForUserProjects(),
                 robertaProperties.getStringProperty("robot.plugin." + this.name + ".compiler.resources.dir"),
+<<<<<<< HEAD
                 robertaProperties.getStringProperty("robot.plugin." + this.name + ".compiler." + os + ".dir"));
         addBlockTypesFromProperties("arduino.properties", this.arduinoProperties);
+=======
+                robertaProperties.getStringProperty("robot.plugin." + this.name + ".compiler." + os + ".dir"),
+                this.name);
+        addBlockTypesFromProperties(propertyName, this.arduinoProperties);
+>>>>>>> issue #942: 'RestInterfaceTest' + 'ArduinoAbstractFactory'corrected, 'Update' classes adapted
     }
 
     public SensorPort getSensorName(String port) {

@@ -30,7 +30,7 @@ public class Update {
     private final String robotUpdateResourcesDir;
 
     @Inject
-    public Update(@Named("robot.plugin.5.updateResources.dir") String robotUpdateResourcesDir) {
+    public Update(@Named("robot.plugin.nao.updateResources.dir") String robotUpdateResourcesDir) {
         this.robotUpdateResourcesDir = robotUpdateResourcesDir;
     }
 
