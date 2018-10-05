@@ -23,14 +23,14 @@ import de.fhg.iais.roberta.syntax.codegen.arduino.botnroll.CppVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
-public class Factory extends AbstractRobotFactory {
-    private final CompilerWorkflow compilerWorkflow;
+public class BotnrollFactory extends AbstractRobotFactory {
+    private final BotnrollCompilerWorkflow compilerWorkflow;
     private final Properties botnrollProperties;
     private final String name;
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:botnrollports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:botnrollports.properties"));
 
-    public Factory(RobertaProperties robertaProperties) {
+    public BotnrollFactory(RobertaProperties robertaProperties) {
         super(robertaProperties);
         String os = "linux";
         if ( SystemUtils.IS_OS_WINDOWS ) {
@@ -39,7 +39,7 @@ public class Factory extends AbstractRobotFactory {
         this.botnrollProperties = Util1.loadProperties("classpath:botnroll.properties");
         this.name = this.botnrollProperties.getProperty("robot.name");
         this.compilerWorkflow =
-            new CompilerWorkflow(
+            new BotnrollCompilerWorkflow(
                 robertaProperties.getTempDirForUserProjects(),
                 robertaProperties.getStringProperty("robot.plugin." + this.name + ".compiler.resources.dir"),
                 robertaProperties.getStringProperty("robot.plugin." + this.name + ".compiler." + os + ".dir"));

@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.arduino.BotNrollConfiguration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
-import de.fhg.iais.roberta.factory.arduino.botnroll.Factory;
+import de.fhg.iais.roberta.factory.arduino.botnroll.BotnrollFactory;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
@@ -18,7 +18,7 @@ public class HelperBotNrollForXmlTest extends AbstractHelperForXmlTest {
 
     public HelperBotNrollForXmlTest() {
         super(
-            new Factory(new RobertaProperties(Util1.loadProperties(null))),
+            new BotnrollFactory(new RobertaProperties(Util1.loadProperties(null))),
             new BotNrollConfiguration.Builder()
                 .addActor(new ActorPort("A", "MA"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))
                 .addActor(new ActorPort("B", "MB"), new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT))
