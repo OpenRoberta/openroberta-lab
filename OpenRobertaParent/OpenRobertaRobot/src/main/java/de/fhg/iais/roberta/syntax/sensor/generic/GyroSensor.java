@@ -17,8 +17,8 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.ISensorVisitor;
 
 /**
  * This class represents the <b>robSensors_gyro_getMode</b>, <b>robSensors_gyro_getSample</b> and <b>robSensors_gyro_setMode</b> blocks from Blockly into the
@@ -49,8 +49,8 @@ public class GyroSensor<V> extends ExternalSensor<V> {
     }
 
     @Override
-    protected V accept(AstVisitor<V> visitor) {
-        return ((AstSensorsVisitor<V>) visitor).visitGyroSensor(this);
+    protected V accept(IVisitor<V> visitor) {
+        return ((ISensorVisitor<V>) visitor).visitGyroSensor(this);
     }
 
     /**

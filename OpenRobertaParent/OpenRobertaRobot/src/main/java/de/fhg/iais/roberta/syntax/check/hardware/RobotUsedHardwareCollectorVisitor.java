@@ -61,15 +61,10 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
-import de.fhg.iais.roberta.visitor.actor.AstActorCommunicationVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
-import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IActorVisitor;
+import de.fhg.iais.roberta.visitor.hardware.ISensorVisitor;
 
-public abstract class RobotUsedHardwareCollectorVisitor extends CheckVisitor implements AstSensorsVisitor<Void>, AstActorMotorVisitor<Void>,
-    AstActorDisplayVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void>, AstActorCommunicationVisitor<Void> {
+public abstract class RobotUsedHardwareCollectorVisitor extends CheckVisitor implements ISensorVisitor<Void>, IActorVisitor<Void> {
     protected final Set<UsedSensor> usedSensors = new LinkedHashSet<>();
     protected final Set<UsedActor> usedActors = new LinkedHashSet<>();
 
@@ -110,21 +105,23 @@ public abstract class RobotUsedHardwareCollectorVisitor extends CheckVisitor imp
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        this.usedSensors.add(
-            new UsedSensor(
-                (ISensorPort) colorSensor.getPort(),
-                SensorType.COLOR,
-                ColorSensorMode.valueOf(((ColorSensorMode) colorSensor.getMode()).getModeValue())));
+        this.usedSensors
+            .add(
+                new UsedSensor(
+                    (ISensorPort) colorSensor.getPort(),
+                    SensorType.COLOR,
+                    ColorSensorMode.valueOf(((ColorSensorMode) colorSensor.getMode()).getModeValue())));
         return null;
     }
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.usedSensors.add(
-            new UsedSensor(
-                (ISensorPort) lightSensor.getPort(),
-                SensorType.LIGHT,
-                LightSensorMode.valueOf(((LightSensorMode) lightSensor.getMode()).getModeValue())));
+        this.usedSensors
+            .add(
+                new UsedSensor(
+                    (ISensorPort) lightSensor.getPort(),
+                    SensorType.LIGHT,
+                    LightSensorMode.valueOf(((LightSensorMode) lightSensor.getMode()).getModeValue())));
         return null;
     }
 

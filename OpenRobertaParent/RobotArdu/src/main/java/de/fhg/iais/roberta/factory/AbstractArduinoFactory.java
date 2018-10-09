@@ -19,9 +19,9 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.arduino.arduino.BrickCheckVisitor;
-import de.fhg.iais.roberta.syntax.codegen.arduino.arduino.CppVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.visitor.ArduinoCppVisitor;
 
 public abstract class AbstractArduinoFactory extends AbstractRobotFactory {
     private final ArduinoCompilerWorkflow compilerWorkflow;
@@ -162,7 +162,7 @@ public abstract class AbstractArduinoFactory extends AbstractRobotFactory {
 
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        return CppVisitor.generate((ArduinoConfiguration) brickConfiguration, phrasesSet, withWrapping);
+        return ArduinoCppVisitor.generate((ArduinoConfiguration) brickConfiguration, phrasesSet, withWrapping);
     }
 
     @Override

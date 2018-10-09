@@ -15,8 +15,8 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitors.arduino.MbotAstVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 
 public class Joystick<V> extends ExternalSensor<V> {
     private final String joystickAxis;
@@ -44,8 +44,8 @@ public class Joystick<V> extends ExternalSensor<V> {
     }
 
     @Override
-    protected V accept(AstVisitor<V> visitor) {
-        return ((MbotAstVisitor<V>) visitor).visitJoystick(this);
+    protected V accept(IVisitor<V> visitor) {
+        return ((IMbotVisitor<V>) visitor).visitJoystick(this);
     }
 
     public String getAxis() {

@@ -12,14 +12,14 @@ import de.fhg.iais.roberta.syntax.action.vorwerk.VacuumOn;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.sensor.vorwerk.DropOffSensor;
 import de.fhg.iais.roberta.syntax.sensor.vorwerk.WallSensor;
-import de.fhg.iais.roberta.visitor.vorwerk.VorwerkAstVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IVorwerkVisitor;
 
 /**
  * This visitor collects information for used actors and sensors in blockly program.
  *
  * @author kcvejoski
  */
-public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisitor implements VorwerkAstVisitor<Void> {
+public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisitor implements IVorwerkVisitor<Void> {
 
     public UsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, Configuration brickConfiguration) {
         super(brickConfiguration);

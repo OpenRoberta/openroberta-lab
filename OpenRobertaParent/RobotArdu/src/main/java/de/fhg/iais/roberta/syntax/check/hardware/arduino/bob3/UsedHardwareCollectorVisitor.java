@@ -23,14 +23,14 @@ import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisit
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.GetSampleSensor;
-import de.fhg.iais.roberta.visitors.arduino.Bob3AstVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IBob3Visitor;
 
 /**
  * This visitor collects information for used actors and sensors in blockly program.
  *
  * @author VinArt
  */
-public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisitor implements Bob3AstVisitor<Void> {
+public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisitor implements IBob3Visitor<Void> {
 
     protected final Set<UsedSensor> usedSensors = new LinkedHashSet<>();
 

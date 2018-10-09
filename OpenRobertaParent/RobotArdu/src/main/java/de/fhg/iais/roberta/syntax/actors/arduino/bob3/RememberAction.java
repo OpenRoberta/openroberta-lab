@@ -16,8 +16,8 @@ import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitors.arduino.Bob3AstVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IBob3Visitor;
 
 /**
  * This class represents the <b>mbedActions_leds_on</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -53,8 +53,8 @@ public class RememberAction<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(AstVisitor<V> visitor) {
-        return ((Bob3AstVisitor<V>) visitor).visitRememberAction(this);
+    protected V accept(IVisitor<V> visitor) {
+        return ((IBob3Visitor<V>) visitor).visitRememberAction(this);
     }
 
     /**

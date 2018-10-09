@@ -14,8 +14,8 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitors.arduino.MbotAstVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 
 public final class FlameSensor<V> extends Sensor<V> {
 
@@ -43,8 +43,8 @@ public final class FlameSensor<V> extends Sensor<V> {
     }
 
     @Override
-    protected V accept(AstVisitor<V> visitor) {
-        return ((MbotAstVisitor<V>) visitor).visitFlameSensor(this);
+    protected V accept(IVisitor<V> visitor) {
+        return ((IMbotVisitor<V>) visitor).visitFlameSensor(this);
     }
 
     /**

@@ -20,8 +20,8 @@ import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.ISensorVisitor;
 
 /**
  * This class represents the <b>robSensors_getSample</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -111,8 +111,8 @@ public class GetSampleSensor<V> extends Sensor<V> {
     }
 
     @Override
-    protected V accept(AstVisitor<V> visitor) {
-        return ((AstSensorsVisitor<V>) visitor).visitGetSampleSensor(this);
+    protected V accept(IVisitor<V> visitor) {
+        return ((ISensorVisitor<V>) visitor).visitGetSampleSensor(this);
     }
 
     /**

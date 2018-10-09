@@ -34,9 +34,9 @@ import de.fhg.iais.roberta.syntax.sensor.generic.RfidSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
-import de.fhg.iais.roberta.visitors.arduino.ArduinoAstVisitor;
+import de.fhg.iais.roberta.visitor.hardware.ICommonArduinoVisitor;
 
-public class BrickCheckVisitor extends RobotBrickCheckVisitor implements ArduinoAstVisitor<Void> {
+public class BrickCheckVisitor extends RobotBrickCheckVisitor implements ICommonArduinoVisitor<Void> {
 
     public BrickCheckVisitor(Configuration brickConfiguration) {
         super(brickConfiguration);

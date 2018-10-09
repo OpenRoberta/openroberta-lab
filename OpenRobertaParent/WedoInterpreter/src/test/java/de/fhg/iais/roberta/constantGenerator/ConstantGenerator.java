@@ -16,7 +16,7 @@ public class ConstantGenerator {
     @Test
     public void generateConstants() throws Exception {
         String in = "./constantsSource.txt";
-        String javaOut = "../RobotWeDo/src/main/java/de/fhg/iais/roberta/syntax/codegen/wedo/C.java";
+        String javaOut = "../RobotWeDo/src/main/java/de/fhg/iais/roberta/visitor/C.java";
         String typescriptOut = "./ts/constants.ts";
         generateConstants(in, javaOut, typescriptOut);
     }
@@ -30,8 +30,8 @@ public class ConstantGenerator {
                 continue;
             }
             if ( line.startsWith("//") ) {
-                javaConstants.add(line);
-                typescriptConstants.add(line);
+                this.javaConstants.add(line);
+                this.typescriptConstants.add(line);
                 continue;
             }
             String[] cmp = line.split("\\s*=\\s*");
@@ -41,45 +41,46 @@ public class ConstantGenerator {
             boolean isEnum = value.startsWith("{");
             boolean isDouble = value.contains(".");
             if ( isString ) {
-                javaConstants.add("    public static final String " + name + " = " + value + ";");
-                typescriptConstants.add("export const " + name + ": string = " + value + ";");
+                this.javaConstants.add("    public static final String " + name + " = " + value + ";");
+                this.typescriptConstants.add("export const " + name + ": string = " + value + ";");
             } else if ( isEnum ) {
                 value = value.substring(1, value.length() - 1).trim();
-                javaConstants.add("    public static enum " + name + " {");
-                javaConstants.add("        " + value);
-                javaConstants.add("    }");
-                typescriptConstants.add("export const " + name + " = {");
-                typescriptConstants.add(Arrays.stream(value.split("\\s*,\\s*")).map(e -> "    " + e + ": \"" + e + "\"").collect(Collectors.joining(",\n")));
-                typescriptConstants.add("}");
+                this.javaConstants.add("    public static enum " + name + " {");
+                this.javaConstants.add("        " + value);
+                this.javaConstants.add("    }");
+                this.typescriptConstants.add("export const " + name + " = {");
+                this.typescriptConstants
+                    .add(Arrays.stream(value.split("\\s*,\\s*")).map(e -> "    " + e + ": \"" + e + "\"").collect(Collectors.joining(",\n")));
+                this.typescriptConstants.add("}");
             } else if ( isDouble ) {
-                javaConstants.add("    public static final double " + name + " = " + value + ";");
-                typescriptConstants.add("export const " + name + ": number = " + value + ";");
+                this.javaConstants.add("    public static final double " + name + " = " + value + ";");
+                this.typescriptConstants.add("export const " + name + ": number = " + value + ";");
             } else {
-                javaConstants.add("    public static final int " + name + " = " + value + ";");
-                typescriptConstants.add("export const " + name + ": number = " + value + ";");
+                this.javaConstants.add("    public static final int " + name + " = " + value + ";");
+                this.typescriptConstants.add("export const " + name + ": number = " + value + ";");
             }
         }
         typescriptSuffix();
         javaSuffix();
-        Util1.writeFile(javaOut, javaConstants.stream().collect(Collectors.joining("\n")));
-        Util1.writeFile(typescriptOut, typescriptConstants.stream().collect(Collectors.joining("\n")));
+        Util1.writeFile(javaOut, this.javaConstants.stream().collect(Collectors.joining("\n")));
+        Util1.writeFile(typescriptOut, this.typescriptConstants.stream().collect(Collectors.joining("\n")));
     }
 
     private void typescriptPrefix() {
-        typescriptConstants.add(""); // codelens doesn't work for the first line
+        this.typescriptConstants.add(""); // codelens doesn't work for the first line
     }
 
     private void typescriptSuffix() {
     }
 
     private void javaPrefix() {
-        javaConstants.add("package de.fhg.iais.roberta.syntax.codegen.wedo;");
-        javaConstants.add("");
-        javaConstants.add("public class C {");
-        javaConstants.add("");
+        this.javaConstants.add("package de.fhg.iais.roberta.syntax.codegen.wedo;");
+        this.javaConstants.add("");
+        this.javaConstants.add("public class C {");
+        this.javaConstants.add("");
     }
 
     private void javaSuffix() {
-        javaConstants.add("}");
+        this.javaConstants.add("}");
     }
 }

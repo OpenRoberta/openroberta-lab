@@ -14,13 +14,13 @@ import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.MotorSide;
-import de.fhg.iais.roberta.syntax.codegen.ev3.JavaVisitor;
-import de.fhg.iais.roberta.syntax.codegen.ev3.PythonVisitor;
-import de.fhg.iais.roberta.syntax.codegen.ev3.SimulationVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
+import de.fhg.iais.roberta.visitor.Ev3JavaVisitor;
+import de.fhg.iais.roberta.visitor.Ev3PythonVisitor;
+import de.fhg.iais.roberta.visitor.Ev3SimVisitor;
 
 public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
 
@@ -46,7 +46,7 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
      */
     private String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String javaCode = JavaVisitor.generate("Test", (EV3Configuration) getRobotConfiguration(), transformer.getTree(), false, Language.ENGLISH);
+        String javaCode = Ev3JavaVisitor.generate("Test", (EV3Configuration) getRobotConfiguration(), transformer.getTree(), false, Language.ENGLISH);
         return javaCode;
     }
 
@@ -71,7 +71,7 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
      */
     public String generateJava(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = JavaVisitor.generate("Test", (EV3Configuration) brickConfiguration, transformer.getTree(), true, Language.ENGLISH);
+        String code = Ev3JavaVisitor.generate("Test", (EV3Configuration) brickConfiguration, transformer.getTree(), true, Language.ENGLISH);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }
@@ -85,7 +85,7 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
      */
     public String generatePython(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = PythonVisitor.generate((EV3Configuration) brickConfiguration, transformer.getTree(), true, Language.ENGLISH);
+        String code = Ev3PythonVisitor.generate((EV3Configuration) brickConfiguration, transformer.getTree(), true, Language.ENGLISH);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }
@@ -99,7 +99,7 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
      */
     public String generateJavaScript(String pathToProgramXml) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = SimulationVisitor.generate(getRobotConfiguration(), transformer.getTree(), Language.ENGLISH);
+        String code = Ev3SimVisitor.generate(getRobotConfiguration(), transformer.getTree(), Language.ENGLISH);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }

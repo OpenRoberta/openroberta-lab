@@ -22,8 +22,8 @@ import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitors.arduino.ArduinoAstVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.ICommonArduinoVisitor;
 
 public class PinWriteValueAction<V> extends Action<V> {
     private final IPinValue pinValue;
@@ -112,8 +112,8 @@ public class PinWriteValueAction<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(AstVisitor<V> visitor) {
-        return ((ArduinoAstVisitor<V>) visitor).visitPinWriteValueAction(this);
+    protected V accept(IVisitor<V> visitor) {
+        return ((ICommonArduinoVisitor<V>) visitor).visitPinWriteValueAction(this);
     }
 
 }

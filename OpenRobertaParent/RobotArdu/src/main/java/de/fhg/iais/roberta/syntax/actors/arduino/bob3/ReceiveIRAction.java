@@ -9,8 +9,8 @@ import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitors.arduino.Bob3AstVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IBob3Visitor;
 
 /**
  * This class represents the <b>bob3communication_sendblock</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate
@@ -45,8 +45,8 @@ public class ReceiveIRAction<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(AstVisitor<V> visitor) {
-        return ((Bob3AstVisitor<V>) visitor).visitReceiveIRAction(this);
+    protected V accept(IVisitor<V> visitor) {
+        return ((IBob3Visitor<V>) visitor).visitReceiveIRAction(this);
     }
 
     /**

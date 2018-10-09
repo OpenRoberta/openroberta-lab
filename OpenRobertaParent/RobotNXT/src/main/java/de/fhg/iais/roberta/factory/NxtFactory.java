@@ -6,7 +6,7 @@ import java.util.Properties;
 
 import de.fhg.iais.roberta.codegen.NxtCompilerWorkflow;
 import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
-import de.fhg.iais.roberta.codegen.SimCompilerWorkflow;
+import de.fhg.iais.roberta.codegen.NxtSimCompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -27,7 +27,7 @@ import de.fhg.iais.roberta.util.Util1;
 
 public class NxtFactory extends AbstractRobotFactory {
     private final NxtCompilerWorkflow robotCompilerWorkflow;
-    private final SimCompilerWorkflow simCompilerWorkflow;
+    private final NxtSimCompilerWorkflow simCompilerWorkflow;
     private final Properties nxtProperties;
     private final String name;
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:NXTports.properties"));
@@ -41,7 +41,7 @@ public class NxtFactory extends AbstractRobotFactory {
             new NxtCompilerWorkflow(
                 robertaProperties.getTempDirForUserProjects(),
                 robertaProperties.getStringProperty("robot.plugin." + this.name + ".compiler.resources.dir"));
-        this.simCompilerWorkflow = new SimCompilerWorkflow();
+        this.simCompilerWorkflow = new NxtSimCompilerWorkflow();
         addBlockTypesFromProperties("NXT.properties", this.nxtProperties);
     }
 

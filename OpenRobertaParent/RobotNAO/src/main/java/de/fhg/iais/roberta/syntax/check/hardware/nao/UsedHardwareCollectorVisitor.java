@@ -46,14 +46,14 @@ import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
-import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
+import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
 
 /**
  * This visitor collects information for used actors and sensors in blockly program.
  *
  * @author kcvejoski
  */
-public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisitor implements NaoAstVisitor<Void> {
+public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisitor implements INaoVisitor<Void> {
 
     public UsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, Configuration configuration) {
         super(configuration);

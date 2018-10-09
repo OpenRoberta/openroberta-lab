@@ -20,12 +20,12 @@ import de.fhg.iais.roberta.components.mbed.CalliopeConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.syntax.check.hardware.mbed.UsedHardwareCollectorVisitor;
-import de.fhg.iais.roberta.syntax.codegen.mbed.calliope.CppVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.mbed.Jaxb2CalliopeConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
+import de.fhg.iais.roberta.visitor.CalliopeCppVisitor;
 
 public class CalliopeCompilerWorkflow extends AbstractCompilerWorkflow {
 
@@ -53,7 +53,7 @@ public class CalliopeCompilerWorkflow extends AbstractCompilerWorkflow {
         if ( data.getErrorMessage() != null ) {
             return null;
         }
-        return CppVisitor.generate((CalliopeConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        return CalliopeCppVisitor.generate((CalliopeConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
     }
 
     @Override

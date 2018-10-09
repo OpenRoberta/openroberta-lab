@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.typecheck.NepoInfos;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.AstVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
 
 /**
  * the top class of all class used to represent the AST (abstract syntax tree) of a program. After construction an AST should be immutable. The logic to achieve
@@ -105,7 +105,7 @@ abstract public class Phrase<V> {
      *
      * @param visitor to be used
      */
-    public final V visit(AstVisitor<V> visitor) {
+    public final V visit(IVisitor<V> visitor) {
         // LOG.info("{}", this);
         if ( getProperty().isDisabled() || (getProperty().isInTask() != null && getProperty().isInTask() == false) ) {
             return null;
@@ -116,7 +116,7 @@ abstract public class Phrase<V> {
     /**
      * accept an visitor
      */
-    protected abstract V accept(AstVisitor<V> visitor);
+    protected abstract V accept(IVisitor<V> visitor);
 
     /**
      * @return converts AST representation of block to JAXB representation of block

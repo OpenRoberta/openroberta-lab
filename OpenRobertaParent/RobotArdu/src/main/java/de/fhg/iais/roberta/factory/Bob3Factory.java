@@ -21,9 +21,9 @@ import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
-import de.fhg.iais.roberta.syntax.codegen.arduino.bob3.CppVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.visitor.Bob3CppVisitor;
 
 public class Bob3Factory extends AbstractRobotFactory {
     private final Bob3CompilerWorkflow compilerWorkflow;
@@ -137,7 +137,7 @@ public class Bob3Factory extends AbstractRobotFactory {
 
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        return CppVisitor.generate(phrasesSet, withWrapping);
+        return Bob3CppVisitor.generate(phrasesSet, withWrapping);
     }
 
     @Override

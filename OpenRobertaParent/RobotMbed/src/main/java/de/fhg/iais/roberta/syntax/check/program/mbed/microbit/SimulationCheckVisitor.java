@@ -37,9 +37,9 @@ import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
-import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 
-public class SimulationCheckVisitor extends RobotSimulationCheckVisitor implements MbedAstVisitor<Void> {
+public class SimulationCheckVisitor extends RobotSimulationCheckVisitor implements IMbedVisitor<Void> {
 
     public SimulationCheckVisitor(Configuration brickConfiguration) {
         super(brickConfiguration);

@@ -19,8 +19,8 @@ import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitors.arduino.MbotAstVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 
 /**
  * This class represents the <b>mbedActions_display_image</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -69,8 +69,8 @@ public class DisplayImageAction<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(AstVisitor<V> visitor) {
-        return ((MbotAstVisitor<V>) visitor).visitDisplayImageAction(this);
+    protected V accept(IVisitor<V> visitor) {
+        return ((IMbotVisitor<V>) visitor).visitDisplayImageAction(this);
     }
 
     /**

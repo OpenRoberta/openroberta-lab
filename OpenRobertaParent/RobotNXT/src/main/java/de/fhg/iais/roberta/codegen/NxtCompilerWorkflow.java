@@ -14,11 +14,11 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.syntax.codegen.nxt.NxcVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.nxt.Jaxb2NxtConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
+import de.fhg.iais.roberta.visitor.NxtNxcVisitor;
 
 public class NxtCompilerWorkflow extends AbstractCompilerWorkflow {
 
@@ -38,7 +38,7 @@ public class NxtCompilerWorkflow extends AbstractCompilerWorkflow {
         if ( data.getErrorMessage() != null ) {
             return null;
         }
-        return NxcVisitor.generate((NxtConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        return NxtNxcVisitor.generate((NxtConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
     }
 
     @Override

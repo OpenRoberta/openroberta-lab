@@ -10,8 +10,8 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.vorwerk.VorwerkAstVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IVorwerkVisitor;
 
 /**
  * This class represents the <b>robActions_motor_on_for</b> and <b>robActions_motor_on</b> blocks from Blockly into the AST (abstract syntax tree). Object from
@@ -38,8 +38,8 @@ public final class DropOffSensor<V> extends ExternalSensor<V> {
     }
 
     @Override
-    protected V accept(AstVisitor<V> visitor) {
-        return ((VorwerkAstVisitor<V>) visitor).visitDropOffSensor(this);
+    protected V accept(IVisitor<V> visitor) {
+        return ((IVorwerkVisitor<V>) visitor).visitDropOffSensor(this);
     }
 
     /**

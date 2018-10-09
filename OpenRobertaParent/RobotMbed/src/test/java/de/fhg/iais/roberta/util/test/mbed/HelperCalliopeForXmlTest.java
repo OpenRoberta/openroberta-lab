@@ -5,11 +5,11 @@ import java.util.Properties;
 import de.fhg.iais.roberta.components.mbed.CalliopeConfiguration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.Calliope2016Factory;
-import de.fhg.iais.roberta.syntax.codegen.mbed.SimulationVisitor;
-import de.fhg.iais.roberta.syntax.codegen.mbed.calliope.CppVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.visitor.CalliopeCppVisitor;
+import de.fhg.iais.roberta.visitor.MbedSimVisitor;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
@@ -31,7 +31,7 @@ public class HelperCalliopeForXmlTest extends de.fhg.iais.roberta.util.test.Abst
      */
     public String generateJavaScript(String pathToProgramXml) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = SimulationVisitor.generate(getRobotConfiguration(), transformer.getTree());
+        String code = MbedSimVisitor.generate(getRobotConfiguration(), transformer.getTree());
         return code;
     }
 
@@ -44,7 +44,7 @@ public class HelperCalliopeForXmlTest extends de.fhg.iais.roberta.util.test.Abst
      */
     public String generateCpp(String pathToProgramXml, CalliopeConfiguration brickConfiguration) throws Exception {
         final Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        final String code = CppVisitor.generate(brickConfiguration, transformer.getTree(), true);
+        final String code = CalliopeCppVisitor.generate(brickConfiguration, transformer.getTree(), true);
         return code;
     }
 

@@ -14,8 +14,8 @@ import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 
 public class RadioReceiveAction<V> extends Action<V> {
     private final BlocklyType type;
@@ -31,8 +31,8 @@ public class RadioReceiveAction<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(AstVisitor<V> visitor) {
-        return ((MbedAstVisitor<V>) visitor).visitRadioReceiveAction(this);
+    protected V accept(IVisitor<V> visitor) {
+        return ((IMbedVisitor<V>) visitor).visitRadioReceiveAction(this);
 
     }
 

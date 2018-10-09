@@ -16,8 +16,8 @@ import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorCommunicationVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IActorVisitor;
 
 public class BluetoothSendAction<V> extends Action<V> {
     private final Expr<V> _connection;
@@ -84,8 +84,8 @@ public class BluetoothSendAction<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(AstVisitor<V> visitor) {
-        return ((AstActorCommunicationVisitor<V>) visitor).visitBluetoothSendAction(this);
+    protected V accept(IVisitor<V> visitor) {
+        return ((IActorVisitor<V>) visitor).visitBluetoothSendAction(this);
     }
 
     /**
@@ -103,19 +103,21 @@ public class BluetoothSendAction<V> extends Action<V> {
         if ( fields.size() == 3 ) {
             String bluetoothSendChannel = helper.extractField(fields, BlocklyConstants.CHANNEL);
             String bluetoothRecieveDataType = helper.extractField(fields, BlocklyConstants.TYPE);
-            return BluetoothSendAction.make(
-                helper.convertPhraseToExpr(bluetoothSendConnection),
-                helper.convertPhraseToExpr(bluetoothSendMessage),
-                bluetoothSendChannel,
-                bluetoothRecieveDataType,
-                helper.extractBlockProperties(block),
-                helper.extractComment(block));
+            return BluetoothSendAction
+                .make(
+                    helper.convertPhraseToExpr(bluetoothSendConnection),
+                    helper.convertPhraseToExpr(bluetoothSendMessage),
+                    bluetoothSendChannel,
+                    bluetoothRecieveDataType,
+                    helper.extractBlockProperties(block),
+                    helper.extractComment(block));
         } else {
-            return BluetoothSendAction.make(
-                helper.convertPhraseToExpr(bluetoothSendConnection),
-                helper.convertPhraseToExpr(bluetoothSendMessage),
-                helper.extractBlockProperties(block),
-                helper.extractComment(block));
+            return BluetoothSendAction
+                .make(
+                    helper.convertPhraseToExpr(bluetoothSendConnection),
+                    helper.convertPhraseToExpr(bluetoothSendMessage),
+                    helper.extractBlockProperties(block),
+                    helper.extractComment(block));
         }
     }
 

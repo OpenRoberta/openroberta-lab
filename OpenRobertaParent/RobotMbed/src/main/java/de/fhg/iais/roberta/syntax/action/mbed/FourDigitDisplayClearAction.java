@@ -9,8 +9,8 @@ import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 
 /**
  * This class represents the <b>mbedActions_fourdigitdisplay_show</b> block from Blockly into the AST (abstract syntax tree). Object from this class will
@@ -44,8 +44,8 @@ public class FourDigitDisplayClearAction<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(AstVisitor<V> visitor) {
-        return ((MbedAstVisitor<V>) visitor).visitFourDigitDisplayClearAction(this);
+    protected V accept(IVisitor<V> visitor) {
+        return ((IMbedVisitor<V>) visitor).visitFourDigitDisplayClearAction(this);
 
     }
 

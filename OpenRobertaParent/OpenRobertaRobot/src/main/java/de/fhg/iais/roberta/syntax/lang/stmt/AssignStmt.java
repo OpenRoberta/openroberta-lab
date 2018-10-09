@@ -17,8 +17,8 @@ import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
  * This class represents the <b>variables_set</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -76,8 +76,8 @@ public class AssignStmt<V> extends Stmt<V> {
     }
 
     @Override
-    protected V accept(AstVisitor<V> visitor) {
-        return ((AstLanguageVisitor<V>) visitor).visitAssignStmt(this);
+    protected V accept(IVisitor<V> visitor) {
+        return ((ILanguageVisitor<V>) visitor).visitAssignStmt(this);
     }
 
     /**

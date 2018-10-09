@@ -20,9 +20,9 @@ import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.FlameSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.Joystick;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.PIRMotionSensor;
-import de.fhg.iais.roberta.visitors.arduino.MbotAstVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 
-public class BrickCheckVisitor extends RobotBrickCheckVisitor implements MbotAstVisitor<Void> {
+public class BrickCheckVisitor extends RobotBrickCheckVisitor implements IMbotVisitor<Void> {
 
     public BrickCheckVisitor(Configuration brickConfiguration) {
         super(brickConfiguration);

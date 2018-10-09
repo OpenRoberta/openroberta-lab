@@ -23,9 +23,9 @@ import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
-import de.fhg.iais.roberta.syntax.codegen.arduino.mbot.CppVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.visitor.MbotCppVisitor;
 
 public class MbotFactory extends AbstractRobotFactory {
     private final MbotCompilerWorkflow compilerWorkflow;
@@ -153,7 +153,7 @@ public class MbotFactory extends AbstractRobotFactory {
 
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        return CppVisitor.generate((MbotConfiguration) brickConfiguration, phrasesSet, withWrapping);
+        return MbotCppVisitor.generate((MbotConfiguration) brickConfiguration, phrasesSet, withWrapping);
     }
 
     @Override

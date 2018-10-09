@@ -9,11 +9,11 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.wedo.WeDoConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.syntax.codegen.wedo.WeDoStackMachineVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.wedo.Jaxb2WeDoConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
+import de.fhg.iais.roberta.visitor.WeDoStackMachineVisitor;
 
 public class WeDoCompilerWorkflow extends AbstractCompilerWorkflow {
 

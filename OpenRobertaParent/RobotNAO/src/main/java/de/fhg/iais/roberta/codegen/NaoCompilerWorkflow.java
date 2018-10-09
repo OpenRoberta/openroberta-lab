@@ -9,11 +9,11 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.nao.NAOConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.syntax.codegen.nao.PythonVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.nao.Jaxb2NaoConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
+import de.fhg.iais.roberta.visitor.NaoPythonVisitor;
 
 public class NaoCompilerWorkflow extends AbstractCompilerWorkflow {
 
@@ -64,7 +64,7 @@ public class NaoCompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     private String generateProgram(String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
-        String sourceCode = PythonVisitor.generate((NAOConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
+        String sourceCode = NaoPythonVisitor.generate((NAOConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
         NaoCompilerWorkflow.LOG.info("generating {} code", toString().toLowerCase());
         return sourceCode;
     }

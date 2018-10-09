@@ -13,8 +13,8 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
 
 /**
  * This class represents the <b>naoActions_ledReset</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -52,8 +52,8 @@ public final class LedReset<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(AstVisitor<V> visitor) {
-        return ((NaoAstVisitor<V>) visitor).visitLedReset(this);
+    protected V accept(IVisitor<V> visitor) {
+        return ((INaoVisitor<V>) visitor).visitLedReset(this);
     }
 
     /**

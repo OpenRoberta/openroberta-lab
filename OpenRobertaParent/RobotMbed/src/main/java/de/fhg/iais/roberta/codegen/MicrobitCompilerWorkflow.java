@@ -12,11 +12,11 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.mbed.MicrobitConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.syntax.codegen.mbed.microbit.PythonVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.mbed.Jaxb2MicrobitConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
+import de.fhg.iais.roberta.visitor.MicrobitPythonVisitor;
 
 public class MicrobitCompilerWorkflow extends AbstractCompilerWorkflow {
 
@@ -39,7 +39,7 @@ public class MicrobitCompilerWorkflow extends AbstractCompilerWorkflow {
             return null;
         }
 
-        return PythonVisitor.generate((MicrobitConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        return MicrobitPythonVisitor.generate((MicrobitConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
     }
 
     @Override

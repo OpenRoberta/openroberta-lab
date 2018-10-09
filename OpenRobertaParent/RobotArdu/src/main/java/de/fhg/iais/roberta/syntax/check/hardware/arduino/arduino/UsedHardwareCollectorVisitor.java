@@ -26,14 +26,14 @@ import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisit
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.util.Quadruplet;
-import de.fhg.iais.roberta.visitors.arduino.ArduinoAstVisitor;
+import de.fhg.iais.roberta.visitor.hardware.ICommonArduinoVisitor;
 
 /**
  * This visitor collects information for used actors and sensors in blockly program.
  *
  * @author eovchinnikova
  */
-public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisitor implements ArduinoAstVisitor<Void> {
+public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisitor implements ICommonArduinoVisitor<Void> {
 
     protected final Set<UsedConfigurationBlock> usedConfigurationBlocks = new LinkedHashSet<>();
 

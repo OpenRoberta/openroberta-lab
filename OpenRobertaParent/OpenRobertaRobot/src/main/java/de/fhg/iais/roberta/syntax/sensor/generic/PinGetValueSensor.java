@@ -9,8 +9,8 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.ISensorVisitor;
 
 /**
  * This class represents the <b>mbedSensors_pin_getSample</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -40,8 +40,8 @@ public class PinGetValueSensor<V> extends ExternalSensor<V> {
     }
 
     @Override
-    protected V accept(AstVisitor<V> visitor) {
-        return ((AstSensorsVisitor<V>) visitor).visitPinGetValueSensor(this);
+    protected V accept(IVisitor<V> visitor) {
+        return ((ISensorVisitor<V>) visitor).visitPinGetValueSensor(this);
     }
 
     /**

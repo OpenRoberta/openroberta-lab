@@ -19,8 +19,8 @@ import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IActorVisitor;
 
 /**
  * This class represents the <b>robActions_display_text</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -95,8 +95,8 @@ public class ShowTextAction<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(AstVisitor<V> visitor) {
-        return ((AstActorDisplayVisitor<V>) visitor).visitShowTextAction(this);
+    protected V accept(IVisitor<V> visitor) {
+        return ((IActorVisitor<V>) visitor).visitShowTextAction(this);
     }
 
     /**
@@ -114,13 +114,14 @@ public class ShowTextAction<V> extends Action<V> {
         Phrase<V> col = helper.extractValue(values, new ExprParam(BlocklyConstants.COL, BlocklyType.NUMBER_INT));
         Phrase<V> row = helper.extractValue(values, new ExprParam(BlocklyConstants.ROW, BlocklyType.NUMBER_INT));
         String port = helper.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.NO_PORT);
-        return ShowTextAction.make(
-            helper.convertPhraseToExpr(msg),
-            helper.convertPhraseToExpr(col),
-            helper.convertPhraseToExpr(row),
-            factory.getActorPort(port),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return ShowTextAction
+            .make(
+                helper.convertPhraseToExpr(msg),
+                helper.convertPhraseToExpr(col),
+                helper.convertPhraseToExpr(row),
+                factory.getActorPort(port),
+                helper.extractBlockProperties(block),
+                helper.extractComment(block));
     }
 
     @Override

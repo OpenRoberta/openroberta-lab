@@ -103,21 +103,16 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo.Severity;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorCommunicationVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
-import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
-import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IActorVisitor;
+import de.fhg.iais.roberta.visitor.hardware.ISensorVisitor;
+import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
- * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
+ * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
  * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
-public class TypecheckVisitor implements AstLanguageVisitor<BlocklyType>, AstSensorsVisitor<BlocklyType>, AstActorCommunicationVisitor<BlocklyType>,
-    AstActorDisplayVisitor<BlocklyType>, AstActorMotorVisitor<BlocklyType>, AstActorLightVisitor<BlocklyType>, AstActorSoundVisitor<BlocklyType> {
+public class TypecheckVisitor implements ILanguageVisitor<BlocklyType>, ISensorVisitor<BlocklyType>, IActorVisitor<BlocklyType> {
     private final int ERROR_LIMIT_FOR_TYPECHECK = 10;
 
     private final Phrase<BlocklyType> phrase;

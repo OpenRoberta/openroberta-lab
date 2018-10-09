@@ -18,12 +18,12 @@ import de.fhg.iais.roberta.codegen.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.syntax.codegen.arduino.bob3.CppVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformers.arduino.Jaxb2Bob3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
+import de.fhg.iais.roberta.visitor.Bob3CppVisitor;
 
 public class Bob3CompilerWorkflow extends AbstractCompilerWorkflow {
 
@@ -48,7 +48,7 @@ public class Bob3CompilerWorkflow extends AbstractCompilerWorkflow {
             return null;
         }
 
-        return CppVisitor.generate(data.getProgramTransformer().getTree(), true);
+        return Bob3CppVisitor.generate(data.getProgramTransformer().getTree(), true);
     }
 
     @Override

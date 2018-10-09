@@ -9,8 +9,8 @@ import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.vorwerk.VorwerkAstVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IVorwerkVisitor;
 
 /**
  * This class represents the <b>vorwerkActions_brush_off</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -43,8 +43,8 @@ public final class BrushOff<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(AstVisitor<V> visitor) {
-        return ((VorwerkAstVisitor<V>) visitor).visitBrushOff(this);
+    protected V accept(IVisitor<V> visitor) {
+        return ((IVorwerkVisitor<V>) visitor).visitBrushOff(this);
     }
 
     /**

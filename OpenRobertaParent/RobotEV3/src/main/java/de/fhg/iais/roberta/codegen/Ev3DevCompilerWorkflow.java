@@ -9,11 +9,11 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.syntax.codegen.ev3.PythonVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.ev3.Jaxb2Ev3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
+import de.fhg.iais.roberta.visitor.Ev3PythonVisitor;
 
 public class Ev3DevCompilerWorkflow extends AbstractCompilerWorkflow {
     private static final Logger LOG = LoggerFactory.getLogger(Ev3DevCompilerWorkflow.class);
@@ -28,7 +28,7 @@ public class Ev3DevCompilerWorkflow extends AbstractCompilerWorkflow {
         if ( data.getErrorMessage() != null ) {
             return null;
         }
-        return PythonVisitor.generate((EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
+        return Ev3PythonVisitor.generate((EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
     }
 
     @Override

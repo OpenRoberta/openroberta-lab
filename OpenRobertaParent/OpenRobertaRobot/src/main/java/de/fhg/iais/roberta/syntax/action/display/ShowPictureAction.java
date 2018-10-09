@@ -19,8 +19,8 @@ import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IActorVisitor;
 
 /**
  * This class represents the <b>robActions_display_picture</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -83,8 +83,8 @@ public class ShowPictureAction<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(AstVisitor<V> visitor) {
-        return ((AstActorDisplayVisitor<V>) visitor).visitShowPictureAction(this);
+    protected V accept(IVisitor<V> visitor) {
+        return ((IActorVisitor<V>) visitor).visitShowPictureAction(this);
     }
 
     /**
@@ -101,12 +101,13 @@ public class ShowPictureAction<V> extends Action<V> {
         String pic = helper.extractField(fields, BlocklyConstants.PICTURE);
         Phrase<V> x = helper.extractValue(values, new ExprParam(BlocklyConstants.X, BlocklyType.NUMBER_INT));
         Phrase<V> y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y, BlocklyType.NUMBER_INT));
-        return ShowPictureAction.make(
-            factory.getShowPicture(pic),
-            helper.convertPhraseToExpr(x),
-            helper.convertPhraseToExpr(y),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return ShowPictureAction
+            .make(
+                factory.getShowPicture(pic),
+                helper.convertPhraseToExpr(x),
+                helper.convertPhraseToExpr(y),
+                helper.extractBlockProperties(block),
+                helper.extractComment(block));
     }
 
     @Override

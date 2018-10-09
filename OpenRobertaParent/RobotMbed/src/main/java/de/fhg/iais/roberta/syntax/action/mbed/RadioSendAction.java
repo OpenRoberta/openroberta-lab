@@ -18,8 +18,8 @@ import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 
 public class RadioSendAction<V> extends Action<V> {
     private final Expr<V> message;
@@ -63,8 +63,8 @@ public class RadioSendAction<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(AstVisitor<V> visitor) {
-        return ((MbedAstVisitor<V>) visitor).visitRadioSendAction(this);
+    protected V accept(IVisitor<V> visitor) {
+        return ((IMbedVisitor<V>) visitor).visitRadioSendAction(this);
     }
 
     /**

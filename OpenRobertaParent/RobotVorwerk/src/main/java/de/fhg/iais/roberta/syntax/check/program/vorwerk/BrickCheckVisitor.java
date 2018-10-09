@@ -9,9 +9,9 @@ import de.fhg.iais.roberta.syntax.action.vorwerk.VacuumOn;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.sensor.vorwerk.DropOffSensor;
 import de.fhg.iais.roberta.syntax.sensor.vorwerk.WallSensor;
-import de.fhg.iais.roberta.visitor.vorwerk.VorwerkAstVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IVorwerkVisitor;
 
-public class BrickCheckVisitor extends RobotBrickCheckVisitor implements VorwerkAstVisitor<Void> {
+public class BrickCheckVisitor extends RobotBrickCheckVisitor implements IVorwerkVisitor<Void> {
 
     public BrickCheckVisitor(Configuration brickConfiguration) {
         super(brickConfiguration);

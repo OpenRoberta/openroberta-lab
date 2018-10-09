@@ -12,11 +12,11 @@ import de.fhg.iais.roberta.components.vorwerk.VorwerkCommunicator;
 import de.fhg.iais.roberta.components.vorwerk.VorwerkConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.syntax.codegen.vorwerk.PythonVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.vorwerk.Jaxb2VorwerkConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
+import de.fhg.iais.roberta.visitor.VorwerkPythonVisitor;
 
 public class VorwerkCompilerWorkflow extends AbstractCompilerWorkflow {
     private static final Logger LOG = LoggerFactory.getLogger(VorwerkCompilerWorkflow.class);
@@ -35,7 +35,7 @@ public class VorwerkCompilerWorkflow extends AbstractCompilerWorkflow {
         }
         VorwerkConfiguration configuration = (VorwerkConfiguration) data.getBrickConfiguration();
         this.vorwerkCommunicator.updateRobotInformation(configuration.getIpAddress(), configuration.getUserName(), configuration.getPassword());
-        return PythonVisitor.generate((VorwerkConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
+        return VorwerkPythonVisitor.generate((VorwerkConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
     }
 
     @Override

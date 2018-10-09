@@ -99,21 +99,16 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorCommunicationVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
-import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
-import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IActorVisitor;
+import de.fhg.iais.roberta.visitor.hardware.ISensorVisitor;
+import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
- * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
+ * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
  * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
-public class InfoCollector<T> implements AstLanguageVisitor<T>, AstSensorsVisitor<T>, AstActorCommunicationVisitor<T>, AstActorDisplayVisitor<T>,
-    AstActorMotorVisitor<T>, AstActorLightVisitor<T>, AstActorSoundVisitor<T> {
+public class InfoCollector<T> implements ILanguageVisitor<T>, ISensorVisitor<T>, IActorVisitor<T> {
 
     private final List<NepoInfo> infos = new ArrayList<>();
 

@@ -4,8 +4,8 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.lang.functions.Function;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
  * Wraps subclasses of the class {@link Function} so they can be used as {@link Stmt} in statements.
@@ -38,8 +38,8 @@ public class FunctionStmt<V> extends Stmt<V> {
     }
 
     @Override
-    protected V accept(AstVisitor<V> visitor) {
-        return ((AstLanguageVisitor<V>) visitor).visitFunctionStmt(this);
+    protected V accept(IVisitor<V> visitor) {
+        return ((ILanguageVisitor<V>) visitor).visitFunctionStmt(this);
 
     }
 

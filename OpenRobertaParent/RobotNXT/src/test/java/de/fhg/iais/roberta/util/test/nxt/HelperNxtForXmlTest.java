@@ -12,12 +12,12 @@ import de.fhg.iais.roberta.factory.NxtFactory;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
-import de.fhg.iais.roberta.syntax.codegen.nxt.NxcVisitor;
-import de.fhg.iais.roberta.syntax.codegen.nxt.SimulationVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
+import de.fhg.iais.roberta.visitor.NxtNxcVisitor;
+import de.fhg.iais.roberta.visitor.NxtSimVisitor;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
@@ -45,7 +45,7 @@ public class HelperNxtForXmlTest extends AbstractHelperForXmlTest {
      */
     public String generateJavaScript(String pathToProgramXml) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = SimulationVisitor.generate(getRobotConfiguration(), transformer.getTree());
+        String code = NxtSimVisitor.generate(getRobotConfiguration(), transformer.getTree());
         return code;
     }
 
@@ -58,7 +58,7 @@ public class HelperNxtForXmlTest extends AbstractHelperForXmlTest {
      */
     private String generateNXCWithoutWrapping(String pathToProgramXml) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        final String code = NxcVisitor.generate((NxtConfiguration) getRobotConfiguration(), transformer.getTree(), false);
+        final String code = NxtNxcVisitor.generate((NxtConfiguration) getRobotConfiguration(), transformer.getTree(), false);
         return code;
     }
 
@@ -71,7 +71,7 @@ public class HelperNxtForXmlTest extends AbstractHelperForXmlTest {
      */
     public String generateNXC(String pathToProgramXml, NxtConfiguration brickConfiguration) throws Exception {
         final Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        final String code = NxcVisitor.generate(brickConfiguration, transformer.getTree(), true);
+        final String code = NxtNxcVisitor.generate(brickConfiguration, transformer.getTree(), true);
         return code;
     }
 

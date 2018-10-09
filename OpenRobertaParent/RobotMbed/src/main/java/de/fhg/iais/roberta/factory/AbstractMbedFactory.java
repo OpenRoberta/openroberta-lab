@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
+import de.fhg.iais.roberta.codegen.MbedSimCompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -24,7 +25,7 @@ import de.fhg.iais.roberta.util.Util1;
 public abstract class AbstractMbedFactory extends AbstractRobotFactory {
 
     protected ICompilerWorkflow compilerWorkflow;
-    protected SimCompilerWorkflow calliopeSimCompilerWorkflow;
+    protected MbedSimCompilerWorkflow calliopeSimCompilerWorkflow;
     protected Properties calliopeProperties;
     protected String name;
     protected int robotPropertyNumber;
@@ -36,7 +37,7 @@ public abstract class AbstractMbedFactory extends AbstractRobotFactory {
         final Properties mbedProperties = Util1.loadProperties("classpath:Mbed.properties");
         addBlockTypesFromProperties("Mbed.properties", mbedProperties);
 
-        this.calliopeSimCompilerWorkflow = new SimCompilerWorkflow();
+        this.calliopeSimCompilerWorkflow = new MbedSimCompilerWorkflow();
     }
 
     @Override

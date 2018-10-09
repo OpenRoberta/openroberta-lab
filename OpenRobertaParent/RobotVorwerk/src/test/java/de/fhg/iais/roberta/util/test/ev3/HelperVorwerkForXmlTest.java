@@ -9,11 +9,11 @@ import de.fhg.iais.roberta.components.vorwerk.VorwerkConfiguration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.VorwerkFactory;
 import de.fhg.iais.roberta.mode.action.Language;
-import de.fhg.iais.roberta.syntax.codegen.vorwerk.PythonVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
+import de.fhg.iais.roberta.visitor.VorwerkPythonVisitor;
 
 public class HelperVorwerkForXmlTest extends AbstractHelperForXmlTest {
 
@@ -32,7 +32,7 @@ public class HelperVorwerkForXmlTest extends AbstractHelperForXmlTest {
      */
     private String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String javaCode = PythonVisitor.generate((VorwerkConfiguration) getRobotConfiguration(), transformer.getTree(), false, Language.ENGLISH);
+        String javaCode = VorwerkPythonVisitor.generate((VorwerkConfiguration) getRobotConfiguration(), transformer.getTree(), false, Language.ENGLISH);
         return javaCode;
     }
 
@@ -57,7 +57,7 @@ public class HelperVorwerkForXmlTest extends AbstractHelperForXmlTest {
      */
     public String generatePython(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = PythonVisitor.generate((VorwerkConfiguration) brickConfiguration, transformer.getTree(), true, Language.ENGLISH);
+        String code = VorwerkPythonVisitor.generate((VorwerkConfiguration) brickConfiguration, transformer.getTree(), true, Language.ENGLISH);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }

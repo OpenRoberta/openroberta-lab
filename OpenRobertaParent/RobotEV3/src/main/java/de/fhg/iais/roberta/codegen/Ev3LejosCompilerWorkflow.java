@@ -10,11 +10,11 @@ import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.components.ev3.JavaSourceCompiler;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.syntax.codegen.ev3.JavaVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.ev3.Jaxb2Ev3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
+import de.fhg.iais.roberta.visitor.Ev3JavaVisitor;
 
 public class Ev3LejosCompilerWorkflow extends AbstractCompilerWorkflow {
     private static final Logger LOG = LoggerFactory.getLogger(Ev3LejosCompilerWorkflow.class);
@@ -29,7 +29,7 @@ public class Ev3LejosCompilerWorkflow extends AbstractCompilerWorkflow {
 
     @Override
     public String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
-        return JavaVisitor.generate(programName, (EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
+        return Ev3JavaVisitor.generate(programName, (EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
     }
 
     @Override

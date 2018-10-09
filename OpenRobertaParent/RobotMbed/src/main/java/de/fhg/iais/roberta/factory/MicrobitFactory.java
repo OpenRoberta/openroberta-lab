@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
+import de.fhg.iais.roberta.codegen.MbedSimCompilerWorkflow;
 import de.fhg.iais.roberta.codegen.MicrobitCompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
@@ -25,7 +26,7 @@ import de.fhg.iais.roberta.util.Util1;
 public class MicrobitFactory extends AbstractRobotFactory {
 
     private final MicrobitCompilerWorkflow compilerWorkflow;
-    private final SimCompilerWorkflow microbitSimCompilerWorkflow;
+    private final MbedSimCompilerWorkflow microbitSimCompilerWorkflow;
     private final Properties microbitProperties;
     private final String name;
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:Microbitports.properties"));
@@ -39,7 +40,7 @@ public class MicrobitFactory extends AbstractRobotFactory {
             new MicrobitCompilerWorkflow(
                 robertaProperties.getStringProperty("robot.plugin." + this.name + ".compiler.resources.dir"),
                 robertaProperties.getStringProperty("robot.plugin." + this.name + ".compiler.dir"));
-        this.microbitSimCompilerWorkflow = new SimCompilerWorkflow();
+        this.microbitSimCompilerWorkflow = new MbedSimCompilerWorkflow();
         Properties mbedProperties = Util1.loadProperties("classpath:Mbed.properties");
         addBlockTypesFromProperties("Mbed.properties", mbedProperties);
         addBlockTypesFromProperties("Microbit.properties", this.microbitProperties);

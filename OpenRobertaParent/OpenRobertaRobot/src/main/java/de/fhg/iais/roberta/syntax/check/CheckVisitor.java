@@ -56,9 +56,9 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
+import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
-public abstract class CheckVisitor implements AstLanguageVisitor<Void> {
+public abstract class CheckVisitor implements ILanguageVisitor<Void> {
 
     protected final List<String> globalVariables = new ArrayList<String>();
     protected final List<String> declaredVariables = new ArrayList<String>();

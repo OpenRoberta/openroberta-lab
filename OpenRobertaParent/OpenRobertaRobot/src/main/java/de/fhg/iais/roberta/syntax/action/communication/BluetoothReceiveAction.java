@@ -16,8 +16,8 @@ import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorCommunicationVisitor;
+import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IActorVisitor;
 
 public class BluetoothReceiveAction<V> extends Action<V> {
     private final Expr<V> connection;
@@ -69,8 +69,8 @@ public class BluetoothReceiveAction<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(AstVisitor<V> visitor) {
-        return ((AstActorCommunicationVisitor<V>) visitor).visitBluetoothReceiveAction(this);
+    protected V accept(IVisitor<V> visitor) {
+        return ((IActorVisitor<V>) visitor).visitBluetoothReceiveAction(this);
     }
 
     /**
@@ -87,12 +87,13 @@ public class BluetoothReceiveAction<V> extends Action<V> {
         if ( fields.size() == 3 ) {
             String bluetoothRecieveChannel = helper.extractField(fields, BlocklyConstants.CHANNEL);
             String bluetoothRecieveDataType = helper.extractField(fields, BlocklyConstants.TYPE);
-            return BluetoothReceiveAction.make(
-                helper.convertPhraseToExpr(bluetoothRecieveConnection),
-                bluetoothRecieveChannel,
-                bluetoothRecieveDataType,
-                helper.extractBlockProperties(block),
-                helper.extractComment(block));
+            return BluetoothReceiveAction
+                .make(
+                    helper.convertPhraseToExpr(bluetoothRecieveConnection),
+                    bluetoothRecieveChannel,
+                    bluetoothRecieveDataType,
+                    helper.extractBlockProperties(block),
+                    helper.extractComment(block));
         } else {
             return BluetoothReceiveAction
                 .make(helper.convertPhraseToExpr(bluetoothRecieveConnection), helper.extractBlockProperties(block), helper.extractComment(block));
