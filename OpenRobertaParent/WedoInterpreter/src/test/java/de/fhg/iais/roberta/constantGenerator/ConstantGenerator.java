@@ -74,7 +74,7 @@ public class ConstantGenerator {
     }
 
     private void javaPrefix() {
-        this.javaConstants.add("package de.fhg.iais.roberta.syntax.codegen.wedo;");
+        this.javaConstants.add("package de.fhg.iais.roberta.visitor;");
         this.javaConstants.add("");
         this.javaConstants.add("public class C {");
         this.javaConstants.add("");

@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.codegen.wedo;
+package de.fhg.iais.roberta.visitor;
 
 public class C {
 
