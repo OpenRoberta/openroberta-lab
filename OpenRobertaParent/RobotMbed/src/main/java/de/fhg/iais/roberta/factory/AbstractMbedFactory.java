@@ -15,12 +15,12 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.mbed.BoardCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.mbed.calliope.SimulationCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
+import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
+import de.fhg.iais.roberta.visitor.validate.CalliopeSimValidatorVisitor;
+import de.fhg.iais.roberta.visitor.validate.MbedBoardValidatorVisitor;
 
 public abstract class AbstractMbedFactory extends AbstractRobotFactory {
 
@@ -126,8 +126,8 @@ public abstract class AbstractMbedFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public RobotSimulationCheckVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
-        return new SimulationCheckVisitor(brickConfiguration);
+    public AbstractSimValidatorVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
+        return new CalliopeSimValidatorVisitor(brickConfiguration);
     }
 
     @Override
@@ -143,8 +143,8 @@ public abstract class AbstractMbedFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public RobotCommonCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
-        return new BoardCheckVisitor(brickConfiguration);
+    public AbstractProgramValidatorVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
+        return new MbedBoardValidatorVisitor(brickConfiguration);
     }
 
 }

@@ -15,9 +15,9 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.ev3.BrickCheckVisitor;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.visitor.validate.AbstractBrickValidatorVisitor;
+import de.fhg.iais.roberta.visitor.validate.Ev3BrickValidatorVisitor;
 
 public class ProgramConfigurationCompatabilityTest {
     private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
@@ -34,7 +34,7 @@ public class ProgramConfigurationCompatabilityTest {
         EV3Configuration brickConfiguration = (EV3Configuration) builder.build();
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/visitors/program_config_compatibility.xml");
 
-        RobotBrickCheckVisitor programChecker = new BrickCheckVisitor(brickConfiguration);
+        AbstractBrickValidatorVisitor programChecker = new Ev3BrickValidatorVisitor(brickConfiguration);
         programChecker.check(phrases);
 
         Assert.assertEquals(4, programChecker.getErrorCount());
@@ -57,7 +57,7 @@ public class ProgramConfigurationCompatabilityTest {
         EV3Configuration brickConfiguration = (EV3Configuration) builder.build();
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/visitors/program_config_compatibility_gyro_touch_ultra_color.xml");
 
-        RobotBrickCheckVisitor programChecker = new BrickCheckVisitor(brickConfiguration);
+        AbstractBrickValidatorVisitor programChecker = new Ev3BrickValidatorVisitor(brickConfiguration);
         programChecker.check(phrases);
 
         Assert.assertEquals(0, programChecker.getErrorCount());

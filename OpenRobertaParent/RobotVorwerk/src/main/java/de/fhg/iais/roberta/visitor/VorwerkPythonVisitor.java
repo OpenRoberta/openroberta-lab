@@ -29,7 +29,6 @@ import de.fhg.iais.roberta.syntax.action.vorwerk.BrushOn;
 import de.fhg.iais.roberta.syntax.action.vorwerk.SideBrush;
 import de.fhg.iais.roberta.syntax.action.vorwerk.VacuumOff;
 import de.fhg.iais.roberta.syntax.action.vorwerk.VacuumOn;
-import de.fhg.iais.roberta.syntax.check.hardware.vorwerk.UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
@@ -57,8 +56,9 @@ import de.fhg.iais.roberta.syntax.sensor.vorwerk.DropOffSensor;
 import de.fhg.iais.roberta.syntax.sensor.vorwerk.WallSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.collect.VorwerkUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IVorwerkVisitor;
-import de.fhg.iais.roberta.visitor.lang.prog.AbstractPythonVisitor;
+import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
@@ -81,7 +81,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
         ILanguage language) {
         super(programPhrases, indentation);
 
-        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(programPhrases, null);
+        VorwerkUsedHardwareCollectorVisitor checkVisitor = new VorwerkUsedHardwareCollectorVisitor(programPhrases, null);
 
         this.brickConfiguration = brickConfiguration;
 

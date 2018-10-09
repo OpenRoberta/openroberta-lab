@@ -103,8 +103,6 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.sensor.GetSampleType;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
@@ -132,6 +130,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
+import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
 public interface IRobotFactory {
 
@@ -926,9 +926,9 @@ public interface IRobotFactory {
 
     Boolean hasConfiguration();
 
-    RobotSimulationCheckVisitor getSimProgramCheckVisitor(Configuration brickConfiguration);
+    AbstractSimValidatorVisitor getSimProgramCheckVisitor(Configuration brickConfiguration);
 
-    RobotCommonCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration);
+    AbstractProgramValidatorVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration);
 
     String getGroup();
 

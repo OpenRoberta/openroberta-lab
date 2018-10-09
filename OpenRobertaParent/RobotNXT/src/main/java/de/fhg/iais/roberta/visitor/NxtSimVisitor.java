@@ -49,7 +49,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.INxtVisitor;
-import de.fhg.iais.roberta.visitor.lang.AbstractSimVisitor;
+import de.fhg.iais.roberta.visitor.lang.codegen.AbstractSimVisitor;
 
 public final class NxtSimVisitor extends AbstractSimVisitor<Void> implements INxtVisitor<Void> {
     private static final String MOTOR_LEFT = "CONST.MOTOR_LEFT";

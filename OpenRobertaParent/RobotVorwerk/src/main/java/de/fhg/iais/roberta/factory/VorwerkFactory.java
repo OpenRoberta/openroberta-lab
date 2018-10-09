@@ -21,9 +21,6 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.vorwerk.BrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.sensor.GetSampleType;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
@@ -31,6 +28,9 @@ import de.fhg.iais.roberta.syntax.sensor.vorwerk.DropOffSensor;
 import de.fhg.iais.roberta.syntax.sensor.vorwerk.WallSensor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
+import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
+import de.fhg.iais.roberta.visitor.validate.VorwerkBrickValidatorVisitor;
 
 public class VorwerkFactory extends AbstractRobotFactory {
     private static final String ROBOT_PLUGIN_PREFIX = "robot.plugin.";
@@ -131,13 +131,13 @@ public class VorwerkFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public RobotSimulationCheckVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
+    public AbstractSimValidatorVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
         return null;
     }
 
     @Override
-    public RobotCommonCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
-        return new BrickCheckVisitor(brickConfiguration);
+    public AbstractProgramValidatorVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
+        return new VorwerkBrickValidatorVisitor(brickConfiguration);
     }
 
     @Override

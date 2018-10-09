@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.ev3.Jaxb2Ev3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.visitor.Ev3PythonVisitor;
+import de.fhg.iais.roberta.visitor.codegen.Ev3PythonVisitor;
 
 public class Ev3DevCompilerWorkflow extends AbstractCompilerWorkflow {
     private static final Logger LOG = LoggerFactory.getLogger(Ev3DevCompilerWorkflow.class);

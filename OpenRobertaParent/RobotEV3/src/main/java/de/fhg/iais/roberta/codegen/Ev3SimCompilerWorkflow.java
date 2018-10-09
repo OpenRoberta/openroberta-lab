@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.ev3.Jaxb2Ev3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.visitor.Ev3SimVisitor;
+import de.fhg.iais.roberta.visitor.codegen.Ev3SimVisitor;
 
 public class Ev3SimCompilerWorkflow extends AbstractCompilerWorkflow {
 

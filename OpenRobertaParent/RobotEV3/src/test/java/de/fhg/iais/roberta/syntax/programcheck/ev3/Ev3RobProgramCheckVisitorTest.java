@@ -16,8 +16,8 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.check.program.ev3.BrickCheckVisitor;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.visitor.validate.Ev3BrickValidatorVisitor;
 
 public class Ev3RobProgramCheckVisitorTest {
     private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
@@ -38,7 +38,7 @@ public class Ev3RobProgramCheckVisitorTest {
     public void check_GlobalVariableUsedInUserCreatedFunction_returnsListWithOneElement() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/visitors/MoveWithZeroSpeed.xml");
 
-        BrickCheckVisitor checkVisitor = new BrickCheckVisitor(makeConfiguration());
+        Ev3BrickValidatorVisitor checkVisitor = new Ev3BrickValidatorVisitor(makeConfiguration());
         checkVisitor.check(phrases);
         Assert.assertEquals(2, checkVisitor.getWarningCount());
 

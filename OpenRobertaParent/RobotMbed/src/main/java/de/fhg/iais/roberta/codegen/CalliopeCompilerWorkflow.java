@@ -19,13 +19,13 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.mbed.CalliopeConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.syntax.check.hardware.mbed.UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.mbed.Jaxb2CalliopeConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.visitor.CalliopeCppVisitor;
+import de.fhg.iais.roberta.visitor.collect.MbedUsedHardwareCollectorVisitor;
 
 public class CalliopeCompilerWorkflow extends AbstractCompilerWorkflow {
 
@@ -85,8 +85,8 @@ public class CalliopeCompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public Key generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language) {
         String sourceCode = generateSourceCode(token, programName, transformer, language);
-        UsedHardwareCollectorVisitor usedHardwareVisitor =
-            new UsedHardwareCollectorVisitor(transformer.getProgramTransformer().getTree(), transformer.getBrickConfiguration());
+        MbedUsedHardwareCollectorVisitor usedHardwareVisitor =
+            new MbedUsedHardwareCollectorVisitor(transformer.getProgramTransformer().getTree(), transformer.getBrickConfiguration());
         EnumSet<CalliopeCompilerFlag> compilerFlags = usedHardwareVisitor.isRadioUsed() ? EnumSet.of(CalliopeCompilerFlag.RADIO_USED) : EnumSet.noneOf(CalliopeCompilerFlag.class);
         return compileSourceCode(token, programName, sourceCode, language, compilerFlags);
     }

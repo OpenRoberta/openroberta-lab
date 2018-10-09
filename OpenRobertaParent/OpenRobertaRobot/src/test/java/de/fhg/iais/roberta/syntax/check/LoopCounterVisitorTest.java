@@ -6,15 +6,15 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
 import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
+import de.fhg.iais.roberta.visitor.collect.AbstractUsedHardwareCollectorVisitor;
 
 public class LoopCounterVisitorTest {
     AbstractHelperForXmlTest h = new GenericHelperForXmlTest();
 
-    private class TestUsedHardware extends RobotUsedHardwareCollectorVisitor {
+    private class TestUsedHardware extends AbstractUsedHardwareCollectorVisitor {
         //TODO create fake for this class
         public TestUsedHardware(ArrayList<ArrayList<Phrase<Void>>> phrases) {
             super(null);

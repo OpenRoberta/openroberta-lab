@@ -52,7 +52,7 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
-import de.fhg.iais.roberta.visitor.lang.AbstractSimVisitor;
+import de.fhg.iais.roberta.visitor.lang.codegen.AbstractSimVisitor;
 
 public final class MbedSimVisitor extends AbstractSimVisitor<Void> implements IMbedVisitor<Void> {
 

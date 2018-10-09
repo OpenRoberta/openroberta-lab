@@ -44,7 +44,6 @@ import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.check.hardware.nxt.UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
@@ -84,8 +83,9 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.collect.NxtUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.INxtVisitor;
-import de.fhg.iais.roberta.visitor.lang.prog.AbstractCppVisitor;
+import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable NXC code representation of a phrase to a
@@ -114,7 +114,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     private NxtNxcVisitor(NxtConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
         this.brickConfiguration = brickConfiguration;
-        UsedHardwareCollectorVisitor codePreprocessVisitor = new UsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
+        NxtUsedHardwareCollectorVisitor codePreprocessVisitor = new NxtUsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
         this.usedVars = codePreprocessVisitor.getVisitedVars();
         this.usedActors = codePreprocessVisitor.getUsedActors();
         this.timeSensorUsed = codePreprocessVisitor.isTimerSensorUsed();

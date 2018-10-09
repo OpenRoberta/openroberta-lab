@@ -21,7 +21,7 @@ import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformers.arduino.Jaxb2BotNrollConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.visitor.BotnrollCppVisitor;
+import de.fhg.iais.roberta.visitor.codegen.BotnrollCppVisitor;
 
 public class BotnrollCompilerWorkflow extends AbstractCompilerWorkflow {
 

@@ -21,7 +21,7 @@ import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformers.arduino.Jaxb2ArduinoConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.visitor.ArduinoCppVisitor;
+import de.fhg.iais.roberta.visitor.codegen.ArduinoCppVisitor;
 
 public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
 

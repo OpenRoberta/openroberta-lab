@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.nao.NAOConfiguration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.test.nao.HelperNaoForXmlTest;
+import de.fhg.iais.roberta.visitor.collect.NaoUsedHardwareCollectorVisitor;
 
 public class UsedHardwareCollectorVisitorTest {
     HelperNaoForXmlTest h = new HelperNaoForXmlTest();
@@ -21,7 +22,7 @@ public class UsedHardwareCollectorVisitorTest {
     public void testLearnFace_returnsListWithOneUsedSensor() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/hardwarecheck/learnface.xml");
 
-        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
+        NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration());
 
         Assert.assertEquals("[UsedSensor [null, NAOFACE, null]]", checkVisitor.getUsedSensors().toString());
 
@@ -31,7 +32,7 @@ public class UsedHardwareCollectorVisitorTest {
     public void testForgetFace_returnsListWithOneUsedSensor() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/hardwarecheck/forgetface.xml");
 
-        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
+        NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration());
 
         Assert.assertEquals("[UsedSensor [null, NAOFACE, null]]", checkVisitor.getUsedSensors().toString());
 
@@ -41,7 +42,7 @@ public class UsedHardwareCollectorVisitorTest {
     public void testGetNaoMarkInfo_returnsListWithOneUsedSensor() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/hardwarecheck/getnaomarkinfo.xml");
 
-        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
+        NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration());
 
         Assert.assertEquals("[UsedSensor [null, DETECT_MARK, null]]", checkVisitor.getUsedSensors().toString());
     }
@@ -50,7 +51,7 @@ public class UsedHardwareCollectorVisitorTest {
     public void testDetectNaoMark_returnsListWithOneUsedSensor() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/hardwarecheck/detectnaomark.xml");
 
-        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
+        NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration());
 
         Assert.assertEquals("[UsedSensor [null, DETECT_MARK, null]]", checkVisitor.getUsedSensors().toString());
     }
@@ -59,7 +60,7 @@ public class UsedHardwareCollectorVisitorTest {
     public void testGetRecogniezdWordFromList_returnsListWithOneUsedSensor() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/hardwarecheck/getrecognizedwordfromlist.xml");
 
-        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
+        NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration());
 
         Assert.assertEquals("[UsedSensor [null, NAOSPEECH, null]]", checkVisitor.getUsedSensors().toString());
     }
@@ -68,7 +69,7 @@ public class UsedHardwareCollectorVisitorTest {
     public void testAllMoveBlocks_returnsListWithOneUsedSensor() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/hardwarecheck/moveblocks.xml");
 
-        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
+        NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration());
 
         Assert.assertEquals("[UsedSensor [NO_PORT, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
     }
@@ -77,7 +78,7 @@ public class UsedHardwareCollectorVisitorTest {
     public void testWalkDistance_returnsListWithOneUsedSensor() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/hardwarecheck/walkdistance.xml");
 
-        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
+        NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration());
 
         Assert.assertEquals("[UsedSensor [NO_PORT, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
     }
@@ -86,7 +87,7 @@ public class UsedHardwareCollectorVisitorTest {
     public void testTurnAction_returnsListWithOneUsedSensor() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/hardwarecheck/turnaction.xml");
 
-        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
+        NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration());
 
         Assert.assertEquals("[UsedSensor [NO_PORT, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
     }
@@ -95,7 +96,7 @@ public class UsedHardwareCollectorVisitorTest {
     public void testWalkToX_returnsListWithOneUsedSensor() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/hardwarecheck/walktoXYTheta1.xml");
 
-        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
+        NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration());
 
         Assert.assertEquals("[UsedSensor [NO_PORT, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
     }
@@ -104,7 +105,7 @@ public class UsedHardwareCollectorVisitorTest {
     public void testWalkToY_returnsListWithOneUsedSensor() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/hardwarecheck/walktoXYTheta2.xml");
 
-        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
+        NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration());
 
         Assert.assertEquals("[UsedSensor [NO_PORT, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
     }
@@ -113,7 +114,7 @@ public class UsedHardwareCollectorVisitorTest {
     public void testWalkToTheta_returnsListWithOneUsedSensor() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/hardwarecheck/walktoXYTheta3.xml");
 
-        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
+        NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration());
 
         Assert.assertEquals("[UsedSensor [NO_PORT, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
     }

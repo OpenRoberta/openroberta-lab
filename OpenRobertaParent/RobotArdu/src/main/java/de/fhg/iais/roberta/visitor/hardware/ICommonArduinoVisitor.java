@@ -6,8 +6,6 @@ import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
-import de.fhg.iais.roberta.visitor.hardware.IActorVisitor;
-import de.fhg.iais.roberta.visitor.hardware.ISensorVisitor;
 
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).

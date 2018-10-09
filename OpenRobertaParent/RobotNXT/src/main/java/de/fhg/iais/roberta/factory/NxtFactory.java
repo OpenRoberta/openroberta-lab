@@ -18,12 +18,12 @@ import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.general.nxt.PickColor;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.nxt.BrickCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.nxt.SimulationCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
+import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
+import de.fhg.iais.roberta.visitor.validate.NxtBrickValidatorVisitor;
+import de.fhg.iais.roberta.visitor.validate.NxtSimValidatorVisitor;
 
 public class NxtFactory extends AbstractRobotFactory {
     private final NxtCompilerWorkflow robotCompilerWorkflow;
@@ -131,13 +131,13 @@ public class NxtFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public RobotSimulationCheckVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
-        return new SimulationCheckVisitor(brickConfiguration);
+    public AbstractSimValidatorVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
+        return new NxtSimValidatorVisitor(brickConfiguration);
     }
 
     @Override
-    public RobotCommonCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
-        return new BrickCheckVisitor(brickConfiguration);
+    public AbstractProgramValidatorVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
+        return new NxtBrickValidatorVisitor(brickConfiguration);
     }
 
     @Override

@@ -49,7 +49,6 @@ import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.check.hardware.mbed.UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
 import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
 import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
@@ -99,15 +98,16 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.collect.MbedUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
-import de.fhg.iais.roberta.visitor.lang.prog.AbstractPythonVisitor;
+import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
 public final class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMbedVisitor<Void> {
-    private final UsedHardwareCollectorVisitor usedHardwareVisitor;
+    private final MbedUsedHardwareCollectorVisitor usedHardwareVisitor;
 
     /**
      * initialize the Python code generator visitor.
@@ -119,7 +119,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     private MicrobitPythonVisitor(MicrobitConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
 
-        this.usedHardwareVisitor = new UsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
+        this.usedHardwareVisitor = new MbedUsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
         this.loopsLabels = this.usedHardwareVisitor.getloopsLabelContainer();
         this.usedGlobalVarInFunctions = this.usedHardwareVisitor.getMarkedVariablesAsGlobal();
     }

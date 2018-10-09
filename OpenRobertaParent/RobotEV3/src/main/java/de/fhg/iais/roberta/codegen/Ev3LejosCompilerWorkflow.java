@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.ev3.Jaxb2Ev3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.visitor.Ev3JavaVisitor;
+import de.fhg.iais.roberta.visitor.codegen.Ev3JavaVisitor;
 
 public class Ev3LejosCompilerWorkflow extends AbstractCompilerWorkflow {
     private static final Logger LOG = LoggerFactory.getLogger(Ev3LejosCompilerWorkflow.class);

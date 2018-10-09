@@ -18,17 +18,17 @@ import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
 import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
+import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 
 public class CheckVisitorTest {
     AbstractHelperForXmlTest h = new GenericHelperForXmlTest();
 
-    class TestProgramCheckVisitor extends RobotCommonCheckVisitor {
+    class TestProgramCheckVisitor extends AbstractProgramValidatorVisitor {
 
         public TestProgramCheckVisitor(Configuration brickConfiguration) {
             super(brickConfiguration);

@@ -47,8 +47,6 @@ import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformerData;
@@ -60,6 +58,8 @@ import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
+import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
+import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
 @Path("/program")
 public class ClientProgram {
@@ -151,7 +151,7 @@ public class ClientProgram {
                 if ( transformer.getErrorMessage() != null ) {
                     forMessages.setError(transformer.getErrorMessage());
                 } else {
-                    final RobotCommonCheckVisitor programChecker = robotFactory.getRobotProgramCheckVisitor(transformer.getBrickConfiguration());
+                    final AbstractProgramValidatorVisitor programChecker = robotFactory.getRobotProgramCheckVisitor(transformer.getBrickConfiguration());
                     programConfigurationCompatibilityCheck(response, transformer, programChecker);
 
                     final String sourceCode = robotFactory.getRobotCompilerWorkflow().generateSourceCode(token, programName, transformer, language);
@@ -411,7 +411,7 @@ public class ClientProgram {
                 programAndConfigTransformer.getBrickConfiguration().setRobotName(httpSessionState.getRobotName());
                 Key messageKey = programAndConfigTransformer.getErrorMessage();
                 if ( messageKey == null ) {
-                    final RobotCommonCheckVisitor programChecker =
+                    final AbstractProgramValidatorVisitor programChecker =
                         robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
                     messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer, programChecker);
                     if ( messageKey == null ) {
@@ -473,7 +473,7 @@ public class ClientProgram {
                         programAndConfigTransformer.getBrickConfiguration().setRobotName(httpSessionState.getRobotName());
                         messageKey = programAndConfigTransformer.getErrorMessage();
                         if ( messageKey == null ) {
-                            final RobotCommonCheckVisitor programChecker =
+                            final AbstractProgramValidatorVisitor programChecker =
                                 robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
                             messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer, programChecker);
                             if ( messageKey == null ) {
@@ -517,7 +517,7 @@ public class ClientProgram {
                 programAndConfigTransformer.getBrickConfiguration().setRobotName(httpSessionState.getRobotName());
                 messageKey = programAndConfigTransformer.getErrorMessage();
                 if ( messageKey == null ) {
-                    final RobotCommonCheckVisitor programChecker =
+                    final AbstractProgramValidatorVisitor programChecker =
                         robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
                     messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer, programChecker);
                     if ( messageKey == null ) {
@@ -558,7 +558,7 @@ public class ClientProgram {
                 transformer.getBrickConfiguration().setRobotName(httpSessionState.getRobotName());
                 Key messageKey = transformer.getErrorMessage();
                 if ( messageKey == null ) {
-                    final RobotSimulationCheckVisitor programChecker = robotFactory.getSimProgramCheckVisitor(transformer.getBrickConfiguration());
+                    final AbstractSimValidatorVisitor programChecker = robotFactory.getSimProgramCheckVisitor(transformer.getBrickConfiguration());
                     messageKey = programConfigurationCompatibilityCheck(response, transformer, programChecker);
                     transformer.getProgramTransformer().getData();
                     if ( messageKey == null ) {
@@ -597,7 +597,7 @@ public class ClientProgram {
     private Key programConfigurationCompatibilityCheck(
         JSONObject response,
         BlocklyProgramAndConfigTransformer programAndConfigTransformer,
-        RobotCommonCheckVisitor programChecker)
+        AbstractProgramValidatorVisitor programChecker)
         throws JSONException,
         JAXBException {
         final Jaxb2AstTransformerData<Void> data = programAndConfigTransformer.getProgramTransformer().getData();

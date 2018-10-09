@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.transformers.arduino.Jaxb2Bob3ConfigurationTransforme
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.visitor.Bob3CppVisitor;
+import de.fhg.iais.roberta.visitor.codegen.Bob3CppVisitor;
 
 public class Bob3CompilerWorkflow extends AbstractCompilerWorkflow {
 

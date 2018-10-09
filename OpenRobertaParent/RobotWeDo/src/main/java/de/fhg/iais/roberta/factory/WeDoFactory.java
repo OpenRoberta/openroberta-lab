@@ -20,9 +20,6 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.wedo.BrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.sensor.GetSampleType;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
@@ -30,6 +27,9 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.WeDoStackMachineVisitor;
+import de.fhg.iais.roberta.visitor.validate.AbstractBrickValidatorVisitor;
+import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
+import de.fhg.iais.roberta.visitor.validate.WedoBrickValidatorVisitor;
 
 public class WeDoFactory extends AbstractRobotFactory {
     private final WeDoCompilerWorkflow compilerWorkflow;
@@ -138,13 +138,13 @@ public class WeDoFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public RobotSimulationCheckVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
+    public AbstractSimValidatorVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
         return null;
     }
 
     @Override
-    public RobotBrickCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
-        return new BrickCheckVisitor<Void>(brickConfiguration);
+    public AbstractBrickValidatorVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
+        return new WedoBrickValidatorVisitor<Void>(brickConfiguration);
     }
 
     @Override

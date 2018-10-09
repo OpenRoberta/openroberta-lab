@@ -16,12 +16,12 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.arduino.arduino.BrickCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.visitor.ArduinoCppVisitor;
+import de.fhg.iais.roberta.visitor.codegen.ArduinoCppVisitor;
+import de.fhg.iais.roberta.visitor.validate.AbstractBrickValidatorVisitor;
+import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
+import de.fhg.iais.roberta.visitor.validate.ArduinoBrickValidatorVisitor;
 
 public abstract class AbstractArduinoFactory extends AbstractRobotFactory {
     private final ArduinoCompilerWorkflow compilerWorkflow;
@@ -139,13 +139,13 @@ public abstract class AbstractArduinoFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public RobotSimulationCheckVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
+    public AbstractSimValidatorVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
         return null;
     }
 
     @Override
-    public RobotBrickCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
-        return new BrickCheckVisitor(brickConfiguration);
+    public AbstractBrickValidatorVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
+        return new ArduinoBrickValidatorVisitor(brickConfiguration);
     }
 
     @Override

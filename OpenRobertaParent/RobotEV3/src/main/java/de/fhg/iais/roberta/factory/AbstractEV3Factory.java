@@ -20,12 +20,12 @@ import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.ev3.ShowPicture;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.ev3.BrickCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.ev3.SimulationCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
+import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
+import de.fhg.iais.roberta.visitor.validate.Ev3BrickValidatorVisitor;
+import de.fhg.iais.roberta.visitor.validate.Ev3SimValidatorVisitor;
 
 public abstract class AbstractEV3Factory extends AbstractRobotFactory {
     private static final String ROBOT_PLUGIN_PREFIX = "robot.plugin.";
@@ -137,13 +137,13 @@ public abstract class AbstractEV3Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public RobotSimulationCheckVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
-        return new SimulationCheckVisitor(brickConfiguration);
+    public AbstractSimValidatorVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
+        return new Ev3SimValidatorVisitor(brickConfiguration);
     }
 
     @Override
-    public RobotCommonCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
-        return new BrickCheckVisitor(brickConfiguration);
+    public AbstractProgramValidatorVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
+        return new Ev3BrickValidatorVisitor(brickConfiguration);
     }
 
     @Override

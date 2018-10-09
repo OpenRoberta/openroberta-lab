@@ -54,7 +54,6 @@ import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.check.hardware.nao.UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
@@ -95,8 +94,9 @@ import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.collect.NaoUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
-import de.fhg.iais.roberta.visitor.lang.prog.AbstractPythonVisitor;
+import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
@@ -118,7 +118,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     private NaoPythonVisitor(NAOConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation, ILanguage language) {
         super(programPhrases, indentation);
 
-        UsedHardwareCollectorVisitor checker = new UsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
+        NaoUsedHardwareCollectorVisitor checker = new NaoUsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
         this.usedSensors = checker.getUsedSensors();
         this.usedGlobalVarInFunctions = checker.getMarkedVariablesAsGlobal();
         this.isProgramEmpty = checker.isProgramEmpty();

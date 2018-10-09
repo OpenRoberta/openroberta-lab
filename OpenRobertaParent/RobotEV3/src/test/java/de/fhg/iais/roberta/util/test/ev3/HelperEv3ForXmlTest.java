@@ -18,9 +18,9 @@ import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
-import de.fhg.iais.roberta.visitor.Ev3JavaVisitor;
-import de.fhg.iais.roberta.visitor.Ev3PythonVisitor;
-import de.fhg.iais.roberta.visitor.Ev3SimVisitor;
+import de.fhg.iais.roberta.visitor.codegen.Ev3JavaVisitor;
+import de.fhg.iais.roberta.visitor.codegen.Ev3PythonVisitor;
+import de.fhg.iais.roberta.visitor.codegen.Ev3SimVisitor;
 
 public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
 

@@ -50,7 +50,6 @@ import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.check.hardware.mbed.UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
 import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
 import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
@@ -107,15 +106,16 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.collect.MbedUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
-import de.fhg.iais.roberta.visitor.lang.prog.AbstractCppVisitor;
+import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable C++ code representation of a phrase to a
  * StringBuilder. <b>This representation is correct C++ code for Calliope systems.</b> <br>
  */
 public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbedVisitor<Void> {
-    private final UsedHardwareCollectorVisitor codePreprocess;
+    private final MbedUsedHardwareCollectorVisitor codePreprocess;
     ArrayList<VarDeclaration<Void>> usedVars;
     private int numberOfArraysUsedInTemplate;
     private int currentArrayInTemplate;
@@ -130,7 +130,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     private CalliopeCppVisitor(CalliopeConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
 
-        this.codePreprocess = new UsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
+        this.codePreprocess = new MbedUsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
 
         this.loopsLabels = this.codePreprocess.getloopsLabelContainer();
         this.userDefinedMethods = this.codePreprocess.getUserDefinedMethods();
