@@ -27,7 +27,7 @@ import com.google.inject.Inject;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Export;
 import de.fhg.iais.roberta.blockly.generated.Instance;
-import de.fhg.iais.roberta.factory.ICompilerWorkflow;
+import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.javaServer.provider.OraData;

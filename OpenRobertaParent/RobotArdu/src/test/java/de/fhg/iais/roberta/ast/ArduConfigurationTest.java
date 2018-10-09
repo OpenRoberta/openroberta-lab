@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.factory.arduino.botnroll.BotnrollFactory;
+import de.fhg.iais.roberta.factory.BotnrollFactory;
 import de.fhg.iais.roberta.transformers.arduino.Jaxb2BotNrollConfigurationTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;

@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.syntax.sensor.nao;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.factory.nao.Factory;
+import de.fhg.iais.roberta.factory.NaoFactory;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -47,7 +47,7 @@ public final class DetectFace<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, ((Factory) helper.getModeFactory())::getDetectFaceMode);
+        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, ((NaoFactory) helper.getModeFactory())::getDetectFaceMode);
         return DetectFace.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 }

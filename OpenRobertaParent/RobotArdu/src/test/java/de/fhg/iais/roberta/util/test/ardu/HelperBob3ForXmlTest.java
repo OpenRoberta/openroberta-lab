@@ -4,7 +4,7 @@ import java.util.Properties;
 
 import de.fhg.iais.roberta.components.arduino.Bob3Configuration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
-import de.fhg.iais.roberta.factory.arduino.bob3.Bob3Factory;
+import de.fhg.iais.roberta.factory.Bob3Factory;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;

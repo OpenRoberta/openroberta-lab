@@ -7,14 +7,14 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.factory.nxt.Factory;
+import de.fhg.iais.roberta.factory.NxtFactory;
 import de.fhg.iais.roberta.transformer.nxt.Jaxb2NxtConfigurationTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 public class NxtConfigurationTest {
-    Factory factory = new Factory(new RobertaProperties(Util1.loadProperties(null)));
+    NxtFactory factory = new NxtFactory(new RobertaProperties(Util1.loadProperties(null)));
 
     @Test
     public void testRoundtrip() throws Exception {

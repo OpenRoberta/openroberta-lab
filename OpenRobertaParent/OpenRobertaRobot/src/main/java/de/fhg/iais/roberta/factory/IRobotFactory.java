@@ -9,6 +9,7 @@ import java.util.Properties;
 
 import com.google.inject.AbstractModule;
 
+import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;

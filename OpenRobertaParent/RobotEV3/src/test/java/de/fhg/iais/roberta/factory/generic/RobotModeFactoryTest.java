@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.factory.generic;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.factory.Ev3LejosV0Factory;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.factory.ev3.lejos.v0.Factory;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.LightMode;
 import de.fhg.iais.roberta.mode.action.BrickLedColor;
@@ -29,7 +29,7 @@ import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class RobotModeFactoryTest {
-    Factory factory = new Factory(new RobertaProperties(Util1.loadProperties(null)));
+    Ev3LejosV0Factory factory = new Ev3LejosV0Factory(new RobertaProperties(Util1.loadProperties(null)));
 
     @Test
     public void getIndexLocationFromString() {

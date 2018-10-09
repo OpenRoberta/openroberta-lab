@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
-import de.fhg.iais.roberta.factory.ev3.lejos.v0.Factory;
+import de.fhg.iais.roberta.factory.Ev3LejosV0Factory;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
@@ -26,7 +26,7 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
 
     public HelperEv3ForXmlTest() {
         super(
-            new Factory(new RobertaProperties(Util1.loadProperties(null))),
+            new Ev3LejosV0Factory(new RobertaProperties(Util1.loadProperties(null))),
             new EV3Configuration.Builder()
                 .addActor(new ActorPort("A", "MA"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))
                 .addActor(new ActorPort("B", "MB"), new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.RIGHT))

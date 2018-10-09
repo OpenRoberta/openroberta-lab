@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
-import de.fhg.iais.roberta.factory.nxt.Factory;
+import de.fhg.iais.roberta.factory.NxtFactory;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
@@ -26,7 +26,7 @@ public class HelperNxtForXmlTest extends AbstractHelperForXmlTest {
 
     public HelperNxtForXmlTest() {
         super(
-            new Factory(new RobertaProperties(Util1.loadProperties(null))),
+            new NxtFactory(new RobertaProperties(Util1.loadProperties(null))),
             new NxtConfiguration.Builder()
                 .addActor(new ActorPort("A", "MA"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))
                 .addActor(new ActorPort("B", "MB"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))

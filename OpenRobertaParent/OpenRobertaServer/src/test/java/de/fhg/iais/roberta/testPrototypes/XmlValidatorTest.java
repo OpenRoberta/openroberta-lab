@@ -20,7 +20,7 @@ public class XmlValidatorTest {
         String programText = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
         String configText = JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet());
         RobertaProperties robertaProperties = new RobertaProperties(Util1.loadProperties(null));
-        IRobotFactory robotFactory = new de.fhg.iais.roberta.factory.nao.Factory(robertaProperties);
+        IRobotFactory robotFactory = new de.fhg.iais.roberta.factory.NaoFactory(robertaProperties);
         BlocklyProgramAndConfigTransformer programAndConfigTransformer = BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configText);
         System.out.println(jaxbImportExport);
     }

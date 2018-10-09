@@ -7,7 +7,7 @@ import org.junit.Assert;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.vorwerk.VorwerkConfiguration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
-import de.fhg.iais.roberta.factory.vorwerk.Factory;
+import de.fhg.iais.roberta.factory.VorwerkFactory;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.syntax.codegen.vorwerk.PythonVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
@@ -18,7 +18,7 @@ import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
 public class HelperVorwerkForXmlTest extends AbstractHelperForXmlTest {
 
     public HelperVorwerkForXmlTest() {
-        super(new Factory(new RobertaProperties(Util1.loadProperties(null))), new VorwerkConfiguration.Builder().build());
+        super(new VorwerkFactory(new RobertaProperties(Util1.loadProperties(null))), new VorwerkConfiguration.Builder().build());
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
         AbstractRobotFactory.addBlockTypesFromProperties("Robot.properties", robotProperties);
     }
