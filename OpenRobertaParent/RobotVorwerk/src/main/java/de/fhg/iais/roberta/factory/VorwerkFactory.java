@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
 
-import de.fhg.iais.roberta.codegen.VorwerkCompilerWorkflow;
 import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
+import de.fhg.iais.roberta.codegen.VorwerkCompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.factory.AbstractRobotFactory;
-import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
@@ -52,8 +50,6 @@ public class VorwerkFactory extends AbstractRobotFactory {
         addBlockTypesFromProperties("Vorwerk.property", this.vorwerkProperties);
 
     }
-
-    protected int robotPropertyNumber;
 
     @Override
     public ISensorPort getSensorPort(String port) {
@@ -147,8 +143,8 @@ public class VorwerkFactory extends AbstractRobotFactory {
 
     @Override
     public String getGroup() {
-        return this.robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.robotPropertyNumber + ".group") != null
-            ? this.robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.robotPropertyNumber + ".group")
+        return this.robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.name + ".group") != null
+            ? this.robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.name + ".group")
             : this.name;
     }
 
