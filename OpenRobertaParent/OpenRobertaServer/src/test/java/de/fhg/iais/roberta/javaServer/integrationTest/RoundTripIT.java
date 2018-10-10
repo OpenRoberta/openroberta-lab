@@ -181,6 +181,7 @@ public class RoundTripIT {
         server.stop();
     }
 
+    // TODO: properties have been refactored. Numbers don't work anymore
     private void initialize() {
         RobertaProperties robertaProperties = new RobertaProperties(Util1.loadProperties("classpath:openRoberta.properties"));
         buildXml = robertaProperties.getStringProperty("robot.plugin.1.generated.programs.build.xml");

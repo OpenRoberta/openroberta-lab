@@ -1,6 +1,6 @@
 FROM openjdk:8u151-jdk
 
-ARG LAST_RUN_OF_GEN=2018-02-26
+ARG LAST_RUN_OF_GEN=2018-10-10
 
 RUN apt-get update && apt-get -y upgrade && apt-get -y install apt-utils
 RUN apt-get install -y \

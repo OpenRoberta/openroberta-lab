@@ -131,7 +131,7 @@ and has executed a
 The entrypoint is defined as the bash script "runIT.sh".
 
   cd $GITREPO/Docker
-  docker build -t rbudde/openroberta_it:1 -f DockerfileIT .
+  docker build -t rbudde/openroberta_it:1 -f DockerfileIT . --build-arg BRANCH=$BRANCH
 
 The following commands are executed by the roberta maintainer; you should NOT do this
   docker push rbudde/openroberta_it:1

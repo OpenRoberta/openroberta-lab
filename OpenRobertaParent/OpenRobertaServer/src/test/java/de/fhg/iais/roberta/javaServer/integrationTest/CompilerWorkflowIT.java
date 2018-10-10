@@ -227,10 +227,11 @@ public class CompilerWorkflowIT {
     }
 
     private static void fixPropertyPathes() {
-        for ( int i = 0; i < 999; i++ ) {
-            replace("robot.plugin." + i + ".compiler.resources.dir");
-            replace("robot.plugin." + i + ".updateResources.dir");
-            replace("robot.plugin." + i + ".generated.programs.build.xml");
+        List<String> robots = robertaProperties.getRobotWhitelist();
+        for ( String robot : robots ) {
+            replace("robot.plugin." + robot + ".compiler.resources.dir");
+            replace("robot.plugin." + robot + ".updateResources.dir");
+            replace("robot.plugin." + robot + ".generated.programs.build.xml");
         }
     }
 
