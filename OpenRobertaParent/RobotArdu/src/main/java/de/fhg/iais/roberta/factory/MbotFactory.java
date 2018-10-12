@@ -10,8 +10,6 @@ import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.codegen.MbotCompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.arduino.MbotConfiguration;
-import de.fhg.iais.roberta.factory.AbstractRobotFactory;
-import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
@@ -134,7 +132,6 @@ public class MbotFactory extends AbstractRobotFactory {
 
     @Override
     public IShowPicture getShowPicture(String picture) {
-        // TODO Auto-generated method stub
         return null;
     }
 

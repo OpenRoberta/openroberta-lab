@@ -658,6 +658,10 @@ public interface IRobotFactory {
         return IRobotFactory.getModeValue(mode, GestureSensorMode.class);
     }
 
+    default IMode getFlameSensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, InfraredSensorMode.class);
+    }
+
     /**
      * Get a sensor port from {@link ISensorPort} given string parameter. It is possible for one sensor port to have multiple string mappings. Throws exception
      * if the sensor port does not exists.
@@ -792,7 +796,7 @@ public interface IRobotFactory {
                 return PinGetValueSensor.make(sensorMetaDataBean, properties, comment);
             case BlocklyConstants.ACCELERATION:
                 sensorMetaDataBean =
-                    new SensorMetaDataBean(getSensorPort(port), getAxis(BlocklyConstants.DEFAULT), getSlot(BlocklyConstants.EMPTY_SLOT), isPortInMutation);
+                    new SensorMetaDataBean(getSensorPort(port), getAxis(sensorType.getSensorMode()), getSlot(BlocklyConstants.EMPTY_SLOT), isPortInMutation);
                 return AccelerometerSensor.make(sensorMetaDataBean, properties, comment);
             case BlocklyConstants.GESTURE:
                 sensorMetaDataBean =

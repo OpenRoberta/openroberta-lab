@@ -53,9 +53,9 @@ public class SensorMetaDataBean {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((this.mode == null) ? 0 : this.mode.hashCode());
-        result = prime * result + ((this.port == null) ? 0 : this.port.hashCode());
-        result = prime * result + ((this.slot == null) ? 0 : this.slot.hashCode());
+        result = (prime * result) + ((this.mode == null) ? 0 : this.mode.hashCode());
+        result = (prime * result) + ((this.port == null) ? 0 : this.port.hashCode());
+        result = (prime * result) + ((this.slot == null) ? 0 : this.slot.hashCode());
         return result;
     }
 

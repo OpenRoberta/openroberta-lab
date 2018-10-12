@@ -318,13 +318,13 @@ public final class MbotCppVisitor extends AbstractArduinoVisitor implements IMbo
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        this.sb.append("myGyro" + gyroSensor.getPort().getOraName() + ".getGyro" + gyroSensor.getMode().toString() + "()");
+        this.sb.append("myGyro" + gyroSensor.getPort().getOraName() + ".getGyro" + gyroSensor.getMode() + "()");
         return null;
     }
 
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometer) {
-        this.sb.append("myGyro" + accelerometer.getPort().getOraName() + ".getAngle" + accelerometer.getMode() + "()");
+        this.sb.append("myGyro" + accelerometer.getPort().getOraName() + ".getAngle" + accelerometer.getMode().toString() + "()");
         return null;
     }
 

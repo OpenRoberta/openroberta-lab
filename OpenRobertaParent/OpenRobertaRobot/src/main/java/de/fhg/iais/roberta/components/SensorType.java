@@ -29,9 +29,9 @@ public enum SensorType implements ISensorType {
     PULSE( "robBrick_pulse" ),
     RFID( "robBrick_rfide" ),
     PIN_VALUE( "robSensors_pin_getSample" ),
-    BUTTON( "robSensors_key_getSample" ),
-    ACCELEROMETER( "robSensors_accelerometer_getSample" ),
-    FLAMESENSOR( "robSensors_flame_getSample" ),
+    BUTTON( "robBrick_key_" ),
+    ACCELEROMETER( "robBrick_accelerometer" ),
+    FLAMESENSOR( "robBrick_flame" ),
     NONE( "" );
 
     private final String[] values;
