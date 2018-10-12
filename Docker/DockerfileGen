@@ -19,7 +19,7 @@ RUN apt-get install -y docker-ce
 RUN apt-get update && apt-get install -y git maven && apt-get clean
 
 # shallow clone of develop. Branch defaults to "develop". Run mvn once to install most all the artifacts needed in /root/.m2
-ARG LAST_RUN_OF_CLONE=2018-03-20
+ARG LAST_RUN_OF_CLONE=2018-10-12
 WORKDIR /opt
 ARG BRANCH=develop
 RUN echo "cloning branch $BRANCH and executing mvn to fill the .m2 cache"
@@ -32,6 +32,7 @@ RUN git clone --depth=1 -b $BRANCH https://github.com/OpenRoberta/robertalab.git
     mvn clean install
  
 # prepare the entry point
+ARG LAST_RUN_OF_COPY_GENLAB=2018-10-12
 WORKDIR /opt
 COPY ["./genLab.sh","./"]
 RUN chmod +x ./genLab.sh
