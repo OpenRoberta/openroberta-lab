@@ -6,6 +6,7 @@ RUN mkdir --parent /opt/openRoberta/lib /opt/openRoberta/OpenRobertaParent
 WORKDIR /opt/openRoberta
 
 COPY ["lib/","./lib/"]
+COPY ["staticResources/","./staticResources/"]
 COPY ["OpenRobertaParent/","./OpenRobertaParent/"]
 
-ENTRYPOINT ["java", "-cp", "lib/*", "de.fhg.iais.roberta.main.ServerStarter", "-d", "database.mode=server"]
+ENTRYPOINT ["java", "-cp", "lib/*", "de.fhg.iais.roberta.main.ServerStarter", "-d", "database.mode=server", "-d", "server.staticresources.dir=staticResources"]
