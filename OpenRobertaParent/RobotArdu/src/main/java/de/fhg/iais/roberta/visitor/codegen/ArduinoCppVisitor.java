@@ -19,28 +19,13 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.control.RelayAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
-import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
-import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
-import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
-import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
-import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.SerialWriteAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
@@ -67,7 +52,7 @@ import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a
  * StringBuilder. <b>This representation is correct C code for Arduino.</b> <br>
  */
-public final class ArduinoCppVisitor extends AbstractArduinoVisitor implements IArduinoVisitor<Void> {
+public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implements IArduinoVisitor<Void> {
     private final boolean isTimerSensorUsed;
 
     /**
@@ -101,11 +86,6 @@ public final class ArduinoCppVisitor extends AbstractArduinoVisitor implements I
     }
 
     @Override
-    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        return null;
-    }
-
-    @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         this.sb.append("_lcd_" + showTextAction.getPort().getOraName() + ".setCursor(");
         showTextAction.getX().visit(this);
@@ -122,21 +102,6 @@ public final class ArduinoCppVisitor extends AbstractArduinoVisitor implements I
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
         this.sb.append("_lcd_" + clearDisplayAction.getPort().getOraName() + ".clear();");
-        return null;
-    }
-
-    @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
         return null;
     }
 
@@ -161,20 +126,16 @@ public final class ArduinoCppVisitor extends AbstractArduinoVisitor implements I
 
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        String[] colors = {
-            "red",
-            "green",
-            "blue"
-        };
+        String[] colors =
+            {
+                "red",
+                "green",
+                "blue"
+            };
         for ( int i = 0; i < 3; i++ ) {
             this.sb.append("analogWrite(_led_" + colors[i] + "_" + lightStatusAction.getPort().getOraName() + ", 0);");
             nlIndent();
         }
-        return null;
-    }
-
-    @Override
-    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
         return null;
     }
 
@@ -186,11 +147,6 @@ public final class ArduinoCppVisitor extends AbstractArduinoVisitor implements I
         this.sb.append(", ");
         toneAction.getDuration().visit(this);
         this.sb.append(");");
-        return null;
-    }
-
-    @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         return null;
     }
 
@@ -224,41 +180,6 @@ public final class ArduinoCppVisitor extends AbstractArduinoVisitor implements I
             .append(", ")
             .append(relayAction.getMode().getValues()[0])
             .append(");");
-        return null;
-    }
-
-    @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
         return null;
     }
 
@@ -419,16 +340,17 @@ public final class ArduinoCppVisitor extends AbstractArduinoVisitor implements I
         nlIndent();
         this.sb.append("}");
         nlIndent();
-        this.sb.append(
-            "return String(((long)(_mfrc522_"
-                + sensorName
-                + ".uid.uidByte[0])<<24)\n    |((long)(_mfrc522_"
-                + sensorName
-                + ".uid.uidByte[1])<<16)\n    | ((long)(_mfrc522_"
-                + sensorName
-                + ".uid.uidByte[2])<<8)\n    | ((long)_mfrc522_"
-                + sensorName
-                + ".uid.uidByte[3]), HEX);");
+        this.sb
+            .append(
+                "return String(((long)(_mfrc522_"
+                    + sensorName
+                    + ".uid.uidByte[0])<<24)\n    |((long)(_mfrc522_"
+                    + sensorName
+                    + ".uid.uidByte[1])<<16)\n    | ((long)(_mfrc522_"
+                    + sensorName
+                    + ".uid.uidByte[2])<<8)\n    | ((long)_mfrc522_"
+                    + sensorName
+                    + ".uid.uidByte[3]), HEX);");
 
         decrIndentation();
         this.nlIndent();
@@ -921,16 +843,6 @@ public final class ArduinoCppVisitor extends AbstractArduinoVisitor implements I
         this.sb.append("Serial.println(");
         serialWriteAction.getValue().visit(this);
         this.sb.append(");");
-        return null;
-    }
-
-    @Override
-    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
         return null;
     }
 

@@ -9,8 +9,8 @@ import de.fhg.iais.roberta.factory.MicrobitFactory;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.visitor.MbedSimVisitor;
-import de.fhg.iais.roberta.visitor.MicrobitPythonVisitor;
+import de.fhg.iais.roberta.visitor.codegen.MbedSimVisitor;
+import de.fhg.iais.roberta.visitor.codegen.MicrobitPythonVisitor;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.

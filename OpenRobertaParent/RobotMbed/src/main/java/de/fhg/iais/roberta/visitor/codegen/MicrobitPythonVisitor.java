@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.visitor;
+package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
 
@@ -12,9 +12,6 @@ import de.fhg.iais.roberta.mode.sensor.PinValue;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
@@ -26,7 +23,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
-import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
@@ -35,20 +31,12 @@ import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
-import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
-import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
-import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
-import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
 import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
 import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
@@ -80,21 +68,13 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -226,46 +206,6 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        return null;
-    }
-
-    @Override
     public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
         this.sb.append("microbit.display.");
         appendTextDisplayType(displayTextAction);
@@ -304,56 +244,6 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
-        return null;
-    }
-
-    @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
         this.sb.append("microbit." + brickSensor.getPort().getOraName() + ".is_pressed()");
         return null;
@@ -362,36 +252,6 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
         this.sb.append("microbit.temperature()");
-        return null;
-    }
-
-    @Override
-    public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitSoundSensor(SoundSensor<Void> sensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitLightSensor(LightSensor<Void> sensor) {
         return null;
     }
 
@@ -410,16 +270,6 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
         }
 
-        return null;
-    }
-
-    @Override
-    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
         return null;
     }
 
@@ -471,14 +321,14 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         }
         this.sb.append("\n\n");
         this.sb.append("def main():\n");
-        this.sb.append(INDENT).append("try:\n");
-        this.sb.append(INDENT).append(INDENT).append("run()\n");
-        this.sb.append(INDENT).append("except Exception as e:\n");
-        this.sb.append(INDENT).append(INDENT).append("raise\n");
+        this.sb.append(this.INDENT).append("try:\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("run()\n");
+        this.sb.append(this.INDENT).append("except Exception as e:\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("raise\n");
 
         this.sb.append("\n");
         this.sb.append("if __name__ == \"__main__\":\n");
-        this.sb.append(INDENT).append("main()");
+        this.sb.append(this.INDENT).append("main()");
     }
 
     @Override
@@ -919,11 +769,6 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitRadioRssiSensor(RadioRssiSensor<Void> radioRssiSensor) {
-        return null;
-    }
-
-    @Override
     public Void visitStmtTextComment(StmtTextComment<Void> stmtTextComment) {
         this.sb.append("# " + stmtTextComment.getTextComment());
         return null;
@@ -938,11 +783,6 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     @Override
     public Void visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<Void> displayGetBrightnessAction) {
         // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitLedBarSetAction(LedBarSetAction<Void> ledBarSetAction) {
         return null;
     }
 
@@ -982,6 +822,54 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
             default:
                 break;
         }
+        return null;
+    }
+
+    @Override
+    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitToneAction(ToneAction<Void> toneAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+        // TODO Auto-generated method stub
         return null;
     }
 

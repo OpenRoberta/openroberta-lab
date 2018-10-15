@@ -18,8 +18,6 @@ import de.fhg.iais.roberta.syntax.action.control.RelayAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.SerialWriteAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.util.Quadruplet;
@@ -48,12 +46,13 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
 
     public Set<UsedConfigurationBlock> getUsedConfigurationBlocks() {
         for ( Quadruplet<ConfigurationBlock, String, List<String>, List<String>> configurationBlock : this.configuration.getConfigurationBlocks() ) {
-            this.usedConfigurationBlocks.add(
-                new UsedConfigurationBlock(
-                    this.configuration.getConfigurationBlockType(configurationBlock),
-                    this.configuration.getBlockName(configurationBlock),
-                    this.configuration.getPorts(configurationBlock),
-                    this.configuration.getPins(configurationBlock)));
+            this.usedConfigurationBlocks
+                .add(
+                    new UsedConfigurationBlock(
+                        this.configuration.getConfigurationBlockType(configurationBlock),
+                        this.configuration.getBlockName(configurationBlock),
+                        this.configuration.getPorts(configurationBlock),
+                        this.configuration.getPins(configurationBlock)));
         }
         return this.usedConfigurationBlocks;
     }
@@ -102,15 +101,4 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
         return null;
     }
 
-    @Override
-    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 }

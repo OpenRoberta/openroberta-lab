@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.visitor;
+package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
 
@@ -19,30 +19,26 @@ import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
-import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
-import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
-import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -247,16 +243,6 @@ public final class NxtSimVisitor extends AbstractSimVisitor<Void> implements INx
     }
 
     @Override
-    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        return null;
-    }
-
-    @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
         String end = createClosingBracket();
         this.sb.append("createPlayFileAction(" + playFileAction.getFileName());
@@ -360,16 +346,6 @@ public final class NxtSimVisitor extends AbstractSimVisitor<Void> implements INx
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
         this.sb.append("createGetSample(CONST.SOUND)");
-        return null;
-    }
-
-    @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
         return null;
     }
 

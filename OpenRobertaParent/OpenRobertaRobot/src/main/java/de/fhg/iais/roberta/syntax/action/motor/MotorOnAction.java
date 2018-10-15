@@ -24,7 +24,7 @@ import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IActorVisitor;
+import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
 
 /**
  * This class represents the <b>robActions_motor_on_for</b> and <b>robActions_motor_on</b> blocks from Blockly into the AST (abstract syntax tree). Object from
@@ -129,7 +129,7 @@ public final class MotorOnAction<V> extends MoveAction<V> {
 
     @Override
     protected V accept(IVisitor<V> visitor) {
-        return ((IActorVisitor<V>) visitor).visitMotorOnAction(this);
+        return ((IMotorVisitor<V>) visitor).visitMotorOnAction(this);
     }
 
     @Override

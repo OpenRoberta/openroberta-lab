@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.action.motor;
+package de.fhg.iais.roberta.syntax.action.motor.differential;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IActorVisitor;
+import de.fhg.iais.roberta.visitor.hardware.actor.IDifferentialMotorVisitor;
 
 /**
  * This class represents the <b>robActions_motorDiff_stop</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -40,7 +40,7 @@ public class MotorDriveStopAction<V> extends Action<V> {
 
     @Override
     protected V accept(IVisitor<V> visitor) {
-        return ((IActorVisitor<V>) visitor).visitMotorDriveStopAction(this);
+        return ((IDifferentialMotorVisitor<V>) visitor).visitMotorDriveStopAction(this);
     }
 
     /**

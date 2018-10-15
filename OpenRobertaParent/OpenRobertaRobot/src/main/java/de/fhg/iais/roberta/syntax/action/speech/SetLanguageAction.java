@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.action.sound;
+package de.fhg.iais.roberta.syntax.action.speech;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IActorVisitor;
+import de.fhg.iais.roberta.visitor.hardware.actor.ISpeechVisitor;
 
 /**
  * This class represents the <b>naoActions_setLanguage</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -58,7 +58,7 @@ public final class SetLanguageAction<V> extends Action<V> {
 
     @Override
     protected V accept(IVisitor<V> visitor) {
-        return ((IActorVisitor<V>) visitor).visitSetLanguageAction(this);
+        return ((ISpeechVisitor<V>) visitor).visitSetLanguageAction(this);
     }
 
     /**

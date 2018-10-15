@@ -16,8 +16,8 @@ import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
-import de.fhg.iais.roberta.visitor.NxtNxcVisitor;
-import de.fhg.iais.roberta.visitor.NxtSimVisitor;
+import de.fhg.iais.roberta.visitor.codegen.NxtNxcVisitor;
+import de.fhg.iais.roberta.visitor.codegen.NxtSimVisitor;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.

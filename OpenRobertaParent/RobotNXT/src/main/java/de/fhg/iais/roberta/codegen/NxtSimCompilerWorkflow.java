@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.nxt.Jaxb2NxtConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.visitor.NxtSimVisitor;
+import de.fhg.iais.roberta.visitor.codegen.NxtSimVisitor;
 
 public class NxtSimCompilerWorkflow extends AbstractCompilerWorkflow {
 

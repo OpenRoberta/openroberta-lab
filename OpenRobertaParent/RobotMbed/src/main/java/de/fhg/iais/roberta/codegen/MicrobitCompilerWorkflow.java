@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.mbed.Jaxb2MicrobitConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.visitor.MicrobitPythonVisitor;
+import de.fhg.iais.roberta.visitor.codegen.MicrobitPythonVisitor;
 
 public class MicrobitCompilerWorkflow extends AbstractCompilerWorkflow {
 

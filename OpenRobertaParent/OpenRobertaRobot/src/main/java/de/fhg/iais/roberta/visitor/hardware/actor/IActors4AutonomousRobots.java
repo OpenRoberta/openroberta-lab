@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.visitor.hardware;
+package de.fhg.iais.roberta.visitor.hardware.actor;
 
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
@@ -11,29 +11,31 @@ import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
-import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
-import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
-import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
+import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public interface IActorVisitor<V> extends IHardwareVisitor<V> {
+public interface IActors4AutonomousRobots<V> extends IDifferentialMotorVisitor<V>, IDisplayVisitor<V>, ICommunicationVisitor<V>, IControlVisitor<V>,
+    ILightVisitor<V>, ISpeechVisitor<V>, ISoundVisitor<V> {
 
     /**
      * visit a {@link ToneAction}.
      *
      * @param toneAction to be visited
      */
+    @Override
     default V visitToneAction(ToneAction<V> toneAction) {
         throw new DbcException("Not implemented!");
     }
@@ -43,6 +45,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param playNoteAction
      */
+    @Override
     default V visitPlayNoteAction(PlayNoteAction<V> playNoteAction) {
         throw new DbcException("Not implemented!");
     }
@@ -52,6 +55,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param volumeAction to be visited
      */
+    @Override
     default V visitVolumeAction(VolumeAction<V> volumeAction) {
         throw new DbcException("Not implemented!");
     }
@@ -61,6 +65,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param sayTextAction to be visited
      */
+    @Override
     default V visitSetLanguageAction(SetLanguageAction<V> setLanguageAction) {
         throw new DbcException("Not implemented!");
     }
@@ -70,6 +75,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param sayTextAction to be visited
      */
+    @Override
     default V visitSayTextAction(SayTextAction<V> sayTextAction) {
         throw new DbcException("Not implemented!");
     }
@@ -79,6 +85,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param playFileAction
      */
+    @Override
     default V visitPlayFileAction(PlayFileAction<V> playFileAction) {
         throw new DbcException("Not implemented!");
     }
@@ -88,6 +95,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param driveAction to be visited
      */
+    @Override
     default V visitDriveAction(DriveAction<V> driveAction) {
         throw new DbcException("Not implemented!");
     }
@@ -97,6 +105,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param turnAction to be visited
      */
+    @Override
     default V visitCurveAction(CurveAction<V> curveAction) {
         throw new DbcException("Not implemented!");
     }
@@ -106,6 +115,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param turnAction to be visited
      */
+    @Override
     default V visitTurnAction(TurnAction<V> turnAction) {
         throw new DbcException("Not implemented!");
     }
@@ -115,6 +125,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param motorGetPowerAction to be visited
      */
+    @Override
     default V visitMotorGetPowerAction(MotorGetPowerAction<V> motorGetPowerAction) {
         throw new DbcException("Not implemented!");
     }
@@ -124,6 +135,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param motorOnAction
      */
+    @Override
     default V visitMotorOnAction(MotorOnAction<V> motorOnAction) {
         throw new DbcException("Not implemented!");
     }
@@ -133,6 +145,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param motorSetPowerAction
      */
+    @Override
     default V visitMotorSetPowerAction(MotorSetPowerAction<V> motorSetPowerAction) {
         throw new DbcException("Not implemented!");
     }
@@ -142,6 +155,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param motorStopAction
      */
+    @Override
     default V visitMotorStopAction(MotorStopAction<V> motorStopAction) {
         throw new DbcException("Not implemented!");
     }
@@ -151,6 +165,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param stopAction
      */
+    @Override
     default V visitMotorDriveStopAction(MotorDriveStopAction<V> stopAction) {
         throw new DbcException("Not implemented!");
     }
@@ -160,6 +175,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param lightAction to be visited
      */
+    @Override
     default V visitLightAction(LightAction<V> lightAction) {
         throw new DbcException("Not implemented!");
     }
@@ -169,6 +185,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param lightStatusAction to be visited
      */
+    @Override
     default V visitLightStatusAction(LightStatusAction<V> lightStatusAction) {
         throw new DbcException("Not implemented!");
     }
@@ -178,6 +195,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param clearDisplayAction to be visited
      */
+    @Override
     default V visitClearDisplayAction(ClearDisplayAction<V> clearDisplayAction) {
         throw new DbcException("Not implemented!");
     }
@@ -187,6 +205,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param showPictureAction
      */
+    @Override
     default V visitShowPictureAction(ShowPictureAction<V> showPictureAction) {
         throw new DbcException("Not implemented!");
     }
@@ -196,6 +215,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param showTextAction
      */
+    @Override
     default V visitShowTextAction(ShowTextAction<V> showTextAction) {
         throw new DbcException("Not implemented!");
     }
@@ -205,6 +225,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param relayAction to be visited
      */
+    @Override
     default V visitRelayAction(RelayAction<V> relayAction) {
         throw new DbcException("Not implemented!");
     }
@@ -214,6 +235,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param bluetoothReceiveActionbluetoothReceiveAction to be visited
      */
+    @Override
     default V visitBluetoothReceiveAction(BluetoothReceiveAction<V> bluetoothReceiveAction) {
         throw new DbcException("Not implemented!");
     }
@@ -223,6 +245,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param bluetoothConnectAction to be visited
      */
+    @Override
     default V visitBluetoothConnectAction(BluetoothConnectAction<V> bluetoothConnectAction) {
         throw new DbcException("Not implemented!");
     }
@@ -232,6 +255,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param bluetoothSendAction to be visited
      */
+    @Override
     default V visitBluetoothSendAction(BluetoothSendAction<V> bluetoothSendAction) {
         throw new DbcException("Not implemented!");
     }
@@ -241,6 +265,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param bluetoothWaitForConnection to be visited
      */
+    @Override
     default V visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<V> bluetoothWaitForConnection) {
         throw new DbcException("Not implemented!");
     }
@@ -250,6 +275,7 @@ public interface IActorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param bluetoothCheckConnectAction to be visited
      */
+    @Override
     default V visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<V> bluetoothCheckConnectAction) {
         throw new DbcException("Not implemented!");
     }

@@ -15,11 +15,6 @@ import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.ActivityTask;
@@ -661,32 +656,7 @@ public abstract class AbstractWeDoVisitor<V> implements ILanguageVisitor<V>, IWe
     }
 
     @Override
-    public V visitBluetoothReceiveAction(BluetoothReceiveAction<V> bluetoothReceiveAction) {
-        throw new DbcException("Operation not supported");
-    }
-
-    @Override
-    public V visitBluetoothConnectAction(BluetoothConnectAction<V> bluetoothConnectAction) {
-        throw new DbcException("Operation not supported");
-    }
-
-    @Override
-    public V visitBluetoothSendAction(BluetoothSendAction<V> bluetoothSendAction) {
-        throw new DbcException("Operation not supported");
-    }
-
-    @Override
-    public V visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<V> bluetoothWaitForConnection) {
-        throw new DbcException("Operation not supported");
-    }
-
-    @Override
     public V visitConnectConst(ConnectConst<V> connectConst) {
-        throw new DbcException("Operation not supported");
-    }
-
-    @Override
-    public V visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<V> bluetoothCheckConnectAction) {
         throw new DbcException("Operation not supported");
     }
 

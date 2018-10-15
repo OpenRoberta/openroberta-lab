@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.action.motor;
+package de.fhg.iais.roberta.syntax.action.motor.differential;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IActorVisitor;
+import de.fhg.iais.roberta.visitor.hardware.actor.IDifferentialMotorVisitor;
 
 /**
  * This class represents the <b>robActions_motorDiff_turn</b> and <b>robActions_motorDiff_turn_for</b> blocks from Blockly into the AST (abstract syntax tree).
@@ -77,7 +77,7 @@ public class TurnAction<V> extends Action<V> {
 
     @Override
     protected V accept(IVisitor<V> visitor) {
-        return ((IActorVisitor<V>) visitor).visitTurnAction(this);
+        return ((IDifferentialMotorVisitor<V>) visitor).visitTurnAction(this);
     }
 
     /**

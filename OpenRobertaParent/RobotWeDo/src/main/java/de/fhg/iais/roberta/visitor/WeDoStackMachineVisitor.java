@@ -11,34 +11,17 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.wedo.WeDoConfiguration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
-import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
-import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
-import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
-import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.collect.WedoUsedHardwareCollectorVisitor;
@@ -65,21 +48,6 @@ public final class WeDoStackMachineVisitor<V> extends AbstractWeDoVisitor<V> {
         JSONObject generatedCode = new JSONObject();
         generatedCode.put(C.OPS, astVisitor.opArray).put(C.FUNCTION_DECLARATION, astVisitor.fctDecls);
         return generatedCode.toString(2);
-    }
-
-    @Override
-    public V visitDriveAction(DriveAction<V> driveAction) {
-        throw new DbcException("operation not supported");
-    }
-
-    @Override
-    public V visitCurveAction(CurveAction<V> curveAction) {
-        throw new DbcException("operation not supported");
-    }
-
-    @Override
-    public V visitTurnAction(TurnAction<V> turnAction) {
-        throw new DbcException("operation not supported");
     }
 
     @Override
@@ -166,40 +134,10 @@ public final class WeDoStackMachineVisitor<V> extends AbstractWeDoVisitor<V> {
     }
 
     @Override
-    public V visitVolumeAction(VolumeAction<V> volumeAction) {
-        throw new DbcException("operation not supported");
-    }
-
-    @Override
-    public V visitSetLanguageAction(SetLanguageAction<V> setLanguageAction) {
-        throw new DbcException("operation not supported");
-    }
-
-    @Override
-    public V visitSayTextAction(SayTextAction<V> sayTextAction) {
-        throw new DbcException("operation not supported");
-    }
-
-    @Override
-    public V visitPlayFileAction(PlayFileAction<V> playFileAction) {
-        throw new DbcException("operation not supported");
-    }
-
-    @Override
-    public V visitShowPictureAction(ShowPictureAction<V> showPictureAction) {
-        throw new DbcException("operation not supported");
-    }
-
-    @Override
     public V visitShowTextAction(ShowTextAction<V> showTextAction) {
         showTextAction.getMsg().visit(this);
         JSONObject o = mk(C.SHOW_TEXT_ACTION);
         return app(o);
-    }
-
-    @Override
-    public V visitMotorDriveStopAction(MotorDriveStopAction<V> stopAction) {
-        throw new DbcException("operation not supported");
     }
 
     @Override
@@ -217,16 +155,6 @@ public final class WeDoStackMachineVisitor<V> extends AbstractWeDoVisitor<V> {
         } else {
             throw new DbcException("operation not supported");
         }
-    }
-
-    @Override
-    public V visitColorSensor(ColorSensor<V> colorSensor) {
-        throw new DbcException("operation not supported");
-    }
-
-    @Override
-    public V visitLightSensor(LightSensor<V> lightSensor) {
-        throw new DbcException("operation not supported");
     }
 
     @Override
@@ -262,36 +190,6 @@ public final class WeDoStackMachineVisitor<V> extends AbstractWeDoVisitor<V> {
         } else {
             throw new DbcException("No robot name or no port!");
         }
-    }
-
-    @Override
-    public V visitIRSeekerSensor(IRSeekerSensor<V> irSeekerSensor) {
-        throw new DbcException("operation not supported");
-    }
-
-    @Override
-    public V visitTouchSensor(TouchSensor<V> touchSensor) {
-        throw new DbcException("operation not supported");
-    }
-
-    @Override
-    public V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor) {
-        throw new DbcException("operation not supported");
-    }
-
-    @Override
-    public V visitSoundSensor(SoundSensor<V> soundSensor) {
-        throw new DbcException("operation not supported");
-    }
-
-    @Override
-    public V visitMotorGetPowerAction(MotorGetPowerAction<V> motorGetPowerAction) {
-        throw new DbcException("operation not supported");
-    }
-
-    @Override
-    public V visitMotorSetPowerAction(MotorSetPowerAction<V> motorSetPowerAction) {
-        throw new DbcException("operation not supported");
     }
 
     @Override

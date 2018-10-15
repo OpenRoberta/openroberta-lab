@@ -14,43 +14,25 @@ import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.control.RelayAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
-import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
-import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
-import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
-import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.SerialWriteAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -63,7 +45,7 @@ import de.fhg.iais.roberta.visitor.hardware.IBotnrollVisitor;
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a StringBuilder.
  * <b>This representation is correct C code for Arduino.</b> <br>
  */
-public final class BotnrollCppVisitor extends AbstractArduinoVisitor implements IBotnrollVisitor<Void> {
+public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor implements IBotnrollVisitor<Void> {
     private final BotNrollConfiguration brickConfiguration;
     private final boolean isTimerSensorUsed;
 
@@ -97,11 +79,6 @@ public final class BotnrollCppVisitor extends AbstractArduinoVisitor implements 
         BotnrollCppVisitor astVisitor = new BotnrollCppVisitor(brickConfiguration, programPhrases, withWrapping ? 1 : 0);
         astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
-    }
-
-    @Override
-    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        return null;
     }
 
     @Override
@@ -151,35 +128,10 @@ public final class BotnrollCppVisitor extends AbstractArduinoVisitor implements 
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        return null;
-    }
-
-    @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         this.sb.append("one.led(" + lightAction.getMode().getValues()[0] + ");");
         return null;
 
-    }
-
-    @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        return null;
     }
 
     @Override
@@ -232,16 +184,6 @@ public final class BotnrollCppVisitor extends AbstractArduinoVisitor implements 
             motorOnAction.getParam().getDuration().getValue().visit(this);
         }
         this.sb.append(");");
-        return null;
-    }
-
-    @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
         return null;
     }
 
@@ -437,16 +379,6 @@ public final class BotnrollCppVisitor extends AbstractArduinoVisitor implements 
     }
 
     @Override
-    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        return null;
-    }
-
-    @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
         this.sb.append("bnr.readBearing()");
         return null;
@@ -455,11 +387,6 @@ public final class BotnrollCppVisitor extends AbstractArduinoVisitor implements 
     @Override
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
         this.sb.append("one.readBattery()");
-        return null;
-    }
-
-    @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         return null;
     }
 
@@ -481,11 +408,6 @@ public final class BotnrollCppVisitor extends AbstractArduinoVisitor implements 
         } else {
             this.sb.append(port + ")");
         }
-        return null;
-    }
-
-    @Override
-    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
         return null;
     }
 
@@ -607,33 +529,4 @@ public final class BotnrollCppVisitor extends AbstractArduinoVisitor implements 
         }
     }
 
-    @Override
-    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitRelayAction(RelayAction<Void> relayAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        return null;
-    }
 }

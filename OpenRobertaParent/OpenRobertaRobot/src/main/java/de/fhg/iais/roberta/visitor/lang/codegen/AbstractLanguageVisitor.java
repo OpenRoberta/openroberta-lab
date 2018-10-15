@@ -39,6 +39,7 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> {
     //TODO find more simple way of handling the loops
+    protected final String INDENT = "    ";
     protected int loopCounter = 0;
     protected LinkedList<Integer> currenLoop = new LinkedList<>();
     protected Map<Integer, Boolean> loopsLabels;
@@ -58,7 +59,7 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
         Assert.isTrue(!programPhrases.isEmpty());
         this.indentation = indentation;
         for ( int i = 0; i < indentation; i++ ) {
-            this.indent.append(INDENT);
+            this.indent.append(this.INDENT);
         }
         this.programPhrases =
             programPhrases
@@ -93,8 +94,10 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
     }
 
     private void generateProgramMainBody() {
-        this.programPhrases.stream().filter(phrase -> phrase.getKind().getCategory() != Category.METHOD || phrase.getKind().hasName("METHOD_CALL")).forEach(
-            p -> {
+        this.programPhrases
+            .stream()
+            .filter(phrase -> phrase.getKind().getCategory() != Category.METHOD || phrase.getKind().hasName("METHOD_CALL"))
+            .forEach(p -> {
                 this.nlIndent();
                 p.visit(this);
             });
@@ -102,8 +105,10 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
 
     protected void generateUserDefinedMethods() {
         this.incrIndentation();
-        this.programPhrases.stream().filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL")).forEach(
-            e -> {
+        this.programPhrases
+            .stream()
+            .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
+            .forEach(e -> {
                 e.visit(this);
                 this.sb.append("\n");
             });
@@ -271,12 +276,12 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
 
     protected void incrIndentation() {
         this.indentation += 1;
-        this.indent.append(INDENT);
+        this.indent.append(this.INDENT);
     }
 
     protected void decrIndentation() {
         this.indentation -= 1;
-        this.indent.delete(0, INDENT.length());
+        this.indent.delete(0, this.INDENT.length());
     }
 
     protected void indent() {
@@ -284,7 +289,7 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
             return;
         } else {
             for ( int i = 0; i < this.indentation; i++ ) {
-                this.sb.append(INDENT);
+                this.sb.append(this.INDENT);
             }
         }
     }

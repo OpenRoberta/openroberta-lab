@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.vorwerk.Jaxb2VorwerkConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.visitor.VorwerkPythonVisitor;
+import de.fhg.iais.roberta.visitor.codegen.VorwerkPythonVisitor;
 
 public class VorwerkCompilerWorkflow extends AbstractCompilerWorkflow {
     private static final Logger LOG = LoggerFactory.getLogger(VorwerkCompilerWorkflow.class);

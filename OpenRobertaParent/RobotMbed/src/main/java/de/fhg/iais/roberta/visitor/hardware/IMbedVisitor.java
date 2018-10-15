@@ -1,5 +1,8 @@
 package de.fhg.iais.roberta.visitor.hardware;
 
+import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
+import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
+import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
@@ -19,6 +22,8 @@ import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
 import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
 import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
@@ -31,11 +36,17 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
+import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
+import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
+import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
+import de.fhg.iais.roberta.visitor.hardware.actor.ISoundVisitor;
+import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
-public interface IMbedVisitor<V> extends IActorVisitor<V>, ISensorVisitor<V> {
+public interface IMbedVisitor<V> extends IDisplayVisitor<V>, ILightVisitor<V>, ISoundVisitor<V>, IMotorVisitor<V>, ISensorVisitor<V> {
 
     /**
      * visit a {@link DisplayTextAction}.
@@ -202,13 +213,6 @@ public interface IMbedVisitor<V> extends IActorVisitor<V>, ISensorVisitor<V> {
     V visitSingleMotorStopAction(SingleMotorStopAction<V> singleMotorStopAction);
 
     /**
-     * visit a {@link SingleMotorStopAction}.
-     *
-     * @param singleMotorStopAction phrase to be visited
-     */
-    V visitRadioRssiSensor(RadioRssiSensor<V> radioRssiSensor);
-
-    /**
      * visit a {@link AccelerometerSensor}.
      *
      * @param accelerometerSensor phrase to be visited
@@ -238,14 +242,41 @@ public interface IMbedVisitor<V> extends IActorVisitor<V>, ISensorVisitor<V> {
      */
     V visitFourDigitDisplayClearAction(FourDigitDisplayClearAction<V> fourDigitDisplayClearAction);
 
-    /**
-     * visit a {@link LedBarSetAction}.
-     *
-     * @param LedBarSetAction phrase to be visited
-     */
-    V visitLedBarSetAction(LedBarSetAction<V> ledBarSetAction);
-
     V visitBothMotorsOnAction(BothMotorsOnAction<V> bothMotorsOnAction);
 
     V visitBothMotorsStopAction(BothMotorsStopAction<V> bothMotorsStopAction);
+
+    @Override
+    default V visitShowPictureAction(ShowPictureAction<V> showPictureAction) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    default V visitShowTextAction(ShowTextAction<V> showTextAction) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    default V visitVolumeAction(VolumeAction<V> volumeAction) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    default V visitPlayFileAction(PlayFileAction<V> playFileAction) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    default V visitLightAction(LightAction<V> lightAction) {
+        throw new DbcException("Not supported!");
+    }
+
+    default V visitRadioRssiSensor(RadioRssiSensor<V> radioRssiSensor) {
+        throw new DbcException("Not supported!");
+    }
+
+    default V visitLedBarSetAction(LedBarSetAction<V> ledBarSetAction) {
+        throw new DbcException("Not supported!");
+    }
+
 }

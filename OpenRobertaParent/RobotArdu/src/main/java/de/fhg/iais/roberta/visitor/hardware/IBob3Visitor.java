@@ -9,8 +9,10 @@ import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.GetSampleSensor;
+import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
+import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
-public interface IBob3Visitor<V> extends ICommonArduinoVisitor<V> {
+public interface IBob3Visitor<V> extends ILightVisitor<V>, ISensorVisitor<V> {
 
     V visitBob3CodePadSensor(CodePadSensor<V> codePadSensor);
 
@@ -26,8 +28,8 @@ public interface IBob3Visitor<V> extends ICommonArduinoVisitor<V> {
 
     V visitRecallAction(RecallAction<V> recallAction);
 
-    V visitLedOnAction(LedOnAction<V> ledOnAction);
-
     V visitLedOffAction(LedOffAction<V> ledOffAction);
+
+    V visitLedOnAction(LedOnAction<V> ledOnAction);
 
 }

@@ -36,11 +36,13 @@ import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
+import de.fhg.iais.roberta.visitor.hardware.actor.ISpeechVisitor;
+import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
-public interface INaoVisitor<V> extends IActorVisitor<V>, ISensorVisitor<V> {
+public interface INaoVisitor<V> extends ISpeechVisitor<V>, ISensorVisitor<V> {
 
     /**
      * visit a {@link SetMode}.

@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.nao.Jaxb2NaoConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.visitor.NaoPythonVisitor;
+import de.fhg.iais.roberta.visitor.codegen.NaoPythonVisitor;
 
 public class NaoCompilerWorkflow extends AbstractCompilerWorkflow {
 

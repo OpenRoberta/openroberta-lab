@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IActorVisitor;
+import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
 
 public class LightAction<V> extends Action<V> {
     private final Expr<V> rgbLedColor;
@@ -104,7 +104,7 @@ public class LightAction<V> extends Action<V> {
 
     @Override
     protected V accept(IVisitor<V> visitor) {
-        return ((IActorVisitor<V>) visitor).visitLightAction(this);
+        return ((ILightVisitor<V>) visitor).visitLightAction(this);
     }
 
     /**
@@ -131,13 +131,14 @@ public class LightAction<V> extends Action<V> {
                 ? helper.extractField(fields, BlocklyConstants.SWITCH_BLINK, BlocklyConstants.DEFAULT)
                 : helper.extractField(fields, BlocklyConstants.SWITCH_STATE, BlocklyConstants.DEFAULT);
         String color = helper.extractField(fields, BlocklyConstants.SWITCH_COLOR, BlocklyConstants.DEFAULT);
-        return LightAction.make(
-            factory.getActorPort(port),
-            factory.getBrickLedColor(color),
-            factory.getBlinkMode(mode),
-            helper.convertPhraseToExpr(ledColor),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return LightAction
+            .make(
+                factory.getActorPort(port),
+                factory.getBrickLedColor(color),
+                factory.getBlinkMode(mode),
+                helper.convertPhraseToExpr(ledColor),
+                helper.extractBlockProperties(block),
+                helper.extractComment(block));
     }
 
     @Override

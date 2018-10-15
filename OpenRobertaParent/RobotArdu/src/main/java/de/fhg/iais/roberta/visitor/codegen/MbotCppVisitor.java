@@ -13,28 +13,25 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.control.RelayAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
-import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
-import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
-import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.SerialWriteAction;
+import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.expressions.arduino.LedMatrix;
@@ -67,7 +64,7 @@ import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a hussentation of a phrase to a StringBuilder. <b>This
  * representation is correct C code for Arduino.</b> <br>
  */
-public final class MbotCppVisitor extends AbstractArduinoVisitor implements IMbotVisitor<Void> {
+public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implements IMbotVisitor<Void> {
     private final MbotConfiguration brickConfiguration;
     private final boolean isTimerSensorUsed;
 
@@ -511,12 +508,13 @@ public final class MbotCppVisitor extends AbstractArduinoVisitor implements IMbo
                     this.sb.append("MeDCMotor " + usedActor.getPort().getCodeName() + "(" + usedActor.getPort().getOraName() + ");\n");
                     break;
                 case DIFFERENTIAL_DRIVE:
-                    this.sb.append(
-                        "MeDrive myDrive("
-                            + this.brickConfiguration.getLeftMotorPort().getOraName()
-                            + ", "
-                            + this.brickConfiguration.getRightMotorPort().getOraName()
-                            + ");\n");
+                    this.sb
+                        .append(
+                            "MeDrive myDrive("
+                                + this.brickConfiguration.getLeftMotorPort().getOraName()
+                                + ", "
+                                + this.brickConfiguration.getRightMotorPort().getOraName()
+                                + ");\n");
                     break;
                 case EXTERNAL_LED:
                     this.sb.append("MeRGBLed rgbled_" + usedActor.getPort().getOraName() + "(" + usedActor.getPort().getOraName() + ", 4);\n");
@@ -656,6 +654,18 @@ public final class MbotCppVisitor extends AbstractArduinoVisitor implements IMbo
         return null;
     }
 
+    @Override
+    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     //    @Override
     //    public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
     //        String valuesToDisplay = displayImageAction.getValuesToDisplay().toString();
@@ -707,32 +717,5 @@ public final class MbotCppVisitor extends AbstractArduinoVisitor implements IMbo
     //        this.sb.append(");");
     //        return null;
     //    }
-
-    @Override
-    public Void visitRelayAction(RelayAction<Void> relayAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        return null;
-    }
 
 }

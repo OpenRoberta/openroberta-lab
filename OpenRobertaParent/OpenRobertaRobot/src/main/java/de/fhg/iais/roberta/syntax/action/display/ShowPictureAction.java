@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IActorVisitor;
+import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
 
 /**
  * This class represents the <b>robActions_display_picture</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -84,7 +84,7 @@ public class ShowPictureAction<V> extends Action<V> {
 
     @Override
     protected V accept(IVisitor<V> visitor) {
-        return ((IActorVisitor<V>) visitor).visitShowPictureAction(this);
+        return ((IDisplayVisitor<V>) visitor).visitShowPictureAction(this);
     }
 
     /**

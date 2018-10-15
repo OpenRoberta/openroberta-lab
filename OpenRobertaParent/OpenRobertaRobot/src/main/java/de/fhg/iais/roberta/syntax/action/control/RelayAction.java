@@ -18,7 +18,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IActorVisitor;
+import de.fhg.iais.roberta.visitor.hardware.actor.IControlVisitor;
 
 public class RelayAction<V> extends Action<V> {
     private final IActorPort port;
@@ -66,7 +66,7 @@ public class RelayAction<V> extends Action<V> {
 
     @Override
     protected V accept(IVisitor<V> visitor) {
-        return ((IActorVisitor<V>) visitor).visitRelayAction(this);
+        return ((IControlVisitor<V>) visitor).visitRelayAction(this);
     }
 
     /**

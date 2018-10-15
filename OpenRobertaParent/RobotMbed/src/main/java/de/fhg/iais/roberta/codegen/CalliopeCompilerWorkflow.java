@@ -24,7 +24,7 @@ import de.fhg.iais.roberta.transformer.mbed.Jaxb2CalliopeConfigurationTransforme
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.visitor.CalliopeCppVisitor;
+import de.fhg.iais.roberta.visitor.codegen.CalliopeCppVisitor;
 import de.fhg.iais.roberta.visitor.collect.MbedUsedHardwareCollectorVisitor;
 
 public class CalliopeCompilerWorkflow extends AbstractCompilerWorkflow {

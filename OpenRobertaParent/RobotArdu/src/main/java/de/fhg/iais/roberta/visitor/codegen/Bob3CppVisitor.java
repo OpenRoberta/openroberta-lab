@@ -5,28 +5,8 @@ import java.util.Set;
 
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.control.RelayAction;
-import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
-import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
-import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
-import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
-import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
-import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
-import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.BodyLEDAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RecallAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
@@ -52,7 +32,7 @@ import de.fhg.iais.roberta.visitor.hardware.IBob3Visitor;
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a StringBuilder.
  * <b>This representation is correct C code for Arduino.</b> <br>
  */
-public final class Bob3CppVisitor extends AbstractArduinoVisitor implements IBob3Visitor<Void> {
+public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implements IBob3Visitor<Void> {
     private final boolean isTimerSensorUsed;
     private final Set<UsedSensor> usedTimer;
 
@@ -254,92 +234,6 @@ public final class Bob3CppVisitor extends AbstractArduinoVisitor implements IBob
     }
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
         this.sb.append("myBob.setLed(");
         if ( ledOffAction.getSide().equals("Left") ) {
@@ -395,23 +289,6 @@ public final class Bob3CppVisitor extends AbstractArduinoVisitor implements IBob
     @Override
     public Void visitRecallAction(RecallAction<Void> recallAction) {
         this.sb.append("recall()");
-        return null;
-    }
-
-    @Override
-    public Void visitRelayAction(RelayAction<Void> relayAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 

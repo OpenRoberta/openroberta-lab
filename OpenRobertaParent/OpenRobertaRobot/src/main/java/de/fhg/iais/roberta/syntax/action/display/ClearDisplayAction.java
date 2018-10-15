@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IActorVisitor;
+import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
 
 /**
  * This class represents the <b>robActions_display_clear</b> block from Blockly into the AST (abstract syntax tree).
@@ -48,7 +48,7 @@ public final class ClearDisplayAction<V> extends Action<V> {
 
     @Override
     protected V accept(IVisitor<V> visitor) {
-        return ((IActorVisitor<V>) visitor).visitClearDisplayAction(this);
+        return ((IDisplayVisitor<V>) visitor).visitClearDisplayAction(this);
     }
 
     /**

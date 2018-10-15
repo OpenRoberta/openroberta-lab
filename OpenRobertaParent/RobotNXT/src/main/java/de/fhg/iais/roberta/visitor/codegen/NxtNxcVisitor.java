@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.visitor;
+package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
 import java.util.Map.Entry;
@@ -21,27 +21,21 @@ import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
-import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
-import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
-import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
@@ -70,19 +64,16 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.collect.NxtUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.INxtVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
@@ -382,12 +373,6 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         return null;
     }
 
-    // TODO add uploading pictures to NXT before implementing this.
-    @Override
-    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        return null;
-    }
-
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         String methodName;
@@ -484,21 +469,6 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
             default:
                 throw new DbcException("Invalid volume action mode!");
         }
-        return null;
-    }
-
-    @Override
-    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         return null;
     }
 
@@ -848,16 +818,6 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        return null;
-    }
-
-    @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         String timerNumber = timerSensor.getPort().getOraName();
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
@@ -884,12 +844,6 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
         this.sb.append("SensorUS(" + ultrasonicSensor.getPort().getCodeName() + ")");
-        return null;
-    }
-
-    @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-
         return null;
     }
 
@@ -1226,11 +1180,6 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
-        return null;
-    }
-
-    @Override
     public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
         String methodName;
 
@@ -1252,11 +1201,6 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         this.sb.append(", ");
         bluetoothSendAction.getMsg().visit(this);
         this.sb.append(");");
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
         return null;
     }
 
@@ -1360,8 +1304,4 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         }
     }
 
-    @Override
-    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        return null;
-    }
 }

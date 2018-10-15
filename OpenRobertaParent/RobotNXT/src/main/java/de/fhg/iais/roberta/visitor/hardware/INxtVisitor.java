@@ -1,5 +1,45 @@
 package de.fhg.iais.roberta.visitor.hardware;
 
-public interface INxtVisitor<V> extends ISensorVisitor<V>, IActorVisitor<V> {
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
+import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
+import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
+import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.hardware.actor.IActors4AutonomousRobots;
+import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
+
+public interface INxtVisitor<V> extends ISensorVisitor<V>, IActors4AutonomousRobots<V> {
+    // TODO add uploading pictures to NXT before implementing this.
+    @Override
+    default V visitShowPictureAction(ShowPictureAction<V> showPictureAction) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    default V visitSetLanguageAction(SetLanguageAction<V> setLanguageAction) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    default V visitSayTextAction(SayTextAction<V> sayTextAction) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    default V visitLightStatusAction(LightStatusAction<V> lightStatusAction) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    default V visitBluetoothConnectAction(BluetoothConnectAction<V> bluetoothConnectAction) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    default V visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<V> bluetoothWaitForConnection) {
+        throw new DbcException("Not supported!");
+    }
 
 }

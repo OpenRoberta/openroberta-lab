@@ -2,8 +2,6 @@ package de.fhg.iais.roberta.visitor.validate;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.action.control.RelayAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.expressions.arduino.LedMatrix;
@@ -56,16 +54,6 @@ public final class MbotBrickValidatorVisitor extends AbstractBrickValidatorVisit
     }
 
     @Override
-    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
-        return null;
-    }
-
-    @Override
     public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
         // TODO Auto-generated method stub
         return null;
@@ -76,4 +64,5 @@ public final class MbotBrickValidatorVisitor extends AbstractBrickValidatorVisit
         // TODO Auto-generated method stub
         return null;
     }
+
 }

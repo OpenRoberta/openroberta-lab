@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.action.sound;
+package de.fhg.iais.roberta.syntax.action.speech;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IActorVisitor;
+import de.fhg.iais.roberta.visitor.hardware.actor.ISpeechVisitor;
 
 /**
  * This class represents the <b>naoActions_sayText</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -79,7 +79,7 @@ public class SayTextAction<V> extends Action<V> {
 
     @Override
     protected V accept(IVisitor<V> visitor) {
-        return ((IActorVisitor<V>) visitor).visitSayTextAction(this);
+        return ((ISpeechVisitor<V>) visitor).visitSayTextAction(this);
 
     }
 
@@ -96,12 +96,13 @@ public class SayTextAction<V> extends Action<V> {
         Phrase<V> speed = helper.extractValue(values, new ExprParam(BlocklyConstants.VOICESPEED, BlocklyType.NUMBER_INT));
         Phrase<V> pitch = helper.extractValue(values, new ExprParam(BlocklyConstants.VOICEPITCH, BlocklyType.NUMBER_INT));
 
-        return SayTextAction.make(
-            helper.convertPhraseToExpr(msg),
-            helper.convertPhraseToExpr(speed),
-            helper.convertPhraseToExpr(pitch),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return SayTextAction
+            .make(
+                helper.convertPhraseToExpr(msg),
+                helper.convertPhraseToExpr(speed),
+                helper.convertPhraseToExpr(pitch),
+                helper.extractBlockProperties(block),
+                helper.extractComment(block));
     }
 
     @Override

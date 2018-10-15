@@ -1,29 +1,19 @@
-package de.fhg.iais.roberta.visitor;
+package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.vorwerk.VorwerkConfiguration;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
-import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
-import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
-import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
-import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
-import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.vorwerk.BrushOff;
 import de.fhg.iais.roberta.syntax.action.vorwerk.BrushOn;
 import de.fhg.iais.roberta.syntax.action.vorwerk.SideBrush;
@@ -56,6 +46,7 @@ import de.fhg.iais.roberta.syntax.sensor.vorwerk.DropOffSensor;
 import de.fhg.iais.roberta.syntax.sensor.vorwerk.WallSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.collect.VorwerkUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IVorwerkVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
@@ -129,107 +120,8 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        switch ( volumeAction.getMode() ) {
-            case SET:
-                this.sb.append("hal.setVolume(");
-                volumeAction.getVolume().visit(this);
-                this.sb.append(")");
-                break;
-            case GET:
-                this.sb.append("hal.getVolume()");
-                break;
-            default:
-                throw new DbcException("Invalid volume action mode!");
-        }
-        return null;
-    }
-
-    private String getLanguageString(ILanguage language) {
-        switch ( (Language) language ) {
-            case GERMAN:
-                return "de";
-            case ENGLISH:
-                return "en";
-            case FRENCH:
-                return "fr";
-            case SPANISH:
-                return "es";
-            case ITALIAN:
-                return "it";
-            case DUTCH:
-                return "nl";
-            case FINNISH:
-                return "fi";
-            case POLISH:
-                return "pl";
-            case RUSSIAN:
-                return "ru";
-            case TURKISH:
-                return "tu";
-            case CZECH:
-                return "cs";
-            case PORTUGUESE:
-                return "pt-pt";
-            case DANISH:
-                return "da";
-            default:
-                return "en";
-        }
-    }
-
-    @Override
-    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
-        this.sb.append("hal.setLanguage(\"");
-        this.sb.append(this.getLanguageString(setLanguageAction.getLanguage()));
-        this.sb.append("\")");
-        return null;
-    }
-
-    @Override
-    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        this.sb.append("hal.sayText(");
-        if ( !sayTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
-            this.sb.append("str(");
-            sayTextAction.getMsg().visit(this);
-            this.sb.append(")");
-        } else {
-            sayTextAction.getMsg().visit(this);
-        }
-        BlockType emptyBlock = BlockTypeContainer.getByName("EMPTY_EXPR");
-        if ( !(sayTextAction.getSpeed().getKind().equals(emptyBlock) && sayTextAction.getPitch().getKind().equals(emptyBlock)) ) {
-            this.sb.append(",");
-            sayTextAction.getSpeed().visit(this);
-            this.sb.append(",");
-            sayTextAction.getPitch().visit(this);
-        }
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
         this.sb.append("hal.play_sound(" + playFileAction.getFileName() + ")");
-        return null;
-    }
-
-    @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
-        this.sb.append("hal.playTone(");
-        toneAction.getFrequency().visit(this);
-        this.sb.append(", ");
-        toneAction.getDuration().visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-        this.sb.append("hal.playTone(float(");
-        this.sb.append(playNoteAction.getFrequency());
-        this.sb.append("), float(");
-        this.sb.append(playNoteAction.getDuration());
-        this.sb.append("))");
         return null;
     }
 
@@ -240,18 +132,6 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
         this.sb.append(", ");
         motorOnAction.getDurationValue().visit(this);
         this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-
-        return null;
-    }
-
-    @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-
         return null;
     }
 
@@ -311,19 +191,17 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
+        return null;
+    }
 
+    @Override
+    public Void visitCurveAction(CurveAction<Void> curveAction) {
         return null;
     }
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
         this.sb.append("hal.stop_motors()");
-        return null;
-    }
-
-    @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
-
         return null;
     }
 
@@ -681,17 +559,17 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
         }
         this.sb.append("\n\n");
         this.sb.append("def main():\n");
-        this.sb.append(INDENT).append("try:\n");
-        this.sb.append(INDENT).append(INDENT).append("run()\n");
-        this.sb.append(INDENT).append("except Exception as e:\n");
-        this.sb.append(INDENT).append(INDENT).append("print('Fehler im Vorwerk')\n");
-        this.sb.append(INDENT).append(INDENT).append("print(e.__class__.__name__)\n");
+        this.sb.append(this.INDENT).append("try:\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("run()\n");
+        this.sb.append(this.INDENT).append("except Exception as e:\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("print('Fehler im Vorwerk')\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("print(e.__class__.__name__)\n");
         // FIXME: we can only print about 30 chars
-        this.sb.append(INDENT).append(INDENT).append("print(e)");
+        this.sb.append(this.INDENT).append(this.INDENT).append("print(e)");
 
         this.sb.append("\n");
         this.sb.append("if __name__ == \"__main__\":\n");
-        this.sb.append(INDENT).append("main()");
+        this.sb.append(this.INDENT).append("main()");
     }
 
 }

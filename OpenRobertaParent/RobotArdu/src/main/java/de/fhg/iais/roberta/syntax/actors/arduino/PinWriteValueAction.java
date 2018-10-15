@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.ICommonArduinoVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
 public class PinWriteValueAction<V> extends Action<V> {
     private final IPinValue pinValue;
@@ -90,12 +90,13 @@ public class PinWriteValueAction<V> extends Action<V> {
         String port = helper.extractField(fields, BlocklyConstants.PIN);
         String pinvalue = helper.extractField(fields, BlocklyConstants.VALUETYPE);
         Phrase<V> value = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER_INT));
-        return PinWriteValueAction.make(
-            factory.getPinGetValueSensorMode(pinvalue),
-            factory.getActorPort(port),
-            helper.convertPhraseToExpr(value),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return PinWriteValueAction
+            .make(
+                factory.getPinGetValueSensorMode(pinvalue),
+                factory.getActorPort(port),
+                helper.convertPhraseToExpr(value),
+                helper.extractBlockProperties(block),
+                helper.extractComment(block));
     }
 
     @Override
@@ -113,7 +114,7 @@ public class PinWriteValueAction<V> extends Action<V> {
 
     @Override
     protected V accept(IVisitor<V> visitor) {
-        return ((ICommonArduinoVisitor<V>) visitor).visitPinWriteValueAction(this);
+        return ((IArduinoVisitor<V>) visitor).visitPinWriteValueAction(this);
     }
 
 }

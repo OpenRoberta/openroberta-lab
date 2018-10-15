@@ -8,8 +8,8 @@ import de.fhg.iais.roberta.factory.Calliope2016Factory;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.visitor.CalliopeCppVisitor;
-import de.fhg.iais.roberta.visitor.MbedSimVisitor;
+import de.fhg.iais.roberta.visitor.codegen.CalliopeCppVisitor;
+import de.fhg.iais.roberta.visitor.codegen.MbedSimVisitor;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.

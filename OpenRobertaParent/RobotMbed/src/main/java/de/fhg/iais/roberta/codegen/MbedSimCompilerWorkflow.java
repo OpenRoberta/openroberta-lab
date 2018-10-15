@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.mbed.Jaxb2CalliopeConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.visitor.MbedSimVisitor;
+import de.fhg.iais.roberta.visitor.codegen.MbedSimVisitor;
 
 public class MbedSimCompilerWorkflow extends AbstractCompilerWorkflow {
 

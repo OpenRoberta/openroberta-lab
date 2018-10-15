@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.visitor;
+package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,12 +48,8 @@ import de.fhg.iais.roberta.syntax.action.nao.TurnDegrees;
 import de.fhg.iais.roberta.syntax.action.nao.WalkAsync;
 import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
-import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
-import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
-import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
-import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
-import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
+import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
@@ -94,6 +90,7 @@ import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.collect.NaoUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
@@ -908,26 +905,6 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        return null;
-    }
-
-    @Override
     public Void visitPlayFile(PlayFile<Void> playFile) {
         this.sb.append("h.playFile(");
         playFile.getMsg().visit(this);
@@ -1328,18 +1305,18 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         }
         this.sb.append("\n\n");
         this.sb.append("def main():\n");
-        this.sb.append(INDENT).append("try:\n");
-        this.sb.append(INDENT).append(INDENT).append("run()\n");
-        this.sb.append(INDENT).append("except Exception as e:\n");
-        this.sb.append(INDENT).append(INDENT).append("h.say(\"Error!\" + str(e))\n");
-        this.sb.append(INDENT).append("finally:\n");
+        this.sb.append(this.INDENT).append("try:\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("run()\n");
+        this.sb.append(this.INDENT).append("except Exception as e:\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("h.say(\"Error!\" + str(e))\n");
+        this.sb.append(this.INDENT).append("finally:\n");
         this.removeSensors();
 
-        this.sb.append(INDENT).append(INDENT).append("h.myBroker.shutdown()");
+        this.sb.append(this.INDENT).append(this.INDENT).append("h.myBroker.shutdown()");
 
         this.sb.append("\n\n");
         this.sb.append("if __name__ == \"__main__\":\n");
-        this.sb.append(INDENT).append("main()");
+        this.sb.append(this.INDENT).append("main()");
     }
 
     @Override
@@ -1403,16 +1380,16 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                 case BlocklyConstants.INFRARED:
                     break;
                 case BlocklyConstants.ULTRASONIC:
-                    this.sb.append(INDENT).append(INDENT).append("h.sonar.unsubscribe(\"OpenRobertaApp\")\n");
+                    this.sb.append(this.INDENT).append(this.INDENT).append("h.sonar.unsubscribe(\"OpenRobertaApp\")\n");
                     break;
                 case BlocklyConstants.DETECT_MARK:
-                    this.sb.append(INDENT).append(INDENT).append("h.mark.unsubscribe(\"RobertaLab\")\n");
+                    this.sb.append(this.INDENT).append(this.INDENT).append("h.mark.unsubscribe(\"RobertaLab\")\n");
                     break;
                 case BlocklyConstants.NAO_FACE:
-                    this.sb.append(INDENT).append(INDENT).append("faceRecognitionModule.unsubscribe()\n");
+                    this.sb.append(this.INDENT).append(this.INDENT).append("faceRecognitionModule.unsubscribe()\n");
                     break;
                 case BlocklyConstants.NAO_SPEECH:
-                    this.sb.append(INDENT).append(INDENT).append("speechRecognitionModule.unsubscribe()\n");
+                    this.sb.append(this.INDENT).append(this.INDENT).append("speechRecognitionModule.unsubscribe()\n");
                 case BlocklyConstants.LIGHT:
                 case BlocklyConstants.COMPASS:
                 case BlocklyConstants.SOUND:

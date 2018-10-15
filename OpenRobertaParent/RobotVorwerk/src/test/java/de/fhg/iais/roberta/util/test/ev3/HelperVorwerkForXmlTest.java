@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
-import de.fhg.iais.roberta.visitor.VorwerkPythonVisitor;
+import de.fhg.iais.roberta.visitor.codegen.VorwerkPythonVisitor;
 
 public class HelperVorwerkForXmlTest extends AbstractHelperForXmlTest {
 

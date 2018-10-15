@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.action.motor;
+package de.fhg.iais.roberta.syntax.action.motor.differential;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IActorVisitor;
+import de.fhg.iais.roberta.visitor.hardware.actor.IDifferentialMotorVisitor;
 
 /**
  * This class represents the <b>robActions_motor_on_for</b> and <b>robActions_motor_on</b> blocks from Blockly into the AST (abstract syntax tree). Object from
@@ -35,8 +35,8 @@ import de.fhg.iais.roberta.visitor.hardware.IActorVisitor;
 public class CurveAction<V> extends Action<V> {
 
     private final IDriveDirection direction;
-    private MotionParam<V> paramLeft;
-    private MotionParam<V> paramRight;
+    private final MotionParam<V> paramLeft;
+    private final MotionParam<V> paramRight;
 
     private CurveAction(
         IDriveDirection direction,
@@ -96,7 +96,7 @@ public class CurveAction<V> extends Action<V> {
 
     @Override
     protected V accept(IVisitor<V> visitor) {
-        return ((IActorVisitor<V>) visitor).visitCurveAction(this);
+        return ((IDifferentialMotorVisitor<V>) visitor).visitCurveAction(this);
     }
 
     /**

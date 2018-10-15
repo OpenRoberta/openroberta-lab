@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IActorVisitor;
+import de.fhg.iais.roberta.visitor.hardware.actor.ISoundVisitor;
 
 /**
  * This class represents the <b>robActions_play_tone</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -84,7 +84,7 @@ public class ToneAction<V> extends Action<V> {
 
     @Override
     protected V accept(IVisitor<V> visitor) {
-        return ((IActorVisitor<V>) visitor).visitToneAction(this);
+        return ((ISoundVisitor<V>) visitor).visitToneAction(this);
     }
 
     /**
@@ -101,12 +101,13 @@ public class ToneAction<V> extends Action<V> {
         Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.FREQUENCE, BlocklyType.NUMBER_INT));
         Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.DURATION, BlocklyType.NUMBER_INT));
         String port = helper.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.NO_PORT);
-        return ToneAction.make(
-            helper.convertPhraseToExpr(left),
-            helper.convertPhraseToExpr(right),
-            factory.getActorPort(port),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return ToneAction
+            .make(
+                helper.convertPhraseToExpr(left),
+                helper.convertPhraseToExpr(right),
+                factory.getActorPort(port),
+                helper.extractBlockProperties(block),
+                helper.extractComment(block));
     }
 
     @Override
