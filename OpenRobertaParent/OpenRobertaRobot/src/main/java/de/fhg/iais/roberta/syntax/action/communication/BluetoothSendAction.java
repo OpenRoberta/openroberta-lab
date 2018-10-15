@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.ICommunicationVisitor;
+import de.fhg.iais.roberta.visitor.hardware.actor.IBluetoothVisitor;
 
 public class BluetoothSendAction<V> extends Action<V> {
     private final Expr<V> _connection;
@@ -85,7 +85,7 @@ public class BluetoothSendAction<V> extends Action<V> {
 
     @Override
     protected V accept(IVisitor<V> visitor) {
-        return ((ICommunicationVisitor<V>) visitor).visitBluetoothSendAction(this);
+        return ((IBluetoothVisitor<V>) visitor).visitBluetoothSendAction(this);
     }
 
     /**

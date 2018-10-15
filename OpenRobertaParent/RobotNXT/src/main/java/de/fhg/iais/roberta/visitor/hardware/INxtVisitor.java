@@ -4,26 +4,15 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
-import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.visitor.hardware.actor.IActors4AutonomousRobots;
+import de.fhg.iais.roberta.visitor.hardware.actor.IActors4AutonomousDriveRobots;
+import de.fhg.iais.roberta.visitor.hardware.actor.IBluetoothVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
-public interface INxtVisitor<V> extends ISensorVisitor<V>, IActors4AutonomousRobots<V> {
+public interface INxtVisitor<V> extends ISensorVisitor<V>, IActors4AutonomousDriveRobots<V>, IBluetoothVisitor<V> {
     // TODO add uploading pictures to NXT before implementing this.
     @Override
     default V visitShowPictureAction(ShowPictureAction<V> showPictureAction) {
-        throw new DbcException("Not supported!");
-    }
-
-    @Override
-    default V visitSetLanguageAction(SetLanguageAction<V> setLanguageAction) {
-        throw new DbcException("Not supported!");
-    }
-
-    @Override
-    default V visitSayTextAction(SayTextAction<V> sayTextAction) {
         throw new DbcException("Not supported!");
     }
 

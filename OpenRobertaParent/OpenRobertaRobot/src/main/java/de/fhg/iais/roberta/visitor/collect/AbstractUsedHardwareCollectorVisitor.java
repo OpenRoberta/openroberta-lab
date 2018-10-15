@@ -60,11 +60,11 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IActors4AutonomousRobots;
+import de.fhg.iais.roberta.visitor.hardware.actor.IAllActorsVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractCollectorVisitor;
 
-public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractCollectorVisitor implements ISensorVisitor<Void>, IActors4AutonomousRobots<Void> {
+public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractCollectorVisitor implements ISensorVisitor<Void>, IAllActorsVisitor<Void> {
     protected final Set<UsedSensor> usedSensors = new LinkedHashSet<>();
     protected final Set<UsedActor> usedActors = new LinkedHashSet<>();
 

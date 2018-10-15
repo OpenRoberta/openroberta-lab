@@ -1,11 +1,5 @@
 package de.fhg.iais.roberta.visitor.hardware.actor;
 
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
-import de.fhg.iais.roberta.syntax.action.control.RelayAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
@@ -23,12 +17,9 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
-import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public interface IActors4AutonomousRobots<V> extends IDifferentialMotorVisitor<V>, IDisplayVisitor<V>, ICommunicationVisitor<V>, IControlVisitor<V>,
-    ILightVisitor<V>, ISpeechVisitor<V>, ISoundVisitor<V> {
+public interface IActors4AutonomousDriveRobots<V> extends IDifferentialMotorVisitor<V>, IDisplayVisitor<V>, ILightVisitor<V>, ISoundVisitor<V> {
 
     /**
      * visit a {@link ToneAction}.
@@ -57,26 +48,6 @@ public interface IActors4AutonomousRobots<V> extends IDifferentialMotorVisitor<V
      */
     @Override
     default V visitVolumeAction(VolumeAction<V> volumeAction) {
-        throw new DbcException("Not implemented!");
-    }
-
-    /**
-     * visit a {@link SayTextAction}.
-     *
-     * @param sayTextAction to be visited
-     */
-    @Override
-    default V visitSetLanguageAction(SetLanguageAction<V> setLanguageAction) {
-        throw new DbcException("Not implemented!");
-    }
-
-    /**
-     * visit a {@link SayTextAction}.
-     *
-     * @param sayTextAction to be visited
-     */
-    @Override
-    default V visitSayTextAction(SayTextAction<V> sayTextAction) {
         throw new DbcException("Not implemented!");
     }
 
@@ -217,66 +188,6 @@ public interface IActors4AutonomousRobots<V> extends IDifferentialMotorVisitor<V
      */
     @Override
     default V visitShowTextAction(ShowTextAction<V> showTextAction) {
-        throw new DbcException("Not implemented!");
-    }
-
-    /**
-     * visit a {@link RelayAction}.
-     *
-     * @param relayAction to be visited
-     */
-    @Override
-    default V visitRelayAction(RelayAction<V> relayAction) {
-        throw new DbcException("Not implemented!");
-    }
-
-    /**
-     * visit a {@link BluetoothRecieveAction}.
-     *
-     * @param bluetoothReceiveActionbluetoothReceiveAction to be visited
-     */
-    @Override
-    default V visitBluetoothReceiveAction(BluetoothReceiveAction<V> bluetoothReceiveAction) {
-        throw new DbcException("Not implemented!");
-    }
-
-    /**
-     * visit a {@link BluetoothConnectAction}.
-     *
-     * @param bluetoothConnectAction to be visited
-     */
-    @Override
-    default V visitBluetoothConnectAction(BluetoothConnectAction<V> bluetoothConnectAction) {
-        throw new DbcException("Not implemented!");
-    }
-
-    /**
-     * visit a {@link BluetoothSendAction}.
-     *
-     * @param bluetoothSendAction to be visited
-     */
-    @Override
-    default V visitBluetoothSendAction(BluetoothSendAction<V> bluetoothSendAction) {
-        throw new DbcException("Not implemented!");
-    }
-
-    /**
-     * visit a {@link BluetoothWaitForConnectionAction}.
-     *
-     * @param bluetoothWaitForConnection to be visited
-     */
-    @Override
-    default V visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<V> bluetoothWaitForConnection) {
-        throw new DbcException("Not implemented!");
-    }
-
-    /**
-     * visit a {@link BluetoothCheckConnectAction}.
-     *
-     * @param bluetoothCheckConnectAction to be visited
-     */
-    @Override
-    default V visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<V> bluetoothCheckConnectAction) {
         throw new DbcException("Not implemented!");
     }
 

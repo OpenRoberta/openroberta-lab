@@ -68,10 +68,10 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.hardware.actor.IActors4AutonomousRobots;
+import de.fhg.iais.roberta.visitor.hardware.actor.IAllActorsVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
-public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorVisitor implements IActors4AutonomousRobots<Void>, ISensorVisitor<Void> {
+public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorVisitor implements IAllActorsVisitor<Void>, ISensorVisitor<Void> {
 
     protected ArrayList<ArrayList<Phrase<Void>>> checkedProgram;
     protected int errorCount = 0;

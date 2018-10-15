@@ -104,7 +104,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo.Severity;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IActors4AutonomousRobots;
+import de.fhg.iais.roberta.visitor.hardware.actor.IAllActorsVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
@@ -112,7 +112,7 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
  * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
-public class TypecheckVisitor implements ILanguageVisitor<BlocklyType>, ISensorVisitor<BlocklyType>, IActors4AutonomousRobots<BlocklyType> {
+public class TypecheckVisitor implements ILanguageVisitor<BlocklyType>, ISensorVisitor<BlocklyType>, IAllActorsVisitor<BlocklyType> {
     private final int ERROR_LIMIT_FOR_TYPECHECK = 10;
 
     private final Phrase<BlocklyType> phrase;
@@ -741,7 +741,7 @@ public class TypecheckVisitor implements ILanguageVisitor<BlocklyType>, ISensorV
 
     @Override
     public BlocklyType visitStmtTextComment(StmtTextComment<BlocklyType> stmtTextComment) {
-        // TODO Auto-generated method stub
+        // s
         return null;
     }
 

@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.visitor.hardware.IHardwareVisitor;
 
-public interface ICommunicationVisitor<V> extends IHardwareVisitor<V> {
+public interface IBluetoothVisitor<V> extends IHardwareVisitor<V> {
 
     /**
      * visit a {@link BluetoothRecieveAction}.

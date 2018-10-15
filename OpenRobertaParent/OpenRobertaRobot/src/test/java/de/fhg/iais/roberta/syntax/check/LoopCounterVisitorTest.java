@@ -25,6 +25,7 @@ public class LoopCounterVisitorTest {
         public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
             return null;
         }
+
     }
 
     @Test

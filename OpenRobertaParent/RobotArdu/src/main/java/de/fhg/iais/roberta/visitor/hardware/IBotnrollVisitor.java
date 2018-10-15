@@ -8,10 +8,10 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.visitor.hardware.actor.IActors4AutonomousRobots;
+import de.fhg.iais.roberta.visitor.hardware.actor.IActors4AutonomousDriveRobots;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
-public interface IBotnrollVisitor<V> extends IActors4AutonomousRobots<V>, ISensorVisitor<V> {
+public interface IBotnrollVisitor<V> extends IActors4AutonomousDriveRobots<V>, ISensorVisitor<V> {
     @Override
     default V visitPlayFileAction(PlayFileAction<V> playFileAction) {
         throw new DbcException("Not supported!");

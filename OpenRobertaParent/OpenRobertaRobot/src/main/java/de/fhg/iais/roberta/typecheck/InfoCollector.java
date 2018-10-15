@@ -100,7 +100,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IActors4AutonomousRobots;
+import de.fhg.iais.roberta.visitor.hardware.actor.IAllActorsVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
@@ -108,7 +108,7 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
  * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
-public class InfoCollector<T> implements ILanguageVisitor<T>, ISensorVisitor<T>, IActors4AutonomousRobots<T> {
+public class InfoCollector<T> implements ILanguageVisitor<T>, ISensorVisitor<T>, IAllActorsVisitor<T> {
 
     private final List<NepoInfo> infos = new ArrayList<>();
 

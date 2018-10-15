@@ -7,7 +7,6 @@ import java.util.Set;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.control.RelayAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.BodyLEDAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RecallAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
@@ -80,11 +79,6 @@ public final class Bob3UsedHardwareCollectorVisitor extends AbstractUsedHardware
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitRelayAction(RelayAction<Void> relayAction) {
         return null;
     }
 
