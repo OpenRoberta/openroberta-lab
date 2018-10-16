@@ -33,4 +33,27 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>de.fhg.iais.tools</groupId>
+                <artifactId>ConstantGenerator</artifactId>
+                <configuration>
+                    <constantsSource>./constantsSource.txt</constantsSource>
+                    <javaOutFile>./src/main/java/de/fhg/iais/roberta/visitor/C.java</javaOutFile>
+                    <typescriptOutFile>./ts/constants.ts</typescriptOutFile>
+                    <javaOutDirectory>./src/main/java/de/fhg/iais/roberta/visitor</javaOutDirectory>
+                    <typescriptOutDirectory>./ts</typescriptOutDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default-cli</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

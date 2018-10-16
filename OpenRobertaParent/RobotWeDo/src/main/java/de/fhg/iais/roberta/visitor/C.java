@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.visitor;
 
 public class C {
-
     public static final String ADD = "ADD";
     public static final String AMBIENTLIGHT = "ambientlight";
     public static final String ANALOG = "analog";
@@ -127,7 +126,6 @@ public class C {
     public static final String MATH_CONSTRAIN_FUNCTION = "MathConstrainFunct";
     public static final String MAX = "max";
     public static final int MAXDIAG = 2500;
-// real Robot drives approx. 35 cm / 1 sec -> 105 pix/sec | 3pix   =  1cm
     public static final double MAXPOWER = 0.351858377 * 3;
     public static final int MAX_HEIGHT = 1000;
     public static final int MAX_WIDTH = 2000;
