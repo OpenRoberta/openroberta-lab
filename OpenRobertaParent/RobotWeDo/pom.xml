@@ -38,12 +38,11 @@
             <plugin>
                 <groupId>de.fhg.iais.tools</groupId>
                 <artifactId>ConstantGenerator</artifactId>
+	            <version>12.0.1</version>
                 <configuration>
                     <constantsSource>./constantsSource.txt</constantsSource>
                     <javaOutFile>./src/main/java/de/fhg/iais/roberta/visitor/C.java</javaOutFile>
-                    <typescriptOutFile>./ts/constants.ts</typescriptOutFile>
-                    <javaOutDirectory>./src/main/java/de/fhg/iais/roberta/visitor</javaOutDirectory>
-                    <typescriptOutDirectory>./ts</typescriptOutDirectory>
+                    <typescriptOutFile>../WedoInterpreter/ts/constants.ts</typescriptOutFile>
                 </configuration>
                 <executions>
                     <execution>

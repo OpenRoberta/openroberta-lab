@@ -619,6 +619,7 @@ public class RestInterfaceTest {
 
         // scenario 1: minscha reads pid's p4, then he writes; pid doesn't use her program; the timestamp increases
         {
+            Thread.sleep(500); // REST-call should be executed sequentially. The sleep is NO guaranty ... Otherwise see below!
             restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p4';'owner':'pid';'authorName':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.pId"));
             long lastChanged1 = ((JSONObject) this.response.getEntity()).getLong("lastChanged");
