@@ -10,7 +10,6 @@ import de.fhg.iais.roberta.factory.BotnrollFactory;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
-import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
 
@@ -18,7 +17,7 @@ public class HelperBotNrollForXmlTest extends AbstractHelperForXmlTest {
 
     public HelperBotNrollForXmlTest() {
         super(
-            new BotnrollFactory(new RobertaProperties(Util1.loadProperties(null))),
+            new BotnrollFactory("botnroll", Util1.loadProperties("classpath:botnroll.properties"), ""),
             new BotNrollConfiguration.Builder()
                 .addActor(new ActorPort("A", "MA"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))
                 .addActor(new ActorPort("B", "MB"), new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT))
@@ -26,6 +25,6 @@ public class HelperBotNrollForXmlTest extends AbstractHelperForXmlTest {
                 .addActor(new ActorPort("D", "MD"), new Actor(ActorType.MEDIUM, false, DriveDirection.FOREWARD, MotorSide.NONE))
                 .build());
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
-        AbstractRobotFactory.addBlockTypesFromProperties("Robot.properties", robotProperties);
+        AbstractRobotFactory.addBlockTypesFromProperties("Robot", robotProperties);
     }
 }

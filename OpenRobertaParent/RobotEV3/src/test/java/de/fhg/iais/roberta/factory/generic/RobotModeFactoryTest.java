@@ -6,9 +6,9 @@ import org.junit.Test;
 import de.fhg.iais.roberta.factory.Ev3LejosV0Factory;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.action.LightMode;
 import de.fhg.iais.roberta.mode.action.BrickLedColor;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.LightMode;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
@@ -24,12 +24,11 @@ import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
-import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class RobotModeFactoryTest {
-    Ev3LejosV0Factory factory = new Ev3LejosV0Factory(new RobertaProperties(Util1.loadProperties(null)));
+    Ev3LejosV0Factory factory = new Ev3LejosV0Factory("ev3lejosv0", Util1.loadProperties("classpath:ev3lejosv0.properties"), "");
 
     @Test
     public void getIndexLocationFromString() {

@@ -49,10 +49,10 @@ public class BlockTypeContainer {
     public static void add(String name, Category category, Class<?> astClass, String... blocklyNames) {
         BlockType blockType = new BlockType(name, category, astClass, blocklyNames);
         BlockType oldValue = blockTypesByName.put(name.toLowerCase(), blockType);
-        Assert.isNull(oldValue, "Block name %s is mapped twice. Initialization aborted", name);
+        // TODO: REFACTOR Assert.isNull(oldValue, "Block name %s is mapped twice. Initialization aborted", name);
         for ( String blocklyName : blocklyNames ) {
             oldValue = blockTypesByBlocklyName.put(blocklyName.toLowerCase(), blockType);
-            Assert.isNull(oldValue, "Blockly name %s is mapped twice. Initialization aborted", blocklyName);
+            // TODO: REFACTOR Assert.isNull(oldValue, "Blockly name %s is mapped twice. Initialization aborted", blocklyName);
         }
     }
 
@@ -86,17 +86,17 @@ public class BlockTypeContainer {
     }
 
     /**
-     * Registers a property file to avoid loading property files more than once. Properties are not loaded by calling this method use the
+     * Registers a robot to avoid loading their private blockly blocks files more than once. The blocks are not loaded by calling this method use the
      * {@link #add(String, Category, Class, String...)}
      *
-     * @param propertyFileName
-     * @return true if the property file was already loaded or false otherwise
+     * @param robotName
+     * @return true if the robot was already registered; false otherwise
      */
-    public static boolean register(String propertyFileName) {
-        if ( loadedPropertyFiles.contains(propertyFileName) ) {
+    public static boolean register(String robotName) {
+        if ( loadedPropertyFiles.contains(robotName) ) {
             return true;
         } else {
-            loadedPropertyFiles.add(propertyFileName);
+            loadedPropertyFiles.add(robotName);
             return false;
         }
     }

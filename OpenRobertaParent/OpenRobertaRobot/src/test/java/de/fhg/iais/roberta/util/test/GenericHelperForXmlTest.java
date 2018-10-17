@@ -2,14 +2,15 @@ package de.fhg.iais.roberta.util.test;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Properties;
 
 import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.inter.mode.action.ILightMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
+import de.fhg.iais.roberta.inter.mode.action.ILightMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.general.IWorkingState;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
@@ -18,21 +19,20 @@ import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
 public class GenericHelperForXmlTest extends AbstractHelperForXmlTest {
     public GenericHelperForXmlTest() {
-        super(new TestFactory(new RobertaProperties(Util1.loadProperties(null))), null);
+        super(new TestFactory("test", new Properties(), null), (Configuration) null);
     }
 
     private static class TestFactory extends AbstractRobotFactory {
         Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:robotports.properties"));
 
-        public TestFactory(RobertaProperties robertaProperties) {
-            super(robertaProperties);
+        public TestFactory(String robotName, Properties robotProperties, String tempDirForUserProjects) {
+            super(robotName, robotProperties);
         }
 
         @Override
@@ -81,62 +81,7 @@ public class GenericHelperForXmlTest extends AbstractHelperForXmlTest {
         }
 
         @Override
-        public String getProgramToolboxBeginner() {
-            return null;
-        }
-
-        @Override
-        public String getProgramToolboxExpert() {
-            return null;
-        }
-
-        @Override
-        public String getProgramDefault() {
-            return null;
-        }
-
-        @Override
-        public String getConfigurationToolbox() {
-            return null;
-        }
-
-        @Override
-        public String getConfigurationDefault() {
-            return null;
-        }
-
-        @Override
-        public String getRealName() {
-            return null;
-        }
-
-        @Override
-        public Boolean hasSim() {
-            return null;
-        }
-
-        @Override
-        public String getInfo() {
-            return null;
-        }
-
-        @Override
-        public Boolean isBeta() {
-            return null;
-        }
-
-        @Override
-        public Boolean hasConfiguration() {
-            return null;
-        }
-
-        @Override
         public AbstractSimValidatorVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
-            return null;
-        }
-
-        @Override
-        public String getGroup() {
             return null;
         }
 
@@ -152,26 +97,6 @@ public class GenericHelperForXmlTest extends AbstractHelperForXmlTest {
 
         @Override
         public IJoystickMode getJoystickMode(String joystickMode) {
-            return null;
-        }
-
-        @Override
-        public String getConnectionType() {
-            return null;
-        }
-
-        @Override
-        public String getVendorId() {
-            return null;
-        }
-
-        @Override
-        public String getCommandline() {
-            return null;
-        }
-
-        @Override
-        public String getSignature() {
             return null;
         }
 

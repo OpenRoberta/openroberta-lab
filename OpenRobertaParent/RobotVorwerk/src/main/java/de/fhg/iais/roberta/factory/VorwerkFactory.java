@@ -24,31 +24,19 @@ import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.syntax.sensor.vorwerk.DropOffSensor;
 import de.fhg.iais.roberta.syntax.sensor.vorwerk.WallSensor;
-import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.VorwerkBrickValidatorVisitor;
 
 public class VorwerkFactory extends AbstractRobotFactory {
-    private static final String ROBOT_PLUGIN_PREFIX = "robot.plugin.";
     protected ICompilerWorkflow robotCompilerWorkflow;
-    protected Properties vorwerkProperties;
-    protected String name;
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:Vorwerkports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:Vorwerkports.properties"));
 
-    public VorwerkFactory(RobertaProperties robertaProperties) {
-        super(robertaProperties);
-        this.vorwerkProperties = Util1.loadProperties("classpath:Vorwerk.properties");
-        this.name = this.vorwerkProperties.getProperty("robot.name");
-        this.robotCompilerWorkflow =
-            new VorwerkCompilerWorkflow(
-                robertaProperties.getTempDirForUserProjects(),
-                robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.name + ".compiler.resources.dir"));
-
-        addBlockTypesFromProperties("Vorwerk.property", this.vorwerkProperties);
-
+    public VorwerkFactory(String robotName, Properties robotProperties, String tempDirForUserProjects) {
+        super(robotName, robotProperties);
+        this.robotCompilerWorkflow = new VorwerkCompilerWorkflow(tempDirForUserProjects, robotProperties.getProperty("robot.plugin.compiler.resources.dir"));
     }
 
     @Override
@@ -77,56 +65,6 @@ public class VorwerkFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public String getProgramToolboxBeginner() {
-        return this.vorwerkProperties.getProperty("robot.program.toolbox.beginner");
-    }
-
-    @Override
-    public String getProgramToolboxExpert() {
-        return this.vorwerkProperties.getProperty("robot.program.toolbox.expert");
-    }
-
-    @Override
-    public String getProgramDefault() {
-        return this.vorwerkProperties.getProperty("robot.program.default");
-    }
-
-    @Override
-    public String getConfigurationToolbox() {
-        return this.vorwerkProperties.getProperty("robot.configuration.toolbox");
-    }
-
-    @Override
-    public String getConfigurationDefault() {
-        return this.vorwerkProperties.getProperty("robot.configuration.default");
-    }
-
-    @Override
-    public String getRealName() {
-        return this.vorwerkProperties.getProperty("robot.real.name");
-    }
-
-    @Override
-    public Boolean hasSim() {
-        return this.vorwerkProperties.getProperty("robot.sim").equals("true") ? true : false;
-    }
-
-    @Override
-    public String getInfo() {
-        return this.vorwerkProperties.getProperty("robot.info") != null ? this.vorwerkProperties.getProperty("robot.info") : "#";
-    }
-
-    @Override
-    public Boolean isBeta() {
-        return this.vorwerkProperties.getProperty("robot.beta") != null ? true : false;
-    }
-
-    @Override
-    public String getConnectionType() {
-        return this.vorwerkProperties.getProperty("robot.connection");
-    }
-
-    @Override
     public AbstractSimValidatorVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
         return null;
     }
@@ -134,18 +72,6 @@ public class VorwerkFactory extends AbstractRobotFactory {
     @Override
     public AbstractProgramValidatorVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
         return new VorwerkBrickValidatorVisitor(brickConfiguration);
-    }
-
-    @Override
-    public Boolean hasConfiguration() {
-        return this.vorwerkProperties.getProperty("robot.configuration") != null ? false : true;
-    }
-
-    @Override
-    public String getGroup() {
-        return this.robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.name + ".group") != null
-            ? this.robertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.name + ".group")
-            : this.name;
     }
 
     @Override

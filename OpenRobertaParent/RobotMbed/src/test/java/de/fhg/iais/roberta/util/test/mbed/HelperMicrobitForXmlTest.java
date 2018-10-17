@@ -7,7 +7,6 @@ import de.fhg.iais.roberta.components.mbed.MicrobitConfiguration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.MicrobitFactory;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
-import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.codegen.MbedSimVisitor;
 import de.fhg.iais.roberta.visitor.codegen.MicrobitPythonVisitor;
@@ -18,9 +17,9 @@ import de.fhg.iais.roberta.visitor.codegen.MicrobitPythonVisitor;
 public class HelperMicrobitForXmlTest extends de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest {
 
     public HelperMicrobitForXmlTest() {
-        super(new MicrobitFactory(new RobertaProperties(Util1.loadProperties(null))), new MicrobitConfiguration.Builder().build());
+        super(new MicrobitFactory("microbit", Util1.loadProperties("classpath:microbit.properties"), ""), new MicrobitConfiguration.Builder().build());
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
-        AbstractRobotFactory.addBlockTypesFromProperties("Robot.properties", robotProperties);
+        AbstractRobotFactory.addBlockTypesFromProperties("Robot", robotProperties);
     }
 
     /**

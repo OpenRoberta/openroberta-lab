@@ -7,8 +7,6 @@ import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.codegen.WeDoCompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.wedo.WeDoConfiguration;
-import de.fhg.iais.roberta.factory.AbstractRobotFactory;
-import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
@@ -24,8 +22,6 @@ import de.fhg.iais.roberta.syntax.sensor.GetSampleType;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
-import de.fhg.iais.roberta.util.RobertaProperties;
-import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.WeDoStackMachineVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractBrickValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
@@ -33,15 +29,11 @@ import de.fhg.iais.roberta.visitor.validate.WedoBrickValidatorVisitor;
 
 public class WeDoFactory extends AbstractRobotFactory {
     private final WeDoCompilerWorkflow compilerWorkflow;
-    private final Properties wedoProperties;
-    private final String name;
 
-    public WeDoFactory(RobertaProperties robertaProperties) {
-        super(robertaProperties);
-        this.wedoProperties = Util1.loadProperties("classpath:WeDo.properties");
-        this.name = this.wedoProperties.getProperty("robot.name");
+    public WeDoFactory(String robotName, Properties robotProperties, String tempDirForUserProjects) {
+        super(robotName, robotProperties);
         this.compilerWorkflow = new WeDoCompilerWorkflow();
-        addBlockTypesFromProperties("wedo.properties", this.wedoProperties);
+        addBlockTypesFromProperties(robotName, this.robotProperties);
     }
 
     public SensorPort getSensorName(String port) {
@@ -83,61 +75,6 @@ public class WeDoFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public String getProgramToolboxBeginner() {
-        return this.wedoProperties.getProperty("robot.program.toolbox.beginner");
-    }
-
-    @Override
-    public String getProgramToolboxExpert() {
-        return this.wedoProperties.getProperty("robot.program.toolbox.expert");
-    }
-
-    @Override
-    public String getProgramDefault() {
-        return this.wedoProperties.getProperty("robot.program.default");
-    }
-
-    @Override
-    public String getConfigurationToolbox() {
-        return this.wedoProperties.getProperty("robot.configuration.toolbox");
-    }
-
-    @Override
-    public String getConfigurationDefault() {
-        return this.wedoProperties.getProperty("robot.configuration.default");
-    }
-
-    @Override
-    public String getRealName() {
-        return this.wedoProperties.getProperty("robot.real.name");
-    }
-
-    @Override
-    public Boolean hasSim() {
-        return this.wedoProperties.getProperty("robot.sim").equals("true") ? true : false;
-    }
-
-    @Override
-    public String getInfo() {
-        return this.wedoProperties.getProperty("robot.info") != null ? this.wedoProperties.getProperty("robot.info") : "#";
-    }
-
-    @Override
-    public Boolean isBeta() {
-        return this.wedoProperties.getProperty("robot.beta") != null ? true : false;
-    }
-
-    @Override
-    public String getConnectionType() {
-        return this.wedoProperties.getProperty("robot.connection");
-    }
-
-    @Override
-    public String getVendorId() {
-        return this.wedoProperties.getProperty("robot.vendor");
-    }
-
-    @Override
     public AbstractSimValidatorVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
         return null;
     }
@@ -148,30 +85,8 @@ public class WeDoFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public Boolean hasConfiguration() {
-        return Boolean.parseBoolean(this.wedoProperties.getProperty("robot.configuration"));
-    }
-
-    @Override
-    public String getGroup() {
-        return this.robertaProperties.getStringProperty("robot.plugin." + this.name + ".group") != null
-            ? this.robertaProperties.getStringProperty("robot.plugin." + this.name + ".group")
-            : this.name;
-    }
-
-    @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
         return WeDoStackMachineVisitor.generate((WeDoConfiguration) brickConfiguration, phrasesSet);
-    }
-
-    @Override
-    public String getCommandline() {
-        return this.wedoProperties.getProperty("robot.connection.commandLine");
-    }
-
-    @Override
-    public String getSignature() {
-        return this.wedoProperties.getProperty("robot.connection.signature");
     }
 
     @Override

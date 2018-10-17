@@ -1,11 +1,9 @@
 package de.fhg.iais.roberta.factory;
 
-import de.fhg.iais.roberta.util.RobertaProperties;
+import java.util.Properties;
 
 public class Ev3LejosV0Factory extends AbstractEV3Factory {
-
-    public Ev3LejosV0Factory(RobertaProperties robertaProperties) {
-        super(robertaProperties, "EV3lejos.properties");
+    public Ev3LejosV0Factory(String robotName, Properties robotProperties, String tempDirForUserProjects) {
+        super(robotName, robotProperties, tempDirForUserProjects);
     }
-
 }

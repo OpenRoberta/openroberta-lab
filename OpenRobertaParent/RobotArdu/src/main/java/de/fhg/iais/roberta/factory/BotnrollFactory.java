@@ -10,15 +10,12 @@ import de.fhg.iais.roberta.codegen.BotnrollCompilerWorkflow;
 import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.arduino.BotNrollConfiguration;
-import de.fhg.iais.roberta.factory.AbstractRobotFactory;
-import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.codegen.BotnrollCppVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
@@ -26,25 +23,21 @@ import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
 public class BotnrollFactory extends AbstractRobotFactory {
     private final BotnrollCompilerWorkflow compilerWorkflow;
-    private final Properties botnrollProperties;
-    private final String name;
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:botnrollports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:botnrollports.properties"));
 
-    public BotnrollFactory(RobertaProperties robertaProperties) {
-        super(robertaProperties);
+    public BotnrollFactory(String robotName, Properties robotProperties, String tempDirForUserProjects) {
+        super(robotName, robotProperties);
         String os = "linux";
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";
         }
-        this.botnrollProperties = Util1.loadProperties("classpath:botnroll.properties");
-        this.name = this.botnrollProperties.getProperty("robot.name");
         this.compilerWorkflow =
             new BotnrollCompilerWorkflow(
-                robertaProperties.getTempDirForUserProjects(),
-                robertaProperties.getStringProperty("robot.plugin." + this.name + ".compiler.resources.dir"),
-                robertaProperties.getStringProperty("robot.plugin." + this.name + ".compiler." + os + ".dir"));
-        addBlockTypesFromProperties("botnroll.properties", this.botnrollProperties);
+                tempDirForUserProjects,
+                robotProperties.getProperty("robot.plugin.compiler.resources.dir"),
+                robotProperties.getProperty("robot.plugin.compiler." + os + ".dir"));
+        addBlockTypesFromProperties(robotName, robotProperties);
     }
 
     @Override
@@ -73,61 +66,6 @@ public class BotnrollFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public String getProgramToolboxBeginner() {
-        return this.botnrollProperties.getProperty("robot.program.toolbox.beginner");
-    }
-
-    @Override
-    public String getProgramToolboxExpert() {
-        return this.botnrollProperties.getProperty("robot.program.toolbox.expert");
-    }
-
-    @Override
-    public String getProgramDefault() {
-        return this.botnrollProperties.getProperty("robot.program.default");
-    }
-
-    @Override
-    public String getConfigurationToolbox() {
-        return this.botnrollProperties.getProperty("robot.configuration.toolbox");
-    }
-
-    @Override
-    public String getConfigurationDefault() {
-        return this.botnrollProperties.getProperty("robot.configuration.default");
-    }
-
-    @Override
-    public String getRealName() {
-        return this.botnrollProperties.getProperty("robot.real.name");
-    }
-
-    @Override
-    public Boolean hasSim() {
-        return this.botnrollProperties.getProperty("robot.sim").equals("true") ? true : false;
-    }
-
-    @Override
-    public String getInfo() {
-        return this.botnrollProperties.getProperty("robot.info") != null ? this.botnrollProperties.getProperty("robot.info") : "#";
-    }
-
-    @Override
-    public Boolean isBeta() {
-        return this.botnrollProperties.getProperty("robot.beta") != null ? true : false;
-    }
-
-    @Override
-    public String getConnectionType() {
-        return this.botnrollProperties.getProperty("robot.connection");
-    }
-
-    @Override
-    public String getVendorId() {
-        return this.botnrollProperties.getProperty("robot.vendor");
-    }
-
-    @Override
     public AbstractSimValidatorVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
         return null;
     }
@@ -138,30 +76,8 @@ public class BotnrollFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public Boolean hasConfiguration() {
-        return Boolean.parseBoolean(this.botnrollProperties.getProperty("robot.configuration"));
-    }
-
-    @Override
-    public String getGroup() {
-        return this.robertaProperties.getStringProperty("robot.plugin." + this.name + ".group") != null
-            ? this.robertaProperties.getStringProperty("robot.plugin." + this.name + ".group")
-            : this.name;
-    }
-
-    @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
         return BotnrollCppVisitor.generate((BotNrollConfiguration) brickConfiguration, phrasesSet, withWrapping);
-    }
-
-    @Override
-    public String getCommandline() {
-        return this.botnrollProperties.getProperty("robot.connection.commandLine");
-    }
-
-    @Override
-    public String getSignature() {
-        return this.botnrollProperties.getProperty("robot.connection.signature");
     }
 
     @Override

@@ -8,15 +8,12 @@ import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.codegen.MbedSimCompilerWorkflow;
 import de.fhg.iais.roberta.codegen.MicrobitCompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.factory.AbstractRobotFactory;
-import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
@@ -27,23 +24,16 @@ public class MicrobitFactory extends AbstractRobotFactory {
 
     private final MicrobitCompilerWorkflow compilerWorkflow;
     private final MbedSimCompilerWorkflow microbitSimCompilerWorkflow;
-    private final Properties microbitProperties;
-    private final String name;
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:Microbitports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:Microbitports.properties"));
 
-    public MicrobitFactory(RobertaProperties robertaProperties) {
-        super(robertaProperties);
-        this.microbitProperties = Util1.loadProperties("classpath:Microbit.properties");
-        this.name = this.microbitProperties.getProperty("robot.name");
+    public MicrobitFactory(String robotName, Properties robotProperties, String tempDirForUserProjects) {
+        super(robotName, robotProperties);
         this.compilerWorkflow =
             new MicrobitCompilerWorkflow(
-                robertaProperties.getStringProperty("robot.plugin." + this.name + ".compiler.resources.dir"),
-                robertaProperties.getStringProperty("robot.plugin." + this.name + ".compiler.dir"));
+                robotProperties.getProperty("robot.plugin.compiler.resources.dir"),
+                robotProperties.getProperty("robot.plugin.compiler.dir"));
         this.microbitSimCompilerWorkflow = new MbedSimCompilerWorkflow();
-        Properties mbedProperties = Util1.loadProperties("classpath:Mbed.properties");
-        addBlockTypesFromProperties("Mbed.properties", mbedProperties);
-        addBlockTypesFromProperties("Microbit.properties", this.microbitProperties);
     }
 
     @Override
@@ -77,56 +67,6 @@ public class MicrobitFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public String getProgramToolboxBeginner() {
-        return this.microbitProperties.getProperty("robot.program.toolbox.beginner");
-    }
-
-    @Override
-    public String getProgramToolboxExpert() {
-        return this.microbitProperties.getProperty("robot.program.toolbox.expert");
-    }
-
-    @Override
-    public String getProgramDefault() {
-        return this.microbitProperties.getProperty("robot.program.default");
-    }
-
-    @Override
-    public String getConfigurationToolbox() {
-        return this.microbitProperties.getProperty("robot.configuration.toolbox");
-    }
-
-    @Override
-    public String getConfigurationDefault() {
-        return this.microbitProperties.getProperty("robot.configuration.default");
-    }
-
-    @Override
-    public String getRealName() {
-        return this.microbitProperties.getProperty("robot.real.name");
-    }
-
-    @Override
-    public Boolean hasSim() {
-        return this.microbitProperties.getProperty("robot.sim").equals("true") ? true : false;
-    }
-
-    @Override
-    public String getInfo() {
-        return this.microbitProperties.getProperty("robot.info") != null ? this.microbitProperties.getProperty("robot.info") : "#";
-    }
-
-    @Override
-    public Boolean isBeta() {
-        return this.microbitProperties.getProperty("robot.beta") != null ? true : false;
-    }
-
-    @Override
-    public String getConnectionType() {
-        return this.microbitProperties.getProperty("robot.connection");
-    }
-
-    @Override
     public AbstractSimValidatorVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
         return new MicrobitSimValidatorVisitor(brickConfiguration);
     }
@@ -137,19 +77,8 @@ public class MicrobitFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public Boolean hasConfiguration() {
-        return Boolean.parseBoolean(this.microbitProperties.getProperty("robot.configuration"));
-    }
-
-    @Override
-    public String getGroup() {
-        return this.microbitProperties.getProperty("robot.group") != null ? this.microbitProperties.getProperty("robot.group") : this.name;
-    }
-
-    @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
         // TODO Auto-generated method stub
         return null;
     }
-
 }

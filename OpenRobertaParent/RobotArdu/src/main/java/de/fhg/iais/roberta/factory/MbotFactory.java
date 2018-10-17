@@ -19,7 +19,6 @@ import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.Axis;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.codegen.MbotCppVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
@@ -27,26 +26,22 @@ import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
 public class MbotFactory extends AbstractRobotFactory {
     private final MbotCompilerWorkflow compilerWorkflow;
-    private final Properties mbotProperties;
-    private final String name;
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:mbotports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:mbotports.properties"));
 
-    public MbotFactory(RobertaProperties robertaProperties) {
-        super(robertaProperties);
+    public MbotFactory(String robotName, Properties robotProperties, String tempDirForUserProjects) {
+        super(robotName, robotProperties);
         String os = "linux";
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";
         }
-        this.mbotProperties = Util1.loadProperties("classpath:mbot.properties");
-        this.name = this.mbotProperties.getProperty("robot.name");
         this.compilerWorkflow =
             new MbotCompilerWorkflow(
-                robertaProperties.getTempDirForUserProjects(),
-                robertaProperties.getStringProperty("robot.plugin." + this.name + ".compiler.resources.dir"),
-                robertaProperties.getStringProperty("robot.plugin." + this.name + ".compiler." + os + ".dir"));
+                tempDirForUserProjects,
+                robotProperties.getProperty("robot.plugin.compiler.resources.dir"),
+                robotProperties.getProperty("robot.plugin.compiler." + os + ".dir"));
 
-        addBlockTypesFromProperties("mbot.properties", this.mbotProperties);
+        addBlockTypesFromProperties(robotName, robotProperties);
     }
 
     @Override
@@ -81,51 +76,6 @@ public class MbotFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public String getProgramToolboxBeginner() {
-        return this.mbotProperties.getProperty("robot.program.toolbox.beginner");
-    }
-
-    @Override
-    public String getProgramToolboxExpert() {
-        return this.mbotProperties.getProperty("robot.program.toolbox.expert");
-    }
-
-    @Override
-    public String getProgramDefault() {
-        return this.mbotProperties.getProperty("robot.program.default");
-    }
-
-    @Override
-    public String getConfigurationToolbox() {
-        return this.mbotProperties.getProperty("robot.configuration.toolbox");
-    }
-
-    @Override
-    public String getConfigurationDefault() {
-        return this.mbotProperties.getProperty("robot.configuration.default");
-    }
-
-    @Override
-    public String getRealName() {
-        return this.mbotProperties.getProperty("robot.real.name");
-    }
-
-    @Override
-    public Boolean hasSim() {
-        return this.mbotProperties.getProperty("robot.sim").equals("true") ? true : false;
-    }
-
-    @Override
-    public String getInfo() {
-        return this.mbotProperties.getProperty("robot.info") != null ? this.mbotProperties.getProperty("robot.info") : "#";
-    }
-
-    @Override
-    public Boolean isBeta() {
-        return this.mbotProperties.getProperty("robot.beta") != null ? true : false;
-    }
-
-    @Override
     public AbstractSimValidatorVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
         return null;
     }
@@ -136,46 +86,13 @@ public class MbotFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public Boolean hasConfiguration() {
-        return Boolean.parseBoolean(this.mbotProperties.getProperty("robot.configuration"));
-    }
-
-    @Override
-    public String getGroup() {
-
-        return this.robertaProperties.getStringProperty("robot.plugin." + this.name + ".group") != null
-            ? this.robertaProperties.getStringProperty("robot.plugin." + this.name + ".group")
-            : this.name;
-    }
-
-    @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
         return MbotCppVisitor.generate((MbotConfiguration) brickConfiguration, phrasesSet, withWrapping);
     }
 
     @Override
-    public String getConnectionType() {
-        return this.mbotProperties.getProperty("robot.connection");
-    }
-
-    @Override
-    public String getVendorId() {
-        return this.mbotProperties.getProperty("robot.vendor");
-    }
-
-    @Override
     public IJoystickMode getJoystickMode(String joystickMode) {
         return IRobotFactory.getModeValue(joystickMode, Axis.class);
-    }
-
-    @Override
-    public String getCommandline() {
-        return this.mbotProperties.getProperty("robot.connection.commandLine");
-    }
-
-    @Override
-    public String getSignature() {
-        return this.mbotProperties.getProperty("robot.connection.signature");
     }
 
     @Override

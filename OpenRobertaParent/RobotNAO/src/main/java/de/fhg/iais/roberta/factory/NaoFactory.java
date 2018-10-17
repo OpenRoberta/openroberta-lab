@@ -4,14 +4,10 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
 
-import com.google.inject.AbstractModule;
-
 import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.codegen.NaoCompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.nao.NAOConfiguration;
-import de.fhg.iais.roberta.factory.AbstractRobotFactory;
-import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
@@ -32,7 +28,6 @@ import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
 import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
-import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.codegen.NaoPythonVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
@@ -40,20 +35,13 @@ import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
 public class NaoFactory extends AbstractRobotFactory {
     private final NaoCompilerWorkflow compilerWorkflow;
-    private final Properties naoProperties;
-    private final String name;
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:NAOports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:NAOports.properties"));
 
-    public NaoFactory(RobertaProperties robertaProperties) {
-        super(robertaProperties);
-        this.naoProperties = Util1.loadProperties("classpath:NAO.properties");
-        this.name = this.naoProperties.getProperty("robot.name");
-        this.compilerWorkflow =
-            new NaoCompilerWorkflow(
-                robertaProperties.getTempDirForUserProjects(),
-                robertaProperties.getStringProperty("robot.plugin." + this.name + ".compiler.resources.dir"));
-        addBlockTypesFromProperties("NAO.properties", this.naoProperties);
+    public NaoFactory(String robotName, Properties robotProperties, String tempDirForUserProjects) {
+        super(robotName, robotProperties);
+        this.compilerWorkflow = new NaoCompilerWorkflow(tempDirForUserProjects, robotProperties.getProperty("robot.plugin.compiler.resources.dir"));
+        addBlockTypesFromProperties(robotName, robotProperties);
     }
 
     @Override
@@ -95,61 +83,6 @@ public class NaoFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public AbstractModule getGuiceModule() {
-        return new GuiceModule(this.robertaProperties.getRobertaProperties());
-    }
-
-    @Override
-    public String getProgramToolboxBeginner() {
-        return this.naoProperties.getProperty("robot.program.toolbox.beginner");
-    }
-
-    @Override
-    public String getProgramToolboxExpert() {
-        return this.naoProperties.getProperty("robot.program.toolbox.expert");
-    }
-
-    @Override
-    public String getProgramDefault() {
-        return this.naoProperties.getProperty("robot.program.default");
-    }
-
-    @Override
-    public String getConfigurationToolbox() {
-        return this.naoProperties.getProperty("robot.configuration.toolbox");
-    }
-
-    @Override
-    public String getConfigurationDefault() {
-        return this.naoProperties.getProperty("robot.configuration.default");
-    }
-
-    @Override
-    public String getRealName() {
-        return this.naoProperties.getProperty("robot.real.name");
-    }
-
-    @Override
-    public Boolean hasSim() {
-        return this.naoProperties.getProperty("robot.sim").equals("true") ? true : false;
-    }
-
-    @Override
-    public String getInfo() {
-        return this.naoProperties.getProperty("robot.info") != null ? this.naoProperties.getProperty("robot.info") : "#";
-    }
-
-    @Override
-    public Boolean isBeta() {
-        return this.naoProperties.getProperty("robot.beta") != null ? true : false;
-    }
-
-    @Override
-    public String getConnectionType() {
-        return this.naoProperties.getProperty("robot.connection");
-    }
-
-    @Override
     public AbstractSimValidatorVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
         return null;
     }
@@ -157,18 +90,6 @@ public class NaoFactory extends AbstractRobotFactory {
     @Override
     public AbstractProgramValidatorVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
         return null;
-    }
-
-    @Override
-    public Boolean hasConfiguration() {
-        return Boolean.parseBoolean(this.naoProperties.getProperty("robot.configuration"));
-    }
-
-    @Override
-    public String getGroup() {
-        return this.robertaProperties.getStringProperty("robot.plugin." + this.name + ".group") != null
-            ? this.robertaProperties.getStringProperty("robot.plugin." + this.name + ".group")
-            : this.name;
     }
 
     @Override

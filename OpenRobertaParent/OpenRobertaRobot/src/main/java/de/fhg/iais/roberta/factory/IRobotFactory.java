@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import com.google.inject.AbstractModule;
-
 import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
@@ -196,10 +194,8 @@ public interface IRobotFactory {
     }
 
     /**
-     * Get a sensor port from {@link ISensorPort} given its name as a string parameter. It is possible for one sensor port to have
-     * multiple
-     * string mappings. Throws exception
-     * if the sensor port does not exists.
+     * Get a sensor port from {@link ISensorPort} given its name as a string parameter. It is possible for one sensor port to have multiple string mappings.
+     * Throws exception if the sensor port does not exists.
      *
      * @param port name of the sensor
      * @return SensorPort {@link ISensorPort}
@@ -216,8 +212,8 @@ public interface IRobotFactory {
     }
 
     /**
-     * Get a actor port from {@link IActorPort} given string parameter and mapping from a port to ActorPort. It is possible for one sensor port to have
-     * multiple string mappings. Throws exception if the sensor port does not exists. <br>
+     * Get a actor port from {@link IActorPort} given string parameter and mapping from a port to ActorPort. It is possible for one sensor port to have multiple
+     * string mappings. Throws exception if the sensor port does not exists. <br>
      * It can only be used by subclasses of IRobotFactory.
      *
      * @param name of the sensor port
@@ -336,8 +332,7 @@ public interface IRobotFactory {
 
     /**
      * Get a {@link ISensorMode} enumeration given string parameter. It is possible for one color to have multiple string mappings. Throws exception if the
-     * color
-     * cannot be found.
+     * color cannot be found.
      *
      * @param name of the color
      * @return enum {@link ISensorMode}
@@ -612,9 +607,8 @@ public interface IRobotFactory {
     }
 
     /**
-     * Get a drop sensor mode from {@link IHumiditySensorMode} given string parameter.
-     * It is possible for one drop sensor mode to have multiple string
-     * mappings. Throws exception if the drop sensor mode does not exists.
+     * Get a drop sensor mode from {@link IHumiditySensorMode} given string parameter. It is possible for one drop sensor mode to have multiple string mappings.
+     * Throws exception if the drop sensor mode does not exists.
      *
      * @param name of the drop sensor mode
      * @return the drop sensor mode from the enum {@link IHumiditySensorMode}
@@ -624,9 +618,8 @@ public interface IRobotFactory {
     }
 
     /**
-     * Get a pulse sensor mode from {@link IPulseSensorMode} given string parameter.
-     * It is possible for one pulse sensor mode to have multiple string
-     * mappings. Throws exception if the pulse sensor mode does not exists.
+     * Get a pulse sensor mode from {@link IPulseSensorMode} given string parameter. It is possible for one pulse sensor mode to have multiple string mappings.
+     * Throws exception if the pulse sensor mode does not exists.
      *
      * @param name of the pulse sensor mode
      * @return the pulse sensor mode from the enum {@link IPulseSensorMode}
@@ -636,9 +629,8 @@ public interface IRobotFactory {
     }
 
     /**
-     * Get a RFID sensor mode from {@link IRfidSensorMode} given string parameter.
-     * It is possible for one RFID sensor mode to have multiple string
-     * mappings. Throws exception if the RFID sensor mode does not exists.
+     * Get a RFID sensor mode from {@link IRfidSensorMode} given string parameter. It is possible for one RFID sensor mode to have multiple string mappings.
+     * Throws exception if the RFID sensor mode does not exists.
      *
      * @param name of the RFID sensor mode
      * @return the RFID sensor mode from the enum {@link IDropSensorMode}
@@ -880,16 +872,6 @@ public interface IRobotFactory {
      * @return
      */
     ICompilerWorkflow getSimCompilerWorkflow();
-
-    /**
-     * Get the guice module for this robot. This is used to add bindings to guice. It should not be used often.<br>
-     * Example: the /download REST resource needs access to the directory, in which binaries are stored (EV3 lejos robot)
-     *
-     * @return the guice module for this robot or <code>null</code>, if this robot doesn't need to inject resources
-     */
-    default AbstractModule getGuiceModule() {
-        return null;
-    }
 
     /**
      * Get the file extension of the specific language for this robot. This is used when we want to download locally the source code into a file.

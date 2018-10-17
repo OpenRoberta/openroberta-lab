@@ -123,7 +123,10 @@ MATH_PROP_FUNCT = "MathPropFunct"
 MATH_CONSTRAIN_FUNCTION = "MathConstrainFunct"
 MAX = "max"
 MAXDIAG = 2500
+
+// MAXPOWER is a double expression
 MAXPOWER = 0.351858377 * 3
+
 MAX_HEIGHT = 1000
 MAX_WIDTH = 2000
 MEDIAN = "median"

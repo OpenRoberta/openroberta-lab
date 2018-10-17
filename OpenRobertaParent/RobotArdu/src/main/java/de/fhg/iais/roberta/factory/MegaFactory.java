@@ -1,10 +1,10 @@
 package de.fhg.iais.roberta.factory;
 
-import de.fhg.iais.roberta.util.RobertaProperties;
+import java.util.Properties;
 
 public class MegaFactory extends AbstractArduinoFactory {
 
-    public MegaFactory(RobertaProperties robertaProperties) {
-        super(robertaProperties, "mega.properties");
+    public MegaFactory(String robotName, Properties robotProperties, String tempDirForUserProjects) {
+        super(robotName, robotProperties, tempDirForUserProjects);
     }
 }

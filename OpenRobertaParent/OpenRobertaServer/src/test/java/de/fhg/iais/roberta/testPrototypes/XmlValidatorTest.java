@@ -5,8 +5,8 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.blockly.generated.Export;
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.NaoFactory;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
-import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
@@ -19,8 +19,7 @@ public class XmlValidatorTest {
         Export jaxbImportExport = JaxbHelper.xml2Element(xmlAsString, Export.class);
         String programText = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
         String configText = JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet());
-        RobertaProperties robertaProperties = new RobertaProperties(Util1.loadProperties(null));
-        IRobotFactory robotFactory = new de.fhg.iais.roberta.factory.NaoFactory(robertaProperties);
+        IRobotFactory robotFactory = new NaoFactory("nao", Util1.loadProperties("classpath:nao.properties"), "");
         BlocklyProgramAndConfigTransformer programAndConfigTransformer = BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configText);
         System.out.println(jaxbImportExport);
     }

@@ -13,7 +13,6 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
@@ -24,16 +23,13 @@ public abstract class AbstractMbedFactory extends AbstractRobotFactory {
 
     protected ICompilerWorkflow compilerWorkflow;
     protected MbedSimCompilerWorkflow calliopeSimCompilerWorkflow;
-    protected Properties calliopeProperties;
-    protected String name;
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:Calliopeports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:Calliopeports.properties"));
 
-    public AbstractMbedFactory(RobertaProperties robertaProperties) {
-        super(robertaProperties);
-        final Properties mbedProperties = Util1.loadProperties("classpath:Mbed.properties");
-        addBlockTypesFromProperties("Mbed.properties", mbedProperties);
-
+    public AbstractMbedFactory(String robotName, Properties robotProperties) {
+        super(robotName, robotProperties);
+        addBlockTypesFromProperties(robotName, robotProperties);
+        addBlockTypesFromProperties("mbed", Util1.loadProperties("classpath:mbed.properties"));
         this.calliopeSimCompilerWorkflow = new MbedSimCompilerWorkflow();
     }
 
@@ -73,75 +69,12 @@ public abstract class AbstractMbedFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public String getProgramToolboxBeginner() {
-        return this.calliopeProperties.getProperty("robot.program.toolbox.beginner");
-    }
-
-    @Override
-    public String getProgramToolboxExpert() {
-        return this.calliopeProperties.getProperty("robot.program.toolbox.expert");
-    }
-
-    @Override
-    public String getProgramDefault() {
-        return this.calliopeProperties.getProperty("robot.program.default");
-    }
-
-    @Override
-    public String getConfigurationToolbox() {
-        return this.calliopeProperties.getProperty("robot.configuration.toolbox");
-    }
-
-    @Override
-    public String getConfigurationDefault() {
-        return this.calliopeProperties.getProperty("robot.configuration.default");
-    }
-
-    @Override
-    public String getRealName() {
-        return this.calliopeProperties.getProperty("robot.real.name");
-    }
-
-    @Override
-    public Boolean hasSim() {
-        return this.calliopeProperties.getProperty("robot.sim").equals("true") ? true : false;
-    }
-
-    @Override
-    public String getInfo() {
-        return this.calliopeProperties.getProperty("robot.info") != null ? this.calliopeProperties.getProperty("robot.info") : "#";
-    }
-
-    @Override
-    public Boolean isBeta() {
-        return this.calliopeProperties.getProperty("robot.beta") != null ? true : false;
-    }
-
-    @Override
-    public String getConnectionType() {
-        return this.calliopeProperties.getProperty("robot.connection");
-    }
-
-    @Override
     public AbstractSimValidatorVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
         return new CalliopeSimValidatorVisitor(brickConfiguration);
-    }
-
-    @Override
-    public Boolean hasConfiguration() {
-        return Boolean.parseBoolean(this.calliopeProperties.getProperty("robot.configuration"));
-    }
-
-    @Override
-    public String getGroup() {
-        return this.robertaProperties.getStringProperty("robot.plugin." + this.name + ".group") != null
-            ? this.robertaProperties.getStringProperty("robot.plugin." + this.name + ".group")
-            : this.name;
     }
 
     @Override
     public AbstractProgramValidatorVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
         return new MbedBoardValidatorVisitor(brickConfiguration);
     }
-
 }

@@ -185,12 +185,13 @@ public class ServerStarter {
         staticResourceServlet.setInitParameter("cacheControl", "private, must-revalidate");
 
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(
-            new Handler[] {
-                restHttpHandler,
-                wsHandler,
-                defaultHandler
-            });
+        handlers
+            .setHandlers(
+                new Handler[] {
+                    restHttpHandler,
+                    wsHandler,
+                    defaultHandler
+                });
         server.setHandler(handlers);
 
         StringBuilder sb = new StringBuilder();
@@ -210,7 +211,7 @@ public class ServerStarter {
             ServerStarter.LOG.info("server started at " + serverMessage);
         } catch ( Exception e ) {
             ServerStarter.LOG.error("Could not start the server at " + serverMessage, e);
-            System.exit(16);
+            System.exit(20);
         }
         this.injector = robertaGuiceServletConfig.getCreatedInjector();
         Ev3SensorLoggingWS.setGuiceInjector(this.injector);
@@ -262,66 +263,16 @@ public class ServerStarter {
             ServerStarter.LOG.info("Number of programs stored in the database: " + numOfProgs);
             session.close();
         } catch ( Exception e ) {
-            ServerStarter.LOG.error("Server was started, but could not connect to the database", e);
+            ServerStarter.LOG.error("Server could not connect to the database (exit 20)", e);
             System.exit(20);
         }
 
     }
 
     /**
-     * configure robot plugins, that may be used with this server. Uses the white list and the declarations from the openroberta.properties file.
-     *
-     * @param robotCommunicator
-     * @return the mapping from robot names to the factory, that supplies all robot-specific data
+     * step through the whitelist of robots and make sure, that the name of each robot is in the database.<br>
+     * This is required, because the robot name is used as foreign key in some tables
      */
-    public static Map<String, IRobotFactory> configureRobotPlugins(RobotCommunicator robotCommunicator, RobertaProperties robertaProperties) {
-        if ( robotCommunicator == null ) {
-            LOG.error("the robot communicator object was not found. This is a severe error. The system will crash!");
-        }
-        List<String> robotWhitelist = robertaProperties.getRobotWhitelist();
-        Map<String, IRobotFactory> robotPlugins = new HashMap<>();
-        for ( String robotToUse : robotWhitelist ) {
-            if ( robotToUse.equals("sim") ) {
-                continue;
-            }
-            String pluginFactory = robertaProperties.getStringProperty("robot.plugin." + robotToUse + ".factory");
-            if ( pluginFactory == null ) {
-                throw new DbcException("robot plugin " + robotToUse + " has no factory. Check the properties. Server does NOT start");
-            } else {
-                try {
-                    @SuppressWarnings("unchecked")
-                    Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass(pluginFactory);
-                    Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(robertaProperties.getClass());
-                    robotPlugins.put(robotToUse, factoryConstructor.newInstance(robertaProperties));
-                } catch ( Exception e ) {
-                    throw new DbcException(
-                        "no factory for robot plugin " + robotToUse + ". Plugin-jar not on the classpath? Invalid properties? Server does NOT start",
-                        e);
-                }
-            }
-        }
-        StringBuilder sb = new StringBuilder();
-        sb.append("ROBOT PLUGINS: ").append(robotPlugins.size()).append(" plugins are found: ");
-        for ( String pluginName : robotWhitelist ) {
-            sb.append(pluginName).append(" ");
-        }
-        LOG.info(sb.toString());
-        return robotPlugins;
-    }
-
-    public static class WebSocketServiceServlet extends WebSocketServlet {
-        private static final long serialVersionUID = -2697779106901658247L;
-
-        @Override
-        public void configure(WebSocketServletFactory factory) {
-            factory.register(Ev3SensorLoggingWS.class);
-        }
-    }
-
-    /**
-     * @deprecated This method shouldn't be called anymore when the robot type is no longer stored in the database.
-     */
-    @Deprecated
     private void checkRobotPluginsDB() {
         try {
             List<String> robotWhitelist = robertaProperties.getRobotWhitelist();
@@ -342,8 +293,65 @@ public class ServerStarter {
             }
             session.close();
         } catch ( Exception e ) {
-            ServerStarter.LOG.error("Server was started, but could not connect to the database", e);
+            LOG.error("Server could not check robot names in the database (exit 20)", e);
             System.exit(20);
+        }
+    }
+
+    /**
+     * configure robot plugins, that may be used with this server. Uses the white list and the declarations from the openroberta.properties file.
+     *
+     * @param robotCommunicator
+     * @return the mapping from robot names to the factory, that supplies all robot-specific data
+     */
+    public static Map<String, IRobotFactory> configureRobotPlugins(RobotCommunicator robotCommunicator, RobertaProperties robertaProperties) {
+        if ( robotCommunicator == null ) {
+            throw new DbcException("the robot communicator object is missing - Server does NOT start");
+        }
+        List<String> robotWhitelist = robertaProperties.getRobotWhitelist();
+        Map<String, IRobotFactory> robotPlugins = new HashMap<>();
+        String tempDirForUserProjects = robertaProperties.getTempDirForUserProjects();
+        for ( String robotName : robotWhitelist ) {
+            if ( robotName.equals("sim") ) {
+                continue;
+            }
+            Properties pluginProperties = Util1.loadProperties("classpath:" + robotName + ".properties");
+            if ( pluginProperties == null ) {
+                throw new DbcException("robot plugin " + robotName + " has no property file " + robotName + ".properties -  Server does NOT start");
+            }
+            String pluginFactory = pluginProperties.getProperty("robot.plugin.factory");
+            if ( pluginFactory == null ) {
+                throw new DbcException("robot plugin " + robotName + " has no factory. Check the properties - Server does NOT start");
+            } else {
+                try {
+                    @SuppressWarnings("unchecked")
+                    Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass(pluginFactory);
+                    Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(String.class, Properties.class, String.class);
+                    robotPlugins.put(robotName, factoryConstructor.newInstance(robotName, pluginProperties, tempDirForUserProjects));
+                } catch ( Exception e ) {
+                    throw new DbcException(
+                        " factory for robot plugin "
+                            + robotName
+                            + " could not be build. Plugin-jar not on the classpath? Invalid properties? Server does NOT start",
+                        e);
+                }
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("ROBOT PLUGINS: ").append(robotPlugins.size()).append(" plugins are found: ");
+        for ( String pluginName : robotWhitelist ) {
+            sb.append(pluginName).append(" ");
+        }
+        LOG.info(sb.toString());
+        return robotPlugins;
+    }
+
+    public static class WebSocketServiceServlet extends WebSocketServlet {
+        private static final long serialVersionUID = -2697779106901658247L;
+
+        @Override
+        public void configure(WebSocketServletFactory factory) {
+            factory.register(Ev3SensorLoggingWS.class);
         }
     }
 }
