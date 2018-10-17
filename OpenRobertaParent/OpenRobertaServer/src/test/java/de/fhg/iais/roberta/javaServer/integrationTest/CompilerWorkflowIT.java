@@ -272,7 +272,7 @@ public class CompilerWorkflowIT {
 
     private static enum RobotInfo {
         ev3lejosv1( "ev3", ".java" ),
-        ev3lejos( "ev3", ".java" ),
+        ev3lejosv0( "ev3", ".java" ),
         ev3dev( "ev3", ".py" ),
         nxt( "nxt", ".nxc" ),
         microbit( "microbit", ".py" ),
