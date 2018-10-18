@@ -126,9 +126,6 @@ public class ServerStarter {
                 keyStoreUri = ServerStarter.class.getResource("/keystore.jks").toExternalForm();
             }
             String password = serverProperties.getStringProperty("server.keystore.password");
-            if ( password == null ) {
-                password = "oraOra";
-            }
             sslContextFactory.setKeyStorePath(keyStoreUri);
             sslContextFactory.setKeyStorePassword(password);
             sslContextFactory.setKeyManagerPassword(password);

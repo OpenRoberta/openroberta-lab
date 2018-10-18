@@ -34,9 +34,14 @@ public class PluginProperties {
         Assert.notNull(tempDir);
         Assert.notNull(properties);
         this.robotName = robotName;
-        this.resourceDir = resourceDir + robotName + "/";
+        String tempResourceDir = resourceDir + properties.getProperty("robot.plugin.compiler.resources.dir");
+        if ( !(tempResourceDir.endsWith("/") || tempResourceDir.endsWith("\\")) ) {
+            tempResourceDir = tempResourceDir + "/";
+        }
+        this.resourceDir = tempResourceDir;
         this.tempDir = tempDir;
-        this.compilerDir = properties.getProperty("robot.plugin.compiler." + getOs() + ".dir");
+        String tempCompilerDir = properties.getProperty("robot.plugin.compiler." + getOs() + ".dir");
+        this.compilerDir = tempCompilerDir == null ? this.resourceDir : tempCompilerDir;
         this.pluginProperties = properties;
     }
 

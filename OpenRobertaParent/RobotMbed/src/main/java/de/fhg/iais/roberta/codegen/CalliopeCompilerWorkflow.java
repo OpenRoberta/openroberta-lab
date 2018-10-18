@@ -106,7 +106,7 @@ public class CalliopeCompilerWorkflow extends AbstractCompilerWorkflow {
         final String tempDir = pluginProperties.getTempDir();
 
         final StringBuilder sb = new StringBuilder();
-        String scriptName = compilerResourcesDir + "/../compile." + (SystemUtils.IS_OS_WINDOWS ? "bat" : "sh");
+        String scriptName = compilerResourcesDir + "../compile." + (SystemUtils.IS_OS_WINDOWS ? "bat" : "sh");
         String bluetooth = radioUsed ? "" : "-b";
         Path path = Paths.get(tempDir + token + "/" + mainFile);
         Path base = Paths.get("");
