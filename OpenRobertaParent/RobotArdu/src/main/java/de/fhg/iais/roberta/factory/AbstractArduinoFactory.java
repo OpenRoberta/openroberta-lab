@@ -1,9 +1,6 @@
 package de.fhg.iais.roberta.factory;
 
 import java.util.ArrayList;
-import java.util.Properties;
-
-import org.apache.commons.lang3.SystemUtils;
 
 import de.fhg.iais.roberta.codegen.ArduinoCompilerWorkflow;
 import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
@@ -15,6 +12,8 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.util.PluginProperties;
+import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.codegen.ArduinoCppVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractBrickValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
@@ -23,19 +22,10 @@ import de.fhg.iais.roberta.visitor.validate.ArduinoBrickValidatorVisitor;
 public abstract class AbstractArduinoFactory extends AbstractRobotFactory {
     private final ArduinoCompilerWorkflow compilerWorkflow;
 
-    public AbstractArduinoFactory(String robotName, Properties robotProperties, String tempDirForUserProjects) {
-        super(robotName, robotProperties);
-        String os = "linux";
-        if ( SystemUtils.IS_OS_WINDOWS ) {
-            os = "windows";
-        }
-        this.compilerWorkflow =
-            new ArduinoCompilerWorkflow(
-                tempDirForUserProjects,
-                robotProperties.getProperty("robot.plugin.compiler.resources.dir"),
-                robotProperties.getProperty("robot.plugin.compiler." + os + ".dir"),
-                this.robotName);
-        addBlockTypesFromProperties(robotName, robotProperties);
+    public AbstractArduinoFactory(PluginProperties pluginProperties) {
+        super(pluginProperties);
+        addBlockTypesFromProperties("arduino", Util1.loadProperties("classpath:arduino.properties"));
+        this.compilerWorkflow = new ArduinoCompilerWorkflow(pluginProperties);
     }
 
     public SensorPort getSensorName(String port) {

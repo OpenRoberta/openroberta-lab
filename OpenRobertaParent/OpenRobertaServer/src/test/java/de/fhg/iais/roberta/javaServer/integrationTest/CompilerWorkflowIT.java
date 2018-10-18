@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.ws.rs.core.Response;
@@ -35,7 +36,7 @@ import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
@@ -63,7 +64,7 @@ public class CompilerWorkflowIT {
     private static final List<String> results = new ArrayList<>();
 
     private static RobotCommunicator robotCommunicator;
-    private static RobertaProperties robertaProperties;
+    private static ServerProperties serverProperties;
     private static Map<String, IRobotFactory> pluginMap;
     private static HttpSessionState httpSessionState;
 
@@ -79,12 +80,13 @@ public class CompilerWorkflowIT {
 
     @BeforeClass
     public static void setupClass() throws Exception {
-        robertaProperties = new RobertaProperties(Util1.loadProperties(null));
+        Properties baseServerProperties = Util1.loadProperties(null);
+        baseServerProperties.put("plugin.resourcedir", "../OpenRobertaParent");
+        serverProperties = new ServerProperties(baseServerProperties);
         // TODO: add a robotBasedir property to the openRoberta.properties. Make all pathes relative to that dir. Create special accessors. Change String to Path.
-        fixPropertyPathes();
         robotCommunicator = new RobotCommunicator();
-        pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, robertaProperties);
-        httpSessionState = HttpSessionState.init(robotCommunicator, pluginMap, robertaProperties, 1);
+        pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties);
+        httpSessionState = HttpSessionState.init(robotCommunicator, pluginMap, serverProperties, 1);
     }
 
     @AfterClass
@@ -98,8 +100,8 @@ public class CompilerWorkflowIT {
 
     @Before
     public void setup() throws Exception {
-        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, robotCommunicator, robertaProperties);
-        this.restAdmin = new ClientAdmin(robotCommunicator, robertaProperties);
+        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, robotCommunicator, serverProperties);
+        this.restAdmin = new ClientAdmin(robotCommunicator, serverProperties);
         when(sessionFactoryWrapper.getSession()).thenReturn(dbSession);
         doNothing().when(dbSession).commit();
     }
@@ -224,23 +226,6 @@ public class CompilerWorkflowIT {
     private void setRobotTo(String robot) throws Exception, JSONException {
         response = this.restAdmin.command(httpSessionState, dbSession, JSONUtilForServer.mkD("{'cmd':'setRobot','robot':'" + robot + "'}"), null);
         JSONUtilForServer.assertEntityRc(this.response, "ok", Key.ROBOT_SET_SUCCESS);
-    }
-
-    private static void fixPropertyPathes() {
-        List<String> robots = robertaProperties.getRobotWhitelist();
-        for ( String robot : robots ) {
-            replace("robot.plugin." + robot + ".compiler.resources.dir");
-            replace("robot.plugin." + robot + ".updateResources.dir");
-            replace("robot.plugin." + robot + ".generated.programs.build.xml");
-        }
-    }
-
-    private static void replace(String key) {
-        String path = robertaProperties.getStringProperty(key);
-        if ( path != null ) {
-            path = path.replaceFirst("OpenRobertaParent", "..");
-            robertaProperties.getRobertaProperties().put(key, path);
-        }
     }
 
     /**

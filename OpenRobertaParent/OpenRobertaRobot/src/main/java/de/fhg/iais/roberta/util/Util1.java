@@ -46,7 +46,7 @@ public class Util1 {
     /**
      * load the OpenRoberta properties. The URI of the properties refers either to the file system or to the classpath. It is used in both production and test.
      * <br>
-     * <b>This methods loads the properties. It does NOT store them. See class {@link RobertaProperties}</b> <br>
+     * <b>This methods loads the properties. It does NOT store them. See class {@link ServerProperties}</b> <br>
      * If the URI-parameter is null, the classpath is searched for the default resource "openRoberta.properties".<br>
      * If the URI-parameters start with "file:" the properties are loaded from the file system.<br>
      * If the URI-parameters start with "classpath:" the properties are loaded as a resource from the classpath.
@@ -61,7 +61,7 @@ public class Util1 {
     /**
      * load the OpenRoberta properties. The URI of the properties refers either to the file system or to the classpath. It is used in both production and test.
      * <br>
-     * <b>This methods loads the properties. It does NOT store them. See class {@link RobertaProperties}</b> <br>
+     * <b>This methods loads the properties. It does NOT store them. See class {@link ServerProperties}</b> <br>
      * If the URI-parameter is null, the classpath is searched for the default resource "openRoberta.properties".<br>
      * If the URI-parameters start with "file:" the properties are loaded from the file system.<br>
      * If the URI-parameters start with "classpath:" the properties are loaded as a resource from the classpath.
@@ -70,25 +70,25 @@ public class Util1 {
      * @return the properties. Never null, maybe empty
      */
     public static Properties loadAndMergeProperties(String propertyURI, List<String> defines) {
-        Properties robertaProperties = loadProperties(true, propertyURI);
+        Properties serverProperties = loadProperties(true, propertyURI);
         if ( defines != null ) {
             for ( String define : defines ) {
                 String[] property = define.split("\\s*=\\s*");
                 if ( property.length == 2 ) {
                     LOG.info("new property from command line: " + define);
-                    robertaProperties.put(property[0], property[1]);
+                    serverProperties.put(property[0], property[1]);
                 } else {
                     LOG.info("command line property is invalid and thus ignored: " + define);
                 }
             }
         }
-        return robertaProperties;
+        return serverProperties;
     }
 
     /**
      * load the OpenRoberta properties. The URI of the properties refers either to the file system or to the classpath. It is used in both production and test.
      * <br>
-     * <b>This methods loads the properties. It does NOT store them. See class {@link RobertaProperties}</b> <br>
+     * <b>This methods loads the properties. It does NOT store them. See class {@link ServerProperties}</b> <br>
      * If the URI-parameter is null, the classpath is searched for the default resource "openRoberta.properties".<br>
      * If the URI-parameters start with "file:" the properties are loaded from the file system.<br>
      * If the URI-parameters start with "classpath:" the properties are loaded as a resource from the classpath.

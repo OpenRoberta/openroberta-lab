@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.codegen.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.vorwerk.VorwerkCommunicator;
 import de.fhg.iais.roberta.components.vorwerk.VorwerkConfiguration;
@@ -15,17 +14,18 @@ import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.vorwerk.Jaxb2VorwerkConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.visitor.codegen.VorwerkPythonVisitor;
 
 public class VorwerkCompilerWorkflow extends AbstractCompilerWorkflow {
     private static final Logger LOG = LoggerFactory.getLogger(VorwerkCompilerWorkflow.class);
-    public final String pathToCrosscompilerBaseDir;
+
     private final VorwerkCommunicator vorwerkCommunicator;
 
-    public VorwerkCompilerWorkflow(String pathToCrosscompilerBaseDir, String pathToCompilerResourcesDir) {
-        this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
-        this.vorwerkCommunicator = new VorwerkCommunicator(pathToCompilerResourcesDir);
+    public VorwerkCompilerWorkflow(PluginProperties pluginProperties) {
+        super(pluginProperties);
+        this.vorwerkCommunicator = new VorwerkCommunicator(pluginProperties.getCompilerResourceDir());
     }
 
     @Override
@@ -40,11 +40,15 @@ public class VorwerkCompilerWorkflow extends AbstractCompilerWorkflow {
 
     @Override
     public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
+        final String compilerBinDir = pluginProperties.getCompilerBinDir();
+        final String compilerResourcesDir = pluginProperties.getCompilerResourceDir();
+        final String tempDir = pluginProperties.getTempDir();
+
         Key key;
 
         try {
-            storeGeneratedProgram(token, programName, sourceCode, this.pathToCrosscompilerBaseDir, ".py");
-            String programLocation = this.pathToCrosscompilerBaseDir + token + File.separator + programName + File.separator + "src";
+            storeGeneratedProgram(token, programName, sourceCode, ".py");
+            String programLocation = tempDir + token + File.separator + programName + File.separator + "src";
             key = this.vorwerkCommunicator.uploadFile(programLocation, programName + ".py");
             if ( key != Key.VORWERK_PROGRAM_UPLOAD_SUCCESSFUL ) {
                 return key;

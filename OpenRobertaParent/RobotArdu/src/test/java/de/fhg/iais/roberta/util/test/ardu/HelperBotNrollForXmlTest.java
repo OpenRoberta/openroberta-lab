@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.factory.BotnrollFactory;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
 
@@ -17,7 +18,7 @@ public class HelperBotNrollForXmlTest extends AbstractHelperForXmlTest {
 
     public HelperBotNrollForXmlTest() {
         super(
-            new BotnrollFactory("botnroll", Util1.loadProperties("classpath:botnroll.properties"), ""),
+            new BotnrollFactory(new PluginProperties("botnroll", "", "", Util1.loadProperties("classpath:botnroll.properties"))),
             new BotNrollConfiguration.Builder()
                 .addActor(new ActorPort("A", "MA"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))
                 .addActor(new ActorPort("B", "MB"), new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT))

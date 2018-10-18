@@ -44,10 +44,10 @@ public class ClientUser {
     private final boolean isPublicServer;
 
     @Inject
-    public ClientUser(RobotCommunicator brickCommunicator, RobertaProperties robertaProperties, MailManagement mailManagement) {
+    public ClientUser(RobotCommunicator brickCommunicator, ServerProperties serverProperties, MailManagement mailManagement) {
         this.brickCommunicator = brickCommunicator;
         this.mailManagement = mailManagement;
-        this.isPublicServer = robertaProperties.getBooleanProperty("server.public");
+        this.isPublicServer = serverProperties.getBooleanProperty("server.public");
     }
 
     private static String[] statusText = new String[2];

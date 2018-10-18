@@ -19,20 +19,21 @@ import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
 public class GenericHelperForXmlTest extends AbstractHelperForXmlTest {
     public GenericHelperForXmlTest() {
-        super(new TestFactory("test", new Properties(), null), (Configuration) null);
+        super(new TestFactory(new PluginProperties("test", "", "", new Properties())), (Configuration) null);
     }
 
     private static class TestFactory extends AbstractRobotFactory {
         Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:robotports.properties"));
 
-        public TestFactory(String robotName, Properties robotProperties, String tempDirForUserProjects) {
-            super(robotName, robotProperties);
+        public TestFactory(PluginProperties pluginProperties) {
+            super(pluginProperties);
         }
 
         @Override

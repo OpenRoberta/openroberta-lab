@@ -49,10 +49,10 @@ public class BlockTypeContainer {
     public static void add(String name, Category category, Class<?> astClass, String... blocklyNames) {
         BlockType blockType = new BlockType(name, category, astClass, blocklyNames);
         BlockType oldValue = blockTypesByName.put(name.toLowerCase(), blockType);
-        // TODO: REFACTOR Assert.isNull(oldValue, "Block name %s is mapped twice. Initialization aborted", name);
+        Assert.isNull(oldValue, "Block name %s is mapped twice. Initialization aborted", name);
         for ( String blocklyName : blocklyNames ) {
             oldValue = blockTypesByBlocklyName.put(blocklyName.toLowerCase(), blockType);
-            // TODO: REFACTOR Assert.isNull(oldValue, "Blockly name %s is mapped twice. Initialization aborted", blocklyName);
+            Assert.isNull(oldValue, "Blockly name %s is mapped twice. Initialization aborted", blocklyName);
         }
     }
 

@@ -5,7 +5,7 @@ import java.util.Map;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
-import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class HttpSessionState implements Serializable {
@@ -28,11 +28,11 @@ public class HttpSessionState implements Serializable {
     public HttpSessionState(
         RobotCommunicator robotCommunicator,
         Map<String, IRobotFactory> robotPluginMap,
-        RobertaProperties robertaProperties,
+        ServerProperties serverProperties,
         long sessionNumber) //
     {
         this.robotPluginMap = robotPluginMap;
-        this.robotName = robertaProperties.getDefaultRobot();
+        this.robotName = serverProperties.getDefaultRobot();
         this.sessionNumber = sessionNumber;
 
     }
@@ -40,10 +40,10 @@ public class HttpSessionState implements Serializable {
     public static HttpSessionState init(
         RobotCommunicator robotCommunicator,
         Map<String, IRobotFactory> robotPluginMap,
-        RobertaProperties robertaProperties,
+        ServerProperties serverProperties,
         long sessionNumber) //
     {
-        return new HttpSessionState(robotCommunicator, robotPluginMap, robertaProperties, sessionNumber);
+        return new HttpSessionState(robotCommunicator, robotPluginMap, serverProperties, sessionNumber);
     }
 
     public int getUserId() {

@@ -24,7 +24,7 @@ import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 /**
@@ -70,29 +70,29 @@ public class RestInterfaceTest {
 
     private RobotCommunicator robotCommunicator;
 
-    private RobertaProperties robertaProperties;
+    private ServerProperties serverProperties;
     private ClientUser restUser;
     private ClientProgram restProgram;
     private ClientConfiguration restConfiguration;
 
     @Before
     public void setup() throws Exception {
-        this.robertaProperties = new RobertaProperties(Util1.loadProperties(null));
-        this.robertaProperties.getRobertaProperties().put("server.public", "true"); // not dangerous! For this.restUser the mail management is set to null
+        this.serverProperties = new ServerProperties(Util1.loadProperties(null));
+        this.serverProperties.getserverProperties().put("server.public", "true"); // not dangerous! For this.restUser the mail management is set to null
 
         this.connectionUrl = "jdbc:hsqldb:mem:restTestInMemoryDb";
         this.robotCommunicator = new RobotCommunicator();
-        this.restUser = new ClientUser(this.robotCommunicator, robertaProperties, null);
+        this.restUser = new ClientUser(this.robotCommunicator, serverProperties, null);
 
         this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-test-cfg.xml", this.connectionUrl);
         Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
         this.memoryDbSetup = new DbSetup(nativeSession);
         this.memoryDbSetup.createEmptyDatabase();
-        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.robotCommunicator, robertaProperties);
+        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.robotCommunicator, serverProperties);
         this.restConfiguration = new ClientConfiguration(this.sessionFactoryWrapper, this.robotCommunicator);
-        Map<String, IRobotFactory> robotPlugins = ServerStarter.configureRobotPlugins(robotCommunicator, robertaProperties);
-        this.sPid = HttpSessionState.init(this.robotCommunicator, robotPlugins, robertaProperties, 1);
-        this.sMinscha = HttpSessionState.init(this.robotCommunicator, robotPlugins, robertaProperties, 2);
+        Map<String, IRobotFactory> robotPlugins = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties);
+        this.sPid = HttpSessionState.init(this.robotCommunicator, robotPlugins, serverProperties, 1);
+        this.sMinscha = HttpSessionState.init(this.robotCommunicator, robotPlugins, serverProperties, 2);
     }
 
     /**

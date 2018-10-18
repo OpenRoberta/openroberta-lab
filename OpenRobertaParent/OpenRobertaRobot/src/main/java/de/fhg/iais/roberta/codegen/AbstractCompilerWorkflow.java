@@ -11,22 +11,21 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractCompilerWorkflow.class);
 
-    @Override
-    public abstract String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language);
+    protected final PluginProperties pluginProperties;
 
-    @Override
-    public abstract Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider);
+    public AbstractCompilerWorkflow(PluginProperties pluginProperties) {
+        this.pluginProperties = pluginProperties;
+    }
 
     /*
      * (non-Javadoc)
@@ -38,16 +37,11 @@ public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
         return compileSourceCode(token, programName, sourceCode, language, null);
     }
 
-    @Override
-    public abstract Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception;
-
-    @Override
-    public abstract String getCompiledCode();
-
-    protected final void storeGeneratedProgram(String token, String programName, String sourceCode, String pathToCrosscompilerBaseDir, String ext) {
+    protected final void storeGeneratedProgram(String token, String programName, String sourceCode, String ext) {
+        String tempDir = this.pluginProperties.getTempDir();
         Assert.isTrue((token != null) && (programName != null) && (sourceCode != null));
-        File sourceFile = new File(pathToCrosscompilerBaseDir + token + "/" + programName + "/src/" + programName + ext);
-        Path path = Paths.get(pathToCrosscompilerBaseDir + token + "/" + programName + "/target/");
+        File sourceFile = new File(tempDir + token + "/" + programName + "/src/" + programName + ext);
+        Path path = Paths.get(tempDir + token + "/" + programName + "/target/");
         try {
             Files.createDirectories(path);
             FileUtils.writeStringToFile(sourceFile, sourceCode, StandardCharsets.UTF_8.displayName());

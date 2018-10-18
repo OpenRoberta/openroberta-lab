@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.factory;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Properties;
 
 import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.codegen.MbedSimCompilerWorkflow;
@@ -14,6 +13,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
@@ -27,13 +27,10 @@ public class MicrobitFactory extends AbstractRobotFactory {
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:Microbitports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:Microbitports.properties"));
 
-    public MicrobitFactory(String robotName, Properties robotProperties, String tempDirForUserProjects) {
-        super(robotName, robotProperties);
-        this.compilerWorkflow =
-            new MicrobitCompilerWorkflow(
-                robotProperties.getProperty("robot.plugin.compiler.resources.dir"),
-                robotProperties.getProperty("robot.plugin.compiler.dir"));
-        this.microbitSimCompilerWorkflow = new MbedSimCompilerWorkflow();
+    public MicrobitFactory(PluginProperties pluginProperties) {
+        super(pluginProperties);
+        this.compilerWorkflow = new MicrobitCompilerWorkflow(pluginProperties);
+        this.microbitSimCompilerWorkflow = new MbedSimCompilerWorkflow(pluginProperties);
     }
 
     @Override

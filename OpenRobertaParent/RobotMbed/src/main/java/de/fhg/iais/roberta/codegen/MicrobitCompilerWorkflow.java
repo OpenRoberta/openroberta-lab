@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.codegen.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.mbed.MicrobitConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -15,6 +14,7 @@ import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.mbed.Jaxb2MicrobitConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.visitor.codegen.MicrobitPythonVisitor;
 
@@ -22,15 +22,10 @@ public class MicrobitCompilerWorkflow extends AbstractCompilerWorkflow {
 
     private static final Logger LOG = LoggerFactory.getLogger(MicrobitCompilerWorkflow.class);
 
-    public final String robotCompilerResourcesDir;
-    public final String robotCompilerDir;
-
     private String compiledHex = "";
 
-    public MicrobitCompilerWorkflow(String robotCompilerResourcesDir, String robotCompilerDir) {
-        this.robotCompilerResourcesDir = robotCompilerResourcesDir;
-        this.robotCompilerDir = robotCompilerDir;
-
+    public MicrobitCompilerWorkflow(PluginProperties pluginProperties) {
+        super(pluginProperties);
     }
 
     @Override
@@ -38,7 +33,6 @@ public class MicrobitCompilerWorkflow extends AbstractCompilerWorkflow {
         if ( data.getErrorMessage() != null ) {
             return null;
         }
-
         return MicrobitPythonVisitor.generate((MicrobitConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
     }
 
@@ -69,15 +63,18 @@ public class MicrobitCompilerWorkflow extends AbstractCompilerWorkflow {
      * run the build and create the complied hex file
      */
     Key runBuild(String sourceCode) {
+        final String compilerBinDir = pluginProperties.getCompilerBinDir();
+        final String compilerResourcesDir = pluginProperties.getCompilerResourceDir();
+
         final StringBuilder sb = new StringBuilder();
 
-        String scriptName = this.robotCompilerResourcesDir + "/compile.py";
+        String scriptName = compilerResourcesDir + "/compile.py";
 
         try {
             ProcessBuilder procBuilder =
                 new ProcessBuilder(
                     new String[] {
-                        this.robotCompilerDir + "python",
+                        compilerBinDir + "python",
                         scriptName,
                         sourceCode
                     });

@@ -2,8 +2,6 @@ package de.fhg.iais.roberta.codegen;
 
 import java.io.File;
 import java.lang.ProcessBuilder.Redirect;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
@@ -14,14 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.codegen.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformers.arduino.Jaxb2Bob3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.visitor.codegen.Bob3CppVisitor;
 
@@ -29,17 +26,10 @@ public class Bob3CompilerWorkflow extends AbstractCompilerWorkflow {
 
     private static final Logger LOG = LoggerFactory.getLogger(Bob3CompilerWorkflow.class);
 
-    public final String pathToCrosscompilerBaseDir;
-    public final String robotCompilerResourcesDir;
-    public final String robotCompilerDir;
-
     private String compiledHex = "";
 
-    public Bob3CompilerWorkflow(String pathToCrosscompilerBaseDir, String robotCompilerResourcesDir, String robotCompilerDir) {
-        this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
-        this.robotCompilerResourcesDir = robotCompilerResourcesDir;
-        this.robotCompilerDir = robotCompilerDir;
-
+    public Bob3CompilerWorkflow(PluginProperties pluginProperties) {
+        super(pluginProperties);
     }
 
     @Override
@@ -81,15 +71,6 @@ public class Bob3CompilerWorkflow extends AbstractCompilerWorkflow {
         return this.compiledHex;
     }
 
-    private void storeGeneratedProgram(String token, String programName, String sourceCode, String ext) throws Exception {
-        Assert.isTrue(token != null && programName != null && sourceCode != null);
-        File sourceFile = new File(this.pathToCrosscompilerBaseDir + token + "/" + programName + "/src/" + programName + ext);
-        Path path = Paths.get(this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target/");
-        Files.createDirectories(path);
-        Bob3CompilerWorkflow.LOG.info("stored under: " + sourceFile.getPath());
-        FileUtils.writeStringToFile(sourceFile, sourceCode, StandardCharsets.UTF_8.displayName());
-    }
-
     /**
      * 1. Make target folder (if not exists).<br>
      * 2. Clean target folder (everything inside).<br>
@@ -101,6 +82,10 @@ public class Bob3CompilerWorkflow extends AbstractCompilerWorkflow {
      * @param mainPackage
      */
     private Key runBuild(String token, String mainFile, String mainPackage) {
+        final String compilerBinDir = pluginProperties.getCompilerBinDir();
+        final String compilerResourcesDir = pluginProperties.getCompilerResourceDir();
+        final String tempDir = pluginProperties.getTempDir();
+
         final StringBuilder sb = new StringBuilder();
 
         String scriptName = "";
@@ -108,21 +93,21 @@ public class Bob3CompilerWorkflow extends AbstractCompilerWorkflow {
         System.out.println(System.getProperty("os.arch"));
         if ( SystemUtils.IS_OS_LINUX ) {
             if ( System.getProperty("os.arch").contains("arm") ) {
-                scriptName = this.robotCompilerResourcesDir + "/linux-arm/arduino-builder";
+                scriptName = compilerResourcesDir + "/linux-arm/arduino-builder";
                 os = "linux-arm";
             } else {
-                scriptName = this.robotCompilerResourcesDir + "/linux/arduino-builder";
+                scriptName = compilerResourcesDir + "/linux/arduino-builder";
                 os = "linux";
             }
         } else if ( SystemUtils.IS_OS_WINDOWS ) {
-            scriptName = this.robotCompilerResourcesDir + "/windows/arduino-builder.exe";
+            scriptName = compilerResourcesDir + "/windows/arduino-builder.exe";
             os = "windows";
         } else if ( SystemUtils.IS_OS_MAC ) {
-            scriptName = this.robotCompilerResourcesDir + "/osx/arduino-builder";
+            scriptName = compilerResourcesDir + "/osx/arduino-builder";
             os = "osx";
         }
 
-        Path path = Paths.get(this.pathToCrosscompilerBaseDir + token + "/" + mainFile);
+        Path path = Paths.get(tempDir + token + "/" + mainFile);
         Path base = Paths.get("");
 
         try {
@@ -130,11 +115,11 @@ public class Bob3CompilerWorkflow extends AbstractCompilerWorkflow {
                 new ProcessBuilder(
                     new String[] {
                         scriptName,
-                        "-hardware=" + this.robotCompilerResourcesDir + "/hardware",
-                        "-tools=" + this.robotCompilerResourcesDir + "/" + os + "/tools-builder",
-                        "-libraries=" + this.robotCompilerResourcesDir + "/libraries",
+                        "-hardware=" + compilerResourcesDir + "/hardware",
+                        "-tools=" + compilerResourcesDir + "/" + os + "/tools-builder",
+                        "-libraries=" + compilerResourcesDir + "/libraries",
                         "-fqbn=nicai:avr:bob3",
-                        "-prefs=compiler.path=" + this.robotCompilerDir,
+                        "-prefs=compiler.path=" + compilerBinDir,
                         "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
                         //                        "-verbose",
                         base.resolve(path).toAbsolutePath().normalize().toString() + "/src/" + mainFile + ".ino"

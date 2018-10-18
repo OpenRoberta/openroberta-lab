@@ -24,16 +24,16 @@ import de.fhg.iais.roberta.javaServer.restServices.robot.RobotSensorLogging;
 import de.fhg.iais.roberta.main.MailManagement;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
-import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.ServerProperties;
 
 public class RobertaGuiceModule extends AbstractModule {
     private static final Logger LOG = LoggerFactory.getLogger(RobertaGuiceModule.class);
-    private final RobertaProperties robertaProperties;
+    private final ServerProperties serverProperties;
     private final Map<String, IRobotFactory> robotPluginMap;
     private final RobotCommunicator robotCommunicator;
 
-    public RobertaGuiceModule(RobertaProperties robertaProperties, Map<String, IRobotFactory> robotPluginMap, RobotCommunicator robotCommunicator) {
-        this.robertaProperties = robertaProperties;
+    public RobertaGuiceModule(ServerProperties serverProperties, Map<String, IRobotFactory> robotPluginMap, RobotCommunicator robotCommunicator) {
+        this.serverProperties = serverProperties;
         this.robotPluginMap = robotPluginMap;
         this.robotCommunicator = robotCommunicator;
     }
@@ -52,7 +52,7 @@ public class RobertaGuiceModule extends AbstractModule {
         bind(RestExample.class);
         bind(ClientPing.class);
 
-        bind(RobertaProperties.class).toInstance(this.robertaProperties);
+        bind(ServerProperties.class).toInstance(this.serverProperties);
         bind(SessionFactoryWrapper.class).in(Singleton.class);
         bind(RobotCommunicator.class).toInstance(this.robotCommunicator);
         bind(MailManagement.class).in(Singleton.class);
@@ -62,7 +62,7 @@ public class RobertaGuiceModule extends AbstractModule {
         bind(String.class).annotatedWith(Names.named("hibernate.config.xml")).toInstance("hibernate-cfg.xml");
 
         try {
-            Names.bindProperties(binder(), this.robertaProperties.getRobertaProperties());
+            Names.bindProperties(binder(), this.serverProperties.getserverProperties());
         } catch ( Exception e ) {
             LOG.error("Could not bind global properties to guice", e);
         }

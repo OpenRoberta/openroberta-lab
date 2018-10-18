@@ -1,10 +1,10 @@
 package de.fhg.iais.roberta.factory;
 
-import java.util.Properties;
+import de.fhg.iais.roberta.util.PluginProperties;
 
 public class UnoFactory extends AbstractArduinoFactory {
 
-    public UnoFactory(String robotName, Properties robotProperties, String tempDirForUserProjects) {
-        super(robotName, robotProperties, tempDirForUserProjects);
+    public UnoFactory(PluginProperties pluginProperties) {
+        super(pluginProperties);
     }
 }

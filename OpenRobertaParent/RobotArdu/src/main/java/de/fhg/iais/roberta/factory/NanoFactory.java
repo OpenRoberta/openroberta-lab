@@ -1,10 +1,10 @@
 package de.fhg.iais.roberta.factory;
 
-import java.util.Properties;
+import de.fhg.iais.roberta.util.PluginProperties;
 
 public class NanoFactory extends AbstractArduinoFactory {
 
-    public NanoFactory(String robotName, Properties robotProperties, String tempDirForUserProjects) {
-        super(robotName, robotProperties, tempDirForUserProjects);
+    public NanoFactory(PluginProperties pluginProperties) {
+        super(pluginProperties);
     }
 }

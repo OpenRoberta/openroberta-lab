@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.factory;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Properties;
 
 import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.codegen.VorwerkCompilerWorkflow;
@@ -24,6 +23,7 @@ import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.syntax.sensor.vorwerk.DropOffSensor;
 import de.fhg.iais.roberta.syntax.sensor.vorwerk.WallSensor;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
@@ -34,9 +34,9 @@ public class VorwerkFactory extends AbstractRobotFactory {
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:Vorwerkports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:Vorwerkports.properties"));
 
-    public VorwerkFactory(String robotName, Properties robotProperties, String tempDirForUserProjects) {
-        super(robotName, robotProperties);
-        this.robotCompilerWorkflow = new VorwerkCompilerWorkflow(tempDirForUserProjects, robotProperties.getProperty("robot.plugin.compiler.resources.dir"));
+    public VorwerkFactory(PluginProperties pluginProperties) {
+        super(pluginProperties);
+        this.robotCompilerWorkflow = new VorwerkCompilerWorkflow(pluginProperties);
     }
 
     @Override

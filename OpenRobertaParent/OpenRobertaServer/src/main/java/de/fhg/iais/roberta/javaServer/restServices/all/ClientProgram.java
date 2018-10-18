@@ -53,7 +53,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2AstTransformerData;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
@@ -70,10 +70,10 @@ public class ClientProgram {
     private final boolean isPublicServer;
 
     @Inject
-    public ClientProgram(SessionFactoryWrapper sessionFactoryWrapper, RobotCommunicator brickCommunicator, RobertaProperties robertaProperties) {
+    public ClientProgram(SessionFactoryWrapper sessionFactoryWrapper, RobotCommunicator brickCommunicator, ServerProperties serverProperties) {
         this.sessionFactoryWrapper = sessionFactoryWrapper;
         this.brickCommunicator = brickCommunicator;
-        this.isPublicServer = robertaProperties.getBooleanProperty("server.public");
+        this.isPublicServer = serverProperties.getBooleanProperty("server.public");
     }
 
     @POST

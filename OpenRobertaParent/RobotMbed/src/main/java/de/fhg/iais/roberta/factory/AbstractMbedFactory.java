@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.factory;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Properties;
 
 import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.codegen.MbedSimCompilerWorkflow;
@@ -13,6 +12,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
@@ -26,11 +26,10 @@ public abstract class AbstractMbedFactory extends AbstractRobotFactory {
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:Calliopeports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:Calliopeports.properties"));
 
-    public AbstractMbedFactory(String robotName, Properties robotProperties) {
-        super(robotName, robotProperties);
-        addBlockTypesFromProperties(robotName, robotProperties);
+    public AbstractMbedFactory(PluginProperties pluginProperties) {
+        super(pluginProperties);
         addBlockTypesFromProperties("mbed", Util1.loadProperties("classpath:mbed.properties"));
-        this.calliopeSimCompilerWorkflow = new MbedSimCompilerWorkflow();
+        this.calliopeSimCompilerWorkflow = new MbedSimCompilerWorkflow(pluginProperties);
     }
 
     @Override

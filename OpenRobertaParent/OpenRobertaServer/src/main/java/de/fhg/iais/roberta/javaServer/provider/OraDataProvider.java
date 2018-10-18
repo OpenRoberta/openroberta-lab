@@ -25,7 +25,7 @@ import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
-import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.ServerProperties;
 
 @Provider
 public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
@@ -48,7 +48,7 @@ public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
     private RobotCommunicator robotCommunicator;
 
     @Inject
-    private RobertaProperties robertaProperties;
+    private ServerProperties serverProperties;
 
     @Inject
     @Named("robotPluginMap")
@@ -91,7 +91,7 @@ public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
                         HttpSessionState.init(
                             OraDataProvider.this.robotCommunicator,
                             OraDataProvider.this.robotPluginMap,
-                            OraDataProvider.this.robertaProperties,
+                            OraDataProvider.this.serverProperties,
                             sessionNumber);
                     httpSession.setAttribute(OPEN_ROBERTA_STATE, httpSessionState);
                 }

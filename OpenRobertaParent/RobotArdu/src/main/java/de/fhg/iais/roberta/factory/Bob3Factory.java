@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.factory;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Properties;
 
 import org.apache.commons.lang3.SystemUtils;
 
@@ -17,6 +16,7 @@ import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.general.PickColor;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.codegen.Bob3CppVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
@@ -27,18 +27,13 @@ public class Bob3Factory extends AbstractRobotFactory {
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:bob3ports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:bob3ports.properties"));
 
-    public Bob3Factory(String robotName, Properties robotProperties, String tempDirForUserProjects) {
-        super(robotName, robotProperties);
+    public Bob3Factory(PluginProperties pluginProperties) {
+        super(pluginProperties);
         String os = "linux";
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";
         }
-        this.compilerWorkflow =
-            new Bob3CompilerWorkflow(
-                tempDirForUserProjects,
-                robotProperties.getProperty("robot.plugin.compiler.resources.dir"),
-                robotProperties.getProperty("robot.plugin.compiler." + os + ".dir"));
-        addBlockTypesFromProperties(robotName, robotProperties);
+        this.compilerWorkflow = new Bob3CompilerWorkflow(pluginProperties);
     }
 
     @Override

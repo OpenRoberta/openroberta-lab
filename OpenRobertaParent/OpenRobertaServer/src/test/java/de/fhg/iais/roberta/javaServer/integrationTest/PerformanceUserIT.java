@@ -38,7 +38,7 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Clock;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
@@ -56,7 +56,7 @@ public class PerformanceUserIT {
     private static final int MAX_PARALLEL_USERS = 30;
     private static final int MAX_TOTAL_USERS = 400;
 
-    private RobertaProperties robertaProperties;
+    private ServerProperties serverProperties;
 
     private SessionFactoryWrapper sessionFactoryWrapper;
     private DbSetup memoryDbSetup;
@@ -76,8 +76,8 @@ public class PerformanceUserIT {
 
     @Before
     public void setupTest() throws Exception {
-        this.robertaProperties = new RobertaProperties(Util1.loadProperties(null));
-        this.robertaProperties.getRobertaProperties().put("server.public", "false");
+        this.serverProperties = new ServerProperties(Util1.loadProperties(null));
+        this.serverProperties.getserverProperties().put("server.public", "false");
         this.connectionUrl = "jdbc:hsqldb:mem:performanceTestInMemoryDb";
 
         this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-testConcurrent-cfg.xml", this.connectionUrl);
@@ -85,15 +85,15 @@ public class PerformanceUserIT {
         this.memoryDbSetup.createEmptyDatabase();
         this.robotCommunicator = new RobotCommunicator();
 
-        this.restUser = new ClientUser(this.robotCommunicator, robertaProperties, null);
-        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.robotCommunicator, robertaProperties);
-        this.restBlocks = new ClientAdmin(this.robotCommunicator, robertaProperties);
-        this.downloadJar = new RobotDownloadProgram(this.robotCommunicator, robertaProperties);
+        this.restUser = new ClientUser(this.robotCommunicator, serverProperties, null);
+        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.robotCommunicator, serverProperties);
+        this.restBlocks = new ClientAdmin(this.robotCommunicator, serverProperties);
+        this.downloadJar = new RobotDownloadProgram(this.robotCommunicator, serverProperties);
         this.brickCommand = new RobotCommand(this.robotCommunicator);
         this.theProgramOfAllUserLol = Resources.toString(PerformanceUserIT.class.getResource("/restInterfaceTest/action_BrickLight.xml"), Charsets.UTF_8);
         this.executorService = Executors.newFixedThreadPool(PerformanceUserIT.MAX_PARALLEL_USERS + 10);
 
-        this.robotPlugins = ServerStarter.configureRobotPlugins(robotCommunicator, robertaProperties);
+        this.robotPlugins = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties);
     }
 
     @Test
@@ -149,7 +149,7 @@ public class PerformanceUserIT {
         PerformanceUserIT.LOG.info("" + userNumber + ";start;");
         Random random = new Random(userNumber);
 
-        HttpSessionState s = HttpSessionState.init(this.robotCommunicator, this.robotPlugins, robertaProperties, 1);
+        HttpSessionState s = HttpSessionState.init(this.robotCommunicator, this.robotPlugins, serverProperties, 1);
         Assert.assertTrue(!s.isUserLoggedIn());
 
         // create user "pid-*" with success

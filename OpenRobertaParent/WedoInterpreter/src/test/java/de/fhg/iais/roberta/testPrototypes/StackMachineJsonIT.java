@@ -43,7 +43,7 @@ import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
@@ -89,7 +89,7 @@ public class StackMachineJsonIT {
     private static final String NODE_CALL = "node ./jsGenerated/runStackMachineJson.js" + " -d " + TEST_BASE;
 
     private static RobotCommunicator robotCommunicator;
-    private static RobertaProperties robertaProperties;
+    private static ServerProperties serverProperties;
     private static Map<String, IRobotFactory> pluginMap;
     private static HttpSessionState httpSessionState;
 
@@ -111,12 +111,12 @@ public class StackMachineJsonIT {
 
     @Before
     public void setup() throws Exception {
-        robertaProperties = new RobertaProperties(Util1.loadProperties("classpath:wedoOpenRoberta.properties"));
+        serverProperties = new ServerProperties(Util1.loadProperties("classpath:wedoOpenRoberta.properties"));
         robotCommunicator = new RobotCommunicator();
-        pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, robertaProperties);
-        httpSessionState = HttpSessionState.init(robotCommunicator, pluginMap, robertaProperties, 1);
-        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, robotCommunicator, robertaProperties);
-        this.restAdmin = new ClientAdmin(robotCommunicator, robertaProperties);
+        pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties);
+        httpSessionState = HttpSessionState.init(robotCommunicator, pluginMap, serverProperties, 1);
+        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, robotCommunicator, serverProperties);
+        this.restAdmin = new ClientAdmin(robotCommunicator, serverProperties);
         when(this.sessionFactoryWrapper.getSession()).thenReturn(this.dbSession);
         doNothing().when(this.dbSession).commit();
     }

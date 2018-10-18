@@ -4,13 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.codegen.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.nxt.Jaxb2NxtConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.visitor.codegen.NxtSimVisitor;
 
@@ -18,7 +18,8 @@ public class NxtSimCompilerWorkflow extends AbstractCompilerWorkflow {
 
     private static final Logger LOG = LoggerFactory.getLogger(NxtSimCompilerWorkflow.class);
 
-    public NxtSimCompilerWorkflow() {
+    public NxtSimCompilerWorkflow(PluginProperties pluginProperties) {
+        super(pluginProperties);
     }
 
     @Override

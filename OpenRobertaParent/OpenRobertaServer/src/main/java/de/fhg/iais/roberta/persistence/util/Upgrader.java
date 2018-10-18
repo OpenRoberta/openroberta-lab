@@ -35,8 +35,8 @@ public class Upgrader {
             LOG.info("database version " + serverVersionForDbDirectory + " is uptodate");
         } else {
             // server version upgrade is necessary
-            Properties robertaProperties = Util1.loadProperties(false, null);
-            String[] previousServerVersions = robertaProperties.getProperty("openRobertaServer.history").split(",");
+            Properties serverProperties = Util1.loadProperties(false, null);
+            String[] previousServerVersions = serverProperties.getProperty("openRobertaServer.history").split(",");
             if ( previousServerVersions.length > 0 && serverVersionForDbDirectory.equals(previousServerVersions[0]) ) {
                 // if the first entry is the actual version, remove the entry ...
                 previousServerVersions = Arrays.copyOfRange(previousServerVersions, 1, previousServerVersions.length);

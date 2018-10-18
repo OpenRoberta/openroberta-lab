@@ -46,12 +46,12 @@ public class ClientAdmin {
     public static final String NO_CONNECT = "NOCONNCT";
 
     private final RobotCommunicator brickCommunicator;
-    private final RobertaProperties robertaProperties;
+    private final ServerProperties serverProperties;
 
     @Inject
-    public ClientAdmin(RobotCommunicator brickCommunicator, RobertaProperties robertaProperties) {
+    public ClientAdmin(RobotCommunicator brickCommunicator, ServerProperties serverProperties) {
         this.brickCommunicator = brickCommunicator;
-        this.robertaProperties = robertaProperties;
+        this.serverProperties = serverProperties;
     }
 
     @POST
@@ -81,14 +81,14 @@ public class ClientAdmin {
                 Statistics.infoUserAgent("Initialization",userAgent, request);
 
                 JSONObject server = new JSONObject();
-                server.put("defaultRobot", robertaProperties.getDefaultRobot());
+                server.put("defaultRobot", serverProperties.getDefaultRobot());
                 JSONObject robots = new JSONObject();
-                Collection<String> availableRobots = robertaProperties.getRobotWhitelist();
+                Collection<String> availableRobots = serverProperties.getRobotWhitelist();
                 int i = 0;
                 for ( String robot : availableRobots ) {
                     JSONObject robotDescription = new JSONObject();
                     robotDescription.put("name", robot);
-                    if ( !RobertaProperties.NAME_OF_SIM.equals(robot) ) {
+                    if ( !ServerProperties.NAME_OF_SIM.equals(robot) ) {
                         robotDescription.put("realName", httpSessionState.getRobotFactory(robot).getRealName());
                         robotDescription.put("info", httpSessionState.getRobotFactory(robot).getInfo());
                         robotDescription.put("beta", httpSessionState.getRobotFactory(robot).isBeta());
@@ -97,16 +97,16 @@ public class ClientAdmin {
                     robots.put("" + i, robotDescription);
                     i++;
                 }
-                server.put("isPublic", robertaProperties.getBooleanProperty("server.public"));
+                server.put("isPublic", serverProperties.getBooleanProperty("server.public"));
                 server.put("robots", robots);
-                String staticRecourcesDir = this.robertaProperties.getStringProperty("server.staticresources.dir");
+                String staticRecourcesDir = this.serverProperties.getStringProperty("server.staticresources.dir");
                 String pathToTutorial = staticRecourcesDir+ File.separator + "tutorial";                
                 List<String> listOfFileNames = Util.getListOfFileNames(pathToTutorial, "json");               
                 server.put("tutorial", listOfFileNames);
                 String pathToHelp = staticRecourcesDir+ File.separator + "help";                
                 listOfFileNames = Util.getListOfFileNames(pathToHelp, "html");               
                 server.put("help", listOfFileNames);
-                String theme = robertaProperties.getStringProperty("server.theme");
+                String theme = serverProperties.getStringProperty("server.theme");
                 server.put("theme", theme);
                 response.put("server", server);
                 LOG.info("success: create init object");
@@ -162,7 +162,7 @@ public class ClientAdmin {
                 }
             } else if ( cmd.equals("setRobot") ) {
                 String robot = request.getString("robot");
-                if ( robot != null && robertaProperties.getRobotWhitelist().contains(robot) ) {
+                if ( robot != null && serverProperties.getRobotWhitelist().contains(robot) ) {
                     Util.addSuccessInfo(response, Key.ROBOT_SET_SUCCESS);
                     if ( httpSessionState.getRobotName() != robot ) {
                         // disconnect previous robot

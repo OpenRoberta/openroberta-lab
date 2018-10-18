@@ -12,11 +12,11 @@ import org.junit.Test;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class UtilTest {
-    private static RobertaProperties robertaProperties;
+    private static ServerProperties serverProperties;
 
     @BeforeClass
     public static void setup() {
-        robertaProperties = new RobertaProperties(Util1.loadProperties(null));
+        serverProperties = new ServerProperties(Util1.loadProperties(null));
     }
 
     @Test
@@ -48,7 +48,7 @@ public class UtilTest {
 
     @Test
     public void testMissingProperty() {
-        boolean browserVisibility = Boolean.parseBoolean(robertaProperties.getStringProperty("does.not.exist"));
+        boolean browserVisibility = Boolean.parseBoolean(serverProperties.getStringProperty("does.not.exist"));
         assertEquals(false, browserVisibility);
     }
 

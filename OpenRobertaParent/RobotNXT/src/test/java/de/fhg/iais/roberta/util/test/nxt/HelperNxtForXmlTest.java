@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
 import de.fhg.iais.roberta.visitor.codegen.NxtNxcVisitor;
@@ -25,7 +26,7 @@ public class HelperNxtForXmlTest extends AbstractHelperForXmlTest {
 
     public HelperNxtForXmlTest() {
         super(
-            new NxtFactory("nxt", Util1.loadProperties("classpath:nxt.properties"), ""),
+            new NxtFactory(new PluginProperties("nxt", "", "", Util1.loadProperties("classpath:nxt.properties"))),
             new NxtConfiguration.Builder()
                 .addActor(new ActorPort("A", "MA"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))
                 .addActor(new ActorPort("B", "MB"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))

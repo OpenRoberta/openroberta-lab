@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.factory;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Properties;
 
 import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.codegen.NaoCompilerWorkflow;
@@ -28,6 +27,7 @@ import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
 import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.codegen.NaoPythonVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
@@ -38,10 +38,9 @@ public class NaoFactory extends AbstractRobotFactory {
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:NAOports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:NAOports.properties"));
 
-    public NaoFactory(String robotName, Properties robotProperties, String tempDirForUserProjects) {
-        super(robotName, robotProperties);
-        this.compilerWorkflow = new NaoCompilerWorkflow(tempDirForUserProjects, robotProperties.getProperty("robot.plugin.compiler.resources.dir"));
-        addBlockTypesFromProperties(robotName, robotProperties);
+    public NaoFactory(PluginProperties pluginProperties) {
+        super(pluginProperties);
+        this.compilerWorkflow = new NaoCompilerWorkflow(pluginProperties);
     }
 
     @Override

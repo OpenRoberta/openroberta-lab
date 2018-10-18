@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
 import de.fhg.iais.roberta.visitor.codegen.Ev3JavaVisitor;
@@ -25,7 +26,7 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
 
     public HelperEv3ForXmlTest() {
         super(
-            new Ev3LejosV0Factory("ev3lejosv0", Util1.loadProperties("classpath:ev3lejosv0.properties"), ""),
+            new Ev3LejosV0Factory(new PluginProperties("ev3lejosv0", "", "", Util1.loadProperties("classpath:ev3lejosv0.properties"))),
             new EV3Configuration.Builder()
                 .addActor(new ActorPort("A", "MA"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))
                 .addActor(new ActorPort("B", "MB"), new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.RIGHT))

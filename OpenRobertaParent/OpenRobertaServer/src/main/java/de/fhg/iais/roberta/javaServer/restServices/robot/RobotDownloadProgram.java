@@ -21,7 +21,7 @@ import com.google.inject.Inject;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.AliveData;
-import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
@@ -35,9 +35,9 @@ public class RobotDownloadProgram {
     private final String pathToCrosscompilerBaseDir;
 
     @Inject
-    public RobotDownloadProgram(RobotCommunicator brickCommunicator, RobertaProperties robertaProperties) {
+    public RobotDownloadProgram(RobotCommunicator brickCommunicator, ServerProperties serverProperties) {
         this.brickCommunicator = brickCommunicator;
-        pathToCrosscompilerBaseDir = robertaProperties.getTempDirForUserProjects();
+        pathToCrosscompilerBaseDir = serverProperties.getTempDirForUserProjects();
     }
 
     @POST
@@ -54,7 +54,8 @@ public class RobotDownloadProgram {
             String fileName = null;
             String filePath = null;
 
-            // FIXME as the number of supported robot system grows, we should think about a better solution here :-D
+            // TODO: as the number of supported robot system grows, we should think about a better solution here :-D
+            // TODO: inconsistent names: "ev3lejosv1" "lejos" ???
             switch ( state.getFirmwareName() ) {
                 case "ev3lejosv1":
                 case "lejos":

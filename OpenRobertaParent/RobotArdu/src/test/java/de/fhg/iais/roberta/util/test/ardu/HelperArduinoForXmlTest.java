@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.components.ConfigurationBlockType;
 import de.fhg.iais.roberta.components.arduino.ArduinoConfiguration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.UnoFactory;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
 
@@ -15,7 +16,7 @@ public class HelperArduinoForXmlTest extends AbstractHelperForXmlTest {
 
     public HelperArduinoForXmlTest() {
         super(
-            new UnoFactory("uno", Util1.loadProperties("classpath:uno.properties"), ""),
+            new UnoFactory(new PluginProperties("uno", "", "", Util1.loadProperties("classpath:uno.properties"))),
             new ArduinoConfiguration.Builder()
                 .addConfigurationBlock(new ConfigurationBlock(ConfigurationBlockType.BUZZER), "buzzer", null, new ArrayList<String>() {
                     {

@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.factory;
 
 import java.util.ArrayList;
-import java.util.Properties;
 
 import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.codegen.WeDoCompilerWorkflow;
@@ -22,6 +21,7 @@ import de.fhg.iais.roberta.syntax.sensor.GetSampleType;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.visitor.WeDoStackMachineVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractBrickValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
@@ -30,10 +30,9 @@ import de.fhg.iais.roberta.visitor.validate.WedoBrickValidatorVisitor;
 public class WeDoFactory extends AbstractRobotFactory {
     private final WeDoCompilerWorkflow compilerWorkflow;
 
-    public WeDoFactory(String robotName, Properties robotProperties, String tempDirForUserProjects) {
-        super(robotName, robotProperties);
-        this.compilerWorkflow = new WeDoCompilerWorkflow();
-        addBlockTypesFromProperties(robotName, this.robotProperties);
+    public WeDoFactory(PluginProperties pluginProperties) {
+        super(pluginProperties);
+        this.compilerWorkflow = new WeDoCompilerWorkflow(pluginProperties);
     }
 
     public SensorPort getSensorName(String port) {

@@ -42,7 +42,7 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.testutil.SeleniumHelper;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
@@ -183,12 +183,12 @@ public class RoundTripIT {
 
     // TODO: properties have been refactored. Numbers don't work anymore
     private void initialize() {
-        RobertaProperties robertaProperties = new RobertaProperties(Util1.loadProperties("classpath:openRoberta.properties"));
-        buildXml = robertaProperties.getStringProperty("robot.plugin.1.generated.programs.build.xml");
-        connectionUrl = robertaProperties.getStringProperty("hibernate.connection.url");
-        crosscompilerBasedir = robertaProperties.getTempDirForUserProjects();
-        crossCompilerResourcesDir = robertaProperties.getStringProperty("robot.plugin.1.compiler.resources.dir");
-        browserVisibility = Boolean.parseBoolean(robertaProperties.getStringProperty("browser.visibility"));
+        ServerProperties serverProperties = new ServerProperties(Util1.loadProperties("classpath:openRoberta.properties"));
+        buildXml = serverProperties.getStringProperty("robot.plugin.1.generated.programs.build.xml");
+        connectionUrl = serverProperties.getStringProperty("hibernate.connection.url");
+        crosscompilerBasedir = null; // serverProperties.getTempDirForUserProjects();
+        crossCompilerResourcesDir = serverProperties.getStringProperty("robot.plugin.1.compiler.resources.dir");
+        browserVisibility = Boolean.parseBoolean(serverProperties.getStringProperty("browser.visibility"));
 
         sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", connectionUrl);
         nativeSession = sessionFactoryWrapper.getNativeSession();
@@ -196,27 +196,30 @@ public class RoundTripIT {
         memoryDbSetup.createEmptyDatabase();
         brickCommunicator = new RobotCommunicator();
 
-        restUser = new ClientUser(brickCommunicator, robertaProperties, null);
-        restProgram = new ClientProgram(sessionFactoryWrapper, brickCommunicator, robertaProperties);
+        restUser = new ClientUser(brickCommunicator, serverProperties, null);
+        restProgram = new ClientProgram(sessionFactoryWrapper, brickCommunicator, serverProperties);
         Map<String, IRobotFactory> robotPlugins = new HashMap<>();
         loadPlugin(robotPlugins);
-        s1 = HttpSessionState.init(brickCommunicator, robotPlugins, robertaProperties, 1);
+        s1 = HttpSessionState.init(brickCommunicator, robotPlugins, serverProperties, 1);
     }
 
     private void setUpDatabase() throws Exception {
         Assert.assertEquals(1, getOneBigInteger("select count(*) from USER"));
         response =
-            restUser.command(
-                s1,
-                sessionFactoryWrapper.getSession(),
-                JSONUtilForServer.mkD("{'cmd':'createUser';'accountName':'orA';'userName':'orA';'password':'Pid';'userEmail':'cavy@home';'role':'STUDENT'}"));
+            restUser
+                .command(
+                    s1,
+                    sessionFactoryWrapper.getSession(),
+                    JSONUtilForServer
+                        .mkD("{'cmd':'createUser';'accountName':'orA';'userName':'orA';'password':'Pid';'userEmail':'cavy@home';'role':'STUDENT'}"));
         Assert.assertEquals(2, getOneBigInteger("select count(*) from USER"));
         Assert.assertTrue(!s1.isUserLoggedIn());
         response = //
-            restUser.command( //
-                s1,
-                sessionFactoryWrapper.getSession(),
-                JSONUtilForServer.mkD("{'cmd':'login';'accountName':'orA';'password':'Pid'}"));
+            restUser
+                .command( //
+                    s1,
+                    sessionFactoryWrapper.getSession(),
+                    JSONUtilForServer.mkD("{'cmd':'login';'accountName':'orA';'password':'Pid'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.USER_GET_ONE_SUCCESS);
         Assert.assertTrue(s1.isUserLoggedIn());
         int s1Id = s1.getUserId();

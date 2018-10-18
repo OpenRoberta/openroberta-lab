@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.codegen.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -12,15 +11,16 @@ import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.ev3.Jaxb2Ev3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.PluginProperties;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.visitor.codegen.Ev3PythonVisitor;
 
 public class Ev3DevCompilerWorkflow extends AbstractCompilerWorkflow {
     private static final Logger LOG = LoggerFactory.getLogger(Ev3DevCompilerWorkflow.class);
-    public final String pathToCrosscompilerBaseDir;
 
-    public Ev3DevCompilerWorkflow(String pathToCrosscompilerBaseDir) {
-        this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
+    public Ev3DevCompilerWorkflow(PluginProperties pluginProperties) {
+        super(pluginProperties);
     }
 
     @Override
@@ -29,17 +29,6 @@ public class Ev3DevCompilerWorkflow extends AbstractCompilerWorkflow {
             return null;
         }
         return Ev3PythonVisitor.generate((EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
-    }
-
-    @Override
-    public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
-        try {
-            storeGeneratedProgram(token, programName, sourceCode, this.pathToCrosscompilerBaseDir, ".py");
-        } catch ( Exception e ) {
-            Ev3DevCompilerWorkflow.LOG.error("Storing the generated program into directory " + token + " failed", e);
-            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
-        }
-        return Key.COMPILERWORKFLOW_SUCCESS;
     }
 
     @Override
@@ -52,5 +41,10 @@ public class Ev3DevCompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public String getCompiledCode() {
         return null;
+    }
+
+    @Override
+    public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
+        throw new DbcException("Operation not supported");
     }
 }

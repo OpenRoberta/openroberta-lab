@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.codegen.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -17,6 +16,7 @@ import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.nxt.Jaxb2NxtConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.visitor.codegen.NxtNxcVisitor;
 
@@ -24,12 +24,8 @@ public class NxtCompilerWorkflow extends AbstractCompilerWorkflow {
 
     private static final Logger LOG = LoggerFactory.getLogger(NxtCompilerWorkflow.class);
 
-    public final String pathToCrosscompilerBaseDir;
-    public final String robotCompilerResourcesDir;
-
-    public NxtCompilerWorkflow(String pathToCrosscompilerBaseDir, String robotCompilerResourcesDir) {
-        this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
-        this.robotCompilerResourcesDir = robotCompilerResourcesDir;
+    public NxtCompilerWorkflow(PluginProperties pluginProperties) {
+        super(pluginProperties);
     }
 
     @Override
@@ -44,9 +40,9 @@ public class NxtCompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
         try {
-            storeGeneratedProgram(token, programName, sourceCode, this.pathToCrosscompilerBaseDir, ".nxc");
+            storeGeneratedProgram(token, programName, sourceCode, ".nxc");
         } catch ( Exception e ) {
-            NxtCompilerWorkflow.LOG.error("Storing the generated program into directory " + token + " failed", e);
+            LOG.error("Storing the generated program into directory " + token + " failed", e);
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
         }
 
@@ -82,16 +78,20 @@ public class NxtCompilerWorkflow extends AbstractCompilerWorkflow {
      * @param mainPackage
      */
     Key runBuild(String token, String mainFile, String mainPackage) {
+        // TODO: really unused? final String compilerBinDir = pluginProperties.getCompilerBinDir();
+        final String compilerResourcesDir = pluginProperties.getCompilerResourceDir();
+        final String tempDir = pluginProperties.getTempDir();
+
         final StringBuilder sb = new StringBuilder();
 
-        Path path = Paths.get(this.robotCompilerResourcesDir);
+        Path path = Paths.get(compilerResourcesDir);
         Path base = Paths.get("");
 
-        String nbcCompilerFileName = this.robotCompilerResourcesDir + "/windows/nbc.exe";
+        String nbcCompilerFileName = compilerResourcesDir + "/windows/nbc.exe";
         if ( SystemUtils.IS_OS_LINUX ) {
             nbcCompilerFileName = "nbc";
         } else if ( SystemUtils.IS_OS_MAC ) {
-            nbcCompilerFileName = this.robotCompilerResourcesDir + "/osx/nbc";
+            nbcCompilerFileName = compilerResourcesDir + "/osx/nbc";
         }
 
         try {
@@ -100,8 +100,8 @@ public class NxtCompilerWorkflow extends AbstractCompilerWorkflow {
                     new String[] {
                         nbcCompilerFileName,
                         "-q",
-                        this.pathToCrosscompilerBaseDir + token + "/" + mainFile + "/src/" + mainFile + ".nxc",
-                        "-O=" + this.pathToCrosscompilerBaseDir + token + "/" + mainFile + "/target/" + mainFile + ".rxe",
+                        tempDir + token + "/" + mainFile + "/src/" + mainFile + ".nxc",
+                        "-O=" + tempDir + token + "/" + mainFile + "/target/" + mainFile + ".rxe",
                         "-I=" + base.resolve(path).toAbsolutePath().normalize().toString()
                     });
             procBuilder.redirectInput(Redirect.INHERIT);

@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.factory;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Properties;
 
 import de.fhg.iais.roberta.codegen.Ev3LejosCompilerWorkflow;
 import de.fhg.iais.roberta.codegen.Ev3SimCompilerWorkflow;
@@ -15,6 +14,7 @@ import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.ev3.ShowPicture;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
@@ -28,12 +28,10 @@ public abstract class AbstractEV3Factory extends AbstractRobotFactory {
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:EV3ports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:EV3ports.properties"));
 
-    public AbstractEV3Factory(String robotName, Properties robotProperties, String tempDirForUserProjects) {
-        super(robotName, robotProperties);
-        this.robotCompilerWorkflow = new Ev3LejosCompilerWorkflow(tempDirForUserProjects, robotProperties.getProperty("robot.plugin.compiler.resources.dir"));
-        this.simCompilerWorkflow = new Ev3SimCompilerWorkflow();
-
-        addBlockTypesFromProperties(robotName, this.robotProperties);
+    public AbstractEV3Factory(PluginProperties pluginProperties) {
+        super(pluginProperties);
+        this.robotCompilerWorkflow = new Ev3LejosCompilerWorkflow(pluginProperties);
+        this.simCompilerWorkflow = new Ev3SimCompilerWorkflow(pluginProperties);
     }
 
     @Override

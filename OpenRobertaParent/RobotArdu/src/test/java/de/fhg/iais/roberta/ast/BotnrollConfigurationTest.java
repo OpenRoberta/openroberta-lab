@@ -1,7 +1,5 @@
 package de.fhg.iais.roberta.ast;
 
-import java.util.Properties;
-
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -12,13 +10,14 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.BotnrollFactory;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.transformers.arduino.Jaxb2BotNrollConfigurationTransformer;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 public class BotnrollConfigurationTest {
     private final String robot = "botnroll";
-    private final Properties robotProperties = Util1.loadProperties("classpath:" + robot + ".properties");
-    private final IRobotFactory factory = new BotnrollFactory(robot, robotProperties, "");
+    private final PluginProperties pluginProperties = new PluginProperties(robot, "", "", Util1.loadProperties("classpath:" + robot + ".properties"));
+    private final IRobotFactory factory = new BotnrollFactory(pluginProperties);
 
     @Test
     public void testRoundtrip() throws Exception {

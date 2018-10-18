@@ -284,8 +284,8 @@ public class Administration {
     }
 
     private String version(boolean isForDatabase) {
-        Properties robertaProperties = Util1.loadProperties(false, null);
-        String version = robertaProperties.getProperty("openRobertaServer.version");
+        Properties serverProperties = Util1.loadProperties(false, null);
+        String version = serverProperties.getProperty("openRobertaServer.version");
         if ( isForDatabase ) {
             return version.replace("-SNAPSHOT", "");
         } else {

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -16,102 +17,100 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 public abstract class AbstractRobotFactory implements IRobotFactory {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractRobotFactory.class);
 
-    protected final String robotName;
-    protected final Properties robotProperties;
+    protected final PluginProperties pluginProperties;
 
-    public AbstractRobotFactory(String robotName, Properties robotProperties) {
-        this.robotName = robotName;
-        this.robotProperties = robotProperties;
+    public AbstractRobotFactory(PluginProperties pluginProperties) {
+        this.pluginProperties = pluginProperties;
 
-        Properties generalRobotProperties = Util1.loadProperties("classpath:Robot.properties");
-        addBlockTypesFromProperties("Robot", generalRobotProperties);
-        addBlockTypesFromProperties(robotName, this.robotProperties);
+        Properties generalpluginProperties = Util1.loadProperties("classpath:Robot.properties");
+        addBlockTypesFromProperties("Robot", generalpluginProperties);
+        addBlockTypesFromProperties(pluginProperties.getRobotName(), pluginProperties.getPluginProperties());
     }
 
     @Override
     public final String getGroup() {
-        String group = this.robotProperties.getProperty("robot.plugin.group");
-        return group != null ? group : this.robotName;
+        String group = this.pluginProperties.getStringProperty("robot.plugin.group");
+        return group != null ? group : pluginProperties.getRobotName();
     }
 
     @Override
     public final String getProgramToolboxBeginner() {
-        return this.robotProperties.getProperty("robot.program.toolbox.beginner");
+        return this.pluginProperties.getStringProperty("robot.program.toolbox.beginner");
     }
 
     @Override
     public final String getProgramToolboxExpert() {
-        return this.robotProperties.getProperty("robot.program.toolbox.expert");
+        return this.pluginProperties.getStringProperty("robot.program.toolbox.expert");
     }
 
     @Override
     public final String getProgramDefault() {
-        return this.robotProperties.getProperty("robot.program.default");
+        return this.pluginProperties.getStringProperty("robot.program.default");
     }
 
     @Override
     public final String getConfigurationToolbox() {
-        return this.robotProperties.getProperty("robot.configuration.toolbox");
+        return this.pluginProperties.getStringProperty("robot.configuration.toolbox");
     }
 
     @Override
     public final String getConfigurationDefault() {
-        return this.robotProperties.getProperty("robot.configuration.default");
+        return this.pluginProperties.getStringProperty("robot.configuration.default");
     }
 
     @Override
     public final String getRealName() {
-        return this.robotProperties.getProperty("robot.real.name");
+        return this.pluginProperties.getStringProperty("robot.real.name");
     }
 
     @Override
     public final Boolean hasSim() {
-        return this.robotProperties.getProperty("robot.sim").equals("true") ? true : false;
+        return this.pluginProperties.getStringProperty("robot.sim").equals("true") ? true : false;
     }
 
     @Override
     public final String getInfo() {
-        return this.robotProperties.getProperty("robot.info") != null ? this.robotProperties.getProperty("robot.info") : "#";
+        return this.pluginProperties.getStringProperty("robot.info") != null ? this.pluginProperties.getStringProperty("robot.info") : "#";
     }
 
     @Override
     public final Boolean isBeta() {
-        return this.robotProperties.getProperty("robot.beta") != null ? true : false;
+        return this.pluginProperties.getStringProperty("robot.beta") != null ? true : false; // TODO: a bit strange - consider robot.beta = false :-)
     }
 
     @Override
     public final String getConnectionType() {
-        return this.robotProperties.getProperty("robot.connection");
+        return this.pluginProperties.getStringProperty("robot.connection");
     }
 
     @Override
     public final String getVendorId() {
-        return this.robotProperties.getProperty("robot.vendor");
+        return this.pluginProperties.getStringProperty("robot.vendor");
     }
 
     @Override
     public final Boolean hasConfiguration() {
-        return Boolean.parseBoolean(this.robotProperties.getProperty("robot.configuration"));
+        return Boolean.parseBoolean(this.pluginProperties.getStringProperty("robot.configuration"));
     }
 
     @Override
     public final String getCommandline() {
-        return this.robotProperties.getProperty("robot.connection.commandLine");
+        return this.pluginProperties.getStringProperty("robot.connection.commandLine");
     }
 
     @Override
     public final String getSignature() {
-        return this.robotProperties.getProperty("robot.connection.signature");
+        return this.pluginProperties.getStringProperty("robot.connection.signature");
     }
 
     @Override
     public final String getMenuVersion() {
-        return this.robotProperties.getProperty("robot.menu.verision");
+        return this.pluginProperties.getStringProperty("robot.menu.verision");
     }
 
     /**
      * should be called only from subclasses. Made public and static for tests (see call hierarchy). Another example, that shows, that singletons are bad.<br>
-     * TODO: rewrite the BlockTypeContainer map singleton and inject it with Guice
+     * TODO: refactor to avoid the singleton
      *
      * @param robotName
      * @param properties
@@ -143,5 +142,4 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
             }
         }
     }
-
 }

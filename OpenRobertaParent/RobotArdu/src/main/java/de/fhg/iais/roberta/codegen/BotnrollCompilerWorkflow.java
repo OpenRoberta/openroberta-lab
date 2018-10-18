@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.codegen.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.arduino.BotNrollConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -20,6 +19,7 @@ import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformers.arduino.Jaxb2BotNrollConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.visitor.codegen.BotnrollCppVisitor;
 
@@ -27,17 +27,10 @@ public class BotnrollCompilerWorkflow extends AbstractCompilerWorkflow {
 
     private static final Logger LOG = LoggerFactory.getLogger(MbotCompilerWorkflow.class);
 
-    public final String pathToCrosscompilerBaseDir;
-    public final String robotCompilerResourcesDir;
-    public final String robotCompilerDir;
-
     private String compiledHex = "";
 
-    public BotnrollCompilerWorkflow(String pathToCrosscompilerBaseDir, String robotCompilerResourcesDir, String robotCompilerDir) {
-        this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
-        this.robotCompilerResourcesDir = robotCompilerResourcesDir;
-        this.robotCompilerDir = robotCompilerDir;
-
+    public BotnrollCompilerWorkflow(PluginProperties pluginProperties) {
+        super(pluginProperties);
     }
 
     @Override
@@ -51,7 +44,7 @@ public class BotnrollCompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
         try {
-            storeGeneratedProgram(token, programName, sourceCode, this.pathToCrosscompilerBaseDir, ".ino");
+            storeGeneratedProgram(token, programName, sourceCode, ".ino");
         } catch ( Exception e ) {
             LOG.error("Storing the generated program into directory " + token + " failed", e);
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
@@ -89,28 +82,31 @@ public class BotnrollCompilerWorkflow extends AbstractCompilerWorkflow {
      * @param mainPackage
      */
     private Key runBuild(String token, String mainFile, String mainPackage) {
-        final StringBuilder sb = new StringBuilder();
+        final String compilerBinDir = pluginProperties.getCompilerBinDir();
+        final String compilerResourcesDir = pluginProperties.getCompilerResourceDir();
+        final String tempDir = pluginProperties.getTempDir();
 
+        final StringBuilder sb = new StringBuilder();
         String scriptName = "";
         String os = "";
         System.out.println(System.getProperty("os.arch"));
         if ( SystemUtils.IS_OS_LINUX ) {
             if ( System.getProperty("os.arch").contains("arm") ) {
-                scriptName = this.robotCompilerResourcesDir + "/linux-arm/arduino-builder";
+                scriptName = compilerResourcesDir + "/linux-arm/arduino-builder";
                 os = "linux-arm";
             } else {
-                scriptName = this.robotCompilerResourcesDir + "/linux/arduino-builder";
+                scriptName = compilerResourcesDir + "/linux/arduino-builder";
                 os = "linux";
             }
         } else if ( SystemUtils.IS_OS_WINDOWS ) {
-            scriptName = this.robotCompilerResourcesDir + "/windows/arduino-builder.exe";
+            scriptName = compilerResourcesDir + "/windows/arduino-builder.exe";
             os = "windows";
         } else if ( SystemUtils.IS_OS_MAC ) {
-            scriptName = this.robotCompilerResourcesDir + "/osx/arduino-builder";
+            scriptName = compilerResourcesDir + "/osx/arduino-builder";
             os = "osx";
         }
 
-        Path path = Paths.get(this.pathToCrosscompilerBaseDir + token + "/" + mainFile);
+        Path path = Paths.get(tempDir + token + "/" + mainFile);
         Path base = Paths.get("");
 
         try {
@@ -118,11 +114,11 @@ public class BotnrollCompilerWorkflow extends AbstractCompilerWorkflow {
                 new ProcessBuilder(
                     new String[] {
                         scriptName,
-                        "-hardware=" + this.robotCompilerResourcesDir + "/hardware",
-                        "-tools=" + this.robotCompilerResourcesDir + "/" + os + "/tools-builder",
-                        "-libraries=" + this.robotCompilerResourcesDir + "/libraries",
+                        "-hardware=" + compilerResourcesDir + "/hardware",
+                        "-tools=" + compilerResourcesDir + "/" + os + "/tools-builder",
+                        "-libraries=" + compilerResourcesDir + "/libraries",
                         "-fqbn=arduino:avr:uno",
-                        "-prefs=compiler.path=" + this.robotCompilerDir,
+                        "-prefs=compiler.path=" + compilerBinDir,
                         "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
                         base.resolve(path).toAbsolutePath().normalize().toString() + "/src/" + mainFile + ".ino"
                     });

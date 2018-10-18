@@ -1,14 +1,13 @@
 package de.fhg.iais.roberta.factory;
 
-import java.util.Properties;
-
 import de.fhg.iais.roberta.codegen.Ev3DevCompilerWorkflow;
+import de.fhg.iais.roberta.util.PluginProperties;
 
 public class Ev3DevFactory extends AbstractEV3Factory {
 
-    public Ev3DevFactory(String robotName, Properties robotProperties, String tempDirForUserProjects) {
-        super(robotName, robotProperties, tempDirForUserProjects);
-        this.robotCompilerWorkflow = new Ev3DevCompilerWorkflow(tempDirForUserProjects);
+    public Ev3DevFactory(PluginProperties pluginProperties) {
+        super(pluginProperties);
+        this.robotCompilerWorkflow = new Ev3DevCompilerWorkflow(pluginProperties);
     }
 
     @Override

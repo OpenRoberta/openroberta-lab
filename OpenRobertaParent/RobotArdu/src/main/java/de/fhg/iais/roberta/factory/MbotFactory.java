@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.factory;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Properties;
 
 import org.apache.commons.lang3.SystemUtils;
 
@@ -19,6 +18,7 @@ import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.Axis;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.codegen.MbotCppVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
@@ -29,19 +29,13 @@ public class MbotFactory extends AbstractRobotFactory {
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:mbotports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:mbotports.properties"));
 
-    public MbotFactory(String robotName, Properties robotProperties, String tempDirForUserProjects) {
-        super(robotName, robotProperties);
+    public MbotFactory(PluginProperties pluginProperties) {
+        super(pluginProperties);
         String os = "linux";
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";
         }
-        this.compilerWorkflow =
-            new MbotCompilerWorkflow(
-                tempDirForUserProjects,
-                robotProperties.getProperty("robot.plugin.compiler.resources.dir"),
-                robotProperties.getProperty("robot.plugin.compiler." + os + ".dir"));
-
-        addBlockTypesFromProperties(robotName, robotProperties);
+        this.compilerWorkflow = new MbotCompilerWorkflow(pluginProperties);
     }
 
     @Override
