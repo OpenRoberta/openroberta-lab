@@ -46,16 +46,17 @@ public class MbotCompilerWorkflow extends AbstractCompilerWorkflow {
         try {
             storeGeneratedProgram(token, programName, sourceCode, ".ino");
         } catch ( Exception e ) {
-            LOG.error("Storing the generated program into directory " + token + " failed", e);
+            MbotCompilerWorkflow.LOG.error("Storing the generated program into directory " + token + " failed", e);
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
         }
+
         Key messageKey = runBuild(token, programName, "generated.main");
         if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
             MbotCompilerWorkflow.LOG.info("hex for program {} generated successfully", programName);
         } else {
             MbotCompilerWorkflow.LOG.info(messageKey.toString());
         }
-        return messageKey;
+        return sourceCode == null ? Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED : messageKey;
     }
 
     @Override
@@ -81,12 +82,12 @@ public class MbotCompilerWorkflow extends AbstractCompilerWorkflow {
      * @param mainPackage
      */
     private Key runBuild(String token, String mainFile, String mainPackage) {
-        final String compilerBinDir = pluginProperties.getCompilerBinDir();
-        final String compilerResourcesDir = pluginProperties.getCompilerResourceDir();
-        final String tempDir = pluginProperties.getTempDir();
+        final String robotName = this.pluginProperties.getRobotName();
+        final String compilerBinDir = this.pluginProperties.getCompilerBinDir();
+        final String compilerResourcesDir = this.pluginProperties.getCompilerResourceDir();
+        final String tempDir = this.pluginProperties.getTempDir();
 
         final StringBuilder sb = new StringBuilder();
-
         String scriptName = "";
         String os = "";
         System.out.println(System.getProperty("os.arch"));
@@ -105,24 +106,23 @@ public class MbotCompilerWorkflow extends AbstractCompilerWorkflow {
             scriptName = compilerResourcesDir + "/osx/arduino-builder";
             os = "osx";
         }
-
+        System.out.println("script name");
+        System.out.println(scriptName);
         Path path = Paths.get(tempDir + token + "/" + mainFile);
         Path base = Paths.get("");
 
         try {
-            ProcessBuilder procBuilder =
-                new ProcessBuilder(
-                    new String[] {
-                        scriptName,
-                        "-hardware=" + compilerResourcesDir + "/hardware",
-                        "-tools=" + compilerResourcesDir + "/" + os + "/tools-builder",
-                        "-libraries=" + compilerResourcesDir + "/libraries",
-                        "-fqbn=arduino:avr:uno",
-                        "-prefs=compiler.path=" + compilerBinDir,
-                        "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
-                        "-verbose",
-                        base.resolve(path).toAbsolutePath().normalize().toString() + "/src/" + mainFile + ".ino"
-                    });
+            String fqbnArg = "-fqbn=arduino:avr:uno";
+            ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
+                scriptName,
+                "-hardware=" + compilerResourcesDir + "/hardware",
+                "-tools=" + compilerResourcesDir + "/" + os + "/tools-builder",
+                "-libraries=" + compilerResourcesDir + "/libraries",
+                fqbnArg,
+                "-prefs=compiler.path=" + compilerBinDir,
+                "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
+                base.resolve(path).toAbsolutePath().normalize().toString() + "/src/" + mainFile + ".ino"
+            });
 
             procBuilder.redirectInput(Redirect.INHERIT);
             procBuilder.redirectOutput(Redirect.INHERIT);

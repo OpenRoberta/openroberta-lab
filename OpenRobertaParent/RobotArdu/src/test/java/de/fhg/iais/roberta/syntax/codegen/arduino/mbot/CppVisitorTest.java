@@ -26,7 +26,7 @@ public class CppVisitorTest {
             + "MeDCMotor motor1(M1);"
             + MAIN_METHOD2
             + "}"
-            + " voidloop(){motor1.run(-1*(60)*255/100);}";
+            + " voidloop(){motor1.run((60)*255/100);}";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/motor1m1.xml", true);
     }
@@ -42,7 +42,7 @@ public class CppVisitorTest {
             + MAIN_METHOD2
             + "}"
             + "void loop(){"
-            + "        motor1.run(-1*(ultraSensor4.distanceCm())*255/100);\n"
+            + "        motor1.run((ultraSensor4.distanceCm())*255/100);\n"
             + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_ultrasonic_sensor.xml", true);
@@ -60,7 +60,7 @@ public class CppVisitorTest {
             + "}"
             + "void loop(){"
             + "if(lineFinder2.readSensors()&1){"
-            + "motor1.run(-1*(60)*255/100);}"
+            + "motor1.run((60)*255/100);}"
             + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_light_sensor2.xml", true);
@@ -95,7 +95,7 @@ public class CppVisitorTest {
             + "}"
             + "void loop(){"
             + "if (pir3.isHumanDetected()) {"
-            + "        motor1.run(-1*(60)*255/100);}\n"
+            + "        motor1.run((60)*255/100);}\n"
             + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_motion_sensor.xml", true);
@@ -113,7 +113,7 @@ public class CppVisitorTest {
             + "}"
             + "void loop(){"
             + "if (myJoystick3.readX() == 0 ) {"
-            + "        motor1.run(-1*(30)*255/100);}\n"
+            + "        motor1.run((30)*255/100);}\n"
             + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_joystick_sample.xml", true);
@@ -133,7 +133,7 @@ public class CppVisitorTest {
             + "myGyro1.update();"
             + "void loop(){"
             + "if (myGyro1.getGyroX() > 10 ) {"
-            + "        motor1.run(-1*(60)*255/100);}\n"
+            + "        motor1.run((60)*255/100);}\n"
             + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_gyroscope_sensor.xml", true);
@@ -153,7 +153,7 @@ public class CppVisitorTest {
             + "myGyro1.update();"
             + "void loop () {"
             + "if (myGyro1.getAngleX() > 10 ) {"
-            + "        motor1.run(-1*(30)*255/100);}}\n";
+            + "        motor1.run((30)*255/100);}}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_accelerometer_sensor.xml", true);
     }
@@ -170,7 +170,7 @@ public class CppVisitorTest {
             + "}"
             + "void loop(){"
             + "if (flameSensor1.readAnalog() > 20 ) {"
-            + "        motor1.run(-1*(60)*255/100);}\n"
+            + "        motor1.run((60)*255/100);}\n"
             + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_flame_sensor.xml", true);
@@ -187,8 +187,8 @@ public class CppVisitorTest {
             + MAIN_METHOD2
             + "}"
             + "void loop() {"
-            + "if (myLight0.read() == 0 ) {"
-            + "        motor1.run(-1*(60)*255/100);}}\n";
+            + "if (myLight0.read()*100/1023 == 0 ) {"
+            + "        motor1.run((60)*255/100);}}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_light_sensor.xml", true);
     }
@@ -223,7 +223,7 @@ public class CppVisitorTest {
             + "myTemp3.update();"
             + "void loop(){"
             + "if (myTemp3.getTemperature() < 20) {"
-            + "        motor1.run(-1*(30)*255/100);}}\n";
+            + "        motor1.run((30)*255/100);}}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_temperature_sensor.xml", true);
     }

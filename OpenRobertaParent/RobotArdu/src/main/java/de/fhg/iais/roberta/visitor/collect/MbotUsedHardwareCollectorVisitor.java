@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.arduino.MbotConfiguration;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
@@ -109,6 +110,12 @@ public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardware
                 this.usedActors.add(new UsedActor(this.brickConfiguration.getRightMotorPort(), ActorType.GEARED_MOTOR));
             }
         }
+        return null;
+    }
+
+    @Override
+    public Void visitLightAction(LightAction<Void> lightAction) {
+        this.usedActors.add(new UsedActor(null, ActorType.LED_ON_BOARD));
         return null;
     }
 

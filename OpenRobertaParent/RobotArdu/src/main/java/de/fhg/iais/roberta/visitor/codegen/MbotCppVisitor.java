@@ -139,6 +139,10 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+        this.sb.append("rgbled_7.setColor(" + lightStatusAction.getPort());
+        this.sb.append(", 0, 0, 0);");
+        nlIndent();
+        this.sb.append("rgbled_7.show();");
         return null;
     }
 
@@ -177,7 +181,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         final MotorDuration<Void> duration = motorOnAction.getParam().getDuration();
         this.sb.append(motorOnAction.getPort().getCodeName()).append(".run(");
-        if ( this.brickConfiguration.getRightMotorPort().getCodeName().equals(motorOnAction.getPort().getCodeName()) ) {
+        if ( !this.brickConfiguration.getRightMotorPort().getCodeName().equals(motorOnAction.getPort().getCodeName()) ) {
             this.sb.append("-1*");
         }
         this.sb.append("(");
@@ -267,7 +271,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.sb.append("myLight" + lightSensor.getPort().getOraName() + ".read()");
+        this.sb.append("myLight" + lightSensor.getPort().getOraName() + ".read()*100/1023");
         return null;
     }
 
@@ -496,16 +500,12 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
                     this.sb.append("MeDCMotor " + usedActor.getPort().getCodeName() + "(" + usedActor.getPort().getOraName() + ");\n");
                     break;
                 case DIFFERENTIAL_DRIVE:
-                    this.sb
-                        .append(
-                            "MeDrive myDrive("
-                                + this.brickConfiguration.getLeftMotorPort().getOraName()
-                                + ", "
-                                + this.brickConfiguration.getRightMotorPort().getOraName()
-                                + ");\n");
-                    break;
-                case EXTERNAL_LED:
-                    this.sb.append("MeRGBLed rgbled_" + usedActor.getPort().getOraName() + "(" + usedActor.getPort().getOraName() + ", 4);\n");
+                    this.sb.append(
+                        "MeDrive myDrive("
+                            + this.brickConfiguration.getLeftMotorPort().getOraName()
+                            + ", "
+                            + this.brickConfiguration.getRightMotorPort().getOraName()
+                            + ");\n");
                     break;
                 case LED_MATRIX:
                     this.sb.append("MeLEDMatrix myLEDMatrix_" + usedActor.getPort().getOraName() + "(" + usedActor.getPort().getOraName() + ");\n");
@@ -622,7 +622,9 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        this.sb.append("myVoltageSensor" + voltageSensor.getPort().getOraName() + ".read()");
+        //RatedVoltage: 5V
+        //Signal type: Analog (range from 0 to 970)
+        this.sb.append("myVoltageSensor" + voltageSensor.getPort().getOraName() + ".read()*5/970");
         return null;
     }
 
@@ -644,13 +646,11 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
