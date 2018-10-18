@@ -81,7 +81,7 @@ public class CompilerWorkflowIT {
     @BeforeClass
     public static void setupClass() throws Exception {
         Properties baseServerProperties = Util1.loadProperties(null);
-        baseServerProperties.put("plugin.resourcedir", "../OpenRobertaParent");
+        baseServerProperties.put("plugin.resourcedir", "..");
         serverProperties = new ServerProperties(baseServerProperties);
         // TODO: add a robotBasedir property to the openRoberta.properties. Make all pathes relative to that dir. Create special accessors. Change String to Path.
         robotCommunicator = new RobotCommunicator();
