@@ -5,7 +5,7 @@ HOW TO GET AN OPENROBERTALAB INSTALLATION WITHOUT MUCH SETUP
 Variables used (set as needed!):
 
 export VERSION='3.0.3'
-export BRANCH=develop
+export BRANCH=reinhardTest
 export GITREPO=~rbudde/git/robertalab
 export DISTR_DIR='/tmp/distr'
 export DB_PARENTDIR='/home/rbudde/db'
@@ -114,13 +114,7 @@ the output of "docker network inspect ora1_default" resp "docker network inspect
 
 Note: when the container terminate, the message "... exited with code 130" is no error, but signals termination with CTRL-C
 
-4.3 RUNNING A TEST SETUP
-  cd $GITREPO/Docker
-  docker-compose -p test -f dc-testserver.yml up &
-  ...
-  docker-compose -p test -f dc-testserver.yml stop
-
-5. INTEGRATION TEST CONTAINER
+4. INTEGRATION TEST CONTAINER
 
 Using the configuration file DockerfileIT you create an image, that contains
 - all crosscompiler
@@ -142,3 +136,35 @@ Starting this image
 - in case of success it returns 0, in case of errors/failures it returns 16
 
   docker run rbudde/openroberta_it:1 $BRANCH $VERSION
+
+  
+5. TEST AND DEBUG 
+
+For test and debug, especially with cross compiler stuff, you want to run an image, that contains
+- all crosscompiler
+- mvn and git
+and has executed a
+- git clone and
+- mvn clean install
+The entrypoint is "/bin/sh".
+
+This image is build by
+
+  cd $GITREPO/Docker
+  docker build -t rbudde/openroberta_debug:1 -f DockerfileDebug .
+
+The following commands are executed by the roberta maintainer; you should NOT do this
+  docker push rbudde/openroberta_debug:1
+ 
+Start this image by
+
+  docker run -p 7100:1999 -p 1099:1099 -it --entrypoint /bin/bash rbudde/openroberta_debug:1
+  
+It runs /bin/bash and you probably will
+- pull from the repo                    git checkout reinhardTest; git pull
+- build the server                      cd OpenRobertaParent;mvn clean install -DskipTests;cd ..
+- create an empty database by executing ./ora.sh --createEmptydb
+- for remote debugging                  nohup jstatd -J-Djava.security.policy=/opt/security/jstatd.all.policy &
+- run the server using executing        ./ora.sh --start-from-git
+
+  

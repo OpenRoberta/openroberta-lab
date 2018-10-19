@@ -30,13 +30,11 @@ import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.VorwerkBrickValidatorVisitor;
 
 public class VorwerkFactory extends AbstractRobotFactory {
-    protected ICompilerWorkflow robotCompilerWorkflow;
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:Vorwerkports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:Vorwerkports.properties"));
 
     public VorwerkFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
-        this.robotCompilerWorkflow = new VorwerkCompilerWorkflow(pluginProperties);
     }
 
     @Override
@@ -56,7 +54,7 @@ public class VorwerkFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return this.robotCompilerWorkflow;
+        return new VorwerkCompilerWorkflow(pluginProperties);
     }
 
     @Override

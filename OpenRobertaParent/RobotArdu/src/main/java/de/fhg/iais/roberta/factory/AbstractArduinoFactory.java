@@ -20,12 +20,9 @@ import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.ArduinoBrickValidatorVisitor;
 
 public abstract class AbstractArduinoFactory extends AbstractRobotFactory {
-    private final ArduinoCompilerWorkflow compilerWorkflow;
-
     public AbstractArduinoFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
         addBlockTypesFromProperties("arduino", Util1.loadProperties("classpath:arduino.properties"));
-        this.compilerWorkflow = new ArduinoCompilerWorkflow(pluginProperties);
     }
 
     public SensorPort getSensorName(String port) {
@@ -53,7 +50,7 @@ public abstract class AbstractArduinoFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return this.compilerWorkflow;
+        return new ArduinoCompilerWorkflow(pluginProperties);
     }
 
     @Override

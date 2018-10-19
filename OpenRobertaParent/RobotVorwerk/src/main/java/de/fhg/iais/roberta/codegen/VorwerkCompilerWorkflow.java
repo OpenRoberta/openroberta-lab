@@ -29,35 +29,38 @@ public class VorwerkCompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     @Override
-    public String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
+    public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
         if ( data.getErrorMessage() != null ) {
-            return null;
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            return;
         }
-        VorwerkConfiguration configuration = (VorwerkConfiguration) data.getBrickConfiguration();
-        this.vorwerkCommunicator.updateRobotInformation(configuration.getIpAddress(), configuration.getUserName(), configuration.getPassword());
-        return VorwerkPythonVisitor.generate((VorwerkConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
+        try {
+            VorwerkConfiguration configuration = (VorwerkConfiguration) data.getBrickConfiguration();
+            this.vorwerkCommunicator.updateRobotInformation(configuration.getIpAddress(), configuration.getUserName(), configuration.getPassword());
+            generatedSourceCode =
+                VorwerkPythonVisitor.generate((VorwerkConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
+            LOG.info("vorwerk code generated");
+        } catch ( Exception e ) {
+            LOG.error("vorwerk code generation failed", e);
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+        }
     }
 
     @Override
-    public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
-        final String compilerBinDir = pluginProperties.getCompilerBinDir();
-        final String compilerResourcesDir = pluginProperties.getCompilerResourceDir();
-        final String tempDir = pluginProperties.getTempDir();
-
-        Key key;
-
-        try {
-            storeGeneratedProgram(token, programName, sourceCode, ".py");
-            String programLocation = tempDir + token + File.separator + programName + File.separator + "src";
-            key = this.vorwerkCommunicator.uploadFile(programLocation, programName + ".py");
-            if ( key != Key.VORWERK_PROGRAM_UPLOAD_SUCCESSFUL ) {
-                return key;
+    public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
+        storeGeneratedProgram(token, programName, ".py");
+        if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+            try {
+                final String compilerBinDir = pluginProperties.getCompilerBinDir();
+                final String compilerResourcesDir = pluginProperties.getCompilerResourceDir();
+                final String tempDir = pluginProperties.getTempDir();
+                String programLocation = tempDir + token + File.separator + programName + File.separator + "src";
+                workflowResult = this.vorwerkCommunicator.uploadFile(programLocation, programName + ".py");
+            } catch ( Exception e ) {
+                LOG.error("Uploading the generated program to " + this.vorwerkCommunicator.getIp() + " failed", e);
+                workflowResult = Key.VORWERK_PROGRAM_UPLOAD_ERROR_CONNECTION_NOT_ESTABLISHED;
             }
-        } catch ( Exception e ) {
-            VorwerkCompilerWorkflow.LOG.error("Uloading the generated program to " + this.vorwerkCommunicator.getIp() + " failed", e);
-            return Key.VORWERK_PROGRAM_UPLOAD_ERROR_CONNECTION_NOT_ESTABLISHED;
         }
-        return Key.COMPILERWORKFLOW_SUCCESS;
     }
 
     @Override

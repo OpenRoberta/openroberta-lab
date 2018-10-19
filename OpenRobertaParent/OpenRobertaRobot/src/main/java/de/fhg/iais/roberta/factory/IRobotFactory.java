@@ -867,7 +867,7 @@ public interface IRobotFactory {
     ICompilerWorkflow getRobotCompilerWorkflow();
 
     /**
-     * Get the compiler workflow object for this simulation.
+     * Get the compiler workflow object for the simulation of this robot.
      *
      * @return
      */

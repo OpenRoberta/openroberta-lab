@@ -23,33 +23,54 @@ public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
 
     protected final PluginProperties pluginProperties;
 
+    protected Key workflowResult = Key.COMPILERWORKFLOW_SUCCESS;
+    protected String generatedSourceCode = null;
+
     public AbstractCompilerWorkflow(PluginProperties pluginProperties) {
         this.pluginProperties = pluginProperties;
     }
 
-    /*
-     * (non-Javadoc)
-     * some subclasses overwrite this method to return "null" (simulator e.g.)
-     */
     @Override
-    public Key generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language) {
-        String sourceCode = generateSourceCode(token, programName, transformer, language);
-        return compileSourceCode(token, programName, sourceCode, language, null);
+    public void generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language) {
+        generateSourceCode(token, programName, transformer, language);
+        if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+            compileSourceCode(token, programName, language, null);
+        }
     }
 
-    protected final void storeGeneratedProgram(String token, String programName, String sourceCode, String ext) {
-        String tempDir = this.pluginProperties.getTempDir();
-        Assert.isTrue((token != null) && (programName != null) && (sourceCode != null));
-        File sourceFile = new File(tempDir + token + "/" + programName + "/src/" + programName + ext);
-        Path path = Paths.get(tempDir + token + "/" + programName + "/target/");
+    @Override
+    public final Key getWorkflowResult() {
+        return workflowResult;
+    }
+
+    @Override
+    public void setProgramText(String programText) {
+        generatedSourceCode = programText;
+    }
+
+    @Override
+    public String getGeneratedProgramText() {
+        return generatedSourceCode;
+    }
+
+    protected final void storeGeneratedProgram(String token, String programName, String ext) {
         try {
-            Files.createDirectories(path);
-            FileUtils.writeStringToFile(sourceFile, sourceCode, StandardCharsets.UTF_8.displayName());
-        } catch ( IOException e ) {
-            String msg = "could not write source code to file system";
-            LOG.error(msg, e);
-            throw new DbcException(msg, e);
+            String tempDir = this.pluginProperties.getTempDir();
+            Assert.isTrue(token != null && programName != null && generatedSourceCode != null && workflowResult == Key.COMPILERWORKFLOW_SUCCESS);
+            File sourceFile = new File(tempDir + token + "/" + programName + "/source/" + programName + ext);
+            Path path = Paths.get(tempDir + token + "/" + programName + "/target/");
+            try {
+                Files.createDirectories(path);
+                FileUtils.writeStringToFile(sourceFile, generatedSourceCode, StandardCharsets.UTF_8.displayName());
+            } catch ( IOException e ) {
+                String msg = "could not write source code to file system";
+                LOG.error(msg, e);
+                throw new DbcException(msg, e);
+            }
+            LOG.info("stored under: " + sourceFile.getPath());
+        } catch ( Exception e ) {
+            LOG.error("Storing the generated program " + programName + " into directory " + token + " failed", e);
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
         }
-        LOG.info("stored under: " + sourceFile.getPath());
     }
 }

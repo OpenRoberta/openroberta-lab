@@ -23,15 +23,11 @@ import de.fhg.iais.roberta.visitor.validate.NxtBrickValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.NxtSimValidatorVisitor;
 
 public class NxtFactory extends AbstractRobotFactory {
-    private final NxtCompilerWorkflow robotCompilerWorkflow;
-    private final NxtSimCompilerWorkflow simCompilerWorkflow;
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:NXTports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:NXTports.properties"));
 
     public NxtFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
-        this.robotCompilerWorkflow = new NxtCompilerWorkflow(pluginProperties);
-        this.simCompilerWorkflow = new NxtSimCompilerWorkflow(pluginProperties);
     }
 
     @Override
@@ -61,12 +57,12 @@ public class NxtFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return this.robotCompilerWorkflow;
+        return new NxtCompilerWorkflow(pluginProperties);
     }
 
     @Override
     public ICompilerWorkflow getSimCompilerWorkflow() {
-        return this.simCompilerWorkflow;
+        return new NxtSimCompilerWorkflow(pluginProperties);
     }
 
     @Override

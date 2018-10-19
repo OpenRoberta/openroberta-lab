@@ -3,8 +3,6 @@ package de.fhg.iais.roberta.factory;
 import java.util.ArrayList;
 import java.util.Map;
 
-import org.apache.commons.lang3.SystemUtils;
-
 import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.codegen.MbotCompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
@@ -25,17 +23,11 @@ import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
 public class MbotFactory extends AbstractRobotFactory {
-    private final MbotCompilerWorkflow compilerWorkflow;
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:mbotports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:mbotports.properties"));
 
     public MbotFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
-        String os = "linux";
-        if ( SystemUtils.IS_OS_WINDOWS ) {
-            os = "windows";
-        }
-        this.compilerWorkflow = new MbotCompilerWorkflow(pluginProperties);
     }
 
     @Override
@@ -55,7 +47,7 @@ public class MbotFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return this.compilerWorkflow;
+        return new MbotCompilerWorkflow(pluginProperties);
     }
 
     @Override

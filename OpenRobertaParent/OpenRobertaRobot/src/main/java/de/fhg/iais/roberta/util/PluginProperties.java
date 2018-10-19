@@ -41,7 +41,10 @@ public class PluginProperties {
         this.resourceDir = tempResourceDir;
         this.tempDir = tempDir;
         String tempCompilerDir = properties.getProperty("robot.plugin.compiler." + getOs() + ".dir");
-        this.compilerDir = tempCompilerDir == null ? this.resourceDir : tempCompilerDir;
+        if ( SystemUtils.IS_OS_WINDOWS && tempCompilerDir != null && tempCompilerDir.equals("") ) {
+            tempCompilerDir = "\"\"";
+        }
+        this.compilerDir = ""; // TODO: set tempCompilerDir;
         this.pluginProperties = properties;
     }
 

@@ -22,16 +22,12 @@ import de.fhg.iais.roberta.visitor.validate.Ev3BrickValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.Ev3SimValidatorVisitor;
 
 public abstract class AbstractEV3Factory extends AbstractRobotFactory {
-    protected Ev3SimCompilerWorkflow simCompilerWorkflow;
-    protected ICompilerWorkflow robotCompilerWorkflow;
     protected String name;
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:EV3ports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:EV3ports.properties"));
 
     public AbstractEV3Factory(PluginProperties pluginProperties) {
         super(pluginProperties);
-        this.robotCompilerWorkflow = new Ev3LejosCompilerWorkflow(pluginProperties);
-        this.simCompilerWorkflow = new Ev3SimCompilerWorkflow(pluginProperties);
     }
 
     @Override
@@ -51,12 +47,12 @@ public abstract class AbstractEV3Factory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getSimCompilerWorkflow() {
-        return this.simCompilerWorkflow;
+        return new Ev3SimCompilerWorkflow(pluginProperties);
     }
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return this.robotCompilerWorkflow;
+        return new Ev3LejosCompilerWorkflow(pluginProperties);
     }
 
     @Override

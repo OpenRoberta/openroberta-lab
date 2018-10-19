@@ -33,30 +33,32 @@ public class MbotCompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     @Override
-    public String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) //
+    public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) //
     {
         if ( data.getErrorMessage() != null ) {
-            return null;
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            return;
         }
-        return MbotCppVisitor.generate((MbotConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        try {
+            generatedSourceCode = MbotCppVisitor.generate((MbotConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+            LOG.info("mbot c++ code generated");
+        } catch ( Exception e ) {
+            LOG.error("mbot c++ code generation failed", e);
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+        }
     }
 
     @Override
-    public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
-        try {
-            storeGeneratedProgram(token, programName, sourceCode, ".ino");
-        } catch ( Exception e ) {
-            MbotCompilerWorkflow.LOG.error("Storing the generated program into directory " + token + " failed", e);
-            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
+    public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
+        storeGeneratedProgram(token, programName, ".ino");
+        if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+            workflowResult = runBuild(token, programName, "generated.main");
+            if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+                LOG.info("compile mbot c++ program {} successful", programName);
+            } else {
+                LOG.error("compile mbot c++ program {} failed with {}", programName, workflowResult);
+            }
         }
-
-        Key messageKey = runBuild(token, programName, "generated.main");
-        if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
-            MbotCompilerWorkflow.LOG.info("hex for program {} generated successfully", programName);
-        } else {
-            MbotCompilerWorkflow.LOG.info(messageKey.toString());
-        }
-        return sourceCode == null ? Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED : messageKey;
     }
 
     @Override
@@ -106,8 +108,6 @@ public class MbotCompilerWorkflow extends AbstractCompilerWorkflow {
             scriptName = compilerResourcesDir + "/osx/arduino-builder";
             os = "osx";
         }
-        System.out.println("script name");
-        System.out.println(scriptName);
         Path path = Paths.get(tempDir + token + "/" + mainFile);
         Path base = Paths.get("");
 
@@ -121,7 +121,7 @@ public class MbotCompilerWorkflow extends AbstractCompilerWorkflow {
                 fqbnArg,
                 "-prefs=compiler.path=" + compilerBinDir,
                 "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
-                base.resolve(path).toAbsolutePath().normalize().toString() + "/src/" + mainFile + ".ino"
+                base.resolve(path).toAbsolutePath().normalize().toString() + "/source/" + mainFile + ".ino"
             });
 
             procBuilder.redirectInput(Redirect.INHERIT);

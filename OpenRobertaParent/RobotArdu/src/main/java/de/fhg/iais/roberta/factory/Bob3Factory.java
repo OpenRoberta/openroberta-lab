@@ -23,7 +23,6 @@ import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
 public class Bob3Factory extends AbstractRobotFactory {
-    private final Bob3CompilerWorkflow compilerWorkflow;
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:bob3ports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:bob3ports.properties"));
 
@@ -33,7 +32,6 @@ public class Bob3Factory extends AbstractRobotFactory {
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";
         }
-        this.compilerWorkflow = new Bob3CompilerWorkflow(pluginProperties);
     }
 
     @Override
@@ -43,7 +41,7 @@ public class Bob3Factory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return this.compilerWorkflow;
+        return new Bob3CompilerWorkflow(pluginProperties);
     }
 
     @Override

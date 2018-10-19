@@ -19,7 +19,7 @@ public interface ICompilerWorkflow {
      * @param language locale to be used for messages
      * @return the generated source code; null in case of an error
      */
-    String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language);
+    void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language);
 
     /**
      * - take the source program<br>
@@ -34,7 +34,7 @@ public interface ICompilerWorkflow {
      * @param flagProvider TODO
      * @return a message key in case of an error; null otherwise
      */
-    Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider);
+    void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider);
 
     /**
      * - take the program given<br>
@@ -54,7 +54,7 @@ public interface ICompilerWorkflow {
      * @param language the locale to be used for messages
      * @return a message key in case of an error; null otherwise
      */
-    Key generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language);
+    void generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language);
 
     /**
      * return the robot configuration for a given XML configuration text.
@@ -70,4 +70,21 @@ public interface ICompilerWorkflow {
      * @return the compilation result.
      */
     String getCompiledCode();
+
+    /**
+     * return the workflow result. This is hopefully Key.COMPILERWORKFLOW_SUCCESS :-)
+     *
+     * @return the workflow result.
+     */
+    Key getWorkflowResult();
+
+    /**
+     * set the program text. Only to be called when native programs have to be compiles (rare case :-)
+     */
+    void setProgramText(String programText);
+
+    /**
+     * get the generated program text
+     */
+    String getGeneratedProgramText();
 }

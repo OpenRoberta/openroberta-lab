@@ -24,31 +24,37 @@ public class Ev3LejosCompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     @Override
-    public String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
-        return Ev3JavaVisitor.generate(programName, (EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
+    public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
+        if ( data.getErrorMessage() != null ) {
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            return;
+        }
+        try {
+            generatedSourceCode =
+                Ev3JavaVisitor.generate(programName, (EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
+            LOG.info("ev3lejos java code generated");
+        } catch ( Exception e ) {
+            LOG.error("ev3lejos java code generation failed", e);
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+        }
     }
 
     @Override
-    public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
-        //Ev3CompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); // only needed for EXTREME debugging
-        try {
-            storeGeneratedProgram(token, programName, sourceCode, ".java");
-        } catch ( Exception e ) {
-            Ev3LejosCompilerWorkflow.LOG.error("Storing the generated program into directory " + token + " failed", e);
-            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
-        }
+    public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
+        storeGeneratedProgram(token, programName, ".java");
+        if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+            final String compilerResourcesDir = pluginProperties.getCompilerResourceDir();
+            final String tempDir = pluginProperties.getTempDir();
 
-        final String compilerResourcesDir = pluginProperties.getCompilerResourceDir();
-        final String tempDir = pluginProperties.getTempDir();
-
-        JavaSourceCompiler scp = new JavaSourceCompiler(programName, sourceCode, compilerResourcesDir);
-        boolean isSuccess = scp.compileAndPackage(tempDir, token);
-        if ( !isSuccess ) {
-            LOG.error("build exception. Messages from the build script are:\n" + scp.getCompilationMessages());
-            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
-        } else {
-            LOG.info("jar for program {} generated successfully", programName);
-            return Key.COMPILERWORKFLOW_SUCCESS;
+            JavaSourceCompiler scp = new JavaSourceCompiler(programName, generatedSourceCode, compilerResourcesDir);
+            boolean isSuccess = scp.compileAndPackage(tempDir, token);
+            if ( !isSuccess ) {
+                LOG.error("build exception. Messages from the build script are:\n" + scp.getCompilationMessages());
+                workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
+            } else {
+                LOG.info("jar for program {} generated successfully", programName);
+                workflowResult = Key.COMPILERWORKFLOW_SUCCESS;
+            }
         }
     }
 

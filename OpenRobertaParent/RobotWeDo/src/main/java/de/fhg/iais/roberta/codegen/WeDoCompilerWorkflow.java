@@ -19,32 +19,28 @@ public class WeDoCompilerWorkflow extends AbstractCompilerWorkflow {
 
     private static final Logger LOG = LoggerFactory.getLogger(WeDoCompilerWorkflow.class);
 
-    private String compiledStackOps = "error";
-
     public WeDoCompilerWorkflow(PluginProperties pluginProperties) {
         super(pluginProperties);
     }
 
     @Override
-    public String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) //
+    public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) //
     {
         if ( data.getErrorMessage() != null ) {
-            return null;
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            return;
         }
         try {
-            String sourceCode = WeDoStackMachineVisitor.generate((WeDoConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree());
-            LOG.info("generating javascript code");
-            return sourceCode;
+            generatedSourceCode = WeDoStackMachineVisitor.generate((WeDoConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree());
+            LOG.info("wedo stack machine code generated");
         } catch ( Exception e ) {
-            LOG.error("generating source code failed", e);
-            return null;
+            LOG.error("wedo stack machine code generation failed", e);
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
         }
     }
 
     @Override
-    public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
-        this.compiledStackOps = sourceCode;
-        return sourceCode == null ? Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED : Key.COMPILERWORKFLOW_SUCCESS;
+    public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
     }
 
     @Override
@@ -56,6 +52,6 @@ public class WeDoCompilerWorkflow extends AbstractCompilerWorkflow {
 
     @Override
     public String getCompiledCode() {
-        return this.compiledStackOps;
+        return generatedSourceCode;
     }
 }

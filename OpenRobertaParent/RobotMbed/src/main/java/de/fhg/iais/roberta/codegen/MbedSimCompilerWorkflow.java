@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.mbed.Jaxb2CalliopeConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.PluginProperties;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.visitor.codegen.MbedSimVisitor;
 
@@ -22,23 +23,28 @@ public class MbedSimCompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     @Override
-    public String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
+    public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
         if ( data.getErrorMessage() != null ) {
-            return null;
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            return;
         }
-        String sourceCode = MbedSimVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree());
-        LOG.info("generating javascript code");
-        return sourceCode;
+        try {
+            generatedSourceCode = MbedSimVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree());
+            LOG.info("javascript mbed simulation code generated");
+        } catch ( Exception e ) {
+            LOG.error("javascript mbed simulation code generation failed", e);
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+        }
     }
 
     @Override
-    public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
-        return null;
+    public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
+        throw new DbcException("Operation not supported");
     }
 
     @Override
-    public Key generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language) {
-        return null;
+    public void generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language) {
+        throw new DbcException("Operation not supported");
     }
 
     @Override

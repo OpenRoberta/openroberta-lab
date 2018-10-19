@@ -35,21 +35,24 @@ public class CalliopeCompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     @Override
-    public String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
+    public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
         if ( data.getErrorMessage() != null ) {
-            return null;
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            return;
         }
-        return CalliopeCppVisitor.generate((CalliopeConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        try {
+            generatedSourceCode =
+                CalliopeCppVisitor.generate((CalliopeConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+            LOG.info("arduino c++ code generated");
+        } catch ( Exception e ) {
+            LOG.error("arduino c++ code generation failed", e);
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+        }
     }
 
     @Override
-    public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
-        try {
-            storeGeneratedProgram(token, programName, sourceCode, ".cpp");
-        } catch ( Exception e ) {
-            CalliopeCompilerWorkflow.LOG.error("Storing the generated program into directory " + token + " failed", e);
-            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
-        }
+    public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
+        storeGeneratedProgram(token, programName, ".cpp");
         boolean isRadioUsed;
         if ( flagProvider == null ) {
             isRadioUsed = false;
@@ -59,23 +62,24 @@ public class CalliopeCompilerWorkflow extends AbstractCompilerWorkflow {
         } else {
             isRadioUsed = false;
         }
-        Key messageKey = runBuild(token, programName, "generated.main", isRadioUsed);
-        if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
-            CalliopeCompilerWorkflow.LOG.info("hex for program {} generated successfully", programName);
+        workflowResult = runBuild(token, programName, "generated.main", isRadioUsed);
+        if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+            LOG.info("compile calliope program {} successful", programName);
         } else {
-            CalliopeCompilerWorkflow.LOG.info(messageKey.toString());
+            LOG.error("compile calliope program {} failed with {}", programName, workflowResult);
         }
-        return messageKey;
     }
 
     @Override
-    public Key generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language) {
-        String sourceCode = generateSourceCode(token, programName, transformer, language);
+    public void generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language) {
         MbedUsedHardwareCollectorVisitor usedHardwareVisitor =
             new MbedUsedHardwareCollectorVisitor(transformer.getProgramTransformer().getTree(), transformer.getBrickConfiguration());
         EnumSet<CalliopeCompilerFlag> compilerFlags =
             usedHardwareVisitor.isRadioUsed() ? EnumSet.of(CalliopeCompilerFlag.RADIO_USED) : EnumSet.noneOf(CalliopeCompilerFlag.class);
-        return compileSourceCode(token, programName, sourceCode, language, compilerFlags);
+        generateSourceCode(token, programName, transformer, language);
+        if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+            compileSourceCode(token, programName, language, compilerFlags);
+        }
     }
 
     @Override

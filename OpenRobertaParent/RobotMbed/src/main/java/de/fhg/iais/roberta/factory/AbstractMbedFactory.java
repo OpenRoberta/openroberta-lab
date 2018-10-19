@@ -20,16 +20,12 @@ import de.fhg.iais.roberta.visitor.validate.CalliopeSimValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.MbedBoardValidatorVisitor;
 
 public abstract class AbstractMbedFactory extends AbstractRobotFactory {
-
-    protected ICompilerWorkflow compilerWorkflow;
-    protected MbedSimCompilerWorkflow calliopeSimCompilerWorkflow;
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:Calliopeports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:Calliopeports.properties"));
 
     public AbstractMbedFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
         addBlockTypesFromProperties("mbed", Util1.loadProperties("classpath:mbed.properties"));
-        this.calliopeSimCompilerWorkflow = new MbedSimCompilerWorkflow(pluginProperties);
     }
 
     @Override
@@ -58,13 +54,8 @@ public abstract class AbstractMbedFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return this.compilerWorkflow;
-    }
-
-    @Override
     public ICompilerWorkflow getSimCompilerWorkflow() {
-        return this.calliopeSimCompilerWorkflow;
+        return new MbedSimCompilerWorkflow(pluginProperties);
     }
 
     @Override

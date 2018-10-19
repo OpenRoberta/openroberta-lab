@@ -21,16 +21,11 @@ import de.fhg.iais.roberta.visitor.validate.MbedBoardValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.MicrobitSimValidatorVisitor;
 
 public class MicrobitFactory extends AbstractRobotFactory {
-
-    private final MicrobitCompilerWorkflow compilerWorkflow;
-    private final MbedSimCompilerWorkflow microbitSimCompilerWorkflow;
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:Microbitports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:Microbitports.properties"));
 
     public MicrobitFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
-        this.compilerWorkflow = new MicrobitCompilerWorkflow(pluginProperties);
-        this.microbitSimCompilerWorkflow = new MbedSimCompilerWorkflow(pluginProperties);
     }
 
     @Override
@@ -55,12 +50,12 @@ public class MicrobitFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return this.compilerWorkflow;
+        return new MicrobitCompilerWorkflow(pluginProperties);
     }
 
     @Override
     public ICompilerWorkflow getSimCompilerWorkflow() {
-        return this.microbitSimCompilerWorkflow;
+        return new MbedSimCompilerWorkflow(pluginProperties);
     }
 
     @Override

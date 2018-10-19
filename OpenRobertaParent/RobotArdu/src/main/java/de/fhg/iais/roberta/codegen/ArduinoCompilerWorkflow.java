@@ -34,37 +34,32 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     @Override
-    public String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
+    public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
         if ( data.getErrorMessage() != null ) {
-            return null;
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            return;
         }
         try {
             ArduinoConfiguration configuration = ((ArduinoConfiguration) data.getBrickConfiguration());
-            String sourceCode = ArduinoCppVisitor.generate(configuration, data.getProgramTransformer().getTree(), true);
-            ArduinoCompilerWorkflow.LOG.info("generating arduino c++ code");
-            return sourceCode;
+            generatedSourceCode = ArduinoCppVisitor.generate(configuration, data.getProgramTransformer().getTree(), true);
+            LOG.info("arduino c++ code generated");
         } catch ( Exception e ) {
-            LOG.error("generating source code failed", e);
-            return null;
+            LOG.error("arduino c++ code generation failed", e);
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
         }
     }
 
     @Override
-    public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
-        try {
-            storeGeneratedProgram(token, programName, sourceCode, ".ino");
-        } catch ( Exception e ) {
-            ArduinoCompilerWorkflow.LOG.error("Storing the generated program into directory " + token + " failed", e);
-            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
+    public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
+        storeGeneratedProgram(token, programName, ".ino");
+        if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+            workflowResult = runBuild(token, programName, "generated.main");
+            if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+                LOG.info("compile arduino program {} successful", programName);
+            } else {
+                LOG.error("compile arduino program {} failed with {}", programName, workflowResult);
+            }
         }
-
-        Key messageKey = runBuild(token, programName, "generated.main");
-        if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
-            ArduinoCompilerWorkflow.LOG.info("hex for program {} generated successfully", programName);
-        } else {
-            ArduinoCompilerWorkflow.LOG.info(messageKey.toString());
-        }
-        return sourceCode == null ? Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED : messageKey;
     }
 
     @Override
@@ -137,7 +132,7 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
                         fqbnArg,
                         "-prefs=compiler.path=" + compilerBinDir,
                         "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
-                        base.resolve(path).toAbsolutePath().normalize().toString() + "/src/" + mainFile + ".ino"
+                        base.resolve(path).toAbsolutePath().normalize().toString() + "/source/" + mainFile + ".ino"
                     });
 
             procBuilder.redirectInput(Redirect.INHERIT);
@@ -156,9 +151,9 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
             return Key.COMPILERWORKFLOW_SUCCESS;
         } catch ( Exception e ) {
             if ( sb.length() > 0 ) {
-                ArduinoCompilerWorkflow.LOG.error("build exception. Messages from the build script are:\n" + sb.toString(), e);
+                LOG.error("build exception. Messages from the build script are:\n" + sb.toString(), e);
             } else {
-                ArduinoCompilerWorkflow.LOG.error("exception when preparing the build", e);
+                LOG.error("exception when preparing the build", e);
             }
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         }

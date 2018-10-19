@@ -28,11 +28,8 @@ import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.WedoBrickValidatorVisitor;
 
 public class WeDoFactory extends AbstractRobotFactory {
-    private final WeDoCompilerWorkflow compilerWorkflow;
-
     public WeDoFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
-        this.compilerWorkflow = new WeDoCompilerWorkflow(pluginProperties);
     }
 
     public SensorPort getSensorName(String port) {
@@ -60,7 +57,7 @@ public class WeDoFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return this.compilerWorkflow;
+        return new WeDoCompilerWorkflow(pluginProperties);
     }
 
     @Override

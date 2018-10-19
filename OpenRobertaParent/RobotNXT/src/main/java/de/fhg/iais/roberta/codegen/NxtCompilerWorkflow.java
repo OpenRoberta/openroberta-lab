@@ -29,30 +29,33 @@ public class NxtCompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     @Override
-    public String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) //
+    public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) //
     {
         if ( data.getErrorMessage() != null ) {
-            return null;
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            return;
         }
-        return NxtNxcVisitor.generate((NxtConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        try {
+            generatedSourceCode = NxtNxcVisitor.generate((NxtConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+            LOG.info("nxt code generated");
+        } catch ( Exception e ) {
+            LOG.error("nxt code generation failed", e);
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+        }
     }
 
     @Override
-    public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
-        try {
-            storeGeneratedProgram(token, programName, sourceCode, ".nxc");
-        } catch ( Exception e ) {
-            LOG.error("Storing the generated program into directory " + token + " failed", e);
-            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
-        }
+    public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
+        storeGeneratedProgram(token, programName, ".nxc");
 
-        Key messageKey = runBuild(token, programName, "generated.main");
-        if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
-            NxtCompilerWorkflow.LOG.info("rxc for program {} generated successfully", programName);
-        } else {
-            NxtCompilerWorkflow.LOG.info(messageKey.toString());
+        if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+            workflowResult = runBuild(token, programName, "generated.main");
+            if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+                LOG.info("compile nxt program {} successful", programName);
+            } else {
+                LOG.error("compile nxt program {} failed with {}", programName, workflowResult);
+            }
         }
-        return messageKey;
     }
 
     @Override
@@ -100,7 +103,7 @@ public class NxtCompilerWorkflow extends AbstractCompilerWorkflow {
                     new String[] {
                         nbcCompilerFileName,
                         "-q",
-                        tempDir + token + "/" + mainFile + "/src/" + mainFile + ".nxc",
+                        tempDir + token + "/" + mainFile + "/source/" + mainFile + ".nxc",
                         "-O=" + tempDir + token + "/" + mainFile + "/target/" + mainFile + ".rxe",
                         "-I=" + base.resolve(path).toAbsolutePath().normalize().toString()
                     });

@@ -24,27 +24,25 @@ public class NaoCompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     @Override
-    public String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
+    public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
         if ( data.getErrorMessage() != null ) {
-            return null;
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            return;
         }
-        return generateProgram(programName, data, language);
+        try {
+            generatedSourceCode = generateProgram(programName, data, language);
+            LOG.info("nao code generated");
+        } catch ( Exception e ) {
+            LOG.error("nao code generation failed", e);
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+        }
     }
 
     @Override
-    public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
-        //Ev3CompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); // only needed for EXTREME debugging
-        try {
-            storeGeneratedProgram(token, programName, sourceCode, ".py");
-        } catch ( final Exception e ) {
-            LOG.error("Storing the generated program into directory " + token + " failed", e);
-            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
-        }
-
+    public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
+        storeGeneratedProgram(token, programName, ".py");
         // maybe copy from /src/ to /target/
         // python -c "import py_compile; py_compile.compile('.../src/...py','.../target/....pyc')"
-        return Key.COMPILERWORKFLOW_SUCCESS;
-
     }
 
     @Override
@@ -61,7 +59,7 @@ public class NaoCompilerWorkflow extends AbstractCompilerWorkflow {
 
     private String generateProgram(String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
         String sourceCode = NaoPythonVisitor.generate((NAOConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
-        NaoCompilerWorkflow.LOG.info("generating {} code", toString().toLowerCase());
+        LOG.info("generating {} code", toString().toLowerCase());
         return sourceCode;
     }
 

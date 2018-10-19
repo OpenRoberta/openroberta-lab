@@ -29,22 +29,29 @@ public class MicrobitCompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     @Override
-    public String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
+    public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
         if ( data.getErrorMessage() != null ) {
-            return null;
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            return;
         }
-        return MicrobitPythonVisitor.generate((MicrobitConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        try {
+            generatedSourceCode =
+                MicrobitPythonVisitor.generate((MicrobitConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+            LOG.info("microbit python code generated");
+        } catch ( Exception e ) {
+            LOG.error("microbit python code generation failed", e);
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+        }
     }
 
     @Override
-    public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
-        Key messageKey = runBuild(sourceCode);
-        if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
-            MicrobitCompilerWorkflow.LOG.info("hex for program {} generated successfully", programName);
+    public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
+        workflowResult = runBuild(generatedSourceCode);
+        if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+            LOG.info("compile microbit program {} successful", programName);
         } else {
-            MicrobitCompilerWorkflow.LOG.info(messageKey.toString());
+            LOG.error("compile microbit program {} failed with {}", programName, workflowResult);
         }
-        return messageKey;
     }
 
     @Override

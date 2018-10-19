@@ -1,0 +1,29 @@
+FROM rbudde/openroberta_base:1
+
+RUN apt-get update && apt-get install -y git maven && apt-get clean
+
+# clone of develop branch. Run mvn once to install most all the artifacts needed in /root/.m2
+ARG LAST_RUN_OF_CLONE=2018-10-19
+WORKDIR /opt
+RUN echo "cloning branch develop and executing mvn to fill the .m2 cache"
+
+RUN git clone https://github.com/OpenRoberta/robertalab.git && \
+    git config --global core.fileMode false && \
+    git config --global user.email "reinhard.budde@iais.fraunhofer.de" && \
+    git config --global user.name "Reinhard Budde" && \
+    cd /opt/robertalab && \
+    git checkout develop
+    
+RUN cd /opt/robertalab/OpenRobertaParent && \
+    chmod +x RobotArdu/resources/linux/arduino-builder RobotArdu/resources/linux/tools-builder/ctags/5.8*/ctags && \
+    chmod +x RobotArdu/resources/linux-arm/arduino-builder RobotArdu/resources/linux-arm/tools-builder/ctags/5.8*/ctags
+WORKDIR /opt/robertalab/OpenRobertaParent
+RUN mvn clean install
+
+# for remote debugging
+WORKDIR /opt/security
+RUN echo '\
+grant codebase "file:/usr/lib/jvm/java-8-openjdk-amd64/lib/tools.jar" {\n\
+   permission java.security.AllPermission;\n\
+};\
+' >jstatd.all.policy

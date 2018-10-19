@@ -34,13 +34,11 @@ import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
 public class NaoFactory extends AbstractRobotFactory {
-    private final NaoCompilerWorkflow compilerWorkflow;
     Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:NAOports.properties"));
     Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:NAOports.properties"));
 
     public NaoFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
-        this.compilerWorkflow = new NaoCompilerWorkflow(pluginProperties);
     }
 
     @Override
@@ -73,7 +71,7 @@ public class NaoFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return this.compilerWorkflow;
+        return new NaoCompilerWorkflow(pluginProperties);
     }
 
     @Override

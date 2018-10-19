@@ -34,29 +34,32 @@ public class BotnrollCompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     @Override
-    public String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
+    public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
         if ( data.getErrorMessage() != null ) {
-            return null;
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            return;
         }
-        return BotnrollCppVisitor.generate((BotNrollConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        try {
+            generatedSourceCode =
+                BotnrollCppVisitor.generate((BotNrollConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+            LOG.info("botnroll c++ code generated");
+        } catch ( Exception e ) {
+            LOG.error("botnroll c++ code generation failed", e);
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+        }
     }
 
     @Override
-    public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
-        try {
-            storeGeneratedProgram(token, programName, sourceCode, ".ino");
-        } catch ( Exception e ) {
-            LOG.error("Storing the generated program into directory " + token + " failed", e);
-            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
+    public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
+        storeGeneratedProgram(token, programName, ".ino");
+        if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+            workflowResult = runBuild(token, programName, "generated.main");
+            if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+                LOG.error("compile botnroll program {} successful", programName);
+            } else {
+                LOG.info("compile botnroll program {} failed with {}", programName, workflowResult);
+            }
         }
-
-        Key messageKey = runBuild(token, programName, "generated.main");
-        if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
-            LOG.info("hex for program {} generated successfully", programName);
-        } else {
-            LOG.info(messageKey.toString());
-        }
-        return messageKey;
     }
 
     @Override
@@ -120,7 +123,7 @@ public class BotnrollCompilerWorkflow extends AbstractCompilerWorkflow {
                         "-fqbn=arduino:avr:uno",
                         "-prefs=compiler.path=" + compilerBinDir,
                         "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
-                        base.resolve(path).toAbsolutePath().normalize().toString() + "/src/" + mainFile + ".ino"
+                        base.resolve(path).toAbsolutePath().normalize().toString() + "/source/" + mainFile + ".ino"
                     });
 
             procBuilder.redirectInput(Redirect.INHERIT);

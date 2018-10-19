@@ -12,7 +12,6 @@ import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.ev3.Jaxb2Ev3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.PluginProperties;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.visitor.codegen.Ev3PythonVisitor;
 
@@ -24,11 +23,30 @@ public class Ev3DevCompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     @Override
-    public String generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
+    public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
         if ( data.getErrorMessage() != null ) {
-            return null;
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            return;
         }
-        return Ev3PythonVisitor.generate((EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
+        try {
+            generatedSourceCode =
+                Ev3PythonVisitor.generate((EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
+            LOG.info("ev3dev code generated");
+        } catch ( Exception e ) {
+            LOG.error("ev3dev code generation failed", e);
+            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+        }
+    }
+
+    @Override
+    public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
+        // nothing to compile. The generated program is the result.
+        return;
+    }
+
+    @Override
+    public void generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
+        generateSourceCode(token, programName, data, language);
     }
 
     @Override
@@ -40,11 +58,6 @@ public class Ev3DevCompilerWorkflow extends AbstractCompilerWorkflow {
 
     @Override
     public String getCompiledCode() {
-        return null;
-    }
-
-    @Override
-    public Key compileSourceCode(String token, String programName, String sourceCode, ILanguage language, Object flagProvider) {
-        throw new DbcException("Operation not supported");
+        return generatedSourceCode;
     }
 }
