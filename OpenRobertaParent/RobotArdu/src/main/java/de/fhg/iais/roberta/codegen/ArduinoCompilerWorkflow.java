@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.arduino.ArduinoConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
@@ -40,7 +39,7 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
             return;
         }
         try {
-            ArduinoConfiguration configuration = ((ArduinoConfiguration) data.getBrickConfiguration());
+            Configuration configuration = (data.getRobotConfiguration());
             this.generatedSourceCode = ArduinoCppVisitor.generate(configuration, data.getProgramTransformer().getTree(), true);
             LOG.info("arduino c++ code generated");
         } catch ( Exception e ) {
@@ -65,7 +64,7 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2ArduinoConfigurationTransformer transformer = new Jaxb2ArduinoConfigurationTransformer(factory);
+        Jaxb2ArduinoConfigurationTransformer transformer = new Jaxb2ArduinoConfigurationTransformer(factory.getBlocklyDropdownFactory());
         return transformer.transform(project);
     }
 

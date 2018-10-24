@@ -19,7 +19,7 @@ public class AssignmentStmtTest {
     @Before
     public void addBlockProperties() {
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
-        AbstractRobotFactory.addBlockTypesFromProperties("Robot", robotProperties);
+        AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
     }
 
     @Test

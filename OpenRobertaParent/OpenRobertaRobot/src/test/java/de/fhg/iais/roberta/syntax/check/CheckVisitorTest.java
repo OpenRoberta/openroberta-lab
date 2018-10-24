@@ -8,7 +8,6 @@ import org.junit.Test;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
@@ -41,11 +40,6 @@ public class CheckVisitorTest {
 
         @Override
         public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-            return null;
-        }
-
-        @Override
-        public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
             return null;
         }
 

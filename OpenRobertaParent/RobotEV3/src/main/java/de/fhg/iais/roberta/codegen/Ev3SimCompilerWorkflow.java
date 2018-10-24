@@ -27,15 +27,15 @@ public class Ev3SimCompilerWorkflow extends AbstractCompilerWorkflow {
     public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) //
     {
         if ( data.getErrorMessage() != null ) {
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
             return;
         }
         try {
-            generatedSourceCode = Ev3SimVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree(), language);
+            this.generatedSourceCode = Ev3SimVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), language);
             LOG.info("javascript ev3 simulation code generated");
         } catch ( Exception e ) {
             LOG.error("javascript ev3 simulation code generation failed", e);
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
         }
     }
 
@@ -52,7 +52,7 @@ public class Ev3SimCompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer(factory);
+        Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer(factory.getBlocklyDropdownFactory());
         return transformer.transform(project);
     }
 

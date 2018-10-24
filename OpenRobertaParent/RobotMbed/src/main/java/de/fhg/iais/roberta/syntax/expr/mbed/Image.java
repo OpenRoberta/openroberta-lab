@@ -11,8 +11,8 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
@@ -95,7 +95,7 @@ public class Image<V> extends Expr<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 25);
         String[][] image = new String[5][5];
         for ( int i = 0; i < 5; i++ ) {
@@ -109,10 +109,10 @@ public class Image<V> extends Expr<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
         for ( int i = 0; i < 5; i++ ) {
             for ( int j = 0; j < 5; j++ ) {
-                JaxbTransformerHelper.addField(jaxbDestination, "P" + j + i, this.image[i][j]);
+                Ast2JaxbHelper.addField(jaxbDestination, "P" + j + i, this.image[i][j]);
             }
         }
         return jaxbDestination;

@@ -18,8 +18,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.transformer.ExprParam;
-import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -114,7 +114,7 @@ public class MethodReturn<V> extends Method<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 2);
         String name = helper.extractField(fields, BlocklyConstants.NAME);
 
@@ -140,17 +140,17 @@ public class MethodReturn<V> extends Method<V> {
     public Block astToBlock() {
         boolean declare = !this.getParameters().get().isEmpty();
         Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
         mutation.setDeclare(declare);
         mutation.setReturnType(this.returnType.getBlocklyName());
         jaxbDestination.setMutation(mutation);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.NAME, this.getMethodName());
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.TYPE, this.returnType.getBlocklyName());
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.NAME, this.getMethodName());
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.TYPE, this.returnType.getBlocklyName());
         Repetitions repetition = new Repetitions();
-        JaxbTransformerHelper.addStatement(repetition, BlocklyConstants.ST, this.getParameters());
-        JaxbTransformerHelper.addStatement(repetition, BlocklyConstants.STACK, this.body);
-        JaxbTransformerHelper.addValue(repetition, BlocklyConstants.RETURN, getReturnValue());
+        Ast2JaxbHelper.addStatement(repetition, BlocklyConstants.ST, this.getParameters());
+        Ast2JaxbHelper.addStatement(repetition, BlocklyConstants.STACK, this.body);
+        Ast2JaxbHelper.addValue(repetition, BlocklyConstants.RETURN, getReturnValue());
         jaxbDestination.setRepetitions(repetition);
         return jaxbDestination;
     }

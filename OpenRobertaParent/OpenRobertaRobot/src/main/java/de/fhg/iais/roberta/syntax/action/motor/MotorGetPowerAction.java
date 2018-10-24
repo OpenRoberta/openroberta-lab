@@ -4,17 +4,15 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.mode.action.ActorPort;
+import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MoveAction;
-import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
@@ -27,7 +25,7 @@ import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
  */
 public class MotorGetPowerAction<V> extends MoveAction<V> {
 
-    private MotorGetPowerAction(IActorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private MotorGetPowerAction(String port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(port, BlockTypeContainer.getByName("MOTOR_GET_POWER_ACTION"), properties, comment);
         Assert.isTrue(port != null);
 
@@ -42,13 +40,13 @@ public class MotorGetPowerAction<V> extends MoveAction<V> {
      * @param comment added from the user,
      * @return read only object of class {@link MotorGetPowerAction}
      */
-    private static <V> MotorGetPowerAction<V> make(IActorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> MotorGetPowerAction<V> make(String port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new MotorGetPowerAction<V>(port, properties, comment);
     }
 
     @Override
     public String toString() {
-        return "MotorGetPower [port=" + getPort() + "]";
+        return "MotorGetPower [port=" + getUserDefinedPort() + "]";
     }
 
     @Override
@@ -63,19 +61,19 @@ public class MotorGetPowerAction<V> extends MoveAction<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        IRobotFactory factory = helper.getModeFactory();
+    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+        BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = helper.extractFields(block, (short) 1);
         String portName = helper.extractField(fields, BlocklyConstants.MOTORPORT);
-        return MotorGetPowerAction.make(factory.getActorPort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
+        return MotorGetPowerAction.make(factory.sanitizePort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORPORT, getPort().toString());
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.MOTORPORT, getUserDefinedPort().toString());
 
         return jaxbDestination;
     }

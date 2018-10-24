@@ -5,7 +5,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.mbed.MicrobitConfiguration;
 import de.fhg.iais.roberta.util.test.mbed.HelperMicrobitForXmlTest;
 
 public class PythonVisitorTest {
@@ -25,8 +24,7 @@ public class PythonVisitorTest {
 
     @BeforeClass
     public static void setupConfigurationForAllTests() {
-        @SuppressWarnings("rawtypes")
-        Configuration.Builder configuration = new MicrobitConfiguration.Builder();
+        Configuration.Builder configuration = new Configuration.Builder();
         brickConfiguration = configuration.build();
     }
 

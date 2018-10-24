@@ -5,12 +5,13 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
+import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
+import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -257,11 +258,12 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitEmptyList(EmptyList<Void> emptyList) {
-        this.sb.append(
-            "new ArrayList<"
-                + getLanguageVarTypeFromBlocklyType(emptyList.getTypeVar()).substring(0, 1).toUpperCase()
-                + getLanguageVarTypeFromBlocklyType(emptyList.getTypeVar()).substring(1).toLowerCase()
-                + ">()");
+        this.sb
+            .append(
+                "new ArrayList<"
+                    + getLanguageVarTypeFromBlocklyType(emptyList.getTypeVar()).substring(0, 1).toUpperCase()
+                    + getLanguageVarTypeFromBlocklyType(emptyList.getTypeVar()).substring(1).toLowerCase()
+                    + ">()");
         return null;
     }
 
@@ -325,18 +327,18 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        this.sb.append("\n").append(INDENT).append("private void ");
+        this.sb.append("\n").append(this.INDENT).append("private void ");
         this.sb.append(methodVoid.getMethodName() + "(");
         methodVoid.getParameters().visit(this);
         this.sb.append(") {");
         methodVoid.getBody().visit(this);
-        this.sb.append("\n").append(INDENT).append("}");
+        this.sb.append("\n").append(this.INDENT).append("}");
         return null;
     }
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        this.sb.append("\n").append(INDENT).append("private " + getLanguageVarTypeFromBlocklyType(methodReturn.getReturnType()));
+        this.sb.append("\n").append(this.INDENT).append("private " + getLanguageVarTypeFromBlocklyType(methodReturn.getReturnType()));
         this.sb.append(" " + methodReturn.getMethodName() + "(");
         methodReturn.getParameters().visit(this);
         this.sb.append(") {");
@@ -344,7 +346,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         nlIndent();
         this.sb.append("return ");
         methodReturn.getReturnValue().visit(this);
-        this.sb.append(";\n").append(INDENT).append("}");
+        this.sb.append(";\n").append(this.INDENT).append("}");
         return null;
     }
 
@@ -373,6 +375,12 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         if ( methodCall.getReturnType() == BlocklyType.VOID ) {
             this.sb.append(";");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitColorConst(ColorConst<Void> colorConst) {
+        this.sb.append("PickColor." + colorConst.getColor().getFirst());
         return null;
     }
 
@@ -559,50 +567,52 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     protected static Map<Binary.Op, String> binaryOpSymbols() {
-        return Collections.unmodifiableMap(
-            Stream
-                .of(
+        return Collections
+            .unmodifiableMap(
+                Stream
+                    .of(
 
-                    entry(Binary.Op.ADD, "+"),
-                    entry(Binary.Op.MINUS, "-"),
-                    entry(Binary.Op.MULTIPLY, "*"),
-                    entry(Binary.Op.DIVIDE, "/"),
-                    entry(Binary.Op.MOD, "%"),
-                    entry(Binary.Op.EQ, "=="),
-                    entry(Binary.Op.NEQ, "!="),
-                    entry(Binary.Op.LT, "<"),
-                    entry(Binary.Op.LTE, "<="),
-                    entry(Binary.Op.GT, ">"),
-                    entry(Binary.Op.GTE, ">="),
-                    entry(Binary.Op.AND, "&&"),
-                    entry(Binary.Op.OR, "||"),
-                    entry(Binary.Op.MATH_CHANGE, "+="),
-                    entry(Binary.Op.TEXT_APPEND, "+="),
-                    entry(Binary.Op.IN, ":"),
-                    entry(Binary.Op.ASSIGNMENT, "="),
-                    entry(Binary.Op.ADD_ASSIGNMENT, "+="),
-                    entry(Binary.Op.MINUS_ASSIGNMENT, "-="),
-                    entry(Binary.Op.MULTIPLY_ASSIGNMENT, "*="),
-                    entry(Binary.Op.DIVIDE_ASSIGNMENT, "/="),
-                    entry(Binary.Op.MOD_ASSIGNMENT, "%=")
+                        entry(Binary.Op.ADD, "+"),
+                        entry(Binary.Op.MINUS, "-"),
+                        entry(Binary.Op.MULTIPLY, "*"),
+                        entry(Binary.Op.DIVIDE, "/"),
+                        entry(Binary.Op.MOD, "%"),
+                        entry(Binary.Op.EQ, "=="),
+                        entry(Binary.Op.NEQ, "!="),
+                        entry(Binary.Op.LT, "<"),
+                        entry(Binary.Op.LTE, "<="),
+                        entry(Binary.Op.GT, ">"),
+                        entry(Binary.Op.GTE, ">="),
+                        entry(Binary.Op.AND, "&&"),
+                        entry(Binary.Op.OR, "||"),
+                        entry(Binary.Op.MATH_CHANGE, "+="),
+                        entry(Binary.Op.TEXT_APPEND, "+="),
+                        entry(Binary.Op.IN, ":"),
+                        entry(Binary.Op.ASSIGNMENT, "="),
+                        entry(Binary.Op.ADD_ASSIGNMENT, "+="),
+                        entry(Binary.Op.MINUS_ASSIGNMENT, "-="),
+                        entry(Binary.Op.MULTIPLY_ASSIGNMENT, "*="),
+                        entry(Binary.Op.DIVIDE_ASSIGNMENT, "/="),
+                        entry(Binary.Op.MOD_ASSIGNMENT, "%=")
 
-                )
-                .collect(entriesToMap()));
+                    )
+                    .collect(entriesToMap()));
     }
 
     protected static Map<Unary.Op, String> unaryOpSymbols() {
-        return Collections.unmodifiableMap(
-            Stream
-                .of(
+        return Collections
+            .unmodifiableMap(
+                Stream
+                    .of(
 
-                    entry(Unary.Op.PLUS, "+"),
-                    entry(Unary.Op.NEG, "-"),
-                    entry(Unary.Op.NOT, "!"),
-                    entry(Unary.Op.POSTFIX_INCREMENTS, "++"),
-                    entry(Unary.Op.PREFIX_INCREMENTS, "++")
+                        entry(Unary.Op.PLUS, "+"),
+                        entry(Unary.Op.NEG, "-"),
+                        entry(Unary.Op.NOT, "!"),
+                        entry(Unary.Op.POSTFIX_INCREMENTS, "++"),
+                        entry(Unary.Op.PREFIX_INCREMENTS, "++")
 
-                )
-                .collect(entriesToMap()));
+                    )
+                    .collect(entriesToMap()));
     }
 
 }

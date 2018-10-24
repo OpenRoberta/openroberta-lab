@@ -1,8 +1,5 @@
 package de.fhg.iais.roberta.components;
 
-import de.fhg.iais.roberta.inter.mode.general.IMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-
 /**
  * Stores information for port, type and the mode of used sensor in a blockly program. This information is shared between the server and the brick for sensor
  * debugging on the brick. If sensor is used then the brick is sending debug information to the server for this particular sensor.
@@ -11,11 +8,11 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
  */
 
 public class UsedSensor {
-    private final ISensorPort port;
-    private final ISensorType type;
-    private final IMode mode;
+    private final String port;
+    private final String type;
+    private final String mode;
 
-    public UsedSensor(ISensorPort port, ISensorType type, IMode mode) {
+    public UsedSensor(String port, String type, String mode) {
         this.port = port;
         this.type = type;
         this.mode = mode;
@@ -24,41 +21,33 @@ public class UsedSensor {
     /**
      * @return the port
      */
-    public ISensorPort getPort() {
+    public String getPort() {
         return this.port;
     }
 
-    /**
-     * @return the sensorType
-     */
-    public ISensorType getType() {
+    public String getType() {
         return this.type;
     }
 
     /**
      * @return the mode
      */
-    public IMode getMode() {
+    public String getMode() {
         return this.mode;
     }
 
     @Override
-    public String toString() {
-        return "UsedSensor [" + this.port + ", " + this.type + ", " + this.mode + "]";
-    }
-
-    @Override
-    public final int hashCode() {
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (this.port == null ? 0 : this.port.hashCode());
-        result = prime * result + (this.mode == null ? 0 : this.mode.hashCode());
-        result = prime * result + this.type.hashCode();
+        result = prime * result + ((this.mode == null) ? 0 : this.mode.hashCode());
+        result = prime * result + ((this.port == null) ? 0 : this.port.hashCode());
+        result = prime * result + ((this.type == null) ? 0 : this.type.hashCode());
         return result;
     }
 
     @Override
-    public final boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if ( this == obj ) {
             return true;
         }
@@ -69,7 +58,11 @@ public class UsedSensor {
             return false;
         }
         UsedSensor other = (UsedSensor) obj;
-        if ( this.type != other.type ) {
+        if ( this.mode == null ) {
+            if ( other.mode != null ) {
+                return false;
+            }
+        } else if ( !this.mode.equals(other.mode) ) {
             return false;
         }
         if ( this.port == null ) {
@@ -79,13 +72,19 @@ public class UsedSensor {
         } else if ( !this.port.equals(other.port) ) {
             return false;
         }
-        if ( this.mode == null ) {
-            if ( other.mode != null ) {
+        if ( this.type == null ) {
+            if ( other.type != null ) {
                 return false;
             }
-        } else if ( this.mode != other.mode ) {
+        } else if ( !this.type.equals(other.type) ) {
             return false;
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "UsedSensor [" + this.port + ", " + this.type + ", " + this.mode + "]";
+    }
+
 }

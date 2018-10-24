@@ -35,10 +35,10 @@ public class VorwerkCompilerWorkflow extends AbstractCompilerWorkflow {
             return;
         }
         try {
-            VorwerkConfiguration configuration = (VorwerkConfiguration) data.getBrickConfiguration();
+            VorwerkConfiguration configuration = (VorwerkConfiguration) data.getRobotConfiguration();
             this.vorwerkCommunicator.updateRobotInformation(configuration.getIpAddress(), configuration.getUserName(), configuration.getPassword());
             generatedSourceCode =
-                VorwerkPythonVisitor.generate((VorwerkConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
+                VorwerkPythonVisitor.generate((VorwerkConfiguration) data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true, language);
             LOG.info("vorwerk code generated");
         } catch ( Exception e ) {
             LOG.error("vorwerk code generation failed", e);

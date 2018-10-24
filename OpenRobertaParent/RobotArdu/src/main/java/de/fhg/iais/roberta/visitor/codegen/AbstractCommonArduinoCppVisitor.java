@@ -3,12 +3,12 @@ package de.fhg.iais.roberta.visitor.codegen;
 import java.util.ArrayList;
 import java.util.Set;
 
-import de.fhg.iais.roberta.components.ConfigurationBlock;
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
@@ -37,12 +37,13 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
 public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor {
 
     protected Set<UsedSensor> usedSensors;
-    protected Set<ConfigurationBlock> usedConfigurationBlocks;
+    protected Configuration configuration;
     protected Set<UsedActor> usedActors;
     protected ArrayList<VarDeclaration<Void>> usedVars;
 
-    protected AbstractCommonArduinoCppVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
+    protected AbstractCommonArduinoCppVisitor(Configuration configuration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
+        this.configuration = configuration;
     }
 
     protected void generateUsedVars() {
@@ -408,12 +409,12 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
 
     //@Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case DEFAULT:
-            case VALUE:
+        switch ( timerSensor.getMode() ) {
+            case SC.DEFAULT:
+            case SC.VALUE:
                 this.sb.append("(int) (millis() - __time)");
                 break;
-            case RESET:
+            case SC.RESET:
                 this.sb.append("__time = millis();");
                 break;
             default:

@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt.Mode;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
 import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
@@ -29,7 +29,7 @@ public class RepeatStmtTest {
 
     @Test
     public void getMode() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/control/repeat_stmt.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/control/repeat_stmt.xml");
 
         RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(0).get(1);
 
@@ -38,7 +38,7 @@ public class RepeatStmtTest {
 
     @Test
     public void getExpr() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/control/repeat_stmt.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/control/repeat_stmt.xml");
 
         RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(0).get(1);
 
@@ -47,7 +47,7 @@ public class RepeatStmtTest {
 
     @Test
     public void getList() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/control/repeat_stmt.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/control/repeat_stmt.xml");
 
         RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(0).get(1);
 
@@ -151,7 +151,7 @@ public class RepeatStmtTest {
     @Test
     public void loopForever() throws Exception {
         String a =
-            "BlockAST[project=[[Location[x=1,y=379],(repeat[FOREVER,BoolConst[true]]FunctionStmt[TextPrintFunct[[ColorConst[GREEN]]]]),(repeat[FOREVER,BoolConst[true]]FunctionStmt[TextPrintFunct[[EmptyExpr[defVal=STRING]]]])]]]";
+            "BlockAST[project=[[Location[x=1,y=379],(repeat[FOREVER,BoolConst[true]]FunctionStmt[TextPrintFunct[[ColorConst[GREEN, #00642E]]]]),(repeat[FOREVER,BoolConst[true]]FunctionStmt[TextPrintFunct[[EmptyExpr[defVal=STRING]]]])]]]";
 
         Assert.assertEquals(a.replaceAll("\\s+", ""), this.h.generateTransformerString("/ast/control/repeat_stmt_loopForever.xml").replaceAll("\\s+", ""));
     }

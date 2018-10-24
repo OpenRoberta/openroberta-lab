@@ -123,7 +123,7 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
 
     @Override
     public Void visitBoolConst(BoolConst<Void> boolConst) {
-        this.sb.append(boolConst.isValue());
+        this.sb.append(boolConst.getValue());
         return null;
     }
 
@@ -135,7 +135,7 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append(getEnumCode(colorConst.getValue()));
+        this.sb.append(colorConst.getColor().getFirst());
         return null;
     }
 
@@ -314,6 +314,10 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
 
     protected String whitespace() {
         return " ";
+    }
+
+    protected String getEnumCode(String value) {
+        return value.toLowerCase();
     }
 
     protected String getEnumCode(IMode value) {

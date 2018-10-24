@@ -16,8 +16,8 @@ import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 public class BotnrollConfigurationTest {
     private final String robot = "botnroll";
-    private final PluginProperties pluginProperties = new PluginProperties(robot, "", "", Util1.loadProperties("classpath:" + robot + ".properties"));
-    private final IRobotFactory factory = new BotnrollFactory(pluginProperties);
+    private final PluginProperties pluginProperties = new PluginProperties(this.robot, "", "", Util1.loadProperties("classpath:" + this.robot + ".properties"));
+    private final IRobotFactory factory = new BotnrollFactory(this.pluginProperties);
 
     @Test
     public void testRoundtrip() throws Exception {
@@ -40,7 +40,7 @@ public class BotnrollConfigurationTest {
                 + "actorport{A:ardumotor,regulated,forward;B:ardumotor,regulated,forward;C:ardumotor,regulated,forward;D:ardumotor,regulated,forward;}}";
 
         BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration.xml");
-        Jaxb2BotNrollConfigurationTransformer transformer = new Jaxb2BotNrollConfigurationTransformer(this.factory);
+        Jaxb2BotNrollConfigurationTransformer transformer = new Jaxb2BotNrollConfigurationTransformer(this.factory.getBlocklyDropdownFactory());
         Configuration b = transformer.transform(project);
         Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateText("test").replaceAll("\\s+", ""));
     }

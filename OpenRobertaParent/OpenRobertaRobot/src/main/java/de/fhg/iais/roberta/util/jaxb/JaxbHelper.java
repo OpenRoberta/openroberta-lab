@@ -20,7 +20,7 @@ import org.xml.sax.InputSource;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 
 public class JaxbHelper {
     private static final Logger LOG = LoggerFactory.getLogger(JaxbHelper.class);
@@ -109,9 +109,9 @@ public class JaxbHelper {
      * @return jaxb the transformer
      * @throws Exception
      */
-    public static Jaxb2BlocklyProgramTransformer<Void> generateProgramTransformer(IRobotFactory factory, String blocklyXml) throws Exception {
+    public static Jaxb2ProgramAst<Void> generateProgramTransformer(IRobotFactory factory, String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(factory);
+        Jaxb2ProgramAst<Void> transformer = new Jaxb2ProgramAst<>(factory);
         transformer.transform(project);
         return transformer;
     }

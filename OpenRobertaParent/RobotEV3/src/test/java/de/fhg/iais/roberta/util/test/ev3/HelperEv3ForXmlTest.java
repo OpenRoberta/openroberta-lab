@@ -1,20 +1,19 @@
 package de.fhg.iais.roberta.util.test.ev3;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.junit.Assert;
 
-import de.fhg.iais.roberta.components.Actor;
-import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.ev3.EV3Configuration;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.Ev3LejosV0Factory;
-import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
-import de.fhg.iais.roberta.mode.action.MotorSide;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
@@ -25,16 +24,36 @@ import de.fhg.iais.roberta.visitor.codegen.Ev3SimVisitor;
 public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
 
     public HelperEv3ForXmlTest() {
-        super(
-            new Ev3LejosV0Factory(new PluginProperties("ev3lejosv0", "", "", Util1.loadProperties("classpath:ev3lejosv0.properties"))),
-            new EV3Configuration.Builder()
-                .addActor(new ActorPort("A", "MA"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(new ActorPort("B", "MB"), new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
-                .addActor(new ActorPort("C", "MC"), new Actor(ActorType.LARGE, false, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(new ActorPort("D", "MD"), new Actor(ActorType.MEDIUM, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
-                .build());
+        super(new Ev3LejosV0Factory(new PluginProperties("ev3lejosv0", "", "", Util1.loadProperties("classpath:ev3lejosv0.properties"))), makeConfiguration());
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
-        AbstractRobotFactory.addBlockTypesFromProperties("Robot", robotProperties);
+        this.robotConfiguration.setRobotName("ev3lejosV1");
+        AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
+    }
+
+    private static Configuration makeConfiguration() {
+        Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
+        ConfigurationComponent motorA = new ConfigurationComponent("LARGE", true, "A", BlocklyConstants.NO_SLOT, "A", motorAproperties);
+
+        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
+        ConfigurationComponent motorB = new ConfigurationComponent("MEDIUM", true, "B", BlocklyConstants.NO_SLOT, "B", motorBproperties);
+
+        Map<String, String> motorCproperties = createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
+        ConfigurationComponent motorC = new ConfigurationComponent("LARGE", true, "C", BlocklyConstants.NO_SLOT, "C", motorCproperties);
+
+        Map<String, String> motorDproperties = createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
+        ConfigurationComponent motorD = new ConfigurationComponent("MEDIUM", true, "D", BlocklyConstants.NO_SLOT, "D", motorDproperties);
+
+        final Configuration.Builder builder = new Configuration.Builder();
+        builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, motorC, motorD));
+        return builder.build();
+    }
+
+    private static Map<String, String> createMap(String... args) {
+        Map<String, String> m = new HashMap<>();
+        for ( int i = 0; i < args.length; i += 2 ) {
+            m.put(args[i], args[i + 1]);
+        }
+        return m;
     }
 
     /**
@@ -45,8 +64,8 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
      * @throws Exception
      */
     private String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String javaCode = Ev3JavaVisitor.generate("Test", (EV3Configuration) getRobotConfiguration(), transformer.getTree(), false, Language.ENGLISH);
+        Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
+        String javaCode = Ev3JavaVisitor.generate("Test", getRobotConfiguration(), transformer.getTree(), false, Language.ENGLISH);
         return javaCode;
     }
 
@@ -70,8 +89,8 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
      * @throws Exception
      */
     public String generateJava(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = Ev3JavaVisitor.generate("Test", (EV3Configuration) brickConfiguration, transformer.getTree(), true, Language.ENGLISH);
+        Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
+        String code = Ev3JavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), true, Language.ENGLISH);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }
@@ -84,8 +103,8 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
      * @throws Exception
      */
     public String generatePython(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = Ev3PythonVisitor.generate((EV3Configuration) brickConfiguration, transformer.getTree(), true, Language.ENGLISH);
+        Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
+        String code = Ev3PythonVisitor.generate(brickConfiguration, transformer.getTree(), true, Language.ENGLISH);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }
@@ -98,7 +117,7 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
      * @throws Exception
      */
     public String generateJavaScript(String pathToProgramXml) throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+        Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
         String code = Ev3SimVisitor.generate(getRobotConfiguration(), transformer.getTree(), Language.ENGLISH);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;

@@ -3,10 +3,9 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
 
 public class EncoderSensorTest {
@@ -23,24 +22,24 @@ public class EncoderSensorTest {
 
     @Test
     public void getMode() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setEncoder.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setEncoder.xml");
 
         EncoderSensor<Void> cs = (EncoderSensor<Void>) transformer.getTree().get(0).get(1);
         EncoderSensor<Void> cs1 = (EncoderSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals(MotorTachoMode.ROTATION, cs.getMode());
-        Assert.assertEquals(MotorTachoMode.DEGREE, cs1.getMode());
+        Assert.assertEquals(SC.ROTATION, cs.getMode());
+        Assert.assertEquals(SC.DEGREE, cs1.getMode());
     }
 
     @Test
     public void getPort() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setEncoder.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setEncoder.xml");
 
         EncoderSensor<Void> cs = (EncoderSensor<Void>) transformer.getTree().get(0).get(1);
         EncoderSensor<Void> cs1 = (EncoderSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals(new ActorPort("A", "MA"), cs.getPort());
-        Assert.assertEquals(new ActorPort("D", "MD"), cs1.getPort());
+        Assert.assertEquals("A", cs.getPort());
+        Assert.assertEquals("D", cs1.getPort());
     }
 
     @Test

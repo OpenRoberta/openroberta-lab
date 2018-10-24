@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
@@ -22,28 +22,28 @@ public class UnaryTest {
 
     @Test
     public void getOp() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/math/math_single1.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/math/math_single1.xml");
         Unary<Void> unary = (Unary<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(Unary.Op.NEG, unary.getOp());
     }
 
     @Test
     public void getExpr() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/math/math_single1.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/math/math_single1.xml");
         Unary<Void> unary = (Unary<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals("NumConst [10]", unary.getExpr().toString());
     }
 
     @Test
     public void getPresedance() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/math/math_single1.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/math/math_single1.xml");
         Unary<Void> unary = (Unary<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(10, unary.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/math/math_single1.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/math/math_single1.xml");
         Unary<Void> unary = (Unary<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(Assoc.LEFT, unary.getAssoc());
     }

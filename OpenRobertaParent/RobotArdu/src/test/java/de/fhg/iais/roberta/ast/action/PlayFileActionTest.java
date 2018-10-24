@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
 
 public class PlayFileActionTest {
@@ -18,7 +18,7 @@ public class PlayFileActionTest {
 
     @Test
     public void getFileName() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/actions/action_PlayFile.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_PlayFile.xml");
         PlayFileAction<Void> pfa = (PlayFileAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals("1", pfa.getFileName());
     }

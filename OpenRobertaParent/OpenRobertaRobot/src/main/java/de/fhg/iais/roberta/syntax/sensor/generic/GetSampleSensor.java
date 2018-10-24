@@ -8,8 +8,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.codegen.AbstractCompilerWorkflow;
-import de.fhg.iais.roberta.components.SensorType;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -17,8 +16,8 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.GetSampleType;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
-import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
@@ -35,28 +34,28 @@ public class GetSampleSensor<V> extends Sensor<V> {
     private final Sensor<V> sensor;
     private final String sensorPort;
     private final String slot;
-    private final GetSampleType sensorType;
+    private final String sensorTypeAndMode;
     private final boolean isPortInMutation;
     private static final ch.qos.logback.classic.Logger LOG = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(AbstractCompilerWorkflow.class);
 
     @SuppressWarnings("unchecked")
     private GetSampleSensor(
-        GetSampleType sensorType,
+        String sensorTypeAndMode,
         String port,
         String slot,
         boolean isPortInMutation,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
-        IRobotFactory factory) {
+        BlocklyDropdownFactory factory) {
         super(BlockTypeContainer.getByName("SENSOR_GET_SAMPLE"), properties, comment);
         LOG.setLevel(ch.qos.logback.classic.Level.TRACE);
-        Assert.notNull(sensorType);
+        Assert.notNull(sensorTypeAndMode);
         Assert.notNull(port);
         this.sensorPort = port;
         this.slot = slot;
-        this.sensorType = sensorType;
+        this.sensorTypeAndMode = sensorTypeAndMode;
         this.isPortInMutation = isPortInMutation;
-        this.sensor = (Sensor<V>) factory.createSensor(sensorType, port, slot, isPortInMutation, properties, comment);
+        this.sensor = (Sensor<V>) factory.createSensor(sensorTypeAndMode, port, slot, isPortInMutation, properties, comment);
         setReadOnly();
     }
 
@@ -70,14 +69,14 @@ public class GetSampleSensor<V> extends Sensor<V> {
      * @return read only object of class {@link GetSampleSensor}
      */
     public static <V> GetSampleSensor<V> make(
-        GetSampleType sensorType,
+        String sensorTypeAndMode,
         String port,
         String slot,
         boolean isPortInMutation,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
-        IRobotFactory factory) {
-        return new GetSampleSensor<>(sensorType, port, slot, isPortInMutation, properties, comment, factory);
+        BlocklyDropdownFactory factory) {
+        return new GetSampleSensor<>(sensorTypeAndMode, port, slot, isPortInMutation, properties, comment, factory);
     }
 
     /**
@@ -101,8 +100,8 @@ public class GetSampleSensor<V> extends Sensor<V> {
     /**
      * @return type of the sensor who will get the sample
      */
-    public GetSampleType getSensorType() {
-        return this.sensorType;
+    public String getSensorTypeAndMode() {
+        return this.sensorTypeAndMode;
     }
 
     @Override
@@ -122,37 +121,31 @@ public class GetSampleSensor<V> extends Sensor<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 3);
         String modeName = helper.extractField(fields, BlocklyConstants.SENSORTYPE);
         String portName = helper.extractField(fields, GetSampleType.get(modeName).getPortTypeName());
         String slot = helper.extractField(fields, GetSampleType.get(modeName).getValues()[0], BlocklyConstants.NO_SLOT);
         boolean isPortInMutation = block.getMutation().getPort() != null;
-        return GetSampleSensor.make(
-            GetSampleType.get(modeName),
-            portName,
-            slot,
-            isPortInMutation,
-            helper.extractBlockProperties(block),
-            helper.extractComment(block),
-            helper.getModeFactory());
+        return GetSampleSensor
+            .make(modeName, portName, slot, isPortInMutation, helper.extractBlockProperties(block), helper.extractComment(block), helper.getDropdownFactory());
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this.sensor, jaxbDestination);
+        Ast2JaxbHelper.setBasicProperties(this.sensor, jaxbDestination);
 
         Mutation mutation = new Mutation();
-        mutation.setInput(getSensorType().name());
+        mutation.setInput(this.sensorTypeAndMode);
         if ( this.isPortInMutation ) {
             mutation.setPort(this.sensorPort);
         }
         jaxbDestination.setMutation(mutation);
 
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORTYPE, this.sensorType.name());
-        JaxbTransformerHelper.addField(jaxbDestination, getSensorType().getPortTypeName(), this.sensorPort);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SLOT, this.slot);
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.SENSORTYPE, this.sensorTypeAndMode);
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, this.sensorPort);
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.SLOT, this.slot);
 
         return jaxbDestination;
     }

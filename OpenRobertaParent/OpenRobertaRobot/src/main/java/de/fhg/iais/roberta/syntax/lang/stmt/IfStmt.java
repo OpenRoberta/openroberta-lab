@@ -15,8 +15,8 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
-import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -202,7 +202,7 @@ public class IfStmt<V> extends Stmt<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         if ( block.getType().equals(BlocklyConstants.LOGIC_TERNARY) ) {
             List<Value> values = block.getValue();
             Assert.isTrue(values.size() <= 3, "Number of values is not less or equal to 3!");
@@ -229,12 +229,12 @@ public class IfStmt<V> extends Stmt<V> {
     public Block astToBlock() {
         Mutation mutation;
         Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
 
         if ( getProperty().getBlockType().equals(BlocklyConstants.LOGIC_TERNARY) ) {
-            JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.IF, getExpr().get(0));
-            JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.THEN, getThenList().get(0).get().get(0));
-            JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.ELSE, getElseList().get().get(0));
+            Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.IF, getExpr().get(0));
+            Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.THEN, getThenList().get(0).get().get(0));
+            Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.ELSE, getElseList().get().get(0));
             return jaxbDestination;
         }
         int _else = get_else();
@@ -255,20 +255,20 @@ public class IfStmt<V> extends Stmt<V> {
             jaxbDestination.setMutation(mutation);
             Repetitions repetitions = new Repetitions();
             for ( int i = 0; i < expr; i++ ) {
-                JaxbTransformerHelper.addValue(repetitions, BlocklyConstants.IF + i, getExpr().get(i));
-                JaxbTransformerHelper.addStatement(repetitions, BlocklyConstants.DO + i, getThenList().get(i));
+                Ast2JaxbHelper.addValue(repetitions, BlocklyConstants.IF + i, getExpr().get(i));
+                Ast2JaxbHelper.addStatement(repetitions, BlocklyConstants.DO + i, getThenList().get(i));
             }
             if ( !elseList.get().isEmpty() ) {
-                JaxbTransformerHelper.addStatement(repetitions, BlocklyConstants.ELSE, getElseList());
+                Ast2JaxbHelper.addStatement(repetitions, BlocklyConstants.ELSE, getElseList());
             }
             jaxbDestination.setRepetitions(repetitions);
             return jaxbDestination;
         }
 
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.IF + "0", getExpr().get(0));
-        JaxbTransformerHelper.addStatement(jaxbDestination, BlocklyConstants.DO + "0", getThenList().get(0));
+        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.IF + "0", getExpr().get(0));
+        Ast2JaxbHelper.addStatement(jaxbDestination, BlocklyConstants.DO + "0", getThenList().get(0));
         if ( !elseList.get().isEmpty() ) {
-            JaxbTransformerHelper.addStatement(jaxbDestination, BlocklyConstants.ELSE, getElseList());
+            Ast2JaxbHelper.addStatement(jaxbDestination, BlocklyConstants.ELSE, getElseList());
         }
 
         return jaxbDestination;

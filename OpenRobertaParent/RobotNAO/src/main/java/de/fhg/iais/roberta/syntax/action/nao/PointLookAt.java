@@ -15,8 +15,8 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
-import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
@@ -122,7 +122,7 @@ public final class PointLookAt<V> extends Action<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 2);
         List<Value> values = helper.extractValues(block, (short) 4);
 
@@ -147,14 +147,14 @@ public final class PointLookAt<V> extends Action<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, this.pointLook.getValues()[0]);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.DIRECTION, this.frame.getValues()[0]);
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.X, this.pointX);
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.Y, this.pointY);
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.Z, this.pointZ);
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.SPEED, this.speed);
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.MODE, this.pointLook.getValues()[0]);
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.DIRECTION, this.frame.getValues()[0]);
+        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.X, this.pointX);
+        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.Y, this.pointY);
+        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.Z, this.pointZ);
+        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.SPEED, this.speed);
 
         return jaxbDestination;
     }

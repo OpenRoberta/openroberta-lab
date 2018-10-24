@@ -1,25 +1,27 @@
 package de.fhg.iais.roberta.syntax;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
- * This container holds all possible kind of objects that we can have to represent the AST (abstract syntax tree). The objects are separated in four main
+ * This container holds all possible kind of objects that we can have to represent the AST (abstract syntax tree). The objects are separated into
  * {@link Category}. They have a unique (String) name to refer to them (in a code generator visitor, for instance). They can be retrieved<br>
  * - either by their (globally) unique name or<br>
  * - a list of (globally) unique names, each of which is used as element name in blockly XML.<br>
- * A concrete root can add dynamically new elements to this container, when the robot is registered during robot startup (this is why this container is
- * <i>not</i> implemented as a enum type. Duriong registraion of new block types the uniqueness of names is guaranteed by this container.
+ * A robot can add dynamically new elements to this container, when the robot is registered during robot startup (this is why this container is <i>not</i>
+ * implemented as a enum type. During registraion of new block types the uniqueness of names is guaranteed by this container.
  */
 public class BlockTypeContainer {
-    private static final String[] NO_BLOCKLY_NAMES = new String[0];
-
-    private static final List<String> loadedPropertyFiles = new ArrayList<>();
+    private static final Logger LOG = LoggerFactory.getLogger(BlockTypeContainer.class);
 
     private static final Map<String, BlockType> blockTypesByName = new HashMap<>();
     private static final Map<String, BlockType> blockTypesByBlocklyName = new HashMap<>();
@@ -46,18 +48,38 @@ public class BlockTypeContainer {
         add("TEXT_CHANGE_CASE_FUNCT", Category.FUNCTION);
     }
 
-    public static void add(String name, Category category, Class<?> astClass, String... blocklyNames) {
-        BlockType blockType = new BlockType(name, category, astClass, blocklyNames);
-        BlockType oldValue = blockTypesByName.put(name.toLowerCase(), blockType);
-        Assert.isNull(oldValue, "Block name %s is mapped twice. Initialization aborted", name);
-        for ( String blocklyName : blocklyNames ) {
-            oldValue = blockTypesByBlocklyName.put(blocklyName.toLowerCase(), blockType);
-            Assert.isNull(oldValue, "Blockly name %s is mapped twice. Initialization aborted", blocklyName);
-        }
+    private static void add(String name, Category category) {
+        add(name, category, null);
     }
 
-    private static void add(String name, Category category) {
-        add(name, category, null, NO_BLOCKLY_NAMES);
+    public static void add(String name, Category category, Class<?> astClass, String... blocklyNames) {
+        List<String> newNames = null;
+        BlockType blockType = blockTypesByName.get(name.toLowerCase());
+        if ( blockType == null ) {
+            blockType = new BlockType(name, category, astClass, blocklyNames);
+            blockTypesByName.put(name.toLowerCase(), blockType);
+            newNames = Arrays.asList(blocklyNames);
+        } else {
+            Assert.isTrue(blockType.getCategory().equals(category), "Block name %s has different category when updated", name);
+            Class<?> oldClass = blockType.getAstClass();
+            if ( oldClass == null && astClass != null ) {
+                throw new DbcException("Block name " + name + " has different implementation classes (1)");
+            }
+            if ( oldClass != null && astClass == null ) {
+                throw new DbcException("Block name " + name + " has different implementation classes (2)");
+            }
+            if ( !(oldClass == null && astClass == null || oldClass.getCanonicalName().equals(astClass.getCanonicalName())) ) {
+                throw new DbcException("Block name " + name + " has different implementation classes (3)");
+            }
+            newNames = blockType.addBlocklyNames(blocklyNames);
+            if ( newNames.size() > 0 ) {
+                LOG.error("blocktype " + name + " is extended!");
+            }
+        }
+        for ( String blocklyName : newNames ) {
+            BlockType checkBlocktype = blockTypesByBlocklyName.put(blocklyName.toLowerCase(), blockType);
+            Assert.isNull(checkBlocktype, "In block %s the blockly name %s is mapped twice. Initialization aborted", name, blocklyName);
+        }
     }
 
     /**
@@ -83,80 +105,5 @@ public class BlockTypeContainer {
         BlockType blockType = blockTypesByBlocklyName.get(blocklyName.toLowerCase());
         Assert.notNull(blockType, "blockly name is not found: " + blocklyName);
         return blockType;
-    }
-
-    /**
-     * Registers a robot to avoid loading their private blockly blocks files more than once. The blocks are not loaded by calling this method use the
-     * {@link #add(String, Category, Class, String...)}
-     *
-     * @param robotName
-     * @return true if the robot was already registered; false otherwise
-     */
-    public static boolean register(String robotName) {
-        if ( loadedPropertyFiles.contains(robotName) ) {
-            return true;
-        } else {
-            loadedPropertyFiles.add(robotName);
-            return false;
-        }
-    }
-
-    public static class BlockType {
-        private final String name;
-        private final Category category;
-        private final Class<?> astClass;
-        private final String[] blocklyNames;
-
-        private BlockType(String name, Category category, Class<?> astClass, String... blocklyNames) {
-            this.name = name;
-            this.category = category;
-            this.astClass = astClass;
-            this.blocklyNames = blocklyNames;
-        }
-
-        /**
-         * @return the unique name in which {@link BlockType} belongs.
-         */
-        public String getName() {
-            return this.name;
-        }
-
-        /**
-         * @return category in which {@link BlockType} belongs.
-         */
-        public Category getCategory() {
-            return this.category;
-        }
-
-        /**
-         * @return the astClass
-         */
-        public Class<?> getAstClass() {
-            return this.astClass;
-        }
-
-        /**
-         * @return the blocklyNames
-         */
-        public String[] getBlocklyNames() {
-            return this.blocklyNames;
-        }
-
-        /**
-         * check whether this block type has the name as expected
-         *
-         * @param nameToCheck
-         * @return true, if the block type has the name expected; false otherwise
-         */
-        public boolean hasName(String... namesToCheck) {
-            for ( String nameToCheck : namesToCheck ) {
-                boolean found = this.name.equals(nameToCheck);
-                if ( found ) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
     }
 }

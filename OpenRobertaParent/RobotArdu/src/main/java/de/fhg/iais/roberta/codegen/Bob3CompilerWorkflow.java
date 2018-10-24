@@ -11,15 +11,12 @@ import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
-import de.fhg.iais.roberta.transformers.arduino.Jaxb2Bob3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.PluginProperties;
-import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.visitor.codegen.Bob3CppVisitor;
 
 public class Bob3CompilerWorkflow extends AbstractCompilerWorkflow {
@@ -62,9 +59,7 @@ public class Bob3CompilerWorkflow extends AbstractCompilerWorkflow {
 
     @Override
     public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
-        BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2Bob3ConfigurationTransformer transformer = new Jaxb2Bob3ConfigurationTransformer(factory);
-        return transformer.transform(project);
+        return new Configuration.Builder().build();
     }
 
     @Override

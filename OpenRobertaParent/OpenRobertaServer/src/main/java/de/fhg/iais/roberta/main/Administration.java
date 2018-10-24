@@ -35,7 +35,7 @@ import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.persistence.util.Upgrader;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
@@ -296,7 +296,7 @@ public class Administration {
     private String xml2Ast2xml(String updatedProgram) throws Exception, JAXBException {
         BlockSet program = JaxbHelper.xml2BlockSet(updatedProgram);
         //        EV3Factory modeFactory = new EV3Factory(null);
-        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(null);
+        Jaxb2ProgramAst<Void> transformer = new Jaxb2ProgramAst<>(null);
         transformer.transform(program);
         BlockSet blockSet = astToJaxb(transformer.getTree());
         String newXml = jaxbToXml(blockSet);

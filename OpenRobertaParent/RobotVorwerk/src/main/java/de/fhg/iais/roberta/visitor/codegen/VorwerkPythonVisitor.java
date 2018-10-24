@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import de.fhg.iais.roberta.components.vorwerk.VorwerkConfiguration;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
@@ -127,7 +127,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        this.sb.append("hal." + motorOnAction.getPort().getCodeName() + "_motor_on(");
+        this.sb.append("hal." + motorOnAction.getUserDefinedPort() + "_motor_on(");
         motorOnAction.getParam().getSpeed().visit(this);
         this.sb.append(", ");
         motorOnAction.getDurationValue().visit(this);
@@ -137,7 +137,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        this.sb.append("hal." + motorStopAction.getPort().getCodeName() + "_motor_stop()");
+        this.sb.append("hal." + motorStopAction.getUserDefinedPort() + "_motor_stop()");
         return null;
     }
 
@@ -207,13 +207,13 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        String timerNumber = timerSensor.getPort().getOraName();
-        switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case DEFAULT:
-            case VALUE:
+        String timerNumber = timerSensor.getPort();
+        switch ( timerSensor.getMode() ) {
+            case SC.DEFAULT:
+            case SC.VALUE:
                 this.sb.append("hal.getTimerValue(" + timerNumber + ")");
                 break;
-            case RESET:
+            case SC.RESET:
                 this.sb.append("hal.resetTimer(" + timerNumber + ")");
                 break;
             default:

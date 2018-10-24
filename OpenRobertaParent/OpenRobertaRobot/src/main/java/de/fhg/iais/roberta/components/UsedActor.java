@@ -1,7 +1,5 @@
 package de.fhg.iais.roberta.components;
 
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-
 /**
  * Stores information for port and mode of used actor in a blockly program. This information is used for program validation.
  *
@@ -9,10 +7,10 @@ import de.fhg.iais.roberta.inter.mode.action.IActorPort;
  */
 
 public class UsedActor {
-    private final IActorPort port;
-    private final ActorType type;
+    private final String port;
+    private final String type;
 
-    public UsedActor(IActorPort port, ActorType type) {
+    public UsedActor(String port, String type) {
         this.port = port;
         this.type = type;
     }
@@ -20,37 +18,25 @@ public class UsedActor {
     /**
      * @return the port
      */
-    public IActorPort getPort() {
+    public String getPort() {
         return this.port;
     }
 
-    /**
-     * @return the actorType
-     */
-    public ActorType getType() {
+    public String getType() {
         return this.type;
     }
 
     @Override
-    public String toString() {
-        return "UsedActor [" + this.port + ", " + this.type + "]";
-    }
-
-    @Override
-    public final int hashCode() {
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
-        try {
-            result = prime * result + this.port.hashCode();
-            result = prime * result + this.type.hashCode();
-        } catch ( NullPointerException e ) {
-            result = 31;
-        }
+        result = prime * result + ((this.port == null) ? 0 : this.port.hashCode());
+        result = prime * result + ((this.type == null) ? 0 : this.type.hashCode());
         return result;
     }
 
     @Override
-    public final boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if ( this == obj ) {
             return true;
         }
@@ -61,9 +47,6 @@ public class UsedActor {
             return false;
         }
         UsedActor other = (UsedActor) obj;
-        if ( this.type != other.type ) {
-            return false;
-        }
         if ( this.port == null ) {
             if ( other.port != null ) {
                 return false;
@@ -71,6 +54,19 @@ public class UsedActor {
         } else if ( !this.port.equals(other.port) ) {
             return false;
         }
+        if ( this.type == null ) {
+            if ( other.type != null ) {
+                return false;
+            }
+        } else if ( !this.type.equals(other.type) ) {
+            return false;
+        }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "UsedActor [" + this.port + ", " + this.type + "]";
+    }
+
 }

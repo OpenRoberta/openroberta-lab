@@ -6,21 +6,19 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.components.nao.NAOConfiguration;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.inter.mode.sensor.IPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nao.Camera;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.nao.DetectedFaceMode;
-import de.fhg.iais.roberta.mode.sensor.nao.DetectedMarkMode;
+import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
 import de.fhg.iais.roberta.syntax.action.nao.Autonomous;
@@ -77,15 +75,15 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectFaceSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectMarkSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
-import de.fhg.iais.roberta.syntax.sensor.nao.DetectedMark;
-import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
+import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrentSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -112,7 +110,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
      * @param programPhrases to generate the code from
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    private NaoPythonVisitor(NAOConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation, ILanguage language) {
+    private NaoPythonVisitor(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation, ILanguage language) {
         super(programPhrases, indentation);
 
         NaoUsedHardwareCollectorVisitor checker = new NaoUsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
@@ -131,11 +129,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public static String generate(
-        NAOConfiguration brickConfiguration,
-        ArrayList<ArrayList<Phrase<Void>>> phrasesSet,
-        boolean withWrapping,
-        ILanguage language) {
+    public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, ILanguage language) {
         Assert.notNull(brickConfiguration);
 
         NaoPythonVisitor astVisitor = new NaoPythonVisitor(brickConfiguration, phrasesSet, 0, language);
@@ -1145,9 +1139,9 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitNaoMark(DetectedMark<Void> detectedMark) {
+    public Void visitNaoMark(DetectMarkSensor<Void> detectedMark) {
         this.sb.append("h.getDetectedMark");
-        if ( detectedMark.getMode() == DetectedMarkMode.IDALL ) {
+        if ( detectedMark.getMode().equals(SC.IDALL) ) {
             this.sb.append("s");
         }
         this.sb.append("()");
@@ -1213,9 +1207,9 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitDetectFace(DetectFace<Void> detectFace) {
+    public Void visitDetectFace(DetectFaceSensor<Void> detectFace) {
         this.sb.append("faceRecognitionModule.detectFace");
-        if ( detectFace.getMode() == DetectedFaceMode.NAMEALL ) {
+        if ( detectFace.getMode().equals(SC.NAMEALL) ) {
             this.sb.append("s");
         }
         this.sb.append("()");
@@ -1228,11 +1222,11 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitElectricCurrent(ElectricCurrent<Void> electricCurrent) {
+    public Void visitElectricCurrent(ElectricCurrentSensor<Void> electricCurrent) {
         String side_axis = electricCurrent.getSlot().toString().toLowerCase();
         String[] slots = side_axis.split("_");
 
-        IPort portType = electricCurrent.getPort();
+        String portType = electricCurrent.getPort();
         String port = portType.toString().toLowerCase();
         port = StringUtils.capitalize(port);
 
@@ -1247,18 +1241,18 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         return null;
     }
 
-    private String constructJointActuator(IPort portType, String port, String side, String axis1, String axis2) {
-        if ( portType.getCodeName().equals("HEAD") ) {
+    private String constructJointActuator(String portType, String port, String side, String axis1, String axis2) {
+        if ( portType.equals("HEAD") ) {
             return port + side;
         } else {
             return side + port + axis1 + axis2;
         }
     }
 
-    private String extractSideFromSlot(String[] slots, IPort portType) {
+    private String extractSideFromSlot(String[] slots, String portType) {
         String side;
         side = Character.toString(slots[0].toUpperCase().charAt(0));
-        if ( portType.getCodeName().equals("HEAD") ) {
+        if ( portType.equals("HEAD") ) {
             side = StringUtils.capitalize(slots[0].toLowerCase());
         }
         return side;
@@ -1338,32 +1332,31 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
 
     private void generateSensors() {
         for ( UsedSensor usedSensor : this.usedSensors ) {
-            switch ( usedSensor.getType().toString() ) {
-                case BlocklyConstants.COLOR:
-                    break;
-                case BlocklyConstants.INFRARED:
-                    break;
-                case BlocklyConstants.ULTRASONIC:
+
+            switch ( usedSensor.getType() ) {
+                case SC.ULTRASONIC:
                     this.sb.append("h.sonar.subscribe(\"OpenRobertaApp\")\n");
                     break;
-                case BlocklyConstants.DETECT_MARK:
+                case SC.DETECT_MARK:
                     this.sb.append("h.mark.subscribe(\"RobertaLab\", 500, 0.0)\n");
                     break;
-                case BlocklyConstants.NAO_FACE:
+                case SC.NAO_FACE:
                     this.sb.append("\nfrom roberta import FaceRecognitionModule\n");
                     this.sb.append("faceRecognitionModule = FaceRecognitionModule(\"faceRecognitionModule\")\n");
                     break;
-                case BlocklyConstants.NAO_SPEECH:
+                case SC.NAO_SPEECH:
                     this.sb.append("\nfrom roberta import SpeechRecognitionModule\n");
                     this.sb.append("speechRecognitionModule = SpeechRecognitionModule(\"speechRecognitionModule\")\n");
                     this.sb.append("speechRecognitionModule.pauseASR()\n");
                     break;
-                case BlocklyConstants.LIGHT:
-                case BlocklyConstants.COMPASS:
-                case BlocklyConstants.SOUND:
-                case BlocklyConstants.TOUCH:
-                case BlocklyConstants.GYRO:
-                case BlocklyConstants.ACCELEROMETER:
+                case SC.COLOR:
+                case SC.INFRARED:
+                case SC.LIGHT:
+                case SC.COMPASS:
+                case SC.SOUND:
+                case SC.TOUCH:
+                case SC.GYRO:
+                case SC.ACCELEROMETER:
                     break;
                 default:
 

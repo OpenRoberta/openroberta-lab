@@ -32,17 +32,7 @@
 			<groupId>de.fhg.iais.openroberta</groupId>
 			<artifactId>OpenRobertaRobot</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>de.fhg.iais.openroberta.ev3.v0</groupId>
-			<artifactId>EV3Runtime</artifactId>
-			<version>${ev3runtime.v0.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>de.fhg.iais.openroberta.ev3.v1</groupId>
-			<artifactId>EV3Runtime</artifactId>
-			<version>${ev3runtime.v1.version}</version>
-		</dependency>
-		<dependency>
+		 <dependency>
 			<groupId>com.sun.jersey.contribs</groupId>
 			<artifactId>jersey-guice</artifactId>
 		</dependency>

@@ -5,13 +5,9 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.NxtFactory;
-import de.fhg.iais.roberta.transformer.nxt.Jaxb2NxtConfigurationTransformer;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 public class NxtConfigurationTest {
     NxtFactory factory = new NxtFactory(new PluginProperties("nxt", "", "", Util1.loadProperties("classpath:nxt.properties")));
@@ -27,48 +23,6 @@ public class NxtConfigurationTest {
         testText2Text();
         testText2Text();
         testText2Text();
-    }
-
-    @Test
-    public void test1() throws Exception {
-        String a = //
-            "robotnxttest{" //
-                + "size{wheeldiameter5.0cm;trackwidth17.0cm;}"
-                + "sensorport{3:infrared;}"
-                + "actorport{A:middlemotor,regulated,forward;}}";
-
-        BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration1.xml");
-        Jaxb2NxtConfigurationTransformer transformer = new Jaxb2NxtConfigurationTransformer(this.factory);
-        Configuration b = transformer.transform(project);
-        Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateText("test").replaceAll("\\s+", ""));
-    }
-
-    @Test
-    public void test2() throws Exception {
-        String a =
-            "robotnxttest{"
-                + "size{wheeldiameter5.6cm;trackwidth17.0cm;}"
-                + "sensorport{1:touch;4:ultrasonic;}"
-                + "actorport{B:largemotor,regulated,forward,right;C:largemotor,regulated,forward,left;}}";
-
-        BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration2.xml");
-        Jaxb2NxtConfigurationTransformer transformer = new Jaxb2NxtConfigurationTransformer(this.factory);
-        Configuration b = transformer.transform(project);
-        Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateText("test").replaceAll("\\s+", ""));
-    }
-
-    @Test
-    public void test3() throws Exception {
-        String a =
-            "robotnxttest{"
-                + "size{wheeldiameter5.6cm;trackwidth17.0cm;}"
-                + "sensorport{1:touch;4:ultrasonic;}"
-                + "actorport{B:largemotor,regulated,forward,right;C:largemotor,regulated,forward,left;}}";
-
-        BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration3.xml");
-        Jaxb2NxtConfigurationTransformer transformer = new Jaxb2NxtConfigurationTransformer(this.factory);
-        Configuration b = transformer.transform(project);
-        Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateText("test").replaceAll("\\s+", ""));
     }
 
     /**

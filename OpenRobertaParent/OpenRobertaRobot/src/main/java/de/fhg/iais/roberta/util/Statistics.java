@@ -1,7 +1,5 @@
 package de.fhg.iais.roberta.util;
 
-import eu.bitwalker.useragentutils.UserAgent;
-
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -9,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import eu.bitwalker.useragentutils.UserAgent;
 
 public final class Statistics {
     private static final Logger STAT = LoggerFactory.getLogger("statistics");

@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.action;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
 
@@ -56,7 +56,7 @@ public class ActionTest {
 
     @Test
     public void disabledComment() throws Exception {
-        final Jaxb2BlocklyProgramTransformer<Void> t = this.h.generateTransformer("/ast/actions/action_DisabledComment.xml");
+        final Jaxb2ProgramAst<Void> t = this.h.generateTransformer("/ast/actions/action_DisabledComment.xml");
 
         Assert.assertEquals(true, t.getTree().get(0).get(2).getProperty().isDisabled());
         Assert.assertEquals("h#,,", t.getTree().get(0).get(1).getComment().getComment());

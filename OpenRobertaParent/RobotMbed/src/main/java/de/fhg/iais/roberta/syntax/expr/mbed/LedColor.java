@@ -11,8 +11,8 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -104,7 +104,7 @@ public class LedColor<V> extends Expr<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 1);
         String color = helper.extractField(fields, BlocklyConstants.COLOUR);
         return LedColor.make(color, helper.extractBlockProperties(block), helper.extractComment(block));
@@ -113,8 +113,8 @@ public class LedColor<V> extends Expr<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.COLOUR, this.value);
+        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.COLOUR, this.value);
         return jaxbDestination;
     }
 }

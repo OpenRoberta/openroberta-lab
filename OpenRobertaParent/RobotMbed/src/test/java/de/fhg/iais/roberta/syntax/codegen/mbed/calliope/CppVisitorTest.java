@@ -6,7 +6,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.mbed.CalliopeConfiguration;
 import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
 
 public class CppVisitorTest {
@@ -25,13 +24,13 @@ public class CppVisitorTest {
 
     private static final String END = "release_fiber();}";
 
-    private static CalliopeConfiguration brickConfiguration;
+    private static Configuration brickConfiguration;
 
     @BeforeClass
     public static void setupConfigurationForAllTests() {
         @SuppressWarnings("rawtypes")
-        Configuration.Builder configuration = new CalliopeConfiguration.Builder();
-        brickConfiguration = (CalliopeConfiguration) configuration.build();
+        Configuration.Builder configuration = new Configuration.Builder();
+        brickConfiguration = configuration.build();
     }
 
     @Test

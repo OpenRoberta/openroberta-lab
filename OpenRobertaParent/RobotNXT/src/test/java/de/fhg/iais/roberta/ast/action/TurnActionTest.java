@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
 
 public class TurnActionTest {
@@ -20,14 +20,14 @@ public class TurnActionTest {
 
     @Test
     public void getDirection() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/actions/action_MotorDiffTurnFor.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_MotorDiffTurnFor.xml");
         TurnAction<Void> ta = (TurnAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(TurnDirection.RIGHT, ta.getDirection());
     }
 
     @Test
     public void getParam() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/actions/action_MotorDiffTurnFor.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_MotorDiffTurnFor.xml");
         TurnAction<Void> ta = (TurnAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals("MotionParam [speed=NumConst [50], duration=MotorDuration [type=DEGREE, value=NumConst [20]]]", ta.getParam().toString());
     }

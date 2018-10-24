@@ -19,14 +19,14 @@ import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 public class BlocklyProgramAndConfigTransformer {
     private static final Logger LOG = LoggerFactory.getLogger(BlocklyProgramAndConfigTransformer.class);
     private Key errorMessage;
-    private Jaxb2BlocklyProgramTransformer<Void> programTransformer;
-    private Configuration brickConfiguration;
+    private Jaxb2ProgramAst<Void> programTransformer;
+    private Configuration robotConfiguration;
 
-    private BlocklyProgramAndConfigTransformer(Key errorMessage, Jaxb2BlocklyProgramTransformer<Void> programTransformer, Configuration brickConfiguration) {
+    private BlocklyProgramAndConfigTransformer(Key errorMessage, Jaxb2ProgramAst<Void> programTransformer, Configuration brickConfiguration) {
         super();
         this.errorMessage = errorMessage;
         this.programTransformer = programTransformer;
-        this.brickConfiguration = brickConfiguration;
+        this.robotConfiguration = brickConfiguration;
     }
 
     /**
@@ -39,15 +39,15 @@ public class BlocklyProgramAndConfigTransformer {
     /**
      * @return the programTransformer
      */
-    public Jaxb2BlocklyProgramTransformer<Void> getProgramTransformer() {
+    public Jaxb2ProgramAst<Void> getProgramTransformer() {
         return this.programTransformer;
     }
 
     /**
-     * @return the brickConfiguration
+     * @return the robot configuration
      */
-    public Configuration getBrickConfiguration() {
-        return this.brickConfiguration;
+    public Configuration getRobotConfiguration() {
+        return this.robotConfiguration;
     }
 
     /**
@@ -72,7 +72,7 @@ public class BlocklyProgramAndConfigTransformer {
             errorMessage = Key.COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND;
         }
 
-        Jaxb2BlocklyProgramTransformer<Void> programTransformer = null;
+        Jaxb2ProgramAst<Void> programTransformer = null;
         try {
             programTransformer = JaxbHelper.generateProgramTransformer(factory, programText);
         } catch ( Exception e ) {

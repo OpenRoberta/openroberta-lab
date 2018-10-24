@@ -16,8 +16,8 @@ import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.transformer.ExprParam;
-import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.Sig;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -210,7 +210,7 @@ public final class Binary<V> extends Expr<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
 
         List<Value> values;
         Phrase<V> leftt;
@@ -271,7 +271,7 @@ public final class Binary<V> extends Expr<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
         if ( !this.operationRange.equals("") ) {
             Mutation mutation = new Mutation();
             mutation.setOperatorRange(this.operationRange);
@@ -280,23 +280,23 @@ public final class Binary<V> extends Expr<V> {
         switch ( getOp() ) {
 
             case MATH_CHANGE:
-                JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VAR, getLeft());
-                JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.DELTA, getRight());
+                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.VAR, getLeft());
+                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.DELTA, getRight());
                 return jaxbDestination;
             case TEXT_APPEND:
-                JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VAR, getLeft());
-                JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.TEXT, getRight());
+                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.VAR, getLeft());
+                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.TEXT, getRight());
                 return jaxbDestination;
 
             case MOD:
-                JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.DIVIDEND, getLeft());
-                JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.DIVISOR, getRight());
+                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.DIVIDEND, getLeft());
+                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.DIVISOR, getRight());
                 return jaxbDestination;
 
             default:
-                JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.OP, getOp().name());
-                JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.A, getLeft());
-                JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.B, getRight());
+                Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.OP, getOp().name());
+                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.A, getLeft());
+                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.B, getRight());
                 return jaxbDestination;
         }
     }

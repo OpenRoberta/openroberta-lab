@@ -10,7 +10,7 @@ public class ToneActionFunctionTest {
     @Test
     public void playTone() throws Exception {
         final String a =
-            "#defineWHEELDIAMETER0.0#defineTRACKWIDTH0.0#defineMAXLINES8#include\"NEPODefs.h\"//containsNEPOdeclarationsfortheNXCNXTAPIresources"
+            "#defineWHEELDIAMETER5.6#defineTRACKWIDTH11.0#defineMAXLINES8#include\"NEPODefs.h\"//containsNEPOdeclarationsfortheNXCNXTAPIresources"
                 + "void macheEtwas();"
                 + "byte volume = 0x02;\n"
                 + "float Element;"

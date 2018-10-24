@@ -5,19 +5,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.inter.mode.general.IMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
-import de.fhg.iais.roberta.visitor.collect.AbstractUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 
 /**
@@ -45,7 +40,7 @@ public final class Ev3UsedHardwareCollectorVisitor extends AbstractUsedHardwareC
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        if ( gyroSensor.getMode() != GyroSensorMode.RESET ) {
+        if ( !gyroSensor.getMode().equals(SC.RESET) ) {
             super.visitGyroSensor(gyroSensor);
         }
         return null;
@@ -65,18 +60,17 @@ public final class Ev3UsedHardwareCollectorVisitor extends AbstractUsedHardwareC
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        super.visitShowPictureAction(showPictureAction);
         this.usedImages.add(showPictureAction.getPicture().toString());
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        IMode mode = infraredSensor.getMode();
-        if ( infraredSensor.getMode().equals(InfraredSensorMode.PRESENCE) ) {
-            mode = InfraredSensorMode.SEEK;
+        String mode = infraredSensor.getMode();
+        if ( infraredSensor.getMode().equals(SC.PRESENCE) ) {
+            mode = SC.SEEK;
         }
-        this.usedSensors.add(new UsedSensor((ISensorPort) infraredSensor.getPort(), SensorType.INFRARED, mode));
+        this.usedSensors.add(new UsedSensor(infraredSensor.getPort(), SC.INFRARED, mode));
         return null;
     }
 

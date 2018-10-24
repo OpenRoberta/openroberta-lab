@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
 
 public class TouchSensorTest {
@@ -19,11 +19,11 @@ public class TouchSensorTest {
 
     @Test
     public void getPort() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_Touch.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_Touch.xml");
 
         TouchSensor<Void> cs = (TouchSensor<Void>) transformer.getTree().get(0).get(1);
 
-        Assert.assertEquals("S1", cs.getPort().getCodeName());
+        Assert.assertEquals("1", cs.getPort());
     }
 
     @Test

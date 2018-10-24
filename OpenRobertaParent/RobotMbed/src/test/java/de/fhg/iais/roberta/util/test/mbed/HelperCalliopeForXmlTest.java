@@ -2,10 +2,10 @@ package de.fhg.iais.roberta.util.test.mbed;
 
 import java.util.Properties;
 
-import de.fhg.iais.roberta.components.mbed.CalliopeConfiguration;
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.Calliope2016Factory;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.codegen.CalliopeCppVisitor;
@@ -19,9 +19,9 @@ public class HelperCalliopeForXmlTest extends de.fhg.iais.roberta.util.test.Abst
     public HelperCalliopeForXmlTest() {
         super(
             new Calliope2016Factory(new PluginProperties("calliope2016", "", "", Util1.loadProperties("classpath:calliope2016.properties"))),
-            new CalliopeConfiguration.Builder().build());
+            new Configuration.Builder().build());
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
-        AbstractRobotFactory.addBlockTypesFromProperties("Robot", robotProperties);
+        AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
     }
 
     /**
@@ -32,7 +32,7 @@ public class HelperCalliopeForXmlTest extends de.fhg.iais.roberta.util.test.Abst
      * @throws Exception
      */
     public String generateJavaScript(String pathToProgramXml) throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+        Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
         String code = MbedSimVisitor.generate(getRobotConfiguration(), transformer.getTree());
         return code;
     }
@@ -44,8 +44,8 @@ public class HelperCalliopeForXmlTest extends de.fhg.iais.roberta.util.test.Abst
      * @return the code as string
      * @throws Exception
      */
-    public String generateCpp(String pathToProgramXml, CalliopeConfiguration brickConfiguration) throws Exception {
-        final Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+    public String generateCpp(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
+        final Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
         final String code = CalliopeCppVisitor.generate(brickConfiguration, transformer.getTree(), true);
         return code;
     }

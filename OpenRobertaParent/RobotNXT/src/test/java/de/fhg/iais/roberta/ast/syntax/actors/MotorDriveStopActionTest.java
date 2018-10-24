@@ -10,7 +10,7 @@ public class MotorDriveStopActionTest {
     @Test
     public void stop() throws Exception {
         final String a =
-            "#defineWHEELDIAMETER0.0#defineTRACKWIDTH0.0#defineMAXLINES8#include\"NEPODefs.h\"//containsNEPOdeclarationsfortheNXCNXTAPIresources"
+            "#defineWHEELDIAMETER5.6#defineTRACKWIDTH11.0#defineMAXLINES8#include\"NEPODefs.h\"//containsNEPOdeclarationsfortheNXCNXTAPIresources"
                 + "\nOff(OUT_BC);}";
 
         this.h.assertWrappedCodeIsOk(a, "/ast/actions/action_Stop.xml");

@@ -1,15 +1,13 @@
 package de.fhg.iais.roberta.components;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.stream.Collectors;
 
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.inter.mode.action.IMotorSide;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
-import de.fhg.iais.roberta.util.Pair;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -18,314 +16,123 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * <br>
  * The {@link Configuration} contains four sensor ports and four actor ports. Client cannot connect more than that.
  */
-public abstract class Configuration {
-    protected String robotName;
-    protected String subtype;
+public class Configuration {
+    protected final Map<String, ConfigurationComponent> configurationComponents;
 
-    protected final Map<IActorPort, Actor> actors;
-    protected final Map<ISensorPort, Sensor> sensors;
+    private String robotName;
+    private final float wheelDiameterCM;
+    private final float trackWidthCM;
 
-    protected final double wheelDiameterCM;
-    protected final double trackWidthCM;
-
-    /**
-     * This constructor sets the each actor connected to given port, each sensor to given port, wheel diameter and track width. <br>
-     * Client must provide <b>{@code Map<ActorPort, EV3Actor>}</b> where each {@link Actor} is connected to {@link ActorPort} and
-     * {@code Map<SensorPort, EV3Sensor>} where each {@link Sensor} is connected to {@link SensorPort}.
-     *
-     * @param actors connected to the brick
-     * @param sensors connected to the brick
-     * @param wheelDiameterCM of the brick wheels
-     * @param trackWidthCM of the brick
-     */
-    public Configuration(Map<IActorPort, Actor> actors, Map<ISensorPort, Sensor> sensors, double wheelDiameterCM, double trackWidthCM) {
-        super();
-        this.robotName = "";
-        this.subtype = "";
-        this.actors = actors;
-        this.sensors = sensors;
+    public Configuration(Collection<ConfigurationComponent> configurationComponents, float wheelDiameterCM, float trackWidthCM) {
+        this.configurationComponents = buildConfigurationComponentMap(configurationComponents);
         this.wheelDiameterCM = wheelDiameterCM;
         this.trackWidthCM = trackWidthCM;
-    }
-
-    public void setRobotName(String robotName) {
-        this.robotName = robotName;
     }
 
     public String getRobotName() {
         return this.robotName;
     }
 
-    public void setSubtype(String subtype) { this.subtype = subtype; }
-
-    public String getSubtype() {
-        return this.subtype;
+    public void setRobotName(String robotName) {
+        this.robotName = robotName;
     }
 
-    /**
-     * Returns the sensor connected on given port.
-     *
-     * @param sensorPort
-     * @return connected sensor on given port
-     */
-    public Sensor getSensorOnPort(ISensorPort sensorPort) {
-        Sensor sensor = this.sensors.get(sensorPort);
-        return sensor;
+    public Collection<ConfigurationComponent> getConfigurationComponents() {
+        return this.configurationComponents.values();
     }
 
-    /**
-     * Returns the actor connected on given port.<br>
-     * <b>Null</b> if there is no actor connected to the port
-     *
-     * @param actorPort
-     * @return connected actor on given port
-     */
-    public Actor getActorOnPort(IActorPort actorPort) {
-        final Actor actor = this.actors.get(actorPort);
-        return actor;
+    public Collection<ConfigurationComponent> getActors() {
+        return this.configurationComponents.values().stream().filter(item -> item.isActor()).collect(Collectors.toList());
     }
 
-    /**
-     * Get all the actors connected to the brick
-     *
-     * @return the actors
-     */
-    public Map<IActorPort, Actor> getActors() {
-        return this.actors;
+    public Collection<ConfigurationComponent> getSensors() {
+        return this.configurationComponents.values().stream().filter(item -> item.isSensor()).collect(Collectors.toList());
     }
 
-    /**
-     * All the sensors connected to the brick
-     *
-     * @return the sensors
-     */
-    public Map<ISensorPort, Sensor> getSensors() {
-        return this.sensors;
+    public ConfigurationComponent getConfigurationComponent(String userDefinedName) {
+        ConfigurationComponent configurationComponent = this.configurationComponents.get(userDefinedName);
+        Assert.notNull(configurationComponent, "configuration component missing for user defined name " + userDefinedName);
+        return configurationComponent;
     }
 
-    /**
-     * @return the wheelDiameterCM
-     */
-    public double getWheelDiameterCM() {
+    public ConfigurationComponent optConfigurationComponent(String userDefinedName) {
+        ConfigurationComponent configurationComponent = this.configurationComponents.get(userDefinedName);
+        return configurationComponent;
+    }
+
+    public String getComponentTypeOfUserDefinedName(String userDefinedName) {
+        ConfigurationComponent configurationComponent = this.getConfigurationComponent(userDefinedName);
+        return configurationComponent.getComponentType();
+    }
+
+    public float getWheelDiameterCM() {
         return this.wheelDiameterCM;
     }
 
-    /**
-     * @return the trackWidthCM
-     */
-    public double getTrackWidthCM() {
+    public float getTrackWidthCM() {
         return this.trackWidthCM;
     }
 
-    /**
-     * Check if the motor is regulated. Client must provide valid {@link ActorPort}.
-     *
-     * @param port on which the motor is connected
-     * @return if the motor is regulated
-     */
-    public boolean isMotorRegulated(IActorPort port) {
-        final Actor actor = this.actors.get(port);
-        Assert.isTrue(actor != null, "No actor connected to the port " + port);
-        return actor.isRegulated();
+    public String getFirstMotorPort(String side) {
+        return getFirstMotor(side).getPortName();
     }
 
-    /**
-     * This method returns the port on which the left motor is connected. If there is no left motor connected throws and {@link DbcException} exception.
-     *
-     * @return port on which the left motor is connected
-     */
-    public IActorPort getLeftMotorPort() {
-        throw new DbcException("Implement the method in the robot specific configuration class!");
+    public ConfigurationComponent getFirstMotor(String side) {
+        List<ConfigurationComponent> found = getMotors(side);
+        if ( found.size() == 0 ) {
+            return null;
+        } else {
+            return found.get(0);
+        }
     }
 
-    /**
-     * This method returns the left motor. If there is no left motor returns *null*
-     *
-     * @return left motor
-     */
-    public Actor getLeftMotor() {
-        throw new DbcException("Implement the method in the robot specific configuration class!");
+    public List<ConfigurationComponent> getMotors(String side) {
+        List<ConfigurationComponent> found = new ArrayList<>();
+        for ( ConfigurationComponent component : this.configurationComponents.values() ) {
+            if ( component.isActor() && side.equals(component.getOptProperty(SC.MOTOR_DRIVE)) ) {
+                found.add(component);
+            }
+        }
+        return found;
     }
 
-    /**
-     * This method returns the number of right motors connected.
-     *
-     * @return port on which the left motor is connected
-     */
-    public int getNumberOfLeftMotors() {
-        throw new DbcException("Implement the method in the robot specific configuration class!");
+    public boolean isMotorRegulated(String port) {
+        return getConfigurationComponent(port).getProperty(SC.MOTOR_REGULATION).equals(SC.TRUE);
     }
 
-    /**
-     * This method returns the right motor. If there is no right motor returns *null*
-     *
-     * @return right motor
-     */
-    public Actor getRightMotor() {
-        throw new DbcException("Implement the method in the robot specific configuration class!");
-    }
-
-    /**
-     * This method returns the port on which the right motor is connected. If there is no right motor connected throws and {@link DbcException} exception.
-     *
-     * @return port on which the left motor is connected
-     */
-    public IActorPort getRightMotorPort() {
-        throw new DbcException("Implement the method in the robot specific configuration class!");
-    }
-
-    /**
-     * This method returns the number of right motors connected.
-     *
-     * @return port on which the left motor is connected
-     */
-    public int getNumberOfRightMotors() {
-        throw new DbcException("Implement the method in the robot specific configuration class!");
+    private Map<String, ConfigurationComponent> buildConfigurationComponentMap(Collection<ConfigurationComponent> configurationComponents) {
+        Map<String, ConfigurationComponent> map = new HashMap<>();
+        for ( ConfigurationComponent configurationComponent : configurationComponents ) {
+            map.put(configurationComponent.getUserDefinedPortName(), configurationComponent);
+        }
+        return map;
     }
 
     /**
      * @return text which defines the brick configuration
      */
     public String generateText(String name) {
-        throw new DbcException("Implement the method in the robot specific configuration class!");
-    }
-
-    @Override
-    public int hashCode() {
-        // trackWidthCM and wheelDiameterCM restricted to 1 fraction digit
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (this.actors == null ? 0 : this.actors.hashCode());
-        result = prime * result + (this.sensors == null ? 0 : this.sensors.hashCode());
-        long temp;
-        temp = (long) (this.trackWidthCM * 10);
-        result = prime * result + (int) (temp ^ temp >>> 32);
-        temp = (long) this.wheelDiameterCM;
-        result = prime * result + (int) (temp ^ temp >>> 32);
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        // trackWidthCM and wheelDiameterCM restricted to 1 fraction digit
-        if ( this == obj ) {
-            return true;
-        }
-        if ( obj == null ) {
-            return false;
-        }
-        if ( getClass() != obj.getClass() ) {
-            return false;
-        }
-        final Configuration other = (Configuration) obj;
-        if ( this.actors == null ) {
-            if ( other.actors != null ) {
-                return false;
-            }
-        } else if ( !this.actors.equals(other.actors) ) {
-            return false;
-        }
-        if ( this.sensors == null ) {
-            if ( other.sensors != null ) {
-                return false;
-            }
-        } else if ( !this.sensors.equals(other.sensors) ) {
-            return false;
-        }
-        if ( (long) (this.trackWidthCM * 10) != (long) (other.trackWidthCM * 10) ) {
-            return false;
-        }
-        if ( (long) (this.wheelDiameterCM * 10) != (long) (other.wheelDiameterCM * 10) ) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "BrickConfiguration [actors="
-            + this.actors
-            + ", sensors="
-            + this.sensors
-            + ", wheelDiameterCM="
-            + this.wheelDiameterCM
-            + ", trackWidthCM="
-            + this.trackWidthCM
-            + "]";
-    }
-
-    protected IActorPort getMotorPortOnSide(IMotorSide side) {
-        Assert.isTrue(this.actors != null, "There is no actors set to the configuration!");
-        for ( final Map.Entry<IActorPort, Actor> entry : this.actors.entrySet() ) {
-            if ( entry.getValue().getMotorSide() == side ) {
-                return entry.getKey();
-            }
-        }
-        return null;
+        return "";
     }
 
     /**
      * This class is a builder of {@link Configuration}
      */
-    public abstract static class Builder<T extends Builder<T>> {
-        private final Map<IActorPort, Actor> actorMapping = new TreeMap<>();
-        private final Map<ISensorPort, Sensor> sensorMapping = new TreeMap<>();
+    public static class Builder {
+        private List<ConfigurationComponent> configurationComponents;
 
-        private double wheelDiameter;
-        private double trackWidth;
-
-        /**
-         * Add actor to the {@link Configuration}
-         *
-         * @param port on which the component is connected
-         * @param actor we want to connect
-         * @return
-         */
-        @SuppressWarnings("unchecked")
-        public T addActor(IActorPort port, Actor actor) {
-            this.actorMapping.put(port, actor);
-            return (T) this;
-        }
+        private float wheelDiameter;
+        private float trackWidth;
 
         /**
-         * Client must provide list of {@link Pair} ({@link ActorPort} and {@link Actor})
-         *
-         * @param actors we want to connect to the brick configuration
-         * @return
-         */
-        @SuppressWarnings("unchecked")
-        public T addActors(List<Pair<IActorPort, Actor>> actors) {
-            for ( final Pair<IActorPort, Actor> pair : actors ) {
-                this.actorMapping.put(pair.getFirst(), pair.getSecond());
-            }
-            return (T) this;
-        }
-
-        /**
-         * Add sensor to the {@link Configuration}
-         *
-         * @param port on which the component is connected
-         * @param component we want to connect
-         * @return
-         */
-        @SuppressWarnings("unchecked")
-        public T addSensor(ISensorPort port, Sensor sensor) {
-            this.sensorMapping.put(port, sensor);
-            return (T) this;
-        }
-
-        /**
-         * Client must provide list of {@link Pair} ({@link SensorPort} and {@link Sensor})
+         * Client must provide list of hardware components ({@link ConfigurationComponent})
          *
          * @param sensors we want to connect to the brick configuration
          * @return
          */
-        @SuppressWarnings("unchecked")
-        public T addSensors(List<Pair<ISensorPort, Sensor>> sensors) {
-            for ( final Pair<ISensorPort, Sensor> pair : sensors ) {
-                this.sensorMapping.put(pair.getFirst(), pair.getSecond());
-            }
-            return (T) this;
+        public Builder addComponents(List<ConfigurationComponent> components) {
+            this.configurationComponents = components;
+            return this;
         }
 
         /**
@@ -334,10 +141,9 @@ public abstract class Configuration {
          * @param wheelDiameter in cm
          * @return
          */
-        @SuppressWarnings("unchecked")
-        public T setWheelDiameter(double wheelDiameter) {
+        public Builder setWheelDiameter(float wheelDiameter) {
             this.wheelDiameter = wheelDiameter;
-            return (T) this;
+            return this;
         }
 
         /**
@@ -346,25 +152,22 @@ public abstract class Configuration {
          * @param trackWidth in cm
          * @return
          */
-        @SuppressWarnings("unchecked")
-        public T setTrackWidth(double trackWidth) {
+
+        public Builder setTrackWidth(float trackWidth) {
             this.trackWidth = trackWidth;
-            return (T) this;
+            return this;
         }
 
-        public abstract Configuration build();
+        public Configuration build() {
+            return new Configuration(this.configurationComponents, this.wheelDiameter, this.trackWidth);
+        }
 
-        @Override
-        public String toString() {
-            return "Builder [actorMapping="
-                + this.actorMapping
-                + ", sensorMapping="
-                + this.sensorMapping
-                + ", wheelDiameter="
-                + this.wheelDiameter
-                + ", trackWidth="
-                + this.trackWidth
-                + "]";
+        public <CC> CC build(Class<CC> clazz) {
+            try {
+                return clazz.getConstructor(Collection.class).newInstance(this.configurationComponents);
+            } catch ( Exception e ) {
+                throw new DbcException("configuration class " + clazz.getSimpleName() + " has no constructor usable by the configuration builder", e);
+            }
         }
     }
 }

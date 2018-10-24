@@ -13,8 +13,9 @@ public class ExprParam {
     private final BlocklyType defaultValue;
 
     /**
-     * @param name of the location of the expression in the XML
+     * @param name of the <b>value</b> attribute of a parameter of expression in the Blockly XML
      * @param defaultValue type if the expression is missing
+     *        TODO: add XML example
      */
     public ExprParam(String name, BlocklyType defaultValue) {
         super();

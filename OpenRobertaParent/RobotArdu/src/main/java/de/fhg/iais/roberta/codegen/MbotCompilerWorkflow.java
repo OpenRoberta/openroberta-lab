@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.arduino.MbotConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
@@ -40,7 +39,7 @@ public class MbotCompilerWorkflow extends AbstractCompilerWorkflow {
             return;
         }
         try {
-            this.generatedSourceCode = MbotCppVisitor.generate((MbotConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+            this.generatedSourceCode = MbotCppVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true);
             LOG.info("mbot c++ code generated");
         } catch ( Exception e ) {
             LOG.error("mbot c++ code generation failed", e);
@@ -64,7 +63,7 @@ public class MbotCompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2MakeBlockConfigurationTransformer transformer = new Jaxb2MakeBlockConfigurationTransformer(factory);
+        Jaxb2MakeBlockConfigurationTransformer transformer = new Jaxb2MakeBlockConfigurationTransformer(factory.getBlocklyDropdownFactory());
         return transformer.transform(project);
     }
 
@@ -84,7 +83,7 @@ public class MbotCompilerWorkflow extends AbstractCompilerWorkflow {
      * @param mainPackage
      */
     private Key runBuild(String token, String mainFile, String mainPackage) {
-        this.pluginProperties.getRobotName();
+        final String robotName = this.pluginProperties.getRobotName();
         final String compilerBinDir = this.pluginProperties.getCompilerBinDir();
         final String compilerResourcesDir = this.pluginProperties.getCompilerResourceDir();
         final String tempDir = this.pluginProperties.getTempDir();

@@ -3,9 +3,9 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
 
 public class CompassSensorTest {
@@ -22,24 +22,24 @@ public class CompassSensorTest {
 
     @Test
     public void getMode() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_getCompass.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_getCompass.xml");
 
         CompassSensor<Void> cs = (CompassSensor<Void>) transformer.getTree().get(0).get(1);
         CompassSensor<Void> cs1 = (CompassSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals(CompassSensorMode.ANGLE, cs.getMode());
-        Assert.assertEquals(CompassSensorMode.COMPASS, cs1.getMode());
+        Assert.assertEquals(SC.ANGLE, cs.getMode());
+        Assert.assertEquals(SC.COMPASS, cs1.getMode());
     }
 
     @Test
     public void getPort() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_getCompass.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_getCompass.xml");
 
         CompassSensor<Void> cs = (CompassSensor<Void>) transformer.getTree().get(0).get(1);
         CompassSensor<Void> cs1 = (CompassSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals("S2", cs.getPort().getCodeName());
-        Assert.assertEquals("S4", cs1.getPort().getCodeName());
+        Assert.assertEquals("2", cs.getPort());
+        Assert.assertEquals("4", cs1.getPort());
     }
 
     @Test

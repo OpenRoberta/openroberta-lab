@@ -49,7 +49,7 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
-import de.fhg.iais.roberta.transformer.Jaxb2AstTransformerData;
+import de.fhg.iais.roberta.transformer.ProgramAst;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
@@ -149,15 +149,15 @@ public class ClientProgram {
                     final AbstractProcessor forMessages = new DummyProcessor();
                     final BlocklyProgramAndConfigTransformer transformer =
                         BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
-                    transformer.getBrickConfiguration().setRobotName(httpSessionState.getRobotName());
+                    transformer.getRobotConfiguration().setRobotName(httpSessionState.getRobotName());
                     if ( transformer.getErrorMessage() != null ) {
                         forMessages.setError(transformer.getErrorMessage());
                     } else {
-                        final AbstractProgramValidatorVisitor programChecker = robotFactory.getRobotProgramCheckVisitor(transformer.getBrickConfiguration());
+                        final AbstractProgramValidatorVisitor programChecker = robotFactory.getRobotProgramCheckVisitor(transformer.getRobotConfiguration());
                         programConfigurationCompatibilityCheck(response, transformer, programChecker);
 
                         compilerWorkflow.generateSourceCode(token, programName, transformer, language);
-                        String sourceCode = compilerWorkflow.getGeneratedProgramText();
+                        String sourceCode = compilerWorkflow.getGeneratedSourceCode();
                         if ( sourceCode == null ) {
                             forMessages.setError(Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED);
                         } else {
@@ -413,11 +413,11 @@ public class ClientProgram {
 
                     final BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                         BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
-                    programAndConfigTransformer.getBrickConfiguration().setRobotName(httpSessionState.getRobotName());
+                    programAndConfigTransformer.getRobotConfiguration().setRobotName(httpSessionState.getRobotName());
                     Key messageKey = programAndConfigTransformer.getErrorMessage();
                     if ( messageKey == null ) {
                         final AbstractProgramValidatorVisitor programChecker =
-                            robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
+                            robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getRobotConfiguration());
                         messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer, programChecker);
                         if ( messageKey == null ) {
                             ClientProgram.LOG.info("compiler workflow started for program {}", programName);
@@ -442,7 +442,7 @@ public class ClientProgram {
                     final String programText = request.optString("programText");
                     final ILanguage language = Language.findByAbbr(request.optString("language"));
                     LOG.info("compilation of native source started for program {}", programName);
-                    compilerWorkflow.setProgramText(programText);
+                    compilerWorkflow.setSourceCode(programText);
                     compilerWorkflow.compileSourceCode(token, programName, language, null);
                     final Key messageKey = compilerWorkflow.getWorkflowResult();
                     LOG.info("compile user supplied native program. Result: " + messageKey);
@@ -477,11 +477,11 @@ public class ClientProgram {
                             final String token = "toknTokn";
                             final BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                                 BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configText);
-                            programAndConfigTransformer.getBrickConfiguration().setRobotName(httpSessionState.getRobotName());
+                            programAndConfigTransformer.getRobotConfiguration().setRobotName(httpSessionState.getRobotName());
                             messageKey = programAndConfigTransformer.getErrorMessage();
                             if ( messageKey == null ) {
                                 final AbstractProgramValidatorVisitor programChecker =
-                                    robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
+                                    robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getRobotConfiguration());
                                 messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer, programChecker);
                                 if ( messageKey == null ) {
                                     ClientProgram.LOG.info("compiler workflow started for program {}", programName);
@@ -521,11 +521,11 @@ public class ClientProgram {
 
                     final BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                         BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
-                    programAndConfigTransformer.getBrickConfiguration().setRobotName(httpSessionState.getRobotName());
+                    programAndConfigTransformer.getRobotConfiguration().setRobotName(httpSessionState.getRobotName());
                     messageKey = programAndConfigTransformer.getErrorMessage();
                     if ( messageKey == null ) {
                         final AbstractProgramValidatorVisitor programChecker =
-                            robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
+                            robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getRobotConfiguration());
                         messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer, programChecker);
                         if ( messageKey == null ) {
                             ClientProgram.LOG.info("compiler workflow started for program {}", programName);
@@ -561,17 +561,17 @@ public class ClientProgram {
 
                     final BlocklyProgramAndConfigTransformer transformer =
                         BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
-                    transformer.getBrickConfiguration().setRobotName(httpSessionState.getRobotName());
+                    transformer.getRobotConfiguration().setRobotName(httpSessionState.getRobotName());
                     Key messageKey = transformer.getErrorMessage();
                     if ( messageKey == null ) {
-                        final AbstractSimValidatorVisitor programChecker = robotFactory.getSimProgramCheckVisitor(transformer.getBrickConfiguration());
+                        final AbstractSimValidatorVisitor programChecker = robotFactory.getSimProgramCheckVisitor(transformer.getRobotConfiguration());
                         messageKey = programConfigurationCompatibilityCheck(response, transformer, programChecker);
                         transformer.getProgramTransformer().getData();
                         if ( messageKey == null ) {
                             ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
                             ICompilerWorkflow simCompilerWorkflow = robotFactory.getSimCompilerWorkflow();
                             simCompilerWorkflow.generateSourceCode(token, programName, transformer, language);
-                            final String javaScriptCode = simCompilerWorkflow.getGeneratedProgramText();
+                            final String javaScriptCode = simCompilerWorkflow.getGeneratedSourceCode();
                             // extreme debugging: ClientProgram.LOG.debug("JavaScriptCode \n{}", javaScriptCode);
                             response.put("javaScriptProgram", javaScriptCode);
                             wasRobotWaiting = true;
@@ -609,7 +609,7 @@ public class ClientProgram {
         AbstractProgramValidatorVisitor programChecker)
         throws JSONException,
         JAXBException {
-        final Jaxb2AstTransformerData<Void> data = programAndConfigTransformer.getProgramTransformer().getData();
+        final ProgramAst<Void> data = programAndConfigTransformer.getProgramTransformer().getData();
         if ( programChecker == null ) {
             response.put("data", ClientProgram.jaxbToXml(ClientProgram.astToJaxb(programAndConfigTransformer.getProgramTransformer().getTree(), data)));
             return null;
@@ -633,7 +633,7 @@ public class ClientProgram {
         return writer.toString();
     }
 
-    private static BlockSet astToJaxb(ArrayList<ArrayList<Phrase<Void>>> astProgram, Jaxb2AstTransformerData<Void> data) {
+    private static BlockSet astToJaxb(ArrayList<ArrayList<Phrase<Void>>> astProgram, ProgramAst<Void> data) {
         final BlockSet blockSet = new BlockSet();
         blockSet.setDescription(data.getDescription());
         blockSet.setRobottype(data.getRobotType());

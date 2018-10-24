@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.visitor.hardware.actor;
 
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
@@ -168,16 +167,6 @@ public interface IActors4AutonomousDriveRobots<V> extends IDifferentialMotorVisi
      */
     @Override
     default V visitClearDisplayAction(ClearDisplayAction<V> clearDisplayAction) {
-        throw new DbcException("Not implemented!");
-    }
-
-    /**
-     * visit a {@link ShowPictureAction}.
-     *
-     * @param showPictureAction
-     */
-    @Override
-    default V visitShowPictureAction(ShowPictureAction<V> showPictureAction) {
         throw new DbcException("Not implemented!");
     }
 

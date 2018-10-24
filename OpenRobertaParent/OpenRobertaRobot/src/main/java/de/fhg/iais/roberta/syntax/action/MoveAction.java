@@ -1,14 +1,13 @@
 package de.fhg.iais.roberta.syntax.action;
 
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
+import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 
 public abstract class MoveAction<V> extends Action<V> {
-    private final IActorPort port;
+    private final String port;
 
-    public MoveAction(IActorPort port, BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public MoveAction(String port, BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(kind, properties, comment);
         this.port = port;
     }
@@ -16,7 +15,7 @@ public abstract class MoveAction<V> extends Action<V> {
     /**
      * @return port on which the motor is connected.
      */
-    public IActorPort getPort() {
+    public String getUserDefinedPort() {
         return this.port;
     }
 

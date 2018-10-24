@@ -12,8 +12,8 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
-import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -87,7 +87,7 @@ public class TextPrintFunct<V> extends Function<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
         exprParams.add(new ExprParam(BlocklyConstants.TEXT, BlocklyType.STRING));
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
@@ -97,8 +97,8 @@ public class TextPrintFunct<V> extends Function<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.TEXT, getParam().get(0));
+        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.TEXT, getParam().get(0));
         return jaxbDestination;
     }
 

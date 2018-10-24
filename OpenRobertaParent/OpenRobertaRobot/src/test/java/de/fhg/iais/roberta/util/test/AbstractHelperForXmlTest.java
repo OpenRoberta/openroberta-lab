@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 /**
@@ -28,7 +28,7 @@ import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
  */
 public abstract class AbstractHelperForXmlTest {
     private final IRobotFactory robotFactory;
-    private final Configuration robotConfiguration;
+    protected final Configuration robotConfiguration;
 
     protected AbstractHelperForXmlTest(IRobotFactory robotFactory, Configuration robotConfiguration) {
         this.robotFactory = robotFactory;
@@ -52,7 +52,7 @@ public abstract class AbstractHelperForXmlTest {
      */
     public <V> ArrayList<ArrayList<Phrase<V>>> generateASTs(String pathToProgramXml) throws Exception {
         BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
-        Jaxb2BlocklyProgramTransformer<V> transformer = new Jaxb2BlocklyProgramTransformer<>(this.robotFactory);
+        Jaxb2ProgramAst<V> transformer = new Jaxb2ProgramAst<>(this.robotFactory);
         transformer.transform(project);
         ArrayList<ArrayList<Phrase<V>>> tree = transformer.getTree();
         return tree;
@@ -77,9 +77,9 @@ public abstract class AbstractHelperForXmlTest {
      * @return jaxb transformer
      * @throws Exception
      */
-    public Jaxb2BlocklyProgramTransformer<Void> generateTransformer(String pathToProgramXml) throws Exception {
+    public Jaxb2ProgramAst<Void> generateTransformer(String pathToProgramXml) throws Exception {
         BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
-        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(this.robotFactory);
+        Jaxb2ProgramAst<Void> transformer = new Jaxb2ProgramAst<>(this.robotFactory);
         transformer.transform(project);
         return transformer;
     }
@@ -111,7 +111,7 @@ public abstract class AbstractHelperForXmlTest {
      * @throws Exception
      */
     public void assertTransformationIsOk(String fileName) throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(fileName);
+        Jaxb2ProgramAst<Void> transformer = generateTransformer(fileName);
         JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
         Marshaller m = jaxbContext.createMarshaller();
         m.setProperty(Marshaller.JAXB_FRAGMENT, true);
@@ -129,7 +129,7 @@ public abstract class AbstractHelperForXmlTest {
         Assert.assertTrue(diff.identical());
     }
 
-    public BlockSet astToJaxb(Jaxb2BlocklyProgramTransformer<Void> transformer) {
+    public BlockSet astToJaxb(Jaxb2ProgramAst<Void> transformer) {
         BlockSet blockSet = new BlockSet();
         blockSet.setXmlversion(transformer.getData().getXmlVersion());
         blockSet.setRobottype(transformer.getData().getRobotType());
@@ -176,7 +176,7 @@ public abstract class AbstractHelperForXmlTest {
         BlockSet program = JaxbHelper.xml2BlockSet(xml);
         //TODO: change the static ev3modeFactory
         //        EV3Factory ev3ModeFactory = new EV3Factory(null);
-        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(null);
+        Jaxb2ProgramAst<Void> transformer = new Jaxb2ProgramAst<>(null);
         transformer.transform(program);
 
         BlockSet blockSet = astToJaxb(transformer);
@@ -204,7 +204,7 @@ public abstract class AbstractHelperForXmlTest {
      * @throws Exception
      */
     private String generateString(String pathToProgramXml, boolean wrapping) throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+        Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
         return this.robotFactory.generateCode(this.robotConfiguration, transformer.getTree(), wrapping);
     }
 

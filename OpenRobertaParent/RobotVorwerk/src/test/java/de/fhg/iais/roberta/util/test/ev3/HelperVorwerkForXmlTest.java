@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.components.vorwerk.VorwerkConfiguration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.VorwerkFactory;
 import de.fhg.iais.roberta.mode.action.Language;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
@@ -22,7 +22,7 @@ public class HelperVorwerkForXmlTest extends AbstractHelperForXmlTest {
             new VorwerkFactory(new PluginProperties("vorwerk", "", "", Util1.loadProperties("classpath:vorwerk.properties"))),
             new VorwerkConfiguration.Builder().build());
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
-        AbstractRobotFactory.addBlockTypesFromProperties("Robot", robotProperties);
+        AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
     }
 
     /**
@@ -33,7 +33,7 @@ public class HelperVorwerkForXmlTest extends AbstractHelperForXmlTest {
      * @throws Exception
      */
     private String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+        Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
         String javaCode = VorwerkPythonVisitor.generate((VorwerkConfiguration) getRobotConfiguration(), transformer.getTree(), false, Language.ENGLISH);
         return javaCode;
     }
@@ -58,7 +58,7 @@ public class HelperVorwerkForXmlTest extends AbstractHelperForXmlTest {
      * @throws Exception
      */
     public String generatePython(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+        Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
         String code = VorwerkPythonVisitor.generate((VorwerkConfiguration) brickConfiguration, transformer.getTree(), true, Language.ENGLISH);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;

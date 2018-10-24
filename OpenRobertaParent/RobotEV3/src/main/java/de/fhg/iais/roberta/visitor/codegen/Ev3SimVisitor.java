@@ -3,22 +3,18 @@ package de.fhg.iais.roberta.visitor.codegen;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
-import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
-import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
-import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
+import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
@@ -43,7 +39,6 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
@@ -51,6 +46,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
@@ -83,7 +79,9 @@ public final class Ev3SimVisitor extends AbstractSimVisitor<Void> implements IEv
         String end = createClosingBracket();
         this.sb.append("createDriveAction(");
         driveAction.getParam().getSpeed().visit(this);
-        IDriveDirection leftMotorRotationDirection = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection();
+        ConfigurationComponent leftMotor = this.brickConfiguration.getFirstMotor(SC.LEFT);
+        IDriveDirection leftMotorRotationDirection = DriveDirection.get(leftMotor.getProperty(SC.MOTOR_REVERSE));
+
         DriveDirection driveDirection = (DriveDirection) driveAction.getDirection();
         if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
             driveDirection = getDriveDirection(driveAction.getDirection() == DriveDirection.FOREWARD);
@@ -102,7 +100,9 @@ public final class Ev3SimVisitor extends AbstractSimVisitor<Void> implements IEv
         curveAction.getParamLeft().getSpeed().visit(this);
         this.sb.append(", ");
         curveAction.getParamRight().getSpeed().visit(this);
-        IDriveDirection leftMotorRotationDirection = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection();
+        ConfigurationComponent leftMotor = this.brickConfiguration.getFirstMotor(SC.LEFT);
+        IDriveDirection leftMotorRotationDirection = DriveDirection.get(leftMotor.getProperty(SC.MOTOR_REVERSE));
+
         DriveDirection driveDirection = (DriveDirection) curveAction.getDirection();
         if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
             driveDirection = getDriveDirection(curveAction.getDirection() == DriveDirection.FOREWARD);
@@ -119,7 +119,9 @@ public final class Ev3SimVisitor extends AbstractSimVisitor<Void> implements IEv
         String end = createClosingBracket();
         this.sb.append("createTurnAction(");
         turnAction.getParam().getSpeed().visit(this);
-        IDriveDirection leftMotorRotationDirection = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection();
+        ConfigurationComponent leftMotor = this.brickConfiguration.getFirstMotor(SC.LEFT);
+        IDriveDirection leftMotorRotationDirection = DriveDirection.get(leftMotor.getProperty(SC.MOTOR_REVERSE));
+
         ITurnDirection turnDirection = turnAction.getDirection();
         if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
             turnDirection = getTurnDirection(turnAction.getDirection() == TurnDirection.LEFT);
@@ -149,7 +151,7 @@ public final class Ev3SimVisitor extends AbstractSimVisitor<Void> implements IEv
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        this.sb.append("createGetMotorPower(" + (motorGetPowerAction.getPort().getOraName().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString() + ")");
+        this.sb.append("createGetMotorPower(" + (motorGetPowerAction.getUserDefinedPort().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString() + ")");
         return null;
     }
 
@@ -159,7 +161,7 @@ public final class Ev3SimVisitor extends AbstractSimVisitor<Void> implements IEv
         String end = createClosingBracket();
         this.sb.append("createMotorOnAction(");
         motorOnAction.getParam().getSpeed().visit(this);
-        this.sb.append(", " + (motorOnAction.getPort().getOraName().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString());
+        this.sb.append(", " + (motorOnAction.getUserDefinedPort().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString());
         if ( isDuration ) {
             this.sb.append(", createDuration(CONST.");
             this.sb.append(motorOnAction.getParam().getDuration().getType().toString() + ", ");
@@ -173,7 +175,7 @@ public final class Ev3SimVisitor extends AbstractSimVisitor<Void> implements IEv
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         String end = createClosingBracket();
-        this.sb.append("createSetMotorPowerAction(" + (motorSetPowerAction.getPort().getOraName().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString() + ", ");
+        this.sb.append("createSetMotorPowerAction(" + (motorSetPowerAction.getUserDefinedPort().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString() + ", ");
         motorSetPowerAction.getPower().visit(this);
         this.sb.append(end);
         return null;
@@ -183,7 +185,7 @@ public final class Ev3SimVisitor extends AbstractSimVisitor<Void> implements IEv
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         String end = createClosingBracket();
         this.sb.append("createStopMotorAction(");
-        this.sb.append((motorStopAction.getPort().getOraName().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString());
+        this.sb.append((motorStopAction.getUserDefinedPort().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString());
         this.sb.append(end);
         return null;
     }
@@ -212,14 +214,14 @@ public final class Ev3SimVisitor extends AbstractSimVisitor<Void> implements IEv
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case DEFAULT:
-            case VALUE:
-                this.sb.append("createGetSample(CONST.TIMER, 'timer" + timerSensor.getPort().getOraName() + "')");
+        switch ( timerSensor.getMode() ) {
+            case SC.DEFAULT:
+            case SC.VALUE:
+                this.sb.append("createGetSample(CONST.TIMER, 'timer" + timerSensor.getPort() + "')");
                 break;
-            case RESET:
+            case SC.RESET:
                 String end = createClosingBracket();
-                this.sb.append("createResetTimer('timer" + timerSensor.getPort().getOraName() + "'");
+                this.sb.append("createResetTimer('timer" + timerSensor.getPort() + "'");
                 this.sb.append(end);
                 break;
             default:
@@ -365,27 +367,27 @@ public final class Ev3SimVisitor extends AbstractSimVisitor<Void> implements IEv
     }
 
     @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        this.sb.append("createGetSample(CONST.BUTTONS, CONST." + brickSensor.getPort() + ")");
+    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+        this.sb.append("createGetSample(CONST.BUTTONS, CONST." + keysSensor.getPort() + ")");
         return null;
     }
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        this.sb.append("createGetSample(CONST.COLOR, CONST." + ((ColorSensorMode) colorSensor.getMode()).getModeValue() + ")");
+        this.sb.append("createGetSample(CONST.COLOR, CONST." + colorSensor.getMode() + ")");
         return null;
     }
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.sb.append("createGetSample(CONST.LIGHT, CONST." + ((LightSensorMode) lightSensor.getMode()).getModeValue() + ")");
+        this.sb.append("createGetSample(CONST.LIGHT, CONST." + lightSensor.getMode() + ")");
         return null;
     }
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        String encoderMotor = (encoderSensor.getPort().getOraName().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString();
-        if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
+        String encoderMotor = (encoderSensor.getPort().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString();
+        if ( encoderSensor.getMode().equals(SC.RESET) ) {
             String end = createClosingBracket();
             this.sb.append("createResetEncoderSensor(" + encoderMotor);
             this.sb.append(end);
@@ -397,7 +399,7 @@ public final class Ev3SimVisitor extends AbstractSimVisitor<Void> implements IEv
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        if ( gyroSensor.getMode() == GyroSensorMode.RESET ) {
+        if ( gyroSensor.getMode().equals(SC.RESET) ) {
             String end = createClosingBracket();
             this.sb.append("createResetGyroSensor(");
             this.sb.append(end);
@@ -409,14 +411,14 @@ public final class Ev3SimVisitor extends AbstractSimVisitor<Void> implements IEv
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        switch ( (CompassSensorMode) compassSensor.getMode() ) {
-            case CALIBRATE:
+        switch ( compassSensor.getMode() ) {
+            case SC.CALIBRATE:
                 this.sb.append("");
                 break;
-            case ANGLE:
+            case SC.ANGLE:
                 this.sb.append("null");
                 break;
-            case COMPASS:
+            case SC.COMPASS:
                 this.sb.append("null");
                 break;
             default:

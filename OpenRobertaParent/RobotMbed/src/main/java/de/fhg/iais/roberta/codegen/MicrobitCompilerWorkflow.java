@@ -8,11 +8,10 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.mbed.MicrobitConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
-import de.fhg.iais.roberta.transformer.mbed.Jaxb2MicrobitConfigurationTransformer;
+import de.fhg.iais.roberta.transformer.mbed.Jaxb2MbedConfigurationAst;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
@@ -31,33 +30,32 @@ public class MicrobitCompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
         if ( data.getErrorMessage() != null ) {
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
             return;
         }
         try {
-            generatedSourceCode =
-                MicrobitPythonVisitor.generate((MicrobitConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+            this.generatedSourceCode = MicrobitPythonVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true);
             LOG.info("microbit python code generated");
         } catch ( Exception e ) {
             LOG.error("microbit python code generation failed", e);
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
         }
     }
 
     @Override
     public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
-        workflowResult = runBuild(generatedSourceCode);
-        if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+        this.workflowResult = runBuild(this.generatedSourceCode);
+        if ( this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
             LOG.info("compile microbit program {} successful", programName);
         } else {
-            LOG.error("compile microbit program {} failed with {}", programName, workflowResult);
+            LOG.error("compile microbit program {} failed with {}", programName, this.workflowResult);
         }
     }
 
     @Override
     public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2MicrobitConfigurationTransformer transformer = new Jaxb2MicrobitConfigurationTransformer(factory);
+        Jaxb2MbedConfigurationAst transformer = new Jaxb2MbedConfigurationAst(factory);
         return transformer.transform(project);
     }
 
@@ -70,8 +68,8 @@ public class MicrobitCompilerWorkflow extends AbstractCompilerWorkflow {
      * run the build and create the complied hex file
      */
     Key runBuild(String sourceCode) {
-        final String compilerBinDir = pluginProperties.getCompilerBinDir();
-        final String compilerResourcesDir = pluginProperties.getCompilerResourceDir();
+        final String compilerBinDir = this.pluginProperties.getCompilerBinDir();
+        final String compilerResourcesDir = this.pluginProperties.getCompilerResourceDir();
 
         final StringBuilder sb = new StringBuilder();
 

@@ -11,7 +11,6 @@ import de.fhg.iais.roberta.syntax.action.vorwerk.VacuumOff;
 import de.fhg.iais.roberta.syntax.action.vorwerk.VacuumOn;
 import de.fhg.iais.roberta.syntax.sensor.vorwerk.DropOffSensor;
 import de.fhg.iais.roberta.syntax.sensor.vorwerk.WallSensor;
-import de.fhg.iais.roberta.visitor.collect.AbstractUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IVorwerkVisitor;
 
 /**

@@ -27,15 +27,15 @@ public class NxtSimCompilerWorkflow extends AbstractCompilerWorkflow {
     public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) //
     {
         if ( data.getErrorMessage() != null ) {
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
             return;
         }
         try {
-            generatedSourceCode = NxtSimVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree());
+            this.generatedSourceCode = NxtSimVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree());
             LOG.info("nxt simulation javascript code generated");
         } catch ( Exception e ) {
             LOG.error("nxt simulation javascript code generation failed", e);
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
         }
     }
 

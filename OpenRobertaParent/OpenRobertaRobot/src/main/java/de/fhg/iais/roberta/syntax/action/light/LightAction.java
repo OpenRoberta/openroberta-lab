@@ -5,8 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
+import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
 import de.fhg.iais.roberta.inter.mode.action.ILightMode;
 import de.fhg.iais.roberta.mode.action.BrickLedColor;
@@ -18,8 +17,8 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
-import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -30,12 +29,12 @@ public class LightAction<V> extends Action<V> {
     private final IBrickLedColor color;
     private final ILightMode mode;
     private static List<Field> fields;
-    private final IActorPort port;
+    private final String port;
     private static boolean isActor;
     private static boolean isBlink;
 
     private LightAction(
-        IActorPort port,
+        String port,
         IBrickLedColor color,
         ILightMode mode,
         Expr<V> rgbLedColor,
@@ -60,7 +59,7 @@ public class LightAction<V> extends Action<V> {
      * @return read only object of class {@link LightAction}
      */
     private static <V> LightAction<V> make(
-        IActorPort port,
+        String port,
         IBrickLedColor color,
         ILightMode mode,
         Expr<V> ledColor,
@@ -93,7 +92,7 @@ public class LightAction<V> extends Action<V> {
     /**
      * @return port.
      */
-    public IActorPort getPort() {
+    public String getPort() {
         return this.port;
     }
 
@@ -114,8 +113,8 @@ public class LightAction<V> extends Action<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        IRobotFactory factory = helper.getModeFactory();
+    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+        BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Value> values = helper.extractValues(block, (short) 1);
         Phrase<V> ledColor = helper.extractValue(values, new ExprParam(BlocklyConstants.COLOR, BlocklyType.COLOR));
         fields = helper.extractFields(block, (short) 3);
@@ -133,7 +132,7 @@ public class LightAction<V> extends Action<V> {
         String color = helper.extractField(fields, BlocklyConstants.SWITCH_COLOR, BlocklyConstants.DEFAULT);
         return LightAction
             .make(
-                factory.getActorPort(port),
+                factory.sanitizePort(port),
                 factory.getBrickLedColor(color),
                 factory.getBlinkMode(mode),
                 helper.convertPhraseToExpr(ledColor),
@@ -144,18 +143,18 @@ public class LightAction<V> extends Action<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
         if ( !this.color.toString().equals(BlocklyConstants.DEFAULT) ) {
-            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SWITCH_COLOR, getColor().toString());
+            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.SWITCH_COLOR, getColor().toString());
         }
         if ( !this.mode.toString().equals(BlocklyConstants.DEFAULT) ) {
-            JaxbTransformerHelper.addField(jaxbDestination, isBlink ? BlocklyConstants.SWITCH_BLINK : BlocklyConstants.SWITCH_STATE, getMode().toString());
+            Ast2JaxbHelper.addField(jaxbDestination, isBlink ? BlocklyConstants.SWITCH_BLINK : BlocklyConstants.SWITCH_STATE, getMode().toString());
         }
         if ( !this.port.toString().equals(BlocklyConstants.NO_PORT) ) {
-            JaxbTransformerHelper.addField(jaxbDestination, isActor ? BlocklyConstants.ACTORPORT : BlocklyConstants.SENSORPORT, getPort().toString());
+            Ast2JaxbHelper.addField(jaxbDestination, isActor ? BlocklyConstants.ACTORPORT : BlocklyConstants.SENSORPORT, getPort().toString());
         }
         if ( !this.rgbLedColor.toString().contains("EmptyExpr [defVal=COLOR]") ) {
-            JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.COLOR, this.rgbLedColor);
+            Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.COLOR, this.rgbLedColor);
         }
         return jaxbDestination;
 

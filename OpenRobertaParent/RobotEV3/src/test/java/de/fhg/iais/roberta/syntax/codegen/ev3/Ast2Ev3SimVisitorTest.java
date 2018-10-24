@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.codegen.ev3;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
@@ -171,6 +172,7 @@ public class Ast2Ev3SimVisitorTest {
 
     }
 
+    @Ignore
     @Test
     public void test11() throws Exception {
         String a =

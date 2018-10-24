@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.visitor.codegen;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
@@ -39,11 +39,11 @@ import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
@@ -82,7 +82,7 @@ public final class MbedSimVisitor extends AbstractSimVisitor<Void> implements IM
         final String end = createClosingBracket();
         this.sb.append("createMotorOnAction(");
         motorOnAction.getParam().getSpeed().visit(this);
-        this.sb.append(", " + "CONST.MOTOR_X" + motorOnAction.getPort());
+        this.sb.append(", " + "CONST.MOTOR_X" + motorOnAction.getUserDefinedPort());
 
         this.sb.append(end);
         return null;
@@ -92,7 +92,7 @@ public final class MbedSimVisitor extends AbstractSimVisitor<Void> implements IM
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         final String end = createClosingBracket();
         this.sb.append("createStopMotorAction(");
-        this.sb.append("CONST.MOTOR_X" + motorStopAction.getPort());
+        this.sb.append("CONST.MOTOR_X" + motorStopAction.getUserDefinedPort());
         this.sb.append(end);
         return null;
     }
@@ -116,14 +116,14 @@ public final class MbedSimVisitor extends AbstractSimVisitor<Void> implements IM
     //TODO: this code is duplicated for all specific sim visitors (refactor)
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case DEFAULT:
-            case VALUE:
-                this.sb.append("createGetSample(CONST.TIMER, 'timer" + timerSensor.getPort().getOraName() + "')");
+        switch ( timerSensor.getMode() ) {
+            case SC.DEFAULT:
+            case SC.VALUE:
+                this.sb.append("createGetSample(CONST.TIMER, 'timer" + timerSensor.getPort() + "')");
                 break;
-            case RESET:
+            case SC.RESET:
                 String end = createClosingBracket();
-                this.sb.append("createResetTimer('timer" + timerSensor.getPort().getOraName() + "'");
+                this.sb.append("createResetTimer('timer" + timerSensor.getPort() + "'");
                 this.sb.append(end);
                 break;
             default:
@@ -161,8 +161,8 @@ public final class MbedSimVisitor extends AbstractSimVisitor<Void> implements IM
     }
 
     @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        String key = brickSensor.getPort().toString().toUpperCase();
+    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+        String key = keysSensor.getPort().toString().toUpperCase();
         this.sb.append("createGetSample(CONST.BUTTONS, CONST." + key + ")");
         return null;
     }
@@ -324,14 +324,14 @@ public final class MbedSimVisitor extends AbstractSimVisitor<Void> implements IM
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        this.sb.append("createPinTouchSensor(" + pinTouchSensor.getPort().getOraName() + ")");
+        this.sb.append("createPinTouchSensor(" + pinTouchSensor.getPort() + ")");
         return null;
     }
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
         this.sb.append("createPinGetValueSensor(CONST." + pinValueSensor.getMode());
-        this.sb.append(", " + pinValueSensor.getPort().getOraName() + ")");
+        this.sb.append(", " + pinValueSensor.getPort() + ")");
         return null;
     }
 
@@ -339,7 +339,7 @@ public final class MbedSimVisitor extends AbstractSimVisitor<Void> implements IM
     public Void visitPinWriteValueSensor(PinWriteValue<Void> pinWriteValueSensor) {
         final String end = createClosingBracket();
         this.sb.append("createPinWriteValueSensor(CONST." + pinWriteValueSensor.getMode());
-        this.sb.append(", " + pinWriteValueSensor.getPort().getOraName() + ", ");
+        this.sb.append(", " + pinWriteValueSensor.getPort() + ", ");
         pinWriteValueSensor.getValue().visit(this);
         this.sb.append(end);
         return null;

@@ -2,13 +2,11 @@ package de.fhg.iais.roberta.visitor.collect;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.components.ActorType;
-import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.components.arduino.MbotConfiguration;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
@@ -29,34 +27,34 @@ import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
  * @author kcvejoski
  */
 public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements IMbotVisitor<Void> {
-    public MbotUsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, MbotConfiguration configuration) {
+    public MbotUsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, Configuration configuration) {
         super(configuration);
         check(phrasesSet);
     }
 
     @Override
     public Void visitJoystick(Joystick<Void> joystick) {
-        this.usedSensors.add(new UsedSensor((ISensorPort) joystick.getPort(), SensorType.JOYSTICK, null));
+        this.usedSensors.add(new UsedSensor(joystick.getPort(), SC.JOYSTICK, SC.DEFAULT));
         return null;
     }
 
     @Override
     public Void visitFlameSensor(FlameSensor<Void> flameSensor) {
-        this.usedSensors.add(new UsedSensor(flameSensor.getPort(), SensorType.FLAMESENSOR, null));
+        this.usedSensors.add(new UsedSensor(flameSensor.getPort(), SC.FLAMESENSOR, SC.DEFAULT));
         return null;
     }
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         super.visitToneAction(toneAction);
-        this.usedActors.add(new UsedActor(null, ActorType.BUZZER));
+        this.usedActors.add(new UsedActor(toneAction.getPort(), SC.BUZZER));
         return null;
     }
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         super.visitPlayNoteAction(playNoteAction);
-        this.usedActors.add(new UsedActor(null, ActorType.BUZZER));
+        this.usedActors.add(new UsedActor(playNoteAction.getPort(), SC.BUZZER));
         return null;
     }
 
@@ -66,9 +64,9 @@ public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardware
         if ( driveAction.getParam().getDuration() != null ) {
             driveAction.getParam().getDuration().getValue().visit(this);
         }
-        if ( this.brickConfiguration != null ) {
-            this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
-        }
+
+        this.usedActors.add(new UsedActor(this.robotConfiguration.getFirstMotorPort(SC.LEFT), SC.DIFFERENTIAL_DRIVE));
+
         return null;
     }
 
@@ -79,9 +77,9 @@ public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardware
         if ( curveAction.getParamLeft().getDuration() != null ) {
             curveAction.getParamLeft().getDuration().getValue().visit(this);
         }
-        if ( this.brickConfiguration != null ) {
-            this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
-        }
+
+        this.usedActors.add(new UsedActor(this.robotConfiguration.getFirstMotorPort(SC.LEFT), SC.DIFFERENTIAL_DRIVE));
+
         return null;
     }
 
@@ -91,9 +89,9 @@ public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardware
         if ( turnAction.getParam().getDuration() != null ) {
             turnAction.getParam().getDuration().getValue().visit(this);
         }
-        if ( this.brickConfiguration != null ) {
-            this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
-        }
+
+        this.usedActors.add(new UsedActor(this.robotConfiguration.getFirstMotorPort(SC.LEFT), SC.DIFFERENTIAL_DRIVE));
+
         return null;
     }
 
@@ -104,30 +102,28 @@ public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardware
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        if ( this.brickConfiguration != null ) {
-            if ( (this.brickConfiguration.getLeftMotorPort() != null) && (this.brickConfiguration.getRightMotorPort() != null) ) {
-                this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.GEARED_MOTOR));
-                this.usedActors.add(new UsedActor(this.brickConfiguration.getRightMotorPort(), ActorType.GEARED_MOTOR));
-            }
+
+        if ( (this.robotConfiguration.getFirstMotorPort(SC.LEFT) != null) && (this.robotConfiguration.getFirstMotorPort(SC.RIGHT) != null) ) {
+            this.usedActors.add(new UsedActor(this.robotConfiguration.getFirstMotorPort(SC.LEFT), SC.GEARED_MOTOR));
+            this.usedActors.add(new UsedActor(this.robotConfiguration.getFirstMotorPort(SC.RIGHT), SC.GEARED_MOTOR));
         }
+
         return null;
     }
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        this.usedActors.add(new UsedActor(null, ActorType.LED_ON_BOARD));
+        this.usedActors.add(new UsedActor(lightAction.getPort(), SC.LED_ON_BOARD));
         return null;
     }
 
     @Override
     public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 

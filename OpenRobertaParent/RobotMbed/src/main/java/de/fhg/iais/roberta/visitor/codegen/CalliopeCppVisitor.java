@@ -3,15 +3,12 @@ package de.fhg.iais.roberta.visitor.codegen;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.fhg.iais.roberta.components.mbed.CalliopeConfiguration;
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.GestureSensorMode;
-import de.fhg.iais.roberta.mode.sensor.PinPull;
-import de.fhg.iais.roberta.mode.sensor.PinValue;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
@@ -70,10 +67,10 @@ import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
@@ -104,7 +101,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
      * @param programPhrases to generate the code from
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
-    private CalliopeCppVisitor(CalliopeConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
+    private CalliopeCppVisitor(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
 
         this.codePreprocess = new MbedUsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
@@ -121,7 +118,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
      * @param programPhrases to generate the code from
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
-    public static String generate(CalliopeConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
+    public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
         Assert.notNull(brickConfiguration);
 
         final CalliopeCppVisitor astVisitor = new CalliopeCppVisitor(brickConfiguration, programPhrases, 0);
@@ -372,8 +369,8 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         this.sb.append("_uBit.soundmotor.motor");
-        if ( !motorOnAction.getPort().getCodeName().equals("AB") ) {
-            this.sb.append(motorOnAction.getPort());
+        if ( !motorOnAction.getUserDefinedPort().equals("AB") ) {
+            this.sb.append(motorOnAction.getUserDefinedPort());
         }
         // fix for IT Gipfel
         else {
@@ -411,12 +408,12 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         this.sb.append("_uBit.soundmotor.motor");
-        if ( motorStopAction.getPort().getCodeName().equals("AB") ) {
+        if ( motorStopAction.getUserDefinedPort().equals("AB") ) {
             this.sb.append("AOff();");
             nlIndent();
             this.sb.append("_uBit.soundmotor.motorB");
         } else {
-            this.sb.append(motorStopAction.getPort());
+            this.sb.append(motorStopAction.getUserDefinedPort());
         }
         this.sb.append("Off();");
         return null;
@@ -448,18 +445,18 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     }
 
     @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        this.sb.append("_uBit.button" + brickSensor.getPort().getCodeName() + ".isPressed()");
+    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+        this.sb.append("_uBit.button" + keysSensor.getPort() + ".isPressed()");
         return null;
     }
 
     @Override
     public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
         this.sb.append("(_uBit.accelerometer.getGesture() == MICROBIT_ACCELEROMETER_EVT_");
-        if ( (gestureSensor.getMode() == GestureSensorMode.UP)
-            || (gestureSensor.getMode() == GestureSensorMode.DOWN)
-            || (gestureSensor.getMode() == GestureSensorMode.LEFT)
-            || (gestureSensor.getMode() == GestureSensorMode.RIGHT) ) {
+        if ( (gestureSensor.getMode().equals(SC.UP))
+            || (gestureSensor.getMode().equals(SC.DOWN))
+            || (gestureSensor.getMode().equals(SC.LEFT))
+            || (gestureSensor.getMode().equals(SC.RIGHT)) ) {
             this.sb.append("TILT_");
         }
         this.sb.append(gestureSensor.getMode() + ")");
@@ -487,19 +484,19 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         this.sb.append("_uBit.accelerometer.get");
-        this.sb.append(gyroSensor.getPort().getCodeName());
+        this.sb.append(gyroSensor.getPort());
         this.sb.append("()");
         return null;
     }
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case DEFAULT:
-            case VALUE:
+        switch ( timerSensor.getMode() ) {
+            case SC.DEFAULT:
+            case SC.VALUE:
                 this.sb.append("( _uBit.systemTime() - _initTime )");
                 break;
-            case RESET:
+            case SC.RESET:
                 this.sb.append("_initTime = _uBit.systemTime();");
                 break;
             default:
@@ -510,23 +507,23 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        String port = pinTouchSensor.getPort().getCodeName();
+        String port = pinTouchSensor.getPort();
         this.sb.append("_uBit.io." + port + ".isTouched()");
         return null;
     }
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
-        String port = pinValueSensor.getPort().getCodeName();
+        String port = pinValueSensor.getPort();
         this.sb.append("_uBit.io." + port);
-        switch ( (PinValue) pinValueSensor.getMode() ) {
-            case DIGITAL:
-            case ANALOG:
-                this.sb.append(".get").append(pinValueSensor.getMode().getValues()[0]);
+        switch ( pinValueSensor.getMode() ) {
+            case SC.DIGITAL:
+            case SC.ANALOG:
+                this.sb.append(".get").append(pinValueSensor.getMode());
                 break;
-            case PULSE_HIGH:
-            case PULSE_LOW:
-                this.sb.append(".read").append(pinValueSensor.getMode().getValues()[0]);
+            case SC.PULSE_HIGH:
+            case SC.PULSE_LOW:
+                this.sb.append(".read").append(pinValueSensor.getMode());
                 break;
             default:
                 throw new DbcException("Value type  " + pinValueSensor.getMode() + " is not supported.");
@@ -537,14 +534,14 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitPinWriteValueSensor(PinWriteValue<Void> pinWriteValueSensor) {
-        String port = pinWriteValueSensor.getPort().getCodeName();
-        if ( pinWriteValueSensor.getPort().getCodeName().equals("4") ) {
+        String port = pinWriteValueSensor.getPort();
+        if ( pinWriteValueSensor.getPort().equals("4") ) {
             port = "P19";
-        } else if ( pinWriteValueSensor.getPort().getCodeName().equals("5") ) {
+        } else if ( pinWriteValueSensor.getPort().equals("5") ) {
             port = "P2";
         }
         String valueType = "AnalogValue(";
-        if ( pinWriteValueSensor.getMode() == PinValue.DIGITAL ) {
+        if ( pinWriteValueSensor.getMode().equals(SC.DIGITAL) ) {
             valueType = "DigitalValue(";
         }
         this.sb.append("_uBit.io." + port + ".set" + valueType);
@@ -555,16 +552,16 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPullAction) {
-        String port = pinSetPullAction.getPort().getCodeName();
+        String port = pinSetPullAction.getPort();
         this.sb.append("_uBit.io." + port + ".setPull(");
-        switch ( (PinPull) pinSetPullAction.getMode() ) {
-            case UP:
+        switch ( pinSetPullAction.getMode() ) {
+            case SC.UP:
                 this.sb.append("PullUp");
                 break;
-            case DOWN:
+            case SC.DOWN:
                 this.sb.append("PullDown");
                 break;
-            case NONE:
+            case SC.NONE:
             default:
                 this.sb.append("PullNone");
                 break;
@@ -926,10 +923,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
         this.sb.append("_uBit.accelerometer.get");
-        if ( accelerometerSensor.getPort().getOraName().equals("STRENGTH") ) {
+        if ( accelerometerSensor.getPort().equals("STRENGTH") ) {
             this.sb.append("Strength");
         } else {
-            this.sb.append(accelerometerSensor.getPort().getOraName());
+            this.sb.append(accelerometerSensor.getPort());
         }
         this.sb.append("()");
         return null;

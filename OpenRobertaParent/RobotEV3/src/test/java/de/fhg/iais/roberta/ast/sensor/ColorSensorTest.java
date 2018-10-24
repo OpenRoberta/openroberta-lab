@@ -3,9 +3,9 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
 
 public class ColorSensorTest {
@@ -24,32 +24,32 @@ public class ColorSensorTest {
 
     @Test
     public void getMode() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setColor.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setColor.xml");
 
         ColorSensor<Void> cs = (ColorSensor<Void>) transformer.getTree().get(0).get(1);
         ColorSensor<Void> cs1 = (ColorSensor<Void>) transformer.getTree().get(1).get(1);
         ColorSensor<Void> cs2 = (ColorSensor<Void>) transformer.getTree().get(2).get(1);
         ColorSensor<Void> cs3 = (ColorSensor<Void>) transformer.getTree().get(3).get(1);
 
-        Assert.assertEquals(ColorSensorMode.COLOUR, cs.getMode());
-        Assert.assertEquals(ColorSensorMode.LIGHT, cs1.getMode());
-        Assert.assertEquals(ColorSensorMode.RGB, cs2.getMode());
-        Assert.assertEquals(ColorSensorMode.AMBIENTLIGHT, cs3.getMode());
+        Assert.assertEquals(SC.COLOUR, cs.getMode());
+        Assert.assertEquals(SC.LIGHT, cs1.getMode());
+        Assert.assertEquals(SC.RGB, cs2.getMode());
+        Assert.assertEquals(SC.AMBIENTLIGHT, cs3.getMode());
     }
 
     @Test
     public void getPort() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setColor.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setColor.xml");
 
         ColorSensor<Void> cs = (ColorSensor<Void>) transformer.getTree().get(0).get(1);
         ColorSensor<Void> cs1 = (ColorSensor<Void>) transformer.getTree().get(1).get(1);
         ColorSensor<Void> cs2 = (ColorSensor<Void>) transformer.getTree().get(2).get(1);
         ColorSensor<Void> cs3 = (ColorSensor<Void>) transformer.getTree().get(3).get(1);
 
-        Assert.assertEquals("S3", cs.getPort().getCodeName());
-        Assert.assertEquals("S1", cs1.getPort().getCodeName());
-        Assert.assertEquals("S2", cs2.getPort().getCodeName());
-        Assert.assertEquals("S4", cs3.getPort().getCodeName());
+        Assert.assertEquals("3", cs.getPort());
+        Assert.assertEquals("1", cs1.getPort());
+        Assert.assertEquals("2", cs2.getPort());
+        Assert.assertEquals("4", cs3.getPort());
     }
 
     @Test

@@ -1,9 +1,7 @@
 package de.fhg.iais.roberta.visitor.validate;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.Sensor;
-import de.fhg.iais.roberta.components.SensorType;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
@@ -25,7 +23,7 @@ public abstract class AbstractSimValidatorVisitor extends AbstractProgramValidat
 
     @Override
     protected void checkSensorPort(ExternalSensor<Void> sensor) {
-        Sensor usedSensor = this.brickConfiguration.getSensorOnPort((ISensorPort) sensor.getPort());
+        ConfigurationComponent usedSensor = this.robotConfiguration.optConfigurationComponent(sensor.getPort());
         if ( usedSensor == null ) {
             if ( sensor.getKind().hasName("INFRARED_SENSING") ) {
                 sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT"));
@@ -33,39 +31,40 @@ public abstract class AbstractSimValidatorVisitor extends AbstractProgramValidat
                 sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_SENSOR_MISSING"));
             }
         } else {
+            String type = usedSensor.getProperty("TYPE");
             switch ( sensor.getKind().getName() ) {
                 case "COLOR_SENSING":
-                    if ( usedSensor.getType() != SensorType.COLOR && usedSensor.getType() != SensorType.HT_COLOR ) {
+                    if ( !type.equals("COLOR") && !type.equals("HT_COLOR") ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
                     break;
                 case "TOUCH_SENSING":
-                    if ( usedSensor.getType() != SensorType.TOUCH ) {
+                    if ( !type.equals("TOUCH") ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
                     break;
                 case "ULTRASONIC_SENSING":
-                    if ( usedSensor.getType() != SensorType.ULTRASONIC ) {
+                    if ( !type.equals("ULTRASONIC") ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
                     break;
                 case "INFRARED_SENSING":
-                    if ( usedSensor.getType() != SensorType.INFRARED ) {
+                    if ( !type.equals("INFRARED") ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT"));
                     }
                     break;
                 case "GYRO_SENSING":
-                    if ( usedSensor.getType() != SensorType.GYRO ) {
+                    if ( !type.equals("GYRO") ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
                     break;
                 case "COMPASS_SENSING":
-                    if ( usedSensor.getType() != SensorType.COMPASS ) {
+                    if ( !type.equals("COMPASS") ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
                     break;
                 case "IRSEEKER_SENSING":
-                    if ( usedSensor.getType() != SensorType.IRSEEKER ) {
+                    if ( !type.equals("IRSEEKER_SENSING") ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
                     break;

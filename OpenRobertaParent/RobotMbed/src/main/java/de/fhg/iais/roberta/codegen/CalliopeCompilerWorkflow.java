@@ -13,11 +13,10 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.mbed.CalliopeConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
-import de.fhg.iais.roberta.transformer.mbed.Jaxb2CalliopeConfigurationTransformer;
+import de.fhg.iais.roberta.transformer.mbed.Jaxb2MbedConfigurationAst;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
@@ -37,16 +36,15 @@ public class CalliopeCompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
         if ( data.getErrorMessage() != null ) {
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
             return;
         }
         try {
-            generatedSourceCode =
-                CalliopeCppVisitor.generate((CalliopeConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+            this.generatedSourceCode = CalliopeCppVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true);
             LOG.info("arduino c++ code generated");
         } catch ( Exception e ) {
             LOG.error("arduino c++ code generation failed", e);
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
         }
     }
 
@@ -62,22 +60,22 @@ public class CalliopeCompilerWorkflow extends AbstractCompilerWorkflow {
         } else {
             isRadioUsed = false;
         }
-        workflowResult = runBuild(token, programName, "generated.main", isRadioUsed);
-        if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+        this.workflowResult = runBuild(token, programName, "generated.main", isRadioUsed);
+        if ( this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
             LOG.info("compile calliope program {} successful", programName);
         } else {
-            LOG.error("compile calliope program {} failed with {}", programName, workflowResult);
+            LOG.error("compile calliope program {} failed with {}", programName, this.workflowResult);
         }
     }
 
     @Override
     public void generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language) {
         MbedUsedHardwareCollectorVisitor usedHardwareVisitor =
-            new MbedUsedHardwareCollectorVisitor(transformer.getProgramTransformer().getTree(), transformer.getBrickConfiguration());
+            new MbedUsedHardwareCollectorVisitor(transformer.getProgramTransformer().getTree(), transformer.getRobotConfiguration());
         EnumSet<CalliopeCompilerFlag> compilerFlags =
             usedHardwareVisitor.isRadioUsed() ? EnumSet.of(CalliopeCompilerFlag.RADIO_USED) : EnumSet.noneOf(CalliopeCompilerFlag.class);
         generateSourceCode(token, programName, transformer, language);
-        if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+        if ( this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
             compileSourceCode(token, programName, language, compilerFlags);
         }
     }
@@ -85,7 +83,7 @@ public class CalliopeCompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2CalliopeConfigurationTransformer transformer = new Jaxb2CalliopeConfigurationTransformer(factory);
+        Jaxb2MbedConfigurationAst transformer = new Jaxb2MbedConfigurationAst(factory);
         return transformer.transform(project);
     }
 
@@ -105,9 +103,9 @@ public class CalliopeCompilerWorkflow extends AbstractCompilerWorkflow {
      * @param mainPackage
      */
     private Key runBuild(String token, String mainFile, String mainPackage, boolean radioUsed) {
-        final String compilerBinDir = pluginProperties.getCompilerBinDir();
-        final String compilerResourcesDir = pluginProperties.getCompilerResourceDir();
-        final String tempDir = pluginProperties.getTempDir();
+        final String compilerBinDir = this.pluginProperties.getCompilerBinDir();
+        final String compilerResourcesDir = this.pluginProperties.getCompilerResourceDir();
+        final String tempDir = this.pluginProperties.getTempDir();
 
         final StringBuilder sb = new StringBuilder();
         String scriptName = compilerResourcesDir + "../compile." + (SystemUtils.IS_OS_WINDOWS ? "bat" : "sh");

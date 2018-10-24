@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
 
 public class VolumeActionTest {
@@ -18,14 +18,14 @@ public class VolumeActionTest {
 
     @Test
     public void getVolume() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/actions/action_SetVolume.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_SetVolume.xml");
         VolumeAction<Void> va = (VolumeAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals("NumConst [50]", va.getVolume().toString());
     }
 
     @Test
     public void getMode() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/actions/action_SetVolume.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_SetVolume.xml");
         VolumeAction<Void> va = (VolumeAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(VolumeAction.Mode.SET, va.getMode());
     }

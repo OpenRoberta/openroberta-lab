@@ -5,18 +5,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.fhg.iais.roberta.components.Category;
-import de.fhg.iais.roberta.components.ConfigurationBlockType;
-import de.fhg.iais.roberta.components.SensorType;
-import de.fhg.iais.roberta.components.ConfigurationBlock;
+import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.components.arduino.ArduinoConfiguration;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
-import de.fhg.iais.roberta.mode.sensor.HumiditySensorMode;
-import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
-import de.fhg.iais.roberta.mode.sensor.PinValue;
-import de.fhg.iais.roberta.mode.sensor.RfidSensorMode;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
@@ -29,11 +24,11 @@ import de.fhg.iais.roberta.syntax.actors.arduino.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
@@ -49,8 +44,8 @@ import de.fhg.iais.roberta.visitor.collect.ArduinoUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
 /**
- * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a
- * StringBuilder. <b>This representation is correct C code for Arduino.</b> <br>
+ * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a StringBuilder.
+ * <b>This representation is correct C code for Arduino.</b> <br>
  */
 public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implements IArduinoVisitor<Void> {
     private final boolean isTimerSensorUsed;
@@ -62,12 +57,11 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
      * @param programPhrases to generate the code from
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
-    private ArduinoCppVisitor(ArduinoConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases, int indentation) {
-        super(phrases, indentation);
+    private ArduinoCppVisitor(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases, int indentation) {
+        super(brickConfiguration, phrases, indentation);
         ArduinoUsedHardwareCollectorVisitor codePreprocessVisitor = new ArduinoUsedHardwareCollectorVisitor(phrases, brickConfiguration);
         this.usedSensors = codePreprocessVisitor.getUsedSensors();
         this.usedVars = codePreprocessVisitor.getVisitedVars();
-        this.usedConfigurationBlocks = codePreprocessVisitor.getUsedConfigurationBlocks();
         //TODO: fix how the timer is detected for all robots
         this.isTimerSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
         this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
@@ -81,7 +75,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
      * @param programPhrases to generate the code from
      * @param withWrapping if false the generated code will be without the surrounding configuration code
      */
-    public static String generate(ArduinoConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
+    public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
         ArduinoCppVisitor astVisitor = new ArduinoCppVisitor(brickConfiguration, programPhrases, withWrapping ? 1 : 0);
         astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
@@ -89,13 +83,13 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        this.sb.append("_lcd_" + showTextAction.getPort().getOraName() + ".setCursor(");
+        this.sb.append("_lcd_" + showTextAction.getPort() + ".setCursor(");
         showTextAction.getX().visit(this);
         this.sb.append(",");
         showTextAction.getY().visit(this);
         this.sb.append(");");
         nlIndent();
-        this.sb.append("_lcd_" + showTextAction.getPort().getOraName() + ".print(");
+        this.sb.append("_lcd_" + showTextAction.getPort() + ".print(");
         showTextAction.getMsg().visit(this);
         this.sb.append(");");
         return null;
@@ -103,21 +97,21 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        this.sb.append("_lcd_" + clearDisplayAction.getPort().getOraName() + ".clear();");
+        this.sb.append("_lcd_" + clearDisplayAction.getPort() + ".clear();");
         return null;
     }
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         if ( !lightAction.getMode().toString().equals(BlocklyConstants.DEFAULT) ) {
-            this.sb.append("digitalWrite(_led_" + lightAction.getPort().getOraName() + ", " + lightAction.getMode().getValues()[0] + ");");
+            this.sb.append("digitalWrite(_led_" + lightAction.getPort() + ", " + lightAction.getMode().getValues()[0] + ");");
         } else {
             Map<String, Expr<Void>> Channels = new HashMap<>();
             Channels.put("red", ((RgbColor<Void>) lightAction.getRgbLedColor()).getR());
             Channels.put("green", ((RgbColor<Void>) lightAction.getRgbLedColor()).getG());
             Channels.put("blue", ((RgbColor<Void>) lightAction.getRgbLedColor()).getB());
             Channels.forEach((k, v) -> {
-                this.sb.append("analogWrite(_led_" + k + "_" + lightAction.getPort().getOraName() + ", ");
+                this.sb.append("analogWrite(_led_" + k + "_" + lightAction.getPort() + ", ");
                 v.visit(this);
                 this.sb.append(");");
                 nlIndent();
@@ -135,7 +129,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                 "blue"
             };
         for ( int i = 0; i < 3; i++ ) {
-            this.sb.append("analogWrite(_led_" + colors[i] + "_" + lightStatusAction.getPort().getOraName() + ", 0);");
+            this.sb.append("analogWrite(_led_" + colors[i] + "_" + lightStatusAction.getPort() + ", 0);");
             nlIndent();
         }
         return null;
@@ -144,7 +138,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         //9 - sound port
-        this.sb.append("tone(_spiele_" + toneAction.getPort().getOraName() + ",");
+        this.sb.append("tone(_spiele_" + toneAction.getPort() + ",");
         toneAction.getFrequency().visit(this);
         this.sb.append(", ");
         toneAction.getDuration().visit(this);
@@ -156,18 +150,18 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         boolean step = motorOnAction.getParam().getDuration() != null;
         if ( step ) {//step motor
-            this.sb.append("Motor_" + motorOnAction.getPort().getOraName() + ".setSpeed(");
+            this.sb.append("Motor_" + motorOnAction.getUserDefinedPort() + ".setSpeed(");
             motorOnAction.getParam().getSpeed().visit(this);
             this.sb.append(");");
             nlIndent();
-            this.sb.append("Motor_" + motorOnAction.getPort().getOraName() + ".step(_SPU_" + motorOnAction.getPort().getOraName() + "*");
+            this.sb.append("Motor_" + motorOnAction.getUserDefinedPort() + ".step(_SPU_" + motorOnAction.getUserDefinedPort() + "*");
             motorOnAction.getDurationValue().visit(this);
             if ( motorOnAction.getDurationMode().equals(MotorMoveMode.DEGREE) ) {
                 this.sb.append("/360");
             }
             this.sb.append(");");
         } else {//servo motor
-            this.sb.append("_servo_" + motorOnAction.getPort().getOraName() + ".write(");
+            this.sb.append("_servo_" + motorOnAction.getUserDefinedPort() + ".write(");
             motorOnAction.getParam().getSpeed().visit(this);
             this.sb.append(");");
         }
@@ -176,20 +170,19 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitRelayAction(RelayAction<Void> relayAction) {
-        this.sb.append("digitalWrite(_relay_").append(relayAction.getPort().getOraName()).append(", ").append(relayAction.getMode().getValues()[0]).append(
-            ");");
+        this.sb.append("digitalWrite(_relay_").append(relayAction.getPort()).append(", ").append(relayAction.getMode().getValues()[0]).append(");");
         return null;
     }
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.sb.append("analogRead(_output_" + lightSensor.getPort().getOraName() + ")/10.24");
+        this.sb.append("analogRead(_output_" + lightSensor.getPort() + ")/10.24");
         return null;
     }
 
     @Override
-    public Void visitBrickSensor(BrickSensor<Void> button) {
-        this.sb.append("digitalRead(_taster_" + button.getPort().getOraName() + ")");
+    public Void visitKeysSensor(KeysSensor<Void> button) {
+        this.sb.append("digitalRead(_taster_" + button.getPort() + ")");
         return null;
     }
 
@@ -224,13 +217,13 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitMoistureSensor(MoistureSensor<Void> moistureSensor) {
-        this.sb.append("analogRead(_moisturePin_" + moistureSensor.getPort().getOraName() + ")/10.24");
+        this.sb.append("analogRead(_moisturePin_" + moistureSensor.getPort() + ")/10.24");
         return null;
     }
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        this.sb.append("map(analogRead(_TMP36_" + temperatureSensor.getPort().getOraName() + "), 0, 410, -50, 150)");
+        this.sb.append("map(analogRead(_TMP36_" + temperatureSensor.getPort() + "), 0, 410, -50, 150)");
         return null;
     }
 
@@ -242,18 +235,18 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitVoltageSensor(VoltageSensor<Void> potentiometer) {
-        this.sb.append("((double)analogRead(_output_" + potentiometer.getPort().getOraName() + "))*5/1024");
+        this.sb.append("((double)analogRead(_output_" + potentiometer.getPort() + "))*5/1024");
         return null;
     }
 
     @Override
     public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
-        switch ( (HumiditySensorMode) humiditySensor.getMode() ) {
-            case HUMIDITY:
-                this.sb.append("_dht_" + humiditySensor.getPort().getOraName() + ".readHumidity()");
+        switch ( humiditySensor.getMode() ) {
+            case SC.HUMIDITY:
+                this.sb.append("_dht_" + humiditySensor.getPort() + ".readHumidity()");
                 break;
-            case TEMPERATURE:
-                this.sb.append("_dht_" + humiditySensor.getPort().getOraName() + ".readTemperature()");
+            case SC.TEMPERATURE:
+                this.sb.append("_dht_" + humiditySensor.getPort() + ".readTemperature()");
                 break;
             default:
                 throw new DbcException("Invalide mode for Humidity Sensor!");
@@ -263,7 +256,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitDropSensor(DropSensor<Void> dropSensor) {
-        this.sb.append("analogRead(_S_" + dropSensor.getPort().getOraName() + ")/10.24");
+        this.sb.append("analogRead(_S_" + dropSensor.getPort() + ")/10.24");
         return null;
     }
 
@@ -308,7 +301,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitPulseSensor(PulseSensor<Void> pulseSensor) {
-        this.sb.append("analogRead(_SensorPin_" + pulseSensor.getPort().getOraName() + ")");
+        this.sb.append("analogRead(_SensorPin_" + pulseSensor.getPort() + ")");
         return null;
     }
 
@@ -338,16 +331,17 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         nlIndent();
         this.sb.append("}");
         nlIndent();
-        this.sb.append(
-            "return String(((long)(_mfrc522_"
-                + sensorName
-                + ".uid.uidByte[0])<<24)\n    |((long)(_mfrc522_"
-                + sensorName
-                + ".uid.uidByte[1])<<16)\n    | ((long)(_mfrc522_"
-                + sensorName
-                + ".uid.uidByte[2])<<8)\n    | ((long)_mfrc522_"
-                + sensorName
-                + ".uid.uidByte[3]), HEX);");
+        this.sb
+            .append(
+                "return String(((long)(_mfrc522_"
+                    + sensorName
+                    + ".uid.uidByte[0])<<24)\n    |((long)(_mfrc522_"
+                    + sensorName
+                    + ".uid.uidByte[1])<<16)\n    | ((long)(_mfrc522_"
+                    + sensorName
+                    + ".uid.uidByte[2])<<8)\n    | ((long)_mfrc522_"
+                    + sensorName
+                    + ".uid.uidByte[3]), HEX);");
 
         decrIndentation();
         this.nlIndent();
@@ -359,11 +353,11 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitRfidSensor(RfidSensor<Void> rfidSensor) {
-        switch ( (RfidSensorMode) rfidSensor.getMode() ) {
-            case PRESENCE:
-                this.sb.append("_mfrc522_" + rfidSensor.getPort().getCodeName() + ".PICC_IsNewCardPresent()");
+        switch ( rfidSensor.getMode() ) {
+            case SC.PRESENCE:
+                this.sb.append("_mfrc522_" + rfidSensor.getPort() + ".PICC_IsNewCardPresent()");
                 break;
-            case SERIAL:
+            case SC.SERIAL:
                 this.sb.append("_readRFIDData()");
                 break;
             default:
@@ -373,35 +367,35 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     }
 
     public void measureIRValue(UsedSensor infraredSensor) {
-        switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
-            case PRESENCE:
+        switch ( infraredSensor.getMode() ) {
+            case SC.PRESENCE:
                 this.sb.append("bool _getIRResults()\n{");
                 incrIndentation();
                 nlIndent();
                 this.sb.append("bool results = false;");
                 nlIndent();
-                this.sb.append("if (_irrecv_" + infraredSensor.getPort().getOraName() + ".decode(&_results_" + infraredSensor.getPort().getOraName() + ")) {");
+                this.sb.append("if (_irrecv_" + infraredSensor.getPort() + ".decode(&_results_" + infraredSensor.getPort() + ")) {");
                 incrIndentation();
                 nlIndent();
                 this.sb.append("results = true;");
                 nlIndent();
-                this.sb.append("_irrecv_" + infraredSensor.getPort().getOraName() + ".resume();");
+                this.sb.append("_irrecv_" + infraredSensor.getPort() + ".resume();");
                 decrIndentation();
                 nlIndent();
                 this.sb.append("}");
                 break;
-            case VALUE:
+            case SC.VALUE:
                 this.sb.append("long int _getIRResults()\n{");
                 incrIndentation();
                 nlIndent();
                 this.sb.append("long int results = 0;");
                 nlIndent();
-                this.sb.append("if (_irrecv_" + infraredSensor.getPort().getOraName() + ".decode(&_results_" + infraredSensor.getPort().getOraName() + ")) {");
+                this.sb.append("if (_irrecv_" + infraredSensor.getPort() + ".decode(&_results_" + infraredSensor.getPort() + ")) {");
                 incrIndentation();
                 nlIndent();
-                this.sb.append("results = _results_" + infraredSensor.getPort().getOraName() + ".value;");
+                this.sb.append("results = _results_" + infraredSensor.getPort() + ".value;");
                 nlIndent();
-                this.sb.append("_irrecv_" + infraredSensor.getPort().getOraName() + ".resume();");
+                this.sb.append("_irrecv_" + infraredSensor.getPort() + ".resume();");
                 decrIndentation();
                 nlIndent();
                 this.sb.append("}");
@@ -425,7 +419,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitMotionSensor(MotionSensor<Void> motionSensor) {
-        this.sb.append("digitalRead(_output_" + motionSensor.getPort().getOraName() + ")");
+        this.sb.append("digitalRead(_output_" + motionSensor.getPort() + ")");
         return null;
     }
 
@@ -444,7 +438,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                 .stream()
                 .filter(phrase -> (phrase.getKind().getCategory() == Category.METHOD) && !phrase.getKind().hasName("METHOD_CALL"))
                 .count();
-        if ( ((this.usedConfigurationBlocks.size() != 0) || this.isTimerSensorUsed) && (numberConf == 0) ) {
+        if ( (this.configuration.getConfigurationComponents().isEmpty() || this.isTimerSensorUsed) && (numberConf == 0) ) {
             this.nlIndent();
         }
         generateUserDefinedMethods();
@@ -452,29 +446,29 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
             nlIndent();
         }
         for ( UsedSensor usedSensor : this.usedSensors ) {
-            if ( usedSensor.getType().equals(SensorType.INFRARED) ) {
+            if ( usedSensor.getType().equals(SC.INFRARED) ) {
                 this.measureIRValue(usedSensor);
                 this.nlIndent();
                 break;
             }
         }
         for ( UsedSensor usedSensor : this.usedSensors ) {
-            if ( usedSensor.getType().equals(SensorType.PIN_VALUE) ) {
+            if ( usedSensor.getType().equals(SC.PIN_VALUE) ) {
                 this.generatePinGetValue(usedSensor);
                 this.nlIndent();
                 break;
             }
         }
-        for ( ConfigurationBlock usedConfigurationBlock : this.usedConfigurationBlocks ) {
-            if ( usedConfigurationBlock.getConfType().equals(ConfigurationBlockType.ULTRASONIC) ) {
-                this.measureDistanceUltrasonicSensor(usedConfigurationBlock.getConfName());
+        for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponents() ) {
+            if ( usedConfigurationBlock.getComponentType().equals(SC.ULTRASONIC) ) {
+                this.measureDistanceUltrasonicSensor(usedConfigurationBlock.getUserDefinedPortName());
                 this.nlIndent();
                 break;
             }
         }
-        for ( ConfigurationBlock usedConfigurationBlock : this.usedConfigurationBlocks ) {
-            if ( usedConfigurationBlock.getConfType().equals(ConfigurationBlockType.RFID) ) {
-                this.readRFIDData(usedConfigurationBlock.getConfName());
+        for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponents() ) {
+            if ( usedConfigurationBlock.getComponentType().equals(SC.RFID) ) {
+                this.readRFIDData(usedConfigurationBlock.getUserDefinedPortName());
                 this.nlIndent();
                 break;
             }
@@ -508,63 +502,63 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         this.nlIndent();
         this.sb.append("#include <math.h>");
         this.nlIndent();
-        for ( ConfigurationBlock usedConfigurationBlock : this.usedConfigurationBlocks ) {
-            switch ( (ConfigurationBlockType) usedConfigurationBlock.getConfType() ) {
-                case HUMIDITY:
+        for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponents() ) {
+            switch ( usedConfigurationBlock.getComponentType() ) {
+                case SC.HUMIDITY:
                     this.sb.append("#include <DHT.h>");
                     this.nlIndent();
                     break;
-                case INFRARED:
+                case SC.INFRARED:
                     this.sb.append("#include <IRremote.h>");
                     this.nlIndent();
                     break;
-                case ENCODER:
+                case SC.ENCODER:
                     this.sb.append("#include <Encoder.h>");
                     this.nlIndent();
                     break;
-                case RFID:
+                case SC.RFID:
                     this.sb.append("#include <SPI.h>");
                     this.nlIndent();
                     this.sb.append("#include <MFRC522.h>");
                     this.nlIndent();
                     break;
-                case LCD:
+                case SC.LCD:
                     this.sb.append("#include <LiquidCrystal.h>");
                     this.nlIndent();
                     break;
-                case LCDI2C:
+                case SC.LCDI2C:
                     this.sb.append("#include <LiquidCrystal_I2C.h>");
                     this.nlIndent();
                     break;
-                case STEPMOTOR:
+                case SC.STEPMOTOR:
                     this.sb.append("#include <Stepper.h>");
                     this.nlIndent();
                     break;
-                case SERVOMOTOR:
+                case SC.SERVOMOTOR:
                     this.sb.append("#include <Servo.h>");
                     this.nlIndent();
                     break;
-                case ULTRASONIC:
-                case MOTION:
-                case MOISTURE:
-                case KEY:
-                case LIGHT:
-                case POTENTIOMETER:
-                case TEMPERATURE:
-                case DROP:
-                case PULSE:
-                case LED:
-                case RGBLED:
-                case BUZZER:
-                case RELAY:
+                case SC.ULTRASONIC:
+                case SC.MOTION:
+                case SC.MOISTURE:
+                case SC.KEY:
+                case SC.LIGHT:
+                case SC.POTENTIOMETER:
+                case SC.TEMPERATURE:
+                case SC.DROP:
+                case SC.PULSE:
+                case SC.LED:
+                case SC.RGBLED:
+                case SC.BUZZER:
+                case SC.RELAY:
                     break;
                 default:
-                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getConfType());
+                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
             }
         }
         for ( UsedSensor usedSensor : this.usedSensors ) {
-            switch ( (SensorType) usedSensor.getType() ) {
-                case PIN_VALUE:
+            switch ( usedSensor.getType() ) {
+                case SC.PIN_VALUE:
                     this.sb.append("#define _ANALOG 0\n#define _DIGITAL 1\n");
                     break;
                 default:
@@ -591,234 +585,234 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     }
 
     private void generateConfigurationSetup() {
-        for ( ConfigurationBlock usedConfigurationBlock : this.usedConfigurationBlocks ) {
-            switch ( (ConfigurationBlockType) usedConfigurationBlock.getConfType() ) {
-                case HUMIDITY:
-                    this.sb.append("_dht_" + usedConfigurationBlock.getConfName() + ".begin();");
+        for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponents() ) {
+            switch ( usedConfigurationBlock.getComponentType() ) {
+                case SC.HUMIDITY:
+                    this.sb.append("_dht_" + usedConfigurationBlock.getUserDefinedPortName() + ".begin();");
                     nlIndent();
                     break;
-                case ULTRASONIC:
-                    this.sb.append("pinMode(_trigger_" + usedConfigurationBlock.getConfName() + ", OUTPUT);");
+                case SC.ULTRASONIC:
+                    this.sb.append("pinMode(_trigger_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
                     nlIndent();
-                    this.sb.append("pinMode(_echo_" + usedConfigurationBlock.getConfName() + ", INPUT);");
-                    nlIndent();
-                    break;
-                case MOTION:
-                    this.sb.append("pinMode(_output_" + usedConfigurationBlock.getConfName() + ", INPUT);");
+                    this.sb.append("pinMode(_echo_" + usedConfigurationBlock.getUserDefinedPortName() + ", INPUT);");
                     nlIndent();
                     break;
-                case MOISTURE:
+                case SC.MOTION:
+                    this.sb.append("pinMode(_output_" + usedConfigurationBlock.getUserDefinedPortName() + ", INPUT);");
+                    nlIndent();
                     break;
-                case INFRARED:
+                case SC.MOISTURE:
+                    break;
+                case SC.INFRARED:
                     this.sb.append("pinMode(13, OUTPUT);");
                     nlIndent();
-                    this.sb.append("_irrecv_" + usedConfigurationBlock.getConfName() + ".enableIRIn();");
+                    this.sb.append("_irrecv_" + usedConfigurationBlock.getUserDefinedPortName() + ".enableIRIn();");
                     nlIndent();
                     break;
-                case KEY:
-                    this.sb.append("pinMode(_taster_" + usedConfigurationBlock.getConfName() + ", INPUT);");
+                case SC.KEY:
+                    this.sb.append("pinMode(_taster_" + usedConfigurationBlock.getUserDefinedPortName() + ", INPUT);");
                     nlIndent();
-                case LIGHT:
+                case SC.LIGHT:
                     break;
-                case POTENTIOMETER:
+                case SC.POTENTIOMETER:
                     break;
-                case TEMPERATURE:
+                case SC.TEMPERATURE:
                     break;
-                case ENCODER:
-                    this.sb.append("pinMode(_SW_" + usedConfigurationBlock.getConfName() + ", INPUT);");
+                case SC.ENCODER:
+                    this.sb.append("pinMode(_SW_" + usedConfigurationBlock.getUserDefinedPortName() + ", INPUT);");
                     nlIndent();
-                    this.sb.append("attachInterrupt(digitalPinToInterrupt(_SW_" + usedConfigurationBlock.getConfName() + "), Interrupt, CHANGE);");
+                    this.sb.append("attachInterrupt(digitalPinToInterrupt(_SW_" + usedConfigurationBlock.getUserDefinedPortName() + "), Interrupt, CHANGE);");
                     nlIndent();
                     break;
-                case DROP:
+                case SC.DROP:
                     break;
-                case PULSE:
+                case SC.PULSE:
                     break;
-                case RFID:
+                case SC.RFID:
                     this.sb.append("SPI.begin();");
                     nlIndent();
-                    this.sb.append("_mfrc522_" + usedConfigurationBlock.getConfName() + ".PCD_Init();");
+                    this.sb.append("_mfrc522_" + usedConfigurationBlock.getUserDefinedPortName() + ".PCD_Init();");
                     nlIndent();
                     break;
-                case LCD:
-                    this.sb.append("_lcd_" + usedConfigurationBlock.getConfName() + ".begin(16, 2);");
+                case SC.LCD:
+                    this.sb.append("_lcd_" + usedConfigurationBlock.getUserDefinedPortName() + ".begin(16, 2);");
                     nlIndent();
                     break;
-                case LCDI2C:
-                    this.sb.append("_lcd_" + usedConfigurationBlock.getConfName() + ".begin();");
+                case SC.LCDI2C:
+                    this.sb.append("_lcd_" + usedConfigurationBlock.getUserDefinedPortName() + ".begin();");
                     nlIndent();
                     break;
-                case LED:
-                    this.sb.append("pinMode(_led_" + usedConfigurationBlock.getConfName() + ", OUTPUT);");
+                case SC.LED:
+                    this.sb.append("pinMode(_led_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
                     nlIndent();
                     break;
-                case RGBLED:
-                    this.sb.append("pinMode(_led_red_" + usedConfigurationBlock.getConfName() + ", OUTPUT);");
+                case SC.RGBLED:
+                    this.sb.append("pinMode(_led_red_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
                     nlIndent();
-                    this.sb.append("pinMode(_led_green_" + usedConfigurationBlock.getConfName() + ", OUTPUT);");
+                    this.sb.append("pinMode(_led_green_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
                     nlIndent();
-                    this.sb.append("pinMode(_led_blue_" + usedConfigurationBlock.getConfName() + ", OUTPUT);");
-                    nlIndent();
-                    break;
-                case BUZZER:
-                    break;
-                case RELAY:
-                    this.sb.append("pinMode(_relay_" + usedConfigurationBlock.getConfName() + ", OUTPUT);");
+                    this.sb.append("pinMode(_led_blue_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
                     nlIndent();
                     break;
-                case STEPMOTOR:
+                case SC.BUZZER:
                     break;
-                case SERVOMOTOR:
-                    this.sb.append("_servo_" + usedConfigurationBlock.getConfName() + ".attach(" + usedConfigurationBlock.getConfPortOf("PULSE") + ");");
+                case SC.RELAY:
+                    this.sb.append("pinMode(_relay_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
+                    nlIndent();
+                    break;
+                case SC.STEPMOTOR:
+                    break;
+                case SC.SERVOMOTOR:
+                    this.sb.append("_servo_" + usedConfigurationBlock.getUserDefinedPortName() + ".attach(" + usedConfigurationBlock.getPortName() + ");");
                     nlIndent();
                     break;
                 default:
-                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getConfType());
+                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
             }
         }
     }
 
     private void generateConfigurationVariables() {
-        for ( ConfigurationBlock usedConfigurationBlock : this.usedConfigurationBlocks ) {
-            String blockName = usedConfigurationBlock.getConfName();
-            switch ( (ConfigurationBlockType) usedConfigurationBlock.getConfType() ) {
-                case HUMIDITY:
-                    this.sb.append("#define DHTPIN" + blockName + " ").append(usedConfigurationBlock.getConfPortOf("OUTPUT"));
+        for ( ConfigurationComponent cc : this.configuration.getConfigurationComponents() ) {
+            String blockName = cc.getUserDefinedPortName();
+            switch ( cc.getComponentType() ) {
+                case SC.HUMIDITY:
+                    this.sb.append("#define DHTPIN" + blockName + " ").append(cc.getProperty("OUTPUT"));
                     nlIndent();
                     this.sb.append("#define DHTTYPE DHT11");
                     nlIndent();
                     this.sb.append("DHT _dht_" + blockName + "(DHTPIN" + blockName + ", DHTTYPE);");
                     nlIndent();
                     break;
-                case ULTRASONIC:
-                    this.sb.append("int _trigger_" + blockName + " = ").append(usedConfigurationBlock.getConfPortOf("TRIG")).append(";");
+                case SC.ULTRASONIC:
+                    this.sb.append("int _trigger_" + blockName + " = ").append(cc.getProperty("TRIG")).append(";");
                     nlIndent();
-                    this.sb.append("int _echo_" + blockName + " = ").append(usedConfigurationBlock.getConfPortOf("ECHO")).append(";");
+                    this.sb.append("int _echo_" + blockName + " = ").append(cc.getProperty("ECHO")).append(";");
                     nlIndent();
                     this.sb.append("double _signalToDistance = 0.03432/2;");
                     nlIndent();
                     break;
-                case MOISTURE:
-                    this.sb.append("int _moisturePin_" + blockName + " = ").append(usedConfigurationBlock.getConfPortOf("S")).append(";");
+                case SC.MOISTURE:
+                    this.sb.append("int _moisturePin_" + blockName + " = ").append(cc.getProperty("S")).append(";");
                     nlIndent();
                     break;
-                case INFRARED:
-                    this.sb.append("int _RECV_PIN_" + blockName + " = ").append(usedConfigurationBlock.getConfPortOf("OUTPUT")).append(";");
+                case SC.INFRARED:
+                    this.sb.append("int _RECV_PIN_" + blockName + " = ").append(cc.getProperty("OUTPUT")).append(";");
                     nlIndent();
                     this.sb.append("IRrecv _irrecv_" + blockName + "(_RECV_PIN_" + blockName + ");");
                     nlIndent();
                     this.sb.append("decode_results _results_" + blockName + ";");
                     nlIndent();
                     break;
-                case LIGHT:
-                    this.sb.append("int _output_" + blockName + " = ").append(usedConfigurationBlock.getConfPortOf("OUTPUT")).append(";");
+                case SC.LIGHT:
+                    this.sb.append("int _output_" + blockName + " = ").append(cc.getProperty("OUTPUT")).append(";");
                     nlIndent();
                     break;
-                case MOTION:
-                    this.sb.append("int _output_" + blockName + " = ").append(usedConfigurationBlock.getConfPortOf("OUTPUT")).append(";");
+                case SC.MOTION:
+                    this.sb.append("int _output_" + blockName + " = ").append(cc.getProperty("OUTPUT")).append(";");
                     nlIndent();
                     break;
-                case POTENTIOMETER:
-                    this.sb.append("int _output_" + blockName + " = ").append(usedConfigurationBlock.getConfPortOf("OUTPUT")).append(";");
+                case SC.POTENTIOMETER:
+                    this.sb.append("int _output_" + blockName + " = ").append(cc.getProperty("OUTPUT")).append(";");
                     nlIndent();
                     break;
-                case TEMPERATURE:
-                    this.sb.append("int _TMP36_" + blockName + " = ").append(usedConfigurationBlock.getConfPortOf("OUTPUT")).append(";");
+                case SC.TEMPERATURE:
+                    this.sb.append("int _TMP36_" + blockName + " = ").append(cc.getProperty("OUTPUT")).append(";");
                     nlIndent();
                     break;
                 // TODO check if there is any block for "ENCODER" implemented!
-                case ENCODER:
+                case SC.ENCODER:
                     this.sb.append("int _CLK_" + blockName + " = 6;");
                     nlIndent();
                     this.sb.append("int _DT_" + blockName + " = 5;");
                     nlIndent();
-                    this.sb.append("int _SW_" + blockName + " = ").append(usedConfigurationBlock.getConfPortOf("OUTPUT")).append(";");
+                    this.sb.append("int _SW_" + blockName + " = ").append(cc.getProperty("OUTPUT")).append(";");
                     nlIndent();
                     this.sb.append("Encoder _myEncoder_" + blockName + "(_DT_" + blockName + ", _CLK_" + blockName + ");");
                     nlIndent();
                     break;
-                case DROP:
-                    this.sb.append("int _S_" + blockName + " = ").append(usedConfigurationBlock.getConfPortOf("S")).append(";");
+                case SC.DROP:
+                    this.sb.append("int _S_" + blockName + " = ").append(cc.getProperty("S")).append(";");
                     nlIndent();
                     break;
-                case PULSE:
-                    this.sb.append("int _SensorPin_" + blockName + " = ").append(usedConfigurationBlock.getConfPortOf("S")).append(";");
+                case SC.PULSE:
+                    this.sb.append("int _SensorPin_" + blockName + " = ").append(cc.getProperty("S")).append(";");
                     nlIndent();
                     break;
-                case RFID:
-                    this.sb.append("#define SS_PIN_" + blockName + " " + usedConfigurationBlock.getConfPortOf("RST"));
+                case SC.RFID:
+                    this.sb.append("#define SS_PIN_" + blockName + " " + cc.getProperty("RST"));
                     nlIndent();
-                    this.sb.append("#define RST_PIN_" + blockName + " " + usedConfigurationBlock.getConfPortOf("SDA"));
+                    this.sb.append("#define RST_PIN_" + blockName + " " + cc.getProperty("SDA"));
                     nlIndent();
                     this.sb.append("MFRC522 _mfrc522_" + blockName + "(SS_PIN_" + blockName + ", RST_PIN_" + blockName + ");");
                     nlIndent();
                     break;
-                case KEY:
-                    this.sb.append("int _taster_" + blockName + " = ").append(usedConfigurationBlock.getConfPortOf("PIN1")).append(";");
+                case SC.KEY:
+                    this.sb.append("int _taster_" + blockName + " = ").append(cc.getProperty("PIN1")).append(";");
                     nlIndent();
                     break;
-                case LCD:
+                case SC.LCD:
                     this.sb
                         .append("LiquidCrystal _lcd_" + blockName + "(")
-                        .append(usedConfigurationBlock.getConfPortOf("RS"))
+                        .append(cc.getProperty("RS"))
                         .append(", ")
-                        .append(usedConfigurationBlock.getConfPortOf("E"))
+                        .append(cc.getProperty("E"))
                         .append(", ")
-                        .append(usedConfigurationBlock.getConfPortOf("D4"))
+                        .append(cc.getProperty("D4"))
                         .append(", ")
-                        .append(usedConfigurationBlock.getConfPortOf("D5"))
+                        .append(cc.getProperty("D5"))
                         .append(", ")
-                        .append(usedConfigurationBlock.getConfPortOf("D6"))
+                        .append(cc.getProperty("D6"))
                         .append(", ")
-                        .append(usedConfigurationBlock.getConfPortOf("D7"))
+                        .append(cc.getProperty("D7"))
                         .append(");");
                     nlIndent();
                     break;
-                case LCDI2C:
+                case SC.LCDI2C:
                     this.sb.append("LiquidCrystal_I2C _lcd_" + blockName + "(0x27, 16, 2);");
                     nlIndent();
                     break;
-                case LED:
-                    this.sb.append("int _led_" + blockName + " = ").append(usedConfigurationBlock.getConfPortOf("INPUT")).append(";");
+                case SC.LED:
+                    this.sb.append("int _led_" + blockName + " = ").append(cc.getProperty("INPUT")).append(";");
                     nlIndent();
                     break;
-                case RGBLED:
-                    this.sb.append("int _led_red_" + blockName + " = ").append(usedConfigurationBlock.getConfPortOf("RED")).append(";");
+                case SC.RGBLED:
+                    this.sb.append("int _led_red_" + blockName + " = ").append(cc.getProperty("RED")).append(";");
                     nlIndent();
-                    this.sb.append("int _led_green_" + blockName + " = ").append(usedConfigurationBlock.getConfPortOf("GREEN")).append(";");
+                    this.sb.append("int _led_green_" + blockName + " = ").append(cc.getProperty("GREEN")).append(";");
                     nlIndent();
-                    this.sb.append("int _led_blue_" + blockName + " = ").append(usedConfigurationBlock.getConfPortOf("BLUE")).append(";");
-                    nlIndent();
-                    break;
-                case BUZZER:
-                    this.sb.append("int _spiele_" + blockName + " = ").append(usedConfigurationBlock.getConfPortOf("+")).append(";");
+                    this.sb.append("int _led_blue_" + blockName + " = ").append(cc.getProperty("BLUE")).append(";");
                     nlIndent();
                     break;
-                case RELAY:
-                    this.sb.append("int _relay_" + blockName + " = ").append(usedConfigurationBlock.getConfPortOf("IN")).append(";");
+                case SC.BUZZER:
+                    this.sb.append("int _spiele_" + blockName + " = ").append(cc.getProperty("+")).append(";");
                     nlIndent();
                     break;
-                case STEPMOTOR:
+                case SC.RELAY:
+                    this.sb.append("int _relay_" + blockName + " = ").append(cc.getProperty("IN")).append(";");
+                    nlIndent();
+                    break;
+                case SC.STEPMOTOR:
                     this.sb.append("int _SPU_" + blockName + " = ").append("2048;"); //TODO: change 2048 to customized
                     nlIndent();
                     this.sb
                         .append("Stepper Motor_" + blockName + "(_SPU_" + blockName + ", ")
-                        .append(usedConfigurationBlock.getConfPortOf("IN1"))
+                        .append(cc.getProperty("IN1"))
                         .append(", ")
-                        .append(usedConfigurationBlock.getConfPortOf("IN2"))
+                        .append(cc.getProperty("IN2"))
                         .append(", ")
-                        .append(usedConfigurationBlock.getConfPortOf("IN3"))
+                        .append(cc.getProperty("IN3"))
                         .append(", ")
-                        .append(usedConfigurationBlock.getConfPortOf("IN4"))
+                        .append(cc.getProperty("IN4"))
                         .append(");");
                     nlIndent();
                     break;
-                case SERVOMOTOR:
+                case SC.SERVOMOTOR:
                     this.sb.append("Servo _servo_" + blockName + ";");
                     nlIndent();
                     break;
                 default:
-                    throw new DbcException("Configuration block is not supported: " + usedConfigurationBlock.getConfType());
+                    throw new DbcException("Configuration block is not supported: " + cc.getComponentType());
             }
         }
     }
@@ -827,13 +821,13 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
         this.sb.append("pinMode(" + pinWriteValueSensor.getPort() + ", OUTPUT);");
         nlIndent();
-        switch ( (PinValue) pinWriteValueSensor.getMode() ) {
-            case ANALOG:
+        switch ( pinWriteValueSensor.getMode() ) {
+            case SC.ANALOG:
                 this.sb.append("analogWrite(" + pinWriteValueSensor.getPort() + ", ");
                 pinWriteValueSensor.getValue().visit(this);
                 this.sb.append(");");
                 break;
-            case DIGITAL:
+            case SC.DIGITAL:
                 this.sb.append("digitalWrite(" + pinWriteValueSensor.getPort() + ", ");
                 pinWriteValueSensor.getValue().visit(this);
                 this.sb.append(");");

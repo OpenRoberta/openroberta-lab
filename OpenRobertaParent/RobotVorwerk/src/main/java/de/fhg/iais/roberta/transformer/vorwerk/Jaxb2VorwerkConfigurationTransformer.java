@@ -28,40 +28,6 @@ public class Jaxb2VorwerkConfigurationTransformer {
         return blockToBrickConfiguration(blocks.get(0));
     }
 
-    public BlockSet transformInverse(VorwerkConfiguration conf) {
-        int idCount = 1;
-        BlockSet blockSet = new BlockSet();
-        Instance instance = new Instance();
-        blockSet.getInstance().add(instance);
-        instance.setX("20");
-        instance.setY("20");
-        Block block = mkBlock(idCount); // Replace by idCount++ if more are needed to get unique ids
-        block.setType("robBrick_vorwerk-Brick");
-        instance.getBlock().add(block);
-        List<Field> fields = block.getField();
-        fields.add(mkField("IP_ADDRESS", conf.getIpAddress()));
-        fields.add(mkField("PORT", conf.getPortNumber()));
-        fields.add(mkField("USERNAME", conf.getUserName()));
-        fields.add(mkField("PASSWORD", conf.getPassword()));
-        return blockSet;
-    }
-
-    private Block mkBlock(int id) {
-        Block block = new Block();
-        block.setId("" + id);
-        block.setInline(false);
-        block.setDisabled(false);
-        block.setIntask(true);
-        return block;
-    }
-
-    private Field mkField(String name, String value) {
-        Field field = new Field();
-        field.setName(name);
-        field.setValue(value);
-        return field;
-    }
-
     private Configuration blockToBrickConfiguration(Block block) {
         switch ( block.getType() ) {
             case "robBrick_vorwerk-Brick":

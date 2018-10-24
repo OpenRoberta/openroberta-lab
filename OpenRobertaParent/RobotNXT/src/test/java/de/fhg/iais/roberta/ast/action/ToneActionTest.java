@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
 
 public class ToneActionTest {
@@ -18,14 +18,14 @@ public class ToneActionTest {
 
     @Test
     public void getFrequency() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/actions/action_PlaySound.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_PlaySound.xml");
         ToneAction<Void> ta = (ToneAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals("NumConst [300]", ta.getFrequency().toString());
     }
 
     @Test
     public void getDuration() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/actions/action_PlaySound.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_PlaySound.xml");
         ToneAction<Void> ta = (ToneAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals("NumConst [100]", ta.getDuration().toString());
     }

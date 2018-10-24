@@ -6,7 +6,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -16,8 +16,8 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
-import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -116,8 +116,8 @@ public class GetSubFunct<V> extends Function<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        IRobotFactory factory = helper.getModeFactory();
+    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+        BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = helper.extractFields(block, (short) 2);
         List<IMode> strParams = new ArrayList<IMode>();
         strParams.add(factory.getIndexLocation(helper.extractField(fields, BlocklyConstants.WHERE1)));
@@ -137,25 +137,25 @@ public class GetSubFunct<V> extends Function<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
 
         mutation.setAt1(false);
         mutation.setAt2(false);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.WHERE1, getStrParam().get(0).toString());
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.WHERE2, getStrParam().get(1).toString());
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.WHERE1, getStrParam().get(0).toString());
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.WHERE2, getStrParam().get(1).toString());
         if ( getFunctName() == FunctionNames.GET_SUBLIST ) {
-            JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.LIST, getParam().get(0));
+            Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.LIST, getParam().get(0));
         } else {
-            JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.STRING, getParam().get(0));
+            Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.STRING, getParam().get(0));
         }
         if ( getStrParam().get(0).toString().equals("FROM_START") || getStrParam().get(0).toString().equals("FROM_END") ) {
             mutation.setAt1(true);
-            JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.AT1, getParam().get(1));
+            Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.AT1, getParam().get(1));
         }
         if ( getStrParam().get(1).toString().equals("FROM_START") || getStrParam().get(1).toString().equals("FROM_END") ) {
             mutation.setAt2(true);
-            JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.AT2, getParam().get(getParam().size() - 1));
+            Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.AT2, getParam().get(getParam().size() - 1));
         }
         jaxbDestination.setMutation(mutation);
         return jaxbDestination;

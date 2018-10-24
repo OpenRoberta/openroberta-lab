@@ -13,7 +13,7 @@ public class WaitStmtTest {
     public void make_ByDefault_ReturnInstanceOfGetSampleSensorClass() throws Exception {
         String expectedResult =
             "BlockAST [project=[[Location [x=80, y=92], MainTask [], WaitStmt [\n"
-                + "(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [BrickSensor [button_a, PRESSED, EMPTY_SLOT]]], BoolConst [true]]]\n"
+                + "(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [button_a, PRESSED, EMPTY_SLOT]]], BoolConst [true]]]\n"
                 + ")], DisplayTextAction [TEXT, StringConst [Hallo]], WaitStmt [\n"
                 + "(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [GyroSensor [X, ANGLE, EMPTY_SLOT]]], NumConst [90]]]\n"
                 + ")], DisplayTextAction [TEXT, StringConst [Hallo]]]]]";

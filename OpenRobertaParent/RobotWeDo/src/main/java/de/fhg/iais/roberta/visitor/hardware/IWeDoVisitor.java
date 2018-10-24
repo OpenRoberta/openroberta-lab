@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.hardware;
 
-import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
@@ -21,11 +20,6 @@ public interface IWeDoVisitor<V> extends IMotorVisitor<V>, ISoundVisitor<V>, ILi
 
     @Override
     default V visitPlayFileAction(PlayFileAction<V> playFileAction) {
-        throw new DbcException("operation not supported");
-    }
-
-    @Override
-    default V visitShowPictureAction(ShowPictureAction<V> showPictureAction) {
         throw new DbcException("operation not supported");
     }
 

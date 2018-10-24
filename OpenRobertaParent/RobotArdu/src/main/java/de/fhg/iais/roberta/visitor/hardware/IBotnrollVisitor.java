@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.hardware;
 
-import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
@@ -24,11 +23,6 @@ public interface IBotnrollVisitor<V> extends IActors4AutonomousDriveRobots<V>, I
 
     @Override
     default V visitPlayNoteAction(PlayNoteAction<V> playNoteAction) {
-        throw new DbcException("Not supported!");
-    }
-
-    @Override
-    default V visitShowPictureAction(ShowPictureAction<V> showPictureAction) {
         throw new DbcException("Not supported!");
     }
 

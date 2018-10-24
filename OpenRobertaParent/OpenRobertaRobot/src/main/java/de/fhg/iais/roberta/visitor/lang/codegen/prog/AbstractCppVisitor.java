@@ -429,7 +429,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append("\"" + colorConst.getValue() + "\"");
+        this.sb.append("\"" + colorConst.getColor().getFirst() + "\"");
         return null;
     }
 

@@ -37,7 +37,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
-import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
 public final class MicrobitSimValidatorVisitor extends AbstractSimValidatorVisitor implements IMbedVisitor<Void> {
 

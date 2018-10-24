@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.components.ev3.JavaSourceCompiler;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
@@ -26,34 +25,34 @@ public class Ev3LejosCompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
         if ( data.getErrorMessage() != null ) {
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
             return;
         }
         try {
-            generatedSourceCode =
-                Ev3JavaVisitor.generate(programName, (EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
+            this.generatedSourceCode =
+                Ev3JavaVisitor.generate(programName, data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true, language);
             LOG.info("ev3lejos java code generated");
         } catch ( Exception e ) {
             LOG.error("ev3lejos java code generation failed", e);
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
         }
     }
 
     @Override
     public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
         storeGeneratedProgram(token, programName, ".java");
-        if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
-            final String compilerResourcesDir = pluginProperties.getCompilerResourceDir();
-            final String tempDir = pluginProperties.getTempDir();
+        if ( this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+            final String compilerResourcesDir = this.pluginProperties.getCompilerResourceDir();
+            final String tempDir = this.pluginProperties.getTempDir();
 
-            JavaSourceCompiler scp = new JavaSourceCompiler(programName, generatedSourceCode, compilerResourcesDir);
+            JavaSourceCompiler scp = new JavaSourceCompiler(programName, this.generatedSourceCode, compilerResourcesDir);
             boolean isSuccess = scp.compileAndPackage(tempDir, token);
             if ( !isSuccess ) {
                 LOG.error("build exception. Messages from the build script are:\n" + scp.getCompilationMessages());
-                workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
+                this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
             } else {
                 LOG.info("jar for program {} generated successfully", programName);
-                workflowResult = Key.COMPILERWORKFLOW_SUCCESS;
+                this.workflowResult = Key.COMPILERWORKFLOW_SUCCESS;
             }
         }
     }
@@ -61,7 +60,7 @@ public class Ev3LejosCompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer(factory);
+        Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer(factory.getBlocklyDropdownFactory());
         return transformer.transform(project);
     }
 

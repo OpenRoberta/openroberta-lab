@@ -33,35 +33,35 @@ public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
     @Override
     public void generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language) {
         generateSourceCode(token, programName, transformer, language);
-        if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+        if ( this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
             compileSourceCode(token, programName, language, null);
         }
     }
 
     @Override
     public final Key getWorkflowResult() {
-        return workflowResult;
+        return this.workflowResult;
     }
 
     @Override
-    public void setProgramText(String programText) {
-        generatedSourceCode = programText;
+    public void setSourceCode(String sourceCode) {
+        this.generatedSourceCode = sourceCode;
     }
 
     @Override
-    public String getGeneratedProgramText() {
-        return generatedSourceCode;
+    public String getGeneratedSourceCode() {
+        return this.generatedSourceCode;
     }
 
     protected final void storeGeneratedProgram(String token, String programName, String ext) {
         try {
             String tempDir = this.pluginProperties.getTempDir();
-            Assert.isTrue(token != null && programName != null && generatedSourceCode != null && workflowResult == Key.COMPILERWORKFLOW_SUCCESS);
+            Assert.isTrue(token != null && programName != null && this.generatedSourceCode != null && this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS);
             File sourceFile = new File(tempDir + token + "/" + programName + "/source/" + programName + ext);
             Path path = Paths.get(tempDir + token + "/" + programName + "/target/");
             try {
                 Files.createDirectories(path);
-                FileUtils.writeStringToFile(sourceFile, generatedSourceCode, StandardCharsets.UTF_8.displayName());
+                FileUtils.writeStringToFile(sourceFile, this.generatedSourceCode, StandardCharsets.UTF_8.displayName());
             } catch ( IOException e ) {
                 String msg = "could not write source code to file system";
                 LOG.error(msg, e);
@@ -70,7 +70,7 @@ public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
             LOG.info("stored under: " + sourceFile.getPath());
         } catch ( Exception e ) {
             LOG.error("Storing the generated program " + programName + " into directory " + token + " failed", e);
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
         }
     }
 }

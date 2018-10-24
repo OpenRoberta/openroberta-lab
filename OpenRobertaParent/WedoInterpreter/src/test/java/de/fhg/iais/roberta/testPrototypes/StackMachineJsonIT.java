@@ -24,6 +24,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -86,7 +87,8 @@ public class StackMachineJsonIT {
     private static final String MARK = "**********";
 
     private static final String TEST_BASE = "./WeDoCI/";
-    private static final String NODE_CALL = "node ./jsGenerated/runStackMachineJson.js" + " -d " + TEST_BASE;
+    private static final String RENAME_CALL = "sh ./renameTypescriptGeneratedJavascript.sh";
+    private static final String NODE_CALL = "node ./jsGenerated/_main.js -d " + TEST_BASE;
 
     private static RobotCommunicator robotCommunicator;
     private static ServerProperties serverProperties;
@@ -109,6 +111,12 @@ public class StackMachineJsonIT {
     private boolean successForCompilation = false;
     private boolean successForInterpretation = false;
 
+    @BeforeClass
+    public static void renameGeneatedJavascript() throws Exception {
+        List<String> output = runCommand(RENAME_CALL);
+        output.stream().forEach(LOG::info);
+    }
+
     @Before
     public void setup() throws Exception {
         serverProperties = new ServerProperties(Util1.loadProperties("classpath:wedoOpenRoberta.properties"));
@@ -124,7 +132,7 @@ public class StackMachineJsonIT {
     @Test
     public void testDirectory() throws Exception {
         generateStackMachineJsonFromBlocklyXmlIT();
-        runInterpretStackMachineJsonInterpreter(NODE_CALL);
+        resultsOfInterpretation = runCommand(NODE_CALL);
         showInterpretationResultOverview(); // must be the first "show" (otherwise refactor full output from overview output)
         showCompilationResultOverview();
         showAndEvaluateResult();
@@ -138,7 +146,7 @@ public class StackMachineJsonIT {
 
         String nodeCall = "node ./jsGenerated/runStackMachineJson.js" + " " + directory + " " + file;
         runCompilation(directory, file);
-        runInterpretStackMachineJsonInterpreter(nodeCall);
+        resultsOfInterpretation = runCommand(nodeCall);
         showAndEvaluateResult();
     }
 
@@ -204,9 +212,9 @@ public class StackMachineJsonIT {
         }
     }
 
-    private void runInterpretStackMachineJsonInterpreter(String nodeCall) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec(nodeCall).getInputStream(), Charset.forName("UTF-8")));
-        resultsOfInterpretation = br.lines().collect(Collectors.toList());
+    private static List<String> runCommand(String command) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec(command).getInputStream(), Charset.forName("UTF-8")));
+        return br.lines().collect(Collectors.toList());
     }
 
     private void setRobotTo(String robot) throws Exception, JSONException {

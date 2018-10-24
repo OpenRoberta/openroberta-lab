@@ -5,7 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -17,8 +17,8 @@ import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.ExprParam;
-import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -106,7 +106,7 @@ public class CurveAction<V> extends Action<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         List<Field> fields;
         String mode;
         List<Value> values;
@@ -114,7 +114,7 @@ public class CurveAction<V> extends Action<V> {
         MotionParam<V> mpRight;
         Phrase<V> left;
         Phrase<V> right;
-        IRobotFactory factory = helper.getModeFactory();
+        BlocklyDropdownFactory factory = helper.getDropdownFactory();
         fields = helper.extractFields(block, (short) 1);
         mode = helper.extractField(fields, BlocklyConstants.DIRECTION);
 
@@ -139,19 +139,19 @@ public class CurveAction<V> extends Action<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
 
         if ( getProperty().getBlockType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_CURVE_FOR) ) {
-            JaxbTransformerHelper
+            Ast2JaxbHelper
                 .addField(jaxbDestination, BlocklyConstants.DIRECTION, getDirection().toString() == "FOREWARD" ? getDirection().toString() : "BACKWARDS");
         } else {
-            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.DIRECTION, getDirection().toString());
+            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.DIRECTION, getDirection().toString());
         }
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.POWER_LEFT, getParamLeft().getSpeed());
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.POWER_RIGHT, getParamRight().getSpeed());
+        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.POWER_LEFT, getParamLeft().getSpeed());
+        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.POWER_RIGHT, getParamRight().getSpeed());
 
         if ( getParamLeft().getDuration() != null ) {
-            JaxbTransformerHelper.addValue(jaxbDestination, getParamLeft().getDuration().getType().toString(), getParamLeft().getDuration().getValue());
+            Ast2JaxbHelper.addValue(jaxbDestination, getParamLeft().getDuration().getType().toString(), getParamLeft().getDuration().getValue());
         }
         return jaxbDestination;
     }

@@ -79,12 +79,12 @@ public interface ICompilerWorkflow {
     Key getWorkflowResult();
 
     /**
-     * set the program text. Only to be called when native programs have to be compiles (rare case :-)
+     * set the program source code. Only to be called when native programs have to be compiles (rare case :-)
      */
-    void setProgramText(String programText);
+    void setSourceCode(String sourceCode);
 
     /**
-     * get the generated program text
+     * get the generated program source code.
      */
-    String getGeneratedProgramText();
+    String getGeneratedSourceCode();
 }

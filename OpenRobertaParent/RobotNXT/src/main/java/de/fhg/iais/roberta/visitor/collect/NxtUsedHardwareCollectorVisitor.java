@@ -2,14 +2,15 @@ package de.fhg.iais.roberta.visitor.collect;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
+import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.collect.AbstractUsedHardwareCollectorVisitor;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
@@ -19,7 +20,7 @@ public final class NxtUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
 
     private boolean isVolumeVariableNeeded = false;
 
-    public NxtUsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, NxtConfiguration configuration) {
+    public NxtUsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, Configuration configuration) {
         super(configuration);
         check(phrasesSet);
     }
@@ -34,6 +35,7 @@ public final class NxtUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
+        this.usedSensors.add(new UsedSensor(lightAction.getPort(), SC.HT_COLOR, "COLOR"));
         return null;
     }
 

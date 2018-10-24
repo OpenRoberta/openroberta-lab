@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.hardware;
 
-import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
@@ -245,11 +244,6 @@ public interface IMbedVisitor<V> extends IDisplayVisitor<V>, ILightVisitor<V>, I
     V visitBothMotorsOnAction(BothMotorsOnAction<V> bothMotorsOnAction);
 
     V visitBothMotorsStopAction(BothMotorsStopAction<V> bothMotorsStopAction);
-
-    @Override
-    default V visitShowPictureAction(ShowPictureAction<V> showPictureAction) {
-        throw new DbcException("Not supported!");
-    }
 
     @Override
     default V visitShowTextAction(ShowTextAction<V> showTextAction) {

@@ -10,9 +10,9 @@ import org.json.JSONObject;
 import com.google.common.collect.Lists;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
@@ -96,10 +96,10 @@ public abstract class AbstractWeDoVisitor<V> implements ILanguageVisitor<V>, IWe
     protected JSONObject fctDecls = new JSONObject();
     protected List<JSONObject> opArray = new ArrayList<>();
     protected final List<List<JSONObject>> opArrayStack = new ArrayList<>();
-    protected final Configuration brickConfiguration;
+    protected final Configuration configuration;
 
-    protected AbstractWeDoVisitor(Configuration brickConfiguration) {
-        this.brickConfiguration = brickConfiguration;
+    protected AbstractWeDoVisitor(Configuration configuration) {
+        this.configuration = configuration;
     }
 
     @Override
@@ -116,7 +116,7 @@ public abstract class AbstractWeDoVisitor<V> implements ILanguageVisitor<V>, IWe
 
     @Override
     public V visitBoolConst(BoolConst<V> boolConst) {
-        JSONObject o = mk(C.EXPR).put(C.EXPR, boolConst.getKind().getName()).put(C.VALUE, boolConst.isValue());
+        JSONObject o = mk(C.EXPR).put(C.EXPR, boolConst.getKind().getName()).put(C.VALUE, boolConst.getValue());
         return app(o);
     }
 
@@ -135,7 +135,7 @@ public abstract class AbstractWeDoVisitor<V> implements ILanguageVisitor<V>, IWe
 
     @Override
     public V visitColorConst(ColorConst<V> colorConst) {
-        JSONObject o = mk(C.EXPR).put(C.EXPR, "COLOR_CONST").put(C.VALUE, colorConst.getValue().getColorID());
+        JSONObject o = mk(C.EXPR).put(C.EXPR, "COLOR_CONST").put(C.VALUE, colorConst.getColor().getFirst());
         return app(o);
     }
 
@@ -415,16 +415,16 @@ public abstract class AbstractWeDoVisitor<V> implements ILanguageVisitor<V>, IWe
     @Override
     public V visitTimerSensor(TimerSensor<V> timerSensor) {
         JSONObject o;
-        switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case DEFAULT:
-            case VALUE:
-                o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, timerSensor.getPort().getOraName());
+        switch ( timerSensor.getMode() ) {
+            case "DEFAULT":
+            case "VALUE":
+                o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, timerSensor.getPort());
                 break;
-            case RESET:
-                o = mk(C.TIMER_SENSOR_RESET).put(C.PORT, timerSensor.getPort().getOraName());
+            case "RESET":
+                o = mk(C.TIMER_SENSOR_RESET).put(C.PORT, timerSensor.getPort());
                 break;
             default:
-                throw new DbcException("Invalid Time Mode!");
+                throw new DbcException("Invalid Timer Mode " + timerSensor.getMode());
         }
         return app(o);
     }
@@ -658,6 +658,14 @@ public abstract class AbstractWeDoVisitor<V> implements ILanguageVisitor<V>, IWe
     @Override
     public V visitConnectConst(ConnectConst<V> connectConst) {
         throw new DbcException("Operation not supported");
+    }
+
+    protected ConfigurationComponent getConfigurationComponent(String userDefinedName) {
+        ConfigurationComponent configurationComponent = configuration.getConfigurationComponent(userDefinedName);
+        if ( configurationComponent == null ) {
+            throw new DbcException("no configuration element with name " + userDefinedName + " found");
+        }
+        return configurationComponent;
     }
 
     protected void appendDuration(MotorDuration<V> duration) {

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.BodyLEDAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RecallAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
@@ -40,9 +40,9 @@ public final class Bob3UsedHardwareCollectorVisitor extends AbstractUsedHardware
     @Override
     public Void visitBob3GetSampleSensor(GetSampleSensor<Void> bob3GetSampleSensor) {
         if ( bob3GetSampleSensor.getSensorType().toString().equals("TIME") ) {
-            this.usedSensors.add(new UsedSensor(null, SensorType.TIMER, null));
+            this.usedSensors.add(new UsedSensor(null, SC.TIMER, null));
         } else {
-            this.usedSensors.add(new UsedSensor(null, SensorType.NONE, null));
+            this.usedSensors.add(new UsedSensor(null, SC.NONE, null));
         }
         return null;
     }

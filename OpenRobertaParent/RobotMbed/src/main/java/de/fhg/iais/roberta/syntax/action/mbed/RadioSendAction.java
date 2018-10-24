@@ -14,10 +14,9 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
-import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 
@@ -74,7 +73,7 @@ public class RadioSendAction<V> extends Action<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         List<Value> values = helper.extractValues(block, (short) 1);
         List<Field> fields = helper.extractFields(block, (short) 2);
         Phrase<V> message = helper.extractValue(values, new ExprParam(BlocklyConstants.MESSAGE, BlocklyType.STRING));
@@ -87,13 +86,13 @@ public class RadioSendAction<V> extends Action<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
         mutation.setDatatype(this.type.getBlocklyName());
         jaxbDestination.setMutation(mutation);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.TYPE, this.type.getBlocklyName());
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.MESSAGE, this.message);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.POWER, this.power);
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.TYPE, this.type.getBlocklyName());
+        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.MESSAGE, this.message);
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.POWER, this.power);
         return jaxbDestination;
     }
 }

@@ -14,9 +14,9 @@ public class GetSampleSensorTest {
     public void make_ByDefault_ReturnInstanceOfGetSampleSensorClass() throws Exception {
         String expectedResult =
             "BlockAST [project=[[Location [x=13, y=87], MainTask [], WaitStmt [\n"
-                + "(repeat [WAIT, Binary [EQ, SensorExpr [MbedGetSampleSensor [BrickSensor [BUTTON_A, PRESSED, EMPTY_SLOT]]], BoolConst [true]]]\n"
+                + "(repeat [WAIT, Binary [EQ, SensorExpr [MbedGetSampleSensor [KeysSensor [BUTTON_A, PRESSED, EMPTY_SLOT]]], BoolConst [true]]]\n"
                 + ")], WaitStmt [\n"
-                + "(repeat [WAIT, Binary [EQ, SensorExpr [MbedGetSampleSensor [BrickSensor [BUTTON_B, PRESSED, EMPTY_SLOT]]], BoolConst [true]]]\n"
+                + "(repeat [WAIT, Binary [EQ, SensorExpr [MbedGetSampleSensor [KeysSensor [BUTTON_B, PRESSED, EMPTY_SLOT]]], BoolConst [true]]]\n"
                 + ")], WaitStmt [\n"
                 + "(repeat [WAIT, Binary [EQ, SensorExpr [MbedGetSampleSensor [GestureSensor [ UP ]]], BoolConst [true]]]\n"
                 + ")], WaitStmt [\n"

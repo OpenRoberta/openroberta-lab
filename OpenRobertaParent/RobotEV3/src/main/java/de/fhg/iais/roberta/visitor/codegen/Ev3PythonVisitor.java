@@ -5,29 +5,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import de.fhg.iais.roberta.components.Actor;
-import de.fhg.iais.roberta.components.Sensor;
+import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.components.ev3.EV3Configuration;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.inter.mode.sensor.IRSeekerSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.BrickKeyPressMode;
-import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
-import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
-import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
-import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
+import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
@@ -71,13 +60,13 @@ import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
@@ -94,7 +83,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
 public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv3Visitor<Void> {
-    protected final EV3Configuration brickConfiguration;
+    protected final Configuration brickConfiguration;
 
     protected final Map<String, String> predefinedImage = new HashMap<>();
 
@@ -112,7 +101,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
      * @param programPhrases to generate the code from
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    private Ev3PythonVisitor(EV3Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation, ILanguage language) {
+    private Ev3PythonVisitor(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation, ILanguage language) {
         super(programPhrases, indentation);
 
         Ev3UsedHardwareCollectorVisitor checkVisitor = new Ev3UsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
@@ -140,7 +129,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
      * @param programPhrases to generate the code from
      */
     public static String generate(
-        EV3Configuration brickConfiguration,
+        Configuration brickConfiguration,
         ArrayList<ArrayList<Phrase<Void>>> programPhrases,
         boolean withWrapping,
         ILanguage language) {
@@ -331,7 +320,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         return null;
     }
 
-    private boolean isActorOnPort(IActorPort port) {
+    private boolean isActorOnPort(String port) {
         boolean isActorOnPort = false;
         for ( UsedActor actor : this.usedActors ) {
             isActorOnPort = isActorOnPort ? isActorOnPort : actor.getPort().equals(port);
@@ -341,16 +330,17 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        if ( isActorOnPort(motorOnAction.getPort()) ) {
+        String userDefinedPort = motorOnAction.getUserDefinedPort();
+        if ( isActorOnPort(userDefinedPort) ) {
             String methodName;
-            boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorOnAction.getPort());
+            boolean isRegulated = this.brickConfiguration.isMotorRegulated(userDefinedPort);
             boolean duration = motorOnAction.getParam().getDuration() != null;
             if ( duration ) {
                 methodName = isRegulated ? "hal.rotateRegulatedMotor('" : "hal.rotateUnregulatedMotor('";
             } else {
                 methodName = isRegulated ? "hal.turnOnRegulatedMotor('" : "hal.turnOnUnregulatedMotor('";
             }
-            this.sb.append(methodName + motorOnAction.getPort().toString() + "', ");
+            this.sb.append(methodName + userDefinedPort.toString() + "', ");
             motorOnAction.getParam().getSpeed().visit(this);
             if ( duration ) {
                 this.sb.append(", " + getEnumCode(motorOnAction.getDurationMode()));
@@ -364,10 +354,11 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        if ( isActorOnPort(motorSetPowerAction.getPort()) ) {
-            boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
+        String userDefinedPort = motorSetPowerAction.getUserDefinedPort();
+        if ( isActorOnPort(userDefinedPort) ) {
+            boolean isRegulated = this.brickConfiguration.isMotorRegulated(userDefinedPort);
             String methodName = isRegulated ? "hal.setRegulatedMotorSpeed('" : "hal.setUnregulatedMotorSpeed('";
-            this.sb.append(methodName + motorSetPowerAction.getPort().toString() + "', ");
+            this.sb.append(methodName + userDefinedPort + "', ");
             motorSetPowerAction.getPower().visit(this);
             this.sb.append(")");
         }
@@ -376,20 +367,21 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        if ( isActorOnPort(motorGetPowerAction.getPort()) ) {
-            boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorGetPowerAction.getPort());
+        String userDefinedPort = motorGetPowerAction.getUserDefinedPort();
+        if ( isActorOnPort(userDefinedPort) ) {
+            boolean isRegulated = this.brickConfiguration.isMotorRegulated(userDefinedPort);
             String methodName = isRegulated ? "hal.getRegulatedMotorSpeed('" : "hal.getUnregulatedMotorSpeed('";
-            this.sb.append(methodName + motorGetPowerAction.getPort().toString() + "')");
+            this.sb.append(methodName + userDefinedPort + "')");
         }
         return null;
     }
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        if ( isActorOnPort(motorStopAction.getPort()) ) {
+        if ( isActorOnPort(motorStopAction.getUserDefinedPort()) ) {
             this.sb
                 .append("hal.stopMotor('")
-                .append(motorStopAction.getPort().toString())
+                .append(motorStopAction.getUserDefinedPort())
                 .append("', ")
                 .append(getEnumCode(motorStopAction.getMode()))
                 .append(')');
@@ -399,12 +391,12 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        if ( isActorOnPort(this.brickConfiguration.getLeftMotorPort()) && isActorOnPort(this.brickConfiguration.getRightMotorPort()) ) {
+        if ( isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.LEFT)) && isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.RIGHT)) ) {
             boolean isDuration = driveAction.getParam().getDuration() != null;
             String methodName = isDuration ? "hal.driveDistance(" : "hal.regulatedDrive(";
             this.sb.append(methodName);
-            this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
-            this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "', False, ");
+            this.sb.append("'" + this.brickConfiguration.getFirstMotorPort(SC.LEFT) + "', ");
+            this.sb.append("'" + this.brickConfiguration.getFirstMotorPort(SC.RIGHT) + "', False, ");
             this.sb.append(getEnumCode(driveAction.getDirection()) + ", ");
             driveAction.getParam().getSpeed().visit(this);
             if ( isDuration ) {
@@ -418,13 +410,15 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        if ( isActorOnPort(this.brickConfiguration.getLeftMotorPort()) && isActorOnPort(this.brickConfiguration.getRightMotorPort()) ) {
+        String leftMotorPort = this.brickConfiguration.getFirstMotorPort(SC.LEFT);
+        String rightMotorPort = this.brickConfiguration.getFirstMotorPort(SC.RIGHT);
+        if ( isActorOnPort(leftMotorPort) && isActorOnPort(rightMotorPort) ) {
             boolean isDuration = turnAction.getParam().getDuration() != null;
-            boolean isRegulated = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
+            boolean isRegulated = this.brickConfiguration.isMotorRegulated(leftMotorPort);
             String methodName = "hal.rotateDirection" + (isDuration ? "Angle" : isRegulated ? "Regulated" : "Unregulated") + "(";
             this.sb.append(methodName);
-            this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
-            this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "', False, ");
+            this.sb.append("'" + leftMotorPort + "', ");
+            this.sb.append("'" + rightMotorPort + "', False, ");
             this.sb.append(getEnumCode(turnAction.getDirection()) + ", ");
             turnAction.getParam().getSpeed().visit(this);
             if ( isDuration ) {
@@ -438,24 +432,28 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        if ( isActorOnPort(this.brickConfiguration.getLeftMotorPort()) && isActorOnPort(this.brickConfiguration.getRightMotorPort()) ) {
+        String leftMotorPort = this.brickConfiguration.getFirstMotorPort(SC.LEFT);
+        String rightMotorPort = this.brickConfiguration.getFirstMotorPort(SC.RIGHT);
+        if ( isActorOnPort(leftMotorPort) && isActorOnPort(rightMotorPort) ) {
             this.sb.append("hal.stopMotors(");
-            this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
-            this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "')");
+            this.sb.append("'" + leftMotorPort + "', ");
+            this.sb.append("'" + rightMotorPort + "')");
         }
         return null;
     }
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        if ( isActorOnPort(this.brickConfiguration.getLeftMotorPort()) && isActorOnPort(this.brickConfiguration.getRightMotorPort()) ) {
+        String leftMotorPort = this.brickConfiguration.getFirstMotorPort(SC.LEFT);
+        String rightMotorPort = this.brickConfiguration.getFirstMotorPort(SC.RIGHT);
+        if ( isActorOnPort(leftMotorPort) && isActorOnPort(rightMotorPort) ) {
             MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
 
             this.sb.append("hal.driveInCurve(");
             this.sb.append(getEnumCode(curveAction.getDirection()) + ", ");
-            this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
+            this.sb.append("'" + leftMotorPort + "', ");
             curveAction.getParamLeft().getSpeed().visit(this);
-            this.sb.append(", '" + this.brickConfiguration.getRightMotorPort().toString() + "', ");
+            this.sb.append(", '" + rightMotorPort + "', ");
             curveAction.getParamRight().getSpeed().visit(this);
             if ( duration != null ) {
                 this.sb.append(", ");
@@ -467,34 +465,34 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        switch ( (BrickKeyPressMode) brickSensor.getMode() ) {
-            case PRESSED:
-                this.sb.append("hal.isKeyPressed(" + getEnumCode(brickSensor.getPort()) + ")");
+    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+        switch ( keysSensor.getMode() ) {
+            case SC.PRESSED:
+                this.sb.append("hal.isKeyPressed('" + keysSensor.getPort().toLowerCase() + "')");
                 break;
-            case WAIT_FOR_PRESS_AND_RELEASE:
-                this.sb.append("hal.isKeyPressedAndReleased(" + getEnumCode(brickSensor.getPort()) + ")");
+            case SC.WAIT_FOR_PRESS_AND_RELEASE:
+                this.sb.append("hal.isKeyPressedAndReleased(" + keysSensor.getPort().toLowerCase() + ")");
                 break;
             default:
-                throw new DbcException("Invalide mode for BrickSensor!");
+                throw new DbcException("Invalide mode for KeysSensor!");
         }
         return null;
     }
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        String colorSensorPort = colorSensor.getPort().getOraName();
-        switch ( (ColorSensorMode) colorSensor.getMode() ) {
-            case AMBIENTLIGHT:
+        String colorSensorPort = colorSensor.getPort();
+        switch ( colorSensor.getMode() ) {
+            case SC.AMBIENTLIGHT:
                 this.sb.append("hal.getColorSensorAmbient('" + colorSensorPort + "')");
                 break;
-            case COLOUR:
+            case SC.COLOUR:
                 this.sb.append("hal.getColorSensorColour('" + colorSensorPort + "')");
                 break;
-            case LIGHT:
+            case SC.LIGHT:
                 this.sb.append("hal.getColorSensorRed('" + colorSensorPort + "')");
                 break;
-            case RGB:
+            case SC.RGB:
                 this.sb.append("hal.getColorSensorRgb('" + colorSensorPort + "')");
                 break;
             default:
@@ -506,18 +504,18 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
         String encoderSensorPort = encoderSensor.getPort().toString();
-        if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
+        if ( encoderSensor.getMode().equals(SC.RESET) ) {
             this.sb.append("hal.resetMotorTacho('" + encoderSensorPort + "')");
         } else {
-            this.sb.append("hal.getMotorTachoValue('" + encoderSensorPort + "', " + getEnumCode(encoderSensor.getMode()) + ")");
+            this.sb.append("hal.getMotorTachoValue('" + encoderSensorPort + "', " + encoderSensor.getMode() + ")");
         }
         return null;
     }
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        String gyroSensorPort = gyroSensor.getPort().getOraName();
-        if ( gyroSensor.getMode() == GyroSensorMode.RESET ) {
+        String gyroSensorPort = gyroSensor.getPort();
+        if ( gyroSensor.getMode().equals(SC.RESET) ) {
             this.sb.append("hal.resetGyroSensor('" + gyroSensorPort + "')");
         } else {
             this.sb.append("hal.getGyroSensorValue('" + gyroSensorPort + "', " + getEnumCode(gyroSensor.getMode()) + ")");
@@ -527,14 +525,14 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        String compassSensorPort = compassSensor.getPort().getOraName();
-        switch ( (CompassSensorMode) compassSensor.getMode() ) {
-            case CALIBRATE:
+        String compassSensorPort = compassSensor.getPort();
+        switch ( compassSensor.getMode() ) {
+            case SC.CALIBRATE:
                 // Calibration is not supported by ev3dev hitechnic sensor for now
                 break;
-            case ANGLE:
-            case COMPASS:
-                this.sb.append("hal.getHiTecCompassSensorValue('" + compassSensorPort + "', " + getEnumCode(compassSensor.getMode()) + ")");
+            case SC.ANGLE:
+            case SC.COMPASS:
+                this.sb.append("hal.getHiTecCompassSensorValue('" + compassSensorPort + "', " + compassSensor.getMode() + ")");
                 break;
             default:
                 throw new DbcException("Invalid Compass Mode!");
@@ -544,12 +542,12 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        String infraredSensorPort = infraredSensor.getPort().getOraName();
-        switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
-            case DISTANCE:
+        String infraredSensorPort = infraredSensor.getPort();
+        switch ( infraredSensor.getMode() ) {
+            case SC.DISTANCE:
                 this.sb.append("hal.getInfraredSensorDistance('" + infraredSensorPort + "')");
                 break;
-            case PRESENCE:
+            case SC.PRESENCE:
                 this.sb.append("hal.getInfraredSensorSeek('" + infraredSensorPort + "')");
                 break;
             default:
@@ -561,12 +559,12 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
-        String irSeekerSensorPort = irSeekerSensor.getPort().getOraName();
-        switch ( (IRSeekerSensorMode) irSeekerSensor.getMode() ) {
-            case MODULATED:
+        String irSeekerSensorPort = irSeekerSensor.getPort();
+        switch ( irSeekerSensor.getMode() ) {
+            case SC.MODULATED:
                 this.sb.append("hal.getHiTecIRSeekerSensorValue('" + irSeekerSensorPort + "', 'AC')");
                 break;
-            case UNMODULATED:
+            case SC.UNMODULATED:
                 this.sb.append("hal.getHiTecIRSeekerSensorValue('" + irSeekerSensorPort + "', 'DC')");
                 break;
             default:
@@ -577,13 +575,13 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        String timerNumber = timerSensor.getPort().getOraName();
-        switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case DEFAULT:
-            case VALUE:
+        String timerNumber = timerSensor.getPort();
+        switch ( timerSensor.getMode() ) {
+            case SC.DEFAULT:
+            case SC.VALUE:
                 this.sb.append("hal.getTimerValue(" + timerNumber + ")");
                 break;
-            case RESET:
+            case SC.RESET:
                 this.sb.append("hal.resetTimer(" + timerNumber + ")");
                 break;
             default:
@@ -594,14 +592,14 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("hal.isPressed('" + touchSensor.getPort().getOraName() + "')");
+        this.sb.append("hal.isPressed('" + touchSensor.getPort() + "')");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        String ultrasonicSensorPort = ultrasonicSensor.getPort().getOraName();
-        if ( ultrasonicSensor.getMode() == UltrasonicSensorMode.DISTANCE ) {
+        String ultrasonicSensorPort = ultrasonicSensor.getPort();
+        if ( ultrasonicSensor.getMode().equals(SC.DISTANCE) ) {
             this.sb.append("hal.getUltraSonicSensorDistance('" + ultrasonicSensorPort + "')");
         } else {
             this.sb.append("hal.getUltraSonicSensorPresence('" + ultrasonicSensorPort + "')");
@@ -611,7 +609,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        String soundSensorPort = soundSensor.getPort().getOraName();
+        String soundSensorPort = soundSensor.getPort();
         this.sb.append("hal.getSoundLevel('" + soundSensorPort + "')");
         return null;
     }
@@ -974,20 +972,20 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         }
         this.sb.append("\n\n");
         this.sb.append("def main():\n");
-        this.sb.append(INDENT).append("try:\n");
-        this.sb.append(INDENT).append(INDENT).append("run()\n");
-        this.sb.append(INDENT).append("except Exception as e:\n");
-        this.sb.append(INDENT).append(INDENT).append("hal.drawText('Fehler im EV3', 0, 0)\n");
-        this.sb.append(INDENT).append(INDENT).append("hal.drawText(e.__class__.__name__, 0, 1)\n");
+        this.sb.append(this.INDENT).append("try:\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("run()\n");
+        this.sb.append(this.INDENT).append("except Exception as e:\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("hal.drawText('Fehler im EV3', 0, 0)\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("hal.drawText(e.__class__.__name__, 0, 1)\n");
         // FIXME: we can only print about 30 chars
-        this.sb.append(INDENT).append(INDENT).append("hal.drawText(str(e), 0, 2)\n");
-        this.sb.append(INDENT).append(INDENT).append("hal.drawText('Press any key', 0, 4)\n");
-        this.sb.append(INDENT).append(INDENT).append("while not hal.isKeyPressed('any'): hal.waitFor(500)\n");
-        this.sb.append(INDENT).append(INDENT).append("raise\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("hal.drawText(str(e), 0, 2)\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("hal.drawText('Press any key', 0, 4)\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("while not hal.isKeyPressed('any'): hal.waitFor(500)\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("raise\n");
 
         this.sb.append("\n");
         this.sb.append("if __name__ == \"__main__\":\n");
-        this.sb.append(INDENT).append("main()");
+        this.sb.append(this.INDENT).append("main()");
     }
 
     private String generateUsedImages() {
@@ -1017,9 +1015,10 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         return sb.toString();
     }
 
-    private boolean isActorUsed(Actor actor, IActorPort port) {
+    private boolean isActorUsed(ConfigurationComponent actor, String port) {
         for ( UsedActor usedActor : this.usedActors ) {
-            if ( port.equals(usedActor.getPort()) && (actor.getName() == usedActor.getType()) ) {
+            String usedActorComponentType = this.brickConfiguration.getConfigurationComponent(usedActor.getPort()).getComponentType();
+            if ( port.equals(usedActor.getPort()) && (actor.getComponentType().equals(usedActorComponentType)) ) {
                 return true;
             }
         }
@@ -1028,9 +1027,8 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     private void appendActors(StringBuilder sb) {
         sb.append("    'actors': {\n");
-        for ( Map.Entry<IActorPort, Actor> entry : this.brickConfiguration.getActors().entrySet() ) {
-            Actor actor = entry.getValue();
-            IActorPort port = entry.getKey();
+        for ( ConfigurationComponent actor : this.brickConfiguration.getActors() ) {
+            String port = actor.getUserDefinedPortName();
             if ( (actor != null) && isActorUsed(actor, port) ) {
                 sb.append("        '").append(port.toString()).append("':");
                 sb.append(generateRegenerateActor(actor, port));
@@ -1040,9 +1038,10 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         sb.append("    },\n");
     }
 
-    private boolean isSensorUsed(Sensor sensor, ISensorPort port) {
+    private boolean isSensorUsed(ConfigurationComponent sensor, String port) {
         for ( UsedSensor usedSensor : this.usedSensors ) {
-            if ( port.equals(usedSensor.getPort()) && (sensor.getType() == usedSensor.getType()) ) {
+            String usedSctorComponentType = this.brickConfiguration.getConfigurationComponent(usedSensor.getPort()).getComponentType();
+            if ( port.equals(usedSensor.getPort()) && (sensor.getComponentType().equals(usedSctorComponentType)) ) {
                 return true;
             }
         }
@@ -1051,11 +1050,10 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     private void appendSensors(StringBuilder sb) {
         sb.append("    'sensors': {\n");
-        for ( Map.Entry<ISensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
-            Sensor sensor = entry.getValue();
-            ISensorPort port = entry.getKey();
+        for ( ConfigurationComponent sensor : this.brickConfiguration.getSensors() ) {
+            String port = sensor.getUserDefinedPortName();
             if ( (sensor != null) && isSensorUsed(sensor, port) ) {
-                sb.append("        '").append(port.getOraName()).append("':");
+                sb.append("        '").append(port).append("':");
                 sb.append(generateRegenerateSensor(sensor, port));
                 sb.append(",\n");
             }
@@ -1063,28 +1061,31 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         sb.append("    },\n");
     }
 
-    private String generateRegenerateActor(Actor actor, IActorPort port) {
+    private String generateRegenerateActor(ConfigurationComponent actor, String port) {
         StringBuilder sb = new StringBuilder();
         // FIXME: that won't scale
         String name = null;
-        switch ( actor.getName() ) {
-            case MEDIUM:
+        switch ( actor.getComponentType() ) {
+            case SC.MEDIUM:
                 name = "MediumMotor";
                 break;
-            case LARGE:
+            case SC.LARGE:
                 name = "LargeMotor";
                 break;
-            case OTHER:
+            case SC.OTHER:
                 name = "OtherConsumer";
                 break;
             default:
-                throw new IllegalArgumentException("no mapping for " + actor.getName() + "to ev3dev-lang-python");
+                throw new IllegalArgumentException("no mapping for " + actor.getComponentType() + "to ev3dev-lang-python");
         }
 
         sb.append("Hal.make").append(name).append("(ev3dev.OUTPUT_").append(port.toString());
-        sb.append(", ").append(actor.isRegulated() ? "'on'" : "'off'");
-        sb.append(", ").append(getEnumCode(actor.getRotationDirection()));
-        sb.append(", ").append(getEnumCode(actor.getMotorSide()));
+        boolean isRegulated = actor.getProperty(SC.MOTOR_REGULATION).equals(SC.TRUE);
+        boolean isReverse = actor.getProperty(SC.MOTOR_REVERSE).equals(SC.ON);
+
+        sb.append(", ").append(isRegulated ? "'on'" : "'off'");
+        sb.append(", ").append(isReverse ? "'backward'" : "'foreward'");
+        sb.append(", ").append("'").append(actor.getProperty(SC.MOTOR_DRIVE).toLowerCase()).append("'");
         sb.append(")");
         return sb.toString();
     }
@@ -1112,41 +1113,41 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
                 "\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00ff\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u00ff\\u00ff\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00c0\\u00ff\\u00ff\\u00ff\\u003f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fc\\u007f\\u0009\\u0010\\u00ff\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0080\\u00ff\\u0007\\u0009\\u0010\\u00e0\\u001f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00e0\\u00ff\\u0000\\r\\u0010\\u0000\\u007f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f8\\u001f\\u0000\\u0005\\u0010\\u0000\\u00f9\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u0003\\u0000\\u0005\\u0000\\u0000\\u00c9\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0080\\u00ff\\u0002\\u0000\\u0005\\u0000\\u0000\\u0005\\u001f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00e0\\u003f\\u0002\\u0000\\u0005\\u0000\\u0080\\u0004\\u007c\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f8\\u000f\\u0006\\u0000\\u0002\\u0000\\u0080\\u0002\\u00f0\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fc\\u0003\\u0004\\u0000\\u0002\\u0000\\u0080\\u0002\\u00c0\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u00c1\\u0000\\u0000\\u0002\\u0000\\u0080\\u0001\\u0040\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u007f\\u00c0\\u0001\\u0000\\u0002\\u0000\\u0040\\u0001\\u0060\\u000e\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0080\\u003f\\u0080\\u0001\\u0000\\u0002\\u0000\\u00c0\\u0000\\u0020\\u001c\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00e0\\u001f\\u0080\\u0003\\u0000\\u0000\\u0000\\u00c0\\u0000\\u0000\\u0078\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f0\\u001f\\u0000\\u0007\\u0000\\u0000\\u0000\\u0040\\u0000\\u0000\\u00f0\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f8\\u0013\\u0000\\u0007\\u00cc\\u0003\\u0000\\u0000\\u0000\\u0000\\u00c0\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fc\\u0027\\u0000\\n\\u0008\\u00fa\\u00c0\\u0002\\u0000\\u0000\\u0080\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u002c\\u0000\\u000e\\u0008\\u008a\\u0080\\u0082\\u000f\\u0000\\u0040\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u007f\\u0068\\u0000\\u0014\\u00e8\\u008b\\u0080\\u0082\\u0008\\u0000\\u0020\\u000f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0080\\u003f\\u0050\\u0000\\u001c\\u0028\\u0088\\u0080\\u00a2\\u0008\\u0000\\u00d0\\u001c\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0080\\u001f\\u0060\\u0000\\u002c\\u0028\\u0088\\u0080\\u00be\\u0008\\u0000\\u0038\\u0018\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00c0\\u001f\\u00c0\\u0000\\u0038\\u00e8\\u00fb\\u0080\\u00a0\\u0008\\u0000\\u000c\\u0038\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00e0\\u000f\\u00c0\\u0000\\u0058\\u0000\\u0000\\u0080\\u00a0\\u000f\\u0000\\u0003\\u0070\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f0\\u0007\\u0080\\u0000\\u00f0\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0001\\u00e0\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f8\\u0003\\u0000\\u0000\\u00b0\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00c0\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f8\\u0003\\u0000\\u0000\\u0070\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0080\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fc\\u0006\\u0000\\u0000\\u00e0\\u0001\\u0000\\u0000\\u0000\\u00ec\\u0001\\u0000\\u0080\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u000c\\u0060\\u0000\\u00a0\\u0002\\u0000\\u0000\\u0000\\u0028\\u00f8\\u0000\\u0000\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u007e\\u0018\\u0040\\u00df\\u00c7\\u0003\\u0000\\u0000\\u0000\\u0028\\u0088\\u0000\\u0000\\u0006\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u007f\\u0000\\u0040\\u0051\\u0044\\u0005\\u0000\\u0000\\u0000\\u00e8\\u008b\\u0000\\u0000\\u000e\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u003f\\u0000\\u0040\\u0051\\u00c4\\u000e\\u0000\\u0000\\u0000\\u0028\\u008a\\u0000\\u0000\\u000c\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0080\\u003f\\u0000\\u0040\\u0051\\u0084\\n\\u0000\\u0000\\u0000\\u0028\\u008a\\u0000\\u0000\\u001f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0080\\u001f\\u0000\\u0040\\u0051\\u0084\\u0014\\u0000\\u0000\\u0000\\u00e8\\u00fb\\u0000\\u0080\\u0019\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00c0\\u001f\\u0000\\u0040\\u00df\\u0007\\u0015\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0038\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00c0\\u000f\\u0000\\u0000\\u0000\\u0000\\u0029\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0030\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00e0\\u000f\\u0000\\u0000\\u0000\\u0000\\u002b\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0070\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00e0\\u0007\\u0000\\u0000\\u0000\\u0000\\u0052\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0060\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f0\\u0007\\u0000\\u0000\\u0000\\u0000\\u0072\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00e0\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f0\\u000f\\u0000\\u0000\\u0000\\u0000\\u00a4\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00e0\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f0\\u0033\\u0000\\u0000\\u0000\\u0000\\u00e4\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00c0\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f8\\u0043\\u0000\\u0000\\u0000\\u0000\\u004c\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00c0\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f8\\u008f\\u0001\\u0000\\u0000\\u0000\\u0088\\u0002\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00c0\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f8\\u0071\\u00c6\\u0007\\u0000\\u0000\\u0088\\u0002\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0080\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f8\\u0081\\u004f\\u00f4\\u0001\\u0000\\u0010\\u0005\\u0000\\u0000\\u0000\\u00c0\\u003e\\u0000\\u0080\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fc\\u0001\\u0040\\u0014\\u0001\\u0000\\u0010\\u0005\\u0000\\u0000\\u0000\\u0080\\u00a2\\u000f\\u00e0\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fc\\u0000\\u00c0\\u0017\\u0001\\u0000\\u0030\\n\\u0000\\u0000\\u0000\\u0080\\u00a2\\u0008\\u0038\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fc\\u0000\\u0040\\u0014\\u0001\\u0000\\u0020\\u001a\\u0000\\u0000\\u0000\\u0080\\u00be\\u0008\\u0007\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u0000\\u0040\\u0014\\u0001\\u0000\\u0020\\u0014\\u0000\\u0000\\u0000\\u0080\\u00a2\\u00e8\\u00ff\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u0000\\u00c0\\u00f7\\u0001\\u0000\\u0040\\u002c\\u0000\\u0000\\u0000\\u0080\\u00a2\\u0008\\u0000\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u0000\\u0000\\u0000\\u0000\\u0000\\u0040\\u0028\\u0000\\u0000\\u0000\\u0080\\u00be\\u000f\\u0000\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u0000\\u0000\\u0000\\u0000\\u0000\\u00c0\\u0050\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u0000\\u0000\\u0000\\u0000\\u0000\\u0080\\u0050\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u0000\\u0000\\u0000\\u0000\\u0000\\u0080\\u00a0\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u00a1\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0006\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u007e\\u000e\\u0000\\u0000\\u0000\\u0000\\u0000\\u00e1\\u001f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u000e\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u007f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0072\\u0070\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u000e\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u007f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u001e\\u00c0\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u000e\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u007f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u000e\\u0080\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u000e\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u007f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0006\\u0000\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u000e\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u007f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0007\\u0000\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u000e\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u007f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0003\\u0000\\u0002\\u0000\\u0000\\u0000\\u0000\\u0000\\u000e\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u007f\\u0000\\u00e0\\u0001\\u0000\\u0000\\u0080\\u0003\\u0000\\u0002\\u0000\\u0000\\u0000\\u0000\\u0000\\u000e\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u007f\\u0000\\u0020\\u00f8\\u0000\\u0000\\u0080\\u0003\\u0000\\u0002\\u0000\\u0000\\u0000\\u0000\\u0000\\u000e\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00ff\\u0000\\u0020\\u0088\\u0000\\u0000\\u0080\\u0003\\u0000\\u0002\\u0000\\u0000\\u0000\\u0000\\u0000\\u000f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00ff\\u000f\\u00e0\\u008b\\u0000\\u0000\\u0000\\u0003\\u0000\\u0002\\u0000\\u0000\\u0000\\u0000\\u0000\\u000f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u00f0\\u0020\\u008a\\u0000\\u0000\\u0000\\u0007\\u0000\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u00c0\\u0027\\u008a\\u0000\\u0000\\u0000\\u0007\\u0000\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u003f\\u00e0\\u00fb\\u0000\\u0000\\u0000\\u000e\\u0080\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u003e\\u00c0\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u007c\\u0070\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f0\\u001f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u00c0\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0080\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0080\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fc\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0080\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fc\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00c0\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fc\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0002\\u0000\\u0000\\u00c0\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fc\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0004\\u0000\\n\\u0000\\u0000\\u00c0\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f8\\u0067\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0004\\u0000\\n\\u0000\\u0000\\u00e0\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f8\\u001f\\u0000\\u0002\\u0000\\u0000\\u0000\\u0000\\u0000\\u0024\\u0000\\u0009\\u0000\\u0000\\u00e0\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f8\\u0007\\u0000\\u0082\\u000f\\u0000\\u0000\\u0000\\u0000\\u0094\\n\\u0079\\u0000\\u0000\\u00e0\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f0\\u000f\\u0000\\u0082\\u0008\\u0000\\u0000\\u0000\\u0000\\u008c\\u0095\\u0048\\u0000\\u0000\\u00f0\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f0\\u000f\\u0000\\u00a2\\u0008\\u0000\\u0000\\u0000\\u0000\\u0094\\u0094\\u0048\\u0000\\u0000\\u00f0\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f0\\u001f\\u0000\\u00be\\u0008\\u0000\\u0000\\u0000\\u0000\\u00a4\\u0054\\u0048\\u0000\\u0000\\u00f8\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00e0\\u001f\\u0000\\u00a0\\u0008\\u0000\\u0000\\u0000\\u0000\\u0000\\u0040\\u0000\\u0000\\u0000\\u0078\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00e0\\u003f\\u0000\\u00a0\\u000f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u007c\\u003e\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00c0\\u003f\\u00f8\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fc\\u00ff\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00c0\\u00ff\\u0067\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u00ff\\u000f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0080\\u007f\\u0018\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u0000\\u003e\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f8\\u00ff\\u0006\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u001f\\u0000\\u0070\\u0000\\u0000\\u0000\\u0000\\u0000\\u00c0\\u00ff\\u00ff\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00c0\\u000f\\u0000\\u00e0\\u0001\\u0000\\u0000\\u0000\\u0000\\u00e0\\u001f\\u00fe\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00c0\\u0003\\u0000\\u0080\\u0001\\u0000\\u0000\\u0000\\u0000\\u00f8\\u0001\\u00f8\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00e0\\u0001\\u0000\\u0000\\u0003\\u0000\\u0000\\u0000\\u0000\\u007c\\u0000\\u00e0\\u0007\\u0000\\u0000\\u003c\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f0\\u0000\\u0000\\u0000\\u0007\\u0000\\u0000\\u0000\\u0000\\u00be\\u0000\\u0090\\u000f\\u0000\\u0000\\u00a0\\u000f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f0\\u0000\\u003e\\u0000\\u0006\\u0000\\u0000\\u0000\\u0000\\u009f\\u0000\\u0010\\u001e\\u0000\\u0000\\u00a0\\u0008\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0078\\u0080\\u00c1\\u0000\\u000c\\u0000\\u0000\\u0000\\u0000\\u00cf\\u0000\\u0030\\u001e\\u0000\\u0000\\u00be\\u0008\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u003c\\u0080\\u0080\\u0000\\u001c\\u0000\\u0000\\u0000\\u0080\\u0087\\u0004\\u0012\\u003c\\u0000\\u0000\\u0082\\u0008\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u003c\\u0080\\u0080\\u0000\\u001c\\u0000\\u0000\\u0000\\u00c0\\u00c3\\u009b\\u003d\\u0078\\u0020\\u0000\\u0082\\u0008\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u003e\\u0080\\u00be\\u0000\\u0018\\u0000\\u0000\\u0000\\u00c0\\u0083\\u0091\\u0018\\u00f8\\u0010\\u0000\\u00be\\u000f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u001f\\u0080\\u0080\\u0000\\u0018\\u0000\\u0000\\u0000\\u00c0\\u00c3\\u0064\\u0032\\u00f8\\u0009\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0080\\u001f\\u0080\\u00be\\u0000\\u0018\\u0000\\u0000\\u0000\\u00c0\\u00c1\\u00f1\\u0038\\u00f0\\u0007\\u0000\\u0010\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00c0\\u001f\\u0080\\u0080\\u0000\\u0038\\u0000\\u0000\\u0000\\u00c0\\u0001\\u00fa\\u0005\\u00f0\\u000f\\u0000\\u0018\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f0\\u001f\\u0080\\u00be\\u0000\\u0038\\u0000\\u0000\\u0000\\u00e0\\u0001\\u0064\\u0002\\u00f0\\u001f\\u0000\\u000c\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f8\\u001f\\u0080\\u0080\\u0000\\u0038\\u0000\\u0000\\u0000\\u00e0\\u0001\\u0060\\u0000\\u00f0\\u003f\\u0000\\n\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fc\\u001f\\u0080\\u00be\\u0000\\u0038\\u0000\\u0000\\u0000\\u00e0\\u0001\\u0060\\u0000\\u00f0\\u007f\\u0080\\u0005\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u001f\\u0080\\u0080\\u0000\\u0038\\u0000\\u0000\\u0000\\u00e0\\u0001\\u00fe\\u0007\\u00f0\\u00ff\\u0041\\u0006\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00ff\\u001c\\u0080\\u00be\\u0000\\u0018\\u0000\\u0000\\u0000\\u00c0\\u0003\\u0062\\u0004\\u00f8\\u00ff\\u0033\\u0002\\u0000\\u0000\\u0000\\u0000\\u0000\\u00c0\\u007f\\u003c\\u0080\\u0080\\u0000\\u001c\\u0000\\u0000\\u0000\\u00c0\\u0003\\u0063\\u000c\\u0088\\u00ff\\u001f\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f0\\u001f\\u003c\\u0080\\u00be\\u0000\\u001c\\u0000\\u0000\\u0000\\u00c0\\u0083\\u0003\\u001c\\u0008\\u00ff\\u003f\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fc\\u000f\\u003c\\u0080\\u0080\\u0000\\u001c\\u0000\\u0000\\u0000\\u00c0\\u0087\\u0003\\u001c\\u000c\\u00fe\\u00ff\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u00ff\\u0007\\u007c\\u0080\\u00ff\\u0000\\u001e\\u0000\\u0000\\u0000\\u00c0\\u008f\\u00ff\\u001f\\u000e\\u00fc\\u00ff\\u0003\\u0000\\u0000\\u0000\\u0000\\u00c0\\u00ff\\u0003\\u00f8\\u0000\\u0000\\u0000\\u000f\\u0000\\u0000\\u0000\\u0080\\u009f\\u0007\\u001e\\u0006\\u00f8\\u00ff\\u001f\\u0000\\u0000\\u0000\\u0000\\u00f8\\u00ff\\u0001\\u00f0\\u0000\\u0000\\u0000\\u0007\\u0000\\u0000\\u0000\\u0000\\u003f\\u0003\\u000c\\u0003\\u00e0\\u00ff\\u00ff\\u0000\\u0000\\u0000\\u0000\\u00ff\\u007f\\u0000\\u00f0\\u0001\\u0000\\u0080\\u0007\\u0000\\u0000\\u0000\\u0000\\u007f\\u0000\\u00c0\\u0003\\u0080\\u00ff\\u00ff\\u0007\\u0000\\u0000\\u00e0\\u00ff\\u001f\\u0000\\u00e0\\u0003\\u0000\\u00c0\\u0003\\u0000\\u0000\\u0000\\u0000\\u00fe\\u0001\\u00e0\\u0001\\u0000\\u00fe\\u00ff\\u00ff\\u0007\\u00e0\\u00ff\\u00ff\\u0007\\u0000\\u00c0\\u000f\\u0000\\u00f0\\u0001\\u0000\\u0000\\u0000\\u0000\\u00fc\\u000f\\u00fc\\u0000\\u0000\\u00f8\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0001\\u0000\\u00c0\\u001f\\u0000\\u00f8\\u0001\\u0000\\u0000\\u0000\\u0000\\u00f8\\u00ff\\u007f\\u0000\\u0000\\u00e0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u007f\\u0000\\u0000\\u0000\\u00ff\\u0000\\u007f\\u0000\\u0000\\u0000\\u0000\\u0000\\u00e0\\u00ff\\u001f\\u0000\\u0000\\u0080\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u001f\\u0000\\u0000\\u0000\\u00fe\\u00ff\\u003f\\u0000\\u0000\\u0000\\u0000\\u0000\\u00c0\\u00ff\\u000f\\u0000\\u0000\\u0000\\u00fc\\u00ff\\u00ff\\u00ff\\u00ff\\u0003\\u0000\\u0000\\u0000\\u00f8\\u00ff\\u000f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fc\\u0000\\u0000\\u0000\\u0000\\u00e0\\u00ff\\u00ff\\u00ff\\u007f\\u0000\\u0000\\u0000\\u0000\\u00f0\\u00ff\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u00ff\\u00ff\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u003e\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000");
     }
 
-    private static String generateRegenerateSensor(Sensor sensor, ISensorPort port) {
+    private static String generateRegenerateSensor(ConfigurationComponent sensor, String port) {
         StringBuilder sb = new StringBuilder();
         // FIXME: that won't scale
         String name = null;
         // [m for m in dir(ev3dev) if m.find("_sensor") != -1]
         // ['ColorSensor', 'GyroSensor', 'I2cSensor', 'InfraredSensor', 'LightSensor', 'SoundSensor', 'TouchSensor', 'UltrasonicSensor']
-        switch ( sensor.getType() ) {
-            case COLOR:
+        switch ( sensor.getComponentType() ) {
+            case SC.COLOR:
                 name = "ColorSensor";
                 break;
-            case GYRO:
+            case SC.GYRO:
                 name = "GyroSensor";
                 break;
-            case INFRARED:
+            case SC.INFRARED:
                 name = "InfraredSensor";
                 break;
-            case TOUCH:
+            case SC.TOUCH:
                 name = "TouchSensor";
                 break;
-            case ULTRASONIC:
+            case SC.ULTRASONIC:
                 name = "UltrasonicSensor";
                 break;
-            case SOUND:
+            case SC.SOUND:
                 name = "SoundSensor";
                 break;
-            case COMPASS:
+            case SC.COMPASS:
                 name = "CompassSensor";
                 break;
-            case IRSEEKER:
+            case SC.IRSEEKER:
                 name = "IRSeekerSensor";
                 break;
             default:
-                throw new IllegalArgumentException("no mapping for " + sensor.getType() + "to ev3dev-lang-python");
+                throw new IllegalArgumentException("no mapping for " + sensor.getComponentType() + "to ev3dev-lang-python");
         }
-        sb.append("Hal.make").append(name).append("(ev3dev.INPUT_").append(port.getOraName()).append(")");
+        sb.append("Hal.make").append(name).append("(ev3dev.INPUT_").append(port).append(")");
         return sb.toString();
     }
 }

@@ -37,15 +37,19 @@ if ( arg1 === '-d' ) {
 
 function processDirectory() {
     FS.readdir( baseDirectory, function( err, files: string[] ) {
-        for ( let file of files ) {
-            if ( file.match( /^.*\.xml$/ ) ) {
-                allXmlFiles.unshift( file.substring( 0, file.length - 4 ) );
+        if ( err === null || err === undefined ) {
+            for ( let file of files ) {
+                if ( file.match( /^.*\.xml$/ ) ) {
+                    allXmlFiles.unshift( file.substring( 0, file.length - 4 ) );
+                }
             }
+            for ( let xmlFile of allXmlFiles ) {
+                p( 'to test: ' + xmlFile );
+            }
+            processOps( allXmlFiles.pop() );
+        } else {
+            p( MARK + baseDirectory + ' could not be read ' + MARK );
         }
-        for ( let xmlFile of allXmlFiles ) {
-            p( 'to test: ' + xmlFile );
-        }
-        processOps( allXmlFiles.pop() );
     } );
 }
 

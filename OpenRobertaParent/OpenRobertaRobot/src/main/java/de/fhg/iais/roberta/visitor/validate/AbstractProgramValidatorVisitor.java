@@ -2,11 +2,11 @@ package de.fhg.iais.roberta.visitor.validate;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.MoveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
@@ -15,7 +15,6 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
@@ -53,13 +52,13 @@ import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
@@ -76,10 +75,10 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     protected ArrayList<ArrayList<Phrase<Void>>> checkedProgram;
     protected int errorCount = 0;
     protected int warningCount = 0;
-    protected Configuration brickConfiguration;
+    protected Configuration robotConfiguration;
 
-    public AbstractProgramValidatorVisitor(Configuration brickConfiguration) {
-        this.brickConfiguration = brickConfiguration;
+    public AbstractProgramValidatorVisitor(Configuration robotConfiguration) {
+        this.robotConfiguration = robotConfiguration;
     }
 
     @Override
@@ -198,7 +197,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        if ( this.brickConfiguration.getActorOnPort((IActorPort) encoderSensor.getPort()) == null ) {
+        if ( this.robotConfiguration.optConfigurationComponent(encoderSensor.getPort()) == null ) {
             encoderSensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_MISSING"));
             this.errorCount++;
         }
@@ -272,7 +271,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     }
 
     @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
+    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
         return null;
     }
 
@@ -338,13 +337,6 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     }
 
     @Override
-    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        showPictureAction.getX().visit(this);
-        showPictureAction.getY().visit(this);
-        return null;
-    }
-
-    @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         showTextAction.getMsg().visit(this);
         showTextAction.getX().visit(this);
@@ -395,22 +387,23 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     }
 
     protected void checkMotorPort(MoveAction<Void> action) {
-        if ( this.brickConfiguration.getActorOnPort(action.getPort()) == null ) {
+        if ( this.robotConfiguration.optConfigurationComponent(action.getUserDefinedPort()) == null ) {
             action.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_MISSING"));
             this.errorCount++;
         }
     }
 
     private void checkLeftRightMotorPort(Phrase<Void> driveAction) {
-        Actor leftMotor = this.brickConfiguration.getLeftMotor();
-        Actor rightMotor = this.brickConfiguration.getRightMotor();
-        checkLeftMotorPresenceAndRegulation(driveAction, leftMotor);
-        checkRightMotorPresenceAndRegulation(driveAction, rightMotor);
-        checkLeftAndRightMotorRotationDirection(driveAction, leftMotor, rightMotor);
-        checkNumberOfMotors(driveAction);
+        if ( validNumberOfMotors(driveAction) ) {
+            ConfigurationComponent leftMotor = this.robotConfiguration.getFirstMotor(SC.LEFT);
+            ConfigurationComponent rightMotor = this.robotConfiguration.getFirstMotor(SC.RIGHT);
+            checkLeftMotorPresenceAndRegulation(driveAction, leftMotor);
+            checkRightMotorPresenceAndRegulation(driveAction, rightMotor);
+            checkMotorRotationDirection(driveAction, leftMotor, rightMotor);
+        }
     }
 
-    private void checkRightMotorPresenceAndRegulation(Phrase<Void> driveAction, Actor rightMotor) {
+    private void checkRightMotorPresenceAndRegulation(Phrase<Void> driveAction, ConfigurationComponent rightMotor) {
         if ( rightMotor == null ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING"));
             this.errorCount++;
@@ -419,7 +412,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
         }
     }
 
-    private void checkLeftMotorPresenceAndRegulation(Phrase<Void> driveAction, Actor leftMotor) {
+    private void checkLeftMotorPresenceAndRegulation(Phrase<Void> driveAction, ConfigurationComponent leftMotor) {
         if ( leftMotor == null ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_LEFT_MISSING"));
             this.errorCount++;
@@ -428,26 +421,29 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
         }
     }
 
-    private void checkLeftAndRightMotorRotationDirection(Phrase<Void> driveAction, Actor leftMotor, Actor rightMotor) {
-        if ( (leftMotor != null) && (rightMotor != null) && (leftMotor.getRotationDirection() != rightMotor.getRotationDirection()) ) {
+    private void checkMotorRotationDirection(Phrase<Void> driveAction, ConfigurationComponent m1, ConfigurationComponent m2) {
+        if ( (m1 != null) && (m2 != null) && !m1.getProperty(SC.MOTOR_REVERSE).equals(m2.getProperty(SC.MOTOR_REVERSE)) ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION"));
             this.errorCount++;
         }
     }
 
-    private void checkNumberOfMotors(Phrase<Void> driveAction) {
-        if ( this.brickConfiguration.getNumberOfRightMotors() > 1 ) {
+    private boolean validNumberOfMotors(Phrase<Void> driveAction) {
+        if ( this.robotConfiguration.getMotors(SC.RIGHT).size() != 1 ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS"));
             this.errorCount++;
+            return false;
         }
-        if ( this.brickConfiguration.getNumberOfLeftMotors() > 1 ) {
+        if ( this.robotConfiguration.getMotors(SC.LEFT).size() > 1 ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS"));
             this.errorCount++;
+            return false;
         }
+        return true;
     }
 
-    private void checkIfMotorRegulated(Phrase<Void> driveAction, Actor motor, String errorMsg) {
-        if ( !motor.isRegulated() ) {
+    private void checkIfMotorRegulated(Phrase<Void> driveAction, ConfigurationComponent motor, String errorMsg) {
+        if ( !motor.getProperty(SC.MOTOR_REGULATION).equals(SC.TRUE) ) {
             driveAction.addInfo(NepoInfo.error(errorMsg));
             this.errorCount++;
         }

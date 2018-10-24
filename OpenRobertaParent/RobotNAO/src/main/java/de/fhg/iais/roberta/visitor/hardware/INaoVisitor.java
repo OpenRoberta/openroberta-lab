@@ -28,12 +28,11 @@ import de.fhg.iais.roberta.syntax.action.nao.WalkAsync;
 import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
 import de.fhg.iais.roberta.syntax.lang.expr.nao.ColorHexString;
-import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectFaceSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectMarkSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
-import de.fhg.iais.roberta.syntax.sensor.nao.DetectedMark;
-import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
+import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrentSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
 import de.fhg.iais.roberta.visitor.hardware.actor.ISpeechVisitor;
@@ -75,7 +74,7 @@ public interface INaoVisitor<V> extends ISpeechVisitor<V>, ISensorVisitor<V> {
     /**
      * visit a {@link MoveJoint}.
      *
-     * @param ElectricCurrent on phrase to be visited
+     * @param ElectricCurrentSensor on phrase to be visited
      */
     V visitMoveJoint(MoveJoint<V> moveJoint);
 
@@ -117,7 +116,7 @@ public interface INaoVisitor<V> extends ISpeechVisitor<V>, ISensorVisitor<V> {
     /**
      * visit a {@link MoveJoint}.
      *
-     * @param ElectricCurrent on phrase to be visited
+     * @param ElectricCurrentSensor on phrase to be visited
      */
     V visitAnimation(Animation<V> animation);
 
@@ -199,21 +198,21 @@ public interface INaoVisitor<V> extends ISpeechVisitor<V>, ISensorVisitor<V> {
     V visitFsrSensor(FsrSensor<V> forceSensor);
 
     /**
-     * visit a {@link DetectedMark}.
+     * visit a {@link DetectMarkSensor}.
      *
      * @param DetectMarkMode on phrase to be visited
      */
-    V visitNaoMark(DetectedMark<V> naoMark);
+    V visitNaoMark(DetectMarkSensor<V> naoMark);
 
     /**
-     * visit a {@link DetectedMark}.
+     * visit a {@link DetectMarkSensor}.
      *
      * @param DetectMarkMode on phrase to be visited
      */
     V visitTakePicture(TakePicture<V> takePicture);
 
     /**
-     * visit a {@link DetectedMark}.
+     * visit a {@link DetectMarkSensor}.
      *
      * @param DetectMarkMode on phrase to be visited
      */
@@ -234,17 +233,13 @@ public interface INaoVisitor<V> extends ISpeechVisitor<V>, ISensorVisitor<V> {
     V visitForgetFace(ForgetFace<V> forgetFace);
 
     /**
-     * visit a {@link DetectFace}.
+     * visit a {@link DetectFaceSensor}.
      *
-     * @param DetectFace on phrase to be visited
+     * @param DetectFaceSensor on phrase to be visited
      */
-    V visitDetectFace(DetectFace<V> detectFace);
+    V visitDetectFace(DetectFaceSensor<V> detectFace);
 
-    V visitGetSampleSensor(GetSampleSensor<V> getSampleSensor);
-
-    V visitElectricCurrent(ElectricCurrent<V> electricCurrent);
-
-    //V visitLedColor(LedColor<V> ledColor);
+    V visitElectricCurrent(ElectricCurrentSensor<V> electricCurrent);
 
     V visitSetIntensity(SetIntensity<V> setIntensity);
 

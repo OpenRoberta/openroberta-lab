@@ -11,7 +11,6 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
@@ -88,13 +87,13 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
@@ -383,11 +382,6 @@ public class TypecheckVisitor implements ILanguageVisitor<BlocklyType>, ISensorV
     }
 
     @Override
-    public BlocklyType visitShowPictureAction(ShowPictureAction<BlocklyType> showPictureAction) {
-        return null;
-    }
-
-    @Override
     public BlocklyType visitShowTextAction(ShowTextAction<BlocklyType> showTextAction) {
         return null;
     }
@@ -408,7 +402,7 @@ public class TypecheckVisitor implements ILanguageVisitor<BlocklyType>, ISensorV
     }
 
     @Override
-    public BlocklyType visitBrickSensor(BrickSensor<BlocklyType> brickSensor) {
+    public BlocklyType visitKeysSensor(KeysSensor<BlocklyType> keysSensor) {
         return null;
     }
 

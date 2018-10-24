@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.util;
 
 /**
  * a pair of objects of arbitrary types. Use the factory method {@link #of(Object, Object)} to create pairs. Pairs are <b>immuntable</b>.
- * 
+ *
  * @author rbudde
  * @param <X>
  * @param <Y>
@@ -18,7 +18,7 @@ public class Pair<X, Y> {
 
     /**
      * make a pair
-     * 
+     *
      * @param first
      * @param second
      * @return the pair
@@ -29,7 +29,7 @@ public class Pair<X, Y> {
 
     /**
      * get the first item of a pair
-     * 
+     *
      * @return the first item
      */
     public X getFirst() {
@@ -38,7 +38,7 @@ public class Pair<X, Y> {
 
     /**
      * get the second item of a pair
-     * 
+     *
      * @return the second item
      */
     public Y getSecond() {
@@ -86,5 +86,9 @@ public class Pair<X, Y> {
     @Override
     public String toString() {
         return "(" + this.first + ", " + this.second + ")";
+    }
+
+    public String toStringContent() {
+        return this.first + ", " + this.second;
     }
 }

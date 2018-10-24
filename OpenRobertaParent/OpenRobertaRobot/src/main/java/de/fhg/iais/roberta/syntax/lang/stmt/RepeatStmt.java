@@ -23,8 +23,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.Unary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.transformer.ExprParam;
-import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -108,7 +108,7 @@ public class RepeatStmt<V> extends Stmt<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         Phrase<V> exprr;
         List<Value> values;
         List<Field> fields;
@@ -214,35 +214,35 @@ public class RepeatStmt<V> extends Stmt<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
 
         switch ( getMode() ) {
             case TIMES:
                 if ( getProperty().getBlockType().equals(BlocklyConstants.CONTROLS_REPEAT) ) {
-                    JaxbTransformerHelper
+                    Ast2JaxbHelper
                         .addField(jaxbDestination, BlocklyConstants.TIMES, ((NumConst<?>) (((ExprList<?>) getExpr()).get().get(2))).getValue());
                 } else {
-                    JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.TIMES, (((ExprList<?>) getExpr()).get().get(2)));
+                    Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.TIMES, (((ExprList<?>) getExpr()).get().get(2)));
                 }
                 break;
 
             case WAIT:
             case UNTIL:
-                JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().name());
-                JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.BOOL, ((Unary<?>) getExpr()).getExpr());
+                Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().name());
+                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.BOOL, ((Unary<?>) getExpr()).getExpr());
                 break;
 
             case WHILE:
-                JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().name());
-                JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.BOOL, getExpr());
+                Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().name());
+                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.BOOL, getExpr());
                 break;
 
             case FOR:
                 ExprList<?> exprList = (ExprList<?>) getExpr();
-                JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VAR, ((Var<?>) exprList.get().get(0)).getValue());
-                JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.FROM, (exprList.get().get(1)));
-                JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.TO, (exprList.get().get(2)));
-                JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.BY, (exprList.get().get(3)));
+                Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.VAR, ((Var<?>) exprList.get().get(0)).getValue());
+                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.FROM, (exprList.get().get(1)));
+                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.TO, (exprList.get().get(2)));
+                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.BY, (exprList.get().get(3)));
                 break;
 
             case FOR_EACH:
@@ -250,10 +250,10 @@ public class RepeatStmt<V> extends Stmt<V> {
                 Mutation mutation = new Mutation();
                 mutation.setListType(((VarDeclaration<?>) exprBinary.getLeft()).getTypeVar().getBlocklyName());
                 jaxbDestination.setMutation(mutation);
-                JaxbTransformerHelper
+                Ast2JaxbHelper
                     .addField(jaxbDestination, BlocklyConstants.TYPE, ((VarDeclaration<?>) exprBinary.getLeft()).getTypeVar().getBlocklyName());
-                JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VAR, ((VarDeclaration<?>) exprBinary.getLeft()).getName());
-                JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.LIST, exprBinary.getRight());
+                Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.VAR, ((VarDeclaration<?>) exprBinary.getLeft()).getName());
+                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.LIST, exprBinary.getRight());
                 break;
             case FOREVER:
             case FOREVER_ARDU:
@@ -262,7 +262,7 @@ public class RepeatStmt<V> extends Stmt<V> {
             default:
                 break;
         }
-        JaxbTransformerHelper.addStatement(jaxbDestination, BlocklyConstants.DO, getList());
+        Ast2JaxbHelper.addStatement(jaxbDestination, BlocklyConstants.DO, getList());
 
         return jaxbDestination;
     }

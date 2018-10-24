@@ -3,10 +3,9 @@ package de.fhg.iais.roberta.util.test.mbed;
 import java.util.Properties;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.mbed.MicrobitConfiguration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.MicrobitFactory;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.codegen.MbedSimVisitor;
@@ -20,9 +19,9 @@ public class HelperMicrobitForXmlTest extends de.fhg.iais.roberta.util.test.Abst
     public HelperMicrobitForXmlTest() {
         super(
             new MicrobitFactory(new PluginProperties("microbit", "", "", Util1.loadProperties("classpath:microbit.properties"))),
-            new MicrobitConfiguration.Builder().build());
+            new Configuration.Builder().build());
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
-        AbstractRobotFactory.addBlockTypesFromProperties("Robot", robotProperties);
+        AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
     }
 
     /**
@@ -33,7 +32,7 @@ public class HelperMicrobitForXmlTest extends de.fhg.iais.roberta.util.test.Abst
      * @throws Exception
      */
     public String generateJavaScript(String pathToProgramXml) throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+        Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
         String code = MbedSimVisitor.generate(getRobotConfiguration(), transformer.getTree());
         return code;
     }
@@ -46,8 +45,8 @@ public class HelperMicrobitForXmlTest extends de.fhg.iais.roberta.util.test.Abst
      * @throws Exception
      */
     public String generatePython(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = MicrobitPythonVisitor.generate((MicrobitConfiguration) brickConfiguration, transformer.getTree(), true);
+        Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
+        String code = MicrobitPythonVisitor.generate(brickConfiguration, transformer.getTree(), true);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }

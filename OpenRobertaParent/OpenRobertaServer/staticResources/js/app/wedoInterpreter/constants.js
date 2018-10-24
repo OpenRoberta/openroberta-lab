@@ -126,6 +126,7 @@ define(["require", "exports"], function (require, exports) {
     exports.MATH_CONSTRAIN_FUNCTION = "MathConstrainFunct";
     exports.MAX = "max";
     exports.MAXDIAG = 2500;
+    // MAXPOWER is a double expression
     exports.MAXPOWER = 0.351858377 * 3;
     exports.MAX_HEIGHT = 1000;
     exports.MAX_WIDTH = 2000;

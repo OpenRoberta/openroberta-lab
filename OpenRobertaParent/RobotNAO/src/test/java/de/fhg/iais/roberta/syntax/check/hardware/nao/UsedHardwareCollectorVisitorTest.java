@@ -6,7 +6,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.nao.NAOConfiguration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.test.nao.HelperNaoForXmlTest;
 import de.fhg.iais.roberta.visitor.collect.NaoUsedHardwareCollectorVisitor;
@@ -15,7 +14,7 @@ public class UsedHardwareCollectorVisitorTest {
     HelperNaoForXmlTest h = new HelperNaoForXmlTest();
 
     private Configuration makeConfiguration() {
-        return new NAOConfiguration.Builder().build();
+        return new Configuration.Builder().build();
     }
 
     @Test

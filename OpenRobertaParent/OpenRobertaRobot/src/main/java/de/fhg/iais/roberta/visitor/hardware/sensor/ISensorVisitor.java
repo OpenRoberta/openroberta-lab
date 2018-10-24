@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.visitor.hardware.sensor;
 
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
@@ -12,6 +11,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
@@ -30,12 +30,12 @@ import de.fhg.iais.roberta.visitor.hardware.IHardwareVisitor;
 
 public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
     /**
-     * visit a {@link BrickSensor}.
+     * visit a {@link KeysSensor}.
      *
-     * @param brickSensor to be visited
+     * @param keysSensor to be visited
      */
-    default V visitBrickSensor(BrickSensor<V> brickSensor) {
-        throw new DbcException("BrickSensor not implemented!");
+    default V visitKeysSensor(KeysSensor<V> keysSensor) {
+        throw new DbcException("KeysSensor not implemented!");
     }
 
     /**
@@ -98,7 +98,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      * @param timerSensor to be visited
      */
     default V visitTimerSensor(TimerSensor<V> timerSensor) {
-        throw new DbcException("BrickSensor not implemented!");
+        throw new DbcException("KeysSensor not implemented!");
     }
 
     /**

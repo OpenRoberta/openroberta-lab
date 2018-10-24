@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.codegen.nxt;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
@@ -134,14 +135,14 @@ public class SimulationVisitorTest {
                 + "var stmt4 = createVarDeclaration(CONST.COLOR, \"variablenName5\", createConstant(CONST.COLOR_CONST, CONST.COLOR_ENUM.YELLOW));\n"
                 + "var stmt5 = createVarDeclaration(CONST.COLOR, \"variablenName6\", createConstant(CONST.COLOR_CONST, CONST.COLOR_ENUM.RED));\n"
                 + "var stmt6 = createVarDeclaration(CONST.COLOR, \"variablenName7\", createConstant(CONST.COLOR_CONST, CONST.COLOR_ENUM.WHITE));\n"
-                + "var stmt7 = createVarDeclaration(CONST.COLOR, \"variablenName8\", createConstant(CONST.COLOR_CONST, CONST.COLOR_ENUM.BROWN));\n"
-                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7]};";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator10.xml");
 
     }
 
     @Test
+    @Ignore
     public void test11() throws Exception {
         String a =
             "var stmt0 = createWaitStmt([createIfStmt([createBinaryExpr(CONST.LT, createGetSample(CONST.COLOUR, CONST.RED), createConstant(CONST.NUM_CONST, 30))], [])]);\n"

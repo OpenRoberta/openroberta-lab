@@ -4,13 +4,12 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import de.fhg.iais.roberta.components.mbed.MicrobitConfiguration;
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.PinValue;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
@@ -67,10 +66,10 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
@@ -96,7 +95,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
      * @param programPhrases to generate the code from
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    private MicrobitPythonVisitor(MicrobitConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
+    private MicrobitPythonVisitor(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
 
         this.usedHardwareVisitor = new MbedUsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
@@ -110,7 +109,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
      * @param brickConfiguration hardware configuration of the brick
      * @param programPhrases to generate the code from
      */
-    public static String generate(MicrobitConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
+    public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
         Assert.notNull(brickConfiguration);
 
         final MicrobitPythonVisitor astVisitor = new MicrobitPythonVisitor(brickConfiguration, programPhrases, 0);
@@ -244,8 +243,8 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        this.sb.append("microbit." + brickSensor.getPort().getOraName() + ".is_pressed()");
+    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+        this.sb.append("microbit." + keysSensor.getPort() + ".is_pressed()");
         return null;
     }
 
@@ -257,12 +256,12 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case DEFAULT:
-            case VALUE:
+        switch ( timerSensor.getMode() ) {
+            case SC.DEFAULT:
+            case SC.VALUE:
                 this.sb.append("( microbit.running_time() - timer1 )");
                 break;
-            case RESET:
+            case SC.RESET:
                 this.sb.append("timer1 = microbit.running_time()");
                 break;
             default:
@@ -275,11 +274,11 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
-        if ( accelerometerSensor.getPort().getCodeName().equals("STRENGTH") ) {
+        if ( accelerometerSensor.getPort().equals("STRENGTH") ) {
             this.sb.append("math.sqrt(microbit.accelerometer.get_x()**2 + microbit.accelerometer.get_y()**2 + microbit.accelerometer.get_z()**2)");
         } else {
             this.sb.append("microbit.accelerometer.get_");
-            this.sb.append(accelerometerSensor.getPort().getCodeName());
+            this.sb.append(accelerometerSensor.getPort());
             this.sb.append("()");
         }
         return null;
@@ -289,7 +288,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
         final String valueType = pinValueSensor.getMode().toString().toLowerCase();
         this.sb.append("microbit.pin");
-        this.sb.append(pinValueSensor.getPort().getCodeName());
+        this.sb.append(pinValueSensor.getPort());
         this.sb.append(".read_");
         this.sb.append(valueType);
         this.sb.append("()");
@@ -610,7 +609,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        this.sb.append("microbit.pin" + pinTouchSensor.getPort().getOraName() + ".is_touched()");
+        this.sb.append("microbit.pin" + pinTouchSensor.getPort() + ".is_touched()");
         return null;
     }
 
@@ -667,9 +666,9 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitPinWriteValueSensor(PinWriteValue<Void> pinWriteValueSensor) {
-        this.sb.append("microbit.pin" + pinWriteValueSensor.getPort().getCodeName());
+        this.sb.append("microbit.pin" + pinWriteValueSensor.getPort());
         String valueType = "analog(";
-        if ( pinWriteValueSensor.getMode() == PinValue.DIGITAL ) {
+        if ( pinWriteValueSensor.getMode().equals(SC.DIGITAL) ) {
             valueType = "digital(";
         }
         this.sb.append(".write_" + valueType);
@@ -682,14 +681,14 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPullAction) {
         // TODO add as soon as microbit runtime is updated
         //        this.sb.append("microbit.pin" + pinSetPullAction.getPort().getValues()[0] + ".set_pull(");
-        //        switch ( (PinPull) pinSetPullAction.getMode() ) {
-        //            case UP:
+        //        switch ( pinSetPullAction.getMode() ) {
+        //            case SC.UP:
         //                this.sb.append("PULL_UP");
         //                break;
-        //            case DOWN:
+        //            case SC.DOWN:
         //                this.sb.append("PULL_DOWN");
         //                break;
-        //            case NONE:
+        //            case SC.NONE:
         //            default:
         //                this.sb.append("NO_PULL");
         //                break;

@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.arduino.BotNrollConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
@@ -40,8 +39,7 @@ public class BotnrollCompilerWorkflow extends AbstractCompilerWorkflow {
             return;
         }
         try {
-            this.generatedSourceCode =
-                BotnrollCppVisitor.generate((BotNrollConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+            this.generatedSourceCode = BotnrollCppVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true);
             LOG.info("botnroll c++ code generated");
         } catch ( Exception e ) {
             LOG.error("botnroll c++ code generation failed", e);
@@ -65,7 +63,7 @@ public class BotnrollCompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2BotNrollConfigurationTransformer transformer = new Jaxb2BotNrollConfigurationTransformer(factory);
+        Jaxb2BotNrollConfigurationTransformer transformer = new Jaxb2BotNrollConfigurationTransformer(factory.getBlocklyDropdownFactory());
         return transformer.transform(project);
     }
 

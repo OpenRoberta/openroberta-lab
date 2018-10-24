@@ -10,7 +10,7 @@ public class MotorOnActionTest {
     @Test
     public void motorOn() throws Exception {
         String a =
-            "#defineWHEELDIAMETER0.0#defineTRACKWIDTH0.0#defineMAXLINES8#include\"NEPODefs.h\"//containsNEPOdeclarationsfortheNXCNXTAPIresources"
+            "#defineWHEELDIAMETER5.6#defineTRACKWIDTH11.0#defineMAXLINES8#include\"NEPODefs.h\"//containsNEPOdeclarationsfortheNXCNXTAPIresources"
                 + "OnFwdReg(OUT_B,SpeedTest(30),OUT_REGMODE_SPEED);OnFwdReg(OUT_C, SpeedTest(50), OUT_REGMODE_SPEED);}";
 
         this.h.assertWrappedCodeIsOk(a, "/ast/actions/action_MotorOn.xml");

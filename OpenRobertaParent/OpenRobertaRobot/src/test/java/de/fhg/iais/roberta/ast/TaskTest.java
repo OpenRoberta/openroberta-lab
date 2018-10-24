@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.ast;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
+import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
 
 public class TaskTest {
     AbstractHelperForXmlTest h = new GenericHelperForXmlTest();
@@ -19,8 +19,8 @@ public class TaskTest {
                 + "exprStmt VarDeclaration [ARRAY_NUMBER, item4, ListCreate [NUMBER, NumConst [1], NumConst [2], NumConst [3]], true, true]\n"
                 + "exprStmt VarDeclaration [ARRAY_STRING, item5, ListCreate [STRING, StringConst [a], EmptyExpr [defVal=ARRAY], StringConst [b]], true, true]\n"
                 + "exprStmt VarDeclaration [ARRAY_BOOLEAN, item6, ListCreate [BOOLEAN, BoolConst [true], BoolConst [false], EmptyExpr [defVal=ARRAY]], true, true]\n"
-                + "exprStmt VarDeclaration [ARRAY_COLOUR, item7, ListCreate [COLOR, ColorConst [RED], ColorConst [BLACK], ColorConst [NONE]], true, true]\n"
-                + "exprStmt VarDeclaration [COLOR, item8, ColorConst [NONE], false, true]]]]]";
+                + "exprStmt VarDeclaration [ARRAY_COLOUR, item7, ListCreate [COLOR, ColorConst [RED, #B30006], ColorConst [BLACK, #000000], ColorConst [NONE, #585858]], true, true]\n"
+                + "exprStmt VarDeclaration [COLOR, item8, ColorConst [NONE, #585858], false, true]]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/task/task_mainTask.xml"));
     }

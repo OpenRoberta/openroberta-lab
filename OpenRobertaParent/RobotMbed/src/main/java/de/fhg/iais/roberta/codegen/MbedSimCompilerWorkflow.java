@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
-import de.fhg.iais.roberta.transformer.mbed.Jaxb2CalliopeConfigurationTransformer;
+import de.fhg.iais.roberta.transformer.mbed.Jaxb2MbedConfigurationAst;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -29,7 +29,7 @@ public class MbedSimCompilerWorkflow extends AbstractCompilerWorkflow {
             return;
         }
         try {
-            generatedSourceCode = MbedSimVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree());
+            generatedSourceCode = MbedSimVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree());
             LOG.info("javascript mbed simulation code generated");
         } catch ( Exception e ) {
             LOG.error("javascript mbed simulation code generation failed", e);
@@ -50,7 +50,7 @@ public class MbedSimCompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2CalliopeConfigurationTransformer transformer = new Jaxb2CalliopeConfigurationTransformer(factory);
+        Jaxb2MbedConfigurationAst transformer = new Jaxb2MbedConfigurationAst(factory);
         return transformer.transform(project);
     }
 
