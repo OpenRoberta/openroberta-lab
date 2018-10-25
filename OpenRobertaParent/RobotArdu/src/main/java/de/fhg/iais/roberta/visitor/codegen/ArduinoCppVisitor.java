@@ -851,5 +851,4 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         this.sb.append(");");
         return null;
     }
-
 }

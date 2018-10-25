@@ -53,13 +53,11 @@ import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
-import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
@@ -69,8 +67,6 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
-import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
-import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
@@ -101,8 +97,6 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
 public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbedVisitor<Void> {
     private final MbedUsedHardwareCollectorVisitor codePreprocess;
     ArrayList<VarDeclaration<Void>> usedVars;
-    private int numberOfArraysUsedInTemplate;
-    private int currentArrayInTemplate;
 
     /**
      * initialize the C++ code generator visitor.
@@ -173,26 +167,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        //TODO there must be a way to make this code simpler
         this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar()));
         if ( var.getTypeVar().isArray() && var.getValue().getKind().hasName("EMPTY_EXPR") ) {
             this.sb.append(" &");
         }
-        /*if ( var.getTypeVar().isArray() ) {
-            if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-                //final ListCreate<Void> list = (ListCreate<Void>) var.getValue();
-                //this.sb.append(list.getValue().get().size() + ">");
-            } else {
-                if ( this.numberOfArraysUsedInTemplate != this.currentArrayInTemplate ) {
-                    this.sb.append("N" + this.currentArrayInTemplate + "> ");
-                    this.currentArrayInTemplate++;
-                } else {
-                    this.currentArrayInTemplate = 0;
-                    this.sb.append("N" + this.currentArrayInTemplate + "> ");
-                    this.currentArrayInTemplate++;
-                }
-            }
-        }*/
         this.sb.append(whitespace() + var.getName());
         return null;
     }
@@ -201,10 +179,6 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         for ( final VarDeclaration<Void> var : this.usedVars ) {
             nlIndent();
             if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-                /*if ( var.getTypeVar().isArray() ) {
-                    ListCreate<Void> list = (ListCreate<Void>) var.getValue();
-                    this.sb.append(list.getValue().get().size() + ">");
-                }*/
                 this.sb.append(var.getName());
                 this.sb.append(whitespace() + "=" + whitespace());
                 var.getValue().visit(this);
@@ -256,6 +230,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             case BOOLEAN:
                 this.sb.append("true");
                 break;
+            case NUMBER:
             case NUMBER_INT:
                 this.sb.append("0");
                 break;
@@ -601,7 +576,6 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        // TODO check if timer is used in the user program
         if ( this.codePreprocess.isTimerSensorUsed() ) {
             this.sb.append("int _initTime = _uBit.systemTime();");
         }
@@ -671,35 +645,6 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             lengthOfIsEmptyFunct.getParam().get(0).visit(this);
             this.sb.append(".size())");
         }
-        return null;
-    }
-
-    @Override
-    public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        if ( listGetIndex.getParam().get(0).toString().contains("ListCreate ") ) {
-            this.sb.append("null");
-            return null;
-        }
-        this.sb.append("_getListElementByIndex(");
-        listGetIndex.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        listGetIndex.getParam().get(1).visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
-        if ( listSetIndex.getParam().get(0).toString().contains("ListCreate ") ) {
-            return null;
-        }
-        this.sb.append("_setListElementByIndex(");
-        listSetIndex.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        listSetIndex.getParam().get(2).visit(this);
-        this.sb.append(", ");
-        listSetIndex.getParam().get(1).visit(this);
-        this.sb.append(");");
         return null;
     }
 
@@ -817,39 +762,6 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     }
 
     @Override
-    public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        //final List<Expr<Void>> parameters = methodVoid.getParameters().get();
-        //appendTemplateIfArrayParameter(parameters);
-        super.visitMethodVoid(methodVoid);
-        return null;
-    }
-
-    @Override
-    public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        //final List<Expr<Void>> parameters = methodReturn.getParameters().get();
-        //appendTemplateIfArrayParameter(parameters);
-        super.visitMethodReturn(methodReturn);
-        return null;
-    }
-
-    private void appendTemplateIfArrayParameter(List<Expr<Void>> parameters) {
-        this.numberOfArraysUsedInTemplate = 0;
-        final boolean isContainedArrayParameter = parameters.stream().filter(p -> p.getVarType().isArray()).findFirst().isPresent();
-        if ( isContainedArrayParameter ) {
-            this.sb.append("\ntemplate<");
-            int i = 0;
-            for ( Expr<Void> expr : parameters ) {
-                if ( expr.getVarType().isArray() ) {
-                    this.sb.append("size_t N" + i++ + ", ");
-                }
-            }
-            this.sb.delete(this.sb.length() - 2, this.sb.length());
-            this.sb.append(">");
-            this.numberOfArraysUsedInTemplate = i;
-        }
-    }
-
-    @Override
     public Void visitPredefinedImage(PredefinedImage<Void> predefinedImage) {
         this.sb.append("MicroBitImage(\"" + predefinedImage.getImageName().getImageString() + "\")");
         return null;
@@ -926,17 +838,16 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitLedColor(LedColor<Void> ledColor) {
-        this.sb
-            .append(
-                "MicroBitColor("
-                    + ledColor.getRedChannel()
-                    + ", "
-                    + ledColor.getGreenChannel()
-                    + ", "
-                    + ledColor.getBlueChannel()
-                    + ", "
-                    + ledColor.getAlphaChannel()
-                    + ")");
+        this.sb.append(
+            "MicroBitColor("
+                + ledColor.getRedChannel()
+                + ", "
+                + ledColor.getGreenChannel()
+                + ", "
+                + ledColor.getBlueChannel()
+                + ", "
+                + ledColor.getAlphaChannel()
+                + ")");
         return null;
     }
 
@@ -1171,10 +1082,6 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         return (((x - in_min) * (out_max - out_min)) / (in_max - in_min)) + out_min;
     }
 
-    private void arrayLen(Var<Void> arr) {
-        this.sb.append(arr.getValue() + ".size()");
-    }
-
     private void appendTextDisplayType(DisplayTextAction<Void> displayTextAction) {
         if ( displayTextAction.getMode() == DisplayTextMode.TEXT ) {
             this.sb.append("scroll(");
@@ -1222,12 +1129,8 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     protected void generateSignaturesOfUserDefinedMethods() {
         for ( final Method<Void> phrase : this.userDefinedMethods ) {
-            //appendTemplateIfArrayParameter(phrase.getParameters().get());
             nlIndent();
             this.sb.append(getLanguageVarTypeFromBlocklyType(phrase.getReturnType()));
-            //if ( getLanguageVarTypeFromBlocklyType(phrase.getReturnType()).toString().contains("array") ) {
-            //    this.sb.append("M>");
-            //}
             this.sb.append(" " + phrase.getMethodName() + "(");
             phrase.getParameters().visit(this);
             this.sb.append(");");
@@ -1252,6 +1155,17 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         this.sb.append("_uBit.soundmotor.motorAOff();");
         nlIndent();
         this.sb.append("_uBit.soundmotor.motorBOff();");
+        return null;
+    }
+
+    /*
+     * Artem Vinokurov 25.10.2018:
+     * I don't know why I am doing this, but it seems that without this a semicolon is lost, somehow...
+     */
+    @Override
+    public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
+        super.visitListSetIndex(listSetIndex);
+        this.sb.append(";");
         return null;
     }
 }

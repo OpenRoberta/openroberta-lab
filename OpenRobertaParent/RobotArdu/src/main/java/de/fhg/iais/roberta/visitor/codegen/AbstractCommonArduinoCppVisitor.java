@@ -7,7 +7,6 @@ import de.fhg.iais.roberta.components.ConfigurationBlock;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
@@ -19,8 +18,6 @@ import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
-import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
@@ -290,126 +287,6 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
             this.sb.append("((int) ");
             lengthOfIsEmptyFunct.getParam().get(0).visit(this);
             this.sb.append(".size())");
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        if ( listGetIndex.getParam().get(0).toString().contains("ListCreate ") ) {
-            this.sb.append("null");
-            return null;
-        }
-        String operation = "";
-        System.out.println(listGetIndex.getElementOperation());
-        switch ( (ListElementOperations) listGetIndex.getElementOperation() ) {
-            case GET:
-                operation = "_getListElementByIndex(";
-                break;
-            case GET_REMOVE:
-                operation = "_getAndRemoveListElementByIndex(";
-                break;
-            case INSERT:
-                break;
-            case REMOVE:
-                operation = "_removeListElementByIndex(";
-                break;
-            case SET:
-                break;
-            default:
-                break;
-        }
-        this.sb.append(operation);
-        switch ( (IndexLocation) listGetIndex.getLocation() ) {
-            case FIRST:
-                listGetIndex.getParam().get(0).visit(this);
-                this.sb.append(", 0)");
-                break;
-            case FROM_END:
-                listGetIndex.getParam().get(0).visit(this);
-                this.sb.append(", ");
-                listGetIndex.getParam().get(0).visit(this);
-                this.sb.append(".size() - 1 - ");
-                listGetIndex.getParam().get(1).visit(this);
-                this.sb.append(")");
-                break;
-            case FROM_START:
-                listGetIndex.getParam().get(0).visit(this);
-                this.sb.append(", ");
-                listGetIndex.getParam().get(1).visit(this);
-                this.sb.append(")");
-                break;
-            case LAST:
-                listGetIndex.getParam().get(0).visit(this);
-                this.sb.append(", ");
-                listGetIndex.getParam().get(0).visit(this);
-                this.sb.append(".size() - 1)");
-                break;
-            default:
-                break;
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
-        if ( listSetIndex.getParam().get(0).toString().contains("ListCreate ") ) {
-            return null;
-        }
-        String operation = "";
-        System.out.println(listSetIndex.getElementOperation());
-        switch ( (ListElementOperations) listSetIndex.getElementOperation() ) {
-            case GET:
-                break;
-            case GET_REMOVE:
-                break;
-            case INSERT:
-                operation = "_insertListElementBeforeIndex(";
-                break;
-            case REMOVE:
-                break;
-            case SET:
-                operation = "_setListElementByIndex(";
-                break;
-            default:
-                break;
-        }
-        this.sb.append(operation);
-        switch ( (IndexLocation) listSetIndex.getLocation() ) {
-            case FIRST:
-                listSetIndex.getParam().get(0).visit(this);
-                this.sb.append(", 0, ");
-                listSetIndex.getParam().get(1).visit(this);
-                this.sb.append(")");
-                break;
-            case FROM_END:
-                listSetIndex.getParam().get(0).visit(this);
-                this.sb.append(", ");
-                listSetIndex.getParam().get(0).visit(this);
-                this.sb.append(".size() - 1 - ");
-                listSetIndex.getParam().get(2).visit(this);
-                this.sb.append(", ");
-                listSetIndex.getParam().get(1).visit(this);
-                this.sb.append(")");
-                break;
-            case FROM_START:
-                listSetIndex.getParam().get(0).visit(this);
-                this.sb.append(", ");
-                listSetIndex.getParam().get(2).visit(this);
-                this.sb.append(", ");
-                listSetIndex.getParam().get(1).visit(this);
-                this.sb.append(")");
-                break;
-            case LAST:
-                listSetIndex.getParam().get(0).visit(this);
-                this.sb.append(", ");
-                listSetIndex.getParam().get(0).visit(this);
-                this.sb.append(".size() - 1, ");
-                listSetIndex.getParam().get(1).visit(this);
-                this.sb.append(")");
-                break;
-            default:
-                break;
         }
         return null;
     }
