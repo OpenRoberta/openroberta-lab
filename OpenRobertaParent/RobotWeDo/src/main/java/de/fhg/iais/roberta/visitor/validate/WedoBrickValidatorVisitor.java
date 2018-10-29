@@ -34,15 +34,15 @@ public final class WedoBrickValidatorVisitor<V> extends AbstractBrickValidatorVi
             sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
             this.errorCount++;
         } else {
-            switch ( usedConfigurationBlock.getType().toString() ) {
+            switch ( usedConfigurationBlock.getConfType().toString() ) {
                 case "INFRARED_SENSING":
-                    if ( !usedConfigurationBlock.getType().equals(SensorType.INFRARED) ) {
+                    if ( !usedConfigurationBlock.getConfType().equals(SensorType.INFRARED) ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
                 case "GYRO_SENSING":
-                    if ( !usedConfigurationBlock.getType().equals(SensorType.GYRO) ) {
+                    if ( !usedConfigurationBlock.getConfType().equals(SensorType.GYRO) ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
@@ -62,7 +62,7 @@ public final class WedoBrickValidatorVisitor<V> extends AbstractBrickValidatorVi
             if ( usedConfigurationBlock == null ) {
                 motorOnAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
                 this.errorCount++;
-            } else if ( usedConfigurationBlock.getType().equals(ActorType.OTHER) && duration ) {
+            } else if ( usedConfigurationBlock.getConfType().equals(ActorType.OTHER) && duration ) {
                 motorOnAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED"));
             }
         }

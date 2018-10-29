@@ -3,13 +3,13 @@ package de.fhg.iais.roberta.visitor.collect;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.ConfigurationBlock;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedActor;
-import de.fhg.iais.roberta.components.UsedConfigurationBlock;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.arduino.ArduinoConfiguration;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
@@ -20,7 +20,6 @@ import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
-import de.fhg.iais.roberta.util.Quadruplet;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
 /**
@@ -30,7 +29,7 @@ import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
  */
 public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements IArduinoVisitor<Void> {
 
-    protected final Set<UsedConfigurationBlock> usedConfigurationBlocks = new LinkedHashSet<>();
+    protected final Set<ConfigurationBlock> usedConfigurationBlocks = new LinkedHashSet<>();
 
     ArduinoConfiguration configuration;
 
@@ -44,16 +43,15 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
         return this.usedSensors;
     }
 
-    public Set<UsedConfigurationBlock> getUsedConfigurationBlocks() {
-        for ( Quadruplet<ConfigurationBlock, String, List<String>, List<String>> configurationBlock : this.configuration.getConfigurationBlocks() ) {
-            this.usedConfigurationBlocks
-                .add(
-                    new UsedConfigurationBlock(
-                        this.configuration.getConfigurationBlockType(configurationBlock),
-                        this.configuration.getBlockName(configurationBlock),
-                        this.configuration.getPorts(configurationBlock),
-                        this.configuration.getPins(configurationBlock)));
-        }
+    public Set<ConfigurationBlock> getUsedConfigurationBlocks() {
+        Map<String, ConfigurationBlock> configurationBlocks = this.configuration.getConfigurationBlocks();
+        configurationBlocks.entrySet().stream().forEach(
+            configurationBlock -> this.usedConfigurationBlocks.add(
+                new ConfigurationBlock(
+                    configurationBlock.getValue().getConfType(),
+                    configurationBlock.getValue().getConfName(),
+                    configurationBlock.getValue().getConfPorts())));
+
         return this.usedConfigurationBlocks;
     }
 

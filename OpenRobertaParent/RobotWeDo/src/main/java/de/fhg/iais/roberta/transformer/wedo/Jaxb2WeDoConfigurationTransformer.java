@@ -1,7 +1,9 @@
 package de.fhg.iais.roberta.transformer.wedo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
@@ -12,7 +14,6 @@ import de.fhg.iais.roberta.components.ConfigurationBlock;
 import de.fhg.iais.roberta.components.ConfigurationBlockType;
 import de.fhg.iais.roberta.components.wedo.WeDoConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.util.Quadruplet;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -65,35 +66,21 @@ public class Jaxb2WeDoConfigurationTransformer {
     }
 
     private Configuration blockToBrickConfiguration(List<List<Block>> blocks) {
-        boolean confBrickFound = false;
-        // Quadruplet: block type; block name; list of block' port names; list of block's pin names
-        List<Quadruplet<ConfigurationBlock, String, List<String>, List<String>>> configurationBlocks = new ArrayList<>();
-
-        // List of blocks is unsorted so maybe the "brick" block is not the first!
+        Map<String, ConfigurationBlock> configurationBlocks = new HashMap<String, ConfigurationBlock>();
         for ( int i = 0; i < blocks.size(); i++ ) {
-            if ( blocks.get(i).get(0).getType().equals("robBrick_WeDo-Brick") ) {
-                confBrickFound = true;
-                continue;
-            } else {
-                configurationBlocks.add(extractConfigurationBlockComponents(blocks.get(i)));
-            }
-        }
-        if ( !confBrickFound ) {
-            throw new DbcException("There was no correct configuration block found! ");
+            configurationBlocks.put(blocks.get(i).get(0).getField().get(0).getValue(), extractConfigurationBlockComponents(blocks.get(i)));
         }
         return new WeDoConfiguration(configurationBlocks).getConfiguration();
     }
 
-    private Quadruplet<ConfigurationBlock, String, List<String>, List<String>> extractConfigurationBlockComponents(List<Block> block) {
-        ConfigurationBlock confBlock = new ConfigurationBlock(ConfigurationBlockType.get(block.get(0).getType()));
+    private ConfigurationBlock extractConfigurationBlockComponents(List<Block> block) {
+        ConfigurationBlockType confType = ConfigurationBlockType.get(block.get(0).getType());
         String name = block.get(0).getField().get(0).getValue();
-        List<String> portNames = new ArrayList<>();
-        List<String> pinNumbers = new ArrayList<>();
+        Map<String, String> confPorts = new HashMap<String, String>();
         for ( int i = 1; i < block.get(0).getField().size(); i++ ) {
-            portNames.add(block.get(0).getField().get(i).getName());
-            pinNumbers.add(block.get(0).getField().get(i).getValue());
+            confPorts.put(block.get(0).getField().get(i).getName(), block.get(0).getField().get(i).getValue());
         }
-        return Quadruplet.of(confBlock, name, portNames, pinNumbers);
+        return new ConfigurationBlock(confType, name, confPorts);
     }
 
     private List<Field> extractFields(Block block, int numOfFields) {

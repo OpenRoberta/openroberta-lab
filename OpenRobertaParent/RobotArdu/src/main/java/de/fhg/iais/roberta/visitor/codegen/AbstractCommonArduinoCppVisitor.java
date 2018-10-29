@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.visitor.codegen;
 import java.util.ArrayList;
 import java.util.Set;
 
+import de.fhg.iais.roberta.components.ConfigurationBlock;
 import de.fhg.iais.roberta.components.UsedActor;
-import de.fhg.iais.roberta.components.UsedConfigurationBlock;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
@@ -41,7 +41,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
 public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor {
 
     protected Set<UsedSensor> usedSensors;
-    protected Set<UsedConfigurationBlock> usedConfigurationBlocks;
+    protected Set<ConfigurationBlock> usedConfigurationBlocks;
     protected Set<UsedActor> usedActors;
     protected ArrayList<VarDeclaration<Void>> usedVars;
 

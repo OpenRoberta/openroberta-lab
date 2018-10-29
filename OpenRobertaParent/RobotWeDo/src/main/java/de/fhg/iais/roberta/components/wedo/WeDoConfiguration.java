@@ -1,17 +1,18 @@
 package de.fhg.iais.roberta.components.wedo;
 
 import java.util.List;
+import java.util.Map;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationBlock;
 import de.fhg.iais.roberta.components.ConfigurationBlockType;
-import de.fhg.iais.roberta.util.Quadruplet;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class WeDoConfiguration extends Configuration {
 
-    protected final List<Quadruplet<ConfigurationBlock, String, List<String>, List<String>>> configurationBlocks;
+    protected final Map<String,ConfigurationBlock> configurationBlocks;
 
-    public WeDoConfiguration(List<Quadruplet<ConfigurationBlock, String, List<String>, List<String>>> configurationBlocks) {
+    public WeDoConfiguration(Map<String,ConfigurationBlock> configurationBlocks) {
         super(null, null, -1, -1);
         this.configurationBlocks = configurationBlocks;
     }
@@ -32,45 +33,35 @@ public class WeDoConfiguration extends Configuration {
         if ( this.configurationBlocks.size() > 1 ) {
             sb.append(" configuration blocks {\n");
             for ( int i = 0; i < this.configurationBlocks.size(); i++ ) {
-                Quadruplet<ConfigurationBlock, String, List<String>, List<String>> block = this.configurationBlocks.get(i);
-                sb.append("    ").append(block.getFirst()).append(", ").append("Name: ").append(block.getSecond());
-                sb.append(", port list: ").append(block.getThird()).append(", pin list: ").append(block.getFourth()).append(";\n");
+                ConfigurationBlock block = this.configurationBlocks.get(i);
+                //                sb.append("    ").append(block.getFirst()).append(", ").append("Name: ").append(block.getSecond());
+                //                sb.append(", port list: ").append(block.getThird()).append(", pin list: ").append(block.getFourth()).append(";\n");
             }
             sb.append("  }\n");
         }
     }
 
-    public List<Quadruplet<ConfigurationBlock, String, List<String>, List<String>>> getConfigurationBlocks() {
+    public Map<String,ConfigurationBlock> getConfigurationBlocks() {
         return this.configurationBlocks;
     }
 
-    public ConfigurationBlock getConfigurationBlock(Quadruplet<ConfigurationBlock, String, List<String>, List<String>> configurationBlock) {
-        return configurationBlock.getFirst();
+    public ConfigurationBlockType getConfigurationBlockType(ConfigurationBlock configurationBlock) {
+        return (ConfigurationBlockType) configurationBlock.getConfType();
     }
 
-    public ConfigurationBlockType getConfigurationBlockType(Quadruplet<ConfigurationBlock, String, List<String>, List<String>> configurationBlock) {
-        return configurationBlock.getFirst().getType();
+    public String getBlockName(ConfigurationBlock configurationBlock) {
+        return configurationBlock.getConfName();
     }
 
-    public String getBlockName(Quadruplet<ConfigurationBlock, String, List<String>, List<String>> configurationBlock) {
-        return configurationBlock.getSecond();
-    }
-
-    public List<String> getPorts(Quadruplet<ConfigurationBlock, String, List<String>, List<String>> configurationBlock) {
-        return configurationBlock.getThird();
-    }
-
-    public List<String> getPins(Quadruplet<ConfigurationBlock, String, List<String>, List<String>> configurationBlock) {
-        return configurationBlock.getFourth();
+    public Map<String, String> getConfPorts(ConfigurationBlock configurationBlock) {
+        return configurationBlock.getConfPorts();
     }
 
     public ConfigurationBlock getConfigurationBlockOnPort(String port) {
-        for ( int i = 0; i < this.configurationBlocks.size(); i++ ) {
-            if ( this.configurationBlocks.get(i).getSecond().toUpperCase().equals(port) ) {
-                return this.configurationBlocks.get(i).getFirst();
-            }
+        if ( port == null || this.configurationBlocks.get(port) == null ) {
+            throw new DbcException("No configuration block could be found with port name: " + port);
         }
-        return null;
+        return this.configurationBlocks.get(port);
     }
 
     @Override

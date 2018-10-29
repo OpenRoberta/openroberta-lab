@@ -29,7 +29,8 @@ public enum ConfigurationBlockType implements IConfigurationBlockType {
     SERVOMOTOR( "robConf_servo" ),
     STEPMOTOR( "robConf_stepmotor" ),
     TEMPERATURE( "robConf_temperature" ),
-    ULTRASONIC( "robConf_ultrasonic" );
+    ULTRASONIC( "robConf_ultrasonic" ),
+    WEDO( "robBrick_WeDo-Brick" );
 
     private final String[] values;
 
@@ -51,7 +52,7 @@ public enum ConfigurationBlockType implements IConfigurationBlockType {
      */
     public static ConfigurationBlockType get(String s) {
         if ( (s == null) || s.isEmpty() ) {
-            throw new DbcException("Invalid sensor type: " + s);
+            throw new DbcException("Invalid block type: " + s);
         }
         String sUpper = s.trim().toUpperCase(Locale.GERMAN);
         for ( ConfigurationBlockType sp : ConfigurationBlockType.values() ) {

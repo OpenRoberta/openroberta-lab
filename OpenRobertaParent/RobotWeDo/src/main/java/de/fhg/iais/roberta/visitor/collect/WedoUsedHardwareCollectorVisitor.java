@@ -1,20 +1,17 @@
 package de.fhg.iais.roberta.visitor.collect;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.ConfigurationBlock;
 import de.fhg.iais.roberta.components.UsedActor;
-import de.fhg.iais.roberta.components.UsedConfigurationBlock;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.wedo.WeDoConfiguration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
-import de.fhg.iais.roberta.util.Quadruplet;
-import de.fhg.iais.roberta.visitor.collect.AbstractUsedHardwareCollectorVisitor;
 
 /**
  * This visitor collects information for used actors and sensors in blockly program.
@@ -23,7 +20,7 @@ import de.fhg.iais.roberta.visitor.collect.AbstractUsedHardwareCollectorVisitor;
  */
 public class WedoUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor {
 
-    protected final Set<UsedConfigurationBlock> usedConfigurationBlocks = new LinkedHashSet<>();
+    protected final Map<String, ConfigurationBlock> usedConfigurationBlocks = new HashMap<String, ConfigurationBlock>();
 
     WeDoConfiguration configuration;
 
@@ -37,15 +34,16 @@ public class WedoUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollec
         return this.usedSensors;
     }
 
-    public Set<UsedConfigurationBlock> getUsedConfigurationBlocks() {
-        for ( Quadruplet<ConfigurationBlock, String, List<String>, List<String>> configurationBlock : this.configuration.getConfigurationBlocks() ) {
-            this.usedConfigurationBlocks.add(
-                new UsedConfigurationBlock(
-                    this.configuration.getConfigurationBlockType(configurationBlock),
-                    this.configuration.getBlockName(configurationBlock),
-                    this.configuration.getPorts(configurationBlock),
-                    this.configuration.getPins(configurationBlock)));
-        }
+    public Map<String, ConfigurationBlock> getUsedConfigurationBlocks() {
+        Map<String, ConfigurationBlock> configurationBlocks = this.configuration.getConfigurationBlocks();
+        configurationBlocks.entrySet().stream().forEach(
+            configurationBlock -> this.usedConfigurationBlocks.put(
+                configurationBlock.getValue().getConfName(),
+                new ConfigurationBlock(
+                    configurationBlock.getValue().getConfType(),
+                    configurationBlock.getValue().getConfName(),
+                    configurationBlock.getValue().getConfPorts())));
+
         return this.usedConfigurationBlocks;
     }
 
@@ -57,15 +55,6 @@ public class WedoUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollec
         }
         if ( this.brickConfiguration != null ) {
             this.usedActors.add(new UsedActor(motorOnAction.getPort(), ActorType.MOTOR));
-        }
-        return null;
-    }
-
-    UsedConfigurationBlock getConfigurationBlock(String name) {
-        for ( UsedConfigurationBlock usedConfigurationBlock : this.usedConfigurationBlocks ) {
-            if ( usedConfigurationBlock.getBlockName().equals(name) ) {
-                return usedConfigurationBlock;
-            }
         }
         return null;
     }

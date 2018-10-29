@@ -1,20 +1,20 @@
 package de.fhg.iais.roberta.components.arduino;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationBlock;
 import de.fhg.iais.roberta.components.ConfigurationBlockType;
-import de.fhg.iais.roberta.util.Quadruplet;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class ArduinoConfiguration extends Configuration {
 
-    protected final List<Quadruplet<ConfigurationBlock, String, List<String>, List<String>>> configurationBlocks;
+    protected final Map<String, ConfigurationBlock> configurationBlocks;
 
-    public ArduinoConfiguration(List<Quadruplet<ConfigurationBlock, String, List<String>, List<String>>> configurationBlocks) {
+    public ArduinoConfiguration(Map<String, ConfigurationBlock> confBlocks) {
         super(null, null, -1, -1);
-        this.configurationBlocks = configurationBlocks;
+        this.configurationBlocks = confBlocks;
     }
 
     /**
@@ -31,10 +31,11 @@ public class ArduinoConfiguration extends Configuration {
 
     /**
      * This class is a builder of {@link Configuration}
+     * 
+     * @param <IConfigurationType>
      */
     public static class Builder extends Configuration.Builder<Builder> {
-        protected final List<Quadruplet<ConfigurationBlock, String, List<String>, List<String>>> confBlocks =
-            new ArrayList<>();
+        protected final Map<String, ConfigurationBlock> confBlocks = new HashMap<>();
 
         /**
          * Add configuration block to the {@link Configuration}
@@ -43,8 +44,8 @@ public class ArduinoConfiguration extends Configuration {
          * @param configuration block we want to connect
          * @return
          */
-        public Builder addConfigurationBlock(ConfigurationBlock block, String name, List<String> ports, List<String> pins) {
-            this.confBlocks.add(Quadruplet.of(block, name, ports, pins));
+        public Builder addConfigurationBlock(ConfigurationBlockType type, String name, Map<String, String> confPorts) {
+            this.confBlocks.put(name, new ConfigurationBlock(type, name, confPorts));
             return this;
         }
 
@@ -52,51 +53,46 @@ public class ArduinoConfiguration extends Configuration {
         public Configuration build() {
             return new ArduinoConfiguration(this.confBlocks);
         }
+
+        public Builder addConfigurationBlock(ConfigurationBlock configurationBlock) {
+            this.confBlocks.put(configurationBlock.getConfName(),configurationBlock);
+            return this;
+        }
     }
 
     private void generateConfigurationBlocks(StringBuilder sb) {
         if ( this.configurationBlocks.size() > 1 ) {
             sb.append(" configuration blocks {\n");
             for ( int i = 1; i < this.configurationBlocks.size(); i++ ) {
-                Quadruplet<ConfigurationBlock, String, List<String>, List<String>> block = this.configurationBlocks.get(i);
-                sb.append("    ").append(block.getFirst()).append(", ").append("Name: ").append(block.getSecond());
-                sb.append(", port list: ").append(block.getThird()).append(", pin list: ").append(block.getFourth()).append(";\n");
+                ConfigurationBlock block = this.configurationBlocks.get(i);
+                //                sb.append("    ").append(block.getFirst()).append(", ").append("Name: ").append(block.getSecond());
+                //                sb.append(", port list: ").append(block.getThird()).append(", pin list: ").append(block.getFourth()).append(";\n");
             }
             sb.append("  }\n");
         }
     }
 
-    public List<Quadruplet<ConfigurationBlock, String, List<String>, List<String>>> getConfigurationBlocks() {
+    public Map<String, ConfigurationBlock> getConfigurationBlocks() {
         return this.configurationBlocks;
     }
 
-    public ConfigurationBlock getConfigurationBlock(Quadruplet<ConfigurationBlock, String, List<String>, List<String>> configurationBlock) {
-        return configurationBlock.getFirst();
+    public ConfigurationBlockType getConfigurationBlockType(ConfigurationBlock configurationBlock) {
+        return (ConfigurationBlockType) configurationBlock.getConfType();
     }
 
-    public ConfigurationBlockType getConfigurationBlockType(Quadruplet<ConfigurationBlock, String, List<String>, List<String>> configurationBlock) {
-        return configurationBlock.getFirst().getType();
+    public String getBlockName(ConfigurationBlock configurationBlock) {
+        return configurationBlock.getConfName();
     }
 
-    public String getBlockName(Quadruplet<ConfigurationBlock, String, List<String>, List<String>> configurationBlock) {
-        return configurationBlock.getSecond();
-    }
-
-    public List<String> getPorts(Quadruplet<ConfigurationBlock, String, List<String>, List<String>> configurationBlock) {
-        return configurationBlock.getThird();
-    }
-
-    public List<String> getPins(Quadruplet<ConfigurationBlock, String, List<String>, List<String>> configurationBlock) {
-        return configurationBlock.getFourth();
+    public Map getConfPorts(ConfigurationBlock configurationBlock) {
+        return configurationBlock.getConfPorts();
     }
 
     public ConfigurationBlock getConfigurationBlockOnPort(String port) {
-        for ( int i = 0; i < this.configurationBlocks.size(); i++ ) {
-            if ( this.configurationBlocks.get(i).getSecond().toUpperCase().equals(port) ) {
-                return this.configurationBlocks.get(i).getFirst();
-            }
+        if ( port == null || this.configurationBlocks.get(port) == null ) {
+            throw new DbcException("No configuration block could be found with port name: " + port);
         }
-        return null;
+        return this.configurationBlocks.get(port);
     }
 
     @Override

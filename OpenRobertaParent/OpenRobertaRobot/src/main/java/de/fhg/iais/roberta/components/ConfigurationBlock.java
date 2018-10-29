@@ -1,56 +1,51 @@
 package de.fhg.iais.roberta.components;
 
-public class ConfigurationBlock {
+import java.util.Map;
 
-    private final ConfigurationBlockType type;
+import de.fhg.iais.roberta.util.dbc.DbcException;
+
+/**
+ */
+public class ConfigurationBlock {
+    final private IConfigurationBlockType confType;
+    final private String confName;
+    final private Map<String, String> confPorts;
+
+    public ConfigurationBlock(IConfigurationBlockType type, String confName, Map<String, String> confPorts) {
+        this.confType = type;
+        this.confName = confName.toUpperCase();
+        this.confPorts = confPorts;
+    }
 
     /**
-     * Creates hardware component of type {@link Category#CONFIGURATION_BLOCK} that will be attached to the brick configuration. Client must provide valid
-     * {@link HardwareComponentType} from {@link Category#CONFIGURATION_BLOCK} category.
-     *
-     * @param componentType of the sensor
+     * @return the confType
      */
-    public ConfigurationBlock(ConfigurationBlockType type) {
-        this.type = type;
+    public IConfigurationBlockType getConfType() {
+        return this.confType;
     }
 
-    @Override
-    public String toString() {
-        return "ConfigurationBlock [" + getType() + "]";
+    /**
+     * @return the confName
+     */
+    public String getConfName() {
+        return this.confName;
     }
 
-    public ConfigurationBlockType getType() {
-        return this.type;
+    /**
+     * @return the confPorts
+     */
+    public Map<String, String> getConfPorts() {
+        return this.confPorts;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = (prime * result) + ((this.type == null) ? 0 : this.type.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if ( this == obj ) {
-            return true;
+    /**
+     * @param name
+     * @return
+     */
+    public String getConfPortOf(String name) {
+        if ( name == null || this.confPorts.get(name) == null ) {
+            throw new DbcException("No configuration port for: " + name);
         }
-        if ( obj == null ) {
-            return false;
-        }
-        if ( getClass() != obj.getClass() ) {
-            return false;
-        }
-        ConfigurationBlock other = (ConfigurationBlock) obj;
-        if ( this.type == null ) {
-            if ( other.getType() != null ) {
-                return false;
-            }
-        } else if ( !this.type.equals(other.getType()) ) {
-            return false;
-        }
-        return true;
+        return this.confPorts.get(name);
     }
-
 }
