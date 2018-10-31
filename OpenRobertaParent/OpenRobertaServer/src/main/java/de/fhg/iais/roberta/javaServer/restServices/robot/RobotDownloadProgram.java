@@ -37,7 +37,7 @@ public class RobotDownloadProgram {
     @Inject
     public RobotDownloadProgram(RobotCommunicator brickCommunicator, ServerProperties serverProperties) {
         this.brickCommunicator = brickCommunicator;
-        pathToCrosscompilerBaseDir = serverProperties.getTempDirForUserProjects();
+        this.pathToCrosscompilerBaseDir = serverProperties.getTempDirForUserProjects();
     }
 
     @POST
@@ -48,7 +48,7 @@ public class RobotDownloadProgram {
         try {
             String token = requestEntity.getString("token");
             LOG.info("/download - request for token " + token);
-            RobotCommunicationData state = brickCommunicator.getState(token);
+            RobotCommunicationData state = this.brickCommunicator.getState(token);
             String programName = state.getProgramName();
 
             String fileName = null;
@@ -60,7 +60,7 @@ public class RobotDownloadProgram {
                 case "ev3lejosv1":
                 case "lejos":
                     fileName = programName + ".jar";
-                    filePath = pathToCrosscompilerBaseDir + token + "/target";
+                    filePath = this.pathToCrosscompilerBaseDir + token + "/target";
                     break;
                 case "Nao":
                     fileName = programName + ".py";
@@ -68,19 +68,20 @@ public class RobotDownloadProgram {
                     break;
                 case "ev3dev":
                     fileName = programName + ".py";
-                    filePath = pathToCrosscompilerBaseDir + token + "/" + programName + "/src";
+                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/src";
                     break;
                 case "NXT":
                     fileName = programName + ".rxe";
-                    filePath = pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
+                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
                 case "ardu":
                 case "bob3":
                 case "uno":
                 case "mega":
                 case "nano":
+                case "mbot":
                     fileName = programName + ".ino.hex";
-                    filePath = pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
+                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
                 default:
                     LOG.error("unsupported firmware name " + state.getFirmwareName());
