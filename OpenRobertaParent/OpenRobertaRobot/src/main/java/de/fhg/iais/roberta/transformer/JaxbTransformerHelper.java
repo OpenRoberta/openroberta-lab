@@ -301,7 +301,7 @@ public final class JaxbTransformerHelper {
         for ( NepoInfo info : astSource.getInfos().getInfos() ) {
             if ( info.getSeverity() == Severity.WARNING ) {
                 warning.setValue(info.getMessage());
-                warning.setPinned(false);
+                warning.setPinned(true);
                 warning.setH("undefined");
                 warning.setW("undefined");
                 block.setWarning(warning);
@@ -314,7 +314,7 @@ public final class JaxbTransformerHelper {
         for ( NepoInfo info : astSource.getInfos().getInfos() ) {
             if ( info.getSeverity() == Severity.ERROR ) {
                 error.setValue(info.getMessage());
-                error.setPinned(false);
+                error.setPinned(true);
                 error.setH("undefined");
                 error.setW("undefined");
                 block.setError(error);
