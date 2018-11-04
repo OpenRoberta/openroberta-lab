@@ -43,22 +43,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             GUISTATE.program.name = 'NEPOprog';
             GUISTATE.program.shared = false;
             GUISTATE.program.toolbox.level = 'beginner';
-            
-            for (var i = 0; i < GUISTATE.server.tutorial.length; i++) {
-                var tutorialPath = '../tutorial/' + GUISTATE.server.tutorial[i];
-                $.getJSON(tutorialPath).done(function(data) {
-                    // store the available tutorial objects
-                    if (data.name) {
-                        var tutorialId = data.name.toLowerCase().replace(/ /g, "");
-                        GUISTATE.tutorials[tutorialId] = data;
-                    } else {
-                        console.error('"' + tutorialPath + '" is not a valid tutorial file! No name could be found.');
-                    }
-                }).fail(function(e, r) {
-                    // this should not happen
-                    console.error('"' + tutorialPath + '" is not a valid json file! The reason is probably a', r);
-                });
-            }
 
             if (GUISTATE.server.theme !== 'default') {
                 var themePath = '../theme/' + GUISTATE.server.theme + '.json';
@@ -124,7 +108,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         return true;
     }
     exports.isProgramWritable = isProgramWritable;
-    
+
     function isConfigurationStandard() {
         return GUISTATE.configuration.name == getRobotGroup().toUpperCase() + 'basis';
     }
@@ -1005,7 +989,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
     exports.checkSim = checkSim;
 
     function getListOfTutorials() {
-        return GUISTATE.tutorials;
+        return GUISTATE.server.tutorial;
     }
     exports.getListOfTutorials = getListOfTutorials;
 

@@ -1,7 +1,11 @@
 package de.fhg.iais.roberta.util;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -146,12 +150,37 @@ public class Util {
      */
     public static List<String> getListOfFileNames(String path, String... extensions) {
         File dir = new File(path);
-        List<File> listOfFiles = (List<File>) FileUtils.listFiles(dir, extensions, true);
-        List<String> listOfFileNames = new ArrayList<>();
-        for ( File file : listOfFiles ) {
-            listOfFileNames.add(file.getName());
+        try {
+            List<File> listOfFiles = (List<File>) FileUtils.listFiles(dir, extensions, true);
+            List<String> listOfFileNames = new ArrayList<>();
+            for ( File file : listOfFiles ) {
+                listOfFileNames.add(file.getAbsolutePath());
+            }
+            return listOfFileNames;
+        } catch ( Exception e ) {
+            return Collections.<String> emptyList();
         }
-        return listOfFileNames;
+    }
+
+    /**
+     * Reads all files provided by the list of paths. Assuming that the files content json data with one property "name" this method returns a JSON object
+     * containing the json data.
+     * 
+     * @param pathes list of absolute paths to json files
+     * @return JSONObject with all valid json data or null
+     */
+    public static JSONObject getJSONObjectFromFiles(List<String> paths) {
+        JSONObject jsonObj = new JSONObject();
+        for ( String path : paths ) {
+            try {
+                String tmpJsonData = new String(Files.readAllBytes(Paths.get(path)));
+                JSONObject tmpJsonObj = new JSONObject(tmpJsonData);
+                jsonObj.put(tmpJsonObj.getString("name").toLowerCase().replaceAll("\\s", ""), tmpJsonObj);
+            } catch ( IOException | JSONException e2 ) {
+                // no problem, we simply ignore files without valid json data or without the property "name"
+            }
+        }
+        return jsonObj;
     }
 
     /**

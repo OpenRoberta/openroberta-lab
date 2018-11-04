@@ -57,7 +57,8 @@ public class ClientAdmin {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response command(@OraData HttpSessionState httpSessionState, @OraData DbSession dbSession, JSONObject fullRequest, @Context HttpHeaders httpHeaders) throws Exception {
+    public Response command(@OraData HttpSessionState httpSessionState, @OraData DbSession dbSession, JSONObject fullRequest, @Context HttpHeaders httpHeaders)
+        throws Exception {
 
         AliveData.rememberClientCall();
         MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
@@ -74,11 +75,11 @@ public class ClientAdmin {
             if ( cmd.equals("init") ) {
                 List<String> userAgentList = httpHeaders.getRequestHeader("User-Agent");
                 String userAgentString = "";
-                if (userAgentList != null) {
+                if ( userAgentList != null ) {
                     userAgentString = userAgentList.get(0);
                 }
                 UserAgent userAgent = UserAgent.parseUserAgentString(userAgentString);
-                Statistics.infoUserAgent("Initialization",userAgent, request);
+                Statistics.infoUserAgent("Initialization", userAgent, request);
 
                 JSONObject server = new JSONObject();
                 server.put("defaultRobot", serverProperties.getDefaultRobot());
@@ -100,12 +101,13 @@ public class ClientAdmin {
                 server.put("isPublic", serverProperties.getBooleanProperty("server.public"));
                 server.put("robots", robots);
                 String staticRecourcesDir = this.serverProperties.getStringProperty("server.staticresources.dir");
-                String pathToTutorial = staticRecourcesDir+ File.separator + "tutorial";                
-                List<String> listOfFileNames = Util.getListOfFileNames(pathToTutorial, "json");               
-                server.put("tutorial", listOfFileNames);
-                String pathToHelp = staticRecourcesDir+ File.separator + "help";                
-                listOfFileNames = Util.getListOfFileNames(pathToHelp, "html");               
-                server.put("help", listOfFileNames);
+                String pathToTutorial = this.serverProperties.getStringProperty("server.tutorial.dir");
+                List<String> tutorialPathes = Util.getListOfFileNames(pathToTutorial, "json");
+                JSONObject tutorial = Util.getJSONObjectFromFiles(tutorialPathes);
+                server.put("tutorial", tutorial);
+                String pathToHelp = staticRecourcesDir + File.separator + "help";
+                tutorialPathes = Util.getListOfFileNames(pathToHelp, "html");
+                server.put("help", tutorialPathes);
                 String theme = serverProperties.getStringProperty("server.theme");
                 server.put("theme", theme);
                 response.put("server", server);

@@ -81,12 +81,10 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         exports.robot.robotPort = '';
         exports.robot.socket = null;
 
-        exports.tutorials = {};
-
         var getInitFromServer = function() {
             return COMM.json("/admin", {
                 "cmd" : "init",
-                "screenSize" : [window.screen.availWidth, window.screen.availHeight]
+                "screenSize" : [ window.screen.availWidth, window.screen.availHeight ]
             }, function(result) {
                 if (result.rc === 'ok') {
                     $.extend(exports.server, result.server);
