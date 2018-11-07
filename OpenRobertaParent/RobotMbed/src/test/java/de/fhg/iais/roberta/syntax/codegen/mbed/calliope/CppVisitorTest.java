@@ -653,13 +653,13 @@ public class CppVisitorTest {
                 + "std::list<double> item;"
                 + MAIN
                 + "item = {1, 2, 3, 4};"
-                + "_uBit.display.scroll(ManagedString(sum(item)));\n"
-                + "_uBit.display.scroll(ManagedString(min(item)));\n"
-                + "_uBit.display.scroll(ManagedString(max(item)));\n"
-                + "_uBit.display.scroll(ManagedString(average(item)));\n"
-                + "_uBit.display.scroll(ManagedString(median(item)));\n"
-                + "_uBit.display.scroll(ManagedString(standardDeviation(item)));\n"
-                + "_uBit.display.scroll(ManagedString(randomElement(item)));"
+                + "_uBit.display.scroll(ManagedString(_getListSum(item)));\n"
+                + "_uBit.display.scroll(ManagedString(_getListMin(item)));\n"
+                + "_uBit.display.scroll(ManagedString(_getListMax(item)));\n"
+                + "_uBit.display.scroll(ManagedString(_getListAverage(item)));\n"
+                + "_uBit.display.scroll(ManagedString(_getListMedian(item)));\n"
+                + "_uBit.display.scroll(ManagedString(_getListStandardDeviation(item)));\n"
+                + "_uBit.display.scroll(ManagedString((item)));"
                 + END;
         assertCodeIsOk(expectedResult, "/action/math_on_list.xml");
     }
@@ -676,7 +676,7 @@ public class CppVisitorTest {
                 + "doSomething(item);"
                 + END
                 + "void doSomething(std::list<MicroBitImage> & x) {"
-                + "_uBit.display.animateImages(x,200);"
+                + "for(MicroBitImage&image:x){_uBit.display.print(image,0,0,255,200);_uBit.display.clear();}"
                 + "}";
 
         assertCodeIsOk(expectedResult, "/function/user_defined_function.xml");

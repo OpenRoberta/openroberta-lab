@@ -61,7 +61,6 @@ import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
@@ -704,7 +703,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         this.sb.append(")");
         return null;
     }
-
+    /*
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
         final FunctionNames functName = mathOnListFunct.getFunctName();
@@ -719,6 +718,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         this.sb.append(")");
         return null;
     }
+    */
 
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
@@ -779,10 +779,12 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
                 this.sb.append(");");
                 nlIndent();
             } catch ( Exception e ) {
-                this.sb.append("_uBit.display.");
-                this.sb.append("animateImages(");
+                this.sb.append("for (MicroBitImage& image : ");
                 displayImageAction.getValuesToDisplay().visit(this);
-                this.sb.append(", 200);");
+                this.sb.append(") {");
+                this.sb.append("_uBit.display.print(image, 0, 0, 255, 200);");
+                this.sb.append("_uBit.display.clear();");
+                this.sb.append("}");
                 return null;
             }
         }
@@ -838,16 +840,17 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitLedColor(LedColor<Void> ledColor) {
-        this.sb.append(
-            "MicroBitColor("
-                + ledColor.getRedChannel()
-                + ", "
-                + ledColor.getGreenChannel()
-                + ", "
-                + ledColor.getBlueChannel()
-                + ", "
-                + ledColor.getAlphaChannel()
-                + ")");
+        this.sb
+            .append(
+                "MicroBitColor("
+                    + ledColor.getRedChannel()
+                    + ", "
+                    + ledColor.getGreenChannel()
+                    + ", "
+                    + ledColor.getBlueChannel()
+                    + ", "
+                    + ledColor.getAlphaChannel()
+                    + ")");
         return null;
     }
 
@@ -1108,6 +1111,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         this.sb.append("#define _GNU_SOURCE\n\n");
         this.sb.append("#include \"MicroBit.h\"\n");
         this.sb.append("#include \"NEPODefs.h\"\n");
+
         if ( this.codePreprocess.isFourDigitDisplayUsed() ) {
             this.sb.append("#include \"FourDigitDisplay.h\"\n");
         }

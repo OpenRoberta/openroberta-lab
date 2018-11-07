@@ -426,6 +426,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
         this.sb.append("#include <Wire.h>\n");
         this.sb.append("#include <SoftwareSerial.h>\n");
         this.sb.append("#include <RobertaFunctions.h>\n");
+        this.sb.append("#include <NEPODefs.h>\n");
         this.sb.append("#include \"MeDrive.h\"\n\n");
         this.sb.append("RobertaFunctions rob;\n");
 
@@ -500,12 +501,13 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
                     this.sb.append("MeDCMotor " + usedActor.getPort().getCodeName() + "(" + usedActor.getPort().getOraName() + ");\n");
                     break;
                 case DIFFERENTIAL_DRIVE:
-                    this.sb.append(
-                        "MeDrive myDrive("
-                            + this.brickConfiguration.getLeftMotorPort().getOraName()
-                            + ", "
-                            + this.brickConfiguration.getRightMotorPort().getOraName()
-                            + ");\n");
+                    this.sb
+                        .append(
+                            "MeDrive myDrive("
+                                + this.brickConfiguration.getLeftMotorPort().getOraName()
+                                + ", "
+                                + this.brickConfiguration.getRightMotorPort().getOraName()
+                                + ");\n");
                     break;
                 case LED_MATRIX:
                     this.sb.append("MeLEDMatrix myLEDMatrix_" + usedActor.getPort().getOraName() + "(" + usedActor.getPort().getOraName() + ");\n");

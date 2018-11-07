@@ -22,6 +22,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
@@ -208,7 +209,6 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
             return null;
         }
         String operation = "";
-        System.out.println(listSetIndex.getElementOperation());
         switch ( (ListElementOperations) listSetIndex.getElementOperation() ) {
             case GET:
                 break;
@@ -262,6 +262,37 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
             default:
                 break;
         }
+        return null;
+    }
+
+    @Override
+    public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
+        switch ( mathOnListFunct.getFunctName() ) {
+            case AVERAGE:
+                this.sb.append("_getListAverage(");
+                break;
+            case MAX:
+                this.sb.append("_getListMax(");
+                break;
+            case MEDIAN:
+                this.sb.append("_getListMedian(");
+                break;
+            case MIN:
+                this.sb.append("_getListMin(");
+                break;
+            case STD_DEV:
+                this.sb.append("_getListStandardDeviation(");
+                break;
+            case SUM:
+                this.sb.append("_getListSum(");
+                break;
+            case RANDOM:
+                this.sb.append("(");
+            default:
+                break;
+        }
+        mathOnListFunct.getParam().get(0).visit(this);
+        this.sb.append(")");
         return null;
     }
 

@@ -347,7 +347,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
         this.sb.append(")");
         return null;
     }
-
+    /*
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
         if ( mathOnListFunct.getParam().get(0).toString().contains("ListCreate ") ) {
@@ -388,6 +388,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
         this.sb.append(")");
         return null;
     }
+    */
 
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {

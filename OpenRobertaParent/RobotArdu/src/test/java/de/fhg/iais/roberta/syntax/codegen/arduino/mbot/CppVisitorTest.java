@@ -14,6 +14,7 @@ public class CppVisitorTest {
             + "#include <Wire.h>\n"
             + "#include <SoftwareSerial.h>\n"
             + "#include <RobertaFunctions.h>\n"
+            + "#include <NEPODefs.h>"
             + "#include \"MeDrive.h\"\n\n";
 
     private static final String MAIN_METHOD2 = "" + "void setup(){" + "Serial.begin(9600);";
@@ -295,82 +296,87 @@ public class CppVisitorTest {
 
     @Test
     public void visitLedAction() throws Exception {
-        String expectedResult = "" //
-            + MAIN_METHOD1
-            + "RobertaFunctions rob;"
-            + "MeRGBLedrgbled_7(7,7==7?2:4);"
-            + MAIN_METHOD2
-            + "}"
-            + "voidloop(){"
-            + "rgbled_7.setColor(0,0,120,120);"
-            + "rgbled_7.show();"
-            + "delay(1000);"
-            + "rgbled_7.setColor(0,120,0,120);"
-            + "rgbled_7.show();"
-            + "delay(1000);}";
+        String expectedResult =
+            "" //
+                + MAIN_METHOD1
+                + "RobertaFunctions rob;"
+                + "MeRGBLedrgbled_7(7,7==7?2:4);"
+                + MAIN_METHOD2
+                + "}"
+                + "voidloop(){"
+                + "rgbled_7.setColor(0,0,120,120);"
+                + "rgbled_7.show();"
+                + "delay(1000);"
+                + "rgbled_7.setColor(0,120,0,120);"
+                + "rgbled_7.show();"
+                + "delay(1000);}";
 
         this.h.assertCodeIsOk(expectedResult, "/syntax/code_generator/java/makeblock/led.xml", true);
     }
 
     @Test
     public void visitSteerAction() throws Exception {
-        String expectedResult = "" //
-            + MAIN_METHOD1
-            + "RobertaFunctions rob;"
-            + "MeDrivemyDrive(M2,M1);"
-            + MAIN_METHOD2
-            + "}"
-            + "voidloop(){"
-            + "myDrive.steer(50*255/100,80*255/100,1,2000);"
-            + "delay(5000);}";
+        String expectedResult =
+            "" //
+                + MAIN_METHOD1
+                + "RobertaFunctions rob;"
+                + "MeDrivemyDrive(M2,M1);"
+                + MAIN_METHOD2
+                + "}"
+                + "voidloop(){"
+                + "myDrive.steer(50*255/100,80*255/100,1,2000);"
+                + "delay(5000);}";
 
         this.h.assertCodeIsOk(expectedResult, "/syntax/code_generator/java/makeblock/steer.xml", true);
     }
 
     @Test
     public void visitDriveAction() throws Exception {
-        String expectedResult = "" //
-            + MAIN_METHOD1
-            + "RobertaFunctions rob;"
-            + "MeDrivemyDrive(M2,M1);"
-            + MAIN_METHOD2
-            + "}"
-            + "voidloop(){"
-            + "myDrive.drive(60*255/100,1,2000);"
-            + "delay(2000);}";
+        String expectedResult =
+            "" //
+                + MAIN_METHOD1
+                + "RobertaFunctions rob;"
+                + "MeDrivemyDrive(M2,M1);"
+                + MAIN_METHOD2
+                + "}"
+                + "voidloop(){"
+                + "myDrive.drive(60*255/100,1,2000);"
+                + "delay(2000);}";
 
         this.h.assertCodeIsOk(expectedResult, "/syntax/code_generator/java/makeblock/drive.xml", true);
     }
 
     @Test
     public void visitButtonSensor() throws Exception {
-        String expectedResult = "" //
-            + MAIN_METHOD1
-            + "RobertaFunctions rob;"
-            + "MeBuzzerbuzzer;"
-            + MAIN_METHOD2
-            + "}"
-            + "voidloop(){"
-            + "if((analogRead(7)<100))"
-            + "{buzzer.tone(8,261.626,2000);"
-            + "delay(20);}}";
+        String expectedResult =
+            "" //
+                + MAIN_METHOD1
+                + "RobertaFunctions rob;"
+                + "MeBuzzerbuzzer;"
+                + MAIN_METHOD2
+                + "}"
+                + "voidloop(){"
+                + "if((analogRead(7)<100))"
+                + "{buzzer.tone(8,261.626,2000);"
+                + "delay(20);}}";
 
         this.h.assertCodeIsOk(expectedResult, "/syntax/code_generator/java/makeblock/get_button.xml", true);
     }
 
     @Test
     public void visitPotentoimeterSensor() throws Exception {
-        String expectedResult = "" //
-            + MAIN_METHOD1
-            + "RobertaFunctions rob;"
-            + "MePotentiometermyVoltageSensor4(PORT_4);"
-            + "MeBuzzerbuzzer;"
-            + MAIN_METHOD2
-            + "}"
-            + "voidloop(){"
-            + "if(myVoltageSensor4.read()*5/970==3)"
-            + "{buzzer.tone(8,261.626,2000);"
-            + "delay(20);}}";
+        String expectedResult =
+            "" //
+                + MAIN_METHOD1
+                + "RobertaFunctions rob;"
+                + "MePotentiometermyVoltageSensor4(PORT_4);"
+                + "MeBuzzerbuzzer;"
+                + MAIN_METHOD2
+                + "}"
+                + "voidloop(){"
+                + "if(myVoltageSensor4.read()*5/970==3)"
+                + "{buzzer.tone(8,261.626,2000);"
+                + "delay(20);}}";
 
         this.h.assertCodeIsOk(expectedResult, "/syntax/code_generator/java/makeblock/potentiometer.xml", true);
     }

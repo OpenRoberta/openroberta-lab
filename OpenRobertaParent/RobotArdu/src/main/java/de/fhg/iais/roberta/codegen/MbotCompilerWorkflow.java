@@ -36,27 +36,27 @@ public class MbotCompilerWorkflow extends AbstractCompilerWorkflow {
     public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) //
     {
         if ( data.getErrorMessage() != null ) {
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
             return;
         }
         try {
-            generatedSourceCode = MbotCppVisitor.generate((MbotConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+            this.generatedSourceCode = MbotCppVisitor.generate((MbotConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
             LOG.info("mbot c++ code generated");
         } catch ( Exception e ) {
             LOG.error("mbot c++ code generation failed", e);
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
         }
     }
 
     @Override
     public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
         storeGeneratedProgram(token, programName, ".ino");
-        if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
-            workflowResult = runBuild(token, programName, "generated.main");
-            if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+        if ( this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+            this.workflowResult = runBuild(token, programName, "generated.main");
+            if ( this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
                 LOG.info("compile mbot c++ program {} successful", programName);
             } else {
-                LOG.error("compile mbot c++ program {} failed with {}", programName, workflowResult);
+                LOG.error("compile mbot c++ program {} failed with {}", programName, this.workflowResult);
             }
         }
     }
@@ -84,7 +84,7 @@ public class MbotCompilerWorkflow extends AbstractCompilerWorkflow {
      * @param mainPackage
      */
     private Key runBuild(String token, String mainFile, String mainPackage) {
-        final String robotName = this.pluginProperties.getRobotName();
+        this.pluginProperties.getRobotName();
         final String compilerBinDir = this.pluginProperties.getCompilerBinDir();
         final String compilerResourcesDir = this.pluginProperties.getCompilerResourceDir();
         final String tempDir = this.pluginProperties.getTempDir();
@@ -92,7 +92,6 @@ public class MbotCompilerWorkflow extends AbstractCompilerWorkflow {
         final StringBuilder sb = new StringBuilder();
         String scriptName = "";
         String os = "";
-        System.out.println(System.getProperty("os.arch"));
         if ( SystemUtils.IS_OS_LINUX ) {
             if ( System.getProperty("os.arch").contains("arm") ) {
                 scriptName = compilerResourcesDir + "/linux-arm/arduino-builder";
@@ -113,16 +112,18 @@ public class MbotCompilerWorkflow extends AbstractCompilerWorkflow {
 
         try {
             String fqbnArg = "-fqbn=arduino:avr:uno";
-            ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
-                scriptName,
-                "-hardware=" + compilerResourcesDir + "/hardware",
-                "-tools=" + compilerResourcesDir + "/" + os + "/tools-builder",
-                "-libraries=" + compilerResourcesDir + "/libraries",
-                fqbnArg,
-                "-prefs=compiler.path=" + compilerBinDir,
-                "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
-                base.resolve(path).toAbsolutePath().normalize().toString() + "/source/" + mainFile + ".ino"
-            });
+            ProcessBuilder procBuilder =
+                new ProcessBuilder(
+                    new String[] {
+                        scriptName,
+                        "-hardware=" + compilerResourcesDir + "/hardware",
+                        "-tools=" + compilerResourcesDir + "/" + os + "/tools-builder",
+                        "-libraries=" + compilerResourcesDir + "/libraries",
+                        fqbnArg,
+                        "-prefs=compiler.path=" + compilerBinDir,
+                        "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
+                        base.resolve(path).toAbsolutePath().normalize().toString() + "/source/" + mainFile + ".ino"
+                    });
 
             procBuilder.redirectInput(Redirect.INHERIT);
             procBuilder.redirectOutput(Redirect.INHERIT);

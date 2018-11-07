@@ -143,7 +143,8 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
         incrIndentation();
         this.sb.append("{");
         nlIndent();
-        this.sb.append("Serial.begin(9600); ");
+        this.sb.append("Serial.begin(9600);");
+        nlIndent();
         generateUsedVars();
         decrIndentation();
         nlIndent();
@@ -162,8 +163,7 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
         this.sb.append("#include <BOB3.h> \n");
         this.sb.append("#include <Wire.h>\n");
         this.sb.append("#include <SoftwareSerial.h>\n");
-        this.sb.append("#include <RobertaFunctions.h>\n");
-        this.sb.append("RobertaFunctions rob;\n");
+        this.sb.append("#include <NEPODefs.h>\n");
         this.sb.append("Bob3 myBob;\n");
 
     }
