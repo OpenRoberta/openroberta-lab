@@ -82,9 +82,14 @@ public class ServerStarter {
         List<String> defines = defineOpt.values(options);
 
         final ServerStarter serverStarter = new ServerStarter(null, defines);
-        Server server = serverStarter.start();
-        server.join();
-        System.exit(0);
+        try {
+            Server server = serverStarter.start();
+            server.join();
+            System.exit(0);
+        } catch ( Exception e ) {
+            LOG.error("Exception during server startup. Server NOT started", e);
+            System.exit(12);
+        }
     }
 
     /**

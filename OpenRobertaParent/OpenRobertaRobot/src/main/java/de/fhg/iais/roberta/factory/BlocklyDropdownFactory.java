@@ -3,11 +3,13 @@ package de.fhg.iais.roberta.factory;
 import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.LoaderOptions;
+import org.yaml.snakeyaml.Yaml;
 
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
@@ -38,16 +40,27 @@ import de.fhg.iais.roberta.mode.general.WorkingState;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.sensor.GetSampleType;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.util.DropDown;
-import de.fhg.iais.roberta.util.DropDowns;
 import de.fhg.iais.roberta.util.Pair;
+import de.fhg.iais.roberta.util.PluginProperties;
+import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class BlocklyDropdownFactory {
     private static final Logger LOG = LoggerFactory.getLogger(BlocklyDropdownFactory.class);
+
+    private static final Yaml YAML;
+    static {
+        LoaderOptions lo = new LoaderOptions();
+        lo.setAllowDuplicateKeys(false);
+        YAML = new Yaml(lo);
+    }
+
+    private final JSONObject robotDescription;
 
     private final Set<String> sensorToPorts;
     private final Set<String> actorToPorts;
@@ -55,17 +68,23 @@ public class BlocklyDropdownFactory {
 
     private final Map<String, WaitUntilSensorBean> waMap;
     private final Map<String, String> modes;
-    private final DropDowns blocklyDropdownColorItems;
+    private final DropDown blocklyDropdownColorItems;
     private final DropDown configurationComponentTypes;
 
-    public BlocklyDropdownFactory(Properties properties) {
-        this.sensorToPorts = BlocklyDropdown2EnumHelper.getSensorPortsFromProperties(properties);
-        this.actorToPorts = BlocklyDropdown2EnumHelper.getActorPortsFromProperties(properties);
-        this.slots = BlocklyDropdown2EnumHelper.getSlotFromProperties(properties);
-        this.blocklyDropdownColorItems = BlocklyDropdown2EnumHelper.getDropdownColorFromProperties(properties);
-        this.waMap = BlocklyDropdown2EnumHelper.getWaitUntilFromProperties(properties);
-        this.modes = BlocklyDropdown2EnumHelper.getModesFromProperties(properties);
-        this.configurationComponentTypes = BlocklyDropdown2EnumHelper.getConfigurationComponentTypesFromProperties(properties);
+    public BlocklyDropdownFactory(PluginProperties pluginProperties) {
+        String robotDescriptor = pluginProperties.getStringProperty("robot.descriptor");
+        robotDescription = new JSONObject();
+        Util1.loadYAMLRecursive("", robotDescription, robotDescriptor);
+
+        this.sensorToPorts = BlocklyDropdown2EnumHelper.getSensorPortsFromProperties(pluginProperties.getPluginProperties());
+        this.actorToPorts = BlocklyDropdown2EnumHelper.getActorPortsFromProperties(pluginProperties.getPluginProperties());
+        this.slots = BlocklyDropdown2EnumHelper.getSlotFromProperties(pluginProperties.getPluginProperties());
+
+        this.blocklyDropdownColorItems = BlocklyDropdown2EnumHelper.getColors(robotDescription);
+        this.waMap = BlocklyDropdown2EnumHelper.getWaitUntils(robotDescription);
+        this.modes = BlocklyDropdown2EnumHelper.getModes(robotDescription);
+        this.configurationComponentTypes = BlocklyDropdown2EnumHelper.getConfigurationComponents(robotDescription);
+
     }
 
     public String getConfigurationComponentTypeByBlocklyName(String blocklyName) {
@@ -150,14 +169,13 @@ public class BlocklyDropdownFactory {
     }
 
     /**
-     * Get a {@link Pair<String, String>} given string parameter. Throws exception if
-     * the color cannot be found.
+     * Get a {@link Pair<String, String>} given string parameter. Throws exception if the color cannot be found.
      *
      * @param name of the color
      * @return {@link Pair<String, String>}
      */
     public Pair<String, String> getPickColor(String color) {
-        return this.blocklyDropdownColorItems.get("color").getPairBySecond(color.toUpperCase());
+        return this.blocklyDropdownColorItems.getPairBySecond(color.toUpperCase());
     }
 
     /**
@@ -256,14 +274,9 @@ public class BlocklyDropdownFactory {
     }
 
     /**
-     * Creates an AST object representing sensor of specific type. If the type of the sensor does not exists it trows an exception.
-     * @param sensorKey see {@link GetSampleType}
-     * @param port on which the sensor is connected
-     * @param slot on which the sensor is connected
-     * @param properties of the block
-     * @param comment of the block
-     * @return returns instance of the specific sensor {@link Sensor}
-     * @throws
+     * Creates an AST object representing sensor of specific type. If the type of the sensor does not exists it trows an exception. @param sensorKey see
+     * {@link GetSampleType} @param port on which the sensor is connected @param slot on which the sensor is connected @param properties of the block @param
+     * comment of the block @return returns instance of the specific sensor {@link Sensor} @throws
      */
     @SuppressWarnings("unchecked")
     public Sensor<?> createSensor(

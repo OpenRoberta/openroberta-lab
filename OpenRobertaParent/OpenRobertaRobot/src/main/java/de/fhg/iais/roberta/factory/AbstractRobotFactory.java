@@ -21,7 +21,7 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
     public AbstractRobotFactory(PluginProperties pluginProperties) {
 
         this.pluginProperties = pluginProperties;
-        this.blocklyDropdown2EnumFactory = new BlocklyDropdownFactory(pluginProperties.getPluginProperties());
+        this.blocklyDropdown2EnumFactory = new BlocklyDropdownFactory(this.pluginProperties);
 
         Properties generalpluginProperties = Util1.loadProperties("classpath:Robot.properties");
         addBlockTypesFromProperties(generalpluginProperties);

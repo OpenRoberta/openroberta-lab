@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public class UtilTest {
+public class Util1Test {
     private static ServerProperties serverProperties;
 
     @BeforeClass

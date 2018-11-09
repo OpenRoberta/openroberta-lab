@@ -9,9 +9,11 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.util.DropDown;
-import de.fhg.iais.roberta.util.DropDowns;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -35,90 +37,74 @@ public class BlocklyDropdown2EnumHelper {
         throw new DbcException("Invalid " + modes.getName() + ": " + modeName);
     }
 
-    public static Set<String> getSensorPortsFromProperties(Properties properties) {
-        String sensors = properties.getProperty("robot.hw.sensors");
+    public static Set<String> getSensorPortsFromProperties(Properties robotProperties) {
+        String sensors = robotProperties.getProperty("robot.hw.sensors");
         Assert.notNull(sensors, "Undefined property robot.hw.sensors");
         String[] sensorPorts = sensors.split("\\s*,\\s*");
-        return new HashSet<String>(Arrays.asList(sensorPorts));
+        return new HashSet<>(Arrays.asList(sensorPorts));
     }
 
-    public static Set<String> getActorPortsFromProperties(Properties properties) {
-        String[] actorPorts = properties.getProperty("robot.hw.actors").split("\\s*,\\s*");
-        return new HashSet<String>(Arrays.asList(actorPorts));
+    public static Set<String> getActorPortsFromProperties(Properties robotProperties) {
+        String actors = robotProperties.getProperty("robot.hw.actors");
+        Assert.notNull(actors, "Undefined property robot.hw.actors");
+        String[] actorPorts = actors.split("\\s*,\\s*");
+        return new HashSet<>(Arrays.asList(actorPorts));
     }
 
     public static Map<String, String> getSlotFromProperties(Properties properties) {
-        Map<String, String> m = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         String filter = "robot.port.slot.";
         for ( Entry<Object, Object> e : properties.entrySet() ) {
             String key = (String) e.getKey();
             if ( key.startsWith(filter) ) {
                 String value = (String) e.getValue();
                 key = key.substring(filter.length());
-                m.put(key, value);
-            }
-        }
-        return m;
-    }
-
-    public static DropDowns getDropdownColorFromProperties(Properties properties) {
-        DropDowns dropdownItems = new DropDowns();
-        String filter = "robot.dropdown.";
-        for ( Entry<Object, Object> e : properties.entrySet() ) {
-            String propertyKey = (String) e.getKey();
-            if ( propertyKey.startsWith(filter) ) {
-                String value = (String) e.getValue();
-                String[] typeAndKey = propertyKey.substring(filter.length()).split("\\.");
-                String dropdownType = typeAndKey[0];
-                String key = typeAndKey[1];
-                dropdownItems.add(dropdownType, key, value);
-            }
-        }
-        return dropdownItems;
-    }
-
-    public static Map<String, String> getModesFromProperties(Properties properties) {
-        Map<String, String> m = new HashMap<>();
-        String filter = "robot.hw.mode.";
-        for ( Entry<Object, Object> e : properties.entrySet() ) {
-            String propertyKey = (String) e.getKey();
-            if ( propertyKey.startsWith(filter) ) {
-                String value = (String) e.getValue();
-                String[] typeAndKey = propertyKey.substring(filter.length()).split("\\.");
-                String key = typeAndKey[1];
-                m.put(key, value);
-            }
-        }
-        return m;
-    }
-
-    public static Map<String, WaitUntilSensorBean> getWaitUntilFromProperties(Properties properties) {
-        Map<String, WaitUntilSensorBean> map = new HashMap<>();
-        String filter = "robot.wait_until.";
-        for ( Entry<Object, Object> e : properties.entrySet() ) {
-            String key = (String) e.getKey();
-            if ( key.startsWith(filter) ) {
-                key = key.substring(filter.length());
-                String value = (String) e.getValue();
-                String[] vs = value.split("\\s*,\\s*");
-                map.put(key, new WaitUntilSensorBean(vs[0], vs[1], vs[2]));
+                map.put(key, value);
             }
         }
         return map;
     }
 
-    public static DropDown getConfigurationComponentTypesFromProperties(Properties properties) {
-        DropDown dropdownItems = new DropDown();
-        String filter = "robot.configuration.";
-        for ( Entry<Object, Object> e : properties.entrySet() ) {
-            String propertyKey = (String) e.getKey();
-            if ( propertyKey.startsWith(filter) ) {
-                String value = (String) e.getValue();
-                String key = propertyKey.substring(filter.length());
-                dropdownItems.add(key, value);
+    public static DropDown getColors(JSONObject robotDescription) {
+        DropDown dropdownItem = new DropDown();
+        JSONObject colors = robotDescription.getJSONObject("color");
+        for ( String key : colors.keySet() ) {
+            String value = colors.getString(key);
+            dropdownItem.add(key, value);
+        }
+        return dropdownItem;
+    }
+
+    public static Map<String, String> getModes(JSONObject robotDescription) {
+        Map<String, String> map = new HashMap<>();
+        JSONObject modes = robotDescription.getJSONObject("mode");
+        for ( String key : modes.keySet() ) {
+            JSONArray v = modes.getJSONArray(key);
+            for ( int i = 0; i < v.length(); i++ ) {
+                String mode = v.getString(i);
+                map.put(mode, mode);
             }
+        }
+        return map;
+    }
+
+    public static Map<String, WaitUntilSensorBean> getWaitUntils(JSONObject robotDescription) {
+        Map<String, WaitUntilSensorBean> map = new HashMap<>();
+        JSONObject waitUntils = robotDescription.getJSONObject("wait");
+        for ( String key : waitUntils.keySet() ) {
+            JSONObject v = waitUntils.getJSONObject(key);
+            map.put(key, new WaitUntilSensorBean(v.getString("implementor"), v.getString("sensor"), v.getString("mode")));
+        }
+        return map;
+    }
+
+    public static DropDown getConfigurationComponents(JSONObject robotDescription) {
+        DropDown dropdownItems = new DropDown();
+        JSONObject configurations = robotDescription.getJSONObject("configuration");
+        for ( String key : configurations.keySet() ) {
+            String value = configurations.getString(key);
+            dropdownItems.add(key, value);
         }
         return dropdownItems;
     }
-
 }
