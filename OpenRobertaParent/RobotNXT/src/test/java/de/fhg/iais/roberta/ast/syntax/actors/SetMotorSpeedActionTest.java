@@ -9,7 +9,7 @@ public class SetMotorSpeedActionTest {
 
     @Test
     public void setMotorSpeed() throws Exception {
-        final String a = "OnFwdReg(OUT_B,SpeedTest(30),OUT_REGMODE_SPEED);";
+        final String a = "OnFwdRegEx(OUT_B,SpeedTest(30),OUT_REGMODE_SPEED,RESET_NONE);";
 
         this.h.assertCodeIsOk(a, "/ast/actions/action_MotorSetPower.xml");
     }

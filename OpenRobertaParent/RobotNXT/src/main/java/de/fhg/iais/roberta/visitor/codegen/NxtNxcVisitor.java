@@ -481,9 +481,9 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                 motorOnAction.getParam().getDuration().getValue().visit(this);
             } else {
                 if ( isRegulatedDrive ) {
-                    this.sb.append(methodNamePart + "Reg(OUT_" + userDefinedPort + ", SpeedTest(");
+                    this.sb.append(methodNamePart + "RegEx(OUT_" + userDefinedPort + ", SpeedTest(");
                     motorOnAction.getParam().getSpeed().visit(this);
-                    this.sb.append("), OUT_REGMODE_SPEED");
+                    this.sb.append("), OUT_REGMODE_SPEED, RESET_NONE");
                 } else {
                     this.sb.append(methodNamePart + "(OUT_" + userDefinedPort + ", SpeedTest(");
                     motorOnAction.getParam().getSpeed().visit(this);
@@ -501,11 +501,11 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         if ( isActorOnPort(userDefinedPort) ) {
             final boolean reverse = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getProperty(SC.MOTOR_REVERSE).equals(SC.ON);
             String sign = reverse ? "-" : "";
-            final String methodName = "OnFwdReg";
+            final String methodName = "OnFwdRegEx";
             //final boolean isRegulated = brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
             this.sb.append(methodName + "(OUT_" + userDefinedPort + ", " + sign + "SpeedTest(");
             motorSetPowerAction.getPower().visit(this);
-            this.sb.append("), OUT_REGMODE_SPEED");
+            this.sb.append("), OUT_REGMODE_SPEED, RESET_NONE");
             this.sb.append(");");
         }
         return null;
@@ -539,10 +539,6 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        System.out.println("test");
-        System.out.println(isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.LEFT)));
-        System.out.println(isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.RIGHT)));
-
         if ( isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.LEFT)) && isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.RIGHT)) ) {
             final boolean isDuration = driveAction.getParam().getDuration() != null;
             final boolean reverse =
@@ -553,7 +549,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
             if ( isDuration ) {
                 methodName = "RotateMotorEx";
             } else {
-                methodName = "OnFwdReg";
+                methodName = "OnFwdRegEx";
             }
             this.sb.append(methodName + "(OUT_");
             if ( this.brickConfiguration.getFirstMotorPort(SC.LEFT).toString().charAt(0) < this.brickConfiguration
@@ -581,7 +577,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                 nlIndent();
                 this.sb.append("Wait(1");
             } else {
-                this.sb.append("OUT_REGMODE_SYNC");
+                this.sb.append("OUT_REGMODE_SYNC, RESET_NONE");
             }
             this.sb.append(");");
         }
