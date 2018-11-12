@@ -5,6 +5,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.components.CalliopeConfiguration;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
 
@@ -28,8 +29,7 @@ public class CppVisitorTest {
 
     @BeforeClass
     public static void setupConfigurationForAllTests() {
-        @SuppressWarnings("rawtypes")
-        Configuration.Builder configuration = new Configuration.Builder();
+        CalliopeConfiguration.Builder configuration = new CalliopeConfiguration.Builder();
         brickConfiguration = configuration.build();
     }
 

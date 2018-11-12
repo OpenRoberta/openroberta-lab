@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.util.test.mbed;
 
 import java.util.Properties;
 
+import de.fhg.iais.roberta.components.CalliopeConfiguration;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.Calliope2016Factory;
@@ -19,7 +20,7 @@ public class HelperCalliopeForXmlTest extends de.fhg.iais.roberta.util.test.Abst
     public HelperCalliopeForXmlTest() {
         super(
             new Calliope2016Factory(new PluginProperties("calliope2016", "", "", Util1.loadProperties("classpath:calliope2016.properties"))),
-            new Configuration.Builder().build());
+            new CalliopeConfiguration.Builder().build());
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
         AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
     }

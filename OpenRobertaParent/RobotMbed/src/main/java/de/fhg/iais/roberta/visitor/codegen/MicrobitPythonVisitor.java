@@ -87,6 +87,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
  */
 public final class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMbedVisitor<Void> {
     private final MbedUsedHardwareCollectorVisitor usedHardwareVisitor;
+    private final Configuration configuration;
 
     /**
      * initialize the Python code generator visitor.
@@ -98,6 +99,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     private MicrobitPythonVisitor(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
 
+        this.configuration = brickConfiguration;
         this.usedHardwareVisitor = new MbedUsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
         this.loopsLabels = this.usedHardwareVisitor.getloopsLabelContainer();
         this.usedGlobalVarInFunctions = this.usedHardwareVisitor.getMarkedVariablesAsGlobal();
@@ -244,7 +246,9 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
-        this.sb.append("microbit." + keysSensor.getPort() + ".is_pressed()");
+        String userDefined = keysSensor.getPort();
+        String port = this.configuration.getConfigurationComponent(userDefined).getPortName();
+        this.sb.append("microbit." + port + ".is_pressed()");
         return null;
     }
 
@@ -274,12 +278,12 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
-        if ( accelerometerSensor.getPort().equals("STRENGTH") ) {
+        String userDefined = accelerometerSensor.getPort();
+        String port = this.configuration.getConfigurationComponent(userDefined).getPortName();
+        if ( port.equals(SC.STRENGTH) ) {
             this.sb.append("math.sqrt(microbit.accelerometer.get_x()**2 + microbit.accelerometer.get_y()**2 + microbit.accelerometer.get_z()**2)");
         } else {
-            this.sb.append("microbit.accelerometer.get_");
-            this.sb.append(accelerometerSensor.getPort());
-            this.sb.append("()");
+            this.sb.append("microbit.accelerometer.get_").append(port).append("()");
         }
         return null;
     }

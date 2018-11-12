@@ -12,7 +12,6 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public abstract class AbstractRobotFactory implements IRobotFactory {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractRobotFactory.class);
@@ -118,7 +117,7 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
     /**
      * should be called only from subclasses. Made public and static for tests (see call hierarchy). Another example, that shows, that singletons are bad.<br>
      * TODO: refactor to avoid the singleton
-     * 
+     *
      * @param properties
      */
     public static void addBlockTypesFromProperties(Properties properties) {
@@ -132,12 +131,12 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
                 String astClassName = attributes[1];
                 Category category = Category.valueOf(attributes[0]); // does the category exist?
                 Assert.notNull(category);
-                Class<?> astClass;
+                Class<?> astClass = null;
                 try {
                     astClass = AbstractRobotFactory.class.getClassLoader().loadClass(astClassName); // does the class exist?
                 } catch ( Exception e ) {
-                    LOG.error("AstClass \"{}\" of block type with key \"{}\" could not be loaded", astClassName, propertyKey);
-                    throw new DbcException("Class not found", e);
+                    //                    LOG.error("AstClass \"{}\" of block type with key \"{}\" could not be loaded", astClassName, propertyKey);
+                    //                    throw new DbcException("Class not found", e)
                 }
                 String[] blocklyNames = Arrays.copyOfRange(attributes, 2, attributes.length);
                 BlockTypeContainer.add(name, category, astClass, blocklyNames);

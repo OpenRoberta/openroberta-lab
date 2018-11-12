@@ -119,7 +119,7 @@ public class Configuration {
      * This class is a builder of {@link Configuration}
      */
     public static class Builder {
-        private List<ConfigurationComponent> configurationComponents;
+        private List<ConfigurationComponent> configurationComponents = new ArrayList<>();
 
         private float wheelDiameter;
         private float trackWidth;

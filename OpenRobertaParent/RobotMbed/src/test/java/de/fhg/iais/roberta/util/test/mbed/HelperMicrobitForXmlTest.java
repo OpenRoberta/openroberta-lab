@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.util.test.mbed;
 import java.util.Properties;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.MicrobitConfiguration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.MicrobitFactory;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
@@ -19,7 +20,7 @@ public class HelperMicrobitForXmlTest extends de.fhg.iais.roberta.util.test.Abst
     public HelperMicrobitForXmlTest() {
         super(
             new MicrobitFactory(new PluginProperties("microbit", "", "", Util1.loadProperties("classpath:microbit.properties"))),
-            new Configuration.Builder().build());
+            new MicrobitConfiguration.Builder().build());
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
         AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
     }

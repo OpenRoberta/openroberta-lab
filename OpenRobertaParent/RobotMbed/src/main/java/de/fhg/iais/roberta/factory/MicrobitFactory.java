@@ -45,7 +45,6 @@ public class MicrobitFactory extends AbstractMbedFactory {
 
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        // TODO Auto-generated method stub
         return null;
     }
 }

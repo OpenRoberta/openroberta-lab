@@ -11,6 +11,8 @@ import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -107,4 +109,17 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
         }
         return jaxbDestination;
     }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+        SensorMetaDataBean sensorData = extractPortAndModeAndSlot(block, helper);
+        return InfraredSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
+    }
+
 }

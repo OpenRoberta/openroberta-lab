@@ -18,12 +18,11 @@ import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
  */
 public class BlocklyProgramAndConfigTransformer {
     private static final Logger LOG = LoggerFactory.getLogger(BlocklyProgramAndConfigTransformer.class);
-    private Key errorMessage;
-    private Jaxb2ProgramAst<Void> programTransformer;
-    private Configuration robotConfiguration;
+    private final Key errorMessage;
+    private final Jaxb2ProgramAst<Void> programTransformer;
+    private final Configuration robotConfiguration;
 
     private BlocklyProgramAndConfigTransformer(Key errorMessage, Jaxb2ProgramAst<Void> programTransformer, Configuration brickConfiguration) {
-        super();
         this.errorMessage = errorMessage;
         this.programTransformer = programTransformer;
         this.robotConfiguration = brickConfiguration;

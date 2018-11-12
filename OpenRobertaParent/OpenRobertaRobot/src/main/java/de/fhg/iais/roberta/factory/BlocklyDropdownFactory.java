@@ -48,7 +48,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class BlocklyDropdownFactory {
     private static final Logger LOG = LoggerFactory.getLogger(BlocklyDropdownFactory.class);
-    @SuppressWarnings("unused")
+
     private final Set<String> sensorToPorts;
     private final Set<String> actorToPorts;
     private final Map<String, String> slots;
