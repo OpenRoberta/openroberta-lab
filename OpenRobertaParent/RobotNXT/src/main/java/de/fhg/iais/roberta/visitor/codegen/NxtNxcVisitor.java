@@ -38,6 +38,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
+import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
@@ -260,41 +261,19 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                 break;
             case FOR_EACH:
                 increaseLoopCounter();
-                String varType;
-                String expression = repeatStmt.getExpr().toString();
-                String segments[] = expression.split(",");
-                String element = segments[2];
-                String arr = null;
-                if ( expression.contains("NUMBER") || expression.contains("CONNECTION") ) {
-                    varType = "float";
-                } else if ( expression.contains("BOOLEAN") ) {
-                    varType = "bool";
-                } else {
-                    varType = "String";
-                }
-                if ( !segments[6].contains("java.util") ) {
-                    arr = segments[6].substring(segments[6].indexOf("[") + 1, segments[6].indexOf("]"));
-                    this.sb
-                        .append(
-                            "for("
-                                + varType
-                                + whitespace()
-                                + element
-                                + " = 0;"
-                                + element
-                                + " < sizeof("
-                                + arr
-                                + ") / sizeof("
-                                + arr
-                                + "[0]); "
-                                + element
-                                + "++) {");
-                } else {
-                    this.sb.append("while(false){");
-                }
-                break;
-            default:
-                break;
+                ((VarDeclaration<Void>) ((Binary<Void>) repeatStmt.getExpr()).getLeft()).visit(this);
+                this.sb.append(";");
+                nlIndent();
+                this.sb.append("for(int i = 0; i < ArrayLen(");
+                this.sb.append(((Var<Void>) ((Binary<Void>) repeatStmt.getExpr()).getRight()).getValue());
+                this.sb.append("); ++i) {");
+                incrIndentation();
+                nlIndent();
+                this.sb.append(((VarDeclaration<Void>) ((Binary<Void>) repeatStmt.getExpr()).getLeft()).getName());
+                this.sb.append(" = ");
+                this.sb.append(((Var<Void>) ((Binary<Void>) repeatStmt.getExpr()).getRight()).getValue());
+                this.sb.append("[i];");
+                decrIndentation();
         }
         incrIndentation();
         repeatStmt.getList().visit(this);
@@ -590,7 +569,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                 this.sb.append("(");
                 driveAction.getParam().getDuration().getValue().visit(this);
                 this.sb.append(" * 360 / (PI * WHEELDIAMETER)), 0, true, true);");
-                this.nlIndent();
+                nlIndent();
                 this.sb.append("Wait(1");
             } else {
                 this.sb.append("OUT_REGMODE_SYNC");
@@ -638,7 +617,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                 this.sb.append("(");
                 turnAction.getParam().getDuration().getValue().visit(this);
                 this.sb.append(" * TRACKWIDTH / WHEELDIAMETER), " + turnpct + ", true, true);");
-                this.nlIndent();
+                nlIndent();
                 this.sb.append("Wait(1");
             } else {
                 this.sb.append(turnpct);
@@ -817,8 +796,8 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         mainTask.getVariables().visit(this);
         incrIndentation();
         this.sb.append("\n").append("task main() {");
-        this.generateUsedVars();
-        this.generateSensors();
+        generateUsedVars();
+        generateSensors();
         return null;
     }
 
@@ -1171,7 +1150,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         this.sb.append("#define MAXLINES 8 \n");
         this.sb.append("#include \"NEPODefs.h\" // contains NEPO declarations for the NXC NXT API resources \n \n");
         decrIndentation();
-        this.generateSignaturesOfUserDefinedMethods();
+        generateSignaturesOfUserDefinedMethods();
     }
 
     @Override
