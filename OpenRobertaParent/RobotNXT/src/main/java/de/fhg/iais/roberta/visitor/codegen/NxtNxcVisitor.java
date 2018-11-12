@@ -214,6 +214,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     //TODO: fix the string concatenation
     @Override
     public Void visitBinary(Binary<Void> binary) {
+        this.sb.append("(");
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
         Op op = binary.getOp();
         String sym = getBinaryOperatorSymbol(op);
@@ -237,7 +238,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
             default:
                 generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
         }
-
+        this.sb.append(")");
         return null;
     }
 
