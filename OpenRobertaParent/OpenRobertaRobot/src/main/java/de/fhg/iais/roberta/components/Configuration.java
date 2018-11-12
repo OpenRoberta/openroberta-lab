@@ -61,7 +61,7 @@ public class Configuration {
     }
 
     public String getComponentTypeOfUserDefinedName(String userDefinedName) {
-        ConfigurationComponent configurationComponent = this.getConfigurationComponent(userDefinedName);
+        ConfigurationComponent configurationComponent = getConfigurationComponent(userDefinedName);
         return configurationComponent.getComponentType();
     }
 
@@ -74,7 +74,7 @@ public class Configuration {
     }
 
     public String getFirstMotorPort(String side) {
-        return getFirstMotor(side).getPortName();
+        return getFirstMotor(side).getUserDefinedPortName();
     }
 
     public ConfigurationComponent getFirstMotor(String side) {

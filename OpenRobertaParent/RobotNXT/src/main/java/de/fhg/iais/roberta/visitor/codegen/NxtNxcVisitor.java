@@ -214,9 +214,11 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     //TODO: fix the string concatenation
     @Override
     public Void visitBinary(Binary<Void> binary) {
-        this.sb.append("(");
-        generateSubExpr(this.sb, false, binary.getLeft(), binary);
         Op op = binary.getOp();
+        if ( op == Op.ADD || op == Op.MINUS || op == Op.DIVIDE || op == Op.MULTIPLY ) {
+            this.sb.append("(");
+        }
+        generateSubExpr(this.sb, false, binary.getLeft(), binary);
         String sym = getBinaryOperatorSymbol(op);
         this.sb.append(whitespace() + sym + whitespace());
         switch ( op ) {
@@ -238,7 +240,9 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
             default:
                 generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
         }
-        this.sb.append(")");
+        if ( op == Op.ADD || op == Op.MINUS || op == Op.DIVIDE || op == Op.MULTIPLY ) {
+            this.sb.append(")");
+        }
         return null;
     }
 
@@ -535,6 +539,10 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
+        System.out.println("test");
+        System.out.println(isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.LEFT)));
+        System.out.println(isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.RIGHT)));
+
         if ( isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.LEFT)) && isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.RIGHT)) ) {
             final boolean isDuration = driveAction.getParam().getDuration() != null;
             final boolean reverse =

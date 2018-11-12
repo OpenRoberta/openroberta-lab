@@ -19,24 +19,24 @@ public class IfStmtTest {
                 + "    }\n"
                 + "}\n"
                 + "if ( false ) {\n"
-                + "    item = 6 + 8;\n"
-                + "    item = 6 + 8;\n"
+                + "    item = (6 + 8);\n"
+                + "    item = (6 + 8);\n"
                 + "} else {\n"
-                + "    item = 3 * 9;\n"
+                + "    item = (3 * 9);\n"
                 + "}\n"
                 + "if ( true ) {\n"
-                + "    item = 6 + 8;\n"
-                + "    item = 6 + 8;\n"
+                + "    item = (6 + 8);\n"
+                + "    item = (6 + 8);\n"
                 + "}\n"
                 + "if ( false ) {\n"
-                + "    item = 6 + 8;\n"
-                + "    item = 6 + 8;\n"
-                + "    item = 3 * 9;\n"
+                + "    item = (6 + 8);\n"
+                + "    item = (6 + 8);\n"
+                + "    item = (3 * 9);\n"
                 + "} else if ( true ) {\n"
-                + "    item = 3 * 9;\n"
-                + "    item = 3 * 9;\n"
+                + "    item = (3 * 9);\n"
+                + "    item = (3 * 9);\n"
                 + "} else {\n"
-                + "    item = 3 * 9;\n"
+                + "    item = (3 * 9);\n"
                 + "}";
 
         this.h.assertCodeIsOk(a, "/syntax/stmt/if_stmt.xml");
@@ -44,7 +44,7 @@ public class IfStmtTest {
 
     @Test
     public void ifStmt1() throws Exception {
-        final String a = "\nif ( ( (5 + 7)== (5 + 7) ) >= (((5 + 7) ==( 5 + 7)) &&(( 5 + 7) <= (5 + 7)))) {\n}";
+        final String a = "\nif((((5+7))==((5+7)))>=((((5+7))==((5+7)))&&(((5+7))<=((5+7))))){\n}";
 
         this.h.assertCodeIsOk(a, "/syntax/stmt/if_stmt1.xml");
     }
