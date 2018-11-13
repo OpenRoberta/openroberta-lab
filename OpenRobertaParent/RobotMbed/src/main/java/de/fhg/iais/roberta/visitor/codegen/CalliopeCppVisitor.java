@@ -604,7 +604,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         }
         String methodName = "_getFirstOccuranceOfElement(";
         if ( indexOfFunct.getLocation() != IndexLocation.FIRST ) {
-            methodName = "_getFirstOccuranceOfElement(";
+            methodName = "_getLastOccuranceOfElement(";
         }
         this.sb.append(methodName);
 

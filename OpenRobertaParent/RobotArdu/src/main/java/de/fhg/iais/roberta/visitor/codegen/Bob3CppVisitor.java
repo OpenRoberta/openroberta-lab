@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
+import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
@@ -35,6 +36,7 @@ import de.fhg.iais.roberta.visitor.hardware.IBob3Visitor;
  */
 public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implements IBob3Visitor<Void> {
     private final boolean isTimerSensorUsed;
+    private boolean isListUsed;
     private final Set<UsedSensor> usedTimer;
 
     /**
@@ -88,15 +90,15 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
             case T:
                 return "";
             case ARRAY:
-                return "double";
+                return "std::list<double>";
             case ARRAY_NUMBER:
-                return "double";
+                return "std::list<double>";
             case ARRAY_STRING:
-                return "String";
+                return "std::list<String>";
             case ARRAY_BOOLEAN:
-                return "bool";
+                return "std::list<bool>";
             case ARRAY_COLOUR:
-                return "Bob3Color";
+                return "std::list<Bob3Color>";
             case BOOLEAN:
                 return "bool";
             case NUMBER:
@@ -144,8 +146,6 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
         incrIndentation();
         this.sb.append("{");
         nlIndent();
-        this.sb.append("Serial.begin(9600);");
-        nlIndent();
         generateUsedVars();
         decrIndentation();
         nlIndent();
@@ -159,11 +159,17 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
         if ( !withWrapping ) {
             return;
         }
-
+        for ( VarDeclaration<Void> var : this.usedVars ) {
+            if ( var.getVarType().toString().contains("ARRAY") ) {
+                this.isListUsed = true;
+            }
+        }
+        if ( this.isListUsed ) {
+            this.sb.append("#include <ArduinoSTL.h>\n");
+            this.sb.append("#include <list>\n");
+        }
         this.sb.append("#include <math.h> \n");
         this.sb.append("#include <BOB3.h> \n");
-        this.sb.append("#include <Wire.h>\n");
-        this.sb.append("#include <SoftwareSerial.h>\n");
         this.sb.append("#include <NEPODefs.h>\n");
         this.sb.append("Bob3 myBob;\n");
 
