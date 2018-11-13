@@ -20,7 +20,6 @@ import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
@@ -52,7 +51,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
             this.sb.append(" = ");
             var.getValue().visit(this);
             this.sb.append(";");
-            this.nlIndent();
+            nlIndent();
         }
     }
 
@@ -164,29 +163,12 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
                 break;
             case FOR_EACH:
                 increaseLoopCounter();
-                String varType;
-                String expression = repeatStmt.getExpr().toString();
-                String segments[] = expression.split(",");
-                String element = segments[2];
-                String arr = null;
-                if ( expression.contains("NUMBER") ) {
-                    varType = "double";
-                } else if ( expression.contains("BOOLEAN") ) {
-                    varType = "bool";
-                } else {
-                    varType = "String";
-                }
-                if ( !segments[6].contains("java.util") ) {
-                    arr = segments[6].substring(segments[6].indexOf("[") + 1, segments[6].indexOf("]"));
-                    this.sb.append("for(" + varType + whitespace() + element + " = 0;" + element + " < " + "__" + arr + "Len; " + element + "++) {");
-                } else {
-                    this.sb.append("while(false){");
-                }
+                generateCodeFromStmtCondition("for", repeatStmt.getExpr());
                 break;
             case FOREVER_ARDU:
                 increaseLoopCounter();
                 this.sb.append("void loop()");
-                this.nlIndent();
+                nlIndent();
                 this.sb.append("{");
                 break;
             default:
@@ -197,14 +179,14 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
         if ( !isWaitStmt ) {
             addContinueLabelToLoop();
             if ( !isArduinoLoop ) {
-                this.nlIndent();
+                nlIndent();
                 this.sb.append("delay(1);");
             }
         } else {
             appendBreakStmt();
         }
         decrIndentation();
-        this.nlIndent();
+        nlIndent();
         this.sb.append("}");
         addBreakLabelToLoop(isWaitStmt);
 
@@ -216,10 +198,10 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
         this.sb.append("while (true) {");
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
-        this.nlIndent();
+        nlIndent();
         this.sb.append("delay(1);");
         decrIndentation();
-        this.nlIndent();
+        nlIndent();
         this.sb.append("}");
         return null;
     }

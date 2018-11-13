@@ -449,7 +449,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
         this.sb.append("bnr.setOne(one);");
         nlIndent();
         this.sb.append("bnr.setBrm(brm);");
-        this.generateSensors();
+        generateSensors();
         generateUsedVars();
         decrIndentation();
         nlIndent();
@@ -463,7 +463,9 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
         if ( !withWrapping ) {
             return;
         }
-
+        this.sb.append("#include <ArduinoSTL.h>\n");
+        this.sb.append("#include <list>\n");
+        this.sb.append("#include <NEPODefs.h>\n");
         this.sb.append("#include <math.h> \n");
         // Bot'n Roll ONE A library:
         this.sb.append("#include <BnrOneA.h>   // Bot'n Roll ONE A library \n");
