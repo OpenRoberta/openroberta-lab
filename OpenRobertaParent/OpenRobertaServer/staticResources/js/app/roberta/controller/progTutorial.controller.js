@@ -1,5 +1,5 @@
-define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.controller', 'blocks', 'jquery' ], function(exports, COMM, MSG, LOG, GUISTATE_C,
-        PROG_C, Blockly, $) {
+define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.controller', 'robot.controller', 'blocks', 'jquery' ], function(exports, COMM,
+        MSG, LOG, GUISTATE_C, PROG_C, ROBOT_C, Blockly, $) {
 
     const INITIAL_WIDTH = 0.3;
     var blocklyWorkspace;
@@ -11,15 +11,8 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
     var maxCredits = [];
 
     function init() {
-        blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
         tutorialList = GUISTATE_C.getListOfTutorials();
-        for ( var tutorial in tutorialList) {
-            if (tutorialList.hasOwnProperty(tutorial)) {
-                $("#head-navigation-tutorial-dropdown").append("<li class='" + tutorialList[tutorial].language + " " + tutorialList[tutorial].robot
-                        + "'><a href='#' id='" + tutorial + "' class='menu tutorial typcn typcn-mortar-board'>" + tutorialList[tutorial].name + "</a></li>");
-            }
-        }
-        GUISTATE_C.updateTutorialMenu();
+        blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
         initEvents();
     }
     exports.init = init;
@@ -34,39 +27,48 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
         });
     }
 
-    function startTutorial(tutorialId) {
-        // initialize this tutorial
+    function loadFromTutorial(tutorialId) {
+        // initialize this tutorial       
         tutorial = tutorialList[tutorialId];
-        maxSteps = tutorial.step.length;
-        step = 0;
-        credits = [];
-        maxCredits = [];
-        $('#tutorial-list').empty();
-
-        // create this tutorial navigation
-        for (var i = 0; i < tutorial.step.length; i++) {
-            $('#tutorial-list').append($('<li>').attr('class', 'step').append($('<a>').attr({
-                'href' : '#'
-            }).append(i + 1)));
+        if (tutorial) {
+            ROBOT_C.switchRobot(tutorial.robot, null, startTutorial);
         }
-        $('#tutorial-list').append($('<li>').attr('id', 'tutorialEnd').append($('<a>').attr({
-            'href' : '#',
-            'class' : 'typcn typcn-delete'
-        })));
 
-        // prepare the view
-        $('#tutorial-navigation').fadeIn(750);
-        $('#head-navigation').fadeOut(750);
+        function startTutorial() {
+            $('#tabProgram').trigger('click');
+            maxSteps = tutorial.step.length;
+            step = 0;
+            credits = [];
+            maxCredits = [];
+            $('#tutorial-list').empty();
 
-        $('#tutorial-list :first-child').addClass('active');
-        $('#tutorialButton').show();
-        $('.blocklyToolboxDiv>.levelTabs').addClass('invisible');
+            // create this tutorial navigation
+            for (var i = 0; i < tutorial.step.length; i++) {
+                $('#tutorial-list').append($('<li>').attr('class', 'step').append($('<a>').attr({
+                    'href' : '#'
+                }).append(i + 1)));
+            }
+            $('#tutorial-list').append($('<li>').append(tutorial.name));
+            $('#tutorial-list').append($('<li>').attr('id', 'tutorialEnd').append($('<a>').attr({
+                'href' : '#',
+                'class' : 'typcn typcn-delete'
+            })));
 
-        initStepEvents();
-        createInstruction();
-        openTutorialView();
-        showOverview();
+            // prepare the view
+            $('#tutorial-navigation').fadeIn(750);
+            $('#head-navigation').fadeOut(750);
+
+            $('#tutorial-list :first-child').addClass('active');
+            $('#tutorialButton').show();
+            $('.blocklyToolboxDiv>.levelTabs').addClass('invisible');
+
+            initStepEvents();
+            createInstruction();
+            openTutorialView();
+            showOverview();
+        }
     }
+    exports.loadFromTutorial = loadFromTutorial;
 
     function initStepEvents() {
         $("#tutorial-list.nav li.step a").on("click", function() {
@@ -84,10 +86,11 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
     function showOverview() {
         if (!tutorial.overview)
             return;
-        $('#tutorialOverviewText').html(tutorial.overview);
+        $('#tutorialOverviewText').html(tutorial.overview.description + '</br></br><b>Lernziel: </b>' + tutorial.overview.goal
+                + '</br></br><b>Vorkenntnisse: </b>' + tutorial.overview.previous);
         $('#tutorialOverviewTitle').html(tutorial.name);
         $('#tutorialOverview').modal();
-        $('#tutorialOverview').one('click.dismiss.bs.modal', function(event) {
+        $('#tutorialOverview.modal').one('click.dismiss.bs.modal', function(event) {
             if (event.target.id === 'tutorialContinue') {
                 return false;
             }
@@ -330,7 +333,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
                 }
             }
             waitForClose();
-         } else {
+        } else {
             toggleTutorial();
         }
     }
@@ -349,5 +352,6 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
         $('#tutorialButton').fadeOut();
         $('.blocklyToolboxDiv>.levelTabs').removeClass('invisible');
         PROG_C.loadExternalToolbox(GUISTATE_C.getProgramToolbox());
+        $('#tabTutorialList').trigger('click');
     }
 });

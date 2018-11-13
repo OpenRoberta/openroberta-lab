@@ -380,7 +380,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         }
         if (groupSwitched) {
             HELP_C.initView();
-            updateTutorialMenu();
             WEBVIEW_C.jsToAppInterface({
                 'target' : 'internal',
                 'type' : 'setRobot',
@@ -1126,19 +1125,13 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
     exports.updateMenuStatus = updateMenuStatus;
 
     function updateTutorialMenu() {
-        $('#head-navigation-tutorial-dropdown li').hide();
-        var length = 0;
-        if (getLanguage() === 'de') {
-            $('#head-navigation-tutorial-dropdown li.DE.' + getRobotGroup()).show();
-            length = $('#head-navigation-tutorial-dropdown li.DE.' + getRobotGroup()).length;
-        } else {
-            $('#head-navigation-tutorial-dropdown li.EN.' + getRobotGroup()).show();
-            length = $('#head-navigation-tutorial-dropdown li.EN.' + getRobotGroup()).length;
-        }
-        if (length > 0) {
-            $('#head-navigation-tutorial').show();
-        } else {
-            $('#head-navigation-tutorial').hide();
+        $('#head-navigation-tutorial').hide();
+        var tutorialList = getListOfTutorials();
+        for ( var tutorial in tutorialList) {
+             if (tutorialList.hasOwnProperty(tutorial) && tutorialList[tutorial].language === getLanguage().toUpperCase()) {
+                $('#head-navigation-tutorial').show();
+                break;
+            }
         }
     }
     exports.updateTutorialMenu = updateTutorialMenu;

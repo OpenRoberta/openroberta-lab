@@ -12,6 +12,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
 
     var BACKGROUND_COLORS = [ '#33B8CA', '#EBC300', '#39378B', '#005A94', '#179C7D', '#F29400', '#E2001A', '#EB6A0A', '#8FA402', '#BACC1E', '#9085BA',
             '#FF69B4', '#DF01D7' ];
+    var currentColorIndex;
     /**
      * Initialize table of programs
      */
@@ -154,10 +155,9 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
     // TODO extend this, if more customization features are available, eg. robot graphics, uploaded images.
     var rowAttributes = function(row, index) {
         var hash = UTIL.getHashFrom(row[0] + row[1] + row[3]);
-        var colorIndex = hash % BACKGROUND_COLORS.length;
+        currentColorIndex = hash % BACKGROUND_COLORS.length;
         return {
-            style : 'background-color :' + BACKGROUND_COLORS[colorIndex] + ';' + //
-            'padding: 24px; border: solid 12px white; z-index: 1; cursor: pointer;'
+            style : 'background-color :' + BACKGROUND_COLORS[currentColorIndex] + ';' + 'padding: 24px; border: solid 12px white; z-index: 1; cursor: pointer;'
         }
     }
     exports.rowAttributes = rowAttributes;
@@ -190,7 +190,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         if (!description) {
             description = "&nbsp;";
         }
-        return '<div class="galleryDescription">' + description + '</div>';
+        return '<div class="galleryDescription color' + currentColorIndex + '">' + description + '</div>';
     }
     exports.formatProgramDescription = formatProgramDescription;
 

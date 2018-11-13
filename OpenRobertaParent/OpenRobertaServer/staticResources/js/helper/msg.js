@@ -1,5 +1,5 @@
 define([ 'exports', 'log', 'jquery', 'blocks-msg' ], function(exports, LOG, $, Blockly) {
-    
+
     var toastMessages = [];
     var toastDelay = 3000;
 

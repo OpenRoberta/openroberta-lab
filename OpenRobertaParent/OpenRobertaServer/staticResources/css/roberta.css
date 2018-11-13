@@ -1361,6 +1361,13 @@ td.bs-checkbox {
     top: 4px;
     left: 40px;
 }
+.tutorialIcon.typcn:before {
+    position: relative;
+    color: #fff;
+    font-size: 24px;
+    top: 4px;
+    left: 40px;
+}
 .galleryProgramname {
 	font-weight:bold; 
 	font-size:24px; 
@@ -1390,17 +1397,74 @@ div.galleryLike {
 div.galleryLike a>span {
     color: #fff;
 }
-div.galleryDescription {
+div.galleryDescription, div.tutorialOverview {
     font-weight: normal;
     font-size: 16px;
-    min-height: 45px;
     max-height: 45px;
     overflow: hidden;
     text-overflow: ellipsis;
-    word-wrap: break-word;
-    word-break: break-word;
-    width: 100%;
     margin-bottom: 12px;
+    display: block;
+    overflow: hidden;
+    position: relative;
+    line-height: 1.2em;
+    max-height: 2.4em;
+    text-align: justify;
+    margin-right: -1em;
+    padding-right: 1em;
+}
+.galleryDescription:before, .tutorialOverview:before {
+    content: '...';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+.galleryDescription:after, .tutorialOverview:after{
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 1em;
+    height: 1em;
+    margin-top: 0.2em;
+}
+.galleryDescription.color0:after, .tutorialOverview.color0:after {
+    background: #33B8CA;
+}
+.galleryDescription.color1:after, .tutorialOverview.color1:after {
+    background: #EBC300;
+}
+.galleryDescription.color2:after, .tutorialOverview.color2:after {
+    background: #39378B;
+}
+.galleryDescription.color3:after, .tutorialOverview.color3:after {
+    background: #005A94;
+}
+.galleryDescription.color4:after, .tutorialOverview.color4:after {
+    background: #179C7D;
+}
+.galleryDescription.color5:after, .tutorialOverview.color5:after {
+    background: #F29400;
+}
+.galleryDescription.color6:after, .tutorialOverview.color6:after {
+    background: #E2001A;
+}
+.galleryDescription.color7:after, .tutorialOverview.color7:after {
+    background: #EB6A0A;
+}
+.galleryDescription.color8:after, .tutorialOverview.color8:after {
+    background: #8FA402;
+}
+.galleryDescription.color9:after, .tutorialOverview.color9:after {
+    background: #BACC1E;
+}
+.galleryDescription.color10:after, .tutorialOverview.color10:after {
+    background: #9085BA;
+}
+.galleryDescription.color11:after, .tutorialOverview.color11:after {
+    background: #FF69B4;
+}
+.galleryDescription.color12:after, .tutorialOverview.color12:after {
+    background: #DF01D7;
 }
 .galleryLike.typcn:before {
     position: inherit;
@@ -1872,6 +1936,9 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 #tutorial-navigation li {
     text-align: center;
 }
+#tutorialOverview>.modal-backdrop.fade.in {
+	opacity: 0.6;
+}
 #tutorialDiv.fromRight {
     background-color: #eee;
 }
@@ -1880,6 +1947,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 	height: 100%;
 	margin: 10px;
 	padding: 16px;
+	font-size: 18px;
 }
 p.quiz {
 	margin-top: 16px;

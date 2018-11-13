@@ -25,6 +25,7 @@ require.config({
         'confList.controller' : '../app/roberta/controller/confList.controller',
         'confList.model' : '../app/roberta/models/confList.model',
         'galleryList.controller' : '../app/roberta/controller/galleryList.controller',
+        'tutorialList.controller' : '../app/roberta/controller/tutorialList.controller',
         'guiState.controller' : '../app/roberta/controller/guiState.controller',
         'guiState.model' : '../app/roberta/models/guiState.model',
         'import.controller' : '../app/roberta/controller/import.controller',
@@ -131,7 +132,7 @@ require.config({
 require([ 'require', 'wrap', 'jquery', 'jquery-cookie', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
         'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'cookieDisclaimer.controller', 'menu.controller','multSim.controller', 'user.controller',
         'robot.controller', 'program.controller', 'progSim.controller', 'progCode.controller', 'progDelete.controller', 'progHelp.controller',
-        'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller', 'progTutorial.controller', 'volume-meter', 'user.model', 'webview.controller' ], function(
+        'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller', 'progTutorial.controller', 'tutorialList.controller', 'volume-meter', 'user.model', 'webview.controller' ], function(
         require) {
 
     $ = require('jquery', 'jquery-cookie');
@@ -149,6 +150,7 @@ require([ 'require', 'wrap', 'jquery', 'jquery-cookie', 'guiState.controller', '
     progDeleteController = require('progDelete.controller');
     progListController = require('progList.controller');
     galleryListController = require('galleryList.controller');
+    tutorialListController = require('tutorialList.controller');
     programController = require('program.controller');
     progHelpController = require('progHelp.controller');
     progInfoController = require('progInfo.controller');
@@ -161,6 +163,7 @@ require([ 'require', 'wrap', 'jquery', 'jquery-cookie', 'guiState.controller', '
     userModel = require('user.model');
     socketController = require('socket.controller');
     tutorialController = require('progTutorial.controller');
+    tutorialListController = require('tutorialList.controller');
     webviewController = require('webview.controller');
 
     $(document).ready(WRAP.fn3(init, 'page init'));
@@ -181,6 +184,7 @@ function init() {
         return userController.init();
     }).then(function() {
         galleryListController.init();
+        tutorialListController.init();
         progListController.init();
         progDeleteController.init();
         confListController.init();

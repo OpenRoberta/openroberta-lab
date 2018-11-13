@@ -277,8 +277,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                 if (result.rc === "ok") {
                     if (GUISTATE_C.findGroup(robot) != GUISTATE_C.getRobotGroup()) {
                         GUISTATE_C.setRobot(robot, result);
-                        CONFIGURATION_C.resetView();
-                        PROGRAM_C.resetView();
+                        //  CONFIGURATION_C.resetView();
+                        // PROGRAM_C.resetView();
                     } else {
                         GUISTATE_C.setRobot(robot, result);
                     }
@@ -296,10 +296,12 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
 //                        'target' : 'wedo',
 //                        'op' : {'type''disconnect'
 //                    });
-                    typeof opt_callback === "function" && opt_callback();
+                    typeof opt_callback === "function" ? opt_callback()
+                            : MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getRobotRealName());
 
+                } else {
+                    MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getRobotRealName());
                 }
-                MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getRobotRealName());
             });
         } else {
             $('#show-message-confirm').one('shown.bs.modal', function(e) {

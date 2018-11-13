@@ -439,6 +439,10 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             $('#tabGalleryList').click();
             return false;
         }, 'gallery clicked');
+        $('#head-navigation-tutorial').onWrap('click', function(event) {
+            $('#tabTutorialList').click();
+            return false;
+        }, 'tutorial clicked');
 
         $('.sim-nav').onWrap('click', 'li:not(.disabled) a', function(event) {
             $('.modal').modal('hide'); // head-navigation-sim-control

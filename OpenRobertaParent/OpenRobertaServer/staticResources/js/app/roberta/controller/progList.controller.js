@@ -1,6 +1,6 @@
-define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program.model', 'configuration.controller', 'program.controller',
-        'guiState.controller', 'blocks-msg', 'jquery', 'bootstrap-table' ], function(require, exports, LOG, UTIL, COMM, PROGLIST, PROGRAM, CONFIGURATION_C,
-        PROGRAM_C, GUISTATE_C, Blockly, $) {
+define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model', 'program.model', 'configuration.controller', 'program.controller',
+        'guiState.controller', 'blocks-msg', 'jquery', 'bootstrap-table' ], function(require, exports, LOG, UTIL, COMM, MSG, PROGLIST, PROGRAM,
+        CONFIGURATION_C, PROGRAM_C, GUISTATE_C, Blockly, $) {
 
     /**
      * Initialize table of programs
@@ -190,8 +190,6 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
             $('#programNameTable').find('[rel="tooltip"]').tooltip();
         }
     }
-    
-    
 
     var eventsDeleteShareLoad = {
         'click .delete' : function(e, value, row, index) {

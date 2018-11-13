@@ -92,7 +92,8 @@ limitations under the License.
                             <li><a href="#" id="menuRunSim" class="typcn typcn-simulation" lkey="Blockly.Msg.MENU_START_SIM">run in simulation</a></li>
                             <li><a href="#" id="menuNewProg" class="typcn typcn-document-add" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
                             <li class="login"><a href="#" id="menuListProg" class="typcn typcn-th-list" lkey="Blockly.Msg.MENU_LIST_PROG">Liste ...</a></li>
-                            <li class="login" ><a href="#" id="multipleSimNav" class="typcn typcn-open" data-toggle="modal" data-target="#simModal">multiple simulation</a></li>
+                            <li class="login"><a href="#" id="multipleSimNav" class="typcn typcn-open" data-toggle="modal" data-target="#simModal">multiple
+                                    simulation</a></li>
                             <li><a href="#" id="menuListExamples" class="typcn typcn-th-list" lkey="Blockly.Msg.MENU_LIST_PROG_EXAMPLES">Beispielprogramme
                                     ...</a></li>
                             <li class="login"><a href="#" id="menuSaveProg" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
@@ -176,14 +177,11 @@ limitations under the License.
                             <li><a href="#" id="menuStateInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_STATE_INFO">Statusinformationen</a></li>
                             <li class="hidden" id="menuAddStatusTextWrap"><a href="#" id="menuAddStatusText" class="typcn typcn-edit">Add a status text</a></li>
                         </ul></li>
-                    <li id="head-navigation-tutorial" class="hidden-xs"><a href="#" data-toggle="dropdown" class="dropdown-toggle"
-                        id="head-navi-tooltip-tutorials" lkey="Blockly.Msg.MENU_TUTORIAL_TOOLTIP" rel="tooltip" data-original-title="" title=""> <span
-                            id="head-navi-icon-tutorial" class="head-navi-icons typcn typcn-mortar-board"></span><span
-                            class="head-navi-title hidden-sm hidden-md hidden-lg" lkey="Blockly.Msg.MENU_TUTORIAL">tutorial</span>
-                    </a>
-                        <ul id="head-navigation-tutorial-dropdown" class="dropdown-menu">
-                            <!-- filled dynamically -->
-                        </ul></li>
+                    <li id="head-navigation-tutorial" class="hidden-xs"><a href="#" id="head-navi-tooltip-tutorials"
+                        lkey="Blockly.Msg.MENU_TUTORIAL_TOOLTIP" rel="tooltip" data-original-title="" title=""> <span id="head-navi-icon-tutorial"
+                            class="head-navi-icons typcn typcn-mortar-board"></span><span class="head-navi-title hidden-sm hidden-md hidden-lg"
+                            lkey="Blockly.Msg.MENU_TUTORIAL">tutorial</span>
+                    </a></li>
                     <li id="head-navigation-gallery"><a href="#" id="head-navi-tooltip-gallery" lkey="Blockly.Msg.MENU_GALLERY_TOOLTIP" rel="tooltip"
                         data-original-title="" title=""> <span id="head-navi-icon-gallery" class="head-navi-icons typcn typcn-th-large-outline"></span><span
                             class="head-navi-title hidden-sm hidden-md hidden-lg" lkey="Blockly.Msg.MENU_GALLERY">gallery</span>
@@ -272,7 +270,8 @@ limitations under the License.
                 <li class="hidden"><a data-toggle="tab" id="tabProgList" href="#progList">Listing of programs</a></li>
                 <li class="hidden"><a data-toggle="tab" id="tabConfList" href="#confList">Listing of configurations</a></li>
                 <li class="hidden"><a data-toggle="tab" id="tabLogList" href="#logList">Logging</a></li>
-                <li class="hidden"><a data-toggle="tab" id="tabGalleryList" href="#galleryList">Logging</a></li>
+                <li class="hidden"><a data-toggle="tab" id="tabGalleryList" href="#galleryList">Galery</a></li>
+                <li class="hidden"><a data-toggle="tab" id="tabTutorialList" href="#tutorialList">Tutorial</a></li>
             </ul>
         </div>
     </nav>
@@ -433,6 +432,15 @@ limitations under the License.
                 </button>
             </div>
             <table id="galleryTable" class="galleryTable">
+            </table>
+        </div>
+        <div id="tutorialList" class="tab-pane fade">
+            <div id="tutorialListToolbar">
+                <button id="backTutorialList" class="btn">
+                    <i class="typcn typcn-arrow-left"></i>
+                </button>
+            </div>
+            <table id="tutorialTable" class="galleryTable">
             </table>
         </div>
         <div id="configuration" class="tab-pane fade">
@@ -748,28 +756,31 @@ limitations under the License.
                 </div>
             </div>
         </div>
+        <!--Multiple Simulation Modal-->
+        <div class="modal fade" id="simModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title text-center" id="myModalLabel">
+                            Multiple Simulation
+                            </h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                    </div>
+                    <div class="modal-body">
+                        <table id="mtable"></table>
+                        <p id="voidList" class="text-center"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary">Ok</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
         </div>
- <!--Multiple Simulation Modal-->
-<div class="modal fade" id="simModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title text-center" id="myModalLabel">Multiple Simulation </h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-      <div class="modal-body" >
-        <table id="mtable"></table>
-        <p id="voidList" class="text-center"></p>
-      </div>
-      <div class="modal-footer">
-      	<button type="button" class="btn btn-primary">Ok</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>        
-      </div>
     </div>
-  </div>
-</div>
+    </div>
 
     <!-- Popup show about info -->
     <div id="show-about" class="modal fade">
@@ -1067,8 +1078,8 @@ limitations under the License.
             </div>
             <div id="simValuesContent">
                 <div id="valuesContent">
-                	<div id="constantValue"></div>
-                	<div id="notConstantValue"></div>
+                    <div id="constantValue"></div>
+                    <div id="notConstantValue"></div>
                 </div>
             </div>
         </div>
@@ -1133,7 +1144,6 @@ limitations under the License.
                 </div>
                 <div class="modal-footer">
                     <button id="tutorialContinue" type="button" class="btn" data-dismiss="modal" autofocus>OK</button>
-                    <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
                 </div>
             </div>
         </div>
