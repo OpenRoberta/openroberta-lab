@@ -22,7 +22,6 @@ public class Jaxb2BotNrollConfigurationTransformer {
     public Configuration transform(BlockSet blockSet) {
         List<Instance> instances = blockSet.getInstance();
         List<Block> blocks = instances.get(0).getBlock();
-        return Jaxb2ConfigurationAstHelper.block2OldConfiguration(blocks.get(0), "robBrick_ardu-Brick", this.factory, "S");
+        return Jaxb2ConfigurationAstHelper.block2OldConfigurationWithFixedBase(blocks.get(0), "robBrick_ardu-Brick", this.factory, "S", 14);
     }
-
 }

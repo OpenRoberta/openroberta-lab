@@ -41,7 +41,7 @@ public class Jaxb2ConfigurationAstHelper {
             List<Field> fields = extractFields(block, (short) 2);
             float wheelDiameter = Float.valueOf(extractField(fields, "WHEEL_DIAMETER", (short) 0)).floatValue();
             float trackWidth = Float.valueOf(extractField(fields, "TRACK_WIDTH", (short) 1)).floatValue();
-
+            //TODO: should 8 here be a parameter of this method?
             List<Value> values = extractValues(block, (short) 8);
             List<ConfigurationComponent> allComponents = extractOldConfigurationComponent(values, factory, sensorsPrefix);
 
@@ -50,7 +50,21 @@ public class Jaxb2ConfigurationAstHelper {
         throw new DbcException("There was no correct configuration block found!");
     }
 
-    private static List<ConfigurationComponent> extractOldConfigurationComponent(List<Value> values, BlocklyDropdownFactory factory, String sensorsPrefix) {
+    public static Configuration block2OldConfigurationWithFixedBase(
+        Block block,
+        String topBlockName,
+        BlocklyDropdownFactory factory,
+        String sensorsPrefix,
+        int configurationBlockQuantity) {
+        if ( block.getType().equals(topBlockName) ) {
+            List<Value> values = extractValues(block, (short) configurationBlockQuantity);
+            List<ConfigurationComponent> allComponents = extractOldConfigurationComponent(values, factory, sensorsPrefix);
+            return new Configuration.Builder().setTrackWidth(-1).setWheelDiameter(-1).addComponents(allComponents).build();
+        }
+        throw new DbcException("There was no correct configuration block found!");
+    }
+
+    public static List<ConfigurationComponent> extractOldConfigurationComponent(List<Value> values, BlocklyDropdownFactory factory, String sensorsPrefix) {
         List<ConfigurationComponent> allComponents = new ArrayList<>();
         for ( Value value : values ) {
             String portName = value.getName();

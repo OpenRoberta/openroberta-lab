@@ -22,6 +22,6 @@ public class Jaxb2MakeBlockConfigurationTransformer {
     public Configuration transform(BlockSet blockSet) {
         List<Instance> instances = blockSet.getInstance();
         List<Block> blocks = instances.get(0).getBlock();
-        return Jaxb2ConfigurationAstHelper.block2OldConfiguration(blocks.get(0), "robBrick_makeBlock-Brick", this.factory, "P");
+        return Jaxb2ConfigurationAstHelper.block2OldConfigurationWithFixedBase(blocks.get(0), "robBrick_makeBlock-Brick", this.factory, "P", 6);
     }
 }
