@@ -1,23 +1,19 @@
 package de.fhg.iais.roberta.ast.expr;
 
-import java.util.Properties;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.test.GeneralTestsHelper;
 
 public class ExprListTest {
 
     @Before
-    public void addBlockProperties() {
-        Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
-        AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
+    public void loadBlocks() {
+        GeneralTestsHelper.loadBlocks("classpath:robotCommon.yml");
     }
 
     @Test

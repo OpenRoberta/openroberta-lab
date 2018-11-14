@@ -1,20 +1,16 @@
 package de.fhg.iais.roberta.factory;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.util.DropDown;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class BlocklyDropdown2EnumHelper {
@@ -35,34 +31,6 @@ public class BlocklyDropdown2EnumHelper {
             }
         }
         throw new DbcException("Invalid " + modes.getName() + ": " + modeName);
-    }
-
-    public static Set<String> getSensorPortsFromProperties(Properties robotProperties) {
-        String sensors = robotProperties.getProperty("robot.hw.sensors");
-        Assert.notNull(sensors, "Undefined property robot.hw.sensors");
-        String[] sensorPorts = sensors.split("\\s*,\\s*");
-        return new HashSet<>(Arrays.asList(sensorPorts));
-    }
-
-    public static Set<String> getActorPortsFromProperties(Properties robotProperties) {
-        String actors = robotProperties.getProperty("robot.hw.actors");
-        Assert.notNull(actors, "Undefined property robot.hw.actors");
-        String[] actorPorts = actors.split("\\s*,\\s*");
-        return new HashSet<>(Arrays.asList(actorPorts));
-    }
-
-    public static Map<String, String> getSlotFromProperties(Properties properties) {
-        Map<String, String> map = new HashMap<>();
-        String filter = "robot.port.slot.";
-        for ( Entry<Object, Object> e : properties.entrySet() ) {
-            String key = (String) e.getKey();
-            if ( key.startsWith(filter) ) {
-                String value = (String) e.getValue();
-                key = key.substring(filter.length());
-                map.put(key, value);
-            }
-        }
-        return map;
     }
 
     public static DropDown getColors(JSONObject robotDescription) {
@@ -106,5 +74,30 @@ public class BlocklyDropdown2EnumHelper {
             dropdownItems.add(key, value);
         }
         return dropdownItems;
+    }
+
+    public static void loadBlocks(JSONObject robotDescription) {
+        JSONObject blocks = robotDescription.getJSONObject("block");
+        for ( String block : blocks.keySet() ) {
+            JSONObject value = blocks.getJSONObject(block);
+
+            try {
+                Class<?> implementor = Class.forName(value.getString("implementor"));
+                JSONArray blocklyBlocks = value.getJSONArray("type");
+                String[] blocklyNames = jsonArray2stringArray(blocklyBlocks);
+                BlockTypeContainer.add(block, Category.valueOf(value.getString("category")), implementor, blocklyNames);
+            } catch ( Exception e ) {
+                throw new DbcException("Invalide definition for block type " + block);
+            }
+        }
+    }
+
+    private static String[] jsonArray2stringArray(JSONArray value) {
+        int length = value.length();
+        String[] resultValues = new String[length];
+        for ( int i = 0; i < length; i++ ) {
+            resultValues[i] = value.getString(i);
+        }
+        return resultValues;
     }
 }

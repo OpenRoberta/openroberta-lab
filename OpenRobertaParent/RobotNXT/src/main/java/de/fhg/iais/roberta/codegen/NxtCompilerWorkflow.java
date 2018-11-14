@@ -80,7 +80,6 @@ public class NxtCompilerWorkflow extends AbstractCompilerWorkflow {
      * @param mainPackage
      */
     Key runBuild(String token, String mainFile, String mainPackage) {
-        // TODO: really unused? final String compilerBinDir = pluginProperties.getCompilerBinDir();
         final String compilerResourcesDir = this.pluginProperties.getCompilerResourceDir();
         final String tempDir = this.pluginProperties.getTempDir();
 
@@ -102,6 +101,7 @@ public class NxtCompilerWorkflow extends AbstractCompilerWorkflow {
                     new String[] {
                         nbcCompilerFileName,
                         "-q",
+                        "-sm-",
                         tempDir + token + "/" + mainFile + "/source/" + mainFile + ".nxc",
                         "-O=" + tempDir + token + "/" + mainFile + "/target/" + mainFile + ".rxe",
                         "-I=" + base.resolve(path).toAbsolutePath().normalize().toString()
@@ -111,7 +111,6 @@ public class NxtCompilerWorkflow extends AbstractCompilerWorkflow {
             procBuilder.redirectError(Redirect.INHERIT);
             Process p = procBuilder.start();
             int ecode = p.waitFor();
-            System.err.println("Exit code " + ecode);
 
             if ( ecode != 0 ) {
                 return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;

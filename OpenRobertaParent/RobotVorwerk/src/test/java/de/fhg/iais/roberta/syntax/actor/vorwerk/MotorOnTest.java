@@ -12,8 +12,8 @@ public class MotorOnTest {
     public void make_ByDefault_ReturnInstanceOfAnimationClass() throws Exception {
         String expectedResult =
             "BlockAST [project=[[Location [x=384, y=50], "
-                + "MainTask [], MotorOnAction [LEFT, MotionParam [speed=NumConst [30], duration=MotorDuration [type=DISTANCE, value=NumConst [20]]]], "
-                + "MotorOnAction [RIGHT, MotionParam [speed=NumConst [30], duration=MotorDuration [type=DISTANCE, value=NumConst [20]]]]]]]";
+                + "MainTask [], MotorOnAction [LEFT_MOTOR, MotionParam [speed=NumConst [30], duration=MotorDuration [type=DISTANCE, value=NumConst [20]]]], "
+                + "MotorOnAction [RIGHT_MOTOR, MotionParam [speed=NumConst [30], duration=MotorDuration [type=DISTANCE, value=NumConst [20]]]]]]]";
 
         String result = this.h.generateTransformerString("/actors/motor_on.xml");
 

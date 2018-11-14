@@ -1,17 +1,65 @@
 package de.fhg.iais.roberta.components.vorwerk;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.google.common.collect.Lists;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.SC;
 
 public class VorwerkConfiguration extends Configuration {
+    private static ArrayList<ConfigurationComponent> components;
     private final String ipAddress;
     private final String portNumber;
     private final String userName;
     private final String password;
+    static {
+        Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
+        ConfigurationComponent motorA = new ConfigurationComponent(SC.LARGE, true, "left", BlocklyConstants.NO_SLOT, "LEFT_MOTOR", motorAproperties);
+
+        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
+        ConfigurationComponent motorB = new ConfigurationComponent(SC.LARGE, true, "right", BlocklyConstants.NO_SLOT, "RIGHT_MOTOR", motorBproperties);
+
+        ConfigurationComponent leftUltrasonic =
+            new ConfigurationComponent(SC.ULTRASONIC, false, "left_ultrasonic", "NO_SLOT", "LEFT_ULTRASONIC", Collections.emptyMap());
+        ConfigurationComponent centerUltrasonic =
+            new ConfigurationComponent(SC.ULTRASONIC, false, "center_ultrasonic", "NO_SLOT", "CENTER_ULTRASONIC", Collections.emptyMap());
+        ConfigurationComponent rightUltrasonic =
+            new ConfigurationComponent(SC.ULTRASONIC, false, "right_ultrasonic", "NO_SLOT", "RIGHT_ULTRASONIC", Collections.emptyMap());
+        ConfigurationComponent leftTouch = new ConfigurationComponent(SC.TOUCH, false, "left", "NO_SLOT", "LEFT_TOUCH", Collections.emptyMap());
+        ConfigurationComponent rightTouch = new ConfigurationComponent(SC.TOUCH, false, "right", "NO_SLOT", "RIGHT_TOUCH", Collections.emptyMap());
+        ConfigurationComponent leftDropoff = new ConfigurationComponent(SC.TOUCH, false, "left", "NO_SLOT", "LEFT_DROPOFF", Collections.emptyMap());
+        ConfigurationComponent rightDropoff = new ConfigurationComponent(SC.TOUCH, false, "right", "NO_SLOT", "RIGHT_DROPOFF", Collections.emptyMap());
+        ConfigurationComponent x = new ConfigurationComponent(SC.ACCELEROMETER, false, "x", "NO_SLOT", "X", Collections.emptyMap());
+        ConfigurationComponent y = new ConfigurationComponent(SC.ACCELEROMETER, false, "y", "NO_SLOT", "Y", Collections.emptyMap());
+        ConfigurationComponent z = new ConfigurationComponent(SC.ACCELEROMETER, false, "z", "NO_SLOT", "Z", Collections.emptyMap());
+        ConfigurationComponent strength = new ConfigurationComponent(SC.ACCELEROMETER, false, "strength", "NO_SLOT", "STRENGTH", Collections.emptyMap());
+
+        components =
+            Lists
+                .newArrayList(
+                    motorA,
+                    motorB,
+                    leftUltrasonic,
+                    rightUltrasonic,
+                    centerUltrasonic,
+                    leftTouch,
+                    rightTouch,
+                    x,
+                    y,
+                    z,
+                    strength,
+                    leftDropoff,
+                    rightDropoff);
+    }
 
     public VorwerkConfiguration(String ipAddress, String portNumber, String userName, String password) {
-        super(Collections.emptyList(), 0.0f, 0.0f);
+        super(components, 0.0f, 0.0f);
 
         this.ipAddress = ipAddress;
         this.portNumber = portNumber;
@@ -33,6 +81,14 @@ public class VorwerkConfiguration extends Configuration {
 
     public String getPassword() {
         return this.password;
+    }
+
+    private static Map<String, String> createMap(String... args) {
+        Map<String, String> m = new HashMap<>();
+        for ( int i = 0; i < args.length; i += 2 ) {
+            m.put(args[i], args[i + 1]);
+        }
+        return m;
     }
 
     /**
@@ -73,14 +129,10 @@ public class VorwerkConfiguration extends Configuration {
         }
 
         @Override
-        public Configuration build() {
+        public VorwerkConfiguration build() {
             return new VorwerkConfiguration(this.ipAddress, this.portNumber, this.userName, this.password);
         }
 
-        @Override
-        public String toString() {
-            return "Builder [" + this.ipAddress + ", " + this.portNumber + ", " + this.userName + ", " + this.password + "]";
-        }
     }
 
 }

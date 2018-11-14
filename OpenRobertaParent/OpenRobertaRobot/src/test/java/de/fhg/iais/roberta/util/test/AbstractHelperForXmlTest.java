@@ -126,6 +126,7 @@ public abstract class AbstractHelperForXmlTest {
         //        System.out.println(writer.toString());
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = XMLUnit.compareXML(writer.toString(), t);
+        //        System.out.println(diff);
         Assert.assertTrue(diff.identical());
     }
 

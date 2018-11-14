@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.vorwerk.VorwerkConfiguration;
 import de.fhg.iais.roberta.util.test.ev3.HelperVorwerkForXmlTest;
 
 public class PythonVisitorTest {
@@ -33,11 +33,11 @@ public class PythonVisitorTest {
             + "        print(e)\n"
             + "if __name__ == \"__main__\":\n"
             + "    main()";
-    private static Configuration brickConfiguration;
+    private static VorwerkConfiguration brickConfiguration;
 
     @BeforeClass
     public static void setupConfigurationForAllTests() {
-        Configuration.Builder builder = new Configuration.Builder();
+        VorwerkConfiguration.Builder builder = new VorwerkConfiguration.Builder();
         brickConfiguration = builder.build();
     }
 

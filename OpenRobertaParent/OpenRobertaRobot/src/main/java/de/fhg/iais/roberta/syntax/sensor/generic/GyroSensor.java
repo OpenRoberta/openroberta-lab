@@ -65,7 +65,7 @@ public class GyroSensor<V> extends ExternalSensor<V> {
             List<Field> fields = helper.extractFields(block, (short) 1);
             String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
             sensorMetaDataBean =
-                new SensorMetaDataBean(factory.sanitizePort(portName), factory.getMode("RESET"), factory.getSlot(BlocklyConstants.NO_SLOT), false);
+                new SensorMetaDataBean(factory.sanitizePort(portName), factory.getMode("RESET"), factory.sanitizeSlot(BlocklyConstants.NO_SLOT), false);
             return GyroSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
         }
         sensorMetaDataBean = extractPortAndModeAndSlot(block, helper);

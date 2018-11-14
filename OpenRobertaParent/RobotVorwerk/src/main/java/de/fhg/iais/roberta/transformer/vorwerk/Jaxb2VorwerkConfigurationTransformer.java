@@ -1,5 +1,8 @@
 package de.fhg.iais.roberta.transformer.vorwerk;
 
+import static de.fhg.iais.roberta.transformer.Jaxb2ConfigurationAstHelper.extractField;
+import static de.fhg.iais.roberta.transformer.Jaxb2ConfigurationAstHelper.extractFields;
+
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -9,7 +12,6 @@ import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.vorwerk.VorwerkConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
@@ -41,18 +43,5 @@ public class Jaxb2VorwerkConfigurationTransformer {
             default:
                 throw new DbcException("There was no correct configuration block found!");
         }
-    }
-
-    private List<Field> extractFields(Block block, int numOfFields) {
-        List<Field> fields;
-        fields = block.getField();
-        Assert.isTrue(fields.size() == numOfFields, "Number of fields is not equal to " + numOfFields + "!");
-        return fields;
-    }
-
-    private String extractField(List<Field> fields, String name, int fieldLocation) {
-        Field field = fields.get(fieldLocation);
-        Assert.isTrue(field.getName().equals(name), "Field name is not equal to " + name + "!");
-        return field.getValue();
     }
 }

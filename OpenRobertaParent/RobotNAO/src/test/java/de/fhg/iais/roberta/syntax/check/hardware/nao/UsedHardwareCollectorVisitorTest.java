@@ -23,7 +23,7 @@ public class UsedHardwareCollectorVisitorTest {
 
         NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration());
 
-        Assert.assertEquals("[UsedSensor [null, NAOFACE, null]]", checkVisitor.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [null, NAO_FACE, null]]", checkVisitor.getUsedSensors().toString());
 
     }
 
@@ -33,7 +33,7 @@ public class UsedHardwareCollectorVisitorTest {
 
         NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration());
 
-        Assert.assertEquals("[UsedSensor [null, NAOFACE, null]]", checkVisitor.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [null, NAO_FACE, null]]", checkVisitor.getUsedSensors().toString());
 
     }
 
@@ -61,7 +61,7 @@ public class UsedHardwareCollectorVisitorTest {
 
         NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration());
 
-        Assert.assertEquals("[UsedSensor [null, NAOSPEECH, null]]", checkVisitor.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [null, NAO_SPEECH, null]]", checkVisitor.getUsedSensors().toString());
     }
 
     @Test

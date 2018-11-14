@@ -38,6 +38,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
@@ -72,7 +73,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
         ILanguage language) {
         super(programPhrases, indentation);
 
-        VorwerkUsedHardwareCollectorVisitor checkVisitor = new VorwerkUsedHardwareCollectorVisitor(programPhrases, null);
+        VorwerkUsedHardwareCollectorVisitor checkVisitor = new VorwerkUsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
 
         this.brickConfiguration = brickConfiguration;
 
@@ -127,7 +128,9 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        this.sb.append("hal." + motorOnAction.getUserDefinedPort() + "_motor_on(");
+        String userDefinedPort = motorOnAction.getUserDefinedPort();
+        String port = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getPortName();
+        this.sb.append("hal." + port + "_motor_on(");
         motorOnAction.getParam().getSpeed().visit(this);
         this.sb.append(", ");
         motorOnAction.getDurationValue().visit(this);
@@ -137,7 +140,9 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        this.sb.append("hal." + motorStopAction.getUserDefinedPort() + "_motor_stop()");
+        String userDefinedPort = motorStopAction.getUserDefinedPort();
+        String port = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getPortName();
+        this.sb.append("hal." + port + "_motor_stop()");
         return null;
     }
 
@@ -177,7 +182,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        this.sb.append("hal.drive_distance(" + getEnumCode(driveAction.getDirection()) + ", ");
+        this.sb.append("hal.drive_distance(" + quote(driveAction.getDirection().toString()) + ", ");
         driveAction.getParam().getSpeed().visit(this);
         this.sb.append(", ");
         if ( driveAction.getParam().getDuration() == null ) {
@@ -224,31 +229,35 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("hal.sample_touch_sensor(" + getEnumCode(touchSensor.getPort()));
+        String port = getDevicePortName(touchSensor);
+        this.sb.append("hal.sample_touch_sensor(" + port);
         this.sb.append(", ");
-        this.sb.append(getEnumCode(touchSensor.getSlot()));
+        this.sb.append(quote(touchSensor.getSlot()));
         this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.sb.append("hal.sample_ultrasonic_sensor(" + getEnumCode(ultrasonicSensor.getPort()));
+        String port = getDevicePortName(ultrasonicSensor);
+        this.sb.append("hal.sample_ultrasonic_sensor(").append(port);
         this.sb.append(", ");
-        this.sb.append(getEnumCode(ultrasonicSensor.getSlot()));
+        this.sb.append(quote(ultrasonicSensor.getSlot()));
         this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
-        this.sb.append("hal.sample_accelerometer_sensor(" + getEnumCode(accelerometerSensor.getPort()) + ")");
+        String port = getDevicePortName(accelerometerSensor);
+        this.sb.append("hal.sample_accelerometer_sensor(").append(port).append(")");
         return null;
     }
 
     @Override
     public Void visitDropOffSensor(DropOffSensor<Void> dropOffSensor) {
-        this.sb.append("hal.sample_dropoff_sensor(" + getEnumCode(dropOffSensor.getPort()) + ")");
+        String port = getDevicePortName(dropOffSensor);
+        this.sb.append("hal.sample_dropoff_sensor(").append(port).append(")");
         return null;
     }
 
@@ -256,6 +265,12 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
     public Void visitWallSensor(WallSensor<Void> wallSensor) {
         this.sb.append("hal.sample_wall_sensor()");
         return null;
+    }
+
+    private String getDevicePortName(ExternalSensor<Void> sensor) {
+        String userDefinedPort = sensor.getPort();
+        String port = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getPortName();
+        return "'" + port + "'";
     }
 
     @Override
@@ -570,6 +585,10 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
         this.sb.append("\n");
         this.sb.append("if __name__ == \"__main__\":\n");
         this.sb.append(this.INDENT).append("main()");
+    }
+
+    private String quote(String value) {
+        return "'" + value.toLowerCase() + "'";
     }
 
 }

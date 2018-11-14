@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.visitor.hardware;
 
-import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
+import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
 import de.fhg.iais.roberta.visitor.hardware.actor.IActors4AutonomousDriveRobots;
 import de.fhg.iais.roberta.visitor.hardware.actor.IBluetoothVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ISpeechVisitor;

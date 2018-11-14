@@ -10,7 +10,7 @@ public class MotorStopTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfAnimationClass() throws Exception {
-        String expectedResult = "BlockAST [project=[[Location [x=384, y=50], " + "MainTask [], MotorStop [port=LEFT], MotorStop [port=RIGHT]]]]";
+        String expectedResult = "BlockAST [project=[[Location [x=384, y=50], " + "MainTask [], MotorStop [port=LEFT_MOTOR], MotorStop [port=RIGHT_MOTOR]]]]";
 
         String result = this.h.generateTransformerString("/actors/motor_stop.xml");
 

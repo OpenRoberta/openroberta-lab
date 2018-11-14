@@ -23,8 +23,8 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
+import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
@@ -275,7 +275,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
-        if ( !this.brickConfiguration.getRobotName().equals("ev3lejos") ) {
+        if ( !this.brickConfiguration.getRobotName().equals("ev3lejosV0") ) {
             this.sb.append("hal.setLanguage(\"");
             this.sb.append(this.getLanguageString(setLanguageAction.getLanguage()));
             this.sb.append("\");");
@@ -285,7 +285,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        if ( this.brickConfiguration.getRobotName().equals("ev3lejosV1") ) {
+        if ( !this.brickConfiguration.getRobotName().equals("ev3lejosV0") ) {
             this.sb.append("hal.sayText(");
             if ( !sayTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
                 this.sb.append("String.valueOf(");
@@ -678,7 +678,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
             //this.sb.append(INDENT).append(INDENT).append(INDENT).append("\nhal.startScreenLoggingThread();");
             this.isInDebugMode = true;
         }
-        if ( this.isSayTextUsed && !this.brickConfiguration.getRobotName().equals("ev3lejos") ) {
+        if ( this.isSayTextUsed && !this.brickConfiguration.getRobotName().equals("ev3lejosV0") ) {
             this.sb.append("\n");
             this.sb.append(this.INDENT).append(this.INDENT).append("hal.setLanguage(\"");
             this.sb.append(this.getLanguageString(this.language));

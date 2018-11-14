@@ -79,7 +79,7 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
         String slotName = helper.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.NO_SLOT);
         boolean isPortInMutation = (block.getMutation() != null) && (block.getMutation().getPort() != null);
 
-        return new SensorMetaDataBean(portName, factory.getMode(modeName), factory.getSlot(slotName), isPortInMutation);
+        return new SensorMetaDataBean(factory.sanitizePort(portName), factory.getMode(modeName), factory.sanitizeSlot(slotName), isPortInMutation);
     }
 
     @Override
@@ -102,6 +102,11 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
         }
         if ( !this.getSlot().toString().equals(BlocklyConstants.NO_SLOT) ) {
             String fieldValue = getSlot();
+
+            //TODO: Remove as soon as possible. This is only for deprecated XML resources for unit tests.
+            if ( fieldValue.equals(BlocklyConstants.EMPTY_SLOT) ) {
+                fieldValue = "";
+            }
             Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.SLOT, fieldValue);
         }
         if ( addMutation ) {

@@ -369,13 +369,13 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public String getEnumCode(String value) {
-        return "'" + super.getEnumCode(value) + "'";
+    public String getEnumCode(IMode value) {
+        return "'" + value.toString().toLowerCase() + "'";
     }
 
     @Override
-    public String getEnumCode(IMode value) {
-        return "'" + value.toString().toLowerCase() + "'";
+    public String getEnumCode(String value) {
+        return "'" + value.toLowerCase() + "'";
     }
 
     @Override

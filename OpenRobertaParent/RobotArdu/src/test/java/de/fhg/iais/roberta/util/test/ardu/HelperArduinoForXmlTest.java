@@ -3,11 +3,9 @@ package de.fhg.iais.roberta.util.test.ardu;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.UnoFactory;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.PluginProperties;
@@ -18,9 +16,6 @@ public class HelperArduinoForXmlTest extends AbstractHelperForXmlTest {
 
     public HelperArduinoForXmlTest() {
         super(new UnoFactory(new PluginProperties("uno", "", "", Util1.loadProperties("classpath:uno.properties"))), makeConfiguration());
-
-        Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
-        AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
     }
 
     private static Configuration makeConfiguration() {

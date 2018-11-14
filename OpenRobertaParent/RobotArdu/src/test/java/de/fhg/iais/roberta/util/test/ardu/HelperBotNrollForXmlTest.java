@@ -3,11 +3,9 @@ package de.fhg.iais.roberta.util.test.ardu;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.BotnrollFactory;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.PluginProperties;
@@ -18,8 +16,6 @@ public class HelperBotNrollForXmlTest extends AbstractHelperForXmlTest {
 
     public HelperBotNrollForXmlTest() {
         super(new BotnrollFactory(new PluginProperties("botnroll", "", "", Util1.loadProperties("classpath:botnroll.properties"))), makeConfiguration());
-        Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
-        AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
     }
 
     private static Configuration makeConfiguration() {

@@ -3,13 +3,10 @@ package de.fhg.iais.roberta.factory;
 import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yaml.snakeyaml.LoaderOptions;
-import org.yaml.snakeyaml.Yaml;
 
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
@@ -52,19 +49,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class BlocklyDropdownFactory {
     private static final Logger LOG = LoggerFactory.getLogger(BlocklyDropdownFactory.class);
-
-    private static final Yaml YAML;
-    static {
-        LoaderOptions lo = new LoaderOptions();
-        lo.setAllowDuplicateKeys(false);
-        YAML = new Yaml(lo);
-    }
-
     private final JSONObject robotDescription;
-
-    private final Set<String> sensorToPorts;
-    private final Set<String> actorToPorts;
-    private final Map<String, String> slots;
 
     private final Map<String, WaitUntilSensorBean> waMap;
     private final Map<String, String> modes;
@@ -73,17 +58,13 @@ public class BlocklyDropdownFactory {
 
     public BlocklyDropdownFactory(PluginProperties pluginProperties) {
         String robotDescriptor = pluginProperties.getStringProperty("robot.descriptor");
-        robotDescription = new JSONObject();
-        Util1.loadYAMLRecursive("", robotDescription, robotDescriptor);
-
-        this.sensorToPorts = BlocklyDropdown2EnumHelper.getSensorPortsFromProperties(pluginProperties.getPluginProperties());
-        this.actorToPorts = BlocklyDropdown2EnumHelper.getActorPortsFromProperties(pluginProperties.getPluginProperties());
-        this.slots = BlocklyDropdown2EnumHelper.getSlotFromProperties(pluginProperties.getPluginProperties());
-
-        this.blocklyDropdownColorItems = BlocklyDropdown2EnumHelper.getColors(robotDescription);
-        this.waMap = BlocklyDropdown2EnumHelper.getWaitUntils(robotDescription);
-        this.modes = BlocklyDropdown2EnumHelper.getModes(robotDescription);
-        this.configurationComponentTypes = BlocklyDropdown2EnumHelper.getConfigurationComponents(robotDescription);
+        this.robotDescription = new JSONObject();
+        Util1.loadYAMLRecursive("", this.robotDescription, robotDescriptor);
+        BlocklyDropdown2EnumHelper.loadBlocks(this.robotDescription);
+        this.blocklyDropdownColorItems = BlocklyDropdown2EnumHelper.getColors(this.robotDescription);
+        this.waMap = BlocklyDropdown2EnumHelper.getWaitUntils(this.robotDescription);
+        this.modes = BlocklyDropdown2EnumHelper.getModes(this.robotDescription);
+        this.configurationComponentTypes = BlocklyDropdown2EnumHelper.getConfigurationComponents(this.robotDescription);
 
     }
 
@@ -115,15 +96,12 @@ public class BlocklyDropdownFactory {
      * @param name of the sensor port
      * @return the sensor port from the enum {@link ISensorPort}
      */
-    public String getSlot(String slot) {
+    public String sanitizeSlot(String slot) {
         Assert.notNull(slot, "Null slot port!");
         if ( slot.isEmpty() ) {
             return BlocklyConstants.EMPTY_SLOT;
         }
-        final String sUpper = slot.trim().toUpperCase(Locale.GERMAN);
-        String internalSlot = this.slots.get(sUpper);
-        Assert.notNull(internalSlot, "Undefined slot! %s", slot);
-        return internalSlot;
+        return slot;
     }
 
     public String getMode(String mode) {
@@ -293,7 +271,7 @@ public class BlocklyDropdownFactory {
         try {
             Class<Sensor<?>> sensorClass = (Class<Sensor<?>>) BlocklyDropdownFactory.class.getClassLoader().loadClass(implementingClass);
             String mode = waBean.getMode();
-            SensorMetaDataBean sensorMetaDataBean = new SensorMetaDataBean(sanitizePort(port), getMode(mode), getSlot(slot), isPortInMutation);
+            SensorMetaDataBean sensorMetaDataBean = new SensorMetaDataBean(sanitizePort(port), getMode(mode), sanitizeSlot(slot), isPortInMutation);
             Method makeMethod = sensorClass.getDeclaredMethod("make", SensorMetaDataBean.class, BlocklyBlockProperties.class, BlocklyComment.class);
             return (Sensor<?>) makeMethod.invoke(null, sensorMetaDataBean, properties, comment);
         } catch ( Exception e ) {

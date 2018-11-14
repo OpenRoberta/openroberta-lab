@@ -3,13 +3,11 @@ package de.fhg.iais.roberta.util.test.ev3;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.junit.Assert;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.Ev3LejosV0Factory;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -24,10 +22,7 @@ import de.fhg.iais.roberta.visitor.codegen.Ev3SimVisitor;
 public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
 
     public HelperEv3ForXmlTest() {
-        super(new Ev3LejosV0Factory(new PluginProperties("ev3lejosv0", "", "", Util1.loadProperties("classpath:ev3lejosv0.properties"))), makeConfiguration());
-        Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
-        this.robotConfiguration.setRobotName("ev3lejosV1");
-        AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
+        super(new Ev3LejosV0Factory(new PluginProperties("ev3lejosv1", "", "", Util1.loadProperties("classpath:ev3lejosv1.properties"))), makeConfiguration());
     }
 
     private static Configuration makeConfiguration() {
@@ -45,7 +40,9 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
 
         final Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, motorC, motorD));
-        return builder.build();
+        Configuration configuration = builder.build();
+        configuration.setRobotName("ev3lejosV1");
+        return configuration;
     }
 
     private static Map<String, String> createMap(String... args) {

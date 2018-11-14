@@ -58,7 +58,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
         switch ( sensorType.getSensorType() ) {
             case BlocklyConstants.TOUCH:
                 sensorMetaDataBean =
-                    new SensorMetaDataBean(factory.sanitizePort(port), factory.getMode(BlocklyConstants.VALUE), factory.getSlot(slot), this.isPortInMutation);
+                    new SensorMetaDataBean(factory.sanitizePort(port), factory.getMode(BlocklyConstants.VALUE), factory.sanitizeSlot(slot), this.isPortInMutation);
                 this.sensor = TouchSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.TIME:
@@ -66,7 +66,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.sanitizePort(BlocklyConstants.NO_PORT),
                         factory.getMode(BlocklyConstants.VALUE),
-                        factory.getSlot(BlocklyConstants.EMPTY_SLOT),
+                        factory.sanitizeSlot(BlocklyConstants.EMPTY_SLOT),
                         isPortInMutation);
                 this.sensor = TimerSensor.make(sensorMetaDataBean, properties, comment);
                 break;
@@ -75,7 +75,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.sanitizePort(BlocklyConstants.NO_PORT),
                         factory.getMode(BlocklyConstants.DEFAULT),
-                        factory.getSlot(BlocklyConstants.EMPTY_SLOT),
+                        factory.sanitizeSlot(BlocklyConstants.EMPTY_SLOT),
                         isPortInMutation);
                 this.sensor = LightSensor.make(sensorMetaDataBean, properties, comment);
                 break;
@@ -84,7 +84,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                     new SensorMetaDataBean(
                         factory.sanitizePort(port),
                         factory.getMode(BlocklyConstants.DEFAULT),
-                        factory.getSlot(BlocklyConstants.EMPTY_SLOT),
+                        factory.sanitizeSlot(BlocklyConstants.EMPTY_SLOT),
                         isPortInMutation);
                 this.sensor = TemperatureSensor.make(sensorMetaDataBean, properties, comment);
                 break;

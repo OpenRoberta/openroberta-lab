@@ -1,12 +1,8 @@
 package de.fhg.iais.roberta.util.test.ev3;
 
-import java.util.Properties;
-
 import org.junit.Assert;
 
-import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.vorwerk.VorwerkConfiguration;
-import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.VorwerkFactory;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
@@ -21,8 +17,6 @@ public class HelperVorwerkForXmlTest extends AbstractHelperForXmlTest {
         super(
             new VorwerkFactory(new PluginProperties("vorwerk", "", "", Util1.loadProperties("classpath:vorwerk.properties"))),
             new VorwerkConfiguration.Builder().build());
-        Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
-        AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
     }
 
     /**
@@ -57,9 +51,9 @@ public class HelperVorwerkForXmlTest extends AbstractHelperForXmlTest {
      * @return the code as string
      * @throws Exception
      */
-    public String generatePython(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
+    public String generatePython(String pathToProgramXml, VorwerkConfiguration brickConfiguration) throws Exception {
         Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = VorwerkPythonVisitor.generate((VorwerkConfiguration) brickConfiguration, transformer.getTree(), true, Language.ENGLISH);
+        String code = VorwerkPythonVisitor.generate(brickConfiguration, transformer.getTree(), true, Language.ENGLISH);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }
