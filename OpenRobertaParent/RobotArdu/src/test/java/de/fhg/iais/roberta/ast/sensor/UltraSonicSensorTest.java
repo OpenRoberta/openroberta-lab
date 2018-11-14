@@ -37,8 +37,8 @@ public class UltraSonicSensorTest {
         UltrasonicSensor<Void> cs = (UltrasonicSensor<Void>) transformer.getTree().get(0).get(1);
         UltrasonicSensor<Void> cs1 = (UltrasonicSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals("S4", cs.getPort());
-        Assert.assertEquals("S2", cs1.getPort());
+        Assert.assertEquals("4", cs.getPort());
+        Assert.assertEquals("2", cs1.getPort());
     }
 
     @Test

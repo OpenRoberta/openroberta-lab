@@ -54,6 +54,7 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
+        //        this.usedSensors.add(new UsedSensor(encoderSensor.getPort(), SC.ENCODER, encoderSensor.getMode()));
         return null;
     }
 
