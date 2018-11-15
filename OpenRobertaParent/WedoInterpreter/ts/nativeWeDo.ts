@@ -104,7 +104,7 @@ export class NativeWeDo implements Native {
     public showTextAction( text: any ) {
         const showText = "" + text;
         U.debug( '***** show "' + showText + '" *****' );
-        WEBVIEW_C.jsToDisplay( { "show": text } );
+        WEBVIEW_C.jsToDisplay( { "show": showText } );
     }
 
     public close() {
