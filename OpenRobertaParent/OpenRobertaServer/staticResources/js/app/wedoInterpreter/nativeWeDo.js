@@ -87,7 +87,7 @@ define(["require", "exports", "interpreter.constants", "interpreter.util", "./we
         NativeWeDo.prototype.showTextAction = function (text) {
             var showText = "" + text;
             U.debug('***** show "' + showText + '" *****');
-            WEBVIEW_C.jsToDisplay({ "show": text });
+            WEBVIEW_C.jsToDisplay({ "show": showText });
         };
         NativeWeDo.prototype.close = function () {
             var ids = WEDO.getConnectedBricks();
