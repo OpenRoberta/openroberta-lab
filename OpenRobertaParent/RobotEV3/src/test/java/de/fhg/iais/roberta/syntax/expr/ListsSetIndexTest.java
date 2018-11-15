@@ -10,7 +10,7 @@ public class ListsSetIndexTest {
     @Test
     public void Test() throws Exception {
         String a =
-            "BlocklyMethods.listsIndex(BlocklyMethods.createListWithNumber(55,66,11), ListElementOperations.SET, (float) 99, IndexLocation.FROM_START, 1);}";
+            "newArrayList<>(Arrays.asList((float) 55, (float) 66, (float) 11)).set(1, (float) 99);}";
 
         this.h.assertCodeIsOk(a, "/syntax/lists/lists_set_index.xml");
     }
@@ -18,14 +18,14 @@ public class ListsSetIndexTest {
     @Test
     public void Test1() throws Exception {
         String a =
-            "BlocklyMethods.listsIndex(BlocklyMethods.createListWithNumber(55,66,11), ListElementOperations.INSERT, (float) 99, IndexLocation.FROM_START, 1);}";
+            "newArrayList<>(Arrays.asList((float) 55, (float) 66, (float) 11)).add(1, (float) 99);}";
 
         this.h.assertCodeIsOk(a, "/syntax/lists/lists_set_index1.xml");
     }
 
     @Test
     public void Test2() throws Exception {
-        String a = "BlocklyMethods.listsIndex(BlocklyMethods.createListWithNumber(55,66,11), ListElementOperations.INSERT, (float) 99, IndexLocation.LAST);}";
+        String a = "newArrayList<>(Arrays.asList((float) 55, (float) 66, (float) 11)).add((float) 99);}";
 
         this.h.assertCodeIsOk(a, "/syntax/lists/lists_set_index2.xml");
     }

@@ -39,6 +39,7 @@ public class AstToLejosJavaVisitorTest {
             + "import java.util.List;\n"
             + "import java.util.ArrayList;\n"
             + "import java.util.Arrays;\n"
+            + "import java.util.Collections;\n"
             + "import lejos.remote.nxt.NXTConnection;\n\n";
 
     private static final String BRICK_CONFIGURATION =
@@ -489,10 +490,10 @@ public class AstToLejosJavaVisitorTest {
                 + "        floatitem=0;"
                 + "        Stringitem2=\"ss\";"
                 + "        booleanitem3=true;"
-                + "        ArrayList<Float>item4=BlocklyMethods.createListWithNumber(1,2,3);"
-                + "        ArrayList<String>item5=BlocklyMethods.createListWithString(\"a\",\"b\");"
-                + "        ArrayList<Boolean>item6=BlocklyMethods.createListWithBoolean(true,false);"
-                + "        ArrayList<PickColor>item7=BlocklyMethods.createListWithColour(PickColor.RED,PickColor.BLACK,PickColor.NONE);"
+                + "        ArrayList<Float>item4=newArrayList<>(Arrays.asList((float) 1, (float) 2, (float) 3));"
+                + "        ArrayList<String>item5=newArrayList<>(Arrays.<String>asList(\"a\",\"b\"));"
+                + "        ArrayList<Boolean>item6=newArrayList<>(Arrays.<Boolean>asList(true,false));"
+                + "        ArrayList<PickColor>item7=newArrayList<>(Arrays.<PickColor>asList(PickColor.RED,PickColor.BLACK,PickColor.NONE));"
                 + "        PickColoritem8=PickColor.NONE;"
                 + "    public void run() throwsException {\n"
 
@@ -616,7 +617,7 @@ public class AstToLejosJavaVisitorTest {
                 + "        return x;\n"
                 + "    }"
                 + MAIN_METHOD
-                + "    ArrayList<String> variablenName=BlocklyMethods.createListWithString(\"a\", \"b\", \"c\");\n"
+                + "    ArrayList<String> variablenName=newArrayList<>(Arrays.<String>asList(\"a\", \"b\", \"c\"));\n"
                 + "    public void run() throwsException {\n"
                 + "        hal.drawText(String.valueOf(test(0, variablenName)), 0, 0);"
                 + "    }\n\n"
@@ -640,7 +641,7 @@ public class AstToLejosJavaVisitorTest {
                 + "        return PickColor.NONE;\n"
                 + "    }"
                 + MAIN_METHOD
-                + "    ArrayList<String> variablenName=BlocklyMethods.createListWithString(\"a\", \"b\", \"c\");\n"
+                + "    ArrayList<String> variablenName=newArrayList<>(Arrays.<String>asList(\"a\", \"b\", \"c\"));\n"
                 + "    public void run() throwsException {\n"
                 + "        hal.drawText(String.valueOf(test()), 0, 0);"
                 + "    }\n\n"
@@ -665,7 +666,7 @@ public class AstToLejosJavaVisitorTest {
                 + "        return PickColor.NONE;\n"
                 + "    }"
                 + MAIN_METHOD
-                + "    ArrayList<String> variablenName=BlocklyMethods.createListWithString(\"a\", \"b\", \"c\");\n"
+                + "    ArrayList<String> variablenName=newArrayList<>(Arrays.<String>asList(\"a\", \"b\", \"c\"));\n"
                 + "    public void run() throwsException {\n"
                 + "        hal.drawText(String.valueOf(test()), 0, 0);"
                 + "    }\n\n"
@@ -725,7 +726,7 @@ public class AstToLejosJavaVisitorTest {
                 + USED_SENSORS_DECL
                 + HAL
                 + MAIN_METHOD
-                + "ArrayList<PickColor>variablenName=BlocklyMethods.createListWithColour(PickColor.NONE,PickColor.RED,PickColor.BLUE);\n"
+                + "ArrayList<PickColor>variablenName=newArrayList<>(Arrays.<PickColor>asList(PickColor.NONE,PickColor.RED,PickColor.BLUE));\n"
                 + "    public void run() throwsException {\n"
                 + "        for (PickColorvariablenName2 : variablenName) {\n"
                 + "            hal.drawText(String.valueOf(variablenName2),0,0);\n"

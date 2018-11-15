@@ -5,9 +5,16 @@ import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
+import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
+import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
+
+import java.util.List;
 
 public final class Ev3BrickValidatorVisitor extends AbstractBrickValidatorVisitor implements IEv3Visitor<Void> {
 
@@ -24,6 +31,30 @@ public final class Ev3BrickValidatorVisitor extends AbstractBrickValidatorVisito
             if ( componentType.equals(SC.OTHER) && duration ) {
                 motorOnAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED"));
             }
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitListCreate(ListCreate<Void> listCreate) {
+        super.visitListCreate(listCreate);
+        if (listCreate.getTypeVar() == BlocklyType.CONNECTION) {
+            List<Expr<Void>> expressions = listCreate.getValue().get();
+            for (Expr<?> expr : expressions) {
+                if (expr.getVarType() == BlocklyType.NULL) {
+                    listCreate.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
+                    return null;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitListRepeat(ListRepeat<Void> listRepeat) {
+        super.visitListRepeat(listRepeat);
+        if (listRepeat.getTypeVar() == BlocklyType.CONNECTION && listRepeat.getParam().get(0).getVarType() == BlocklyType.NULL) {
+            listRepeat.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
         }
         return null;
     }

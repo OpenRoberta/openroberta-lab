@@ -9,7 +9,7 @@ public class ListsLengthTest {
 
     @Test
     public void Test() throws Exception {
-        String a = "BlocklyMethods.length(BlocklyMethods.createListWithNumber(((float)0.1),((float)0.0),0))}";
+        String a = "newArrayList<>(Arrays.asList((float)((float) 0.1), (float) ((float)0.0), (float) 0)).size()}";
 
         this.h.assertCodeIsOk(a, "/syntax/lists/lists_length.xml");
     }

@@ -1,7 +1,9 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,8 +12,11 @@ import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
+import de.fhg.iais.roberta.inter.mode.general.IIndexLocation;
+import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.MotorDuration;
@@ -44,6 +49,7 @@ import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
@@ -79,6 +85,13 @@ import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.collect.Ev3UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractJavaVisitor;
+
+import static de.fhg.iais.roberta.mode.general.IndexLocation.*;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET_REMOVE;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.INSERT;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.REMOVE;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.SET;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
@@ -182,13 +195,16 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     protected void generateProgramSuffix(boolean withWrapping) {
         if ( withWrapping ) {
             if ( this.isInDebugMode ) {
-                this.sb.append("\n");
-                this.sb.append(this.INDENT).append(this.INDENT).append("hal.closeResources();\n");
+                this.nlIndent();
+                this.sb.append("hal.closeResources();\n");
             }
-
-            this.sb.append(this.INDENT).append("}");
+            this.decrIndentation();
+            this.nlIndent();
+            this.sb.append("}");
         }
-        this.sb.append("\n").append("}");
+        this.decrIndentation();
+        this.nlIndent();
+        this.sb.append("}");
     }
 
     @Override
@@ -670,17 +686,20 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         mainTask.getVariables().visit(this);
-        this.sb.append("\n\n").append(this.INDENT).append("public void run() throws Exception {\n");
+        this.nlIndent();
+        this.nlIndent();
+        this.sb.append("public void run() throws Exception {\n");
         incrIndentation();
         // this is needed for testing
         if ( mainTask.getDebug().equals("TRUE") ) {
-            this.sb.append(this.INDENT).append(this.INDENT).append("hal.startLogging();");
+            this.nlIndent();
+            this.sb.append("hal.startLogging();");
             //this.sb.append(INDENT).append(INDENT).append(INDENT).append("\nhal.startScreenLoggingThread();");
             this.isInDebugMode = true;
         }
         if ( this.isSayTextUsed && !this.brickConfiguration.getRobotName().equals("ev3lejosV0") ) {
-            this.sb.append("\n");
-            this.sb.append(this.INDENT).append(this.INDENT).append("hal.setLanguage(\"");
+            this.nlIndent();
+            this.sb.append("hal.setLanguage(\"");
             this.sb.append(this.getLanguageString(this.language));
             this.sb.append("\");");
         }
@@ -689,25 +708,60 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
-        this.sb.append("BlocklyMethods.listsGetSubList( ");
+        IndexLocation loc0 = (IndexLocation) getSubFunct.getStrParam().get(0);
+        IndexLocation loc1 = (IndexLocation) getSubFunct.getStrParam().get(1);
+
+        boolean isLeftAParam = loc0 == FROM_START || loc0 == FROM_END;
+
         getSubFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        IndexLocation where1 = (IndexLocation) getSubFunct.getStrParam().get(0);
-        this.sb.append(getEnumCode(where1));
-        if ( (where1 == IndexLocation.FROM_START) || (where1 == IndexLocation.FROM_END) ) {
-            this.sb.append(", ");
-            getSubFunct.getParam().get(1).visit(this);
-        }
-        this.sb.append(", ");
-        IndexLocation where2 = (IndexLocation) getSubFunct.getStrParam().get(1);
-        this.sb.append(getEnumCode(where2));
-        if ( (where2 == IndexLocation.FROM_START) || (where2 == IndexLocation.FROM_END) ) {
-            this.sb.append(", ");
-            if ( getSubFunct.getParam().size() == 3 ) {
-                getSubFunct.getParam().get(2).visit(this);
-            } else {
+        this.sb.append(".subList(");
+
+        switch ( loc0 ) {
+            case FIRST:
+                this.sb.append("0");
+                break;
+            case LAST:
+                getSubFunct.getParam().get(0).visit(this);
+                this.sb.append(".size() - 1");
+                break;
+            case FROM_START:
                 getSubFunct.getParam().get(1).visit(this);
-            }
+                break;
+            case FROM_END:
+                this.sb.append("(");
+                getSubFunct.getParam().get(0).visit(this);
+                this.sb.append(".size() - 1) - ");
+                getSubFunct.getParam().get(1).visit(this);
+                break;
+        }
+
+        this.sb.append(", ");
+
+        switch ( loc1 ) {
+            case FIRST:
+                this.sb.append("0");
+                break;
+            case LAST:
+                getSubFunct.getParam().get(0).visit(this);
+                this.sb.append(".size()");
+                break;
+            case FROM_START:
+                if (isLeftAParam) {
+                    getSubFunct.getParam().get(2).visit(this);
+                } else {
+                    getSubFunct.getParam().get(1).visit(this);
+                }
+                break;
+            case FROM_END:
+                this.sb.append("(");
+                getSubFunct.getParam().get(0).visit(this);
+                this.sb.append(".size() - 1) - ");
+                if (isLeftAParam) {
+                    getSubFunct.getParam().get(2).visit(this);
+                } else {
+                    getSubFunct.getParam().get(1).visit(this);
+                }
+                break;
         }
         this.sb.append(")");
         return null;
@@ -716,13 +770,15 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        String methodName = "BlocklyMethods.findFirst( ";
-        if ( indexOfFunct.getLocation() == IndexLocation.LAST ) {
-            methodName = "BlocklyMethods.findLast( ";
-        }
-        this.sb.append(methodName);
         indexOfFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
+        switch ( (IndexLocation) indexOfFunct.getLocation() ) {
+            case FIRST:
+                this.sb.append(".indexOf(");
+                break;
+            case LAST:
+                this.sb.append(".lastIndexOf(");
+                break;
+        }
         if ( indexOfFunct.getParam().get(1).getVarType() == BlocklyType.NUMBER ) {
             this.sb.append(" (float) ");
         }
@@ -733,13 +789,15 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
-        String methodName = "BlocklyMethods.length( ";
-        if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
-            methodName = "BlocklyMethods.isEmpty( ";
-        }
-        this.sb.append(methodName);
         lengthOfIsEmptyFunct.getParam().get(0).visit(this);
-        this.sb.append(")");
+        switch(lengthOfIsEmptyFunct.getFunctName()) {
+            case LIST_IS_EMPTY:
+                this.sb.append(".isEmpty()");
+                break;
+            case LISTS_LENGTH:
+                this.sb.append(".size()");
+                break;
+        }
         return null;
     }
 
@@ -756,39 +814,88 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitListCreate(ListCreate<Void> listCreate) {
-        this.sb.append("BlocklyMethods.createListWith" + listCreate.getTypeVar().getBlocklyName() + "(");
-        listCreate.getValue().visit(this);
+        this.sb.append("new ArrayList<>(");
+
+        if (listCreate.getValue().get().size() > 1) {
+            this.sb.append("Arrays.");
+            if ( listCreate.getVarType() == BlocklyType.CONNECTION ) {
+                this.sb.append("<NXTConnection>");
+            } else if ( listCreate.getVarType() == BlocklyType.COLOR ) {
+                this.sb.append("<PickColor>");
+            } else if ( listCreate.getVarType() == BlocklyType.STRING ) {
+                this.sb.append("<String>");
+            } else if ( listCreate.getVarType() == BlocklyType.BOOLEAN ) {
+                this.sb.append("<Boolean>");
+            }
+
+            this.sb.append("asList(");
+            // manually go through value list to cast numbers to float
+            if (listCreate.getVarType() == BlocklyType.NUMBER) {
+                List<Expr<Void>> expressions = listCreate.getValue().get();
+                for ( int i = 0; i < expressions.size(); i++ ) {
+                    this.sb.append("(float) ");
+                    expressions.get(i).visit(this);
+                    if (i != expressions.size() - 1) {
+                        this.sb.append(", ");
+                    }
+                }
+
+            } else {
+                listCreate.getValue().visit(this);
+            }
+            this.sb.append(")");
+        }
+
         this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
-        this.sb.append("BlocklyMethods.createListWithItem(");
+        this.sb.append("new ArrayList<>(Collections.nCopies(");
+        listRepeat.getParam().get(1).visit(this);
+        this.sb.append(", ");
         if ( listRepeat.getParam().get(0).getVarType() == BlocklyType.NUMBER ) {
             this.sb.append(" (float) ");
         }
         listRepeat.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        listRepeat.getParam().get(1).visit(this);
-        this.sb.append(")");
+        this.sb.append("))");
         return null;
     }
 
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        this.sb.append("BlocklyMethods.listsIndex(");
+        ListElementOperations op = (ListElementOperations) listGetIndex.getElementOperation();
+        IndexLocation loc = (IndexLocation) listGetIndex.getLocation();
+
         listGetIndex.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        this.sb.append(getEnumCode(listGetIndex.getElementOperation()));
-        this.sb.append(", ");
-        this.sb.append(getEnumCode(listGetIndex.getLocation()));
-        if ( listGetIndex.getParam().size() == 2 ) {
-            this.sb.append(", ");
-            listGetIndex.getParam().get(1).visit(this);
+        if (op == GET) {
+            this.sb.append(".get(");
+        } else if (op == GET_REMOVE || op == REMOVE) {
+            this.sb.append(".remove(");
+        }
+        switch ( loc ) {
+            case FIRST:
+                this.sb.append("0");
+                break;
+            case LAST:
+                listGetIndex.getParam().get(0).visit(this);
+                this.sb.append(".size() - 1");
+                break;
+            case FROM_START:
+                listGetIndex.getParam().get(1).visit(this);
+                break;
+            case FROM_END:
+                this.sb.append("(");
+                listGetIndex.getParam().get(0).visit(this);
+                this.sb.append(".size() - 1) - ");
+                listGetIndex.getParam().get(1).visit(this);
+                break;
         }
         this.sb.append(")");
-        if ( listGetIndex.getElementOperation().isStatment() ) {
+
+        // This means its a remove statement and a semicolon is required
+        if (op == REMOVE) {
             this.sb.append(";");
         }
         return null;
@@ -796,21 +903,41 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
-        this.sb.append("BlocklyMethods.listsIndex(");
+        ListElementOperations op = (ListElementOperations) listSetIndex.getElementOperation();
+        IndexLocation loc = (IndexLocation) listSetIndex.getLocation();
+
         listSetIndex.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        this.sb.append(getEnumCode(listSetIndex.getElementOperation()));
-        this.sb.append(", ");
+        if (op == SET) {
+            this.sb.append(".set(");
+        } else if (op == INSERT) {
+            this.sb.append(".add(");
+        }
+        switch ( loc ) {
+            case FIRST:
+                this.sb.append("0");
+                this.sb.append(", ");
+                break;
+            case LAST:
+                break;
+            case FROM_START:
+                listSetIndex.getParam().get(2).visit(this);
+                this.sb.append(", ");
+                break;
+            case FROM_END:
+                this.sb.append("(");
+                listSetIndex.getParam().get(0).visit(this);
+                this.sb.append(".size() - 1) - ");
+                listSetIndex.getParam().get(2).visit(this);
+                this.sb.append(", ");
+                break;
+        }
+
         if ( listSetIndex.getParam().get(1).getVarType() == BlocklyType.NUMBER ) {
             this.sb.append(" (float) ");
         }
+
         listSetIndex.getParam().get(1).visit(this);
-        this.sb.append(", ");
-        this.sb.append(getEnumCode(listSetIndex.getLocation()));
-        if ( listSetIndex.getParam().size() == 3 ) {
-            this.sb.append(", ");
-            listSetIndex.getParam().get(2).visit(this);
-        }
+
         this.sb.append(");");
         return null;
     }
@@ -881,11 +1008,11 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case MIN:
-                this.sb.append("BlocklyMethods.minOnList(");
+                this.sb.append("Collections.min(");
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case MAX:
-                this.sb.append("BlocklyMethods.maxOnList(");
+                this.sb.append("Collections.max(");
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case AVERAGE:
@@ -1041,6 +1168,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         this.sb.append("import java.util.List;\n");
         this.sb.append("import java.util.ArrayList;\n");
         this.sb.append("import java.util.Arrays;\n\n");
+        this.sb.append("import java.util.Collections;\n");
 
         this.sb.append("import lejos.remote.nxt.NXTConnection;\n\n");
     }
@@ -1098,24 +1226,24 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     private String getOldModeClass(String sensorType, String sensorMode) {
         switch ( sensorType ) {
-            case "TOUCH":
+            case SC.TOUCH:
                 if ( sensorMode.equals("PRESSED") || sensorMode.equals("DEFAULT") ) {
                     return "TouchSensorMode.TOUCH";
                 } else {
                     return "TouchSensorMode." + sensorMode;
                 }
 
-            case "COLOR":
-            case "COLOUR":
+            case SC.COLOR:
+            case SC.COLOUR:
                 if ( sensorMode.equals(SC.LIGHT) ) {
                     sensorMode = SC.RED;
                 }
                 return "ColorSensorMode." + sensorMode;
-            case "ULTRASONIC":
+            case SC.ULTRASONIC:
                 return "UltrasonicSensorMode." + sensorMode;
-            case "INFRARED":
+            case SC.INFRARED:
                 return "InfraredSensorMode." + sensorMode;
-            case "GYRO":
+            case SC.GYRO:
                 return "GyroSensorMode." + sensorMode;
             default:
                 throw new DbcException("There is mapping missing for " + sensorType + " with the old enums!");
@@ -1134,7 +1262,12 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     private String generateRegenerateSensor(ConfigurationComponent sensor) {
         StringBuilder sb = new StringBuilder();
-        sb.append("new Sensor(SensorType.").append(sensor.getComponentType());
+        sb.append("new Sensor(SensorType.");
+        if (sensor.getComponentType().equals(SC.COLOUR)) {
+            sb.append(SC.COLOR);
+        } else {
+            sb.append(sensor.getComponentType());
+        }
         sb.append(")");
         return sb.toString();
     }

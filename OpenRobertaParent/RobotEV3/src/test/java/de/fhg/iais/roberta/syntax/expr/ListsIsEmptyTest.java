@@ -9,7 +9,7 @@ public class ListsIsEmptyTest {
 
     @Test
     public void Test() throws Exception {
-        String a = "BlocklyMethods.isEmpty(BlocklyMethods.createListWithNumber(0, 0, 0))}";
+        String a = "newArrayList<>(Arrays.asList((float) 0, (float) 0, (float) 0)).isEmpty()}";
 
         this.h.assertCodeIsOk(a, "/syntax/lists/lists_is_empty.xml");
     }
