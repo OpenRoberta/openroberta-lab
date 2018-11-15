@@ -110,7 +110,7 @@ public abstract class AbstractWeDoVisitor<V> implements ILanguageVisitor<V>, IWe
 
     @Override
     public V visitMathConst(MathConst<V> mathConst) {
-        JSONObject o = mk(C.EXPR).put(C.EXPR, mathConst.getMathConst() + "')");
+        JSONObject o = mk(C.EXPR).put(C.EXPR, C.MATH_CONST).put(C.VALUE, mathConst.getMathConst());
         return app(o);
     }
 
@@ -543,7 +543,7 @@ public abstract class AbstractWeDoVisitor<V> implements ILanguageVisitor<V>, IWe
         mathConstrainFunct.getParam().get(0).visit(this);
         mathConstrainFunct.getParam().get(1).visit(this);
         mathConstrainFunct.getParam().get(2).visit(this);
-        JSONObject o = mk(C.MATH_CONSTRAIN_FUNCTION);
+        JSONObject o = mk(C.EXPR).put(C.EXPR, C.MATH_CONSTRAIN_FUNCTION);
         return app(o);
     }
 
@@ -564,7 +564,7 @@ public abstract class AbstractWeDoVisitor<V> implements ILanguageVisitor<V>, IWe
 
     @Override
     public V visitMathRandomFloatFunct(MathRandomFloatFunct<V> mathRandomFloatFunct) {
-        JSONObject o = mk(C.RANDOM_DOUBLE);
+        JSONObject o = mk(C.EXPR).put(C.EXPR, C.RANDOM_DOUBLE);
         return app(o);
     }
 
@@ -572,14 +572,14 @@ public abstract class AbstractWeDoVisitor<V> implements ILanguageVisitor<V>, IWe
     public V visitMathRandomIntFunct(MathRandomIntFunct<V> mathRandomIntFunct) {
         mathRandomIntFunct.getParam().get(0).visit(this);
         mathRandomIntFunct.getParam().get(1).visit(this);
-        JSONObject o = mk(C.RANDOM_INT);
+        JSONObject o = mk(C.EXPR).put(C.EXPR, C.RANDOM_INT);
         return app(o);
     }
 
     @Override
     public V visitMathSingleFunct(MathSingleFunct<V> mathSingleFunct) {
         mathSingleFunct.getParam().get(0).visit(this);
-        JSONObject o = mk(C.SINGLE_FUNCTION).put(C.NAME, mathSingleFunct.getFunctName());
+        JSONObject o = mk(C.EXPR).put(C.EXPR, C.SINGLE_FUNCTION).put(C.OP, mathSingleFunct.getFunctName());
         return app(o);
     }
 

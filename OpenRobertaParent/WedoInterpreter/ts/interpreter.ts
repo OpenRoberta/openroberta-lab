@@ -285,6 +285,10 @@ export class Interpreter {
                         }
                         s.push( !truthy );
                         break;
+                    case C.NEG:
+                        const value = s.pop();
+                        s.push( -value );
+                        break;
                     default:
                         U.dbcException( "invalid unary expr subOp: " + subOp );
                 }
@@ -302,10 +306,12 @@ export class Interpreter {
                     default:
                         throw "Invalid Math Constant Name";
                 }
+                break;
             }
             case C.SINGLE_FUNCTION: {
                 const subOp = expr[C.OP];
                 const value = s.pop();
+                U.debug( '---------- ' + subOp + ' with ' + value )
                 switch ( subOp ) {
                     case 'ROOT': s.push( Math.sqrt( value ) ); break;
                     case 'ABS': s.push( Math.abs( value ) ); break;
@@ -325,6 +331,7 @@ export class Interpreter {
                     default:
                         throw "Invalid Function Name";
                 }
+                break;
             }
             case C.MATH_CONSTRAIN_FUNCTION: {
                 const max = s.pop();
@@ -361,6 +368,7 @@ export class Interpreter {
                     default:
                         throw "Invalid Math Property Function Name";
                 }
+                break;
             }
             case C.BINARY: {
                 const subOp = expr[C.OP];
@@ -380,6 +388,7 @@ export class Interpreter {
                     case C.MULTIPLY: s.push( 0 + left * right ); break;
                     case C.DIVIDE: s.push( 0 + left / right ); break;
                     case C.POWER: s.push( Math.pow( left, right ) ); break;
+                    case C.MOD: s.push( left % right ); break;
                     default:
                         U.dbcException( "invalid binary expr supOp: " + subOp );
                 }

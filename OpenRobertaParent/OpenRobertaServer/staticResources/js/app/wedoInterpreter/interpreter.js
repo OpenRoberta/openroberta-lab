@@ -287,6 +287,10 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                             }
                             s.push(!truthy);
                             break;
+                        case C.NEG:
+                            var value = s.pop();
+                            s.push(-value);
+                            break;
                         default:
                             U.dbcException("invalid unary expr subOp: " + subOp);
                     }
@@ -316,10 +320,12 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                         default:
                             throw "Invalid Math Constant Name";
                     }
+                    break;
                 }
                 case C.SINGLE_FUNCTION: {
                     var subOp = expr[C.OP];
                     var value = s.pop();
+                    U.debug('---------- ' + subOp + ' with ' + value);
                     switch (subOp) {
                         case 'ROOT':
                             s.push(Math.sqrt(value));
@@ -369,6 +375,7 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                         default:
                             throw "Invalid Function Name";
                     }
+                    break;
                 }
                 case C.MATH_CONSTRAIN_FUNCTION: {
                     var max_1 = s.pop();
@@ -418,6 +425,7 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                         default:
                             throw "Invalid Math Property Function Name";
                     }
+                    break;
                 }
                 case C.BINARY: {
                     var subOp = expr[C.OP];
@@ -462,6 +470,9 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                             break;
                         case C.POWER:
                             s.push(Math.pow(left, right));
+                            break;
+                        case C.MOD:
+                            s.push(left % right);
                             break;
                         default:
                             U.dbcException("invalid binary expr supOp: " + subOp);
