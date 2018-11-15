@@ -15,7 +15,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
-import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
@@ -215,11 +214,6 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        return null;
-    }
-
-    @Override
-    public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
         return null;
     }
 

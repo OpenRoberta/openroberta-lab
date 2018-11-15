@@ -54,7 +54,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
-import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
@@ -588,12 +587,6 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         }
 
         return null;
-    }
-
-    @Override
-    public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
-        return null;
-
     }
 
     @Override

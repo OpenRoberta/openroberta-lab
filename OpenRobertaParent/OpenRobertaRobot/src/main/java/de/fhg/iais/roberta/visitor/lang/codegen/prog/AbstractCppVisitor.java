@@ -19,6 +19,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
+import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
+import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
@@ -141,6 +143,58 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
+        return null;
+    }
+
+    @Override
+    public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
+        if ( getSubFunct.getFunctName() == FunctionNames.GET_SUBLIST ) {
+            this.sb.append("_getSubList(");
+            getSubFunct.getParam().get(0).visit(this);
+            this.sb.append(", ");
+            switch ( (IndexLocation) getSubFunct.getStrParam().get(0) ) {
+                case FIRST:
+                    this.sb.append("0, ");
+                    break;
+                case FROM_END:
+                    getSubFunct.getParam().get(0).visit(this);
+                    this.sb.append(".size() - 1 - ");
+                    getSubFunct.getParam().get(1).visit(this);
+                    this.sb.append(", ");
+                    break;
+                case FROM_START:
+                    getSubFunct.getParam().get(1).visit(this);
+                    this.sb.append(", ");
+                    break;
+                default:
+                    break;
+            }
+            switch ( (IndexLocation) getSubFunct.getStrParam().get(1) ) {
+                case LAST:
+                    getSubFunct.getParam().get(0).visit(this);
+                    this.sb.append(".size() - 1");
+                    break;
+                case FROM_END:
+                    getSubFunct.getParam().get(0).visit(this);
+                    this.sb.append(".size() - 1 - ");
+                    try {
+                        getSubFunct.getParam().get(2).visit(this);
+                    } catch ( IndexOutOfBoundsException e ) { // means that our start index does not have a variable
+                        getSubFunct.getParam().get(1).visit(this);
+                    }
+                    break;
+                case FROM_START:
+                    try {
+                        getSubFunct.getParam().get(2).visit(this);
+                    } catch ( IndexOutOfBoundsException e ) { // means that our start index does not have a variable
+                        getSubFunct.getParam().get(1).visit(this);
+                    }
+                    break;
+                default:
+                    break;
+            }
+            this.sb.append(")");
+        }
         return null;
     }
 
