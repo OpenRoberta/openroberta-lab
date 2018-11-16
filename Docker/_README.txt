@@ -4,11 +4,12 @@ HOW TO GET AN OPENROBERTALAB INSTALLATION WITHOUT MUCH SETUP
 
 Variables used (set as needed!):
 
+export HOME="/home/rbudde"
 export VERSION='3.0.3'
-export BRANCH=reinhardTest
-export GITREPO=~rbudde/git/robertalab
+export BRANCH='develop'
+export GITREPO="$HOME/git/robertalab"
 export DISTR_DIR='/tmp/distr'
-export DB_PARENTDIR='/home/rbudde/db'
+export DB_PARENTDIR="$HOME/db"
 export SERVER_PORT_ON_HOST=7000
 export DBSERVER_PORT_ON_HOST=9001
 

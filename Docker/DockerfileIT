@@ -1,6 +1,6 @@
 FROM rbudde/openroberta_base:1
 
-ARG LAST_RUN_OF_IT=2018-10-10
+ARG LAST_RUN_OF_IT=2018-11-16
 
 RUN apt-get update && apt-get install -y git maven && apt-get clean
  
