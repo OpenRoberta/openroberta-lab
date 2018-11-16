@@ -320,8 +320,8 @@ public final class BlocklyConstants {
     public static final String DETECT_MARK = "DETECT_MARK";
     public static final String NAO_SONAR = "SONAR";
     public static final String NAO_GYROMETER = "GYROMETER";
-    public static final String NAO_FACE = "NAOFACE";
-    public static final String NAO_SPEECH = "NAOSPEECH";
+    public static final String NAO_FACE = "NAO_FACE";
+    public static final String NAO_SPEECH = "NAO_SPEECH";
     public static final String ACCELEROMETER = "ACCELEROMETER";
     public static final String NAO_FSR = "FSR";
     public static final String NAO_PHRASE = "PHRASE";

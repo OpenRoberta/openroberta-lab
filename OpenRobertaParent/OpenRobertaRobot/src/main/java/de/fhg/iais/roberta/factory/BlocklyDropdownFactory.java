@@ -54,31 +54,24 @@ public class BlocklyDropdownFactory {
     private final Map<String, WaitUntilSensorBean> waMap;
     private final Map<String, String> modes;
     private final DropDown blocklyDropdownColorItems;
-    private final DropDown configurationComponentTypes;
+    private final Map<String, String> configurationComponentTypes;
 
     public BlocklyDropdownFactory(PluginProperties pluginProperties) {
         String robotDescriptor = pluginProperties.getStringProperty("robot.descriptor");
         this.robotDescription = new JSONObject();
         Util1.loadYAMLRecursive("", this.robotDescription, robotDescriptor);
-        BlocklyDropdown2EnumHelper.loadBlocks(this.robotDescription);
-        this.blocklyDropdownColorItems = BlocklyDropdown2EnumHelper.getColors(this.robotDescription);
-        this.waMap = BlocklyDropdown2EnumHelper.getWaitUntils(this.robotDescription);
-        this.modes = BlocklyDropdown2EnumHelper.getModes(this.robotDescription);
-        this.configurationComponentTypes = BlocklyDropdown2EnumHelper.getConfigurationComponents(this.robotDescription);
+        BlocklyDropdownFactoryHelper.loadBlocks(this.robotDescription);
+        this.blocklyDropdownColorItems = BlocklyDropdownFactoryHelper.getColors(this.robotDescription);
+        this.waMap = BlocklyDropdownFactoryHelper.getWaitUntils(this.robotDescription);
+        this.modes = BlocklyDropdownFactoryHelper.getModes(this.robotDescription);
+        this.configurationComponentTypes = BlocklyDropdownFactoryHelper.getConfigurationComponents(this.robotDescription);
 
     }
 
     public String getConfigurationComponentTypeByBlocklyName(String blocklyName) {
         Assert.nonEmptyString(blocklyName, "Invalid blockly name");
-        String configurationComponentType = this.configurationComponentTypes.getBySecond(blocklyName);
+        String configurationComponentType = this.configurationComponentTypes.get(blocklyName);
         Assert.notNull(configurationComponentType, "No associated component type for %s in the properties", blocklyName);
-        return configurationComponentType;
-    }
-
-    public String getBlocklyNameByConfigurationComponentType(String typeName) {
-        Assert.nonEmptyString(typeName, "Invalid type name");
-        String configurationComponentType = this.configurationComponentTypes.getByFirst(typeName);
-        Assert.notNull(configurationComponentType, "No associated blockly name for %s in the properties", typeName);
         return configurationComponentType;
     }
 
@@ -121,7 +114,7 @@ public class BlocklyDropdownFactory {
      * @return index location from the enum {@link IIndexLocation}
      */
     public IIndexLocation getIndexLocation(String indexLocation) {
-        return BlocklyDropdown2EnumHelper.getModeValue(indexLocation, IndexLocation.class);
+        return BlocklyDropdownFactoryHelper.getModeValue(indexLocation, IndexLocation.class);
     }
 
     /**
@@ -132,7 +125,7 @@ public class BlocklyDropdownFactory {
      * @return direction location from the enum {@link IDirection}
      */
     public IDirection getDirection(String direction) {
-        return BlocklyDropdown2EnumHelper.getModeValue(direction, Direction.class);
+        return BlocklyDropdownFactoryHelper.getModeValue(direction, Direction.class);
     }
 
     /**
@@ -143,7 +136,7 @@ public class BlocklyDropdownFactory {
      * @return operation from the enum {@link IListElementOperations}
      */
     public IListElementOperations getListElementOpertaion(String operation) {
-        return BlocklyDropdown2EnumHelper.getModeValue(operation, ListElementOperations.class);
+        return BlocklyDropdownFactoryHelper.getModeValue(operation, ListElementOperations.class);
     }
 
     /**
@@ -164,7 +157,7 @@ public class BlocklyDropdownFactory {
      * @return mode from the enum {@link LightMode}
      */
     public ILightMode getBlinkMode(String mode) {
-        return BlocklyDropdown2EnumHelper.getModeValue(mode, LightMode.class);
+        return BlocklyDropdownFactoryHelper.getModeValue(mode, LightMode.class);
     }
 
     /**
@@ -175,11 +168,11 @@ public class BlocklyDropdownFactory {
      * @return mode from the enum {@link ILightMode}
      */
     public IBrickLedColor getBrickLedColor(String mode) {
-        return BlocklyDropdown2EnumHelper.getModeValue(mode, BrickLedColor.class);
+        return BlocklyDropdownFactoryHelper.getModeValue(mode, BrickLedColor.class);
     }
 
     public IWorkingState getWorkingState(String mode) {
-        return BlocklyDropdown2EnumHelper.getModeValue(mode, WorkingState.class);
+        return BlocklyDropdownFactoryHelper.getModeValue(mode, WorkingState.class);
     }
 
     /**
@@ -190,7 +183,7 @@ public class BlocklyDropdownFactory {
      * @return turn direction from the enum {@link ITurnDirection}
      */
     public ITurnDirection getTurnDirection(String direction) {
-        return BlocklyDropdown2EnumHelper.getModeValue(direction, TurnDirection.class);
+        return BlocklyDropdownFactoryHelper.getModeValue(direction, TurnDirection.class);
     }
 
     /**
@@ -201,7 +194,7 @@ public class BlocklyDropdownFactory {
      * @return motor move mode from the enum {@link IMotorMoveMode}
      */
     public IMotorMoveMode getMotorMoveMode(String mode) {
-        return BlocklyDropdown2EnumHelper.getModeValue(mode, MotorMoveMode.class);
+        return BlocklyDropdownFactoryHelper.getModeValue(mode, MotorMoveMode.class);
     }
 
     /**
@@ -212,7 +205,7 @@ public class BlocklyDropdownFactory {
      * @return name of the stopping mode from the enum {@link IMotorStopMode}
      */
     public IMotorStopMode getMotorStopMode(String mode) {
-        return BlocklyDropdown2EnumHelper.getModeValue(mode, MotorStopMode.class);
+        return BlocklyDropdownFactoryHelper.getModeValue(mode, MotorStopMode.class);
     }
 
     /**
@@ -223,7 +216,7 @@ public class BlocklyDropdownFactory {
      * @return the motor side from the enum {@link IMotorSide}
      */
     public IMotorSide getMotorSide(String motorSide) {
-        return BlocklyDropdown2EnumHelper.getModeValue(motorSide, MotorSide.class);
+        return BlocklyDropdownFactoryHelper.getModeValue(motorSide, MotorSide.class);
     }
 
     /**
@@ -234,7 +227,7 @@ public class BlocklyDropdownFactory {
      * @return the drive direction from the enum {@link IDriveDirection}
      */
     public IDriveDirection getDriveDirection(String driveDirection) {
-        return BlocklyDropdown2EnumHelper.getModeValue(driveDirection, DriveDirection.class);
+        return BlocklyDropdownFactoryHelper.getModeValue(driveDirection, DriveDirection.class);
     }
 
     /**
@@ -244,11 +237,11 @@ public class BlocklyDropdownFactory {
      * @return the drelay mode from the enum {@link IRelayMode}
      */
     public IRelayMode getRelayMode(String relayMode) {
-        return BlocklyDropdown2EnumHelper.getModeValue(relayMode, RelayMode.class);
+        return BlocklyDropdownFactoryHelper.getModeValue(relayMode, RelayMode.class);
     }
 
     public ILanguage getLanguageMode(String mode) {
-        return BlocklyDropdown2EnumHelper.getModeValue(mode, Language.class);
+        return BlocklyDropdownFactoryHelper.getModeValue(mode, Language.class);
     }
 
     /**

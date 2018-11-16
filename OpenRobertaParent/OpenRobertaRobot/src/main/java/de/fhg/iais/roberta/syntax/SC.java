@@ -92,5 +92,6 @@ public interface SC {
     String LED_MATRIX = "LED_MATRIX";
     String BUTTON = "BUTTON";
     String STRENGTH = "STRENGTH";
+    String RED = "RED";
 
 }

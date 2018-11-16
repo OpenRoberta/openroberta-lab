@@ -20,7 +20,7 @@ public abstract class AbstractBrickValidatorVisitor extends AbstractProgramValid
             sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
             this.errorCount++;
         } else {
-            String type = usedSensor.getProperty("TYPE");
+            String type = usedSensor.getComponentType();
             switch ( sensor.getKind().getName() ) {
                 case "COLOR_SENSING":
                     if ( !type.equals("COLOR") && !type.equals("HT_COLOR") ) {

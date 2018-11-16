@@ -26,16 +26,6 @@ public class TaskTest {
     }
 
     @Test
-    public void mainTaskShadow() throws Exception {
-        String a =
-            "BlockAST [project=[[Location [x=38, y=88], MainTask [\n"
-                + "exprStmt VarDeclaration [NUMBER, item, ShadowExpr [NumConst [0], null], true, true]\n"
-                + "exprStmt VarDeclaration [NUMBER, item2, ShadowExpr [NumConst [0], NumConst [15]], false, true]]]]]";
-
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/task/task_mainTaskShadow.xml"));
-    }
-
-    @Test
     public void mainTask1() throws Exception {
         String a = "BlockAST [project=[[Location [x=10, y=83], MainTask []]]]";
 
@@ -75,10 +65,4 @@ public class TaskTest {
     public void reverseTransformatinStartActivityTask() throws Exception {
         this.h.assertTransformationIsOk("/ast/task/task_startActivityTask.xml");
     }
-
-    @Test
-    public void reverseTransformatinMainTaskShadow() throws Exception {
-        this.h.assertTransformationIsOk("/ast/task/task_mainTaskShadow.xml");
-    }
-
 }

@@ -445,7 +445,6 @@ public class NxcVisitorTest {
                 + "    float item;\n"
                 + "    string item2;\n"
                 + "task main() {"
-                + "    item=0;\n"
                 + "    item2=\"cc\";\n"
                 + "}\n";
 

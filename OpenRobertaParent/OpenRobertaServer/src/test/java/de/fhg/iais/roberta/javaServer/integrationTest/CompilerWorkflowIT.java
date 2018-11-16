@@ -102,8 +102,8 @@ public class CompilerWorkflowIT {
     public void setup() throws Exception {
         this.restProgram = new ClientProgram(this.sessionFactoryWrapper, robotCommunicator, serverProperties);
         this.restAdmin = new ClientAdmin(robotCommunicator, serverProperties);
-        when(sessionFactoryWrapper.getSession()).thenReturn(dbSession);
-        doNothing().when(dbSession).commit();
+        when(this.sessionFactoryWrapper.getSession()).thenReturn(this.dbSession);
+        doNothing().when(this.dbSession).commit();
     }
 
     @Test
@@ -118,11 +118,11 @@ public class CompilerWorkflowIT {
 
     @Test
     public void testNepo() throws Exception {
-        resourceBase = "/crossCompilerTests/";
+        this.resourceBase = "/crossCompilerTests/";
         boolean resultAcc = true;
         LOG.info("XXXXXXXXXX START of the NEPO compilations XXXXXXXXXX");
         for ( RobotInfo info : RobotInfo.values() ) {
-            String resourceDirectory = resourceBase + info.dirName;
+            String resourceDirectory = this.resourceBase + info.dirName;
             resultAcc = resultAcc & Util1.fileStreamOfResourceDirectory(resourceDirectory).//
                 filter(f -> f.endsWith(".xml")).map(f -> compileNepo(info, f)).reduce(true, (a, b) -> a && b);
         }
@@ -136,11 +136,11 @@ public class CompilerWorkflowIT {
 
     @Test
     public void testNative() throws Exception {
-        resourceBase = "/crossCompilerTests/";
+        this.resourceBase = "/crossCompilerTests/";
         boolean resultAcc = true;
         LOG.info("XXXXXXXXXX START of the NATIVE compilations XXXXXXXXXX");
         for ( RobotInfo info : RobotInfo.values() ) {
-            String resourceDirectory = resourceBase + "/" + info.dirName;
+            String resourceDirectory = this.resourceBase + "/" + info.dirName;
             resultAcc = resultAcc & Util1.fileStreamOfResourceDirectory(resourceDirectory). //
                 filter(f -> f.endsWith(info.suffixNative)).map(f -> compileNative(info, f)).reduce(true, (a, b) -> a && b);
         }
@@ -154,13 +154,13 @@ public class CompilerWorkflowIT {
 
     private boolean compileNepo(RobotInfo info, String resource) throws DbcException {
         String expectResult = resource.startsWith("error") ? "error" : "ok";
-        String fullResource = resourceBase + info.dirName + "/" + resource;
+        String fullResource = this.resourceBase + info.dirName + "/" + resource;
         try {
             log("start", info.name(), fullResource, null);
             setRobotTo(info.name());
             JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileP','name':'prog','language':'de'}");
             cmd.getJSONObject("data").put("program", Util1.readResourceContent(fullResource));
-            response = this.restProgram.command(httpSessionState, cmd);
+            this.response = this.restProgram.command(httpSessionState, cmd);
         } catch ( Exception e ) {
             log("fail", info.name(), fullResource, e);
             return false;
@@ -177,14 +177,14 @@ public class CompilerWorkflowIT {
     private boolean compileNative(RobotInfo info, String resource) throws DbcException {
         String expectResult = resource.startsWith("error") ? "error" : "ok";
         resource = resource.endsWith(info.suffixNative) ? resource.substring(0, resource.length() - info.suffixNative.length()) : resource;
-        String fullResource = resourceBase + info.dirName + "/" + resource + info.suffixNative;
+        String fullResource = this.resourceBase + info.dirName + "/" + resource + info.suffixNative;
         try {
             log("start", info.name(), fullResource, null);
             setRobotTo(info.name());
             JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileN','name':'" + resource + "','language':'de'}");
             String fileContent = Util1.readResourceContent(fullResource);
             cmd.getJSONObject("data").put("programText", fileContent);
-            response = this.restProgram.command(httpSessionState, cmd);
+            this.response = this.restProgram.command(httpSessionState, cmd);
         } catch ( Exception e ) {
             log("fail", info.name(), fullResource, e);
             return false;
@@ -224,7 +224,7 @@ public class CompilerWorkflowIT {
     }
 
     private void setRobotTo(String robot) throws Exception, JSONException {
-        response = this.restAdmin.command(httpSessionState, dbSession, JSONUtilForServer.mkD("{'cmd':'setRobot','robot':'" + robot + "'}"), null);
+        this.response = this.restAdmin.command(httpSessionState, this.dbSession, JSONUtilForServer.mkD("{'cmd':'setRobot','robot':'" + robot + "'}"), null);
         JSONUtilForServer.assertEntityRc(this.response, "ok", Key.ROBOT_SET_SUCCESS);
     }
 

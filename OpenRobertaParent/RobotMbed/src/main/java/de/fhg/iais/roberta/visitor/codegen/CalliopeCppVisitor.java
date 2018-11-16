@@ -516,21 +516,23 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         String userDefinedName = pinValueSensor.getPort();
         String port = this.configuration.getConfigurationComponent(userDefinedName).getPortName();
         String mode = pinValueSensor.getMode();
-        String modeCapitalized = WordUtils.capitalizeFully(mode);
         this.sb.append("_uBit.io." + port);
         switch ( mode ) {
             case SC.DIGITAL:
+                this.sb.append(".getDigitalValue()");
+                break;
             case SC.ANALOG:
-                this.sb.append(".get").append(modeCapitalized).append("Value");
+                this.sb.append(".getAnalogValue()");
                 break;
             case SC.PULSE_HIGH:
+                this.sb.append(".readPulseHigh()");
+                break;
             case SC.PULSE_LOW:
-                this.sb.append(".read").append(modeCapitalized);
+                this.sb.append(".readPulseLow()");
                 break;
             default:
                 throw new DbcException("Value type  " + mode + " is not supported.");
         }
-        this.sb.append("()");
         return null;
     }
 

@@ -11,9 +11,10 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.util.DropDown;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public class BlocklyDropdown2EnumHelper {
+public class BlocklyDropdownFactoryHelper {
 
     public static <E extends IMode> E getModeValue(String modeName, Class<E> modes) {
         if ( modeName == null ) {
@@ -66,21 +67,23 @@ public class BlocklyDropdown2EnumHelper {
         return map;
     }
 
-    public static DropDown getConfigurationComponents(JSONObject robotDescription) {
-        DropDown dropdownItems = new DropDown();
+    public static Map<String, String> getConfigurationComponents(JSONObject robotDescription) {
+        Map<String, String> r = new HashMap<>();
         JSONObject configurations = robotDescription.getJSONObject("configuration");
         for ( String key : configurations.keySet() ) {
-            String value = configurations.getString(key);
-            dropdownItems.add(key, value);
+            JSONArray value = configurations.getJSONArray(key);
+            for ( int i = 0; i < value.length(); i++ ) {
+                String old = r.put(value.getString(i), key);
+                Assert.isNull(old, "Duplicate binding for %s", old);
+            }
         }
-        return dropdownItems;
+        return r;
     }
 
     public static void loadBlocks(JSONObject robotDescription) {
         JSONObject blocks = robotDescription.getJSONObject("block");
         for ( String block : blocks.keySet() ) {
             JSONObject value = blocks.getJSONObject(block);
-
             try {
                 Class<?> implementor = Class.forName(value.getString("implementor"));
                 JSONArray blocklyBlocks = value.getJSONArray("type");

@@ -13,7 +13,7 @@ public class BlockType {
     private final String name;
     private final Category category;
     private final Class<?> astClass;
-    private Set<String> blocklyNames;
+    private final Set<String> blocklyNames;
 
     public BlockType(String name, Category category, Class<?> astClass, String... blocklyNames) {
         Assert.notNull(name);
@@ -76,10 +76,10 @@ public class BlockType {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((astClass == null) ? 0 : astClass.hashCode());
-        result = prime * result + ((blocklyNames == null) ? 0 : blocklyNames.hashCode());
-        result = prime * result + ((category == null) ? 0 : category.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((this.astClass == null) ? 0 : this.astClass.hashCode());
+        result = prime * result + ((this.blocklyNames == null) ? 0 : this.blocklyNames.hashCode());
+        result = prime * result + ((this.category == null) ? 0 : this.category.hashCode());
+        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
         return result;
     }
 
@@ -95,28 +95,28 @@ public class BlockType {
             return false;
         }
         BlockType other = (BlockType) obj;
-        if ( astClass == null ) {
+        if ( this.astClass == null ) {
             if ( other.astClass != null ) {
                 return false;
             }
-        } else if ( !astClass.getCanonicalName().equals(other.astClass.getCanonicalName()) ) {
+        } else if ( !this.astClass.getCanonicalName().equals(other.astClass.getCanonicalName()) ) {
             return false;
         }
-        if ( blocklyNames == null ) {
+        if ( this.blocklyNames == null ) {
             if ( other.blocklyNames != null ) {
                 return false;
             }
-        } else if ( !blocklyNames.equals(other.blocklyNames) ) {
+        } else if ( !this.blocklyNames.equals(other.blocklyNames) ) {
             return false;
         }
-        if ( category != other.category ) {
+        if ( this.category != other.category ) {
             return false;
         }
-        if ( name == null ) {
+        if ( this.name == null ) {
             if ( other.name != null ) {
                 return false;
             }
-        } else if ( !name.equals(other.name) ) {
+        } else if ( !this.name.equals(other.name) ) {
             return false;
         }
         return true;
@@ -125,13 +125,13 @@ public class BlockType {
     @Override
     public String toString() {
         return "BlockType [name="
-            + name
+            + this.name
             + ", category="
-            + category
+            + this.category
             + ", astClass="
-            + (astClass == null ? "null" : astClass.getCanonicalName())
+            + (this.astClass == null ? "null" : this.astClass.getCanonicalName())
             + ", blocklyNames="
-            + blocklyNames
+            + this.blocklyNames
             + "]";
     }
 

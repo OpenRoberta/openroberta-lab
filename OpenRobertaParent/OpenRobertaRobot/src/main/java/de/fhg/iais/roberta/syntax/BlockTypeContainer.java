@@ -8,7 +8,22 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Functions;
+
 import de.fhg.iais.roberta.components.Category;
+import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
+import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
+import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
+import de.fhg.iais.roberta.syntax.lang.stmt.ActionStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -27,29 +42,25 @@ public class BlockTypeContainer {
     private static final Map<String, BlockType> blockTypesByBlocklyName = new HashMap<>();
 
     static {
-        add("EXPR_LIST", Category.EXPR);
-        add("SENSOR_EXPR", Category.EXPR);
-        add("ACTION_EXPR", Category.EXPR);
-        add("EMPTY_EXPR", Category.EXPR);
-        add("SHADOW_EXPR", Category.EXPR);
-        add("FUNCTION_EXPR", Category.EXPR);
-        add("METHOD_EXPR", Category.EXPR);
-        add("FUNCTIONS", Category.EXPR);
-        add("EXPR_STMT", Category.STMT);
-        add("STMT_LIST", Category.STMT);
-        add("AKTION_STMT", Category.STMT);
-        add("SENSOR_STMT", Category.STMT);
-        add("FUNCTION_STMT", Category.STMT);
-        add("METHOD_STMT", Category.STMT);
-        add("LOCATION", Category.HELPER);
-        add("TEXT_CHAR_AT_FUNCT", Category.FUNCTION);
-        add("TEXT_TRIM_FUNCT", Category.FUNCTION);
-        add("TEXT_PROMPT_FUNCT", Category.FUNCTION);
-        add("TEXT_CHANGE_CASE_FUNCT", Category.FUNCTION);
+        add("EXPR_LIST", Category.EXPR, ExprList.class);
+        add("SENSOR_EXPR", Category.EXPR, SensorExpr.class);
+        add("ACTION_EXPR", Category.EXPR, ActionExpr.class);
+        add("EMPTY_EXPR", Category.EXPR, EmptyExpr.class);
+        add("FUNCTION_EXPR", Category.EXPR, FunctionExpr.class);
+        add("METHOD_EXPR", Category.EXPR, MethodExpr.class);
+        add("FUNCTIONS", Category.EXPR, Functions.class);
+        add("EXPR_STMT", Category.STMT, ExprStmt.class);
+        add("STMT_LIST", Category.STMT, StmtList.class);
+        add("AKTION_STMT", Category.STMT, ActionStmt.class);
+        add("SENSOR_STMT", Category.STMT, SensorStmt.class);
+        add("FUNCTION_STMT", Category.STMT, FunctionStmt.class);
+        add("METHOD_STMT", Category.STMT, MethodStmt.class);
+        add("LOCATION", Category.HELPER, Location.class);
+
     }
 
-    private static void add(String name, Category category) {
-        add(name, category, null);
+    private static void add(String name, Category category, Class<?> astClass) {
+        add(name, category, astClass, new String[0]);
     }
 
     public static void add(String name, Category category, Class<?> astClass, String... blocklyNames) {

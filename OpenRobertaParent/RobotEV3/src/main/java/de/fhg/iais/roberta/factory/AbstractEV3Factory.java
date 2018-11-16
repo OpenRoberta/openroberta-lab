@@ -23,7 +23,7 @@ public abstract class AbstractEV3Factory extends AbstractRobotFactory {
     }
 
     public IShowPicture getShowPicture(String picture) {
-        return BlocklyDropdown2EnumHelper.getModeValue(picture, ShowPicture.class);
+        return BlocklyDropdownFactoryHelper.getModeValue(picture, ShowPicture.class);
     }
 
     @Override

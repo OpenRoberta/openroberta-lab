@@ -706,7 +706,7 @@ public class AstToLejosJavaVisitorTest {
                 + USED_SENSORS_DECL
                 + HAL
                 + MAIN_METHOD
-                + "    float item=0;\n"
+                + "    float item;\n"
                 + "    String item2=\"cc\";\n"
                 + "    public void run() throwsException {\n"
                 + "    }\n\n"

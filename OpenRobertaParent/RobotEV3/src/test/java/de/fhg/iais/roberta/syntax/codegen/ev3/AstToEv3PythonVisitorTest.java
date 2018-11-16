@@ -297,25 +297,6 @@ public class AstToEv3PythonVisitorTest {
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator9.xml");
     }
 
-    // Skip "{6,7}.xml" since it only tests color sensor modes
-
-    @Test
-    public void testShadow() throws Exception {
-
-        String a =
-            "" //
-                + IMPORTS
-                + GLOBALS
-                + "\nitem = 0\n"
-                + "item2 = \"cc\"\n"
-                + "def run():\n"
-                + "    global item, item2\n"
-                + "\n"
-                + MAIN_METHOD;
-
-        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator11.xml");
-    }
-
     @Test
     public void testExpr1() throws Exception {
         String a =

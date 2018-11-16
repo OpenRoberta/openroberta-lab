@@ -5,10 +5,15 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.util.test.ardu.HelperArduinoForXmlTest;
 
-@Ignore // TODO: reactivate this test REFACTORING
+@Ignore //REFACTORING CONFIGURATION MISSING
 public class CppVisitorTest {
     private final HelperArduinoForXmlTest h = new HelperArduinoForXmlTest();
-
+    private static final String BASIC_INCLUDE =
+        "//ThisfileisautomaticallygeneratedbytheOpenRobertaLab.\n"
+            + "#include<math.h>\n"
+            + "#include<RobertaFunctions.h>//OpenRobertalibrary"
+            + "#include<NEPODefs.h>"
+            + "RobertaFunctionsrob;";
     private static final String INCLUDE =
         ""
             + "//ThisfileisautomaticallygeneratedbytheOpenRobertaLab.\n"
@@ -401,9 +406,10 @@ public class CppVisitorTest {
 
         final String a =
             "" //
-                + INCLUDE
-                + DEFINES
-                + VOID_SETUP
+
+                + BASIC_INCLUDE
+                //                + DEFINES
+                //                + VOID_SETUP
                 + "}voidloop(){"
                 + "_lcd_L.setCursor(0,0);"
                 + "_lcd_L.print(digitalRead(_output_B));"

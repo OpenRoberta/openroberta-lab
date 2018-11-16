@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.Configuration;
@@ -539,145 +540,130 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        if ( isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.LEFT)) && isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.RIGHT)) ) {
-            final boolean isDuration = driveAction.getParam().getDuration() != null;
-            final boolean reverse =
-                this.brickConfiguration.getFirstMotor(SC.LEFT).getProperty(SC.MOTOR_REVERSE).equals(SC.ON)
-                    || this.brickConfiguration.getFirstMotor(SC.RIGHT).getProperty(SC.MOTOR_REVERSE).equals(SC.ON);
-            final boolean localReverse = driveAction.getDirection() == DriveDirection.BACKWARD;
-            String methodName = "";
-            if ( isDuration ) {
-                methodName = "RotateMotorEx";
-            } else {
-                methodName = "OnFwdRegEx";
-            }
-            this.sb.append(methodName + "(OUT_");
-            if ( this.brickConfiguration.getFirstMotorPort(SC.LEFT).toString().charAt(0) < this.brickConfiguration
-                .getFirstMotorPort(SC.RIGHT)
-                .toString()
-                .charAt(0) ) {
-                this.sb.append(this.brickConfiguration.getFirstMotorPort(SC.LEFT));
-                this.sb.append(this.brickConfiguration.getFirstMotorPort(SC.RIGHT));
-            } else {
-                this.sb.append(this.brickConfiguration.getFirstMotorPort(SC.RIGHT));
-                this.sb.append(this.brickConfiguration.getFirstMotorPort(SC.LEFT));
-            }
-            if ( (!reverse && localReverse) || (!localReverse && reverse) ) {
-                this.sb.append(", -1 * ");
-            } else {
-                this.sb.append(", ");
-            }
-            this.sb.append("SpeedTest(");
-            driveAction.getParam().getSpeed().visit(this);
-            this.sb.append(")").append(", ");
-            if ( isDuration ) {
-                this.sb.append("(");
-                driveAction.getParam().getDuration().getValue().visit(this);
-                this.sb.append(" * 360 / (PI * WHEELDIAMETER)), 0, true, true);");
-                nlIndent();
-                this.sb.append("Wait(1");
-            } else {
-                this.sb.append("OUT_REGMODE_SYNC, RESET_NONE");
-            }
-            this.sb.append(");");
+        ConfigurationComponent leftMotor = this.brickConfiguration.getFirstMotor(SC.LEFT);
+        ConfigurationComponent rightMotor = this.brickConfiguration.getFirstMotor(SC.RIGHT);
+        String leftMotorPort = leftMotor.getUserDefinedPortName();
+        String rightMotorPort = rightMotor.getUserDefinedPortName();
+
+        final boolean isDuration = driveAction.getParam().getDuration() != null;
+        final boolean reverse = leftMotor.getProperty(SC.MOTOR_REVERSE).equals(SC.ON) || rightMotor.getProperty(SC.MOTOR_REVERSE).equals(SC.ON);
+        final boolean localReverse = driveAction.getDirection() == DriveDirection.BACKWARD;
+
+        String methodName = isDuration ? "RotateMotorEx" : "OnFwdRegEx";
+        this.sb.append(methodName).append("(OUT_");
+        String port = createSortedPorts(leftMotorPort, rightMotorPort);
+        this.sb.append(port);
+        if ( (!reverse && localReverse) || (!localReverse && reverse) ) {
+            this.sb.append(", -1 * ");
+        } else {
+            this.sb.append(", ");
         }
+        this.sb.append("SpeedTest(");
+        driveAction.getParam().getSpeed().visit(this);
+        this.sb.append(")").append(", ");
+        if ( isDuration ) {
+            this.sb.append("(");
+            driveAction.getParam().getDuration().getValue().visit(this);
+            this.sb.append(" * 360 / (PI * WHEELDIAMETER)), 0, true, true);");
+            nlIndent();
+            this.sb.append("Wait(1");
+        } else {
+            this.sb.append("OUT_REGMODE_SYNC, RESET_NONE");
+        }
+        this.sb.append(");");
+
         return null;
+    }
+
+    private String createSortedPorts(String port1, String port2) {
+        Assert.isTrue(port1.length() == 1 && port2.length() == 1);
+        char[] charArray = (port1 + port2).toCharArray();
+        Arrays.sort(charArray);
+        String port = new String(charArray);
+        return port;
     }
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
         ConfigurationComponent leftMotor = this.brickConfiguration.getFirstMotor(SC.LEFT);
-        ConfigurationComponent rigthMotor = this.brickConfiguration.getFirstMotor(SC.RIGHT);
-        if ( isActorOnPort(leftMotor.getUserDefinedPortName()) && isActorOnPort(rigthMotor.getUserDefinedPortName()) ) {
-            final boolean isDuration = turnAction.getParam().getDuration() != null;
-            final boolean reverse = leftMotor.getProperty(SC.MOTOR_REVERSE).equals(SC.ON) || rigthMotor.getProperty(SC.MOTOR_REVERSE).equals(SC.ON);
+        ConfigurationComponent rightMotor = this.brickConfiguration.getFirstMotor(SC.RIGHT);
+        String leftMotorPort = leftMotor.getUserDefinedPortName();
+        String rightMotorPort = rightMotor.getUserDefinedPortName();
 
-            String methodName = "";
-            int turnpct = 100;
-            if ( isDuration ) {
-                methodName = "RotateMotorEx";
-            } else {
-                methodName = "OnFwdSync";
-            }
-            this.sb.append(methodName + "(OUT_");
-            if ( leftMotor.getUserDefinedPortName().charAt(0) < this.brickConfiguration.getFirstMotorPort(SC.RIGHT).toString().charAt(0) ) {
-                turnpct *= -1;
-                this.sb.append(leftMotor.getUserDefinedPortName());
-                this.sb.append(rigthMotor.getUserDefinedPortName());
-            } else {
-                this.sb.append(rigthMotor.getUserDefinedPortName());
-                this.sb.append(leftMotor.getUserDefinedPortName());
-            }
-            if ( reverse ) {
-                turnpct *= -1;
-            }
-            this.sb.append(", SpeedTest(");
-            turnAction.getParam().getSpeed().visit(this);
-            this.sb.append(")");
-            if ( turnAction.getDirection() == TurnDirection.LEFT ) {
-                turnpct *= -1;
-            }
-            this.sb.append(", ");
-            if ( isDuration ) {
-                this.sb.append("(");
-                turnAction.getParam().getDuration().getValue().visit(this);
-                this.sb.append(" * TRACKWIDTH / WHEELDIAMETER), " + turnpct + ", true, true);");
-                nlIndent();
-                this.sb.append("Wait(1");
-            } else {
-                this.sb.append(turnpct);
-            }
-            this.sb.append(");");
+        final boolean isDuration = turnAction.getParam().getDuration() != null;
+        final boolean reverse = leftMotor.getProperty(SC.MOTOR_REVERSE).equals(SC.ON) || rightMotor.getProperty(SC.MOTOR_REVERSE).equals(SC.ON);
+
+        int turnpct = 100;
+        String methodName = isDuration ? "RotateMotorEx" : "OnFwdSync";
+        this.sb.append(methodName + "(OUT_");
+        if ( leftMotorPort.charAt(0) < rightMotorPort.charAt(0) ) {
+            turnpct *= -1;
         }
+        if ( reverse ) {
+            turnpct *= -1;
+        }
+        String sortedPort = createSortedPorts(leftMotorPort, rightMotorPort);
+        this.sb.append(sortedPort).append(", SpeedTest(");
+        turnAction.getParam().getSpeed().visit(this);
+        this.sb.append(")");
+        if ( turnAction.getDirection() == TurnDirection.LEFT ) {
+            turnpct *= -1;
+        }
+        this.sb.append(", ");
+        if ( isDuration ) {
+            this.sb.append("(");
+            turnAction.getParam().getDuration().getValue().visit(this);
+            this.sb.append(" * TRACKWIDTH / WHEELDIAMETER), " + turnpct + ", true, true);");
+            nlIndent();
+            this.sb.append("Wait(1");
+        } else {
+            this.sb.append(turnpct);
+        }
+        this.sb.append(");");
+
         return null;
     }
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        if ( isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.LEFT)) && isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.RIGHT)) ) {
-            final boolean isDuration = curveAction.getParamLeft().getDuration() != null;
-            final boolean confForward = this.brickConfiguration.getFirstMotor(SC.LEFT).getProperty(SC.MOTOR_REVERSE).equals(SC.OFF);
-            final boolean blockForward = curveAction.getDirection() == DriveDirection.FOREWARD;
-            String methodName = "";
-            if ( isDuration ) {
-                methodName = "SteerDriveEx";
-            } else {
-                methodName = "SteerDrive";
-            }
-            this.sb.append(methodName);
-            this.sb.append("(OUT_" + this.brickConfiguration.getFirstMotorPort(SC.LEFT));
-            this.sb.append(", OUT_" + this.brickConfiguration.getFirstMotorPort(SC.RIGHT));
-            this.sb.append(", SpeedTest(");
-            curveAction.getParamLeft().getSpeed().visit(this);
-            this.sb.append("), SpeedTest(");
-            curveAction.getParamRight().getSpeed().visit(this);
-            this.sb.append("), ");
-            this.sb.append(confForward == blockForward);
-            if ( isDuration ) {
-                this.sb.append(", ");
-                curveAction.getParamLeft().getDuration().getValue().visit(this);
-            }
-            this.sb.append(");");
+        ConfigurationComponent leftMotor = this.brickConfiguration.getFirstMotor(SC.LEFT);
+        ConfigurationComponent rightMotor = this.brickConfiguration.getFirstMotor(SC.RIGHT);
+        String leftMotorPort = leftMotor.getUserDefinedPortName();
+        String rightMotorPort = rightMotor.getUserDefinedPortName();
+
+        final boolean isDuration = curveAction.getParamLeft().getDuration() != null;
+        final boolean confForward = leftMotor.getProperty(SC.MOTOR_REVERSE).equals(SC.OFF);
+        final boolean blockForward = curveAction.getDirection() == DriveDirection.FOREWARD;
+
+        String methodName = isDuration ? "SteerDriveEx" : "SteerDrive";
+
+        this.sb.append(methodName).append("(OUT_").append(leftMotorPort);
+        this.sb.append(", OUT_").append(rightMotorPort);
+        this.sb.append(", SpeedTest(");
+        curveAction.getParamLeft().getSpeed().visit(this);
+        this.sb.append("), SpeedTest(");
+        curveAction.getParamRight().getSpeed().visit(this);
+        this.sb.append("), ");
+        this.sb.append(confForward == blockForward);
+        if ( isDuration ) {
+            this.sb.append(", ");
+            curveAction.getParamLeft().getDuration().getValue().visit(this);
         }
+        this.sb.append(");");
+
         return null;
     }
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        if ( isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.LEFT)) && isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.RIGHT)) ) {
-            this.sb.append("Off(OUT_");
-            if ( this.brickConfiguration.getFirstMotorPort(SC.LEFT).toString().charAt(0) < this.brickConfiguration
-                .getFirstMotorPort(SC.RIGHT)
-                .toString()
-                .charAt(0) ) {
-                this.sb.append(this.brickConfiguration.getFirstMotorPort(SC.LEFT));
-                this.sb.append(this.brickConfiguration.getFirstMotorPort(SC.RIGHT));
-            } else {
-                this.sb.append(this.brickConfiguration.getFirstMotorPort(SC.RIGHT));
-                this.sb.append(this.brickConfiguration.getFirstMotorPort(SC.LEFT));
-            }
-            this.sb.append(");");
-        }
+        ConfigurationComponent leftMotor = this.brickConfiguration.getFirstMotor(SC.LEFT);
+        ConfigurationComponent rightMotor = this.brickConfiguration.getFirstMotor(SC.RIGHT);
+        String leftMotorPort = leftMotor.getUserDefinedPortName();
+        String rightMotorPort = rightMotor.getUserDefinedPortName();
+
+        String sortedPorts = createSortedPorts(leftMotorPort, rightMotorPort);
+        this.sb.append("Off(OUT_").append(sortedPorts).append(");");
+
         return null;
     }
 
@@ -734,20 +720,19 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
         String userDefinedPort = encoderSensor.getPort();
-        String port = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getPortName();
         String mode = encoderSensor.getMode();
         switch ( mode ) {
             case SC.RESET:
-                this.sb.append("ResetTachoCount(OUT_" + port + ");");
+                this.sb.append("ResetTachoCount(OUT_" + userDefinedPort + ");");
                 break;
             case SC.ROTATION:
-                this.sb.append("MotorTachoCount(OUT_" + port + ") / 360.0");
+                this.sb.append("MotorTachoCount(OUT_" + userDefinedPort + ") / 360.0");
                 break;
             case SC.DEGREE:
-                this.sb.append("MotorTachoCount(OUT_" + port + ")");
+                this.sb.append("MotorTachoCount(OUT_" + userDefinedPort + ")");
                 break;
             case SC.DISTANCE:
-                this.sb.append("MotorTachoCount(OUT_" + port + ") * PI / 360.0 * WHEELDIAMETER");
+                this.sb.append("MotorTachoCount(OUT_" + userDefinedPort + ") * PI / 360.0 * WHEELDIAMETER");
                 break;
             default:
                 throw new DbcException("Invalide encoder sensor mode:" + mode + "!");

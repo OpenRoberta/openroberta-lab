@@ -22,11 +22,11 @@ public class NaoFactory extends AbstractRobotFactory {
     }
 
     public IMode getDetectMarkMode(String mode) {
-        return BlocklyDropdown2EnumHelper.getModeValue(mode, DetectMarkSensorMode.class);
+        return BlocklyDropdownFactoryHelper.getModeValue(mode, DetectMarkSensorMode.class);
     }
 
     public IMode getDetectFaceMode(String mode) {
-        return BlocklyDropdown2EnumHelper.getModeValue(mode, DetectFaceSensorMode.class);
+        return BlocklyDropdownFactoryHelper.getModeValue(mode, DetectFaceSensorMode.class);
     }
 
     @Override

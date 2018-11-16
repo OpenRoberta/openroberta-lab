@@ -1106,6 +1106,10 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
                 }
 
             case "COLOR":
+            case "COLOUR":
+                if ( sensorMode.equals(SC.LIGHT) ) {
+                    sensorMode = SC.RED;
+                }
                 return "ColorSensorMode." + sensorMode;
             case "ULTRASONIC":
                 return "UltrasonicSensorMode." + sensorMode;

@@ -1367,7 +1367,8 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
 
     private void removeSensors() {
         for ( UsedSensor usedSensor : this.usedSensors ) {
-            switch ( usedSensor.getType().toString() ) {
+            String sensorType = usedSensor.getType();
+            switch ( sensorType ) {
                 case BlocklyConstants.COLOR:
                     break;
                 case BlocklyConstants.INFRARED:
@@ -1383,6 +1384,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                     break;
                 case BlocklyConstants.NAO_SPEECH:
                     this.sb.append(this.INDENT).append(this.INDENT).append("speechRecognitionModule.unsubscribe()\n");
+                    break;
                 case BlocklyConstants.LIGHT:
                 case BlocklyConstants.COMPASS:
                 case BlocklyConstants.SOUND:
@@ -1391,7 +1393,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                 case BlocklyConstants.ACCELEROMETER:
                     break;
                 default:
-                    throw new DbcException("Sensor is not supported!");
+                    throw new DbcException("Sensor is not supported " + sensorType);
             }
         }
     }
