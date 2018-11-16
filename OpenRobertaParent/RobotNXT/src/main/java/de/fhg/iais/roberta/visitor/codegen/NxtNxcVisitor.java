@@ -871,14 +871,13 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        /*if ( !listGetIndex.getParam().get(0).getVarType().toString().contains("ARRAY") ) {
-        this.tmpArrCount += 1;
-        this.sb.append("__tmpArr" + this.tmpArrCount);
-        } else {*/
         listGetIndex.getParam().get(0).visit(this);
-        //}
         this.sb.append("[");
+        this.sb.append("sanitise_index(ArrayLen(");
+        listGetIndex.getParam().get(0).visit(this);
+        this.sb.append("), ");
         listGetIndex.getParam().get(1).visit(this);
+        this.sb.append(")");
         this.sb.append("]");
         return null;
     }
@@ -887,12 +886,11 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
         listSetIndex.getParam().get(0).visit(this);
         this.sb.append("[");
-        /*if ( !listSetIndex.getParam().get(1).getVarType().toString().contains("ARRAY") ) {
-            this.tmpArrCount += 1;
-            this.sb.append("__tmpArr" + this.tmpArrCount);
-        } else {*/
+        this.sb.append("sanitise_index(ArrayLen(");
+        listSetIndex.getParam().get(0).visit(this);
+        this.sb.append("), ");
         listSetIndex.getParam().get(2).visit(this);
-        //}
+        this.sb.append(")");
         this.sb.append("]");
         this.sb.append(" = ");
         listSetIndex.getParam().get(1).visit(this);
