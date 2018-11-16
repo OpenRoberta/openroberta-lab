@@ -135,13 +135,17 @@ public class RobotCommunicator {
     }
 
     public void disconnect(String token) {
-        RobotCommunicationData state = this.allStates.get(token);
-        if ( state == null ) {
-            LOG.info("token " + token + " is not waited for. Ok.");
+        if ( token == null ) {
+            return; // was not connected
         } else {
-            state.abortPush(); // notifyAll() executed
-            this.allStates.remove(token);
-            LOG.info("Robot [" + state.getRobotIdentificator() + "] token " + token + " disconnected.");
+            RobotCommunicationData state = this.allStates.get(token);
+            if ( state == null ) {
+                LOG.info("token " + token + " is not waited for. Ok.");
+            } else {
+                state.abortPush(); // notifyAll() executed
+                this.allStates.remove(token);
+                LOG.info("Robot [" + state.getRobotIdentificator() + "] token " + token + " disconnected.");
+            }
         }
     }
 

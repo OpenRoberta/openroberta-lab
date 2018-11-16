@@ -5,6 +5,7 @@ import java.util.Map;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.util.RandomUrlPostfix;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
@@ -15,7 +16,7 @@ public class HttpSessionState implements Serializable {
 
     private int userId = HttpSessionState.NO_USER;
     private String robotName;
-    private String token = "1Q2W3E4R";
+    private String token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
     private String programName;
     private String program;
     private String configurationName;
@@ -56,8 +57,7 @@ public class HttpSessionState implements Serializable {
 
     public void setUserClearDataKeepTokenAndRobotId(int userId) {
         Assert.isTrue(userId >= 1 || userId == HttpSessionState.NO_USER);
-        // token is not cleared. This would annoy the user.
-        // robotId is not cleared. This would annoy the user.
+        // token is not cleared & robotId is not cleared: this would annoy the user.
         this.userId = userId;
         this.programName = null;
         this.program = null;

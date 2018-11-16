@@ -36,10 +36,7 @@ cp Docker/Dockerfile* Docker/*.sh DockerInstallation
 
 cd /opt/robertalab/DockerInstallation
 
-docker build -t rbudde/openroberta_lab:$BRANCH-$VERSION            -f DockerfileLab                                         .
-docker build -t rbudde/openroberta_db:$BRANCH-$VERSION             -f DockerfileDb             --build-arg version=$VERSION .
-
-docker build -t rbudde/openroberta_upgrade:$BRANCH-$VERSION        -f DockerfileUpgrade                                     .
-
-docker build -t rbudde/openroberta_embedded:$BRANCH-$VERSION       -f DockerfileLabEmbedded                                 .
-docker build -t rbudde/openroberta_emptydbfortest:$BRANCH-$VERSION -f DockerfileDbEmptyForTest --build-arg version=$VERSION .
+docker build -t rbudde/openroberta_lab:$BRANCH-$VERSION      -f DockerfileLab                             .
+docker build -t rbudde/openroberta_db:$BRANCH-$VERSION       -f DockerfileDb --build-arg version=$VERSION .
+docker build -t rbudde/openroberta_upgrade:$BRANCH-$VERSION  -f DockerfileUpgrade                         .
+docker build -t rbudde/openroberta_embedded:$BRANCH-$VERSION -f DockerfileLabEmbedded                     .

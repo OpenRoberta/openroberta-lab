@@ -441,12 +441,12 @@ public class ClientProgram {
                     }
                     handleRunProgramError(response, messageKey, token, wasRobotWaiting);
                 } else if ( cmd.equals("compileN") ) {
-                    final String token = httpSessionState.getToken();
                     final String programName = request.getString("name");
                     final String programText = request.optString("programText");
                     final ILanguage language = Language.findByAbbr(request.optString("language"));
                     LOG.info("compilation of native source started for program {}", programName);
                     compilerWorkflow.setSourceCode(programText);
+                    final String token = httpSessionState.getToken();
                     compilerWorkflow.compileSourceCode(token, programName, language, null);
                     final Key messageKey = compilerWorkflow.getWorkflowResult();
                     LOG.info("compile user supplied native program. Result: " + messageKey);
@@ -478,7 +478,7 @@ public class ClientProgram {
                         if ( robotType1.equals(robot) && robotType2.equals(robot) ) {
                             final String programText = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
                             final String configText = JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet());
-                            final String token = "toknTokn";
+                            final String token = httpSessionState.getToken();
                             final BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                                 BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configText);
                             programAndConfigTransformer.getRobotConfiguration().setRobotName(httpSessionState.getRobotName());

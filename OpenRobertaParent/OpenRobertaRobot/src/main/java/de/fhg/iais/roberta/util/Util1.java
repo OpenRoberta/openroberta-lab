@@ -134,7 +134,7 @@ public class Util1 {
      * @return the properties. Never null, may be empty
      */
     public static Properties loadProperties(String propertyURI) {
-        return loadProperties(true, propertyURI);
+        return loadProperties(false, propertyURI);
     }
 
     /**
@@ -149,7 +149,7 @@ public class Util1 {
      * @return the properties. Never null, maybe empty
      */
     public static Properties loadAndMergeProperties(String propertyURI, List<String> defines) {
-        Properties serverProperties = loadProperties(true, propertyURI);
+        Properties serverProperties = loadProperties(false, propertyURI);
         if ( defines != null ) {
             for ( String define : defines ) {
                 String[] property = define.split("\\s*=\\s*");
