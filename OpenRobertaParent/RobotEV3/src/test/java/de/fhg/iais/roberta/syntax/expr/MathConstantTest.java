@@ -9,7 +9,7 @@ public class MathConstantTest {
 
     @Test
     public void Test() throws Exception {
-        String a = "BlocklyMethods.PIBlocklyMethods.EBlocklyMethods.GOLDEN_RATIOBlocklyMethods.sqrt(2)BlocklyMethods.sqrt(1.0/2.0)Float.POSITIVE_INFINITY}";
+        String a = "BlocklyMethods.PIBlocklyMethods.EBlocklyMethods.GOLDEN_RATIOBlocklyMethods.sqrt(2)BlocklyMethods.sqrt((float)1.0/(float)2.0)Float.POSITIVE_INFINITY}";
 
         this.h.assertCodeIsOk(a, "/syntax/math/math_constant.xml");
     }

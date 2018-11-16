@@ -134,8 +134,4 @@ public class ServerProperties {
     public String getTempDir() {
         return this.tempDir;
     }
-
-    public String getTempDirForUserProjects() {
-        return this.tempDir + "userProjects/";
-    }
 }

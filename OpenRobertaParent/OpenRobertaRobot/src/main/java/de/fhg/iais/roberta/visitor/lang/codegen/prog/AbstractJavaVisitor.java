@@ -97,7 +97,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
                 this.sb.append("BlocklyMethods.sqrt(2)");
                 break;
             case SQRT1_2:
-                this.sb.append("BlocklyMethods.sqrt(1.0/2.0)");
+                this.sb.append("BlocklyMethods.sqrt((float) 1.0/ (float) 2.0)");
                 break;
             case INFINITY:
                 this.sb.append("Float.POSITIVE_INFINITY");

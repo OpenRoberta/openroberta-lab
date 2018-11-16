@@ -37,7 +37,7 @@ public class RobotDownloadProgram {
     @Inject
     public RobotDownloadProgram(RobotCommunicator brickCommunicator, ServerProperties serverProperties) {
         this.brickCommunicator = brickCommunicator;
-        this.pathToCrosscompilerBaseDir = serverProperties.getTempDirForUserProjects();
+        this.pathToCrosscompilerBaseDir = serverProperties.getTempDir();
     }
 
     @POST
