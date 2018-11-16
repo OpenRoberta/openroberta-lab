@@ -663,7 +663,8 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                 case SC.STEPMOTOR:
                     break;
                 case SC.SERVOMOTOR:
-                    this.sb.append("_servo_" + usedConfigurationBlock.getUserDefinedPortName() + ".attach(" + usedConfigurationBlock.getPortName() + ");");
+                    this.sb
+                        .append("_servo_" + usedConfigurationBlock.getUserDefinedPortName() + ".attach(" + usedConfigurationBlock.getProperty(SC.PULSE) + ");");
                     nlIndent();
                     break;
                 default:
