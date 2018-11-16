@@ -282,7 +282,7 @@
     {
       "opc": "expr",
       "expr": "STRING_CONST",
-      "value": "expected: 169, got: "
+      "value": "expected: 159, got: "
     },
     {
       "opc": "expr",
