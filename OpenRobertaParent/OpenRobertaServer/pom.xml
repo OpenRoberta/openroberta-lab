@@ -8,8 +8,7 @@
 	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
 	OF ANY KIND, either express or implied. See the License for the specific 
 	language governing permissions and limitations under the License. -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
@@ -111,12 +110,12 @@
 			<artifactId>RobotVorwerk</artifactId>
 			<scope>test</scope>
 		</dependency>
-        <dependency>
-            <groupId>de.fhg.iais.openroberta</groupId>
-            <artifactId>RobotWeDo</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
+		<dependency>
+			<groupId>de.fhg.iais.openroberta</groupId>
+			<artifactId>RobotWeDo</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>de.fhg.iais.openroberta</groupId>
 			<artifactId>OpenRobertaRobot</artifactId>
@@ -130,9 +129,9 @@
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.googlecode.owasp-java-html-sanitizer/owasp-java-html-sanitizer -->
 		<dependency>
-		    <groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
-		    <artifactId>owasp-java-html-sanitizer</artifactId>
-		    <version>20180219.1</version>
+			<groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
+			<artifactId>owasp-java-html-sanitizer</artifactId>
+			<version>20180219.1</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -212,13 +211,13 @@
 									<type>jar</type>
 									<overWrite>true</overWrite>
 								</artifactItem>
-                                <artifactItem>
-                                    <groupId>de.fhg.iais.openroberta</groupId>
-                                    <artifactId>RobotWeDo</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                </artifactItem>
+								<artifactItem>
+									<groupId>de.fhg.iais.openroberta</groupId>
+									<artifactId>RobotWeDo</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
 							</artifactItems>
 							<outputDirectory>${project.build.directory}/resources</outputDirectory>
 							<overWriteReleases>true</overWriteReleases>
@@ -274,6 +273,9 @@
 						</dependencies>
 						<configuration>
 							<groups>de.fhg.iais.roberta.util.testsetup.IntegrationTest</groups>
+							<!-- Force alphabetical order to have a reproducible build -->
+							<runOrder>alphabetical</runOrder>
+							<useSystemClassLoader>false</useSystemClassLoader>
 						</configuration>
 						<executions>
 							<execution>
