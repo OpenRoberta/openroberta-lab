@@ -443,6 +443,7 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = "Bir sınırlayıcı tarafından kesilen 
 Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = "Her sınırlayıcıda kesen metinleri bir metin listesine ayır.";
 Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER = "sınırlayıcı ile";
 Blockly.Msg.LIST_BACK_TOOLTIP = "Back to previous view.";  // untranslated
+Blockly.Msg.LIST_CREATE_WITH_ERROR = "Error: This block may be used only within a variable declaration.";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = "false = Olumsuz";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Ya 'True' yada 'False' değerini verir.";

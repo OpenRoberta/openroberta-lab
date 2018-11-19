@@ -443,6 +443,7 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = "구분 기호로 분리 된 하나의 �
 Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = "각 속보, 텍스트의 목록들에서 텍스트를 분할합니다.";
 Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER = "분리와";
 Blockly.Msg.LIST_BACK_TOOLTIP = "Back to previous view.";  // untranslated
+Blockly.Msg.LIST_CREATE_WITH_ERROR = "Error: This block may be used only within a variable declaration.";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = "거짓";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://ko.wikipedia.org/wiki/%EC%A7%84%EB%A6%BF%EA%B0%92";
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "참 혹은 거짓 모두 반환합니다.";

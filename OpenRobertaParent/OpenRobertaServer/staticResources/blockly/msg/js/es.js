@@ -443,6 +443,7 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = "Unir una lista de textos en un solo text
 Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = "Dividir el texto en una lista de textos, separando en cada delimitador.";
 Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER = "con delimitador";
 Blockly.Msg.LIST_BACK_TOOLTIP = "Volver a vista anterior";
+Blockly.Msg.LIST_CREATE_WITH_ERROR = "Error: This block may be used only within a variable declaration.";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = "falso";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Devuelve verdadero o falso.";

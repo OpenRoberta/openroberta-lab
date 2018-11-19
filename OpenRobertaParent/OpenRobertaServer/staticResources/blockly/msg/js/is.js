@@ -443,6 +443,7 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = "Sameinar lista af textum í einn texta, 
 Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = "Skiptir texta í lista af textum, með skil við hvert skiltákn.";
 Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER = "með skiltákni";
 Blockly.Msg.LIST_BACK_TOOLTIP = "Back to previous view.";  // untranslated
+Blockly.Msg.LIST_CREATE_WITH_ERROR = "Error: This block may be used only within a variable declaration.";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = "ósatt";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Skilar annað hvort sönnu eða ósönnu.";

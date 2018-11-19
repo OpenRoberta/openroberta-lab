@@ -443,6 +443,7 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = "加入文本列表至一个文本，由�
 Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = "拆分文本到文本列表，按每个分隔符拆分。";
 Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER = "用分隔符";
 Blockly.Msg.LIST_BACK_TOOLTIP = "返回上一视图。";
+Blockly.Msg.LIST_CREATE_WITH_ERROR = "Error: This block may be used only within a variable declaration.";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = "假";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "返回真或假。";

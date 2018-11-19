@@ -443,6 +443,7 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = "Concatenează o listă de texte (alterna
 Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = "Împarte textul într-o listă de texte, despărțite prin fiecare separator";
 Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER = "cu separatorul";
 Blockly.Msg.LIST_BACK_TOOLTIP = "Back to previous view.";  // untranslated
+Blockly.Msg.LIST_CREATE_WITH_ERROR = "Error: This block may be used only within a variable declaration.";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = "fals";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Returnează adevărat sau fals.";

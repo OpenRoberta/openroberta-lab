@@ -277,8 +277,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                 if (result.rc === "ok") {
                     if (GUISTATE_C.findGroup(robot) != GUISTATE_C.getRobotGroup()) {
                         GUISTATE_C.setRobot(robot, result);
-                        //  CONFIGURATION_C.resetView();
-                        // PROGRAM_C.resetView();
+                        CONFIGURATION_C.resetView();
+                        PROGRAM_C.resetView();
                     } else {
                         GUISTATE_C.setRobot(robot, result);
                     }

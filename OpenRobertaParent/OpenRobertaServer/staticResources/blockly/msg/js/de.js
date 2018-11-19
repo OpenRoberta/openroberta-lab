@@ -443,6 +443,7 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = "Liste mit Texten in einen Text vereinen,
 Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = "Text in eine Liste mit Texten aufteilen, unterbrochen bei jedem Trennzeichen.";
 Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER = "mit Trennzeichen";
 Blockly.Msg.LIST_BACK_TOOLTIP = "Zurück zur vorherigen Auswahl.";
+Blockly.Msg.LIST_CREATE_WITH_ERROR = "Fehler: Dieser Block kann nur an einen Block angefügt werden, der eine Variable erzeugt.";
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = "falsch";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Ist entweder wahr (true) oder falsch (false)";

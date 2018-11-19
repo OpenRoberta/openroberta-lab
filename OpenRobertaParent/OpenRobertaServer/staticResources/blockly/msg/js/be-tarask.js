@@ -443,6 +443,7 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = "Аб’ядноўвае сьпіс тэ�
 Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = "Падзяліць тэкст у сьпіс тэкстаў, па падзяляльніках.";
 Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER = "з падзяляльнікам";
 Blockly.Msg.LIST_BACK_TOOLTIP = "Back to previous view.";  // untranslated
+Blockly.Msg.LIST_CREATE_WITH_ERROR = "Error: This block may be used only within a variable declaration.";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = "хлусьня";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Вяртае «ісьціна» ці «хлусьня».";

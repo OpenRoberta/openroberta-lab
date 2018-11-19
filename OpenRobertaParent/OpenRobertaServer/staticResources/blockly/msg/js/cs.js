@@ -443,6 +443,7 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = "Spojit seznam textů do jednoho textu, r
 Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = "Rozdělit text do seznamu textů, lámání na oddělovačích.";
 Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER = "s oddělovačem";
 Blockly.Msg.LIST_BACK_TOOLTIP = "Zpět na předchozí pohled.";
+Blockly.Msg.LIST_CREATE_WITH_ERROR = "Error: This block may be used only within a variable declaration.";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = "nepravda";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Vrací pravda nebo nepravda.";

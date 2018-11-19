@@ -443,6 +443,7 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = "Gionze na lista ëd test ant un test sol
 Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = "Divide un test an na lista ëd test, tajand a minca 'n separator.";
 Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER = "con ël separator";
 Blockly.Msg.LIST_BACK_TOOLTIP = "Back to previous view.";  // untranslated
+Blockly.Msg.LIST_CREATE_WITH_ERROR = "Error: This block may be used only within a variable declaration.";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = "fàuss";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "A rëspond ver o fàuss.";

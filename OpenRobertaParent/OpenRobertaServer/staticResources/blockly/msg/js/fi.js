@@ -443,6 +443,7 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = "Yhdistä luettelon tekstit yhdeksi tekst
 Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = "Jaa teksti osiin erotinmerkin perusteella ja järjestä osat listaksi.";
 Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER = "erottimen kanssa";
 Blockly.Msg.LIST_BACK_TOOLTIP = "Takaisin aiempaan näkymään.";
+Blockly.Msg.LIST_CREATE_WITH_ERROR = "Error: This block may be used only within a variable declaration.";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = "epätosi";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Palauttaa joko tosi tai epätosi.";

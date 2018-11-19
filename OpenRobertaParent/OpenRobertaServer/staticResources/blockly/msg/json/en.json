@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-11-07 14:32:16.218997",
+		"lastupdated": "2018-11-19 11:55:50.514671",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1469,5 +1469,6 @@
 	"SENSOR_OUT_DIGITAL_GETSAMPLE_TOOLTIP": "Returns the value from the specified digital pin. The value is either HIGH »1« or LOW »0«.",
 	"ACTOR_MODE_ANALOGIN_TOOLTIP": "Writes an analog value (PWM wave) to a pin. Only values between 0 and 255 should be used",
 	"ACTOR_MODE_DIGITALIN_TOOLTIP": "Writes a HIGH or a LOW value to a digital pin. Only the values HIGH »1« and LOW »0« should be used.",
-	"ACTION_INFRARED": "infrared emitter"
+	"ACTION_INFRARED": "infrared emitter",
+	"LIST_CREATE_WITH_ERROR": "Error: This block may be used only within a variable declaration."
 }

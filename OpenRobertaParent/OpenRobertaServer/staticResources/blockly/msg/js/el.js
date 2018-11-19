@@ -443,6 +443,7 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = "Ενώστε μια λίστα κειμ�
 Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = "Διαίρεση του κειμένου σε μια λίστα κειμένων, με σπάσιμο σε κάθε διαχωριστικό.";
 Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER = "με διαχωριστικό";
 Blockly.Msg.LIST_BACK_TOOLTIP = "Back to previous view.";  // untranslated
+Blockly.Msg.LIST_CREATE_WITH_ERROR = "Error: This block may be used only within a variable declaration.";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = "ψευδής";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Επιστρέφει είτε αληθής είτε ψευδής.";

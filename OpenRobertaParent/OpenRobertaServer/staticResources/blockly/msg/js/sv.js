@@ -443,6 +443,7 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = "Sammanfoga en textlista till en text, so
 Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = "Dela upp text till en textlista och bryt vid varje avgränsare.";
 Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER = "med avgränsare";
 Blockly.Msg.LIST_BACK_TOOLTIP = "Tillbaka till föregående vy.";
+Blockly.Msg.LIST_CREATE_WITH_ERROR = "Error: This block may be used only within a variable declaration.";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = "falskt";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Returnerar antingen sant eller falskt.";

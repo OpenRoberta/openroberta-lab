@@ -443,6 +443,7 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = "Gabung daftar teks menjadi satu teks, ya
 Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = "Membagi teks ke dalam daftar teks, pisahkan pada setiap pembatas.";
 Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER = "dengan pembatas";
 Blockly.Msg.LIST_BACK_TOOLTIP = "Back to previous view.";  // untranslated
+Blockly.Msg.LIST_CREATE_WITH_ERROR = "Error: This block may be used only within a variable declaration.";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = "salah";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Kembalikan benar atau salah.";

@@ -443,6 +443,7 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = "Събира списък от текс�
 Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = "Разделя текст в списък на текстове, по всеки разделител.";
 Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER = "с разделител";
 Blockly.Msg.LIST_BACK_TOOLTIP = "Back to previous view.";  // untranslated
+Blockly.Msg.LIST_CREATE_WITH_ERROR = "Error: This block may be used only within a variable declaration.";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = "невярно";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Връща вярно или невярно.";

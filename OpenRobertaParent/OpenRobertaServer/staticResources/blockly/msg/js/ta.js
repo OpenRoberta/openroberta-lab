@@ -443,6 +443,7 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = "வரம்புச் சுட்ட
 Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = "உரையை வரம்புச் சுட்டி கொண்டு துண்டாக்கு.";
 Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER = "தடை எழுத்து";
 Blockly.Msg.LIST_BACK_TOOLTIP = "Back to previous view.";  // untranslated
+Blockly.Msg.LIST_CREATE_WITH_ERROR = "Error: This block may be used only within a variable declaration.";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = "பொய்";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "மெய், அல்லது பொய் பின்கொடு.";

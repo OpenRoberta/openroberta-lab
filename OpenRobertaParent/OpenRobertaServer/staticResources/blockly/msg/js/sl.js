@@ -443,6 +443,7 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = "Združi seznam besedil v eno besedilo, l
 Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = "Razdruži besedilo v seznam besedil. Za razdruževanje besedila uporabi ločilo.";
 Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER = "z ločilom";
 Blockly.Msg.LIST_BACK_TOOLTIP = "Back to previous view.";  // untranslated
+Blockly.Msg.LIST_CREATE_WITH_ERROR = "Error: This block may be used only within a variable declaration.";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = "neresnično";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Vrne resnično ali neresnično.";
