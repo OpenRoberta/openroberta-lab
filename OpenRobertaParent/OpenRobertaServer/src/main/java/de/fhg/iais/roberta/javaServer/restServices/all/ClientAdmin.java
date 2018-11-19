@@ -102,12 +102,11 @@ public class ClientAdmin {
                 server.put("robots", robots);
                 String staticRecourcesDir = this.serverProperties.getStringProperty("server.staticresources.dir");
                 String pathToTutorial = this.serverProperties.getStringProperty("server.tutorial.dir");
-                List<String> tutorialPathes = Util.getListOfFileNames(pathToTutorial, "json");
-                JSONObject tutorial = Util.getJSONObjectFromFiles(tutorialPathes);
+                JSONObject tutorial = Util.getJSONObjectFromDirectory(pathToTutorial, "json");
                 server.put("tutorial", tutorial);
                 String pathToHelp = staticRecourcesDir + File.separator + "help";
-                tutorialPathes = Util.getListOfFileNames(pathToHelp, "html");
-                server.put("help", tutorialPathes);
+                List<String> help = Util.getListOfFileNamesFromDirectory(pathToHelp, "html");
+                server.put("help", help);
                 String theme = serverProperties.getStringProperty("server.theme");
                 server.put("theme", theme);
                 response.put("server", server);

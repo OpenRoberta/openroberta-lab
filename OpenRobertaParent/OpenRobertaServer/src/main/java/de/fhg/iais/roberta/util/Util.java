@@ -148,17 +148,13 @@ public class Util {
      * @param extension The file extension(s).
      * @return a list of files names or an empty list.
      */
-    public static List<String> getListOfFileNames(String path, String... extensions) {
+    public static List<File> getListOfFiles(String path, String... extensions) {
         File dir = new File(path);
         try {
             List<File> listOfFiles = (List<File>) FileUtils.listFiles(dir, extensions, true);
-            List<String> listOfFileNames = new ArrayList<>();
-            for ( File file : listOfFiles ) {
-                listOfFileNames.add(file.getAbsolutePath());
-            }
-            return listOfFileNames;
+            return listOfFiles;
         } catch ( Exception e ) {
-            return Collections.<String> emptyList();
+            return Collections.<File> emptyList();
         }
     }
 
@@ -166,14 +162,16 @@ public class Util {
      * Reads all files provided by the list of paths. Assuming that the files content json data with one property "name" this method returns a JSON object
      * containing the json data.
      * 
-     * @param pathes list of absolute paths to json files
-     * @return JSONObject with all valid json data or null
+     * @param path to the directory
+     * @param extensions of the files
+     * @return
      */
-    public static JSONObject getJSONObjectFromFiles(List<String> paths) {
+    public static JSONObject getJSONObjectFromDirectory(String path, String... extensions) {
+        List<File> files = getListOfFiles(path, extensions);
         JSONObject jsonObj = new JSONObject();
-        for ( String path : paths ) {
+        for ( File file : files ) {
             try {
-                String tmpJsonData = new String(Files.readAllBytes(Paths.get(path)));
+                String tmpJsonData = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
                 JSONObject tmpJsonObj = new JSONObject(tmpJsonData);
                 jsonObj.put(tmpJsonObj.getString("name").toLowerCase().replaceAll("\\s", ""), tmpJsonObj);
             } catch ( IOException | JSONException e2 ) {
@@ -239,5 +237,21 @@ public class Util {
             LOG.error("Possible XSS: program description does not match sanitised value. " + additionalInfo);
         }
         return input.replace(description, "description=\"" + StringEscapeUtils.escapeHtml4(safeHTML) + "\"");
+    }
+
+    /**
+     * Looks for files in a specific directory and returns the names of the files found.
+     * 
+     * @param The path to the directory where to look for the files.
+     * @param extension The file extension(s).
+     * @return a list of files names or an empty list.
+     */
+    public static List<String> getListOfFileNamesFromDirectory(String path, String extensions) {
+        List<File> files = getListOfFiles(path, extensions);
+        List<String> listOfFileNames = new ArrayList<String>();
+        for ( File file : files ) {
+            listOfFileNames.add(file.getName());
+        }
+        return listOfFileNames;
     }
 }
