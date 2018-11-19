@@ -161,7 +161,7 @@ public class Util {
     /**
      * Reads all files provided by the list of paths. Assuming that the files content json data with one property "name" this method returns a JSON object
      * containing the json data.
-     * 
+     *
      * @param path to the directory
      * @param extensions of the files
      * @return
@@ -222,6 +222,7 @@ public class Util {
         newDescription = newDescription.substring(0, newDescription.length() - 1);
         newDescription = StringEscapeUtils.unescapeHtml4(newDescription);
 
+        newDescription = newDescription.replace("&nbsp;", " ");
         PolicyFactory policy = new HtmlPolicyBuilder().allowElements(tagWhiteList).allowAttributes(attributeWhiteList).onElements(tagWhiteList).toFactory();
         String safeHTML = policy.sanitize(newDescription);
         if ( !newDescription.equals(safeHTML) ) {
@@ -241,7 +242,7 @@ public class Util {
 
     /**
      * Looks for files in a specific directory and returns the names of the files found.
-     * 
+     *
      * @param The path to the directory where to look for the files.
      * @param extension The file extension(s).
      * @return a list of files names or an empty list.
