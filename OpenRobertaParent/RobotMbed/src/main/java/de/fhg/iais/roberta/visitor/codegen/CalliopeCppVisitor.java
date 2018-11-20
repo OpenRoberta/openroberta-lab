@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.visitor.codegen;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import org.apache.commons.text.WordUtils;
 
 import de.fhg.iais.roberta.components.Configuration;
@@ -1131,6 +1132,31 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
         super.visitListSetIndex(listSetIndex);
         this.sb.append(";");
+        return null;
+    }
+
+    @Override
+    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
+        this.sb.append("_uBit.serial.send(");
+        if ( serialWriteAction.getValue().getVarType().equals(BlocklyType.STRING) ) {
+            serialWriteAction.getValue().visit(this);
+        } else if ( serialWriteAction.getValue().getVarType().equals(BlocklyType.COLOR)) {
+            LedColor<Void> color = (LedColor<Void>) serialWriteAction.getValue();
+            this.sb.append("ManagedString(\"");
+            this.sb.append(color.getRedChannel());
+            this.sb.append(", ");
+            this.sb.append(color.getGreenChannel());
+            this.sb.append(", ");
+            this.sb.append(color.getBlueChannel());
+            this.sb.append(", ");
+            this.sb.append(color.getAlphaChannel());
+            this.sb.append("\")");
+        } else {
+            this.sb.append("ManagedString(");
+            serialWriteAction.getValue().visit(this);
+            this.sb.append(")");
+        }
+        this.sb.append(" + \"\\r\\n\", MicroBitSerialMode::ASYNC);");
         return null;
     }
 }

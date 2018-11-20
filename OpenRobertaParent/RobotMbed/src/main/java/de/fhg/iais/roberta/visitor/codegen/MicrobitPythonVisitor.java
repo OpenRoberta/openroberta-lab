@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
 
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import de.fhg.iais.roberta.components.Configuration;
@@ -876,4 +877,9 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         return null;
     }
 
+    @Override
+    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
+        // TODO implement with microbit serial write
+        return null;
+    }
 }

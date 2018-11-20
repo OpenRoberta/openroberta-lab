@@ -8,19 +8,17 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.SerialWriteAction;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
+import de.fhg.iais.roberta.visitor.hardware.actor.ISerialVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ISoundVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
-public interface IArduinoVisitor<V> extends IMotorVisitor<V>, IDisplayVisitor<V>, ISoundVisitor<V>, ILightVisitor<V>, ISensorVisitor<V> {
+public interface IArduinoVisitor<V> extends IMotorVisitor<V>, IDisplayVisitor<V>, ISoundVisitor<V>, ILightVisitor<V>, ISensorVisitor<V>, ISerialVisitor<V> {
 
     V visitPinWriteValueAction(PinWriteValueAction<V> pinWriteValueSensor);
-
-    V visitSerialWriteAction(SerialWriteAction<V> serialWriteAction);
 
     V visitRelayAction(RelayAction<V> relayAction);
 

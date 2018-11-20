@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.actors.arduino;
+package de.fhg.iais.roberta.syntax.action.serial;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
+import de.fhg.iais.roberta.visitor.hardware.actor.ISerialVisitor;
 
 public class SerialWriteAction<V> extends Action<V> {
 
@@ -67,7 +67,7 @@ public class SerialWriteAction<V> extends Action<V> {
 
     @Override
     protected V accept(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitSerialWriteAction(this);
+        return ((ISerialVisitor<V>) visitor).visitSerialWriteAction(this);
     }
 
 }

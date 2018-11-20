@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
@@ -739,4 +740,8 @@ public class TypecheckVisitor implements ILanguageVisitor<BlocklyType>, ISensorV
         return null;
     }
 
+    @Override
+    public BlocklyType visitSerialWriteAction(SerialWriteAction<BlocklyType> serialWriteAction) {
+        return null;
+    }
 }
