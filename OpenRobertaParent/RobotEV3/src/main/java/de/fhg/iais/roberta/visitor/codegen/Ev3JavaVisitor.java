@@ -918,6 +918,10 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
                 this.sb.append(", ");
                 break;
             case LAST:
+                if ( op == SET ) {
+                    listSetIndex.getParam().get(0).visit(this);
+                    this.sb.append(".size() - 1, ");
+                }
                 break;
             case FROM_START:
                 listSetIndex.getParam().get(2).visit(this);
