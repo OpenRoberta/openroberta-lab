@@ -250,6 +250,10 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
                 listGetIndex.getParam().get(0).visit(this);
                 this.sb.append(".size() - 1)");
                 break;
+            case RANDOM:
+                listGetIndex.getParam().get(0).visit(this);
+                this.sb.append(", 0 /* absolutely random number */)");
+                break;
             default:
                 break;
         }
@@ -310,6 +314,12 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
                 this.sb.append(", ");
                 listSetIndex.getParam().get(0).visit(this);
                 this.sb.append(".size() - 1, ");
+                listSetIndex.getParam().get(1).visit(this);
+                this.sb.append(")");
+                break;
+            case RANDOM:
+                listSetIndex.getParam().get(0).visit(this);
+                this.sb.append(", 0 /* absolutely random number */, ");
                 listSetIndex.getParam().get(1).visit(this);
                 this.sb.append(")");
                 break;

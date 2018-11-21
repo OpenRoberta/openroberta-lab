@@ -1,7 +1,14 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
+import static de.fhg.iais.roberta.mode.general.IndexLocation.FROM_END;
+import static de.fhg.iais.roberta.mode.general.IndexLocation.FROM_START;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET_REMOVE;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.INSERT;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.REMOVE;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.SET;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,8 +19,6 @@ import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.inter.mode.general.IIndexLocation;
-import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
@@ -51,7 +56,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
-import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
@@ -85,13 +89,6 @@ import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.collect.Ev3UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractJavaVisitor;
-
-import static de.fhg.iais.roberta.mode.general.IndexLocation.*;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET_REMOVE;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.INSERT;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.REMOVE;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.SET;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
@@ -195,15 +192,15 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     protected void generateProgramSuffix(boolean withWrapping) {
         if ( withWrapping ) {
             if ( this.isInDebugMode ) {
-                this.nlIndent();
+                nlIndent();
                 this.sb.append("hal.closeResources();\n");
             }
-            this.decrIndentation();
-            this.nlIndent();
+            decrIndentation();
+            nlIndent();
             this.sb.append("}");
         }
-        this.decrIndentation();
-        this.nlIndent();
+        decrIndentation();
+        nlIndent();
         this.sb.append("}");
     }
 
@@ -293,7 +290,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
         if ( !this.brickConfiguration.getRobotName().equals("ev3lejosV0") ) {
             this.sb.append("hal.setLanguage(\"");
-            this.sb.append(this.getLanguageString(setLanguageAction.getLanguage()));
+            this.sb.append(getLanguageString(setLanguageAction.getLanguage()));
             this.sb.append("\");");
         }
         return null;
@@ -686,21 +683,21 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         mainTask.getVariables().visit(this);
-        this.nlIndent();
-        this.nlIndent();
+        nlIndent();
+        nlIndent();
         this.sb.append("public void run() throws Exception {\n");
         incrIndentation();
         // this is needed for testing
         if ( mainTask.getDebug().equals("TRUE") ) {
-            this.nlIndent();
+            nlIndent();
             this.sb.append("hal.startLogging();");
             //this.sb.append(INDENT).append(INDENT).append(INDENT).append("\nhal.startScreenLoggingThread();");
             this.isInDebugMode = true;
         }
         if ( this.isSayTextUsed && !this.brickConfiguration.getRobotName().equals("ev3lejosV0") ) {
-            this.nlIndent();
+            nlIndent();
             this.sb.append("hal.setLanguage(\"");
-            this.sb.append(this.getLanguageString(this.language));
+            this.sb.append(getLanguageString(this.language));
             this.sb.append("\");");
         }
         return null;
@@ -746,7 +743,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
                 this.sb.append(".size()");
                 break;
             case FROM_START:
-                if (isLeftAParam) {
+                if ( isLeftAParam ) {
                     getSubFunct.getParam().get(2).visit(this);
                 } else {
                     getSubFunct.getParam().get(1).visit(this);
@@ -756,7 +753,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
                 this.sb.append("(");
                 getSubFunct.getParam().get(0).visit(this);
                 this.sb.append(".size() - 1) - ");
-                if (isLeftAParam) {
+                if ( isLeftAParam ) {
                     getSubFunct.getParam().get(2).visit(this);
                 } else {
                     getSubFunct.getParam().get(1).visit(this);
@@ -790,7 +787,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
         lengthOfIsEmptyFunct.getParam().get(0).visit(this);
-        switch(lengthOfIsEmptyFunct.getFunctName()) {
+        switch ( lengthOfIsEmptyFunct.getFunctName() ) {
             case LIST_IS_EMPTY:
                 this.sb.append(".isEmpty()");
                 break;
@@ -816,7 +813,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     public Void visitListCreate(ListCreate<Void> listCreate) {
         this.sb.append("new ArrayList<>(");
 
-        if (listCreate.getValue().get().size() > 1) {
+        if ( listCreate.getValue().get().size() > 1 ) {
             this.sb.append("Arrays.");
             if ( listCreate.getVarType() == BlocklyType.CONNECTION ) {
                 this.sb.append("<NXTConnection>");
@@ -830,12 +827,12 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
             this.sb.append("asList(");
             // manually go through value list to cast numbers to float
-            if (listCreate.getVarType() == BlocklyType.NUMBER) {
+            if ( listCreate.getVarType() == BlocklyType.NUMBER ) {
                 List<Expr<Void>> expressions = listCreate.getValue().get();
                 for ( int i = 0; i < expressions.size(); i++ ) {
                     this.sb.append("(float) ");
                     expressions.get(i).visit(this);
-                    if (i != expressions.size() - 1) {
+                    if ( i != expressions.size() - 1 ) {
                         this.sb.append(", ");
                     }
                 }
@@ -869,9 +866,9 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         IndexLocation loc = (IndexLocation) listGetIndex.getLocation();
 
         listGetIndex.getParam().get(0).visit(this);
-        if (op == GET) {
+        if ( op == GET ) {
             this.sb.append(".get(");
-        } else if (op == GET_REMOVE || op == REMOVE) {
+        } else if ( op == GET_REMOVE || op == REMOVE ) {
             this.sb.append(".remove(");
         }
         switch ( loc ) {
@@ -891,11 +888,14 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
                 this.sb.append(".size() - 1) - ");
                 listGetIndex.getParam().get(1).visit(this);
                 break;
+            case RANDOM:
+                this.sb.append("0 /* absolutely random number */");
+                break;
         }
         this.sb.append(")");
 
         // This means its a remove statement and a semicolon is required
-        if (op == REMOVE) {
+        if ( op == REMOVE ) {
             this.sb.append(";");
         }
         return null;
@@ -907,9 +907,9 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         IndexLocation loc = (IndexLocation) listSetIndex.getLocation();
 
         listSetIndex.getParam().get(0).visit(this);
-        if (op == SET) {
+        if ( op == SET ) {
             this.sb.append(".set(");
-        } else if (op == INSERT) {
+        } else if ( op == INSERT ) {
             this.sb.append(".add(");
         }
         switch ( loc ) {
@@ -928,6 +928,10 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
                 listSetIndex.getParam().get(0).visit(this);
                 this.sb.append(".size() - 1) - ");
                 listSetIndex.getParam().get(2).visit(this);
+                this.sb.append(", ");
+                break;
+            case RANDOM:
+                this.sb.append("0 /* absolutely random number */");
                 this.sb.append(", ");
                 break;
         }
@@ -1263,7 +1267,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     private String generateRegenerateSensor(ConfigurationComponent sensor) {
         StringBuilder sb = new StringBuilder();
         sb.append("new Sensor(SensorType.");
-        if (sensor.getComponentType().equals(SC.COLOUR)) {
+        if ( sensor.getComponentType().equals(SC.COLOUR) ) {
             sb.append(SC.COLOR);
         } else {
             sb.append(sensor.getComponentType());
