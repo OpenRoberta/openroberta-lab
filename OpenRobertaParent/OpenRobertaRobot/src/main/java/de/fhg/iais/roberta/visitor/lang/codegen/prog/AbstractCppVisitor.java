@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
+import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
@@ -143,6 +144,13 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
+        String number = ((NumConst<Void>) listRepeat.getParam().get(0)).getValue();
+        int repeat = Integer.parseInt(((NumConst<Void>) listRepeat.getParam().get(1)).getValue());
+        this.sb.append("{");
+        for ( int i = 0; i < repeat - 1; i++ ) {
+            this.sb.append(number).append(", ");
+        }
+        this.sb.append(number).append("}");
         return null;
     }
 
