@@ -1311,7 +1311,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', '
     };
 
     var evalListsGetIndexStmt = function(obj, stmt) {
-        var list = evalExpr(obj, stmt.list);
+        var list = evalExpr(obj, "list");
         var it;
         if (stmt.item) {
             it = evalExpr(obj, "item");
