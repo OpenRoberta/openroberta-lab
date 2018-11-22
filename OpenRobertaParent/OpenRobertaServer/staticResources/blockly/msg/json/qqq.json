@@ -558,6 +558,7 @@
 	"MODE_LIGHT": "",
 	"MODE_RGB": "",
 	"MODE_AMBIENTLIGHT": "",
+	"MODE_REFLEXION": "",
 	"MODE_ROTATION": "",
 	"MODE_DEGREE": "",
 	"MODE_ANGLE": "",

@@ -692,6 +692,7 @@ Blockly.Msg.MODE_PRESSED = "pressed";  // untranslated
 Blockly.Msg.MODE_PULSE_HIGH = "pulse time HIGH";  // untranslated
 Blockly.Msg.MODE_PULSE_LOW = "pulse time LOW";  // untranslated
 Blockly.Msg.MODE_RATE = "rata";
+Blockly.Msg.MODE_REFLEXION = "reflected light";  // untranslated
 Blockly.Msg.MODE_RGB = "RGB (rosso, verde, blu)";
 Blockly.Msg.MODE_ROTATION = "rotazione";
 Blockly.Msg.MODE_SENSOR1 = "Light Sensor1";  // untranslated

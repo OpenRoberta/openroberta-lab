@@ -120,7 +120,11 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.sb.append("myBob.getIRLight()");
+        if ( infraredSensor.getMode().equals("REFLEXION") ) {
+            this.sb.append("myBob.getIRSensor()");
+        } else {
+            this.sb.append("myBob.getIRLight()");
+        }
         return null;
     }
 

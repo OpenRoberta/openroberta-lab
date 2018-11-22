@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-11-19 11:55:50.514671",
+		"lastupdated": "2018-11-22 11:31:42.378796",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -564,6 +564,7 @@
 	"MODE_LIGHT": "light",
 	"MODE_RGB": "RGB",
 	"MODE_AMBIENTLIGHT": "ambient light",
+	"MODE_REFLEXION": "reflected light",
 	"MODE_ROTATION": "rotation",
 	"MODE_DEGREE": "degree",
 	"MODE_ANGLE": "angle",
