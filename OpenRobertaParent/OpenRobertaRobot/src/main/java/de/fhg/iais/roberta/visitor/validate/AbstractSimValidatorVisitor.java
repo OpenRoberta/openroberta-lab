@@ -31,7 +31,7 @@ public abstract class AbstractSimValidatorVisitor extends AbstractProgramValidat
                 sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_SENSOR_MISSING"));
             }
         } else {
-            String type = usedSensor.getProperty("TYPE");
+            String type = usedSensor.getComponentType();
             switch ( sensor.getKind().getName() ) {
                 case "COLOR_SENSING":
                     if ( !type.equals("COLOR") && !type.equals("HT_COLOR") ) {
