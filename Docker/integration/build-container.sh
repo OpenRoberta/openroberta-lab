@@ -10,4 +10,4 @@ if [ ! -d "$1" ]; then
   exit 0
 fi
 
-docker build -t robertalab/integration:v0.1-$1 $1
+docker build -t robertalab/integration:v0.1-$1 -f $1/Dockerfile ..

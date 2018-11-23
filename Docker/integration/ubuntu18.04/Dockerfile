@@ -5,7 +5,7 @@ RUN apt install -y avrdude avr-libc gcc-avr git maven python python-pip libusb-0
 RUN apt remove -y openjdk-11-jre-headless
 RUN pip install uflash
     
-COPY ["../../runIT.sh","/opt/"]
+COPY ["./runIT.sh","/opt/"]
 RUN chmod +x /opt/runIT.sh
 ENTRYPOINT ["/opt/runIT.sh"]
  
