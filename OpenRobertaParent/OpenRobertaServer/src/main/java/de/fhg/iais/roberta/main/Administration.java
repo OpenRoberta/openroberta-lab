@@ -340,8 +340,14 @@ public class Administration {
         ProgramDao programDao = new ProgramDao(session);
         List<Program> programList = programDao.loadAll();
         for ( Program program : programList ) {
-            program.setProgramText(program.getUncheckedProgramText());
+            try {
+                program.setProgramText(program.getUncheckedProgramText());
+            } catch ( NullPointerException e ) {
+                LOG.error("Program text is empty!", program.getName());
+            }
         }
+        session.commit();
+        session.close();
     }
 
     private String replaceWord(String source, String oldWord, String newWord) {

@@ -15,6 +15,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+import org.owasp.html.HtmlChangeListener;
 import org.owasp.html.HtmlPolicyBuilder;
 import org.owasp.html.PolicyFactory;
 import org.slf4j.Logger;
@@ -194,50 +195,76 @@ public class Util {
                 "i",
                 "u",
                 "strike",
+                "blockquote",
+                "span",
+                "em",
                 "div",
                 "font",
+                "pre",
                 "br",
                 "ul",
                 "ol",
-                "li"
+                "li",
+                "h1",
+                "h2",
+                "h3",
+                "h4",
+                "h5",
+                "h6",
+                "p",
+                "strong"
             };
         String[] attributeWhiteList =
             {
                 "size",
+                "class",
+                "id",
                 "style",
-                "color"
+                "color",
+                "align"
             };
-        String DESCRIPTION = "description=\".*?\"";
-        Pattern pattern = Pattern.compile(DESCRIPTION);
-        Matcher matcher = pattern.matcher(input);
+        Matcher matcher = Pattern.compile("description=\".*?\"").matcher(input);
         String description;
         try {
             matcher.find();
             description = matcher.group();
         } catch ( IllegalStateException e ) {
-            LOG.warn("No description found for the program");
+            /*
+             * In this case the program has no description, so we just return the original program
+             * LOG.warn("No description found for the program");
+             */
             return input;
         }
         String newDescription = description.split("description=\"")[1];
         newDescription = newDescription.substring(0, newDescription.length() - 1);
-        newDescription = StringEscapeUtils.unescapeHtml4(newDescription);
-
-        newDescription = newDescription.replace("&nbsp;", " ");
-        PolicyFactory policy = new HtmlPolicyBuilder().allowElements(tagWhiteList).allowAttributes(attributeWhiteList).onElements(tagWhiteList).toFactory();
-        String safeHTML = policy.sanitize(newDescription);
-        if ( !newDescription.equals(safeHTML) ) {
-            String additionalInfo = "Info: ";
-            if ( args.length > 0 ) {
-                for ( String arg : args ) {
-                    additionalInfo += arg;
-                    additionalInfo += " ";
-                }
-            } else {
-                additionalInfo += "no info available / user not logged in";
-            }
-            LOG.error("Possible XSS: program description does not match sanitised value. " + additionalInfo);
+        if ( newDescription.length() == 0 ) {
+            return input;
         }
-        return input.replace(description, "description=\"" + StringEscapeUtils.escapeHtml4(safeHTML) + "\"");
+        newDescription = StringEscapeUtils.unescapeXml(newDescription);
+
+        HtmlChangeListener<List<String>> htmlChangeListener = new HtmlChangeListener<List<String>>() {
+            @Override
+            public void discardedTag(List<String> arg0, String tagName) {
+                LOG.error("Discarding tag:", tagName);
+            }
+
+            @Override
+            public void discardedAttributes(List<String> arg0, String arg1, String... attributes) {
+                LOG.error("Discarding tag:", arg1);
+            }
+        };
+
+        List<String> results = new ArrayList<String>();
+
+        PolicyFactory policy =
+            new HtmlPolicyBuilder()
+                .allowElements(tagWhiteList)
+                .allowWithoutAttributes("span")
+                .allowAttributes(attributeWhiteList)
+                .onElements(tagWhiteList)
+                .toFactory();
+        String safeHTML = policy.sanitize(newDescription, htmlChangeListener, results);
+        return input.replace(description, "description=\"" + StringEscapeUtils.escapeXml11(safeHTML) + "\"");
     }
 
     /**

@@ -237,6 +237,15 @@ case "$cmd" in
 				  main='de.fhg.iais.roberta.main.Administration'
                   java -cp ${serverTargetDir}/\* "${main}" createemptydb "$databaseurl" ;;
 
+--checkXSS)  	  serverVersionForDb="$1"
+                  if [[ "$serverVersionForDb" == '' ]]
+                  then
+				    serverVersionForDb=$(java -cp ./${serverTargetDir}/\* de.fhg.iais.roberta.main.Administration version-for-db)
+				  fi
+                  databaseurl="jdbc:hsqldb:file:OpenRobertaParent/OpenRobertaServer/db-$serverVersionForDb/openroberta-db"
+				  main='de.fhg.iais.roberta.main.Administration'
+                  java -cp ${serverTargetDir}/\* "${main}" checkXSS "$databaseurl" ;;
+
 --alive)          _aliveFn $* ;;
 
 *)                echo "invalid command: $cmd - exit 1"
