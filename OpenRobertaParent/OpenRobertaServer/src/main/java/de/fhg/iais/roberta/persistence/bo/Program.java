@@ -114,21 +114,11 @@ public class Program implements WithSurrogateId {
     }
 
     public String getProgramText() {
-        String[] additionalInfo =
-            {
-                getAuthor().getUserName(),
-                getAuthor().getEmail()
-            };
-        return Util.removeUnwantedDescriptionHTMLTags(this.programText, additionalInfo);
+        return Util.checkProgramTextForXSS(this.programText);
     }
 
     public void setProgramText(String programText) {
-        String[] additionalInfo =
-            {
-                getAuthor().getUserName(),
-                getAuthor().getEmail()
-            };
-        this.programText = Util.removeUnwantedDescriptionHTMLTags(programText, additionalInfo);
+        this.programText = Util.checkProgramTextForXSS(programText);
         this.lastChanged = Util1.getNow();
     }
 

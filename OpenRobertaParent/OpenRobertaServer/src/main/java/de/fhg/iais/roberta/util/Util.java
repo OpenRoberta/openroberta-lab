@@ -182,13 +182,38 @@ public class Util {
         return jsonObj;
     }
 
+    public static String checkProgramTextForXSS(String programText) {
+        if ( programText == null ) {
+            return programText;
+        }
+        Matcher matcher = Pattern.compile("description=\".*?\"").matcher(programText);
+        String description;
+        try {
+            matcher.find();
+            description = matcher.group();
+        } catch ( IllegalStateException e ) {
+            return programText;
+        }
+        String newDescription = description.split("description=\"")[1];
+        newDescription = newDescription.substring(0, newDescription.length() - 1);
+        if ( newDescription.length() == 0 ) {
+            return programText;
+        }
+        String safeHTML = Util.removeUnwantedDescriptionHTMLTags(newDescription);
+        if ( !safeHTML.equals(newDescription) ) {
+            return programText.replace(description, "description=\"" + safeHTML + "\"");
+        } else {
+            return programText;
+        }
+    }
+
     /**
      * Remove unwanted tags and tag/attribute combinations from a string to prevent XSS
      *
      * @param input XML code containing description attribute that contains code with unwanted tags
      * @return output XML code without unwanted tags in description attribute
      */
-    public static String removeUnwantedDescriptionHTMLTags(String input, String... args) {
+    public static String removeUnwantedDescriptionHTMLTags(String input) {
         String[] tagWhiteList =
             {
                 "b",
@@ -223,24 +248,8 @@ public class Util {
                 "color",
                 "align"
             };
-        Matcher matcher = Pattern.compile("description=\".*?\"").matcher(input);
-        String description;
-        try {
-            matcher.find();
-            description = matcher.group();
-        } catch ( IllegalStateException e ) {
-            /*
-             * In this case the program has no description, so we just return the original program
-             * LOG.warn("No description found for the program");
-             */
-            return input;
-        }
-        String newDescription = description.split("description=\"")[1];
-        newDescription = newDescription.substring(0, newDescription.length() - 1);
-        if ( newDescription.length() == 0 ) {
-            return input;
-        }
-        newDescription = StringEscapeUtils.unescapeXml(newDescription);
+
+        input = StringEscapeUtils.unescapeXml(input);
 
         HtmlChangeListener<List<String>> htmlChangeListener = new HtmlChangeListener<List<String>>() {
             @Override
@@ -263,8 +272,8 @@ public class Util {
                 .allowAttributes(attributeWhiteList)
                 .onElements(tagWhiteList)
                 .toFactory();
-        String safeHTML = policy.sanitize(newDescription, htmlChangeListener, results);
-        return input.replace(description, "description=\"" + StringEscapeUtils.escapeXml11(safeHTML) + "\"");
+        String safeHTML = policy.sanitize(input, htmlChangeListener, results);
+        return StringEscapeUtils.escapeXml11(safeHTML);
     }
 
     /**

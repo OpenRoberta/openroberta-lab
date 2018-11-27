@@ -197,7 +197,7 @@ public class ClientProgram {
                     }
                 } else if ( cmd.equals("importXML") ) {
                     String xmlText = request.getString("program");
-                    xmlText = Util.removeUnwantedDescriptionHTMLTags(xmlText);
+                    xmlText = Util.checkProgramTextForXSS(xmlText);
                     String programName = request.getString("name");
                     if ( !Util1.isValidJavaIdentifier(programName) ) {
                         programName = "NEPOprog";

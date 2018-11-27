@@ -36,6 +36,7 @@ import de.fhg.iais.roberta.persistence.util.Upgrader;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
@@ -339,13 +340,27 @@ public class Administration {
         DbSession session = sessionFactory.getSession();
         ProgramDao programDao = new ProgramDao(session);
         List<Program> programList = programDao.loadAll();
+        int totalProcessed = 0;
+        int totalDifferent = 0;
         for ( Program program : programList ) {
-            try {
-                program.setProgramText(program.getUncheckedProgramText());
-            } catch ( NullPointerException e ) {
-                LOG.error("Program text is empty!", program.getName());
+            String uncheckedProgramText = program.getUncheckedProgramText();
+            if ( uncheckedProgramText == null || uncheckedProgramText.equals("") ) {
+                continue;
+            }
+            String checkedProgramText = Util.checkProgramTextForXSS(uncheckedProgramText);
+            if ( !checkedProgramText.equals(uncheckedProgramText) ) {
+                totalDifferent += 1;
+                try {
+                    totalProcessed += 1;
+                    program.setProgramText(checkedProgramText);
+                    session.commit();
+                } catch ( NullPointerException e ) {
+                    LOG.error("Program text is empty!", program.getName());
+                }
             }
         }
+        LOG.info("Total programs processed: " + totalProcessed);
+        LOG.info("Total programs different: " + totalDifferent);
         session.commit();
         session.close();
     }
