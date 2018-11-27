@@ -10,10 +10,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -117,6 +119,9 @@ public class Administration {
                 break;
             case "rename":
                 renameRobotType(this.args[2], this.args[3]);
+                break;
+            case "configurationCleanUp":
+                removeUnusedConfigurations();
                 break;
             // old stuff for some old problematic upgrades of the database
             case "conf:xml2text":
@@ -384,6 +389,35 @@ public class Administration {
         RobotDao robotDao = new RobotDao(session);
         Robot robot = robotDao.loadRobot(oldRobotName);
         robot.setName(newRobotName);
+        session.commit();
+        session.createSqlQuery("shutdown").executeUpdate();
+    }
+
+    public void removeUnusedConfigurations() {
+        SessionFactoryWrapper sessionFactory = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
+        DbSession session = sessionFactory.getSession();
+        ConfigurationDao configurationDao = new ConfigurationDao(session);
+        List<Configuration> configurationList = configurationDao.loadAll();
+        LOG.info("Total configurations: " + configurationList.size());
+        Set<String> hashSet = new HashSet<>();
+        int unusedConfigCounter = 0;
+        for ( Configuration configuration : configurationList ) {
+            hashSet.add(configuration.getConfigurationHash());
+        }
+        LOG.info("Total unique configurations: " + hashSet.size());
+
+        List<ConfigurationData> configurationDataList = configurationDao.loadAllConfigurationData();
+        LOG.info("Total configuration data entries: " + configurationDataList.size());
+
+        for ( ConfigurationData configurationData : configurationDataList ) {
+            if ( !hashSet.contains(configurationData.getConfigurationHash()) ) {
+                unusedConfigCounter += 1;
+            }
+        }
+        LOG.info("Amount of unused configurations: " + unusedConfigCounter);
+        // seek all unused configurations and destroy them
+        String deleteUnusedConfigurationsSQL = "DELETE FROM ConfigurationData WHERE configurationHash NOT IN (SELECT configurationHash FROM Configuration)";
+        session.createQuery(deleteUnusedConfigurationsSQL).executeUpdate();
         session.commit();
         session.createSqlQuery("shutdown").executeUpdate();
     }

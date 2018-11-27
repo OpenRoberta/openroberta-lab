@@ -113,6 +113,17 @@ public class ConfigurationDao extends AbstractDao<Program> {
         return il.size() == 0 ? null : il.get(0);
     }
 
+    /**
+     * @return
+     */
+
+    public List<ConfigurationData> loadAllConfigurationData() {
+        Query hql = this.session.createQuery("from ConfigurationData");
+        @SuppressWarnings("unchecked")
+        List<ConfigurationData> il = hql.list();
+        return Collections.unmodifiableList(il);
+    }
+
     public int deleteByName(String name, User owner, Robot robot) {
         Configuration toBeDeleted = load(name, owner, robot);
         if ( toBeDeleted == null ) {

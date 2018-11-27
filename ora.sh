@@ -246,7 +246,7 @@ case "$cmd" in
 				  main='de.fhg.iais.roberta.main.Administration'
                   java -cp ${serverTargetDir}/\* "${main}" checkXSS "$databaseurl" ;;
                   
---rename)  	      serverVersionForDb="$1"
+--renameRobot)    serverVersionForDb="$1"
                   if [[ "$serverVersionForDb" == '' ]]
                   then
 				    serverVersionForDb=$(java -cp ./${serverTargetDir}/\* de.fhg.iais.roberta.main.Administration version-for-db)
@@ -254,6 +254,15 @@ case "$cmd" in
                   databaseurl="jdbc:hsqldb:file:OpenRobertaParent/OpenRobertaServer/db-$serverVersionForDb/openroberta-db"
 				  main='de.fhg.iais.roberta.main.Administration'
                   java -cp ${serverTargetDir}/\* "${main}" rename "$databaseurl" $2 $3;;
+                  
+--purgeConfigs)   serverVersionForDb="$1"
+                  if [[ "$serverVersionForDb" == '' ]]
+                  then
+				    serverVersionForDb=$(java -cp ./${serverTargetDir}/\* de.fhg.iais.roberta.main.Administration version-for-db)
+				  fi
+                  databaseurl="jdbc:hsqldb:file:OpenRobertaParent/OpenRobertaServer/db-$serverVersionForDb/openroberta-db"
+				  main='de.fhg.iais.roberta.main.Administration'
+                  java -cp ${serverTargetDir}/\* "${main}" configurationCleanUp "$databaseurl" ;;
 
 --alive)          _aliveFn $* ;;
 
