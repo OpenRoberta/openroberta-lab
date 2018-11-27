@@ -54,6 +54,16 @@ public class Robot implements WithSurrogateId {
         return this.name;
     }
 
+    /**
+     * Sets the name of the robot in the database <br>
+     * <br>
+     * <font color=#ff0000><b>Dangerous operation</b></font>, should be used only from the Administration class
+     * Was used for renaming ardu to botnroll
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getTags() {
         return this.tags;
     }

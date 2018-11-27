@@ -43,19 +43,27 @@ public class ConfigurationData {
     }
 
     public String getConfigurationHash() {
-        return configurationHash;
+        return this.configurationHash;
     }
 
     public String getConfigurationText() {
-        return configurationText;
+        return this.configurationText;
+    }
+
+    public void setConfigurationHash(String configurationHash) {
+        this.configurationHash = configurationHash;
+    }
+
+    public void setConfigurationText(String configurationText) {
+        this.configurationText = configurationText;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((configurationHash == null) ? 0 : configurationHash.hashCode());
-        result = prime * result + ((configurationText == null) ? 0 : configurationText.hashCode());
+        result = prime * result + ((this.configurationHash == null) ? 0 : this.configurationHash.hashCode());
+        result = prime * result + ((this.configurationText == null) ? 0 : this.configurationText.hashCode());
         return result;
     }
 
@@ -71,18 +79,18 @@ public class ConfigurationData {
             return false;
         }
         ConfigurationData other = (ConfigurationData) obj;
-        if ( configurationHash == null ) {
+        if ( this.configurationHash == null ) {
             if ( other.configurationHash != null ) {
                 return false;
             }
-        } else if ( !configurationHash.equals(other.configurationHash) ) {
+        } else if ( !this.configurationHash.equals(other.configurationHash) ) {
             return false;
         }
-        if ( configurationText == null ) {
+        if ( this.configurationText == null ) {
             if ( other.configurationText != null ) {
                 return false;
             }
-        } else if ( !configurationText.equals(other.configurationText) ) {
+        } else if ( !this.configurationText.equals(other.configurationText) ) {
             return false;
         }
         return true;
@@ -90,7 +98,7 @@ public class ConfigurationData {
 
     @Override
     public String toString() {
-        return "ConfigurationData [configurationHash=" + configurationHash + "]";
+        return "ConfigurationData [configurationHash=" + this.configurationHash + "]";
     }
 
     public static String createHash(String inputString) {

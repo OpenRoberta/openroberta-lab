@@ -245,6 +245,15 @@ case "$cmd" in
                   databaseurl="jdbc:hsqldb:file:OpenRobertaParent/OpenRobertaServer/db-$serverVersionForDb/openroberta-db"
 				  main='de.fhg.iais.roberta.main.Administration'
                   java -cp ${serverTargetDir}/\* "${main}" checkXSS "$databaseurl" ;;
+                  
+--rename)  	      serverVersionForDb="$1"
+                  if [[ "$serverVersionForDb" == '' ]]
+                  then
+				    serverVersionForDb=$(java -cp ./${serverTargetDir}/\* de.fhg.iais.roberta.main.Administration version-for-db)
+				  fi
+                  databaseurl="jdbc:hsqldb:file:OpenRobertaParent/OpenRobertaServer/db-$serverVersionForDb/openroberta-db"
+				  main='de.fhg.iais.roberta.main.Administration'
+                  java -cp ${serverTargetDir}/\* "${main}" rename "$databaseurl" $2 $3;;
 
 --alive)          _aliveFn $* ;;
 

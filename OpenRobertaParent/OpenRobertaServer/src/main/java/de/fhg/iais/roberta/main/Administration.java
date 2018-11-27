@@ -26,8 +26,13 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
+import de.fhg.iais.roberta.persistence.bo.Configuration;
+import de.fhg.iais.roberta.persistence.bo.ConfigurationData;
 import de.fhg.iais.roberta.persistence.bo.Program;
+import de.fhg.iais.roberta.persistence.bo.Robot;
+import de.fhg.iais.roberta.persistence.dao.ConfigurationDao;
 import de.fhg.iais.roberta.persistence.dao.ProgramDao;
+import de.fhg.iais.roberta.persistence.dao.RobotDao;
 import de.fhg.iais.roberta.persistence.util.DbExecutor;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
@@ -109,6 +114,9 @@ public class Administration {
                 break;
             case "upgrade":
                 upgrade();
+                break;
+            case "rename":
+                renameRobotType(this.args[2], this.args[3]);
                 break;
             // old stuff for some old problematic upgrades of the database
             case "conf:xml2text":
@@ -330,6 +338,56 @@ public class Administration {
         return program;
     }
 
+    public void renameRobotType(String oldRobotName, String newRobotName) {
+        LOG.info("renaming " + oldRobotName + " to " + newRobotName);
+        SessionFactoryWrapper sessionFactory = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
+        DbSession session = sessionFactory.getSession();
+        ProgramDao programDao = new ProgramDao(session);
+        List<Program> programList = programDao.loadAll();
+        int totalProgramsProcessed = 0;
+        int totalConfigurationsProcessed = 0;
+        int totalProgramsRewrite = 0;
+        int totalConfigurationsRewrite = 0;
+        LOG.info("Starting program rename/rewrite");
+        for ( Program program : programList ) {
+            String programText = program.getProgramText();
+            totalProgramsProcessed += 1;
+            if ( programText == null ) {
+                continue;
+            }
+            if ( programText.contains("robottype=\"" + oldRobotName) ) {
+                totalProgramsRewrite += 1;
+                programText = programText.replaceFirst("robottype=\"" + oldRobotName, "robottype=\"" + newRobotName);
+                program.setProgramText(programText);
+            }
+        }
+        LOG.info("Total programs processed: " + totalProgramsProcessed);
+        LOG.info("Total programs rewritten: " + totalProgramsRewrite);
+
+        ConfigurationDao configurationDao = new ConfigurationDao(session);
+        List<Configuration> configurationList = configurationDao.loadAll();
+        LOG.info("Starting configuration rename/rewrite");
+        for ( Configuration configuration : configurationList ) {
+            ConfigurationData configurationData = configurationDao.load(configuration.getConfigurationHash());
+            String configurationText = configurationData.getConfigurationText();
+            totalConfigurationsProcessed += 1;
+            if ( configurationText.contains("robottype=\"" + oldRobotName) ) {
+                configurationText = configurationText.replaceFirst("robottype=\"" + oldRobotName, "robottype=\"" + newRobotName);
+                String newHash = configurationDao.persistConfigurationHash(configurationText);
+                totalConfigurationsRewrite += 1;
+                configuration.setConfigurationHash(newHash);
+            }
+        }
+        LOG.info("Total configurations processed: " + totalConfigurationsProcessed);
+        LOG.info("Total configurations rewritten: " + totalConfigurationsRewrite);
+
+        RobotDao robotDao = new RobotDao(session);
+        Robot robot = robotDao.loadRobot(oldRobotName);
+        robot.setName(newRobotName);
+        session.commit();
+        session.createSqlQuery("shutdown").executeUpdate();
+    }
+
     /*
      * This method loads _all_ programs from the database (potentially slow or takes too much memory?)
      * using the unchecked version of the getter and then saves them back with the setter that checks
@@ -341,28 +399,30 @@ public class Administration {
         ProgramDao programDao = new ProgramDao(session);
         List<Program> programList = programDao.loadAll();
         int totalProcessed = 0;
+        int totalDescriptions = 0;
         int totalDifferent = 0;
         for ( Program program : programList ) {
             String uncheckedProgramText = program.getUncheckedProgramText();
+            totalProcessed += 1;
             if ( uncheckedProgramText == null || uncheckedProgramText.equals("") ) {
                 continue;
             }
+            totalDescriptions += 1;
             String checkedProgramText = Util.checkProgramTextForXSS(uncheckedProgramText);
             if ( !checkedProgramText.equals(uncheckedProgramText) ) {
                 totalDifferent += 1;
                 try {
-                    totalProcessed += 1;
                     program.setProgramText(checkedProgramText);
-                    session.commit();
                 } catch ( NullPointerException e ) {
                     LOG.error("Program text is empty!", program.getName());
                 }
             }
         }
         LOG.info("Total programs processed: " + totalProcessed);
+        LOG.info("Total programs descriptions: " + totalDescriptions);
         LOG.info("Total programs different: " + totalDifferent);
         session.commit();
-        session.close();
+        session.createSqlQuery("shutdown").executeUpdate();
     }
 
     private String replaceWord(String source, String oldWord, String newWord) {
