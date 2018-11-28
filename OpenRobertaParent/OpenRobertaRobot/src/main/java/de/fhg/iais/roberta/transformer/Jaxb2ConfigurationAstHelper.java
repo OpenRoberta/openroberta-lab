@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
@@ -36,32 +38,43 @@ public class Jaxb2ConfigurationAstHelper {
         return field.getValue();
     }
 
-    public static Configuration block2OldConfiguration(Block block, String topBlockName, BlocklyDropdownFactory factory, String sensorsPrefix) {
-        if ( block.getType().equals(topBlockName) ) {
-            List<Field> fields = extractFields(block, (short) 2);
-            float wheelDiameter = Float.valueOf(extractField(fields, "WHEEL_DIAMETER", (short) 0)).floatValue();
-            float trackWidth = Float.valueOf(extractField(fields, "TRACK_WIDTH", (short) 1)).floatValue();
-            //TODO: should 8 here be a parameter of this method?
-            List<Value> values = extractValues(block, (short) 8);
-            List<ConfigurationComponent> allComponents = extractOldConfigurationComponent(values, factory, sensorsPrefix);
-
-            return new Configuration.Builder().setTrackWidth(trackWidth).setWheelDiameter(wheelDiameter).addComponents(allComponents).build();
+    public static Block getTopBlock(BlockSet blockSet, String topBlockName) {
+        List<Instance> instances = blockSet.getInstance();
+        List<Block> blocks;
+        Block startingBlock = null;
+        for ( Instance instance : instances ) {
+            blocks = instance.getBlock();
+            for ( Block block : blocks ) {
+                if ( block.getType().equals(topBlockName) ) {
+                    startingBlock = block;
+                }
+            }
         }
-        throw new DbcException("There was no correct configuration block found!");
+        if ( startingBlock == null ) {
+            throw new DbcException("No valid base/starting block was found in the configuration");
+        }
+        return startingBlock;
+    }
+
+    public static Configuration block2OldConfiguration(Block topBlock, BlocklyDropdownFactory factory, String sensorsPrefix) {
+        List<Field> fields = extractFields(topBlock, (short) 2);
+        float wheelDiameter = Float.valueOf(extractField(fields, "WHEEL_DIAMETER", (short) 0)).floatValue();
+        float trackWidth = Float.valueOf(extractField(fields, "TRACK_WIDTH", (short) 1)).floatValue();
+        //TODO: should 8 here be a parameter of this method?
+        List<Value> values = extractValues(topBlock, (short) 8);
+        List<ConfigurationComponent> allComponents = extractOldConfigurationComponent(values, factory, sensorsPrefix);
+
+        return new Configuration.Builder().setTrackWidth(trackWidth).setWheelDiameter(wheelDiameter).addComponents(allComponents).build();
     }
 
     public static Configuration block2OldConfigurationWithFixedBase(
-        Block block,
-        String topBlockName,
+        Block topBlock,
         BlocklyDropdownFactory factory,
         String sensorsPrefix,
         int configurationBlockQuantity) {
-        if ( block.getType().equals(topBlockName) ) {
-            List<Value> values = extractValues(block, (short) configurationBlockQuantity);
-            List<ConfigurationComponent> allComponents = extractOldConfigurationComponent(values, factory, sensorsPrefix);
-            return new Configuration.Builder().setTrackWidth(-1).setWheelDiameter(-1).addComponents(allComponents).build();
-        }
-        throw new DbcException("There was no correct configuration block found!");
+        List<Value> values = extractValues(topBlock, (short) configurationBlockQuantity);
+        List<ConfigurationComponent> allComponents = extractOldConfigurationComponent(values, factory, sensorsPrefix);
+        return new Configuration.Builder().setTrackWidth(-1).setWheelDiameter(-1).addComponents(allComponents).build();
     }
 
     public static List<ConfigurationComponent> extractOldConfigurationComponent(List<Value> values, BlocklyDropdownFactory factory, String sensorsPrefix) {
