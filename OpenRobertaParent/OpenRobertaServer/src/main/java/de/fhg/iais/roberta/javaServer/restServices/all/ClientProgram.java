@@ -198,6 +198,10 @@ public class ClientProgram {
                 } else if ( cmd.equals("importXML") ) {
                     String xmlText = request.getString("program");
                     xmlText = Util.checkProgramTextForXSS(xmlText);
+                    if ( xmlText.contains("robottype=\"ardu") ) {
+                        xmlText = xmlText.replaceAll("robottype=\"ardu", "robottype=\"botnroll");
+                        LOG.warn("Ardu to botnroll renaming on import should be removed in future.");
+                    }
                     String programName = request.getString("name");
                     if ( !Util1.isValidJavaIdentifier(programName) ) {
                         programName = "NEPOprog";
