@@ -662,9 +662,6 @@ public abstract class AbstractWeDoVisitor<V> implements ILanguageVisitor<V>, IWe
 
     protected ConfigurationComponent getConfigurationComponent(String userDefinedName) {
         ConfigurationComponent configurationComponent = configuration.getConfigurationComponent(userDefinedName);
-        if ( configurationComponent == null ) {
-            throw new DbcException("no configuration element with name " + userDefinedName + " found");
-        }
         return configurationComponent;
     }
 

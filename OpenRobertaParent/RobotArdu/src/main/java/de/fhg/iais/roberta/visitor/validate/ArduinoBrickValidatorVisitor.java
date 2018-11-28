@@ -8,11 +8,11 @@ import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
-import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
@@ -104,7 +104,7 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
 
     @Override
     protected void checkSensorPort(ExternalSensor<Void> sensor) {
-        ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.getConfigurationComponent(sensor.getPort());
+        ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(sensor.getPort());
         if ( usedConfigurationBlock == null ) {
             sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
             this.errorCount++;
@@ -131,7 +131,7 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         if ( motorOnAction.getInfos().getErrorCount() == 0 ) {
-            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.getConfigurationComponent(motorOnAction.getUserDefinedPort());
+            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(motorOnAction.getUserDefinedPort());
             boolean duration = motorOnAction.getParam().getDuration() != null;
             if ( usedConfigurationBlock == null ) {
                 motorOnAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
@@ -146,7 +146,7 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         if ( lightAction.getInfos().getErrorCount() == 0 ) {
-            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.getConfigurationComponent(lightAction.getPort());
+            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(lightAction.getPort());
             if ( usedConfigurationBlock == null ) {
                 lightAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
                 this.errorCount++;
@@ -158,7 +158,7 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         if ( playNoteAction.getInfos().getErrorCount() == 0 ) {
-            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.getConfigurationComponent(playNoteAction.getPort());
+            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(playNoteAction.getPort());
             if ( usedConfigurationBlock == null ) {
                 playNoteAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
                 this.errorCount++;
@@ -170,7 +170,7 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         if ( lightStatusAction.getInfos().getErrorCount() == 0 ) {
-            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.getConfigurationComponent(lightStatusAction.getPort());
+            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(lightStatusAction.getPort());
             if ( usedConfigurationBlock == null ) {
                 lightStatusAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
                 this.errorCount++;
@@ -182,7 +182,7 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         if ( toneAction.getInfos().getErrorCount() == 0 ) {
-            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.getConfigurationComponent(toneAction.getPort());
+            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(toneAction.getPort());
             if ( usedConfigurationBlock == null ) {
                 toneAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
                 this.errorCount++;
@@ -194,7 +194,7 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
     @Override
     public Void visitRelayAction(RelayAction<Void> relayAction) {
         if ( relayAction.getInfos().getErrorCount() == 0 ) {
-            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.getConfigurationComponent(relayAction.getPort());
+            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(relayAction.getPort());
             if ( usedConfigurationBlock == null ) {
                 relayAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
                 this.errorCount++;
@@ -206,7 +206,7 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showtextAction) {
         if ( showtextAction.getInfos().getErrorCount() == 0 ) {
-            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.getConfigurationComponent(showtextAction.getPort());
+            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(showtextAction.getPort());
             if ( usedConfigurationBlock == null ) {
                 showtextAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
                 this.errorCount++;
@@ -218,7 +218,7 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
         if ( clearDisplayAction.getInfos().getErrorCount() == 0 ) {
-            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.getConfigurationComponent(clearDisplayAction.getPort());
+            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(clearDisplayAction.getPort());
             if ( usedConfigurationBlock == null ) {
                 clearDisplayAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
                 this.errorCount++;

@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor.validate;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
@@ -26,7 +27,7 @@ public final class WedoBrickValidatorVisitor<V> extends AbstractBrickValidatorVi
 
     @Override
     protected void checkSensorPort(ExternalSensor<Void> sensor) {
-        ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.getConfigurationComponent(sensor.getPort());
+        ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(sensor.getPort());
         if ( usedConfigurationBlock == null ) {
             sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
             this.errorCount++;
@@ -53,12 +54,12 @@ public final class WedoBrickValidatorVisitor<V> extends AbstractBrickValidatorVi
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         if ( motorOnAction.getInfos().getErrorCount() == 0 ) {
-            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.getConfigurationComponent(motorOnAction.getUserDefinedPort());
+            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(motorOnAction.getUserDefinedPort());
             boolean duration = motorOnAction.getParam().getDuration() != null;
             if ( usedConfigurationBlock == null ) {
                 motorOnAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
                 this.errorCount++;
-            } else if ( usedConfigurationBlock.getComponentType().equals("OTHER") && duration ) {
+            } else if ( SC.OTHER.equals(usedConfigurationBlock.getComponentType()) && duration ) {
                 motorOnAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED"));
             }
         }
@@ -68,7 +69,7 @@ public final class WedoBrickValidatorVisitor<V> extends AbstractBrickValidatorVi
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         if ( motorStopAction.getInfos().getErrorCount() == 0 ) {
-            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.getConfigurationComponent(motorStopAction.getUserDefinedPort());
+            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(motorStopAction.getUserDefinedPort());
             if ( usedConfigurationBlock == null ) {
                 motorStopAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
                 this.errorCount++;
@@ -80,7 +81,7 @@ public final class WedoBrickValidatorVisitor<V> extends AbstractBrickValidatorVi
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         if ( lightAction.getInfos().getErrorCount() == 0 ) {
-            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.getConfigurationComponent(lightAction.getPort());
+            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(lightAction.getPort());
             if ( usedConfigurationBlock == null ) {
                 lightAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
                 this.errorCount++;
@@ -92,7 +93,7 @@ public final class WedoBrickValidatorVisitor<V> extends AbstractBrickValidatorVi
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         if ( playNoteAction.getInfos().getErrorCount() == 0 ) {
-            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.getConfigurationComponent(playNoteAction.getPort());
+            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(playNoteAction.getPort());
             if ( usedConfigurationBlock == null ) {
                 playNoteAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
                 this.errorCount++;
@@ -104,7 +105,7 @@ public final class WedoBrickValidatorVisitor<V> extends AbstractBrickValidatorVi
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         if ( lightStatusAction.getInfos().getErrorCount() == 0 ) {
-            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.getConfigurationComponent(lightStatusAction.getPort());
+            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(lightStatusAction.getPort());
             if ( usedConfigurationBlock == null ) {
                 lightStatusAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
                 this.errorCount++;
