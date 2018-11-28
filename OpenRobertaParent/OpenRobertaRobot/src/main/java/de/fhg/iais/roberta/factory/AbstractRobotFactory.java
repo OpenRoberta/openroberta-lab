@@ -4,16 +4,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.util.PluginProperties;
+import de.fhg.iais.roberta.util.Util1;
 
 public abstract class AbstractRobotFactory implements IRobotFactory {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractRobotFactory.class);
     protected final PluginProperties pluginProperties;
     protected final BlocklyDropdownFactory blocklyDropdown2EnumFactory;
+    protected final String beginnerToolbox;
+    protected final String expertToolbox;
+    protected final String programDefault;
+    protected final String configurationToolbox;
+    protected final String configurationDefault;
 
     public AbstractRobotFactory(PluginProperties pluginProperties) {
-
         this.pluginProperties = pluginProperties;
         this.blocklyDropdown2EnumFactory = new BlocklyDropdownFactory(this.pluginProperties);
+
+        this.beginnerToolbox = Util1.readResourceContent(this.pluginProperties.getStringProperty("robot.program.toolbox.beginner"));
+        this.expertToolbox = Util1.readResourceContent(this.pluginProperties.getStringProperty("robot.program.toolbox.expert"));
+        this.programDefault = Util1.readResourceContent(this.pluginProperties.getStringProperty("robot.program.default"));
+        this.configurationToolbox = Util1.readResourceContent(this.pluginProperties.getStringProperty("robot.configuration.toolbox"));
+        this.configurationDefault = Util1.readResourceContent(this.pluginProperties.getStringProperty("robot.configuration.default"));
     }
 
     @Override
@@ -29,32 +40,36 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
 
     @Override
     public final String getProgramToolboxBeginner() {
-        return this.pluginProperties.getStringProperty("robot.program.toolbox.beginner");
+        return this.beginnerToolbox;
     }
 
     @Override
     public final String getProgramToolboxExpert() {
-        return this.pluginProperties.getStringProperty("robot.program.toolbox.expert");
+        return this.expertToolbox;
     }
 
     @Override
     public final String getProgramDefault() {
-        return this.pluginProperties.getStringProperty("robot.program.default");
+        return this.programDefault;
     }
 
     @Override
     public final String getConfigurationToolbox() {
-        return this.pluginProperties.getStringProperty("robot.configuration.toolbox");
+        return this.configurationToolbox;
     }
 
     @Override
     public final String getConfigurationDefault() {
-        return this.pluginProperties.getStringProperty("robot.configuration.default");
+        return this.configurationDefault;
     }
 
     @Override
     public final String getRealName() {
         return this.pluginProperties.getStringProperty("robot.real.name");
+    }
+
+    public final String getName() {
+        return this.pluginProperties.getStringProperty("robot.name");
     }
 
     @Override
