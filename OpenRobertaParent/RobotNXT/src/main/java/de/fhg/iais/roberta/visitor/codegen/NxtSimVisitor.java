@@ -163,9 +163,8 @@ public final class NxtSimVisitor extends AbstractSimVisitor<Void> implements INx
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         String end = createClosingBracket();
-        this.sb
-            .append(
-                "createSetMotorPowerAction(" + (motorSetPowerAction.getUserDefinedPort().toString().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString() + ", ");
+        this.sb.append(
+            "createSetMotorPowerAction(" + (motorSetPowerAction.getUserDefinedPort().toString().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString() + ", ");
         motorSetPowerAction.getPower().visit(this);
         this.sb.append(end);
         return null;
@@ -286,7 +285,7 @@ public final class NxtSimVisitor extends AbstractSimVisitor<Void> implements INx
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
 
-        this.sb.append("createGetSample(CONST.COLOUR, CONST." + colorSensor.getMode() + ")");
+        this.sb.append("createGetSample(CONST.COLOR, CONST." + colorSensor.getMode() + ")");
         return null;
     }
 
