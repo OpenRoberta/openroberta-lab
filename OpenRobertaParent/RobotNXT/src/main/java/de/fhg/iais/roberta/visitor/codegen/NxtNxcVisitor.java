@@ -698,10 +698,13 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        if ( this.brickConfiguration.getConfigurationComponent(colorSensor.getPort()).getProperty(SC.TYPE).equals(SC.HT_COLOR) ) {
+        String colorSensorType = this.brickConfiguration.getConfigurationComponent(colorSensor.getPort()).getComponentType();
+        if ( colorSensorType.toLowerCase().contains(SC.HT_COLOR.toLowerCase()) ) {
             this.sb.append("SensorHtColor(");
-        } else {
+        } else if ( colorSensorType.toLowerCase().contains(SC.COLOR.toLowerCase()) ) {
             this.sb.append("SensorColor(");
+        } else {
+            throw new DbcException("Invalide sensor type:" + colorSensorType + "!");
         }
         String portName = this.brickConfiguration.getConfigurationComponent(colorSensor.getPort()).getPortName();
         this.sb.append(portName + ", \"" + colorSensor.getMode() + "\")");
