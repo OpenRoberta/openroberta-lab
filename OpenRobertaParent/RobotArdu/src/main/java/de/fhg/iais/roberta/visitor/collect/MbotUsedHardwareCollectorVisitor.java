@@ -113,7 +113,7 @@ public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardware
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        this.usedActors.add(new UsedActor(lightAction.getPort(), SC.LED_ON_BOARD));
+        this.usedActors.add(new UsedActor("0", SC.LED_ON_BOARD));
         return null;
     }
 

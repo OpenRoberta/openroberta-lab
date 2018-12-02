@@ -145,7 +145,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         //8 - sound port
-        this.sb.append("buzzer.tone(8, ");
+        this.sb.append("_buzzer.tone(8, ");
         toneAction.getFrequency().visit(this);
         this.sb.append(", ");
         toneAction.getDuration().visit(this);
@@ -158,7 +158,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         //8 - sound port
-        this.sb.append("buzzer.tone(8, ");
+        this.sb.append("_buzzer.tone(8, ");
         this.sb.append(playNoteAction.getFrequency());
         this.sb.append(", ");
         this.sb.append(playNoteAction.getDuration());
@@ -171,7 +171,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         final MotorDuration<Void> duration = motorOnAction.getParam().getDuration();
-        this.sb.append(motorOnAction.getUserDefinedPort()).append(".run(");
+        this.sb.append("_motor").append(motorOnAction.getUserDefinedPort()).append(".run(");
         if ( !this.configuration.getFirstMotorPort(SC.RIGHT).equals(motorOnAction.getUserDefinedPort()) ) {
             this.sb.append("-1*");
         }
@@ -184,7 +184,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
             motorOnAction.getDurationValue().visit(this);
             this.sb.append(");");
             nlIndent();
-            this.sb.append(motorOnAction.getUserDefinedPort()).append(".stop();");
+            this.sb.append("_motor").append(motorOnAction.getUserDefinedPort()).append(".stop();");
         }
         return null;
     }
@@ -201,16 +201,17 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        this.sb.append(motorStopAction.getUserDefinedPort()).append(".stop();");
+        this.sb.append("_motor").append(motorStopAction.getUserDefinedPort()).append(".stop();");
         return null;
     }
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         final MotorDuration<Void> duration = driveAction.getParam().getDuration();
-        this.sb.append("myDrive.drive(");
+        this.sb.append("_meDrive.drive(");
         driveAction.getParam().getSpeed().visit(this);
-        this.sb.append("*255/100, ").append(driveAction.getDirection() == DriveDirection.FOREWARD ? 1 : 0);
+        this.sb.append(", ");
+        this.sb.append(driveAction.getDirection() == DriveDirection.FOREWARD ? 1 : 0);
         if ( duration != null ) {
             this.sb.append(", ");
             duration.getValue().visit(this);
@@ -222,11 +223,11 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
         final MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
-        this.sb.append("myDrive.steer(");
+        this.sb.append("_meDrive.steer(");
         curveAction.getParamLeft().getSpeed().visit(this);
-        this.sb.append("*255/100, ");
+        this.sb.append(", ");
         curveAction.getParamRight().getSpeed().visit(this);
-        this.sb.append("*255/100, ").append(curveAction.getDirection() == DriveDirection.FOREWARD ? 1 : 0);
+        this.sb.append(", ").append(curveAction.getDirection() == DriveDirection.FOREWARD ? 1 : 0);
         if ( duration != null ) {
             this.sb.append(", ");
             duration.getValue().visit(this);
@@ -238,9 +239,9 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
         final MotorDuration<Void> duration = turnAction.getParam().getDuration();
-        this.sb.append("myDrive.turn(");
+        this.sb.append("_meDrive.turn(");
         turnAction.getParam().getSpeed().visit(this);
-        this.sb.append("*255/100, ").append(turnAction.getDirection() == TurnDirection.LEFT ? 1 : 0);
+        this.sb.append(", ").append(turnAction.getDirection() == TurnDirection.LEFT ? 1 : 0);
         if ( duration != null ) {
             this.sb.append(", ");
             duration.getValue().visit(this);
@@ -253,7 +254,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
         for ( final UsedActor actor : this.usedActors ) {
             if ( actor.getType().equals(SC.DIFFERENTIAL_DRIVE) ) {
-                this.sb.append("myDrive.stop();");
+                this.sb.append("_meDrive.stop();");
                 break;
             }
         }
@@ -410,19 +411,31 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     protected void generateProgramPrefix(boolean withWrapping) {
         if ( !withWrapping ) {
             return;
+        } else {
+            this.decrIndentation();
         }
-
-        this.sb.append("#include <math.h> \n");
-        this.sb.append("#include <MeMCore.h> \n");
-        this.sb.append("#include <Wire.h>\n");
-        this.sb.append("#include <SoftwareSerial.h>\n");
+        this.sb.append("// This file is automatically generated by the Open Roberta Lab.");
+        this.nlIndent();
+        this.nlIndent();
+        this.sb.append("#include <math.h>");
+        this.nlIndent();
+        this.sb.append("#include <MeMCore.h>");
+        this.nlIndent();
+        this.sb.append("#include <Wire.h>");
+        this.nlIndent();
+        this.sb.append("#include <SoftwareSerial.h>");
+        this.nlIndent();
+        this.sb.append("#include \"MeDrive.h\"");
+        this.nlIndent();
         this.sb.append("#include <RobertaFunctions.h>\n");
-        this.sb.append("#include <NEPODefs.h>\n");
-        this.sb.append("#include \"MeDrive.h\"\n\n");
-        this.sb.append("RobertaFunctions rob;\n");
 
+        this.nlIndent();
         generateSensors();
         generateActors();
+        this.nlIndent();
+        this.nlIndent();
+        this.sb.append("RobertaFunctions rob;\n");
+        this.nlIndent();
     }
 
     @Override
@@ -486,25 +499,25 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
         for ( final UsedActor usedActor : this.usedActors ) {
             switch ( usedActor.getType() ) {
                 case SC.LED_ON_BOARD:
-                    this.sb.append("MeRGBLed rgbled_7(7, 7==7?2:4);\n");
+                    this.sb.append("MeRGBLed _rgbLed(7, 2);");
+                    nlIndent();
                     break;
                 case SC.GEARED_MOTOR:
-                    this.sb.append("MeDCMotor " + usedActor.getPort() + "(" + usedActor.getPort() + ");\n");
+                    this.sb.append("MeDCMotor _motor" + usedActor.getPort() + "(M" + usedActor.getPort() + ");");
+                    nlIndent();
                     break;
                 case SC.DIFFERENTIAL_DRIVE:
-                    this.sb
-                        .append(
-                            "MeDrive myDrive("
-                                + this.configuration.getFirstMotorPort(SC.LEFT)
-                                + ", "
-                                + this.configuration.getFirstMotorPort(SC.RIGHT)
-                                + ");\n");
+                    this.sb.append(
+                        "MeDrive _meDrive(M" + this.configuration.getFirstMotorPort(SC.LEFT) + ", M" + this.configuration.getFirstMotorPort(SC.RIGHT) + ");");
+                    nlIndent();
                     break;
                 case SC.LED_MATRIX:
-                    this.sb.append("MeLEDMatrix myLEDMatrix_" + usedActor.getPort() + "(" + usedActor.getPort() + ");\n");
+                    this.sb.append("MeLEDMatrix _meLEDMatrix_" + usedActor.getPort() + "(" + usedActor.getPort() + ");");
+                    nlIndent();
                     break;
                 case SC.BUZZER:
-                    this.sb.append("MeBuzzer buzzer;\n");
+                    this.sb.append("MeBuzzer _buzzer;");
+                    nlIndent();
                     break;
                 default:
                     throw new DbcException("Actor is not supported! " + usedActor.getType());

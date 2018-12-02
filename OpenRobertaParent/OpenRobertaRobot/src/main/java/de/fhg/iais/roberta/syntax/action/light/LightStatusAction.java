@@ -62,7 +62,7 @@ public class LightStatusAction<V> extends Action<V> {
     /**
      * @return port.
      */
-    public String  getPort() {
+    public String getPort() {
         return this.port;
     }
 
@@ -95,6 +95,9 @@ public class LightStatusAction<V> extends Action<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        if ( !this.port.toString().equals(BlocklyConstants.NO_PORT) ) {
+            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.ACTORPORT, getPort().toString());
+        }
         return jaxbDestination;
     }
 

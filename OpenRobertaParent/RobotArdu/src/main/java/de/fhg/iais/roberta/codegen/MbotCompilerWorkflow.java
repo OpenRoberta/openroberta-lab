@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
-import de.fhg.iais.roberta.transformers.arduino.Jaxb2MakeBlockConfigurationTransformer;
+import de.fhg.iais.roberta.transformers.arduino.Jaxb2MbotConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
@@ -63,7 +63,7 @@ public class MbotCompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2MakeBlockConfigurationTransformer transformer = new Jaxb2MakeBlockConfigurationTransformer(factory.getBlocklyDropdownFactory());
+        Jaxb2MbotConfigurationTransformer transformer = new Jaxb2MbotConfigurationTransformer(factory.getBlocklyDropdownFactory());
         return transformer.transform(project);
     }
 
