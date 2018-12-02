@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -659,57 +660,11 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
         return null;
     }
-
-    //    @Override
-    //    public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
-    //        String valuesToDisplay = displayImageAction.getValuesToDisplay().toString();
-    //        valuesToDisplay = valuesToDisplay.replaceAll("   ", "-");
-    //        valuesToDisplay = valuesToDisplay.replaceAll("  ", "-");
-    //        valuesToDisplay = valuesToDisplay.replaceAll(" #", "#");
-    //        final String[] valuesToDisplayArray = valuesToDisplay.split("\n");
-    //        final char[][] imageCharacterMatrix = new char[8][16];
-    //        valuesToDisplayArray[0] = valuesToDisplayArray[0].split("Image \\[ \\[")[1].split("]")[0];
-    //        imageCharacterMatrix[0] = valuesToDisplayArray[0].replaceAll(",", "").toCharArray();
-    //        for ( int i = 1; i < 8; i++ ) {
-    //            valuesToDisplayArray[i] = valuesToDisplayArray[i].replaceAll("\\[|\\]|\\] \\]", "");
-    //            imageCharacterMatrix[i] = valuesToDisplayArray[i].replaceAll(",", "").toCharArray();
-    //        }
-    //        final int[] imageBitmap = new int[16];
-    //        for ( int i = 0; i < 16; i++ ) {
-    //            for ( int j = 0; j < 8; j++ ) {
-    //                if ( imageCharacterMatrix[j][i] == '#' ) {
-    //                    imageBitmap[i] += Util1.pow2(7 - j);
-    //                }
-    //            }
-    //        }
-    //        this.sb.append("unsigned char drawBuffer[16];");
-    //        nlIndent();
-    //        this.sb.append("unsigned char *drawTemp;");
-    //        nlIndent();
-    //
-    //        this.sb.append("drawTemp = new unsigned char[16]{");
-    //        for ( int i = 0; i < 15; i++ ) {
-    //            this.sb.append(imageBitmap[i]);
-    //            this.sb.append(", ");
-    //        }
-    //        this.sb.append(imageBitmap[15]);
-    //        this.sb.append("};");
-    //        nlIndent();
-    //        this.sb.append("memcpy(drawBuffer,drawTemp,16);");
-    //        nlIndent();
-    //        this.sb.append("free(drawTemp);");
-    //        nlIndent();
-    //        this.sb.append("myLEDMatrix_" + displayImageAction.getPort().getValues()[0] + ".drawBitmap(0, 0, 16, drawBuffer);");
-    //        nlIndent();
-    //        return null;
-    //    }
-
-    //    @Override
-    //    public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
-    //        this.sb.append("myLEDMatrix_" + displayTextAction.getPort().getValues()[0] + ".drawStr(0, 7, ");
-    //        displayTextAction.getMsg().visit(this);
-    //        this.sb.append(");");
-    //        return null;
-    //    }
-
+    
+    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
+        this.sb.append("Serial.println(");
+        serialWriteAction.getValue().visit(this);
+        this.sb.append(");");
+        return null;
+    }
 }
