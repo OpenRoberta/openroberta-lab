@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-12-03 13:55:19.409010",
+		"lastupdated": "2018-12-03 16:07:21.960602",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1473,5 +1473,7 @@
 	"ACTION_INFRARED": "infrared emitter",
 	"ORA_LIST_CREATE_WITH_ERROR": "Error: This block may be used only within a variable declaration.",
 	"POPUP_SCANNED_ROBOTS": "found robots",
-	"POPUP_DISPLAY_HEADER": "output of your program"
+	"POPUP_DISPLAY_HEADER": "output of your program",
+	"CONNECTION_MAKEBLOCK_RECEIVE_TOOLTIP": "Reads a message from the IR receiver. Only strings can be received.",
+	"CONNECTION_MAKEBLOCK_SEND_TOOLTIP": "Sends a message of type string to another mBot. Hold the mBots's face to face!"
 }

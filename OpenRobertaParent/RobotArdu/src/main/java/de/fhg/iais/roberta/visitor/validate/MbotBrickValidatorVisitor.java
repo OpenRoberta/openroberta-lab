@@ -4,6 +4,8 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ReceiveIRAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.mbot.SendIRAction;
 import de.fhg.iais.roberta.syntax.expressions.arduino.LedMatrix;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
@@ -59,9 +61,21 @@ public final class MbotBrickValidatorVisitor extends AbstractBrickValidatorVisit
         // TODO Auto-generated method stub
         return null;
     }
-    
+
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
+        // TODO Auto-generated method stub
         return null;
     }
 }

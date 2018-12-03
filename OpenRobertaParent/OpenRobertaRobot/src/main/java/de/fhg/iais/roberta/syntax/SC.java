@@ -93,5 +93,5 @@ public interface SC {
     String BUTTON = "BUTTON";
     String STRENGTH = "STRENGTH";
     String RED = "RED";
-
+    String IR_TRANSMITTER = "IR_TRANSMITTER";
 }

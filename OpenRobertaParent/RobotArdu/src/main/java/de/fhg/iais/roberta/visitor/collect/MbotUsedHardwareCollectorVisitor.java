@@ -17,6 +17,8 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ReceiveIRAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.mbot.SendIRAction;
 import de.fhg.iais.roberta.syntax.expressions.arduino.LedMatrix;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.FlameSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.Joystick;
@@ -127,10 +129,22 @@ public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardware
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
         return null;
     }
-    
+
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
         serialWriteAction.getValue().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
+        this.usedActors.add(new UsedActor("INTERNAL", SC.IR_TRANSMITTER));
+        return null;
+    }
+
+    @Override
+    public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
+        this.usedActors.add(new UsedActor("INTERNAL", SC.IR_TRANSMITTER));
         return null;
     }
 

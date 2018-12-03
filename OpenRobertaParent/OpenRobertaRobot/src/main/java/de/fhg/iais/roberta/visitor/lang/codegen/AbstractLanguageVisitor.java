@@ -98,13 +98,13 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
             .stream()
             .filter(phrase -> phrase.getKind().getCategory() != Category.METHOD || phrase.getKind().hasName("METHOD_CALL"))
             .forEach(p -> {
-                this.nlIndent();
+                nlIndent();
                 p.visit(this);
             });
     }
 
     protected void generateUserDefinedMethods() {
-        this.incrIndentation();
+        incrIndentation();
         this.programPhrases
             .stream()
             .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
@@ -112,7 +112,7 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
                 e.visit(this);
                 this.sb.append("\n");
             });
-        this.decrIndentation();
+        decrIndentation();
     }
 
     @Override
