@@ -112,10 +112,11 @@ public enum Key {
     LIKE_DELETE_SUCCESS,
     VORWERK_PROGRAM_UPLOAD_SUCCESSFUL,
     VORWERK_PROGRAM_UPLOAD_ERROR_CONNECTION_NOT_ESTABLISHED,
-    VORWERK_PROGRAM_UPLOAD_ERROR_SSH_CONNECTION;
+    VORWERK_PROGRAM_UPLOAD_ERROR_SSH_CONNECTION,
+    LIST_CREATE_WITH_ERROR;
 
     private Key() {
-        this.key = "ORA_" + this.toString();
+        this.key = "ORA_" + toString();
     }
 
     private Key(String key) {

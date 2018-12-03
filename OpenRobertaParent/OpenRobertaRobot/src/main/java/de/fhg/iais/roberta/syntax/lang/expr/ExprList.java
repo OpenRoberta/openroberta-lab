@@ -21,7 +21,7 @@ public class ExprList<V> extends Expr<V> {
     private final List<Expr<V>> el = new ArrayList<Expr<V>>();
 
     private ExprList() {
-        super(BlockTypeContainer.getByName("EXPR_LIST"), BlocklyBlockProperties.make("1", "1", false, false, false, false, false, null, false), null);
+        super(BlockTypeContainer.getByName("EXPR_LIST"), BlocklyBlockProperties.make("1", "1", false, false, false, false, false, null, false, false), null);
     }
 
     /**

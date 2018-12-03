@@ -159,7 +159,7 @@ public class ClientProgram {
                         compilerWorkflow.generateSourceCode(token, programName, transformer, language);
                         String sourceCode = compilerWorkflow.getGeneratedSourceCode();
                         if ( sourceCode == null ) {
-                            forMessages.setError(Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED);
+                            forMessages.setError(compilerWorkflow.getWorkflowResult());
                         } else {
                             response.put("sourceCode", sourceCode);
                             response.put("fileExtension", robotFactory.getFileExtension());

@@ -15,7 +15,7 @@ public class MotionParamTest {
 
     @Test
     public void make() throws Exception {
-        NumConst<Void> numConst = NumConst.make("0", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
+        NumConst<Void> numConst = NumConst.make("0", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false), null);
         MotorDuration<Void> motorDuration = new MotorDuration<>(MotorMoveMode.DEGREE, numConst);
         MotionParam<Void> motionParam = new MotionParam.Builder<Void>().speed(numConst).duration(motorDuration).build();
 
@@ -26,7 +26,7 @@ public class MotionParamTest {
 
     @Test
     public void getSpeed() throws Exception {
-        NumConst<Void> numConst = NumConst.make("0", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
+        NumConst<Void> numConst = NumConst.make("0", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false), null);
         MotorDuration<Void> motorDuration = new MotorDuration<>(MotorMoveMode.DEGREE, numConst);
         MotionParam<Void> motionParam = new MotionParam.Builder<Void>().speed(numConst).duration(motorDuration).build();
 
@@ -35,7 +35,7 @@ public class MotionParamTest {
 
     @Test
     public void getDuration() throws Exception {
-        NumConst<Void> numConst = NumConst.make("0", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
+        NumConst<Void> numConst = NumConst.make("0", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false), null);
         MotorDuration<Void> motorDuration = new MotorDuration<>(MotorMoveMode.DEGREE, numConst);
         MotionParam<Void> motionParam = new MotionParam.Builder<Void>().speed(numConst).duration(motorDuration).build();
 

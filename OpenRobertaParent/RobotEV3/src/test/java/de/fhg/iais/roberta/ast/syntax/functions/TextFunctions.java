@@ -20,30 +20,33 @@ public class TextFunctions {
     @Test
     public void getPresedence() {
         ArrayList<Expr<Void>> param = new ArrayList<>();
-        StringConst<Void> stringConst = StringConst.make("AS", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
+        StringConst<Void> stringConst =
+            StringConst.make("AS", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false), null);
         param.add(stringConst);
         MathPowerFunct<Void> funct =
-            MathPowerFunct.make(FunctionNames.ABS, param, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
+            MathPowerFunct.make(FunctionNames.ABS, param, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false), null);
         Assert.assertEquals(10, funct.getPrecedence());
     }
 
     @Test
     public void getAssoc() {
         ArrayList<Expr<Void>> param = new ArrayList<>();
-        StringConst<Void> stringConst = StringConst.make("AS", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
+        StringConst<Void> stringConst =
+            StringConst.make("AS", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false), null);
         param.add(stringConst);
         MathPowerFunct<Void> funct =
-            MathPowerFunct.make(FunctionNames.ABS, param, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
+            MathPowerFunct.make(FunctionNames.ABS, param, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false), null);
         Assert.assertEquals(Assoc.LEFT, funct.getAssoc());
     }
 
     @Test
     public void getOpSymbol() {
         ArrayList<Expr<Void>> param = new ArrayList<>();
-        StringConst<Void> stringConst = StringConst.make("AS", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
+        StringConst<Void> stringConst =
+            StringConst.make("AS", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false), null);
         param.add(stringConst);
         MathPowerFunct<Void> funct =
-            MathPowerFunct.make(FunctionNames.POWER, param, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
+            MathPowerFunct.make(FunctionNames.POWER, param, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false), null);
         Assert.assertEquals("^", funct.getFunctName().getOpSymbol());
     }
 

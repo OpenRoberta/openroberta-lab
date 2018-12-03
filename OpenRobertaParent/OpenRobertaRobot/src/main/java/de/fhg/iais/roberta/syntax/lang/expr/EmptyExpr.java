@@ -17,7 +17,7 @@ public class EmptyExpr<V> extends Expr<V> {
     private final BlocklyType defVal;
 
     private EmptyExpr(BlocklyType defVal) {
-        super(BlockTypeContainer.getByName("EMPTY_EXPR"), BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
+        super(BlockTypeContainer.getByName("EMPTY_EXPR"), BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false), null);
         Assert.isTrue(defVal != null);
         this.defVal = defVal;
         setReadOnly();

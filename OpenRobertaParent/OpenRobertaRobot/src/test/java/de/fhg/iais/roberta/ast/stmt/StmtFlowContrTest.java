@@ -7,21 +7,23 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
+import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
 
 public class StmtFlowContrTest {
     AbstractHelperForXmlTest h = new GenericHelperForXmlTest();
 
     @Test
     public void make() throws Exception {
-        StmtFlowCon<Void> flowCon = StmtFlowCon.make(Flow.BREAK, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
+        StmtFlowCon<Void> flowCon =
+            StmtFlowCon.make(Flow.BREAK, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false), null);
         Assert.assertEquals("\nStmtFlowCon [BREAK]", flowCon.toString());
     }
 
     @Test
     public void getFlow() throws Exception {
-        StmtFlowCon<Void> flowCon = StmtFlowCon.make(Flow.BREAK, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
+        StmtFlowCon<Void> flowCon =
+            StmtFlowCon.make(Flow.BREAK, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false), null);
         Assert.assertEquals(Flow.BREAK, flowCon.getFlow());
     }
 

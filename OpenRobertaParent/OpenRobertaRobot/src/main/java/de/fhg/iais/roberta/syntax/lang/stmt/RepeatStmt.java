@@ -22,9 +22,9 @@ import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -165,26 +165,28 @@ public class RepeatStmt<V> extends Stmt<V> {
                 String type = fields.get(0).getValue();
                 EmptyExpr<V> empty = EmptyExpr.make(BlocklyType.get(type));
                 var =
-                    VarDeclaration.make(
-                        BlocklyType.get(helper.extractField(fields, BlocklyConstants.TYPE)),
-                        helper.extractField(fields, BlocklyConstants.VAR),
-                        empty,
-                        false,
-                        false,
-                        BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false),
-                        null);
+                    VarDeclaration
+                        .make(
+                            BlocklyType.get(helper.extractField(fields, BlocklyConstants.TYPE)),
+                            helper.extractField(fields, BlocklyConstants.VAR),
+                            empty,
+                            false,
+                            false,
+                            BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false),
+                            null);
 
                 values = helper.extractValues(block, (short) 1);
                 exprr = helper.extractValue(values, new ExprParam(BlocklyConstants.LIST, BlocklyType.ARRAY));
 
                 Binary<V> exprBinary =
-                    Binary.make(
-                        Binary.Op.IN,
-                        helper.convertPhraseToExpr(var),
-                        helper.convertPhraseToExpr(exprr),
-                        "",
-                        helper.extractBlockProperties(block),
-                        helper.extractComment(block));
+                    Binary
+                        .make(
+                            Binary.Op.IN,
+                            helper.convertPhraseToExpr(var),
+                            helper.convertPhraseToExpr(exprr),
+                            "",
+                            helper.extractBlockProperties(block),
+                            helper.extractComment(block));
                 return helper.extractRepeatStatement(block, exprBinary, BlocklyConstants.FOR_EACH);
 
             case BlocklyConstants.CONTROLS_WHILE_UNTIL:
@@ -193,11 +195,12 @@ public class RepeatStmt<V> extends Stmt<V> {
                 values = helper.extractValues(block, (short) 1);
                 if ( RepeatStmt.Mode.UNTIL == RepeatStmt.Mode.get(modee) ) {
                     exprr =
-                        Unary.make(
-                            Op.NOT,
-                            helper.convertPhraseToExpr(helper.extractValue(values, new ExprParam(BlocklyConstants.BOOL, BlocklyType.BOOLEAN))),
-                            helper.extractBlockProperties(block),
-                            helper.extractComment(block));
+                        Unary
+                            .make(
+                                Op.NOT,
+                                helper.convertPhraseToExpr(helper.extractValue(values, new ExprParam(BlocklyConstants.BOOL, BlocklyType.BOOLEAN))),
+                                helper.extractBlockProperties(block),
+                                helper.extractComment(block));
                 } else {
                     exprr = helper.extractValue(values, new ExprParam(BlocklyConstants.BOOL, BlocklyType.BOOLEAN));
                 }
@@ -219,8 +222,7 @@ public class RepeatStmt<V> extends Stmt<V> {
         switch ( getMode() ) {
             case TIMES:
                 if ( getProperty().getBlockType().equals(BlocklyConstants.CONTROLS_REPEAT) ) {
-                    Ast2JaxbHelper
-                        .addField(jaxbDestination, BlocklyConstants.TIMES, ((NumConst<?>) (((ExprList<?>) getExpr()).get().get(2))).getValue());
+                    Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.TIMES, ((NumConst<?>) (((ExprList<?>) getExpr()).get().get(2))).getValue());
                 } else {
                     Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.TIMES, (((ExprList<?>) getExpr()).get().get(2)));
                 }
@@ -250,8 +252,7 @@ public class RepeatStmt<V> extends Stmt<V> {
                 Mutation mutation = new Mutation();
                 mutation.setListType(((VarDeclaration<?>) exprBinary.getLeft()).getTypeVar().getBlocklyName());
                 jaxbDestination.setMutation(mutation);
-                Ast2JaxbHelper
-                    .addField(jaxbDestination, BlocklyConstants.TYPE, ((VarDeclaration<?>) exprBinary.getLeft()).getTypeVar().getBlocklyName());
+                Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.TYPE, ((VarDeclaration<?>) exprBinary.getLeft()).getTypeVar().getBlocklyName());
                 Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.VAR, ((VarDeclaration<?>) exprBinary.getLeft()).getName());
                 Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.LIST, exprBinary.getRight());
                 break;

@@ -282,7 +282,7 @@ abstract public class AbstractJaxb2Ast<V> {
                     .make(
                         BlocklyType.get(arg.getType()),
                         arg.getName(),
-                        BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false),
+                        BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false),
                         null);
             parameters.addExpr(parametar);
         }
@@ -592,7 +592,8 @@ abstract public class AbstractJaxb2Ast<V> {
                 isDeletable(block),
                 isMovable(block),
                 isInTask(block),
-                isShadow(block));
+                isShadow(block),
+                isErrorAttribute(block));
     }
 
     public int getElseIf(Mutation mutation) {
@@ -700,5 +701,12 @@ abstract public class AbstractJaxb2Ast<V> {
             return null;
         }
         return block.isShadow();
+    }
+
+    private Boolean isErrorAttribute(Block block) {
+        if ( block.isErrorAttribute() == null ) {
+            return null;
+        }
+        return block.isErrorAttribute();
     }
 }

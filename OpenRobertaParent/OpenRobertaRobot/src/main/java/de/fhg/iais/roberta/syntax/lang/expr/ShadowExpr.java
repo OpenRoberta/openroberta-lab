@@ -13,7 +13,7 @@ public class ShadowExpr<V> extends Expr<V> {
     private final Expr<V> block;
 
     private ShadowExpr(Expr<V> shadow, Expr<V> block) {
-        super(BlockTypeContainer.getByName("SHADOW_EXPR"), BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
+        super(BlockTypeContainer.getByName("SHADOW_EXPR"), BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false), null);
         Assert.isTrue(shadow != null);
         this.shadow = shadow;
         this.block = block;

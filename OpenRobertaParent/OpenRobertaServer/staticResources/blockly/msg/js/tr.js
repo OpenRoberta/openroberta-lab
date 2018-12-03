@@ -443,7 +443,6 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = "Bir sınırlayıcı tarafından kesilen 
 Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = "Her sınırlayıcıda kesen metinleri bir metin listesine ayır.";
 Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER = "sınırlayıcı ile";
 Blockly.Msg.LIST_BACK_TOOLTIP = "Back to previous view.";  // untranslated
-Blockly.Msg.LIST_CREATE_WITH_ERROR = "Error: This block may be used only within a variable declaration.";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = "false = Olumsuz";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Ya 'True' yada 'False' değerini verir.";
@@ -902,6 +901,7 @@ Blockly.Msg.ORA_GROUP_CREATE_ERROR_NOT_SAVED_TO_DB = "This group already exists"
 Blockly.Msg.ORA_LIKE_DELETE_SUCCESS = "You do not like program »$« anymore!";  // untranslated
 Blockly.Msg.ORA_LIKE_SAVE_ERROR_EXISTS = "You couldn't like program »$«. Maybe you have already liked it.";  // untranslated
 Blockly.Msg.ORA_LIKE_SAVE_SUCCESS = "You like program »$« now!";  // untranslated
+Blockly.Msg.ORA_LIST_CREATE_WITH_ERROR = "Error: This block may be used only within a variable declaration.";  // untranslated
 Blockly.Msg.ORA_OWNER_DOES_NOT_EXIST = "Sahip yok.";
 Blockly.Msg.ORA_PROGRAM_CONFIGURATION_NOT_COMPATIBLE = "Program , konfigürasyonla uyumlu degil.";
 Blockly.Msg.ORA_PROGRAM_DELETE_ERROR = "Konfigürasyonu silerken bir hata oldu. Lütfen tekrar deneyiniz!";

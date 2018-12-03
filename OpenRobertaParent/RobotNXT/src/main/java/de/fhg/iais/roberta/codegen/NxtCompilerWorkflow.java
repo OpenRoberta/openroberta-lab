@@ -38,8 +38,13 @@ public class NxtCompilerWorkflow extends AbstractCompilerWorkflow {
             this.generatedSourceCode = NxtNxcVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true);
             LOG.info("nxt code generated");
         } catch ( Exception e ) {
-            LOG.error("nxt code generation failed", e);
-            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+            if ( e.getMessage().equals("Got error on list create block") ) {
+                LOG.error("NXT code generation failed due to error on the list block");
+                this.workflowResult = Key.LIST_CREATE_WITH_ERROR;
+            } else {
+                LOG.error("nxt code generation failed", e.getMessage());
+                this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+            }
         }
     }
 
