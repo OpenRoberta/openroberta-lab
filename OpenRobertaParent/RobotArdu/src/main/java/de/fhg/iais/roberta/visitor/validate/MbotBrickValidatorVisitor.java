@@ -2,8 +2,8 @@ package de.fhg.iais.roberta.visitor.validate;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.bob3.LedOffAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.bob3.LedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.SendIRAction;
 import de.fhg.iais.roberta.syntax.expressions.arduino.LedMatrix;
@@ -47,18 +47,6 @@ public final class MbotBrickValidatorVisitor extends AbstractBrickValidatorVisit
 
     @Override
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-12-03 16:07:21.960602",
+		"lastupdated": "2018-12-03 19:40:41.797133",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -562,6 +562,7 @@
 	"MODE_PRESENCE": "presence",
 	"MODE_COLOUR": "colour",
 	"MODE_LIGHT": "light",
+	"MODE_LINE": "line",
 	"MODE_RGB": "RGB",
 	"MODE_AMBIENTLIGHT": "ambient light",
 	"MODE_REFLEXION": "reflected light",
@@ -1259,8 +1260,8 @@
 	"SET_RGB_LED": "turn RGB LED",
 	"SET_RELAY": "turn relay",
 	"SET_RELAY_ARDUINO": "turn relay SRD-05VDC-SL-C",
-	"CONNECTION_BOB3_RECEIVE_TOOLTIP": "Reads a message via the IR receiver. Only numbers can be received.",
-	"CONNECTION_BOB3_SEND_TOOLTIP": "Sends a message of type number to another Bob3. Hold the Bob3's face to face!",
+	"CONNECTION_RECEIVE_TOOLTIP_BOB3": "Reads a message via the IR receiver. Only numbers can be received.",
+	"CONNECTION_SEND_TOOLTIP_BOB3": "Sends a message of type number to another Bob3. Hold the Bob3's face to face!",
 	"BLOCK_NOT_EXECUTED": "The exection of this block will have no effect!",
 	"BOB3_RECALL_NUMBER": "recall number",
 	"BOB3_REMEMBER_NUMBER": "remember number",
@@ -1474,6 +1475,8 @@
 	"ORA_LIST_CREATE_WITH_ERROR": "Error: This block may be used only within a variable declaration.",
 	"POPUP_SCANNED_ROBOTS": "found robots",
 	"POPUP_DISPLAY_HEADER": "output of your program",
-	"CONNECTION_MAKEBLOCK_RECEIVE_TOOLTIP": "Reads a message from the IR receiver. Only strings can be received.",
-	"CONNECTION_MAKEBLOCK_SEND_TOOLTIP": "Sends a message of type string to another mBot. Hold the mBots's face to face!"
+	"CONNECTION_RECEIVE_TOOLTIP_MBOT": "Reads a message from the IR receiver. Only strings can be received.",
+	"CONNECTION_SEND_TOOLTIP_MBOT": "Sends a message of type string to another mBot. Hold the mBots's face to face!",
+	"SLOT_LEFT": "left",
+	"SLOT_RIGHT": "right"
 }

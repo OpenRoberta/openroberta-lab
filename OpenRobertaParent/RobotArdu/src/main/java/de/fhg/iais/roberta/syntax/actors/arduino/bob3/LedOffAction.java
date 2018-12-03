@@ -1,10 +1,9 @@
-package de.fhg.iais.roberta.syntax.actors.arduino.mbot;
+package de.fhg.iais.roberta.syntax.actors.arduino.bob3;
 
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -12,14 +11,10 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
-import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IBob3Visitor;
 
 /**
  * This class represents the <b>mbedActions_leds_on</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -29,45 +24,35 @@ import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
  * <br>
  * To create an instance from this class use the method {@link #make(ColorConst, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-public class LedOnAction<V> extends Action<V> {
-    private final Expr<V> ledColor;
+public class LedOffAction<V> extends Action<V> {
     private final String side;
 
-    private LedOnAction(String side, Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("MAKEBLOCK_RGB_LED_ON"), properties, comment);
-        Assert.notNull(ledColor);
-        this.ledColor = ledColor;
+    private LedOffAction(String side, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(BlockTypeContainer.getByName("BOB3_RGB_LED_OFF"), properties, comment);
         this.side = side;
         setReadOnly();
     }
 
     /**
-     * Creates instance of {@link LedOnAction}. This instance is read only and can not be modified.
+     * Creates instance of {@link LedOffAction}. This instance is read only and can not be modified.
      *
      * @param ledColor {@link ColorConst} color of the led; must <b>not</b> be null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link LedOnAction}
+     * @return read only object of class {@link LedOffAction}
      */
-    private static <V> LedOnAction<V> make(String side, Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LedOnAction<>(side, ledColor, properties, comment);
-    }
-
-    /**
-     * @return {@link ColorConst} color of the led.
-     */
-    public Expr<V> getLedColor() {
-        return this.ledColor;
+    private static <V> LedOffAction<V> make(String side, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new LedOffAction<>(side, properties, comment);
     }
 
     @Override
     public String toString() {
-        return "LedOnAction [ " + this.ledColor + " ]";
+        return "LedOnAction [ ]";
     }
 
     @Override
     protected V accept(IVisitor<V> visitor) {
-        return ((IMbotVisitor<V>) visitor).visitLedOnAction(this);
+        return ((IBob3Visitor<V>) visitor).visitLedOffAction(this);
     }
 
     public String getSide() {
@@ -82,22 +67,18 @@ public class LedOnAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
-        List<Value> values = helper.extractValues(block, (short) 1);
         List<Field> fields = helper.extractFields(block, (short) 1);
         String side = helper.extractField(fields, BlocklyConstants.LED + BlocklyConstants.SIDE);
-
-        Phrase<V> ledColor = helper.extractValue(values, new ExprParam(BlocklyConstants.COLOR, BlocklyType.COLOR));
-
-        return LedOnAction.make(side, helper.convertPhraseToExpr(ledColor), helper.extractBlockProperties(block), helper.extractComment(block));
-
+        return LedOffAction.make(side, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+
         Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.LED + BlocklyConstants.SIDE, this.side);
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.COLOR, this.ledColor);
+
         return jaxbDestination;
 
     }

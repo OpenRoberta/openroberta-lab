@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 
 /**
- * This class represents the <b>bob3communication_sendblock</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate
+ * This class represents the <b>robCommunication_ir_sendblock</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate
  * code for turning on the Led.<br/>
  * <br>
  * The client must provide the {@link ColorConst} color of the led. <br>
@@ -31,7 +31,7 @@ public class SendIRAction<V> extends Action<V> {
     private final Expr<V> message;
 
     private SendIRAction(Expr<V> message, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("MAKEBLOCK_IR_SENDER"), properties, comment);
+        super(BlockTypeContainer.getByName("IR_SENDER"), properties, comment);
         this.message = message;
         setReadOnly();
     }

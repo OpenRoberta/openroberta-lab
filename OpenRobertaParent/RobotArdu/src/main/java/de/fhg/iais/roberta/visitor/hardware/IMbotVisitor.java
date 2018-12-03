@@ -1,7 +1,5 @@
 package de.fhg.iais.roberta.visitor.hardware;
 
-import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.SendIRAction;
 import de.fhg.iais.roberta.syntax.expressions.arduino.LedMatrix;
@@ -18,10 +16,6 @@ public interface IMbotVisitor<V> extends IActors4AutonomousDriveRobots<V>, ISens
     V visitFlameSensor(FlameSensor<V> flameSensor);
 
     V visitImage(LedMatrix<V> ledMatrix);
-
-    V visitLedOffAction(LedOffAction<V> ledOffAction);
-
-    V visitLedOnAction(LedOnAction<V> ledOnAction);
 
     V visitSendIRAction(SendIRAction<V> sendIRAction);
 
