@@ -17,10 +17,10 @@ import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
-import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
@@ -154,8 +154,9 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
             motorOnAction.getParam().getSpeed().visit(this);
             this.sb.append(");");
             nlIndent();
-            this.sb.append("Motor_" + motorOnAction.getUserDefinedPort() + ".step(_SPU_" + motorOnAction.getUserDefinedPort() + "*");
+            this.sb.append("Motor_" + motorOnAction.getUserDefinedPort() + ".step(_SPU_" + motorOnAction.getUserDefinedPort() + "*(");
             motorOnAction.getDurationValue().visit(this);
+            this.sb.append(")");
             if ( motorOnAction.getDurationMode().equals(MotorMoveMode.DEGREE) ) {
                 this.sb.append("/360");
             }
@@ -188,10 +189,10 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     public void measureDistanceUltrasonicSensor(String sensorName) {
         this.sb.append("double _getUltrasonicDistance()");
-        this.nlIndent();
+        nlIndent();
         this.sb.append("{");
-        this.incrIndentation();
-        this.nlIndent();
+        incrIndentation();
+        nlIndent();
         this.sb.append("digitalWrite(_trigger_" + sensorName + ", LOW);");
         nlIndent();
         this.sb.append("delay(5);");
@@ -203,10 +204,10 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         this.sb.append("digitalWrite(_trigger_" + sensorName + ", LOW);");
         nlIndent();
         this.sb.append("return pulseIn(_echo_" + sensorName + ", HIGH)*_signalToDistance;");
-        this.decrIndentation();
-        this.nlIndent();
+        decrIndentation();
+        nlIndent();
         this.sb.append("}");
-        this.nlIndent();
+        nlIndent();
     }
 
     @Override
@@ -307,7 +308,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     public Void readRFIDData(String sensorName) {
         this.sb.append("String _readRFIDData()");
-        this.nlIndent();
+        nlIndent();
         this.sb.append("{");
         incrIndentation();
         nlIndent();
@@ -344,9 +345,9 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                     + ".uid.uidByte[3]), HEX);");
 
         decrIndentation();
-        this.nlIndent();
+        nlIndent();
         this.sb.append("}");
-        this.nlIndent();
+        nlIndent();
         return null;
 
     }
@@ -431,7 +432,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         generateConfigurationVariables();
         if ( this.isTimerSensorUsed ) {
             this.sb.append("unsigned long __time = millis();");
-            this.nlIndent();
+            nlIndent();
         }
         long numberConf =
             this.programPhrases
@@ -439,7 +440,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                 .filter(phrase -> (phrase.getKind().getCategory() == Category.METHOD) && !phrase.getKind().hasName("METHOD_CALL"))
                 .count();
         if ( (this.configuration.getConfigurationComponents().isEmpty() || this.isTimerSensorUsed) && (numberConf == 0) ) {
-            this.nlIndent();
+            nlIndent();
         }
         generateUserDefinedMethods();
         if ( numberConf != 0 ) {
@@ -447,46 +448,46 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         }
         for ( UsedSensor usedSensor : this.usedSensors ) {
             if ( usedSensor.getType().equals(SC.INFRARED) ) {
-                this.measureIRValue(usedSensor);
-                this.nlIndent();
+                measureIRValue(usedSensor);
+                nlIndent();
                 break;
             }
         }
         for ( UsedSensor usedSensor : this.usedSensors ) {
             if ( usedSensor.getType().equals(SC.PIN_VALUE) ) {
-                this.generatePinGetValue(usedSensor);
-                this.nlIndent();
+                generatePinGetValue(usedSensor);
+                nlIndent();
                 break;
             }
         }
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponents() ) {
             if ( usedConfigurationBlock.getComponentType().equals(SC.ULTRASONIC) ) {
-                this.measureDistanceUltrasonicSensor(usedConfigurationBlock.getUserDefinedPortName());
-                this.nlIndent();
+                measureDistanceUltrasonicSensor(usedConfigurationBlock.getUserDefinedPortName());
+                nlIndent();
                 break;
             }
         }
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponents() ) {
             if ( usedConfigurationBlock.getComponentType().equals(SC.RFID) ) {
-                this.readRFIDData(usedConfigurationBlock.getUserDefinedPortName());
-                this.nlIndent();
+                readRFIDData(usedConfigurationBlock.getUserDefinedPortName());
+                nlIndent();
                 break;
             }
         }
         this.sb.append("void setup()");
-        this.nlIndent();
+        nlIndent();
         this.sb.append("{");
         incrIndentation();
         nlIndent();
         this.sb.append("Serial.begin(9600); ");
         nlIndent();
-        this.generateConfigurationSetup();
-        this.generateUsedVars();
+        generateConfigurationSetup();
+        generateUsedVars();
         this.sb.delete(this.sb.lastIndexOf("\n"), this.sb.length());
-        this.decrIndentation();
-        this.nlIndent();
+        decrIndentation();
+        nlIndent();
         this.sb.append("}");
-        this.nlIndent();
+        nlIndent();
         return null;
     }
 
@@ -495,48 +496,48 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         if ( !withWrapping ) {
             return;
         } else {
-            this.decrIndentation();
+            decrIndentation();
         }
         this.sb.append("// This file is automatically generated by the Open Roberta Lab.");
-        this.nlIndent();
-        this.nlIndent();
+        nlIndent();
+        nlIndent();
         this.sb.append("#include <math.h>");
-        this.nlIndent();
+        nlIndent();
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponents() ) {
             switch ( usedConfigurationBlock.getComponentType() ) {
                 case SC.HUMIDITY:
                     this.sb.append("#include <DHT.h>");
-                    this.nlIndent();
+                    nlIndent();
                     break;
                 case SC.INFRARED:
                     this.sb.append("#include <IRremote.h>");
-                    this.nlIndent();
+                    nlIndent();
                     break;
                 case SC.ENCODER:
                     this.sb.append("#include <Encoder.h>");
-                    this.nlIndent();
+                    nlIndent();
                     break;
                 case SC.RFID:
                     this.sb.append("#include <SPI.h>");
-                    this.nlIndent();
+                    nlIndent();
                     this.sb.append("#include <MFRC522.h>");
-                    this.nlIndent();
+                    nlIndent();
                     break;
                 case SC.LCD:
                     this.sb.append("#include <LiquidCrystal.h>");
-                    this.nlIndent();
+                    nlIndent();
                     break;
                 case SC.LCDI2C:
                     this.sb.append("#include <LiquidCrystal_I2C.h>");
-                    this.nlIndent();
+                    nlIndent();
                     break;
                 case SC.STEPMOTOR:
                     this.sb.append("#include <Stepper.h>");
-                    this.nlIndent();
+                    nlIndent();
                     break;
                 case SC.SERVOMOTOR:
                     this.sb.append("#include <Servo.h>");
-                    this.nlIndent();
+                    nlIndent();
                     break;
                 case SC.ULTRASONIC:
                 case SC.MOTION:
@@ -566,7 +567,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
             }
         }
         this.sb.append("#include <RobertaFunctions.h>   // Open Roberta library");
-        this.nlIndent();
+        nlIndent();
         if ( this.isListsUsed ) {
             this.sb.append("#include <ArduinoSTL.h>");
             nlIndent();
@@ -574,8 +575,8 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
             nlIndent();
         }
         this.sb.append("#include <NEPODefs.h>");
-        this.nlIndent();
-        this.nlIndent();
+        nlIndent();
+        nlIndent();
         this.sb.append("RobertaFunctions rob;");
     }
 
