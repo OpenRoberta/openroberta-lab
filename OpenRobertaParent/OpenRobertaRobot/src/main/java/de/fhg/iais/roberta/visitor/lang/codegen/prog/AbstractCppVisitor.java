@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
+import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
@@ -59,6 +60,18 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
      */
     protected AbstractCppVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
+    }
+
+    @Override
+    public Void visitRgbColor(RgbColor<Void> rgbColor) {
+        this.sb.append("RGB(");
+        rgbColor.getR().visit(this);
+        this.sb.append(", ");
+        rgbColor.getG().visit(this);
+        this.sb.append(", ");
+        rgbColor.getB().visit(this);
+        this.sb.append(")");
+        return null;
     }
 
     @Override
@@ -505,7 +518,17 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append("\"" + colorConst.getColor().getFirst() + "\"");
+        String fullColor = colorConst.getColor().getSecond().substring(1, 7);
+        String R = fullColor.substring(0, 2);
+        String G = fullColor.substring(2, 4);
+        String B = fullColor.substring(4, 6);
+        this.sb.append("RGB(0x");
+        this.sb.append(R);
+        this.sb.append(", 0x");
+        this.sb.append(G);
+        this.sb.append(", 0x");
+        this.sb.append(B);
+        this.sb.append(")");
         return null;
     }
 
@@ -551,7 +574,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
             case ARRAY_BOOLEAN:
                 return "std::list<bool>";
             case ARRAY_COLOUR:
-                return "std::list<String>";
+                return "std::list<unsigned int>";
             case BOOLEAN:
                 return "bool";
             case NUMBER:
@@ -563,7 +586,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
             case VOID:
                 return "void";
             case COLOR:
-                return "String";
+                return "unsigned int";
             case CONNECTION:
                 return "int";
             default:

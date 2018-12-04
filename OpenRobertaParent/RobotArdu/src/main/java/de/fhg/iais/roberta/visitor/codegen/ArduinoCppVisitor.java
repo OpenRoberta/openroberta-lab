@@ -25,6 +25,7 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
+import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
@@ -127,6 +128,22 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                     this.sb.append(");");
                     nlIndent();
                 });
+                return null;
+            }
+            if ( lightAction.getRgbLedColor().getClass().equals(Var.class) ) {
+                String tempVarName = ((Var<Void>) lightAction.getRgbLedColor()).getValue();
+                this.sb.append("analogWrite(_led_red_" + lightAction.getPort() + ", RCHANNEL(");
+                this.sb.append(tempVarName);
+                this.sb.append("));");
+                nlIndent();
+                this.sb.append("analogWrite(_led_green_" + lightAction.getPort() + ", GCHANNEL(");
+                this.sb.append(tempVarName);
+                this.sb.append("));");
+                nlIndent();
+                this.sb.append("analogWrite(_led_blue_" + lightAction.getPort() + ", BCHANNEL(");
+                this.sb.append(tempVarName);
+                this.sb.append("));");
+                nlIndent();
                 return null;
             }
             Map<String, Expr<Void>> Channels = new HashMap<>();

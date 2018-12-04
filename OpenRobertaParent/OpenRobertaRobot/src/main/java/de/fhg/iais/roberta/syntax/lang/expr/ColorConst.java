@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
@@ -88,7 +89,13 @@ public class ColorConst<V> extends Expr<V> {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = helper.extractFields(block, (short) 1);
         String field = helper.extractField(fields, BlocklyConstants.COLOUR);
-        return ColorConst.make(factory.getPickColor(field), helper.extractBlockProperties(block), helper.extractComment(block));
+        Pair<String, String> definedColor;
+        try {
+            definedColor = factory.getPickColor(field);
+        } catch ( DbcException e ) {
+            definedColor = Pair.of(field, field);
+        }
+        return ColorConst.make(definedColor, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

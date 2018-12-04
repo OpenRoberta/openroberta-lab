@@ -16,8 +16,6 @@ import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
@@ -69,12 +67,6 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     @Override
-    public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append(colorConst.getColor().getFirst());
-        return null;
-    }
-
-    @Override
     protected String getLanguageVarTypeFromBlocklyType(BlocklyType type) {
         switch ( type ) {
             case ANY:
@@ -98,7 +90,7 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
             case ARRAY_BOOLEAN:
                 return "std::list<bool>";
             case ARRAY_COLOUR:
-                return "std::list<Bob3Color>";
+                return "std::list<unsigned int>";
             case BOOLEAN:
                 return "bool";
             case NUMBER:
@@ -110,7 +102,7 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
             case VOID:
                 return "void";
             case COLOR:
-                return "Bob3Color";
+                return "unsigned int";
             case CONNECTION:
                 return "int";
             default:
@@ -196,22 +188,6 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         this.sb.append("myBob.setLed(2, OFF);");
         this.sb.append("myBob.setLed(1, OFF);");
-        return null;
-    }
-
-    @Override
-    public Void visitRgbColor(RgbColor<Void> rgbColor) {
-        this.sb.append("(");
-        rgbColor.getR().visit(this);
-        this.sb.append(")");
-        this.sb.append("*256*256 + ");
-        this.sb.append("(");
-        rgbColor.getG().visit(this);
-        this.sb.append(")");
-        this.sb.append("*256 + ");
-        this.sb.append("(");
-        rgbColor.getB().visit(this);
-        this.sb.append(")");
         return null;
     }
 

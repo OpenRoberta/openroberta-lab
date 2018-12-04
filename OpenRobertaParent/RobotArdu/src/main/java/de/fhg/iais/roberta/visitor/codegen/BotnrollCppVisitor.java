@@ -351,7 +351,6 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
         switch ( colorSensor.getMode() ) {
             case SC.COLOUR:
                 this.sb.append("bnr.colorSensorColor(");
-                this.sb.append(colors);
                 this.sb.append(port);
                 this.sb.append(")");
                 break;
@@ -450,6 +449,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
         nlIndent();
         this.sb.append("bnr.setBrm(brm);");
         generateSensors();
+        nlIndent();
         generateUsedVars();
         decrIndentation();
         nlIndent();

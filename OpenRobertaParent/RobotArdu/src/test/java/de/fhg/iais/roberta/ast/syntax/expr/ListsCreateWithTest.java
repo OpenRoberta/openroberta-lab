@@ -37,7 +37,7 @@ public class ListsCreateWithTest {
 
     @Test
     public void Test4() throws Exception {
-        String a = "{\"NONE\",\"RED\",\"BROWN\"}";
+        String a = "{RGB(0x58,0x58,0x58),RGB(0xB3,0x00,0x06),RGB(0x53,0x21,0x15)}";
 
         this.h.assertCodeIsOk(a, "/syntax/lists/lists_create_with4.xml", false);
     }
