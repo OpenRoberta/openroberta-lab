@@ -22,6 +22,7 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
@@ -106,6 +107,28 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         if ( !lightAction.getMode().toString().equals(BlocklyConstants.DEFAULT) ) {
             this.sb.append("digitalWrite(_led_" + lightAction.getPort() + ", " + lightAction.getMode().getValues()[0] + ");");
         } else {
+            if ( lightAction.getRgbLedColor().getClass().equals(ColorConst.class) ) {
+                String hexValue = ((ColorConst<Void>) lightAction.getRgbLedColor()).getColor().getSecond();
+                hexValue = hexValue.split("#")[1];
+                int R = Integer.decode("0x" + hexValue.substring(0, 2));
+                int G = Integer.decode("0x" + hexValue.substring(2, 4));
+                int B = Integer.decode("0x" + hexValue.substring(4, 6));
+                Map<String, Integer> colorConstChannels = new HashMap<>();
+                colorConstChannels.put("red", R);
+                colorConstChannels.put("green", G);
+                colorConstChannels.put("blue", B);
+                colorConstChannels.forEach((k, v) -> {
+                    this.sb.append("analogWrite(_led_");
+                    this.sb.append(k);
+                    this.sb.append("_");
+                    this.sb.append(lightAction.getPort());
+                    this.sb.append(", ");
+                    this.sb.append(v);
+                    this.sb.append(");");
+                    nlIndent();
+                });
+                return null;
+            }
             Map<String, Expr<Void>> Channels = new HashMap<>();
             Channels.put("red", ((RgbColor<Void>) lightAction.getRgbLedColor()).getR());
             Channels.put("green", ((RgbColor<Void>) lightAction.getRgbLedColor()).getG());
