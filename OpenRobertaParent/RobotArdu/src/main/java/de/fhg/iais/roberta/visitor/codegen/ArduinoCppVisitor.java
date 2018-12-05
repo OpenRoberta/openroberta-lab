@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.PinReadValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
@@ -592,6 +593,10 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                 case SC.RGBLED:
                 case SC.BUZZER:
                 case SC.RELAY:
+                case SC.DIGITAL_INPUT:
+                case SC.ANALOG_INPUT:
+                case SC.DIGITAL_PIN:
+                case SC.ANALOG_PIN:
                     break;
                 default:
                     throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
@@ -706,6 +711,16 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                 case SC.SERVOMOTOR:
                     this.sb
                         .append("_servo_" + usedConfigurationBlock.getUserDefinedPortName() + ".attach(" + usedConfigurationBlock.getProperty(SC.PULSE) + ");");
+                    nlIndent();
+                    break;
+                case SC.DIGITAL_PIN:
+                case SC.ANALOG_PIN:
+                    this.sb.append("pinMode(_input_" + usedConfigurationBlock.getUserDefinedPortName() + ", INPUT);");
+                    nlIndent();
+                    break;
+                case SC.ANALOG_INPUT:
+                case SC.DIGITAL_INPUT:
+                    this.sb.append("pinMode(_output_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
                     nlIndent();
                     break;
                 default:
@@ -853,6 +868,16 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                     this.sb.append("Servo _servo_" + blockName + ";");
                     nlIndent();
                     break;
+                case SC.ANALOG_PIN:
+                case SC.DIGITAL_PIN:
+                    this.sb.append("int _input_").append(blockName).append(" = ").append(cc.getProperty("OUTPUT")).append(";");
+                    nlIndent();
+                    break;
+                case SC.ANALOG_INPUT:
+                case SC.DIGITAL_INPUT:
+                    this.sb.append("int _output_").append(blockName).append(" = ").append(cc.getProperty("INPUT")).append(";");
+                    nlIndent();
+                    break;
                 default:
                     throw new DbcException("Configuration block is not supported: " + cc.getComponentType());
             }
@@ -861,16 +886,14 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
-        this.sb.append("pinMode(" + pinWriteValueSensor.getPort() + ", OUTPUT);");
-        nlIndent();
         switch ( pinWriteValueSensor.getMode() ) {
             case SC.ANALOG:
-                this.sb.append("analogWrite(" + pinWriteValueSensor.getPort() + ", ");
+                this.sb.append("analogWrite(_output_").append(pinWriteValueSensor.getPort()).append(", ");
                 pinWriteValueSensor.getValue().visit(this);
                 this.sb.append(");");
                 break;
             case SC.DIGITAL:
-                this.sb.append("digitalWrite(" + pinWriteValueSensor.getPort() + ", ");
+                this.sb.append("digitalWrite(_output_").append(pinWriteValueSensor.getPort()).append(", ");
                 pinWriteValueSensor.getValue().visit(this);
                 this.sb.append(");");
                 break;
@@ -885,6 +908,21 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         this.sb.append("Serial.println(");
         serialWriteAction.getValue().visit(this);
         this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitPinReadValueAction(PinReadValueAction<Void> pinReadValueActor) {
+        switch ( pinReadValueActor.getMode() ) {
+            case SC.ANALOG:
+                this.sb.append("analogRead(_input_").append(pinReadValueActor.getPort()).append(")");
+                break;
+            case SC.DIGITAL:
+                this.sb.append("digitalRead(_input_").append(pinReadValueActor.getPort()).append(")");
+                break;
+            default:
+                break;
+        }
         return null;
     }
 }

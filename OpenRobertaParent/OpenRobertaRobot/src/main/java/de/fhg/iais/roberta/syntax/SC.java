@@ -94,4 +94,7 @@ public interface SC {
     String STRENGTH = "STRENGTH";
     String RED = "RED";
     String IR_TRANSMITTER = "IR_TRANSMITTER";
+    String DIGITAL_INPUT = "DIGITAL_INPUT";
+    String ANALOG_INPUT = "ANALOG_INPUT";
+    String DIGITAL_PIN = "DIGITAL_PIN";
 }
