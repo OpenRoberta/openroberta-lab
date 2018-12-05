@@ -1123,8 +1123,8 @@ table [data-toggle="collapse"].collapsed:after {
     background-color: #eee;
     background-size: contain;
 }
-.robotSpecial span.img-ev3lejos {
-    background-image: url("/css/img/ev3lejos.png");
+.robotSpecial span.img-ev3lejosV0 {
+    background-image: url("/css/img/ev3lejosV0.png");
 }
 .robotSpecial span.img-ev3lejosV1 {
     background-image: url("/css/img/ev3lejosV1.png");
