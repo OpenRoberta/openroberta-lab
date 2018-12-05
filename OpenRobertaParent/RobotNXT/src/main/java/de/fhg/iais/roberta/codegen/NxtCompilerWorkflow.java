@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.nxt.Jaxb2NxtConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.PluginProperties;
+import de.fhg.iais.roberta.util.dbc.VisitorException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.visitor.codegen.NxtNxcVisitor;
 
@@ -37,14 +38,12 @@ public class NxtCompilerWorkflow extends AbstractCompilerWorkflow {
         try {
             this.generatedSourceCode = NxtNxcVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true);
             LOG.info("nxt code generated");
+        } catch ( VisitorException v ) {
+            LOG.error("NXT code generation failed due to error on the list block");
+            this.workflowResult = Key.LIST_CREATE_WITH_ERROR;
         } catch ( Exception e ) {
-            if ( e.getMessage().equals("Got error on list create block") ) {
-                LOG.error("NXT code generation failed due to error on the list block");
-                this.workflowResult = Key.LIST_CREATE_WITH_ERROR;
-            } else {
-                LOG.error("nxt code generation failed", e.getMessage());
-                this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
-            }
+            LOG.error("nxt code generation failed", e.getMessage());
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
         }
     }
 

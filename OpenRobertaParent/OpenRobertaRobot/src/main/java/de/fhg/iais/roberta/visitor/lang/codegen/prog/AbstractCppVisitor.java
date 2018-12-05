@@ -42,7 +42,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.dbc.VisitorException;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractLanguageVisitor;
 
@@ -150,8 +150,8 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitListCreate(ListCreate<Void> listCreate) {
-        if ( listCreate.getProperty().isErrorAttribute() != null && listCreate.getProperty().isErrorAttribute().booleanValue() == true ) {
-            throw new DbcException("Got error on list create block");
+        if ( listCreate.getProperty().isErrorAttribute() != null && listCreate.getProperty().isErrorAttribute().booleanValue() ) {
+            throw new VisitorException("Got error on list create block");
         }
         this.sb.append("{");
         listCreate.getValue().visit(this);
