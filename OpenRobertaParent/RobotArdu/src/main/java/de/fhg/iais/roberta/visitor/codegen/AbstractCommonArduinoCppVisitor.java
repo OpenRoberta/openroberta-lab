@@ -9,10 +9,10 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
-import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
+import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
@@ -245,7 +245,14 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
         this.sb.append(methodName);
         indexOfFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
-        indexOfFunct.getParam().get(1).visit(this);
+        if ( indexOfFunct.getParam().get(1).getClass().equals(StringConst.class) ) {
+            this.sb.append("String(");
+            indexOfFunct.getParam().get(1).visit(this);
+            this.sb.append(")");
+        } else {
+            indexOfFunct.getParam().get(1).visit(this);
+            this.sb.append(")");
+        }
         this.sb.append(")");
         return null;
     }
