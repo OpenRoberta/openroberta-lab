@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.UsedActor;
@@ -137,9 +138,6 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
         if ( lightAction.getRgbLedColor().getClass().equals(ColorConst.class) ) {
             String hexValue = ((ColorConst<Void>) lightAction.getRgbLedColor()).getColor().getSecond();
             hexValue = hexValue.split("#")[1];
-            this.sb.append(", ");
-            this.sb.append("_meRgbLed.setColor(");
-            this.sb.append(lightAction.getPort());
             this.sb.append(", ");
             this.sb.append("0x");
             this.sb.append(hexValue.substring(0, 2));
@@ -583,8 +581,13 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
                     break;
                 case SC.DIFFERENTIAL_DRIVE:
                     nlIndent();
-                    this.sb.append(
-                        "MeDrive _meDrive(M" + this.configuration.getFirstMotorPort(SC.LEFT) + ", M" + this.configuration.getFirstMotorPort(SC.RIGHT) + ");");
+                    this.sb
+                        .append(
+                            "MeDrive _meDrive(M"
+                                + this.configuration.getFirstMotorPort(SC.LEFT)
+                                + ", M"
+                                + this.configuration.getFirstMotorPort(SC.RIGHT)
+                                + ");");
                     break;
                 case SC.LED_MATRIX:
                     nlIndent();
