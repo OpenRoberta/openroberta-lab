@@ -97,4 +97,5 @@ public interface SC {
     String DIGITAL_INPUT = "DIGITAL_INPUT";
     String ANALOG_INPUT = "ANALOG_INPUT";
     String DIGITAL_PIN = "DIGITAL_PIN";
+    String IDONE = "IDONE";
 }

@@ -399,7 +399,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
             case SC.PRESENCE:
                 this.sb.append("_mfrc522_" + rfidSensor.getPort() + ".PICC_IsNewCardPresent()");
                 break;
-            case SC.SERIAL:
+            case SC.IDONE:
                 this.sb.append("_readRFIDData()");
                 break;
             default:
