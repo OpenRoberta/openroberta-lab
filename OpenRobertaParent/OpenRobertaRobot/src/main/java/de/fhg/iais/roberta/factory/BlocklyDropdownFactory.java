@@ -40,8 +40,6 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.sensor.GetSampleType;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
-import de.fhg.iais.roberta.util.DropDown;
-import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -53,7 +51,7 @@ public class BlocklyDropdownFactory {
 
     private final Map<String, WaitUntilSensorBean> waMap;
     private final Map<String, String> modes;
-    private final DropDown blocklyDropdownColorItems;
+    private final Map<String, String> colorDefs;
     private final Map<String, String> configurationComponentTypes;
 
     public BlocklyDropdownFactory(PluginProperties pluginProperties) {
@@ -61,7 +59,7 @@ public class BlocklyDropdownFactory {
         this.robotDescription = new JSONObject();
         Util1.loadYAMLRecursive("", this.robotDescription, robotDescriptor);
         BlocklyDropdownFactoryHelper.loadBlocks(this.robotDescription);
-        this.blocklyDropdownColorItems = BlocklyDropdownFactoryHelper.getColors(this.robotDescription);
+        this.colorDefs = BlocklyDropdownFactoryHelper.getColors(this.robotDescription);
         this.waMap = BlocklyDropdownFactoryHelper.getWaitUntils(this.robotDescription);
         this.modes = BlocklyDropdownFactoryHelper.getModes(this.robotDescription);
         this.configurationComponentTypes = BlocklyDropdownFactoryHelper.getConfigurationComponents(this.robotDescription);
@@ -142,11 +140,11 @@ public class BlocklyDropdownFactory {
     /**
      * Get a {@link Pair<String, String>} given string parameter. Throws exception if the color cannot be found.
      *
-     * @param name of the color
-     * @return {@link Pair<String, String>}
+     * @param rgbValue of the color
+     * @return the NAME of the color, if the name exists; otherwise return null
      */
-    public Pair<String, String> getPickColor(String color) {
-        return this.blocklyDropdownColorItems.getPairBySecond(color.toUpperCase());
+    public String getPickColor(String rgbValue) {
+        return this.colorDefs.get(rgbValue.toUpperCase());
     }
 
     /**

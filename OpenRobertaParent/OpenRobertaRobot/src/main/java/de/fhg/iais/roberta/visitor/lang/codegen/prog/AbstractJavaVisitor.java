@@ -380,7 +380,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append("PickColor." + colorConst.getColor().getFirst());
+        this.sb.append("PickColor." + colorConst.getColorName());
         return null;
     }
 

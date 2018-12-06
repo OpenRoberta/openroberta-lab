@@ -51,12 +51,12 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getPickColorFromString() {
-        Assert.assertEquals(this.dropdownFactory.getPickColor("#B30006").getFirst(), "RED");
+        Assert.assertEquals(this.dropdownFactory.getPickColor("#B30006"), "RED");
     }
 
-    @Test(expected = DbcException.class)
+    @Test
     public void invalidPickColor() {
-        this.dropdownFactory.getPickColor("18");
+        Assert.assertNull(this.dropdownFactory.getPickColor("18"));
     }
 
     @Test

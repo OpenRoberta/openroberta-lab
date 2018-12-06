@@ -135,7 +135,7 @@ public abstract class AbstractWeDoVisitor<V> implements ILanguageVisitor<V>, IWe
 
     @Override
     public V visitColorConst(ColorConst<V> colorConst) {
-        JSONObject o = mk(C.EXPR).put(C.EXPR, "COLOR_CONST").put(C.VALUE, colorConst.getColor().getFirst());
+        JSONObject o = mk(C.EXPR).put(C.EXPR, "COLOR_CONST").put(C.VALUE, colorConst.getColorName());
         return app(o);
     }
 

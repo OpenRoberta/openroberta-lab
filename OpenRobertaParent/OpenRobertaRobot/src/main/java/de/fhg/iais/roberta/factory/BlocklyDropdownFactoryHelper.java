@@ -10,7 +10,6 @@ import org.json.JSONObject;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.util.DropDown;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -34,14 +33,16 @@ public class BlocklyDropdownFactoryHelper {
         throw new DbcException("Invalid " + modes.getName() + ": " + modeName);
     }
 
-    public static DropDown getColors(JSONObject robotDescription) {
-        DropDown dropdownItem = new DropDown();
-        JSONObject colors = robotDescription.getJSONObject("color");
-        for ( String key : colors.keySet() ) {
-            String value = colors.getString(key);
-            dropdownItem.add(key, value);
+    public static Map<String, String> getColors(JSONObject robotDescription) {
+        Map<String, String> colorDefs = new HashMap<>();
+        JSONObject colors = robotDescription.optJSONObject("color");
+        if ( colors != null ) {
+            for ( String colourName : colors.keySet() ) {
+                String rgbValue = colors.getString(colourName);
+                colorDefs.put(rgbValue, colourName);
+            }
         }
-        return dropdownItem;
+        return colorDefs;
     }
 
     public static Map<String, String> getModes(JSONObject robotDescription) {

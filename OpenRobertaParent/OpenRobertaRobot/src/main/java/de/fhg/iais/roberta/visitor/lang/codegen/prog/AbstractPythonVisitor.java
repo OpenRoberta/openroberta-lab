@@ -76,7 +76,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append("'" + colorConst.getColor().getFirst().toLowerCase() + "'");
+        this.sb.append("'" + colorConst.getColorName().toLowerCase() + "'");
         return null;
     }
 

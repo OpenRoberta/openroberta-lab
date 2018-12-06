@@ -128,7 +128,7 @@ public abstract class AbstractSimVisitor<V> implements ILanguageVisitor<V> {
 
     @Override
     public V visitColorConst(ColorConst<V> colorConst) {
-        this.sb.append("createConstant(CONST." + colorConst.getKind().getName() + ", CONST.COLOR_ENUM." + colorConst.getColor().getFirst() + ")");
+        this.sb.append("createConstant(CONST." + colorConst.getKind().getName() + ", CONST.COLOR_ENUM." + colorConst.getColorName() + ")");
         return null;
     }
 

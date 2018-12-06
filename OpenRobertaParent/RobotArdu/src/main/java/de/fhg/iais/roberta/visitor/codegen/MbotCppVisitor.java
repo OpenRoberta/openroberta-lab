@@ -136,7 +136,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
             return null;
         }
         if ( lightAction.getRgbLedColor().getClass().equals(ColorConst.class) ) {
-            String hexValue = ((ColorConst<Void>) lightAction.getRgbLedColor()).getColor().getSecond();
+            String hexValue = ((ColorConst<Void>) lightAction.getRgbLedColor()).getRgbValue();
             hexValue = hexValue.split("#")[1];
             this.sb.append(", ");
             this.sb.append("0x");
@@ -500,7 +500,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     private void generateSensors() {
-        LinkedHashSet<Integer> usedInfraredPort = new LinkedHashSet<Integer>();
+        LinkedHashSet<Integer> usedInfraredPort = new LinkedHashSet<>();
         for ( final UsedSensor usedSensor : this.usedSensors ) {
             switch ( usedSensor.getType() ) {
                 case SC.BUTTON:

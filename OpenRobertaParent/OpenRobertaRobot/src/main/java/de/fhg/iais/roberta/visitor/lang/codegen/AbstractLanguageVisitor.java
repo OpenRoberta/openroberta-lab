@@ -135,8 +135,7 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append(colorConst.getColor().getFirst());
-        return null;
+        throw new UnsupportedOperationException("should be overriden in a robot-specific class");
     }
 
     @Override

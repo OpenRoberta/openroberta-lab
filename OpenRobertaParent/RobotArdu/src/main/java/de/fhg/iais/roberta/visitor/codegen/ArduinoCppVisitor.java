@@ -110,7 +110,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
             this.sb.append("digitalWrite(_led_" + lightAction.getPort() + ", " + lightAction.getMode().getValues()[0] + ");");
         } else {
             if ( lightAction.getRgbLedColor().getClass().equals(ColorConst.class) ) {
-                String hexValue = ((ColorConst<Void>) lightAction.getRgbLedColor()).getColor().getSecond();
+                String hexValue = ((ColorConst<Void>) lightAction.getRgbLedColor()).getRgbValue();
                 hexValue = hexValue.split("#")[1];
                 int R = Integer.decode("0x" + hexValue.substring(0, 2));
                 int G = Integer.decode("0x" + hexValue.substring(2, 4));

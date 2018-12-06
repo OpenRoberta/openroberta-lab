@@ -129,7 +129,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        String value = colorConst.getColor().getFirst();
+        String value = colorConst.getColorName();
         if ( !value.equals("NONE") ) {
             value = "INPUT_" + value + "COLOR";
         } else {

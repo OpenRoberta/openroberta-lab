@@ -518,7 +518,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        String fullColor = colorConst.getColor().getSecond().substring(1, 7);
+        String fullColor = colorConst.getRgbValue().substring(1, 7);
         String R = fullColor.substring(0, 2);
         String G = fullColor.substring(2, 4);
         String B = fullColor.substring(4, 6);
