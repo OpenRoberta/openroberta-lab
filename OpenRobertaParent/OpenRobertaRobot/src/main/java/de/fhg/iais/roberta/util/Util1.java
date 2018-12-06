@@ -79,7 +79,7 @@ public class Util1 {
     public static void loadYAMLRecursive(String prefixForDebug, JSONObject accumulator, String uri) {
         Assert.notNull(accumulator, "accumulating JSONObject must not be null");
         Assert.nonEmptyString(uri, "URI is null or empty at %s", prefixForDebug);
-        InputStream in = getInputStream(true, uri);
+        InputStream in = getInputStream(false, uri);
         try {
             Map<?, ?> map = (Map<?, ?>) YAML.load(in);
             JSONObject toAdd = new JSONObject(map);
@@ -113,7 +113,7 @@ public class Util1 {
      */
     public static JSONObject loadYAML(String uri) {
         Assert.nonEmptyString(uri, "URI is null or empty");
-        InputStream in = getInputStream(true, uri);
+        InputStream in = getInputStream(false, uri);
         try {
             Map<?, ?> map = (Map<?, ?>) YAML.load(in);
             return new JSONObject(map);

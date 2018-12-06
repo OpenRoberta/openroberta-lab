@@ -36,7 +36,7 @@ public class VorwerkCompilerWorkflow extends AbstractCompilerWorkflow {
         }
         try {
             VorwerkConfiguration configuration = (VorwerkConfiguration) data.getRobotConfiguration();
-            this.vorwerkCommunicator.updateRobotInformation(configuration.getIpAddress(), configuration.getUserName(), configuration.getPassword());
+            this.vorwerkCommunicator.setCredentials(configuration.getIpAddress(), configuration.getUserName(), configuration.getPassword());
             generatedSourceCode =
                 VorwerkPythonVisitor.generate((VorwerkConfiguration) data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true, language);
             LOG.info("vorwerk code generated");
@@ -51,14 +51,13 @@ public class VorwerkCompilerWorkflow extends AbstractCompilerWorkflow {
         storeGeneratedProgram(token, programName, ".py");
         if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
             try {
-                final String compilerBinDir = pluginProperties.getCompilerBinDir();
-                final String compilerResourcesDir = pluginProperties.getCompilerResourceDir();
                 final String tempDir = pluginProperties.getTempDir();
                 String programLocation = tempDir + token + File.separator + programName + File.separator + "src";
-                workflowResult = this.vorwerkCommunicator.uploadFile(programLocation, programName + ".py");
+                this.vorwerkCommunicator.uploadFile(programLocation, programName + ".py");
+                workflowResult = Key.COMPILERWORKFLOW_SUCCESS;
             } catch ( Exception e ) {
                 LOG.error("Uploading the generated program to " + this.vorwerkCommunicator.getIp() + " failed", e);
-                workflowResult = Key.VORWERK_PROGRAM_UPLOAD_ERROR_CONNECTION_NOT_ESTABLISHED;
+                workflowResult = Key.VORWERK_PROGRAM_UPLOAD_ERROR;
             }
         }
     }

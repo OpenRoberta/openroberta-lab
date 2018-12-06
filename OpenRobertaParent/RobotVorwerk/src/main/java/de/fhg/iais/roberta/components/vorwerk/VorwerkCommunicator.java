@@ -2,22 +2,25 @@ package de.fhg.iais.roberta.components.vorwerk;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
-import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class VorwerkCommunicator {
+    private static final Logger LOG = LoggerFactory.getLogger(VorwerkCommunicator.class);
+
     public final String pathToCompilerResourcesDir;
     private String ip;
     private String username;
@@ -25,78 +28,135 @@ public class VorwerkCommunicator {
     //ports on the robot
     int sshPort = 22;
 
-    public VorwerkCommunicator(String ip, String username, String password, String pathToCompilerResourcesDir) {
-        this.ip = ip;
-        this.username = username;
-        this.password = password;
+    public VorwerkCommunicator(String pathToCompilerResourcesDir) {
         this.pathToCompilerResourcesDir = pathToCompilerResourcesDir;
     }
 
-    public VorwerkCommunicator(String pathToCompilerResourcesDir) {
-        this.pathToCompilerResourcesDir = pathToCompilerResourcesDir;
+    public void setCredentials(String ip, String username, String password) {
+        this.ip = ip;
+        this.username = username;
+        this.password = password;
+    }
+
+    /**
+     * upload a file. If not successful, throw an exception
+     */
+    public void uploadFile(String path, String programName) throws Exception {
+        List<String> fileNames = new ArrayList<>();
+        fileNames.add("__init__.py");
+        fileNames.add("blockly_methods.py");
+        fileNames.add("hal.py");
+
+        Session session = null;
+        try {
+            session = createSession(this.username, this.ip, 22, this.password);
+            sshCommand("rm " + programName);
+            sshCommand("rm -r roberta");
+            sshCommand("mkdir roberta");
+            for ( String fname : fileNames ) {
+                copyLocalToRemote(session, this.pathToCompilerResourcesDir + "roberta", "roberta", fname);
+            }
+            copyLocalToRemote(session, path, ".", programName);
+            sshCommand("python " + programName);
+            sshCommand("rm " + programName);
+            sshCommand("rm -r roberta");
+        } finally {
+            try {
+                if ( session != null ) {
+                    session.disconnect();
+                }
+            } catch ( Exception e ) {
+                // OK
+            }
+        }
     }
 
     public String getIp() {
         return this.ip;
     }
 
-    public Key uploadFile(String path, String programName) throws Exception {
-
-        Key key = null;
-        List<String> fileNames = new ArrayList<String>();
-        fileNames.add("__init__.py");
-        fileNames.add("blockly_methods.py");
-        fileNames.add("hal.py");
-
-        Session session = createSession(this.username, this.ip, 22, this.password);
+    /**
+     * create an ssh command. If not successful, throw an exception
+     */
+    private void sshCommand(String command) throws Exception {
+        Session session = null;
+        Channel channel = null;
         try {
-            key = sshCommand("rm " + programName);
-            key = sshCommand("rm -r roberta");
-            key = sshCommand("mkdir roberta");
-            if ( key == Key.VORWERK_PROGRAM_UPLOAD_SUCCESSFUL ) {
-                for ( String fname : fileNames ) {
-                    copyLocalToRemote(session, this.pathToCompilerResourcesDir + "roberta", "roberta", fname);
+            session = createSession(this.username, this.ip, 22, this.password);
+            channel = session.openChannel("exec");
+            ((ChannelExec) channel).setCommand(command);
+            channel.setInputStream(null);
+            ((ChannelExec) channel).setErrStream(System.err);
+            InputStream in = channel.getInputStream();
+            channel.connect();
+
+            //show messages on the ssh channel
+            byte[] tmp = new byte[1024];
+            while ( true ) {
+                while ( in.available() > 0 ) {
+                    int i = in.read(tmp, 0, 1024);
+                    if ( i < 0 ) {
+                        break;
+                    }
                 }
-                copyLocalToRemote(session, path, ".", programName);
-                key = sshCommand("python " + programName);
-                key = sshCommand("rm " + programName);
-                key = sshCommand("rm -r roberta");
+                if ( channel.isClosed() ) {
+                    if ( in.available() > 0 ) {
+                        continue;
+                    }
+                    break;
+                }
+                Thread.sleep(1000);
             }
-            session.disconnect();
-        } catch ( Exception e ) {
-            session.disconnect();
-            key = Key.VORWERK_PROGRAM_UPLOAD_ERROR_CONNECTION_NOT_ESTABLISHED;
-        }
-        return key;
-    }
-
-    private static Session createSession(String user, String host, int port, String password) {
-        try {
-            JSch jsch = new JSch();
-
-            Properties config = new java.util.Properties();
-            config.put("StrictHostKeyChecking", "no");
-
-            Session session = jsch.getSession(user, host, port);
-            session.setConfig(config);
-            session.setPassword(password);
-            session.connect(5000);
-
-            return session;
-        } catch ( Exception e ) {
-            System.out.println(e);
-            return null;
+        } finally {
+            try {
+                if ( channel != null ) {
+                    channel.disconnect();
+                }
+            } catch ( Exception e ) {
+                // OK
+            }
+            try {
+                if ( session != null ) {
+                    session.disconnect();
+                }
+            } catch ( Exception e ) {
+                // OK
+            }
         }
     }
 
-    private static void copyLocalToRemote(Session session, String from, String to, String fileName) throws JSchException, IOException {
-        boolean ptimestamp = true;
-        from = from + "/" + fileName;
+    /**
+     * create a session. If not successful, throw an exception
+     *
+     * @return the session; throw exception if creation is not successful
+     */
+    private static Session createSession(String user, String host, int port, String password) throws Exception {
+        JSch jsch = new JSch();
 
-        // exec 'scp -t rfile' remotely
-        String command = "scp " + (ptimestamp ? "-p" : "") + " -t " + to;
+        Properties config = new java.util.Properties();
+        config.put("StrictHostKeyChecking", "no");
+
+        Session session = jsch.getSession(user, host, port);
+        session.setConfig(config);
+        session.setPassword(password);
+        session.connect(5000);
+
+        return session;
+    }
+
+    /**
+     * copy local file to remote. If not successful, throw an exception
+     */
+    private static void copyLocalToRemote(Session session, String from, String to, String fileName) throws Exception {
+        Channel channel = null;
+        InputStream fis = null;
         try {
-            Channel channel = session.openChannel("exec");
+            boolean ptimestamp = true;
+            from = from + "/" + fileName;
+
+            // exec 'scp -t rfile' remotely
+            String command = "scp " + (ptimestamp ? "-p" : "") + " -t " + to;
+            channel = session.openChannel("exec");
             ((ChannelExec) channel).setCommand(command);
 
             // get I/O streams for remote scp
@@ -104,10 +164,7 @@ public class VorwerkCommunicator {
             InputStream in = channel.getInputStream();
 
             channel.connect();
-
-            if ( checkAck(in) != 0 ) {
-                System.exit(0);
-            }
+            checkAck(in);
 
             File _lfile = new File(from);
 
@@ -118,9 +175,7 @@ public class VorwerkCommunicator {
                 command += " " + _lfile.lastModified() / 1000 + " 0\n";
                 out.write(command.getBytes());
                 out.flush();
-                if ( checkAck(in) != 0 ) {
-                    System.exit(0);
-                }
+                checkAck(in);
             }
 
             // send "C0644 filesize filename", where filename should not include '/'
@@ -131,19 +186,13 @@ public class VorwerkCommunicator {
             } else {
                 command += from;
             }
-
             command += "\n";
             out.write(command.getBytes());
             out.flush();
+            checkAck(in);
 
-            if ( checkAck(in) != 0 ) {
-                System.exit(0);
-            }
-
-            // send a content of lfile
-
-            InputStream fis = new FileInputStream(from);
-
+            // send content of lfile
+            fis = new FileInputStream(from);
             byte[] buf = new byte[1024];
             while ( true ) {
                 int len = fis.read(buf, 0, buf.length);
@@ -157,111 +206,42 @@ public class VorwerkCommunicator {
             buf[0] = 0;
             out.write(buf, 0, 1);
             out.flush();
-
-            if ( checkAck(in) != 0 ) {
-                System.exit(0);
+            checkAck(in);
+        } finally {
+            try {
+                if ( channel != null ) {
+                    channel.disconnect();
+                }
+            } catch ( Exception e ) {
+                // OK
             }
-            out.close();
-
             try {
                 if ( fis != null ) {
                     fis.close();
                 }
-            } catch ( Exception ex ) {
-                System.out.println(ex);
+            } catch ( Exception e ) {
+                // OK
             }
-
-            channel.disconnect();
-        } catch ( Exception e ) {
-            System.out.println(e.getMessage());
         }
     }
 
-    public static int checkAck(InputStream in) throws IOException {
+    /**
+     * check the response from a channel. Return if ok; if an error occured, throw an exception
+     *
+     * @throws Exception
+     */
+    private static void checkAck(InputStream in) throws Exception {
         int b = in.read();
-        // b may be 0 for success,
-        //          1 for error,
-        //          2 for fatal error,
-        //         -1
-        if ( b == 0 ) {
-            return b;
+        // b may be 0 for success, 1 for error, 2 for fatal error, -1 for success (???)
+        if ( b == 0 || b == -1 ) {
+            return;
         }
-        if ( b == -1 ) {
-            return b;
-        }
-
-        if ( b == 1 || b == 2 ) {
-            StringBuffer sb = new StringBuffer();
-            int c;
-            do {
-                c = in.read();
-                sb.append((char) c);
-            } while ( c != '\n' );
-            if ( b == 1 ) { // error
-                System.out.print(sb.toString());
-            }
-            if ( b == 2 ) { // fatal error
-                System.out.print(sb.toString());
-            }
-        }
-        return b;
-    }
-
-    private Key sshCommand(String command) {
-        try {
-            Session session = createSession(this.username, this.ip, 22, this.password);
-            if ( session != null ) {
-                //open channel and send command
-                Channel channel = session.openChannel("exec");
-                ((ChannelExec) channel).setCommand(command);
-
-                //set streams
-                channel.setInputStream(null);
-                ((ChannelExec) channel).setErrStream(System.err);
-                InputStream in = channel.getInputStream();
-
-                //establish channel connection
-                channel.connect();
-
-                //show messages on the ssh channel
-                byte[] tmp = new byte[1024];
-                while ( true ) {
-                    while ( in.available() > 0 ) {
-                        int i = in.read(tmp, 0, 1024);
-                        if ( i < 0 ) {
-                            break;
-                        }
-                        //System.out.print(new String(tmp, 0, i));
-                    }
-                    if ( channel.isClosed() ) {
-                        if ( in.available() > 0 ) {
-                            continue;
-                        }
-                        // LOG.info("exit-status: " + channel.getExitStatus());
-                        break;
-                    }
-                    try {
-                        Thread.sleep(1000);
-                    } catch ( Exception ee ) {
-                    }
-                }
-
-                //disconnect from channel and session
-                channel.disconnect();
-                session.disconnect();
-                return Key.VORWERK_PROGRAM_UPLOAD_SUCCESSFUL;
-            } else {
-                return Key.VORWERK_PROGRAM_UPLOAD_ERROR_SSH_CONNECTION;
-            }
-        } catch ( Exception e ) {
-            System.out.println(e);
-            return Key.VORWERK_PROGRAM_UPLOAD_ERROR_SSH_CONNECTION;
-        }
-    }
-
-    public void updateRobotInformation(String ip, String username, String password) {
-        this.ip = ip;
-        this.username = username;
-        this.password = password;
+        StringBuffer sb = new StringBuffer();
+        int c;
+        do {
+            c = in.read();
+            sb.append((char) c);
+        } while ( c != '\n' );
+        throw new DbcException("Error. code: " + b + " msg: " + sb.toString());
     }
 }

@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 
-import de.fhg.iais.roberta.util.Statistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,34 +68,22 @@ public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
     }
 
     private Injectable<DbSession> getInjectableDbSessionState() {
-        return new Injectable<DbSession>() {
-            @Override
-            public DbSession getValue() {
-                return OraDataProvider.this.sessionFactoryWrapper.getSession();
-            }
+        return () -> {
+            return OraDataProvider.this.sessionFactoryWrapper.getSession();
         };
     }
 
     private Injectable<HttpSessionState> getInjectableHttpSessionState() {
-        return new Injectable<HttpSessionState>() {
-
-            @Override
-            public HttpSessionState getValue() {
-                HttpSession httpSession = OraDataProvider.this.servletRequest.getSession(true);
-                HttpSessionState httpSessionState = (HttpSessionState) httpSession.getAttribute(OPEN_ROBERTA_STATE);
-                if ( httpSessionState == null ) {
-                    long sessionNumber = SESSION_COUNTER.incrementAndGet();
-                    LOG.info("session #" + sessionNumber + " created");
-                    httpSessionState =
-                        HttpSessionState.init(
-                            OraDataProvider.this.robotCommunicator,
-                            OraDataProvider.this.robotPluginMap,
-                            OraDataProvider.this.serverProperties,
-                            sessionNumber);
-                    httpSession.setAttribute(OPEN_ROBERTA_STATE, httpSessionState);
-                }
-                return httpSessionState;
+        return () -> {
+            HttpSession httpSession = OraDataProvider.this.servletRequest.getSession(true);
+            HttpSessionState httpSessionState = (HttpSessionState) httpSession.getAttribute(OPEN_ROBERTA_STATE);
+            if ( httpSessionState == null ) {
+                long sessionNumber = SESSION_COUNTER.incrementAndGet();
+                LOG.info("session #" + sessionNumber + " created");
+                httpSessionState = HttpSessionState.init(this.robotCommunicator, this.robotPluginMap, this.serverProperties, sessionNumber);
+                httpSession.setAttribute(OPEN_ROBERTA_STATE, httpSessionState);
             }
+            return httpSessionState;
         };
     }
 }
