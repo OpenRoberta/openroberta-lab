@@ -31,7 +31,7 @@ public class MethodIfReturn<V> extends Method<V> {
 
     private MethodIfReturn(Expr<V> oraCondition, BlocklyType oraReturnType, Expr<V> oraReturnValue, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("METHOD_IF_RETURN"), properties, comment);
-        Assert.isTrue(oraCondition != null && oraCondition.isReadOnly() && returnType != null && oraReturnValue != null && oraReturnValue.isReadOnly());
+        Assert.isTrue(oraCondition != null && oraCondition.isReadOnly() && oraReturnType != null && oraReturnValue != null && oraReturnValue.isReadOnly());
         this.oraCondition = oraCondition;
         this.oraReturnType = oraReturnType;
         this.oraReturnValue = oraReturnValue;
