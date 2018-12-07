@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-12-03 19:40:41.797133",
+		"lastupdated": "2018-12-07 13:39:44.120732",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1457,12 +1457,12 @@
 	"TO": "to",
 	"GEARED_MOTOR": "grared motor",
 	"LED_MATRIX": "LED matrix",
-	"ACTION_IN": "input",
-	"SENSOR_OUT": "output",
-	"ACTION_DIGITALIN": "input digital",
-	"SENSOR_DIGITALOUT": "output digital",
-	"ACTION_ANALOGIN": "input analog",
-	"SENSOR_ANALOGOUT": "output analog",
+	"ACTION_IN": "actuator",
+	"SENSOR_OUT": "sensor",
+	"ACTION_DIGITALIN": "actuator digital",
+	"SENSOR_DIGITALOUT": "sensor digital",
+	"ACTION_ANALOGIN": "actuator analog",
+	"SENSOR_ANALOGOUT": "sensor analog",
 	"DIGITALIN_TOOLTIP": "Represents any actuator connected to a digital pin.",
 	"DIGITALOUT_TOOLTIP": "Represents any sensor connected to a digital.",
 	"ANALOGIN_TOOLTIP": "Represents any actuator connected to an analog pin",
