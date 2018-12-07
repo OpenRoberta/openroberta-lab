@@ -4,6 +4,10 @@ package de.fhg.iais.roberta.syntax;
  * This class contains all Blockly name constants that are used in the XML representation of the block.
  */
 public final class BlocklyConstants {
+    private BlocklyConstants() {
+        // no objects :-)
+    }
+
     public static final String ADD = "ADD";
     public static final String ELSE = "ELSE";
     public static final String THEN = "THEN";
@@ -15,7 +19,7 @@ public final class BlocklyConstants {
     public static final String FOR = "FOR";
     public static final String BY = "BY";
     public static final String DO = "DO";
-    public static final String WAIT = "WAIT";
+    public static final String WAIT = "WAIT"; //NOSONAR : clash with method "wait" defined in superclass "java.lang.Object" is no problem
     public static final String COLOUR = "COLOUR";
     public static final String AT1 = "AT1";
     public static final String AT2 = "AT2";

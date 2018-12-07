@@ -150,12 +150,12 @@ public class VorwerkCommunicator {
     private static void copyLocalToRemote(Session session, String from, String to, String fileName) throws Exception {
         Channel channel = null;
         InputStream fis = null;
-        try {
+        try { //NOSONAR : proposes to use try-resource, but Channel doesn't implement Closeable
             boolean ptimestamp = true;
             from = from + "/" + fileName;
 
             // exec 'scp -t rfile' remotely
-            String command = "scp " + (ptimestamp ? "-p" : "") + " -t " + to;
+            String command = "scp " + (ptimestamp ? "-p" : "") + " -t " + to; //NOSONAR : ptimestamp used to enhance readability, even if it is constant
             channel = session.openChannel("exec");
             ((ChannelExec) channel).setCommand(command);
 

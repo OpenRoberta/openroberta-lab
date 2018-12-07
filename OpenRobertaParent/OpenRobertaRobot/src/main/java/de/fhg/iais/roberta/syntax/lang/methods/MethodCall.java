@@ -26,24 +26,24 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
  * method with return value<br/>
  */
 public class MethodCall<V> extends Method<V> {
-    private final String methodName;
-    private final ExprList<V> parameters;
-    private final ExprList<V> parametersValues;
-    private final BlocklyType returnType;
+    private final String oraMethodName;
+    private final ExprList<V> oraParameters;
+    private final ExprList<V> oraParametersValues;
+    private final BlocklyType oraReturnType;
 
     private MethodCall(
-        String methodName,
-        ExprList<V> parameters,
-        ExprList<V> parametersValues,
-        BlocklyType returnType,
+        String oraMethodName,
+        ExprList<V> oraParameters,
+        ExprList<V> oraParametersValues,
+        BlocklyType oraReturnType,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
         super(BlockTypeContainer.getByName("METHOD_CALL"), properties, comment);
-        Assert.isTrue(!methodName.equals("") && parameters.isReadOnly() && parametersValues.isReadOnly());
-        this.methodName = methodName;
-        this.parameters = parameters;
-        this.parametersValues = parametersValues;
-        this.returnType = returnType;
+        Assert.isTrue(!oraMethodName.equals("") && oraParameters.isReadOnly() && oraParametersValues.isReadOnly());
+        this.oraMethodName = oraMethodName;
+        this.oraParameters = oraParameters;
+        this.oraParametersValues = oraParametersValues;
+        this.oraReturnType = oraReturnType;
         setReadOnly();
     }
 
@@ -65,40 +65,43 @@ public class MethodCall<V> extends Method<V> {
         BlocklyType returnType,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        return new MethodCall<V>(methodName, parameters, parametersValues, returnType, properties, comment);
+        return new MethodCall<>(methodName, parameters, parametersValues, returnType, properties, comment);
     }
 
     /**
      * @return the methodName
      */
+    @Override
     public String getMethodName() {
-        return this.methodName;
+        return this.oraMethodName;
     }
 
     /**
      * @return the parameters
      */
+    @Override
     public ExprList<V> getParameters() {
-        return this.parameters;
+        return this.oraParameters;
     }
 
     /**
      * @return the parametersValues
      */
     public ExprList<V> getParametersValues() {
-        return this.parametersValues;
+        return this.oraParametersValues;
     }
 
     /**
      * @return the return_
      */
+    @Override
     public BlocklyType getReturnType() {
-        return this.returnType;
+        return this.oraReturnType;
     }
 
     @Override
     public String toString() {
-        return "MethodCall [" + this.methodName + ", " + this.parameters + ", " + this.parametersValues + ", " + this.returnType + "]";
+        return "MethodCall [" + this.oraMethodName + ", " + this.oraParameters + ", " + this.oraParametersValues + ", " + this.oraReturnType + "]";
     }
 
     @Override
@@ -133,11 +136,11 @@ public class MethodCall<V> extends Method<V> {
         Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
         mutation.setName(getMethodName());
-        if ( this.returnType != BlocklyType.VOID ) {
-            mutation.setOutputType(this.returnType.getBlocklyName());
+        if ( this.oraReturnType != BlocklyType.VOID ) {
+            mutation.setOutputType(this.oraReturnType.getBlocklyName());
         }
-        if ( !this.parameters.get().isEmpty() ) {
-            for ( Expr<V> parameter : this.parameters.get() ) {
+        if ( !this.oraParameters.get().isEmpty() ) {
+            for ( Expr<V> parameter : this.oraParameters.get() ) {
                 Arg arg = new Arg();
                 arg.setName(((Var<V>) parameter).getValue());
                 arg.setType(((Var<V>) parameter).getVarType().getBlocklyName());
@@ -146,7 +149,7 @@ public class MethodCall<V> extends Method<V> {
         }
         jaxbDestination.setMutation(mutation);
         int counter = 0;
-        for ( Expr<V> parameterValue : this.parametersValues.get() ) {
+        for ( Expr<V> parameterValue : this.oraParametersValues.get() ) {
             Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.ARG + counter, parameterValue);
             counter++;
         }
