@@ -253,7 +253,6 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
             indexOfFunct.getParam().get(1).visit(this);
             this.sb.append(")");
         }
-        this.sb.append(")");
         return null;
     }
 
