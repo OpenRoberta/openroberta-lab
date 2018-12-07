@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
+import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
@@ -20,6 +21,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
+import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
@@ -161,13 +163,47 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
-        String number = ((NumConst<Void>) listRepeat.getParam().get(0)).getValue();
-        int repeat = Integer.parseInt(((NumConst<Void>) listRepeat.getParam().get(1)).getValue());
-        this.sb.append("{");
-        for ( int i = 0; i < repeat - 1; i++ ) {
-            this.sb.append(number).append(", ");
+        if ( listRepeat.getParam().get(0).getClass().equals(NumConst.class) ) {
+            String number = ((NumConst<Void>) listRepeat.getParam().get(0)).getValue();
+            int repeat = Integer.parseInt(((NumConst<Void>) listRepeat.getParam().get(1)).getValue());
+            this.sb.append("{");
+            for ( int i = 0; i < repeat - 1; i++ ) {
+                this.sb.append(number).append(", ");
+            }
+            this.sb.append(number).append("}");
+            return null;
         }
-        this.sb.append(number).append("}");
+        if ( listRepeat.getParam().get(0).getClass().equals(ColorConst.class) ) {
+            String hexValue = ((ColorConst<Void>) listRepeat.getParam().get(0)).getRgbValue();
+            hexValue = hexValue.split("#")[1];
+            int R = Integer.decode("0x" + hexValue.substring(0, 2));
+            int G = Integer.decode("0x" + hexValue.substring(2, 4));
+            int B = Integer.decode("0x" + hexValue.substring(4, 6));
+            int repeat = Integer.parseInt(((NumConst<Void>) listRepeat.getParam().get(1)).getValue());
+            this.sb.append("{");
+            for ( int i = 0; i < repeat - 1; i++ ) {
+                this.sb.append("RGB(").append(R).append(", ").append(G).append(", ").append(B).append(")").append(", ");
+            }
+            this.sb.append("RGB(").append(R).append(", ").append(G).append(", ").append(B).append(")").append("}");
+        }
+        if ( listRepeat.getParam().get(0).getClass().equals(StringConst.class) ) {
+            String value = ((StringConst<Void>) listRepeat.getParam().get(0)).getValue();
+            int repeat = Integer.parseInt(((NumConst<Void>) listRepeat.getParam().get(1)).getValue());
+            this.sb.append("{");
+            for ( int i = 0; i < repeat - 1; i++ ) {
+                this.sb.append(value).append(", ");
+            }
+            this.sb.append(value).append("}");
+        }
+        if ( listRepeat.getParam().get(0).getClass().equals(BoolConst.class) ) {
+            boolean value = ((BoolConst<Void>) listRepeat.getParam().get(0)).getValue();
+            int repeat = Integer.parseInt(((NumConst<Void>) listRepeat.getParam().get(1)).getValue());
+            this.sb.append("{");
+            for ( int i = 0; i < repeat - 1; i++ ) {
+                this.sb.append(value).append(", ");
+            }
+            this.sb.append(value).append("}");
+        }
         return null;
     }
 
