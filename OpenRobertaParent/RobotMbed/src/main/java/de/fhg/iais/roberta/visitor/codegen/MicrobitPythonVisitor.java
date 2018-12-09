@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import de.fhg.iais.roberta.components.Configuration;
@@ -35,6 +34,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
@@ -595,9 +595,9 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        this.sb.append("\"\".join(");
+        this.sb.append("\"\".join(str(arg) for arg in [");
         textJoinFunct.getParam().visit(this);
-        this.sb.append(")");
+        this.sb.append("])");
         return null;
     }
 
