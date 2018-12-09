@@ -8,6 +8,7 @@ define([ 'exports', 'comm', 'log', 'jquery' ], function(exports, COMM, LOG, $) {
      */
     function fn3(fnToBeWrapped, message) {
         var wrap = function(p0, p1, p2) {
+            COMM.errorNum = 0;
             var markerTIMER = '[[TIME]] ';
             var start = new Date();
             try {

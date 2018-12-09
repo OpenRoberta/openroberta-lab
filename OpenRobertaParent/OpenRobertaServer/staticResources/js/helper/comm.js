@@ -39,6 +39,7 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
     }
     exports.get = get;
 
+    exports.errorNum = 0;
     /**
      * POST a JSON object as ENTITY and expect a JSON object as response.
      */
@@ -94,11 +95,11 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
             url : URL,
             //success : WRAP.fn3(successFn, "list success"),
             error : onError,
-            complete: completeFn
+            complete : completeFn
         });
     }
     exports.listRobotsFromAgent = listRobotsFromAgent;
-    
+
     function sendProgramHexToAgent(programHex, robotPort, programName, signature, commandLine, successFn) {
         var URL = 'http://127.0.0.1:8991/upload';
         var board = 'arduino:avr:uno';
@@ -140,7 +141,7 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
                 403 : errorFn,
                 404 : errorFn
             },
-            error: function(jqXHR){
+            error : function(jqXHR) {
             }
         });
 

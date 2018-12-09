@@ -91,7 +91,7 @@ require.config({
         'robertaLogic.program' : '../app/simulation/robertaLogic/program',
         'robertaLogic.timer' : '../app/simulation/robertaLogic/timer',
         'robertaLogic.gyro' : '../app/simulation/robertaLogic/gyro',
-        
+
         'interpreter.constants' : '../app/wedoInterpreter/constants',
         'interpreter.interpreter' : '../app/wedoInterpreter/interpreter',
         'interpreter.nativeInterface' : '../app/wedoInterpreter/nativeInterface',
@@ -129,14 +129,15 @@ require.config({
     }
 });
 
-require([ 'require', 'wrap', 'jquery', 'jquery-cookie', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
-        'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'cookieDisclaimer.controller', 'menu.controller','multSim.controller', 'user.controller',
-        'robot.controller', 'program.controller', 'progSim.controller', 'progCode.controller', 'progDelete.controller', 'progHelp.controller',
-        'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller', 'progTutorial.controller', 'tutorialList.controller', 'volume-meter', 'user.model', 'webview.controller' ], function(
-        require) {
+require([ 'require', 'wrap', 'log', 'jquery', 'jquery-cookie', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
+        'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'cookieDisclaimer.controller', 'menu.controller', 'multSim.controller',
+        'user.controller', 'robot.controller', 'program.controller', 'progSim.controller', 'progCode.controller', 'progDelete.controller',
+        'progHelp.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
+        'progTutorial.controller', 'tutorialList.controller', 'volume-meter', 'user.model', 'webview.controller' ], function(require) {
 
     $ = require('jquery', 'jquery-cookie');
     WRAP = require('wrap');
+    LOG = require('log');
     COMM = require('comm');
     confDeleteController = require('confDelete.controller');
     configurationController = require('configuration.controller');
@@ -191,7 +192,7 @@ function init() {
         confDeleteController.init();
         progShareController.init();
         logListController.init();
-        
+
         programController.init();
         configurationController.init();
         progHelpController.init();
@@ -202,7 +203,7 @@ function init() {
         menuController.init();
         tutorialController.init();
         multSimController.init();
-        
+
         cookieDisclaimer.init();
         $(".cover").fadeOut(100, function() {
             if (!guiStateController.getStartWithoutPopup()) {
@@ -217,7 +218,7 @@ function init() {
                 }
             }
         });
-        
+
         $(".pace").fadeOut(500);
     });
 }
@@ -225,19 +226,27 @@ function init() {
 /**
  * Handle server errors
  */
-function handleServerErrors() {
-    // TODO more?        
-    guiStateController.setPing(false);
-    $('#message').attr('lkey', Blockly.Msg.SERVER_NOT_AVAILABLE);
-    $('#message').html(Blockly.Msg.SERVER_NOT_AVAILABLE);
-    $('#show-message').modal({
-        backdrop : 'static',
-        keyboard : false
-    })
-    $('#show-message :button').hide();
-    $('#show-message').on('hidden.bs.modal', function(e) {
-        // $("#show-message").modal("show");
-        guiStateController.setPing(true);
-    });
-    $("#show-message").modal("show");
+ALLOWED_PING_NUM = 5
+
+function handleServerErrors(jqXHR) {
+    // TODO more?  
+    LOG.error("Client connection issue: " + jqXHR.status);
+    if (this.url === "/rest/ping") {
+        COMM.errorNum += 1;
+    }
+    if (this.url !== "/rest/ping" || COMM.errorNum > ALLOWED_PING_NUM) {
+        guiStateController.setPing(false);
+        $('#message').attr('lkey', Blockly.Msg.SERVER_NOT_AVAILABLE);
+        $('#message').html(Blockly.Msg.SERVER_NOT_AVAILABLE);
+        $('#show-message').modal({
+            backdrop : 'static',
+            keyboard : false
+        })
+        $('#show-message :button').hide();
+        $('#show-message').one('hidden.bs.modal', function(e) {
+            // $("#show-message").modal("show");
+            guiStateController.setPing(true);
+        });
+        $("#show-message").modal("show");
+    }
 }
