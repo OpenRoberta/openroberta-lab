@@ -49,6 +49,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
+import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
@@ -372,30 +373,50 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
-        // TODO
-        //        this.sb.append("BlocklyMethods.listsGetSubList( ");
-        //        getSubFunct.getParam().get(0).visit(this);
-        //        this.sb.append(", ");
-        //        IndexLocation where1 = (IndexLocation) getSubFunct.getStrParam().get(0);
-        //        this.sb.append(getEnumCode(where1));
-        //        if ( where1 == IndexLocation.FROM_START || where1 == IndexLocation.FROM_END ) {
-        //            this.sb.append(", ");
-        //            getSubFunct.getParam().get(1).visit(this);
-        //        }
-        //        this.sb.append(", ");
-        //        IndexLocation where2 = (IndexLocation) getSubFunct.getStrParam().get(1);
-        //        this.sb.append(getEnumCode(where2));
-        //        if ( where2 == IndexLocation.FROM_START || where2 == IndexLocation.FROM_END ) {
-        //            this.sb.append(", ");
-        //            if ( getSubFunct.getParam().size() == 3 ) {
-        //                getSubFunct.getParam().get(2).visit(this);
-        //            } else {
-        //                getSubFunct.getParam().get(1).visit(this);
-        //            }
-        //        }
-        //        this.sb.append(")");
+        if ( getSubFunct.getFunctName() == FunctionNames.GET_SUBLIST ) {
+            getSubFunct.getParam().get(0).visit(this);
+            this.sb.append("[");
+            switch ( (IndexLocation) getSubFunct.getStrParam().get(0) ) {
+                case FIRST:
+                    this.sb.append("0:");
+                    break;
+                case FROM_END:
+                    this.sb.append("-");
+                    getSubFunct.getParam().get(1).visit(this);
+                    this.sb.append(":");
+                    break;
+                case FROM_START:
+                    getSubFunct.getParam().get(1).visit(this);
+                    this.sb.append(":");
+                    break;
+                default:
+                    break;
+            }
+            switch ( (IndexLocation) getSubFunct.getStrParam().get(1) ) {
+                case LAST:
+                    this.sb.append("-1");
+                    break;
+                case FROM_END:
+                    this.sb.append("-");
+                    try {
+                        getSubFunct.getParam().get(2).visit(this);
+                    } catch ( IndexOutOfBoundsException e ) { // means that our start index does not have a variable
+                        getSubFunct.getParam().get(1).visit(this);
+                    }
+                    break;
+                case FROM_START:
+                    try {
+                        getSubFunct.getParam().get(2).visit(this);
+                    } catch ( IndexOutOfBoundsException e ) { // means that our start index does not have a variable
+                        getSubFunct.getParam().get(1).visit(this);
+                    }
+                    break;
+                default:
+                    break;
+            }
+            this.sb.append("]");
+        }
         return null;
-
     }
 
     @Override
