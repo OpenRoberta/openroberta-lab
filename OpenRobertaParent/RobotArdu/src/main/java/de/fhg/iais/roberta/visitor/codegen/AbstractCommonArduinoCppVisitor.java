@@ -251,8 +251,8 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
             this.sb.append(")");
         } else {
             indexOfFunct.getParam().get(1).visit(this);
-            this.sb.append(")");
         }
+        this.sb.append(")");
         return null;
     }
 
@@ -331,48 +331,6 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
         this.sb.append(")");
         return null;
     }
-    /*
-    @Override
-    public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        if ( mathOnListFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            this.sb.append("null");
-            return null;
-        }
-        switch ( mathOnListFunct.getFunctName() ) {
-            case SUM:
-                this.sb.append("rob.arrSum(");
-                break;
-            case MIN:
-                this.sb.append("rob.arrMin(");
-                break;
-            case MAX:
-                this.sb.append("rob.arrMax(");
-                break;
-            case AVERAGE:
-                this.sb.append("rob.arrMean(");
-                break;
-            case MEDIAN:
-                this.sb.append("rob.arrMedian(");
-                break;
-            case STD_DEV:
-                this.sb.append("rob.arrStandardDeviatioin(");
-                break;
-            case RANDOM:
-                this.sb.append("rob.arrRand(");
-                break;
-            case MODE:
-                this.sb.append("rob.arrMode(");
-                break;
-            default:
-                break;
-        }
-        arrayLen((Var<Void>) mathOnListFunct.getParam().get(0));
-        this.sb.append(", ");
-        mathOnListFunct.getParam().get(0).visit(this);
-        this.sb.append(")");
-        return null;
-    }
-    */
 
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {

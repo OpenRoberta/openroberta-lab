@@ -266,7 +266,6 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
             return null;
         }
         String operation = "";
-        String ending = "";
         switch ( (ListElementOperations) listGetIndex.getElementOperation() ) {
             case GET:
                 operation = "_getListElementByIndex(";
@@ -278,7 +277,6 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
                 break;
             case REMOVE:
                 operation = "_removeListElementByIndex(";
-                ending = ";";
                 break;
             case SET:
                 break;
@@ -318,7 +316,6 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
             default:
                 break;
         }
-        this.sb.append(ending);
         return null;
     }
 
