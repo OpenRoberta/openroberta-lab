@@ -22,6 +22,7 @@ Assuming that the environment variable DB_PARENTDIR holds the name of the direct
 directories (e.g. contains the directory db-$VERSION), then OpenRoberta is started by
 
 ```bash
+cd $GITREPO/Docker;                                                             # where the compose files are :-)
 docker run -v $DB_PARENTDIR:/opt/db rbudde/openroberta_upgrade:$BRANCH-$VERSION # upgrade the db
 docker-compose -p ora -f dc-server-db-server.yml up &                           # start server and database server
 docker-compose -p ora -f dc-server-db-server.yml stop                           # stop both servers later  

@@ -295,11 +295,11 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
                 this.sb.append(", 2) != 0");
                 break;
             case PRIME:
-                this.sb.append("rob.isPrime(");
+                this.sb.append("isPrimeD(");
                 mathNumPropFunct.getParam().get(0).visit(this);
                 break;
             case WHOLE:
-                this.sb.append("rob.isWhole(");
+                this.sb.append("isWholeD(");
                 mathNumPropFunct.getParam().get(0).visit(this);
                 break;
             case POSITIVE:

@@ -9,7 +9,7 @@ public class MathNumberPropertyTest {
 
     @Test
     public void Test() throws Exception {
-        final String a = "(fmod(0,2)==0)(fmod(0,2)!=0)rob.isPrime(0)rob.isWhole(0)(0>0)(0<0)(fmod(0,0)==0)";
+        final String a = "(fmod(0,2)==0)(fmod(0,2)!=0)isPrimeD(0)isWholeD(0)(0>0)(0<0)(fmod(0,0)==0)";
 
         this.h.assertCodeIsOk(a, "/syntax/math/math_number_property.xml", false);
     }

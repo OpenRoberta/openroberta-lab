@@ -324,7 +324,7 @@ public class Util1 {
     public static List<String> readResourceLines(String resourceName) {
         try {
             return Files.readAllLines(Paths.get(Util1.class.getResource(resourceName).toURI()));
-        } catch ( IOException | URISyntaxException e ) {
+        } catch ( Exception e ) {
             throw new DbcException("read from resource failed for: " + resourceName, e);
         }
     }
