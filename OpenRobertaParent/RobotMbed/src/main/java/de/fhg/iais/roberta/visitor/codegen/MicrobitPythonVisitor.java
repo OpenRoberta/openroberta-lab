@@ -89,6 +89,8 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 public final class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMbedVisitor<Void> {
     private final MbedUsedHardwareCollectorVisitor usedHardwareVisitor;
     private final Configuration configuration;
+    private boolean medianUsed;
+    private boolean stdDevUsed;
 
     /**
      * initialize the Python code generator visitor.
@@ -104,6 +106,16 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         this.usedHardwareVisitor = new MbedUsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
         this.loopsLabels = this.usedHardwareVisitor.getloopsLabelContainer();
         this.usedGlobalVarInFunctions = this.usedHardwareVisitor.getMarkedVariablesAsGlobal();
+        programPhrases.forEach(e -> {
+            e.forEach(e1 -> {
+                if ( e1.toString().contains("MEDIAN") ) {
+                    this.medianUsed = true;
+                }
+                if ( e1.toString().contains("STD_DEV") ) {
+                    this.stdDevUsed = true;
+                }
+            });
+        });
     }
 
     /**
@@ -534,14 +546,17 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
             case SUM:
                 this.sb.append("sum(");
                 mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
                 break;
             case MIN:
                 this.sb.append("min(");
                 mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
                 break;
             case MAX:
                 this.sb.append("max(");
                 mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
                 break;
             case AVERAGE:
                 this.sb.append("float(sum(");
@@ -551,19 +566,18 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
                 this.sb.append(")");
                 break;
             case MEDIAN:
-                // TODO
-                //                this.sb.append("BlocklyMethods.medianOnList(");
-                //                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append("_median(");
+                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
                 break;
             case STD_DEV:
-                // TODO
-                //                this.sb.append("BlocklyMethods.standardDeviatioin(");
-                //                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append("_standard_deviation(");
+                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
                 break;
             case RANDOM:
-                // TODO
-                //                this.sb.append("BlocklyMethods.randOnList(");
-                //                mathOnListFunct.getParam().get(0).visit(this);
+                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append("[0]");
                 break;
             case MODE:
                 // TODO
@@ -573,7 +587,6 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
             default:
                 break;
         }
-        this.sb.append(")");
         return null;
     }
 
@@ -734,6 +747,56 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         return null;
     }
 
+    private void generateMedianComputeFunction() {
+        this.sb.append("def _median(l):");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("l = sorted(l)");
+        nlIndent();
+        this.sb.append("l_len = len(l)");
+        nlIndent();
+        this.sb.append("if l_len < 1:");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("return None");
+        decrIndentation();
+        nlIndent();
+        this.sb.append("if l_len % 2 == 0:");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("return ( l[int( (l_len-1) / 2)] + l[int( (l_len+1) / 2)] ) / 2.0");
+        decrIndentation();
+        nlIndent();
+        this.sb.append("else:");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("return l[int( (l_len-1) / 2)]");
+        decrIndentation();
+        decrIndentation();
+        nlIndent();
+        nlIndent();
+    }
+
+    private void generateStandardDeviationComputeFunction() {
+        this.sb.append("def _standard_deviation(l):");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("mean = float(sum(l)) / len(l)");
+        nlIndent();
+        this.sb.append("sd = 0");
+        nlIndent();
+        this.sb.append("for i in l:");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("sd += (i - mean)*(i - mean)");
+        decrIndentation();
+        nlIndent();
+        this.sb.append("return math.sqrt(sd / len(l))");
+        decrIndentation();
+        nlIndent();
+        nlIndent();
+    }
+
     @Override
     protected void generateProgramPrefix(boolean withWrapping) {
         if ( !withWrapping ) {
@@ -752,6 +815,13 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         }
         this.sb.append("class BreakOutOfALoop(Exception): pass\n");
         this.sb.append("class ContinueLoop(Exception): pass\n\n");
+
+        if ( this.medianUsed ) {
+            generateMedianComputeFunction();
+        }
+        if ( this.stdDevUsed ) {
+            generateStandardDeviationComputeFunction();
+        }
 
         this.sb.append("timer1 = microbit.running_time()");
 
