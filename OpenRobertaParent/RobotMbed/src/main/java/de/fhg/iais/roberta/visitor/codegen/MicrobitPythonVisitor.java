@@ -463,11 +463,30 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         listGetIndex.getParam().get(0).visit(this);
         if ( getEnumCode(listGetIndex.getElementOperation()).equals("get") ) {
             this.sb.append("[");
-            listGetIndex.getParam().get(1).visit(this);
-            this.sb.append("]");
-        } else if ( getEnumCode(listGetIndex.getElementOperation()).equals("remove") ) {
+        } else {
             this.sb.append(".pop(");
-            listGetIndex.getParam().get(1).visit(this);
+        }
+        switch ( (IndexLocation) listGetIndex.getLocation() ) {
+            case RANDOM: // backwards compatibility
+            case FIRST:
+                this.sb.append("0");
+                break;
+            case FROM_END:
+                this.sb.append("-");
+                listGetIndex.getParam().get(1).visit(this);
+                break;
+            case FROM_START:
+                listGetIndex.getParam().get(1).visit(this);
+                break;
+            case LAST:
+                this.sb.append("-1");
+                break;
+            default:
+                break;
+        }
+        if ( getEnumCode(listGetIndex.getElementOperation()).equals("get") ) {
+            this.sb.append("]");
+        } else {
             this.sb.append(")");
         }
         return null;
@@ -478,9 +497,35 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         if ( getEnumCode(listSetIndex.getElementOperation()).equals("set") ) {
             listSetIndex.getParam().get(0).visit(this);
             this.sb.append("[");
-            listSetIndex.getParam().get(1).visit(this);
+        } else if ( getEnumCode(listSetIndex.getElementOperation()).equals("insert") ) {
+            listSetIndex.getParam().get(0).visit(this);
+            this.sb.append(".insert(");
+        }
+        switch ( (IndexLocation) listSetIndex.getLocation() ) {
+            case RANDOM: // backwards compatibility
+            case FIRST:
+                this.sb.append("0");
+                break;
+            case FROM_END:
+                this.sb.append("-");
+                listSetIndex.getParam().get(2).visit(this);
+                break;
+            case FROM_START:
+                listSetIndex.getParam().get(2).visit(this);
+                break;
+            case LAST:
+                this.sb.append("-1");
+                break;
+            default:
+                break;
+        }
+        if ( getEnumCode(listSetIndex.getElementOperation()).equals("set") ) {
             this.sb.append("] = ");
-            listSetIndex.getParam().get(2).visit(this);
+            listSetIndex.getParam().get(1).visit(this);
+        } else if ( getEnumCode(listSetIndex.getElementOperation()).equals("insert") ) {
+            this.sb.append(", ");
+            listSetIndex.getParam().get(1).visit(this);
+            this.sb.append(")");
         }
         return null;
     }
