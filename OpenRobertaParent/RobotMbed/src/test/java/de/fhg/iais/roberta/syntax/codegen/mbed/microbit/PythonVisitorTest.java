@@ -16,7 +16,7 @@ public class PythonVisitorTest {
             + "import microbit\n"
             + "import random\n"
             + "import math\n\n"
-            + "_GOLDEN_RATIO = (1 + 5 ** 0.5) / 2\n"
+            + "_GOLDEN_RATIO = (1 + 5 ** 0.5) / 2\n\n\n"
             + "class BreakOutOfALoop(Exception): pass\n"
             + "class ContinueLoop(Exception): pass\n\n"
             + "timer1 = microbit.running_time()\n";
@@ -36,7 +36,7 @@ public class PythonVisitorTest {
                 + "import random\n"
                 + "import math\n"
                 + "\n"
-                + "_GOLDEN_RATIO = (1 + 5 ** 0.5) / 2\n"
+                + "_GOLDEN_RATIO = (1 + 5 ** 0.5) / 2\n\n\n"
                 + "class BreakOutOfALoop(Exception): pass\n"
                 + "class ContinueLoop(Exception): pass\n"
                 + "\n"

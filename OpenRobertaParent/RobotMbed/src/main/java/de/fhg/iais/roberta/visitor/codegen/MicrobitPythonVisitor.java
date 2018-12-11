@@ -89,7 +89,6 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
  */
 public final class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMbedVisitor<Void> {
     private final MbedUsedHardwareCollectorVisitor usedHardwareVisitor;
-    private final Configuration configuration;
     private boolean medianUsed;
     private boolean stdDevUsed;
 
@@ -102,8 +101,6 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
      */
     private MicrobitPythonVisitor(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
-
-        this.configuration = brickConfiguration;
         this.usedHardwareVisitor = new MbedUsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
         this.loopsLabels = this.usedHardwareVisitor.getloopsLabelContainer();
         this.usedGlobalVarInFunctions = this.usedHardwareVisitor.getMarkedVariablesAsGlobal();
@@ -129,6 +126,12 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         Assert.notNull(brickConfiguration);
 
         final MicrobitPythonVisitor astVisitor = new MicrobitPythonVisitor(brickConfiguration, programPhrases, 0);
+        astVisitor.generateCode(withWrapping);
+        return astVisitor.sb.toString();
+    }
+
+    public static String generate(ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
+        final MicrobitPythonVisitor astVisitor = new MicrobitPythonVisitor(null, programPhrases, 0);
         astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
     }
@@ -261,8 +264,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     @Override
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
         String userDefined = keysSensor.getPort();
-        String port = this.configuration.getConfigurationComponent(userDefined).getPortName();
-        this.sb.append("microbit." + port + ".is_pressed()");
+        this.sb.append("microbit." + userDefined + ".is_pressed()");
         return null;
     }
 
@@ -293,11 +295,10 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
         String userDefined = accelerometerSensor.getPort();
-        String port = this.configuration.getConfigurationComponent(userDefined).getPortName();
-        if ( port.equals(SC.STRENGTH) ) {
+        if ( userDefined.equals(SC.STRENGTH) ) {
             this.sb.append("math.sqrt(microbit.accelerometer.get_x()**2 + microbit.accelerometer.get_y()**2 + microbit.accelerometer.get_z()**2)");
         } else {
-            this.sb.append("microbit.accelerometer.get_").append(port).append("()");
+            this.sb.append("microbit.accelerometer.get_").append(userDefined.toLowerCase()).append("()");
         }
         return null;
     }
@@ -325,8 +326,6 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
             nlIndent();
             this.sb.append("global " + String.join(", ", this.usedGlobalVarInFunctions));
-        } else {
-            addPassIfProgramIsEmpty();
         }
         return null;
     }
@@ -351,14 +350,6 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     @Override
     public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
         this.sb.append("\"" + gestureSensor.getMode().toString().toLowerCase().replace("_", " ") + "\" == microbit.accelerometer.current_gesture()");
-        return null;
-    }
-
-    @Override
-    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
-        this.sb.append("print(");
-        textPrintFunct.getParam().get(0).visit(this);
-        this.sb.append(")");
         return null;
     }
 
@@ -577,6 +568,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
                 this.sb.append(" % 2) == 1");
                 break;
             case PRIME:
+                this.sb.append("false # not implemented yet");
                 // TODO
                 //                this.sb.append("BlocklyMethods.isPrime(");
                 //                mathNumPropFunct.getParam().get(0).visit(this);
@@ -789,7 +781,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         displaySetPixelAction.getY().visit(this);
         this.sb.append(", ");
         displaySetPixelAction.getBrightness().visit(this);
-        this.sb.append(");");
+        this.sb.append(")");
         return null;
     }
 
@@ -871,7 +863,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         this.sb.append("import microbit\n");
         this.sb.append("import random\n");
         this.sb.append("import math\n\n");
-        this.sb.append("_GOLDEN_RATIO = (1 + 5 ** 0.5) / 2");
+        this.sb.append("_GOLDEN_RATIO = (1 + 5 ** 0.5) / 2\n\n");
 
         if ( this.usedHardwareVisitor.isRadioUsed() ) {
             this.sb.append("import radio\n\n");
@@ -1016,6 +1008,12 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
         // TODO implement with microbit serial write
+        return null;
+    }
+
+    @Override
+    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
+        // TODO Auto-generated method stub
         return null;
     }
 }
