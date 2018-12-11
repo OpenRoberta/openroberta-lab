@@ -45,8 +45,8 @@ public interface SC {
     String FLOAT = "FLOAT";
     String NONFLOAT = "NONFLOAT";
     String SLEEP = "SLEEP";
-    String PULSE_HIGH = "PULSE_HIGH";
-    String PULSE_LOW = "PULSE_LOW";
+    String PULSEHIGH = "PULSEHIGH";
+    String PULSELOW = "PULSELOW";
     String UP = "UP";
     String DOWN = "DOWN";
     String NONE = "NONE";

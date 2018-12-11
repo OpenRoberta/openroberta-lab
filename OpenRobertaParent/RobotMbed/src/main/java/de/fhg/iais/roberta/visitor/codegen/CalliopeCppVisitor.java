@@ -525,10 +525,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             case SC.ANALOG:
                 this.sb.append(".getAnalogValue()");
                 break;
-            case SC.PULSE_HIGH:
+            case SC.PULSEHIGH:
                 this.sb.append(".readPulseHigh()");
                 break;
-            case SC.PULSE_LOW:
+            case SC.PULSELOW:
                 this.sb.append(".readPulseLow()");
                 break;
             default:
