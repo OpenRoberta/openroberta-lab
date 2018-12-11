@@ -13,7 +13,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
-import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
@@ -29,7 +28,6 @@ import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
-import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
 
@@ -57,14 +55,8 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        if ( var.toString().contains("false, false") ) {
-            this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
-            this.sb.append(var.getName());
-            this.sb.append(var.getTypeVar().isArray() ? "[]" : "");
-        } else {
-            this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
-            this.sb.append(var.getName());
-        }
+        this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
+        this.sb.append(var.getName());
         return null;
     }
 
@@ -107,7 +99,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
         String sym = getBinaryOperatorSymbol(op);
         this.sb.append(whitespace() + sym + whitespace());
         if ( op == Op.TEXT_APPEND ) {
-            appendCastToStringIfBoolean(binary);
+            convertToString(binary);
             return null;
         } else if ( op == Op.DIVIDE ) {
             appendCastToFloat(binary);
@@ -132,13 +124,19 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
         this.sb.append(")");
     }
 
-    private void appendCastToStringIfBoolean(Binary<Void> binary) {
-        if ( binary.getRight().getVarType() == BlocklyType.BOOLEAN ) {
-            this.sb.append("rob.boolToString(");
-            generateSubExpr(this.sb, false, binary.getRight(), binary);
-            this.sb.append(")");
-        } else {
-            generateSubExpr(this.sb, false, binary.getRight(), binary);
+    private void convertToString(Binary<Void> binary) {
+        switch ( binary.getRight().getVarType() ) {
+            case BOOLEAN:
+            case NUMBER:
+            case NUMBER_INT:
+            case COLOR:
+                this.sb.append("String(");
+                generateSubExpr(this.sb, false, binary.getRight(), binary);
+                this.sb.append(")");
+                break;
+            default:
+                generateSubExpr(this.sb, false, binary.getRight(), binary);
+                break;
         }
     }
 
@@ -229,10 +227,6 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
         waitTimeStmt.getTime().visit(this);
         this.sb.append(");");
         return null;
-    }
-
-    protected void arrayLen(Var<Void> arr) {
-        this.sb.append("__" + arr.getValue() + "Len");
     }
 
     @Override

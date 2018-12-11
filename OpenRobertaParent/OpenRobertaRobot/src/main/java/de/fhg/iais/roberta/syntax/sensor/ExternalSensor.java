@@ -78,7 +78,6 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
         String modeName = helper.extractField(fields, BlocklyConstants.MODE, BlocklyConstants.DEFAULT);
         String slotName = helper.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.NO_SLOT);
         boolean isPortInMutation = (block.getMutation() != null) && (block.getMutation().getPort() != null);
-
         return new SensorMetaDataBean(factory.sanitizePort(portName), factory.getMode(modeName), factory.sanitizeSlot(slotName), isPortInMutation);
     }
 

@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.test.ardu.HelperArduinoForXmlTest;
 
-public class ArduinoListsTest {
+public class ArduinoControlTest {
     private final HelperArduinoForXmlTest arduinoHelper = new HelperArduinoForXmlTest();
 
     @Test
@@ -19,17 +19,6 @@ public class ArduinoListsTest {
         ConfigurationComponent led = new ConfigurationComponent("LED", true, "LED", BlocklyConstants.NO_SLOT, "L", ledPins);
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(led));
-        this.arduinoHelper.compareExistingAndGeneratedSource("ast/lists/arduino_lists_test.ino", "/ast/lists/arduino_lists_test.xml", builder.build());
+        this.arduinoHelper.compareExistingAndGeneratedSource("ast/control/arduino_loops_test.ino", "/ast/control/arduino_loops_test.xml", builder.build());
     }
-
-    @Test
-    public void listsOccuranceTest() throws Exception {
-        Map<String, String> ledPins = HelperArduinoForXmlTest.createMap("INPUT", "13");
-        ConfigurationComponent led = new ConfigurationComponent("LED", true, "LED", BlocklyConstants.NO_SLOT, "L", ledPins);
-        Configuration.Builder builder = new Configuration.Builder();
-        builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(led));
-        this.arduinoHelper
-            .compareExistingAndGeneratedSource("ast/lists/arduino_occurance_lists_test.ino", "/ast/lists/arduino_occurance_lists_test.xml", builder.build());
-    }
-
 }

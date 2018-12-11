@@ -142,7 +142,6 @@ public class HelperArduinoForXmlTest extends AbstractHelperForXmlTest {
     public static String readFileToString(String filename) {
         List<String> lines = Collections.emptyList();
         try {
-            System.out.println(filename);
             lines = Files.readAllLines(Paths.get(ClassLoader.getSystemResource(filename).toURI()));
         } catch ( IOException e ) {
             return "";

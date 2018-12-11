@@ -28,14 +28,12 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PulseSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.RfidSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
@@ -270,12 +268,6 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     }
 
     @Override
-    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        this.sb.append("meinEncoder.read()");
-        return null;
-    }
-
-    @Override
     public Void visitVoltageSensor(VoltageSensor<Void> potentiometer) {
         this.sb.append("((double)analogRead(_output_" + potentiometer.getPort() + "))*5/1024");
         return null;
@@ -299,45 +291,6 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     @Override
     public Void visitDropSensor(DropSensor<Void> dropSensor) {
         this.sb.append("analogRead(_S_" + dropSensor.getPort() + ")/10.24");
-        return null;
-    }
-
-    private void generatePinGetValue(UsedSensor usedSensor) {
-        this.sb.append("double _pinGetValue(int pinName, int mode) {");
-        incrIndentation();
-        nlIndent();
-        this.sb.append("pinMode(pinName, INPUT);");
-        nlIndent();
-        this.sb.append("switch ( mode ) {");
-        nlIndent();
-        incrIndentation();
-        this.sb.append("case _ANALOG:");
-        nlIndent();
-        this.sb.append("return (double) analogRead(pinName);");
-        decrIndentation();
-        nlIndent();
-        incrIndentation();
-        this.sb.append("case _DIGITAL:");
-        nlIndent();
-        this.sb.append("return (double) digitalRead(pinName);");
-        decrIndentation();
-        nlIndent();
-        this.sb.append("default:");
-        incrIndentation();
-        nlIndent();
-        this.sb.append("return -1.0;");
-        decrIndentation();
-        nlIndent();
-        decrIndentation();
-        this.sb.append("}");
-        nlIndent();
-        this.sb.append("}");
-        nlIndent();
-    }
-
-    @Override
-    public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
-        this.sb.append("_pinGetValue(" + pinGetValueSensor.getPort() + ", _" + pinGetValueSensor.getMode() + ")");
         return null;
     }
 
@@ -494,13 +447,6 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                 break;
             }
         }
-        for ( UsedSensor usedSensor : this.usedSensors ) {
-            if ( usedSensor.getType().equals(SC.PIN_VALUE) ) {
-                generatePinGetValue(usedSensor);
-                nlIndent();
-                break;
-            }
-        }
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponents() ) {
             if ( usedConfigurationBlock.getComponentType().equals(SC.ULTRASONIC) ) {
                 measureDistanceUltrasonicSensor(usedConfigurationBlock.getUserDefinedPortName());
@@ -554,10 +500,6 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                     this.sb.append("#include <IRremote.h>");
                     nlIndent();
                     break;
-                case SC.ENCODER:
-                    this.sb.append("#include <Encoder.h>");
-                    nlIndent();
-                    break;
                 case SC.RFID:
                     this.sb.append("#include <SPI.h>");
                     nlIndent();
@@ -602,15 +544,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                     throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
             }
         }
-        for ( UsedSensor usedSensor : this.usedSensors ) {
-            switch ( usedSensor.getType() ) {
-                case SC.PIN_VALUE:
-                    this.sb.append("#define _ANALOG 0\n#define _DIGITAL 1\n");
-                    break;
-                default:
-                    break;
-            }
-        }
+
         this.sb.append("#include <RobertaFunctions.h>   // Open Roberta library");
         nlIndent();
         if ( this.isListsUsed ) {
@@ -663,12 +597,6 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                 case SC.POTENTIOMETER:
                     break;
                 case SC.TEMPERATURE:
-                    break;
-                case SC.ENCODER:
-                    this.sb.append("pinMode(_SW_" + usedConfigurationBlock.getUserDefinedPortName() + ", INPUT);");
-                    nlIndent();
-                    this.sb.append("attachInterrupt(digitalPinToInterrupt(_SW_" + usedConfigurationBlock.getUserDefinedPortName() + "), Interrupt, CHANGE);");
-                    nlIndent();
                     break;
                 case SC.DROP:
                     break;
@@ -775,17 +703,6 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                     break;
                 case SC.TEMPERATURE:
                     this.sb.append("int _TMP36_" + blockName + " = ").append(cc.getProperty("OUTPUT")).append(";");
-                    nlIndent();
-                    break;
-                // TODO check if there is any block for "ENCODER" implemented!
-                case SC.ENCODER:
-                    this.sb.append("int _CLK_" + blockName + " = 6;");
-                    nlIndent();
-                    this.sb.append("int _DT_" + blockName + " = 5;");
-                    nlIndent();
-                    this.sb.append("int _SW_" + blockName + " = ").append(cc.getProperty("OUTPUT")).append(";");
-                    nlIndent();
-                    this.sb.append("Encoder _myEncoder_" + blockName + "(_DT_" + blockName + ", _CLK_" + blockName + ");");
                     nlIndent();
                     break;
                 case SC.DROP:

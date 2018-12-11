@@ -18,7 +18,6 @@ import de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
@@ -81,12 +80,8 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
             case S:
             case T:
                 return "";
-            case ARRAY:
-                return "std::list<double>";
             case ARRAY_NUMBER:
                 return "std::list<double>";
-            case ARRAY_STRING:
-                return "std::list<String>";
             case ARRAY_BOOLEAN:
                 return "std::list<bool>";
             case ARRAY_COLOUR:
@@ -103,8 +98,6 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
                 return "void";
             case COLOR:
                 return "unsigned int";
-            case CONNECTION:
-                return "int";
             default:
                 throw new IllegalArgumentException("unhandled type");
         }
@@ -180,20 +173,11 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        this.sb.append("myBob.setWhiteLeds(WHITE, WHITE);");
         return null;
     }
 
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        this.sb.append("myBob.setLed(2, OFF);");
-        this.sb.append("myBob.setLed(1, OFF);");
-        return null;
-    }
-
-    @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.sb.append("myBob.getIRSensor()");
         return null;
     }
 
