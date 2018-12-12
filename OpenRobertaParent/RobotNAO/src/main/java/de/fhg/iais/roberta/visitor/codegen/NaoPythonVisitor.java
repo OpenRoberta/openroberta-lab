@@ -138,6 +138,12 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         return astVisitor.sb.toString();
     }
 
+    public static String generate(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
+        NaoPythonVisitor astVisitor = new NaoPythonVisitor(null, phrasesSet, 0, null);
+        astVisitor.generateCode(withWrapping);
+        return astVisitor.sb.toString();
+    }
+
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
         this.sb.append("BlocklyMethods.rgb2hex(");
@@ -866,7 +872,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
         this.sb.append("h.setLanguage(\"");
-        this.sb.append(this.getLanguageString(setLanguageAction.getLanguage()));
+        this.sb.append(getLanguageString(setLanguageAction.getLanguage()));
         this.sb.append("\")");
         return null;
     }
@@ -1283,7 +1289,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         this.sb.append("from roberta import Hal\n");
         this.sb.append("from roberta import BlocklyMethods\n");
         this.sb.append("h = Hal()\n");
-        this.generateSensors();
+        generateSensors();
 
         if ( !this.loopsLabels.isEmpty() ) {
             nlIndent();
@@ -1304,7 +1310,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         this.sb.append(this.INDENT).append("except Exception as e:\n");
         this.sb.append(this.INDENT).append(this.INDENT).append("h.say(\"Error!\" + str(e))\n");
         this.sb.append(this.INDENT).append("finally:\n");
-        this.removeSensors();
+        removeSensors();
 
         this.sb.append(this.INDENT).append(this.INDENT).append("h.myBroker.shutdown()");
 
