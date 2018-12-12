@@ -12,4 +12,9 @@ public class Bob3SensorsTest {
         this.bob3Helper.compareExistingAndGeneratedSource("ast/sensors/bob3_sensors_test.ino", "/ast/sensors/bob3_sensors_test.xml");
     }
 
+    @Test
+    public void waitBlockTest() throws Exception {
+        this.bob3Helper.compareExistingAndGeneratedSource("ast/sensors/bob3_wait_test.ino", "/ast/sensors/bob3_wait_test.xml");
+    }
+
 }

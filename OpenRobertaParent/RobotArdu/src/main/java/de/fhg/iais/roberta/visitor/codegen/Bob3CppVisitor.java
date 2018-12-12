@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
@@ -172,16 +173,6 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        return null;
-    }
-
-    @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
         if ( pinTouchSensor.getSlot().equals("0") ) {
             this.sb.append("( myBob.getArm(" + pinTouchSensor.getPort() + ") > " + pinTouchSensor.getSlot() + " )");
@@ -260,6 +251,29 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
     @Override
     public Void visitRecallAction(RecallAction<Void> recallAction) {
         this.sb.append("recall()");
+        return null;
+    }
+
+    @Override
+    public Void visitLightAction(LightAction<Void> lightAction) {
+        this.sb.append("myBob.setWhiteLeds(WHITE, WHITE);");
+        return null;
+    }
+
+    @Override
+    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+        this.sb.append("myBob.setLed(2, OFF);");
+        this.sb.append("myBob.setLed(1, OFF);");
+        return null;
+    }
+
+    @Override
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        if ( lightSensor.getMode().equals("REFLEXION") ) {
+            this.sb.append("myBob.getIRSensor()");
+        } else {
+            this.sb.append("myBob.getIRLight()");
+        }
         return null;
     }
 
