@@ -1,7 +1,13 @@
 package de.fhg.iais.roberta.util.test.ev3;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
@@ -25,7 +31,7 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
         super(new Ev3LejosV0Factory(new PluginProperties("ev3lejosv1", "", "", Util1.loadProperties("classpath:ev3lejosv1.properties"))), makeConfiguration());
     }
 
-    private static Configuration makeConfiguration() {
+    public static Configuration makeConfiguration() {
         Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
         ConfigurationComponent motorA = new ConfigurationComponent("LARGE", true, "A", BlocklyConstants.NO_SLOT, "A", motorAproperties);
 
@@ -39,7 +45,7 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
         ConfigurationComponent motorD = new ConfigurationComponent("MEDIUM", true, "D", BlocklyConstants.NO_SLOT, "D", motorDproperties);
 
         final Configuration.Builder builder = new Configuration.Builder();
-        builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, motorC, motorD));
+        builder.setTrackWidth(18f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, motorC, motorD));
         Configuration configuration = builder.build();
         configuration.setRobotName("ev3lejosV1");
         return configuration;
@@ -118,6 +124,27 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
         String code = Ev3SimVisitor.generate(getRobotConfiguration(), transformer.getTree(), Language.ENGLISH);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
+    }
+
+    public static String readFileToString(String filename) {
+        List<String> lines = Collections.emptyList();
+        try {
+            lines = Files.readAllLines(Paths.get(ClassLoader.getSystemResource(filename).toURI()));
+        } catch ( IOException e ) {
+            return "";
+        } catch ( URISyntaxException e ) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for ( String line : lines ) {
+            sb.append(line);
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+    public void compareExistingAndGeneratedPythonSource(String sourceCodeFilename, String xmlFilename, Configuration configuration) throws Exception {
+        Assert.assertEquals(HelperEv3ForXmlTest.readFileToString(sourceCodeFilename), generatePython(xmlFilename, configuration) + "\n");
     }
 
 }
