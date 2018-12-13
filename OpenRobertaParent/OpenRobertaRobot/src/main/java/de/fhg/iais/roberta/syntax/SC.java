@@ -98,4 +98,6 @@ public interface SC {
     String ANALOG_INPUT = "ANALOG_INPUT";
     String DIGITAL_PIN = "DIGITAL_PIN";
     String IDONE = "IDONE";
+    String ANY = "ANY";
+    String ENTER = "ENTER";
 }

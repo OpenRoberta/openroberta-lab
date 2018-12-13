@@ -100,8 +100,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
 
         this.sb.append("(");
 
-        if ( (isVar && (varType.equals("STRING") || varType.equals("COLOR")))
-            || ((mode != null) && !mode.toString().equals("RED") && !mode.toString().equals("RGB")) ) {
+        if ( (isVar && (varType.equals("STRING"))) || ((mode != null) && !mode.toString().equals("RED") && !mode.toString().equals("RGB")) ) {
             toChar = ".c_str()";
         }
 
@@ -335,7 +334,20 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
 
     @Override
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
-        this.sb.append("bnr.buttonIsPressed(" + keysSensor.getPort() + ")");
+        switch ( keysSensor.getPort() ) {
+            case SC.LEFT:
+                this.sb.append("bnr.buttonIsPressed(1)");
+                break;
+            case SC.RIGHT:
+                this.sb.append("bnr.buttonIsPressed(3)");
+                break;
+            case SC.ANY:
+                this.sb.append("bnr.buttonIsPressed(123)");
+                break;
+            case SC.ENTER:
+                this.sb.append("bnr.buttonIsPressed(2)");
+                break;
+        }
         return null;
     }
 
@@ -351,14 +363,15 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
         switch ( colorSensor.getMode() ) {
             case SC.COLOUR:
                 this.sb.append("bnr.colorSensorColor(");
+                this.sb.append(colors);
                 this.sb.append(port);
                 this.sb.append(")");
                 break;
             case SC.RGB:
-                this.sb.append("bnr.colorSensorRGB(" + colors + port);
+                this.sb.append("{bnr.colorSensorRGB(" + colors + port);
                 this.sb.append(")[0], bnr.colorSensorRGB(" + colors + port);
                 this.sb.append(")[1], bnr.colorSensorRGB(" + colors + port);
-                this.sb.append(")[2]");
+                this.sb.append(")[2]}");
                 break;
             case SC.LIGHT:
                 this.sb.append("bnr.colorSensorLight(" + colors + port);
@@ -396,7 +409,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
                 throw new DbcException("Invalid Infrared Sensor Mode: " + infraredSensor.getMode());
         }
         if ( port.equals("BOTH") ) {
-            this.sb.append(infraredSensor.getPort() + ")");
+            this.sb.append("3)");
         } else {
             this.sb.append(port + ")");
         }
