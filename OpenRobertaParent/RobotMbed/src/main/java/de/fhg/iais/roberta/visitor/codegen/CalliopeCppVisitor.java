@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
@@ -57,6 +58,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
@@ -1138,6 +1140,19 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
         super.visitListSetIndex(listSetIndex);
         this.sb.append(";");
+        return null;
+    }
+
+    /*
+     * Artem Vinokurov 13.12.2018:
+     * There is something wrong with semicolon generation for calliope:
+     */
+    @Override
+    public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
+        super.visitListGetIndex(listGetIndex);
+        if ( ((ListElementOperations) listGetIndex.getElementOperation()).equals(ListElementOperations.REMOVE) ) {
+            this.sb.append(";");
+        }
         return null;
     }
 

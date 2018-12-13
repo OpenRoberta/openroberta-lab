@@ -73,7 +73,7 @@ public class HelperCalliopeForXmlTest extends de.fhg.iais.roberta.util.test.Abst
     }
 
     public void compareExistingAndGeneratedSource(String sourceCodeFilename, String xmlFilename) throws Exception {
-        Assert.assertEquals(HelperMicrobitForXmlTest.readFileToString(sourceCodeFilename), generateCpp(xmlFilename, new Configuration.Builder().build()));
+        Assert.assertEquals(HelperCalliopeForXmlTest.readFileToString(sourceCodeFilename), generateCpp(xmlFilename, new Configuration.Builder().build()));
     }
 
 }
