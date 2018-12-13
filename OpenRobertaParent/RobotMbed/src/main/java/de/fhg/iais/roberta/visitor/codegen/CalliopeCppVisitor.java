@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.visitor.codegen;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import org.apache.commons.text.WordUtils;
 
 import de.fhg.iais.roberta.components.Configuration;
@@ -37,6 +36,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
@@ -194,12 +194,18 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             this.sb.append("(int) ");
         }
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
+        final String sym;
+        if ( op.equals(Op.TEXT_APPEND) ) {
+            sym = "=";
+        } else {
+            sym = getBinaryOperatorSymbol(op);
+        }
 
-        final String sym = getBinaryOperatorSymbol(op);
         this.sb.append(whitespace() + sym + whitespace());
         switch ( op ) {
             case TEXT_APPEND:
-                this.sb.append("ManagedString(");
+                generateSubExpr(this.sb, false, binary.getLeft(), binary);
+                this.sb.append(" + ManagedString(");
                 generateSubExpr(this.sb, false, binary.getRight(), binary);
                 this.sb.append(")");
                 break;
@@ -1140,7 +1146,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         this.sb.append("_uBit.serial.send(");
         if ( serialWriteAction.getValue().getVarType().equals(BlocklyType.STRING) ) {
             serialWriteAction.getValue().visit(this);
-        } else if ( serialWriteAction.getValue().getVarType().equals(BlocklyType.COLOR)) {
+        } else if ( serialWriteAction.getValue().getVarType().equals(BlocklyType.COLOR) ) {
             LedColor<Void> color = (LedColor<Void>) serialWriteAction.getValue();
             this.sb.append("ManagedString(\"");
             this.sb.append(color.getRedChannel());

@@ -1,5 +1,14 @@
 package de.fhg.iais.roberta.util.test.mbed;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.List;
+
+import org.junit.Assert;
+
 import de.fhg.iais.roberta.components.CalliopeConfiguration;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.Calliope2016Factory;
@@ -44,6 +53,27 @@ public class HelperCalliopeForXmlTest extends de.fhg.iais.roberta.util.test.Abst
         final Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
         final String code = CalliopeCppVisitor.generate(brickConfiguration, transformer.getTree(), true);
         return code;
+    }
+
+    public static String readFileToString(String filename) {
+        List<String> lines = Collections.emptyList();
+        try {
+            lines = Files.readAllLines(Paths.get(ClassLoader.getSystemResource(filename).toURI()));
+        } catch ( IOException e ) {
+            return "";
+        } catch ( URISyntaxException e ) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for ( String line : lines ) {
+            sb.append(line);
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+    public void compareExistingAndGeneratedSource(String sourceCodeFilename, String xmlFilename) throws Exception {
+        Assert.assertEquals(HelperMicrobitForXmlTest.readFileToString(sourceCodeFilename), generateCpp(xmlFilename, new Configuration.Builder().build()));
     }
 
 }
