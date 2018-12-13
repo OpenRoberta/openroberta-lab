@@ -22,4 +22,9 @@ public class NaoListsTest {
     public void listsMathOnListTest() throws Exception {
         this.naoHelper.compareExistingAndGeneratedSource("lists/nao_lists_math_on_list_test.py", "/lists/nao_lists_math_on_list_test.xml");
     }
+
+    @Test
+    public void listsSublistTest() throws Exception {
+        this.naoHelper.compareExistingAndGeneratedSource("lists/nao_lists_sublist_test.py", "/lists/nao_lists_sublist_test.xml");
+    }
 }
