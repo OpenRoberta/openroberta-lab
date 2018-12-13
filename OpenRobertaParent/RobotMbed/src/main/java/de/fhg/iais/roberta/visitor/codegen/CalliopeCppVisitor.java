@@ -1133,8 +1133,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     }
 
     /*
-     * Artem Vinokurov 25.10.2018:
-     * I don't know why I am doing this, but it seems that without this a semicolon is lost, somehow...
+     * TODO: I don't know why I am doing this, but it seems that without this a semicolon is lost, somehow... Artem Vinokurov 25.10.2018
      */
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
@@ -1144,8 +1143,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     }
 
     /*
-     * Artem Vinokurov 13.12.2018:
-     * There is something wrong with semicolon generation for calliope:
+     * TODO: There is something wrong with semicolon generation for calliope. Artem Vinokurov 25.10.2018
      */
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {

@@ -12,4 +12,9 @@ public class CalliopeListsTest {
         this.calliopeHelper.compareExistingAndGeneratedSource("lists/calliope_lists_get_set_test.cpp", "/lists/calliope_lists_get_set_test.xml");
     }
 
+    @Test
+    public void calliopeFindFirstLastTest() throws Exception {
+        this.calliopeHelper
+            .compareExistingAndGeneratedSource("lists/calliope_lists_find_last_first_test.cpp", "/lists/calliope_lists_find_last_first_test.xml");
+    }
 }
