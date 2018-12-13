@@ -11,12 +11,12 @@ import java.util.Properties;
 
 import javax.ws.rs.core.Response;
 
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONObject;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -58,24 +58,24 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 @RunWith(MockitoJUnitRunner.class)
 public class CompilerWorkflowCommonIT {
     private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflowIT.class);
+    private static final boolean CROSSCOMPILER_CALL = true;
     private static final boolean SHOW_SUCCESS = false;
     private static final String RESOURCE_BASE = "/crossCompilerTests/common/";
 
     private static final String DEFAULT_DECL = Util1.readResourceContent(RESOURCE_BASE + "decl/default.xml");
-    private static final List<String> results = new ArrayList<>();
+    private static JSONObject ROBOTS;
+    private static JSONObject PROGS;
+    private static final List<String> RESULTS = new ArrayList<>();
 
-    private static RobotCommunicator robotCommunicator;
-    private static ServerProperties serverProperties;
-    private static String tempDir;
-    private static Map<String, IRobotFactory> pluginMap;
-    private static HttpSessionState httpSessionState;
+    private static RobotCommunicator ROBOT_COMMUNICATOR;
+    private static ServerProperties SERVER_PROPERTIES;
+    private static Map<String, IRobotFactory> PLUGIN_MAP;
+    private static HttpSessionState HTTP_SESSION_STATE;
 
     @Mock
     private DbSession dbSession;
     @Mock
     private SessionFactoryWrapper sessionFactoryWrapper;
-
-    private Response response; // store a REST response here
 
     private ClientProgram restProgram;
     private ClientAdmin restAdmin;
@@ -84,18 +84,19 @@ public class CompilerWorkflowCommonIT {
     public static void setupClass() throws Exception {
         Properties baseServerProperties = Util1.loadProperties(null);
         baseServerProperties.put("plugin.resourcedir", "..");
-        serverProperties = new ServerProperties(baseServerProperties);
-        tempDir = serverProperties.getTempDir();
-        // TODO: add a robotBasedir property to the openRoberta.properties. Make all pathes relative to that dir. Create special accessors. Change String to Path.
-        robotCommunicator = new RobotCommunicator();
-        pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties);
-        httpSessionState = HttpSessionState.init(robotCommunicator, pluginMap, serverProperties, 1);
+        SERVER_PROPERTIES = new ServerProperties(baseServerProperties);
+        ROBOT_COMMUNICATOR = new RobotCommunicator();
+        PLUGIN_MAP = ServerStarter.configureRobotPlugins(ROBOT_COMMUNICATOR, SERVER_PROPERTIES);
+        HTTP_SESSION_STATE = HttpSessionState.init(ROBOT_COMMUNICATOR, PLUGIN_MAP, SERVER_PROPERTIES, 1);
+        JSONObject testSpecification = Util1.loadYAML("classpath:/crossCompilerTests/common/testSpec.yml");
+        ROBOTS = testSpecification.getJSONObject("robots");
+        PROGS = testSpecification.getJSONObject("progs");
     }
 
     @AfterClass
     public static void printResults() {
         LOG.info("XXXXXXXXXX results of common compilations XXXXXXXXXX");
-        for ( String result : results ) {
+        for ( String result : RESULTS ) {
             LOG.info(result);
         }
 
@@ -103,20 +104,33 @@ public class CompilerWorkflowCommonIT {
 
     @Before
     public void setup() throws Exception {
-        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, robotCommunicator, serverProperties);
-        this.restAdmin = new ClientAdmin(robotCommunicator, serverProperties);
+        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, ROBOT_COMMUNICATOR, SERVER_PROPERTIES);
+        this.restAdmin = new ClientAdmin(ROBOT_COMMUNICATOR, SERVER_PROPERTIES);
         when(this.sessionFactoryWrapper.getSession()).thenReturn(this.dbSession);
         doNothing().when(this.dbSession).commit();
     }
 
     @Test
     public void testCommonPartOfNepo() throws Exception {
-        boolean resultAcc = true;
         LOG.info("XXXXXXXXXX START of the NEPO common compilations XXXXXXXXXX");
-        for ( RobotInfo info : RobotInfo.values() ) {
-            final String templateWithConfig = getTemplateWithConfigReplaced(info);
-            resultAcc = resultAcc & Util1.fileStreamOfResourceDirectory(RESOURCE_BASE + "prog"). //
-                filter(f -> f.endsWith(".xml")).map(f -> compileAfterProgramGenerated(info, templateWithConfig, f)).reduce(true, (a, b) -> a && b);
+        boolean resultAcc = true;
+        for ( String robotName : ROBOTS.keySet() ) {
+            JSONObject robot = ROBOTS.getJSONObject(robotName);
+            String robotDir = robot.getString("dir");
+            String templateWithConfig = getTemplateWithConfigReplaced(robotDir);
+            nextProg: for ( String progName : PROGS.keySet() ) {
+                JSONObject prog = PROGS.getJSONObject(progName);
+                JSONObject exclude = prog.optJSONObject("exclude");
+                if ( exclude != null ) {
+                    for ( String excludeRobot : exclude.keySet() ) {
+                        if ( excludeRobot.equals(robotName) ) {
+                            LOG.info("########## for " + robotName + " prog " + progName + " is excluded. Reason: " + exclude.getString(excludeRobot));
+                            continue nextProg; // skip this prog due to exclusion and check the next program
+                        }
+                    }
+                }
+                resultAcc = resultAcc && compileAfterProgramGenerated(robotName, templateWithConfig, progName + ".xml");
+            }
         }
         if ( resultAcc ) {
             LOG.info("XXXXXXXXXX all of the NEPO common compilations succeeded XXXXXXXXXX");
@@ -126,30 +140,37 @@ public class CompilerWorkflowCommonIT {
         }
     }
 
+    @Ignore
     @Test
     public void testShowGeneratedProgram() {
-        RobotInfo robot = RobotInfo.calliope2017;
+        String robot = "calliope2017";
+        String robotDir = ROBOTS.getJSONObject(robot).getString("dir");
         String templateName = "mathAndLists.xml";
-        final String template = getTemplateWithConfigReplaced(robot);
+        final String template = getTemplateWithConfigReplaced(robotDir);
         final String generatedProgram = generateFinalProgram(template, templateName);
         LOG.info("the generated program for robot " + robot + " with template " + templateName + " is:\n" + generatedProgram);
     }
 
-    private boolean compileAfterProgramGenerated(RobotInfo info, String template, String progNameWithXmlSuffix) throws DbcException {
+    private boolean compileAfterProgramGenerated(String robotName, String template, String progNameWithXmlSuffix) throws DbcException {
         String reason = "?";
         boolean result = false;
-        String robotName = info.name();
         logStart(robotName, progNameWithXmlSuffix);
         String token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
-        httpSessionState.setToken(token);
+        HTTP_SESSION_STATE.setToken(token);
         template = generateFinalProgram(template, progNameWithXmlSuffix);
         try {
-            setRobotTo(info.name());
-            JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileP','name':'prog','language':'de'}");
-            cmd.getJSONObject("data").put("program", template);
-            this.response = this.restProgram.command(httpSessionState, cmd);
-            result = checkEntityRc(this.response, "ok", "PROGRAM_INVALID_STATEMETNS");
-            reason = "response-info";
+            LOG.info("########## " + robotName + " - " + progNameWithXmlSuffix);
+            if ( CROSSCOMPILER_CALL ) {
+                setRobotTo(robotName);
+                org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileP','name':'prog','language':'de'}");
+                cmd.getJSONObject("data").put("program", template);
+                Response response = this.restProgram.command(HTTP_SESSION_STATE, cmd);
+                result = checkEntityRc(response, "ok", "PROGRAM_INVALID_STATEMETNS");
+                reason = "response-info";
+            } else {
+                result = true;
+                reason = "crosscomiler not called";
+            }
         } catch ( Exception e ) {
             LOG.error("ClientProgram failed", e);
             result = false;
@@ -157,6 +178,12 @@ public class CompilerWorkflowCommonIT {
         }
         log(result, robotName, progNameWithXmlSuffix, reason);
         return result;
+    }
+
+    private void setRobotTo(String robot) throws Exception {
+        Response response =
+            this.restAdmin.command(HTTP_SESSION_STATE, this.dbSession, JSONUtilForServer.mkD("{'cmd':'setRobot','robot':'" + robot + "'}"), null);
+        JSONUtilForServer.assertEntityRc(response, "ok", Key.ROBOT_SET_SUCCESS);
     }
 
     private void logStart(String name, String fullResource) {
@@ -171,7 +198,7 @@ public class CompilerWorkflowCommonIT {
             format = "      +++++++++++++++ Robot: %-15s compile file: %-60s succeeded =============== ]]]]]";
         } else {
             format = "      --------------- Robot: %-15s compile file: %-60s FAILED(" + reason + ") =============== ]]]]]";
-            showFailingProgram(httpSessionState.getToken());
+            showFailingProgram(HTTP_SESSION_STATE.getToken());
         }
         String msg = String.format(format, name, fullResource);
         if ( result ) {
@@ -181,21 +208,16 @@ public class CompilerWorkflowCommonIT {
         }
         if ( result ) {
             if ( SHOW_SUCCESS ) {
-                results.add(String.format("succ; %-15s; %-60s;", name, fullResource));
+                RESULTS.add(String.format("succ; %-15s; %-60s;", name, fullResource));
             }
         } else {
-            results.add(String.format("fail; %-15s; %-60s;", name, fullResource));
+            RESULTS.add(String.format("fail; %-15s; %-60s;", name, fullResource));
         }
     }
 
-    private void setRobotTo(String robot) throws Exception, JSONException {
-        this.response = this.restAdmin.command(httpSessionState, this.dbSession, JSONUtilForServer.mkD("{'cmd':'setRobot','robot':'" + robot + "'}"), null);
-        JSONUtilForServer.assertEntityRc(this.response, "ok", Key.ROBOT_SET_SUCCESS);
-    }
-
-    private static String getTemplateWithConfigReplaced(RobotInfo info) {
-        String template = Util1.readResourceContent(RESOURCE_BASE + "template/" + info.dirName + ".xml");
-        String defaultConfig = Util1.readResourceContent(RESOURCE_BASE + "conf/" + info.dirName + ".xml");
+    private static String getTemplateWithConfigReplaced(String robotDir) {
+        String template = Util1.readResourceContent(RESOURCE_BASE + "template/" + robotDir + ".xml");
+        String defaultConfig = Util1.readResourceContent(RESOURCE_BASE + "conf/" + robotDir + ".xml");
         final String templateWithConfig = template.replaceAll("\\[\\[conf\\]\\]", defaultConfig);
         return templateWithConfig;
     }
@@ -230,7 +252,7 @@ public class CompilerWorkflowCommonIT {
      */
     private static boolean checkEntityRc(Response response, String rc, String... acceptableErrorCodes) {
         de.fhg.iais.roberta.util.dbc.Assert.nonEmptyString(rc);
-        JSONObject entity = (JSONObject) response.getEntity();
+        org.codehaus.jettison.json.JSONObject entity = (org.codehaus.jettison.json.JSONObject) response.getEntity();
         String returnCode = entity.optString("rc", "");
         if ( rc.equals(returnCode) ) {
             return true;
@@ -249,7 +271,7 @@ public class CompilerWorkflowCommonIT {
 
     private static void showFailingProgram(String token) {
         try {
-            String tokenDir = tempDir + token;
+            String tokenDir = SERVER_PROPERTIES.getTempDir() + token;
             Util1.fileStreamOfFileDirectory(tokenDir).forEach(f -> showFailingProgramFromTokenDir(tokenDir, f));
         } catch ( Exception e ) {
             LOG.error("could not show the failing program. Probably the generation failed.");
@@ -270,26 +292,5 @@ public class CompilerWorkflowCommonIT {
             sb.append(String.format("%-4d %s", lineCounter++, sourceLine)).append("\n");
         }
         LOG.error("failing source from file: " + sourceFile + " is:\n" + sb.toString());
-    }
-
-    private static enum RobotInfo {
-        ev3lejosv1( "ev3" ),
-        ev3lejosv0( "ev3" ),
-        ev3dev( "ev3" ),
-        nxt( "nxt" ),
-        microbit( "microbit" ),
-        uno( "ardu" ),
-        nano( "ardu" ),
-        mega( "ardu" ),
-        nao( "nao" ),
-        bob3( "bob3" ),
-        calliope2017( "calliope" ),
-        calliope2016( "calliope" );
-
-        public final String dirName;
-
-        private RobotInfo(String dirName) {
-            this.dirName = dirName;
-        }
     }
 }

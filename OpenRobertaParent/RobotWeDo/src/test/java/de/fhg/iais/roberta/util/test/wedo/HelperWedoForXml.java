@@ -27,7 +27,7 @@ public class HelperWedoForXml extends AbstractHelperForXmlTest {
     Configuration configuration = makeConfiguration();
 
     public HelperWedoForXml() {
-        super(new WeDoFactory(new PluginProperties("wedo", "", "", Util1.loadProperties("classpath:wedo.properties"))), makeConfiguration());
+        super(new WeDoFactory(new PluginProperties("wedo", "", "", Util1.loadProperties("classpath:/wedo.properties"))), makeConfiguration());
     }
 
     public static Configuration makeConfiguration() {

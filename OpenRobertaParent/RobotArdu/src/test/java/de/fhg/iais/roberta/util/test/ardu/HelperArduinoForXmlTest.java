@@ -25,7 +25,7 @@ import de.fhg.iais.roberta.visitor.codegen.ArduinoCppVisitor;
 public class HelperArduinoForXmlTest extends AbstractHelperForXmlTest {
 
     public HelperArduinoForXmlTest() {
-        super(new UnoFactory(new PluginProperties("uno", "", "", Util1.loadProperties("classpath:uno.properties"))), makeConfiguration());
+        super(new UnoFactory(new PluginProperties("uno", "", "", Util1.loadProperties("classpath:/uno.properties"))), makeConfiguration());
     }
 
     private static Configuration makeConfiguration() {

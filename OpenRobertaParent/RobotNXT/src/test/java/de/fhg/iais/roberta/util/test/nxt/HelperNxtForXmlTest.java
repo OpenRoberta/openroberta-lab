@@ -29,7 +29,7 @@ import de.fhg.iais.roberta.visitor.codegen.NxtSimVisitor;
 public class HelperNxtForXmlTest extends AbstractHelperForXmlTest {
 
     public HelperNxtForXmlTest() {
-        super(new NxtFactory(new PluginProperties("nxt", "", "", Util1.loadProperties("classpath:nxt.properties"))), makeConfiguration());
+        super(new NxtFactory(new PluginProperties("nxt", "", "", Util1.loadProperties("classpath:/nxt.properties"))), makeConfiguration());
     }
 
     public static Configuration makeConfiguration() {

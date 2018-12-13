@@ -28,7 +28,7 @@ import de.fhg.iais.roberta.visitor.codegen.Ev3SimVisitor;
 public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
 
     public HelperEv3ForXmlTest() {
-        super(new Ev3LejosV0Factory(new PluginProperties("ev3lejosv1", "", "", Util1.loadProperties("classpath:ev3lejosv1.properties"))), makeConfiguration());
+        super(new Ev3LejosV0Factory(new PluginProperties("ev3lejosv1", "", "", Util1.loadProperties("classpath:/ev3lejosv1.properties"))), makeConfiguration());
     }
 
     public static Configuration makeConfiguration() {

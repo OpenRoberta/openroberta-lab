@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 public class NxtConfigurationTest {
-    NxtFactory factory = new NxtFactory(new PluginProperties("nxt", "", "", Util1.loadProperties("classpath:nxt.properties")));
+    NxtFactory factory = new NxtFactory(new PluginProperties("nxt", "", "", Util1.loadProperties("classpath:/nxt.properties")));
 
     @Test
     public void testRoundtrip() throws Exception {

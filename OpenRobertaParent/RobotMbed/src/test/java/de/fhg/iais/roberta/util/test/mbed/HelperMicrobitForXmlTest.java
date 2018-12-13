@@ -25,7 +25,7 @@ public class HelperMicrobitForXmlTest extends de.fhg.iais.roberta.util.test.Abst
 
     public HelperMicrobitForXmlTest() {
         super(
-            new MicrobitFactory(new PluginProperties("microbit", "", "", Util1.loadProperties("classpath:microbit.properties"))),
+            new MicrobitFactory(new PluginProperties("microbit", "", "", Util1.loadProperties("classpath:/microbit.properties"))),
             new MicrobitConfiguration.Builder().build());
     }
 

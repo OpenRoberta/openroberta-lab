@@ -13,7 +13,7 @@ import java.util.Set;
 import javax.ws.rs.core.Response;
 
 import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONObject;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
@@ -48,8 +48,8 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
  * The tests in this class are integration tests. The front end is <b>not</b> tested. The tests deliver programs (either NEPO programs encoded in XML or native
  * programs encoded as expected by the crosscompilers) to the various crosscompilers and check whether the expected response is returned ("ok", "error").<br>
  * <br>
- * In src/test/crossCompilerTests for each robot "x" a directory with name "x" is expected. This directory contains all tests for this robot. The helper
- * methods "compileNepo" and "compileNative" are used to execute one test.<br>
+ * In src/test/crossCompilerTests for each robot "x" a directory with name "x" is expected. This directory contains all tests for this robot. The helper methods
+ * "compileNepo" and "compileNative" are used to execute one test.<br>
  * <br>
  * TODO: add tests for generating simulation programs
  *
@@ -59,22 +59,23 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 @RunWith(MockitoJUnitRunner.class)
 public class CompilerWorkflowIT {
     private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflowIT.class);
+    private static final boolean CROSSCOMPILER_CALL = true;
     private static final boolean SHOW_SUCCESS = false;
 
-    private String resourceBase;
-    private static final List<String> results = new ArrayList<>();
+    private static JSONObject ROBOTS;
+    private static String RESOURCE_BASE;
 
-    private static RobotCommunicator robotCommunicator;
-    private static ServerProperties serverProperties;
-    private static Map<String, IRobotFactory> pluginMap;
-    private static HttpSessionState httpSessionState;
+    private static final List<String> RESULTS = new ArrayList<>();
+
+    private static RobotCommunicator ROBOT_COMMUNICATOR;
+    private static ServerProperties SERVER_PROPERTIES;
+    private static Map<String, IRobotFactory> PLUGIN_MAP;
+    private static HttpSessionState HTTP_SESSIONSTATE;
 
     @Mock
     private DbSession dbSession;
     @Mock
     private SessionFactoryWrapper sessionFactoryWrapper;
-
-    private Response response; // store a REST response here
 
     private ClientProgram restProgram;
     private ClientAdmin restAdmin;
@@ -83,49 +84,52 @@ public class CompilerWorkflowIT {
     public static void setupClass() throws Exception {
         Properties baseServerProperties = Util1.loadProperties(null);
         baseServerProperties.put("plugin.resourcedir", "..");
-        serverProperties = new ServerProperties(baseServerProperties);
+        SERVER_PROPERTIES = new ServerProperties(baseServerProperties);
         // TODO: add a robotBasedir property to the openRoberta.properties. Make all pathes relative to that dir. Create special accessors. Change String to Path.
-        robotCommunicator = new RobotCommunicator();
-        pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties);
-        httpSessionState = HttpSessionState.init(robotCommunicator, pluginMap, serverProperties, 1);
+        ROBOT_COMMUNICATOR = new RobotCommunicator();
+        PLUGIN_MAP = ServerStarter.configureRobotPlugins(ROBOT_COMMUNICATOR, SERVER_PROPERTIES);
+        HTTP_SESSIONSTATE = HttpSessionState.init(ROBOT_COMMUNICATOR, PLUGIN_MAP, SERVER_PROPERTIES, 1);
+
+        RESOURCE_BASE = "/crossCompilerTests/robotSpecific/";
+        JSONObject testSpecification = Util1.loadYAML("classpath:" + RESOURCE_BASE + "testSpec.yml");
+        ROBOTS = testSpecification.getJSONObject("robots");
     }
 
     @AfterClass
     public static void printResults() {
         LOG.info("XXXXXXXXXX results of NEPO and NATIVE compilations XXXXXXXXXX");
-        for ( String result : results ) {
+        for ( String result : RESULTS ) {
             LOG.info(result);
         }
-
     }
 
     @Before
     public void setup() throws Exception {
-        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, robotCommunicator, serverProperties);
-        this.restAdmin = new ClientAdmin(robotCommunicator, serverProperties);
+        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, ROBOT_COMMUNICATOR, SERVER_PROPERTIES);
+        this.restAdmin = new ClientAdmin(ROBOT_COMMUNICATOR, SERVER_PROPERTIES);
         when(this.sessionFactoryWrapper.getSession()).thenReturn(this.dbSession);
         doNothing().when(this.dbSession).commit();
     }
 
     @Test
     public void testPlugins() throws Exception {
-        Set<String> foundPlugins = pluginMap.keySet();
-        for ( RobotInfo info : RobotInfo.values() ) {
-            if ( !foundPlugins.contains(info.name()) ) {
-                Assert.fail("Plugin not found: " + info.name());
+        Set<String> foundPlugins = PLUGIN_MAP.keySet();
+        for ( String robot : ROBOTS.keySet() ) {
+            if ( !foundPlugins.contains(robot) ) {
+                Assert.fail("Plugin not found: " + robot);
             }
         }
     }
 
     @Test
     public void testNepo() throws Exception {
-        this.resourceBase = "/crossCompilerTests/";
         boolean resultAcc = true;
         LOG.info("XXXXXXXXXX START of the NEPO compilations XXXXXXXXXX");
-        for ( RobotInfo info : RobotInfo.values() ) {
-            String resourceDirectory = this.resourceBase + info.dirName;
+        for ( final String robotName : ROBOTS.keySet() ) {
+            final String robotDir = ROBOTS.getJSONObject(robotName).getString("dir");
+            final String resourceDirectory = RESOURCE_BASE + robotDir;
             resultAcc = resultAcc & Util1.fileStreamOfResourceDirectory(resourceDirectory).//
-                filter(f -> f.endsWith(".xml")).map(f -> compileNepo(info, f)).reduce(true, (a, b) -> a && b);
+                filter(f -> f.endsWith(".xml")).map(f -> compileNepo(robotName, robotDir, f)).reduce(true, (a, b) -> a && b);
         }
         if ( resultAcc ) {
             LOG.info("XXXXXXXXXX all of the NEPO compilations succeeded XXXXXXXXXX");
@@ -137,13 +141,13 @@ public class CompilerWorkflowIT {
 
     @Test
     public void testNative() throws Exception {
-        this.resourceBase = "/crossCompilerTests/";
         boolean resultAcc = true;
         LOG.info("XXXXXXXXXX START of the NATIVE compilations XXXXXXXXXX");
-        for ( RobotInfo info : RobotInfo.values() ) {
-            String resourceDirectory = this.resourceBase + "/" + info.dirName;
+        for ( final String robotName : ROBOTS.keySet() ) {
+            final JSONObject robot = ROBOTS.getJSONObject(robotName);
+            final String resourceDirectory = RESOURCE_BASE + "/" + robot.getString("dir");
             resultAcc = resultAcc & Util1.fileStreamOfResourceDirectory(resourceDirectory). //
-                filter(f -> f.endsWith(info.suffixNative)).map(f -> compileNative(info, f)).reduce(true, (a, b) -> a && b);
+                map(f -> compileNative(robotName, robot, f)).reduce(true, (a, b) -> a && b);
         }
         if ( resultAcc ) {
             LOG.info("XXXXXXXXXX all of the NATIVE compilations succeeded XXXXXXXXXX");
@@ -153,81 +157,93 @@ public class CompilerWorkflowIT {
         }
     }
 
-    private boolean compileNepo(RobotInfo info, String resource) throws DbcException {
-        httpSessionState.setToken(RandomUrlPostfix.generate(12, 12, 3, 3, 3));
+    private boolean compileNepo(String robotName, String robotDir, String resource) {
+        HTTP_SESSIONSTATE.setToken(RandomUrlPostfix.generate(12, 12, 3, 3, 3));
         String expectResult = resource.startsWith("error") ? "error" : "ok";
-        String fullResource = this.resourceBase + info.dirName + "/" + resource;
+        String fullResource = RESOURCE_BASE + robotDir + "/" + resource;
         try {
-            log("start", info.name(), fullResource, null);
-            setRobotTo(info.name());
-            JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileP','name':'prog','language':'de'}");
-            cmd.getJSONObject("data").put("program", Util1.readResourceContent(fullResource));
-            this.response = this.restProgram.command(httpSessionState, cmd);
+            logStart(robotName, fullResource);
+            setRobotTo(robotName);
+            boolean result = false;
+            if ( CROSSCOMPILER_CALL ) {
+                org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileP','name':'prog','language':'de'}");
+                cmd.getJSONObject("data").put("program", Util1.readResourceContent(fullResource));
+                Response response = this.restProgram.command(HTTP_SESSIONSTATE, cmd);
+                result = checkEntityRc(response, expectResult, "PROGRAM_INVALID_STATEMETNS");
+            } else {
+                result = true;
+            }
+            log(result, robotName, fullResource, null);
+            return result;
         } catch ( Exception e ) {
-            log("fail", info.name(), fullResource, e);
+            log(false, robotName, fullResource, e);
             return false;
         }
-        boolean result = checkEntityRc(this.response, expectResult, "PROGRAM_INVALID_STATEMETNS");
-        if ( result ) {
-            log("success", info.name(), fullResource, null);
-        } else {
-            log("fail", info.name(), fullResource, null);
+    }
+
+    private boolean compileNative(String robotName, JSONObject robot, String resource) throws DbcException {
+        final String suffix = robot.getString("suffix");
+        if ( !resource.endsWith(suffix) ) {
+            return true;
         }
+        String expectResult = resource.startsWith("error") ? "error" : "ok";
+        resource = resource.substring(0, resource.length() - suffix.length());
+        String fullResource = RESOURCE_BASE + robot.getString("dir") + "/" + resource + suffix;
+        boolean result = false;
+        Exception exc = null;
+        try {
+            logStart(robotName, fullResource);
+            setRobotTo(robotName);
+            if ( CROSSCOMPILER_CALL ) {
+                org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileN','name':'" + resource + "','language':'de'}");
+                String fileContent = Util1.readResourceContent(fullResource);
+                cmd.getJSONObject("data").put("programText", fileContent);
+                Response response = this.restProgram.command(HTTP_SESSIONSTATE, cmd);
+                result = checkEntityRc(response, expectResult);
+            } else {
+                result = true;
+            }
+        } catch ( Exception e ) {
+            result = false;
+            exc = e;
+        }
+        log(result, robotName, fullResource, exc);
         return result;
     }
 
-    private boolean compileNative(RobotInfo info, String resource) throws DbcException {
-        String expectResult = resource.startsWith("error") ? "error" : "ok";
-        resource = resource.endsWith(info.suffixNative) ? resource.substring(0, resource.length() - info.suffixNative.length()) : resource;
-        String fullResource = this.resourceBase + info.dirName + "/" + resource + info.suffixNative;
-        try {
-            log("start", info.name(), fullResource, null);
-            setRobotTo(info.name());
-            JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileN','name':'" + resource + "','language':'de'}");
-            String fileContent = Util1.readResourceContent(fullResource);
-            cmd.getJSONObject("data").put("programText", fileContent);
-            this.response = this.restProgram.command(httpSessionState, cmd);
-        } catch ( Exception e ) {
-            log("fail", info.name(), fullResource, e);
-            return false;
-        }
-        boolean result = checkEntityRc(this.response, expectResult);
-        if ( result ) {
-            log("success", info.name(), fullResource, null);
-        } else {
-            log("fail", info.name(), fullResource, null);
-        }
-        return result;
+    private void logStart(String name, String fullResource) {
+        String format = "[[[[[ =============== Robot: %-150s compile file: %-60s ===============";
+        String msg = String.format(format, name, fullResource);
+        LOG.info(msg);
     }
 
-    private void log(String level, String name, String fullResource, Throwable thw) {
+    private void log(boolean result, String name, String fullResource, Throwable thw) {
         String cause = thw == null ? "response-info" : "exception";
         String format;
-        if ( level.equals("start") ) {
-            format = "[[[[[ =============== Robot: %-150s compile file: %-60s ===============";
-        } else if ( level.equals("success") ) {
+        if ( result ) {
             format = "      +++++++++++++++ Robot: %-15s compile file: %-60s succeeded =============== ]]]]]";
-        } else if ( level.equals("fail") ) {
-            format = "      --------------- Robot: %-15s compile file: %-60s FAILED(" + cause + ") =============== ]]]]]";
         } else {
-            throw new DbcException("invalid level: " + level);
+            format = "      --------------- Robot: %-15s compile file: %-60s FAILED(" + cause + ") =============== ]]]]]";
         }
         String msg = String.format(format, name, fullResource);
-        if ( level.equals("fail") ) {
-            LOG.error(msg);
-        } else {
+        if ( result ) {
             LOG.info(msg);
+        } else {
+            LOG.error(msg);
         }
-        if ( level.equals("fail") ) {
-            results.add(String.format("fail; %-15s; %-60s;", name, fullResource));
-        } else if ( SHOW_SUCCESS && level.equals("success") ) {
-            results.add(String.format("succ; %-15s; %-60s;", name, fullResource));
+        if ( result ) {
+            if ( SHOW_SUCCESS ) {
+                RESULTS.add(String.format("succ; %-15s; %-60s;", name, fullResource));
+            }
+        } else {
+            RESULTS.add(String.format("fail; %-15s; %-60s;", name, fullResource));
         }
     }
 
     private void setRobotTo(String robot) throws Exception, JSONException {
-        this.response = this.restAdmin.command(httpSessionState, this.dbSession, JSONUtilForServer.mkD("{'cmd':'setRobot','robot':'" + robot + "'}"), null);
-        JSONUtilForServer.assertEntityRc(this.response, "ok", Key.ROBOT_SET_SUCCESS);
+        Response response =
+            this.restAdmin.command(HTTP_SESSIONSTATE, this.dbSession, JSONUtilForServer.mkD("{'cmd':'setRobot','robot':'" + robot + "'}"), null);
+        JSONUtilForServer.assertEntityRc(response, "ok", Key.ROBOT_SET_SUCCESS);
     }
 
     /**
@@ -254,29 +270,6 @@ public class CompilerWorkflowIT {
             return false;
         } else {
             return false;
-        }
-    }
-
-    private static enum RobotInfo {
-        ev3lejosv1( "ev3", ".java" ),
-        ev3lejosv0( "ev3", ".java" ),
-        ev3dev( "ev3", ".py" ),
-        nxt( "nxt", ".nxc" ),
-        microbit( "microbit", ".py" ),
-        uno( "ardu", ".ino" ),
-        nano( "ardu", ".ino" ),
-        mega( "ardu", ".ino" ),
-        nao( "nao", ".py" ),
-        bob3( "bob3", ".ino" ),
-        calliope2017( "calliope", ".cpp" ),
-        calliope2016( "calliope", ".cpp" );
-
-        public final String dirName;
-        public final String suffixNative;
-
-        private RobotInfo(String dirName, String suffixNative) {
-            this.dirName = dirName;
-            this.suffixNative = suffixNative;
         }
     }
 }

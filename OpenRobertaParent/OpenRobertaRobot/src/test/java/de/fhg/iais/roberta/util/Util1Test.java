@@ -2,22 +2,18 @@ package de.fhg.iais.roberta.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
-
-import de.fhg.iais.roberta.util.dbc.DbcException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Util1Test {
-    private static ServerProperties serverProperties;
-
-    @BeforeClass
-    public static void setup() {
-        serverProperties = new ServerProperties(Util1.loadProperties(null));
-    }
+    private static final Logger LOG = LoggerFactory.getLogger(Util1Test.class);
 
     @Test
     public void testJavaIdentifier() {
@@ -48,6 +44,7 @@ public class Util1Test {
 
     @Test
     public void testMissingProperty() {
+        ServerProperties serverProperties = new ServerProperties(Util1.loadProperties(null));
         boolean browserVisibility = Boolean.parseBoolean(serverProperties.getStringProperty("does.not.exist"));
         assertEquals(false, browserVisibility);
     }
@@ -74,5 +71,23 @@ public class Util1Test {
         assertEquals(2, from.length);
         assertEquals("b", from[0]);
         assertEquals("c", from[1]);
+    }
+
+    @Test
+    public void testLoadResource() {
+        assertNotNull(Util1.fileStreamOfResourceDirectory("/yaml"));
+        try {
+            Util1.fileStreamOfResourceDirectory("yaml");
+            fail("resource found and that is an error");
+        } catch ( Exception e ) {
+            // ok!
+        }
+        assertNotNull(Util1.getInputStream(true, "classpath:/yaml/y1.yml"));
+        try {
+            Util1.getInputStream(true, "classpath:yaml/y1.yml");
+            fail("resource found and that is an error");
+        } catch ( Exception e ) {
+            // ok!
+        }
     }
 }

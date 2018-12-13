@@ -25,7 +25,7 @@ public class HelperCalliopeForXmlTest extends de.fhg.iais.roberta.util.test.Abst
 
     public HelperCalliopeForXmlTest() {
         super(
-            new Calliope2016Factory(new PluginProperties("calliope2016", "", "", Util1.loadProperties("classpath:calliope2016.properties"))),
+            new Calliope2016Factory(new PluginProperties("calliope2016", "", "", Util1.loadProperties("classpath:/calliope2016.properties"))),
             new CalliopeConfiguration.Builder().build());
     }
 

@@ -29,7 +29,7 @@ public class JaxbHelper {
     private static final JAXBContext jaxbContext;
     static {
         SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        InputStream xsdStream = JaxbHelper.class.getClassLoader().getResourceAsStream("blockly.xsd");
+        InputStream xsdStream = JaxbHelper.class.getResourceAsStream("/blockly.xsd");
         StreamSource xsdSource = new StreamSource(xsdStream);
         try {
             blockSetSchema = sf.newSchema(xsdSource);

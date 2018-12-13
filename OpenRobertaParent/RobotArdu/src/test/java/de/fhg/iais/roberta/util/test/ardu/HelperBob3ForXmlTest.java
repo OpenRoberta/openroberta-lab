@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.visitor.codegen.Bob3CppVisitor;
 public class HelperBob3ForXmlTest extends AbstractHelperForXmlTest {
 
     public HelperBob3ForXmlTest() {
-        super(new Bob3Factory(new PluginProperties("bob3", "", "", Util1.loadProperties("classpath:bob3.properties"))), new Configuration.Builder().build());
+        super(new Bob3Factory(new PluginProperties("bob3", "", "", Util1.loadProperties("classpath:/bob3.properties"))), new Configuration.Builder().build());
     }
 
     public String generateCpp(String pathToProgramXml) throws Exception {

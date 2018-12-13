@@ -119,7 +119,7 @@ public class StackMachineJsonIT {
 
     @Before
     public void setup() throws Exception {
-        serverProperties = new ServerProperties(Util1.loadProperties("classpath:wedoOpenRoberta.properties"));
+        serverProperties = new ServerProperties(Util1.loadProperties("classpath:/wedoOpenRoberta.properties"));
         robotCommunicator = new RobotCommunicator();
         pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties);
         httpSessionState = HttpSessionState.init(robotCommunicator, pluginMap, serverProperties, 1);

@@ -21,7 +21,7 @@ import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class RobotModeFactoryTest {
-    Ev3LejosV0Factory factory = new Ev3LejosV0Factory(new PluginProperties("ev3lejosv0", "", "", Util1.loadProperties("classpath:ev3lejosv0.properties")));
+    Ev3LejosV0Factory factory = new Ev3LejosV0Factory(new PluginProperties("ev3lejosv0", "", "", Util1.loadProperties("classpath:/ev3lejosv0.properties")));
     BlocklyDropdownFactory dropdownFactory = this.factory.getBlocklyDropdownFactory();
 
     @Test

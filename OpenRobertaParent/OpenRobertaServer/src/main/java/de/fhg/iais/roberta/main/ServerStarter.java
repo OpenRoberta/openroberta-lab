@@ -319,7 +319,7 @@ public class ServerStarter {
             if ( robotName.equals("sim") ) {
                 continue;
             }
-            Properties basicPluginProperties = Util1.loadProperties("classpath:" + robotName + ".properties");
+            Properties basicPluginProperties = Util1.loadProperties("classpath:/" + robotName + ".properties");
             if ( basicPluginProperties == null ) {
                 throw new DbcException("robot plugin " + robotName + " has no property file " + robotName + ".properties -  Server does NOT start");
             }

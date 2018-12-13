@@ -15,7 +15,7 @@ public class HelperVorwerkForXmlTest extends AbstractHelperForXmlTest {
 
     public HelperVorwerkForXmlTest() {
         super(
-            new VorwerkFactory(new PluginProperties("vorwerk", "", "", Util1.loadProperties("classpath:vorwerk.properties"))),
+            new VorwerkFactory(new PluginProperties("vorwerk", "", "", Util1.loadProperties("classpath:/vorwerk.properties"))),
             new VorwerkConfiguration.Builder().build());
     }
 

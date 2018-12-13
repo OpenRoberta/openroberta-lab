@@ -20,7 +20,7 @@ public class XmlValidatorTest {
         Export jaxbImportExport = JaxbHelper.xml2Element(xmlAsString, Export.class);
         String programText = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
         String configText = JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet());
-        IRobotFactory robotFactory = new NaoFactory(new PluginProperties("nao", "", "", Util1.loadProperties("classpath:nao.properties")));
+        IRobotFactory robotFactory = new NaoFactory(new PluginProperties("nao", "", "", Util1.loadProperties("classpath:/nao.properties")));
         BlocklyProgramAndConfigTransformer programAndConfigTransformer = BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configText);
         System.out.println(jaxbImportExport);
     }

@@ -30,10 +30,10 @@ public class SeleniumHelper {
     public boolean browserVisibility;
 
     public SeleniumHelper(String baseUrl) throws Exception {
-        Properties properties = Util1.loadProperties("classpath:openRoberta.properties");
+        Properties properties = Util1.loadProperties("classpath:/openRoberta.properties");
         this.browserVisibility = Boolean.parseBoolean(properties.getProperty("browser.visibility"));
         List<String> addr = Arrays.asList("server.ip=localhost", "server.port=1998");
-        this.serverStarter = new ServerStarter("classpath:openRoberta.properties", addr);
+        this.serverStarter = new ServerStarter("classpath:/openRoberta.properties", addr);
         this.server = this.serverStarter.start();
         Session session = this.serverStarter.getInjectorForTests().getInstance(SessionFactoryWrapper.class).getNativeSession();
         new DbSetup(session).createEmptyDatabase();

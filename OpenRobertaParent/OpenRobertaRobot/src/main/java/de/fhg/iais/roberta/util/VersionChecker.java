@@ -32,7 +32,7 @@ public class VersionChecker {
         for ( String propertyPrefix : propertyPrefixes ) {
             try {
                 Properties properties = new Properties();
-                InputStream resourceAsStream = VersionChecker.class.getClassLoader().getResourceAsStream(propertyPrefix + ".properties");
+                InputStream resourceAsStream = VersionChecker.class.getResourceAsStream(propertyPrefix + ".properties");
                 properties.load(resourceAsStream);
                 String version = properties.getProperty("version", "?");
                 if ( version.equals("?") || !versionValid(version) ) {

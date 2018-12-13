@@ -183,7 +183,7 @@ public class RoundTripIT {
 
     // TODO: properties have been refactored. Numbers don't work anymore
     private void initialize() {
-        ServerProperties serverProperties = new ServerProperties(Util1.loadProperties("classpath:openRoberta.properties"));
+        ServerProperties serverProperties = new ServerProperties(Util1.loadProperties("classpath:/openRoberta.properties"));
         buildXml = serverProperties.getStringProperty("robot.plugin.1.generated.programs.build.xml");
         connectionUrl = serverProperties.getStringProperty("hibernate.connection.url");
         crosscompilerBasedir = null; // serverProperties.getTempDirForUserProjects();
@@ -235,7 +235,7 @@ public class RoundTripIT {
 
     private void startServerAndLogin() throws IOException, InterruptedException {
         List<String> addr = Arrays.asList("server.ip=localhost", "server.port=1998");
-        server = new ServerStarter("classpath:openRoberta.properties", addr).start();
+        server = new ServerStarter("classpath:/openRoberta.properties", addr).start();
         int port = server.getURI().getPort();
         baseUrl = "http://localhost:" + port;
         driver.get(baseUrl + "/");

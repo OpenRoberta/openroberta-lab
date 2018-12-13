@@ -25,7 +25,7 @@ import de.fhg.iais.roberta.visitor.codegen.BotnrollCppVisitor;
 public class HelperBotNrollForXmlTest extends AbstractHelperForXmlTest {
 
     public HelperBotNrollForXmlTest() {
-        super(new BotnrollFactory(new PluginProperties("botnroll", "", "", Util1.loadProperties("classpath:botnroll.properties"))), makeConfiguration());
+        super(new BotnrollFactory(new PluginProperties("botnroll", "", "", Util1.loadProperties("classpath:/botnroll.properties"))), makeConfiguration());
     }
 
     public static Configuration makeConfiguration() {

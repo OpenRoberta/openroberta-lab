@@ -13,7 +13,7 @@ public class ExprListTest {
 
     @Before
     public void loadBlocks() {
-        GeneralTestsHelper.loadBlocks("classpath:robotCommon.yml");
+        GeneralTestsHelper.loadBlocks("classpath:/robotCommon.yml");
     }
 
     @Test

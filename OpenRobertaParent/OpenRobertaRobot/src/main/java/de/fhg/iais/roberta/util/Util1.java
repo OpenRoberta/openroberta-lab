@@ -35,7 +35,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class Util1 {
     private static final Logger LOG = LoggerFactory.getLogger(Util1.class);
-    private static final String PROPERTY_DEFAULT_PATH = "openRoberta.properties";
+    private static final String PROPERTY_DEFAULT_PATH = "classpath:/openRoberta.properties";
 
     /**
      * YAML parser. NOT thread-safe!
@@ -177,12 +177,7 @@ public class Util1 {
      */
     public static InputStream getInputStream(boolean doLogging, String propertyURI) {
         try {
-            if ( propertyURI == null || propertyURI.trim().equals("") ) {
-                if ( doLogging ) {
-                    Util1.LOG.info("default URI from classpath. Using: " + Util1.PROPERTY_DEFAULT_PATH);
-                }
-                return Util1.class.getClassLoader().getResourceAsStream(Util1.PROPERTY_DEFAULT_PATH);
-            } else if ( propertyURI.startsWith("file:") ) {
+            if ( propertyURI.startsWith("file:") ) {
                 String filesystemPathName = propertyURI.substring(5);
                 if ( doLogging ) {
                     Util1.LOG.info("Operating on the file system. Using the path: " + filesystemPathName);
@@ -193,7 +188,11 @@ public class Util1 {
                 if ( doLogging ) {
                     Util1.LOG.info("Operating on the classpath. Using the resource: " + classPathName);
                 }
-                return Util1.class.getClassLoader().getResourceAsStream(classPathName);
+                InputStream resourceAsStream = Util1.class.getResourceAsStream(classPathName);
+                if ( resourceAsStream == null ) {
+                    throw new DbcException("Could not open input stream for URI: " + propertyURI);
+                }
+                return resourceAsStream;
             } else {
                 throw new DbcException("Could not open input stream for URI: " + propertyURI);
             }
@@ -216,6 +215,7 @@ public class Util1 {
      */
     public static Properties loadProperties(boolean doLogging, String propertyURI) {
         Properties properties = new Properties();
+        propertyURI = (propertyURI == null || propertyURI.trim().equals("")) ? Util1.PROPERTY_DEFAULT_PATH : propertyURI;
         try {
             loadIncludes(properties, getInputStream(doLogging, propertyURI));
             properties.load(getInputStream(doLogging, propertyURI));
