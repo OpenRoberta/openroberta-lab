@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
+import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
@@ -274,6 +275,18 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
         } else {
             this.sb.append("myBob.getIRLight()");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
+        this.sb.append("_CLAMP(");
+        mathConstrainFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        mathConstrainFunct.getParam().get(1).visit(this);
+        this.sb.append(", ");
+        mathConstrainFunct.getParam().get(2).visit(this);
+        this.sb.append(")");
         return null;
     }
 
