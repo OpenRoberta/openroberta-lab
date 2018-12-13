@@ -50,8 +50,34 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
         configuration.setRobotName("ev3lejosV1");
         return configuration;
     }
+    
+    public static Configuration makeStandardEv3DevConfiguration() {
+        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
+        ConfigurationComponent motorB = new ConfigurationComponent("MEDIUM", true, "B", BlocklyConstants.NO_SLOT, "B", motorBproperties);
 
-    public static Map<String, String> createMap(String... args) {
+        Map<String, String> motorCproperties = createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
+        ConfigurationComponent motorC = new ConfigurationComponent("LARGE", true, "C", BlocklyConstants.NO_SLOT, "C", motorCproperties);
+
+        Map<String, String> touchSensorProperties = createMap();
+        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", BlocklyConstants.NO_SLOT, "1", touchSensorProperties);
+
+        Map<String, String> gyroSensorProperties = createMap();
+        ConfigurationComponent gyroSensor = new ConfigurationComponent("GYRO", false, "S2", BlocklyConstants.NO_SLOT, "2", touchSensorProperties);
+
+        Map<String, String> colourSensorProperties = createMap();
+        ConfigurationComponent colourSensor = new ConfigurationComponent("COLOR", false, "S3", BlocklyConstants.NO_SLOT, "3", touchSensorProperties);
+
+        Map<String, String> ultrasonicSensorProperties = createMap();
+        ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S4", BlocklyConstants.NO_SLOT, "4", touchSensorProperties);
+
+        final Configuration.Builder builder = new Configuration.Builder();
+        builder.setTrackWidth(18f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorB, motorC, touchSensor, gyroSensor, colourSensor, ultrasonicSensor));
+        Configuration configuration = builder.build();
+        configuration.setRobotName("ev3dev");
+        return configuration;
+    }
+
+    private static Map<String, String> createMap(String... args) {
         Map<String, String> m = new HashMap<>();
         for ( int i = 0; i < args.length; i += 2 ) {
             m.put(args[i], args[i + 1]);

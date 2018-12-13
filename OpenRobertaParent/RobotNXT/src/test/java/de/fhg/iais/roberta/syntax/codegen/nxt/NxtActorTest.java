@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.codegen.nxt;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 
 import org.junit.Test;
@@ -23,6 +24,15 @@ public class NxtActorTest {
         return builder.build();
     }
 
+    public static Configuration makeDisplayConfiguration() {
+        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", BlocklyConstants.NO_SLOT, "1", Collections.emptyMap());
+        ConfigurationComponent soundSensor = new ConfigurationComponent("SOUND", false, "S2", BlocklyConstants.NO_SLOT, "2", Collections.emptyMap());
+        ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", BlocklyConstants.NO_SLOT, "3", Collections.emptyMap());
+        final Configuration.Builder builder = new Configuration.Builder();
+        builder.setTrackWidth(12f).setWheelDiameter(5.6f).addComponents(Arrays.asList(touchSensor, soundSensor, colorSensor));
+        return builder.build();
+    }
+
     @Test
     public void nxtOtherPowerConsumerTest() throws Exception {
         this.nxtHelper
@@ -30,5 +40,14 @@ public class NxtActorTest {
                 "ast/actions/nxt_other_consumer_test.nxc",
                 "/ast/actions/nxt_other_consumer_test.xml",
                 makeOtherConsumerConfiguration());
+    }
+
+    @Test
+    public void nxtDisplayTest() throws Exception {
+        this.nxtHelper
+            .compareExistingAndGeneratedNxcSource(
+                "ast/actions/nxt_display_all_datatypes_test.nxc",
+                "/ast/actions/nxt_display_all_datatypes_test.xml",
+                makeDisplayConfiguration());
     }
 }
