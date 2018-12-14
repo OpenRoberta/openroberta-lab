@@ -70,7 +70,7 @@
 						<goals>
 							<goal>xjc</goal>
 						</goals>
-						<configuration>
+						<configuration> 
 							<schemaDirectory>src/main/resources</schemaDirectory>
 							<schemaFiles>blockly.xsd</schemaFiles>
 							<outputDirectory>${project.build.directory}/generated-sources/jaxb/blockly</outputDirectory>
