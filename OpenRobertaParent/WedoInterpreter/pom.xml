@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>de.fhg.iais.openroberta</groupId>
 		<artifactId>OpenRobertaParent</artifactId>
-		<version>3.0.2</version>
+		<version>3.0.3</version>
 	</parent>
 	<artifactId>WedoInterpreter</artifactId>
 	<description>Javascript-based interpreter for We-Do</description>
@@ -21,7 +21,7 @@
 			<groupId>de.fhg.iais.openroberta</groupId>
 			<artifactId>RobotWeDo</artifactId>
             <scope>compile</scope>
-            <version>3.0.2</version>
+            <version>3.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.inject</groupId>
