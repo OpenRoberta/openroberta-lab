@@ -51,7 +51,7 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
         return configuration;
     }
 
-    private static Map<String, String> createMap(String... args) {
+    public static Map<String, String> createMap(String... args) {
         Map<String, String> m = new HashMap<>();
         for ( int i = 0; i < args.length; i += 2 ) {
             m.put(args[i], args[i + 1]);
@@ -145,6 +145,10 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
 
     public void compareExistingAndGeneratedPythonSource(String sourceCodeFilename, String xmlFilename, Configuration configuration) throws Exception {
         Assert.assertEquals(HelperEv3ForXmlTest.readFileToString(sourceCodeFilename), generatePython(xmlFilename, configuration) + "\n");
+    }
+
+    public void compareExistingAndGeneratedJavaSource(String sourceCodeFilename, String xmlFilename, Configuration configuration) throws Exception {
+        Assert.assertEquals(HelperEv3ForXmlTest.readFileToString(sourceCodeFilename), generateJava(xmlFilename, configuration) + "\n");
     }
 
 }

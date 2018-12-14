@@ -97,7 +97,11 @@ public class Configuration {
     }
 
     public boolean isMotorRegulated(String port) {
-        return getConfigurationComponent(port).getProperty(SC.MOTOR_REGULATION).equals(SC.TRUE);
+        if ( getConfigurationComponent(port).getOptProperty(SC.MOTOR_REGULATION) == null ) {
+            return false;
+        } else {
+            return getConfigurationComponent(port).getOptProperty(SC.MOTOR_REGULATION).equals(SC.TRUE);
+        }
     }
 
     private Map<String, ConfigurationComponent> buildConfigurationComponentMap(Collection<ConfigurationComponent> configurationComponents) {

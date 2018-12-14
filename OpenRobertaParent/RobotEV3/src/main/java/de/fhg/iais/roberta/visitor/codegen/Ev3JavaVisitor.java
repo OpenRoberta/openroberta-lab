@@ -1260,11 +1260,24 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     private String generateRegenerateActor(ConfigurationComponent actor) {
         StringBuilder sb = new StringBuilder();
-        String driveDirection = actor.getProperty(SC.MOTOR_REVERSE).equals(SC.OFF) ? "FOREWARD" : "BACKWARD";
+        String driveDirection;
+        if ( actor.getComponentType().equals("OTHER") ) {
+            driveDirection = "FOREWARD";
+        } else {
+            driveDirection = actor.getProperty(SC.MOTOR_REVERSE).equals(SC.OFF) ? "FOREWARD" : "BACKWARD";
+        }
         sb.append("new Actor(ActorType.").append(actor.getComponentType());
-        sb.append(", ").append(actor.getProperty(SC.MOTOR_REGULATION).toLowerCase());
+        if ( actor.getComponentType().equals("OTHER") ) {
+            sb.append(", false");
+        } else {
+            sb.append(", ").append(actor.getProperty(SC.MOTOR_REGULATION).toLowerCase());
+        }
         sb.append(", DriveDirection.").append(driveDirection);
-        sb.append(", MotorSide.").append(actor.getProperty(SC.MOTOR_DRIVE)).append(")");
+        if ( actor.getComponentType().equals("MEDIUM") || actor.getComponentType().equals("OTHER") ) {
+            sb.append(", MotorSide.NONE)");
+        } else {
+            sb.append(", MotorSide.").append(actor.getProperty(SC.MOTOR_DRIVE)).append(")");
+        }
         return sb.toString();
     }
 
