@@ -1,8 +1,13 @@
 package de.fhg.iais.roberta.util.test.nxt;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
@@ -45,7 +50,7 @@ public class HelperNxtForXmlTest extends AbstractHelperForXmlTest {
         return builder.build();
     }
 
-    private static Map<String, String> createMap(String... args) {
+    public static Map<String, String> createMap(String... args) {
         Map<String, String> m = new HashMap<>();
         for ( int i = 0; i < args.length; i += 2 ) {
             m.put(args[i], args[i + 1]);
@@ -109,4 +114,24 @@ public class HelperNxtForXmlTest extends AbstractHelperForXmlTest {
         Assert.assertEquals(correctJavaCode.replaceAll("\\s+", ""), generateNXC(fileName, brickConfiguration).replaceAll("\\s+", ""));
     }
 
+    public static String readFileToString(String filename) {
+        List<String> lines = Collections.emptyList();
+        try {
+            lines = Files.readAllLines(Paths.get(ClassLoader.getSystemResource(filename).toURI()));
+        } catch ( IOException e ) {
+            return "";
+        } catch ( URISyntaxException e ) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for ( String line : lines ) {
+            sb.append(line);
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+    public void compareExistingAndGeneratedNxcSource(String sourceCodeFilename, String xmlFilename, Configuration configuration) throws Exception {
+        Assert.assertEquals(HelperNxtForXmlTest.readFileToString(sourceCodeFilename), generateNXC(xmlFilename, configuration));
+    }
 }

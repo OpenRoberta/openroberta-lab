@@ -465,9 +465,19 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         String userDefinedPort = motorOnAction.getUserDefinedPort();
         if ( isActorOnPort(userDefinedPort) ) {
-            final boolean reverse = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getProperty(SC.MOTOR_REVERSE).equals("ON");
+            final boolean reverse;
+            if ( this.brickConfiguration.getConfigurationComponent(userDefinedPort).getOptProperty(SC.MOTOR_REVERSE) == null ) {
+                reverse = false;
+            } else {
+                reverse = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getOptProperty(SC.MOTOR_REVERSE).equals("ON");
+            }
             final boolean isDuration = motorOnAction.getParam().getDuration() != null;
-            final boolean isRegulatedDrive = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getProperty(SC.MOTOR_REGULATION).equals("TRUE");
+            final boolean isRegulatedDrive;
+            if ( this.brickConfiguration.getConfigurationComponent(userDefinedPort).getOptProperty(SC.MOTOR_REGULATION) == null ) {
+                isRegulatedDrive = false;
+            } else {
+                isRegulatedDrive = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getOptProperty(SC.MOTOR_REGULATION).equals("TRUE");
+            }
             String sign = reverse ? "-" : "";
             String methodNamePart = reverse ? "OnRev" : "OnFwd";
             if ( isDuration ) {
