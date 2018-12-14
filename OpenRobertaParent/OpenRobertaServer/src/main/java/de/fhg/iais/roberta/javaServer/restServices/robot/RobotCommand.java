@@ -58,7 +58,7 @@ public class RobotCommand {
         }
         // TODO: move robot to the requested properties for the next version
         String robot = requestEntity.optString("robot", "ev3");
-        String macaddr = requestEntity.optString("macaddr", "1234");
+        String macaddr = requestEntity.optString("macaddr", "usb");
         String brickname = requestEntity.optString("brickname", robot);
         String batteryvoltage = requestEntity.optString("battery", "");
         String menuversion = requestEntity.optString("menuversion", "");
