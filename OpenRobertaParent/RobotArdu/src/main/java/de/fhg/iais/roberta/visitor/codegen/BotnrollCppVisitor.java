@@ -153,8 +153,8 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        ConfigurationComponent leftMotor = this.configuration.getFirstMotor(SC.LEFT);
-        ConfigurationComponent rightMotor = this.configuration.getFirstMotor(SC.RIGHT);
+        ConfigurationComponent leftMotor = this.configuration.getConfigurationComponent("B");
+        ConfigurationComponent rightMotor = this.configuration.getConfigurationComponent("A");
         final boolean reverse = leftMotor.isReverse() && rightMotor.isReverse();
         String methodName;
         String port = null;
@@ -197,8 +197,9 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        ConfigurationComponent leftMotor = this.configuration.getFirstMotor(SC.LEFT);
-        ConfigurationComponent rightMotor = this.configuration.getFirstMotor(SC.RIGHT);
+        ConfigurationComponent leftMotor = this.configuration.getConfigurationComponent("B");
+        ConfigurationComponent rightMotor = this.configuration.getConfigurationComponent("A");
+
         final boolean isRegulatedDrive = leftMotor.isRegulated() && rightMotor.isRegulated();
 
         final boolean isDuration = driveAction.getParam().getDuration() != null;
@@ -234,8 +235,8 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        ConfigurationComponent leftMotor = this.configuration.getFirstMotor(SC.LEFT);
-        ConfigurationComponent rightMotor = this.configuration.getFirstMotor(SC.RIGHT);
+        ConfigurationComponent leftMotor = this.configuration.getConfigurationComponent("B");
+        ConfigurationComponent rightMotor = this.configuration.getConfigurationComponent("A");
         final boolean isRegulatedDrive = leftMotor.isRegulated() && rightMotor.isRegulated();
 
         final boolean isDuration = curveAction.getParamLeft().getDuration() != null && curveAction.getParamRight().getDuration() != null;
@@ -271,8 +272,8 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        ConfigurationComponent leftMotor = this.configuration.getFirstMotor(SC.LEFT);
-        ConfigurationComponent rightMotor = this.configuration.getFirstMotor(SC.RIGHT);
+        ConfigurationComponent leftMotor = this.configuration.getConfigurationComponent("B");
+        ConfigurationComponent rightMotor = this.configuration.getConfigurationComponent("A");
         boolean isRegulatedDrive = leftMotor.isRegulated() || rightMotor.isRegulated();
         boolean isDuration = turnAction.getParam().getDuration() != null;
         boolean isReverseLeftMotor = leftMotor.getProperty(SC.MOTOR_REVERSE).equals(SC.ON);

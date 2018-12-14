@@ -44,11 +44,22 @@ public final class ConfigurationComponent {
     }
 
     public boolean isRegulated() {
-        return this.getProperty(SC.MOTOR_REGULATION).equals(SC.TRUE);
+        return getProperty(SC.MOTOR_REGULATION).equals(SC.TRUE);
     }
 
     public boolean isReverse() {
-        return this.getProperty(SC.MOTOR_REVERSE).equals(SC.ON);
+        return getProperty(SC.MOTOR_REVERSE).equals(SC.ON);
+    }
+
+    public String getSide() {
+        switch ( getProperty(SC.MOTOR_DRIVE) ) {
+            case SC.LEFT:
+                return SC.LEFT;
+            case SC.RIGHT:
+                return SC.RIGHT;
+            default:
+                return SC.NONE;
+        }
     }
 
     public String getPortName() {
