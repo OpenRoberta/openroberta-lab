@@ -821,6 +821,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
             case NUMBER:
             case ARRAY_CONNECTION:
             case ARRAY_NUMBER:
+            case ARRAY_COLOUR:
                 methodName += "Num(";
                 break;
             case STRING:

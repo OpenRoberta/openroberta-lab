@@ -32,7 +32,7 @@ public class HelperNxtForXmlTest extends AbstractHelperForXmlTest {
         super(new NxtFactory(new PluginProperties("nxt", "", "", Util1.loadProperties("classpath:nxt.properties"))), makeConfiguration());
     }
 
-    private static Configuration makeConfiguration() {
+    public static Configuration makeConfiguration() {
         Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
         ConfigurationComponent motorA = new ConfigurationComponent("LARGE", true, "A", BlocklyConstants.NO_SLOT, "A", motorAproperties);
 
