@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
@@ -69,6 +70,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.dbc.VisitorException;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.collect.NxtUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.INxtVisitor;
@@ -870,6 +872,10 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
+        ListElementOperations operation = (ListElementOperations) listGetIndex.getElementOperation();
+        if ( !operation.equals(ListElementOperations.GET) ) {
+            throw new VisitorException("Unsupported get method: " + operation.toString());
+        }
         IndexLocation location = (IndexLocation) listGetIndex.getLocation();
         listGetIndex.getParam().get(0).visit(this);
         this.sb.append("[");
@@ -910,6 +916,10 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
+        ListElementOperations operation = (ListElementOperations) listSetIndex.getElementOperation();
+        if ( !operation.equals(ListElementOperations.SET) ) {
+            throw new VisitorException("Unsupported get method: " + operation.toString());
+        }
         IndexLocation location = (IndexLocation) listSetIndex.getLocation();
         listSetIndex.getParam().get(0).visit(this);
         this.sb.append("[");
