@@ -870,12 +870,39 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
+        IndexLocation location = (IndexLocation) listGetIndex.getLocation();
         listGetIndex.getParam().get(0).visit(this);
         this.sb.append("[");
         this.sb.append("sanitise_index(ArrayLen(");
         listGetIndex.getParam().get(0).visit(this);
         this.sb.append("), ");
-        listGetIndex.getParam().get(1).visit(this);
+        switch ( location ) {
+            case FIRST:
+                this.sb.append("0");
+                break;
+            case FROM_END:
+                this.sb.append("ArrayLen(");
+                listGetIndex.getParam().get(0).visit(this);
+                this.sb.append(") - ");
+                listGetIndex.getParam().get(1).visit(this);
+                break;
+            case FROM_START:
+                listGetIndex.getParam().get(1).visit(this);
+                break;
+            case LAST:
+                this.sb.append("ArrayLen(");
+                listGetIndex.getParam().get(0).visit(this);
+                this.sb.append(") - 1");
+                break;
+            case RANDOM:
+                // provided for backwards compatibility,
+                // frontend does not have an option to choose this
+                // but old programs may contain this option
+                this.sb.append("0");
+                break;
+            default:
+                break;
+        }
         this.sb.append(")");
         this.sb.append("]");
         return null;
@@ -883,12 +910,40 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
+        IndexLocation location = (IndexLocation) listSetIndex.getLocation();
         listSetIndex.getParam().get(0).visit(this);
         this.sb.append("[");
         this.sb.append("sanitise_index(ArrayLen(");
         listSetIndex.getParam().get(0).visit(this);
         this.sb.append("), ");
-        listSetIndex.getParam().get(2).visit(this);
+        switch ( location ) {
+            case FIRST:
+                this.sb.append("0");
+                break;
+            case FROM_END:
+                this.sb.append("ArrayLen(");
+                listSetIndex.getParam().get(0).visit(this);
+                this.sb.append(") - ");
+                listSetIndex.getParam().get(2).visit(this);
+                break;
+            case FROM_START:
+                listSetIndex.getParam().get(2).visit(this);
+                break;
+            case LAST:
+                this.sb.append("ArrayLen(");
+                listSetIndex.getParam().get(0).visit(this);
+                this.sb.append(") - 1");
+                break;
+            case RANDOM:
+                // provided for backwards compatibility,
+                // frontend does not have an option to choose this
+                // but old programs may contain this option
+                this.sb.append("0");
+                break;
+            default:
+                break;
+        }
+
         this.sb.append(")");
         this.sb.append("]");
         this.sb.append(" = ");
