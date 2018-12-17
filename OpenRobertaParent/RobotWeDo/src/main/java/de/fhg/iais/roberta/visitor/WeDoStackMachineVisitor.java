@@ -45,7 +45,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractWeDoVisitor<V> {
 
     @Override
     public V visitLightAction(LightAction<V> lightAction) {
-        ConfigurationComponent confLedBlock = this.getConfigurationComponent(lightAction.getPort());
+        ConfigurationComponent confLedBlock = getConfigurationComponent(lightAction.getPort());
         String brickName = confLedBlock.getProperty("VAR");
         if ( (brickName != null) ) {
             lightAction.getRgbLedColor().visit(this);
@@ -58,7 +58,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractWeDoVisitor<V> {
 
     @Override
     public V visitLightStatusAction(LightStatusAction<V> lightStatusAction) {
-        ConfigurationComponent confLedBlock = this.getConfigurationComponent(lightStatusAction.getPort());
+        ConfigurationComponent confLedBlock = getConfigurationComponent(lightStatusAction.getPort());
         String brickName = confLedBlock.getProperty("VAR");
         if ( (brickName != null) ) {
             // for wedo this block is only for setting off the led, so no test for status required lightStatusAction.getStatus()
@@ -73,7 +73,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractWeDoVisitor<V> {
     @Override
     public V visitMotorOnAction(MotorOnAction<V> motorOnAction) {
         boolean isDuration = motorOnAction.getParam().getDuration() != null;
-        ConfigurationComponent confMotorBlock = this.getConfigurationComponent(motorOnAction.getUserDefinedPort());
+        ConfigurationComponent confMotorBlock = getConfigurationComponent(motorOnAction.getUserDefinedPort());
         String brickName = confMotorBlock.getProperty("VAR");
         String port = confMotorBlock.getProperty("CONNECTOR");
         if ( (brickName != null) && (port != null) ) {
@@ -93,7 +93,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractWeDoVisitor<V> {
 
     @Override
     public V visitMotorStopAction(MotorStopAction<V> motorStopAction) {
-        ConfigurationComponent confMotorBlock = this.getConfigurationComponent(motorStopAction.getUserDefinedPort());
+        ConfigurationComponent confMotorBlock = getConfigurationComponent(motorStopAction.getUserDefinedPort());
         String brickName = confMotorBlock.getProperty("VAR");
         String port = confMotorBlock.getProperty("CONNECTOR");
         if ( (brickName != null) && (port != null) ) {
@@ -119,11 +119,10 @@ public final class WeDoStackMachineVisitor<V> extends AbstractWeDoVisitor<V> {
 
     @Override
     public V visitKeysSensor(KeysSensor<V> keysSensor) {
-        ConfigurationComponent keysSensorBlock = this.getConfigurationComponent(keysSensor.getPort());
+        ConfigurationComponent keysSensorBlock = getConfigurationComponent(keysSensor.getPort());
         String brickName = keysSensorBlock.getProperty("VAR");
-        String port = keysSensorBlock.getProperty("CONNECTOR");
         if ( (brickName != null) ) {
-            JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.NAME, brickName).put(C.PORT, port);
+            JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.NAME, brickName);
             return app(o);
         } else {
             throw new DbcException("operation not supported");
@@ -132,7 +131,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractWeDoVisitor<V> {
 
     @Override
     public V visitGyroSensor(GyroSensor<V> gyroSensor) {
-        ConfigurationComponent confGyroSensor = this.getConfigurationComponent(gyroSensor.getPort());
+        ConfigurationComponent confGyroSensor = getConfigurationComponent(gyroSensor.getPort());
         String brickName = confGyroSensor.getProperty("VAR");
         String port = confGyroSensor.getProperty("CONNECTOR");
         String slot = gyroSensor.getSlot().toString();
@@ -146,7 +145,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractWeDoVisitor<V> {
 
     @Override
     public V visitInfraredSensor(InfraredSensor<V> infraredSensor) {
-        ConfigurationComponent confInfraredSensor = this.getConfigurationComponent(infraredSensor.getPort());
+        ConfigurationComponent confInfraredSensor = getConfigurationComponent(infraredSensor.getPort());
         String brickName = confInfraredSensor.getProperty("VAR");
         String port = confInfraredSensor.getProperty("CONNECTOR");
         if ( (brickName != null) && (port != null) ) {
@@ -159,7 +158,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractWeDoVisitor<V> {
 
     @Override
     public V visitPlayNoteAction(PlayNoteAction<V> playNoteAction) {
-        ConfigurationComponent playNoteBlock = this.getConfigurationComponent(playNoteAction.getPort());
+        ConfigurationComponent playNoteBlock = getConfigurationComponent(playNoteAction.getPort());
         String brickName = playNoteBlock.getProperty("VAR");
         if ( (brickName != null) ) {
             JSONObject frequency = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, playNoteAction.getFrequency());
@@ -175,7 +174,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractWeDoVisitor<V> {
 
     @Override
     public V visitToneAction(ToneAction<V> toneAction) {
-        ConfigurationComponent toneBlock = this.getConfigurationComponent(toneAction.getPort());
+        ConfigurationComponent toneBlock = getConfigurationComponent(toneAction.getPort());
         String brickName = toneBlock.getProperty("VAR");
         if ( (brickName != null) ) {
             toneAction.getFrequency().visit(this);

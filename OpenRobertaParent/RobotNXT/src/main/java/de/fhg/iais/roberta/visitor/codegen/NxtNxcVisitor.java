@@ -918,7 +918,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
         ListElementOperations operation = (ListElementOperations) listSetIndex.getElementOperation();
         if ( !operation.equals(ListElementOperations.SET) ) {
-            throw new VisitorException("Unsupported get method: " + operation.toString());
+            throw new VisitorException("Unsupported set method: " + operation.toString());
         }
         IndexLocation location = (IndexLocation) listSetIndex.getLocation();
         listSetIndex.getParam().get(0).visit(this);
