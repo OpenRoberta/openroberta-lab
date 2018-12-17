@@ -9,6 +9,6 @@ public class WeDoTest {
 
     @Test
     public void weDoEverythingTest() throws Exception {
-        this.helperWeDo.compareExistingAndGeneratedVmSource("wedo_everything_test.json", "/wedo_everything_test.xml");
+        this.helperWeDo.compareExistingAndGeneratedVmSource("/wedo_everything_test.json", "/wedo_everything_test.xml");
     }
 }
