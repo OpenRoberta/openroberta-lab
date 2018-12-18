@@ -35,7 +35,7 @@ public class IRSeekerSensor<V> extends ExternalSensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link IRSeekerSensor}
      */
-    static <V> IRSeekerSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> IRSeekerSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new IRSeekerSensor<V>(sensorMetaDataBean, properties, comment);
     }
 
