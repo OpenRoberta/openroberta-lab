@@ -1,6 +1,6 @@
-FROM openjdk:8u151-jdk
+FROM rbudde/openroberta_base:1
 
-ARG LAST_RUN_OF_BASE=2018-11-16
+ARG LAST_RUN_OF_BASE=2018-12-19
  
 RUN mkdir --parent /opt/openRoberta/lib /opt/openRoberta/OpenRobertaParent
 WORKDIR /opt/openRoberta

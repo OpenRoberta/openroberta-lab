@@ -19,7 +19,15 @@ then
     echo 'the version parameter of form x.y.z is missing (second parameter) - exit 12'
     exit 12
 fi
-echo "building branch $BRANCH with version $VERSION"
+BUILD_ALL="$3"
+if [ -z "$BUILD_ALL" ]
+then
+    BUILD_ALL='true'
+elif [ "$BUILD_ALL" != 'false' ]
+then
+    BUILD_ALL='true'
+fi
+echo "building branch $BRANCH with version $VERSION. Build all container is set to $BUILD_ALL"
 git clone --depth=1 -b $BRANCH https://github.com/OpenRoberta/robertalab.git
 cd /opt/robertalab/OpenRobertaParent
 mvn clean install
@@ -36,7 +44,15 @@ cp Docker/Dockerfile* Docker/*.sh DockerInstallation
 
 cd /opt/robertalab/DockerInstallation
 
-docker build -t rbudde/openroberta_lab:$BRANCH-$VERSION      -f DockerfileLab                             .
-docker build -t rbudde/openroberta_db:$BRANCH-$VERSION       -f DockerfileDb --build-arg version=$VERSION .
-docker build -t rbudde/openroberta_upgrade:$BRANCH-$VERSION  -f DockerfileUpgrade                         .
-docker build -t rbudde/openroberta_embedded:$BRANCH-$VERSION -f DockerfileLabEmbedded                     .
+if [ "$BUILD_ALL" == 'true' ]
+then
+    docker build -t rbudde/openroberta_lab:$BRANCH-$VERSION      -f DockerfileLab                             .
+    docker build -t rbudde/openroberta_db:$BRANCH-$VERSION       -f DockerfileDb --build-arg version=$VERSION .
+    docker build -t rbudde/openroberta_upgrade:$BRANCH-$VERSION  -f DockerfileUpgrade                         .
+    docker build -t rbudde/openroberta_embedded:$BRANCH-$VERSION -f DockerfileLabEmbedded                     .
+else
+    LAST_COMMIT=$(git rev-list HEAD...HEAD~1)
+    TAG_NAME=rbudde/openroberta_lab:$LAST_COMMIT
+    docker build -t $TAG_NAME -f DockerfileLab .
+    echo "docker build finished for $TAG_NAME"
+fi

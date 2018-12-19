@@ -2,16 +2,31 @@
 
 ## define the variables used (set as needed!):
 
+this is the (temporary) setting for the test server docker container
+
+```bash
+export HOME="/home/TestOpenRoberta"
+export VERSION='3.0.4'
+export BRANCH='develop'
+export GITREPO="$HOME/robertalab"
+export DB_PARENTDIR="$HOME/export"
+export SERVER_PORT_ON_HOST=1999
+export DBSERVER_PORT_ON_HOST=9001
+```
+
+this is the setting for docker tests of rbudde on ilya.iais.fraunhofer.de
+
 ```bash
 export HOME="/home/rbudde"
-export VERSION='3.0.3'
-export BRANCH='develop'
+export VERSION='3.0.r'
+export BRANCH='rbTest'
 export GITREPO="$HOME/git/robertalab"
 export DISTR_DIR='/tmp/distr'
 export DB_PARENTDIR="$HOME/db"
 export SERVER_PORT_ON_HOST=7000
 export DBSERVER_PORT_ON_HOST=9001
 ```
+
 ## tl;dr: to generate the docker image "rbudde/openroberta_lab:$VERSION" from "develop" run
 
 ```bash
@@ -36,7 +51,7 @@ branch develop to fill the /root/.m2 cache. This makes later builds much faster.
 
 ```bash
 cd $GITREPO/Docker
-docker build -f DockerfileGen_debian_stretch -t rbudde/openroberta_gen:1 .
+docker build -f meta/DockerfileGen_ubuntu_18_04 -t rbudde/openroberta_gen:1 .
 docker push rbudde/openroberta_gen:1
 ```
 
@@ -46,7 +61,7 @@ The docker image "base" is used as basis for further images. It replaces crossco
 because the crosscompiler packages are erroneous [28.11.2018]. Java 8 is installed, too (for ev3).
 
 ```bashcd $GITREPO/Docker
-docker build -f DockerfileBase_ubuntu_18_04 -t rbudde/openroberta_base:1 .
+docker build -f meta/DockerfileBase_ubuntu_18_04 -t rbudde/openroberta_base:1 .
 docker push rbudde/openroberta_base:1
 ```
 
@@ -58,25 +73,26 @@ Run the "gen" image. It will
 * generate the images for the version given as second parameter
 * execute a maven build to generate the artifacts
 * export the artifacts into a installation directory
-* create several docker images, all based on the "base" images and this being based on ubuntu_18_04:
+* create several docker images, all based on the "base" images and this being based on ubuntu_18_04 (no third parameter when called or parameter is not 'false'):
   * "openroberta_lab" contains a server ready to co-operate with a db server
   * "openroberta_db" contains a production-ready db server
   * "openroberta_upgrade" contains an administration service working with an embedded database
     to upgrade the database
   * "openroberta_embedded" contains a server working with an embedded database
-  
+* OR create "openroberta_lab", which contains a server ready to co-operate with a db server (third parameter when called is 'false')
+
 When the "gen" image is run,
 
 * the first -v arguments makes the "real" docker demon available in the "gen" container.
   Do not change this parameter
 - a second -v is optional. If you want to get only the docker images, dismiss the parameter.
   If you want to access the installation directory (for testing, e.g.), then
-  add -v $DISTR_DIR:/opt/robertalab/DockerInstallation to the docker run command. Set DISTR_DIR to an
+  add -v <DISTR_DIR>:/opt/robertalab/DockerInstallation to the docker run command. Set <DISTR_DIR> to an
   NOT EXISTING directory of the machine running the docker demon and you get the installation there
   for inspection
 
 ```bash
-docker run -v /var/run/docker.sock:/var/run/docker.sock rbudde/openroberta_gen:1 $BRANCH $VERSION 
+docker run -v /var/run/docker.sock:/var/run/docker.sock rbudde/openroberta_gen:1 $BRANCH $VERSION
 ```
 	   
 # commands for the roberta maintainer. THIS IS DOCUMENTATION. YOU MUST NOT DO THIS.
@@ -154,7 +170,7 @@ The debian stretch distributions contains invalid crosscompilers packages.
 
 ```bash
 cd $GITREPO/Docker
-docker build -t rbudde/openroberta_it_ubuntu_18_04:1 -f DockerfileIT_ubuntu_18_04 . --build-arg BRANCH=$BRANCH
+docker build -t rbudde/openroberta_it_ubuntu_18_04:1 -f tesing/DockerfileIT_ubuntu_18_04 . --build-arg BRANCH=$BRANCH
 ```
 
 The following command is executed by the roberta maintainer; you should NOT do this
@@ -178,7 +194,7 @@ The entrypoint is "/bin/bash" (this doesn't matter). This image is build by
 
 ```bash
 cd $GITREPO/Docker
-docker build -t rbudde/openroberta_debug_ubuntu_18_04:1 -f DockerfileDebug_ubuntu_18_04 .
+docker build -t rbudde/openroberta_debug_ubuntu_18_04:1 -f testing/DockerfileDebug_ubuntu_18_04 .
 ```
 
 The following commands are executed by the roberta maintainer; you should NOT do this

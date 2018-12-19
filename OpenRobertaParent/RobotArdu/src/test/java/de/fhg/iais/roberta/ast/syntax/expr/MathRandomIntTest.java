@@ -9,7 +9,7 @@ public class MathRandomIntTest {
 
     @Test
     public void Test() throws Exception {
-        final String a = "rob.randomIntegerInRange(1,100)";
+        final String a = "_randomIntegerInRange(1,100)";
 
         this.h.assertCodeIsOk(a, "/syntax/math/math_random_int.xml", false);
     }

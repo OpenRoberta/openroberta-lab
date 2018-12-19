@@ -218,11 +218,12 @@ public class CompilerWorkflowIT {
     }
 
     private void log(boolean result, String name, String fullResource, Throwable thw) {
-        String cause = thw == null ? "response-info" : "exception";
+        String cause = thw == null ? "response-info" : "exception: ";
         String format;
         if ( result ) {
             format = "      +++++++++++++++ Robot: %-15s compile file: %-60s succeeded =============== ]]]]]";
         } else {
+            LOG.error("EXCEPTION!", thw);
             format = "      --------------- Robot: %-15s compile file: %-60s FAILED(" + cause + ") =============== ]]]]]";
         }
         String msg = String.format(format, name, fullResource);
@@ -256,7 +257,7 @@ public class CompilerWorkflowIT {
      */
     private static boolean checkEntityRc(Response response, String rc, String... acceptableErrorCodes) {
         de.fhg.iais.roberta.util.dbc.Assert.nonEmptyString(rc);
-        JSONObject entity = (JSONObject) response.getEntity();
+        org.codehaus.jettison.json.JSONObject entity = (org.codehaus.jettison.json.JSONObject) response.getEntity();
         String returnCode = entity.optString("rc", "");
         if ( rc.equals(returnCode) ) {
             return true;

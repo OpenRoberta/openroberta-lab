@@ -108,16 +108,16 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         if ( infraredSensor.getMode().equals("REFLEXION") ) {
-            this.sb.append("myBob.getIRSensor()");
+            this.sb.append("rob.getIRSensor()");
         } else {
-            this.sb.append("myBob.getIRLight()");
+            this.sb.append("rob.getIRLight()");
         }
         return null;
     }
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        this.sb.append("myBob.getTemperature()");
+        this.sb.append("rob.getTemperature()");
         return null;
     }
 
@@ -162,7 +162,7 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
         this.sb.append("#include <math.h> \n");
         this.sb.append("#include <BOB3.h> \n");
         this.sb.append("#include <NEPODefs.h>\n");
-        this.sb.append("Bob3 myBob;\n");
+        this.sb.append("Bob3 rob;\n");
 
     }
 
@@ -176,16 +176,16 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
         if ( pinTouchSensor.getSlot().equals("0") ) {
-            this.sb.append("( myBob.getArm(" + pinTouchSensor.getPort() + ") > " + pinTouchSensor.getSlot() + " )");
+            this.sb.append("( rob.getArm(" + pinTouchSensor.getPort() + ") > " + pinTouchSensor.getSlot() + " )");
         } else {
-            this.sb.append("( myBob.getArm(" + pinTouchSensor.getPort() + ") == " + pinTouchSensor.getSlot() + " )");
+            this.sb.append("( rob.getArm(" + pinTouchSensor.getPort() + ") == " + pinTouchSensor.getSlot() + " )");
         }
         return null;
     }
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        this.sb.append("myBob.setLed(");
+        this.sb.append("rob.setLed(");
         if ( ledOnAction.getSide().equals("Left") ) {
             this.sb.append("EYE_2, ");
         } else {
@@ -198,7 +198,7 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
-        this.sb.append("myBob.setLed(");
+        this.sb.append("rob.setLed(");
         if ( ledOffAction.getSide().equals("Left") ) {
             this.sb.append("EYE_2, OFF);");
         } else {
@@ -209,7 +209,7 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitBodyLEDAction(BodyLEDAction<Void> bodyLEDAction) {
-        this.sb.append("myBob.setLed(");
+        this.sb.append("rob.setLed(");
         this.sb.append(bodyLEDAction.getSide() + ", ");
         this.sb.append(bodyLEDAction.getledState() + ");");
         return null;
@@ -217,13 +217,13 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitBob3CodePadSensor(CodePadSensor<Void> codePadSensor) {
-        this.sb.append("myBob.getID()");
+        this.sb.append("rob.getID()");
         return null;
     }
 
     @Override
     public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
-        this.sb.append("myBob.transmitIRCode(");
+        this.sb.append("rob.transmitIRCode(");
         sendIRAction.getCode().visit(this);
         this.sb.append(");");
         return null;
@@ -231,7 +231,7 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
-        this.sb.append("myBob.receiveIRCode(500)");
+        this.sb.append("rob.receiveIRCode(500)");
         return null;
     }
 
@@ -257,23 +257,23 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        this.sb.append("myBob.setWhiteLeds(WHITE, WHITE);");
+        this.sb.append("rob.setWhiteLeds(WHITE, WHITE);");
         return null;
     }
 
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        this.sb.append("myBob.setLed(2, OFF);");
-        this.sb.append("myBob.setLed(1, OFF);");
+        this.sb.append("rob.setLed(2, OFF);");
+        this.sb.append("rob.setLed(1, OFF);");
         return null;
     }
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
         if ( lightSensor.getMode().equals("REFLEXION") ) {
-            this.sb.append("myBob.getIRSensor()");
+            this.sb.append("rob.getIRSensor()");
         } else {
-            this.sb.append("myBob.getIRLight()");
+            this.sb.append("rob.getIRLight()");
         }
         return null;
     }

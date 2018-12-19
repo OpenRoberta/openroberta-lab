@@ -1,6 +1,6 @@
-FROM debian:stretch
+FROM ubuntu:18.04
 
-ARG LAST_RUN_OF_BASE=2018-11-28
+ARG LAST_RUN_OF_BASE=2018-12-19
 
 RUN apt-get update && apt-get -y upgrade && \
     apt-get install -y openjdk-8-jdk && \

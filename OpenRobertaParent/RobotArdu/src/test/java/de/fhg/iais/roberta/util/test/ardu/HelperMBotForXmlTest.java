@@ -23,6 +23,7 @@ public class HelperMBotForXmlTest extends AbstractHelperForXmlTest {
     }
 
     public void compareExistingAndGeneratedSource(String sourceCodeFilename, String xmlFilename, Configuration configuration) throws Exception {
-        Assert.assertEquals(Util1.readResourceContent(sourceCodeFilename), generateCpp(xmlFilename, configuration));
+        Assert
+            .assertEquals(Util1.readResourceContent(sourceCodeFilename).replaceAll("\\s+", ""), generateCpp(xmlFilename, configuration).replaceAll("\\s+", ""));
     }
 }

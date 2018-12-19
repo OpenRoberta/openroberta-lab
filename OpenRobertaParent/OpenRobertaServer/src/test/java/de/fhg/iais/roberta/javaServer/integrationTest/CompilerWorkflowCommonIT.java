@@ -16,7 +16,6 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -58,7 +57,7 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 @RunWith(MockitoJUnitRunner.class)
 public class CompilerWorkflowCommonIT {
     private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflowIT.class);
-    private static final boolean CROSSCOMPILER_CALL = true;
+    private static final boolean CROSSCOMPILER_CALL = false;
     private static final boolean SHOW_SUCCESS = false;
     private static final String RESOURCE_BASE = "/crossCompilerTests/common/";
 
@@ -129,7 +128,7 @@ public class CompilerWorkflowCommonIT {
                         }
                     }
                 }
-                resultAcc = resultAcc && compileAfterProgramGenerated(robotName, templateWithConfig, progName + ".xml");
+                resultAcc = resultAcc && compileAfterProgramGenerated(robotName, templateWithConfig, progName, prog);
             }
         }
         if ( resultAcc ) {
@@ -140,26 +139,25 @@ public class CompilerWorkflowCommonIT {
         }
     }
 
-    @Ignore
     @Test
     public void testShowGeneratedProgram() {
-        String robot = "calliope2017";
+        String robot = "bob3";
         String robotDir = ROBOTS.getJSONObject(robot).getString("dir");
-        String templateName = "mathAndLists.xml";
+        String progName = "mathLogic-1";
         final String template = getTemplateWithConfigReplaced(robotDir);
-        final String generatedProgram = generateFinalProgram(template, templateName);
-        LOG.info("the generated program for robot " + robot + " with template " + templateName + " is:\n" + generatedProgram);
+        final String generatedProgram = generateFinalProgram(template, progName, PROGS.getJSONObject(progName));
+        LOG.info("the generated program for robot " + robot + " with name " + progName + " is:\n" + generatedProgram);
     }
 
-    private boolean compileAfterProgramGenerated(String robotName, String template, String progNameWithXmlSuffix) throws DbcException {
+    private boolean compileAfterProgramGenerated(String robotName, String template, String progName, JSONObject prog) throws DbcException {
         String reason = "?";
         boolean result = false;
-        logStart(robotName, progNameWithXmlSuffix);
+        logStart(robotName, progName);
         String token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
         HTTP_SESSION_STATE.setToken(token);
-        template = generateFinalProgram(template, progNameWithXmlSuffix);
+        template = generateFinalProgram(template, progName, prog);
         try {
-            LOG.info("########## " + robotName + " - " + progNameWithXmlSuffix);
+            LOG.info("########## " + robotName + " - " + progName);
             if ( CROSSCOMPILER_CALL ) {
                 setRobotTo(robotName);
                 org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileP','name':'prog','language':'de'}");
@@ -176,7 +174,7 @@ public class CompilerWorkflowCommonIT {
             result = false;
             reason = "exception (" + e.getMessage() + ")";
         }
-        log(result, robotName, progNameWithXmlSuffix, reason);
+        log(result, robotName, progName, reason);
         return result;
     }
 
@@ -222,13 +220,15 @@ public class CompilerWorkflowCommonIT {
         return templateWithConfig;
     }
 
-    private static String generateFinalProgram(String template, String progNameWithXmlSuffix) {
-        String prog = read("prog", progNameWithXmlSuffix);
-        Assert.assertNotNull(prog, "program not found: " + progNameWithXmlSuffix);
-        template = template.replaceAll("\\[\\[prog\\]\\]", prog);
-        String progFragment = read("progFragment", progNameWithXmlSuffix);
-        template = template.replaceAll("\\[\\[progFragment\\]\\]", progFragment == null ? "" : progFragment);
-        String decl = read("decl", progNameWithXmlSuffix);
+    private static String generateFinalProgram(String template, String progName, JSONObject prog) {
+        String progSource = read("prog", progName + ".xml");
+        Assert.assertNotNull(progSource, "program not found: " + progName);
+        template = template.replaceAll("\\[\\[prog\\]\\]", progSource);
+        String progFragmentName = prog.optString("fragment");
+        String progFragment = progFragmentName == null ? "" : read("fragment", progFragmentName + ".xml");
+        template = template.replaceAll("\\[\\[fragment\\]\\]", progFragment == null ? "" : progFragment);
+        String declName = prog.optString("decl");
+        String decl = declName == null ? DEFAULT_DECL : read("decl", declName + ".xml");
         template = template.replaceAll("\\[\\[decl\\]\\]", decl == null ? DEFAULT_DECL : decl);
         return template;
     }
