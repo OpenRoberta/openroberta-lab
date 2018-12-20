@@ -11,4 +11,9 @@ public class WeDoTest {
     public void weDoEverythingTest() throws Exception {
         this.helperWeDo.compareExistingAndGeneratedVmSource("/wedo_everything_test.json", "/wedo_everything_test.xml");
     }
+
+    @Test
+    public void weDoAllBlocksTest() throws Exception {
+        this.helperWeDo.compareExistingAndGeneratedVmSource("/wedo_all_blocks_test.json", "/wedo_all_blocks_test.xml");
+    }
 }
