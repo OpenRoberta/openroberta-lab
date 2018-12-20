@@ -540,4 +540,5 @@ public class CppVisitorTest {
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/arduino/pin_read_write.xml", true);
     }
+
 }

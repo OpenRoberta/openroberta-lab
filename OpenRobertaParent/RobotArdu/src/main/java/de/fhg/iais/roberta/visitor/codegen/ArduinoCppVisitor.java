@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 import de.fhg.iais.roberta.components.Category;
@@ -316,7 +317,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         nlIndent();
         this.sb.append("}");
         nlIndent();
-        this.sb.append("if(!_mfrc522_R.PICC_ReadCardSerial())");
+        this.sb.append("if(!_mfrc522_" + sensorName + ".PICC_ReadCardSerial())");
         nlIndent();
         this.sb.append("{");
         incrIndentation();
@@ -490,37 +491,31 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         nlIndent();
         this.sb.append("#include <math.h>");
         nlIndent();
+        LinkedHashSet<String> headerFiles = new LinkedHashSet<>();
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponents() ) {
             switch ( usedConfigurationBlock.getComponentType() ) {
                 case SC.HUMIDITY:
-                    this.sb.append("#include <DHT.h>");
-                    nlIndent();
+                    headerFiles.add("#include <DHT.h>");
                     break;
                 case SC.INFRARED:
-                    this.sb.append("#include <IRremote.h>");
-                    nlIndent();
+                    headerFiles.add("#include <IRremote.h>");
                     break;
                 case SC.RFID:
-                    this.sb.append("#include <SPI.h>");
-                    nlIndent();
-                    this.sb.append("#include <MFRC522.h>");
-                    nlIndent();
+                    headerFiles.add("#include <SPI.h>");
+                    headerFiles.add("#include <MFRC522.h>");
                     break;
                 case SC.LCD:
-                    this.sb.append("#include <LiquidCrystal.h>");
+                    headerFiles.add("#include <LiquidCrystal.h>");
                     nlIndent();
                     break;
                 case SC.LCDI2C:
-                    this.sb.append("#include <LiquidCrystal_I2C.h>");
-                    nlIndent();
+                    headerFiles.add("#include <LiquidCrystal_I2C.h>");
                     break;
                 case SC.STEPMOTOR:
-                    this.sb.append("#include <Stepper.h>");
-                    nlIndent();
+                    headerFiles.add("#include <Stepper.h>");
                     break;
                 case SC.SERVOMOTOR:
-                    this.sb.append("#include <Servo.h>");
-                    nlIndent();
+                    headerFiles.add("#include <Servo.h>");
                     break;
                 case SC.ULTRASONIC:
                 case SC.MOTION:
@@ -544,7 +539,10 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                     throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
             }
         }
-
+        for ( String header : headerFiles ) {
+            this.sb.append(header);
+            nlIndent();
+        }
         this.sb.append("#include <RobertaFunctions.h>   // Open Roberta library");
         nlIndent();
         if ( this.isListsUsed ) {

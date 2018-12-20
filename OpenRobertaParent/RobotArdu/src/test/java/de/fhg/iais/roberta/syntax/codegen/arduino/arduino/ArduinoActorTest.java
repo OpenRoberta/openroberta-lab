@@ -8,6 +8,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.test.ardu.HelperArduinoForXmlTest;
 
 public class ArduinoActorTest {
@@ -131,6 +132,41 @@ public class ArduinoActorTest {
             .compareExistingAndGeneratedSource(
                 "/ast/actions/arduino_analog_digital_output_test.ino",
                 "/ast/actions/arduino_analog_digital_output_test.xml",
+                builder.build());
+    }
+
+    @Test
+    public void multiIncludeTest() throws Exception {
+        Map<String, String> servoMotorPins = HelperArduinoForXmlTest.createMap("PULSE", "8");
+        ConfigurationComponent servoMotor1 = new ConfigurationComponent("SERVOMOTOR", true, "servo", BlocklyConstants.NO_SLOT, "S", servoMotorPins);
+        ConfigurationComponent servoMotor2 = new ConfigurationComponent("SERVOMOTOR", true, "servo", BlocklyConstants.NO_SLOT, "S2", servoMotorPins);
+        Map<String, String> rfidPins = HelperArduinoForXmlTest.createMap("RST", "9", "SDA", "10", "SCK", "13", "MOSI", "11", "MISO", "12");
+        ConfigurationComponent rfid1 = new ConfigurationComponent("RFID", true, "rfid", BlocklyConstants.NO_SLOT, "R6", rfidPins);
+        ConfigurationComponent rfid2 = new ConfigurationComponent("RFID", true, "rfid", BlocklyConstants.NO_SLOT, "R7", rfidPins);
+        Configuration.Builder builder = new Configuration.Builder();
+        builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(rfid1, rfid2, servoMotor1, servoMotor2));
+        this.arduinoHelper
+            .compareExistingAndGeneratedSource(
+                "/ast/brickConfiguration/arduino_multi_include_test.ino",
+                "/ast/brickConfiguration/arduino_multi_include_test.xml",
+                builder.build());
+    }
+
+    @Test(expected = DbcException.class)
+    public void negativeIncludeTest() throws Exception {
+        Map<String, String> servoMotorPins = HelperArduinoForXmlTest.createMap("PULSE", "8");
+        ConfigurationComponent servoMotor1 = new ConfigurationComponent("NON-EXISTING-COMPONENT", true, "servo", BlocklyConstants.NO_SLOT, "S", servoMotorPins);
+        ConfigurationComponent servoMotor2 =
+            new ConfigurationComponent("NON-EXISTING-COMPONENT2", true, "servo", BlocklyConstants.NO_SLOT, "S2", servoMotorPins);
+        Map<String, String> rfidPins = HelperArduinoForXmlTest.createMap("RST", "9", "SDA", "10", "SCK", "13", "MOSI", "11", "MISO", "12");
+        ConfigurationComponent rfid1 = new ConfigurationComponent("NON-EXISTING-COMPONENT", true, "rfid", BlocklyConstants.NO_SLOT, "R6", rfidPins);
+        ConfigurationComponent rfid2 = new ConfigurationComponent("NON-EXISTING-COMPONENT2", true, "rfid", BlocklyConstants.NO_SLOT, "R7", rfidPins);
+        Configuration.Builder builder = new Configuration.Builder();
+        builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(rfid1, rfid2, servoMotor1, servoMotor2));
+        this.arduinoHelper
+            .compareExistingAndGeneratedSource(
+                "/ast/brickConfiguration/arduino_multi_include_test.ino",
+                "/ast/brickConfiguration/arduino_multi_include_test.xml",
                 builder.build());
     }
 }
