@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-12-17 11:20:47.270913",
+		"lastupdated": "2018-12-20 14:12:34.286806",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1455,7 +1455,7 @@
 	"ACTION_SERIAL_PRINT": "show on Serial Monitor",
 	"ACTION_SERIAL_PRINT_TOOLTIP": "Show data on the Serial Monitor. You can find the Serial Monitor in the USB Programm on top, under View.",
 	"TO": "to",
-	"GEARED_MOTOR": "grared motor",
+	"GEARED_MOTOR": "geared motor",
 	"LED_MATRIX": "LED matrix",
 	"ACTION_IN": "actuator",
 	"SENSOR_OUT": "sensor",
