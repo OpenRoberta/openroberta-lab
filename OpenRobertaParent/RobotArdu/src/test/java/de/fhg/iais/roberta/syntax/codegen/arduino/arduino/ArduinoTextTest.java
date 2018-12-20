@@ -20,6 +20,6 @@ public class ArduinoTextTest {
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(led));
         this.arduinoHelper
-            .compareExistingAndGeneratedSource("ast/text/arduino_append_text_test.ino", "/ast/text/arduino_append_text_test.xml", builder.build());
+            .compareExistingAndGeneratedSource("/ast/text/arduino_append_text_test.ino", "/ast/text/arduino_append_text_test.xml", builder.build());
     }
 }

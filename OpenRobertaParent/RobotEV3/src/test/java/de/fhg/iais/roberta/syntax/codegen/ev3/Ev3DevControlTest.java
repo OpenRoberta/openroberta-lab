@@ -11,6 +11,6 @@ public class Ev3DevControlTest {
 
     @Test
     public void ev3DevWaitTest() throws Exception {
-        this.ev3DevHelper.compareExistingAndGeneratedPythonSource("ast/control/ev3dev_wait_test.py", "/ast/control/ev3dev_wait_test.xml", this.configuration);
+        this.ev3DevHelper.compareExistingAndGeneratedPythonSource("/ast/control/ev3dev_wait_test.py", "/ast/control/ev3dev_wait_test.xml", this.configuration);
     }
 }

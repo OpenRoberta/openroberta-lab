@@ -11,13 +11,13 @@ public class MicrobitMathTest {
     public void mathOnListsTest() throws Exception {
         this.microbitHelper
             .compareExistingAndGeneratedSource(
-                "function/microbit_math_constants_and_functions_test.py",
+                "/function/microbit_math_constants_and_functions_test.py",
                 "/function/microbit_math_constants_and_functions_test.xml");
     }
 
     @Test
     public void mathOperationsTest() throws Exception {
-        this.microbitHelper.compareExistingAndGeneratedSource("function/microbit_math_operations_test.py", "/function/microbit_math_operations_test.xml");
+        this.microbitHelper.compareExistingAndGeneratedSource("/function/microbit_math_operations_test.py", "/function/microbit_math_operations_test.xml");
     }
 
 }

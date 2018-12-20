@@ -29,6 +29,6 @@ public class MbotSensorTest {
     @Test
     public void mbotSensorsTest() throws Exception {
         this.mbotHelper
-            .compareExistingAndGeneratedSource("ast/sensors/mbot_sensors_test.ino", "/ast/sensors/mbot_sensors_test.xml", this.standardMbotConfiguration);
+            .compareExistingAndGeneratedSource("/ast/sensors/mbot_sensors_test.ino", "/ast/sensors/mbot_sensors_test.xml", this.standardMbotConfiguration);
     }
 }

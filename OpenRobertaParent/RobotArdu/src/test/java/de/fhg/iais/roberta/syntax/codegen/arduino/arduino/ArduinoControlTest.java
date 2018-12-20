@@ -19,6 +19,6 @@ public class ArduinoControlTest {
         ConfigurationComponent led = new ConfigurationComponent("LED", true, "LED", BlocklyConstants.NO_SLOT, "L", ledPins);
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(led));
-        this.arduinoHelper.compareExistingAndGeneratedSource("ast/control/arduino_loops_test.ino", "/ast/control/arduino_loops_test.xml", builder.build());
+        this.arduinoHelper.compareExistingAndGeneratedSource("/ast/control/arduino_loops_test.ino", "/ast/control/arduino_loops_test.xml", builder.build());
     }
 }

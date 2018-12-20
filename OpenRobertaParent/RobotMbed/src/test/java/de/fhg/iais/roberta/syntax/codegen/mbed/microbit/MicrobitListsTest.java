@@ -9,12 +9,12 @@ public class MicrobitListsTest {
 
     @Test
     public void mathOnListsTest() throws Exception {
-        this.microbitHelper.compareExistingAndGeneratedSource("lists/microbit_math_on_lists_test.py", "/lists/microbit_math_on_lists_test.xml");
+        this.microbitHelper.compareExistingAndGeneratedSource("/lists/microbit_math_on_lists_test.py", "/lists/microbit_math_on_lists_test.xml");
     }
 
     @Test
     public void fullListsTest() throws Exception {
-        this.microbitHelper.compareExistingAndGeneratedSource("lists/microbit_lists_full_test.py", "/lists/microbit_lists_full_test.xml");
+        this.microbitHelper.compareExistingAndGeneratedSource("/lists/microbit_lists_full_test.py", "/lists/microbit_lists_full_test.xml");
     }
 
 }

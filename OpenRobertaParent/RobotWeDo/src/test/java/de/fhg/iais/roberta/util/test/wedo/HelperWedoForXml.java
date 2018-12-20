@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.util.test.wedo;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Assert;
@@ -38,10 +37,10 @@ public class HelperWedoForXml extends AbstractHelperForXmlTest {
         ConfigurationComponent infraredSensor = new ConfigurationComponent("INFRARED", false, "I", BlocklyConstants.NO_SLOT, "I", infraredSensorProperties);
 
         Map<String, String> buzzerProperties = createMap("NAME", "S", "VAR", "W");
-        ConfigurationComponent buzzer = new ConfigurationComponent("BUZZER", false, "S", BlocklyConstants.NO_SLOT, "S", keySensorProperties);
+        ConfigurationComponent buzzer = new ConfigurationComponent("BUZZER", false, "S", BlocklyConstants.NO_SLOT, "S", buzzerProperties);
 
         Map<String, String> ledProperties = createMap("NAME", "L", "VAR", "W");
-        ConfigurationComponent led = new ConfigurationComponent("LIGHT", false, "L", BlocklyConstants.NO_SLOT, "L", keySensorProperties);
+        ConfigurationComponent led = new ConfigurationComponent("LIGHT", false, "L", BlocklyConstants.NO_SLOT, "L", ledProperties);
 
         final Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(11f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorM, keySensor, gyroSensor, infraredSensor, buzzer, led));
@@ -56,13 +55,5 @@ public class HelperWedoForXml extends AbstractHelperForXmlTest {
 
     public void compareExistingAndGeneratedVmSource(String sourceCodeResource, String xmlResource) throws Exception {
         Assert.assertEquals(Util1.readResourceContent(sourceCodeResource).replaceAll("\\s+", ""), generateVmCode(xmlResource).replaceAll("\\s+", ""));
-    }
-
-    public static Map<String, String> createMap(String... args) {
-        Map<String, String> m = new HashMap<>();
-        for ( int i = 0; i < args.length; i += 2 ) {
-            m.put(args[i], args[i + 1]);
-        }
-        return m;
     }
 }

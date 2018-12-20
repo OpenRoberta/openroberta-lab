@@ -29,6 +29,6 @@ public class Ev3DevSensorTest {
     @Test
     public void ev3DevGetListsTest() throws Exception {
         this.ev3DevHelper
-            .compareExistingAndGeneratedPythonSource("ast/sensors/ev3dev_htsensors_test.py", "/ast/sensors/ev3dev_htsensors_test.xml", this.configuration);
+            .compareExistingAndGeneratedPythonSource("/ast/sensors/ev3dev_htsensors_test.py", "/ast/sensors/ev3dev_htsensors_test.xml", this.configuration);
     }
 }

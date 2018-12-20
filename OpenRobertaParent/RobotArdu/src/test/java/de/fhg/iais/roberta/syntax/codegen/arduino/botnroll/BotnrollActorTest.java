@@ -13,12 +13,12 @@ public class BotnrollActorTest {
     @Test
     public void botnrollLcdTest() throws Exception {
         this.botnrollHelper
-            .compareExistingAndGeneratedSource("ast/actions/botnroll_indication_test.ino", "/ast/actions/botnroll_indication_test.xml", this.configuration);
+            .compareExistingAndGeneratedSource("/ast/actions/botnroll_indication_test.ino", "/ast/actions/botnroll_indication_test.xml", this.configuration);
     }
 
     @Test
     public void botnrollMovementTest() throws Exception {
         this.botnrollHelper
-            .compareExistingAndGeneratedSource("ast/actions/botnroll_movement_test.ino", "/ast/actions/botnroll_movement_test.xml", this.configuration);
+            .compareExistingAndGeneratedSource("/ast/actions/botnroll_movement_test.ino", "/ast/actions/botnroll_movement_test.xml", this.configuration);
     }
 }

@@ -9,7 +9,7 @@ public class MicrobitSensorsTest {
 
     @Test
     public void waitTimeConditionTest() throws Exception {
-        this.microbitHelper.compareExistingAndGeneratedSource("sensor/microbit_timer_test.py", "/sensor/microbit_timer_test.xml");
+        this.microbitHelper.compareExistingAndGeneratedSource("/sensor/microbit_timer_test.py", "/sensor/microbit_timer_test.xml");
     }
 
 }

@@ -2,6 +2,8 @@ package de.fhg.iais.roberta.util.test;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -195,6 +197,14 @@ public abstract class AbstractHelperForXmlTest {
         StringWriter writer = new StringWriter();
         m.marshal(blockSet, writer);
         return writer.toString();
+    }
+
+    public static Map<String, String> createMap(String... args) {
+        Map<String, String> m = new HashMap<>();
+        for ( int i = 0; i < args.length; i += 2 ) {
+            m.put(args[i], args[i + 1]);
+        }
+        return m;
     }
 
     /**

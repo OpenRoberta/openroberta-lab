@@ -19,7 +19,7 @@ public class ArduinoListsTest {
         ConfigurationComponent led = new ConfigurationComponent("LED", true, "LED", BlocklyConstants.NO_SLOT, "L", ledPins);
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(led));
-        this.arduinoHelper.compareExistingAndGeneratedSource("ast/lists/arduino_lists_test.ino", "/ast/lists/arduino_lists_test.xml", builder.build());
+        this.arduinoHelper.compareExistingAndGeneratedSource("/ast/lists/arduino_lists_test.ino", "/ast/lists/arduino_lists_test.xml", builder.build());
     }
 
     @Test
@@ -29,7 +29,7 @@ public class ArduinoListsTest {
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(led));
         this.arduinoHelper
-            .compareExistingAndGeneratedSource("ast/lists/arduino_occurance_lists_test.ino", "/ast/lists/arduino_occurance_lists_test.xml", builder.build());
+            .compareExistingAndGeneratedSource("/ast/lists/arduino_occurance_lists_test.ino", "/ast/lists/arduino_occurance_lists_test.xml", builder.build());
     }
 
     @Test
@@ -39,7 +39,7 @@ public class ArduinoListsTest {
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(led));
         this.arduinoHelper
-            .compareExistingAndGeneratedSource("ast/lists/arduino_list_repeat_test.ino", "/ast/lists/arduino_list_repeat_test.xml", builder.build());
+            .compareExistingAndGeneratedSource("/ast/lists/arduino_list_repeat_test.ino", "/ast/lists/arduino_list_repeat_test.xml", builder.build());
     }
 
     @Test
@@ -48,7 +48,7 @@ public class ArduinoListsTest {
         ConfigurationComponent led = new ConfigurationComponent("LED", true, "LED", BlocklyConstants.NO_SLOT, "L", ledPins);
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(led));
-        this.arduinoHelper.compareExistingAndGeneratedSource("ast/lists/arduino_sublist_test.ino", "/ast/lists/arduino_sublist_test.xml", builder.build());
+        this.arduinoHelper.compareExistingAndGeneratedSource("/ast/lists/arduino_sublist_test.ino", "/ast/lists/arduino_sublist_test.xml", builder.build());
     }
 
     @Test
@@ -58,7 +58,7 @@ public class ArduinoListsTest {
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(led));
         this.arduinoHelper
-            .compareExistingAndGeneratedSource("ast/lists/arduino_lists_get_set_test.ino", "/ast/lists/arduino_lists_get_set_test.xml", builder.build());
+            .compareExistingAndGeneratedSource("/ast/lists/arduino_lists_get_set_test.ino", "/ast/lists/arduino_lists_get_set_test.xml", builder.build());
     }
 
 }

@@ -9,12 +9,12 @@ public class MicrobitActorsTest {
 
     @Test
     public void radioTest() throws Exception {
-        this.microbitHelper.compareExistingAndGeneratedSource("action/microbit_radio_test.py", "/action/microbit_radio_test.xml");
+        this.microbitHelper.compareExistingAndGeneratedSource("/action/microbit_radio_test.py", "/action/microbit_radio_test.xml");
     }
 
     @Test
     public void setGetPixelBrightnessTest() throws Exception {
-        this.microbitHelper.compareExistingAndGeneratedSource("action/microbit_set_get_pixel_test.py", "/action/microbit_set_get_pixel_test.xml");
+        this.microbitHelper.compareExistingAndGeneratedSource("/action/microbit_set_get_pixel_test.py", "/action/microbit_set_get_pixel_test.xml");
     }
 
 }

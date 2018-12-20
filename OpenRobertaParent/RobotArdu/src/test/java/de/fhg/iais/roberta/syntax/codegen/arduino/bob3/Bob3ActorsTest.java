@@ -9,7 +9,7 @@ public class Bob3ActorsTest {
 
     @Test
     public void listsTest() throws Exception {
-        this.bob3Helper.compareExistingAndGeneratedSource("ast/actions/bob3_actors_test.ino", "/ast/actions/bob3_actors_test.xml");
+        this.bob3Helper.compareExistingAndGeneratedSource("/ast/actions/bob3_actors_test.ino", "/ast/actions/bob3_actors_test.xml");
     }
 
 }

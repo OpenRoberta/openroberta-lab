@@ -9,7 +9,7 @@ public class MicrobitTextTest {
 
     @Test
     public void mathOnListsTest() throws Exception {
-        this.microbitHelper.compareExistingAndGeneratedSource("function/microbit_text_join_test.py", "/function/microbit_text_join_test.xml");
+        this.microbitHelper.compareExistingAndGeneratedSource("/function/microbit_text_join_test.py", "/function/microbit_text_join_test.xml");
     }
 
 }

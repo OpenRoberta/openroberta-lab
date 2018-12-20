@@ -19,7 +19,7 @@ public class ArduinoActorTest {
         ConfigurationComponent relay = new ConfigurationComponent("RELAY", true, "relay", BlocklyConstants.NO_SLOT, "R", relayPins);
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(relay));
-        this.arduinoHelper.compareExistingAndGeneratedSource("ast/actions/arduino_relay_test.ino", "/ast/actions/arduino_relay_test.xml", builder.build());
+        this.arduinoHelper.compareExistingAndGeneratedSource("/ast/actions/arduino_relay_test.ino", "/ast/actions/arduino_relay_test.xml", builder.build());
     }
 
     @Test
@@ -29,7 +29,7 @@ public class ArduinoActorTest {
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(stepperMotor));
         this.arduinoHelper
-            .compareExistingAndGeneratedSource("ast/actions/arduino_stepper_motor_test.ino", "/ast/actions/arduino_stepper_motor_test.xml", builder.build());
+            .compareExistingAndGeneratedSource("/ast/actions/arduino_stepper_motor_test.ino", "/ast/actions/arduino_stepper_motor_test.xml", builder.build());
     }
 
     @Test
@@ -39,7 +39,7 @@ public class ArduinoActorTest {
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(stepperMotor));
         this.arduinoHelper
-            .compareExistingAndGeneratedSource("ast/actions/arduino_stepper_degree_test.ino", "/ast/actions/arduino_stepper_degree_test.xml", builder.build());
+            .compareExistingAndGeneratedSource("/ast/actions/arduino_stepper_degree_test.ino", "/ast/actions/arduino_stepper_degree_test.xml", builder.build());
     }
 
     @Test
@@ -49,7 +49,7 @@ public class ArduinoActorTest {
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(servoMotor));
         this.arduinoHelper
-            .compareExistingAndGeneratedSource("ast/actions/arduino_servo_motor_test.ino", "/ast/actions/arduino_servo_motor_test.xml", builder.build());
+            .compareExistingAndGeneratedSource("/ast/actions/arduino_servo_motor_test.ino", "/ast/actions/arduino_servo_motor_test.xml", builder.build());
     }
 
     @Test
@@ -60,7 +60,7 @@ public class ArduinoActorTest {
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(led));
         this.arduinoHelper
             .compareExistingAndGeneratedSource(
-                "ast/actions/arduino_show_on_serial_with_led_test.ino",
+                "/ast/actions/arduino_show_on_serial_with_led_test.ino",
                 "/ast/actions/arduino_show_on_serial_with_led_test.xml",
                 builder.build());
     }
@@ -73,7 +73,7 @@ public class ArduinoActorTest {
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(screen));
         this.arduinoHelper
             .compareExistingAndGeneratedSource(
-                "ast/actions/arduino_lcd1602_show_clear_test.ino",
+                "/ast/actions/arduino_lcd1602_show_clear_test.ino",
                 "/ast/actions/arduino_lcd1602_show_clear_test.xml",
                 builder.build());
     }
@@ -86,7 +86,7 @@ public class ArduinoActorTest {
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(screen));
         this.arduinoHelper
             .compareExistingAndGeneratedSource(
-                "ast/actions/arduino_lcd1602i2c_show_clear_test.ino",
+                "/ast/actions/arduino_lcd1602i2c_show_clear_test.ino",
                 "/ast/actions/arduino_lcd1602i2c_show_clear_test.xml",
                 builder.build());
     }
@@ -97,7 +97,7 @@ public class ArduinoActorTest {
         ConfigurationComponent buzzer = new ConfigurationComponent("BUZZER", true, "buzzer", BlocklyConstants.NO_SLOT, "B", buzzerPins);
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(buzzer));
-        this.arduinoHelper.compareExistingAndGeneratedSource("ast/actions/arduino_buzzer_test.ino", "/ast/actions/arduino_buzzer_test.xml", builder.build());
+        this.arduinoHelper.compareExistingAndGeneratedSource("/ast/actions/arduino_buzzer_test.ino", "/ast/actions/arduino_buzzer_test.xml", builder.build());
     }
 
     @Test
@@ -106,7 +106,7 @@ public class ArduinoActorTest {
         ConfigurationComponent led = new ConfigurationComponent("LED", true, "LED", BlocklyConstants.NO_SLOT, "L", ledPins);
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(led));
-        this.arduinoHelper.compareExistingAndGeneratedSource("ast/actions/arduino_led_test.ino", "/ast/actions/arduino_led_test.xml", builder.build());
+        this.arduinoHelper.compareExistingAndGeneratedSource("/ast/actions/arduino_led_test.ino", "/ast/actions/arduino_led_test.xml", builder.build());
     }
 
     @Test
@@ -115,7 +115,7 @@ public class ArduinoActorTest {
         ConfigurationComponent rgbLed = new ConfigurationComponent("RGBLED", true, "RGBLED", BlocklyConstants.NO_SLOT, "R", rgbLedPins);
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(rgbLed));
-        this.arduinoHelper.compareExistingAndGeneratedSource("ast/actions/arduino_rgb_led_test.ino", "/ast/actions/arduino_rgb_led_test.xml", builder.build());
+        this.arduinoHelper.compareExistingAndGeneratedSource("/ast/actions/arduino_rgb_led_test.ino", "/ast/actions/arduino_rgb_led_test.xml", builder.build());
     }
 
     @Test
@@ -129,7 +129,7 @@ public class ArduinoActorTest {
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(digitalOutput, analogOutput));
         this.arduinoHelper
             .compareExistingAndGeneratedSource(
-                "ast/actions/arduino_analog_digital_output_test.ino",
+                "/ast/actions/arduino_analog_digital_output_test.ino",
                 "/ast/actions/arduino_analog_digital_output_test.xml",
                 builder.build());
     }

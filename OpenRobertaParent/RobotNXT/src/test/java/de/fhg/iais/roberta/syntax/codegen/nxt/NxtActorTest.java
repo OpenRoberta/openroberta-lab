@@ -37,7 +37,7 @@ public class NxtActorTest {
     public void nxtOtherPowerConsumerTest() throws Exception {
         this.nxtHelper
             .compareExistingAndGeneratedNxcSource(
-                "ast/actions/nxt_other_consumer_test.nxc",
+                "/ast/actions/nxt_other_consumer_test.nxc",
                 "/ast/actions/nxt_other_consumer_test.xml",
                 makeOtherConsumerConfiguration());
     }
@@ -46,7 +46,7 @@ public class NxtActorTest {
     public void nxtDisplayTest() throws Exception {
         this.nxtHelper
             .compareExistingAndGeneratedNxcSource(
-                "ast/actions/nxt_display_all_datatypes_test.nxc",
+                "/ast/actions/nxt_display_all_datatypes_test.nxc",
                 "/ast/actions/nxt_display_all_datatypes_test.xml",
                 makeDisplayConfiguration());
     }

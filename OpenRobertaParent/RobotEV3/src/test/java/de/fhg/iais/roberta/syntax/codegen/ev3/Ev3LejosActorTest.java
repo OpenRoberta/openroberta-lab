@@ -32,7 +32,7 @@ public class Ev3LejosActorTest {
     public void mediumAndOtherConsumerTest() throws Exception {
         this.ev3lejosHelper
             .compareExistingAndGeneratedJavaSource(
-                "ast/actions/ev3_actors_medium_other_test.java",
+                "/ast/actions/ev3_actors_medium_other_test.java",
                 "/ast/actions/ev3_actors_medium_other_test.xml",
                 this.configuration);
     }

@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.actor.vorwerk;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ev3.HelperVorwerkForXmlTest;
+import de.fhg.iais.roberta.util.test.vorwerk.HelperVorwerkForXmlTest;
 
 public class SideBrushTest {
     private final HelperVorwerkForXmlTest h = new HelperVorwerkForXmlTest();

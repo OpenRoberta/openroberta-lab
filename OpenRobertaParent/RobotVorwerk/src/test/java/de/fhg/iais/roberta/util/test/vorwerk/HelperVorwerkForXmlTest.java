@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.util.test.ev3;
+package de.fhg.iais.roberta.util.test.vorwerk;
 
 import org.junit.Assert;
 

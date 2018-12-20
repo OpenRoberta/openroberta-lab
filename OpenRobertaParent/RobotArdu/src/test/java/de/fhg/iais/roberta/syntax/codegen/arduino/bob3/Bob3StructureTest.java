@@ -10,7 +10,7 @@ public class Bob3StructureTest {
 
     @Test
     public void listsTest() throws Exception {
-        this.bob3Helper.compareExistingAndGeneratedSource("ast/variables/bob3_datatypes_test.ino", "/ast/variables/bob3_datatypes_test.xml");
+        this.bob3Helper.compareExistingAndGeneratedSource("/ast/variables/bob3_datatypes_test.ino", "/ast/variables/bob3_datatypes_test.xml");
     }
 
 }

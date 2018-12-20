@@ -5,7 +5,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.components.vorwerk.VorwerkConfiguration;
-import de.fhg.iais.roberta.util.test.ev3.HelperVorwerkForXmlTest;
+import de.fhg.iais.roberta.util.test.vorwerk.HelperVorwerkForXmlTest;
 
 public class PythonVisitorTest {
     private final HelperVorwerkForXmlTest h = new HelperVorwerkForXmlTest();

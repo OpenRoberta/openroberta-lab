@@ -9,11 +9,11 @@ public class MicrobitSyntaxTest {
 
     @Test
     public void emptyValuesTest() throws Exception {
-        this.microbitHelper.compareExistingAndGeneratedSource("stmts/microbit_emtpy_values_test.py", "/stmts/microbit_emtpy_values_test.xml");
+        this.microbitHelper.compareExistingAndGeneratedSource("/stmts/microbit_emtpy_values_test.py", "/stmts/microbit_emtpy_values_test.xml");
     }
 
     @Test
     public void waitTimeConditionTest() throws Exception {
-        this.microbitHelper.compareExistingAndGeneratedSource("stmts/microbit_wait_test.py", "/stmts/microbit_wait_test.xml");
+        this.microbitHelper.compareExistingAndGeneratedSource("/stmts/microbit_wait_test.py", "/stmts/microbit_wait_test.xml");
     }
 }

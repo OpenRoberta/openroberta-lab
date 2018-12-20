@@ -1,12 +1,5 @@
 package de.fhg.iais.roberta.util.test.mbed;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.List;
-
 import org.junit.Assert;
 
 import de.fhg.iais.roberta.components.Configuration;
@@ -58,28 +51,10 @@ public class HelperMicrobitForXmlTest extends de.fhg.iais.roberta.util.test.Abst
 
     public String generatePython(String pathToProgramXML) throws Exception {
         Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXML);
-        String code = MicrobitPythonVisitor.generate(transformer.getTree(), true);
-        return code + "\n";
-    }
-
-    public static String readFileToString(String filename) {
-        List<String> lines = Collections.emptyList();
-        try {
-            lines = Files.readAllLines(Paths.get(ClassLoader.getSystemResource(filename).toURI()));
-        } catch ( IOException e ) {
-            return "";
-        } catch ( URISyntaxException e ) {
-            return "";
-        }
-        StringBuilder sb = new StringBuilder();
-        for ( String line : lines ) {
-            sb.append(line);
-            sb.append("\n");
-        }
-        return sb.toString();
+        return MicrobitPythonVisitor.generate(transformer.getTree(), true);
     }
 
     public void compareExistingAndGeneratedSource(String sourceCodeFilename, String xmlFilename) throws Exception {
-        Assert.assertEquals(HelperMicrobitForXmlTest.readFileToString(sourceCodeFilename), generatePython(xmlFilename));
+        Assert.assertEquals(Util1.readResourceContent(sourceCodeFilename), generatePython(xmlFilename));
     }
 }

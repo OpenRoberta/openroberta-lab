@@ -23,7 +23,7 @@ public class ArduinoSensorTest {
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(analogInput, digitalInput));
         this.arduinoHelper
             .compareExistingAndGeneratedSource(
-                "ast/sensors/arduino_analog_digital_input_test.ino",
+                "/ast/sensors/arduino_analog_digital_input_test.ino",
                 "/ast/sensors/arduino_analog_digital_input_test.xml",
                 builder.build());
     }
@@ -34,7 +34,7 @@ public class ArduinoSensorTest {
         ConfigurationComponent led = new ConfigurationComponent("LED", true, "LED", BlocklyConstants.NO_SLOT, "L", ledPins);
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(led));
-        this.arduinoHelper.compareExistingAndGeneratedSource("ast/sensors/arduino_timer_test.ino", "/ast/sensors/arduino_timer_test.xml", builder.build());
+        this.arduinoHelper.compareExistingAndGeneratedSource("/ast/sensors/arduino_timer_test.ino", "/ast/sensors/arduino_timer_test.xml", builder.build());
     }
 
     @Test
@@ -43,7 +43,7 @@ public class ArduinoSensorTest {
         ConfigurationComponent button = new ConfigurationComponent("KEY", true, "key", BlocklyConstants.NO_SLOT, "B", buttonPins);
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(button));
-        this.arduinoHelper.compareExistingAndGeneratedSource("ast/sensors/arduino_button_test.ino", "/ast/sensors/arduino_button_test.xml", builder.build());
+        this.arduinoHelper.compareExistingAndGeneratedSource("/ast/sensors/arduino_button_test.ino", "/ast/sensors/arduino_button_test.xml", builder.build());
     }
 
     @Test
@@ -53,7 +53,7 @@ public class ArduinoSensorTest {
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motion));
         this.arduinoHelper
-            .compareExistingAndGeneratedSource("ast/sensors/arduino_presence_test.ino", "/ast/sensors/arduino_presence_test.xml", builder.build());
+            .compareExistingAndGeneratedSource("/ast/sensors/arduino_presence_test.ino", "/ast/sensors/arduino_presence_test.xml", builder.build());
     }
 
     @Test
@@ -62,7 +62,7 @@ public class ArduinoSensorTest {
         ConfigurationComponent light = new ConfigurationComponent("LIGHT", true, "light", BlocklyConstants.NO_SLOT, "L", lightPins);
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(light));
-        this.arduinoHelper.compareExistingAndGeneratedSource("ast/sensors/arduino_light_test.ino", "/ast/sensors/arduino_light_test.xml", builder.build());
+        this.arduinoHelper.compareExistingAndGeneratedSource("/ast/sensors/arduino_light_test.ino", "/ast/sensors/arduino_light_test.xml", builder.build());
     }
 
     @Test
@@ -72,7 +72,7 @@ public class ArduinoSensorTest {
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(infrared));
         this.arduinoHelper
-            .compareExistingAndGeneratedSource("ast/sensors/arduino_infrared_test.ino", "/ast/sensors/arduino_infrared_test.xml", builder.build());
+            .compareExistingAndGeneratedSource("/ast/sensors/arduino_infrared_test.ino", "/ast/sensors/arduino_infrared_test.xml", builder.build());
     }
 
     @Test
@@ -83,7 +83,7 @@ public class ArduinoSensorTest {
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(infrared));
         this.arduinoHelper
             .compareExistingAndGeneratedSource(
-                "ast/sensors/arduino_infrared_presence_test.ino",
+                "/ast/sensors/arduino_infrared_presence_test.ino",
                 "/ast/sensors/arduino_infrared_presence_test.xml",
                 builder.build());
     }
@@ -95,7 +95,7 @@ public class ArduinoSensorTest {
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(temperature));
         this.arduinoHelper
-            .compareExistingAndGeneratedSource("ast/sensors/arduino_temperature_test.ino", "/ast/sensors/arduino_temperature_test.xml", builder.build());
+            .compareExistingAndGeneratedSource("/ast/sensors/arduino_temperature_test.ino", "/ast/sensors/arduino_temperature_test.xml", builder.build());
     }
 
     @Test
@@ -105,7 +105,7 @@ public class ArduinoSensorTest {
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(humidity));
         this.arduinoHelper
-            .compareExistingAndGeneratedSource("ast/sensors/arduino_humidity_test.ino", "/ast/sensors/arduino_humidity_test.xml", builder.build());
+            .compareExistingAndGeneratedSource("/ast/sensors/arduino_humidity_test.ino", "/ast/sensors/arduino_humidity_test.xml", builder.build());
     }
 
     @Test
@@ -114,7 +114,7 @@ public class ArduinoSensorTest {
         ConfigurationComponent drop = new ConfigurationComponent("DROP", true, "drop", BlocklyConstants.NO_SLOT, "D", dropPins);
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(drop));
-        this.arduinoHelper.compareExistingAndGeneratedSource("ast/sensors/arduino_drop_test.ino", "/ast/sensors/arduino_drop_test.xml", builder.build());
+        this.arduinoHelper.compareExistingAndGeneratedSource("/ast/sensors/arduino_drop_test.ino", "/ast/sensors/arduino_drop_test.xml", builder.build());
     }
 
     @Test
@@ -123,7 +123,7 @@ public class ArduinoSensorTest {
         ConfigurationComponent pulse = new ConfigurationComponent("PULSE", true, "pulse", BlocklyConstants.NO_SLOT, "P", pulsePins);
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(pulse));
-        this.arduinoHelper.compareExistingAndGeneratedSource("ast/sensors/arduino_pulse_test.ino", "/ast/sensors/arduino_pulse_test.xml", builder.build());
+        this.arduinoHelper.compareExistingAndGeneratedSource("/ast/sensors/arduino_pulse_test.ino", "/ast/sensors/arduino_pulse_test.xml", builder.build());
     }
 
     @Test
@@ -134,7 +134,7 @@ public class ArduinoSensorTest {
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(potentiometer));
         this.arduinoHelper
-            .compareExistingAndGeneratedSource("ast/sensors/arduino_potentiometer_test.ino", "/ast/sensors/arduino_potentiometer_test.xml", builder.build());
+            .compareExistingAndGeneratedSource("/ast/sensors/arduino_potentiometer_test.ino", "/ast/sensors/arduino_potentiometer_test.xml", builder.build());
     }
 
     @Test
@@ -144,7 +144,7 @@ public class ArduinoSensorTest {
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(moisture));
         this.arduinoHelper
-            .compareExistingAndGeneratedSource("ast/sensors/arduino_moisture_test.ino", "/ast/sensors/arduino_moisture_test.xml", builder.build());
+            .compareExistingAndGeneratedSource("/ast/sensors/arduino_moisture_test.ino", "/ast/sensors/arduino_moisture_test.xml", builder.build());
     }
 
     @Test
@@ -154,7 +154,7 @@ public class ArduinoSensorTest {
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(ultrasonic));
         this.arduinoHelper
-            .compareExistingAndGeneratedSource("ast/sensors/arduino_ultrasonic_test.ino", "/ast/sensors/arduino_ultrasonic_test.xml", builder.build());
+            .compareExistingAndGeneratedSource("/ast/sensors/arduino_ultrasonic_test.ino", "/ast/sensors/arduino_ultrasonic_test.xml", builder.build());
     }
 
     @Test
@@ -163,6 +163,6 @@ public class ArduinoSensorTest {
         ConfigurationComponent rfid = new ConfigurationComponent("RFID", true, "rfid", BlocklyConstants.NO_SLOT, "R", rfidPins);
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(rfid));
-        this.arduinoHelper.compareExistingAndGeneratedSource("ast/sensors/arduino_rfid_test.ino", "/ast/sensors/arduino_rfid_test.xml", builder.build());
+        this.arduinoHelper.compareExistingAndGeneratedSource("/ast/sensors/arduino_rfid_test.ino", "/ast/sensors/arduino_rfid_test.xml", builder.build());
     }
 }

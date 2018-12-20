@@ -1,13 +1,6 @@
 package de.fhg.iais.roberta.util.test.ev3;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
@@ -50,7 +43,7 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
         configuration.setRobotName("ev3lejosV1");
         return configuration;
     }
-    
+
     public static Configuration makeStandardEv3DevConfiguration() {
         Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
         ConfigurationComponent motorB = new ConfigurationComponent("MEDIUM", true, "B", BlocklyConstants.NO_SLOT, "B", motorBproperties);
@@ -62,27 +55,20 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
         ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", BlocklyConstants.NO_SLOT, "1", touchSensorProperties);
 
         Map<String, String> gyroSensorProperties = createMap();
-        ConfigurationComponent gyroSensor = new ConfigurationComponent("GYRO", false, "S2", BlocklyConstants.NO_SLOT, "2", touchSensorProperties);
+        ConfigurationComponent gyroSensor = new ConfigurationComponent("GYRO", false, "S2", BlocklyConstants.NO_SLOT, "2", gyroSensorProperties);
 
         Map<String, String> colourSensorProperties = createMap();
-        ConfigurationComponent colourSensor = new ConfigurationComponent("COLOR", false, "S3", BlocklyConstants.NO_SLOT, "3", touchSensorProperties);
+        ConfigurationComponent colourSensor = new ConfigurationComponent("COLOR", false, "S3", BlocklyConstants.NO_SLOT, "3", colourSensorProperties);
 
         Map<String, String> ultrasonicSensorProperties = createMap();
-        ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S4", BlocklyConstants.NO_SLOT, "4", touchSensorProperties);
+        ConfigurationComponent ultrasonicSensor =
+            new ConfigurationComponent("ULTRASONIC", false, "S4", BlocklyConstants.NO_SLOT, "4", ultrasonicSensorProperties);
 
         final Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(18f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorB, motorC, touchSensor, gyroSensor, colourSensor, ultrasonicSensor));
         Configuration configuration = builder.build();
         configuration.setRobotName("ev3dev");
         return configuration;
-    }
-
-    private static Map<String, String> createMap(String... args) {
-        Map<String, String> m = new HashMap<>();
-        for ( int i = 0; i < args.length; i += 2 ) {
-            m.put(args[i], args[i + 1]);
-        }
-        return m;
     }
 
     /**
@@ -152,29 +138,12 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
         return code;
     }
 
-    public static String readFileToString(String filename) {
-        List<String> lines = Collections.emptyList();
-        try {
-            lines = Files.readAllLines(Paths.get(ClassLoader.getSystemResource(filename).toURI()));
-        } catch ( IOException e ) {
-            return "";
-        } catch ( URISyntaxException e ) {
-            return "";
-        }
-        StringBuilder sb = new StringBuilder();
-        for ( String line : lines ) {
-            sb.append(line);
-            sb.append("\n");
-        }
-        return sb.toString();
-    }
-
     public void compareExistingAndGeneratedPythonSource(String sourceCodeFilename, String xmlFilename, Configuration configuration) throws Exception {
-        Assert.assertEquals(HelperEv3ForXmlTest.readFileToString(sourceCodeFilename), generatePython(xmlFilename, configuration) + "\n");
+        Assert.assertEquals(Util1.readResourceContent(sourceCodeFilename), generatePython(xmlFilename, configuration));
     }
 
     public void compareExistingAndGeneratedJavaSource(String sourceCodeFilename, String xmlFilename, Configuration configuration) throws Exception {
-        Assert.assertEquals(HelperEv3ForXmlTest.readFileToString(sourceCodeFilename), generateJava(xmlFilename, configuration) + "\n");
+        Assert.assertEquals(Util1.readResourceContent(sourceCodeFilename), generateJava(xmlFilename, configuration));
     }
 
 }

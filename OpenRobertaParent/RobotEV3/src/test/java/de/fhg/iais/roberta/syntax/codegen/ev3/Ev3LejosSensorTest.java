@@ -29,6 +29,6 @@ public class Ev3LejosSensorTest {
     @Test
     public void ev3HtSensorTest() throws Exception {
         this.ev3lejosHelper
-            .compareExistingAndGeneratedJavaSource("ast/sensors/ev3_htsensors_test.java", "/ast/sensors/ev3_htsensors_test.xml", this.configuration);
+            .compareExistingAndGeneratedJavaSource("/ast/sensors/ev3_htsensors_test.java", "/ast/sensors/ev3_htsensors_test.xml", this.configuration);
     }
 }

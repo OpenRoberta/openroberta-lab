@@ -9,7 +9,7 @@ public class Bob3MathTest {
 
     @Test
     public void clampTest() throws Exception {
-        this.bob3Helper.compareExistingAndGeneratedSource("ast/math/bob3_clamp_test.ino", "/ast/math/bob3_clamp_test.xml");
+        this.bob3Helper.compareExistingAndGeneratedSource("/ast/math/bob3_clamp_test.ino", "/ast/math/bob3_clamp_test.xml");
     }
 
 }

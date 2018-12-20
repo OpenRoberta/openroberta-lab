@@ -9,7 +9,7 @@ public class CalliopeExpressionsTest {
 
     @Test
     public void calliopeBinaryTest() throws Exception {
-        this.calliopeHelper.compareExistingAndGeneratedSource("expr/calliope_binary_test.cpp", "/expr/calliope_binary_test.xml");
+        this.calliopeHelper.compareExistingAndGeneratedSource("/expr/calliope_binary_test.cpp", "/expr/calliope_binary_test.xml");
     }
 
 }

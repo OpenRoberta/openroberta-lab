@@ -13,6 +13,6 @@ public class BotnrollSensorTest {
     @Test
     public void botnrollSensorTest() throws Exception {
         this.botnrollHelper
-            .compareExistingAndGeneratedSource("ast/sensors/botnroll_sensors_test.ino", "/ast/sensors/botnroll_sensors_test.xml", this.configuration);
+            .compareExistingAndGeneratedSource("/ast/sensors/botnroll_sensors_test.ino", "/ast/sensors/botnroll_sensors_test.xml", this.configuration);
     }
 }
