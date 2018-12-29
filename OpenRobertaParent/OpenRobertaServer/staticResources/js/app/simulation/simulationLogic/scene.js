@@ -13,7 +13,6 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         if(robot.constructor != Array){
             this.backgroundImg = backgroundImg;
             this.robot = robot;
-//            this.obstacle = obstacle;
             this.ruler = ruler;
             this.pattern = pattern;
             this.uCtx = $('#unitBackgroundLayer')[0].getContext('2d'); // unit context
@@ -31,11 +30,9 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             this.isMultiple = false;
             $("#constantValue").html("");
         }else if(robot.constructor === Array){
-            console.log("robot is multiple");
             this.backgroundImg = backgroundImg;
             this.robots = robot;
             this.numprogs = robot.length;
-//            this.obstacle = obstacle;
             this.ruler = ruler;
             this.pattern = pattern;
             this.uCtx = $('#unitBackgroundLayer')[0].getContext('2d'); // unit context
@@ -43,10 +40,6 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             this.mCtx = $('#rulerLayer')[0].getContext('2d'); // ruler == *m*easurement context
             this.oCtx = $('#objectLayer')[0].getContext('2d'); // object context
             this.rCtx = $('#robotLayer')[0].getContext('2d'); // robot context
-//            this.rCtxs = [];
-//            for(var i=0;i<robot.length;i++){
-//                
-//            }
             this.playground = {
                 x : 0,
                 y : 0,
@@ -59,23 +52,10 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             $("#constantValue").html("");
             var pagistr = "<select class=\"form-control\" style=\"background-color:"+this.robots[SIM.getRobotOfConsideration()].geom.color +"\" id=\"robotOfConsideration\">";
             for(var pagirobot = 0; pagirobot<this.numprogs; pagirobot++){
-                /*
-                if(SIM.getRobotOfConsideration()===pagirobot){
-                    pagistr += "<option selected style=\"background-color:"+this.robots[pagirobot].geom.color+'">&nbsp'+"</option>";
-//                    pagistr += "<option selected>"+(pagirobot+1)+"</option>";
-
-                }else{
-                    pagistr += "<option style=\"background-color:"+this.robots[pagirobot].geom.color+'">&nbsp'+"</option>";
-//                    pagistr += "<option >"+(pagirobot+1)+"</option>";
-
-                }
-                */
                 pagistr += "<option class=\"robotOfConsiderationOptions\" style=\"background-color:"+this.robots[pagirobot].geom.color+'">&nbsp'+"</option>";
-
             }
             pagistr += "</select>";
             $("#constantValue").append('<div><label>Robot</label><span style=\"width:auto\">' + pagistr + '</span></div>');
-//            $("#notConstantValue").append('<div><label>Color Sensor</label><span style="margin-left:6px; width: 20px; background-color:' + this.robot.geom.color + '">&nbsp;</span></div>');
 
         }
     }
@@ -382,17 +362,8 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
     }
     
     Scene.prototype.drawRobots = function(){
-//        if (this.robot.idle) {
-//            this.drawMbed();
-//            return;
-//        }
         this.rCtx.clearRect(0, 0, CONSTANTS.MAX_WIDTH, CONSTANTS.MAX_HEIGHT);
         
-//        // provide new user information
-//        $('#notConstantValue').html('');
-//        $("#notConstantValue").append('<div><label>FPS</label><span>' + UTIL.round(1 / SIM.getDt(), 0) + '</span></div>');
-//        $("#notConstantValue").append('<div><label>Time</label><span>' + UTIL.round(this.robot.time, 3) + 's</span></div>');
-//        this.rCtx.save();
         for(var iterrobot=0;iterrobot<this.numprogs;iterrobot++){
             this.rCtx.restore();
             this.rCtx.save();
@@ -409,24 +380,15 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             if(SIM.getRobotOfConsideration()===iterrobot){
                 
                 $('#notConstantValue').html('');
-//                $('#notConstantValue').append("<ul class=\"pagination\"><li><a href=\"#\">1</a></li><li><a href=\"#\">2</a></li></ul>");
                 var pagistr = "<select class=\"form-control\" id=\"exampleFormControlSelect1\">";
-//                $('#notConstantValue').append("<ul class=\"pagination\">");
                 for(var pagirobot = 0; pagirobot<this.numprogs; pagirobot++){
                     if(iterrobot===pagirobot){
-//                        $('#notConstantValue').append("<li class=\"active\"><a href=\"#\">"+pagirobot+"</a></li>");
                         pagistr += "<option >"+(pagirobot+1)+"</option>";
                     }else{
-//                        $('#notConstantValue').append("<li><a href=\"#\">"+pagirobot+"</a></li>");
                         pagistr += "<option >"+(pagirobot+1)+"</option>"
                     }
                 }
                 pagistr += "</select>";
-//                $('#notConstantValue').append(pagistr);
-//                $(".robotsel").off("click");
-//                $(".robotsel").on("click", function(){
-//                    console.log("clicked");
-//                });
                 $("#notConstantValue").append('<div><label>Program Name</label><span>' + this.robots[iterrobot].savedName+ '</span></div>');
                 $("#notConstantValue").append('<div><label>FPS</label><span>' + UTIL.round(1 / SIM.getDt(), 0) + '</span></div>');
                 $("#notConstantValue").append('<div><label>Time</label><span>' + UTIL.round(this.robots[iterrobot].time, 3) + 's</span></div>');
@@ -459,7 +421,6 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             //back wheel
             this.rCtx.fillStyle = this.robots[iterrobot].wheelBack.color;
             this.rCtx.fillRect(this.robots[iterrobot].wheelBack.x, this.robots[iterrobot].wheelBack.y, this.robots[iterrobot].wheelBack.w, this.robots[iterrobot].wheelBack.h);
-            //this.robots[iterrobot]
             this.rCtx.shadowBlur = 0;
             this.rCtx.shadowOffsetX = 0;
             this.rCtx.fillStyle = this.robots[iterrobot].touchSensor.color;
@@ -510,8 +471,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
               this.rCtx.beginPath();
               this.rCtx.arc(this.robots[iterrobot].led.x, this.robots[iterrobot].led.y, 2.5, 0, Math.PI * 2);
               this.rCtx.fill();
-          }
-          
+          }     
           //wheels
           this.rCtx.fillStyle = this.robots[iterrobot].wheelLeft.color;
           this.rCtx.fillRect(this.robots[iterrobot].wheelLeft.x, this.robots[iterrobot].wheelLeft.y, this.robots[iterrobot].wheelLeft.w, this.robots[iterrobot].wheelLeft.h);
@@ -523,17 +483,8 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
           this.rCtx.arc(0, -15, this.robots[iterrobot].colorSensor.r, 0, Math.PI * 2);
           this.rCtx.fillStyle = this.robots[iterrobot].colorSensor.color;
           this.rCtx.fill();
-          this.rCtx.strokeStyle = "black";
-          
+          this.rCtx.strokeStyle = "black"; 
           this.rCtx.stroke();
-          
-          //number on robot
-//          this.rCtx.save();
-//          this.rCtx.scale(1,-1);
-//          this.rCtx.font = "30px Arial";
-//          this.rCtx.fillStyle = "black";
-//          this.rCtx.fillText(iterrobot+1,-10,0);
-//          this.rCtx.restore();
           //ledSensor
           if (this.robots[iterrobot].ledSensor && this.robots[iterrobot].ledSensor.color) {
               this.rCtx.fillStyle = this.robots[iterrobot].ledSensor.color;
@@ -584,13 +535,6 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
               this.robots[iterrobot].pose.yOld = this.robots[iterrobot].pose.y;
           }
         }
-
-
-
-
-
-
-
     }
 
     Scene.prototype.updateSensorValues = function(running) {
@@ -601,8 +545,6 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             this.robot.frontRight.bumped = false;
             this.robot.backLeft.bumped = false;
             this.robot.backRight.bumped = false;
-//            console.log("obstacle list is ");
-//            console.log(SIM.obstacleList);
             for (var i = 0; i < SIM.obstacleList.length; i++) {
                 var p = SIM.obstacleList[i];
                 if (i == 0) {
@@ -728,9 +670,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             var g = 0
             var b = 0;
             var colors = this.uCtx.getImageData(Math.round(this.robot.colorSensor.rx - 3), Math.round(this.robot.colorSensor.ry - 3), 6, 6);
-            //var colors = uCtx.getImageData(Math.round(this.robot.colorSensor.rx - 4), Math.round(this.robot.colorSensor.ry - 4), 8, 8);
             var out = [ 0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140 ]; // outside the circle
-            // var out = [ 0, 4, 24, 28, 32, 60, 192, 220, 224, 228, 248, 252 ]; // outside the circle
             var b = 0;
             for (var j = 0; j < colors.data.length; j += 24) {
                 //  for (var j = 0; j < colors.data.length; j += 32) {
@@ -884,9 +824,6 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
                 values.buttons[key] = this.robot.buttons[key] == true;
                 values.buttons.any = (values.buttons.any || this.robot.buttons[key]);
              }
-//            for ( var key in this.robot.buttons) {
-//                this.robot.buttons[key] = false;
-//            }
         }
         if (this.robot.webAudio) {
             values.volume = this.robot.webAudio.volume * 100;
@@ -938,8 +875,6 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
                 this.robots[progiter].frontRight.bumped = false;
                 this.robots[progiter].backLeft.bumped = false;
                 this.robots[progiter].backRight.bumped = false;
-    //            console.log("obstacle list is ");
-    //            console.log(SIM.obstacleList);
                 var personalObstacleList = SIM.obstacleList.slice();
                 for(var i=0;i<this.numprogs;i++){
                     if(i===progiter){
@@ -1123,12 +1058,9 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
                 var g = 0
                 var b = 0;
                 var colors = this.uCtx.getImageData(Math.round(this.robots[progiter].colorSensor.rx - 3), Math.round(this.robots[progiter].colorSensor.ry - 3), 6, 6);
-                //var colors = uCtx.getImageData(Math.round(this.robots[progiter].colorSensor.rx - 4), Math.round(this.robots[progiter].colorSensor.ry - 4), 8, 8);
-                var out = [ 0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140 ]; // outside the circle
-                // var out = [ 0, 4, 24, 28, 32, 60, 192, 220, 224, 228, 248, 252 ]; // outside the circle
-                var b = 0;
+                 var out = [ 0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140 ]; // outside the circle
+                 var b = 0;
                 for (var j = 0; j < colors.data.length; j += 24) {
-                    //  for (var j = 0; j < colors.data.length; j += 32) {
                     for (var i = j; i < j + 24; i += 4) {
                         if (out.indexOf(i) < 0) {
                             r += colors.data[i + 0];
@@ -1294,10 +1226,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
                     values.buttons[key] = this.robots[progiter].buttons[key] == true;
                     values.buttons.any = (values.buttons.any || this.robots[progiter].buttons[key]);
                  }
-    //            for ( var key in this.robots[progiter].buttons) {
-    //                this.robots[progiter].buttons[key] = false;
-    //            }
-            }
+             }
             if (this.robots[progiter].webAudio) {
                 values.volume = this.robots[progiter].webAudio.volume * 100;
             }

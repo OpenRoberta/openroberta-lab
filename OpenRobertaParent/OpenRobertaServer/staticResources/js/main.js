@@ -202,7 +202,6 @@ function init() {
         progRunController.init();
         menuController.init();
         tutorialController.init();
-        multSimController.init();
 
         cookieDisclaimer.init();
         $(".cover").fadeOut(100, function() {
