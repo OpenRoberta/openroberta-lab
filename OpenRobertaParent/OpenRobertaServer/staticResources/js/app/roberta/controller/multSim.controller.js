@@ -106,7 +106,8 @@ define([ 'exports', 'util', 'progList.model', 'program.controller', 'program.mod
                                             PROGRAM_M.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(
                                                     result) {
                                                 if (result.rc === "ok") {
-                                                    extractedprograms[i]["result"] = result;
+                                                    for ( var resultProp in result)
+                                                        extractedprograms[i][resultProp] = result[resultProp];
                                                     programsfetched++;
                                                     if (programsfetched === oriarray.length) {
                                                         simulateMultiple(extractedprograms);
@@ -138,7 +139,7 @@ define([ 'exports', 'util', 'progList.model', 'program.controller', 'program.mod
     function simulateMultiple(programs) {
         $("#simModal").modal('toggle');
         const INITIAL_WIDTH = 0.5;
-        SIM.initMultiple(programs, true, GUISTATE_C.getRobotGroup());
+        SIM.init(programs, true, GUISTATE_C.getRobotGroup());
         $(".sim").removeClass('hide');
         $('#simButtonsCollapse').collapse({
             'toggle' : false

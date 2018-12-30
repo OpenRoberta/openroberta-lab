@@ -14,13 +14,12 @@ define([ 'exports', 'message', 'log', 'util', 'simulation.simulation', 'guiState
         $('#simButton').off('click touchend');
         $('#simButton').on('click touchend', function(event) {
             toggleSim();
-
             return false;
         });
 
         $('#simRobotModal').removeClass("modal-backdrop");
         $('#simControl').onWrap('click', function(event) {
-            if (SIM.isMultiple() === false) {
+            if (SIM.getNumRobots() == 1) {
                 if ($('#simControl').hasClass('typcn-media-play-outline')) {
                     Blockly.hideChaff();
                     var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
@@ -37,10 +36,10 @@ define([ 'exports', 'message', 'log', 'util', 'simulation.simulation', 'guiState
                             MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
                             $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
                             $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
-                            SIM.init(result.javaScriptProgram, false, GUISTATE_C.getRobotGroup());
                             setTimeout(function() {
                                 SIM.setPause(false);
                             }, 500);
+                            SIM.init([result], false, GUISTATE_C.getRobotGroup());
                         } else {
                             MSG.displayInformation(result, "", result.message, "");
                         }
@@ -57,7 +56,7 @@ define([ 'exports', 'message', 'log', 'util', 'simulation.simulation', 'guiState
                     MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", "multiple simulation");
                     $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
                     $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
-                    SIM.startMultiple(false, GUISTATE_C.getRobotGroup());
+                    SIM.run(false, GUISTATE_C.getRobotGroup());
                     setTimeout(function() {
                         SIM.setPause(false);
                     }, 500);
@@ -66,7 +65,6 @@ define([ 'exports', 'message', 'log', 'util', 'simulation.simulation', 'guiState
                     $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
                     SIM.stopProgram();
                 }
-
             }
         });
         $('#simImport').onWrap('click', function(event) {
@@ -146,7 +144,7 @@ define([ 'exports', 'message', 'log', 'util', 'simulation.simulation', 'guiState
 
             PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
                 if (result.rc == "ok") {
-                    SIM.init(result.javaScriptProgram, true, GUISTATE_C.getRobotGroup());
+                    SIM.init([result], true, GUISTATE_C.getRobotGroup());
                     $(".sim").removeClass('hide');
                     $('#simButtonsCollapse').collapse({
                         'toggle' : false
