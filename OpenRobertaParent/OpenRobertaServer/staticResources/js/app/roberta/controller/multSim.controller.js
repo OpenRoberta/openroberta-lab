@@ -143,6 +143,12 @@ define([ 'exports', 'util', 'progList.model', 'program.controller', 'program.mod
         $('#simButtonsCollapse').collapse({
             'toggle' : false
         });
-        $('#blockly').openRightView('sim', INITIAL_WIDTH);
+        if ($("#blockly").hasClass("rightActive") && !$("#simDiv").hasClass("rightActive")) {
+            $('#blockly').closeRightView(function() {
+                $('#blockly').openRightView('sim', INITIAL_WIDTH);
+            });
+        } else if (!$("#simDiv").hasClass("rightActive")) {
+            $('#blockly').openRightView('sim', INITIAL_WIDTH);
+        }
     }
 });
