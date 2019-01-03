@@ -92,8 +92,7 @@ limitations under the License.
                             <li><a href="#" id="menuRunSim" class="typcn typcn-simulation" lkey="Blockly.Msg.MENU_START_SIM">run in simulation</a></li>
                             <li><a href="#" id="menuNewProg" class="typcn typcn-document-add" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
                             <li class="login"><a href="#" id="menuListProg" class="typcn typcn-th-list" lkey="Blockly.Msg.MENU_LIST_PROG">Liste ...</a></li>
-                            <li class="login"><a href="#" id="multipleSimNav" class="typcn typcn-open" data-toggle="modal" data-target="#simModal">multiple
-                                    simulation</a></li>
+                            <li class="login"><a href="#" id="menuRunMulipleSim" class="typcn typcn-open">run multiple robot simulation</a></li>
                             <li><a href="#" id="menuListExamples" class="typcn typcn-th-list" lkey="Blockly.Msg.MENU_LIST_PROG_EXAMPLES">Beispielprogramme
                                     ...</a></li>
                             <li class="login"><a href="#" id="menuSaveProg" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
@@ -758,31 +757,25 @@ limitations under the License.
         </div>
     </div>
     <!--Multiple Simulation Modal-->
-    <div class="modal fade" id="simModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div id="showMultipleSimPrograms" class="modal fade in">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title text-center" id="myModalLabel">
-                        Multiple Simulation
-                        </h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 id="#headMulipleRobots" class="modal-title" lkey="Blockly.Msg.POPUP_MULTIPLE_ROBOTS">Meine Programme</h3>
                 </div>
                 <div class="modal-body">
-                    <table id="mtable"></table>
-                    <p id="voidList" class="text-center"></p>
+                    <table id="multipleRobotsTable"></table>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Ok</button>
+                    <button type="button" id="loadMultipleSimPrograms" class="btn btn-primary">Ok</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
-
     <!-- Popup show about info -->
-    <div id="show-about" class="modal fade">
+    <div id="show-about" class="modal fade in">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -985,7 +978,7 @@ limitations under the License.
         </div>
     </div>
     <!--  Popup to show relations / share programs -->
-    <div id="show-relations" class="modal fade">
+    <div id="show-relations" class="modal fade in">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">

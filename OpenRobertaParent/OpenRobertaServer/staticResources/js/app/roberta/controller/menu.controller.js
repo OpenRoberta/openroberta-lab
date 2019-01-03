@@ -320,7 +320,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             case 'menuToolboxExpert':
                 $('.levelTabs a[href="#expert"]').tab('show');
                 break;
-            case 'multipleSimNav':
+            case 'menuRunMulipleSim':
                 MULT_SIM.showListProg();
                 break;          
             default:

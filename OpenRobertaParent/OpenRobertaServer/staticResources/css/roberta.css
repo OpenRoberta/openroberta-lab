@@ -1609,6 +1609,7 @@ input[type=range]:focus::-ms-fill-upper {
 #progList table thead,
 #confList table thead,
 #show-relations table thead,
+#showMultipleSimPrograms table thead,
 #logList table thead {
     text-transform: uppercase;
     background-color: #898989;
@@ -1618,6 +1619,7 @@ input[type=range]:focus::-ms-fill-upper {
 }
 #progList table,
 #confList table,
+#showMultipleSimPrograms table thead,
 #show-relations table {
     margin: 0;
     width: 100%;
