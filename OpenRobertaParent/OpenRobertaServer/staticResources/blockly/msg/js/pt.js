@@ -606,6 +606,7 @@ Blockly.Msg.MENU_ROBOT_STATE_TOOLTIP = "informação do robô";
 Blockly.Msg.MENU_ROBOT_STOP_HINT_EV3 = "Press <span class='typcn typcn-media-stop'></span>+<span class='typcn typcn-arrow-sorted-down'></span> buttons on the robot to abort the program!";  // untranslated
 Blockly.Msg.MENU_ROBOT_STOP_HINT_NXT = "Press <span class='typcn typcn-media-cancel'></span> button on the robot to abort the program!";  // untranslated
 Blockly.Msg.MENU_ROBOT_TOOLTIP = "robôs";
+Blockly.Msg.MENU_RUN_MULT_SIM = "multiple robot simulation ...";  // untranslated
 Blockly.Msg.MENU_SAVE = "guardar";
 Blockly.Msg.MENU_SAVE_AS = "guardar como …";
 Blockly.Msg.MENU_SHOW_AGAIN = "mostrar nota de boas-vindas novamente";
@@ -1030,6 +1031,8 @@ Blockly.Msg.POPUP_DO_UPDATE_FIRMWARE = "Atualizar agora";
 Blockly.Msg.POPUP_EMAIL = "Correio-eletrónico";
 Blockly.Msg.POPUP_EMAIL_SEND = "Enviar agora";
 Blockly.Msg.POPUP_GET_LINK = "Here is the link to your actual program. Please don't change it, it probably won't work anymore. It's already copied to your clipboard!</br>$";  // untranslated
+Blockly.Msg.POPUP_MULTIPLE_ROBOTS = "Select multiple programs for the simulation";  // untranslated
+Blockly.Msg.POPUP_MULTROBOTS_NOPROGRAMS = "Please create and store at least two programs which then can be executed each by a simulated robot!";  // untranslated
 Blockly.Msg.POPUP_NAME = "Nome";
 Blockly.Msg.POPUP_NEW_PASSWORD = "Nova palavra-passe";
 Blockly.Msg.POPUP_OLD_PASSWORD = "Palavra-passe antiga";

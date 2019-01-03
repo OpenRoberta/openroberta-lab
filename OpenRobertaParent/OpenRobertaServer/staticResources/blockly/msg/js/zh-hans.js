@@ -606,6 +606,7 @@ Blockly.Msg.MENU_ROBOT_STATE_TOOLTIP = "机器人信息";
 Blockly.Msg.MENU_ROBOT_STOP_HINT_EV3 = "按下 <span class='typcn typcn-media-stop\"></span>+<span class=\"typcn typcn-arrow-sorted-down\"></span> 按钮, 机器人中止程序!";
 Blockly.Msg.MENU_ROBOT_STOP_HINT_NXT = "按下 <span class='typcn typcn-media-cancel\"></span> b按钮, 机器人中止程序!";
 Blockly.Msg.MENU_ROBOT_TOOLTIP = "机器人";
+Blockly.Msg.MENU_RUN_MULT_SIM = "multiple robot simulation ...";  // untranslated
 Blockly.Msg.MENU_SAVE = "保存";
 Blockly.Msg.MENU_SAVE_AS = "另存为 ...";
 Blockly.Msg.MENU_SHOW_AGAIN = "再次显示欢迎便笺";
@@ -1030,6 +1031,8 @@ Blockly.Msg.POPUP_DO_UPDATE_FIRMWARE = "立即更新";
 Blockly.Msg.POPUP_EMAIL = "电子邮件";
 Blockly.Msg.POPUP_EMAIL_SEND = "立即发送";
 Blockly.Msg.POPUP_GET_LINK = "下面是指向实际程序的链接。请不要改变它, 它可能不会再工作了。它已经复制到您的剪贴板!</br>$";
+Blockly.Msg.POPUP_MULTIPLE_ROBOTS = "Select multiple programs for the simulation";  // untranslated
+Blockly.Msg.POPUP_MULTROBOTS_NOPROGRAMS = "Please create and store at least two programs which then can be executed each by a simulated robot!";  // untranslated
 Blockly.Msg.POPUP_NAME = "名字";
 Blockly.Msg.POPUP_NEW_PASSWORD = "新密码";
 Blockly.Msg.POPUP_OLD_PASSWORD = "旧密码";

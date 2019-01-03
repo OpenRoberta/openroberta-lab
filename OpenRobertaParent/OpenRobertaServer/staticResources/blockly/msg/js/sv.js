@@ -606,6 +606,7 @@ Blockly.Msg.MENU_ROBOT_STATE_TOOLTIP = "robotinfo";
 Blockly.Msg.MENU_ROBOT_STOP_HINT_EV3 = "Tryck <span class='typcn typcn-media-stop\"></span>+<span class=\"typcn typcn-arrow-sorted-down\"></span> knapparna på roboten för att avbryta programmet!";
 Blockly.Msg.MENU_ROBOT_STOP_HINT_NXT = "Tryck <span class='typcn typcn-media-cancel\"></span> knappen på roboten för att avbryta programmet!";
 Blockly.Msg.MENU_ROBOT_TOOLTIP = "robotar";
+Blockly.Msg.MENU_RUN_MULT_SIM = "multiple robot simulation ...";  // untranslated
 Blockly.Msg.MENU_SAVE = "spara";
 Blockly.Msg.MENU_SAVE_AS = "spara som ...";
 Blockly.Msg.MENU_SHOW_AGAIN = "visa välkomstsida igen";
@@ -1030,6 +1031,8 @@ Blockly.Msg.POPUP_DO_UPDATE_FIRMWARE = "Uppdatera nu";
 Blockly.Msg.POPUP_EMAIL = "E-post";
 Blockly.Msg.POPUP_EMAIL_SEND = "Skicka nu";
 Blockly.Msg.POPUP_GET_LINK = "Här är länken till ditt riktiga program. Vänligen ändra inte det, det kommer säkert inte längre att fungera. Det har redan kopierats till urklipp! </ Br> $";
+Blockly.Msg.POPUP_MULTIPLE_ROBOTS = "Select multiple programs for the simulation";  // untranslated
+Blockly.Msg.POPUP_MULTROBOTS_NOPROGRAMS = "Please create and store at least two programs which then can be executed each by a simulated robot!";  // untranslated
 Blockly.Msg.POPUP_NAME = "Namn";
 Blockly.Msg.POPUP_NEW_PASSWORD = "Nytt lösenord";
 Blockly.Msg.POPUP_OLD_PASSWORD = "Gammalt lösenord";
