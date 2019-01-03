@@ -77,7 +77,7 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
         if (num == undefined) {
             setObstacle();
             setRuler();
-            scene = new Scene(imgObjectList[currentBackground], robots, imgPattern, ruler);
+            scene = new Scene(imgObjectList[currentBackground], robots, obstacle, imgPattern, ruler);
             scene.updateBackgrounds();
             scene.drawObjects();
             scene.drawRuler();
@@ -220,11 +220,7 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
         hOld: 0,
         isParallelToAxis: true
     };
-    var obslist = [ground, obstacle];
-    exports.obstacleList = obslist;
-
-    var hoverindex = 1;
-    exports.hoverindex = hoverindex;
+    exports.obstacleList = [ground, obstacle];
 
     var ruler = {
         x: 0,
@@ -241,13 +237,17 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
 
     var globalID;
     var robots = [];
+    var robotIndex = 0;
+    var mouseOnRobotIndex = 0;
     var simRobotType;
     var numRobots = 0;
-    exports.getNumRobots = function(){return numRobots;};
+    exports.getNumRobots = function () {
+        return numRobots;
+    };
     var ROBOT;
 
     function init(programs, refresh, robotType) {
-        mouseOnIndex = -1;
+        mouseOnRobotIndex = -1;
         storedPrograms = programs;
         numRobots = programs.length;
         reset = false;
@@ -549,16 +549,10 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
             var boolDown = (dx * dx + dy * dy < robots[i].mouse.r * robots[i].mouse.r);
             isDownRobots[i] = boolDown;
             if (boolDown) {
-                mouseOnIndex = i;
+                mouseOnRobotIndex = i;
             }
         }
-
-        for (var i = 0; i < obslist.length; i++) {
-            isDownObstacle = (startX > obslist[i].x && startX < obslist[i].x + obslist[i].w && startY > obslist[i].y && startY < obslist[i].y + obslist[i].h);
-            if (isDownObstacle) {
-                break;
-            }
-        }
+        isDownObstacle = (startX > obstacle.x && startX < obstacle.x + obstacle.w && startY > obstacle.y && startY < obstacle.y + obstacle.h);
         isDownRuler = (startX > ruler.x && startX < ruler.x + ruler.w && startY > ruler.y && startY < ruler.y + ruler.h);
         if (isDownRobots || isDownObstacle || isDownRuler || isAnyRobotDown()) {
             e.stopPropagation();
@@ -589,8 +583,8 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
 
     function handleMouseUp(e) {
         $("#robotLayer").css('cursor', 'auto');
-        if (mouseOnIndex >= 0 && robots[mouseOnIndex].drawWidth) {
-            robots[mouseOnIndex].canDraw = true;
+        if (mouseOnRobotIndex >= 0 && robots[mouseOnRobotIndex].drawWidth) {
+            robots[mouseOnRobotIndex].canDraw = true;
         }
         isDownObstacle = false;
         isDownRuler = false;
@@ -599,7 +593,7 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
                 isDownRobots[i] = false;
             }
         }
-        mouseOnIndex = -1;
+        mouseOnRobotIndex = -1;
     }
 
     function handleMouseOut(e) {
@@ -611,7 +605,7 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
                 isDownRobots[i] = false;
             }
         }
-        mouseOnIndex = -1;
+        mouseOnRobotIndex = -1;
         e.stopPropagation();
     }
 
@@ -635,19 +629,13 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
                     break;
                 }
             }
+            var hoverObstacle = (mouseX > obstacle.x && mouseX < obstacle.x + obstacle.w && mouseY > obstacle.y && mouseY < obstacle.y + obstacle.h);
             var hoverRuler = (mouseX > ruler.x && mouseX < ruler.x + ruler.w && mouseY > ruler.y && mouseY < ruler.y + ruler.h);
-            if (hoverRobot || hoverRuler)
+            if (hoverRobot || hoverObstacle || hoverRuler) {
                 $("#robotLayer").css('cursor', 'pointer');
-            var hoverObstacle;
-            for (var i = 1; i < obslist.length; i++) {
-                hoverObstacle = (mouseX > obslist[i].x && mouseX < obslist[i].x + obslist[i].w && mouseY > obslist[i].y && mouseY < obslist[i].y + obslist[i].h);
-                if (hoverObstacle) {
-                    $("#robotLayer").css('cursor', 'pointer');
-                    hoverindex = i;
-                    return;
-                }
+            } else {
+                $("#robotLayer").css('cursor', 'auto');
             }
-            $("#robotLayer").css('cursor', 'auto');
             return;
         }
         $("#robotLayer").css('cursor', 'pointer');
@@ -656,18 +644,18 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
         startX = mouseX;
         startY = mouseY;
         if (isAnyRobotDown()) {
-            if (robots[mouseOnIndex].drawWidth) {
-                robots[mouseOnIndex].canDraw = false;
+            if (robots[mouseOnRobotIndex].drawWidth) {
+                robots[mouseOnRobotIndex].canDraw = false;
             }
-            robots[mouseOnIndex].pose.xOld = robots[mouseOnIndex].pose.x;
-            robots[mouseOnIndex].pose.yOld = robots[mouseOnIndex].pose.y;
-            robots[mouseOnIndex].pose.x += dx;
-            robots[mouseOnIndex].pose.y += dy;
-            robots[mouseOnIndex].mouse.rx += dx;
-            robots[mouseOnIndex].mouse.ry += dy;
+            robots[mouseOnRobotIndex].pose.xOld = robots[mouseOnRobotIndex].pose.x;
+            robots[mouseOnRobotIndex].pose.yOld = robots[mouseOnRobotIndex].pose.y;
+            robots[mouseOnRobotIndex].pose.x += dx;
+            robots[mouseOnRobotIndex].pose.y += dy;
+            robots[mouseOnRobotIndex].mouse.rx += dx;
+            robots[mouseOnRobotIndex].mouse.ry += dy;
         } else if (isDownObstacle) {
-            obslist[hoverindex].x += dx;
-            obslist[hoverindex].y += dy;
+            obstacle.x += dx;
+            obstacle.y += dy;
             scene.drawObjects();
         } else if (isDownRuler) {
             ruler.x += dx;
@@ -794,7 +782,7 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
     }
 
     function initScene() {
-        scene = new Scene(imgObjectList[currentBackground], robots, imgPattern, ruler);
+        scene = new Scene(imgObjectList[currentBackground], robots, obstacle, imgPattern, ruler);
         scene.updateBackgrounds();
         scene.drawObjects();
         scene.drawRuler();
@@ -883,6 +871,7 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
     }
 
     function createRobots(reqRobot, numRobots) {
+        robots = [];
         if (numRobots >= 1) {
             var tempRobot = createRobot(reqRobot);
             tempRobot.savedName = userPrograms[0].savedName;

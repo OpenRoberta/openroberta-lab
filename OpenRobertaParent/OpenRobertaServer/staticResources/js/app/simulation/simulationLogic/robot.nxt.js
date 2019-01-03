@@ -1,4 +1,4 @@
-define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 'volume-meter' ], function(SIM, CONSTANTS, Robot, Volume) {
+define(['simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 'volume-meter'], function (SIM, CONSTANTS, Robot, Volume) {
 
     /**
      * Creates a new robot for a simulation.
@@ -11,127 +11,245 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 
      * @class
      */
     function Nxt(pose) {
-        this.pose = pose;
+        Robot.call(this, pose);
+        this.geom = {
+            x: -20,
+            y: -20,
+            w: 40,
+            h: 50,
+            color: 'LIGHTGREY'
+        };
+        this.wheelLeft = {
+            x: 16,
+            y: -8,
+            w: 8,
+            h: 16,
+            color: '#000000'
+        };
+        this.wheelRight = {
+            x: -24,
+            y: -8,
+            w: 8,
+            h: 16,
+            color: '#000000'
+        };
+        this.wheelBack = {
+            x: -2.5,
+            y: 30,
+            w: 5,
+            h: 5,
+            color: '#000000'
+        };
+        this.ledSensor = {
+            x: 0,
+            y: -15,
+            color: '',
+        };
+        this.encoder = {
+            left: 0,
+            right: 0
+        };
+        this.colorSensor = {
+            x: 0,
+            y: -15,
+            rx: 0,
+            ry: 0,
+            r: 5,
+            colorValue: 0,
+            lightValue: 0,
+            color: 'grey'
+        };
+        this.ultraSensor = {
+            x: 0,
+            y: -20,
+            rx: 0,
+            ry: 0,
+            distance: 0,
+            u: [],
+            cx: 0,
+            cy: 0,
+            color: '#FF69B4'
+        };
+        this.touchSensor = {
+            x: 0,
+            y: -25,
+            x1: 0,
+            y1: 0,
+            x2: 0,
+            y2: 0,
+            value: 0,
+            color: 'LIGHTGREY'
+        };
+        this.gyroSensor = {
+            value: 0,
+            color: '#000'
+        };
+        this.webAudio = {
+            context: context,
+            oscillator: oscillator,
+            gainNode: gainNode,
+            volume: 0.5,
+        }
 
-        var initialPose = {
-            x : pose.x,
-            y : pose.y,
-            theta : pose.theta,
-            transX : pose.transX,
-            transY : pose.transY
-        };
-        this.resetPose = function() {
-            this.pose.x = initialPose.x;
-            this.pose.y = initialPose.y;
-            this.pose.theta = initialPose.theta;
-            this.pose.xOld = initialPose.x;
-            this.pose.yOld = initialPose.y;
-            this.pose.thetaOld = initialPose.theta;
-            this.pose.transX = initialPose.transX;
-            this.pose.transY = initialPose.transY;
-            this.debug = false;
-        };
-        this.reset = function() {
-            this.encoder.left = 0;
-            this.encoder.right = 0;
-            this.ledSensor.color = '';
-            // this.time = 0;
-            for (key in this.timer) {
-                this.timer[key] = 0;
+        this.tone = {
+            duration: 0,
+            timer: 0,
+            file: {
+                0: function (a) {
+                    var ts = a.context.currentTime;
+                    a.oscillator.frequency.setValueAtTime(600, ts);
+                    a.gainNode.gain.setValueAtTime(a.volume, ts);
+                    ts += 1;
+                    a.gainNode.gain.setValueAtTime(0, ts);
+                },
+                1: function (a) {
+                    var ts = a.context.currentTime;
+                    for (var i = 0; i < 2; i++) {
+                        a.oscillator.frequency.setValueAtTime(600, ts);
+                        a.gainNode.gain.setValueAtTime(a.volume, ts);
+                        ts += (150 / 1000.0);
+                        a.gainNode.gain.setValueAtTime(0, ts);
+                        ts += (25 / 1000.0);
+                    }
+                },
+                2: function (a) {
+                    const
+                        C2 = 523;
+                    var ts = a.context.currentTime;
+                    for (var i = 4; i < 8; i++) {
+                        a.oscillator.frequency.setValueAtTime(C2 * i / 4, ts);
+                        a.gainNode.gain.setValueAtTime(a.volume, ts);
+                        ts += (100 / 1000.0);
+                        a.gainNode.gain.setValueAtTime(0, ts);
+                        ts += (25 / 1000.0);
+                    }
+                },
+                3: function (a) {
+                    const
+                        C2 = 523;
+                    var ts = a.context.currentTime;
+                    for (var i = 7; i >= 4; i--) {
+                        a.oscillator.frequency.setValueAtTime(C2 * i / 4, ts);
+                        a.gainNode.gain.setValueAtTime(a.volume, ts);
+                        ts += (100 / 1000.0);
+                        a.gainNode.gain.setValueAtTime(0, ts);
+                        ts += (25 / 1000.0);
+                    }
+                },
+                4: function (a) {
+                    var ts = a.context.currentTime;
+                    a.oscillator.frequency.setValueAtTime(100, ts);
+                    a.gainNode.gain.setValueAtTime(a.volume, ts);
+                    ts += (500 / 1000.0);
+                    a.gainNode.gain.setValueAtTime(0, ts);
+                }
             }
-            var robot = this;
-            $("#simRobotContent").html(this.svg);
-            for ( var property in robot.buttons) {
-                $('#' + property).off('mousedown');
-                $('#' + property).on('mousedown', function() {
-                    robot.buttons[this.id] = true;
-                });
-                $('#' + property).off('mouseup');
-                $('#' + property).on('mouseup', function() {
-                    robot.buttons[this.id] = false;
-                });
-            }
-            $("#display").html('');
-            this.tone.duration = 0;
-            this.tone.frequency = 0;
-            this.webAudio.volume = 0.5;
+        }
+        this.buttons = {
+            escape: false,
+            left: false,
+            enter: false,
+            right: false
         };
+        this.frontLeft = {
+            x: 22.5,
+            y: -25,
+            rx: 0,
+            ry: 0,
+            bumped: false
+        };
+        this.frontRight = {
+            x: -22.5,
+            y: -25,
+            rx: 0,
+            ry: 0,
+            bumped: false
+        };
+        this.backLeft = {
+            x: 20,
+            y: 30,
+            rx: 0,
+            ry: 0,
+            bumped: false
+        };
+        this.backRight = {
+            x: -20,
+            y: 30,
+            rx: 0,
+            ry: 0,
+            bumped: false
+        };
+        this.backMiddle = {
+            x: 0,
+            y: 30,
+            rx: 0,
+            ry: 0
+        };
+        this.mouse = {
+            x: 0,
+            y: 5,
+            rx: 0,
+            ry: 0,
+            r: 30
+        };
+        this.svg = '<svg xmlns="http://www.w3.org/2000/svg" width="254px" height="400px" viewBox="0 0 254 400" preserveAspectRatio="xMidYMid meet">' +
+            '<rect x="7" y="1" style="stroke-width: 2px;" stroke="black" id="backgroundConnectors" width="240" height="398" fill="#6D6E6C" />' +
+            '<rect x="1" y="24" style="stroke-width: 2px;" stroke="black" id="backgroundSides" width="252" height="352" fill="#F2F3F2" />' +
+            '<rect x="44" y="68" style="stroke-width: 4px;" stroke="#cccccc" width="170" height="106" fill="#DDDDDD" rx="4" ry="4" />' +
+            '<g id="display" clip-path="url(#clipPath)" fill="#000" transform="translate(50, 72)" font-family="Courier New" letter-spacing="2px" font-size="10pt"></g>' +
+            '<defs><clipPath id="clipPath"><rect x="0" y="0" width="160" height="96"/></clipPath></defs>' +
+            '<rect x="101" y="216" style="stroke-width: 2px;" stroke="#cccccc" id="bg-center" width="52" height="90" fill="#cccccc" rx="4" ry="4" />' +
+            '<rect x="105" y="220" style="stroke-width: 1px;" stroke="black" id="enter" class="simKey" width="44" height="44" fill="#DA8540" rx="2" ry="2" />' +
+            '<rect x="105" y="280" style="stroke-width: 1px;" stroke="black" id="escape" class="simKey" width="44" height="22" fill="#6D6E6C" rx="2" ry="2" />' +
+            '<path d="M0.5,-4.13 l-4,7 h8 z" style="vector-effect: non-scaling-stroke; stroke-width: 8px; stroke-linecap: round; stroke-linejoin: round;" stroke="#cccccc" id="bg-left" transform="matrix(0, -5.5, 5.5, 0, 74.0, 245.0)" fill="#cccccc" />' +
+            '<path d="M0.0,16.7 l-4,7 h8 z" style="vector-effect: non-scaling-stroke; stroke-width: 8px; stroke-linecap: round; stroke-linejoin: round;" stroke="#cccccc" id="bg-right" transform="matrix(-0.0, 5.5, -5.5, -0.0, 294, 241)" fill="#cccccc" />' +
+            '<path d="M0.0,16.7 l-4,7 h8 z" style="vector-effect: non-scaling-stroke; stroke-width: 1px; stroke-linecap: round; stroke-linejoin: round;" stroke="black" id="right" class="simKey" transform="matrix(-0.0, 5.5, -5.5, -0.0, 294, 241)" fill="#A3A2A4" />' +
+            '<path d="M0.5,-4.13 l-4,7 h8 z" style="vector-effect: non-scaling-stroke; stroke-width: 1px; stroke-linecap: round; stroke-linejoin: round;" stroke="black" id="left" class="simKey" transform="matrix(0, -5.5, 5.5, 0, 74.0, 245.0)" fill="#A3A2A4" />' +
+            '<rect x="8" y="22" style="stroke-width: 1px; stroke: none;" id="bg-bordertop" width="238" height="3" fill="#6D6E6C" />' +
+            '<rect x="8" y="375" style="stroke-width: 1px; stroke: none;" id="bg-borderbottom" width="238" height="3" fill="#6D6E6C" />' +
+            '<line id="bg-line" x1="126" y1="176" x2="126" y2="216" style="stroke-width: 4px; fill: none;" stroke="#cccccc" />' + '</svg>';
+        this.time = 0;
+        this.timer = {
+            timer1: false
+        };
+        this.debug = false;
     }
-    Nxt.prototype.geom = {
-        x : -20,
-        y : -20,
-        w : 40,
-        h : 50,
-        color : 'LIGHTGREY'
+    Nxt.prototype = Object.create(Robot.prototype);
+    Nxt.prototype.constructor = Nxt;
+
+    Nxt.prototype.reset = function () {
+        var Nxt = this;
+        this.encoder.left = 0;
+        this.encoder.right = 0;
+        this.ledSensor.color = '';
+        // this.time = 0;
+        for (key in this.timer) {
+            this.timer[key] = 0;
+        }
+        var robot = this;
+        $("#simRobotContent").html(this.svg);
+        for (var property in robot.buttons) {
+            $('#' + property).off('mousedown');
+            $('#' + property).on('mousedown', function () {
+                robot.buttons[this.id] = true;
+            });
+            $('#' + property).off('mouseup');
+            $('#' + property).on('mouseup', function () {
+                robot.buttons[this.id] = false;
+            });
+        }
+        $("#display").html('');
+        this.tone.duration = 0;
+        this.tone.frequency = 0;
+        this.webAudio.volume = 0.5;
     };
-    Nxt.prototype.wheelLeft = {
-        x : 16,
-        y : -8,
-        w : 8,
-        h : 16,
-        color : '#000000'
-    };
-    Nxt.prototype.wheelRight = {
-        x : -24,
-        y : -8,
-        w : 8,
-        h : 16,
-        color : '#000000'
-    };
-    Nxt.prototype.wheelBack = {
-        x : -2.5,
-        y : 30,
-        w : 5,
-        h : 5,
-        color : '#000000'
-    };
-    Nxt.prototype.ledSensor = {
-        x : 0,
-        y : -15,
-        color : '',
-    };
-    Nxt.prototype.encoder = {
-        left : 0,
-        right : 0
-    };
-    Nxt.prototype.colorSensor = {
-        x : 0,
-        y : -15,
-        rx : 0,
-        ry : 0,
-        r : 5,
-        colorValue : 0,
-        lightValue : 0,
-        color : 'grey'
-    };
-    Nxt.prototype.ultraSensor = {
-        x : 0,
-        y : -20,
-        rx : 0,
-        ry : 0,
-        distance : 0,
-        u : [],
-        cx : 0,
-        cy : 0,
-        color : '#FF69B4'
-    };
-    Nxt.prototype.touchSensor = {
-        x : 0,
-        y : -25,
-        x1 : 0,
-        y1 : 0,
-        x2 : 0,
-        y2 : 0,
-        value : 0,
-        color : 'LIGHTGREY'
-    };
-    Nxt.prototype.gyroSensor = {
-        value : 0,
-        color : '#000'
-    };
+
+
     var AudioContext = window.AudioContext // Default
-            || window.webkitAudioContext // Safari and old versions of Chrome
-            || false;
+        ||
+        window.webkitAudioContext // Safari and old versions of Chrome
+        ||
+        false;
 
     Nxt.prototype.sound = null;
 
@@ -153,23 +271,23 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 
                 navigator.mediaDevices = {};
             }
             navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-            
+
             // ask for an audio input
             navigator.mediaDevices.getUserMedia({
-                "audio" : {
-                    "mandatory" : {
-                        "googEchoCancellation" : "false",
-                        "googAutoGainControl" : "false",
-                        "googNoiseSuppression" : "false",
-                        "googHighpassFilter" : "false"
+                "audio": {
+                    "mandatory": {
+                        "googEchoCancellation": "false",
+                        "googAutoGainControl": "false",
+                        "googNoiseSuppression": "false",
+                        "googHighpassFilter": "false"
                     },
-                    "optional" : []
+                    "optional": []
                 },
-            }).then(function(stream) {
+            }).then(function (stream) {
                 mediaStreamSource = context.createMediaStreamSource(stream);
                 Nxt.prototype.sound = Volume.createAudioMeter(context);
                 mediaStreamSource.connect(Nxt.prototype.sound);
-            }, function() {
+            }, function () {
                 console.log("Sorry, but there is no microphone available on your system");
             });
         } catch (e) {
@@ -180,135 +298,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 
         console.log("Sorry, but the Web Audio API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox");
     }
 
-    Nxt.prototype.webAudio = {
-        context : context,
-        oscillator : oscillator,
-        gainNode : gainNode,
-        volume : 0.5,
-    }
 
-    Nxt.prototype.tone = {
-        duration : 0,
-        timer : 0,
-        file : {
-            0 : function(a) {
-                var ts = a.context.currentTime;
-                a.oscillator.frequency.setValueAtTime(600, ts);
-                a.gainNode.gain.setValueAtTime(a.volume, ts);
-                ts += 1;
-                a.gainNode.gain.setValueAtTime(0, ts);
-            },
-            1 : function(a) {
-                var ts = a.context.currentTime;
-                for (var i = 0; i < 2; i++) {
-                    a.oscillator.frequency.setValueAtTime(600, ts);
-                    a.gainNode.gain.setValueAtTime(a.volume, ts);
-                    ts += (150 / 1000.0);
-                    a.gainNode.gain.setValueAtTime(0, ts);
-                    ts += (25 / 1000.0);
-                }
-            },
-            2 : function(a) {
-                const
-                C2 = 523;
-                var ts = a.context.currentTime;
-                for (var i = 4; i < 8; i++) {
-                    a.oscillator.frequency.setValueAtTime(C2 * i / 4, ts);
-                    a.gainNode.gain.setValueAtTime(a.volume, ts);
-                    ts += (100 / 1000.0);
-                    a.gainNode.gain.setValueAtTime(0, ts);
-                    ts += (25 / 1000.0);
-                }
-            },
-            3 : function(a) {
-                const
-                C2 = 523;
-                var ts = a.context.currentTime;
-                for (var i = 7; i >= 4; i--) {
-                    a.oscillator.frequency.setValueAtTime(C2 * i / 4, ts);
-                    a.gainNode.gain.setValueAtTime(a.volume, ts);
-                    ts += (100 / 1000.0);
-                    a.gainNode.gain.setValueAtTime(0, ts);
-                    ts += (25 / 1000.0);
-                }
-            },
-            4 : function(a) {
-                var ts = a.context.currentTime;
-                a.oscillator.frequency.setValueAtTime(100, ts);
-                a.gainNode.gain.setValueAtTime(a.volume, ts);
-                ts += (500 / 1000.0);
-                a.gainNode.gain.setValueAtTime(0, ts);
-            }
-        }
-    }
-    Nxt.prototype.buttons = {
-        escape : false,
-        left : false,
-        enter : false,
-        right : false
-    };
-    Nxt.prototype.frontLeft = {
-        x : 22.5,
-        y : -25,
-        rx : 0,
-        ry : 0,
-        bumped : false
-    };
-    Nxt.prototype.frontRight = {
-        x : -22.5,
-        y : -25,
-        rx : 0,
-        ry : 0,
-        bumped : false
-    };
-    Nxt.prototype.backLeft = {
-        x : 20,
-        y : 30,
-        rx : 0,
-        ry : 0,
-        bumped : false
-    };
-    Nxt.prototype.backRight = {
-        x : -20,
-        y : 30,
-        rx : 0,
-        ry : 0,
-        bumped : false
-    };
-    Nxt.prototype.backMiddle = {
-        x : 0,
-        y : 30,
-        rx : 0,
-        ry : 0
-    };
-    Nxt.prototype.mouse = {
-        x : 0,
-        y : 5,
-        rx : 0,
-        ry : 0,
-        r : 30
-    };
-    Nxt.prototype.svg = '<svg xmlns="http://www.w3.org/2000/svg" width="254px" height="400px" viewBox="0 0 254 400" preserveAspectRatio="xMidYMid meet">'
-            + '<rect x="7" y="1" style="stroke-width: 2px;" stroke="black" id="backgroundConnectors" width="240" height="398" fill="#6D6E6C" />'
-            + '<rect x="1" y="24" style="stroke-width: 2px;" stroke="black" id="backgroundSides" width="252" height="352" fill="#F2F3F2" />'
-            + '<rect x="44" y="68" style="stroke-width: 4px;" stroke="#cccccc" width="170" height="106" fill="#DDDDDD" rx="4" ry="4" />'
-            + '<g id="display" clip-path="url(#clipPath)" fill="#000" transform="translate(50, 72)" font-family="Courier New" letter-spacing="2px" font-size="10pt"></g>'
-            + '<defs><clipPath id="clipPath"><rect x="0" y="0" width="160" height="96"/></clipPath></defs>'
-            + '<rect x="101" y="216" style="stroke-width: 2px;" stroke="#cccccc" id="bg-center" width="52" height="90" fill="#cccccc" rx="4" ry="4" />'
-            + '<rect x="105" y="220" style="stroke-width: 1px;" stroke="black" id="enter" class="simKey" width="44" height="44" fill="#DA8540" rx="2" ry="2" />'
-            + '<rect x="105" y="280" style="stroke-width: 1px;" stroke="black" id="escape" class="simKey" width="44" height="22" fill="#6D6E6C" rx="2" ry="2" />'
-            + '<path d="M0.5,-4.13 l-4,7 h8 z" style="vector-effect: non-scaling-stroke; stroke-width: 8px; stroke-linecap: round; stroke-linejoin: round;" stroke="#cccccc" id="bg-left" transform="matrix(0, -5.5, 5.5, 0, 74.0, 245.0)" fill="#cccccc" />'
-            + '<path d="M0.0,16.7 l-4,7 h8 z" style="vector-effect: non-scaling-stroke; stroke-width: 8px; stroke-linecap: round; stroke-linejoin: round;" stroke="#cccccc" id="bg-right" transform="matrix(-0.0, 5.5, -5.5, -0.0, 294, 241)" fill="#cccccc" />'
-            + '<path d="M0.0,16.7 l-4,7 h8 z" style="vector-effect: non-scaling-stroke; stroke-width: 1px; stroke-linecap: round; stroke-linejoin: round;" stroke="black" id="right" class="simKey" transform="matrix(-0.0, 5.5, -5.5, -0.0, 294, 241)" fill="#A3A2A4" />'
-            + '<path d="M0.5,-4.13 l-4,7 h8 z" style="vector-effect: non-scaling-stroke; stroke-width: 1px; stroke-linecap: round; stroke-linejoin: round;" stroke="black" id="left" class="simKey" transform="matrix(0, -5.5, 5.5, 0, 74.0, 245.0)" fill="#A3A2A4" />'
-            + '<rect x="8" y="22" style="stroke-width: 1px; stroke: none;" id="bg-bordertop" width="238" height="3" fill="#6D6E6C" />'
-            + '<rect x="8" y="375" style="stroke-width: 1px; stroke: none;" id="bg-borderbottom" width="238" height="3" fill="#6D6E6C" />'
-            + '<line id="bg-line" x1="126" y1="176" x2="126" y2="216" style="stroke-width: 4px; fill: none;" stroke="#cccccc" />' + '</svg>';
-    Nxt.prototype.time = 0;
-    Nxt.prototype.timer = {
-        timer1 : false
-    };
-    Nxt.prototype.debug = false;
     /**
      * Update all actions of the Nxt. The new pose is calculated with the
      * forward kinematics equations for a differential drive Nxt.
@@ -318,7 +308,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 
      *            motors/wheels, display, led ...
      * 
      */
-    Nxt.prototype.update = function(actions) {
+    Nxt.prototype.update = function (actions) {
         // update debug       
         this.debug = actions.debug || this.debug;
         // update pose
@@ -420,19 +410,19 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 
         //update led(s)
         if (actions.led) {
             switch (actions.led.mode) {
-            case "OFF":
-                this.ledSensor.color = '';
-                break;
-            case "ON":
-                this.ledSensor.color = actions.led.color.toUpperCase();
-                break;
+                case "OFF":
+                    this.ledSensor.color = '';
+                    break;
+                case "ON":
+                    this.ledSensor.color = actions.led.color.toUpperCase();
+                    break;
             }
         }
         // update display
         if (actions.display) {
             if (actions.display.text) {
-                $("#display").html($("#display").html() + '<text x=' + actions.display.x * 1.5 + ' y=' + (actions.display.y) * 12 + '>'
-                        + actions.display.text + '</text>');
+                $("#display").html($("#display").html() + '<text x=' + actions.display.x * 1.5 + ' y=' + (actions.display.y) * 12 + '>' +
+                    actions.display.text + '</text>');
             }
             if (actions.display.picture) {
                 $("#display").html(this.display[actions.display.picture]);
@@ -480,7 +470,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 
      * @returns the translated point
      * 
      */
-    Nxt.prototype.translate = function(sin, cos, point) {
+    Nxt.prototype.translate = function (sin, cos, point) {
         point.rx = this.pose.x - point.y * cos + point.x * sin;
         point.ry = this.pose.y - point.y * sin - point.x * cos;
         return point;

@@ -9,9 +9,10 @@ define(['simulation.simulation', 'simulation.math', 'util', 'robertaLogic.consta
      * 
      * @constructor
      */
-    function Scene(backgroundImg, robots, pattern, ruler) {
+    function Scene(backgroundImg, robots, obstacle, pattern, ruler) {
         this.backgroundImg = backgroundImg;
         this.robots = robots;
+        this.obstacle = obstacle;
         this.numprogs = robots.length;
         this.ruler = ruler;
         this.pattern = pattern;
@@ -95,29 +96,26 @@ define(['simulation.simulation', 'simulation.math', 'util', 'robertaLogic.consta
             this.mCtx.drawImage(this.ruler.img, this.ruler.x, this.ruler.y, this.ruler.w, this.ruler.h);
         }
     }
-    Scene.prototype.drawObjects = function () {
-        var obslist = SIM.obstacleList;
-        for (var i = 1; i < obslist.length; i++) {
-            var paddingrect = 8;
-            this.oCtx.clearRect(obslist[i].xOld - paddingrect, obslist[i].yOld - paddingrect, obslist[i].wOld + 2 * paddingrect, obslist[i].hOld + 2 * paddingrect);
-            obslist[i].xOld = obslist[i].x;
-            obslist[i].yOld = obslist[i].y;
-            obslist[i].wOld = obslist[i].w;
-            obslist[i].hOld = obslist[i].h;
-            this.oCtx.restore();
-            this.oCtx.save();
-            this.oCtx.scale(SIM.getScale(), SIM.getScale());
-            if (obslist[i].img) {
-                this.oCtx.drawImage(obslist[i].img, obslist[i].x, obslist[i].y, obslist[i].w, obslist[i].h);
-            } else if (obslist[i].color) {
-                this.oCtx.fillStyle = obslist[i].color;
-                this.oCtx.shadowBlur = 5;
-                this.oCtx.shadowColor = "black";
-                this.oCtx.fillRect(obslist[i].x, obslist[i].y, obslist[i].w, obslist[i].h);
-            }
-
+    
+    Scene.prototype.drawObjects = function() {
+        this.oCtx.clearRect(this.obstacle.xOld - 20, this.obstacle.yOld - 20, this.obstacle.wOld + 40, this.obstacle.hOld + 40);
+        this.obstacle.xOld = this.obstacle.x;
+        this.obstacle.yOld = this.obstacle.y;
+        this.obstacle.wOld = this.obstacle.w;
+        this.obstacle.hOld = this.obstacle.h;
+        this.oCtx.restore();
+        this.oCtx.save();
+        this.oCtx.scale(SIM.getScale(), SIM.getScale());
+        if (this.obstacle.img) {
+            this.oCtx.drawImage(this.obstacle.img, this.obstacle.x, this.obstacle.y, this.obstacle.w, this.obstacle.h);
+        } else if (this.obstacle.color) {
+            this.oCtx.fillStyle = this.obstacle.color;
+            this.oCtx.shadowBlur = 5;
+            this.oCtx.shadowColor = "black";
+            this.oCtx.fillRect(this.obstacle.x, this.obstacle.y, this.obstacle.w, this.obstacle.h);
         }
     }
+
 
     Scene.prototype.drawMbed = function () {
         this.rCtx.clearRect(0, 0, CONSTANTS.MAX_WIDTH, CONSTANTS.MAX_HEIGHT);
@@ -169,7 +167,6 @@ define(['simulation.simulation', 'simulation.math', 'util', 'robertaLogic.consta
         }
         this.rCtx.clearRect(0, 0, CONSTANTS.MAX_WIDTH, CONSTANTS.MAX_HEIGHT);
         for (var r = 0; r < this.numprogs; r++) {
-            //console.log(r + ' ' + SIM.getBackground() + ' ' + this.robots[0]);
             this.rCtx.restore();
             this.rCtx.save();
             var x;
@@ -339,28 +336,28 @@ define(['simulation.simulation', 'simulation.math', 'util', 'robertaLogic.consta
     Scene.prototype.updateSensorValues = function (running) {
         var robotsValues = [];
         for (var r = 0; r < this.numprogs; r++) {
+            var personalObstacleList = SIM.obstacleList.slice();
             var values = {};
+            for (var i = 0; i < this.numprogs; i++) {
+                if (i === r) {
+                    continue;
+                } else {
+                    var tempobstacle = {
+                        isParallelToAxis: false,
+                        backLeft: this.robots[i].backLeft,
+                        backRight: this.robots[i].backRight,
+                        frontLeft: this.robots[i].frontLeft,
+                        frontRight: this.robots[i].frontRight
+                    }
+                    personalObstacleList.push(tempobstacle);
+                }
+            }
             if (this.robots[r].touchSensor) {
                 this.robots[r].touchSensor.value = 0;
                 this.robots[r].frontLeft.bumped = false;
                 this.robots[r].frontRight.bumped = false;
                 this.robots[r].backLeft.bumped = false;
-                this.robots[r].backRight.bumped = false;
-                var personalObstacleList = SIM.obstacleList.slice();
-                for (var i = 0; i < this.numprogs; i++) {
-                    if (i === r) {
-                        continue;
-                    } else {
-                        var tempobstacle = {
-                            isParallelToAxis: false,
-                            backLeft: this.robots[i].backLeft,
-                            backRight: this.robots[i].backRight,
-                            frontLeft: this.robots[i].frontLeft,
-                            frontRight: this.robots[i].frontRight
-                        }
-                        personalObstacleList.push(tempobstacle);
-                    }
-                }
+                this.robots[r].backRight.bumped = false;                
                 for (var i = 0; i < personalObstacleList.length; i++) {
                     var p = personalObstacleList[i];
                     if (i == 0) {
@@ -622,21 +619,6 @@ define(['simulation.simulation', 'simulation.math', 'util', 'robertaLogic.consta
 
                 var uA = new Array(u1, u2, u3, u4, u5);
                 this.robots[r].ultraSensor.distance = CONSTANTS.MAXDIAG;
-                var personalObstacleList = SIM.obstacleList.slice();
-                for (var i = 0; i < this.numprogs; i++) {
-                    if (i === r) {
-                        continue;
-                    } else {
-                        var tempobstacle = {
-                            isParallelToAxis: false,
-                            backLeft: this.robots[i].backLeft,
-                            backRight: this.robots[i].backRight,
-                            frontLeft: this.robots[i].frontLeft,
-                            frontRight: this.robots[i].frontRight
-                        }
-                        personalObstacleList.push(tempobstacle);
-                    }
-                }
                 for (var i = 0; i < personalObstacleList.length; i++) {
                     var obstacleLines = (SIMATH.getLinesFromRect(personalObstacleList[i]));
                     var uDis = [CONSTANTS.MAXDIAG, CONSTANTS.MAXDIAG, CONSTANTS.MAXDIAG, CONSTANTS.MAXDIAG, CONSTANTS.MAXDIAG];
