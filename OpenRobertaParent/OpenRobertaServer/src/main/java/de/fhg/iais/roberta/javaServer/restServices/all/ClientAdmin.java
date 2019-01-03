@@ -194,6 +194,7 @@ public class ClientAdmin {
                         configuration.put("conf", robotFactory.getConfigurationDefault());
                         response.put("configuration", configuration);
                         response.put("sim", robotFactory.hasSim());
+                        response.put("multipleSim", robotFactory.hasMultipleSim());
                         response.put("connection", robotFactory.getConnectionType());
                         response.put("vendor", robotFactory.getVendorId());
                         response.put("configurationUsed", robotFactory.hasConfiguration());

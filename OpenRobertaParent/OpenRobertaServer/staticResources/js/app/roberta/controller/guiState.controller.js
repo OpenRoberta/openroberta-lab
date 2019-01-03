@@ -256,6 +256,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         GUISTATE.gui.program = result.program;
         GUISTATE.gui.configuration = result.configuration;
         GUISTATE.gui.sim = result.sim;
+        GUISTATE.gui.multipleSim = result.multipleSim;
         GUISTATE.gui.connection = result.connection;
         GUISTATE.gui.vendor = result.vendor;
         GUISTATE.gui.signature = result.signature;
@@ -895,6 +896,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         GUISTATE.user.isAccountActivated = result.isAccountActivated;
 
         $('.nav > li > ul > .login, .logout').removeClass('disabled');
+        $('.nav > li > ul > .login.unavailable').addClass('disabled');
         $('.nav > li > ul > .logout').addClass('disabled');
         $('#head-navi-icon-user').removeClass('error');
         $('#head-navi-icon-user').addClass('ok');
@@ -983,6 +985,17 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         } else {
             $('#menuRunSim').parent().addClass('disabled');
             $('#simButton').hide();
+        }
+        if (GUISTATE.gui.multipleSim == true) {
+            $('#menuRunMulipleSim').parent().removeClass('unavailable');
+            $('#menuRunMulipleSim').parent().addClass('available');
+            if (isUserLoggedIn()) {
+                $('#menuRunMulipleSim').parent().removeClass('disabled');
+            }
+        } else {
+            $('#menuRunMulipleSim').parent().addClass('unavailable');
+            $('#menuRunMulipleSim').parent().removeClass('available');
+            $('#menuRunMulipleSim').parent().addClass('disabled');
         }
     }
     exports.checkSim = checkSim;
@@ -1128,7 +1141,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         $('#head-navigation-tutorial').hide();
         var tutorialList = getListOfTutorials();
         for ( var tutorial in tutorialList) {
-             if (tutorialList.hasOwnProperty(tutorial) && tutorialList[tutorial].language === getLanguage().toUpperCase()) {
+            if (tutorialList.hasOwnProperty(tutorial) && tutorialList[tutorial].language === getLanguage().toUpperCase()) {
                 $('#head-navigation-tutorial').show();
                 break;
             }

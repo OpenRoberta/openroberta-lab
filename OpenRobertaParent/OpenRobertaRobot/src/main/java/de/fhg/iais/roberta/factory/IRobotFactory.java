@@ -44,6 +44,8 @@ public interface IRobotFactory {
     String getRealName();
 
     Boolean hasSim();
+    
+    Boolean hasMultipleSim();
 
     String getInfo();
 

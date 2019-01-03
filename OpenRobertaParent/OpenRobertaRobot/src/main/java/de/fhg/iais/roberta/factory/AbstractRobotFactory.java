@@ -63,6 +63,13 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
     }
 
     @Override
+    public final Boolean hasMultipleSim() {
+        return this.pluginProperties.getStringProperty("robot.multisim") != null
+            ? this.pluginProperties.getStringProperty("robot.multisim").equals("true")
+            : false;
+    }
+
+    @Override
     public final String getInfo() {
         return this.pluginProperties.getStringProperty("robot.info") != null ? this.pluginProperties.getStringProperty("robot.info") : "#";
     }
