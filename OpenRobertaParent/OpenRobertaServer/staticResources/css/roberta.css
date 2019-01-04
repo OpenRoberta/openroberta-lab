@@ -1878,6 +1878,15 @@ img.img-responsive {
 li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
     list-style-type: inherit !important;
 }
+#tutorialOverview .modal-content {
+    background-image: url(../css/svg/Roberta_zwinkernd.svg);
+    background-repeat: no-repeat;
+    background-position: 105% 140%;
+    background-size: 200px;
+}
+#tutorialOverview .modal-body {
+    padding-bottom: 50px;
+}
 #tutorial-navigation {
 	display:none;
 }
@@ -1893,50 +1902,94 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 	/* display: none; /* not needed in the tutorial form*/	
 }
 #tutorial-navigation ul {
-	width:100%;
+	margin: 22px 0 16px 0;
 }
-#tutorial-navigation li a:hover {
-    transition-duration: 300ms;
-    background: #BACC1E;
+ul#tutorial-close {
+    float: right;
 }
-
-#tutorial-navigation li.active a {
-    transition-duration: 300ms;
-    background: #BACC1E;
+#tutorialEnd a:before {
+    line-height: 42px;
+    font-size: 1.5em;
 }
-
-#tutorial-navigation li a.typcn:before {
-    font-size: 40px;
+#tutorial-header, .step, #tutorial-close {
+	color: #333;
 }
-
-/* #tutorial-navigation li a {
-	margin: 4px 20px 4px 0;
-    background: #ddd;
-    display: block;
-} */
-#tutorial-navigation li a {
-    margin: 4px 30px 40px 0;
-    background: #ddd;
-    width: 48px;
-    height: 48px;
-    padding: 12px;
-    font-size: 24px;
-    display: block;
-    font-weight: bold;
-}
-#tutorial-navigation li:last-child {
-	float:right;
+#tutorial-navigation li {
+    text-align: center;
 }
 #tutorial-navigation li:last-child a:before {
     position: absolute;
     top: 3px;
     right: 3px;
 }
-#tutorial-navigation li:last-child a{
-	margin-right: 0;
+#tutorial-navigation li.step {
+	text-align: center;
+	float: left;
+	background: #EAF0BB;
+	list-style: none;
+	padding: 0;
+	height: 48px;
 }
-#tutorial-navigation li {
-    text-align: center;
+#tutorial-navigation li.step.active {
+    background: #BACC1E;
+}
+#tutorial-navigation li a {
+	width: 48px;
+	height: 48px;
+	padding: 12px 6px 12px 18px;
+	font-size: 24px;
+	display: inline-block;
+	font-weight: bold;
+	box-sizing: border-box;
+	float: left;
+	margin: 0;
+	margin-left: -15px;
+}
+#tutorial-navigation li:first-child a {
+	width: 48px;
+	padding: 12px;
+	margin-left: 0;
+}
+#tutorial-navigation li.step:after {
+	background-image: url(../css/svg/step_connector.svg);
+	content: " ";
+	width: 17px;
+	height: 48px;
+	display: inline-block;
+}
+#tutorial-navigation li.step.last:after {
+	background-image: url(../css/svg/step_connector_last.svg);
+}
+#tutorial-navigation li.step.active:after {
+	background-image: url(../css/svg/step_connector_active.svg);
+}
+#tutorial-navigation li.step.preActive:after {
+	background-image: url(../css/svg/step_connector_before_active.svg);
+}
+#tutorial-navigation li.step.last.active:after {
+	background-image: url(../css/svg/step_connector_active_last.svg);
+}
+#tutorial-navigation .navbar-nav>.active>a, #tutorial-navigation .navbar-nav>li>a:hover {
+    color: #333;
+    background-color: transparent;
+}
+#tutorial-navigation a.typcn.typcn-delete {
+    color: #333;
+    font-size: 36px;
+    position: absolute;
+    border: white solid 6px;
+    right: 16px;
+    background: white;
+    top: 24px;
+}
+#tutorial-header {
+	overflow: hidden;
+    height: 92px;
+    margin: 0;
+    padding: 0;
+    padding-left: 36px;
+    line-height: 92px;
+    vertical-align: middle;
 }
 #tutorialOverview>.modal-backdrop.fade.in {
 	opacity: 0.6;
@@ -1950,6 +2003,15 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 	margin: 10px;
 	padding: 16px;
 	font-size: 18px;
+}
+div#helpDiv {
+    margin-top: 24px;
+}
+.quiz.continue {
+    margin-top: 24px;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    text-align: right;
 }
 p.quiz {
 	margin-top: 16px;
