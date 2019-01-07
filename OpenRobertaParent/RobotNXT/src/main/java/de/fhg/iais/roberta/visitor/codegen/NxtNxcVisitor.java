@@ -2,6 +2,8 @@ package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.Configuration;
@@ -1275,6 +1277,12 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     private void generateSensors() {
+        Map<String, UsedSensor> usedSensorMap = new HashMap<>();
+        for ( UsedSensor usedSensor : this.usedSensors ) {
+            if ( !usedSensorMap.containsKey(usedSensor.getPort()) ) {
+                usedSensorMap.put(usedSensor.getPort(), usedSensor);
+            }
+        }
         for ( UsedSensor usedSensor : this.usedSensors ) {
             nlIndent();
             this.sb.append("SetSensor(");
@@ -1291,12 +1299,14 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                     break;
                 case SC.LIGHT:
                     this.sb.append("SENSOR_LIGHT);");
-                    nlIndent();
-                    this.sb.append("SetSensorLight(").append(configurationComponent.getPortName()).append(", ");
-                    if ( usedSensor.getMode().equals(SC.LIGHT) ) {
-                        this.sb.append("true);");
-                    } else {
-                        this.sb.append("false);");
+                    if ( usedSensorMap.get(usedSensor.getPort()).getMode().equals(usedSensor.getMode()) ) {
+                        nlIndent();
+                        this.sb.append("SetSensorLight(").append(configurationComponent.getPortName()).append(", ");
+                        if ( usedSensor.getMode().equals(SC.LIGHT) ) {
+                            this.sb.append("true);");
+                        } else {
+                            this.sb.append("false);");
+                        }
                     }
                     break;
                 case SC.TOUCH:
