@@ -458,6 +458,7 @@ public class NxcVisitorTest {
                 + IMPORTS_CONSTANTS
                 + "task main() {"
                 + "    SetSensor(S4, SENSOR_LIGHT);\n"
+                + "    SetSensorLight(S4, true);\n"
                 + "  SteerDriveEx( OUT_A, OUT_B,SpeedTest(30),SpeedTest(-20), true, 20 );\n"
                 + "  SteerDriveEx( OUT_A, OUT_B, SpeedTest(50),SpeedTest(-50), false, 20 );\n"
                 + "  while ( true ) {\n"
