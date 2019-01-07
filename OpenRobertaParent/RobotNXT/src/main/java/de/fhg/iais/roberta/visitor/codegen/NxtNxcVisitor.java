@@ -696,10 +696,19 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
         String portName = this.brickConfiguration.getConfigurationComponent(lightSensor.getPort()).getPortName();
-        this.sb.append("SensorLight(");
+        this.sb.append("_readLightSensor(");
         this.sb.append(portName);
         this.sb.append(", ");
-        this.sb.append("\"" + lightSensor.getMode() + "\"");
+        switch ( lightSensor.getMode() ) {
+            case "LIGHT":
+                this.sb.append("1");
+                break;
+            case "AMBIENTLIGHT":
+                this.sb.append("2");
+                break;
+            default:
+                throw new DbcException("Wrong mode provided for light sensor, must be AMBIENTLIGHT or LIGHT");
+        }
         this.sb.append(")");
         return null;
     }
@@ -1279,11 +1288,6 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     private void generateSensors() {
         Map<String, UsedSensor> usedSensorMap = new HashMap<>();
         for ( UsedSensor usedSensor : this.usedSensors ) {
-            if ( !usedSensorMap.containsKey(usedSensor.getPort()) ) {
-                usedSensorMap.put(usedSensor.getPort(), usedSensor);
-            }
-        }
-        for ( UsedSensor usedSensor : this.usedSensors ) {
             nlIndent();
             this.sb.append("SetSensor(");
             ConfigurationComponent configurationComponent = this.brickConfiguration.getConfigurationComponent(usedSensor.getPort());
@@ -1299,15 +1303,6 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                     break;
                 case SC.LIGHT:
                     this.sb.append("SENSOR_LIGHT);");
-                    if ( usedSensorMap.get(usedSensor.getPort()).getMode().equals(usedSensor.getMode()) ) {
-                        nlIndent();
-                        this.sb.append("SetSensorLight(").append(configurationComponent.getPortName()).append(", ");
-                        if ( usedSensor.getMode().equals(SC.LIGHT) ) {
-                            this.sb.append("true);");
-                        } else {
-                            this.sb.append("false);");
-                        }
-                    }
                     break;
                 case SC.TOUCH:
                     this.sb.append("SENSOR_TOUCH);");
