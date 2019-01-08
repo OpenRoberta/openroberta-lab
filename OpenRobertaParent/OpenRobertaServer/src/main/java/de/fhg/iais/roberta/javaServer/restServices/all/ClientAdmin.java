@@ -86,9 +86,9 @@ public class ClientAdmin {
                 Statistics.infoUserAgent("Initialization", userAgent, request);
 
                 JSONObject server = new JSONObject();
-                server.put("defaultRobot", serverProperties.getDefaultRobot());
+                server.put("defaultRobot", this.serverProperties.getDefaultRobot());
                 JSONObject robots = new JSONObject();
-                Collection<String> availableRobots = serverProperties.getRobotWhitelist();
+                Collection<String> availableRobots = this.serverProperties.getRobotWhitelist();
                 int i = 0;
                 for ( String robot : availableRobots ) {
                     JSONObject robotDescription = new JSONObject();
@@ -102,7 +102,7 @@ public class ClientAdmin {
                     robots.put("" + i, robotDescription);
                     i++;
                 }
-                server.put("isPublic", serverProperties.getBooleanProperty("server.public"));
+                server.put("isPublic", this.serverProperties.getBooleanProperty("server.public"));
                 server.put("robots", robots);
                 String staticRecourcesDir = this.serverProperties.getStringProperty("server.staticresources.dir");
                 String pathToTutorial = this.serverProperties.getStringProperty("server.tutorial.dir");
@@ -114,7 +114,7 @@ public class ClientAdmin {
                 String pathToHelp = staticRecourcesDir + File.separator + "help";
                 List<String> help = Util.getListOfFileNamesFromDirectory(pathToHelp, "html");
                 server.put("help", help);
-                String theme = serverProperties.getStringProperty("server.theme");
+                String theme = this.serverProperties.getStringProperty("server.theme");
                 server.put("theme", theme);
                 response.put("server", server);
                 LOG.info("success: create init object");
@@ -170,7 +170,7 @@ public class ClientAdmin {
                 }
             } else if ( cmd.equals("setRobot") ) {
                 String robot = request.getString("robot");
-                if ( robot != null && serverProperties.getRobotWhitelist().contains(robot) ) {
+                if ( robot != null && this.serverProperties.getRobotWhitelist().contains(robot) ) {
                     Util.addSuccessInfo(response, Key.ROBOT_SET_SUCCESS);
                     if ( httpSessionState.getRobotName() != robot ) {
                         // disconnect previous robot
@@ -208,7 +208,6 @@ public class ClientAdmin {
                         response.put("commandLine", robotFactory.getCommandline());
                         response.put("signature", robotFactory.getSignature());
                         response.put("fileExtension", robotFactory.getFileExtension());
-
                         LOG.info("set robot to {}", robot);
                     } else {
                         LOG.info("set Robot: robot {} was already set", robot);

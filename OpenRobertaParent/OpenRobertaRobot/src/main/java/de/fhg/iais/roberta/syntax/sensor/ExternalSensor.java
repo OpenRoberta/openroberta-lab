@@ -61,7 +61,7 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + " [" + getPort() + ", " + getMode() + ", " + getSlot() + "]";
+        return this.getClass().getSimpleName() + " [" + this.getPort() + ", " + this.getMode() + ", " + this.getSlot() + "]";
     }
 
     /**
@@ -88,19 +88,19 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
         boolean addMutation = false;
         Mutation mutation = new Mutation();
         if ( !this.mode.toString().equals(BlocklyConstants.DEFAULT) ) {
-            mutation.setMode(getMode().toString());
+            mutation.setMode(this.getMode().toString());
             addMutation = true;
-            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().toString());
+            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.MODE, this.getMode().toString());
             if ( this.isPortInMutation ) {
-                mutation.setPort(getPort().toString());
+                mutation.setPort(this.getPort().toString());
             }
         }
         if ( !this.getPort().toString().equals(BlocklyConstants.NO_PORT) ) {
-            String fieldValue = getPort();
+            String fieldValue = this.getPort();
             Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
         }
         if ( !this.getSlot().toString().equals(BlocklyConstants.NO_SLOT) ) {
-            String fieldValue = getSlot();
+            String fieldValue = this.getSlot();
 
             //TODO: Remove as soon as possible. This is only for deprecated XML resources for unit tests.
             if ( fieldValue.equals(BlocklyConstants.EMPTY_SLOT) ) {

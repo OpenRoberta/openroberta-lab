@@ -64,12 +64,20 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
     exports.runOnBrick = runOnBrick;
 
     function runForAutoConnection(result) {
+        console.log(GUISTATE_C.getRobot())
         GUISTATE_C.setState(result);
         if (result.rc == "ok") {
+            console.log("")
             var filename = GUISTATE_C.getProgramName();
+            if(GUISTATE_C.getRobot() !== 'sensebox') {
+                filename += '.hex';
+            } else {
+                filename += '.bin';
+                result.compiledCode = UTIL.base64decode(result.compiledCode); 
+            }
             if (GUISTATE_C.isProgramToDownload() || navigator.userAgent.toLowerCase().match(/iPad|iPhone|android/i) != null) {
                 // either the user doesn't want to see the modal anymore or he uses a smartphone / tablet, where you cannot choose the download folder.
-                UTIL.download(filename + '.hex', result.compiledCode);
+                UTIL.download(filename, result.compiledCode); 
                 setTimeout(function() {
                     GUISTATE_C.setConnectionState("wait");
                 }, 5000);
@@ -165,7 +173,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             $('#trA').removeClass('hidden');
         } else {
             $('#trA').addClass('hidden');
-            UTIL.download(fileName + '.hex', content);
+            UTIL.download(fileName, content);
             GUISTATE_C.setConnectionState("error");
         }
 
@@ -174,17 +182,17 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
                 type : 'application/octet-stream'
             });
             if ('msSaveOrOpenBlob' in navigator) {
-                navigator.msSaveOrOpenBlob(contentAsBlob, fileName + '.hex');
+                navigator.msSaveOrOpenBlob(contentAsBlob, fileName);
             } else {
                 var downloadLink = document.createElement('a');
-                downloadLink.download = fileName + '.hex';
+                downloadLink.download = fileName;
                 downloadLink.innerHTML = fileName;
                 downloadLink.href = window.URL.createObjectURL(contentAsBlob);
             }
         } else {
             var downloadLink = document.createElement('a');
             downloadLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
-            downloadLink.setAttribute('download', fileName + '.hex');
+            downloadLink.setAttribute('download', fileName);
             downloadLink.style.display = 'none';
         }
 

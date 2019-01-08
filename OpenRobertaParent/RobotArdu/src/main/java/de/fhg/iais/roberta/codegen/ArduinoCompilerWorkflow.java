@@ -39,10 +39,10 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
             return;
         }
         try {
-            Configuration configuration = (data.getRobotConfiguration());
+            final Configuration configuration = (data.getRobotConfiguration());
             this.generatedSourceCode = ArduinoCppVisitor.generate(configuration, data.getProgramTransformer().getTree(), true);
             LOG.info("arduino c++ code generated");
-        } catch ( Exception e ) {
+        } catch ( final Exception e ) {
             LOG.error("arduino c++ code generation failed", e);
             this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
         }
@@ -50,9 +50,9 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
 
     @Override
     public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
-        storeGeneratedProgram(token, programName, ".ino");
+        this.storeGeneratedProgram(token, programName, ".ino");
         if ( this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
-            this.workflowResult = runBuild(token, programName, "generated.main");
+            this.workflowResult = this.runBuild(token, programName, "generated.main");
             if ( this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
                 LOG.info("compile arduino program {} successful", programName);
             } else {
@@ -63,8 +63,8 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
 
     @Override
     public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
-        BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2ArduinoConfigurationTransformer transformer = new Jaxb2ArduinoConfigurationTransformer(factory.getBlocklyDropdownFactory());
+        final BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
+        final Jaxb2ArduinoConfigurationTransformer transformer = new Jaxb2ArduinoConfigurationTransformer(factory.getBlocklyDropdownFactory());
         return transformer.transform(project);
     }
 
@@ -94,21 +94,21 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
         String os = "";
         if ( SystemUtils.IS_OS_LINUX ) {
             if ( System.getProperty("os.arch").contains("arm") ) {
-                scriptName = compilerResourcesDir + "/linux-arm/arduino-builder";
-                os = "linux-arm";
+                scriptName = compilerResourcesDir + "arduino-builder/linux-arm/arduino-builder";
+                os = "arduino-builder/linux-arm";
             } else {
-                scriptName = compilerResourcesDir + "/linux/arduino-builder";
-                os = "linux";
+                scriptName = compilerResourcesDir + "arduino-builder/linux/arduino-builder";
+                os = "arduino-builder/linux";
             }
         } else if ( SystemUtils.IS_OS_WINDOWS ) {
-            scriptName = compilerResourcesDir + "/windows/arduino-builder.exe";
-            os = "windows";
+            scriptName = compilerResourcesDir + "arduino-builder/windows/arduino-builder.exe";
+            os = "arduino-builder/windows";
         } else if ( SystemUtils.IS_OS_MAC ) {
-            scriptName = compilerResourcesDir + "/osx/arduino-builder";
-            os = "osx";
+            scriptName = compilerResourcesDir + "arduino-builder/osx/arduino-builder";
+            os = "arduino-builder/osx";
         }
-        Path path = Paths.get(tempDir + token + "/" + mainFile);
-        Path base = Paths.get("");
+        final Path path = Paths.get(tempDir + token + "/" + mainFile);
+        final Path base = Paths.get("");
 
         try {
             String fqbnArg = "";
@@ -120,11 +120,12 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
                 fqbnArg = "-fqbn=arduino:avr:nano:cpu=atmega328";
             }
 
-            ProcessBuilder procBuilder =
+            final ProcessBuilder procBuilder =
                 new ProcessBuilder(
                     new String[] {
                         scriptName,
-                        "-hardware=" + compilerResourcesDir + "/hardware",
+                        "-hardware=" + compilerResourcesDir + "hardware/builtin",
+                        "-hardware=" + compilerResourcesDir + "hardware/additional",
                         "-tools=" + compilerResourcesDir + "/" + os + "/tools-builder",
                         "-libraries=" + compilerResourcesDir + "/libraries",
                         fqbnArg,
@@ -136,18 +137,18 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
             procBuilder.redirectInput(Redirect.INHERIT);
             procBuilder.redirectOutput(Redirect.INHERIT);
             procBuilder.redirectError(Redirect.INHERIT);
-            Process p = procBuilder.start();
-            int ecode = p.waitFor();
+            final Process p = procBuilder.start();
+            final int ecode = p.waitFor();
             System.err.println("Exit code " + ecode);
 
             if ( ecode != 0 ) {
                 return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
             }
             this.compiledHex = FileUtils.readFileToString(new File(path + "/target/" + mainFile + ".ino.hex"), "UTF-8");
-            Base64.Encoder urec = Base64.getEncoder();
+            final Base64.Encoder urec = Base64.getEncoder();
             this.compiledHex = urec.encodeToString(this.compiledHex.getBytes());
             return Key.COMPILERWORKFLOW_SUCCESS;
-        } catch ( Exception e ) {
+        } catch ( final Exception e ) {
             if ( sb.length() > 0 ) {
                 LOG.error("build exception. Messages from the build script are:\n" + sb.toString(), e);
             } else {

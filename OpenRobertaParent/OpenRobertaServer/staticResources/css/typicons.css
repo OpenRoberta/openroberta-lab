@@ -669,6 +669,9 @@
 .typcn-arduino:before {
   content: "\e9d8";
 }
+.typcn-sensebox:before {
+  content: "\e921";
+}
 .typcn-infinity-outline:before {
   content: "\e9d9";
 }

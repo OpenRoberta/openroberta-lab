@@ -100,4 +100,10 @@ public interface SC {
     String IDONE = "IDONE";
     String ANY = "ANY";
     String ENTER = "ENTER";
+    String PRESSURE = "PRESSURE";
+    String VEML = "VEML";
+    String UVLIGHT = "UVLIGHT";
+    String LIGHTVEML = "LIGHTVEML";
+    String WIRELESS = "WIRELESS";
+    String SEND_DATA = "SEND_DATA";
 }

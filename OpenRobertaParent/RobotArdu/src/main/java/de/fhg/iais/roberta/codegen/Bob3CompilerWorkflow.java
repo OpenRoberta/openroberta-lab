@@ -46,9 +46,9 @@ public class Bob3CompilerWorkflow extends AbstractCompilerWorkflow {
 
     @Override
     public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
-        storeGeneratedProgram(token, programName, ".ino");
+        this.storeGeneratedProgram(token, programName, ".ino");
         if ( this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
-            this.workflowResult = runBuild(token, programName, "generated.main");
+            this.workflowResult = this.runBuild(token, programName, "generated.main");
             if ( this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
                 LOG.info("compile bob3 program {} successful", programName);
             } else {
@@ -88,18 +88,18 @@ public class Bob3CompilerWorkflow extends AbstractCompilerWorkflow {
         String os = "";
         if ( SystemUtils.IS_OS_LINUX ) {
             if ( System.getProperty("os.arch").contains("arm") ) {
-                scriptName = compilerResourcesDir + "/linux-arm/arduino-builder";
-                os = "linux-arm";
+                scriptName = compilerResourcesDir + "arduino-builder/linux-arm/arduino-builder";
+                os = "arduino-builder/linux-arm";
             } else {
-                scriptName = compilerResourcesDir + "/linux/arduino-builder";
-                os = "linux";
+                scriptName = compilerResourcesDir + "arduino-builder/linux/arduino-builder";
+                os = "arduino-builder/linux";
             }
         } else if ( SystemUtils.IS_OS_WINDOWS ) {
-            scriptName = compilerResourcesDir + "/windows/arduino-builder.exe";
-            os = "windows";
+            scriptName = compilerResourcesDir + "arduino-builder/windows/arduino-builder.exe";
+            os = "arduino-builder/windows";
         } else if ( SystemUtils.IS_OS_MAC ) {
-            scriptName = compilerResourcesDir + "/osx/arduino-builder";
-            os = "osx";
+            scriptName = compilerResourcesDir + "arduino-builder/osx/arduino-builder";
+            os = "arduino-builder/osx";
         }
 
         Path path = Paths.get(tempDir + token + "/" + mainFile);
@@ -110,7 +110,8 @@ public class Bob3CompilerWorkflow extends AbstractCompilerWorkflow {
                 new ProcessBuilder(
                     new String[] {
                         scriptName,
-                        "-hardware=" + compilerResourcesDir + "/hardware",
+                        "-hardware=" + compilerResourcesDir + "hardware/builtin",
+                        "-hardware=" + compilerResourcesDir + "hardware/additional",
                         "-tools=" + compilerResourcesDir + "/" + os + "/tools-builder",
                         "-libraries=" + compilerResourcesDir + "/libraries",
                         "-fqbn=nicai:avr:bob3",

@@ -361,4 +361,5 @@ public final class BlocklyConstants {
     public static final String PULSE = "PULSE";
     public static final String DROP = "DROP";
     public static final String RFID = "RFID";
+    public static final String SENSOR = "SENSOR";
 }

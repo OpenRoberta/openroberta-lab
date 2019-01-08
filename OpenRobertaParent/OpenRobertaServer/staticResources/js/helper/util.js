@@ -30,6 +30,22 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
     }
     exports.getCookie = getCookie;
 
+    /**
+     * Decode base64 string to array of bytes
+     * 
+     * @param b64string
+     *            A base64 encoded string
+     */
+    function base64decode(b64string) {
+        var byteCharacters = atob(b64string);
+        var byteNumbers = new Array(byteCharacters.length);
+        for (var i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        return new Uint8Array(byteNumbers);
+    }
+    exports.base64decode = base64decode;
+    
     function clone(obj) {
         var copy;
 
