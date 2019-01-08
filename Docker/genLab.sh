@@ -28,7 +28,8 @@ then
     BUILD_ALL='true'
 fi
 echo "building branch $BRANCH with version $VERSION. Build all container is set to $BUILD_ALL"
-git clone --depth=1 -b $BRANCH https://github.com/OpenRoberta/robertalab.git
+git pull
+git checkout $BRANCH
 cd /opt/robertalab/OpenRobertaParent
 mvn clean install
 chmod +x RobotArdu/resources/linux/arduino-builder RobotArdu/resources/linux/tools-builder/ctags/5.8*/ctags
@@ -54,5 +55,6 @@ else
     LAST_COMMIT=$(git rev-list HEAD...HEAD~1)
     TAG_NAME=rbudde/openroberta_lab:$LAST_COMMIT
     docker build -t $TAG_NAME -f DockerfileLab .
-    echo "docker build finished for $TAG_NAME"
+    docker build -t rbudde/openroberta_lab:$BRANCH-$VERSION -f DockerfileLab .
+    echo "docker build finished for $TAG_NAME and rbudde/openroberta_lab:$BRANCH-$VERSION"
 fi

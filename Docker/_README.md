@@ -12,6 +12,7 @@ export GITREPO="$HOME/robertalab"
 export DB_PARENTDIR="$HOME/export"
 export SERVER_PORT_ON_HOST=1999
 export DBSERVER_PORT_ON_HOST=9001
+export BUILD_ALL=true
 ```
 
 this is the setting for docker tests of rbudde on ilya.iais.fraunhofer.de
@@ -25,6 +26,7 @@ export DISTR_DIR='/tmp/distr'
 export DB_PARENTDIR="$HOME/db"
 export SERVER_PORT_ON_HOST=7000
 export DBSERVER_PORT_ON_HOST=9001
+export BUILD_ALL=true
 ```
 
 ## tl;dr: to generate the docker image "rbudde/openroberta_lab:$VERSION" from "develop" run
@@ -92,7 +94,7 @@ When the "gen" image is run,
   for inspection
 
 ```bash
-docker run -v /var/run/docker.sock:/var/run/docker.sock rbudde/openroberta_gen:1 $BRANCH $VERSION
+docker run -v /var/run/docker.sock:/var/run/docker.sock rbudde/openroberta_gen:1 $BRANCH $VERSION $BUILD_ALL
 ```
 	   
 # commands for the roberta maintainer. THIS IS DOCUMENTATION. YOU MUST NOT DO THIS.

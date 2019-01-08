@@ -30,7 +30,7 @@ RUN echo "cloning branch develop and executing mvn to fill the .m2 cache" && \
     mvn clean install
  
 # prepare the entry point
-ARG LAST_RUN_OF_COPY_GENLAB=2018-10-12
+ARG LAST_RUN_OF_COPY_GENLAB=2019-01-08
 WORKDIR /opt
 COPY ["./genLab.sh","./"]
 RUN chmod +x ./genLab.sh
