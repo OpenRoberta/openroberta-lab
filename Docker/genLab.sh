@@ -38,23 +38,18 @@ cd /opt/robertalab
 rm -rf DockerInstallation
 ./ora.sh --export /opt/robertalab/DockerInstallation
 
-yes yes | ./ora.sh --createEmptydb
-cp -r OpenRobertaParent/OpenRobertaServer/db-$VERSION DockerInstallation
-
 cp Docker/Dockerfile* Docker/*.sh DockerInstallation
 
 cd /opt/robertalab/DockerInstallation
 
+LAST_COMMIT=$(git rev-list HEAD...HEAD~1)
+DOCKER_VERSION=$BRANCH-$VERSION
+PREFIX=rbudde/openroberta
+
+docker build -t ${PREFIX}_lab:$DOCKER_VERSION -t ${PREFIX}_lab:$LAST_COMMIT -f DockerfileLab .
 if [ "$BUILD_ALL" == 'true' ]
 then
-    docker build -t rbudde/openroberta_lab:$BRANCH-$VERSION      -f DockerfileLab                             .
-    docker build -t rbudde/openroberta_db:$BRANCH-$VERSION       -f DockerfileDb --build-arg version=$VERSION .
-    docker build -t rbudde/openroberta_upgrade:$BRANCH-$VERSION  -f DockerfileUpgrade                         .
-    docker build -t rbudde/openroberta_embedded:$BRANCH-$VERSION -f DockerfileLabEmbedded                     .
-else
-    LAST_COMMIT=$(git rev-list HEAD...HEAD~1)
-    TAG_NAME=rbudde/openroberta_lab:$LAST_COMMIT
-    docker build -t $TAG_NAME -f DockerfileLab .
-    docker build -t rbudde/openroberta_lab:$BRANCH-$VERSION -f DockerfileLab .
-    echo "docker build finished for $TAG_NAME and rbudde/openroberta_lab:$BRANCH-$VERSION"
+    docker build -t ${PREFIX}_db:$BRANCH-$VERSION       -f DockerfileDb --build-arg version=$VERSION .
+    docker build -t ${PREFIX}_upgrade:$BRANCH-$VERSION  -f DockerfileUpgrade                         .
+    docker build -t ${PREFIX}_embedded:$BRANCH-$VERSION -f DockerfileLabEmbedded                     .
 fi

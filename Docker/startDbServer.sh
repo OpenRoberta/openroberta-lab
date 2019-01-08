@@ -20,7 +20,7 @@ trap trapSignals SIGINT
 
 DATABASE=db-${VERSION}/openroberta-db
 echo "the database server will use database directory $DATABASE in base directory $DB_BASEDIR"
-java -cp lib/\* org.hsqldb.Server --database.0 file:$DB_BASEDIR/$DATABASE --dbname.0 openroberta-db &
+java -Xmx4G -cp lib/\* org.hsqldb.Server --database.0 file:$DB_BASEDIR/$DATABASE --dbname.0 openroberta-db &
 child="$!"
 echo "waiting for child with pid $child to terminate"
 wait "$child"
