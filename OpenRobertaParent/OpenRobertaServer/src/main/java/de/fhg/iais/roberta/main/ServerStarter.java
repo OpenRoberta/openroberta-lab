@@ -188,13 +188,12 @@ public class ServerStarter {
         staticResourceServlet.setInitParameter("cacheControl", "private, must-revalidate");
 
         HandlerList handlers = new HandlerList();
-        handlers
-            .setHandlers(
-                new Handler[] {
-                    restHttpHandler,
-                    wsHandler,
-                    defaultHandler
-                });
+        handlers.setHandlers(
+            new Handler[] {
+                restHttpHandler,
+                wsHandler,
+                defaultHandler
+            });
         server.setHandler(handlers);
 
         StringBuilder sb = new StringBuilder();
@@ -282,9 +281,15 @@ public class ServerStarter {
             DbSession session = this.injector.getInstance(SessionFactoryWrapper.class).getSession();
             RobotDao robotDao = new RobotDao(session);
             for ( String robotToUse : robotWhitelist ) {
+                if ( robotToUse.equals("sim") )
+                    continue;
                 String pluginName = robotToUse;
-                if ( serverProperties.getStringProperty("robot.plugin." + pluginName + ".group") != null ) {
-                    pluginName = serverProperties.getStringProperty("robot.plugin." + pluginName + ".group");
+                Properties basicPluginProperties = Util1.loadProperties("classpath:/" + pluginName + ".properties");
+                if ( basicPluginProperties == null ) {
+                    throw new DbcException("robot plugin " + pluginName + " has no property file " + pluginName + ".properties -  Server does NOT start");
+                }
+                if ( basicPluginProperties.getProperty("robot.plugin.group") != null ) {
+                    pluginName = basicPluginProperties.getProperty("robot.plugin.group");
                 }
                 Robot pluginRobot = robotDao.loadRobot(pluginName);
                 if ( pluginRobot == null ) {
