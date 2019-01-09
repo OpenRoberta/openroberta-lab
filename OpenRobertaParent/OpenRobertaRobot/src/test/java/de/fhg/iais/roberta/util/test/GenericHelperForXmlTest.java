@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
 public class GenericHelperForXmlTest extends AbstractHelperForXmlTest {
     public GenericHelperForXmlTest() {
-        super(new TestFactory(new PluginProperties("test", "", "", Util1.loadProperties("classpath:/test.properties"))), (Configuration) null);
+        super(new TestFactory(new PluginProperties("test", "", "", Util1.loadProperties("classpath:/pluginProperties/test.properties"))), (Configuration) null);
     }
 
     private static class TestFactory extends AbstractRobotFactory {

@@ -102,6 +102,7 @@ public class HelperNxtForXmlTest extends AbstractHelperForXmlTest {
     }
 
     public void compareExistingAndGeneratedNxcSource(String sourceCodeFilename, String xmlFilename, Configuration configuration) throws Exception {
-        Assert.assertEquals(Util1.readResourceContent(sourceCodeFilename), generateNXC(xmlFilename, configuration));
+        Assert
+            .assertEquals(Util1.readResourceContent(sourceCodeFilename).replaceAll("\\s+", ""), generateNXC(xmlFilename, configuration).replaceAll("\\s+", ""));
     }
 }

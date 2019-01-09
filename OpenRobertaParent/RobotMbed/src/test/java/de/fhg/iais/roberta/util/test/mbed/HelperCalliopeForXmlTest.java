@@ -49,7 +49,10 @@ public class HelperCalliopeForXmlTest extends de.fhg.iais.roberta.util.test.Abst
     }
 
     public void compareExistingAndGeneratedSource(String sourceCodeFilename, String xmlFilename) throws Exception {
-        Assert.assertEquals(Util1.readResourceContent(sourceCodeFilename), generateCpp(xmlFilename, new Configuration.Builder().build()));
+        Assert
+            .assertEquals(
+                Util1.readResourceContent(sourceCodeFilename).replaceAll("\\s+", ""),
+                generateCpp(xmlFilename, new Configuration.Builder().build()).replaceAll("\\s+", ""));
     }
 
 }

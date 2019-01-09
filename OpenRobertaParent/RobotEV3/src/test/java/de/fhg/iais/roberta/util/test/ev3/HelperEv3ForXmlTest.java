@@ -139,11 +139,17 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
     }
 
     public void compareExistingAndGeneratedPythonSource(String sourceCodeFilename, String xmlFilename, Configuration configuration) throws Exception {
-        Assert.assertEquals(Util1.readResourceContent(sourceCodeFilename), generatePython(xmlFilename, configuration));
+        Assert
+            .assertEquals(
+                Util1.readResourceContent(sourceCodeFilename).replaceAll("\\s+", ""),
+                generatePython(xmlFilename, configuration).replaceAll("\\s+", ""));
     }
 
     public void compareExistingAndGeneratedJavaSource(String sourceCodeFilename, String xmlFilename, Configuration configuration) throws Exception {
-        Assert.assertEquals(Util1.readResourceContent(sourceCodeFilename), generateJava(xmlFilename, configuration));
+        Assert
+            .assertEquals(
+                Util1.readResourceContent(sourceCodeFilename).replaceAll("\\s+", ""),
+                generateJava(xmlFilename, configuration).replaceAll("\\s+", ""));
     }
 
 }

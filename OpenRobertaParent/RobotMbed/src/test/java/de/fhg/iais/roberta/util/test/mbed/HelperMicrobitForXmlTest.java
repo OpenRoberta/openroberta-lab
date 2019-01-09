@@ -55,6 +55,6 @@ public class HelperMicrobitForXmlTest extends de.fhg.iais.roberta.util.test.Abst
     }
 
     public void compareExistingAndGeneratedSource(String sourceCodeFilename, String xmlFilename) throws Exception {
-        Assert.assertEquals(Util1.readResourceContent(sourceCodeFilename), generatePython(xmlFilename));
+        Assert.assertEquals(Util1.readResourceContent(sourceCodeFilename).replaceAll("\\s+", ""), generatePython(xmlFilename).replaceAll("\\s+", ""));
     }
 }

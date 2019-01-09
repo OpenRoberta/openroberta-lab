@@ -24,6 +24,6 @@ public class HelperNaoForXmlTest extends de.fhg.iais.roberta.util.test.AbstractH
     }
 
     public void compareExistingAndGeneratedSource(String sourceCodeFilename, String xmlFilename) throws Exception {
-        Assert.assertEquals(Util1.readResourceContent(sourceCodeFilename), generateCpp(xmlFilename));
+        Assert.assertEquals(Util1.readResourceContent(sourceCodeFilename).replaceAll("\\s+", ""), generateCpp(xmlFilename).replaceAll("\\s+", ""));
     }
 }
