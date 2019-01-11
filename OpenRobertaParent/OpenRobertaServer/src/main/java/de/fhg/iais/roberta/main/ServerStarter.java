@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -188,12 +189,13 @@ public class ServerStarter {
         staticResourceServlet.setInitParameter("cacheControl", "private, must-revalidate");
 
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(
-            new Handler[] {
-                restHttpHandler,
-                wsHandler,
-                defaultHandler
-            });
+        handlers
+            .setHandlers(
+                new Handler[] {
+                    restHttpHandler,
+                    wsHandler,
+                    defaultHandler
+                });
         server.setHandler(handlers);
 
         StringBuilder sb = new StringBuilder();
@@ -218,7 +220,7 @@ public class ServerStarter {
         this.injector = robertaGuiceServletConfig.getCreatedInjector();
         Ev3SensorLoggingWS.setGuiceInjector(this.injector);
 
-        checkRobotPluginsDB();
+        checkRobotPluginsDB(robotPluginMap.values());
         Runtime.getRuntime().addShutdownHook(new ShutdownHook("embedded".equals(serverProperties.getStringProperty("database.mode")), this.injector));
         LOG.info("Shutdown hook added. If the server is gracefully stopped in the future, a shutdown message is logged");
         logTheNumberOfStoredPrograms();
@@ -272,41 +274,6 @@ public class ServerStarter {
     }
 
     /**
-     * step through the whitelist of robots and make sure, that the name of each robot is in the database.<br>
-     * This is required, because the robot name is used as foreign key in some tables
-     */
-    private void checkRobotPluginsDB() {
-        try {
-            List<String> robotWhitelist = serverProperties.getRobotWhitelist();
-            DbSession session = this.injector.getInstance(SessionFactoryWrapper.class).getSession();
-            RobotDao robotDao = new RobotDao(session);
-            for ( String robotToUse : robotWhitelist ) {
-                if ( robotToUse.equals("sim") )
-                    continue;
-                String pluginName = robotToUse;
-                Properties basicPluginProperties = Util1.loadProperties("classpath:/" + pluginName + ".properties");
-                if ( basicPluginProperties == null ) {
-                    throw new DbcException("robot plugin " + pluginName + " has no property file " + pluginName + ".properties -  Server does NOT start");
-                }
-                if ( basicPluginProperties.getProperty("robot.plugin.group") != null ) {
-                    pluginName = basicPluginProperties.getProperty("robot.plugin.group");
-                }
-                Robot pluginRobot = robotDao.loadRobot(pluginName);
-                if ( pluginRobot == null ) {
-                    // add missing robot type to database
-                    Pair<Key, Robot> result = robotDao.persistRobot(pluginName);
-                    session.save(result.getSecond());
-                    ServerStarter.LOG.info(result.getSecond().getName() + " added to the database");
-                }
-            }
-            session.close();
-        } catch ( Exception e ) {
-            LOG.error("Server could not check robot names in the database (exit 20)", e);
-            System.exit(20);
-        }
-    }
-
-    /**
      * configure robot plugins, that may be used with this server. Uses the white list and the declarations from the openroberta.properties file.
      *
      * @param robotCommunicator
@@ -354,6 +321,34 @@ public class ServerStarter {
         }
         LOG.info(sb.toString());
         return robotPlugins;
+    }
+
+    /**
+     * step through all configured robot factories and make sure, that the group name of each robot (or its name, if no group is configured) is in the
+     * database.<br>
+     * This is required, because the robot (group) name is used as foreign key in some tables
+     *
+     * @param robotFactories collection of all configured robot factories
+     */
+    private void checkRobotPluginsDB(Collection<IRobotFactory> robotFactories) {
+        try {
+            DbSession session = this.injector.getInstance(SessionFactoryWrapper.class).getSession();
+            RobotDao robotDao = new RobotDao(session);
+            for ( IRobotFactory robotFactory : robotFactories ) {
+                String robotForDb = robotFactory.getGroup();
+                Robot pluginRobot = robotDao.loadRobot(robotForDb);
+                if ( pluginRobot == null ) {
+                    // add missing robot type to database
+                    Pair<Key, Robot> result = robotDao.persistRobot(robotForDb);
+                    session.save(result.getSecond());
+                    ServerStarter.LOG.info(result.getSecond().getName() + " added to the database");
+                }
+            }
+            session.close();
+        } catch ( Exception e ) {
+            LOG.error("Server could not check robot names in the database (exit 20)", e);
+            System.exit(20);
+        }
     }
 
     public static class WebSocketServiceServlet extends WebSocketServlet {

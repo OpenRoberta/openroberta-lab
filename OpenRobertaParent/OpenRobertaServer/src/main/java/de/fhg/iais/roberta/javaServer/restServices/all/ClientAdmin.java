@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.javaServer.restServices.all;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -13,10 +12,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import de.fhg.iais.roberta.util.*;
-import de.fhg.iais.roberta.util.Statistics;
-import eu.bitwalker.useragentutils.UserAgent;
 
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -31,6 +26,15 @@ import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.util.AliveData;
+import de.fhg.iais.roberta.util.ClientLogger;
+import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.RandomUrlPostfix;
+import de.fhg.iais.roberta.util.ServerProperties;
+import de.fhg.iais.roberta.util.Statistics;
+import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.Util1;
+import eu.bitwalker.useragentutils.UserAgent;
 
 @Path("/admin")
 public class ClientAdmin {
@@ -102,7 +106,10 @@ public class ClientAdmin {
                 server.put("robots", robots);
                 String staticRecourcesDir = this.serverProperties.getStringProperty("server.staticresources.dir");
                 String pathToTutorial = this.serverProperties.getStringProperty("server.tutorial.dir");
-                JSONObject tutorial = Util.getJSONObjectFromDirectory(pathToTutorial, "json");
+                JSONObject tutorial =
+                    (pathToTutorial == null || pathToTutorial.trim().isEmpty() || !new File(pathToTutorial).isDirectory())
+                        ? new JSONObject()
+                        : Util.getJSONObjectFromDirectory(pathToTutorial, "json");
                 server.put("tutorial", tutorial);
                 String pathToHelp = staticRecourcesDir + File.separator + "help";
                 List<String> help = Util.getListOfFileNamesFromDirectory(pathToHelp, "html");

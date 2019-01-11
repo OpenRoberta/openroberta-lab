@@ -385,7 +385,10 @@ public class Util1 {
     }
 
     /**
-     * return a stream of all files found in a resource directory
+     * return a stream of all files found in a resource directory<br>
+     * <b>Note:</b> this seems to work <i>not</i> always. We had cases where 'Util1.class.getResource(directory).toURI()' failed with the message, that a
+     * zip-file-system wasn't found. This occurs in the context of a resource dir located in an jar and may depend on the way a classpath is constructed.
+     * Example: sometimes travis + eclipse were ok, mvn in the bash failed.
      *
      * @param directory whose files are requested
      * @return the stream of all files

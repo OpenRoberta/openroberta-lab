@@ -130,7 +130,13 @@ function _exportApplication {
             cd ..
         fi
     done
-    cd ..
+	cd ..
+	if [[ -d "Resources/tutorial" ]]
+	then
+		echo "tutorials are copied"
+		mkAndCheckDir "${exportpath}/OpenRobertaParent/tutorial"
+		cp -r Resources/tutorial/* "${exportpath}/OpenRobertaParent/tutorial"
+	fi
     echo 'copy scripts'
     cp Resources/shScriptsForExport/*.sh ${exportpath}
     chmod ugo+rx ${exportpath}/*.sh
