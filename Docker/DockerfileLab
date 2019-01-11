@@ -13,6 +13,6 @@ COPY ["OpenRobertaParent/","./OpenRobertaParent/"]
 
 ENTRYPOINT ["java", "-cp", "lib/*", "de.fhg.iais.roberta.main.ServerStarter", \
             "-d", "database.mode=server", \
-            "-d", "server.staticresources.dir=staticResources" \
+            "-d", "server.staticresources.dir=staticResources", \
             "-d", "server.tutorial.dir=OpenRobertaParent/tutorial" \
            ]
