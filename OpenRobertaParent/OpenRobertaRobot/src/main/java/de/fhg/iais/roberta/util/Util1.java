@@ -316,27 +316,24 @@ public class Util1 {
     }
 
     /**
-     * read all lines from a resource
-     *
-     * @param resourceName
-     * @return the list of lines of the resource
-     */
-    public static List<String> readResourceLines(String resourceName) {
-        try {
-            return Files.readAllLines(Paths.get(Util1.class.getResource(resourceName).toURI()));
-        } catch ( Exception e ) {
-            throw new DbcException("read from resource failed for: " + resourceName, e);
-        }
-    }
-
-    /**
      * read all lines from a resource, concatenate them to a string separated by a newline
      *
      * @param resourceName
      * @return the content of the resource as one String
      */
     public static String readResourceContent(String resourceName) {
-        return readResourceLines(resourceName).stream().collect(Collectors.joining(System.lineSeparator()));
+        final Class<?> clazz = Util1.class;
+        final String lineSeparator = System.lineSeparator();
+        final StringBuilder sb = new StringBuilder();
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(clazz.getResourceAsStream(resourceName), "UTF-8"))) {
+            String line;
+            while ( (line = in.readLine()) != null ) {
+                sb.append(line).append(lineSeparator);
+            }
+            return sb.toString();
+        } catch ( IOException e ) {
+            throw new DbcException("reading resource failed for: " + resourceName, e);
+        }
     }
 
     /**
