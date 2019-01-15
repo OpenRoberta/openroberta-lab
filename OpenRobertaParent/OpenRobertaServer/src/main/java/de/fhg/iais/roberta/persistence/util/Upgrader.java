@@ -118,7 +118,7 @@ public class Upgrader {
             Session nativeSession = sessionFactoryWrapper.getNativeSession();
             nativeSession.beginTransaction();
             DbSetup dbSetup = new DbSetup(nativeSession);
-            dbSetup.createEmptyDatabase(
+            dbSetup.sqlFile(
                 "/update-2-2-7.sql",
                 "select count(*) from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'PENDING_EMAIL_CONFIRMATIONS'",
                 "select count(*) from USER where ACCOUNT = 'Gallery'");

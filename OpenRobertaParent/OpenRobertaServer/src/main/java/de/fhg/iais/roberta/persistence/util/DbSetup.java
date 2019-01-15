@@ -15,9 +15,8 @@ public class DbSetup {
     private static final Logger LOG = LoggerFactory.getLogger(DbSetup.class);
     //../OpenRobertaServer/src/main/resources
     private static final String DB_CREATE_TABLES_SQL = "/create-tables.sql";
-    private static final String SQL_RETURNING_POSITIVENUMBER_IF_SQLFILE_ALREADY_LOADED =
-        "select count(*) from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'PROGRAM'";
-    private static final String SQL_RETURNING_POSITIVENUMBER_IF_SETUP_WAS_SUCCESSFUL = "select count(*) from ROBOT";
+    static final String SQL_RETURNING_POSITIVENUMBER_IF_SQLFILE_ALREADY_LOADED = "select count(*) from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'PROGRAM'";
+    static final String SQL_RETURNING_POSITIVENUMBER_IF_SETUP_WAS_SUCCESSFUL = "select count(*) from ROBOT";
 
     private final DbExecutor dbExecutor;
 
@@ -26,13 +25,13 @@ public class DbSetup {
     }
 
     public void createEmptyDatabase() {
-        createEmptyDatabase(
+        sqlFile(
             DbSetup.DB_CREATE_TABLES_SQL,
             DbSetup.SQL_RETURNING_POSITIVENUMBER_IF_SQLFILE_ALREADY_LOADED,
             DbSetup.SQL_RETURNING_POSITIVENUMBER_IF_SETUP_WAS_SUCCESSFUL);
     }
 
-    public void createEmptyDatabase(String sqlResource, String sqlReturningPositiveIfSqlFileAlreadyLoaded, String sqlReturningPositiveIfSetupSuccessful) {
+    public void sqlFile(String sqlResource, String sqlReturningPositiveIfSqlFileAlreadyLoaded, String sqlReturningPositiveIfSetupSuccessful) {
         try {
             this.dbExecutor.sqlFile(sqlResource, sqlReturningPositiveIfSqlFileAlreadyLoaded, sqlReturningPositiveIfSetupSuccessful);
         } catch ( Exception e ) {

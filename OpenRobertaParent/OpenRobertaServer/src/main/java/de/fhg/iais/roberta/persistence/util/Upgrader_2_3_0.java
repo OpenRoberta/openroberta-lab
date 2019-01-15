@@ -37,12 +37,12 @@ public class Upgrader_2_3_0 {
         this.nativeSession = sessionFactoryWrapper.getNativeSession();
         this.dbSession = new DbSession(nativeSession);
         // step 1
-        new DbSetup(nativeSession).createEmptyDatabase(
+        new DbSetup(nativeSession).sqlFile(
             "/update-2-3-0--step-1.sql",
             "select count(*) from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'USER_LIKE'",
             "select count(*) from PROGRAM where VIEWED = 0");
         step2();
-        new DbSetup(nativeSession).createEmptyDatabase(//
+        new DbSetup(nativeSession).sqlFile(//
             "/update-2-3-0--step-3.sql",
             null,
             "select count(*) from CONFIGURATION_DATA");
