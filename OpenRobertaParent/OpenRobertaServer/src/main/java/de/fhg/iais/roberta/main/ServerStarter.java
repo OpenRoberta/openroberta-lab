@@ -34,7 +34,6 @@ import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.guice.RobertaGuiceServletConfig;
 import de.fhg.iais.roberta.javaServer.websocket.Ev3SensorLoggingWS;
 import de.fhg.iais.roberta.persistence.bo.Robot;
-import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 import de.fhg.iais.roberta.persistence.dao.RobotDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
@@ -262,9 +261,8 @@ public class ServerStarter {
     private void logTheNumberOfStoredPrograms() {
         try {
             DbSession session = this.injector.getInstance(SessionFactoryWrapper.class).getSession();
-            ProgramDao projectDao = new ProgramDao(session);
-            int numOfProgs = projectDao.loadAll().size();
-            ServerStarter.LOG.info("Number of programs stored in the database: " + numOfProgs);
+            List<?> numberOfProgramsInList = session.getSession().createSQLQuery("select count(*) from PROGRAM").list();
+            ServerStarter.LOG.info("Number of programs stored in the database: " + numberOfProgramsInList);
             session.close();
         } catch ( Exception e ) {
             ServerStarter.LOG.error("Server could not connect to the database (exit 20)", e);

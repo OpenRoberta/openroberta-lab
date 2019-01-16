@@ -119,9 +119,9 @@ public class Upgrader {
             nativeSession.beginTransaction();
             DbSetup dbSetup = new DbSetup(nativeSession);
             dbSetup.sqlFile(
-                "/update-2-2-7.sql",
                 "select count(*) from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'PENDING_EMAIL_CONFIRMATIONS'",
-                "select count(*) from USER where ACCOUNT = 'Gallery'");
+                "select count(*) from USER where ACCOUNT = 'Gallery'",
+                "/update-2-2-7.sql");
             nativeSession.createSQLQuery("shutdown").executeUpdate();
             nativeSession.close();
         } else {

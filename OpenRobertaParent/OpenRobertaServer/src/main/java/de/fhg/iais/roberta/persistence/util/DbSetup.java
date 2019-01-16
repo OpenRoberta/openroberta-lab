@@ -9,13 +9,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class DbSetup {
 
     private static final Logger LOG = LoggerFactory.getLogger(DbSetup.class);
-    //../OpenRobertaServer/src/main/resources
-    private static final String DB_CREATE_TABLES_SQL = "/create-tables.sql";
-    static final String SQL_RETURNING_POSITIVENUMBER_IF_SQLFILE_ALREADY_LOADED = "select count(*) from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'PROGRAM'";
+
+    public static final String DB_CREATE_TABLES_WITHOUT_CONSTRAINTS_SQL = "/create-tables-without-constraints.sql";
+    public static final String DB_CREATE_CONSTRAINTS_SQL = "/create-constraints.sql";
+    public static final String DB_CREATE_INITROWS_SQL = "/create-initrows.sql";
+    static final String SQL_RETURNING_POSITIVENUMBER_IF_SQLFILES_ALREADY_LOADED = "select count(*) from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'PROGRAM'";
     static final String SQL_RETURNING_POSITIVENUMBER_IF_SETUP_WAS_SUCCESSFUL = "select count(*) from ROBOT";
 
     private final DbExecutor dbExecutor;
@@ -26,16 +29,39 @@ public class DbSetup {
 
     public void createEmptyDatabase() {
         sqlFile(
-            DbSetup.DB_CREATE_TABLES_SQL,
-            DbSetup.SQL_RETURNING_POSITIVENUMBER_IF_SQLFILE_ALREADY_LOADED,
-            DbSetup.SQL_RETURNING_POSITIVENUMBER_IF_SETUP_WAS_SUCCESSFUL);
+            SQL_RETURNING_POSITIVENUMBER_IF_SQLFILES_ALREADY_LOADED,
+            SQL_RETURNING_POSITIVENUMBER_IF_SETUP_WAS_SUCCESSFUL, //
+            DB_CREATE_TABLES_WITHOUT_CONSTRAINTS_SQL,
+            DB_CREATE_CONSTRAINTS_SQL,
+            DB_CREATE_INITROWS_SQL);
     }
 
-    public void sqlFile(String sqlResource, String sqlReturningPositiveIfSqlFileAlreadyLoaded, String sqlReturningPositiveIfSetupSuccessful) {
+    /**
+     * execute SQL statements read from a array of files
+     *
+     * @param sqlReturningPositiveIfSqlFileAlreadyLoaded SQL statement returning positive number if this file has already been loaded; maybe null
+     * @param sqlReturningPositiveIfSetupSuccessful SQL statement returning positive number if the load of all files was successful; maybe null
+     * @param sqlResource
+     */
+    public void sqlFile(String sqlReturningPositiveIfSqlFileAlreadyLoaded, String sqlReturningPositiveIfSetupSuccessful, String... sqlResources) {
         try {
-            this.dbExecutor.sqlFile(sqlResource, sqlReturningPositiveIfSqlFileAlreadyLoaded, sqlReturningPositiveIfSetupSuccessful);
+            int result = 0;
+            if ( sqlReturningPositiveIfSqlFileAlreadyLoaded != null ) {
+                result = ((BigInteger) this.dbExecutor.oneValueSelect(sqlReturningPositiveIfSqlFileAlreadyLoaded)).intValue();
+            }
+            if ( result == 0 ) {
+                for ( String sqlResource : sqlResources ) {
+                    this.dbExecutor.sqlFile(this.getClass().getResourceAsStream(sqlResource));
+                }
+                if ( sqlReturningPositiveIfSetupSuccessful != null ) {
+                    result = ((BigInteger) this.dbExecutor.oneValueSelect(sqlReturningPositiveIfSetupSuccessful)).intValue();
+                    if ( result <= 0 ) {
+                        throw new DbcException("loading sql from resources " + Arrays.toString(sqlResources) + " was NOT successful");
+                    }
+                }
+            }
         } catch ( Exception e ) {
-            DbSetup.LOG.error("failure during execution of sql statements from classpath resource " + sqlResource, e);
+            DbSetup.LOG.error("failure during execution of sql statements from classpath resource(s) " + Arrays.toString(sqlResources), e);
         }
     }
 

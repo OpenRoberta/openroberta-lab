@@ -23,28 +23,28 @@ import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
  * <br>
  * Steps:<br>
  * <ul>
- * <li>edit main(...) to run only <code>copier.createDatabaseWithoutConstraints()</code>. This creates in embedded mode the database as specified in
- * <code>DB_CONNECTION_COPY_CREATE</code> and executes the DDL SQL command found in <code>DDL_FOR_COPY_TABLE_CREATE</code>. Then it closes the new created
- * database
- * <li>now start the hsqldb target server by<br>
- * <code>java -Xmx4G -cp <path-to-hsqldb-2.4.0.jar> org.hsqldb.Server --port 9002 --database.0 file:db-copy/openroberta-db-copy --dbname.0 openroberta-db-copy &</code><br>
+ * <li>edit main(...) to run only <code>copier.createDatabaseWithoutConstraints()</code>. This creates (in embedded mode) the database as specified by
+ * <code>DB_CONNECTION_COPY_CREATE</code> and executes the DDL SQL commands for table creation found in
+ * <code>DbSetup.DB_CREATE_TABLES_WITHOUT_CONSTRAINTS_SQL</code>. Then it closes the created database
+ * <li>now start the hsqldb target server like<br>
+ * <code>java -Xmx8G -cp [[path-to-hsqldb-2.4.0.jar]] org.hsqldb.Server --port 9002 --database.0 file:db-copy/openroberta-db-copy --dbname.0 openroberta-db-copy &</code><br>
  * this server will later store the database copy in directory <code>db-copy</code>. It listens on the (non default port) 9002
- * <li>now <b>either</b> start the hsqldb source server by<br>
- * <code>java -Xmx4G -cp <path-to-hsqldb-2.4.0.jar> org.hsqldb.Server --database.0 file:db-3.0.4/openroberta-db --dbname.0 openroberta-db &</code><br>
- * this server will later deliver the data from directory <code>db-3.0.4</code>. It listens on the default port 9001
+ * <li>now <b>either</b> start the hsqldb source server like<br>
+ * <code>java -Xmx8G -cp [[path-to-hsqldb-2.4.0.jar]] org.hsqldb.Server --database.0 file:[[db-3.0.4]]/openroberta-db --dbname.0 openroberta-db &</code><br>
+ * this server will later generate the data from directory <code>db-3.0.4</code>. It listens on the default port 9001
  * <li><b>or</b> connect to a remote hsqldb source server by a ssh statement like<br>
  * <code>ssh rbudde@test.open-roberta.org -L9001:localhost:9001</code><br>
- * this tunnel will allow to connect from 'here' the port 9001 to the port 9001 'there', which is 'there' the default port the hsqldb source server is already
- * listening
+ * this tunnel will allow to connect from 'here' the port 9001 to port 9001 at 'there'. Port 9001 at 'there' is the default port for a hsqldb source server
+ * already listening
  * <li>edit main(...) to run only <code>copier.copyDatabase()</code>. This will connect to the databases specified in the source URI <code>DB_CONNECTION</code>
- * and the target URI <code>DB_CONNECTION_COPY</code>. Then it copies using <code>copyTable(...)</code> all tables as specified to the target database. This
- * takes about a minute (Jan 2019 :-)
+ * and the target URI <code>DB_CONNECTION_COPY</code>. Then it copies using <code>copyTable(...)</code> all tables as specified. This takes about 2 minutes (Jan
+ * 2019 :-)
  * <li>edit main(...) to run only <code>copier.enforceConstraints()</code>. This will connect to the the hsqldb target server using
- * <code>DB_CONNECTION_COPY</code> and execute the SQL statements from resource <code>DDL_FOR_COPY_ENFORCE_CONSTRAINTS</code>. This enforces all constraints.
+ * <code>DB_CONNECTION_COPY</code> and execute the SQL statements from resource <code>DbSetup.DB_CREATE_CONSTRAINTS_SQL</code>. This enforces all constraints.
  * This may take 10 minutes (Jan 2019 :-).
  * <li><b>either</b> terminate the tunnel if used.
  * <li><b>or</b> decide, whether the hsqldb <i>source</i> server should continue to run. If not, connect a sql client to <code>DB_CONNECTION</code> and
- * shutdown. <b>BE CAREFUL NOT TO SHUTDOWN A SERVER IN USE BY A JETTY SERVER (e.g. the productive database!)</b>
+ * shutdown. <b>BE CAREFUL NOT TO SHUTDOWN A SOURCE SERVER IN USE BY A JETTY SERVER (e.g. the productive database!)</b>
  * <li>edit main(...) to run only <code>copier.shutdownCopy()</code>. This will run a <code>shutdown compact</code> command. This may take 10 minutes (Jan 2019
  * :-). The hsqldb <i>target</i> server will terminate. Have a look at the logging.
  * </ul>
@@ -58,11 +58,10 @@ public class DatabaseCopier {
     private static final String DB_DRIVER = "org.hsqldb.jdbcDriver";
 
     private static final String DB_CONNECTION_COPY_CREATE = "jdbc:hsqldb:file:db-copy/openroberta-db-copy";
-    private static final String DDL_FOR_COPY_TABLE_CREATE = "/create-tables-without-constraints.sql";
-    private static final String DDL_FOR_COPY_ENFORCE_CONSTRAINTS = "/enforce-constraints.sql";
 
     private static final String DB_CONNECTION_COPY = "jdbc:hsqldb:hsql://localhost:9002/openroberta-db-copy";
     private static final String DB_CONNECTION = "jdbc:hsqldb:hsql://localhost:9001/openroberta-db";
+
     private static final String DB_USER = "orA";
     private static final String DB_PASSWORD = "Pid";
 
@@ -74,7 +73,7 @@ public class DatabaseCopier {
         // copier.createDatabaseWithoutConstraints();
         // copier.copyDatabase();
         // copier.enforceConstraints();
-        copier.shutdownCopy();
+        // copier.shutdownCopy();
     }
 
     private void createDatabaseWithoutConstraints() {
@@ -82,7 +81,7 @@ public class DatabaseCopier {
         Session nativeSession = sessionFactoryWrapper.getNativeSession();
         DbSetup dbSetup = new DbSetup(nativeSession);
         nativeSession.beginTransaction();
-        dbSetup.sqlFile(DDL_FOR_COPY_TABLE_CREATE, null, null);
+        dbSetup.sqlFile(null, null, DbSetup.DB_CREATE_TABLES_WITHOUT_CONSTRAINTS_SQL);
         nativeSession.createSQLQuery("shutdown").executeUpdate();
         nativeSession.close();
     }
@@ -101,11 +100,21 @@ public class DatabaseCopier {
             copyTable(statementFrom, dbConnectionTo, "LOST_PASSWORD", 4);
             copyTable(statementFrom, dbConnectionTo, "PENDING_EMAIL_CONFIRMATIONS", 4);
             copyTable(statementFrom, dbConnectionTo, "ROBOT", 5);
-            copyTable(statementFrom, dbConnectionTo, "PROGRAM", 15, 0, 30000);
-            copyTable(statementFrom, dbConnectionTo, "PROGRAM", 15, 30000, 60000);
-            copyTable(statementFrom, dbConnectionTo, "PROGRAM", 15, 60000, 90000);
-            copyTable(statementFrom, dbConnectionTo, "PROGRAM", 15, 90000, 120000);
+
+            copyTable(statementFrom, dbConnectionTo, "PROGRAM", 15, 0, 10000);
+            copyTable(statementFrom, dbConnectionTo, "PROGRAM", 15, 10000, 20000);
+            copyTable(statementFrom, dbConnectionTo, "PROGRAM", 15, 20000, 30000);
+            copyTable(statementFrom, dbConnectionTo, "PROGRAM", 15, 30000, 40000);
+            copyTable(statementFrom, dbConnectionTo, "PROGRAM", 15, 40000, 50000);
+            copyTable(statementFrom, dbConnectionTo, "PROGRAM", 15, 50000, 60000);
+            copyTable(statementFrom, dbConnectionTo, "PROGRAM", 15, 60000, 70000);
+            copyTable(statementFrom, dbConnectionTo, "PROGRAM", 15, 70000, 80000);
+            copyTable(statementFrom, dbConnectionTo, "PROGRAM", 15, 80000, 90000);
+            copyTable(statementFrom, dbConnectionTo, "PROGRAM", 15, 90000, 100000);
+            copyTable(statementFrom, dbConnectionTo, "PROGRAM", 15, 100000, 110000);
+            copyTable(statementFrom, dbConnectionTo, "PROGRAM", 15, 110000, 120000);
             copyTable(statementFrom, dbConnectionTo, "PROGRAM", 15, 120000, 10000000);
+
             copyTable(statementFrom, dbConnectionTo, "USER_PROGRAM", 4);
             copyTable(statementFrom, dbConnectionTo, "USER_PROGRAM_LIKE", 6);
             copyTable(statementFrom, dbConnectionTo, "TOOLBOX", 11);
@@ -197,7 +206,7 @@ public class DatabaseCopier {
             dbConnectionTo = getDBConnection(DB_CONNECTION_COPY);
             dbConnectionTo.setAutoCommit(false);
             statementTo = dbConnectionTo.createStatement();
-            sqlFile(statementTo, this.getClass().getResourceAsStream(DDL_FOR_COPY_ENFORCE_CONSTRAINTS));
+            sqlFile(statementTo, this.getClass().getResourceAsStream(DbSetup.DB_CREATE_CONSTRAINTS_SQL));
         } catch ( Exception e ) {
             LOG.error("exception when connecting to database or executing sql", e);
         } finally {
