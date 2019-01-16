@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.persistence.util;
+package de.fhg.iais.roberta.main;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -15,20 +15,39 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.fhg.iais.roberta.persistence.util.DbSetup;
+import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
+
 /**
- * db-${serverVersionForDb}/openroberta-db a class with a static main method, responsible for copying one database to the other.<br>
+ * <b>COPY A DATABASE TO ANOTHER DATABASE</b><br>
  * <br>
- * Start the server for the copy:<br>
- * java -Xmx6G -cp lib/\* org.hsqldb.Server \<br>
- * --database.0 file:db-copy/openroberta-db-copy --dbname.0 openroberta-db-copy \<br>
- * --database.1 file:db-3.0.4/openroberta-db --dbname.1 openroberta-db &<br>
- * <br>
- * shutdown with:<br>
- * ./admin.sh -q --shutdown jdbc:hsqldb:hsql://localhost/openroberta-db-copy<br>
- * ./admin.sh -q --shutdown jdbc:hsqldb:hsql://localhost/openroberta-db<br>
- * <br>
- * create an empty copy database by calling:<br>
- * copier.createDatabaseWithoutConstraints();
+ * Steps:<br>
+ * <ul>
+ * <li>edit main(...) to run only <code>copier.createDatabaseWithoutConstraints()</code>. This creates in embedded mode the database as specified in
+ * <code>DB_CONNECTION_COPY_CREATE</code> and executes the DDL SQL command found in <code>DDL_FOR_COPY_TABLE_CREATE</code>. Then it closes the new created
+ * database
+ * <li>now start the hsqldb target server by<br>
+ * <code>java -Xmx4G -cp <path-to-hsqldb-2.4.0.jar> org.hsqldb.Server --port 9002 --database.0 file:db-copy/openroberta-db-copy --dbname.0 openroberta-db-copy &</code><br>
+ * this server will later store the database copy in directory <code>db-copy</code>. It listens on the (non default port) 9002
+ * <li>now <b>either</b> start the hsqldb source server by<br>
+ * <code>java -Xmx4G -cp <path-to-hsqldb-2.4.0.jar> org.hsqldb.Server --database.0 file:db-3.0.4/openroberta-db --dbname.0 openroberta-db &</code><br>
+ * this server will later deliver the data from directory <code>db-3.0.4</code>. It listens on the default port 9001
+ * <li><b>or</b> connect to a remote hsqldb source server by a ssh statement like<br>
+ * <code>ssh rbudde@test.open-roberta.org -L9001:localhost:9001</code><br>
+ * this tunnel will allow to connect from 'here' the port 9001 to the port 9001 'there', which is 'there' the default port the hsqldb source server is already
+ * listening
+ * <li>edit main(...) to run only <code>copier.copyDatabase()</code>. This will connect to the databases specified in the source URI <code>DB_CONNECTION</code>
+ * and the target URI <code>DB_CONNECTION_COPY</code>. Then it copies using <code>copyTable(...)</code> all tables as specified to the target database. This
+ * takes about a minute (Jan 2019 :-)
+ * <li>edit main(...) to run only <code>copier.enforceConstraints()</code>. This will connect to the the hsqldb target server using
+ * <code>DB_CONNECTION_COPY</code> and execute the SQL statements from resource <code>DDL_FOR_COPY_ENFORCE_CONSTRAINTS</code>. This enforces all constraints.
+ * This may take 10 minutes (Jan 2019 :-).
+ * <li><b>either</b> terminate the tunnel if used.
+ * <li><b>or</b> decide, whether the hsqldb <i>source</i> server should continue to run. If not, connect a sql client to <code>DB_CONNECTION</code> and
+ * shutdown. <b>BE CAREFUL NOT TO SHUTDOWN A SERVER IN USE BY A JETTY SERVER (e.g. the productive database!)</b>
+ * <li>edit main(...) to run only <code>copier.shutdownCopy()</code>. This will run a <code>shutdown compact</code> command. This may take 10 minutes (Jan 2019
+ * :-). The hsqldb <i>target</i> server will terminate. Have a look at the logging.
+ * </ul>
  *
  * @author rbudde
  */
@@ -37,7 +56,11 @@ public class DatabaseCopier {
 
     private static final int COMMIT_HIGH_WATER_MARK = 1000;
     private static final String DB_DRIVER = "org.hsqldb.jdbcDriver";
+
     private static final String DB_CONNECTION_COPY_CREATE = "jdbc:hsqldb:file:db-copy/openroberta-db-copy";
+    private static final String DDL_FOR_COPY_TABLE_CREATE = "/create-tables-without-constraints.sql";
+    private static final String DDL_FOR_COPY_ENFORCE_CONSTRAINTS = "/enforce-constraints.sql";
+
     private static final String DB_CONNECTION_COPY = "jdbc:hsqldb:hsql://localhost:9002/openroberta-db-copy";
     private static final String DB_CONNECTION = "jdbc:hsqldb:hsql://localhost:9001/openroberta-db";
     private static final String DB_USER = "orA";
@@ -51,6 +74,7 @@ public class DatabaseCopier {
         // copier.createDatabaseWithoutConstraints();
         // copier.copyDatabase();
         // copier.enforceConstraints();
+        copier.shutdownCopy();
     }
 
     private void createDatabaseWithoutConstraints() {
@@ -58,7 +82,7 @@ public class DatabaseCopier {
         Session nativeSession = sessionFactoryWrapper.getNativeSession();
         DbSetup dbSetup = new DbSetup(nativeSession);
         nativeSession.beginTransaction();
-        dbSetup.sqlFile("/create-tables-without-constraints.sql", null, null);
+        dbSetup.sqlFile(DDL_FOR_COPY_TABLE_CREATE, null, null);
         nativeSession.createSQLQuery("shutdown").executeUpdate();
         nativeSession.close();
     }
@@ -87,7 +111,6 @@ public class DatabaseCopier {
             copyTable(statementFrom, dbConnectionTo, "TOOLBOX", 11);
             copyTable(statementFrom, dbConnectionTo, "CONFIGURATION", 11);
             copyTable(statementFrom, dbConnectionTo, "CONFIGURATION_DATA", 2);
-
         } catch ( Exception e ) {
             LOG.error("exception when connecting to database or copying sql", e);
         } finally {
@@ -151,6 +174,22 @@ public class DatabaseCopier {
         copyTable(statementFrom, dbConnectionTo, tableName, numberOfColumns, -1, -1);
     }
 
+    private void shutdownCopy() {
+        Connection dbConnectionTo = null;
+        Statement statementTo = null;
+        try {
+            dbConnectionTo = getDBConnection(DB_CONNECTION_COPY);
+            dbConnectionTo.setAutoCommit(false);
+            statementTo = dbConnectionTo.createStatement();
+            statementTo.executeUpdate("shutdown compact");
+        } catch ( Exception e ) {
+            LOG.error("exception when connecting to database or shutting down the server", e);
+        } finally {
+            closeQuietly(statementTo);
+            closeQuietly(dbConnectionTo);
+        }
+    }
+
     private void enforceConstraints() {
         Connection dbConnectionTo = null;
         Statement statementTo = null;
@@ -158,7 +197,7 @@ public class DatabaseCopier {
             dbConnectionTo = getDBConnection(DB_CONNECTION_COPY);
             dbConnectionTo.setAutoCommit(false);
             statementTo = dbConnectionTo.createStatement();
-            sqlFile(statementTo, this.getClass().getResourceAsStream("/enforce-constraints.sql"));
+            sqlFile(statementTo, this.getClass().getResourceAsStream(DDL_FOR_COPY_ENFORCE_CONSTRAINTS));
         } catch ( Exception e ) {
             LOG.error("exception when connecting to database or executing sql", e);
         } finally {
