@@ -1,9 +1,6 @@
 package de.fhg.iais.roberta.util;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -149,7 +146,7 @@ public class Util {
      * @param extension The file extension(s).
      * @return a list of files names or an empty list.
      */
-    public static List<File> getListOfFiles(String path, String... extensions) {
+    public static List<File> getListOfFilesFromDirectory(String path, String... extensions) {
         File dir = new File(path);
         try {
             List<File> listOfFiles = (List<File>) FileUtils.listFiles(dir, extensions, true);
@@ -167,19 +164,18 @@ public class Util {
      * @param extensions of the files
      * @return
      */
-    public static JSONObject getJSONObjectFromDirectory(String path, String... extensions) {
-        List<File> files = getListOfFiles(path, extensions);
-        JSONObject jsonObj = new JSONObject();
+    public static JSONObject getJSONObjectsFromDirectory(String path) {
+        List<File> files = getListOfFilesFromDirectory(path, "json");
+        JSONObject jsonObjRepresentingTheDirectory = new JSONObject();
         for ( File file : files ) {
             try {
-                String tmpJsonData = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
-                JSONObject tmpJsonObj = new JSONObject(tmpJsonData);
-                jsonObj.put(tmpJsonObj.getString("name").toLowerCase().replaceAll("\\s", ""), tmpJsonObj);
-            } catch ( IOException | JSONException e2 ) {
+                JSONObject jsonObjInDirectory = new JSONObject(Util1.readFileContent(file.getAbsolutePath()));
+                jsonObjRepresentingTheDirectory.put(jsonObjInDirectory.getString("name").toLowerCase().replaceAll("\\s", ""), jsonObjInDirectory);
+            } catch ( Exception e ) {
                 // no problem, we simply ignore files without valid json data or without the property "name"
             }
         }
-        return jsonObj;
+        return jsonObjRepresentingTheDirectory;
     }
 
     public static String checkProgramTextForXSS(String programText) {
@@ -263,7 +259,7 @@ public class Util {
             }
         };
 
-        List<String> results = new ArrayList<String>();
+        List<String> results = new ArrayList<>();
 
         PolicyFactory policy =
             new HtmlPolicyBuilder()
@@ -284,8 +280,8 @@ public class Util {
      * @return a list of files names or an empty list.
      */
     public static List<String> getListOfFileNamesFromDirectory(String path, String extensions) {
-        List<File> files = getListOfFiles(path, extensions);
-        List<String> listOfFileNames = new ArrayList<String>();
+        List<File> files = getListOfFilesFromDirectory(path, extensions);
+        List<String> listOfFileNames = new ArrayList<>();
         for ( File file : files ) {
             listOfFileNames.add(file.getName());
         }

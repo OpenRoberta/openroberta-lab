@@ -44,9 +44,11 @@ import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
  * This may take 10 minutes (Jan 2019 :-).
  * <li><b>either</b> terminate the tunnel if used.
  * <li><b>or</b> decide, whether the hsqldb <i>source</i> server should continue to run. If not, connect a sql client to <code>DB_CONNECTION</code> and
- * shutdown. <b>BE CAREFUL NOT TO SHUTDOWN A SOURCE SERVER IN USE BY A JETTY SERVER (e.g. the productive database!)</b>
+ * shutdown. <b>BE CAREFUL <i>NOT</i> TO SHUTDOWN A DATABASE SERVER IN USE (e.g. by the public Jetty server!)</b>
  * <li>edit main(...) to run only <code>copier.shutdownCopy()</code>. This will run a <code>shutdown compact</code> command. This may take 10 minutes (Jan 2019
  * :-). The hsqldb <i>target</i> server will terminate. Have a look at the logging.
+ * <li>a SQL client with a GUI is started by<br>
+ * <code>java -Xmx4G -cp [[path-to-hsqldb-2.4.0.jar]] org.hsqldb.util.DatabaseManagerSwing</code>
  * </ul>
  *
  * @author rbudde

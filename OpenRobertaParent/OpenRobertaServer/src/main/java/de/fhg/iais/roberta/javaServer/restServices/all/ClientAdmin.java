@@ -109,7 +109,7 @@ public class ClientAdmin {
                 JSONObject tutorial =
                     (pathToTutorial == null || pathToTutorial.trim().isEmpty() || !new File(pathToTutorial).isDirectory())
                         ? new JSONObject()
-                        : Util.getJSONObjectFromDirectory(pathToTutorial, "json");
+                        : Util.getJSONObjectsFromDirectory(pathToTutorial);
                 server.put("tutorial", tutorial);
                 String pathToHelp = staticRecourcesDir + File.separator + "help";
                 List<String> help = Util.getListOfFileNamesFromDirectory(pathToHelp, "html");
