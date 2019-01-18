@@ -168,7 +168,7 @@ public class Administration {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
         String backupFileName = "backup/dbBackup-" + now.format(formatter) + "-u" + users + "-p" + programs + ".tgz";
 
-        dbExecutor.ddl("BACKUP DATABASE TO '" + backupFileName + "' BLOCKING;");
+        dbExecutor.ddl("BACKUP DATABASE TO '" + backupFileName + "' NOT BLOCKING;");
         LOG.info("backup succeeded for a database with " + users + " users and " + programs + " programs");
 
         nativeSession.getTransaction().commit();
