@@ -28,8 +28,8 @@ then
     BUILD_ALL='true'
 fi
 echo "building branch $BRANCH with version $VERSION. Build all container is set to $BUILD_ALL"
-git checkout $BRANCH
 git pull
+git checkout $BRANCH
 cd /opt/robertalab/OpenRobertaParent
 mvn clean install
 chmod +x RobotArdu/resources/linux/arduino-builder RobotArdu/resources/linux/tools-builder/ctags/5.8*/ctags
