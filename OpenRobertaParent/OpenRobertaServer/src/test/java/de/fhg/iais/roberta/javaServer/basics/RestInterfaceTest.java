@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.javaServer.basics;
 
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.core.Response;
@@ -58,6 +60,8 @@ import de.fhg.iais.roberta.util.Util1;
  * @author rbudde
  */
 public class RestInterfaceTest {
+    private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
+
     private SessionFactoryWrapper sessionFactoryWrapper; // used by REST services to retrieve data base sessions
     private DbSetup memoryDbSetup; // use to query the test data base, etc.
 
@@ -90,7 +94,7 @@ public class RestInterfaceTest {
         this.memoryDbSetup.createEmptyDatabase();
         this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.robotCommunicator, serverProperties);
         this.restConfiguration = new ClientConfiguration(this.sessionFactoryWrapper, this.robotCommunicator);
-        Map<String, IRobotFactory> robotPlugins = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties);
+        Map<String, IRobotFactory> robotPlugins = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
         this.sPid = HttpSessionState.init(this.robotCommunicator, robotPlugins, serverProperties, 1);
         this.sMinscha = HttpSessionState.init(this.robotCommunicator, robotPlugins, serverProperties, 2);
     }
@@ -355,18 +359,20 @@ public class RestInterfaceTest {
         saveConfigAs(this.sMinscha, minschaId, "c1", "<conf>c1.1.conf.minscha</conf>", "ok", Key.CONFIGURATION_SAVE_SUCCESS);
         Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from CONFIGURATION where OWNER_ID = " + minschaId));
         String config =
-            this.memoryDbSetup.getOne(
-                "select d.CONFIGURATION_TEXT from CONFIGURATION c, CONFIGURATION_DATA d where c.CONFIGURATION_HASH = d.CONFIGURATION_HASH and OWNER_ID = "
-                    + minschaId
-                    + " and NAME = 'c1'");
+            this.memoryDbSetup
+                .getOne(
+                    "select d.CONFIGURATION_TEXT from CONFIGURATION c, CONFIGURATION_DATA d where c.CONFIGURATION_HASH = d.CONFIGURATION_HASH and OWNER_ID = "
+                        + minschaId
+                        + " and NAME = 'c1'");
         Assert.assertTrue(config.contains("c1.1.conf.minscha"));
         saveConfig(this.sMinscha, minschaId, "c1", "<conf>c1.2.conf.minscha</conf>", "ok", Key.CONFIGURATION_SAVE_SUCCESS);
         Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from CONFIGURATION where OWNER_ID = " + minschaId));
         config =
-            this.memoryDbSetup.getOne(
-                "select d.CONFIGURATION_TEXT from CONFIGURATION c, CONFIGURATION_DATA d where c.CONFIGURATION_HASH = d.CONFIGURATION_HASH and OWNER_ID = "
-                    + minschaId
-                    + " and NAME = 'c1'");
+            this.memoryDbSetup
+                .getOne(
+                    "select d.CONFIGURATION_TEXT from CONFIGURATION c, CONFIGURATION_DATA d where c.CONFIGURATION_HASH = d.CONFIGURATION_HASH and OWNER_ID = "
+                        + minschaId
+                        + " and NAME = 'c1'");
         Assert.assertTrue(config.contains("c1.2.conf.minscha"));
 
         saveProgramAs(this.sMinscha, minschaId, "p1", "<program>.1.minscha</program>", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);

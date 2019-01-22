@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.testutil;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -21,6 +22,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class SeleniumHelper {
     private static final Logger LOG = LoggerFactory.getLogger(SeleniumHelper.class);
+    private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
 
     public int port;
     public final ServerStarter serverStarter;
@@ -34,7 +36,7 @@ public class SeleniumHelper {
         this.browserVisibility = Boolean.parseBoolean(properties.getProperty("browser.visibility"));
         List<String> addr = Arrays.asList("server.ip=localhost", "server.port=1998");
         this.serverStarter = new ServerStarter("classpath:/openRoberta.properties", addr);
-        this.server = this.serverStarter.start();
+        this.server = this.serverStarter.start(EMPTY_STRING_LIST);
         Session session = this.serverStarter.getInjectorForTests().getInstance(SessionFactoryWrapper.class).getNativeSession();
         new DbSetup(session).createEmptyDatabase();
         this.driver = SeleniumHelper.runBrowser(this.browserVisibility);

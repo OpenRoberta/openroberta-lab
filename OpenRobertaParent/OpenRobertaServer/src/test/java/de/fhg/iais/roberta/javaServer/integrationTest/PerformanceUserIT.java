@@ -1,7 +1,9 @@
 package de.fhg.iais.roberta.javaServer.integrationTest;
 
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.Callable;
@@ -53,6 +55,7 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 public class PerformanceUserIT {
     private static final Logger LOG = LoggerFactory.getLogger("workflow");
 
+    private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
     private static final int MAX_PARALLEL_USERS = 30;
     private static final int MAX_TOTAL_USERS = 400;
 
@@ -93,7 +96,7 @@ public class PerformanceUserIT {
         this.theProgramOfAllUserLol = Resources.toString(PerformanceUserIT.class.getResource("/restInterfaceTest/action_BrickLight.xml"), Charsets.UTF_8);
         this.executorService = Executors.newFixedThreadPool(PerformanceUserIT.MAX_PARALLEL_USERS + 10);
 
-        this.robotPlugins = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties);
+        this.robotPlugins = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
     }
 
     @Test
@@ -168,10 +171,11 @@ public class PerformanceUserIT {
         // login with user "pid-*" and create 2 programs
         thinkTimeInMillisec += think(random, 2, 6);
         response = //
-            this.restUser.command( //
-                s,
-                this.sessionFactoryWrapper.getSession(),
-                JSONUtilForServer.mkD("{'cmd':'login';'accountName':'pid-acc-" + userNumber + "';'password':'dip-" + userNumber + "'}"));
+            this.restUser
+                .command( //
+                    s,
+                    this.sessionFactoryWrapper.getSession(),
+                    JSONUtilForServer.mkD("{'cmd':'login';'accountName':'pid-acc-" + userNumber + "';'password':'dip-" + userNumber + "'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.USER_GET_ONE_SUCCESS);
         Assert.assertTrue(s.isUserLoggedIn());
         int sId = s.getUserId();

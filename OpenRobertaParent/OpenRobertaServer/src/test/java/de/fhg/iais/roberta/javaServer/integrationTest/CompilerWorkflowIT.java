@@ -5,6 +5,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -59,6 +60,8 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 @RunWith(MockitoJUnitRunner.class)
 public class CompilerWorkflowIT {
     private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflowIT.class);
+
+    private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
     private static final boolean CROSSCOMPILER_CALL = true;
     private static final boolean SHOW_SUCCESS = false;
 
@@ -87,7 +90,7 @@ public class CompilerWorkflowIT {
         SERVER_PROPERTIES = new ServerProperties(baseServerProperties);
         // TODO: add a robotBasedir property to the openRoberta.properties. Make all pathes relative to that dir. Create special accessors. Change String to Path.
         ROBOT_COMMUNICATOR = new RobotCommunicator();
-        PLUGIN_MAP = ServerStarter.configureRobotPlugins(ROBOT_COMMUNICATOR, SERVER_PROPERTIES);
+        PLUGIN_MAP = ServerStarter.configureRobotPlugins(ROBOT_COMMUNICATOR, SERVER_PROPERTIES, EMPTY_STRING_LIST);
         HTTP_SESSIONSTATE = HttpSessionState.init(ROBOT_COMMUNICATOR, PLUGIN_MAP, SERVER_PROPERTIES, 1);
 
         RESOURCE_BASE = "/crossCompilerTests/robotSpecific/";

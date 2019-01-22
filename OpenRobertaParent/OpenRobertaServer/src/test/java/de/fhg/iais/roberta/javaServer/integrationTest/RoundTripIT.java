@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.javaServer.integrationTest;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -51,6 +52,7 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 @Category(IntegrationTest.class)
 public class RoundTripIT {
     private static final String resourcePath = "/roundtrip/";
+    private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
     private static final String[] blocklyPrograms =
         {
             "move",
@@ -235,7 +237,7 @@ public class RoundTripIT {
 
     private void startServerAndLogin() throws IOException, InterruptedException {
         List<String> addr = Arrays.asList("server.ip=localhost", "server.port=1998");
-        server = new ServerStarter("classpath:/openRoberta.properties", addr).start();
+        server = new ServerStarter("classpath:/openRoberta.properties", addr).start(EMPTY_STRING_LIST);
         int port = server.getURI().getPort();
         baseUrl = "http://localhost:" + port;
         driver.get(baseUrl + "/");

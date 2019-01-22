@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -82,6 +83,7 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 public class StackMachineJsonIT {
     private static final Logger LOG = LoggerFactory.getLogger(StackMachineJsonIT.class);
 
+    private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
     private static final String ROBOT_DEFAULT = "wedo";
     private static final Pattern ROBOT_PATTERN = Pattern.compile(".*ROBOT(.*)START-RESULT");
     private static final String MARK = "**********";
@@ -121,7 +123,7 @@ public class StackMachineJsonIT {
     public void setup() throws Exception {
         serverProperties = new ServerProperties(Util1.loadProperties("classpath:/wedoOpenRoberta.properties"));
         robotCommunicator = new RobotCommunicator();
-        pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties);
+        pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
         httpSessionState = HttpSessionState.init(robotCommunicator, pluginMap, serverProperties, 1);
         this.restProgram = new ClientProgram(this.sessionFactoryWrapper, robotCommunicator, serverProperties);
         this.restAdmin = new ClientAdmin(robotCommunicator, serverProperties);

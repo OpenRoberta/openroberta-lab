@@ -5,6 +5,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -59,6 +60,7 @@ public class CompilerWorkflowCommonIT {
     private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflowIT.class);
     private static final boolean CROSSCOMPILER_CALL = false;
     private static final boolean SHOW_SUCCESS = false;
+    private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
     private static final String RESOURCE_BASE = "/crossCompilerTests/common/";
 
     private static final String DEFAULT_DECL = Util1.readResourceContent(RESOURCE_BASE + "decl/default.xml");
@@ -85,7 +87,7 @@ public class CompilerWorkflowCommonIT {
         baseServerProperties.put("plugin.resourcedir", "..");
         SERVER_PROPERTIES = new ServerProperties(baseServerProperties);
         ROBOT_COMMUNICATOR = new RobotCommunicator();
-        PLUGIN_MAP = ServerStarter.configureRobotPlugins(ROBOT_COMMUNICATOR, SERVER_PROPERTIES);
+        PLUGIN_MAP = ServerStarter.configureRobotPlugins(ROBOT_COMMUNICATOR, SERVER_PROPERTIES, EMPTY_STRING_LIST);
         HTTP_SESSION_STATE = HttpSessionState.init(ROBOT_COMMUNICATOR, PLUGIN_MAP, SERVER_PROPERTIES, 1);
         JSONObject testSpecification = Util1.loadYAML("classpath:/crossCompilerTests/common/testSpec.yml");
         ROBOTS = testSpecification.getJSONObject("robots");
