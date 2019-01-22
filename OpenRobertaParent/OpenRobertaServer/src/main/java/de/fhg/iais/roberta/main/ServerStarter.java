@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -68,22 +69,21 @@ public class ServerStarter {
     private Injector injector;
 
     /**
-     * startup and shutdown of the server. See {@link ServerStarter}. Uses the first element of the args array. This contains the URI of a property file and
-     * starts either with "file:" if a path of the file system should be used or "classpath:" if the properties should be loaded as a resource from the
-     * classpath. May be <code>null</code>, if the default resource from the classpath should be loaded.
+     * startup and shutdown of the server. See {@link ServerStarter}.
      *
-     * @param args first element may contain the URI of a property file.
-     * @throws Exception
+     * @param args a sequence of -d key=value and -D plugin:key=value for server resp. plugin proerty modifications
      */
     public static void main(String[] args) throws Exception {
         OptionParser parser = new OptionParser();
-        OptionSpec<String> defineOpt = parser.accepts("d").withRequiredArg().ofType(String.class);
+        OptionSpec<String> serverDefineOpt = parser.acceptsAll(asList("d", "server-property")).withRequiredArg().ofType(String.class);
+        OptionSpec<String> pluginDefineOpt = parser.acceptsAll(asList("D", "plugin-property")).withRequiredArg().ofType(String.class);
         OptionSet options = parser.parse(args);
-        List<String> defines = defineOpt.values(options);
+        List<String> serverDefines = serverDefineOpt.values(options);
+        List<String> pluginDefines = pluginDefineOpt.values(options);
 
-        final ServerStarter serverStarter = new ServerStarter(null, defines);
+        final ServerStarter serverStarter = new ServerStarter(null, serverDefines);
         try {
-            Server server = serverStarter.start();
+            Server server = serverStarter.start(pluginDefines);
             server.join();
             System.exit(0);
         } catch ( Exception e ) {
@@ -96,10 +96,10 @@ public class ServerStarter {
      * create the starter. Load the properties.
      *
      * @param propertyPath optional URI to properties resource. May be null.
-     * @param defines is a list of properties (from the command line ...) which overwrite the properties from the propertyPath. May be null.
+     * @param serverDefines is a list of properties (from the command line ...) which overwrite the properties from the propertyPath. May be null.
      */
-    public ServerStarter(String propertyPath, List<String> defines) {
-        Properties properties = Util1.loadAndMergeProperties(propertyPath, defines);
+    public ServerStarter(String propertyPath, List<String> serverDefines) {
+        Properties properties = Util1.loadAndMergeProperties(propertyPath, serverDefines);
         setupPropertyForDatabaseConnection(properties);
         serverProperties = new ServerProperties(properties);
         Util.setServerVersion(serverProperties.getStringProperty("openRobertaServer.version"));
@@ -107,10 +107,11 @@ public class ServerStarter {
 
     /**
      * startup. See {@link ServerStarter}. If the server could not be created, <b>the process will be terminated by System.exit(status) with status > 0</b>.
-     *
+     * 
+     * @param pluginDefines
      * @return the server
      */
-    public Server start() throws IOException {
+    public Server start(List<String> pluginDefines) throws IOException {
         String host = serverProperties.getStringProperty("server.ip");
         int httpPort = serverProperties.getIntProperty("server.port", 0);
         int httpsPort = serverProperties.getIntProperty("server.portHttps", 0);
@@ -143,7 +144,7 @@ public class ServerStarter {
 
         // configure robot plugins
         RobotCommunicator robotCommunicator = new RobotCommunicator();
-        Map<String, IRobotFactory> robotPluginMap = configureRobotPlugins(robotCommunicator, serverProperties);
+        Map<String, IRobotFactory> robotPluginMap = configureRobotPlugins(robotCommunicator, serverProperties, pluginDefines);
         RobertaGuiceServletConfig robertaGuiceServletConfig = new RobertaGuiceServletConfig(serverProperties, robotPluginMap, robotCommunicator);
 
         // 1. REST API with /rest prefix
@@ -275,9 +276,13 @@ public class ServerStarter {
      * configure robot plugins, that may be used with this server. Uses the white list and the declarations from the openroberta.properties file.
      *
      * @param robotCommunicator
+     * @param pluginDefines modifications of plugin properties as a list of "<pluginName>:<key>=<value>"
      * @return the mapping from robot names to the factory, that supplies all robot-specific data
      */
-    public static Map<String, IRobotFactory> configureRobotPlugins(RobotCommunicator robotCommunicator, ServerProperties serverProperties) {
+    public static Map<String, IRobotFactory> configureRobotPlugins(
+        RobotCommunicator robotCommunicator,
+        ServerProperties serverProperties,
+        List<String> pluginDefines) {
         if ( robotCommunicator == null ) {
             throw new DbcException("the robot communicator object is missing - Server does NOT start");
         }
@@ -292,6 +297,21 @@ public class ServerStarter {
             Properties basicPluginProperties = Util1.loadProperties("classpath:/" + robotName + ".properties");
             if ( basicPluginProperties == null ) {
                 throw new DbcException("robot plugin " + robotName + " has no property file " + robotName + ".properties -  Server does NOT start");
+            }
+            String robotNameColon = robotName + ":";
+            if ( pluginDefines != null ) {
+                for ( String pluginDefine : pluginDefines ) {
+                    if ( pluginDefine.startsWith(robotNameColon) ) {
+                        String define = pluginDefine.substring(robotNameColon.length());
+                        String[] property = define.split("\\s*=\\s*");
+                        if ( property.length == 2 ) {
+                            LOG.info("new plugin property from command line: " + pluginDefine);
+                            basicPluginProperties.put(property[0], property[1]);
+                        } else {
+                            LOG.info("command line plugin property is invalid and thus ignored: " + pluginDefine);
+                        }
+                    }
+                }
             }
             String pluginFactory = basicPluginProperties.getProperty("robot.plugin.factory");
             if ( pluginFactory == null ) {
@@ -347,6 +367,10 @@ public class ServerStarter {
             LOG.error("Server could not check robot names in the database (exit 20)", e);
             System.exit(20);
         }
+    }
+
+    private static List<String> asList(String... s) {
+        return Arrays.asList(s);
     }
 
     public static class WebSocketServiceServlet extends WebSocketServlet {

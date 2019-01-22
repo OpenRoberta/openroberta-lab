@@ -154,10 +154,10 @@ public class Util1 {
             for ( String define : defines ) {
                 String[] property = define.split("\\s*=\\s*");
                 if ( property.length == 2 ) {
-                    LOG.info("new property from command line: " + define);
+                    LOG.info("new server property from command line: " + define);
                     serverProperties.put(property[0], property[1]);
                 } else {
-                    LOG.info("command line property is invalid and thus ignored: " + define);
+                    LOG.info("command line server property is invalid and thus ignored: " + define);
                 }
             }
         }
