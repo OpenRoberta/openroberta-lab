@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'typicons';
-  src:  url('fonts/typicons.eot?k6rrbf');
-  src:  url('fonts/typicons.eot?k6rrbf#iefix') format('embedded-opentype'),
-    url('fonts/typicons.ttf?k6rrbf') format('truetype'),
-    url('fonts/typicons.woff?k6rrbf') format('woff'),
-    url('fonts/typicons.svg?k6rrbf#typicons') format('svg');
+  src:  url('fonts/typicons.eot?7bjj3z');
+  src:  url('fonts/typicons.eot?7bjj3z#iefix') format('embedded-opentype'),
+    url('fonts/typicons.ttf?7bjj3z') format('truetype'),
+    url('fonts/typicons.woff?7bjj3z') format('woff'),
+    url('fonts/typicons.svg?7bjj3z#typicons') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -21,7 +21,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.typcn-wedo:before {
+.typcn-sensebox:before {
   content: "\e900";
 }
 .typcn-menu_dots:before {
@@ -32,6 +32,9 @@
 }
 .typcn-Roberta:before {
   content: "\e603";
+}
+.typcn-wedo:before {
+  content: "\e901";
 }
 .typcn-bob3:before {
   content: "\e905";
@@ -465,7 +468,7 @@
 .typcn-power:before {
   content: "\e994";
 }
-.typcn-vorwerk:before {
+.typcn-vorwerk3:before {
   content: "\e995";
 }
 .typcn-point-of-interest:before {
@@ -668,9 +671,6 @@
 }
 .typcn-arduino:before {
   content: "\e9d8";
-}
-.typcn-sensebox:before {
-  content: "\e921";
 }
 .typcn-infinity-outline:before {
   content: "\e9d9";
