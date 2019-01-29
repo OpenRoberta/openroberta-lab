@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
@@ -62,8 +63,18 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
         this.nlIndent();
         this.generateConfigurationVariables();
         this.nlIndent();
-        this.generateUserDefinedMethods();
-        this.nlIndent();
+        long numberConf =
+            this.programPhrases
+                .stream()
+                .filter(phrase -> (phrase.getKind().getCategory() == Category.METHOD) && !phrase.getKind().hasName("METHOD_CALL"))
+                .count();
+        if ( this.configuration.getConfigurationComponents().isEmpty() && (numberConf == 0) ) {
+            nlIndent();
+        }
+        generateUserDefinedMethods();
+        if ( numberConf != 0 ) {
+            nlIndent();
+        }
         this.sb.append("void setup()");
         this.nlIndent();
         this.sb.append("{");

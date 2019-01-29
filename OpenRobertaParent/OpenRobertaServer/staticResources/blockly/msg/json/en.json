@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-01-28 15:41:54.529745",
+		"lastupdated": "2019-01-30 17:28:02.235958",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -868,7 +868,6 @@
 	"MOTOR_STEER": "steer",
 	"MODE_OBSTACLE": "obstacle",
 	"SENSOR_LIGHT": "light sensor",
-	"SENSOR_LIGHTVEML": "visible and UV light sensor",
 	"SENSOR_AMBIENTLIGHT": "ambientlight sensor",
 	"LIGHT_GETSAMPLE_TOOLTIP": "Gets the current reading from the light sensor in percent.",
 	"SENSOR_SOUND": "sound sensor",
@@ -1316,7 +1315,6 @@
 	"SENSOR_ULTRASONIC_DISTANCE_GETSAMPLE_TOOLTIP_ARDUINO": "Gets the current reading from the ultrasonic sensor in cm. Maximum distance to messure is 400 cm.",
 	"SENSOR_ULTRASONIC_DISTANCE_GETSAMPLE_TOOLTIP_MBOT": "Gets the current reading from the ultrasonic sensor in cm. Maximum distance to messure is 400 cm. Minimum distance tp measure is 3 cm.",
 	"SENSOR_IRSEEKER_GETSAMPLE_TOOLTIP": "Gets the position of an infrared beacon.",
-	"SENSOR_LIGHTVEML_GETSAMPLE_TOOLTIP": "Gets either visible or UV light dependent on the mode",
 	"SENSOR_RSSI": "signal strength",
 	"SENSOR_RSSI_VALUE_GETSAMPLE_TOOLTIP": "Gets the signal strength from the last received message.",
 	"SENSOR_GESTURE_UP_GETSAMPLE_TOOLTIP": "Returns »true« if the posture is upright.",
@@ -1493,9 +1491,13 @@
 	"ID": "ID",
 	"WIRELESS_TOOLTIP": "Represents a wireless connection",
 	"BUZZER_TOOLTIP": "Represents a buzzer",
-	"LIGHTVEML_TOOLTIP": "Represents a combined VEML/TSL visible and UV light sensor",
 	"SSID": "SSID",
 	"BOX_ID": "Device ID",
 	"PASSWORD": "Password",
-	"CONNECTOR": "Connector"
+	"CONNECTOR": "Connector",
+	"SEND_DATA_TO_OSEM": "send data to openSenseMap",
+	"SEND_DATA_TO_OSEM_TOOLTIP": "This block is used to send data from sensors to the openSenseMap. Please configure the sensor IDs prior to the usage of this block.",
+	"SEND_DATA_TO_OSEM_MUTATION_ITEM": "sensor value",
+	"SENSOR_LIGHTVEML": "visible/UV light sensor",
+	"SENSOR_LIGHTVEML_GETSAMPLE_TOOLTIP": "visible/UV light sensor"
 }

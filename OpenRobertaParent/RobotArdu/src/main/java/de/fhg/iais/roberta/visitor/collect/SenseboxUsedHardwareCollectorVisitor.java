@@ -47,6 +47,7 @@ public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHard
 
     @Override
     public Void visitVemlLightSensor(VemlLightSensor<Void> lightSensor) {
+        this.usedSensors.add(new UsedSensor(lightSensor.getPort(), SC.LIGHTVEML, lightSensor.getMode()));
         return null;
     }
 
