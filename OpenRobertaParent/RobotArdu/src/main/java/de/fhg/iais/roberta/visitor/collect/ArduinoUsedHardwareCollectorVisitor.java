@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinReadValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
+import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
@@ -86,6 +87,19 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
     @Override
     public Void visitPinReadValueAction(PinReadValueAction<Void> pinReadValueActor) {
         this.usedActors.add(new UsedActor(pinReadValueActor.getPort(), SC.ANALOG_INPUT));
+        return null;
+    }
+
+    //TODO Put this in the abstract collector AbstractCollectorVisitor.java if it does not affect other robots
+    // 29.01.2019 - Artem Vinokurov
+    @Override
+    public Void visitVarDeclaration(VarDeclaration<Void> var) {
+        if ( var.isGlobal() ) {
+            this.visitedVars.add(var);
+        }
+        var.getValue().visit(this);
+        this.globalVariables.add(var.getName());
+        this.declaredVariables.add(var.getName());
         return null;
     }
 

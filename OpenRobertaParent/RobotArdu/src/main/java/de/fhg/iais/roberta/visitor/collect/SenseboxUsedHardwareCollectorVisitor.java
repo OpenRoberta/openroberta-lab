@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.syntax.actors.arduino.PinReadValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
+import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
@@ -67,6 +68,19 @@ public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHard
     @Override
     public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
         this.usedSensors.add(new UsedSensor(humiditySensor.getPort(), SC.HUMIDITY, humiditySensor.getMode()));
+        return null;
+    }
+
+    //TODO Put this in the abstract collector AbstractCollectorVisitor.java if it does not affect other robots
+    // 29.01.2019 - Artem Vinokurov
+    @Override
+    public Void visitVarDeclaration(VarDeclaration<Void> var) {
+        if ( var.isGlobal() ) {
+            this.visitedVars.add(var);
+        }
+        var.getValue().visit(this);
+        this.globalVariables.add(var.getName());
+        this.declaredVariables.add(var.getName());
         return null;
     }
 

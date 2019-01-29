@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RecallAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction;
+import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.GetSampleSensor;
@@ -89,6 +90,19 @@ public final class Bob3UsedHardwareCollectorVisitor extends AbstractUsedHardware
 
     @Override
     public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
+        return null;
+    }
+
+    //TODO Put this in the abstract collector AbstractCollectorVisitor.java if it does not affect other robots
+    // 29.01.2019 - Artem Vinokurov
+    @Override
+    public Void visitVarDeclaration(VarDeclaration<Void> var) {
+        if ( var.isGlobal() ) {
+            this.visitedVars.add(var);
+        }
+        var.getValue().visit(this);
+        this.globalVariables.add(var.getName());
+        this.declaredVariables.add(var.getName());
         return null;
     }
 }
