@@ -107,7 +107,7 @@ public class ServerStarter {
 
     /**
      * startup. See {@link ServerStarter}. If the server could not be created, <b>the process will be terminated by System.exit(status) with status > 0</b>.
-     * 
+     *
      * @param pluginDefines
      * @return the server
      */
@@ -238,12 +238,13 @@ public class ServerStarter {
         String serverVersionForDbDirectory = properties.getProperty("openRobertaServer.version").replace("-SNAPSHOT", "");
         String databaseParentDir = properties.getProperty("database.parentdir");
         String databaseUri = properties.getProperty("database.uri");
+        String databaseName = properties.getProperty("database.name");
         String databaseMode = properties.getProperty("database.mode");
         String dbUrl;
         if ( "embedded".equals(databaseMode) ) {
-            dbUrl = "jdbc:hsqldb:file:" + databaseParentDir + "/db-" + serverVersionForDbDirectory + "/openroberta-db;ifexists=true";
+            dbUrl = "jdbc:hsqldb:file:" + databaseParentDir + "/db-" + serverVersionForDbDirectory + "/" + databaseName + ";ifexists=true";
         } else if ( "server".equals(databaseMode) ) {
-            dbUrl = "jdbc:hsqldb:hsql://" + databaseUri + "/openroberta-db";
+            dbUrl = "jdbc:hsqldb:hsql://" + databaseUri + "/" + databaseName;
         } else {
             throw new DbcException("invalid database mode (use either embedded or server): " + databaseMode);
         }
