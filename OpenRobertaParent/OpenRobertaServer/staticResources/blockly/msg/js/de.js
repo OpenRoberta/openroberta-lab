@@ -1031,9 +1031,11 @@ Blockly.Msg.POPUP_DOWNLOAD_CHECK = "Okay, ich habe meinen Download Ordner geänd
 Blockly.Msg.POPUP_DOWNLOAD_SAVE = "Speichern";
 Blockly.Msg.POPUP_DOWNLOAD_SAVE_AS = "Speichern unter ...";
 Blockly.Msg.POPUP_DOWNLOAD_STEP_A = "Klicke mit der rechten Maustaste auf den untenstehenden Link und";
+Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX = "Überprüfe, dass dein Gerät in Programmierungsmodus (LED dimmt sich) ist, wenn nein, drucke die Rote Taste zweimal. Klicke mit der rechten Maustaste auf den untenstehenden Link und";
 Blockly.Msg.POPUP_DOWNLOAD_STEP_B = "wähle »Speichern unter ...«, dann";
 Blockly.Msg.POPUP_DOWNLOAD_STEP_C = "markiere den verbundenen »$« in der linken Spalte mit einem Klick,";
 Blockly.Msg.POPUP_DOWNLOAD_STEP_D = "jetzt klicke auf »Speichern« in der rechten unteren Ecke.<br><span style='font-size: 14px;'>Falls dein Programm nicht automatisch startet, warte eine Weile und drücke dann den Reset Knopf.</span>";
+Blockly.Msg.POPUP_DOWNLOAD_STEP_D_SENSEBOX = "jetzt klicke auf »Speichern« in der rechten unteren Ecke.";
 Blockly.Msg.POPUP_DO_UPDATE_FIRMWARE = "Aktualisieren";
 Blockly.Msg.POPUP_EMAIL = "E-Mail";
 Blockly.Msg.POPUP_EMAIL_SEND = "Jetzt abschicken";

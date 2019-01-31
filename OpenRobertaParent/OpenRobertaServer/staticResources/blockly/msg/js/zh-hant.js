@@ -1031,9 +1031,11 @@ Blockly.Msg.POPUP_DOWNLOAD_CHECK = "好的, 我已永久更改了瀏覽器的下
 Blockly.Msg.POPUP_DOWNLOAD_SAVE = "儲存";
 Blockly.Msg.POPUP_DOWNLOAD_SAVE_AS = "將連結另存為 ...";
 Blockly.Msg.POPUP_DOWNLOAD_STEP_A = "按右鍵下面的程式連結, 然後";
+Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX = "Check that your device is in programming mode (LED dimming in a pattern), if not, double press the red button. Right click on you program link below and";  // untranslated
 Blockly.Msg.POPUP_DOWNLOAD_STEP_B = "選擇»儲存連結為...«, 然後";
 Blockly.Msg.POPUP_DOWNLOAD_STEP_C = "點擊你的連接»$«在左欄,";
 Blockly.Msg.POPUP_DOWNLOAD_STEP_D = "現在點擊右下角的»儲存«按鈕。<br><span style=\"font-size: 14px;\">如果您的程式沒有自動開始，稍等片刻後按下重置按鈕。</span>";
+Blockly.Msg.POPUP_DOWNLOAD_STEP_D_SENSEBOX = "now click on the »Save« button on the bottom right.";  // untranslated
 Blockly.Msg.POPUP_DO_UPDATE_FIRMWARE = "立即更新";
 Blockly.Msg.POPUP_EMAIL = "電子郵件";
 Blockly.Msg.POPUP_EMAIL_SEND = "立即發送";

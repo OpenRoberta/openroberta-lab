@@ -1031,9 +1031,11 @@ Blockly.Msg.POPUP_DOWNLOAD_CHECK = "Okay, I've changed the download folder of my
 Blockly.Msg.POPUP_DOWNLOAD_SAVE = "Guardar";
 Blockly.Msg.POPUP_DOWNLOAD_SAVE_AS = "Guardar enlace como ...";
 Blockly.Msg.POPUP_DOWNLOAD_STEP_A = "Haz clic derecho enel enlace del programa abajo y";
+Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX = "Check that your device is in programming mode (LED dimming in a pattern), if not, double press the red button. Right click on you program link below and";  // untranslated
 Blockly.Msg.POPUP_DOWNLOAD_STEP_B = "elige »Guardar enlace como as ...«, luego";
 Blockly.Msg.POPUP_DOWNLOAD_STEP_C = "haz clic sobre tu »$« conectado en la columna izquierda,";
 Blockly.Msg.POPUP_DOWNLOAD_STEP_D = "now click on the »Save« button on the bottom right.<br><span style='font-size: 14px;'>If your program doesn't start automatically press the reset button after a while.</span>";  // untranslated
+Blockly.Msg.POPUP_DOWNLOAD_STEP_D_SENSEBOX = "now click on the »Save« button on the bottom right.";  // untranslated
 Blockly.Msg.POPUP_DO_UPDATE_FIRMWARE = "Actualizar ahora";
 Blockly.Msg.POPUP_EMAIL = "Correo electrónico";
 Blockly.Msg.POPUP_EMAIL_SEND = "Enviar ahora";

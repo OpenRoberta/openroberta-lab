@@ -64,10 +64,8 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
     exports.runOnBrick = runOnBrick;
 
     function runForAutoConnection(result) {
-        console.log(GUISTATE_C.getRobot())
         GUISTATE_C.setState(result);
         if (result.rc == "ok") {
-            console.log("")
             var filename = GUISTATE_C.getProgramName();
             if(GUISTATE_C.getRobot() !== 'sensebox') {
                 filename += '.hex';
@@ -91,6 +89,17 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
                 fillDownloadModal(filename, result.compiledCode);
 
                 $("#save-client-compiled-program").one("shown.bs.modal", function(e) {
+                    if(GUISTATE_C.getRobot() === 'sensebox') {
+                      $('[lkey$="STEP_A_SENSEBOX"]').attr("hidden", false);
+                      $('[lkey$="STEP_D_SENSEBOX"]').attr("hidden", false);
+                      $('[lkey$="STEP_A"]').attr("hidden", true);
+                      $('[lkey$="STEP_D"]').attr("hidden", true);
+                    } else {
+                        $('[lkey$="STEP_A_SENSEBOX"]').attr("hidden", true);
+                        $('[lkey$="STEP_D_SENSEBOX"]').attr("hidden", true);
+                        $('[lkey$="STEP_A"]').attr("hidden", false);
+                        $('[lkey$="STEP_D"]').attr("hidden", false);
+                    }
                     $('#download-instructions tr').each(function(i) {
                         $(this).delay(750 * i).animate({
                             opacity : 1

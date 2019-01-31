@@ -1031,9 +1031,11 @@ Blockly.Msg.POPUP_DOWNLOAD_CHECK = "OK, změnil jsem trvale složku pro stahová
 Blockly.Msg.POPUP_DOWNLOAD_SAVE = "Uložit";
 Blockly.Msg.POPUP_DOWNLOAD_SAVE_AS = "Uložit odkaz jako...";
 Blockly.Msg.POPUP_DOWNLOAD_STEP_A = "Klikněte pravým tlačítkem na odkaz na váš proram níže a";
+Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX = "Check that your device is in programming mode (LED dimming in a pattern), if not, double press the red button. Right click on you program link below and";  // untranslated
 Blockly.Msg.POPUP_DOWNLOAD_STEP_B = "zvolte »Uložit odkaz jako«, potom";
 Blockly.Msg.POPUP_DOWNLOAD_STEP_C = "klikněte na váš připojený »$« v levém sloupci,";
 Blockly.Msg.POPUP_DOWNLOAD_STEP_D = "nyní klikněte na tlačítko »Uložit« vpravo dole.<br><span style='font-size: 14px;'>Pokud se váš program nespustí automaticky, stiskněte po chvíli tlačítko Reset.</span>";
+Blockly.Msg.POPUP_DOWNLOAD_STEP_D_SENSEBOX = "now click on the »Save« button on the bottom right.";  // untranslated
 Blockly.Msg.POPUP_DO_UPDATE_FIRMWARE = "Aktualizovat nyní";
 Blockly.Msg.POPUP_EMAIL = "E-mail";
 Blockly.Msg.POPUP_EMAIL_SEND = "Odeslat nyní";

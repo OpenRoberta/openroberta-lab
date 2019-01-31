@@ -1031,9 +1031,11 @@ Blockly.Msg.POPUP_DOWNLOAD_CHECK = "Okay, I've changed the download folder of my
 Blockly.Msg.POPUP_DOWNLOAD_SAVE = "Save";  // untranslated
 Blockly.Msg.POPUP_DOWNLOAD_SAVE_AS = "Save link as ...";  // untranslated
 Blockly.Msg.POPUP_DOWNLOAD_STEP_A = "Right click on your program link below and";  // untranslated
+Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX = "Check that your device is in programming mode (LED dimming in a pattern), if not, double press the red button. Right click on you program link below and";  // untranslated
 Blockly.Msg.POPUP_DOWNLOAD_STEP_B = "choose »Save link as ...«, then";  // untranslated
 Blockly.Msg.POPUP_DOWNLOAD_STEP_C = "click on your connected »$« in the left column,";  // untranslated
 Blockly.Msg.POPUP_DOWNLOAD_STEP_D = "now click on the »Save« button on the bottom right.<br><span style='font-size: 14px;'>If your program doesn't start automatically press the reset button after a while.</span>";  // untranslated
+Blockly.Msg.POPUP_DOWNLOAD_STEP_D_SENSEBOX = "now click on the »Save« button on the bottom right.";  // untranslated
 Blockly.Msg.POPUP_DO_UPDATE_FIRMWARE = "Simdi güncelle";
 Blockly.Msg.POPUP_EMAIL = "E-posta";
 Blockly.Msg.POPUP_EMAIL_SEND = "Simdi gönder";

@@ -1031,9 +1031,11 @@ Blockly.Msg.POPUP_DOWNLOAD_CHECK = "Okej, jag har ändrat nedladdningsmappen i m
 Blockly.Msg.POPUP_DOWNLOAD_SAVE = "Spara";
 Blockly.Msg.POPUP_DOWNLOAD_SAVE_AS = "Spara länk som ...";
 Blockly.Msg.POPUP_DOWNLOAD_STEP_A = "Högerklicka på din programlänk nedan och";
+Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX = "Check that your device is in programming mode (LED dimming in a pattern), if not, double press the red button. Right click on you program link below and";  // untranslated
 Blockly.Msg.POPUP_DOWNLOAD_STEP_B = "välj »Spara länk som ...«, därefter";
 Blockly.Msg.POPUP_DOWNLOAD_STEP_C = "klicka på din anslutna »$« i den vänstra kolumnen,";
 Blockly.Msg.POPUP_DOWNLOAD_STEP_D = "Klicka nu på »Spara« -knappen längst ner till höger. <br> <span style = \"font-size: 14px;\"> Om ditt program inte startar automatiskt trycker du på återställningsknappen efter ett tag. </ span>";
+Blockly.Msg.POPUP_DOWNLOAD_STEP_D_SENSEBOX = "now click on the »Save« button on the bottom right.";  // untranslated
 Blockly.Msg.POPUP_DO_UPDATE_FIRMWARE = "Uppdatera nu";
 Blockly.Msg.POPUP_EMAIL = "E-post";
 Blockly.Msg.POPUP_EMAIL_SEND = "Skicka nu";
