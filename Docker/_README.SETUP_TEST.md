@@ -10,7 +10,7 @@ export GITREPO="$HOME/robertalab"
 export DB_PARENTDIR="$HOME/db"
 export SERVER_PORT_ON_HOST=1999
 export DBSERVER_PORT_ON_HOST=9001
-export BUILD_ALL=true
+export BUILD_ALL=false
 
 echo 'generating all containers based on branch develop'
 docker run -v /var/run/docker.sock:/var/run/docker.sock rbudde/openroberta_gen:1 $BRANCH $VERSION $BUILD_ALL
