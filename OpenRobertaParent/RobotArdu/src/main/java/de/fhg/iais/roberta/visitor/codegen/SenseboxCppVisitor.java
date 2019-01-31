@@ -462,13 +462,13 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                 case SC.HUMIDITY:
                     this.sb.append("HDC1080 _hdc1080_").append(blockName).append(";");
                     this.nlIndent();
-                    this.sb.append("String _hdc1080_id_").append(blockName).append(" = \"").append(cc.getProperty("ID")).append("\";");
+                    this.sb.append("char* _hdc1080_id_").append(blockName).append(" = \"").append(cc.getProperty("ID")).append("\";");
                     this.nlIndent();
                     break;
                 case SC.TEMPERATURE:
                     this.sb.append("BMP280 _bmp280_").append(blockName).append(";");
                     this.nlIndent();
-                    this.sb.append("String _bmp280_id_").append(blockName).append(" = \"").append(cc.getProperty("ID")).append("\";");
+                    this.sb.append("char* _bmp280_id_").append(blockName).append(" = \"").append(cc.getProperty("ID")).append("\";");
                     this.nlIndent();
                     break;
                 case SC.ULTRASONIC:
@@ -487,7 +487,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     this.nlIndent();
                     this.sb.append("TSL45315 _tsl_").append(blockName).append(";");
                     this.nlIndent();
-                    this.sb.append("String _veml_tsl_id_").append(blockName).append(" = \"").append(cc.getProperty("ID")).append("\";");
+                    this.sb.append("char* _veml_tsl_id_").append(blockName).append(" = \"").append(cc.getProperty("ID")).append("\";");
                     this.nlIndent();
                     break;
                 case SC.WIRELESS:
