@@ -9,7 +9,7 @@ isDefined PORT
 isDefined DATE_SETUP
 isDefined BRANCH
 isDefined GIT_REPO
-case "$c" in
+case "$GIT_REPO" in
     /*) : ;;
     *)  GIT_REPO=$BASE/$GIT_REPO
 esac
