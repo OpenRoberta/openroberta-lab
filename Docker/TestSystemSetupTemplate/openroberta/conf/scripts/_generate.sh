@@ -9,6 +9,7 @@ isDefined PORT
 isDefined DATE_SETUP
 isDefined BRANCH
 isDefined GIT_REPO
+isDefined GIT_UPTODATE true false
 case "$GIT_REPO" in
     /*) : ;;
     *)  GIT_REPO=$BASE/$GIT_REPO
@@ -17,7 +18,10 @@ esac
 # ----- AQUIRE A FILE LOCK. Checkout commit, build binaries, export, build container -----
 ( flock -w 1200 9 || (echo "deployement of $SERVER_NAME was delayed for more than 20 minutes. Exit 12"; exit 12) 
     cd $GIT_REPO
-    if [ "$COMMIT" == '' ]
+    if [ "$GIT_UPTODATE" == 'true' ]
+    then
+        echo "git repo is already uptodate, nothing pulled, nothing checked out"
+    elif [ "$COMMIT" == '' ]
     then
         echo "checking out branch $BRANCH and get the actual state"
         git pull

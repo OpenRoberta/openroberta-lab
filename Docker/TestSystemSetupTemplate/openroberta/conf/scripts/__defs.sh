@@ -1,12 +1,24 @@
 #!/bin/bash
 
 function isDefined {
-    VAR=$1
-    if [ "${!VAR}" == '' ]
+    VAR="$1"; shift
+    VAL="${!VAR}"
+    if [ "$VAL" == '' ]
     then
         echo "variable $VAR is not defined in server configuration file 'decl.sh'. Exit 12"
         exit 12
+    elif [ "$1" == '' ]
+    then
+        return
     fi
+    for ENUM do
+        if [ "$VAL" == "$ENUM" ]
+        then
+            return
+        fi
+    done
+    echo "variable $VAR from 'decl.sh' is not one of the enumerations '$*'. Exit 12"
+    exit 12
 }
 
 function isServerNameValid {
