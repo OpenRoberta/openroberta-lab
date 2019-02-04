@@ -448,14 +448,14 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                 break;
             }
         }
-        for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponents() ) {
+        for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
             if ( usedConfigurationBlock.getComponentType().equals(SC.ULTRASONIC) ) {
                 measureDistanceUltrasonicSensor(usedConfigurationBlock.getUserDefinedPortName());
                 nlIndent();
                 break;
             }
         }
-        for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponents() ) {
+        for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
             if ( usedConfigurationBlock.getComponentType().equals(SC.RFID) ) {
                 readRFIDData(usedConfigurationBlock.getUserDefinedPortName());
                 nlIndent();
@@ -492,7 +492,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         this.sb.append("#include <math.h>");
         nlIndent();
         LinkedHashSet<String> headerFiles = new LinkedHashSet<>();
-        for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponents() ) {
+        for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
             switch ( usedConfigurationBlock.getComponentType() ) {
                 case SC.HUMIDITY:
                     headerFiles.add("#include <DHT.h>");
@@ -563,7 +563,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     }
 
     private void generateConfigurationSetup() {
-        for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponents() ) {
+        for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
             switch ( usedConfigurationBlock.getComponentType() ) {
                 case SC.HUMIDITY:
                     this.sb.append("_dht_" + usedConfigurationBlock.getUserDefinedPortName() + ".begin();");
@@ -656,7 +656,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     }
 
     private void generateConfigurationVariables() {
-        for ( ConfigurationComponent cc : this.configuration.getConfigurationComponents() ) {
+        for ( ConfigurationComponent cc : this.configuration.getConfigurationComponentsValues() ) {
             String blockName = cc.getUserDefinedPortName();
             switch ( cc.getComponentType() ) {
                 case SC.HUMIDITY:

@@ -22,11 +22,16 @@ public class Configuration {
     private String robotName;
     private final float wheelDiameterCM;
     private final float trackWidthCM;
+    private final List<String> componentTypes;
 
     public Configuration(Collection<ConfigurationComponent> configurationComponents, float wheelDiameterCM, float trackWidthCM) {
         this.configurationComponents = buildConfigurationComponentMap(configurationComponents);
         this.wheelDiameterCM = wheelDiameterCM;
         this.trackWidthCM = trackWidthCM;
+        this.componentTypes = new ArrayList<>();
+        for ( ConfigurationComponent configurationComponent : this.configurationComponents.values() ) {
+            this.componentTypes.add(configurationComponent.getComponentType());
+        }
     }
 
     public String getRobotName() {
@@ -37,7 +42,19 @@ public class Configuration {
         this.robotName = robotName;
     }
 
-    public Collection<ConfigurationComponent> getConfigurationComponents() {
+    public HashMap<String, ConfigurationComponent> getConfigurationComponents() {
+        return (HashMap<String, ConfigurationComponent>) this.configurationComponents;
+    }
+
+    public boolean isComponentTypePresent(String componentType) {
+        if ( this.componentTypes.contains(componentType) ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Collection<ConfigurationComponent> getConfigurationComponentsValues() {
         return this.configurationComponents.values();
     }
 

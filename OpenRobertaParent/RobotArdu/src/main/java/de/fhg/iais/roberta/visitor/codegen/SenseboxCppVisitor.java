@@ -29,6 +29,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
@@ -321,43 +322,48 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
 
     @Override
     public Void visitDataSendAction(SendDataAction<Void> sendDataAction) {
+        if ( !this.configuration.isComponentTypePresent(SC.WIRELESS) ) {
+            throw new DbcException("Send data action block can be used only with conjunction with wi-fi block from configuration.");
+        }
         List<Expr<Void>> listOfSensors = sendDataAction.getParam().get();
         for ( Expr<Void> sensor : listOfSensors ) {
             this.sb.append("_osem.uploadMeasurement(");
             sensor.visit(this);
             this.sb.append(",");
-            switch ( ((SensorExpr<Void>) sensor).getSens().getKind().getName() ) {
+            String sensorName = null;
+            String userDefinedPortName = null;
+            try {
+                sensorName = ((SensorExpr<Void>) sensor).getSens().getKind().getName();
+                userDefinedPortName = ((ExternalSensor<Void>) (((SensorExpr<Void>) sensor).getSens())).getPort();
+            } catch ( ClassCastException e ) {
+                throw new DbcException("Expressions in the send data block are restricted to sensor values. Affected expression is " + sensor);
+            }
+            switch ( sensorName ) {
                 case "HUMIDITY_SENSING":
-                    this.sb.append("_hdc1080_id_");
-                    for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponents() ) {
-                        switch ( usedConfigurationBlock.getComponentType() ) {
-                            case SC.HUMIDITY:
-                                this.sb.append(usedConfigurationBlock.getUserDefinedPortName());
-                                break;
-                        }
+                    if ( this.configuration.isComponentTypePresent(SC.HUMIDITY) ) {
+                        this.sb.append("_hdc1080_id_");
+                    } else {
+                        throw new DbcException("A block is used for which the corresponding configuration block is not present: " + sensorName);
                     }
                     break;
                 case "TEMPERATURE_SENSING":
-                    this.sb.append("_bmp280_id_");
-                    for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponents() ) {
-                        switch ( usedConfigurationBlock.getComponentType() ) {
-                            case SC.TEMPERATURE:
-                                this.sb.append(usedConfigurationBlock.getUserDefinedPortName());
-                                break;
-                        }
+                    if ( this.configuration.isComponentTypePresent(SC.TEMPERATURE) ) {
+                        this.sb.append("_bmp280_id_");
+                    } else {
+                        throw new DbcException("A block is used for which the corresponding configuration block is not present: " + sensorName);
                     }
                     break;
                 case "VEMLLIGHT_SENSING":
-                    this.sb.append("_veml_tsl_id_");
-                    for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponents() ) {
-                        switch ( usedConfigurationBlock.getComponentType() ) {
-                            case SC.LIGHTVEML:
-                                this.sb.append(usedConfigurationBlock.getUserDefinedPortName());
-                                break;
-                        }
+                    if ( this.configuration.isComponentTypePresent(SC.LIGHTVEML) ) {
+                        this.sb.append("_veml_tsl_id_");
+                    } else {
+                        throw new DbcException("A block is used for which the corresponding configuration block is not present: " + sensorName);
                     }
                     break;
+                default:
+                    throw new DbcException("An invalid sensor has been detected: " + sensorName);
             }
+            this.sb.append(userDefinedPortName);
             this.sb.append(");");
             this.nlIndent();
         }
@@ -365,7 +371,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     private void generateConfigurationSetup() {
-        for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponents() ) {
+        for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
             switch ( usedConfigurationBlock.getComponentType() ) {
                 case SC.LED:
                     this.sb.append("pinMode(_led_").append(usedConfigurationBlock.getUserDefinedPortName()).append(", OUTPUT);");
@@ -424,7 +430,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     private void generateConfigurationVariables() {
-        for ( ConfigurationComponent cc : this.configuration.getConfigurationComponents() ) {
+        for ( ConfigurationComponent cc : this.configuration.getConfigurationComponentsValues() ) {
             String blockName = cc.getUserDefinedPortName();
             switch ( cc.getComponentType() ) {
                 case SC.LED:
