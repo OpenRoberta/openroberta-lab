@@ -1,15 +1,26 @@
 #!/bin/bash
 
-echo "$0: help | gen <server> | start <server> | stop <server> | deploy <server> | autoDeploy | restart | genNet | genDbC | startDbC | stopDbC | info | logs | prune"
+HELP_TEXT="$0: [-q] help | gen <server> | start [<server>] | stop [<server>] | deploy [<server>] | autoDeploy | restart | genNet | genDbC | startDbC | stopDbC | info | logs | prune"
+
+CMD=$1; shift
+if [ "$CMD" == '-q' ]
+then
+    CMD=$1; shift
+    QUIET='true'
+else
+    echo "$HELP_TEXT"
+fi
 
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 chmod ugo+rx $SCRIPTDIR/run.sh
 
 source $SCRIPTDIR/__defs.sh
 
-CMD=$1; shift
 case "$CMD" in
-    help)     : ;;
+    help)     if [ "$QUIET" == true ]
+              then
+                  echo "$HELP_TEXT"
+              fi ;;
     gen)      SERVER_NAME=$1; shift
               isServerNameValid $SERVER_NAME
               echo "generating the server '$SERVER_NAME'"
@@ -34,12 +45,12 @@ case "$CMD" in
     restart)  $SCRIPTDIR/run.sh startDbC
               sleep 10
               $SCRIPTDIR/run.sh start ;;
-    genDbC)   echo "generating the database image rbudde/openroberta_db:2.4.0"
-              docker build -f $CONF/docker-for-db/DockerfileDb -t rbudde/openroberta_db:2.4.0 $CONF/docker-for-db
-              echo "generating the database image rbudde/openroberta_db:2.4.0 finished" ;;
     genNet)   echo "generating the openroberta bridge network 'ora-net'"
               docker network create --driver bridge ora-net
               echo "generating the openroberta bridge network 'ora-net' finished" ;;
+    genDbC)   echo "generating the database image rbudde/openroberta_db:2.4.0"
+              docker build -f $CONF/docker-for-db/DockerfileDb -t rbudde/openroberta_db:2.4.0 $CONF/docker-for-db
+              echo "generating the database image rbudde/openroberta_db:2.4.0 finished" ;;
     startDbC) source $SCRIPTDIR/_dbContainerStop.sh
               source $SCRIPTDIR/_dbContainerStart.sh ;;
     stopDbC)  source $SCRIPTDIR/_dbContainerStop.sh ;;

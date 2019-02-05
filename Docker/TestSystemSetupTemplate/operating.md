@@ -6,8 +6,10 @@ dedicated to this openroberta lab server. All these databases are published by o
 
 The main duties if you are using this test deployment template (for variables see below):
 
-* for all test servers (with name <NAME>) you want to runn, change in the directories $SERVER/<NAME> the file descl.sh as you need it.
-* in directory $BASE/db put all databases (identical to the servernames) into file `databases.txt` (e.g. `test dev dev1`)
+* for all test servers (with name <NAME>) you want to run, change in the directories $SERVER/<NAME> the file descl.sh as you need it.
+* put the names of all test servers, which should be started, when the system boots, into file `$SERVER/servers.txt` (e.g. `test dev dev1`)
+* in directory $BASE/db put all databases (the databases have the same name os the servers), which should be started when the system boots, into file
+  `databases.txt` (e.g. `test dev dev1`)
 
 Assuming that the network `ora-net` is created, the database container is running, then you (re-)deploy `test` and `dev1` and view the system state by executing
 
@@ -58,9 +60,9 @@ See `$SERVER/dev1` for example. From the declaration file the docker image and t
 
 Generating the image is roughly done by using the data from `decl.sh`:
 
-* pulling actual data into a Git repo
+* (optionally) pulling actual data into a Git repo
 * checking out the branch/commit as declared
-* running `mvn clean install`
+* running `mvn clean install -DskipTests`
 * exporting the server into an export directory
 * creating the docker image from that directory
 
@@ -89,14 +91,28 @@ The database server is listening to port `9001`. This port must be mapped to `90
 Everything is done with the help of the shell script `$CONF/scripts/run.sh`. I tried to make this scripts as robust as possible. Please send any
 problems, improvements, ideas to reinhard.budde at iais.fraunhofer.decl
 
-The main commands of the script are (run `$CONF/scripts/run.sh help` to see the names):
+The main commands of the script are (run `$CONF/scripts/run.sh help` to see the names) the following. Note, that if the server name is missing,
+_all_ servers found in file `$SERVER/servers.txt` are taken into account:
 
 * `gen <name>`: generate the docker image for server <name>. Use the configuration found in `$SERVER/<name>`.
-* `start <name>`: start a container with the image generated for server <name>. Before doing that, stop a container running sever <name> (see below)
-* `stop <name>`: stop a container for server <name>. Remove the exited container.
-* `deploy <name>`: shortcut for gen and start for server <name>.
+* `start [<name>]`: start a container with the image generated for server <name>. Before doing that, stop a container running sever <name>
+* `stop [<name>]`: stop a container for server <name>. Remove the exited container.
+* `deploy [<name>]`: shortcut for gen and start for server <name>.
 
 Maintenance and debugging commands are:
+
+* `autoDeploy`: usually called from cron. Reads the server names from file `$SERVER/autodeploy.txt` and re-deploys each server, if the git
+  repository connected to this server has got new commits. A typical line in crontab to run this is:
+  
+```bash
+*/5 * * * * bash /data/openroberta/conf/scripts/run.sh -q autoDeploy >>/data/openroberta/logs/cronlog.txt
+```
+
+* `restart`: usually called from the configuration file `robertalab.sh` found in `/etc/init.d`. A typical script is:
+
+```bash
+...
+```
 
 * `info`: show images and running containers
 * `logs`: show the last 10 lines of all logs of all running containers. B.t.w.: `docker logs -f <name>` is convenient to see how a server works.
@@ -105,5 +121,7 @@ Maintenance and debugging commands are:
 Rarely used are commands:
 
 * `genDbC`: generate the database container `rbudde/openroberta_db:2.4.0`. Used once when the test server is setup.
-* `startDbC <name1> ... <nameN>`: (re-)start the database server servicing the databases given as parameters. The database names must match the server names.
-  This commmand is needed if a new server is added to the test server and a new database has been added to `$BASE/db`
+* `startDbC [<name1> ... <nameN>]`: (re-)start the database container servicing the databases given as parameters. The database names must match server names.
+  This commmand is needed if a new server is added to the test server and a new database has been added to `$BASE/db`. If no database names are given,
+  _all_ databases found in file `BASE/db/databases.txt` are taken into account
+* `stopDbC`: stop the database container

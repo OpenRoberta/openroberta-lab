@@ -57,7 +57,10 @@ function setServerNamesintoSERVER_NAMES {
 }    
 
 HOSTNAME=$(hostname)
-echo "working on host $HOSTNAME"
+if [ "$QUIET" != true ]
+then
+    echo "working on host $HOSTNAME"
+fi
 
 BASE=/data/openroberta
 CONF=$BASE/conf
