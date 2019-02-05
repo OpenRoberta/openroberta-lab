@@ -105,6 +105,7 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
 
     @Override
     protected void checkSensorPort(ExternalSensor<Void> sensor) {
+        //TODO should super(sensor) be called here?
         ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(sensor.getPort());
         if ( usedConfigurationBlock == null ) {
             sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));

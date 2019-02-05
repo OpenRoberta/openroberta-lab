@@ -614,6 +614,7 @@ public class ClientProgram {
         throws JSONException,
         JAXBException {
         final ProgramAst<Void> data = programAndConfigTransformer.getProgramTransformer().getData();
+        //this will silently ignore the fact, that there is no brick validator for this robot. C'est la vie.
         if ( programChecker == null ) {
             response.put("data", ClientProgram.jaxbToXml(ClientProgram.astToJaxb(programAndConfigTransformer.getProgramTransformer().getTree(), data)));
             return null;

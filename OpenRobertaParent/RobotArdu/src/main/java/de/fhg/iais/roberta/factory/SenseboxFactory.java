@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.visitor.codegen.SenseboxCppVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
+import de.fhg.iais.roberta.visitor.validate.SenseboxBrickValidatorVisitor;
 
 public class SenseboxFactory extends AbstractRobotFactory {
 
@@ -39,7 +40,7 @@ public class SenseboxFactory extends AbstractRobotFactory {
 
     @Override
     public AbstractProgramValidatorVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
-        return null;
+        return new SenseboxBrickValidatorVisitor(brickConfiguration);
     }
 
     @Override

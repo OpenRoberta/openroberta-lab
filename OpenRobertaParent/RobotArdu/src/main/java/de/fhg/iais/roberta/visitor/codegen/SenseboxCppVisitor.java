@@ -322,43 +322,23 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
 
     @Override
     public Void visitDataSendAction(SendDataAction<Void> sendDataAction) {
-        if ( !this.configuration.isComponentTypePresent(SC.WIRELESS) ) {
-            throw new DbcException("Send data action block can be used only with conjunction with wi-fi block from configuration.");
-        }
         List<Expr<Void>> listOfSensors = sendDataAction.getParam().get();
         for ( Expr<Void> sensor : listOfSensors ) {
             this.sb.append("_osem.uploadMeasurement(");
             sensor.visit(this);
             this.sb.append(",");
-            String sensorName = null;
-            String userDefinedPortName = null;
-            try {
-                sensorName = ((SensorExpr<Void>) sensor).getSens().getKind().getName();
-                userDefinedPortName = ((ExternalSensor<Void>) (((SensorExpr<Void>) sensor).getSens())).getPort();
-            } catch ( ClassCastException e ) {
-                throw new DbcException("Expressions in the send data block are restricted to sensor values. Affected expression is " + sensor);
-            }
+            String sensorName = ((SensorExpr<Void>) sensor).getSens().getKind().getName();
+            String userDefinedPortName = ((ExternalSensor<Void>) (((SensorExpr<Void>) sensor).getSens())).getPort();
             switch ( sensorName ) {
                 case "HUMIDITY_SENSING":
-                    if ( this.configuration.isComponentTypePresent(SC.HUMIDITY) ) {
-                        this.sb.append("_hdc1080_id_");
-                    } else {
-                        throw new DbcException("A block is used for which the corresponding configuration block is not present: " + sensorName);
-                    }
+                    this.sb.append("_hdc1080_id_");
                     break;
                 case "TEMPERATURE_SENSING":
-                    if ( this.configuration.isComponentTypePresent(SC.TEMPERATURE) ) {
-                        this.sb.append("_bmp280_id_");
-                    } else {
-                        throw new DbcException("A block is used for which the corresponding configuration block is not present: " + sensorName);
-                    }
+                    this.sb.append("_bmp280_id_");
+
                     break;
                 case "VEMLLIGHT_SENSING":
-                    if ( this.configuration.isComponentTypePresent(SC.LIGHTVEML) ) {
-                        this.sb.append("_veml_tsl_id_");
-                    } else {
-                        throw new DbcException("A block is used for which the corresponding configuration block is not present: " + sensorName);
-                    }
+                    this.sb.append("_veml_tsl_id_");
                     break;
                 default:
                     throw new DbcException("An invalid sensor has been detected: " + sensorName);
