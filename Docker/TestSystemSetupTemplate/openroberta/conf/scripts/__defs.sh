@@ -37,7 +37,26 @@ then
 fi
 }
 
-HOSTNAME=$(hostname -f)
+function setServerNamesintoSERVER_NAMES {
+    if [ "$1" == '' ]
+    then
+        if [ -f "$SERVER/servers.txt" ]
+        then
+            SERVERS=$(cat $SERVER/servers.txt)
+            SERVER_NAMES=$SERVERS
+        else
+            echo "no file '$SERVER/servers.txt' found. Exit 12"
+            exit 12
+        fi
+    else
+        SERVER_NAMES=$1
+    fi
+    for SERVER_NAME in $SERVER_NAMES; do
+        isServerNameValid $SERVER_NAME
+    done
+}    
+
+HOSTNAME=$(hostname)
 echo "working on host $HOSTNAME"
 
 BASE=/data/openroberta

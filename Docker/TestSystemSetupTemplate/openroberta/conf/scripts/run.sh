@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "$0: help | gen <server> | start <server> | stop <server> | deploy <server> | genNet | genDbC | startDbC | stopDbC | info | logs | prune"
+echo "$0: help | gen <server> | start <server> | stop <server> | deploy <server> | autoDeploy | restart | genNet | genDbC | startDbC | stopDbC | info | logs | prune"
 
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 chmod ugo+rx $SCRIPTDIR/run.sh
@@ -15,38 +15,25 @@ case "$CMD" in
               echo "generating the server '$SERVER_NAME'"
               source $SCRIPTDIR/_generate.sh
               echo "generating the server '$SERVER_NAME' finished" ;;
-    start)    SERVER_NAME=$1; shift
-              if [ "$SERVER_NAME" == '' ]
-              then
-                  if [ -f "$SERVER/servers.txt" ]
-                  then
-                      SERVERS=$(cat $SERVER/servers.txt)
-                      set $SERVERS
-                      for SERVER_NAME do
-                          isServerNameValid $SERVER_NAME
-                      done
-                      for SERVER_NAME do
-                          source $SCRIPTDIR/_stop.sh
-                          source $SCRIPTDIR/_start.sh
-                      done
-                  else
-                      echo "no file '$SERVER/servers.txt' found. Exit 12"
-                      exit 12
-                  fi
-              else
-                  isServerNameValid $SERVER_NAME
+    start)    setServerNamesintoSERVER_NAMES $1
+              for SERVER_NAME in $SERVER_NAMES; do
                   source $SCRIPTDIR/_stop.sh
                   source $SCRIPTDIR/_start.sh
-              fi
-              echo "finished" ;;
-    stop)     SERVER_NAME=$1; shift
-              isServerNameValid $SERVER_NAME
-              source $SCRIPTDIR/_stop.sh ;;
-    deploy)   SERVER_NAME=$1; shift
-              isServerNameValid $SERVER_NAME
-              echo "deploying (generating,starting) the server '$SERVER_NAME'"
-              $SCRIPTDIR/run.sh gen $SERVER_NAME
-              $SCRIPTDIR/run.sh start $SERVER_NAME ;;
+              done ;;
+    stop)     setServerNamesintoSERVER_NAMES $1
+              for SERVER_NAME in $SERVER_NAMES; do
+                  source $SCRIPTDIR/_stop.sh
+              done ;;
+    deploy)   setServerNamesintoSERVER_NAMES $1
+              for SERVER_NAME in $SERVER_NAMES; do
+                  echo "deploying (generating,starting) the server '$SERVER_NAME'"
+                  $SCRIPTDIR/run.sh gen $SERVER_NAME
+                  $SCRIPTDIR/run.sh start $SERVER_NAME
+              done ;;
+    autoDeploy) source $SCRIPTDIR/_autodeploy.sh ;;
+    restart)  $SCRIPTDIR/run.sh startDbC
+              sleep 10
+              $SCRIPTDIR/run.sh start ;;
     genDbC)   echo "generating the database image rbudde/openroberta_db:2.4.0"
               docker build -f $CONF/docker-for-db/DockerfileDb -t rbudde/openroberta_db:2.4.0 $CONF/docker-for-db
               echo "generating the database image rbudde/openroberta_db:2.4.0 finished" ;;
@@ -75,5 +62,8 @@ case "$CMD" in
               docker volume rm $(docker volume ls -q -f dangling=true)
               echo '******************** remove unused containers, networks, images ********************'
               docker system prune ;;
+    test)     echo '******************** TEST MODE START ********************'
+              source $SCRIPTDIR/_test.sh
+              echo '******************** TEST MODE TERMINATED ***************' ;;
     *)        echo "invalid command: '$CMD'" ;;
 esac
