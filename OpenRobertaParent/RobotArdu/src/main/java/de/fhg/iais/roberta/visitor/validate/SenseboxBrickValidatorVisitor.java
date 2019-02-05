@@ -11,6 +11,13 @@ import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
@@ -82,6 +89,75 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
                     //throw new DbcException("An invalid sensor has been detected: " + sensorName);
             }
         }
+        return null;
+    }
+
+    @Override
+    public Void visitVemlLightSensor(VemlLightSensor<Void> vemlLightSensor) {
+        checkSensorPort(vemlLightSensor);
+        switch ( vemlLightSensor.getMode() ) {
+            case SC.LIGHT:
+                break;
+            case SC.UVLIGHT:
+                break;
+            default:
+                vemlLightSensor.addInfo(NepoInfo.error("ILLEGAL_MODE_USED"));
+                this.errorCount++;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+        checkSensorPort(temperatureSensor);
+        switch ( temperatureSensor.getMode() ) {
+            case SC.TEMPERATURE:
+                break;
+            case SC.PRESSURE:
+                break;
+            default:
+                temperatureSensor.addInfo(NepoInfo.error("ILLEGAL_MODE_USED"));
+                this.errorCount++;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
+        checkSensorPort(humiditySensor);
+        switch ( humiditySensor.getMode() ) {
+            case SC.HUMIDITY:
+                break;
+            case SC.TEMPERATURE:
+                break;
+            default:
+                humiditySensor.addInfo(NepoInfo.error("ILLEGAL_MODE_USED"));
+                this.errorCount++;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitKeysSensor(KeysSensor<Void> button) {
+        checkSensorPort(button);
+        return null;
+    }
+
+    @Override
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        checkSensorPort(lightSensor);
+        return null;
+    }
+
+    @Override
+    public Void visitVoltageSensor(VoltageSensor<Void> potentiometer) {
+        checkSensorPort(potentiometer);
+        return null;
+    }
+
+    @Override
+    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+        checkSensorPort(ultrasonicSensor);
         return null;
     }
 
