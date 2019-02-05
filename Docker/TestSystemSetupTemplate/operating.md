@@ -2,7 +2,23 @@
 
 The test server is build for serving many different instances of the openroberta lab server. These instances are generated from commits of one or more git repositories.
 Each instance of the openroberta lab server is running in a docker container of its own. Each instance of the openroberta lab server is connected to a database
-dedicated to this openroberta lab server. All these databases are published by one database server running in a docker container of its own. 
+dedicated to this openroberta lab server. All these databases are published by one database server running in a docker container of its own.
+
+The main duties if you are using this test deployment template (for variables see below):
+
+* for all test servers (with name <NAME>) you want to runn, change in the directories $SERVER/<NAME> the file descl.sh as you need it.
+* in directory $BASE/db put all databases (identical to the servernames) into file `databases.txt` (e.g. `test dev dev1`)
+
+Assuming that the network `ora-net` is created, the database container is running, then you (re-)deploy `test` and `dev1` and view the system state by executing
+
+```bash
+$CONF/run.sh deploy test # shorthand for gen and start
+
+$CONF/run.sh gen dev1
+$CONF/run.sh start dev1
+
+$CONF/run.sh info
+```
 
 ## Apache2 configuration
 
