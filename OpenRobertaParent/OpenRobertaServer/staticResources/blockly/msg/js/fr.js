@@ -106,6 +106,7 @@ Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compa
 Blockly.Msg.COMPASS_TOOLTIP = "Bloc pour le capteur boussole.";
 Blockly.Msg.COMPASS_TOOLTIP_EV3 = "Représente un capteur boussole HiTechnic NXT";
 Blockly.Msg.CONFIGURATION_ERROR_ACTOR_MISSING = "This actuator is not set to the port!";  // untranslated
+Blockly.Msg.CONFIGURATION_ERROR_DEPENDENCY_MISSING = "One or more blocks that are required to use this block are missing, consult the documentation to find which block is needed.";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION = "Le sens de rotation entre le moteur gauche et le moteur droit est différent.";
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_MISSING = "Le moteur gauche est manquant dans la configuration du robot !";
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED = "Le moteur gauche n'est pas ajusté!";

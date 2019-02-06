@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-01-31 13:53:27.156348",
+		"lastupdated": "2019-02-06 11:29:59.724302",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -821,6 +821,7 @@
 	"CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED": "Left motor is not regulated!",
 	"CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED": "Right motor is not regulated!",
 	"CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED": "Other power consumer does not support this type of block!",
+	"CONFIGURATION_ERROR_DEPENDENCY_MISSING": "One or more blocks that are required to use this block are missing, consult the documentation to find which block is needed.",
 	"DATATABLE_PROGRAM_NAME": "Program name",
 	"DATATABLE_CREATED_BY": "Creator",
 	"DATATABLE_SHARED": "Shared",
