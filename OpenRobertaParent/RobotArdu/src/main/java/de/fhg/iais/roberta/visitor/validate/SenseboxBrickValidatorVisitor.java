@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinReadValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
@@ -44,13 +45,19 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
     }
 
     @Override
+    public Void visitLightAction(LightAction<Void> lightAction) {
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.LED) ) {
+            this.addError("CONFIGURATION_ERROR_DEPENDENCY_MISSING", lightAction);
+        }
+        return null;
+    }
+
+    @Override
     public Void visitDataSendAction(SendDataAction<Void> sendDataAction) {
+        //Send data action block can be used only with conjunction with wi-fi block from configuration:
         if ( !this.robotConfiguration.isComponentTypePresent(SC.WIRELESS) ) {
-            //TODO okay, really, replace this with a suiting error message:
-            sendDataAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_DEPENDENCY_MISSING"));
-            this.errorCount++;
+            this.addError("CONFIGURATION_ERROR_DEPENDENCY_MISSING", sendDataAction);
             return null;
-            //throw new DbcException("Send data action block can be used only with conjunction with wi-fi block from configuration.");
         }
         List<Expr<Void>> listOfSensors = sendDataAction.getParam().get();
         for ( Expr<Void> sensor : listOfSensors ) {
@@ -59,40 +66,32 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
                 checkSensorPort((ExternalSensor<Void>) (((SensorExpr<Void>) sensor).getSens()));
                 sensorName = ((SensorExpr<Void>) sensor).getSens().getKind().getName();
             } catch ( ClassCastException e ) {
-                //throw new DbcException("Expressions in the send data block are restricted to sensor values. Affected expression is " + sensor);
-                sendDataAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_DEPENDENCY_MISSING"));
-                this.errorCount++;
+                // Expressions in the send data block are restricted to sensor values:
+                this.addError("CONFIGURATION_ERROR_DEPENDENCY_MISSING", sendDataAction);
                 return null;
             }
             switch ( sensorName ) {
                 case "HUMIDITY_SENSING":
+                    //A block is used for which the corresponding configuration block is not present:
                     if ( !this.robotConfiguration.isComponentTypePresent(SC.HUMIDITY) ) {
-                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
-                        this.errorCount++;
-                        return null;
-                        //throw new DbcException("A block is used for which the corresponding configuration block is not present: " + sensorName);
+                        this.addError("CONFIGURATION_ERROR_SENSOR_MISSING", sensor);
                     }
                     break;
                 case "TEMPERATURE_SENSING":
+                    //A block is used for which the corresponding configuration block is not present:
                     if ( !this.robotConfiguration.isComponentTypePresent(SC.TEMPERATURE) ) {
-                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
-                        this.errorCount++;
-                        return null;
-                        //throw new DbcException("A block is used for which the corresponding configuration block is not present: " + sensorName);
+                        this.addError("CONFIGURATION_ERROR_SENSOR_MISSING", sensor);
                     }
                     break;
                 case "VEMLLIGHT_SENSING":
+                    //A block is used for which the corresponding configuration block is not present:
                     if ( !this.robotConfiguration.isComponentTypePresent(SC.LIGHTVEML) ) {
-                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
-                        this.errorCount++;
-                        return null;
-                        //throw new DbcException("A block is used for which the corresponding configuration block is not present: " + sensorName);
+                        this.addError("CONFIGURATION_ERROR_SENSOR_MISSING", sensor);
                     }
                     break;
                 default:
-                    sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
-                    this.errorCount++;
-                    //throw new DbcException("An invalid sensor has been detected: " + sensorName);
+                    //An invalid sensor has been detected:
+                    this.addError("CONFIGURATION_ERROR_SENSOR_MISSING", sensor);
             }
         }
         return null;
