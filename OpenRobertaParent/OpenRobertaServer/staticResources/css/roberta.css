@@ -1368,6 +1368,10 @@ td.bs-checkbox {
     top: 4px;
     left: 40px;
 }
+div.imgSol img, div.imgSol svg {
+	max-width: 100%;
+	overflow: hidden;
+}
 .galleryProgramname {
 	font-weight:bold; 
 	font-size:24px; 

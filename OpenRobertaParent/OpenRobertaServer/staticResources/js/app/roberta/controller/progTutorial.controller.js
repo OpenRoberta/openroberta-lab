@@ -255,10 +255,9 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
     }
 
     function showSolution() {
-        $('#helpDiv').append($('<div>').append($('<img>').attr({
-            'src' : 'tutorial/img/' + tutorial.step[step].solution + '.png',
+        $('#helpDiv').append($('<div>').append(tutorial.step[step].solution).attr({
             'class' : 'imgSol'
-        })));
+        }));
         $('#quizHelp').remove();
     }
 
