@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.syntax.codegen.arduino.arduino;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.util.test.ardu.HelperSenseboxForXmlTest;
@@ -7,6 +8,7 @@ import de.fhg.iais.roberta.util.test.ardu.HelperSenseboxForXmlTest;
 public class SenseboxSensorTest {
     private final HelperSenseboxForXmlTest senseboxHelper = new HelperSenseboxForXmlTest();
 
+    @Ignore
     @Test
     public void sensorsAndSenddataTest() throws Exception {
         this.senseboxHelper

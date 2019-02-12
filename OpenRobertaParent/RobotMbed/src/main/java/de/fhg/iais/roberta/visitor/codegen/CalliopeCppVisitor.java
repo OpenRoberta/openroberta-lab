@@ -194,11 +194,15 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         final Op op = binary.getOp();
         if ( op == Op.MOD ) {
             this.sb.append("(int) ");
+        } else if ( op == Op.NEQ ) {
+            this.sb.append("!( ");
         }
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
         final String sym;
         if ( op.equals(Op.TEXT_APPEND) ) {
             sym = "=";
+        } else if ( op.equals(Op.NEQ) ) {
+            sym = "==";
         } else {
             sym = getBinaryOperatorSymbol(op);
         }
@@ -220,6 +224,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
                 this.sb.append("((int) ");
                 generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
                 this.sb.append(")");
+                break;
+            case NEQ:
+                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+                this.sb.append(" )");
                 break;
             default:
                 generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);

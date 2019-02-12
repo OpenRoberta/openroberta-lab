@@ -233,7 +233,8 @@ public class Util {
                 "h5",
                 "h6",
                 "p",
-                "strong"
+                "strong",
+                "font"
             };
         String[] attributeWhiteList =
             {
@@ -242,7 +243,8 @@ public class Util {
                 "id",
                 "style",
                 "color",
-                "align"
+                "align",
+                "font"
             };
 
         input = StringEscapeUtils.unescapeXml(input);
@@ -250,12 +252,12 @@ public class Util {
         HtmlChangeListener<List<String>> htmlChangeListener = new HtmlChangeListener<List<String>>() {
             @Override
             public void discardedTag(List<String> arg0, String tagName) {
-                LOG.error("Discarding tag:", tagName);
+                LOG.error("Discarding tag: " + tagName);
             }
 
             @Override
             public void discardedAttributes(List<String> arg0, String arg1, String... attributes) {
-                LOG.error("Discarding tag:", arg1);
+                LOG.error("Discarding attribute: " + arg1);
             }
         };
 

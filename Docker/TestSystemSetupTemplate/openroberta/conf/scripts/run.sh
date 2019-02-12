@@ -38,13 +38,15 @@ case "$CMD" in
     deploy)   setServerNamesintoSERVER_NAMES $1
               for SERVER_NAME in $SERVER_NAMES; do
                   echo "deploying (generating,starting) the server '$SERVER_NAME'"
-                  $SCRIPTDIR/run.sh gen $SERVER_NAME
-                  $SCRIPTDIR/run.sh start $SERVER_NAME
+                  $SCRIPTDIR/run.sh -q gen $SERVER_NAME
+                  $SCRIPTDIR/run.sh -q start $SERVER_NAME
               done ;;
     autoDeploy) source $SCRIPTDIR/_autodeploy.sh ;;
-    restart)  $SCRIPTDIR/run.sh startDbC
+    startAll) $SCRIPTDIR/run.sh -q startDbC
               sleep 10
-              $SCRIPTDIR/run.sh start ;;
+              $SCRIPTDIR/run.sh -q start ;;
+    stopAll)  $SCRIPTDIR/run.sh -q stop
+              $SCRIPTDIR/run.sh -q stopDbC ;;
     genNet)   echo "generating the openroberta bridge network 'ora-net'"
               docker network create --driver bridge ora-net
               echo "generating the openroberta bridge network 'ora-net' finished" ;;

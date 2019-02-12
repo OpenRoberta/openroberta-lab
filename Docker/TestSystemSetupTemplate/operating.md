@@ -99,25 +99,6 @@ _all_ servers found in file `$SERVER/servers.txt` are taken into account:
 * `stop [<name>]`: stop a container for server <name>. Remove the exited container.
 * `deploy [<name>]`: shortcut for gen and start for server <name>.
 
-Maintenance and debugging commands are:
-
-* `autoDeploy`: usually called from cron. Reads the server names from file `$SERVER/autodeploy.txt` and re-deploys each server, if the git
-  repository connected to this server has got new commits. A typical line in crontab to run this is:
-  
-```bash
-*/5 * * * * bash /data/openroberta/conf/scripts/run.sh -q autoDeploy >>/data/openroberta/logs/cronlog.txt
-```
-
-* `restart`: usually called from the configuration file `robertalab.sh` found in `/etc/init.d`. A typical script is:
-
-```bash
-...
-```
-
-* `info`: show images and running containers
-* `logs`: show the last 10 lines of all logs of all running containers. B.t.w.: `docker logs -f <name>` is convenient to see how a server works.
-* `prune`: remove all stale data from the docker installation. IMPORTANT if you are low with disc space.
-
 Rarely used are commands:
 
 * `genDbC`: generate the database container `rbudde/openroberta_db:2.4.0`. Used once when the test server is setup.
@@ -125,3 +106,47 @@ Rarely used are commands:
   This commmand is needed if a new server is added to the test server and a new database has been added to `$BASE/db`. If no database names are given,
   _all_ databases found in file `BASE/db/databases.txt` are taken into account
 * `stopDbC`: stop the database container
+* `prune`: remove all stale data from the docker installation. IMPORTANT if you are low with disc space.
+
+Getting information:
+
+* `info`: show images and running containers
+* `logs`: show the last 10 lines of all logs of all running containers. B.t.w.: `docker logs -f <name>` is convenient to see how a server works.
+* of course, docker commands can help, too: `docker logs -f dev1` or `docker ps`
+
+## Init scripts and automatic deploy
+
+The shell script `$CONF/scripts/run.sh` has two more commands, that are used to initialize the test setup (on server restart, for example) and to
+deploy one or more servers automatically if new commits hit the remote repo.
+ 
+* `autoDeploy`: usually called from cron. Reads the server names from file `$SERVER/autodeploy.txt` and re-deploys each server, if the git
+  repository connected to this server has got new commits. A typical line in crontab to run this is:
+  
+```bash
+*/5 * * * * bash /data/openroberta/conf/scripts/run.sh -q autoDeploy >>/data/openroberta/logs/cronlog.txt
+```
+
+* `startAll` and `stopAll`: usually called from the configuration file `robertalab.sh` found in `/etc/init.d`. A typical script is:
+
+```bash
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          robertalab
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: the openroberta service
+# Description:       Start, stop and restart the db and the jetty openroberta server
+### END INIT INFO
+
+BASE=/data/openroberta
+SCRIPTS=$BASE/conf/scripts
+case "$1" in
+    start)   bash $SCRIPTS/run.sh startAll ;;
+    stop)    bash $SCRIPTS/run.sh stopAll  ;;
+    restart) bash $SCRIPTS/run.sh startAll ;;
+    *)       echo "Usage: $0 {start|stop|restart}"
+             exit 12 ;;
+esac
+```
