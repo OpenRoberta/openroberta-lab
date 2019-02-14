@@ -890,32 +890,36 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         IndexLocation location = (IndexLocation) listGetIndex.getLocation();
         listGetIndex.getParam().get(0).visit(this);
         this.sb.append("[");
-        this.sb.append("sanitise_index(ArrayLen(");
-        listGetIndex.getParam().get(0).visit(this);
-        this.sb.append("), ");
         switch ( location ) {
             case FIRST:
-                this.sb.append("0");
+                this.sb.append("sanitiseFromStart(ArrayLen(");
+                listGetIndex.getParam().get(0).visit(this);
+                this.sb.append("), 0");
                 break;
             case FROM_END:
-                this.sb.append("ArrayLen(");
+                this.sb.append("sanitiseFromEnd(ArrayLen(");
                 listGetIndex.getParam().get(0).visit(this);
-                this.sb.append(") - 1 - ");
+                this.sb.append("), -1 - ");
                 listGetIndex.getParam().get(1).visit(this);
                 break;
             case FROM_START:
+                this.sb.append("sanitiseFromStart(ArrayLen(");
+                listGetIndex.getParam().get(0).visit(this);
+                this.sb.append("), ");
                 listGetIndex.getParam().get(1).visit(this);
                 break;
             case LAST:
-                this.sb.append("ArrayLen(");
+                this.sb.append("sanitiseFromEnd(ArrayLen(");
                 listGetIndex.getParam().get(0).visit(this);
-                this.sb.append(") - 1");
+                this.sb.append("), -1");
                 break;
             case RANDOM:
                 // provided for backwards compatibility,
                 // frontend does not have an option to choose this
                 // but old programs may contain this option
-                this.sb.append("0");
+                this.sb.append("sanitiseFromStart(ArrayLen(");
+                listGetIndex.getParam().get(0).visit(this);
+                this.sb.append("), 0");
                 break;
             default:
                 break;
@@ -934,32 +938,36 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         IndexLocation location = (IndexLocation) listSetIndex.getLocation();
         listSetIndex.getParam().get(0).visit(this);
         this.sb.append("[");
-        this.sb.append("sanitise_index(ArrayLen(");
-        listSetIndex.getParam().get(0).visit(this);
-        this.sb.append("), ");
         switch ( location ) {
             case FIRST:
-                this.sb.append("0");
+                this.sb.append("sanitiseFromStart(ArrayLen(");
+                listSetIndex.getParam().get(0).visit(this);
+                this.sb.append("), 0");
                 break;
             case FROM_END:
-                this.sb.append("ArrayLen(");
+                this.sb.append("sanitiseFromEnd(ArrayLen(");
                 listSetIndex.getParam().get(0).visit(this);
-                this.sb.append(") - 1 - ");
+                this.sb.append("), -1 - ");
                 listSetIndex.getParam().get(2).visit(this);
                 break;
             case FROM_START:
+                this.sb.append("sanitiseFromStart(ArrayLen(");
+                listSetIndex.getParam().get(0).visit(this);
+                this.sb.append("), ");
                 listSetIndex.getParam().get(2).visit(this);
                 break;
             case LAST:
-                this.sb.append("ArrayLen(");
+                this.sb.append("sanitiseFromEnd(ArrayLen(");
                 listSetIndex.getParam().get(0).visit(this);
-                this.sb.append(") - 1");
+                this.sb.append("), -1");
                 break;
             case RANDOM:
                 // provided for backwards compatibility,
                 // frontend does not have an option to choose this
                 // but old programs may contain this option
-                this.sb.append("0");
+                this.sb.append("sanitiseFromStart(ArrayLen(");
+                listSetIndex.getParam().get(0).visit(this);
+                this.sb.append("), 0");
                 break;
             default:
                 break;
@@ -1064,17 +1072,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
             default:
                 break;
         }
-        /*if ( !mathOnListFunct.getParam().get(0).getVarType().toString().contains("ARRAY") ) {
-            this.tmpArrCount += 1;
-            this.sb.append("__tmpArr" + this.tmpArrCount);
-        } else {*/
         mathOnListFunct.getParam().get(0).visit(this);
-        //}
-        if ( mathOnListFunct.getFunctName().equals(FunctionNames.AVERAGE) ) {
-            this.sb.append(", ArrayLen(");
-            mathOnListFunct.getParam().get(0).visit(this);
-            this.sb.append(")");
-        }
         this.sb.append(")");
         return null;
     }

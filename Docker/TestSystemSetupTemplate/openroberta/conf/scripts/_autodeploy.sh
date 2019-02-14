@@ -1,7 +1,5 @@
 #!/bin/bash
 
-DEBUG=true
-DATE=$(date '+%Y-%m-%d %H:%M:%S')
 if [ -f "$SERVER/autodeploy.txt" ]
 then
     flock -n 9 9>$SERVER/lockfile
@@ -25,12 +23,15 @@ then
                 cd $GIT_REPO
                 git checkout .
                 git fetch
-                git checkout $BRANCH
+                GITMSG=$(git checkout $BRANCH 2>&1)
+                [ "$DEBUG" = 'true' ] && echo "$DATE: git messages are: $GITMSG"
                 DIFF=$(git rev-list HEAD...origin/$BRANCH --count)
                 [ "$DEBUG" = 'true' ] && echo "$DATE: found $DIFF new commits in branch '$BRANCH'"
                 if [ $DIFF -gt 0 ]
                 then
-                    echo "$DIFF new commits found in branch $BRANCH. Thus the server $SERVER_NAME will be deployed"
+                    echo "$DATE: $DIFF new commits found in branch $BRANCH. A reset --hard to origin/$BRANCH is executed"
+                    git reset --hard origin/$BRANCH
+                    echo "$DATE: the server $SERVER_NAME will be deployed now"
                     $SCRIPTDIR/run.sh deploy $SERVER_NAME
                 fi
             done ;; 

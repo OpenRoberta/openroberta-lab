@@ -111,6 +111,7 @@ Rarely used are commands:
 Getting information:
 
 * `info`: show images and running containers
+* `network`: show the ora-net network
 * `logs`: show the last 10 lines of all logs of all running containers. B.t.w.: `docker logs -f <name>` is convenient to see how a server works.
 * of course, docker commands can help, too: `docker logs -f dev1` or `docker ps`
 
