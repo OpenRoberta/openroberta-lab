@@ -900,7 +900,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
             case FROM_END:
                 this.sb.append("ArrayLen(");
                 listGetIndex.getParam().get(0).visit(this);
-                this.sb.append(") - ");
+                this.sb.append(") - 1 - ");
                 listGetIndex.getParam().get(1).visit(this);
                 break;
             case FROM_START:
@@ -944,7 +944,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
             case FROM_END:
                 this.sb.append("ArrayLen(");
                 listSetIndex.getParam().get(0).visit(this);
-                this.sb.append(") - ");
+                this.sb.append(") - 1 - ");
                 listSetIndex.getParam().get(2).visit(this);
                 break;
             case FROM_START:
@@ -1070,6 +1070,11 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         } else {*/
         mathOnListFunct.getParam().get(0).visit(this);
         //}
+        if ( mathOnListFunct.getFunctName().equals(FunctionNames.AVERAGE) ) {
+            this.sb.append(", ArrayLen(");
+            mathOnListFunct.getParam().get(0).visit(this);
+            this.sb.append(")");
+        }
         this.sb.append(")");
         return null;
     }
