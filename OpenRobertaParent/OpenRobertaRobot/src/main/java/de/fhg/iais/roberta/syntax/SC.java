@@ -106,4 +106,5 @@ public interface SC {
     String LIGHTVEML = "LIGHTVEML";
     String WIRELESS = "WIRELESS";
     String SEND_DATA = "SEND_DATA";
+    String SENSEBOX = "SENSEBOX";
 }

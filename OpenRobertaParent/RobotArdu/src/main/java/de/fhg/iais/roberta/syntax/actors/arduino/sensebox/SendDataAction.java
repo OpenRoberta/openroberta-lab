@@ -1,8 +1,12 @@
 package de.fhg.iais.roberta.syntax.actors.arduino.sensebox;
 
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -10,6 +14,7 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
@@ -19,11 +24,11 @@ import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
 public class SendDataAction<V> extends Action<V> {
 
-    private final ExprList<V> listOfSensors;
+    private final Map<String, Expr<V>> id2Phenomena;
 
-    private SendDataAction(ExprList<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private SendDataAction(Map<String, Expr<V>> id2Phenomena, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("DATA_SEND_ACTION"), properties, comment);
-        this.listOfSensors = param;
+        this.id2Phenomena = id2Phenomena;
         this.setReadOnly();
     }
 
@@ -34,8 +39,8 @@ public class SendDataAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link SendDataAction}
      */
-    public static <V> SendDataAction<V> make(ExprList<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SendDataAction<>(param, properties, comment);
+    public static <V> SendDataAction<V> make(Map<String, Expr<V>> id2Phenomena, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new SendDataAction<>(id2Phenomena, properties, comment);
     }
 
     @Override
@@ -48,8 +53,8 @@ public class SendDataAction<V> extends Action<V> {
         return ((IArduinoVisitor<V>) visitor).visitDataSendAction(this);
     }
 
-    public ExprList<V> getParam() {
-        return listOfSensors;
+    public Map<String, Expr<V>> getId2Phenomena() {
+        return id2Phenomena;
     }
 
     /**
@@ -61,7 +66,12 @@ public class SendDataAction<V> extends Action<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         ExprList<V> exprList = helper.blockToExprList(block, BlocklyType.STRING);
-        return SendDataAction.make(exprList, helper.extractBlockProperties(block), helper.extractComment(block));
+        List<Field> fields = helper.extractFields(block, (short) 999);
+        Map<String, Expr<V>> id2Phenomena = new HashMap<>();
+        for ( int i = 0; i < fields.size(); i++ ) {
+            id2Phenomena.put(fields.get(i).getValue(), exprList.get().get(i));
+        }
+        return SendDataAction.make(id2Phenomena, helper.extractBlockProperties(block), helper.extractComment(block));
 
     }
 
@@ -69,12 +79,15 @@ public class SendDataAction<V> extends Action<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
-        int numOfStrings = getParam().get().size();
+        int numOfStrings = getId2Phenomena().size();
         Mutation mutation = new Mutation();
         mutation.setItems(BigInteger.valueOf(numOfStrings));
         jaxbDestination.setMutation(mutation);
-        for ( int i = 0; i < numOfStrings; i++ ) {
-            Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.ADD + i, getParam().get().get(i));
+        int i = 0;
+        for ( Map.Entry<String, Expr<V>> entry : getId2Phenomena().entrySet() ) {
+            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.PHEN + i, entry.getKey());
+            Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.ADD + i, entry.getValue());
+            i++;
         }
         return jaxbDestination;
     }

@@ -2,13 +2,12 @@ package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
@@ -27,9 +26,7 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
-import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
@@ -322,13 +319,18 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
 
     @Override
     public Void visitDataSendAction(SendDataAction<Void> sendDataAction) {
-        List<Expr<Void>> listOfSensors = sendDataAction.getParam().get();
-        for ( Expr<Void> sensor : listOfSensors ) {
+        for ( Map.Entry<String, Expr<Void>> entry : sendDataAction.getId2Phenomena().entrySet() ) {
             this.sb.append("_osem.uploadMeasurement(");
-            sensor.visit(this);
+            entry.getValue().visit(this);
+            this.sb.append(", _").append(entry.getKey()).append(");");
+            nlIndent();
+        }
+        /*for ( Expr<Void> phenomenon : listOfPhenomena ) {
+            this.sb.append("_osem.uploadMeasurement(");
+            phenomenon.visit(this);
             this.sb.append(",");
-            String sensorName = ((SensorExpr<Void>) sensor).getSens().getKind().getName();
-            String userDefinedPortName = ((ExternalSensor<Void>) (((SensorExpr<Void>) sensor).getSens())).getPort();
+            String sensorName = ((SensorExpr<Void>) phenomenon).getSens().getKind().getName();
+            String userDefinedPortName = ((ExternalSensor<Void>) (((SensorExpr<Void>) phenomenon).getSens())).getPort();
             switch ( sensorName ) {
                 case "HUMIDITY_SENSING":
                     this.sb.append("_hdc1080_id_");
@@ -346,7 +348,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
             this.sb.append(userDefinedPortName);
             this.sb.append(");");
             this.nlIndent();
-        }
+        }*/
         return null;
     }
 
@@ -386,7 +388,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                 case SC.WIRELESS:
                     this.sb
                         .append("_bee_")
-                        .append(usedConfigurationBlock.getUserDefinedPortName())
+                        //.append(usedConfigurationBlock.getUserDefinedPortName())
                         .append("->connectToWifi(\"")
                         .append(usedConfigurationBlock.getProperty("SSID"))
                         .append("\",\"")
@@ -402,6 +404,9 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                 case SC.LIGHT:
                 case SC.BUZZER:
                 case SC.SOUND:
+                case SC.SENSEBOX:
+                    this.sb.append("_osem = new OpenSenseMap(\"").append(usedConfigurationBlock.getUserDefinedPortName()).append("\", _bee_);");
+                    nlIndent();
                     break;
                 default:
                     throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
@@ -448,13 +453,9 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                 case SC.HUMIDITY:
                     this.sb.append("HDC1080 _hdc1080_").append(blockName).append(";");
                     this.nlIndent();
-                    this.sb.append("char* _hdc1080_id_").append(blockName).append(" = \"").append(cc.getProperty("ID")).append("\";");
-                    this.nlIndent();
                     break;
                 case SC.TEMPERATURE:
                     this.sb.append("BMP280 _bmp280_").append(blockName).append(";");
-                    this.nlIndent();
-                    this.sb.append("char* _bmp280_id_").append(blockName).append(" = \"").append(cc.getProperty("ID")).append("\";");
                     this.nlIndent();
                     break;
                 case SC.ULTRASONIC:
@@ -473,19 +474,25 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     this.nlIndent();
                     this.sb.append("TSL45315 _tsl_").append(blockName).append(";");
                     this.nlIndent();
-                    this.sb.append("char* _veml_tsl_id_").append(blockName).append(" = \"").append(cc.getProperty("ID")).append("\";");
-                    this.nlIndent();
                     break;
                 case SC.WIRELESS:
-                    this.sb.append("Bee* _bee_").append(blockName).append(" = new Bee();");
-                    for ( UsedActor usedActor : this.usedActors ) {
-                        if ( usedActor.getType().equals(SC.SEND_DATA) ) {
-                            this.nlIndent();
-                            this.sb.append("OpenSenseMap _osem(\"").append(cc.getProperty("BOX_ID")).append("\", _bee_").append(blockName).append(");");
-                            this.nlIndent();
+                    this.sb
+                        .append("Bee* _bee_")
+                        //.append(blockName)
+                        .append(" = new Bee();");
+                    this.nlIndent();
+                    break;
+                case SC.SENSEBOX:
+                    Iterator it = cc.getComponentProperties().entrySet().iterator();
+                    while ( it.hasNext() ) {
+                        Map.Entry<String, String> pair = (Map.Entry<String, String>) it.next();
+                        if ( !pair.getKey().contains("NAME") ) {
+                            this.sb.append("char* _").append(pair.getKey()).append(" = \"").append(pair.getValue()).append("\"");
+                            nlIndent();
                         }
                     }
-                    this.nlIndent();
+                    this.sb.append("OpenSenseMap _osem;");
+                    nlIndent();
                     break;
                 default:
                     throw new DbcException("Configuration block is not supported: " + cc.getComponentType());

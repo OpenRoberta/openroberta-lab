@@ -1,7 +1,5 @@
 package de.fhg.iais.roberta.visitor.validate;
 
-import java.util.List;
-
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
@@ -10,8 +8,6 @@ import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
-import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
@@ -59,40 +55,8 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
             this.addError("CONFIGURATION_ERROR_DEPENDENCY_MISSING", sendDataAction);
             return null;
         }
-        List<Expr<Void>> listOfSensors = sendDataAction.getParam().get();
-        for ( Expr<Void> sensor : listOfSensors ) {
-            String sensorName = null;
-            try {
-                checkSensorPort((ExternalSensor<Void>) (((SensorExpr<Void>) sensor).getSens()));
-                sensorName = ((SensorExpr<Void>) sensor).getSens().getKind().getName();
-            } catch ( ClassCastException e ) {
-                // Expressions in the send data block are restricted to sensor values:
-                this.addError("CONFIGURATION_ERROR_DEPENDENCY_MISSING", sendDataAction);
-                return null;
-            }
-            switch ( sensorName ) {
-                case "HUMIDITY_SENSING":
-                    //A block is used for which the corresponding configuration block is not present:
-                    if ( !this.robotConfiguration.isComponentTypePresent(SC.HUMIDITY) ) {
-                        this.addError("CONFIGURATION_ERROR_SENSOR_MISSING", sensor);
-                    }
-                    break;
-                case "TEMPERATURE_SENSING":
-                    //A block is used for which the corresponding configuration block is not present:
-                    if ( !this.robotConfiguration.isComponentTypePresent(SC.TEMPERATURE) ) {
-                        this.addError("CONFIGURATION_ERROR_SENSOR_MISSING", sensor);
-                    }
-                    break;
-                case "VEMLLIGHT_SENSING":
-                    //A block is used for which the corresponding configuration block is not present:
-                    if ( !this.robotConfiguration.isComponentTypePresent(SC.LIGHTVEML) ) {
-                        this.addError("CONFIGURATION_ERROR_SENSOR_MISSING", sensor);
-                    }
-                    break;
-                default:
-                    //An invalid sensor has been detected:
-                    this.addError("CONFIGURATION_ERROR_SENSOR_MISSING", sensor);
-            }
+        for ( Expr<Void> value : sendDataAction.getId2Phenomena().values() ) {
+            value.visit(this);
         }
         return null;
     }
