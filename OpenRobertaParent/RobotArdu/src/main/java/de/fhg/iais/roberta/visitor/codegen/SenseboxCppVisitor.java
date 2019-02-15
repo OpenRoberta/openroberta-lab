@@ -407,11 +407,20 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                 case SC.BUZZER:
                 case SC.SOUND:
                 case SC.SENSEBOX:
+                    break;
+                default:
+                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
+            }
+        }
+        for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
+            switch ( usedConfigurationBlock.getComponentType() ) {
+                case SC.SENSEBOX:
                     this.sb.append("_osem = new OpenSenseMap(\"").append(usedConfigurationBlock.getUserDefinedPortName()).append("\", _bee_);");
                     nlIndent();
                     break;
                 default:
-                    throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
+                    // let's do nothing for everything else, but not write all those cases here.
+                    break;
             }
         }
     }
