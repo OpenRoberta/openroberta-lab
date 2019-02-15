@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
+import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
@@ -55,8 +56,8 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
             this.addError("CONFIGURATION_ERROR_DEPENDENCY_MISSING", sendDataAction);
             return null;
         }
-        for ( Expr<Void> value : sendDataAction.getId2Phenomena().values() ) {
-            value.visit(this);
+        for ( Pair<String, Expr<Void>> value : sendDataAction.getId2Phenomena() ) {
+            value.getSecond().visit(this);
         }
         return null;
     }

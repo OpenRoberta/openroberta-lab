@@ -2,8 +2,9 @@ package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.Configuration;
@@ -36,6 +37,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
+import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.collect.SenseboxUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
@@ -319,10 +321,10 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
 
     @Override
     public Void visitDataSendAction(SendDataAction<Void> sendDataAction) {
-        for ( Map.Entry<String, Expr<Void>> entry : sendDataAction.getId2Phenomena().entrySet() ) {
+        for ( Pair<String, Expr<Void>> entry : sendDataAction.getId2Phenomena() ) {
             this.sb.append("_osem.uploadMeasurement(");
-            entry.getValue().visit(this);
-            this.sb.append(", _").append(entry.getKey()).append(");");
+            entry.getSecond().visit(this);
+            this.sb.append(", _").append(entry.getFirst()).append(");");
             nlIndent();
         }
         /*for ( Expr<Void> phenomenon : listOfPhenomena ) {
@@ -483,11 +485,23 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     this.nlIndent();
                     break;
                 case SC.SENSEBOX:
-                    Iterator it = cc.getComponentProperties().entrySet().iterator();
-                    while ( it.hasNext() ) {
-                        Map.Entry<String, String> pair = (Map.Entry<String, String>) it.next();
-                        if ( !pair.getKey().contains("NAME") ) {
-                            this.sb.append("char* _").append(pair.getKey()).append(" = \"").append(pair.getValue()).append("\"");
+                    Set<Entry<String, String>> componentEntrySet = cc.getComponentProperties().entrySet();
+                    int maxNumberOfPairs = componentEntrySet.size() / 2;
+                    String[] names = new String[maxNumberOfPairs];
+                    String[] ids = new String[maxNumberOfPairs];
+                    for ( Entry<String, String> entry : componentEntrySet ) {
+                        String key = entry.getKey();
+                        if ( key.startsWith("ID") ) {
+                            int index = Integer.parseInt(key.substring(2));
+                            ids[index - 1] = entry.getValue();
+                        } else if ( key.startsWith("NAME") ) {
+                            int index = Integer.parseInt(key.substring(4));
+                            names[index - 1] = entry.getValue();
+                        }
+                    }
+                    for ( int i = 0; i < maxNumberOfPairs; i++ ) {
+                        if ( names[i] != null && ids[i] != null ) {
+                            this.sb.append("char* _").append(names[i]).append(" = \"").append(ids[i]).append("\";");
                             nlIndent();
                         }
                     }
