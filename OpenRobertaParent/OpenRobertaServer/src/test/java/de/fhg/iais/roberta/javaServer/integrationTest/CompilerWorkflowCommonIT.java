@@ -143,9 +143,9 @@ public class CompilerWorkflowCommonIT {
 
     @Test
     public void testShowGeneratedProgram() {
-        String robot = "bob3";
+        String robot = "nano";
         String robotDir = ROBOTS.getJSONObject(robot).getString("dir");
-        String progName = "mathLogic-1";
+        String progName = "listOperations";
         final String template = getTemplateWithConfigReplaced(robotDir);
         final String generatedProgram = generateFinalProgram(template, progName, PROGS.getJSONObject(progName));
         LOG.info("the generated program for robot " + robot + " with name " + progName + " is:\n" + generatedProgram);
