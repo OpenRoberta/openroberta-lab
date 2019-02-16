@@ -211,9 +211,9 @@ public class Administration {
         long programs = ((BigInteger) dbExecutor.oneValueSelect("select count(*) from PROGRAM;")).longValue();
 
         try {
-            dbExecutor.ddl("SHUTDOWN COMPACT;");
+            dbExecutor.ddl("SHUTDOWN;");
         } finally {
-            LOG.info("shutdown compact for a database with " + users + " registered users and " + programs + " stored programs");
+            LOG.info("shutdown for a database with " + users + " registered users and " + programs + " stored programs");
         }
     }
 
