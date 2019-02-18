@@ -110,7 +110,10 @@ public class Upgrader {
         String dbUrl = "jdbc:hsqldb:file:" + pathToDatabaseDirectory + "/openroberta-db;ifexists=true";
         SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", dbUrl);
         // if the version is not detected in the conditions of if/else-if, it is expected, that NOTHING CHANGES.
-        if ( versionToUpgradeTo.equals("2.3.0") ) {
+        if ( versionToUpgradeTo.equals("3.1.0") ) {
+            LOG.info("upgrade to 3.1.0 WITH database changes");
+            new Upgrader_3_1_0(sessionFactoryWrapper).run();
+        } else if ( versionToUpgradeTo.equals("2.3.0") ) {
             LOG.info("upgrade to 2.3.0 WITH database changes");
             new Upgrader_2_3_0(sessionFactoryWrapper).run();
         } else if ( versionToUpgradeTo.equals("2.2.7") ) {
@@ -118,10 +121,11 @@ public class Upgrader {
             Session nativeSession = sessionFactoryWrapper.getNativeSession();
             nativeSession.beginTransaction();
             DbSetup dbSetup = new DbSetup(nativeSession);
-            dbSetup.sqlFile(
-                "select count(*) from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'PENDING_EMAIL_CONFIRMATIONS'",
-                "select count(*) from USER where ACCOUNT = 'Gallery'",
-                "/update-2-2-7.sql");
+            dbSetup
+                .sqlFile(
+                    "select count(*) from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'PENDING_EMAIL_CONFIRMATIONS'",
+                    "select count(*) from USER where ACCOUNT = 'Gallery'",
+                    "/update-2-2-7.sql");
             nativeSession.createSQLQuery("shutdown").executeUpdate();
             nativeSession.close();
         } else {
@@ -131,9 +135,9 @@ public class Upgrader {
         DbExecutor dbExecutor = DbExecutor.make(nativeSession);
         nativeSession.beginTransaction();
         try {
-            dbExecutor.ddl("SHUTDOWN COMPACT;");
+            dbExecutor.ddl("SHUTDOWN;");
         } finally {
-            LOG.info("shutdown compact succeeded for a database db-" + versionToUpgradeTo);
+            LOG.info("shutdown terminated for a database db-" + versionToUpgradeTo);
         }
     }
 }

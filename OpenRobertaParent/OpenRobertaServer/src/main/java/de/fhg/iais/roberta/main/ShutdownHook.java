@@ -27,9 +27,9 @@ public class ShutdownHook extends Thread {
             DbExecutor dbExecutor = DbExecutor.make(nativeSession);
             nativeSession.beginTransaction();
             try {
-                dbExecutor.ddl("SHUTDOWN COMPACT;");
+                dbExecutor.ddl("SHUTDOWN;");
             } finally {
-                LOG.info("Shutdown. Database command SHUTDOWN COMPACT finished for am embedded database");
+                LOG.info("Shutdown. Database command SHUTDOWN finished for am embedded database");
             }
         } else {
             LOG.info("Shutdown. Database server not affected. May have been shutdown, may continue to operate - your choice.");
