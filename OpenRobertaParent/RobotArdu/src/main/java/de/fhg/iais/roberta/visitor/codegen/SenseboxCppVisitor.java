@@ -339,7 +339,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     break;
                 case "TEMPERATURE_SENSING":
                     this.sb.append("_bmp280_id_");
-        
+
                     break;
                 case "VEMLLIGHT_SENSING":
                     this.sb.append("_veml_tsl_id_");
@@ -439,7 +439,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     this.nlIndent();
                     break;
                 case SC.KEY:
-                    this.sb.append("int _taster_").append(blockName).append(" = ").append(cc.getProperty("PIN1")).append(";");
+                    this.sb.append("int _button_").append(blockName).append(" = ").append(cc.getProperty("PIN1")).append(";");
                     this.nlIndent();
                     break;
                 case SC.LIGHT:
