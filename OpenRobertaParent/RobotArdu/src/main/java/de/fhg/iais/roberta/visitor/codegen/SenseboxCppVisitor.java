@@ -339,7 +339,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     break;
                 case "TEMPERATURE_SENSING":
                     this.sb.append("_bmp280_id_");
-
+        
                     break;
                 case "VEMLLIGHT_SENSING":
                     this.sb.append("_veml_tsl_id_");
@@ -410,14 +410,6 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     break;
                 default:
                     throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
-            }
-        }
-        for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
-            if ( usedConfigurationBlock.getComponentType().equals(SC.SENSEBOX)
-                && usedConfigurationBlock.getUserDefinedPortName() != null
-                && !usedConfigurationBlock.getUserDefinedPortName().isEmpty() ) {
-                this.sb.append("_osm = new OpenSenseMap(\"").append(usedConfigurationBlock.getUserDefinedPortName()).append("\", _bee_);");
-                nlIndent();
             }
         }
     }
@@ -491,34 +483,35 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     this.nlIndent();
                     break;
                 case SC.SENSEBOX:
-                    if ( cc.getUserDefinedPortName() != null && !cc.getUserDefinedPortName().isEmpty() ) {
-                        Set<Entry<String, String>> componentEntrySet = cc.getComponentProperties().entrySet();
-                        int maxNumberOfPairs = componentEntrySet.size() / 2;
-                        String[] names = new String[maxNumberOfPairs];
-                        String[] ids = new String[maxNumberOfPairs];
-                        for ( Entry<String, String> entry : componentEntrySet ) {
-                            String key = entry.getKey();
-                            if ( key.startsWith("ID") ) {
-                                int index = Integer.parseInt(key.substring(2));
-                                ids[index - 1] = entry.getValue();
-                            } else if ( key.startsWith("NAME") ) {
-                                int index = Integer.parseInt(key.substring(4));
-                                names[index - 1] = entry.getValue();
-                            }
-                        }
-                        for ( int i = 0; i < maxNumberOfPairs; i++ ) {
-                            System.out.println(ids[i]);
-                            if ( !names[i].isEmpty() && !ids[i].isEmpty() ) {
-                                this.sb.append("char* _").append(names[i]).append(" = \"").append(ids[i]).append("\";");
-                                nlIndent();
-                            }
-                        }
-                        this.sb.append("OpenSenseMap _osm;");
-                        nlIndent();
-                    }
                     break;
                 default:
                     throw new DbcException("Configuration block is not supported: " + cc.getComponentType());
+            }
+        }
+        for ( ConfigurationComponent cc : this.configuration.getConfigurationComponentsValues() ) {
+            if ( cc.getComponentType().equals(SC.SENSEBOX) && cc.getUserDefinedPortName() != null && !cc.getUserDefinedPortName().isEmpty() ) {
+                Set<Entry<String, String>> componentEntrySet = cc.getComponentProperties().entrySet();
+                int maxNumberOfPairs = componentEntrySet.size() / 2;
+                String[] names = new String[maxNumberOfPairs];
+                String[] ids = new String[maxNumberOfPairs];
+                for ( Entry<String, String> entry : componentEntrySet ) {
+                    String key = entry.getKey();
+                    if ( key.startsWith("ID") ) {
+                        int index = Integer.parseInt(key.substring(2));
+                        ids[index - 1] = entry.getValue();
+                    } else if ( key.startsWith("NAME") ) {
+                        int index = Integer.parseInt(key.substring(4));
+                        names[index - 1] = entry.getValue();
+                    }
+                }
+                for ( int i = 0; i < maxNumberOfPairs; i++ ) {
+                    if ( !names[i].isEmpty() && !ids[i].isEmpty() ) {
+                        this.sb.append("char* _").append(names[i]).append(" = \"").append(ids[i]).append("\";");
+                        nlIndent();
+                    }
+                }
+                this.sb.append("OpenSenseMap _osm(\"").append(cc.getUserDefinedPortName()).append("\", _bee_);");
+                nlIndent();
             }
         }
     }
