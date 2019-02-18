@@ -206,6 +206,12 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
 
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+        this.sb.append("analogWrite(_led_red_").append(lightStatusAction.getPort()).append(", 0);");
+        this.nlIndent();
+        this.sb.append("analogWrite(_led_green_").append(lightStatusAction.getPort()).append(", 0);");
+        this.nlIndent();
+        this.sb.append("analogWrite(_led_blue_").append(lightStatusAction.getPort()).append(", 0);");
+        this.nlIndent();
         return null;
     }
 
@@ -339,7 +345,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     break;
                 case "TEMPERATURE_SENSING":
                     this.sb.append("_bmp280_id_");
-        
+
                     break;
                 case "VEMLLIGHT_SENSING":
                     this.sb.append("_veml_tsl_id_");
