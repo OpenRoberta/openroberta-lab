@@ -38,13 +38,17 @@ public class Ev3DevCompilerWorkflow extends AbstractCompilerWorkflow {
 
     @Override
     public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
-        // nothing to compile. The generated program is the result.
-        return;
+        try {
+            storeGeneratedProgram(token, programName, ".py");
+        } catch ( Exception e ) {
+            Ev3DevCompilerWorkflow.LOG.error("Storing the generated program into directory " + token + " failed", e);
+        }
     }
 
     @Override
     public void generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
         generateSourceCode(token, programName, data, language);
+        compileSourceCode(token, programName, language, null);
     }
 
     @Override

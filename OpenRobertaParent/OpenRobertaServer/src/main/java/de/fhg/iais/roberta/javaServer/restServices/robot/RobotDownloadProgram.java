@@ -68,7 +68,7 @@ public class RobotDownloadProgram {
                     break;
                 case "ev3dev":
                     fileName = programName + ".py";
-                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/src";
+                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/source";
                     break;
                 case "NXT":
                     fileName = programName + ".rxe";
