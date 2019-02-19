@@ -1,5 +1,5 @@
-define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller', 'configuration.controller', 'user.controller' ], function(
-        exports, LOG, $, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, USER_C) {
+define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller', 'configuration.controller', 'user.controller' ], function(exports, LOG, $,
+        GUISTATE_C, PROGRAM_C, CONFIGURATION_C, USER_C) {
 
     /**
      * Initialize language switching
@@ -33,10 +33,12 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
             language = 'tr';
         } else if (navigator.language.indexOf("nl") > -1) {
             language = 'nl';
-//        } else if (navigator.language.indexOf("eu") > -1) {
-//            language = 'eu';
-//        } else if (navigator.language.indexOf("gl") > -1) {
-//            language = 'gl';
+        } else if (navigator.language.indexOf("sv") > -1) {
+            language = 'sv';
+        } else if (navigator.language.indexOf("zh-hans") > -1) {
+            language = 'zh-hans';
+        } else if (navigator.language.indexOf("zh-hant") > -1) {
+            language = 'zh-hant';
         } else {
             language = 'en';
         }
@@ -76,14 +78,14 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
         if (GUISTATE_C.getLanguage == language) {
             return;
         }
-        
+
         var url = 'blockly/msg/js/' + language.toLowerCase() + '.js';
         getCachedScript(url).done(function(data) {
             translate();
             GUISTATE_C.setLanguage(language);
             PROGRAM_C.reloadView();
             CONFIGURATION_C.reloadView();
-            USER_C.initValidationMessages();            
+            USER_C.initValidationMessages();
             var value = Blockly.Msg.MENU_START_BRICK;
             if (value.indexOf("$") >= 0) {
                 value = value.replace("$", GUISTATE_C.getRobotRealName());
