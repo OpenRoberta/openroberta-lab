@@ -133,13 +133,15 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        this.sb.append("digitalWrite(_buzzer_").append(toneAction.getPort()).append(",  HIGH);");
+        this.sb.append("tone(_buzzer_").append(toneAction.getPort()).append(", ");
+        toneAction.getFrequency().visit(this);
+        this.sb.append(");");
         nlIndent();
         this.sb.append("delay(");
         toneAction.getDuration().visit(this);
         this.sb.append(");");
         nlIndent();
-        this.sb.append("digitalWrite(_buzzer_").append(toneAction.getPort()).append(",  LOW);");
+        this.sb.append("noTone(_buzzer_").append(toneAction.getPort()).append(");");
         return null;
     }
 
@@ -347,7 +349,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     break;
                 case "TEMPERATURE_SENSING":
                     this.sb.append("_bmp280_id_");
-        
+
                     break;
                 case "VEMLLIGHT_SENSING":
                     this.sb.append("_veml_tsl_id_");
