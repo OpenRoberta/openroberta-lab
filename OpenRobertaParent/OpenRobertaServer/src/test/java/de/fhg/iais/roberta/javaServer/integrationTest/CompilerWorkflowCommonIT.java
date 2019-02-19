@@ -5,6 +5,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -141,14 +143,24 @@ public class CompilerWorkflowCommonIT {
         }
     }
 
+    /**
+     * generate a program for different robots. May help testing ...<br>
+     * <br>
+     * - supply the program name<br>
+     * - supply the list of robots - copy from the console
+     */
+    @Ignore
     @Test
-    public void testShowGeneratedProgram() {
-        String robot = "nano";
-        String robotDir = ROBOTS.getJSONObject(robot).getString("dir");
+    public void testShowAllGeneratedProgram() {
         String progName = "listOperations";
-        final String template = getTemplateWithConfigReplaced(robotDir);
-        final String generatedProgram = generateFinalProgram(template, progName, PROGS.getJSONObject(progName));
-        LOG.info("the generated program for robot " + robot + " with name " + progName + " is:\n" + generatedProgram);
+        List<String> robots = Arrays.asList("nano", "calliope2017", "ev3lejosv1");
+        for ( String robot : robots ) {
+            String robotDir = ROBOTS.getJSONObject(robot).getString("dir");
+            final String template = getTemplateWithConfigReplaced(robotDir);
+            final String generatedProgram = generateFinalProgram(template, progName, PROGS.getJSONObject(progName));
+            LOG.info("********** program " + progName + " for robot " + robot + " **********:\n" + generatedProgram);
+        }
+        LOG.info("********** generation terminated **********");
     }
 
     private boolean compileAfterProgramGenerated(String robotName, String template, String progName, JSONObject prog) throws DbcException {
