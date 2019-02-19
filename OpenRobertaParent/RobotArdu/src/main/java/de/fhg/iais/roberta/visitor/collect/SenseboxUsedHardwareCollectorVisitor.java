@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
 /**
@@ -22,6 +23,13 @@ import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
  * @author VinArt
  */
 public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements IArduinoVisitor<Void> {
+    private boolean isListsUsed = false;
+
+    @Override
+    public boolean isListsUsed() {
+        return isListsUsed;
+    }
+
     public SenseboxUsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         super(null);
         this.check(phrasesSet);
@@ -78,6 +86,15 @@ public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHard
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         if ( var.isGlobal() ) {
             this.visitedVars.add(var);
+        }
+        if ( var.getVarType().equals(BlocklyType.ARRAY)
+            || var.getVarType().equals(BlocklyType.ARRAY_BOOLEAN)
+            || var.getVarType().equals(BlocklyType.ARRAY_NUMBER)
+            || var.getVarType().equals(BlocklyType.ARRAY_COLOUR)
+            || var.getVarType().equals(BlocklyType.ARRAY_CONNECTION)
+            || var.getVarType().equals(BlocklyType.ARRAY_IMAGE)
+            || var.getVarType().equals(BlocklyType.ARRAY_STRING) ) {
+            this.isListsUsed = true;
         }
         var.getValue().visit(this);
         this.globalVariables.add(var.getName());
