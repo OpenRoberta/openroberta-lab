@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
+import de.fhg.iais.roberta.mode.general.PickColor;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
@@ -135,7 +136,9 @@ public abstract class AbstractWeDoVisitor<V> implements ILanguageVisitor<V>, IWe
 
     @Override
     public V visitColorConst(ColorConst<V> colorConst) {
-        JSONObject o = mk(C.EXPR).put(C.EXPR, "COLOR_CONST").put(C.VALUE, colorConst.getColorName());
+        String colorName = colorConst.getColorName();
+        int colorValue = PickColor.valueOf(colorName).getColorID();
+        JSONObject o = mk(C.EXPR).put(C.EXPR, "COLOR_CONST").put(C.VALUE, colorValue);
         return app(o);
     }
 
