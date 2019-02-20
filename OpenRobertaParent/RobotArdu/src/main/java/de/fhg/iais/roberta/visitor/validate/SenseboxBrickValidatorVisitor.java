@@ -3,6 +3,8 @@ package de.fhg.iais.roberta.visitor.validate;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinReadValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
@@ -44,7 +46,7 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.LED) ) {
-            this.addError("CONFIGURATION_ERROR_DEPENDENCY_MISSING", lightAction);
+            lightAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
         }
         return null;
     }
@@ -53,7 +55,7 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
     public Void visitDataSendAction(SendDataAction<Void> sendDataAction) {
         //Send data action block can be used only with conjunction with wi-fi block from configuration:
         if ( !this.robotConfiguration.isComponentTypePresent(SC.WIRELESS) ) {
-            this.addError("CONFIGURATION_ERROR_DEPENDENCY_MISSING", sendDataAction);
+            sendDataAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
             return null;
         }
         for ( Pair<String, Expr<Void>> value : sendDataAction.getId2Phenomena() ) {
@@ -131,4 +133,17 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
         return null;
     }
 
+    public Void visitToneAction(ToneAction<Void> toneAction) {
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.BUZZER) ) {
+            toneAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+        }
+        return null;
+    }
+
+    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.LED) ) {
+            lightStatusAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+        }
+        return null;
+    }
 }

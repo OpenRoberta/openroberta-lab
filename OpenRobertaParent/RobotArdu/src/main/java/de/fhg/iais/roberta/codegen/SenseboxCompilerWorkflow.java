@@ -41,9 +41,9 @@ public class SenseboxCompilerWorkflow extends AbstractCompilerWorkflow {
         try {
             Configuration configuration = (data.getRobotConfiguration());
             this.generatedSourceCode = SenseboxCppVisitor.generate(configuration, data.getProgramTransformer().getTree(), true);
-            LOG.info("arduino c++ code generated");
+            LOG.info("senseBox c++ code generated");
         } catch ( Exception e ) {
-            LOG.error("arduino c++ code generation failed", e);
+            LOG.error("senseBox c++ code generation failed", e);
             this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
         }
     }

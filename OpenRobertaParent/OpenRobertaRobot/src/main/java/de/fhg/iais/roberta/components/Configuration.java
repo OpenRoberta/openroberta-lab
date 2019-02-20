@@ -58,6 +58,15 @@ public class Configuration {
         return this.configurationComponents.values();
     }
 
+    public ConfigurationComponent getConfigurationComponentbyType(String type) {
+        for ( ConfigurationComponent cc : this.configurationComponents.values() ) {
+            if ( cc.getComponentType().equals(type) ) {
+                return cc;
+            }
+        }
+        return null;
+    }
+
     public Collection<ConfigurationComponent> getActors() {
         return this.configurationComponents.values().stream().filter(item -> item.isActor()).collect(Collectors.toList());
     }
