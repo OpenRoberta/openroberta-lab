@@ -709,7 +709,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         IndexLocation loc1 = (IndexLocation) getSubFunct.getStrParam().get(1);
 
         boolean isLeftAParam = loc0 == FROM_START || loc0 == FROM_END;
-
+        this.sb.append("new ArrayList<>(");
         getSubFunct.getParam().get(0).visit(this);
         this.sb.append(".subList(");
 
@@ -760,7 +760,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
                 }
                 break;
         }
-        this.sb.append(")");
+        this.sb.append("))");
         return null;
 
     }
