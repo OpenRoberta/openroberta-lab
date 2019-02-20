@@ -101,6 +101,11 @@ public class RobotCommunicator {
             robot = "ardu";
         }
 
+        //TODO: this re-writes for old robots, that do not know, that there are V1 and V0 of lejos. 20.02.2019, Artem Vinokurov.
+        if ( robot.equals("ev3lejosv0") ) {
+            robot = "lejos";
+        }
+
         LOG.info("client:" + robot + ", robot: " + state.getRobot() + ", firmware: " + state.getFirmwareName());
 
         if ( state.getRobot().equals(robot) ) {
