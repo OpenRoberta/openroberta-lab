@@ -34,12 +34,13 @@ define(['simulation.simulation', 'simulation.math', 'util', 'robertaLogic.consta
         }
         if (this.numprogs > 1) {
             $("#constantValue").html("");
-            var pagistr = '<select class="form-control" style="background-color:' + this.robots[SIM.getRobotIndex()].geom.color + '" id="robotIndex">';
-            for (var pagirobot = 0; pagirobot < this.numprogs; pagirobot++) {
-                pagistr += '<option class="robotIndexOptions" style="background-color:' + this.robots[pagirobot].geom.color + '">&nbsp' + "</option>";
+            var robotIndexColour = "";
+            robotIndexColour += '<select id="robotIndex" style="background-color:' + this.robots[SIM.getRobotIndex()].geom.color +  '">';
+            for (var i = 0; i < this.numprogs; i++) {
+                robotIndexColour += '<option style="background-color:' + this.robots[i].geom.color + '" value="' +SIM.getRobotIndex() +'">&nbsp' + "</option>";
             }
-            pagistr += "</select>";
-            $("#constantValue").append('<div><label>Robot</label><span style="width:auto">' + pagistr + '</span></div>');
+            robotIndexColour += "</select>";
+            $("#constantValue").append('<div><label>Robot</label><span style="width:auto">' + robotIndexColour + '</span></div>');
         }
     }
 

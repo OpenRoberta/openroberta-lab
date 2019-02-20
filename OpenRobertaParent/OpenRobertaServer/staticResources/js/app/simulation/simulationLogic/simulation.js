@@ -274,12 +274,8 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
                 $('#simButtonsHead').show();
             }
         }
-        var blocklyprograms = programs.map(function (x) {
-            return BUILDER.build(x.javaScriptProgram);
-        });
-        programEvals = programs.map(function (x) {
-            return new ProgramEval()
-        });
+        var blocklyprograms = programs.map(x => BUILDER.build(x.javaScriptProgram));
+        programEvals = programs.map(x => new ProgramEval());
         isDownRobots = [];
         for (var i = 0; i < numRobots; i++) {
             programEvals[i].initProgram(blocklyprograms[i]);
@@ -289,6 +285,7 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
             robots = [];
             readyRobots = [];
             isDownRobots = [];
+            $("#simRobotContent").empty();
 
             require(['simulation.robot.' + simRobotType], function (reqRobot) {
                 createRobots(reqRobot, numRobots);
@@ -297,7 +294,6 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
                     robots[i].resetPose();
                     readyRobots.push(false);
                     isDownRobots.push(false);
-
                 }
                 removeMouseEvents();
                 canceled = false;
@@ -329,11 +325,7 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
     exports.run = run;
 
     function getRobotIndex() {
-        if ($("#robotIndex")[0] == null) {
-            return 0;
-        } else {
-            return $("#robotIndex")[0].selectedIndex;
-        }
+        return robotIndex;
     }
     exports.getRobotIndex = getRobotIndex;
 
@@ -375,7 +367,6 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
         dt = now - (time || now);
         dt /= 1000;
         time = now;
-        robotIndex = getRobotIndex();
         stepCounter += 1;
         for (var i = 0; i < numRobots; i++) {
             if (!programEvals[i].getProgram().isTerminated() && !pause && !reset) {
@@ -524,11 +515,11 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
         switch (keyName) {
             case "ArrowUp":
             case "ArrowLeft":
-                robots[getRobotIndex()].pose.theta -= Math.PI / 180;
+                robots[robotIndex].pose.theta -= Math.PI / 180;
                 break;
             case "ArrowDown":
             case "ArrowRight":
-                robots[getRobotIndex()].pose.theta += Math.PI / 180;
+                robots[robotIndex].pose.theta += Math.PI / 180;
                 break;
             default:
                 // nothing to do so far
@@ -578,6 +569,9 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
                 dy = startY - robots[i].mouse.ry;
                 var boolDown = (dx * dx + dy * dy < robots[i].mouse.r * robots[i].mouse.r);
                 if (boolDown) {
+                    $("#svg" + robotIndex).hide();
+                    robotIndex = i;
+                    $("#svg" + robotIndex).show();
                     $("#robotIndex")[0][i].selected = true;
                     break;
                 }
@@ -739,25 +733,25 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
 
     function addMouseEvents() {
         $("#robotLayer").on('mousedown touchstart', function (e) {
-            if (robots[robotIndex].handleMouseDown)
+            if (robots[robotIndex].handleMouseDown) {
                 robots[robotIndex].handleMouseDown(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
-            else
+            } else {
                 handleMouseDown(e);
+            }
         });
         $("#robotLayer").on('mousemove touchmove', function (e) {
-
             if (robots[robotIndex].handleMouseMove) {
                 robots[robotIndex].handleMouseMove(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
             } else {
                 handleMouseMove(e);
             }
-
         });
         $("#robotLayer").mouseup(function (e) {
-            if (robots[robotIndex].handleMouseUp)
+            if (robots[robotIndex].handleMouseUp) {
                 robots[robotIndex].handleMouseUp(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
-            else
+            } else {
                 handleMouseUp(e);
+            }
         });
         $("#robotLayer").on('mouseout touchcancel', function (e) {
             if (robots[robotIndex].handleMouseOut) {
@@ -776,6 +770,17 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
         $(document).on('keydown', function (e) {
             handleKeyEvent(e);
         });
+        var that = this;
+        $("#simRobotModal").on("shown.bs.modal", function(){
+             $("#svg" + robotIndex).show();
+        });
+        $("#robotIndex")
+        .change(function (e) {
+            $("#svg" + robotIndex).hide();
+            robotIndex= e.target.selectedIndex;
+            $("#svg" + robotIndex).show();
+         })
+        .change();
     }
 
     function removeMouseEvents() {
@@ -783,6 +788,8 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
         $("#simDiv").off();
         $("#canvasDiv").off();
         $(document).unbind('keydown', handleKeyEvent);
+        $("#simRobotModal").off();
+        $("#robotIndex").unbind('change');
     }
 
     function initScene() {
@@ -877,12 +884,12 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
     function createRobots(reqRobot, numRobots) {
         robots = [];
         if (numRobots >= 1) {
-            var tempRobot = createRobot(reqRobot);
+            var tempRobot = createRobot(reqRobot, 0);
             tempRobot.savedName = userPrograms[0].savedName;
             robots[0] = tempRobot;
             for (var i = 1; i < numRobots; i++) {
-                var yOffset = 60 * (Math.floor((i + 1) / 2)) * (Math.pow((-1), i));
-                tempRobot = createRobot(reqRobot, yOffset);
+                var yOffset = 60 * (Math.floor((i + 1) / 2)) * ((-1) ** (i));
+                tempRobot = createRobot(reqRobot, i, yOffset);
                 tempRobot.savedName = userPrograms[i].savedName;
                 var tempcolor = arrToRgb(colorsAdmissible[((i - 1) % (colorsAdmissible.length))]);
                 tempRobot.geom.color = tempcolor;
@@ -895,7 +902,7 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
         }
     }
 
-    function createRobot(reqRobot, optYOffset) {
+    function createRobot(reqRobot, num, optYOffset) {
         var yOffset = optYOffset || 0;
         var robot;
         if (currentBackground == 2) {
@@ -907,7 +914,7 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
                 yOld: 200 + yOffset,
                 transX: 0,
                 transY: 0
-            });
+            },num);
             robot.canDraw = false;
         } else if (currentBackground == 3) {
             robot = new reqRobot({
@@ -918,7 +925,7 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
                 yOld: 200 + yOffset,
                 transX: 0,
                 transY: 0
-            });
+            },num);
             robot.canDraw = true;
             robot.drawColor = "#000000";
             robot.drawWidth = 10;
@@ -931,7 +938,7 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
                 yOld: 104 + yOffset,
                 transX: 0,
                 transY: 0
-            });
+            },num);
             robot.canDraw = false;
         } else if (currentBackground == 5) {
             robot = new reqRobot({
@@ -953,7 +960,7 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
                 yOld: 440 + yOffset,
                 transX: 0,
                 transY: 0
-            });
+            },num);
             robot.canDraw = false;
         } else if (currentBackground == 7) {
             var cx = imgObjectList[currentBackground].width / 2.0 + 10;
@@ -966,7 +973,7 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
                 yOld: cy + yOffset,
                 transX: -cx,
                 transY: -cy
-            });
+            },num);
             robot.canDraw = true;
             robot.drawColor = "#ffffff";
             robot.drawWidth = 1;
@@ -981,7 +988,7 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
                 yOld: cy + yOffset,
                 transX: 0,
                 transY: 0
-            });
+            },num);
             robot.canDraw = false;
         }
         return robot;
