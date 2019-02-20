@@ -338,20 +338,14 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
         }
         this.sb.append(String.join(", ", paramList));
         this.sb.append("):");
-        boolean isMethodBodyEmpty = methodReturn.getBody().get().isEmpty();
-        if ( isMethodBodyEmpty ) {
+        if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
             nlIndent();
-            this.sb.append("pass");
-        } else {
-            if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
-                nlIndent();
-                this.sb.append("global " + String.join(", ", this.usedGlobalVarInFunctions));
-            }
-            methodReturn.getBody().visit(this);
-            nlIndent();
-            this.sb.append("return ");
-            methodReturn.getReturnValue().visit(this);
+            this.sb.append("global " + String.join(", ", this.usedGlobalVarInFunctions));
         }
+        methodReturn.getBody().visit(this);
+        nlIndent();
+        this.sb.append("return ");
+        methodReturn.getReturnValue().visit(this);
         return null;
     }
 
@@ -575,5 +569,5 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     public Void visitStmtTextComment(StmtTextComment<Void> stmtTextComment) {
         this.sb.append("# " + stmtTextComment.getTextComment());
         return null;
-    };
+    }
 }
