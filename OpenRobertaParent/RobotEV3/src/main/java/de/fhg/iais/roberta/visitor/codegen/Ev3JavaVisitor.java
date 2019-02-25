@@ -867,9 +867,9 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
         listGetIndex.getParam().get(0).visit(this);
         if ( op == GET ) {
-            this.sb.append(".get(");
+            this.sb.append(".get( (int) (");
         } else if ( op == GET_REMOVE || op == REMOVE ) {
-            this.sb.append(".remove(");
+            this.sb.append(".remove( (int)");
         }
         switch ( loc ) {
             case FIRST:
@@ -892,7 +892,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
                 this.sb.append("0 /* absolutely random number */");
                 break;
         }
-        this.sb.append(")");
+        this.sb.append("))");
 
         // This means its a remove statement and a semicolon is required
         if ( op == REMOVE ) {
@@ -914,34 +914,36 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         }
         switch ( loc ) {
             case FIRST:
-                this.sb.append("0");
-                this.sb.append(", ");
+                this.sb.append("0, ");
                 break;
             case LAST:
                 if ( op == SET ) {
+                    this.sb.append("(int) (");
                     listSetIndex.getParam().get(0).visit(this);
-                    this.sb.append(".size() - 1, ");
+                    this.sb.append(".size() - 1");
+                    this.sb.append("), ");
                 }
                 break;
             case FROM_START:
+                this.sb.append("(int) (");
                 listSetIndex.getParam().get(2).visit(this);
-                this.sb.append(", ");
+                this.sb.append("), ");
                 break;
             case FROM_END:
+                this.sb.append("(int) (");
                 this.sb.append("(");
                 listSetIndex.getParam().get(0).visit(this);
                 this.sb.append(".size() - 1) - ");
                 listSetIndex.getParam().get(2).visit(this);
-                this.sb.append(", ");
+                this.sb.append("), ");
                 break;
             case RANDOM:
                 this.sb.append("0 /* absolutely random number */");
-                this.sb.append(", ");
                 break;
         }
 
         if ( listSetIndex.getParam().get(1).getVarType() == BlocklyType.NUMBER ) {
-            this.sb.append(" (float) ");
+            this.sb.append("(float) ");
         }
 
         listSetIndex.getParam().get(1).visit(this);

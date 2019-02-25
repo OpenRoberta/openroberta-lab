@@ -9,16 +9,14 @@ public class ListsSetIndexTest {
 
     @Test
     public void Test() throws Exception {
-        String a =
-            "newArrayList<>(Arrays.asList((float) 55, (float) 66, (float) 11)).set(1, (float) 99);}";
+        String a = "newArrayList<>(Arrays.asList((float) 55, (float) 66, (float) 11)).set((int) (1), (float) 99);}";
 
         this.h.assertCodeIsOk(a, "/syntax/lists/lists_set_index.xml");
     }
 
     @Test
     public void Test1() throws Exception {
-        String a =
-            "newArrayList<>(Arrays.asList((float) 55, (float) 66, (float) 11)).add(1, (float) 99);}";
+        String a = "newArrayList<>(Arrays.asList((float) 55, (float) 66, (float) 11)).add( (int) (1), (float) 99);}";
 
         this.h.assertCodeIsOk(a, "/syntax/lists/lists_set_index1.xml");
     }

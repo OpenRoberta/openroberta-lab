@@ -10,7 +10,7 @@ public class ListsGetIndexTest {
     @Test
     public void Test() throws Exception {
         String a =
-            "publicvoidrun()throwsException{hal.regulatedDrive(DriveDirection.FOREWARD,newArrayList<>(Arrays.asList((float)0,(float)0,(float)0)).get(0));hal.regulatedDrive(DriveDirection.FOREWARD,newArrayList<>(Arrays.asList((float)0,(float)0,(float)0)).remove(0));newArrayList<>(Arrays.asList((float)0,(float)0,(float)0)).remove(newArrayList<>(Arrays.asList((float)0,(float)0,(float)0)).size()-1);}";
+            "publicvoidrun()throwsException{hal.regulatedDrive(DriveDirection.FOREWARD,newArrayList<>(Arrays.asList((float)0,(float)0,(float)0)).get((int)(0)));hal.regulatedDrive(DriveDirection.FOREWARD,newArrayList<>(Arrays.asList((float)0,(float)0,(float)0)).remove((int)0)));newArrayList<>(Arrays.asList((float)0,(float)0,(float)0)).remove((int)newArrayList<>(Arrays.asList((float)0,(float)0,(float)0)).size()-1));}";
         this.h.assertCodeIsOk(a, "/syntax/lists/lists_get_index.xml");
     }
 }
