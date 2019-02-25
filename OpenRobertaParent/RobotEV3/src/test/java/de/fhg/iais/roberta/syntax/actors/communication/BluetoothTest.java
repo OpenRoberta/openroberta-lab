@@ -24,7 +24,7 @@ public class BluetoothTest {
     @Test
     public void send() throws Exception {
         String a = "NXTConnectionvariablenName2=hal.establishConnectionTo(\"\");publicvoidrun()throwsException{hal.sendMessage(\"\", variablenName2);}";
-
+        System.out.println(a);
         this.h.assertCodeIsOk(a, "/syntax/actions/action_BluetoothSend.xml");
     }
 

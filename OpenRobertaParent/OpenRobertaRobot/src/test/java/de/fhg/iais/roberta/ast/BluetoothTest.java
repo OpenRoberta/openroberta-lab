@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.ast;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
+import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
 
 public class BluetoothTest {
     AbstractHelperForXmlTest h = new GenericHelperForXmlTest();
@@ -29,11 +29,9 @@ public class BluetoothTest {
 
     @Test
     public void connectionSend() throws Exception {
-        String a =
-            "BlockAST [project=[[Location [x=97, y=7], MainTask [\n"
-                + "exprStmt VarDeclaration [CONNECTION, variablenName2, ActionExpr [BluetoothConnectAction [StringConst []]], false, true]], "
-                + "BluetoothSendAction [Var [variablenName2], StringConst [], null]]]]";
+        String a = "BlockAST [project=[[Location [x=384, y=50], MainTask [], BluetoothSendAction [ConnectConst [2], NumConst [0], 5]]]]";
 
+        System.out.println(this.h.generateTransformerString("/ast/actions/action_BluetoothSend.xml"));
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/actions/action_BluetoothSend.xml"));
     }
 

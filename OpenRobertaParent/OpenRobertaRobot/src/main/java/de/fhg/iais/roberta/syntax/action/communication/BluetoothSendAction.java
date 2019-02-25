@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.action.communication;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Data;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
@@ -25,20 +26,30 @@ public class BluetoothSendAction<V> extends Action<V> {
     private final Expr<V> _msg;
     String _channel;
     String dataType;
+    private final String dataValue;
 
-    private BluetoothSendAction(Expr<V> connection, Expr<V> msg, String channel, String dataType, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private BluetoothSendAction(
+        String dataValue,
+        Expr<V> connection,
+        Expr<V> msg,
+        String channel,
+        String dataType,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment) {
         super(BlockTypeContainer.getByName("BLUETOOTH_SEND_ACTION"), properties, comment);
         this._connection = connection;
         this._msg = msg;
         this._channel = channel;
         this.dataType = dataType;
+        this.dataValue = dataValue;
         setReadOnly();
     }
 
-    private BluetoothSendAction(Expr<V> connection, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private BluetoothSendAction(String dataValue, Expr<V> connection, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("BLUETOOTH_SEND_ACTION"), properties, comment);
         this._connection = connection;
         this._msg = msg;
+        this.dataValue = dataValue;
         setReadOnly();
     }
 
@@ -50,17 +61,23 @@ public class BluetoothSendAction<V> extends Action<V> {
      * @return read only object of class {@link BluetoothSendAction}
      */
     public static <V> BluetoothSendAction<V> make(
+        String dataValue,
         Expr<V> connection,
         Expr<V> msg,
         String channel,
         String dataType,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        return new BluetoothSendAction<>(connection, msg, channel, dataType, properties, comment);
+        return new BluetoothSendAction<>(dataValue, connection, msg, channel, dataType, properties, comment);
     }
 
-    public static <V> BluetoothSendAction<V> make(Expr<V> connection, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new BluetoothSendAction<>(connection, msg, properties, comment);
+    public static <V> BluetoothSendAction<V> make(
+        String dataValue,
+        Expr<V> connection,
+        Expr<V> msg,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment) {
+        return new BluetoothSendAction<>(dataValue, connection, msg, properties, comment);
     }
 
     public Expr<V> getConnection() {
@@ -101,11 +118,14 @@ public class BluetoothSendAction<V> extends Action<V> {
         List<Field> fields = helper.extractFields(block, (short) 3);
         Phrase<V> bluetoothSendMessage = helper.extractValue(values, new ExprParam(BlocklyConstants.MESSAGE, BlocklyType.STRING));
         Phrase<V> bluetoothSendConnection = helper.extractValue(values, new ExprParam(BlocklyConstants.CONNECTION, BlocklyType.NULL));
+        Data data = block.getData();
+        String datum = data.getValue();
         if ( fields.size() == 3 ) {
             String bluetoothSendChannel = helper.extractField(fields, BlocklyConstants.CHANNEL);
             String bluetoothRecieveDataType = helper.extractField(fields, BlocklyConstants.TYPE);
             return BluetoothSendAction
                 .make(
+                    datum,
                     helper.convertPhraseToExpr(bluetoothSendConnection),
                     helper.convertPhraseToExpr(bluetoothSendMessage),
                     bluetoothSendChannel,
@@ -113,10 +133,15 @@ public class BluetoothSendAction<V> extends Action<V> {
                     helper.extractBlockProperties(block),
                     helper.extractComment(block));
         } else {
+            String bluetoothSendChannel = "-1";
+            String bluetoothRecieveDataType = helper.extractField(fields, BlocklyConstants.TYPE);
             return BluetoothSendAction
                 .make(
+                    datum,
                     helper.convertPhraseToExpr(bluetoothSendConnection),
                     helper.convertPhraseToExpr(bluetoothSendMessage),
+                    bluetoothSendChannel,
+                    bluetoothRecieveDataType,
                     helper.extractBlockProperties(block),
                     helper.extractComment(block));
         }
@@ -135,6 +160,9 @@ public class BluetoothSendAction<V> extends Action<V> {
         Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
         Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.MESSAGE, getMsg());
         Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.CONNECTION, getConnection());
+        Data data = new Data();
+        data.setValue(this.dataValue);
+        jaxbDestination.setData(data);
         return jaxbDestination;
     }
 
