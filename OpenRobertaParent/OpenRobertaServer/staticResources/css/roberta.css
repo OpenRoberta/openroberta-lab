@@ -2170,3 +2170,9 @@ label.quiz.answer.fail {
 #simModal .fixed-table-header{
 	background-color:#B3BFB8;
 }
+
+/* distance between steps in mbed/sensebox download modal: */
+
+td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
+	padding-bottom: 2.5em;
+}
