@@ -133,6 +133,7 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
         return null;
     }
 
+    @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.BUZZER) ) {
             toneAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
@@ -140,6 +141,7 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
         return null;
     }
 
+    @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.LED) ) {
             lightStatusAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));

@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
@@ -99,6 +100,12 @@ public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHard
         var.getValue().visit(this);
         this.globalVariables.add(var.getName());
         this.declaredVariables.add(var.getName());
+        return null;
+    }
+
+    @Override
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        this.usedSensors.add(new UsedSensor(compassSensor.getPort(), SC.SENSEBOX_COMPASS, compassSensor.getMode()));
         return null;
     }
 

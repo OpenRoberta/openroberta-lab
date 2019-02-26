@@ -28,6 +28,9 @@ import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
@@ -321,6 +324,125 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
         return null;
     }
 
+    private void updateBmxValues(String portName) {
+        nlIndent();
+        this.sb.append("int _getValueFromBmx(int axis, int mode) {");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("int _x_axis;");
+        nlIndent();
+        this.sb.append("int _y_axis;");
+        nlIndent();
+        this.sb.append("int _z_axis;");
+        nlIndent();
+        this.sb.append("switch (mode) {");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("case 1:");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("_bmx055_").append(portName).append(".getAcceleration(&_x_axis, &_y_axis, &_z_axis);");
+        nlIndent();
+        this.sb.append("break;");
+        decrIndentation();
+        nlIndent();
+        this.sb.append("case 2:");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("_bmx055_").append(portName).append(".getRotation(&_x_axis, &_y_axis, &_z_axis);");
+        nlIndent();
+        this.sb.append("break;");
+        decrIndentation();
+        nlIndent();
+        this.sb.append("case 3:");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("_bmx055_").append(portName).append(".getMagnet(&_x_axis, &_y_axis, &_z_axis);");
+        nlIndent();
+        this.sb.append("break;");
+        decrIndentation();
+        decrIndentation();
+        nlIndent();
+        this.sb.append("}");
+        nlIndent();
+        this.sb.append("switch (axis) {");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("case 1:");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("return _x_axis;");
+        decrIndentation();
+        nlIndent();
+        this.sb.append("case 2:");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("return _y_axis;");
+        decrIndentation();
+        nlIndent();
+        this.sb.append("case 3:");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("return _z_axis;");
+        decrIndentation();
+        decrIndentation();
+        nlIndent();
+        this.sb.append("}");
+        decrIndentation();
+        nlIndent();
+        this.sb.append("}");
+        nlIndent();
+        nlIndent();
+    }
+
+    @Override
+    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
+        switch ( accelerometerSensor.getMode() ) {
+            case "X":
+                this.sb.append("_getValueFromBmx(1, 1)");
+                break;
+            case "Y":
+                this.sb.append("_getValueFromBmx(2, 1)");
+                break;
+            case "Z":
+                this.sb.append("_getValueFromBmx(3, 1)");
+                break;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+        switch ( gyroSensor.getMode() ) {
+            case "X":
+                this.sb.append("_getValueFromBmx(1, 2)");
+                break;
+            case "Y":
+                this.sb.append("_getValueFromBmx(2, 2)");
+                break;
+            case "Z":
+                this.sb.append("_getValueFromBmx(3, 2)");
+                break;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        switch ( compassSensor.getMode() ) {
+            case "X":
+                this.sb.append("_getValueFromBmx(1, 3)");
+                break;
+            case "Y":
+                this.sb.append("_getValueFromBmx(2, 3)");
+                break;
+            case "Z":
+                this.sb.append("_getValueFromBmx(3, 3)");
+                break;
+        }
+        return null;
+    }
+
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         switch ( timerSensor.getMode() ) {
@@ -345,30 +467,6 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
             this.sb.append(", _").append(entry.getFirst()).append(");");
             nlIndent();
         }
-        /*for ( Expr<Void> phenomenon : listOfPhenomena ) {
-            this.sb.append("_osm.uploadMeasurement(");
-            phenomenon.visit(this);
-            this.sb.append(",");
-            String sensorName = ((SensorExpr<Void>) phenomenon).getSens().getKind().getName();
-            String userDefinedPortName = ((ExternalSensor<Void>) (((SensorExpr<Void>) phenomenon).getSens())).getPort();
-            switch ( sensorName ) {
-                case "HUMIDITY_SENSING":
-                    this.sb.append("_hdc1080_id_");
-                    break;
-                case "TEMPERATURE_SENSING":
-                    this.sb.append("_bmp280_id_");
-        
-                    break;
-                case "VEMLLIGHT_SENSING":
-                    this.sb.append("_veml_tsl_id_");
-                    break;
-                default:
-                    throw new DbcException("An invalid sensor has been detected: " + sensorName);
-            }
-            this.sb.append(userDefinedPortName);
-            this.sb.append(");");
-            this.nlIndent();
-        }*/
         return null;
     }
 
@@ -418,7 +516,13 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     this.sb.append("delay(1000);");
                     this.nlIndent();
                     break;
+                case SC.SENSEBOX_ACCELEROMETER:
+                    this.sb.append("_bmx055_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".begin();");
+                    nlIndent();
+                    break;
                 // no additional configuration needed:
+                case SC.SENSEBOX_COMPASS:
+                case SC.GYRO:
                 case SC.ULTRASONIC:
                 case SC.POTENTIOMETER:
                 case SC.LIGHT:
@@ -525,6 +629,14 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                             nlIndent();
                         }
                     }
+                    break;
+                case SC.SENSEBOX_ACCELEROMETER:
+                    this.sb.append("BMX055 _bmx055_").append(blockName).append(";");
+                    nlIndent();
+                    updateBmxValues(blockName);
+                    break;
+                case SC.SENSEBOX_COMPASS:
+                case SC.GYRO:
                     break;
                 default:
                     throw new DbcException("Configuration block is not supported: " + cc.getComponentType());

@@ -65,7 +65,7 @@ public abstract class AbstractBrickValidatorVisitor extends AbstractProgramValid
                     }
                     break;
                 case "COMPASS_SENSING":
-                    if ( !type.equals("COMPASS") ) {
+                    if ( !type.equals("COMPASS") && !type.equals("SENSEBOX_COMPASS") ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
