@@ -660,7 +660,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                         }
                     }
                     for ( int i = 0; i < maxNumberOfPairs; i++ ) {
-                        if ( !names[i].isEmpty() && !ids[i].isEmpty() ) {
+                        if ( !names[i].isEmpty() ) {
                             this.sb.append("char* _").append(names[i]).append(" = \"").append(ids[i]).append("\";");
                             nlIndent();
                         }
