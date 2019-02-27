@@ -53,8 +53,11 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
 
     @Override
     public Void visitDataSendAction(SendDataAction<Void> sendDataAction) {
-        //Send data action block can be used only with conjunction with wi-fi block from configuration:
-        if ( !this.robotConfiguration.isComponentTypePresent(SC.WIRELESS) ) {
+        if ( (sendDataAction.getDestination().equals("SENSEMAP") && !this.robotConfiguration.isComponentTypePresent(SC.WIRELESS)) ) {
+            sendDataAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            return null;
+        }
+        if ( (sendDataAction.getDestination().equals("SDCARD") && !this.robotConfiguration.isComponentTypePresent(SC.SENSEBOX_SDCARD)) ) {
             sendDataAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
             return null;
         }

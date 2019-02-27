@@ -22,6 +22,7 @@ Blockly.Msg.ACTION_MOTOR = "電機";
 Blockly.Msg.ACTION_PLAY = "演示";
 Blockly.Msg.ACTION_RELAY = "繼電器";
 Blockly.Msg.ACTION_RGBLED = "RGB LED燈";
+Blockly.Msg.ACTION_SDCARD = "SD card";  // untranslated
 Blockly.Msg.ACTION_SERIAL_PRINT = "顯示在串列監視器上";
 Blockly.Msg.ACTION_SERIAL_PRINT_TOOLTIP = "顯示資料在串列監視器上。您可以在 \"視圖\" 頂部的 USB 程式中找到串列監視器。";
 Blockly.Msg.ACTION_SERVO = "伺服電機";

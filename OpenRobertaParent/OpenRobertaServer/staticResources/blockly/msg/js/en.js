@@ -22,6 +22,7 @@ Blockly.Msg.ACTION_MOTOR = "motor";
 Blockly.Msg.ACTION_PLAY = "play";
 Blockly.Msg.ACTION_RELAY = "relay SRD-05VDC-SL-C";
 Blockly.Msg.ACTION_RGBLED = "RGB LED";
+Blockly.Msg.ACTION_SDCARD = "SD card";
 Blockly.Msg.ACTION_SERIAL_PRINT = "show on Serial Monitor";
 Blockly.Msg.ACTION_SERIAL_PRINT_TOOLTIP = "Show data on the Serial Monitor. You can find the Serial Monitor in the USB Programm on top, under View.";
 Blockly.Msg.ACTION_SERVO = "servo motor";

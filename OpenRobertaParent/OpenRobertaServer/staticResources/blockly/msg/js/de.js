@@ -22,6 +22,7 @@ Blockly.Msg.ACTION_MOTOR = "Motor";
 Blockly.Msg.ACTION_PLAY = "Spiele";
 Blockly.Msg.ACTION_RELAY = "Relais";
 Blockly.Msg.ACTION_RGBLED = "RGB LED";
+Blockly.Msg.ACTION_SDCARD = "SD card";  // untranslated
 Blockly.Msg.ACTION_SERIAL_PRINT = "Zeige auf Serial Monitor";
 Blockly.Msg.ACTION_SERIAL_PRINT_TOOLTIP = "Zeige Daten auf dem Serial Monitor. Im USB Programm findest du den Serial Monitor oben, unter Anzeige.";
 Blockly.Msg.ACTION_SERVO = "Servomotor";

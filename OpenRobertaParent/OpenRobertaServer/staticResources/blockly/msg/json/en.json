@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-02-26 14:54:15.291429",
+		"lastupdated": "2019-02-27 12:20:23.861998",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1504,5 +1504,6 @@
 	"SENSOR_LIGHTVEML_GETSAMPLE_TOOLTIP": "the current reading visible/UV light sensor",
 	"BRICK_PHENOMENON": "Phenomenon",
 	"SEND_DATA_SENSEMAP": "openSenseMap",
-	"CONFIGURATION_NO_PHENOMENON": "no phenomenon"
+	"CONFIGURATION_NO_PHENOMENON": "no phenomenon",
+	"ACTION_SDCARD": "SD card"
 }

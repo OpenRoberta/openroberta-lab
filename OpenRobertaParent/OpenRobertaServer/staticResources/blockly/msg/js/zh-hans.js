@@ -22,6 +22,7 @@ Blockly.Msg.ACTION_MOTOR = "电机";
 Blockly.Msg.ACTION_PLAY = "演示";
 Blockly.Msg.ACTION_RELAY = "继电器";
 Blockly.Msg.ACTION_RGBLED = "RGB LED灯";
+Blockly.Msg.ACTION_SDCARD = "SD card";  // untranslated
 Blockly.Msg.ACTION_SERIAL_PRINT = "显示在串行监视器上";
 Blockly.Msg.ACTION_SERIAL_PRINT_TOOLTIP = "显示数据在串行监视器上。您可以在 \"视图\" 顶部的 USB 程序中找到串行监视器。";
 Blockly.Msg.ACTION_SERVO = "伺服电机";

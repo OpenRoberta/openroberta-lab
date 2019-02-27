@@ -103,6 +103,10 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
         this.sb.append("#undef max\n");
         this.sb.append("#undef min\n");
         this.sb.append("#include \"SenseBoxMCU.h\"");
+        if ( this.configuration.getConfigurationComponentbyType(SC.SENSEBOX_SDCARD) != null ) {
+            this.sb.append("\n#include <SPI.h>");
+            this.sb.append("\n#include <SD.h>");
+        }
         if ( this.isListsUsed ) {
             this.sb.append("\n#include <list>");
         }
@@ -461,11 +465,31 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
 
     @Override
     public Void visitDataSendAction(SendDataAction<Void> sendDataAction) {
-        for ( Pair<String, Expr<Void>> entry : sendDataAction.getId2Phenomena() ) {
-            this.sb.append("_osm.uploadMeasurement(");
-            entry.getSecond().visit(this);
-            this.sb.append(", _").append(entry.getFirst()).append(");");
+        if ( sendDataAction.getDestination().equals("SENSEMAP") ) {
+            for ( Pair<String, Expr<Void>> entry : sendDataAction.getId2Phenomena() ) {
+                this.sb.append("_osm.uploadMeasurement(");
+                entry.getSecond().visit(this);
+                this.sb.append(", _").append(entry.getFirst()).append(");");
+                nlIndent();
+            }
+        } else if ( sendDataAction.getDestination().equals("SDCARD") ) {
+            ConfigurationComponent cc = this.configuration.getConfigurationComponentbyType(SC.SENSEBOX_SDCARD);
+            String filename = cc.getOptProperty("NAO_FILENAME");
+            this.sb.append("_dataFile = SD.open(").append("\"").append(filename).append("\", FILE_WRITE);");
             nlIndent();
+            for ( Pair<String, Expr<Void>> entry : sendDataAction.getId2Phenomena() ) {
+                this.sb.append("_dataFile.print(_").append(entry.getFirst()).append(");");
+                nlIndent();
+                this.sb.append("_dataFile.print(\" : \");");
+                nlIndent();
+                this.sb.append("_dataFile.println(");
+                entry.getSecond().visit(this);
+                this.sb.append(");");
+                nlIndent();
+            }
+            this.sb.append("_dataFile.close();");
+        } else {
+            throw new DbcException("SendDataAction visitor in sensebox: no valid destination found");
         }
         return null;
     }
@@ -518,6 +542,18 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     break;
                 case SC.SENSEBOX_ACCELEROMETER:
                     this.sb.append("_bmx055_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".begin();");
+                    nlIndent();
+                    break;
+                case SC.SENSEBOX_SDCARD:
+                    this.sb.append("SD.begin(28);");
+                    nlIndent();
+                    this.sb
+                        .append("_dataFile = SD.open(")
+                        .append("\"")
+                        .append(usedConfigurationBlock.getOptProperty("NAO_FILENAME"))
+                        .append("\", FILE_WRITE);");
+                    nlIndent();
+                    this.sb.append("_dataFile.close();");
                     nlIndent();
                     break;
                 // no additional configuration needed:
@@ -629,6 +665,10 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                             nlIndent();
                         }
                     }
+                    break;
+                case SC.SENSEBOX_SDCARD:
+                    this.sb.append("File _dataFile;");
+                    nlIndent();
                     break;
                 case SC.SENSEBOX_ACCELEROMETER:
                     this.sb.append("BMX055 _bmx055_").append(blockName).append(";");

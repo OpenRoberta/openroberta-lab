@@ -22,6 +22,7 @@ Blockly.Msg.ACTION_MOTOR = "moteur";
 Blockly.Msg.ACTION_PLAY = "jouer";
 Blockly.Msg.ACTION_RELAY = "rejouer";
 Blockly.Msg.ACTION_RGBLED = "LED RVB";
+Blockly.Msg.ACTION_SDCARD = "SD card";  // untranslated
 Blockly.Msg.ACTION_SERIAL_PRINT = "afficher sur le moniteur série";
 Blockly.Msg.ACTION_SERIAL_PRINT_TOOLTIP = "Affiche des données sur le moniteur série. Tu peux trouver le moniteur série dans le menu Vue puis Programme USB.";
 Blockly.Msg.ACTION_SERVO = "servomoteur";

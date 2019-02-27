@@ -22,6 +22,7 @@ Blockly.Msg.ACTION_MOTOR = "motor";
 Blockly.Msg.ACTION_PLAY = "starta";
 Blockly.Msg.ACTION_RELAY = "relä";
 Blockly.Msg.ACTION_RGBLED = "RGB LED";
+Blockly.Msg.ACTION_SDCARD = "SD card";  // untranslated
 Blockly.Msg.ACTION_SERIAL_PRINT = "visa seriell skärm";
 Blockly.Msg.ACTION_SERIAL_PRINT_TOOLTIP = "Visa data på seriell skärm. Du kan finna den seriella skärmen i usb-programmet i överkant under vyn.";
 Blockly.Msg.ACTION_SERVO = "servomotor";
