@@ -28,7 +28,10 @@ define(['simulation.simulation', 'simulation.math', 'util', 'robertaLogic.consta
             h: 0
         };
         this.wave = 0.0;
-        this.waves = Array(this.numprogs).fill(0.0);
+        this.waves = [];
+        for (var i = 0; i < this.numprogs; i++) {
+            this.waves.push(0.0);
+        }
         if (this.numprogs > 1) {
             $("#constantValue").html("");
             var pagistr = '<select class="form-control" style="background-color:' + this.robots[SIM.getRobotIndex()].geom.color + '" id="robotIndex">';

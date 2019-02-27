@@ -1246,8 +1246,13 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', '
     var evalCreateArrayWithItem = function(obj) {
         var size = evalExpr(obj, "size");
         var val = evalExpr(obj, "value");
-        if (!isObject(size) && !isObject(val) && !obj.modifiedStmt)
-            return new Array(size).fill(val);
+        if (!isObject(size) && !isObject(val) && !obj.modifiedStmt){
+            var a = [];
+            for (var i = 0; i < size; i++) {
+                a.push(val);
+            }
+        }
+        return a;
     };
 
     var evalListLength = function(obj) {

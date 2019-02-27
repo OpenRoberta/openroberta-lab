@@ -223,7 +223,7 @@ define(['simulation.simulation', 'robertaLogic.constants', 'simulation.robot', '
         this.encoder.right = 0;
         this.ledSensor.color = '';
         // this.time = 0;
-        for (key in this.timer) {
+        for (var key in this.timer) {
             this.timer[key] = 0;
         }
         var robot = this;
@@ -451,7 +451,7 @@ define(['simulation.simulation', 'robertaLogic.constants', 'simulation.robot', '
         }
         // update timer
         if (actions.timer) {
-            for (key in actions.timer) {
+            for (var key in actions.timer) {
                 if (actions.timer[key] == 'reset') {
                     this.timer[key] = 0;
                 }
