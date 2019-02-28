@@ -68,10 +68,6 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
         return this.pluginProperties.getStringProperty("robot.real.name");
     }
 
-    public final String getName() {
-        return this.pluginProperties.getStringProperty("robot.name");
-    }
-
     @Override
     public final Boolean hasSim() {
         return this.pluginProperties.getStringProperty("robot.sim").equals("true") ? true : false;

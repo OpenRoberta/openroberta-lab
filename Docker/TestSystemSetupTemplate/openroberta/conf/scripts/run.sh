@@ -84,7 +84,7 @@ case "$CMD" in
               echo '******************** removing stale volumes ********************'
               docker volume rm $(docker volume ls -q -f dangling=true)
               echo '******************** remove unused containers, networks, images ********************'
-              docker system prune ;;
+              docker system prune --force ;;
     test)     echo '******************** TEST MODE START ********************'
               source $SCRIPTDIR/_test.sh
               echo '******************** TEST MODE TERMINATED ***************' ;;

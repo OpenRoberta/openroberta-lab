@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.ws.rs.core.Response;
 
@@ -59,16 +60,16 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 @Category(IntegrationTest.class)
 @RunWith(MockitoJUnitRunner.class)
 public class CompilerWorkflowCommonIT {
-    private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflowIT.class);
-    private static final boolean CROSSCOMPILER_CALL = false;
-    private static final boolean SHOW_SUCCESS = false;
+    private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflowCommonIT.class);
+    private static final boolean CROSSCOMPILER_CALL = true;
+    private static final boolean SHOW_SUCCESS = true;
     private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
     private static final String RESOURCE_BASE = "/crossCompilerTests/common/";
 
     private static final String DEFAULT_DECL = Util1.readResourceContent(RESOURCE_BASE + "decl/default.xml");
     private static JSONObject ROBOTS;
     private static JSONObject PROGS;
-    private static final List<String> RESULTS = new ArrayList<>();
+    private static List<String> RESULTS = new ArrayList<>();
 
     private static RobotCommunicator ROBOT_COMMUNICATOR;
     private static ServerProperties SERVER_PROPERTIES;
@@ -94,6 +95,15 @@ public class CompilerWorkflowCommonIT {
         JSONObject testSpecification = Util1.loadYAML("classpath:/crossCompilerTests/common/testSpec.yml");
         ROBOTS = testSpecification.getJSONObject("robots");
         PROGS = testSpecification.getJSONObject("progs");
+        StringBuilder sb = new StringBuilder();
+        Set<String> robots = PROGS.keySet();
+        Set<String> programs = PROGS.keySet();
+        sb.append("from ").append(robots.size()).append(" robots and ").append(programs.size()).append(" program we generate ");
+        sb.append(robots.size() * programs.size()).append(" programs. Robots are:\n    ");
+        for ( String robot : robots ) {
+            sb.append(robot).append(" ");
+        }
+        LOG.info(sb.toString());
     }
 
     @AfterClass
@@ -152,7 +162,7 @@ public class CompilerWorkflowCommonIT {
     @Ignore
     @Test
     public void testShowAllGeneratedProgram() {
-        String progName = "listOperations";
+        String progName = "functionWithWithoutParameter";
         List<String> robots = Arrays.asList("nano", "calliope2017", "ev3lejosv1");
         for ( String robot : robots ) {
             String robotDir = ROBOTS.getJSONObject(robot).getString("dir");
@@ -167,11 +177,11 @@ public class CompilerWorkflowCommonIT {
         String reason = "?";
         boolean result = false;
         logStart(robotName, progName);
-        String token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
-        HTTP_SESSION_STATE.setToken(token);
-        template = generateFinalProgram(template, progName, prog);
         try {
             LOG.info("########## " + robotName + " - " + progName);
+            String token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
+            HTTP_SESSION_STATE.setToken(token);
+            template = generateFinalProgram(template, progName, prog);
             if ( CROSSCOMPILER_CALL ) {
                 setRobotTo(robotName);
                 org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileP','name':'prog','language':'de'}");

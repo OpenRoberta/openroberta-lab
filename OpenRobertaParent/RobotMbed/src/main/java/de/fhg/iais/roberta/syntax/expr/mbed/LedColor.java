@@ -94,7 +94,6 @@ public class LedColor<V> extends Expr<V> {
     @Override
     protected V accept(IVisitor<V> visitor) {
         return ((IMbedVisitor<V>) visitor).visitLedColor(this);
-
     }
 
     /**

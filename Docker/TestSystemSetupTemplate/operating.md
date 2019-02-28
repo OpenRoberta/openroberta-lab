@@ -1,37 +1,36 @@
-# Operating the test server (2019-02-01 15:00:00)
+# Operating the test server (2019-03-06 17:00:00)
 
-The test server is build for serving many different instances of the openroberta lab server. These instances are generated from commits of one or more git repositories.
-Each instance of the openroberta lab server is running in a docker container of its own. Each instance of the openroberta lab server is connected to a database
-dedicated to this openroberta lab server. All these databases are published by one database server running in a docker container of its own.
+The test server serves many different instances of the openroberta lab server. These instances are generated from a branch or a commit of (usually) one or
+many git repositories. Each instance of the openroberta lab server is running in a docker container of its own. Each instance of the openroberta lab server
+is connected to a database dedicated to this openroberta lab server. All databases are published by one database server running in a docker container of its own.
 
-The main duties if you are using this test deployment template (for variables see below):
+If you want to deploy the `develop` branch on server `dev4`, for instance, do the following (the variables used are explained below):
 
-* for all test servers (with name <NAME>) you want to run, change in the directories $SERVER/<NAME> the file descl.sh as you need it.
-* put the names of all test servers, which should be started, when the system boots, into file `$SERVER/servers.txt` (e.g. `test dev dev1`)
-* in directory $BASE/db put all databases (the databases have the same name os the servers), which should be started when the system boots, into file
-  `databases.txt` (e.g. `test dev dev1`)
+* modify in the directory `$SERVER/dev4` the file `decl.sh` as you need it (set the branch name, e.g.)
+* be sure, that in `$BASE/db/dev4` a valid database is available. Check whether `$BASE/db/databases.txt` contains `dev4`. It not, add it and restart
+  the database server by `$CONF/run.sh startDbC`
 
-Assuming that the network `ora-net` is created, the database container is running, then you (re-)deploy `test` and `dev1` and view the system state by executing
+Assuming that the network `ora-net` is created, the database container is running, then you (re-)deploy `dev4` and view the system state by executing
 
 ```bash
-$CONF/run.sh deploy test # shorthand for gen and start
+$CONF/run.sh deploy dev4 # shorthand for gen and start, e.g. the same as the 2 lines below
 
 $CONF/run.sh gen dev1
 $CONF/run.sh start dev1
 
-$CONF/run.sh info
+$CONF/run.sh info        # show the state of all test server
 ```
 
 ## Apache2 configuration
 
-We need a running web server to distribute requests to the different openroberta lab server. This is done with Apache (nginx would be fine, too).
+We need a running web server to distribute requests to the different openroberta lab servers. This is done with Apache (nginx would be fine, too).
 Configuration examples exist in the directory apache2:
 
-* `localhost:1999` --- `test.open-roberta.org.443` and `test.open-roberta.org.80`
-* `localhost:1998` --- `dev.open-roberta.org.443`  and `dev.open-roberta.org.80`
-* `localhost:1997` --- `dev1.open-roberta.org.443` and `dev1.open-roberta.org.80`
+* `localhost:1999` is bound to `test.open-roberta.org.443` and `test.open-roberta.org.80`
+* `localhost:1998` is bound to `dev.open-roberta.org.443`  and `dev.open-roberta.org.80`
+* `localhost:1997` is bound to `dev1.open-roberta.org.443` and `dev1.open-roberta.org.80`
 
-and so on. B.t.w.: the ports are not fixed. But they must be consistent between web server and lab server configuration.
+and so on. B.t.w.: the ports are not fixed. But they must be consistent between apache2 and lab server.
 
 ## General structure
 
@@ -52,22 +51,21 @@ The names of the servers are (b.t.w.: this matches the virtual host names of the
 * dev: configuration is in `$SERVER/dev/decl.sh`
 * dev1 up to dev9: configuration is in `$SERVER/dev1/decl.sh` up to `$SERVER/dev9/decl.sh`
 
-See `$SERVER/dev1` for example. From the declaration file the docker image and the running container for this server are generated:
+See `$SERVER/dev1` for example. The name of the docker images and the name of the running containers are:
 
-* test: image `rbudde/openroberta_lab_test:1` and container with name `test`
-* dev: image `rbudde/openroberta_lab_dev:1` and container with name `dev`
-* dev1 up to dev9: image `rbudde/openroberta_lab_dev1:1` up to `rbudde/openroberta_lab_dev9:1` and container with name `dev1` up to `dev9`
+* test: image is `rbudde/openroberta_lab_test:1` and container has name `test`
+* dev: image is `rbudde/openroberta_lab_dev:1` and container has name `dev`
+* dev1 up to dev9: images are `rbudde/openroberta_lab_dev1:1` to `rbudde/openroberta_lab_dev9:1` and container have names `dev1` to `dev9`
 
-Generating the image is roughly done by using the data from `decl.sh`:
+Generating the images is done by using the data from `decl.sh`:
 
-* (optionally) pulling actual data into a Git repo
-* checking out the branch/commit as declared
+* pulling actual data into a Git repo and checking out the branch/commit as declared (you can suppress this with `GIT_UPTODATE=true`)
 * running `mvn clean install -DskipTests`
 * exporting the server into an export directory
 * creating the docker image from that directory
 
-Note: by using `flock` the generation of images is done sequentially. A new generation request is blocked as long as another generation is running.
-Thus it is safe, that many test server share a git repository. This increases the performance of server generation a lot.
+Note: by using `flock` the generation of images is done sequentially. A new request for image generation is blocked as long as another
+generation is running. Thus it is safe, that many test server share a git repository. This increases the performance of server generation a lot.
 
 ## database server
 
@@ -102,9 +100,7 @@ _all_ servers found in file `$SERVER/servers.txt` are taken into account:
 Rarely used are commands:
 
 * `genDbC`: generate the database container `rbudde/openroberta_db:2.4.0`. Used once when the test server is setup.
-* `startDbC [<name1> ... <nameN>]`: (re-)start the database container servicing the databases given as parameters. The database names must match server names.
-  This commmand is needed if a new server is added to the test server and a new database has been added to `$BASE/db`. If no database names are given,
-  _all_ databases found in file `BASE/db/databases.txt` are taken into account
+* `startDbC`: (re-)start the database container servicing the databases, whose names are found in file `BASE/db/databases.txt`
 * `stopDbC`: stop the database container
 * `prune`: remove all stale data from the docker installation. IMPORTANT if you are low with disc space.
 

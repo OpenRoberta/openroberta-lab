@@ -8,6 +8,7 @@ then
         0)  [ "$DEBUG" = 'true' ] && echo "$DATE: got the lock for file '$SERVER/lockfile'"
             AUTODEPLOY_SERVERS=$(cat $SERVER/autodeploy.txt)
             set $AUTODEPLOY_SERVERS
+            UPDATED_SERVERS=$((0))
             for SERVER_NAME do
                 [ "$DEBUG" = 'true' ] && echo "$DATE: checking server '$SERVER_NAME'"
                 isServerNameValid $SERVER_NAME
@@ -33,8 +34,14 @@ then
                     git reset --hard origin/$BRANCH
                     echo "$DATE: the server $SERVER_NAME will be deployed now"
                     $SCRIPTDIR/run.sh deploy $SERVER_NAME
+                    UPDATED_SERVERS=$(($UPDATED_SERVERS + 1))
                 fi
-            done ;; 
+            done
+            if [ $UPDATED_SERVERS -gt 0 ]
+            then
+                [ "$DEBUG" = 'true' ] && echo "$UPDATED_SERVERS server(s) have been updated. Removing stale docker data now"
+                $SCRIPTDIR/run.sh -q prune
+            fi ;; 
         *) echo "$DATE: '$SERVER/lockfile' was LOCKED. Trying again later" ;;
     esac
 else
