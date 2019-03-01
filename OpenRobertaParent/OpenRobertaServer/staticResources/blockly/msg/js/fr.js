@@ -17,6 +17,7 @@ Blockly.Msg.ACTION_IN = "actuator";  // untranslated
 Blockly.Msg.ACTION_INFRARED = "infrared emitter";  // untranslated
 Blockly.Msg.ACTION_LCD = "LCD 1602";
 Blockly.Msg.ACTION_LCDI2C = "LCD 1602 I²C";
+Blockly.Msg.ACTION_LCDI2C_SENSEBOX = "OLED I²C";  // untranslated
 Blockly.Msg.ACTION_LED = "LED";
 Blockly.Msg.ACTION_MOTOR = "moteur";
 Blockly.Msg.ACTION_PLAY = "jouer";

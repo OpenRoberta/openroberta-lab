@@ -74,6 +74,10 @@ public class PluginProperties {
         return this.pluginProperties.getProperty(propertyName);
     }
 
+    public void setStringProperty(String propertyName, String value) {
+        this.pluginProperties.setProperty(propertyName, value);
+    }
+
     public int getIntProperty(String propertyName) {
         Assert.notNull(this.pluginProperties);
         String property = this.pluginProperties.getProperty(propertyName);

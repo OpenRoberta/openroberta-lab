@@ -107,6 +107,15 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
             this.sb.append("\n#include <SPI.h>");
             this.sb.append("\n#include <SD.h>");
         }
+
+        if ( this.configuration.getConfigurationComponentbyType(SC.LCDI2C) != null ) {
+            this.sb.append("\n#include <SPI.h>");
+            this.sb.append("\n#include <Wire.h>");
+            this.sb.append("\n#include <Adafruit_GFX.h>");
+            this.sb.append("\n#include <Adafruit_SSD1306.h>");
+            this.sb.append("\n#include <senseBoxIO.h>");
+        }
+
         if ( this.isListsUsed ) {
             this.sb.append("\n#include <list>");
         }
@@ -143,6 +152,22 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+        this.sb.append("_display_").append(showTextAction.getPort()).append(".setCursor(");
+        showTextAction.getX().visit(this);
+        this.sb.append(", ");
+        showTextAction.getY().visit(this);
+        this.sb.append(");");
+        nlIndent();
+        this.sb.append("_display_").append(showTextAction.getPort()).append(".setTextSize(1);");
+        nlIndent();
+        this.sb.append("_display_").append(showTextAction.getPort()).append(".setTextColor(WHITE, BLACK);");
+        nlIndent();
+        this.sb.append("_display_").append(showTextAction.getPort()).append(".println(");
+        showTextAction.getMsg().visit(this);
+        this.sb.append(");");
+        nlIndent();
+        this.sb.append("_display_").append(showTextAction.getPort()).append(".display();");
+        nlIndent();
         return null;
     }
 
@@ -556,7 +581,20 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     this.sb.append("_dataFile.close();");
                     nlIndent();
                     break;
-                // no additional configuration needed:
+                case SC.LCDI2C:
+                    this.sb.append("senseBoxIO.powerI2C(true);");
+                    nlIndent();
+                    this.sb.append("delay(2000);");
+                    nlIndent();
+                    this.sb.append("_display_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".begin(SSD1306_SWITCHCAPVCC, 0x3D);");
+                    nlIndent();
+                    this.sb.append("_display_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".display();");
+                    nlIndent();
+                    this.sb.append("delay(100);");
+                    nlIndent();
+                    this.sb.append("_display_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".clearDisplay();");
+                    nlIndent();
+                    // no additional configuration needed:
                 case SC.SENSEBOX_COMPASS:
                 case SC.GYRO:
                 case SC.ULTRASONIC:
@@ -665,6 +703,12 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                             nlIndent();
                         }
                     }
+                    break;
+                case SC.LCDI2C:
+                    this.sb.append("#define OLED_RESET 4");
+                    nlIndent();
+                    this.sb.append("Adafruit_SSD1306 _display_").append(cc.getUserDefinedPortName()).append("(OLED_RESET);");
+                    nlIndent();
                     break;
                 case SC.SENSEBOX_SDCARD:
                     this.sb.append("File _dataFile;");

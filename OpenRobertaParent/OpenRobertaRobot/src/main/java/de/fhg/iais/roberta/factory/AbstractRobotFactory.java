@@ -99,6 +99,10 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
         return this.pluginProperties.getStringProperty("robot.connection");
     }
 
+    public final void setConnectionType(String type) {
+        this.pluginProperties.setStringProperty("robot.connection", type);
+    }
+
     @Override
     public final String getVendorId() {
         return this.pluginProperties.getStringProperty("robot.vendor");

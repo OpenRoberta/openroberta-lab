@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-02-27 16:07:18.587455",
+		"lastupdated": "2019-03-01 13:47:49.783624",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1505,5 +1505,6 @@
 	"BRICK_PHENOMENON": "Phenomenon",
 	"SEND_DATA_SENSEMAP": "openSenseMap",
 	"CONFIGURATION_NO_PHENOMENON": "no phenomenon",
-	"ACTION_SDCARD": "SD card"
+	"ACTION_SDCARD": "SD card",
+	"ACTION_LCDI2C_SENSEBOX": "OLED I²C"
 }
