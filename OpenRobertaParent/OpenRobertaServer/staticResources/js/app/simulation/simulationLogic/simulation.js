@@ -274,8 +274,12 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
                 $('#simButtonsHead').show();
             }
         }
-        var blocklyprograms = programs.map(x => BUILDER.build(x.javaScriptProgram));
-        programEvals = programs.map(x => new ProgramEval());
+        var blocklyprograms = programs.map(function (x) {
+            return BUILDER.build(x.javaScriptProgram);
+        });
+        programEvals = programs.map(function (x) {
+            return new ProgramEval()
+        });
         isDownRobots = [];
         for (var i = 0; i < numRobots; i++) {
             programEvals[i].initProgram(blocklyprograms[i]);
@@ -898,7 +902,7 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
             tempRobot.savedName = userPrograms[0].savedName;
             robots[0] = tempRobot;
             for (var i = 1; i < numRobots; i++) {
-                var yOffset = 60 * (Math.floor((i + 1) / 2)) * ((-1) ** (i));
+                var yOffset = 60 * (Math.floor((i + 1) / 2)) * (Math.pow((-1), i));
                 tempRobot = createRobot(reqRobot, i, yOffset);
                 tempRobot.savedName = userPrograms[i].savedName;
                 var tempcolor = arrToRgb(colorsAdmissible[((i - 1) % (colorsAdmissible.length))]);
