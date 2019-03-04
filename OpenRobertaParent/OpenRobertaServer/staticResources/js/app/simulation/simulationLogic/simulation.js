@@ -369,42 +369,52 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
         time = now;
         stepCounter += 1;
         for (var i = 0; i < numRobots; i++) {
-            if (!programEvals[i].getProgram().isTerminated() && !pause && !reset) {
-                actionValues[i] = programEvals[i].step(sensorValues[i]);
-            } else if (isAllTerminated() && !pause && !robots[i].endless) {
-                setPause(true);
-                robots[i].reset();
-            } else if (reset && !pause) {
-                reset = false;
-                robots[i].buttons.Reset = false;
-                removeMouseEvents();
-                setPause(true);
-                robots[i].reset();
-                scene.drawRobots();
-                // some time to cancel all timeouts
-                setTimeout(function () {
-                    init(userPrograms, false, simRobotType);
-                    addMouseEvents();
-                }, 205);
-                setTimeout(function () {
-                    //delete robot.button.Reset;
-                    setPause(false);
-                }, 1000);
+            if (!robots[i].pause && !pause) {
+                if (!programEvals[i].getProgram().isTerminated() && !reset) {
+                    actionValues[i] = programEvals[i].step(sensorValues[i]);
+                } else if (programEvals[i].getProgram().isTerminated() && !robots[i].endless) {
+                    robots[i].pause = true;
+                    robots[i].reset();
+                } else if (reset) {
+                    reset = false;
+                    robots[i].buttons.Reset = false;
+                    removeMouseEvents();
+                    robots[i].pause = true;
+                    robots[i].reset();
+                    scene.drawRobots();
+                    // some time to cancel all timeouts
+                    setTimeout(function () {
+                        init(userPrograms, false, simRobotType);
+                        addMouseEvents();
+                    }, 205);
+                    setTimeout(function () {
+                        //delete robot.button.Reset;
+                        setPause(false);
+                        for (var i = 0; i < robots.length; i++) {
+                            robots[i].pause = false;              
+                        }
+                    }, 1000);
+                }
             }
-            robots[i].update(actionValues[i]);
+            robots[i].update(actionValues[i]);            
+        }
+        function allPause() {
+            for (var i = 0; i < robots.length; i++) {
+                if (!robots[i].pause) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        if (allPause()) {
+            setPause(true);
+            for (var i = 0; i < robots.length; i++) {
+                robots[i].pause = false;              
+            }
         }
         reset = robots[0].buttons.Reset;
         sensorValues = scene.updateSensorValues(!pause);
         scene.drawRobots();
-    }
-
-    function isAllTerminated() {
-        for (var i = 0; i < programEvals.length; i++) {
-            if (!programEvals[i].getProgram().isTerminated()) {
-                return false;
-            }
-        }
-        return true;
     }
 
     function reloadProgram() {
