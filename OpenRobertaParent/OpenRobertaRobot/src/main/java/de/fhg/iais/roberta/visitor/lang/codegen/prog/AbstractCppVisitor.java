@@ -331,7 +331,15 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
             case GET_REMOVE:
                 break;
             case INSERT:
-                operation = "_insertListElementBeforeIndex(";
+                if ( ((IndexLocation) listSetIndex.getLocation()).equals(IndexLocation.LAST) ) {
+                    listSetIndex.getParam().get(0).visit(this);
+                    this.sb.append(".push_back(");
+                    listSetIndex.getParam().get(1).visit(this);
+                    this.sb.append(")");
+                    return null;
+                } else {
+                    operation = "_insertListElementBeforeIndex(";
+                }
                 break;
             case REMOVE:
                 break;
@@ -547,7 +555,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     public Void visitStmtTextComment(StmtTextComment<Void> stmtTextComment) {
         this.sb.append("// " + stmtTextComment.getTextComment());
         return null;
-    };
+    }
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
