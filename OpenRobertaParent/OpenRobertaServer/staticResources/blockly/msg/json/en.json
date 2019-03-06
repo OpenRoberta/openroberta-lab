@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-03-04 14:52:58.671515",
+		"lastupdated": "2019-03-06 11:32:17.571488",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1506,5 +1506,5 @@
 	"SEND_DATA_SENSEMAP": "openSenseMap",
 	"CONFIGURATION_NO_PHENOMENON": "no phenomenon",
 	"ACTION_SDCARD": "SD card",
-	"ACTION_LCDI2C_SENSEBOX": "OLED I²C"
+	"ACTION_LCDI2C_SENSEBOX": "OLED Display I²C"
 }
