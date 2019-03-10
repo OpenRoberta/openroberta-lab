@@ -401,8 +401,8 @@ public class ClientProgram {
                     }
 
                 } else if ( cmd.equals("runP") ) {
+                    httpSessionState.setProcessing(true);
                     boolean wasRobotWaiting = false;
-
                     final String token = httpSessionState.getToken();
                     final String programName = request.getString("name");
                     final String programText = request.optString("programText");
@@ -440,6 +440,7 @@ public class ClientProgram {
                         }
                     }
                     handleRunProgramError(response, messageKey, token, wasRobotWaiting);
+                    httpSessionState.setProcessing(false);                   
                 } else if ( cmd.equals("compileN") ) {
                     final String programName = request.getString("name");
                     final String programText = request.optString("programText");

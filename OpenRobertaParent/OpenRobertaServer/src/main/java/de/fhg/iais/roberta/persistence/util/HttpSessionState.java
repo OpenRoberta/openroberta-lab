@@ -23,6 +23,7 @@ public class HttpSessionState implements Serializable {
     private String configuration;
     private String toolboxName;
     private String toolbox;
+    private boolean processing;
     private long sessionNumber;
     private Map<String, IRobotFactory> robotPluginMap;
 
@@ -35,7 +36,7 @@ public class HttpSessionState implements Serializable {
         this.robotPluginMap = robotPluginMap;
         this.robotName = serverProperties.getDefaultRobot();
         this.sessionNumber = sessionNumber;
-
+        this.setProcessing(false);
     }
 
     public static HttpSessionState init(
@@ -132,5 +133,13 @@ public class HttpSessionState implements Serializable {
 
     public long getSessionNumber() {
         return this.sessionNumber;
+    }
+
+    public boolean isProcessing() {
+        return processing;
+    }
+
+    public void setProcessing(boolean processing) {
+        this.processing = processing;
     }
 }

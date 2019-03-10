@@ -307,6 +307,10 @@ public class RobotCommunicationData {
         return this.state;
     }
 
+    public void setStateBusy() {
+        this.state = State.ROBOT_IS_BUSY;
+    }
+
     public String getFirmwareName() {
         return this.firmwarename;
     }

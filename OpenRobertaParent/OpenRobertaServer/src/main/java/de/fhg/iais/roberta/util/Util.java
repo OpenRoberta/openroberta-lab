@@ -96,7 +96,7 @@ public class Util {
                             response.put("robot.nepoexitvalue", state.getNepoExitValue());
                             State communicationState = state.getState();
                             String infoAboutState;
-                            if ( communicationState == State.ROBOT_IS_BUSY ) {
+                            if ( httpSessionState.isProcessing() || communicationState == State.ROBOT_IS_BUSY ) {
                                 infoAboutState = "busy";
                             } else if ( state.isRobotProbablyDisconnected() || communicationState == State.GARBAGE ) {
                                 infoAboutState = "disconnected";
