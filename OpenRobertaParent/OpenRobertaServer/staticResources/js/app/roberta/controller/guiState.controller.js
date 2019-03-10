@@ -565,7 +565,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
     function getRobotState() {
         return GUISTATE.robot.state;
     }
-    exports.getRobotState = getgitk;
+    exports.getRobotState = getRobotState;
 
     function getRobotVersion() {
         return GUISTATE.robot.version;
