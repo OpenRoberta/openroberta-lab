@@ -637,6 +637,7 @@ Blockly.Msg.MENU_SIM_WRO = "World Robot Olympiad Umgebung.";
 Blockly.Msg.MENU_START_BRICK = "starte auf »$«";
 Blockly.Msg.MENU_START_SIM = "öffne/schließe die Simulation";
 Blockly.Msg.MENU_STATE_INFO = "Statusinformationen";
+Blockly.Msg.MENU_STOP_BRICK = "stoppe Program auf »$«";
 Blockly.Msg.MENU_TOOLBOX = "NEPO-Blöcke";
 Blockly.Msg.MENU_TOOLBOX_BEGINNER = "NEPO-Blöcke Anfänger";
 Blockly.Msg.MENU_TOOLBOX_EXPERT = "NEPO-Blöcke Experte";

@@ -637,6 +637,7 @@ Blockly.Msg.MENU_SIM_WRO = "World Robot Olympiad scene";
 Blockly.Msg.MENU_START_BRICK = "start op  »$«";
 Blockly.Msg.MENU_START_SIM = "open/sluit simulatie scherm";
 Blockly.Msg.MENU_STATE_INFO = "status informatie";
+Blockly.Msg.MENU_STOP_BRICK = "stop program on »$«";  // untranslated
 Blockly.Msg.MENU_TOOLBOX = "NEPO-Blokken";
 Blockly.Msg.MENU_TOOLBOX_BEGINNER = "NEPO-Blokken beginner";
 Blockly.Msg.MENU_TOOLBOX_EXPERT = "NEPO-Blokken expert";

@@ -637,6 +637,7 @@ Blockly.Msg.MENU_SIM_WRO = "World Robot Olympiad scene";  // untranslated
 Blockly.Msg.MENU_START_BRICK = "Robot uzerinde calistir";
 Blockly.Msg.MENU_START_SIM = "Simulasyonda calistir";
 Blockly.Msg.MENU_STATE_INFO = "Durum bilgisi";
+Blockly.Msg.MENU_STOP_BRICK = "stop program on »$«";  // untranslated
 Blockly.Msg.MENU_TOOLBOX = "NEPO-Bloklari";
 Blockly.Msg.MENU_TOOLBOX_BEGINNER = "NEPO-Bloklari Baslangic";
 Blockly.Msg.MENU_TOOLBOX_EXPERT = "NEPO-Bloklari Uzman";

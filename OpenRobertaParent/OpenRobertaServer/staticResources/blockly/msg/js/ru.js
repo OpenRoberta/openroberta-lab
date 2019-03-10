@@ -637,6 +637,7 @@ Blockly.Msg.MENU_SIM_WRO = "Сцена \"Мировая Олимпиада Ро�
 Blockly.Msg.MENU_START_BRICK = "запустить на программном блоке";
 Blockly.Msg.MENU_START_SIM = "запустить в симуляции";
 Blockly.Msg.MENU_STATE_INFO = "информация о состоянии";
+Blockly.Msg.MENU_STOP_BRICK = "stop program on »$«";  // untranslated
 Blockly.Msg.MENU_TOOLBOX = "NEPO-блоки";
 Blockly.Msg.MENU_TOOLBOX_BEGINNER = "NEPO-блоки начинающий";
 Blockly.Msg.MENU_TOOLBOX_EXPERT = "NEPO-блоки эксперт";

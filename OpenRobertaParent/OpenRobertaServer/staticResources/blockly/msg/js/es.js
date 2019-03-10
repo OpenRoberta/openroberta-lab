@@ -637,6 +637,7 @@ Blockly.Msg.MENU_SIM_WRO = "Escenaro del WRO";
 Blockly.Msg.MENU_START_BRICK = "ejecutar en ladrillo";
 Blockly.Msg.MENU_START_SIM = "ejecutar en simulación";
 Blockly.Msg.MENU_STATE_INFO = "información de estado";
+Blockly.Msg.MENU_STOP_BRICK = "stop program on »$«";  // untranslated
 Blockly.Msg.MENU_TOOLBOX = "NEPO-Bloques";
 Blockly.Msg.MENU_TOOLBOX_BEGINNER = "NEPO-Bloques principiante";
 Blockly.Msg.MENU_TOOLBOX_EXPERT = "NEPO-Bloques experto";

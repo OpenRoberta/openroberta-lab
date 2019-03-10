@@ -626,6 +626,7 @@
 	"MENU_HELP": "",
 	"MENU_USER": "",
 	"MENU_START_BRICK": "",
+	"MENU_STOP_BRICK": "",
 	"MENU_EXPORT_PROG": "",
 	"MENU_IMPORT_PROG": "",
 	"MENU_CHECK": "",

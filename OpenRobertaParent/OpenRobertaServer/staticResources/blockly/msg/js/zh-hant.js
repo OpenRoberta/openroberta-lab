@@ -637,6 +637,7 @@ Blockly.Msg.MENU_SIM_WRO = "世界機器人奧林匹克場景";
 Blockly.Msg.MENU_START_BRICK = "運行»$«";
 Blockly.Msg.MENU_START_SIM = "打開/關閉模擬視圖";
 Blockly.Msg.MENU_STATE_INFO = "狀態資訊";
+Blockly.Msg.MENU_STOP_BRICK = "stop program on »$«";  // untranslated
 Blockly.Msg.MENU_TOOLBOX = "NEPO-方塊";
 Blockly.Msg.MENU_TOOLBOX_BEGINNER = "NEPO-方塊 初學者";
 Blockly.Msg.MENU_TOOLBOX_EXPERT = "NEPO-方塊 專家";

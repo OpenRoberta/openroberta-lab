@@ -1,7 +1,9 @@
 define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.model', 'socket.controller', 'guiState.controller', 'webview.controller',
-        'interpreter.interpreter', 'interpreter.nativeWeDo', 'jquery' ], function(exports, UTIL, LOG, MSG, PROG_C, PROGRAM, SOCKET_C, GUISTATE_C, WEBVIEW_C, WEDO_I, WEDO_N, $) {
+        'interpreter.interpreter', 'interpreter.nativeWeDo', 'jquery' ], function(exports, UTIL, LOG, MSG, PROG_C, PROGRAM, SOCKET_C, GUISTATE_C, WEBVIEW_C,
+        WEDO_I, WEDO_N, $) {
 
     var blocklyWorkspace;
+    var interpreter;
     /**
      * 
      */
@@ -16,6 +18,11 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
         Blockly.bindEvent_(blocklyWorkspace.robControls.runOnBrick, 'mousedown', null, function(e) {
             LOG.info('runOnBrick from blockly button');
             runOnBrick();
+            return false;
+        });
+        Blockly.bindEvent_(blocklyWorkspace.robControls.stopBrick, 'mousedown', null, function(e) {
+            LOG.info('stopBrick from blockly button');
+            stopBrick();
             return false;
         });
         if (GUISTATE_C.getConnection() != 'autoConnection') {
@@ -67,15 +74,15 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
         GUISTATE_C.setState(result);
         if (result.rc == "ok") {
             var filename = GUISTATE_C.getProgramName();
-            if(GUISTATE_C.getRobot() !== 'sensebox') {
+            if (GUISTATE_C.getRobot() !== 'sensebox') {
                 filename += '.hex';
             } else {
                 filename += '.bin';
-                result.compiledCode = UTIL.base64decode(result.compiledCode); 
+                result.compiledCode = UTIL.base64decode(result.compiledCode);
             }
             if (GUISTATE_C.isProgramToDownload() || navigator.userAgent.toLowerCase().match(/iPad|iPhone|android/i) != null) {
                 // either the user doesn't want to see the modal anymore or he uses a smartphone / tablet, where you cannot choose the download folder.
-                UTIL.download(filename, result.compiledCode); 
+                UTIL.download(filename, result.compiledCode);
                 setTimeout(function() {
                     GUISTATE_C.setConnectionState("wait");
                 }, 5000);
@@ -89,11 +96,11 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
                 fillDownloadModal(filename, result.compiledCode);
 
                 $("#save-client-compiled-program").one("shown.bs.modal", function(e) {
-                    if(GUISTATE_C.getRobot() === 'sensebox') {
-                      $('[lkey$="STEP_A_SENSEBOX"]').attr("hidden", false);
-                      $('[lkey$="STEP_D_SENSEBOX"]').attr("hidden", false);
-                      $('[lkey$="STEP_A"]').attr("hidden", true);
-                      $('[lkey$="STEP_D"]').attr("hidden", true);
+                    if (GUISTATE_C.getRobot() === 'sensebox') {
+                        $('[lkey$="STEP_A_SENSEBOX"]').attr("hidden", false);
+                        $('[lkey$="STEP_D_SENSEBOX"]').attr("hidden", false);
+                        $('[lkey$="STEP_A"]').attr("hidden", true);
+                        $('[lkey$="STEP_D"]').attr("hidden", true);
                     } else {
                         $('[lkey$="STEP_A_SENSEBOX"]').attr("hidden", true);
                         $('[lkey$="STEP_D_SENSEBOX"]').attr("hidden", true);
@@ -154,6 +161,13 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
 
     function callbackOnTermination() {
         GUISTATE_C.setConnectionState("wait");
+        blocklyWorkspace.robControls.switchToStart();
+    }
+
+    function stopBrick() {
+        if (interpreter !== null) {
+            interpreter.terminate();
+        }
     }
 
     function runForWebviewConnection(result) {
@@ -162,15 +176,23 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             var program = JSON.parse(programSrc);
             var ops = program.ops;
             var functionDeclaration = program.functionDeclaration;
-            if (GUISTATE_C.getRobot() === "wedo") {
-                GUISTATE_C.setConnectionState("busy");
-                var weDoInterpreter = new WEDO_I.Interpreter();
-                try{
-	                weDoInterpreter.run(program, new WEDO_N.NativeWeDo(), callbackOnTermination);
-	             } catch(error) {
-	            	weDoInterpreter.terminate();
-                    alert(error);
+            switch (GUISTATE_C.getRobot()) {
+            case "wedo":
+                interpreter = new WEDO_I.Interpreter();
+                if (interpreter !== null) {
+                    GUISTATE_C.setConnectionState("busy");
+                    blocklyWorkspace.robControls.switchToStop();
+                    try {
+                        interpreter.run(program, new WEDO_N.NativeWeDo(), callbackOnTermination);
+                    } catch (error) {
+                        interpreter.terminate();
+                        interpreter = null;
+                        alert(error);
+                    }
                 }
+                break;
+            default:
+                // TODO
             }
             MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
         }

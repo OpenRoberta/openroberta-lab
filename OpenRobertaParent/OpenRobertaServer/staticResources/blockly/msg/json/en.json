@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-03-06 11:32:17.571488",
+		"lastupdated": "2019-03-10 21:54:21.775317",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -632,6 +632,7 @@
 	"MENU_HELP": "help",
 	"MENU_USER": "login",
 	"MENU_START_BRICK": "run on »$«",
+	"MENU_STOP_BRICK": "stop program on »$«",
 	"MENU_EXPORT_PROG": "export program",
 	"MENU_IMPORT_PROG": "import program ...",
 	"MENU_CHECK": "check",

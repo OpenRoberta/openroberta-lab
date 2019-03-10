@@ -637,6 +637,7 @@ Blockly.Msg.MENU_SIM_WRO = "Scéna Olympiáda robotů";
 Blockly.Msg.MENU_START_BRICK = "spustit v »$«";
 Blockly.Msg.MENU_START_SIM = "otevře/zavře okno simulátoru";
 Blockly.Msg.MENU_STATE_INFO = "informace o stavu";
+Blockly.Msg.MENU_STOP_BRICK = "stop program on »$«";  // untranslated
 Blockly.Msg.MENU_TOOLBOX = "NEPO bloky";
 Blockly.Msg.MENU_TOOLBOX_BEGINNER = "NEPO bloky - začátečník";
 Blockly.Msg.MENU_TOOLBOX_EXPERT = "NEPO bloky - pokročilý";
