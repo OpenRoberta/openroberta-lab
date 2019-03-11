@@ -8,6 +8,8 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinReadValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
@@ -149,6 +151,16 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
         if ( !this.robotConfiguration.isComponentTypePresent(SC.LED) ) {
             lightStatusAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
         }
+        return null;
+    }
+
+    @Override
+    public Void visitPlotPointAction(PlotPointAction<Void> plotPointAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitPlotClearAction(PlotClearAction<Void> plotClearAction) {
         return null;
     }
 }

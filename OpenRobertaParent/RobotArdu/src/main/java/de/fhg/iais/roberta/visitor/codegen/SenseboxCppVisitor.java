@@ -22,6 +22,8 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinReadValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
@@ -118,6 +120,10 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
             this.sb.append("\n#include <senseBoxIO.h>");
         }
 
+        if ( this.configuration.getConfigurationComponentbyType(SC.SENSEBOX_PLOTTING) != null ) {
+            this.sb.append("\n#include <Plot.h>");
+        }
+
         if ( this.isListsUsed ) {
             this.sb.append("\n#include <stdlib.h>");
             this.sb.append("\n#include <list>");
@@ -170,6 +176,25 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
         this.sb.append(");");
         nlIndent();
         this.sb.append("_display_").append(showTextAction.getPort()).append(".display();");
+        nlIndent();
+        return null;
+    }
+
+    @Override
+    public Void visitPlotPointAction(PlotPointAction<Void> plotPointAction) {
+        this.sb.append("_plot_").append(plotPointAction.getPort()).append(".addDataPoint(");
+        plotPointAction.getTickmark().visit(this);
+        this.sb.append(", ");
+        plotPointAction.getValue().visit(this);
+        this.sb.append(");");
+        nlIndent();
+        return null;
+    }
+
+    @Override
+    public Void visitPlotClearAction(PlotClearAction<Void> plotClearAction) {
+        String portName = this.configuration.getConfigurationComponentbyType(SC.LCDI2C).getUserDefinedPortName();
+        this.sb.append("_display_").append(portName).append(".clearDisplay();");
         nlIndent();
         return null;
     }
@@ -597,7 +622,69 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     nlIndent();
                     this.sb.append("_display_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".clearDisplay();");
                     nlIndent();
-                    // no additional configuration needed:
+                    break;
+                case SC.SENSEBOX_PLOTTING:
+                    this.sb
+                        .append("_plot_")
+                        .append(usedConfigurationBlock.getUserDefinedPortName())
+                        .append(".setTitle(\"")
+                        .append(usedConfigurationBlock.getProperty("TITLE"))
+                        .append("\");");
+                    nlIndent();
+                    this.sb
+                        .append("_plot_")
+                        .append(usedConfigurationBlock.getUserDefinedPortName())
+                        .append(".setXLabel(\"")
+                        .append(usedConfigurationBlock.getProperty("XLABEL"))
+                        .append("\");");
+                    ;
+                    nlIndent();
+                    this.sb
+                        .append("_plot_")
+                        .append(usedConfigurationBlock.getUserDefinedPortName())
+                        .append(".setYLabel(\"")
+                        .append(usedConfigurationBlock.getProperty("YLABEL"))
+                        .append("\");");
+                    ;
+                    nlIndent();
+                    this.sb
+                        .append("_plot_")
+                        .append(usedConfigurationBlock.getUserDefinedPortName())
+                        .append(".setXRange(")
+                        .append(usedConfigurationBlock.getProperty("XSTART"))
+                        .append(", ")
+                        .append(usedConfigurationBlock.getProperty("XEND"))
+                        .append(");");
+                    nlIndent();
+                    this.sb
+                        .append("_plot_")
+                        .append(usedConfigurationBlock.getUserDefinedPortName())
+                        .append(".setYRange(")
+                        .append(usedConfigurationBlock.getProperty("YSTART"))
+                        .append(", ")
+                        .append(usedConfigurationBlock.getProperty("YEND"))
+                        .append(");");
+                    nlIndent();
+                    this.sb
+                        .append("_plot_")
+                        .append(usedConfigurationBlock.getUserDefinedPortName())
+                        .append(".setXTick(")
+                        .append(usedConfigurationBlock.getProperty("XTICK"))
+                        .append(");");
+                    nlIndent();
+                    this.sb
+                        .append("_plot_")
+                        .append(usedConfigurationBlock.getUserDefinedPortName())
+                        .append(".setYTick(")
+                        .append(usedConfigurationBlock.getProperty("YTICK"))
+                        .append(");");
+                    nlIndent();
+                    this.sb.append("_plot_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".setXPrecision(0);");
+                    nlIndent();
+                    this.sb.append("_plot_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".setYPrecision(0);");
+                    nlIndent();
+                    break;
+                // no additional configuration needed:
                 case SC.SENSEBOX_COMPASS:
                 case SC.GYRO:
                 case SC.ULTRASONIC:
@@ -722,11 +809,20 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     nlIndent();
                     updateBmxValues(blockName);
                     break;
+                case SC.SENSEBOX_PLOTTING:
                 case SC.SENSEBOX_COMPASS:
                 case SC.GYRO:
                     break;
                 default:
                     throw new DbcException("Configuration block is not supported: " + cc.getComponentType());
+            }
+        }
+        for ( ConfigurationComponent cc : this.configuration.getConfigurationComponentsValues() ) {
+            if ( cc.getComponentType().equals(SC.SENSEBOX_PLOTTING) ) {
+                String blockName = cc.getUserDefinedPortName();
+                String displayName = this.configuration.getConfigurationComponentbyType(SC.LCDI2C).getUserDefinedPortName();
+                this.sb.append("Plot _plot_").append(blockName).append("(&").append("_display_").append(displayName).append(");");
+                nlIndent();
             }
         }
     }

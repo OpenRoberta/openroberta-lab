@@ -9,6 +9,8 @@ import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinReadValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -106,6 +108,16 @@ public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHard
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
         this.usedSensors.add(new UsedSensor(compassSensor.getPort(), SC.SENSEBOX_COMPASS, compassSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitPlotPointAction(PlotPointAction<Void> plotPointAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitPlotClearAction(PlotClearAction<Void> plotClearAction) {
         return null;
     }
 

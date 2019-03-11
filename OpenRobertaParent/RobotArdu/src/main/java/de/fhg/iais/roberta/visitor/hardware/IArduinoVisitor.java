@@ -9,6 +9,8 @@ import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinReadValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
@@ -57,6 +59,14 @@ public interface IArduinoVisitor<V> extends IMotorVisitor<V>, IDisplayVisitor<V>
     }
 
     default V visitDataSendAction(SendDataAction<V> sendDataAction) {
+        throw new DbcException("Not supported!");
+    }
+
+    default V visitPlotPointAction(PlotPointAction<V> plotPointAction) {
+        throw new DbcException("Not supported!");
+    }
+
+    default V visitPlotClearAction(PlotClearAction<V> plotClearAction) {
         throw new DbcException("Not supported!");
     }
 

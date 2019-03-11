@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-03-10 21:54:21.775317",
+		"lastupdated": "2019-03-12 14:56:46.727341",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1507,5 +1507,18 @@
 	"SEND_DATA_SENSEMAP": "openSenseMap",
 	"CONFIGURATION_NO_PHENOMENON": "no phenomenon",
 	"ACTION_SDCARD": "SD card",
-	"ACTION_LCDI2C_SENSEBOX": "OLED Display I²C"
+	"ACTION_LCDI2C_SENSEBOX": "OLED Display I²C",
+	"ACTION_PLOTTING": "plot",
+	"ACTION_PLOT_POINT": "plot a point",
+	"ACTION_PLOT_CLEAR": "clear the plot",
+	"TITLE": "title",
+	"XLABEL": "X axis label",
+	"YLABEL": "Y axis label",
+	"XSTART": "start of X axis",
+	"XEND": "end of X axis",
+	"YSTART": "start of Y axis",
+	"YEND": "end of Y axis",
+	"XTICK": "distance between X ticks",
+	"YTICK": "distance between Y ticks",
+	"ACTION_PLOT_TICKMARK": "at tickmark"
 }
