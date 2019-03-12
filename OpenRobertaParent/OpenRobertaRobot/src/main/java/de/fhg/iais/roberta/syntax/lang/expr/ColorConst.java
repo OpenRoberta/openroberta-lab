@@ -26,14 +26,12 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
  * To create an instance from this class use the method {@link #make(String, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class ColorConst<V> extends Expr<V> {
-    private final String colorName;
-    private final String rgbValue;
+    private final String hexValue;
 
-    private ColorConst(String colorName, String rgbValue, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private ColorConst(String hexValue, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("COLOR_CONST"), properties, comment);
-        Assert.isTrue(rgbValue != null);
-        this.colorName = colorName;
-        this.rgbValue = rgbValue;
+        Assert.isTrue(hexValue != null);
+        this.hexValue = hexValue.toUpperCase();
         setReadOnly();
     }
 
@@ -45,17 +43,12 @@ public class ColorConst<V> extends Expr<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ColorConst}.
      */
-    public static <V> ColorConst<V> make(String colorName, String rgbValue, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ColorConst<>(colorName, rgbValue, properties, comment);
+    public static <V> ColorConst<V> make(String hexValue, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new ColorConst<>(hexValue, properties, comment);
     }
 
-    public String getColorName() {
-        Assert.notNull(colorName, "this robot has NO color names. Why do you ask for it?");
-        return this.colorName;
-    }
-
-    public String getRgbValue() {
-        return this.rgbValue;
+    public String getHexValue() {
+        return this.hexValue;
     }
 
     @Override
@@ -75,7 +68,7 @@ public class ColorConst<V> extends Expr<V> {
 
     @Override
     public String toString() {
-        return "ColorConst [" + this.colorName + ", " + rgbValue.toUpperCase() + "]";
+        return "ColorConst [" + hexValue + "]";
     }
 
     @Override
@@ -93,16 +86,15 @@ public class ColorConst<V> extends Expr<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = helper.extractFields(block, (short) 1);
-        String rgbValue = helper.extractField(fields, BlocklyConstants.COLOUR);
-        String colorName = factory.getPickColor(rgbValue);
-        return ColorConst.make(colorName, rgbValue, helper.extractBlockProperties(block), helper.extractComment(block));
+        String hexValue = helper.extractField(fields, BlocklyConstants.COLOUR);
+        return ColorConst.make(hexValue, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.COLOUR, this.rgbValue);
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.COLOUR, this.hexValue);
         return jaxbDestination;
     }
 }

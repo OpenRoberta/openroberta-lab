@@ -110,13 +110,12 @@ public abstract class AbstractSimVisitor<V> implements ILanguageVisitor<V> {
 
     @Override
     public V visitStringConst(StringConst<V> stringConst) {
-        this.sb
-            .append(
-                "createConstant(CONST."
-                    + stringConst.getKind().getName()
-                    + ", '"
-                    + StringEscapeUtils.escapeEcmaScript(stringConst.getValue().replaceAll("[<>\\$]", ""))
-                    + "')");
+        this.sb.append(
+            "createConstant(CONST."
+                + stringConst.getKind().getName()
+                + ", '"
+                + StringEscapeUtils.escapeEcmaScript(stringConst.getValue().replaceAll("[<>\\$]", ""))
+                + "')");
         return null;
     }
 
@@ -128,7 +127,36 @@ public abstract class AbstractSimVisitor<V> implements ILanguageVisitor<V> {
 
     @Override
     public V visitColorConst(ColorConst<V> colorConst) {
-        this.sb.append("createConstant(CONST." + colorConst.getKind().getName() + ", CONST.COLOR_ENUM." + colorConst.getColorName() + ")");
+        String color = "";
+        switch ( colorConst.getHexValue() ) {
+            case "#000000":
+                color = "BLACK";
+                break;
+            case "#0057A6":
+                color = "BLUE";
+                break;
+            case "#00642E":
+                color = "GREEN";
+                break;
+            case "#F7D117":
+                color = "YELLOW";
+                break;
+            case "#B30006":
+                color = "RED";
+                break;
+            case "#FFFFFF":
+                color = "WHITE";
+                break;
+            case "#532115":
+                color = "BROWN";
+                break;
+            case "#585858":
+                color = "NONE";
+                break;
+            default:
+                throw new DbcException("Invalid color constant: " + colorConst.getHexValue());
+        }
+        this.sb.append("createConstant(CONST." + colorConst.getKind().getName() + ", CONST.COLOR_ENUM." + color + ")");
         return null;
     }
 

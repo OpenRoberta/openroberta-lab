@@ -133,13 +133,57 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        String value = colorConst.getColorName();
-        if ( !value.equals("NONE") ) {
-            value = "INPUT_" + value + "COLOR";
-        } else {
-            value = "NULL";
+        String color = "";
+        switch ( colorConst.getHexValue() ) {
+            case "#000000":
+                color = "BLACK";
+                break;
+            case "#0057A6":
+                color = "BLUE";
+                break;
+            case "#00642E":
+                color = "GREEN";
+                break;
+            case "#F7D117":
+                color = "YELLOW";
+                break;
+            case "#B30006":
+                color = "RED";
+                break;
+            case "#FFFFFF":
+                color = "WHITE";
+                break;
+            case "#532115":
+                color = "BROWN";
+                break;
+            case "#EE82EE":
+                color = "VIOLET";
+                break;
+            case "#800080":
+                color = "PURPLE";
+                break;
+            case "#00FF00":
+                color = "LIME";
+                break;
+            case "#FFA500":
+                color = "ORANGE";
+                break;
+            case "#FF00FF":
+                color = "MAGENTA";
+                break;
+            case "#DC143C":
+                color = "CRIMSON";
+                break;
+            case "#585858":
+                color = "NULL";
+                break;
+            default:
+                throw new DbcException("Invalid color constant: " + colorConst.getHexValue());
         }
-        this.sb.append(value);
+        if ( !color.equals("NULL") ) {
+            color = "INPUT_" + color + "COLOR";
+        }
+        this.sb.append(color);
         return null;
     }
 

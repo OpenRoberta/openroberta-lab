@@ -50,16 +50,6 @@ public class RobotModeFactoryTest {
     }
 
     @Test
-    public void getPickColorFromString() {
-        Assert.assertEquals(this.dropdownFactory.getPickColor("#B30006"), "RED");
-    }
-
-    @Test
-    public void invalidPickColor() {
-        Assert.assertNull(this.dropdownFactory.getPickColor("18"));
-    }
-
-    @Test
     public void getActorPortFromString() {
         Assert.assertEquals(this.dropdownFactory.sanitizePort("A"), "A");
     }

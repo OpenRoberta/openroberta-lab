@@ -176,7 +176,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
             return null;
         }
         if ( listRepeat.getParam().get(0).getClass().equals(ColorConst.class) ) {
-            String hexValue = ((ColorConst<Void>) listRepeat.getParam().get(0)).getRgbValue();
+            String hexValue = ((ColorConst<Void>) listRepeat.getParam().get(0)).getHexValue();
             hexValue = hexValue.split("#")[1];
             int R = Integer.decode("0x" + hexValue.substring(0, 2));
             int G = Integer.decode("0x" + hexValue.substring(2, 4));
@@ -567,7 +567,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        String fullColor = colorConst.getRgbValue().substring(1, 7);
+        String fullColor = colorConst.getHexValue().substring(1, 7);
         String R = fullColor.substring(0, 2);
         String G = fullColor.substring(2, 4);
         String B = fullColor.substring(4, 6);

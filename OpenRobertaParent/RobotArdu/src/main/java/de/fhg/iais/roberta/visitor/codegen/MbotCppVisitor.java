@@ -136,7 +136,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
             return null;
         }
         if ( lightAction.getRgbLedColor().getClass().equals(ColorConst.class) ) {
-            String hexValue = ((ColorConst<Void>) lightAction.getRgbLedColor()).getRgbValue();
+            String hexValue = ((ColorConst<Void>) lightAction.getRgbLedColor()).getHexValue();
             hexValue = hexValue.split("#")[1];
             int R = Integer.decode("0x" + hexValue.substring(0, 2));
             int G = Integer.decode("0x" + hexValue.substring(2, 4));

@@ -13,7 +13,6 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
-import de.fhg.iais.roberta.mode.general.PickColor;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
@@ -136,9 +135,43 @@ public abstract class AbstractWeDoVisitor<V> implements ILanguageVisitor<V>, IWe
 
     @Override
     public V visitColorConst(ColorConst<V> colorConst) {
-        String colorName = colorConst.getColorName();
-        int colorValue = PickColor.valueOf(colorName).getColorID();
-        JSONObject o = mk(C.EXPR).put(C.EXPR, "COLOR_CONST").put(C.VALUE, colorValue);
+        int colorId = 0;
+        switch ( colorConst.getHexValue() ) {
+            case "#FF1493":
+                colorId = 1;
+                break;
+            case "#800080":
+                colorId = 2;
+                break;
+            case "#4876FF":
+                colorId = 3;
+                break;
+            case "#00FFFF":
+                colorId = 4;
+                break;
+            case "#90EE90":
+                colorId = 5;
+                break;
+            case "#008000":
+                colorId = 6;
+                break;
+            case "#FFFF00":
+                colorId = 7;
+                break;
+            case "#FFA500":
+                colorId = 8;
+                break;
+            case "#FF0000":
+                colorId = 9;
+                break;
+            case "#FFFFFE":
+            case "#FFFFFF":
+                colorId = 10;
+                break;
+            default:
+                throw new DbcException("Invalid color constant: " + colorConst.getHexValue());
+        }
+        JSONObject o = mk(C.EXPR).put(C.EXPR, "COLOR_CONST").put(C.VALUE, colorId);
         return app(o);
     }
 

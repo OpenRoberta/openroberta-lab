@@ -14,7 +14,7 @@ public class ColorConstTest {
 
     @Test
     public void make() throws Exception {
-        String a = "BlockAST [project=[[Location [x=116, y=139], ColorConst [BLUE, #0057A6]]]]";
+        String a = "BlockAST [project=[[Location [x=116, y=139], ColorConst [#0057A6]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/colour/colour_const1.xml"));
     }
@@ -23,7 +23,7 @@ public class ColorConstTest {
     public void isValue() throws Exception {
         Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/colour/colour_const1.xml");
         ColorConst<Void> colorConst = (ColorConst<Void>) transformer.getTree().get(0).get(1);
-        Assert.assertEquals("BLUE", colorConst.getColorName());
+        Assert.assertEquals("#0057A6", colorConst.getHexValue());
     }
 
     @Test

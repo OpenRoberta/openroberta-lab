@@ -51,7 +51,6 @@ public class BlocklyDropdownFactory {
 
     private final Map<String, WaitUntilSensorBean> waMap;
     private final Map<String, String> modes;
-    private final Map<String, String> colorDefs;
     private final Map<String, String> configurationComponentTypes;
 
     public BlocklyDropdownFactory(PluginProperties pluginProperties) {
@@ -59,7 +58,6 @@ public class BlocklyDropdownFactory {
         this.robotDescription = new JSONObject();
         Util1.loadYAMLRecursive("", this.robotDescription, robotDescriptor);
         BlocklyDropdownFactoryHelper.loadBlocks(this.robotDescription);
-        this.colorDefs = BlocklyDropdownFactoryHelper.getColors(this.robotDescription);
         this.waMap = BlocklyDropdownFactoryHelper.getWaitUntils(this.robotDescription);
         this.modes = BlocklyDropdownFactoryHelper.getModes(this.robotDescription);
         this.configurationComponentTypes = BlocklyDropdownFactoryHelper.getConfigurationComponents(this.robotDescription);
@@ -135,16 +133,6 @@ public class BlocklyDropdownFactory {
      */
     public IListElementOperations getListElementOpertaion(String operation) {
         return BlocklyDropdownFactoryHelper.getModeValue(operation, ListElementOperations.class);
-    }
-
-    /**
-     * Get a {@link Pair<String, String>} given string parameter. Throws exception if the color cannot be found.
-     *
-     * @param rgbValue of the color
-     * @return the NAME of the color, if the name exists; otherwise return null
-     */
-    public String getPickColor(String rgbValue) {
-        return this.colorDefs.get(rgbValue.toUpperCase());
     }
 
     /**
