@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -37,11 +38,6 @@ public class BluetoothReceiveAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    private BluetoothReceiveAction(Expr<V> bluetoothRecieveConnection, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("BLUETOOTH_RECEIVED_ACTION"), properties, comment);
-        this.connection = bluetoothRecieveConnection;
-        setReadOnly();
-    }
 
     public static <V> BluetoothReceiveAction<V> make(
         Expr<V> bluetoothRecieveConnection,
@@ -52,9 +48,6 @@ public class BluetoothReceiveAction<V> extends Action<V> {
         return new BluetoothReceiveAction<V>(bluetoothRecieveConnection, channel, dataType, properties, comment);
     }
 
-    public static <V> BluetoothReceiveAction<V> make(Expr<V> bluetoothRecieveConnection, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new BluetoothReceiveAction<V>(bluetoothRecieveConnection, properties, comment);
-    }
 
     public Expr<V> getConnection() {
         return this.connection;
@@ -95,8 +88,15 @@ public class BluetoothReceiveAction<V> extends Action<V> {
                     helper.extractBlockProperties(block),
                     helper.extractComment(block));
         } else {
+            String bluetoothReceiveChannel = "-1";
+            String bluetoothRecieveDataType = helper.extractField(fields, BlocklyConstants.TYPE);
             return BluetoothReceiveAction
-                .make(helper.convertPhraseToExpr(bluetoothRecieveConnection), helper.extractBlockProperties(block), helper.extractComment(block));
+                .make(
+                    helper.convertPhraseToExpr(bluetoothRecieveConnection),
+                    bluetoothReceiveChannel,
+                    bluetoothRecieveDataType,
+                    helper.extractBlockProperties(block),
+                    helper.extractComment(block));
         }
     }
 
@@ -104,7 +104,17 @@ public class BluetoothReceiveAction<V> extends Action<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
+
+        Mutation mutation = new Mutation();
+        mutation.setDatatype(this.dataType);
+        jaxbDestination.setMutation(mutation);
+
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.TYPE, this.dataType);
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.PROTOCOL, "BLUETOOTH");
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.CHANNEL, getChannel());
+
         Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+
         Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.CONNECTION, getConnection());
         return jaxbDestination;
     }
