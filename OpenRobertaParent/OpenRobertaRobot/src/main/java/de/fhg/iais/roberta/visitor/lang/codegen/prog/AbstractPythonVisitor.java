@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.slf4j.LoggerFactory;
+import org.apache.commons.text.StringEscapeUtils;
 
 import de.fhg.iais.roberta.codegen.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
@@ -24,6 +25,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
+import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
@@ -71,6 +73,13 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
             super.visitNumConst(numConst);
             this.sb.append(")");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitStringConst(StringConst<Void> stringConst) {
+        // Escape strings like EcmaScript (which escapes both ' and ")
+        this.sb.append("'").append(StringEscapeUtils.escapeEcmaScript(stringConst.getValue().replaceAll("[<>\\$]", ""))).append("'");
         return null;
     }
 

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.apache.commons.text.StringEscapeUtils;
+
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -554,6 +556,12 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitStmtTextComment(StmtTextComment<Void> stmtTextComment) {
         this.sb.append("// " + stmtTextComment.getTextComment());
+        return null;
+    }
+
+    @Override
+    public Void visitStringConst(StringConst<Void> stringConst) {
+        this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.getValue().replaceAll("[<>\\$]", ""))).append("\"");
         return null;
     }
 
