@@ -18,9 +18,9 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -36,15 +36,23 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 public class ListGetIndex<V> extends Function<V> {
     private final IListElementOperations mode;
     private final IIndexLocation location;
+    private final String dataType;
 
     private final List<Expr<V>> param;
 
-    private ListGetIndex(IListElementOperations mode, IIndexLocation name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private ListGetIndex(
+        IListElementOperations mode,
+        IIndexLocation name,
+        List<Expr<V>> param,
+        String dataType,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment) {
         super(BlockTypeContainer.getByName("LIST_INDEX_OF"), properties, comment);
         Assert.isTrue(mode != null && name != null && param != null);
         this.mode = mode;
         this.location = name;
         this.param = param;
+        this.dataType = dataType;
         setReadOnly();
     }
 
@@ -62,9 +70,10 @@ public class ListGetIndex<V> extends Function<V> {
         IListElementOperations mode,
         IIndexLocation name,
         List<Expr<V>> param,
+        String dataType,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        return new ListGetIndex<V>(mode, name, param, properties, comment);
+        return new ListGetIndex<>(mode, name, param, dataType, properties, comment);
     }
 
     /**
@@ -120,19 +129,22 @@ public class ListGetIndex<V> extends Function<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = helper.extractFields(block, (short) 2);
-        List<ExprParam> exprParams = new ArrayList<ExprParam>();
+        List<ExprParam> exprParams = new ArrayList<>();
         String op = helper.extractField(fields, BlocklyConstants.MODE);
         exprParams.add(new ExprParam(BlocklyConstants.VALUE, BlocklyType.STRING));
         if ( block.getMutation().isAt() ) {
             exprParams.add(new ExprParam(BlocklyConstants.AT, BlocklyType.NUMBER_INT));
         }
+        String dataType = block.getMutation().getDatatype();
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return ListGetIndex.make(
-            factory.getListElementOpertaion(op),
-            factory.getIndexLocation(helper.extractField(fields, BlocklyConstants.WHERE)),
-            params,
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return ListGetIndex
+            .make(
+                factory.getListElementOpertaion(op),
+                factory.getIndexLocation(helper.extractField(fields, BlocklyConstants.WHERE)),
+                params,
+                dataType,
+                helper.extractBlockProperties(block),
+                helper.extractComment(block));
     }
 
     @Override
@@ -143,6 +155,7 @@ public class ListGetIndex<V> extends Function<V> {
         Mutation mutation = new Mutation();
         mutation.setAt(false);
         mutation.setStatement(getElementOperation().isStatment());
+        mutation.setDatatype(this.dataType);
         Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.MODE, getElementOperation().toString());
         Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.WHERE, getLocation().toString());
         Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, getParam().get(0));
