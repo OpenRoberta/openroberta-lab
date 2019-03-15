@@ -2,6 +2,8 @@ package de.fhg.iais.roberta.visitor.validate;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
+import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -11,6 +13,7 @@ import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
+import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
@@ -47,7 +50,7 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        if ( !this.robotConfiguration.isComponentTypePresent(SC.LED) ) {
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
             lightAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
         }
         return null;
@@ -64,6 +67,12 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
             return null;
         }
         for ( Pair<String, Expr<Void>> value : sendDataAction.getId2Phenomena() ) {
+            if ( value.getSecond() instanceof EmptyExpr ) {
+                // well, here can be an annotation if we encounter an empty input.
+                // this key, ACTION_ERROR_EMPTY_INPUT should be added to blockly, maybe.
+                sendDataAction.addInfo(NepoInfo.error("ACTION_ERROR_EMPTY_INPUT"));
+                return null;
+            }
             value.getSecond().visit(this);
         }
         return null;
@@ -148,7 +157,7 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
 
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        if ( !this.robotConfiguration.isComponentTypePresent(SC.LED) ) {
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
             lightStatusAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
         }
         return null;
@@ -156,11 +165,33 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
 
     @Override
     public Void visitPlotPointAction(PlotPointAction<Void> plotPointAction) {
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
+            plotPointAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+        }
         return null;
     }
 
     @Override
     public Void visitPlotClearAction(PlotClearAction<Void> plotClearAction) {
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
+            plotClearAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
+            showTextAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
+            clearDisplayAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+        }
         return null;
     }
 }

@@ -193,9 +193,15 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
 
     @Override
     public Void visitPlotClearAction(PlotClearAction<Void> plotClearAction) {
-        String portName = this.configuration.getConfigurationComponentbyType(SC.LCDI2C).getUserDefinedPortName();
-        this.sb.append("_display_").append(portName).append(".clearDisplay();");
-        nlIndent();
+        ConfigurationComponent cc = this.configuration.getConfigurationComponentbyType(SC.LCDI2C);
+        String portName = null;
+        if ( cc != null ) {
+            portName = cc.getUserDefinedPortName();
+        }
+        if ( portName != null ) {
+            this.sb.append("_display_").append(portName).append(".clearDisplay();");
+            nlIndent();
+        }
         return null;
     }
 
