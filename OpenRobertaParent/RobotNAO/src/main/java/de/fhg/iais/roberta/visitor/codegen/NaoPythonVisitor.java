@@ -49,13 +49,13 @@ import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
-import de.fhg.iais.roberta.syntax.lang.expr.nao.ColorHexString;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
@@ -1405,12 +1405,6 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitColorHexString(ColorHexString<Void> colorHexString) {
-        this.sb.append(colorHexString.getValue().replaceAll("#", "0x"));
-        return null;
-    }
-
-    @Override
     public Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
         this.sb.append("speechRecognitionModule.recognizeWordFromDictionary(");
         recognizeWord.getVocabulary().visit(this);
@@ -1431,6 +1425,11 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         this.sb.append("faceRecognitionModule.getFaceInformation(");
         detectedFaceInformation.getFaceName().visit(this);
         this.sb.append(")");
+        return null;
+    }
+
+    public Void visitColorConst(ColorConst<Void> colorConst) {
+        this.sb.append(colorConst.getHexIntAsString());
         return null;
     }
 

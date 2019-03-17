@@ -231,15 +231,11 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
             this.sb.append("digitalWrite(_led_").append(lightAction.getPort()).append(", ").append(lightAction.getMode().getValues()[0] + ");");
         } else {
             if ( lightAction.getRgbLedColor().getClass().equals(ColorConst.class) ) {
-                String hexValue = ((ColorConst<Void>) lightAction.getRgbLedColor()).getHexValue();
-                hexValue = hexValue.split("#")[1];
-                int R = Integer.decode("0x" + hexValue.substring(0, 2));
-                int G = Integer.decode("0x" + hexValue.substring(2, 4));
-                int B = Integer.decode("0x" + hexValue.substring(4, 6));
-                Map<String, Integer> colorConstChannels = new HashMap<>();
-                colorConstChannels.put("red", R);
-                colorConstChannels.put("green", G);
-                colorConstChannels.put("blue", B);
+                ColorConst<Void> colorConst = (ColorConst<Void>) lightAction.getRgbLedColor();
+                Map<String, String> colorConstChannels = new HashMap<>();
+                colorConstChannels.put("red", colorConst.getRedChannelHex());
+                colorConstChannels.put("green", colorConst.getGreenChannelHex());
+                colorConstChannels.put("blue", colorConst.getBlueChannelHex());
                 colorConstChannels.forEach((k, v) -> {
                     this.sb.append("analogWrite(_led_");
                     this.sb.append(k);
@@ -606,11 +602,8 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                 case SC.SENSEBOX_SDCARD:
                     this.sb.append("SD.begin(28);");
                     nlIndent();
-                    this.sb
-                        .append("_dataFile = SD.open(")
-                        .append("\"")
-                        .append(usedConfigurationBlock.getOptProperty("NAO_FILENAME"))
-                        .append("\", FILE_WRITE);");
+                    this.sb.append("_dataFile = SD.open(").append("\"").append(usedConfigurationBlock.getOptProperty("NAO_FILENAME")).append(
+                        "\", FILE_WRITE);");
                     nlIndent();
                     this.sb.append("_dataFile.close();");
                     nlIndent();

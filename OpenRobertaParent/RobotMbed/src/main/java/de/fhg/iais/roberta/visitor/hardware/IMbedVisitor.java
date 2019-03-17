@@ -24,7 +24,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
-import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
 import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
@@ -105,13 +104,6 @@ public interface IMbedVisitor<V> extends IDisplayVisitor<V>, ILightVisitor<V>, I
      */
     @Override
     V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor);
-
-    /**
-     * visit a {@link LedColor}.
-     *
-     * @param ledColor phrase to be visited
-     */
-    V visitLedColor(LedColor<V> ledColor);
 
     /**
      * visit a {@link LedOnAction}.

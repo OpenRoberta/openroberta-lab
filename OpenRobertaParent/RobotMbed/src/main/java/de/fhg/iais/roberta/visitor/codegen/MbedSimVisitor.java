@@ -34,11 +34,11 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
-import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
 import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
@@ -284,19 +284,17 @@ public final class MbedSimVisitor extends AbstractSimVisitor<Void> implements IM
         return null;
     }
 
-    @Override
-    public Void visitLedColor(LedColor<Void> ledColor) {
-        this.sb
-            .append(
-                "createConstant(CONST."
-                    + ledColor.getKind().getName()
-                    + ", ["
-                    + ledColor.getRedChannel()
-                    + ", "
-                    + ledColor.getGreenChannel()
-                    + ", "
-                    + ledColor.getBlueChannel()
-                    + "])");
+    public Void visitColorConst(ColorConst<Void> colorConst) {
+        this.sb.append(
+            "createConstant(CONST."
+                + colorConst.getKind().getName()
+                + ", ["
+                + colorConst.getRedChannelInt()
+                + ", "
+                + colorConst.getGreenChannelInt()
+                + ", "
+                + colorConst.getBlueChannelInt()
+                + "])");
         return null;
     }
 

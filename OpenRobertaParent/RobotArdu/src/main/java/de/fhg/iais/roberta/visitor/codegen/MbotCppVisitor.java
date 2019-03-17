@@ -136,17 +136,13 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
             return null;
         }
         if ( lightAction.getRgbLedColor().getClass().equals(ColorConst.class) ) {
-            String hexValue = ((ColorConst<Void>) lightAction.getRgbLedColor()).getHexValue();
-            hexValue = hexValue.split("#")[1];
-            int R = Integer.decode("0x" + hexValue.substring(0, 2));
-            int G = Integer.decode("0x" + hexValue.substring(2, 4));
-            int B = Integer.decode("0x" + hexValue.substring(4, 6));
+            ColorConst<Void> colorConst = (ColorConst<Void>) lightAction.getRgbLedColor();
             this.sb.append(", ");
-            this.sb.append(R);
+            this.sb.append(colorConst.getRedChannelHex());
             this.sb.append(", ");
-            this.sb.append(G);
+            this.sb.append(colorConst.getGreenChannelHex());
             this.sb.append(", ");
-            this.sb.append(B);
+            this.sb.append(colorConst.getBlueChannelHex());
             this.sb.append(");");
             nlIndent();
             this.sb.append("_meRgbLed.show();");
@@ -581,13 +577,8 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
                     break;
                 case SC.DIFFERENTIAL_DRIVE:
                     nlIndent();
-                    this.sb
-                        .append(
-                            "MeDrive _meDrive(M"
-                                + this.configuration.getFirstMotorPort(SC.LEFT)
-                                + ", M"
-                                + this.configuration.getFirstMotorPort(SC.RIGHT)
-                                + ");");
+                    this.sb.append(
+                        "MeDrive _meDrive(M" + this.configuration.getFirstMotorPort(SC.LEFT) + ", M" + this.configuration.getFirstMotorPort(SC.RIGHT) + ");");
                     break;
                 case SC.LED_MATRIX:
                     nlIndent();

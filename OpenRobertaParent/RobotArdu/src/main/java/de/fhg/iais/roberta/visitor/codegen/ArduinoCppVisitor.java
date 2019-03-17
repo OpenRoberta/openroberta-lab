@@ -28,6 +28,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
@@ -109,7 +110,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
             this.sb.append("digitalWrite(_led_" + lightAction.getPort() + ", " + lightAction.getMode().getValues()[0] + ");");
         } else {
             if ( lightAction.getRgbLedColor().getClass().equals(ColorConst.class) ) {
-                String hexValue = ((ColorConst<Void>) lightAction.getRgbLedColor()).getHexValue();
+                String hexValue = ((ColorConst<Void>) lightAction.getRgbLedColor()).getHexValueAsString();
                 hexValue = hexValue.split("#")[1];
                 int R = Integer.decode("0x" + hexValue.substring(0, 2));
                 int G = Integer.decode("0x" + hexValue.substring(2, 4));
@@ -327,17 +328,16 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         nlIndent();
         this.sb.append("}");
         nlIndent();
-        this.sb
-            .append(
-                "return String(((long)(_mfrc522_"
-                    + sensorName
-                    + ".uid.uidByte[0])<<24)\n    |((long)(_mfrc522_"
-                    + sensorName
-                    + ".uid.uidByte[1])<<16)\n    | ((long)(_mfrc522_"
-                    + sensorName
-                    + ".uid.uidByte[2])<<8)\n    | ((long)_mfrc522_"
-                    + sensorName
-                    + ".uid.uidByte[3]), HEX);");
+        this.sb.append(
+            "return String(((long)(_mfrc522_"
+                + sensorName
+                + ".uid.uidByte[0])<<24)\n    |((long)(_mfrc522_"
+                + sensorName
+                + ".uid.uidByte[1])<<16)\n    | ((long)(_mfrc522_"
+                + sensorName
+                + ".uid.uidByte[2])<<8)\n    | ((long)_mfrc522_"
+                + sensorName
+                + ".uid.uidByte[3]), HEX);");
 
         decrIndentation();
         nlIndent();

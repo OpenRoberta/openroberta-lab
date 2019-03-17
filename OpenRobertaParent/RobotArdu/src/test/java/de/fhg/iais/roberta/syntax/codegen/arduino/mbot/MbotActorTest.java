@@ -27,37 +27,33 @@ public class MbotActorTest {
 
     @Test
     public void mbotPlayNoteFrequencyTest() throws Exception {
-        this.mbotHelper
-            .compareExistingAndGeneratedSource(
-                "/ast/actions/mbot_play_note_frequency_test.ino",
-                "/ast/actions/mbot_play_note_frequency_test.xml",
-                this.standardMbotConfiguration);
+        this.mbotHelper.compareExistingAndGeneratedSource(
+            "/ast/actions/mbot_play_note_frequency_test.ino",
+            "/ast/actions/mbot_play_note_frequency_test.xml",
+            this.standardMbotConfiguration);
     }
 
     @Test
     public void mbotMotorsTest() throws Exception {
-        this.mbotHelper
-            .compareExistingAndGeneratedSource(
-                "/ast/actions/mbot_motor_related_actions_test.ino",
-                "/ast/actions/mbot_motor_related_actions_test.xml",
-                this.standardMbotConfiguration);
+        this.mbotHelper.compareExistingAndGeneratedSource(
+            "/ast/actions/mbot_motor_related_actions_test.ino",
+            "/ast/actions/mbot_motor_related_actions_test.xml",
+            this.standardMbotConfiguration);
     }
 
     @Test
     public void mbotSerialAndLedTest() throws Exception {
-        this.mbotHelper
-            .compareExistingAndGeneratedSource(
-                "/ast/actions/mbot_serial_and_led_test.ino",
-                "/ast/actions/mbot_serial_and_led_test.xml",
-                this.standardMbotConfiguration);
+        this.mbotHelper.compareExistingAndGeneratedSource(
+            "/ast/actions/mbot_serial_and_led_test.ino",
+            "/ast/actions/mbot_serial_and_led_test.xml",
+            this.standardMbotConfiguration);
     }
 
     @Test
     public void mbotSendReceiveMessageTest() throws Exception {
-        this.mbotHelper
-            .compareExistingAndGeneratedSource(
-                "/ast/actions/mbot_send_receive_message_test.ino",
-                "/ast/actions/mbot_send_receive_message_test.xml",
-                this.standardMbotConfiguration);
+        this.mbotHelper.compareExistingAndGeneratedSource(
+            "/ast/actions/mbot_send_receive_message_test.ino",
+            "/ast/actions/mbot_send_receive_message_test.xml",
+            this.standardMbotConfiguration);
     }
 }

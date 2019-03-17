@@ -39,6 +39,7 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
+import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
@@ -481,4 +482,40 @@ public final class Ev3SimVisitor extends AbstractSimVisitor<Void> implements IEv
     public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
         return null;
     }
+
+    @Override
+    public Void visitColorConst(ColorConst<Void> colorConst) {
+        String color = "";
+        switch ( colorConst.getHexValueAsString().toUpperCase() ) {
+            case "#000000":
+                color = "BLACK";
+                break;
+            case "#0057A6":
+                color = "BLUE";
+                break;
+            case "#00642E":
+                color = "GREEN";
+                break;
+            case "#F7D117":
+                color = "YELLOW";
+                break;
+            case "#B30006":
+                color = "RED";
+                break;
+            case "#FFFFFF":
+                color = "WHITE";
+                break;
+            case "#532115":
+                color = "BROWN";
+                break;
+            case "#585858":
+                color = "NONE";
+                break;
+            default:
+                throw new DbcException("Invalid color constant: " + colorConst.getHexValueAsString());
+        }
+        this.sb.append("createConstant(CONST." + colorConst.getKind().getName() + ", CONST.COLOR_ENUM." + color + ")");
+        return null;
+    }
+
 }

@@ -18,7 +18,6 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.StartActivityTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
@@ -122,41 +121,6 @@ public abstract class AbstractSimVisitor<V> implements ILanguageVisitor<V> {
     @Override
     public V visitNullConst(NullConst<V> nullConst) {
         this.sb.append("createConstant(CONST." + nullConst.getKind().getName() + ", undefined)");
-        return null;
-    }
-
-    @Override
-    public V visitColorConst(ColorConst<V> colorConst) {
-        String color = "";
-        switch ( colorConst.getHexValue() ) {
-            case "#000000":
-                color = "BLACK";
-                break;
-            case "#0057A6":
-                color = "BLUE";
-                break;
-            case "#00642E":
-                color = "GREEN";
-                break;
-            case "#F7D117":
-                color = "YELLOW";
-                break;
-            case "#B30006":
-                color = "RED";
-                break;
-            case "#FFFFFF":
-                color = "WHITE";
-                break;
-            case "#532115":
-                color = "BROWN";
-                break;
-            case "#585858":
-                color = "NONE";
-                break;
-            default:
-                throw new DbcException("Invalid color constant: " + colorConst.getHexValue());
-        }
-        this.sb.append("createConstant(CONST." + colorConst.getKind().getName() + ", CONST.COLOR_ENUM." + color + ")");
         return null;
     }
 

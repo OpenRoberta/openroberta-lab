@@ -40,7 +40,7 @@ public class ColourUsageTest {
             .append("_meRgbLed.show();")
             .append("_meRgbLed.setColor(1, RCHANNEL(item), GCHANNEL(item), BCHANNEL(item));")
             .append("_meRgbLed.show();")
-            .append("_meRgbLed.setColor(1, 255, 255, 255);")
+            .append("_meRgbLed.setColor(1, 0xFF, 0xFF, 0xFF);")
             .append("_meRgbLed.show();")
             .append("_meRgbLed.setColor(2, RCHANNEL(item), GCHANNEL(item), BCHANNEL(item));")
             .append("_meRgbLed.show();")

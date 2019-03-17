@@ -13,7 +13,6 @@ import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
-import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -26,6 +25,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
+import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
@@ -271,6 +271,19 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
+    public Void visitListRepeat(ListRepeat<Void> listRepeat) {
+        this.sb.append("new ArrayList<>(Collections.nCopies(");
+        listRepeat.getParam().get(1).visit(this);
+        this.sb.append(", ");
+        if ( listRepeat.getParam().get(0).getVarType() == BlocklyType.NUMBER ) {
+            this.sb.append(" (float) ");
+        }
+        listRepeat.getParam().get(0).visit(this);
+        this.sb.append("))");
+        return null;
+    }
+
+    @Override
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
         this.sb.append("BlocklyMethods.");
         switch ( mathSingleFunct.getFunctName() ) {
@@ -384,41 +397,6 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitStringConst(StringConst<Void> stringConst) {
         this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.getValue().replaceAll("[<>\\$]", ""))).append("\"");
-        return null;
-    }
-
-    @Override
-    public Void visitColorConst(ColorConst<Void> colorConst) {
-        String color = "";
-        switch ( colorConst.getHexValue() ) {
-            case "#000000":
-                color = "BLACK";
-                break;
-            case "#0057A6":
-                color = "BLUE";
-                break;
-            case "#00642E":
-                color = "GREEN";
-                break;
-            case "#F7D117":
-                color = "YELLOW";
-                break;
-            case "#B30006":
-                color = "RED";
-                break;
-            case "#FFFFFF":
-                color = "WHITE";
-                break;
-            case "#532115":
-                color = "BROWN";
-                break;
-            case "#585858":
-                color = "NONE";
-                break;
-            default:
-                throw new DbcException("Invalid color constant: " + colorConst.getHexValue());
-        }
-        this.sb.append("PickColor." + color);
         return null;
     }
 

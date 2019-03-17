@@ -134,7 +134,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
         String color = "";
-        switch ( colorConst.getHexValue() ) {
+        switch ( colorConst.getHexValueAsString().toUpperCase() ) {
             case "#000000":
                 color = "BLACK";
                 break;
@@ -178,7 +178,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                 color = "NULL";
                 break;
             default:
-                throw new DbcException("Invalid color constant: " + colorConst.getHexValue());
+                throw new DbcException("Invalid color constant: " + colorConst.getHexValueAsString());
         }
         if ( !color.equals("NULL") ) {
             color = "INPUT_" + color + "COLOR";

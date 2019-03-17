@@ -12,8 +12,6 @@ import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
-import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
@@ -21,7 +19,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
-import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
@@ -165,47 +162,12 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
-        if ( listRepeat.getParam().get(0).getClass().equals(NumConst.class) ) {
-            String number = ((NumConst<Void>) listRepeat.getParam().get(0)).getValue();
-            int repeat = Integer.parseInt(((NumConst<Void>) listRepeat.getParam().get(1)).getValue());
-            this.sb.append("{");
-            for ( int i = 0; i < repeat - 1; i++ ) {
-                this.sb.append(number).append(", ");
-            }
-            this.sb.append(number).append("}");
-            return null;
-        }
-        if ( listRepeat.getParam().get(0).getClass().equals(ColorConst.class) ) {
-            String hexValue = ((ColorConst<Void>) listRepeat.getParam().get(0)).getHexValue();
-            hexValue = hexValue.split("#")[1];
-            int R = Integer.decode("0x" + hexValue.substring(0, 2));
-            int G = Integer.decode("0x" + hexValue.substring(2, 4));
-            int B = Integer.decode("0x" + hexValue.substring(4, 6));
-            int repeat = Integer.parseInt(((NumConst<Void>) listRepeat.getParam().get(1)).getValue());
-            this.sb.append("{");
-            for ( int i = 0; i < repeat - 1; i++ ) {
-                this.sb.append("RGB(").append(R).append(", ").append(G).append(", ").append(B).append(")").append(", ");
-            }
-            this.sb.append("RGB(").append(R).append(", ").append(G).append(", ").append(B).append(")").append("}");
-        }
-        if ( listRepeat.getParam().get(0).getClass().equals(StringConst.class) ) {
-            String value = ((StringConst<Void>) listRepeat.getParam().get(0)).getValue();
-            int repeat = Integer.parseInt(((NumConst<Void>) listRepeat.getParam().get(1)).getValue());
-            this.sb.append("{");
-            for ( int i = 0; i < repeat - 1; i++ ) {
-                this.sb.append(value).append(", ");
-            }
-            this.sb.append(value).append("}");
-        }
-        if ( listRepeat.getParam().get(0).getClass().equals(BoolConst.class) ) {
-            boolean value = ((BoolConst<Void>) listRepeat.getParam().get(0)).getValue();
-            int repeat = Integer.parseInt(((NumConst<Void>) listRepeat.getParam().get(1)).getValue());
-            this.sb.append("{");
-            for ( int i = 0; i < repeat - 1; i++ ) {
-                this.sb.append(value).append(", ");
-            }
-            this.sb.append(value).append("}");
-        }
+        // This implementation assumes that robots providing a "list repeat" block have implemented a method "_createListRepeat(counter, element)" in one of the included files.
+        this.sb.append("_createListRepeat(");
+        listRepeat.getCounter().visit(this);
+        this.sb.append(", ");
+        listRepeat.getElement().visit(this);
+        this.sb.append(")");
         return null;
     }
 
@@ -565,22 +527,6 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
         return null;
     }
 
-    @Override
-    public Void visitColorConst(ColorConst<Void> colorConst) {
-        String fullColor = colorConst.getHexValue().substring(1, 7);
-        String R = fullColor.substring(0, 2);
-        String G = fullColor.substring(2, 4);
-        String B = fullColor.substring(4, 6);
-        this.sb.append("RGB(0x");
-        this.sb.append(R);
-        this.sb.append(", 0x");
-        this.sb.append(G);
-        this.sb.append(", 0x");
-        this.sb.append(B);
-        this.sb.append(")");
-        return null;
-    }
-
     protected void addContinueLabelToLoop() {
         if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
             nlIndent();
@@ -736,52 +682,50 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     protected static Map<Binary.Op, String> binaryOpSymbols() {
-        return Collections
-            .unmodifiableMap(
-                Stream
-                    .of(
+        return Collections.unmodifiableMap(
+            Stream
+                .of(
 
-                        entry(Binary.Op.ADD, "+"),
-                        entry(Binary.Op.MINUS, "-"),
-                        entry(Binary.Op.MULTIPLY, "*"),
-                        entry(Binary.Op.DIVIDE, "/"),
-                        entry(Binary.Op.MOD, "%"),
-                        entry(Binary.Op.EQ, "=="),
-                        entry(Binary.Op.NEQ, "!="),
-                        entry(Binary.Op.LT, "<"),
-                        entry(Binary.Op.LTE, "<="),
-                        entry(Binary.Op.GT, ">"),
-                        entry(Binary.Op.GTE, ">="),
-                        entry(Binary.Op.AND, "&&"),
-                        entry(Binary.Op.OR, "||"),
-                        entry(Binary.Op.MATH_CHANGE, "+="),
-                        entry(Binary.Op.TEXT_APPEND, "+="),
-                        entry(Binary.Op.IN, ":"),
-                        entry(Binary.Op.ASSIGNMENT, "="),
-                        entry(Binary.Op.ADD_ASSIGNMENT, "+="),
-                        entry(Binary.Op.MINUS_ASSIGNMENT, "-="),
-                        entry(Binary.Op.MULTIPLY_ASSIGNMENT, "*="),
-                        entry(Binary.Op.DIVIDE_ASSIGNMENT, "/="),
-                        entry(Binary.Op.MOD_ASSIGNMENT, "%=")
+                    entry(Binary.Op.ADD, "+"),
+                    entry(Binary.Op.MINUS, "-"),
+                    entry(Binary.Op.MULTIPLY, "*"),
+                    entry(Binary.Op.DIVIDE, "/"),
+                    entry(Binary.Op.MOD, "%"),
+                    entry(Binary.Op.EQ, "=="),
+                    entry(Binary.Op.NEQ, "!="),
+                    entry(Binary.Op.LT, "<"),
+                    entry(Binary.Op.LTE, "<="),
+                    entry(Binary.Op.GT, ">"),
+                    entry(Binary.Op.GTE, ">="),
+                    entry(Binary.Op.AND, "&&"),
+                    entry(Binary.Op.OR, "||"),
+                    entry(Binary.Op.MATH_CHANGE, "+="),
+                    entry(Binary.Op.TEXT_APPEND, "+="),
+                    entry(Binary.Op.IN, ":"),
+                    entry(Binary.Op.ASSIGNMENT, "="),
+                    entry(Binary.Op.ADD_ASSIGNMENT, "+="),
+                    entry(Binary.Op.MINUS_ASSIGNMENT, "-="),
+                    entry(Binary.Op.MULTIPLY_ASSIGNMENT, "*="),
+                    entry(Binary.Op.DIVIDE_ASSIGNMENT, "/="),
+                    entry(Binary.Op.MOD_ASSIGNMENT, "%=")
 
-                    )
-                    .collect(entriesToMap()));
+                )
+                .collect(entriesToMap()));
     }
 
     protected static Map<Unary.Op, String> unaryOpSymbols() {
-        return Collections
-            .unmodifiableMap(
-                Stream
-                    .of(
+        return Collections.unmodifiableMap(
+            Stream
+                .of(
 
-                        entry(Unary.Op.PLUS, "+"),
-                        entry(Unary.Op.NEG, "-"),
-                        entry(Unary.Op.NOT, "!"),
-                        entry(Unary.Op.POSTFIX_INCREMENTS, "++"),
-                        entry(Unary.Op.PREFIX_INCREMENTS, "++")
+                    entry(Unary.Op.PLUS, "+"),
+                    entry(Unary.Op.NEG, "-"),
+                    entry(Unary.Op.NOT, "!"),
+                    entry(Unary.Op.POSTFIX_INCREMENTS, "++"),
+                    entry(Unary.Op.PREFIX_INCREMENTS, "++")
 
-                    )
-                    .collect(entriesToMap()));
+                )
+                .collect(entriesToMap()));
     }
 
 }

@@ -27,7 +27,6 @@ import de.fhg.iais.roberta.syntax.action.nao.TurnDegrees;
 import de.fhg.iais.roberta.syntax.action.nao.WalkAsync;
 import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
-import de.fhg.iais.roberta.syntax.lang.expr.nao.ColorHexString;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFaceSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectMarkSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
@@ -244,8 +243,6 @@ public interface INaoVisitor<V> extends ISpeechVisitor<V>, ISensorVisitor<V> {
     V visitSetIntensity(SetIntensity<V> setIntensity);
 
     V visitAutonomous(Autonomous<V> autonomous);
-
-    V visitColorHexString(ColorHexString<V> colorHexString);
 
     V visitRecognizeWord(RecognizeWord<V> recognizeWord);
 

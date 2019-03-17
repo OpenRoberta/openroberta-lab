@@ -31,7 +31,7 @@ public class ColorConst<V> extends Expr<V> {
     private ColorConst(String hexValue, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("COLOR_CONST"), properties, comment);
         Assert.isTrue(hexValue != null);
-        this.hexValue = hexValue.toUpperCase();
+        this.hexValue = hexValue;
         setReadOnly();
     }
 
@@ -47,8 +47,36 @@ public class ColorConst<V> extends Expr<V> {
         return new ColorConst<>(hexValue, properties, comment);
     }
 
-    public String getHexValue() {
+    public String getHexValueAsString() {
         return this.hexValue;
+    }
+
+    public String getHexIntAsString() {
+        return this.hexValue.replaceAll("#", "0x");
+    }
+
+    public int getRedChannelInt() {
+        return Integer.valueOf(this.hexValue.substring(1, 3), 16);
+    }
+
+    public int getGreenChannelInt() {
+        return Integer.valueOf(this.hexValue.substring(3, 5), 16);
+    }
+
+    public int getBlueChannelInt() {
+        return Integer.valueOf(this.hexValue.substring(5, 7), 16);
+    }
+
+    public String getRedChannelHex() {
+        return "0x" + this.hexValue.substring(1, 3);
+    }
+
+    public String getGreenChannelHex() {
+        return "0x" + this.hexValue.substring(3, 5);
+    }
+
+    public String getBlueChannelHex() {
+        return "0x" + this.hexValue.substring(5, 7);
     }
 
     @Override

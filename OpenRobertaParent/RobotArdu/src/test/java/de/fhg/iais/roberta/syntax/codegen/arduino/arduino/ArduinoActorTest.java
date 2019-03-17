@@ -59,11 +59,10 @@ public class ArduinoActorTest {
         ConfigurationComponent led = new ConfigurationComponent("LED", true, "LED", BlocklyConstants.NO_SLOT, "L", ledPins);
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(led));
-        this.arduinoHelper
-            .compareExistingAndGeneratedSource(
-                "/ast/actions/arduino_show_on_serial_with_led_test.ino",
-                "/ast/actions/arduino_show_on_serial_with_led_test.xml",
-                builder.build());
+        this.arduinoHelper.compareExistingAndGeneratedSource(
+            "/ast/actions/arduino_show_on_serial_with_led_test.ino",
+            "/ast/actions/arduino_show_on_serial_with_led_test.xml",
+            builder.build());
     }
 
     @Test
@@ -72,11 +71,10 @@ public class ArduinoActorTest {
         ConfigurationComponent screen = new ConfigurationComponent("LCD", true, "L", BlocklyConstants.NO_SLOT, "L2", screenPins);
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(screen));
-        this.arduinoHelper
-            .compareExistingAndGeneratedSource(
-                "/ast/actions/arduino_lcd1602_show_clear_test.ino",
-                "/ast/actions/arduino_lcd1602_show_clear_test.xml",
-                builder.build());
+        this.arduinoHelper.compareExistingAndGeneratedSource(
+            "/ast/actions/arduino_lcd1602_show_clear_test.ino",
+            "/ast/actions/arduino_lcd1602_show_clear_test.xml",
+            builder.build());
     }
 
     @Test
@@ -85,11 +83,10 @@ public class ArduinoActorTest {
         ConfigurationComponent screen = new ConfigurationComponent("LCDI2C", true, "L", BlocklyConstants.NO_SLOT, "L", screenPins);
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(screen));
-        this.arduinoHelper
-            .compareExistingAndGeneratedSource(
-                "/ast/actions/arduino_lcd1602i2c_show_clear_test.ino",
-                "/ast/actions/arduino_lcd1602i2c_show_clear_test.xml",
-                builder.build());
+        this.arduinoHelper.compareExistingAndGeneratedSource(
+            "/ast/actions/arduino_lcd1602i2c_show_clear_test.ino",
+            "/ast/actions/arduino_lcd1602i2c_show_clear_test.xml",
+            builder.build());
     }
 
     @Test
@@ -128,11 +125,10 @@ public class ArduinoActorTest {
             new ConfigurationComponent("DIGITAL_INPUT", true, "DIGITAL_INPUT", BlocklyConstants.NO_SLOT, "A", digitalOuputPins);
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(digitalOutput, analogOutput));
-        this.arduinoHelper
-            .compareExistingAndGeneratedSource(
-                "/ast/actions/arduino_analog_digital_output_test.ino",
-                "/ast/actions/arduino_analog_digital_output_test.xml",
-                builder.build());
+        this.arduinoHelper.compareExistingAndGeneratedSource(
+            "/ast/actions/arduino_analog_digital_output_test.ino",
+            "/ast/actions/arduino_analog_digital_output_test.xml",
+            builder.build());
     }
 
     @Test
@@ -145,11 +141,10 @@ public class ArduinoActorTest {
         ConfigurationComponent rfid2 = new ConfigurationComponent("RFID", true, "rfid", BlocklyConstants.NO_SLOT, "R7", rfidPins);
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(rfid1, rfid2, servoMotor1, servoMotor2));
-        this.arduinoHelper
-            .compareExistingAndGeneratedSource(
-                "/ast/brickConfiguration/arduino_multi_include_test.ino",
-                "/ast/brickConfiguration/arduino_multi_include_test.xml",
-                builder.build());
+        this.arduinoHelper.compareExistingAndGeneratedSource(
+            "/ast/brickConfiguration/arduino_multi_include_test.ino",
+            "/ast/brickConfiguration/arduino_multi_include_test.xml",
+            builder.build());
     }
 
     @Test(expected = DbcException.class)
@@ -163,10 +158,9 @@ public class ArduinoActorTest {
         ConfigurationComponent rfid2 = new ConfigurationComponent("NON-EXISTING-COMPONENT2", true, "rfid", BlocklyConstants.NO_SLOT, "R7", rfidPins);
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(rfid1, rfid2, servoMotor1, servoMotor2));
-        this.arduinoHelper
-            .compareExistingAndGeneratedSource(
-                "/ast/brickConfiguration/arduino_multi_include_test.ino",
-                "/ast/brickConfiguration/arduino_multi_include_test.xml",
-                builder.build());
+        this.arduinoHelper.compareExistingAndGeneratedSource(
+            "/ast/brickConfiguration/arduino_multi_include_test.ino",
+            "/ast/brickConfiguration/arduino_multi_include_test.xml",
+            builder.build());
     }
 }

@@ -30,6 +30,7 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
+import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
@@ -363,6 +364,59 @@ public final class NxtSimVisitor extends AbstractSimVisitor<Void> implements INx
 
     @Override
     public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitColorConst(ColorConst<Void> colorConst) {
+        String color = "";
+        System.out.println(colorConst.getHexValueAsString().toUpperCase());
+        switch ( colorConst.getHexValueAsString().toUpperCase() ) {
+            case "#000000":
+                color = "BLACK";
+                break;
+            case "#0057A6":
+                color = "BLUE";
+                break;
+            case "#00642E":
+                color = "GREEN";
+                break;
+            case "#F7D117":
+                color = "YELLOW";
+                break;
+            case "#B30006":
+                color = "RED";
+                break;
+            case "#FFFFFF":
+                color = "WHITE";
+                break;
+            case "#532115":
+                color = "BROWN";
+                break;
+            case "#EE82EE":
+                color = "VIOLET";
+                break;
+            case "#800080":
+                color = "PURPLE";
+                break;
+            case "#00FF00":
+                color = "LIME";
+                break;
+            case "#FFA500":
+                color = "ORANGE";
+                break;
+            case "#FF00FF":
+                color = "MAGENTA";
+                break;
+            case "#DC143C":
+                color = "CRIMSON";
+            case "#585858":
+                color = "NONE";
+                break;
+            default:
+                throw new DbcException("Invalid color constant: " + colorConst.getHexValueAsString());
+        }
+        this.sb.append("createConstant(CONST." + colorConst.getKind().getName() + ", CONST.COLOR_ENUM." + color + ")");
         return null;
     }
 

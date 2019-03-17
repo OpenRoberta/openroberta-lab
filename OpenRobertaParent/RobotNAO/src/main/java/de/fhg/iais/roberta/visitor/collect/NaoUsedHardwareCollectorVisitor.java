@@ -35,7 +35,6 @@ import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
-import de.fhg.iais.roberta.syntax.lang.expr.nao.ColorHexString;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFaceSensor;
@@ -263,11 +262,6 @@ public final class NaoUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
 
     @Override
     public Void visitAutonomous(Autonomous<Void> autonomous) {
-        return null;
-    }
-
-    @Override
-    public Void visitColorHexString(ColorHexString<Void> colorHexString) {
         return null;
     }
 

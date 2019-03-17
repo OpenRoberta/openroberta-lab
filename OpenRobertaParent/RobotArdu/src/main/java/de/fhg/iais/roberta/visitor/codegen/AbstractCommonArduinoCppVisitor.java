@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
+import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
@@ -355,6 +356,17 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
             default:
                 throw new DbcException("Invalid Time Mode!");
         }
+        return null;
+    }
+
+    public Void visitColorConst(ColorConst<Void> colorConst) {
+        this.sb.append("RGB(");
+        this.sb.append(colorConst.getRedChannelHex());
+        this.sb.append(", ");
+        this.sb.append(colorConst.getGreenChannelHex());
+        this.sb.append(", ");
+        this.sb.append(colorConst.getBlueChannelHex());
+        this.sb.append(")");
         return null;
     }
 }

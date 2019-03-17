@@ -83,6 +83,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.IWeDoVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
@@ -136,7 +137,7 @@ public abstract class AbstractWeDoVisitor<V> implements ILanguageVisitor<V>, IWe
     @Override
     public V visitColorConst(ColorConst<V> colorConst) {
         int colorId = 0;
-        switch ( colorConst.getHexValue() ) {
+        switch ( colorConst.getHexValueAsString().toUpperCase() ) {
             case "#FF1493":
                 colorId = 1;
                 break;
@@ -169,7 +170,8 @@ public abstract class AbstractWeDoVisitor<V> implements ILanguageVisitor<V>, IWe
                 colorId = 10;
                 break;
             default:
-                throw new DbcException("Invalid color constant: " + colorConst.getHexValue());
+                colorConst.addInfo(NepoInfo.error("SIM_BLOCK_NOT_SUPPORTED"));
+                throw new DbcException("Invalid color constant: " + colorConst.getHexIntAsString());
         }
         JSONObject o = mk(C.EXPR).put(C.EXPR, "COLOR_CONST").put(C.VALUE, colorId);
         return app(o);

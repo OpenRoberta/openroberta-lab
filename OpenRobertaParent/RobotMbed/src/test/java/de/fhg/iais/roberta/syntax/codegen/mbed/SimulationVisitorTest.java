@@ -126,9 +126,9 @@ public class SimulationVisitorTest {
     public void visitLedOnAction_TurnOnLedInThreeDifferentColors_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult =
             "" //
-                + "var stmt0 = createLedOnAction(createConstant(CONST.LED_COLOR_CONST, [255, 0, 0]));\n"
-                + "var stmt1 = createLedOnAction(createConstant(CONST.LED_COLOR_CONST, [0, 153, 0]));\n"
-                + "var stmt2 = createLedOnAction(createConstant(CONST.LED_COLOR_CONST, [153, 153, 255]));\n"
+                + "var stmt0 = createLedOnAction(createConstant(CONST.COLOR_CONST, [255, 0, 0]));\n"
+                + "var stmt1 = createLedOnAction(createConstant(CONST.COLOR_CONST, [0, 153, 0]));\n"
+                + "var stmt2 = createLedOnAction(createConstant(CONST.COLOR_CONST, [153, 153, 255]));\n"
                 + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2]};";
 
         assertCodeIsOk(expectedResult, "/action/led_on_three_colors.xml");

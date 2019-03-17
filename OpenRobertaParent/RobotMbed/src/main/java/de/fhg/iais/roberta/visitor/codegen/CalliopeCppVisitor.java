@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.visitor.codegen;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import org.apache.commons.text.WordUtils;
 
 import de.fhg.iais.roberta.components.Configuration;
@@ -42,13 +41,13 @@ import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
-import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
 import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
+import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
@@ -60,6 +59,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
@@ -76,6 +76,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
@@ -609,6 +610,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         return null;
     }
 
+    public Void visitListRepeat(ListRepeat<Void> listRepeat) {
+        throw new DbcException("Not supported list function " + listRepeat.getClass().getName());
+    }
+
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
         if ( indexOfFunct.getParam().get(0).toString().contains("ListCreate ") ) {
@@ -820,19 +825,17 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         return null;
     }
 
-    @Override
-    public Void visitLedColor(LedColor<Void> ledColor) {
-        this.sb
-            .append(
-                "MicroBitColor("
-                    + ledColor.getRedChannel()
-                    + ", "
-                    + ledColor.getGreenChannel()
-                    + ", "
-                    + ledColor.getBlueChannel()
-                    + ", "
-                    + ledColor.getAlphaChannel()
-                    + ")");
+    public Void visitColorConst(ColorConst<Void> colorConst) {
+        this.sb.append(
+            "MicroBitColor("
+                + colorConst.getRedChannelInt()
+                + ", "
+                + colorConst.getGreenChannelInt()
+                + ", "
+                + colorConst.getBlueChannelInt()
+                + ", "
+                + 255
+                + ")");
         return null;
     }
 
@@ -1189,16 +1192,8 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         if ( serialWriteAction.getValue().getVarType().equals(BlocklyType.STRING) ) {
             serialWriteAction.getValue().visit(this);
         } else if ( serialWriteAction.getValue().getVarType().equals(BlocklyType.COLOR) ) {
-            LedColor<Void> color = (LedColor<Void>) serialWriteAction.getValue();
-            this.sb.append("ManagedString(\"");
-            this.sb.append(color.getRedChannel());
-            this.sb.append(", ");
-            this.sb.append(color.getGreenChannel());
-            this.sb.append(", ");
-            this.sb.append(color.getBlueChannel());
-            this.sb.append(", ");
-            this.sb.append(color.getAlphaChannel());
-            this.sb.append("\")");
+            ColorConst<Void> color = (ColorConst<Void>) serialWriteAction.getValue();
+            visitColorConst(color);
         } else {
             this.sb.append("ManagedString(");
             serialWriteAction.getValue().visit(this);
@@ -1210,9 +1205,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
-        if (humiditySensor.getMode().equals(SC.HUMIDITY)) {
+        if ( humiditySensor.getMode().equals(SC.HUMIDITY) ) {
             this.sb.append("sht31.readHumidity()");
-        } else if (humiditySensor.getMode().equals(SC.TEMPERATURE)) {
+        } else if ( humiditySensor.getMode().equals(SC.TEMPERATURE) ) {
             this.sb.append("sht31.readTemperature()");
         } else {
             throw new UnsupportedOperationException("Mode " + humiditySensor.getMode() + " not supported!");

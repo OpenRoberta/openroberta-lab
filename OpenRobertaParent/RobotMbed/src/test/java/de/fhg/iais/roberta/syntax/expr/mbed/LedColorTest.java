@@ -13,9 +13,9 @@ public class LedColorTest {
         String expectedResult =
 
             "BlockAST [project=[[Location [x=138, y=37], MainTask [\n"
-                + "exprStmt VarDeclaration [COLOR, Element, LedColor [#0057a6], true, true]\n"
-                + "exprStmt VarDeclaration [COLOR, Element2, LedColor [#b30006], true, true]\n"
-                + "exprStmt VarDeclaration [COLOR, Element3, LedColor [#f7d117], false, true]]]]]";
+                + "exprStmt VarDeclaration [COLOR, Element, ColorConst [#0057a6], true, true]\n"
+                + "exprStmt VarDeclaration [COLOR, Element2, ColorConst [#b30006], true, true]\n"
+                + "exprStmt VarDeclaration [COLOR, Element3, ColorConst [#f7d117], false, true]]]]]";
         String result = this.h.generateTransformerString("/expr/led_color.xml");
 
         Assert.assertEquals(expectedResult, result);

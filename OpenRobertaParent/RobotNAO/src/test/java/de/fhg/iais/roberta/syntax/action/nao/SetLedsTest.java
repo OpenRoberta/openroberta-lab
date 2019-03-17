@@ -11,10 +11,10 @@ public class SetLedsTest {
     @Test
     public void testLedsOnColor() throws Exception {
         String expectedResult =
-            "BlockAST [project=[[Location [x=138, y=163], SetLeds [EYES, ColorHexString [#ffcc33], ], "
-                + "SetLeds [LEFTEYE, ColorHexString [#ffcc66], ], SetLeds [RIGHTEYE, ColorHexString [#66cccc], ], "
-                + "SetLeds [LEFTFOOT, ColorHexString [#336666], ], SetLeds [RIGHTFOOT, ColorHexString [#ccccff], ], "
-                + "SetLeds [ALL, ColorHexString [#663366], ]]]]";
+            "BlockAST [project=[[Location [x=138, y=163], SetLeds [EYES, ColorConst [#ffcc33], ], "
+                + "SetLeds [LEFTEYE, ColorConst [#ffcc66], ], SetLeds [RIGHTEYE, ColorConst [#66cccc], ], "
+                + "SetLeds [LEFTFOOT, ColorConst [#336666], ], SetLeds [RIGHTFOOT, ColorConst [#ccccff], ], "
+                + "SetLeds [ALL, ColorConst [#663366], ]]]]";
 
         String result = this.h.generateTransformerString("/action/ledsOnColor.xml");
 

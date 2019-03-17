@@ -13,9 +13,9 @@ public class LedOnActionTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=138, y=37], "
                 + "MainTask [], "
-                + "LedOnAction [ LedColor [#ff0000] ], "
-                + "LedOnAction [ LedColor [#009900] ], "
-                + "LedOnAction [ LedColor [#9999ff] ]]]]";
+                + "LedOnAction [ ColorConst [#ff0000] ], "
+                + "LedOnAction [ ColorConst [#009900] ], "
+                + "LedOnAction [ ColorConst [#9999ff] ]]]]";
 
         String result = this.h.generateTransformerString("/action/led_on_three_colors.xml");
 

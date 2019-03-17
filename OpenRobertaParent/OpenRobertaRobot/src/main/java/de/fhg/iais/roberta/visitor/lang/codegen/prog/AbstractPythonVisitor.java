@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
+
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -71,41 +71,6 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
             super.visitNumConst(numConst);
             this.sb.append(")");
         }
-        return null;
-    }
-
-    @Override
-    public Void visitColorConst(ColorConst<Void> colorConst) {
-        String color = "";
-        switch ( colorConst.getHexValue() ) {
-            case "#000000":
-                color = "BLACK";
-                break;
-            case "#0057A6":
-                color = "BLUE";
-                break;
-            case "#00642E":
-                color = "GREEN";
-                break;
-            case "#F7D117":
-                color = "YELLOW";
-                break;
-            case "#B30006":
-                color = "RED";
-                break;
-            case "#FFFFFF":
-                color = "WHITE";
-                break;
-            case "#532115":
-                color = "BROWN";
-                break;
-            case "#585858":
-                color = "NONE";
-                break;
-            default:
-                throw new DbcException("Invalid color constant: " + colorConst.getHexValue());
-        }
-        this.sb.append("'" + color.toLowerCase() + "'");
         return null;
     }
 

@@ -23,7 +23,7 @@ public class ColorConstTest {
     public void isValue() throws Exception {
         Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/colour/colour_const1.xml");
         ColorConst<Void> colorConst = (ColorConst<Void>) transformer.getTree().get(0).get(1);
-        Assert.assertEquals("#0057A6", colorConst.getHexValue());
+        Assert.assertEquals("#0057A6", colorConst.getHexValueAsString());
     }
 
     @Test

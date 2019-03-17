@@ -58,6 +58,20 @@ public class ListRepeat<V> extends Function<V> {
     public List<Expr<V>> getParam() {
         return this.param;
     }
+    
+    /**
+     * @return element (what) to repeat from parameters 
+     */
+    public Expr<V> getElement() {
+        return this.param.get(0);
+    }
+    
+    /**
+     * @return number (how often) to repeat from parameters 
+     */
+    public Expr<V> getCounter() {
+        return this.param.get(1);
+    }
 
     /**
      * @return the typeVar
