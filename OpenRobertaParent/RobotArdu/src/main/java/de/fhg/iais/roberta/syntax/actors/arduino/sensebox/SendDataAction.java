@@ -75,7 +75,7 @@ public class SendDataAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
-        ExprList<V> exprList = helper.blockToExprList(block, BlocklyType.STRING);
+        ExprList<V> exprList = helper.blockToExprList(block, BlocklyType.NUMBER);
         List<Field> fields = helper.extractFields(block, (short) 999);
         List<Pair<String, Expr<V>>> id2Phenomena = new ArrayList<>();
         String destination = fields.get(0).getValue();
