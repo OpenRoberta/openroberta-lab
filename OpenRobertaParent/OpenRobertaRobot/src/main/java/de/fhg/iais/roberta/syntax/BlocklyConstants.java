@@ -59,6 +59,7 @@ public final class BlocklyConstants {
     public static final String FILE = "FILE";
     public static final String DURATION = "DURATION";
     public static final String FREQUENCE = "FREQUENCE";
+    public static final String FREQUENCY = "FREQUENCY";
     public static final String PICTURE = "PICTURE";
     public static final String ROW = "ROW";
     public static final String COL = "COL";
