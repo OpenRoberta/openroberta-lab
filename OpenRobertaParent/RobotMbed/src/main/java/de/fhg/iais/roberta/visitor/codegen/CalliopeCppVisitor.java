@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.visitor.codegen;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import org.apache.commons.text.WordUtils;
 
 import de.fhg.iais.roberta.components.Configuration;
@@ -605,7 +606,6 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             nlIndent();
             this.sb.append("_uBit.accelerometer.updateSample();");
         }
-
         return null;
     }
 
@@ -1097,15 +1097,21 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         if ( this.codePreprocess.isLedBarUsed() ) {
             this.sb.append("#include \"Grove_LED_Bar.h\"\n");
         }
+        if ( this.codePreprocess.isHumidityUsed() ) {
+            this.sb.append("#include \"Sht31.h\"\n");
+        }
         this.sb.append("#include <list>\n");
         this.sb.append("#include <array>\n");
         this.sb.append("#include <stdlib.h>\n");
-        this.sb.append("MicroBit _uBit;");
+        this.sb.append("MicroBit _uBit;\n");
         if ( this.codePreprocess.isFourDigitDisplayUsed() ) {
             this.sb.append("FourDigitDisplay fdd(MICROBIT_PIN_P2, MICROBIT_PIN_P8);\n"); // Only works on the right UART Grove connector
         }
         if ( this.codePreprocess.isLedBarUsed() ) {
             this.sb.append("Grove_LED_Bar ledBar(MICROBIT_PIN_P8, MICROBIT_PIN_P2);\n"); // Only works on the right UART Grove connector; Clock/Data pins are swapped compared to 4DigitDisplay
+        }
+        if ( this.codePreprocess.isHumidityUsed() ) {
+            this.sb.append("Sht31 sht31 = Sht31(MICROBIT_PIN_P8, MICROBIT_PIN_P2);\n");
         }
     }
 
@@ -1199,6 +1205,18 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             this.sb.append(")");
         }
         this.sb.append(" + \"\\r\\n\", MicroBitSerialMode::ASYNC);");
+        return null;
+    }
+
+    @Override
+    public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
+        if (humiditySensor.getMode().equals(SC.HUMIDITY)) {
+            this.sb.append("sht31.readHumidity()");
+        } else if (humiditySensor.getMode().equals(SC.TEMPERATURE)) {
+            this.sb.append("sht31.readTemperature()");
+        } else {
+            throw new UnsupportedOperationException("Mode " + humiditySensor.getMode() + " not supported!");
+        }
         return null;
     }
 }

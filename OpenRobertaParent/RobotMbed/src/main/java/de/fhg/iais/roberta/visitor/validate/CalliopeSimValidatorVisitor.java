@@ -33,6 +33,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
@@ -268,6 +269,12 @@ public final class CalliopeSimValidatorVisitor extends AbstractSimValidatorVisit
     @Override
     public Void visitBothMotorsStopAction(BothMotorsStopAction<Void> bothMotorsStopAction) {
         // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
+        humiditySensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 }

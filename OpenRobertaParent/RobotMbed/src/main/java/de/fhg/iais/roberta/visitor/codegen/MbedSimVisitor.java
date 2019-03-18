@@ -44,6 +44,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
@@ -458,6 +459,12 @@ public final class MbedSimVisitor extends AbstractSimVisitor<Void> implements IM
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
         // TODO implement with javascript console.log?
+        return null;
+    }
+
+    @Override
+    public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
+
         return null;
     }
 }

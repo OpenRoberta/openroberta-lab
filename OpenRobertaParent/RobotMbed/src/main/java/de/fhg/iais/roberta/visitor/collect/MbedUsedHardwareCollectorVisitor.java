@@ -36,6 +36,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
@@ -54,6 +55,7 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
     private boolean greyScale;
     private boolean fourDigitDisplayUsed;
     private boolean ledBarUsed;
+    private boolean humidityUsed;
 
     public MbedUsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, Configuration configuration) {
         super(configuration);
@@ -78,6 +80,10 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
 
     public boolean isLedBarUsed() {
         return this.ledBarUsed;
+    }
+
+    public boolean isHumidityUsed() {
+        return this.humidityUsed;
     }
 
     @Override
@@ -292,6 +298,12 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
     @Override
     public Void visitBothMotorsStopAction(BothMotorsStopAction<Void> bothMotorsStopAction) {
         // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
+        this.humidityUsed = true;
         return null;
     }
 }

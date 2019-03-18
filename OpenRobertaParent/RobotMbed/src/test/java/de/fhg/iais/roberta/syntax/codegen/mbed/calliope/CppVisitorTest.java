@@ -645,6 +645,26 @@ public class CppVisitorTest {
     }
 
     @Test
+    public void visitHumiditySensor_DisplayTemperatureAndHumidity_ReturnsCorrectCPP_Program() throws Exception {
+        String expectedResult =
+            "" //
+                + "#define_GNU_SOURCE\n\n"
+                + "#include \"MicroBit.h\""
+                + "#include \"NEPODefs.h\""
+                + "#include \"Sht31.h\n\""
+                + "#include <list>\n"
+                + "#include <array>\n"
+                + "#include <stdlib.h>\n"
+                + "MicroBit_uBit;"
+                + "Sht31 sht31 = Sht31(MICROBIT_PIN_P8, MICROBIT_PIN_P2);"
+                + MAIN
+                + "_uBit.display.scroll(ManagedString(sht31.readHumidity()));"
+                + "_uBit.display.scroll(ManagedString(sht31.readTemperature()));"
+                + END;
+        assertCodeIsOk(expectedResult, "/sensor/humidity_sensor.xml");
+    }
+
+    @Test
     public void visitMathOnListFunct_DisplayAllMathOnListFunctsResults_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult =
             "" //

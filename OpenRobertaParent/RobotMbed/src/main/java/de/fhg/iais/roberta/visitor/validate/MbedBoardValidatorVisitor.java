@@ -30,6 +30,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
@@ -220,6 +221,11 @@ public final class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisit
     @Override
     public Void visitBothMotorsStopAction(BothMotorsStopAction<Void> bothMotorsStopAction) {
         // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
         return null;
     }
 }
