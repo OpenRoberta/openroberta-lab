@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.apache.commons.text.StringEscapeUtils;
+
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
@@ -23,6 +25,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
@@ -375,6 +378,12 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         if ( methodCall.getReturnType() == BlocklyType.VOID ) {
             this.sb.append(";");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitStringConst(StringConst<Void> stringConst) {
+        this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.getValue().replaceAll("[<>\\$]", ""))).append("\"");
         return null;
     }
 

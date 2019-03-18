@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.visitor.lang.codegen;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
