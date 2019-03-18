@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;

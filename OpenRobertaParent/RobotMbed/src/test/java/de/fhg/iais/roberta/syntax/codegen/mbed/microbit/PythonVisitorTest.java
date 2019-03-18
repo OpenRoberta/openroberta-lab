@@ -64,8 +64,8 @@ public class PythonVisitorTest {
                 + IMPORTS
                 + "\ndef run():\n"
                 + "    global timer1\n"
-                + "    microbit.display.scroll('Hallo')\n"
-                + "    microbit.display.show('H')\n"
+                + "    microbit.display.scroll(\"Hallo\")\n"
+                + "    microbit.display.show(\"H\")\n"
                 + "\n"
                 + "def main():\n"
                 + "    try:\n"
