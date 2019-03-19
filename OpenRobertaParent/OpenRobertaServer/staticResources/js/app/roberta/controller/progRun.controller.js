@@ -118,6 +118,8 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
                     });
                 });
                 $('#save-client-compiled-program').one('hidden.bs.modal', function(e) {
+                    var textH = $("#popupDownloadHeader").text();
+                    $("#popupDownloadHeader").text(textH.replace($.trim(GUISTATE_C.getRobotRealName()), "$"));
                     if ($('#label-checkbox').is(':checked')) {
                         GUISTATE_C.setProgramToDownload();
                     }
