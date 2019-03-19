@@ -1,7 +1,9 @@
 #!/bin/bash
 
 DEBUG=false
-HELP_TEXT="$0: [-q] [-D] help | gen <server> | start [<server>] | stop [<server>] | deploy [<server>] | autoDeploy | restart | genNet | genDbC | startDbC | stopDbC | info | network | logs | prune"
+
+SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+chmod ugo+rx $SCRIPTDIR/run.sh
 
 CMD=$1; shift
 if [ "$CMD" == '-q' ]
@@ -9,7 +11,7 @@ then
     CMD=$1; shift
     QUIET='true'
 else
-    echo "$HELP_TEXT"
+    source $SCRIPTDIR/_help.sh
 fi
 if [ "$CMD" == '-D' ]
 then
@@ -17,16 +19,13 @@ then
     DEBUG=true
 fi
 
-SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-chmod ugo+rx $SCRIPTDIR/run.sh
-
 source $SCRIPTDIR/__defs.sh
 
 DATE=$(date '+%Y-%m-%d %H:%M:%S')
 
 [ "$DEBUG" = 'true' ] && echo "$DATE: executing command '$CMD'"
 case "$CMD" in
-    help)     [ "$QUIET" == true ] && echo "$HELP_TEXT" ;;
+    help)     [ "$QUIET" == true ] && source $SCRIPTDIR/_help.sh ;;
     gen)      SERVER_NAME=$1; shift
               isServerNameValid $SERVER_NAME
               echo "$DATE: generating the server '$SERVER_NAME'"
@@ -48,10 +47,14 @@ case "$CMD" in
                   $SCRIPTDIR/run.sh -q start $SERVER_NAME
               done ;;
     autoDeploy) source $SCRIPTDIR/_autodeploy.sh ;;
-    startAll) $SCRIPTDIR/run.sh -q startDbC
+    startAll) echo '******************** '$DATE' ********************'
+              echo 'start database container and all server container'
+              $SCRIPTDIR/run.sh -q startDbC
               sleep 10
               $SCRIPTDIR/run.sh -q start ;;
-    stopAll)  $SCRIPTDIR/run.sh -q stop
+    stopAll)  echo '******************** '$DATE' ********************'
+              echo 'stop database container and all server container'
+              $SCRIPTDIR/run.sh -q stop
               $SCRIPTDIR/run.sh -q stopDbC ;;
     genNet)   echo "$DATE: generating the openroberta bridge network 'ora-net'"
               docker network create --driver bridge ora-net

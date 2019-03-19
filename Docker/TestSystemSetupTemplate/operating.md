@@ -117,13 +117,13 @@ The shell script `$CONF/scripts/run.sh` has two more commands, that are used to 
 deploy one or more servers automatically if new commits hit the remote repo.
  
 * `autoDeploy`: usually called from cron. Reads the server names from file `$SERVER/autodeploy.txt` and re-deploys each server, if the git
-  repository connected to this server has got new commits. A typical line in crontab to run this is:
+  repository connected to this server has got new commits. Use `crontab -e` to add the following line to the crontab to run this is:
   
 ```bash
 */5 * * * * bash /data/openroberta/conf/scripts/run.sh -q autoDeploy >>/data/openroberta/logs/cronlog.txt
 ```
 
-* `startAll` and `stopAll`: usually called from the configuration file `robertalab.sh` found in `/etc/init.d`. A typical script is:
+* `startAll` and `stopAll`: usually called from the configuration file `robertalab` found in `/etc/init.d`. A typical script is:
 
 ```bash
 #!/bin/sh
@@ -133,17 +133,32 @@ deploy one or more servers automatically if new commits hit the remote repo.
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: the openroberta service
-# Description:       Start, stop and restart the db and the jetty openroberta server
+# Short-Description: openroberta service
+# Description:       Start, stop and restart the database server and the openroberta server declared in server/servers.txt
 ### END INIT INFO
+
+# Author: Reinhard
 
 BASE=/data/openroberta
 SCRIPTS=$BASE/conf/scripts
 case "$1" in
-    start)   bash $SCRIPTS/run.sh startAll ;;
-    stop)    bash $SCRIPTS/run.sh stopAll  ;;
-    restart) bash $SCRIPTS/run.sh startAll ;;
-    *)       echo "Usage: $0 {start|stop|restart}"
+    start)   bash $SCRIPTS/run.sh -q startAll                              >>/data/openroberta/logs/init.txt ;;
+    stop)    bash $SCRIPTS/run.sh -q stopAll                               >>/data/openroberta/logs/init.txt ;;
+    restart) bash $SCRIPTS/run.sh -q startAll                              >>/data/openroberta/logs/init.txt ;;
+    *)       echo "invalid command \"$1\". Usage: $0 {start|stop|restart}" >>/data/openroberta/logs/init.txt
              exit 12 ;;
 esac
+```
+
+Assuming systemd, after putting `robertalab` into `/etc/init.d`, the service is added with the commands:
+
+```bash
+chmod ugo+x /etc/init.d/robertalab
+
+systemctl daemon-reload
+systemctl enable robertalab
+systemctl start robertalab
+
+systemctl status robertalab       # to see logging
+journalctl -u robertalab.service  # to see more logging
 ```

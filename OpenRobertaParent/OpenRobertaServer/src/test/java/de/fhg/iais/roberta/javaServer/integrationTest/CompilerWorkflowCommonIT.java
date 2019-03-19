@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +16,9 @@ import java.util.Set;
 import javax.ws.rs.core.Response;
 
 import org.json.JSONObject;
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -61,20 +61,19 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 @RunWith(MockitoJUnitRunner.class)
 public class CompilerWorkflowCommonIT {
     private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflowCommonIT.class);
-    private static final boolean CROSSCOMPILER_CALL = true;
+    private static final boolean CROSSCOMPILER_CALL = true; // set to false, if the test logic has to be tested. NEVER commit with false.
     private static final boolean SHOW_SUCCESS = true;
     private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
     private static final String RESOURCE_BASE = "/crossCompilerTests/common/";
 
-    private static final String DEFAULT_DECL = Util1.readResourceContent(RESOURCE_BASE + "decl/default.xml");
-    private static JSONObject ROBOTS;
-    private static JSONObject PROGS;
-    private static List<String> RESULTS = new ArrayList<>();
+    private JSONObject robotsFromTestSpec;
+    private JSONObject progsFromTestSpec;
+    private List<String> results = new ArrayList<>();
 
-    private static RobotCommunicator ROBOT_COMMUNICATOR;
-    private static ServerProperties SERVER_PROPERTIES;
-    private static Map<String, IRobotFactory> PLUGIN_MAP;
-    private static HttpSessionState HTTP_SESSION_STATE;
+    private RobotCommunicator robotCommunicator;
+    private ServerProperties serverProperties;
+    private Map<String, IRobotFactory> pluginMap;
+    private HttpSessionState httpSessionState;
 
     @Mock
     private DbSession dbSession;
@@ -84,66 +83,71 @@ public class CompilerWorkflowCommonIT {
     private ClientProgram restProgram;
     private ClientAdmin restAdmin;
 
-    @BeforeClass
-    public static void setupClass() throws Exception {
-        Properties baseServerProperties = Util1.loadProperties(null);
-        baseServerProperties.put("plugin.resourcedir", "..");
-        SERVER_PROPERTIES = new ServerProperties(baseServerProperties);
-        ROBOT_COMMUNICATOR = new RobotCommunicator();
-        PLUGIN_MAP = ServerStarter.configureRobotPlugins(ROBOT_COMMUNICATOR, SERVER_PROPERTIES, EMPTY_STRING_LIST);
-        HTTP_SESSION_STATE = HttpSessionState.init(ROBOT_COMMUNICATOR, PLUGIN_MAP, SERVER_PROPERTIES, 1);
-        JSONObject testSpecification = Util1.loadYAML("classpath:/crossCompilerTests/common/testSpec.yml");
-        ROBOTS = testSpecification.getJSONObject("robots");
-        PROGS = testSpecification.getJSONObject("progs");
-        StringBuilder sb = new StringBuilder();
-        Set<String> robots = PROGS.keySet();
-        Set<String> programs = PROGS.keySet();
-        sb.append("from ").append(robots.size()).append(" robots and ").append(programs.size()).append(" program we generate ");
-        sb.append(robots.size() * programs.size()).append(" programs. Robots are:\n    ");
-        for ( String robot : robots ) {
-            sb.append(robot).append(" ");
-        }
-        LOG.info(sb.toString());
-    }
-
-    @AfterClass
-    public static void printResults() {
-        LOG.info("XXXXXXXXXX results of common compilations XXXXXXXXXX");
-        for ( String result : RESULTS ) {
-            LOG.info(result);
-        }
-
-    }
-
     @Before
     public void setup() throws Exception {
-        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, ROBOT_COMMUNICATOR, SERVER_PROPERTIES);
-        this.restAdmin = new ClientAdmin(ROBOT_COMMUNICATOR, SERVER_PROPERTIES);
+        Properties baseServerProperties = Util1.loadProperties(null);
+        baseServerProperties.put("plugin.resourcedir", "..");
+        serverProperties = new ServerProperties(baseServerProperties);
+        robotCommunicator = new RobotCommunicator();
+        pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
+        httpSessionState = HttpSessionState.init(robotCommunicator, pluginMap, serverProperties, 1);
+        JSONObject testSpecification = Util1.loadYAML("classpath:/crossCompilerTests/common/testSpec.yml");
+        robotsFromTestSpec = testSpecification.getJSONObject("robots");
+        progsFromTestSpec = testSpecification.getJSONObject("progs");
+        Set<String> robots = robotsFromTestSpec.keySet();
+        Set<String> programs = progsFromTestSpec.keySet();
+        StringBuilder sb = new StringBuilder();
+        sb.append("\nXXXXXXXXXX from ").append(robots.size()).append(" robots and ").append(programs.size()).append(" program we generate ");
+        sb.append(robots.size() * programs.size()).append(" programs. XXXXXXXXXX\nRobots are:\n    ");
+        for ( String robot : robots ) {
+            sb.append(robot).append("\n    ");
+        }
+        sb.append("\nPrograms are:\n    ");
+        for ( String program : programs ) {
+            sb.append(program).append("\n    ");
+        }
+        LOG.info(sb.toString());
+
+        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, robotCommunicator, serverProperties);
+        this.restAdmin = new ClientAdmin(robotCommunicator, serverProperties);
         when(this.sessionFactoryWrapper.getSession()).thenReturn(this.dbSession);
         doNothing().when(this.dbSession).commit();
+    }
+
+    @After
+    public void tearDownAndPrintResults() {
+        LOG.info("XXXXXXXXXX results of common compilations XXXXXXXXXX");
+        for ( String result : results ) {
+            LOG.info(result);
+        }
     }
 
     @Test
     public void testCommonPartOfNepo() throws Exception {
         LOG.info("XXXXXXXXXX START of the NEPO common compilations XXXXXXXXXX");
         boolean resultAcc = true;
-        for ( String robotName : ROBOTS.keySet() ) {
-            JSONObject robot = ROBOTS.getJSONObject(robotName);
-            String robotDir = robot.getString("dir");
-            String templateWithConfig = getTemplateWithConfigReplaced(robotDir);
-            nextProg: for ( String progName : PROGS.keySet() ) {
-                JSONObject prog = PROGS.getJSONObject(progName);
-                JSONObject exclude = prog.optJSONObject("exclude");
-                if ( exclude != null ) {
-                    for ( String excludeRobot : exclude.keySet() ) {
-                        if ( excludeRobot.equals(robotName) ) {
-                            LOG.info("########## for " + robotName + " prog " + progName + " is excluded. Reason: " + exclude.getString(excludeRobot));
-                            continue nextProg; // skip this prog due to exclusion and check the next program
+        try {
+            for ( String robotName : robotsFromTestSpec.keySet() ) {
+                JSONObject robot = robotsFromTestSpec.getJSONObject(robotName);
+                String robotDir = robot.getString("dir");
+                String templateWithConfig = getTemplateWithConfigReplaced(robotDir);
+                nextProg: for ( String progName : progsFromTestSpec.keySet() ) {
+                    JSONObject prog = progsFromTestSpec.getJSONObject(progName);
+                    JSONObject exclude = prog.optJSONObject("exclude");
+                    if ( exclude != null ) {
+                        for ( String excludeRobot : exclude.keySet() ) {
+                            if ( excludeRobot.equals(robotName) ) {
+                                LOG.info("########## for " + robotName + " prog " + progName + " is excluded. Reason: " + exclude.getString(excludeRobot));
+                                continue nextProg;
+                            }
                         }
                     }
+                    boolean resultNext = compileAfterProgramGenerated(robotName, templateWithConfig, progName, prog);
+                    resultAcc = resultAcc && resultNext;
                 }
-                resultAcc = resultAcc && compileAfterProgramGenerated(robotName, templateWithConfig, progName, prog);
             }
+        } catch ( Exception e ) {
+            LOG.error("XXXXXXXXXX test terminated with an unexpected exception XXXXXXXXXX", e);
         }
         if ( resultAcc ) {
             LOG.info("XXXXXXXXXX all of the NEPO common compilations succeeded XXXXXXXXXX");
@@ -157,20 +161,40 @@ public class CompilerWorkflowCommonIT {
      * generate a program for different robots. May help testing ...<br>
      * <br>
      * - supply the program name<br>
-     * - supply the list of robots - copy from the console
+     * - supply the list of robots
      */
     @Ignore
     @Test
-    public void testShowAllGeneratedProgram() {
-        String progName = "functionWithWithoutParameter";
-        List<String> robots = Arrays.asList("nano", "calliope2017", "ev3lejosv1");
+    public void testShowSomeGeneratedPrograms() {
+        String progName = "mathFunctions";
+        List<String> robots = Arrays.asList("microbit", "nano", "calliope2017", "ev3lejosv1");
         for ( String robot : robots ) {
-            String robotDir = ROBOTS.getJSONObject(robot).getString("dir");
+            String robotDir = robotsFromTestSpec.getJSONObject(robot).getString("dir");
             final String template = getTemplateWithConfigReplaced(robotDir);
-            final String generatedProgram = generateFinalProgram(template, progName, PROGS.getJSONObject(progName));
+            final String generatedProgram = generateFinalProgram(template, progName, progsFromTestSpec.getJSONObject(progName));
             LOG.info("********** program " + progName + " for robot " + robot + " **********:\n" + generatedProgram);
         }
         LOG.info("********** generation terminated **********");
+    }
+
+    /**
+     * generate and compile a program for different robots. May help testing ...<br>
+     * <br>
+     * - supply the program name<br>
+     * - supply the list of robots (you may copy from the console output)
+     */
+    @Ignore
+    @Test
+    public void testCompileSomeGeneratedPrograms() {
+        String progName = "functionWithWithoutParameter";
+        // Collection<String> robots = Arrays.asList("microbit", "nano", "calliope2017", "ev3lejosv1");
+        Collection<String> robots = robotsFromTestSpec.keySet();
+        for ( String robotName : robots ) {
+            LOG.info("********** generate and compile program " + progName + " for robot " + robotName + " **********");
+            String robotDir = robotsFromTestSpec.getJSONObject(robotName).getString("dir");
+            final String templateWithConfig = getTemplateWithConfigReplaced(robotDir);
+            compileAfterProgramGenerated(robotName, templateWithConfig, progName, progsFromTestSpec.getJSONObject(progName));
+        }
     }
 
     private boolean compileAfterProgramGenerated(String robotName, String template, String progName, JSONObject prog) throws DbcException {
@@ -178,15 +202,14 @@ public class CompilerWorkflowCommonIT {
         boolean result = false;
         logStart(robotName, progName);
         try {
-            LOG.info("########## " + robotName + " - " + progName);
             String token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
-            HTTP_SESSION_STATE.setToken(token);
+            httpSessionState.setToken(token);
             template = generateFinalProgram(template, progName, prog);
             if ( CROSSCOMPILER_CALL ) {
                 setRobotTo(robotName);
                 org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileP','name':'prog','language':'de'}");
                 cmd.getJSONObject("data").put("program", template);
-                Response response = this.restProgram.command(HTTP_SESSION_STATE, cmd);
+                Response response = this.restProgram.command(httpSessionState, cmd);
                 result = checkEntityRc(response, "ok", "PROGRAM_INVALID_STATEMETNS");
                 reason = "response-info";
             } else {
@@ -203,13 +226,12 @@ public class CompilerWorkflowCommonIT {
     }
 
     private void setRobotTo(String robot) throws Exception {
-        Response response =
-            this.restAdmin.command(HTTP_SESSION_STATE, this.dbSession, JSONUtilForServer.mkD("{'cmd':'setRobot','robot':'" + robot + "'}"), null);
+        Response response = this.restAdmin.command(httpSessionState, this.dbSession, JSONUtilForServer.mkD("{'cmd':'setRobot','robot':'" + robot + "'}"), null);
         JSONUtilForServer.assertEntityRc(response, "ok", Key.ROBOT_SET_SUCCESS);
     }
 
     private void logStart(String name, String fullResource) {
-        String format = "[[[[[ =============== Robot: %-150s compile file: %-60s ===============";
+        String format = "[[[[[[[[[[ Robot: %-15s compile file: %s";
         String msg = String.format(format, name, fullResource);
         LOG.info(msg);
     }
@@ -217,23 +239,19 @@ public class CompilerWorkflowCommonIT {
     private void log(boolean result, String name, String fullResource, String reason) {
         String format;
         if ( result ) {
-            format = "      +++++++++++++++ Robot: %-15s compile file: %-60s succeeded =============== ]]]]]";
+            format = "++++++++++ Robot: %-15s succeeded compile file: %s";
         } else {
-            format = "      --------------- Robot: %-15s compile file: %-60s FAILED(" + reason + ") =============== ]]]]]";
-            showFailingProgram(HTTP_SESSION_STATE.getToken());
+            format = "---------- Robot: %-15s FAILED (" + reason + ") compile file: %s";
+            showFailingProgram(httpSessionState.getToken());
         }
-        String msg = String.format(format, name, fullResource);
-        if ( result ) {
-            LOG.info(msg);
-        } else {
-            LOG.error(msg);
-        }
+        LOG.info(String.format(format, name, fullResource));
+        LOG.info("]]]]]]]]]]");
         if ( result ) {
             if ( SHOW_SUCCESS ) {
-                RESULTS.add(String.format("succ; %-15s; %-60s;", name, fullResource));
+                results.add(String.format("succ; %-15s; %-60s;", name, fullResource));
             }
         } else {
-            RESULTS.add(String.format("fail; %-15s; %-60s;", name, fullResource));
+            results.add(String.format("fail; %-15s; %-60s;", name, fullResource));
         }
     }
 
@@ -252,8 +270,9 @@ public class CompilerWorkflowCommonIT {
         String progFragment = progFragmentName == null ? "" : read("fragment", progFragmentName + ".xml");
         template = template.replaceAll("\\[\\[fragment\\]\\]", progFragment == null ? "" : progFragment);
         String declName = prog.optString("decl");
-        String decl = declName == null ? DEFAULT_DECL : read("decl", declName + ".xml");
-        template = template.replaceAll("\\[\\[decl\\]\\]", decl == null ? DEFAULT_DECL : decl);
+        Assert.assertNotNull(declName, "decl for program not found: " + progName);
+        String decl = read("decl", declName + ".xml");
+        template = template.replaceAll("\\[\\[decl\\]\\]", decl);
         return template;
     }
 
@@ -293,9 +312,9 @@ public class CompilerWorkflowCommonIT {
         }
     }
 
-    private static void showFailingProgram(String token) {
+    private void showFailingProgram(String token) {
         try {
-            String tokenDir = SERVER_PROPERTIES.getTempDir() + token;
+            String tokenDir = serverProperties.getTempDir() + token;
             Util1.fileStreamOfFileDirectory(tokenDir).forEach(f -> showFailingProgramFromTokenDir(tokenDir, f));
         } catch ( Exception e ) {
             LOG.error("could not show the failing program. Probably the generation failed.");

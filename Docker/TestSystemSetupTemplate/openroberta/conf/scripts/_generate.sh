@@ -26,12 +26,12 @@ esac
     then
         echo "checking out branch $BRANCH and get the actual state"
         git pull
-        git checkout $BRANCH
+        git checkout -f $BRANCH
         git pull
         LAST_COMMIT=$(git rev-list HEAD...HEAD~1)
     else
         echo "checking out commit $COMMIT"
-        git checkout $COMMIT
+        git checkout -f $COMMIT
         LAST_COMMIT=$COMMIT
     fi
     cd OpenRobertaParent; mvn clean install -DskipTests; cd ..
