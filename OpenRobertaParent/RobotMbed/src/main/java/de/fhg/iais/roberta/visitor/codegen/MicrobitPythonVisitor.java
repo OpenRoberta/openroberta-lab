@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
+import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
@@ -22,7 +23,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
-import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
@@ -731,14 +731,11 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitPinWriteValueSensor(PinWriteValue<Void> pinWriteValueSensor) {
-        this.sb.append("microbit.pin" + pinWriteValueSensor.getPort());
-        String valueType = "analog(";
-        if ( pinWriteValueSensor.getMode().equals(SC.DIGITAL) ) {
-            valueType = "digital(";
-        }
-        this.sb.append(".write_" + valueType);
-        pinWriteValueSensor.getValue().visit(this);
+    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
+        this.sb.append("microbit.pin" + pinWriteValueAction.getPort());
+        String valueType = pinWriteValueAction.getMode().equals(SC.DIGITAL) ? "digital(" : "analog(";
+        this.sb.append(".write_").append(valueType);
+        pinWriteValueAction.getValue().visit(this);
         this.sb.append(");");
         return null;
     }

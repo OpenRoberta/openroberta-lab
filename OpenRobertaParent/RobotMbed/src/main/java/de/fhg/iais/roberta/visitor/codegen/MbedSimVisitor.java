@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
-import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
-import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
+import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
@@ -22,16 +21,17 @@ import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
-import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
+import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
@@ -285,17 +285,19 @@ public final class MbedSimVisitor extends AbstractSimVisitor<Void> implements IM
         return null;
     }
 
+    @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append(
-            "createConstant(CONST."
-                + colorConst.getKind().getName()
-                + ", ["
-                + colorConst.getRedChannelInt()
-                + ", "
-                + colorConst.getGreenChannelInt()
-                + ", "
-                + colorConst.getBlueChannelInt()
-                + "])");
+        this.sb
+            .append(
+                "createConstant(CONST."
+                    + colorConst.getKind().getName()
+                    + ", ["
+                    + colorConst.getRedChannelInt()
+                    + ", "
+                    + colorConst.getGreenChannelInt()
+                    + ", "
+                    + colorConst.getBlueChannelInt()
+                    + "])");
         return null;
     }
 
@@ -337,11 +339,11 @@ public final class MbedSimVisitor extends AbstractSimVisitor<Void> implements IM
     }
 
     @Override
-    public Void visitPinWriteValueSensor(PinWriteValue<Void> pinWriteValueSensor) {
+    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
         final String end = createClosingBracket();
-        this.sb.append("createPinWriteValueSensor(CONST." + pinWriteValueSensor.getMode());
-        this.sb.append(", " + pinWriteValueSensor.getPort() + ", ");
-        pinWriteValueSensor.getValue().visit(this);
+        this.sb.append("createPinWriteValueSensor(CONST." + pinWriteValueAction.getMode());
+        this.sb.append(", " + pinWriteValueAction.getPort() + ", ");
+        pinWriteValueAction.getValue().visit(this);
         this.sb.append(end);
         return null;
     }

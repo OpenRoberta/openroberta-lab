@@ -5,14 +5,13 @@ import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
+import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.PinReadValueAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
@@ -235,7 +234,7 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
     }
 
     @Override
-    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
+    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
         return null;
     }
 
@@ -243,11 +242,4 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
         return null;
     }
-
-    @Override
-    public Void visitPinReadValueAction(PinReadValueAction<Void> pinReadValueActor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }

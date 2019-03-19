@@ -2,19 +2,15 @@ package de.fhg.iais.roberta.syntax.sensor.generic;
 
 import java.util.List;
 
-import org.slf4j.LoggerFactory;
-
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
-import de.fhg.iais.roberta.codegen.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.sensor.GetSampleType;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
@@ -36,7 +32,6 @@ public class GetSampleSensor<V> extends Sensor<V> {
     private final String slot;
     private final String sensorTypeAndMode;
     private final boolean isPortInMutation;
-    private static final ch.qos.logback.classic.Logger LOG = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(AbstractCompilerWorkflow.class);
 
     @SuppressWarnings("unchecked")
     private GetSampleSensor(
@@ -46,9 +41,9 @@ public class GetSampleSensor<V> extends Sensor<V> {
         boolean isPortInMutation,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
-        BlocklyDropdownFactory factory) {
+        BlocklyDropdownFactory factory) //
+    {
         super(BlockTypeContainer.getByName("SENSOR_GET_SAMPLE"), properties, comment);
-        LOG.setLevel(ch.qos.logback.classic.Level.TRACE);
         Assert.notNull(sensorTypeAndMode);
         Assert.notNull(port);
         this.sensorPort = port;
@@ -124,8 +119,8 @@ public class GetSampleSensor<V> extends Sensor<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 3);
         String modeName = helper.extractField(fields, BlocklyConstants.SENSORTYPE);
-        String portName = helper.extractField(fields, GetSampleType.get(modeName).getPortTypeName());
-        String slot = helper.extractField(fields, GetSampleType.get(modeName).getValues()[0], BlocklyConstants.NO_SLOT);
+        String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
+        String slot = helper.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.NO_SLOT);
         boolean isPortInMutation = block.getMutation().getPort() != null;
         return GetSampleSensor
             .make(modeName, portName, slot, isPortInMutation, helper.extractBlockProperties(block), helper.extractComment(block), helper.getDropdownFactory());

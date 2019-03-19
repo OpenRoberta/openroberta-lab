@@ -15,13 +15,12 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
+import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.PinReadValueAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
@@ -36,6 +35,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PulseSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.RfidSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
@@ -800,16 +800,16 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     }
 
     @Override
-    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
-        switch ( pinWriteValueSensor.getMode() ) {
+    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
+        switch ( pinWriteValueAction.getMode() ) {
             case SC.ANALOG:
-                this.sb.append("analogWrite(_output_").append(pinWriteValueSensor.getPort()).append(", ");
-                pinWriteValueSensor.getValue().visit(this);
+                this.sb.append("analogWrite(_output_").append(pinWriteValueAction.getPort()).append(", ");
+                pinWriteValueAction.getValue().visit(this);
                 this.sb.append(");");
                 break;
             case SC.DIGITAL:
-                this.sb.append("digitalWrite(_output_").append(pinWriteValueSensor.getPort()).append(", ");
-                pinWriteValueSensor.getValue().visit(this);
+                this.sb.append("digitalWrite(_output_").append(pinWriteValueAction.getPort()).append(", ");
+                pinWriteValueAction.getValue().visit(this);
                 this.sb.append(");");
                 break;
             default:
@@ -827,13 +827,13 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     }
 
     @Override
-    public Void visitPinReadValueAction(PinReadValueAction<Void> pinReadValueActor) {
-        switch ( pinReadValueActor.getMode() ) {
+    public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
+        switch ( pinGetValueSensor.getMode() ) {
             case SC.ANALOG:
-                this.sb.append("analogRead(_input_").append(pinReadValueActor.getPort()).append(")");
+                this.sb.append("analogRead(_input_").append(pinGetValueSensor.getPort()).append(")");
                 break;
             case SC.DIGITAL:
-                this.sb.append("digitalRead(_input_").append(pinReadValueActor.getPort()).append(")");
+                this.sb.append("digitalRead(_input_").append(pinGetValueSensor.getPort()).append(")");
                 break;
             default:
                 break;

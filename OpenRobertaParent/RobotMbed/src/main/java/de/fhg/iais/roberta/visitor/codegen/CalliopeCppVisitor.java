@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
+import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
@@ -29,7 +30,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
-import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
@@ -558,14 +558,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     }
 
     @Override
-    public Void visitPinWriteValueSensor(PinWriteValue<Void> pinWriteValueSensor) {
+    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
         String userDefinedName = pinWriteValueSensor.getPort();
         String port = this.configuration.getConfigurationComponent(userDefinedName).getPortName();
-        String valueType = "AnalogValue(";
-        if ( pinWriteValueSensor.getMode().equals(SC.DIGITAL) ) {
-            valueType = "DigitalValue(";
-        }
-        this.sb.append("_uBit.io." + port + ".set" + valueType);
+        String valueType = pinWriteValueSensor.getMode().equals(SC.DIGITAL) ? "DigitalValue(" : "AnalogValue(";
+        this.sb.append("_uBit.io.").append(port).append(".set").append(valueType);
         pinWriteValueSensor.getValue().visit(this);
         this.sb.append(");");
         return null;

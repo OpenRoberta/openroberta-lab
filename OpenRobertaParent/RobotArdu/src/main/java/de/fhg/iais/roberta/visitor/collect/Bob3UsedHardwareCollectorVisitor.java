@@ -15,9 +15,9 @@ import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
-import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.GetSampleSensor;
 import de.fhg.iais.roberta.visitor.hardware.IBob3Visitor;
 
 /**
@@ -39,8 +39,8 @@ public final class Bob3UsedHardwareCollectorVisitor extends AbstractUsedHardware
     }
 
     @Override
-    public Void visitBob3GetSampleSensor(GetSampleSensor<Void> bob3GetSampleSensor) {
-        if ( bob3GetSampleSensor.getSensorType().toString().equals("TIME") ) {
+    public Void visitBob3GetSampleSensor(GetSampleSensor<Void> sampleSensor) {
+        if ( sampleSensor.getSensorTypeAndMode().equals("TIME") ) {
             this.usedSensors.add(new UsedSensor(null, SC.TIMER, null));
         } else {
             this.usedSensors.add(new UsedSensor(null, SC.NONE, null));

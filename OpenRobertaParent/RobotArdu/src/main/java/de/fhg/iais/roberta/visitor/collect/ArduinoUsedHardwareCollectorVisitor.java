@@ -10,10 +10,9 @@ import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.PinReadValueAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
@@ -81,12 +80,6 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
         serialWriteAction.getValue().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitPinReadValueAction(PinReadValueAction<Void> pinReadValueActor) {
-        this.usedActors.add(new UsedActor(pinReadValueActor.getPort(), SC.ANALOG_INPUT));
         return null;
     }
 

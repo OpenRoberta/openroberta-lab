@@ -6,8 +6,7 @@ import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
-import de.fhg.iais.roberta.syntax.actors.arduino.PinReadValueAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
+import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
@@ -15,6 +14,7 @@ import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
@@ -40,19 +40,16 @@ public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHard
 
     @Override
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void visitPinReadValueAction(PinReadValueAction<Void> pinReadValueActor) {
-        // TODO Auto-generated method stub
+    public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
         return null;
     }
 
     @Override
     public Void visitRelayAction(RelayAction<Void> relayAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 

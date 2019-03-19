@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
 
-public class PinWriteValueSensorTest {
+public class PinWriteValueActionTest {
     private final HelperCalliopeForXmlTest h = new HelperCalliopeForXmlTest();
 
     @Test
@@ -13,7 +13,7 @@ public class PinWriteValueSensorTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=384, y=50], "
                 + "MainTask [], "
-                + "PinWriteValueSensor [ANALOG, 2, NumConst [1]], PinWriteValueSensor [DIGITAL, 4, NumConst [1]]]]]";
+                + "PinWriteValueAction [ANALOG, 2, NumConst [1]], PinWriteValueAction [DIGITAL, 4, NumConst [1]]]]]";
 
         String result = this.h.generateTransformerString("/action/write_value_to_pin.xml");
 

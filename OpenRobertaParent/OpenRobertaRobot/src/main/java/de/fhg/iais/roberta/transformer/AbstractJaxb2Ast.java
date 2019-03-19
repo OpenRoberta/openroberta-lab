@@ -555,6 +555,23 @@ abstract public class AbstractJaxb2Ast<V> {
         throw new DbcException("There is no field with name " + name);
     }
 
+    /**
+     * Extract an optional field from a list of {@link Field}. <br>
+     * <br>
+     *
+     * @param fields as a source
+     * @param name of the field to be extracted
+     * @return value containing the field; if the key was not found, return null
+     */
+    public String optField(List<Field> fields, String name) {
+        for ( Field field : fields ) {
+            if ( field.getName().equals(name) ) {
+                return field.getValue();
+            }
+        }
+        return null;
+    }
+
     public String extractOperation(Block block, String name) {
         List<Field> fields = extractFields(block, (short) 1);
         String operation = extractField(fields, name);
