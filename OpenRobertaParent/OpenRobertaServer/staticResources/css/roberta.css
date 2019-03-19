@@ -795,25 +795,22 @@ div.rightMenuButton:hover,
 .download-checkbox ul {
     list-style: none;
 }
-table#download-instructions {
-    padding-left: 0;
-    margin-top: 24px;
+#download-instructions {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
 }
-#download-instructions tr {
-    height: 80px;
-    font-size: 20px;
-    opacity: 0;
+#download-instructions li {
+	font-size: 1.5em;
+	margin-bottom: 1.5em;
 }
-#download-instructions td {
-    padding-left: 12px;
-    vertical-align: top;
+
+.download-message {
+	position: relative;
+	left: 2em;
+	margin-left: -1em;
 }
-#download-instructions #liA,
-#download-instructions #liB,
-#download-instructions #liC,
-#download-instructions #liD {
-	background-repeat: no-repeat;
-}
+
 #programLink a {
     text-decoration: underline;
     color: #337ab7;

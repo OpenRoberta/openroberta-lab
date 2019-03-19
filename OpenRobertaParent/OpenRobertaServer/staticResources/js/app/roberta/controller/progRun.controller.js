@@ -94,21 +94,25 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
                 MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
             } else {
                 fillDownloadModal(filename, result.compiledCode);
-
                 $("#save-client-compiled-program").one("shown.bs.modal", function(e) {
-                    if (GUISTATE_C.getRobot() === 'sensebox') {
-                        $('[lkey$="STEP_A_SENSEBOX"]').attr("hidden", false);
-                        $('[lkey$="STEP_D_SENSEBOX"]').attr("hidden", false);
-                        $('[lkey$="STEP_A"]').attr("hidden", true);
-                        $('[lkey$="STEP_D"]').attr("hidden", true);
-                    } else {
-                        $('[lkey$="STEP_A_SENSEBOX"]').attr("hidden", true);
-                        $('[lkey$="STEP_D_SENSEBOX"]').attr("hidden", true);
-                        $('[lkey$="STEP_A"]').attr("hidden", false);
-                        $('[lkey$="STEP_D"]').attr("hidden", false);
+                    for (const x of Array(4).keys()) {
+                        var stepLetter = String.fromCharCode('A'.charCodeAt(0) + x);
+                        var step = $($.parseHTML('<li class="typcn typcn-roberta"><span class="download-message">' 
+                                + Blockly.Msg['POPUP_DOWNLOAD_STEP_' + stepLetter + '_' 
+                                + GUISTATE_C.getRobot().toUpperCase()] + '</span></li>'));
+                        step.css('opacity', '0');
+                        $('#download-instructions').append(step);
                     }
-                    $('#download-instructions tr').each(function(i) {
-                        $(this).delay(750 * i).animate({
+                    $("#download-instructions li").each(function(index) {
+                        if (GUISTATE_C.getRobot().indexOf("calliope") >= 0) {
+                            substituteName = "MINI";
+                        } else {
+                            substituteName = GUISTATE_C.getRobot().toUpperCase();
+                        }
+                        $(this).html($(this).html().replace("$", substituteName));
+                    })
+                    $('#download-instructions li').each(function(index) {
+                        $(this).delay(750 * index).animate({
                             opacity : 1
                         }, 1000);
                     });
@@ -118,9 +122,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
                         GUISTATE_C.setProgramToDownload();
                     }
                     $('#programLink').remove();
-                    $('#download-instructions tr').each(function(i) {
-                        $(this).css('opacity', '0');
-                    });
+                    $('#download-instructions').empty();
                     GUISTATE_C.setConnectionState("wait");
                     MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
                 });
@@ -240,13 +242,5 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
         }
         var textH = $("#popupDownloadHeader").text();
         $("#popupDownloadHeader").text(textH.replace("$", $.trim(GUISTATE_C.getRobotRealName())));
-        var textC = $("#download-instructions").find("tr").eq(2).find("td").eq(1).html();
-        var usb;
-        if (GUISTATE_C.getRobot().indexOf("calliope") >= 0) {
-            usb = "MINI";
-        } else {
-            usb = GUISTATE_C.getRobot().toUpperCase();
-        }
-        $("#download-instructions").find("tr").eq(2).find("td").eq(1).html(textC.replace("$", usb));
     }
 });
