@@ -798,17 +798,18 @@ div.rightMenuButton:hover,
 #download-instructions {
 	list-style-type: none;
 	padding: 0;
-	margin: 0;
+	margin: 32px 16px 0px 16px;
 }
 #download-instructions li {
-	font-size: 1.5em;
-	margin-bottom: 1.5em;
-}
-
-.download-message {
+	font-size: 20px;
+	margin-bottom: 48px;
+	padding-left: 2em;
 	position: relative;
-	left: 2em;
-	margin-left: -1em;
+}
+#download-instructions .typcn-Roberta::before {
+	position: absolute;
+	left: 0;
+	padding-top: 4px;
 }
 
 #programLink a {
