@@ -93,24 +93,25 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
                 }, 5000);
                 MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
             } else {
-                fillDownloadModal(filename, result.compiledCode);
-                $("#save-client-compiled-program").one("shown.bs.modal", function(e) {
-                    for (const x of Array(4).keys()) {
-                        var stepLetter = String.fromCharCode('A'.charCodeAt(0) + x);
-                        var step = $($.parseHTML('<li class="typcn typcn-roberta"><span class="download-message">' 
-                                + Blockly.Msg['POPUP_DOWNLOAD_STEP_' + stepLetter + '_' 
-                                + GUISTATE_C.getRobot().toUpperCase()] + '</span></li>'));
-                        step.css('opacity', '0');
-                        $('#download-instructions').append(step);
+                createDownloadLink(filename, result.compiledCode);
+                var textH = $("#popupDownloadHeader").text();
+                $("#popupDownloadHeader").text(textH.replace("$", $.trim(GUISTATE_C.getRobotRealName())));
+                for (var i = 1; Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]; i++) {
+                    var step = $('<li class="typcn typcn-roberta">');
+                    var a = Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i + '_' + GUISTATE_C.getRobotGroup().toUpperCase()] || Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]
+                            || 'POPUP_DOWNLOAD_STEP_' + i;
+                    step.html('<span class="download-message">' + a + '</span>');
+                    step.css('opacity', '0');
+                    $('#download-instructions').append(step);
+                }
+                var substituteName = GUISTATE_C.getRobotGroup().toUpperCase();
+                $("#download-instructions li").each(function(index) {
+                    if (GUISTATE_C.getRobotGroup() === "calliope") {
+                        substituteName = "MINI";
                     }
-                    $("#download-instructions li").each(function(index) {
-                        if (GUISTATE_C.getRobot().indexOf("calliope") >= 0) {
-                            substituteName = "MINI";
-                        } else {
-                            substituteName = GUISTATE_C.getRobot().toUpperCase();
-                        }
-                        $(this).html($(this).html().replace("$", substituteName));
-                    })
+                    $(this).html($(this).html().replace("$", substituteName));
+                })
+                $("#save-client-compiled-program").one("shown.bs.modal", function(e) {
                     $('#download-instructions li').each(function(index) {
                         $(this).delay(750 * index).animate({
                             opacity : 1
@@ -202,7 +203,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
         }
     }
 
-    function fillDownloadModal(fileName, content) {
+    function createDownloadLink(fileName, content) {
         var rawSvg;
         if (!('msSaveOrOpenBlob' in navigator)) {
             $('#trA').removeClass('hidden');
@@ -242,7 +243,5 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             downloadLink.setAttribute('style', 'font-size:36px');
             $('#downloadLink').append(programLinkDiv);
         }
-        var textH = $("#popupDownloadHeader").text();
-        $("#popupDownloadHeader").text(textH.replace("$", $.trim(GUISTATE_C.getRobotRealName())));
     }
 });
