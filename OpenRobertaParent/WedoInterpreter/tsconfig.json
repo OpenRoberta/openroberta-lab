@@ -8,11 +8,7 @@
 		"moduleResolution": "node",
 		"baseUrl": "./ts",
 		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		
-		"paths": {
-            "interpreter.*": ["*"]
-        }
+		"noUnusedParameters": true
 	},
 	"compileOnSave": true,
 	"buildOnSave": true

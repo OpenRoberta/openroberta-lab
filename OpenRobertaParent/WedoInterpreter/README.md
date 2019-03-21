@@ -25,7 +25,7 @@ and run the interpreter code (using node). Requirements:
 
 1. install the plugin 'TypeScript IDE' (in spite of its strange name it is a plugin). It includes an editor and ts compiler. Restart eclipse.
 2. the settings are ok (including format + save options)
-3. the tsconfig.json contains settings for tsc. For the fullpower of this config file see https://www.typescriptlang.org/docs/handbook/tsconfig-json.html .
+3. the tsconfig.json contains settings for tsc. For the full power of this config file see https://www.typescriptlang.org/docs/handbook/tsconfig-json.html .
 Simple settings are, e.g.:
 ```javascript
 {
@@ -47,7 +47,7 @@ Simple settings are, e.g.:
 
 7. the editor supports 'goto dec', 'completion' and much more (see the wiki). Note (again): On every save the compiler runs (incrementally) and shows all errors
    in the 'problem view'. Click and analyse.
-8. sometimes for consolidation of run the tsc-configuration for compilation
+8. sometimes run the tsc-configuration to achieve consistent generated javascript files.
 
 9. PITFALL 1: 'goto dec' and others may opens a NEW editor. Thus a file may be accessed by more than one editor.
    BE CAREFUL: NEVER edit the same source at the same time with two editors. Changes will be LOST in almost allcases!

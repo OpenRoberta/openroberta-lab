@@ -14,8 +14,8 @@
     },
     "exclude": [
         "**/node_modules",
-        "**/nativeTest.ts",
-        "**/runStackMachineJson.ts"
+        "**/interpreter.nativeTest.ts",
+        "**/interpreter.runStackMachineJson.ts"
     ],
     "compileOnSave": false,
     "buildOnSave": false
