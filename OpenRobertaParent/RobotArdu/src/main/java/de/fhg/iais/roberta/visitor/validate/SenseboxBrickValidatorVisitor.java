@@ -165,7 +165,7 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
 
     @Override
     public Void visitPlotPointAction(PlotPointAction<Void> plotPointAction) {
-        if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) || !this.robotConfiguration.isComponentTypePresent(SC.SENSEBOX_PLOTTING) ) {
             plotPointAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
         }
         return null;
@@ -173,7 +173,7 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
 
     @Override
     public Void visitPlotClearAction(PlotClearAction<Void> plotClearAction) {
-        if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) || !this.robotConfiguration.isComponentTypePresent(SC.SENSEBOX_PLOTTING) ) {
             plotClearAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
         }
         return null;
