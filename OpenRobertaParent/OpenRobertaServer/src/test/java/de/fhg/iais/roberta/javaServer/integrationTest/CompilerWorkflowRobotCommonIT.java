@@ -59,8 +59,8 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
  */
 @Category(IntegrationTest.class)
 @RunWith(MockitoJUnitRunner.class)
-public class CompilerWorkflowCommonIT {
-    private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflowCommonIT.class);
+public class CompilerWorkflowRobotCommonIT {
+    private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflowRobotCommonIT.class);
     private static final boolean CROSSCOMPILER_CALL = true; // set to false, if the test logic has to be tested. NEVER commit with false.
     private static final boolean SHOW_SUCCESS = true;
     private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
@@ -136,7 +136,7 @@ public class CompilerWorkflowCommonIT {
                     JSONObject exclude = prog.optJSONObject("exclude");
                     if ( exclude != null ) {
                         for ( String excludeRobot : exclude.keySet() ) {
-                            if ( excludeRobot.equals(robotName) ) {
+                            if ( excludeRobot.equals(robotName) || excludeRobot.equals("ALL") ) {
                                 LOG.info("########## for " + robotName + " prog " + progName + " is excluded. Reason: " + exclude.getString(excludeRobot));
                                 continue nextProg;
                             }
@@ -166,8 +166,8 @@ public class CompilerWorkflowCommonIT {
     @Ignore
     @Test
     public void testShowSomeGeneratedPrograms() {
-        String progName = "mathFunctions";
-        List<String> robots = Arrays.asList("microbit", "nano", "calliope2017", "ev3lejosv1");
+        String progName = "mathAndLists";
+        List<String> robots = Arrays.asList("ev3lejosv1");
         for ( String robot : robots ) {
             String robotDir = robotsFromTestSpec.getJSONObject(robot).getString("dir");
             final String template = getTemplateWithConfigReplaced(robotDir);

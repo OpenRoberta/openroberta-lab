@@ -855,7 +855,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         if ( op == GET ) {
             this.sb.append(".get( (int) (");
         } else if ( op == GET_REMOVE || op == REMOVE ) {
-            this.sb.append(".remove( (int)");
+            this.sb.append(".remove( (int) (");
         }
         switch ( loc ) {
             case FIRST:

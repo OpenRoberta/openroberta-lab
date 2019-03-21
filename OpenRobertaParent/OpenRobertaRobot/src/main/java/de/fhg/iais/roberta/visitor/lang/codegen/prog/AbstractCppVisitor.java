@@ -468,9 +468,6 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
         this.sb.append("\n").append(getLanguageVarTypeFromBlocklyType(methodReturn.getReturnType()));
-        if ( methodReturn.getReturnType().toString().contains("ARRAY") ) {
-            this.sb.append("M>");
-        }
         this.sb.append(" " + methodReturn.getMethodName() + "(");
         methodReturn.getParameters().visit(this);
         this.sb.append(") {");
