@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
+import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
@@ -225,6 +226,11 @@ public final class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisit
 
     @Override
     public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction<Void> switchLedMatrixAction) {
         return null;
     }
 }

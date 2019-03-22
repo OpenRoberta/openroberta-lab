@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
+import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
@@ -266,4 +267,7 @@ public interface IMbedVisitor<V> extends IDisplayVisitor<V>, ILightVisitor<V>, I
         throw new DbcException("Not supported!");
     }
 
+    default V visitSwitchLedMatrixAction(SwitchLedMatrixAction<V> switchLedMatrixAction) {
+        throw new DbcException("Not supported!");
+    }
 }

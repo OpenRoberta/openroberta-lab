@@ -665,6 +665,18 @@ public class CppVisitorTest {
     }
 
     @Test
+    public void visitSwitchLedMatrix_SwitchLedMatrixOffAndOn_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + MAIN
+                + "_uBit.display.disable();\n"
+                + "_uBit.display.enable();\n"
+                + END;
+        assertCodeIsOk(expectedResult, "/action/switch_led_matrix.xml");
+    }
+
+    @Test
     public void visitMathOnListFunct_DisplayAllMathOnListFunctsResults_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult =
             "" //

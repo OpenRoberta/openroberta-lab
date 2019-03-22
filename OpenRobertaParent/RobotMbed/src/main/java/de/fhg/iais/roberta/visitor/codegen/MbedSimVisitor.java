@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
@@ -462,7 +463,11 @@ public final class MbedSimVisitor extends AbstractSimVisitor<Void> implements IM
 
     @Override
     public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
+        return null;
+    }
 
+    @Override
+    public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction<Void> switchLedMatrixAction) {
         return null;
     }
 }

@@ -3,6 +3,8 @@ package de.fhg.iais.roberta.visitor.codegen;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.fhg.iais.roberta.mode.general.WorkingState;
+import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import org.apache.commons.text.WordUtils;
 
 import de.fhg.iais.roberta.components.Configuration;
@@ -1196,6 +1198,16 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             this.sb.append("sht31.readTemperature()");
         } else {
             throw new UnsupportedOperationException("Mode " + humiditySensor.getMode() + " not supported!");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction<Void> switchLedMatrixAction) {
+        if ( switchLedMatrixAction.isActivated() ) {
+            this.sb.append("_uBit.display.enable();");
+        } else {
+            this.sb.append("_uBit.display.disable();");
         }
         return null;
     }
