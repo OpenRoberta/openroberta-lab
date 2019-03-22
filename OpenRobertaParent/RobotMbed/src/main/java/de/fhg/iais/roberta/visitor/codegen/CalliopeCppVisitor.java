@@ -467,7 +467,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
         String userDefined = keysSensor.getPort();
         String port = this.configuration.getConfigurationComponent(userDefined).getPortName();
-        this.sb.append("_uBit.button" + port + ".isPressed()");
+        this.sb.append("_uBit.button").append(port).append(".isPressed()");
         return null;
     }
 

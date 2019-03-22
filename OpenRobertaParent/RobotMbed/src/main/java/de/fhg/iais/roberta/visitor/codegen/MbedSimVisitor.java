@@ -166,7 +166,7 @@ public final class MbedSimVisitor extends AbstractSimVisitor<Void> implements IM
     @Override
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
         String key = keysSensor.getPort().toString().toUpperCase();
-        this.sb.append("createGetSample(CONST.BUTTONS, CONST." + key + ")");
+        this.sb.append("createGetSample(CONST.BUTTONS, CONST.BUTTON_").append(key).append(")");
         return null;
     }
 
@@ -287,17 +287,16 @@ public final class MbedSimVisitor extends AbstractSimVisitor<Void> implements IM
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb
-            .append(
-                "createConstant(CONST."
-                    + colorConst.getKind().getName()
-                    + ", ["
-                    + colorConst.getRedChannelInt()
-                    + ", "
-                    + colorConst.getGreenChannelInt()
-                    + ", "
-                    + colorConst.getBlueChannelInt()
-                    + "])");
+        this.sb.append(
+            "createConstant(CONST."
+                + colorConst.getKind().getName()
+                + ", ["
+                + colorConst.getRedChannelInt()
+                + ", "
+                + colorConst.getGreenChannelInt()
+                + ", "
+                + colorConst.getBlueChannelInt()
+                + "])");
         return null;
     }
 

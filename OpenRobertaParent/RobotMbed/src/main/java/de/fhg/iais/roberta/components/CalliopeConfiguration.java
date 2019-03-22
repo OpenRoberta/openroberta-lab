@@ -39,41 +39,36 @@ public class CalliopeConfiguration extends Configuration {
         ConfigurationComponent A = new ConfigurationComponent("A", false, "A", "NO_SLOT", "A", Collections.emptyMap());
         ConfigurationComponent B = new ConfigurationComponent("B", false, "B", "NO_SLOT", "B", Collections.emptyMap());
         ConfigurationComponent AB = new ConfigurationComponent("AB", false, "AB", "NO_SLOT", "AB", Collections.emptyMap());
-        ConfigurationComponent button_a = new ConfigurationComponent("button_a", false, "A", "NO_SLOT", "button_a", Collections.emptyMap());
-        ConfigurationComponent button_b = new ConfigurationComponent("button_b", false, "B", "NO_SLOT", "button_b", Collections.emptyMap());
 
         ArrayList<ConfigurationComponent> components =
-            Lists
-                .newArrayList(
-                    pin0,
-                    pin1,
-                    pin2,
-                    C16,
-                    C04,
-                    C05,
-                    C12,
-                    C11,
-                    C17,
-                    C10,
-                    C06,
-                    C07,
-                    C08,
-                    C09,
-                    pin3,
-                    C19,
-                    C18,
-                    pin4,
-                    pin5,
-                    X,
-                    Y,
-                    Z,
-                    STRENGTH,
-                    NO_PORT,
-                    A,
-                    B,
-                    AB,
-                    button_a,
-                    button_b);
+            Lists.newArrayList(
+                pin0,
+                pin1,
+                pin2,
+                C16,
+                C04,
+                C05,
+                C12,
+                C11,
+                C17,
+                C10,
+                C06,
+                C07,
+                C08,
+                C09,
+                pin3,
+                C19,
+                C18,
+                pin4,
+                pin5,
+                X,
+                Y,
+                Z,
+                STRENGTH,
+                NO_PORT,
+                A,
+                B,
+                AB);
         configuration = new Configuration.Builder().addComponents(components).build();
     }
 
