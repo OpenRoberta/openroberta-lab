@@ -53,12 +53,12 @@ public class AstToEv3PythonVisitorTest {
 
     private static final String CFG_MOTOR_B =
         "" //
-            + "        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B, 'on', 'foreward', 'right'),\n";
+            + "        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B, 'on', 'foreward'),\n";
 
     private static final String CFG_MOTORS =
         "" //
-            + "        'A':Hal.makeLargeMotor(ev3dev.OUTPUT_A, 'on', 'foreward', 'left'),\n"
-            + "        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B, 'on', 'foreward', 'right'),\n";
+            + "        'A':Hal.makeLargeMotor(ev3dev.OUTPUT_A, 'on', 'foreward'),\n"
+            + "        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B, 'on', 'foreward'),\n";
 
     private static final String CFG_TOUCH_SENSOR =
         "" //
