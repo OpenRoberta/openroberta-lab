@@ -255,7 +255,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     @Override
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
         String userDefined = keysSensor.getPort();
-        this.sb.append("microbit." + userDefined + ".is_pressed()");
+        this.sb.append("microbit.button_").append(userDefined.toLowerCase()).append(".is_pressed()");
         return null;
     }
 
