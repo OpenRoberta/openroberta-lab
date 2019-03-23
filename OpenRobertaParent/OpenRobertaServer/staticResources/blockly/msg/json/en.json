@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-03-22 14:51:09.543724",
+		"lastupdated": "2019-03-23 07:45:02.629813",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -843,7 +843,7 @@
 	"SIM_CONFIGURATION_WARNING_SENSOR_MISSING": "This sensor is not in the configuration! The behaviour of the program on the real robot will be different than expected!",
 	"SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT": "In this block you have used a wrong sensor port! The behaviour of the program on the real robot will be different than expected, please check the robot configuration!",
 	"SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT": "The infrared sensor is not connected in the configuration! The behaviour of the program on the real robot will be different than expected, please check the robot configuration!",
-	"SERVER_NOT_AVAILABLE": "The Open Roberta Lab is currently not available. </br>Your internet connection was interrupted. If you currently have an EV3 connected via the USB cable solve this with a click on the programming environment.<br>If this problem persists please check your internet connection and try to reload this website. If you have this problem again, please don't hesitate to contact us via mail:</br>roberta-zentrale@iais.fraunhofer.de",
+	"SERVER_NOT_AVAILABLE": "The Open Roberta Lab is currently not available. </br>Your internet connection was interrupted. If you currently have an EV3 connected via the USB cable solve this with a click on the programming environment.<br>If this problem persists please check your internet connection and try to reload this website. If you have this problem again, please don't hesitate to contact us via mail:</br>support-o-r@iais.fraunhofer.de",
 	"MENU_MESSAGE_DOWNLOAD": "Your program has been successfully downloaded.",
 	"POPUP_PROGRAM_TERMINATED_UNEXPECTED": "The execution of the program on the robot has terminated unexpectedly!",
 	"TOUR1_DESCRIPTION00": "next",
@@ -894,7 +894,7 @@
 	"ORA_TOKEN_SET_ERROR_WRONG_ROBOTTYPE": "You are trying to connect a robot of a different type as selected in the menu. <br> Please switch the robot type in the robot's menu and try to connect again!",
 	"ORA_USER_ERROR_EMAIL_USED": "There is already an account with this email address registered. Please enter another email address!",
 	"ORA_USER_PASSWORD_RECOVERY_EXPIRED_URL": "The link is not valid anymore. Please ask for resetting your password again, if you still cannot remember it!",
-	"ORA_USER_PASSWORD_RECOVERY_SENT_MAIL_FAIL": "Sorry, we cannot send a mail to you, please contact »roberta-zentrale@iais.fraunhofer.de«",
+	"ORA_USER_PASSWORD_RECOVERY_SENT_MAIL_FAIL": "Sorry, we cannot send a mail to you, please contact »support-o-r@iais.fraunhofer.de«",
 	"ORA_USER_PASSWORD_RECOVERY_SENT_MAIL_SUCCESS": "We send a mail to you, please check your mailbox!",
 	"ORA_USER_UPDATE_SUCCESS": "Your password has been successfully changed!",
 	"LIGHT_TOOLTIP": "Represents a light sensor.",
@@ -1224,7 +1224,7 @@
 	"YOUNGER_THEN_14": "I am younger than 16!",
 	"OLDER_THEN_14": "I am 16 or older than 16!",
 	"ORA_USER_ACTIVATION_SENT_MAIL_SUCCESS": "We send a mail to you, please check your mailbox!",
-	"ORA_USER_ACTIVATION_SENT_MAIL_FAIL": "Sorry, we cannot send a mail to you, please contact »roberta-zentrale@iais.fraunhofer.de«",
+	"ORA_USER_ACTIVATION_SENT_MAIL_FAIL": "Sorry, we cannot send a mail to you, please contact »support-o-r@iais.fraunhofer.de«",
 	"ORA_USER_ACTIVATION_SUCCESS": "Your account is successfully verified! Please login!",
 	"ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE": "Your are not allowed to share. Please activate your account! <br><a href='https://www.roberta-home.de/index.php?id=138&L=1' target='_blank'>Further information ...</a>",
 	"ORA_USER_DEACTIVATION_SUCCESS": "Your account is currently not verified, please check your mailbox!",
