@@ -656,10 +656,10 @@ public class CppVisitorTest {
                 + "#include <array>\n"
                 + "#include <stdlib.h>\n"
                 + "MicroBit_uBit;"
-                + "Sht31 sht31 = Sht31(MICROBIT_PIN_P8, MICROBIT_PIN_P2);"
+                + "Sht31 _sht31 = Sht31(MICROBIT_PIN_P8, MICROBIT_PIN_P2);"
                 + MAIN
-                + "_uBit.display.scroll(ManagedString(sht31.readHumidity()));"
-                + "_uBit.display.scroll(ManagedString(sht31.readTemperature()));"
+                + "_uBit.display.scroll(ManagedString(_sht31.readHumidity()));"
+                + "_uBit.display.scroll(ManagedString(_sht31.readTemperature()));"
                 + END;
         assertCodeIsOk(expectedResult, "/sensor/humidity_sensor.xml");
     }

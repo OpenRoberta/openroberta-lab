@@ -1112,7 +1112,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             this.sb.append("Grove_LED_Bar ledBar(MICROBIT_PIN_P8, MICROBIT_PIN_P2);\n"); // Only works on the right UART Grove connector; Clock/Data pins are swapped compared to 4DigitDisplay
         }
         if ( this.codePreprocess.isHumidityUsed() ) {
-            this.sb.append("Sht31 sht31 = Sht31(MICROBIT_PIN_P8, MICROBIT_PIN_P2);\n");
+            this.sb.append("Sht31 _sht31 = Sht31(MICROBIT_PIN_P8, MICROBIT_PIN_P2);\n");
         }
     }
 
@@ -1190,9 +1190,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
         if ( humiditySensor.getMode().equals(SC.HUMIDITY) ) {
-            this.sb.append("sht31.readHumidity()");
+            this.sb.append("_sht31.readHumidity()");
         } else if ( humiditySensor.getMode().equals(SC.TEMPERATURE) ) {
-            this.sb.append("sht31.readTemperature()");
+            this.sb.append("_sht31.readTemperature()");
         } else {
             throw new UnsupportedOperationException("Mode " + humiditySensor.getMode() + " not supported!");
         }
