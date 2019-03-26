@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.visitor.validate;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
@@ -50,8 +51,12 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
+        if ( lightAction.getMode().toString().equals(BlocklyConstants.ON) && !this.robotConfiguration.isComponentTypePresent(SC.LED) ) {
             lightAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+        } else if ( lightAction.getMode().toString().equals(BlocklyConstants.DEFAULT) && !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
+            lightAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+        } else {
+            // no errors, all blocks in place.
         }
         return null;
     }

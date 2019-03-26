@@ -367,4 +367,5 @@ public final class BlocklyConstants {
     public static final String ID = "ID";
     public static final String PROTOCOL = "PROTOCOL";
     public static final String TICKMARK = "TICKMARK";
+    public static final String ON = "ON";
 }

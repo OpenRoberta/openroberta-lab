@@ -9,6 +9,8 @@ import java.util.Set;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.components.UsedActor;
+import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
@@ -553,16 +555,26 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
             switch ( usedConfigurationBlock.getComponentType() ) {
                 case SC.LED:
-                    this.sb.append("pinMode(_led_").append(usedConfigurationBlock.getUserDefinedPortName()).append(", OUTPUT);");
-                    this.nlIndent();
+                    for ( UsedActor usedActor : this.usedActors ) {
+                        if ( usedActor.getType().equals(SC.LED) ) {
+                            this.sb.append("pinMode(_led_").append(usedConfigurationBlock.getUserDefinedPortName()).append(", OUTPUT);");
+                            nlIndent();
+                            break;
+                        }
+                    }
                     break;
                 case SC.RGBLED:
-                    this.sb.append("pinMode(_led_red_").append(usedConfigurationBlock.getUserDefinedPortName()).append(", OUTPUT);");
-                    this.nlIndent();
-                    this.sb.append("pinMode(_led_green_").append(usedConfigurationBlock.getUserDefinedPortName()).append(", OUTPUT);");
-                    this.nlIndent();
-                    this.sb.append("pinMode(_led_blue_").append(usedConfigurationBlock.getUserDefinedPortName()).append(", OUTPUT);");
-                    this.nlIndent();
+                    for ( UsedActor usedActor : this.usedActors ) {
+                        if ( usedActor.getType().equals(SC.RGBLED) ) {
+                            this.sb.append("pinMode(_led_red_").append(usedConfigurationBlock.getUserDefinedPortName()).append(", OUTPUT);");
+                            this.nlIndent();
+                            this.sb.append("pinMode(_led_green_").append(usedConfigurationBlock.getUserDefinedPortName()).append(", OUTPUT);");
+                            this.nlIndent();
+                            this.sb.append("pinMode(_led_blue_").append(usedConfigurationBlock.getUserDefinedPortName()).append(", OUTPUT);");
+                            this.nlIndent();
+                            break;
+                        }
+                    }
                     break;
                 case SC.KEY:
                     this.sb.append("pinMode(_button_").append(usedConfigurationBlock.getUserDefinedPortName()).append(", INPUT);");
@@ -596,14 +608,24 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     this.nlIndent();
                     break;
                 case SC.SENSEBOX_ACCELEROMETER:
-                    this.sb.append("_bmx055_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".begin();");
-                    nlIndent();
+                    for ( UsedSensor usedSensor : this.usedSensors ) {
+                        if ( usedSensor.getType().equals(SC.SENSEBOX_COMPASS)
+                            || usedSensor.getType().equals(SC.ACCELEROMETER)
+                            || usedSensor.getType().equals(SC.GYRO) ) {
+                            this.sb.append("_bmx055_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".begin();");
+                            nlIndent();
+                            break;
+                        }
+                    }
                     break;
                 case SC.SENSEBOX_SDCARD:
                     this.sb.append("SD.begin(28);");
                     nlIndent();
-                    this.sb.append("_dataFile = SD.open(").append("\"").append(usedConfigurationBlock.getOptProperty("NAO_FILENAME")).append(
-                        "\", FILE_WRITE);");
+                    this.sb
+                        .append("_dataFile = SD.open(")
+                        .append("\"")
+                        .append(usedConfigurationBlock.getOptProperty("NAO_FILENAME"))
+                        .append("\", FILE_WRITE);");
                     nlIndent();
                     this.sb.append("_dataFile.close();");
                     nlIndent();
@@ -704,16 +726,26 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
             String blockName = cc.getUserDefinedPortName();
             switch ( cc.getComponentType() ) {
                 case SC.LED:
-                    this.sb.append("int _led_").append(blockName).append(" = ").append(cc.getProperty("INPUT")).append(";");
-                    this.nlIndent();
+                    for ( UsedActor usedActor : this.usedActors ) {
+                        if ( usedActor.getType().equals(SC.LED) ) {
+                            this.sb.append("int _led_").append(blockName).append(" = ").append(cc.getProperty("INPUT")).append(";");
+                            nlIndent();
+                            break;
+                        }
+                    }
                     break;
                 case SC.RGBLED:
-                    this.sb.append("int _led_red_").append(blockName).append(" = ").append(cc.getProperty("RED")).append(";");
-                    this.nlIndent();
-                    this.sb.append("int _led_green_").append(blockName).append(" = ").append(cc.getProperty("GREEN")).append(";");
-                    this.nlIndent();
-                    this.sb.append("int _led_blue_").append(blockName).append(" = ").append(cc.getProperty("BLUE")).append(";");
-                    this.nlIndent();
+                    for ( UsedActor usedActor : this.usedActors ) {
+                        if ( usedActor.getType().equals(SC.RGBLED) ) {
+                            this.sb.append("int _led_red_").append(blockName).append(" = ").append(cc.getProperty("RED")).append(";");
+                            this.nlIndent();
+                            this.sb.append("int _led_green_").append(blockName).append(" = ").append(cc.getProperty("GREEN")).append(";");
+                            this.nlIndent();
+                            this.sb.append("int _led_blue_").append(blockName).append(" = ").append(cc.getProperty("BLUE")).append(";");
+                            this.nlIndent();
+                            break;
+                        }
+                    }
                     break;
                 case SC.KEY:
                     this.sb.append("int _button_").append(blockName).append(" = ").append(cc.getProperty("PIN1")).append(";");
@@ -772,24 +804,29 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     }
                     break;
                 case SC.SENSEBOX:
-                    Set<Entry<String, String>> componentEntrySet = cc.getComponentProperties().entrySet();
-                    int maxNumberOfPairs = componentEntrySet.size() / 2;
-                    String[] names = new String[maxNumberOfPairs];
-                    String[] ids = new String[maxNumberOfPairs];
-                    for ( Entry<String, String> entry : componentEntrySet ) {
-                        String key = entry.getKey();
-                        if ( key.startsWith("ID") ) {
-                            int index = Integer.parseInt(key.substring(2));
-                            ids[index - 1] = entry.getValue();
-                        } else if ( key.startsWith("NAME") ) {
-                            int index = Integer.parseInt(key.substring(4));
-                            names[index - 1] = entry.getValue();
-                        }
-                    }
-                    for ( int i = 0; i < maxNumberOfPairs; i++ ) {
-                        if ( !names[i].isEmpty() ) {
-                            this.sb.append("char* _").append(names[i]).append(" = \"").append(ids[i]).append("\";");
-                            nlIndent();
+                    for ( UsedActor usedActor : this.usedActors ) {
+                        if ( usedActor.getType().equals(SC.SEND_DATA) ) {
+                            Set<Entry<String, String>> componentEntrySet = cc.getComponentProperties().entrySet();
+                            int maxNumberOfPairs = componentEntrySet.size() / 2;
+                            String[] names = new String[maxNumberOfPairs];
+                            String[] ids = new String[maxNumberOfPairs];
+                            for ( Entry<String, String> entry : componentEntrySet ) {
+                                String key = entry.getKey();
+                                if ( key.startsWith("ID") ) {
+                                    int index = Integer.parseInt(key.substring(2));
+                                    ids[index - 1] = entry.getValue();
+                                } else if ( key.startsWith("NAME") ) {
+                                    int index = Integer.parseInt(key.substring(4));
+                                    names[index - 1] = entry.getValue();
+                                }
+                            }
+                            for ( int i = 0; i < maxNumberOfPairs; i++ ) {
+                                if ( !names[i].isEmpty() ) {
+                                    this.sb.append("char* _").append(names[i]).append(" = \"").append(ids[i]).append("\";");
+                                    nlIndent();
+                                }
+                            }
+                            break;
                         }
                     }
                     break;
@@ -804,9 +841,16 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     nlIndent();
                     break;
                 case SC.SENSEBOX_ACCELEROMETER:
-                    this.sb.append("BMX055 _bmx055_").append(blockName).append(";");
-                    nlIndent();
-                    updateBmxValues(blockName);
+                    for ( UsedSensor usedSensor : this.usedSensors ) {
+                        if ( usedSensor.getType().equals(SC.SENSEBOX_COMPASS)
+                            || usedSensor.getType().equals(SC.ACCELEROMETER)
+                            || usedSensor.getType().equals(SC.GYRO) ) {
+                            nlIndent();
+                            this.sb.append("BMX055 _bmx055_").append(blockName).append(";");
+                            updateBmxValues(blockName);
+                            break;
+                        }
+                    }
                     break;
                 case SC.SENSEBOX_PLOTTING:
                 case SC.SENSEBOX_COMPASS:

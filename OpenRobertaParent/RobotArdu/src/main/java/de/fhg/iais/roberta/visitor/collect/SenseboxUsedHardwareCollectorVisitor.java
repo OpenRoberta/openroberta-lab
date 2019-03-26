@@ -4,9 +4,11 @@ import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
+import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
@@ -115,6 +117,16 @@ public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHard
 
     @Override
     public Void visitPlotClearAction(PlotClearAction<Void> plotClearAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitLightAction(LightAction<Void> lightAction) {
+        if ( !lightAction.getMode().toString().equals(BlocklyConstants.DEFAULT) ) {
+            this.usedActors.add(new UsedActor(lightAction.getPort(), SC.LED));
+        } else {
+            this.usedActors.add(new UsedActor(lightAction.getPort(), SC.RGBLED));
+        }
         return null;
     }
 
