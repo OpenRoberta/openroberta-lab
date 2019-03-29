@@ -1402,8 +1402,6 @@ div.galleryLike a>span {
 div.galleryDescription, div.tutorialOverview {
     font-weight: normal;
     font-size: 16px;
-    max-height: 45px;
-    min-height: 45px;
     overflow: hidden;
     text-overflow: ellipsis;
     margin-bottom: 12px;
@@ -1412,6 +1410,7 @@ div.galleryDescription, div.tutorialOverview {
     position: relative;
     line-height: 1.2em;
     max-height: 2.4em;
+    min-height: 2.4em;
     text-align: justify;
     margin-right: -1em;
     padding-right: 1em;
@@ -1422,13 +1421,13 @@ div.galleryDescription, div.tutorialOverview {
     right: 0;
     bottom: 0;
 }
-.galleryDescription:after, .tutorialOverview:after{
+.galleryDescription:after, .tutorialOverview:after {
     content: '';
     position: absolute;
     right: 0;
     width: 1em;
-    height: 1em;
-    margin-top: 0.2em;
+    height: 2.5em;
+    margin-top: -0.3em;
 }
 .galleryDescription.color0:after, .tutorialOverview.color0:after {
     background: #33B8CA;
