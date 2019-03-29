@@ -967,7 +967,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitFourDigitDisplayShowAction(FourDigitDisplayShowAction<Void> fourDigitDisplayShowAction) {
-        this.sb.append("fdd.show(");
+        this.sb.append("_fdd.show(");
         fourDigitDisplayShowAction.getValue().visit(this);
         this.sb.append(", ");
         fourDigitDisplayShowAction.getPosition().visit(this);
@@ -979,13 +979,13 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitFourDigitDisplayClearAction(FourDigitDisplayClearAction<Void> fourDigitDisplayClearAction) {
-        this.sb.append("fdd.clear();");
+        this.sb.append("_fdd.clear();");
         return null;
     }
 
     @Override
     public Void visitLedBarSetAction(LedBarSetAction<Void> ledBarSetAction) {
-        this.sb.append("ledBar.setLed(");
+        this.sb.append("_ledBar.setLed(");
         ledBarSetAction.getX().visit(this);
         this.sb.append(", ");
         ledBarSetAction.getBrightness().visit(this);
@@ -1106,10 +1106,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         this.sb.append("#include <stdlib.h>\n");
         this.sb.append("MicroBit _uBit;\n");
         if ( this.codePreprocess.isFourDigitDisplayUsed() ) {
-            this.sb.append("FourDigitDisplay fdd(MICROBIT_PIN_P2, MICROBIT_PIN_P8);\n"); // Only works on the right UART Grove connector
+            this.sb.append("FourDigitDisplay _fdd(MICROBIT_PIN_P2, MICROBIT_PIN_P8);\n"); // Only works on the right UART Grove connector
         }
         if ( this.codePreprocess.isLedBarUsed() ) {
-            this.sb.append("Grove_LED_Bar ledBar(MICROBIT_PIN_P8, MICROBIT_PIN_P2);\n"); // Only works on the right UART Grove connector; Clock/Data pins are swapped compared to 4DigitDisplay
+            this.sb.append("Grove_LED_Bar _ledBar(MICROBIT_PIN_P8, MICROBIT_PIN_P2);\n"); // Only works on the right UART Grove connector; Clock/Data pins are swapped compared to 4DigitDisplay
         }
         if ( this.codePreprocess.isHumidityUsed() ) {
             this.sb.append("Sht31 _sht31 = Sht31(MICROBIT_PIN_P8, MICROBIT_PIN_P2);\n");

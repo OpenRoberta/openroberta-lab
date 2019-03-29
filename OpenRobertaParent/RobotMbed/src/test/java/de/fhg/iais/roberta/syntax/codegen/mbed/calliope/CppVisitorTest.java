@@ -279,6 +279,66 @@ public class CppVisitorTest {
     }
 
     @Test
+    public void visitFourDigitDisplayShowAction_TurnOnLedMissingColor_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + "#define_GNU_SOURCE\n\n"
+                + "#include \"MicroBit.h\""
+                + "#include \"NEPODefs.h\""
+                + "#include \"FourDigitDisplay.h\n\""
+                + "#include <list>\n"
+                + "#include <array>\n"
+                + "#include <stdlib.h>\n"
+                + "MicroBit_uBit;"
+                + "FourDigitDisplay _fdd(MICROBIT_PIN_P2, MICROBIT_PIN_P8);"
+                + MAIN
+                + "_fdd.show(1234,0,true);\n"
+                + END;
+
+        assertCodeIsOk(expectedResult, "/action/fourdigitdisplay_show.xml");
+    }
+
+    @Test
+    public void visitFourDigitDisplayClearAction_TurnOnLedMissingColor_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + "#define_GNU_SOURCE\n\n"
+                + "#include \"MicroBit.h\""
+                + "#include \"NEPODefs.h\""
+                + "#include \"FourDigitDisplay.h\n\""
+                + "#include <list>\n"
+                + "#include <array>\n"
+                + "#include <stdlib.h>\n"
+                + "MicroBit_uBit;"
+                + "FourDigitDisplay _fdd(MICROBIT_PIN_P2, MICROBIT_PIN_P8);"
+                + MAIN
+                + "_fdd.clear();\n"
+                + END;
+
+        assertCodeIsOk(expectedResult, "/action/fourdigitdisplay_clear.xml");
+    }
+
+    @Test
+    public void visitLedBarSetAction_TurnOnLedMissingColor_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + "#define_GNU_SOURCE\n\n"
+                + "#include \"MicroBit.h\""
+                + "#include \"NEPODefs.h\""
+                + "#include \"Grove_LED_Bar.h\n\""
+                + "#include <list>\n"
+                + "#include <array>\n"
+                + "#include <stdlib.h>\n"
+                + "MicroBit_uBit;"
+                + "Grove_LED_Bar _ledBar(MICROBIT_PIN_P8, MICROBIT_PIN_P2);"
+                + MAIN
+                + "_ledBar.setLed(0,5);\n"
+                + END;
+
+        assertCodeIsOk(expectedResult, "/action/ledbar_set.xml");
+    }
+
+    @Test
     public void visitLightStatusAction_TurnOffLed_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult =
             "" //
