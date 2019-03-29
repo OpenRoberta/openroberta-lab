@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-03-29 15:03:28.950074",
+		"lastupdated": "2019-03-29 16:56:49.946368",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1510,6 +1510,7 @@
 	"SWITCH_LED_MATRIX_TOOLTIP": "Enables/Disables the LED matrix to use the dual purpose pins.",
 	"ACTION_PLOTTING": "plot",
 	"ACTION_PLOT_POINT": "plot a point",
+	"ACTION_PLOT_POINT_TOOLTIP": "plot a point with specified value (Y axis) at the specified tickmark (X axis)",
 	"ACTION_PLOT_CLEAR": "clear the plot",
 	"TITLE": "title",
 	"XLABEL": "X axis label",

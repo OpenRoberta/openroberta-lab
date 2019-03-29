@@ -24,6 +24,7 @@ Blockly.Msg.ACTION_PLAY = "play";  // untranslated
 Blockly.Msg.ACTION_PLOTTING = "plot";  // untranslated
 Blockly.Msg.ACTION_PLOT_CLEAR = "clear the plot";  // untranslated
 Blockly.Msg.ACTION_PLOT_POINT = "plot a point";  // untranslated
+Blockly.Msg.ACTION_PLOT_POINT_TOOLTIP = "plot a point with specified value (Y axis) at the specified tickmark (X axis)";  // untranslated
 Blockly.Msg.ACTION_PLOT_TICKMARK = "at tickmark";  // untranslated
 Blockly.Msg.ACTION_RELAY = "relay SRD-05VDC-SL-C";  // untranslated
 Blockly.Msg.ACTION_RGBLED = "RGB LED";  // untranslated

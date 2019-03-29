@@ -24,6 +24,7 @@ Blockly.Msg.ACTION_PLAY = "Spiele";
 Blockly.Msg.ACTION_PLOTTING = "plot";
 Blockly.Msg.ACTION_PLOT_CLEAR = "clear the plot";
 Blockly.Msg.ACTION_PLOT_POINT = "plot a point";
+Blockly.Msg.ACTION_PLOT_POINT_TOOLTIP = "plot a point with specified value (Y axis) at the specified tickmark (X axis)";
 Blockly.Msg.ACTION_PLOT_TICKMARK = "at tickmark";
 Blockly.Msg.ACTION_RELAY = "Relais";
 Blockly.Msg.ACTION_RGBLED = "RGB LED";

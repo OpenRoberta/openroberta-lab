@@ -863,7 +863,13 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
         for ( ConfigurationComponent cc : this.configuration.getConfigurationComponentsValues() ) {
             if ( cc.getComponentType().equals(SC.SENSEBOX_PLOTTING) ) {
                 String blockName = cc.getUserDefinedPortName();
-                String displayName = this.configuration.getConfigurationComponentbyType(SC.LCDI2C).getUserDefinedPortName();
+                ConfigurationComponent displayConfigurationComponent = this.configuration.getConfigurationComponentbyType(SC.LCDI2C);
+                String displayName;
+                if ( displayConfigurationComponent != null ) {
+                    displayName = displayConfigurationComponent.getUserDefinedPortName();
+                } else {
+                    displayName = "NO PORT";
+                }
                 this.sb.append("Plot _plot_").append(blockName).append("(&").append("_display_").append(displayName).append(");");
                 nlIndent();
             }
