@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Fixed
+### Added
+ - issue #N/A:  a simple tutorial for Calliope
+ - issue #N/A:  new plugin for Calliope simulation (a45bcf72)
+ - issue #1138: sensebox OLED screen support for plotting mode
+ - issue #1164: raspberry pi plugin
+
+### Changed
+ - issue #N/A:  background image for Calliope configuration updated 
+ - issue #1138: sensebox default configuration updated
+
+### Removed
+### Deprecated
+### Security
+
+## [3.3.0] - 2019-03-29
+
+### Fixed
  - issue #N/A:  naming problem UMD <-> AMD in WeDo interpreter
  - issue #N/A:  integration tests can run completely without stopping on the first fail (3646bb5c)
  - issue #970:  template type argument removed from the return type of functions (artifact from previous implementation of lists), tests added
@@ -23,22 +40,19 @@ All notable changes to this project will be documented in this file.
  - issue #1175: brace-enclosed initiliser lists are now properly converted to arrays for usage with animate block in Calliope
 
 ### Added
- - issue #N/A:  new plugin for Calliope simulation (a45bcf72)
  - issue #1118: display deactivation for Calliope as switch LED matrix on/off block under Pin section of Action toolbox
  - issue #1124: new flag in the http session to give better feedback of the robot's state during compilation, so the play button does not become active before needed
- - issue #1138: sensebox OLED screen support for textual and plotting modes
+ - issue #1138: sensebox OLED screen support for textual mode
  - issue #1138: missing OLED screen off block to the sensebox toolboxes
  - issue #1138: unit tests for OLED screen (text mode, off block), write to SD card action, send data to OpenSenseMap action, serial print, buzzer, LED, RGB LED, in-built BMX055 sensor, external sensors (HDC1080, BME280, VEML/TSL), button, sound, ultrasonic and light sensors for sensebox
  - issue #1138: checkers for missing configuration components for sensebox
  - issue #1152: execution of WeDo programs can be aborted
- - issue #1164: raspberry pi plugin
  - issue #1165: SHT31 sensor (humidity) support for Calliope, includes code generation, blockly changes and unit tests
 
 ### Changed
  - issue #N/A:  email address for support changed to support-o-r@iais.fraunhofer.de
  - issue #N/A:  background images for Calliope changed
  - issue #1138: sensebox libraries updated
- - issue #1138: sensebox default configuration updated
  - issue #1138: correct C++ STL (ARM port, not ArduinoSTL) is used for sensebox
  - issue #1138: label for OLED screen changed from OLED I2C to OLED Display I2C for sensebox
  - issue #1138: default value type for send data inputs changed from string to number for sensebox, has effect on empty inputs
