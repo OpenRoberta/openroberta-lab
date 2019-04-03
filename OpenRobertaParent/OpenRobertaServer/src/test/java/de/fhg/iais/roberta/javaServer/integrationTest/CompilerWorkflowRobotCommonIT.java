@@ -50,8 +50,9 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
  * The tests in this class are integration tests. The front end is <b>not</b> tested. The tests deliver programs (either NEPO programs encoded in XML or native
  * programs encoded as expected by the crosscompilers) to the various crosscompilers and check whether the expected response is returned ("ok", "error").<br>
  * <br>
- * In src/test/crossCompilerTests/common the directory "template" contains a XML templates for each robot. The directory "conf" contains a configuration for
- * each robot. The directory "prog" contains program fragment to be inserted into all templates together with matching configurations.<br>
+ * In src/test/crossCompilerTests/common the directory "template" contains a XML templates for each robot. Default configuration for
+ * each robot is taken from each robot plugin. The directory "prog" contains program fragment to be inserted into all templates together with matching
+ * configurations.<br>
  * <br>
  * Enjoy
  *
@@ -129,8 +130,8 @@ public class CompilerWorkflowRobotCommonIT {
         try {
             for ( String robotName : robotsFromTestSpec.keySet() ) {
                 JSONObject robot = robotsFromTestSpec.getJSONObject(robotName);
-                String robotDir = robot.getString("dir");
-                String templateWithConfig = getTemplateWithConfigReplaced(robotDir);
+                String robotDir = robot.getString("template");
+                String templateWithConfig = getTemplateWithConfigReplaced(robotDir, robotName);
                 nextProg: for ( String progName : progsFromTestSpec.keySet() ) {
                     JSONObject prog = progsFromTestSpec.getJSONObject(progName);
                     JSONObject exclude = prog.optJSONObject("exclude");
@@ -169,8 +170,8 @@ public class CompilerWorkflowRobotCommonIT {
         String progName = "mathAndLists";
         List<String> robots = Arrays.asList("ev3lejosv1");
         for ( String robot : robots ) {
-            String robotDir = robotsFromTestSpec.getJSONObject(robot).getString("dir");
-            final String template = getTemplateWithConfigReplaced(robotDir);
+            String robotDir = robotsFromTestSpec.getJSONObject(robot).getString("template");
+            final String template = getTemplateWithConfigReplaced(robotDir, robot);
             final String generatedProgram = generateFinalProgram(template, progName, progsFromTestSpec.getJSONObject(progName));
             LOG.info("********** program " + progName + " for robot " + robot + " **********:\n" + generatedProgram);
         }
@@ -191,8 +192,8 @@ public class CompilerWorkflowRobotCommonIT {
         Collection<String> robots = robotsFromTestSpec.keySet();
         for ( String robotName : robots ) {
             LOG.info("********** generate and compile program " + progName + " for robot " + robotName + " **********");
-            String robotDir = robotsFromTestSpec.getJSONObject(robotName).getString("dir");
-            final String templateWithConfig = getTemplateWithConfigReplaced(robotDir);
+            String robotDir = robotsFromTestSpec.getJSONObject(robotName).getString("template");
+            final String templateWithConfig = getTemplateWithConfigReplaced(robotDir, robotName);
             compileAfterProgramGenerated(robotName, templateWithConfig, progName, progsFromTestSpec.getJSONObject(progName));
         }
     }
@@ -255,9 +256,11 @@ public class CompilerWorkflowRobotCommonIT {
         }
     }
 
-    private static String getTemplateWithConfigReplaced(String robotDir) {
+    private static String getTemplateWithConfigReplaced(String robotDir, String robotName) {
         String template = Util1.readResourceContent(RESOURCE_BASE + "template/" + robotDir + ".xml");
-        String defaultConfig = Util1.readResourceContent(RESOURCE_BASE + "conf/" + robotDir + ".xml");
+        Properties robotProperties = Util1.loadProperties("classpath:/" + robotName + ".properties");
+        String defaultConfigurationURI = robotProperties.getProperty("robot.configuration.default");
+        String defaultConfig = Util1.readResourceContent(defaultConfigurationURI);
         final String templateWithConfig = template.replaceAll("\\[\\[conf\\]\\]", defaultConfig);
         return templateWithConfig;
     }

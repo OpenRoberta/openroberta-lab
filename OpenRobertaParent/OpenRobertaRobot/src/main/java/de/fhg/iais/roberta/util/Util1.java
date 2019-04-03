@@ -194,7 +194,7 @@ public class Util1 {
                 }
                 return resourceAsStream;
             } else {
-                throw new DbcException("Could not open input stream for URI: " + propertyURI);
+                throw new DbcException("Could not open input stream for URI, missing file:/ or classpath:/ before the resource name? " + propertyURI);
             }
         } catch ( Exception e ) {
             throw new DbcException("Could not open input stream of URI " + propertyURI + ". Inspect the stacktrace", e);
