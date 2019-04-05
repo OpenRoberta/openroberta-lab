@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.transformer.expedition;
+package de.fhg.iais.roberta.transformer.raspberrypi;
 
 import static de.fhg.iais.roberta.transformer.Jaxb2ConfigurationAstHelper.extractField;
 import static de.fhg.iais.roberta.transformer.Jaxb2ConfigurationAstHelper.extractFields;
@@ -10,17 +10,17 @@ import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.expedition.ExpeditionConfiguration;
+import de.fhg.iais.roberta.components.raspberrypi.RaspberryPiConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
  * JAXB to brick configuration. Client should provide a tree of jaxb objects. Generates a BrickConfiguration object.
  */
-public class Jaxb2ExpeditionConfigurationTransformer {
+public class Jaxb2RaspberryPiConfigurationTransformer {
     IRobotFactory factory;
 
-    public Jaxb2ExpeditionConfigurationTransformer(IRobotFactory factory) {
+    public Jaxb2RaspberryPiConfigurationTransformer(IRobotFactory factory) {
         this.factory = factory;
     }
 
@@ -39,7 +39,7 @@ public class Jaxb2ExpeditionConfigurationTransformer {
                 String userName = extractField(fields, "USERNAME", 2);
                 String password = extractField(fields, "PASSWORD", 3);
 
-                return new ExpeditionConfiguration.Builder().setIpAddres(ipAddress).setPassword(password).setPortNumber(portNumber).setUserName(userName).build();
+                return new RaspberryPiConfiguration.Builder().setIpAddres(ipAddress).setPassword(password).setPortNumber(portNumber).setUserName(userName).build();
             default:
                 throw new DbcException("There was no correct configuration block found!");
         }

@@ -1,14 +1,14 @@
-package de.fhg.iais.roberta.syntax.sensor.expedition;
+package de.fhg.iais.roberta.syntax.sensor.raspberrypi;
 
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.expedition.HelperExpeditionForXmlTest;
+import de.fhg.iais.roberta.util.test.raspberrypi.HelperRaspberryPiForXmlTest;
 
 @Ignore
 public class WallTest {
-    private final HelperExpeditionForXmlTest h = new HelperExpeditionForXmlTest();
+    private final HelperRaspberryPiForXmlTest h = new HelperRaspberryPiForXmlTest();
 
     @Test
     public void make_ByDefault_ReturnInstanceOfAnimationClass() throws Exception {

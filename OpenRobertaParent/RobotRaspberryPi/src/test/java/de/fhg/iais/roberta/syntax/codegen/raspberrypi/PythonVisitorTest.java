@@ -1,16 +1,16 @@
-package de.fhg.iais.roberta.syntax.codegen.expedition;
+package de.fhg.iais.roberta.syntax.codegen.raspberrypi;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.components.expedition.ExpeditionConfiguration;
-import de.fhg.iais.roberta.util.test.expedition.HelperExpeditionForXmlTest;
+import de.fhg.iais.roberta.components.raspberrypi.RaspberryPiConfiguration;
+import de.fhg.iais.roberta.util.test.raspberrypi.HelperRaspberryPiForXmlTest;
 
 @Ignore
 public class PythonVisitorTest {
-    private final HelperExpeditionForXmlTest h = new HelperExpeditionForXmlTest();
+    private final HelperRaspberryPiForXmlTest h = new HelperRaspberryPiForXmlTest();
 
     private static final String IMPORTS =
         "" //
@@ -35,11 +35,11 @@ public class PythonVisitorTest {
             + "        print(e)\n"
             + "if __name__ == \"__main__\":\n"
             + "    main()";
-    private static ExpeditionConfiguration brickConfiguration;
+    private static RaspberryPiConfiguration brickConfiguration;
 
     @BeforeClass
     public static void setupConfigurationForAllTests() {
-        ExpeditionConfiguration.Builder builder = new ExpeditionConfiguration.Builder();
+        RaspberryPiConfiguration.Builder builder = new RaspberryPiConfiguration.Builder();
         brickConfiguration = builder.build();
     }
 

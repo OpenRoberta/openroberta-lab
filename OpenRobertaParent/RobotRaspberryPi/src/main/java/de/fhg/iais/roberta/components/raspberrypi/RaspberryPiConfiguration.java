@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.components.expedition;
+package de.fhg.iais.roberta.components.raspberrypi;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.SC;
 
-public class ExpeditionConfiguration extends Configuration {
+public class RaspberryPiConfiguration extends Configuration {
     private static ArrayList<ConfigurationComponent> components;
     private final String ipAddress;
     private final String portNumber;
@@ -58,7 +58,7 @@ public class ExpeditionConfiguration extends Configuration {
                     rightDropoff);
     }
 
-    public ExpeditionConfiguration(String ipAddress, String portNumber, String userName, String password) {
+    public RaspberryPiConfiguration(String ipAddress, String portNumber, String userName, String password) {
         super(components, 0.0f, 0.0f);
 
         this.ipAddress = ipAddress;
@@ -129,8 +129,8 @@ public class ExpeditionConfiguration extends Configuration {
         }
 
         @Override
-        public ExpeditionConfiguration build() {
-            return new ExpeditionConfiguration(this.ipAddress, this.portNumber, this.userName, this.password);
+        public RaspberryPiConfiguration build() {
+            return new RaspberryPiConfiguration(this.ipAddress, this.portNumber, this.userName, this.password);
         }
 
     }

@@ -1,17 +1,17 @@
 package de.fhg.iais.roberta.visitor.validate;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.syntax.action.expedition.LedBlinkAction;
-import de.fhg.iais.roberta.syntax.action.expedition.LedDimAction;
-import de.fhg.iais.roberta.syntax.action.expedition.LedGetAction;
-import de.fhg.iais.roberta.syntax.action.expedition.LedSetAction;
+import de.fhg.iais.roberta.syntax.action.raspberrypi.LedBlinkAction;
+import de.fhg.iais.roberta.syntax.action.raspberrypi.LedDimAction;
+import de.fhg.iais.roberta.syntax.action.raspberrypi.LedGetAction;
+import de.fhg.iais.roberta.syntax.action.raspberrypi.LedSetAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorHexString;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
-import de.fhg.iais.roberta.visitor.hardware.IExpeditionVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IRaspberryPiVisitor;
 
-public final class ExpeditionBrickValidatorVisitor extends AbstractBrickValidatorVisitor implements IExpeditionVisitor<Void> {
+public final class RaspberryPiBrickValidatorVisitor extends AbstractBrickValidatorVisitor implements IRaspberryPiVisitor<Void> {
 
-    public ExpeditionBrickValidatorVisitor(Configuration brickConfiguration) {
+    public RaspberryPiBrickValidatorVisitor(Configuration brickConfiguration) {
         super(brickConfiguration);
     }
 

@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.mode.sensor.expedition;
+package de.fhg.iais.roberta.mode.sensor.raspberrypi;
 
 public enum Slot {
     NO_SLOT, EMPTY_SLOT( "" ), CENTER( "CENTER" ), LEFT( "LEFT" ), RIGHT( "RIGHT" ), FRONT( "FRONT" ), SIDE( "SIDE" );

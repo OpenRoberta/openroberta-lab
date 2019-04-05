@@ -2,17 +2,17 @@ package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.components.expedition.ExpeditionConfiguration;
+import de.fhg.iais.roberta.components.raspberrypi.RaspberryPiConfiguration;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
-import de.fhg.iais.roberta.syntax.action.expedition.LedBlinkAction;
-import de.fhg.iais.roberta.syntax.action.expedition.LedDimAction;
-import de.fhg.iais.roberta.syntax.action.expedition.LedGetAction;
-import de.fhg.iais.roberta.syntax.action.expedition.LedSetAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.raspberrypi.LedBlinkAction;
+import de.fhg.iais.roberta.syntax.action.raspberrypi.LedDimAction;
+import de.fhg.iais.roberta.syntax.action.raspberrypi.LedGetAction;
+import de.fhg.iais.roberta.syntax.action.raspberrypi.LedSetAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorHexString;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
@@ -38,16 +38,16 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.collect.ExpeditionUsedHardwareCollectorVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IExpeditionVisitor;
+import de.fhg.iais.roberta.visitor.collect.RaspberryPiUsedHardwareCollectorVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IRaspberryPiVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
-public final class ExpeditionPythonVisitor extends AbstractPythonVisitor implements IExpeditionVisitor<Void> {
-    protected final ExpeditionConfiguration brickConfiguration;
+public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implements IRaspberryPiVisitor<Void> {
+    protected final RaspberryPiConfiguration brickConfiguration;
 
     /**
      * initialize the Python code generator visitor.
@@ -56,14 +56,14 @@ public final class ExpeditionPythonVisitor extends AbstractPythonVisitor impleme
      * @param programPhrases to generate the code from
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    private ExpeditionPythonVisitor(
-        ExpeditionConfiguration brickConfiguration,
+    private RaspberryPiPythonVisitor(
+        RaspberryPiConfiguration brickConfiguration,
         ArrayList<ArrayList<Phrase<Void>>> programPhrases,
         int indentation,
         ILanguage language) {
         super(programPhrases, indentation);
 
-        ExpeditionUsedHardwareCollectorVisitor checkVisitor = new ExpeditionUsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
+        RaspberryPiUsedHardwareCollectorVisitor checkVisitor = new RaspberryPiUsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
 
         this.brickConfiguration = brickConfiguration;
 
@@ -79,13 +79,13 @@ public final class ExpeditionPythonVisitor extends AbstractPythonVisitor impleme
      * @param programPhrases to generate the code from
      */
     public static String generate(
-        ExpeditionConfiguration brickConfiguration,
+        RaspberryPiConfiguration brickConfiguration,
         ArrayList<ArrayList<Phrase<Void>>> programPhrases,
         boolean withWrapping,
         ILanguage language) {
         Assert.notNull(brickConfiguration);
 
-        ExpeditionPythonVisitor astVisitor = new ExpeditionPythonVisitor(brickConfiguration, programPhrases, 0, language);
+        RaspberryPiPythonVisitor astVisitor = new RaspberryPiPythonVisitor(brickConfiguration, programPhrases, 0, language);
         astVisitor.generateCode(withWrapping);
 
         return astVisitor.sb.toString();

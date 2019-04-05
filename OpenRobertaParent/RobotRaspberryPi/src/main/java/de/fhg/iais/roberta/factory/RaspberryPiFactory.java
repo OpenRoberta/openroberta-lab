@@ -2,24 +2,24 @@ package de.fhg.iais.roberta.factory;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.codegen.ExpeditionCompilerWorkflow;
+import de.fhg.iais.roberta.codegen.RaspberryPiCompilerWorkflow;
 import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
-import de.fhg.iais.roberta.visitor.validate.ExpeditionBrickValidatorVisitor;
+import de.fhg.iais.roberta.visitor.validate.RaspberryPiBrickValidatorVisitor;
 
-public class ExpeditionFactory extends AbstractRobotFactory {
+public class RaspberryPiFactory extends AbstractRobotFactory {
 
-    public ExpeditionFactory(PluginProperties pluginProperties) {
+    public RaspberryPiFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
     }
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return new ExpeditionCompilerWorkflow(this.pluginProperties);
+        return new RaspberryPiCompilerWorkflow(this.pluginProperties);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class ExpeditionFactory extends AbstractRobotFactory {
 
     @Override
     public AbstractProgramValidatorVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
-        return new ExpeditionBrickValidatorVisitor(brickConfiguration);
+        return new RaspberryPiBrickValidatorVisitor(brickConfiguration);
     }
 
     @Override

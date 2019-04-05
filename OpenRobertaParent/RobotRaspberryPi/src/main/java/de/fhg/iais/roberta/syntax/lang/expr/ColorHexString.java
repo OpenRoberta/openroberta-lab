@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IExpeditionVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IRaspberryPiVisitor;
 
 /**
  * This class represents the <b>robColour_picker</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate color
@@ -75,7 +75,7 @@ public class ColorHexString<V> extends Expr<V> {
 
     @Override
     protected V accept(IVisitor<V> visitor) {
-        return ((IExpeditionVisitor<V>) visitor).visitColorHexString(this);
+        return ((IRaspberryPiVisitor<V>) visitor).visitColorHexString(this);
     }
 
     /**

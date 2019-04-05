@@ -1,22 +1,22 @@
-package de.fhg.iais.roberta.util.test.expedition;
+package de.fhg.iais.roberta.util.test.raspberrypi;
 
 import org.junit.Assert;
 
-import de.fhg.iais.roberta.components.expedition.ExpeditionConfiguration;
-import de.fhg.iais.roberta.factory.ExpeditionFactory;
+import de.fhg.iais.roberta.components.raspberrypi.RaspberryPiConfiguration;
+import de.fhg.iais.roberta.factory.RaspberryPiFactory;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
-import de.fhg.iais.roberta.visitor.codegen.ExpeditionPythonVisitor;
+import de.fhg.iais.roberta.visitor.codegen.RaspberryPiPythonVisitor;
 
-public class HelperExpeditionForXmlTest extends AbstractHelperForXmlTest {
+public class HelperRaspberryPiForXmlTest extends AbstractHelperForXmlTest {
 
-    public HelperExpeditionForXmlTest() {
+    public HelperRaspberryPiForXmlTest() {
         super(
-            new ExpeditionFactory(new PluginProperties("expedition", "", "", Util1.loadProperties("classpath:/expedition.properties"))),
-            new ExpeditionConfiguration.Builder().build());
+            new RaspberryPiFactory(new PluginProperties("raspberrypi", "", "", Util1.loadProperties("classpath:/raspberrypi.properties"))),
+            new RaspberryPiConfiguration.Builder().build());
     }
 
     /**
@@ -28,7 +28,7 @@ public class HelperExpeditionForXmlTest extends AbstractHelperForXmlTest {
      */
     private String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
         Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
-        String javaCode = ExpeditionPythonVisitor.generate((ExpeditionConfiguration) getRobotConfiguration(), transformer.getTree(), false, Language.ENGLISH);
+        String javaCode = RaspberryPiPythonVisitor.generate((RaspberryPiConfiguration) getRobotConfiguration(), transformer.getTree(), false, Language.ENGLISH);
         return javaCode;
     }
 
@@ -51,9 +51,9 @@ public class HelperExpeditionForXmlTest extends AbstractHelperForXmlTest {
      * @return the code as string
      * @throws Exception
      */
-    public String generatePython(String pathToProgramXml, ExpeditionConfiguration brickConfiguration) throws Exception {
+    public String generatePython(String pathToProgramXml, RaspberryPiConfiguration brickConfiguration) throws Exception {
         Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = ExpeditionPythonVisitor.generate(brickConfiguration, transformer.getTree(), true, Language.ENGLISH);
+        String code = RaspberryPiPythonVisitor.generate(brickConfiguration, transformer.getTree(), true, Language.ENGLISH);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }

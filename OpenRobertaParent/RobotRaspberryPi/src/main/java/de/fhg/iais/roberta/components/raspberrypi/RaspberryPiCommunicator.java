@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.components.expedition;
+package de.fhg.iais.roberta.components.raspberrypi;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,13 +19,13 @@ import com.jcraft.jsch.Session;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public class ExpeditionCommunicator {
-    private static final Logger LOG = LoggerFactory.getLogger(ExpeditionCommunicator.class);
+public class RaspberryPiCommunicator {
+    private static final Logger LOG = LoggerFactory.getLogger(RaspberryPiCommunicator.class);
     //ports on the robot
     int sshPort = 22;
     private final PluginProperties pluginProperties;
 
-    public ExpeditionCommunicator(PluginProperties pluginProperties) {
+    public RaspberryPiCommunicator(PluginProperties pluginProperties) {
         this.pluginProperties = pluginProperties;
     }
 
