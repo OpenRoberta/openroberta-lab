@@ -112,11 +112,13 @@ public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHard
 
     @Override
     public Void visitPlotPointAction(PlotPointAction<Void> plotPointAction) {
+        this.usedActors.add(new UsedActor(plotPointAction.getPort(), SC.SENSEBOX_PLOTTING));
         return null;
     }
 
     @Override
     public Void visitPlotClearAction(PlotClearAction<Void> plotClearAction) {
+        this.usedActors.add(new UsedActor(plotClearAction.getPort(), SC.SENSEBOX_PLOTTING));
         return null;
     }
 

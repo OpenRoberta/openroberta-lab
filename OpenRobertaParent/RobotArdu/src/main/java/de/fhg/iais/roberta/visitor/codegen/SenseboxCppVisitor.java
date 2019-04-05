@@ -646,67 +646,71 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     nlIndent();
                     this.sb.append("_display_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".clearDisplay();");
                     nlIndent();
-                    break;
-                case SC.SENSEBOX_PLOTTING:
-                    this.sb
-                        .append("_plot_")
-                        .append(usedConfigurationBlock.getUserDefinedPortName())
-                        .append(".setTitle(\"")
-                        .append(usedConfigurationBlock.getProperty("TITLE"))
-                        .append("\");");
-                    nlIndent();
-                    this.sb
-                        .append("_plot_")
-                        .append(usedConfigurationBlock.getUserDefinedPortName())
-                        .append(".setXLabel(\"")
-                        .append(usedConfigurationBlock.getProperty("XLABEL"))
-                        .append("\");");
-                    ;
-                    nlIndent();
-                    this.sb
-                        .append("_plot_")
-                        .append(usedConfigurationBlock.getUserDefinedPortName())
-                        .append(".setYLabel(\"")
-                        .append(usedConfigurationBlock.getProperty("YLABEL"))
-                        .append("\");");
-                    ;
-                    nlIndent();
-                    this.sb
-                        .append("_plot_")
-                        .append(usedConfigurationBlock.getUserDefinedPortName())
-                        .append(".setXRange(")
-                        .append(usedConfigurationBlock.getProperty("XSTART"))
-                        .append(", ")
-                        .append(usedConfigurationBlock.getProperty("XEND"))
-                        .append(");");
-                    nlIndent();
-                    this.sb
-                        .append("_plot_")
-                        .append(usedConfigurationBlock.getUserDefinedPortName())
-                        .append(".setYRange(")
-                        .append(usedConfigurationBlock.getProperty("YSTART"))
-                        .append(", ")
-                        .append(usedConfigurationBlock.getProperty("YEND"))
-                        .append(");");
-                    nlIndent();
-                    this.sb
-                        .append("_plot_")
-                        .append(usedConfigurationBlock.getUserDefinedPortName())
-                        .append(".setXTick(")
-                        .append(usedConfigurationBlock.getProperty("XTICK"))
-                        .append(");");
-                    nlIndent();
-                    this.sb
-                        .append("_plot_")
-                        .append(usedConfigurationBlock.getUserDefinedPortName())
-                        .append(".setYTick(")
-                        .append(usedConfigurationBlock.getProperty("YTICK"))
-                        .append(");");
-                    nlIndent();
-                    this.sb.append("_plot_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".setXPrecision(0);");
-                    nlIndent();
-                    this.sb.append("_plot_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".setYPrecision(0);");
-                    nlIndent();
+                    for ( UsedActor usedActor : this.usedActors ) {
+                        System.out.println(usedActor.getType());
+                        if ( usedActor.getType().equals(SC.SENSEBOX_PLOTTING) ) {
+                            this.sb
+                                .append("_plot_")
+                                .append(usedConfigurationBlock.getUserDefinedPortName())
+                                .append(".setTitle(\"")
+                                .append(usedConfigurationBlock.getProperty("TITLE"))
+                                .append("\");");
+                            nlIndent();
+                            this.sb
+                                .append("_plot_")
+                                .append(usedConfigurationBlock.getUserDefinedPortName())
+                                .append(".setXLabel(\"")
+                                .append(usedConfigurationBlock.getProperty("XLABEL"))
+                                .append("\");");
+
+                            nlIndent();
+                            this.sb
+                                .append("_plot_")
+                                .append(usedConfigurationBlock.getUserDefinedPortName())
+                                .append(".setYLabel(\"")
+                                .append(usedConfigurationBlock.getProperty("YLABEL"))
+                                .append("\");");
+
+                            nlIndent();
+                            this.sb
+                                .append("_plot_")
+                                .append(usedConfigurationBlock.getUserDefinedPortName())
+                                .append(".setXRange(")
+                                .append(usedConfigurationBlock.getProperty("XSTART"))
+                                .append(", ")
+                                .append(usedConfigurationBlock.getProperty("XEND"))
+                                .append(");");
+                            nlIndent();
+                            this.sb
+                                .append("_plot_")
+                                .append(usedConfigurationBlock.getUserDefinedPortName())
+                                .append(".setYRange(")
+                                .append(usedConfigurationBlock.getProperty("YSTART"))
+                                .append(", ")
+                                .append(usedConfigurationBlock.getProperty("YEND"))
+                                .append(");");
+                            nlIndent();
+                            this.sb
+                                .append("_plot_")
+                                .append(usedConfigurationBlock.getUserDefinedPortName())
+                                .append(".setXTick(")
+                                .append(usedConfigurationBlock.getProperty("XTICK"))
+                                .append(");");
+                            nlIndent();
+                            this.sb
+                                .append("_plot_")
+                                .append(usedConfigurationBlock.getUserDefinedPortName())
+                                .append(".setYTick(")
+                                .append(usedConfigurationBlock.getProperty("YTICK"))
+                                .append(");");
+                            nlIndent();
+                            this.sb.append("_plot_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".setXPrecision(0);");
+                            nlIndent();
+                            this.sb.append("_plot_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".setYPrecision(0);");
+                            nlIndent();
+                            break;
+                        }
+                    }
                     break;
                 // no additional configuration needed:
                 case SC.SENSEBOX_COMPASS:
@@ -864,7 +868,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
             }
         }
         for ( ConfigurationComponent cc : this.configuration.getConfigurationComponentsValues() ) {
-            if ( cc.getComponentType().equals(SC.SENSEBOX_PLOTTING) ) {
+            if ( cc.getComponentType().equals(SC.LCDI2C) ) {
                 String blockName = cc.getUserDefinedPortName();
                 ConfigurationComponent displayConfigurationComponent = this.configuration.getConfigurationComponentbyType(SC.LCDI2C);
                 String displayName;
