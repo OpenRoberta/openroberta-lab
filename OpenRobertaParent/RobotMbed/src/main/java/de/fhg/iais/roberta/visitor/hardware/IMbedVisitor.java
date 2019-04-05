@@ -18,9 +18,9 @@ import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
-import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
+import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
@@ -119,14 +119,18 @@ public interface IMbedVisitor<V>
      *
      * @param radioSendAction phrase to be visited
      */
-    V visitRadioSendAction(RadioSendAction<V> radioSendAction);
+    default V visitRadioSendAction(RadioSendAction<V> radioSendAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
     /**
      * visit a {@link RadioReceiveAction}.
      *
      * @param radioReceiveAction phrase to be visited
      */
-    V visitRadioReceiveAction(RadioReceiveAction<V> radioReceiveAction);
+    default V visitRadioReceiveAction(RadioReceiveAction<V> radioReceiveAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
     /**
      * visit a {@link RgbColor}.
@@ -183,7 +187,9 @@ public interface IMbedVisitor<V>
      *
      * @param radioSetChannelAction phrase to be visited
      */
-    V visitRadioSetChannelAction(RadioSetChannelAction<V> radioSetChannelAction);
+    default V visitRadioSetChannelAction(RadioSetChannelAction<V> radioSetChannelAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
     /**
      * visit a {@link SingleMotorOnAction}.
@@ -220,14 +226,18 @@ public interface IMbedVisitor<V>
      *
      * @param FourDigitDisplayShowAction phrase to be visited
      */
-    V visitFourDigitDisplayShowAction(FourDigitDisplayShowAction<V> fourDigitDisplayShowAction);
+    default V visitFourDigitDisplayShowAction(FourDigitDisplayShowAction<V> fourDigitDisplayShowAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
     /**
      * visit a {@link FourDigitDisplayClearAction}.
      *
      * @param FourDigitDisplayClearAction phrase to be visited
      */
-    V visitFourDigitDisplayClearAction(FourDigitDisplayClearAction<V> fourDigitDisplayClearAction);
+    default V visitFourDigitDisplayClearAction(FourDigitDisplayClearAction<V> fourDigitDisplayClearAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
     V visitBothMotorsOnAction(BothMotorsOnAction<V> bothMotorsOnAction);
 

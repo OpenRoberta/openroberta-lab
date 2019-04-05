@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.visitor;
+package de.fhg.iais.roberta.visitor.lang.codegen;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,8 +15,6 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
-import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
@@ -80,15 +78,12 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.visitor.hardware.IWeDoVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
-public abstract class AbstractWeDoVisitor<V> implements ILanguageVisitor<V>, IWeDoVisitor<V> {
+public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor<V> {
     protected int loopsCounter = 0;
     protected int currentLoop = 0;
     protected int stmtsNumber = 0;
@@ -99,7 +94,7 @@ public abstract class AbstractWeDoVisitor<V> implements ILanguageVisitor<V>, IWe
     protected final List<List<JSONObject>> opArrayStack = new ArrayList<>();
     protected final Configuration configuration;
 
-    protected AbstractWeDoVisitor(Configuration configuration) {
+    protected AbstractStackMachineVisitor(Configuration configuration) {
         this.configuration = configuration;
     }
 
@@ -244,12 +239,6 @@ public abstract class AbstractWeDoVisitor<V> implements ILanguageVisitor<V>, IWe
         }
         return app(o);
     }
-
-    @Override
-    public abstract V visitToneAction(ToneAction<V> toneAction);
-
-    @Override
-    public abstract V visitPlayNoteAction(PlayNoteAction<V> playNoteAction);
 
     @Override
     public V visitMathPowerFunct(MathPowerFunct<V> mathPowerFunct) {
@@ -447,29 +436,6 @@ public abstract class AbstractWeDoVisitor<V> implements ILanguageVisitor<V>, IWe
         for ( Stmt<V> stmt : stmtList.get() ) {
             stmt.visit(this);
         }
-        return null;
-    }
-
-    @Override
-    public V visitTimerSensor(TimerSensor<V> timerSensor) {
-        JSONObject o;
-        switch ( timerSensor.getMode() ) {
-            case "DEFAULT":
-            case "VALUE":
-                o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, timerSensor.getPort());
-                break;
-            case "RESET":
-                o = mk(C.TIMER_SENSOR_RESET).put(C.PORT, timerSensor.getPort());
-                break;
-            default:
-                throw new DbcException("Invalid Timer Mode " + timerSensor.getMode());
-        }
-        return app(o);
-    }
-
-    @Override
-    public V visitGetSampleSensor(GetSampleSensor<V> sensorGetSample) {
-        sensorGetSample.getSensor().visit(this);
         return null;
     }
 
@@ -699,7 +665,7 @@ public abstract class AbstractWeDoVisitor<V> implements ILanguageVisitor<V>, IWe
     }
 
     protected ConfigurationComponent getConfigurationComponent(String userDefinedName) {
-        ConfigurationComponent configurationComponent = configuration.getConfigurationComponent(userDefinedName);
+        ConfigurationComponent configurationComponent = this.configuration.getConfigurationComponent(userDefinedName);
         return configurationComponent;
     }
 

@@ -99,7 +99,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      * @param timerSensor to be visited
      */
     default V visitTimerSensor(TimerSensor<V> timerSensor) {
-        throw new DbcException("KeysSensor not implemented!");
+        throw new DbcException("TimerSensor not implemented!");
     }
 
     /**
@@ -181,7 +181,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      */
     default V visitPinGetValueSensor(PinGetValueSensor<V> pinGetValueSensor) {
         throw new DbcException("PinGetValueSensor not implemented!");
-    };
+    }
 
     /**
      * visit a {@link GetSampleSensor}.

@@ -16,14 +16,19 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.collect.WedoUsedHardwareCollectorVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IWeDoVisitor;
+import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
+import de.fhg.iais.roberta.visitor.lang.codegen.C;
 
-public final class WeDoStackMachineVisitor<V> extends AbstractWeDoVisitor<V> {
+public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IWeDoVisitor<V> {
     protected ArrayList<VarDeclaration<Void>> usedVars;
 
     private WeDoStackMachineVisitor(Configuration configuration, ArrayList<ArrayList<Phrase<Void>>> phrases) {
@@ -184,5 +189,28 @@ public final class WeDoStackMachineVisitor<V> extends AbstractWeDoVisitor<V> {
         } else {
             throw new DbcException("No robot name or no port!");
         }
+    }
+
+    @Override
+    public V visitTimerSensor(TimerSensor<V> timerSensor) {
+        JSONObject o;
+        switch ( timerSensor.getMode() ) {
+            case "DEFAULT":
+            case "VALUE":
+                o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, timerSensor.getPort());
+                break;
+            case "RESET":
+                o = mk(C.TIMER_SENSOR_RESET).put(C.PORT, timerSensor.getPort());
+                break;
+            default:
+                throw new DbcException("Invalid Timer Mode " + timerSensor.getMode());
+        }
+        return app(o);
+    }
+
+    @Override
+    public V visitGetSampleSensor(GetSampleSensor<V> sensorGetSample) {
+        sensorGetSample.getSensor().visit(this);
+        return null;
     }
 }
