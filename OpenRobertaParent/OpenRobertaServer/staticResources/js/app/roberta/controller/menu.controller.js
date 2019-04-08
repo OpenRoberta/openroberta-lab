@@ -1,7 +1,8 @@
 define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket.controller', 'user.controller', 'user.model', 'guiState.controller',
-        'cookieDisclaimer.controller', 'program.controller', 'program.model','multSim.controller', 'progRun.controller', 'configuration.controller','import.controller', 'enjoyHint', 'tour.controller',
-        'simulation.simulation', 'progList.model', 'jquery', 'blocks', 'slick' ], function(exports, LOG, UTIL, MSG, COMM, ROBOT_C, SOCKET_C, USER_C, USER, GUISTATE_C,
-        CookieDisclaimer,PROGRAM_C, PROGRAM_M,MULT_SIM, RUN_C, CONFIGURATION_C,IMPORT_C, EnjoyHint, TOUR_C, SIM, PROGLIST, $, Blockly) {
+        'cookieDisclaimer.controller', 'program.controller', 'program.model', 'multSim.controller', 'progRun.controller', 'configuration.controller',
+        'import.controller', 'enjoyHint', 'tour.controller', 'simulation.simulation', 'progList.model', 'jquery', 'blocks', 'slick' ], function(exports, LOG,
+        UTIL, MSG, COMM, ROBOT_C, SOCKET_C, USER_C, USER, GUISTATE_C, CookieDisclaimer, PROGRAM_C, PROGRAM_M, MULT_SIM, RUN_C, CONFIGURATION_C, IMPORT_C,
+        EnjoyHint, TOUR_C, SIM, PROGLIST, $, Blockly) {
 
     function init() {
         initMenu();
@@ -322,7 +323,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 break;
             case 'menuRunMulipleSim':
                 MULT_SIM.showListProg();
-                break;          
+                break;
             default:
                 break;
             }
@@ -670,6 +671,26 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             }
             if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '2')) {
                 IMPORT_C.importNepoCodeToCompile();
+                return false;
+            }
+            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '3')) {
+                var debug = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_debug');
+                debug.initSvg();
+                debug.render();
+                return false;
+            }
+            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '4')) {
+                var assert = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_assert');
+                assert.initSvg();
+                assert.render();
+                var logComp = GUISTATE_C.getBlocklyWorkspace().newBlock('logic_compare');
+                logComp.initSvg();
+                logComp.setMovable(false);
+                logComp.setDeletable(false);
+                logComp.render();
+                var parentConnection = assert.getInput('OUT').connection;
+                var childConnection = logComp.outputConnection;
+                parentConnection.connect(childConnection);
                 return false;
             }
         });

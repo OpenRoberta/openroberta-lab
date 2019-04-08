@@ -76,7 +76,9 @@ import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.lang.stmt.ActionStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
@@ -736,12 +738,21 @@ public class TypecheckVisitor implements ILanguageVisitor<BlocklyType>, ISensorV
 
     @Override
     public BlocklyType visitStmtTextComment(StmtTextComment<BlocklyType> stmtTextComment) {
-        // s
         return null;
     }
 
     @Override
     public BlocklyType visitSerialWriteAction(SerialWriteAction<BlocklyType> serialWriteAction) {
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitAssertStmt(AssertStmt<BlocklyType> assertStmt) {
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitDebugAction(DebugAction<BlocklyType> debugAction) {
         return null;
     }
 }

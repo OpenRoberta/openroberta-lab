@@ -17,6 +17,8 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
+import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
@@ -211,6 +213,18 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
     @Override
     public V visitGetSampleSensor(GetSampleSensor<V> sensorGetSample) {
         sensorGetSample.getSensor().visit(this);
+        return null;
+    }
+    
+    @Override
+    public V visitAssertStmt(AssertStmt<V> assertStmt) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public V visitDebugAction(DebugAction<V> debugAction) {
+        // TODO Auto-generated method stub
         return null;
     }
 }

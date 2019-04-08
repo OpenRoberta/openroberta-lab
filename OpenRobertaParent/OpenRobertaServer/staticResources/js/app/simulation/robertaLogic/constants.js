@@ -487,6 +487,12 @@ define({
     NOOP_STMT: "createNoopStmt",
 
     PIN: "pin",
+    
+    ASSERT_STMT: "createAssertStmt",
+    
+    TEST: "test",
+    
+    CONSOLE_DEBUG: "createConsoleDebugAction",
 
     COLOR_ENUM: {
         NONE: "NONE",

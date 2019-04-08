@@ -74,7 +74,9 @@ import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.lang.stmt.ActionStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
@@ -701,6 +703,18 @@ public class InfoCollector<T> implements ILanguageVisitor<T>, ISensorVisitor<T>,
 
     @Override
     public T visitSerialWriteAction(SerialWriteAction<T> serialWriteAction) {
+        return null;
+    }
+
+    @Override
+    public T visitAssertStmt(AssertStmt<T> assertStmt) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitDebugAction(DebugAction<T> debugAction) {
+        // TODO Auto-generated method stub
         return null;
     }
 }

@@ -95,5 +95,4 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
         this.declaredVariables.add(var.getName());
         return null;
     }
-
 }

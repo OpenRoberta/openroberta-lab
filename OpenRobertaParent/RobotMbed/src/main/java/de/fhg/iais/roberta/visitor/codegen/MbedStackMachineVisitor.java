@@ -34,6 +34,8 @@ import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
@@ -348,6 +350,18 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     private int map(int x, int in_min, int in_max, int out_min, int out_max) {
         return (((x - in_min) * (out_max - out_min)) / (in_max - in_min)) + out_min;
+    }
+
+    @Override
+    public V visitAssertStmt(AssertStmt<V> assertStmt) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public V visitDebugAction(DebugAction<V> debugAction) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

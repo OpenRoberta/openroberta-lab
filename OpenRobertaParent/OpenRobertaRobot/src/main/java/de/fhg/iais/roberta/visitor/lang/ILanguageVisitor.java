@@ -46,7 +46,9 @@ import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.lang.stmt.ActionStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
@@ -452,4 +454,8 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
         functionExpr.getFunction().visit(this);
         return null;
     }
+
+    V visitAssertStmt(AssertStmt<V> assertStmt);
+
+    V visitDebugAction(DebugAction<V> debugAction);
 }

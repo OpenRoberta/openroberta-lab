@@ -18,6 +18,8 @@ import de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
@@ -287,6 +289,20 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
         this.sb.append(", ");
         mathConstrainFunct.getParam().get(2).visit(this);
         this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitDebugAction(DebugAction<Void> debugAction) {
+        // not to block generated test programs, we do nothing
+        // throw new DbcException("DebugAction is not supported so far! ");
+        return null;
+    }
+
+    @Override
+    public Void visitAssertStmt(AssertStmt<Void> assertStmt) {
+        // not to block generated test programs, we do nothing
+        // throw new DbcException("AssertStmt is not supported so far! ");
         return null;
     }
 

@@ -226,7 +226,12 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', '
             case CONSTANTS.NOOP_STMT:
                 this.step(simulationData);
                 break;
-
+            case CONSTANTS.CONSOLE_DEBUG:
+                evalConsoleDebugAction(internal(this));
+                break;
+            case CONSTANTS.ASSERT_STMT:
+                evalAssertStmt(internal(this), stmt);
+                break;
             default:
                 throw "Invalid Statement " + stmt.stmt + "!";
             }
@@ -1028,6 +1033,20 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', '
             return [ red, green, blue ];
         }
     };
+    
+    var evalConsoleDebugAction = function(obj) {
+        var text = evalExpr(obj, "text");
+        console.log(text);
+    };
+    
+    var evalAssertStmt = function(obj, stmt) {
+        var test = evalExpr(obj, "test"); 
+        var text = evalExpr(obj, "text"); 
+        var left = evalExpr(obj, "left"); 
+        var op = evalExpr(obj, "op"); 
+        var right = evalExpr(obj, "right"); 
+        console.assert(test, text + " " + left + " " + op + " " + right);
+    }
 
     var evalBinary = function(obj, op) {
         var valLeft = evalExpr(obj, "left");

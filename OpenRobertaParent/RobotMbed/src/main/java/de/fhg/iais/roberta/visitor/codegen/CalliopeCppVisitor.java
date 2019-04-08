@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.visitor.codegen;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.fhg.iais.roberta.mode.general.WorkingState;
 import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import org.apache.commons.text.WordUtils;
 
@@ -70,6 +69,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
+import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
@@ -1222,6 +1222,12 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         } else {
             this.sb.append("_uBit.display.disable();");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitDebugAction(DebugAction<Void> debugAction) {
+        writeToSerial(debugAction.getValue());
         return null;
     }
 }

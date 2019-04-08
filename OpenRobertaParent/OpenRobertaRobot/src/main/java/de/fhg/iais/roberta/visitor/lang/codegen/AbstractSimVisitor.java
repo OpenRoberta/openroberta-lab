@@ -58,7 +58,9 @@ import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.lang.stmt.ActionStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
@@ -73,6 +75,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 public abstract class AbstractSimVisitor<V> implements ILanguageVisitor<V> {
@@ -735,6 +738,30 @@ public abstract class AbstractSimVisitor<V> implements ILanguageVisitor<V> {
 
         }
         this.sb.append("]" + end);
+        return null;
+    }
+    
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public V visitAssertStmt(AssertStmt<V> assertStmt) {
+        String end = createClosingBracket();
+        this.sb.append("createAssertStmt(");
+        assertStmt.getAssert().visit(this);
+        this.sb.append(", createConstant(CONST.STRING_CONST, \"").append(assertStmt.getMsg()).append("\"), ");
+        ((Binary<Void>)assertStmt.getAssert()).getLeft().visit((IVisitor<Void>) this);
+        this.sb.append(", createConstant(CONST.STRING_CONST, \"").append(((Binary<Void>)assertStmt.getAssert()).getOp()).append("\"), ");
+        ((Binary<Void>)assertStmt.getAssert()).getRight().visit((IVisitor<Void>) this);
+        this.sb.append(end);
+        return null;
+    }
+
+    @Override
+    public V visitDebugAction(DebugAction<V> debugAction) {
+        String end = createClosingBracket();
+        this.sb.append("createConsoleDebugAction(");
+        debugAction.getValue().visit(this);
+        this.sb.append(end);
         return null;
     }
 

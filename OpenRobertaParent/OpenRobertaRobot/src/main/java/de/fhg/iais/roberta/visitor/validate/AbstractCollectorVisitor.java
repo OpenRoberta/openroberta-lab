@@ -46,7 +46,9 @@ import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
+import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
@@ -433,6 +435,18 @@ public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void>
     @Override
     public Void visitMethodCall(MethodCall<Void> methodCall) {
         methodCall.getParametersValues().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitAssertStmt(AssertStmt<Void> assertStmt) {
+        assertStmt.getAssert().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitDebugAction(DebugAction<Void> debugAction) {
+        debugAction.getValue().visit(this);
         return null;
     }
 

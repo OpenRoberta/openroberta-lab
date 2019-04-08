@@ -304,14 +304,14 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
         result[CONST.FILE] = file;
         return result;
     }
-    
+
     function createSetLanguageAction(language) {
         var result = {};
         result[CONST.STMT] = CONST.SET_LANGUAGE_ACTION;
         result[CONST.LANGUAGE] = language;
         return result;
     }
-    
+
     function createSayTextAction(text, speed, pitch) {
         var result = {};
         result[CONST.STMT] = CONST.SAY_TEXT_ACTION;
@@ -659,11 +659,29 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
 
         return result;
     }
-    
+
     function createNoopStmt() {
         var result = {};
         result[CONST.STMT] = CONST.NOOP_STMT;
 
+        return result;
+    }
+
+    function createConsoleDebugAction(msg) {
+        var result = {};
+        result[CONST.STMT] = CONST.CONSOLE_DEBUG;
+        result[CONST.TEXT] = msg;
+        return result;
+    }
+
+    function createAssertStmt(test, msg, left, op, right) {
+        var result = {};
+        result[CONST.STMT] = CONST.ASSERT_STMT;
+        result[CONST.TEST] = test;
+        result[CONST.TEXT] = msg;
+        result[CONST.LEFT] = left;
+        result[CONST.OP] = op;
+        result[CONST.RIGHT] = right;
         return result;
     }
 

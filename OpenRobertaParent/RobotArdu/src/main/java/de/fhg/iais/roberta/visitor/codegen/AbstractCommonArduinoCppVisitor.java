@@ -9,8 +9,10 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
@@ -25,6 +27,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
@@ -368,5 +371,22 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
         this.sb.append(colorConst.getBlueChannelHex());
         this.sb.append(")");
         return null;
+    }
+    
+    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
+        writeToSerial(serialWriteAction.getValue());
+        return null;
+    }
+    
+    @Override
+    public Void visitDebugAction(DebugAction<Void> debugAction) {
+        writeToSerial(debugAction.getValue());
+        return null;
+    }
+    
+    private void writeToSerial(Expr<Void> valueToWrite) {
+        this.sb.append("Serial.println(");
+        valueToWrite.visit(this);
+        this.sb.append(");");
     }
 }

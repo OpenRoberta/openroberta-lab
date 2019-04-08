@@ -262,7 +262,8 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
         this.sb.append(")");
         return null;
     }
-
+   
+    
     protected void generateExprCode(Unary<Void> unary, StringBuilder sb) {
         if ( unary.getExpr().getPrecedence() < unary.getPrecedence() || unary.getOp() == Unary.Op.NEG ) {
             sb.append("(");
@@ -369,5 +370,4 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
     protected static <K, U> Collector<Map.Entry<K, U>, ?, ConcurrentMap<K, U>> entriesToConcurrentMap() {
         return Collectors.toConcurrentMap((e) -> e.getKey(), (e) -> e.getValue());
     }
-
 }

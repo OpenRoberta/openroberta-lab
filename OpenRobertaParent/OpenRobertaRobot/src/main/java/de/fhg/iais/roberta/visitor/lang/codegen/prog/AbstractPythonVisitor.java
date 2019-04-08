@@ -29,6 +29,8 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
+import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
@@ -560,6 +562,30 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitStmtTextComment(StmtTextComment<Void> stmtTextComment) {
         this.sb.append("# " + stmtTextComment.getTextComment());
+        return null;
+    }
+    
+    @Override
+    public Void visitAssertStmt(AssertStmt<Void> assertStmt) {
+        this.sb.append("if not ");
+        assertStmt.getAssert().visit(this);
+        this.sb.append(":");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("print(\"Assertion failed: \", \"").append(assertStmt.getMsg()).append("\", ");
+        ((Binary<Void>)assertStmt.getAssert()).getLeft().visit(this);
+        this.sb.append(", \"").append(((Binary<Void>)assertStmt.getAssert()).getOp().toString()).append("\", ");
+        ((Binary<Void>)assertStmt.getAssert()).getRight().visit(this);
+        this.sb.append(")");
+        decrIndentation();
+        return null;
+    }
+    
+    @Override
+    public Void visitDebugAction(DebugAction<Void> debugAction) {
+        this.sb.append("print(");
+        debugAction.getValue().visit(this);
+        this.sb.append(")");
         return null;
     }
 }
