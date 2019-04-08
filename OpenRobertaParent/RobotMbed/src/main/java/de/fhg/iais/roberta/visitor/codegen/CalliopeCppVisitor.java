@@ -1172,19 +1172,35 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
-        this.sb.append("_uBit.serial.send(");
-        if ( serialWriteAction.getValue().getVarType().equals(BlocklyType.STRING) ) {
-            serialWriteAction.getValue().visit(this);
-        } else if ( serialWriteAction.getValue().getVarType().equals(BlocklyType.COLOR) ) {
-            ColorConst<Void> color = (ColorConst<Void>) serialWriteAction.getValue();
-            visitColorConst(color);
+        writeToSerial(serialWriteAction.getValue());
+        return null;
+    }
+
+    private void writeToSerial(Expr<Void> valueToWrite) {
+        // default TxBufferSize seems to be 20 which has to be extended for longer Strings
+        if ( (valueToWrite).getVarType().equals(BlocklyType.STRING) ) {
+            this.sb.append("_uBit.serial.setTxBufferSize(");
+            valueToWrite.visit(this);
+            this.sb.append(".length() + 2);");
+            nlIndent();
+            this.sb.append("_uBit.serial.send(");
+            valueToWrite.visit(this);
+        } else if ( valueToWrite.getVarType().equals(BlocklyType.COLOR) ) {
+            this.sb.append("_uBit.serial.setTxBufferSize(9);");
+            nlIndent();
+            this.sb.append("_uBit.serial.send(");
+            this.sb.append("ManagedString(\"");
+            this.sb.append(((ColorConst<Void>) valueToWrite).getHexValueAsString());
+            this.sb.append("\")");
         } else {
-            this.sb.append("ManagedString(");
-            serialWriteAction.getValue().visit(this);
+            this.sb.append("_uBit.serial.send(ManagedString(");
+            valueToWrite.visit(this);
             this.sb.append(")");
         }
         this.sb.append(" + \"\\r\\n\", MicroBitSerialMode::ASYNC);");
-        return null;
+        nlIndent();
+        // give serial some time
+        this.sb.append("_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);");
     }
 
     @Override
