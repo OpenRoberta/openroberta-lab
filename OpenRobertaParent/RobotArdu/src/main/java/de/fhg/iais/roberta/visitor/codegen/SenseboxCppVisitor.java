@@ -121,9 +121,6 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
             this.sb.append("\n#include <Adafruit_GFX.h>");
             this.sb.append("\n#include <Adafruit_SSD1306.h>");
             this.sb.append("\n#include <senseBoxIO.h>");
-        }
-
-        if ( this.configuration.getConfigurationComponentbyType(SC.SENSEBOX_PLOTTING) != null ) {
             this.sb.append("\n#include <Plot.h>");
         }
 
@@ -647,7 +644,6 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     this.sb.append("_display_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".clearDisplay();");
                     nlIndent();
                     for ( UsedActor usedActor : this.usedActors ) {
-                        System.out.println(usedActor.getType());
                         if ( usedActor.getType().equals(SC.SENSEBOX_PLOTTING) ) {
                             this.sb
                                 .append("_plot_")
@@ -707,6 +703,8 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                             this.sb.append("_plot_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".setXPrecision(0);");
                             nlIndent();
                             this.sb.append("_plot_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".setYPrecision(0);");
+                            nlIndent();
+                            this.sb.append("_plot_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".clear();");
                             nlIndent();
                             break;
                         }
