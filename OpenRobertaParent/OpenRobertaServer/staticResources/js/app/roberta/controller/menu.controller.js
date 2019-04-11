@@ -677,15 +677,19 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 var debug = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_debug');
                 debug.initSvg();
                 debug.render();
+                debug.setInTask(false);
+                
                 return false;
             }
             if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '4')) {
                 var assert = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_assert');
                 assert.initSvg();
+                assert.setInTask(false);
                 assert.render();
                 var logComp = GUISTATE_C.getBlocklyWorkspace().newBlock('logic_compare');
                 logComp.initSvg();
                 logComp.setMovable(false);
+                logComp.setInTask(false);
                 logComp.setDeletable(false);
                 logComp.render();
                 var parentConnection = assert.getInput('OUT').connection;

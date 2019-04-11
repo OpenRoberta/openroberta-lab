@@ -994,7 +994,9 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
-        // TODO implement with microbit serial write
+        this.sb.append("print(");
+        serialWriteAction.getValue().visit(this);
+        this.sb.append(")");
         return null;
     }
 
