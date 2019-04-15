@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+  <program>
+    <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="2.0" description="" tags="">
+      <instance x="384" y="50">
+        <block type="robControls_start" id="VX2E5{r6urla*zAC;38t" intask="true" deletable="false">
+          <mutation declare="false"/>
+          <field name="DEBUG">TRUE</field>
+        </block>
+        <block type="does-not-exist-----produces-errors" id="l.{@0k{,=^wfFU)?ptcd" intask="true">
+          <field name="DIRECTION">FOREWARD</field>
+          <value name="POWER">
+            <block type="math_number" id="a~0dwO6-%Fr~fN{GaR~-" intask="true">
+              <field name="NUM">30</field>
+            </block>
+          </value>
+          <value name="DISTANCE">
+            <block type="math_number" id="%ESlS0r=kL-|xGt2xiBI" intask="true">
+              <field name="NUM">20</field>
+            </block>
+          </value>
+        </block>
+        <block type="robControls_wait_time" id="Xni1LzW=xDGjX^~Lhc.u" intask="true">
+          <value name="WAIT">
+            <block type="math_number" id="z0zGCYOPnM?J:6KCdpE?" intask="true">
+              <field name="NUM">5000</field>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_motorDiff_on_for" id="}+oB9RzSB?G3P3rKAxUC" intask="true">
+          <field name="DIRECTION">FOREWARD</field>
+          <value name="POWER">
+            <block type="math_number" id="0[)4/7A?c]BT9zH[I2C4" intask="true">
+              <field name="NUM">30</field>
+            </block>
+          </value>
+          <value name="DISTANCE">
+            <block type="math_number" id="XrcY#IeDgnf#BgAGcFy!" intask="true">
+              <field name="NUM">20</field>
+            </block>
+          </value>
+        </block>
+      </instance>
+    </block_set>
+  </program>
+  <config>
+    <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="2.0" description="" tags="">
+      <instance x="0" y="0">
+        <block type="robBrick_EV3-Brick" id="1" intask="true" deletable="false">
+          <field name="WHEEL_DIAMETER">5.6</field>
+          <field name="TRACK_WIDTH">12</field>
+          <value name="S1">
+            <block type="robBrick_touch" id="2" intask="true"/>
+          </value>
+          <value name="S2">
+            <block type="robBrick_sound" id="3" intask="true">
+              <data>nxt</data>
+            </block>
+          </value>
+          <value name="S3">
+            <block type="robBrick_light" id="4" intask="true"/>
+          </value>
+          <value name="S4">
+            <block type="robBrick_ultrasonic" id="5" intask="true"/>
+          </value>
+          <value name="MB">
+            <block type="robBrick_motor_big" id="6" intask="true">
+              <field name="MOTOR_REGULATION">TRUE</field>
+              <field name="MOTOR_REVERSE">OFF</field>
+              <field name="MOTOR_DRIVE">RIGHT</field>
+            </block>
+          </value>
+          <value name="MC">
+            <block type="robBrick_motor_big" id="7" intask="true">
+              <field name="MOTOR_REGULATION">TRUE</field>
+              <field name="MOTOR_REVERSE">OFF</field>
+              <field name="MOTOR_DRIVE">LEFT</field>
+            </block>
+          </value>
+        </block>
+      </instance>
+    </block_set>
+  </config>
+</export>

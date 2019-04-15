@@ -1,0 +1,368 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="calliope2016" xmlversion="2.0" description="" tags="">
+	<instance x="361" y="-172">
+		<block type="robControls_start" id="@vdJc~w=wNX]WrSXorOT"
+			intask="true" deletable="false">
+			<mutation declare="true"></mutation>
+			<field name="DEBUG">TRUE</field>
+			<statement name="ST">
+				<block type="robGlobalVariables_declare" id="|4G0fElm./#IYNanzjy|"
+					intask="true" deletable="false" movable="false">
+					<mutation next="false" declaration_type="Array_Number"></mutation>
+					<field name="VAR">item2</field>
+					<field name="TYPE">Array_Number</field>
+					<value name="VALUE">
+						<block type="robLists_create_with" id="2/{tFlTXr`LM1l~QdJ+b"
+							intask="true">
+							<mutation items="3" list_type="Number"></mutation>
+							<field name="LIST_TYPE">Number</field>
+							<value name="ADD0">
+								<block type="math_number" id="0tpDb*eGffYl*TG6t8c~"
+									intask="true">
+									<field name="NUM">0</field>
+								</block>
+							</value>
+							<value name="ADD1">
+								<block type="math_number" id=")+Dey}Fv-y%ckS#E%)-G"
+									intask="true">
+									<field name="NUM">0</field>
+								</block>
+							</value>
+							<value name="ADD2">
+								<block type="math_number" id=")ehCLXwiF0~Y|9K+KlD8"
+									intask="true">
+									<field name="NUM">0</field>
+								</block>
+							</value>
+						</block>
+					</value>
+				</block>
+			</statement>
+		</block>
+		<block type="robControls_loopForever" id="k1tN/jf%=#km;HT8/EfB"
+			intask="true">
+			<statement name="DO">
+				<block type="robControls_if" id="wm/!h,R1zwuB76@AqBXt" intask="true">
+					<mutation elseif="1"></mutation>
+					<repetitions>
+						<value name="IF0">
+							<block type="logic_compare" id="mKlXt5ct5)D/buX`kdG["
+								intask="true">
+								<field name="OP">EQ</field>
+								<value name="A">
+									<block type="math_number" id="rGh_w@93[wX}Q_2|aq*I"
+										intask="true">
+										<field name="NUM">30</field>
+									</block>
+								</value>
+								<value name="B">
+									<block type="math_number" id="D`TDsLxrKbj,XFKzCgN:"
+										intask="true">
+										<field name="NUM">20</field>
+									</block>
+								</value>
+							</block>
+						</value>
+						<statement name="DO0">
+							<block type="controls_flow_statements" id="OF{-NBf4c)})k!8,MU3k"
+								intask="true">
+								<field name="FLOW">BREAK</field>
+							</block>
+						</statement>
+						<value name="IF1">
+							<block type="logic_compare" id="JXMa%jx*,_^w:8Po^a!)"
+								intask="true">
+								<field name="OP">EQ</field>
+								<value name="A">
+									<block type="math_number" id="MO;DR?b5,e+L@HsQ/?Sl"
+										intask="true">
+										<field name="NUM">30</field>
+									</block>
+								</value>
+								<value name="B">
+									<block type="math_number" id="x)3ZpFY_=.%H6q0wM.Sb"
+										intask="true">
+										<field name="NUM">12</field>
+									</block>
+								</value>
+							</block>
+						</value>
+						<statement name="DO1">
+							<block type="controls_flow_statements" id="l/HF4BCa/GJ~0!SCQ?cO"
+								intask="true">
+								<field name="FLOW">CONTINUE</field>
+							</block>
+						</statement>
+					</repetitions>
+				</block>
+			</statement>
+		</block>
+		<block type="robControls_for" id=";_r[aZ9m#3K:JNr,dYc}" intask="true">
+			<field name="VAR">i</field>
+			<value name="FROM">
+				<block type="math_number" id="LuO95EV{NsWe;[IKua]@" intask="true">
+					<field name="NUM">1</field>
+				</block>
+			</value>
+			<value name="TO">
+				<block type="math_number" id="UsIg7FN:fI9(9Qh)W_vY" intask="true">
+					<field name="NUM">10</field>
+				</block>
+			</value>
+			<value name="BY">
+				<block type="math_number" id="R!i[6iIh:o,3jOaV3:UX" intask="true">
+					<field name="NUM">1</field>
+				</block>
+			</value>
+			<statement name="DO">
+				<block type="robControls_if" id="vYF_4H_gwRc^qpU1=|@~" intask="true">
+					<mutation elseif="1"></mutation>
+					<repetitions>
+						<value name="IF0">
+							<block type="logic_compare" id="1`Kt[LQeAB_-uu0|biSz"
+								intask="true">
+								<field name="OP">EQ</field>
+								<value name="A">
+									<block type="math_number" id="|-u1^Afx`Y@^Ifz]!D}%"
+										intask="true">
+										<field name="NUM">30</field>
+									</block>
+								</value>
+								<value name="B">
+									<block type="math_number" id="9)e~hr/#cs62jQ.I3KGF"
+										intask="true">
+										<field name="NUM">20</field>
+									</block>
+								</value>
+							</block>
+						</value>
+						<statement name="DO0">
+							<block type="controls_flow_statements" id=".U[j5hdJgx2Mb_;I_qF`"
+								intask="true">
+								<field name="FLOW">CONTINUE</field>
+							</block>
+						</statement>
+						<value name="IF1">
+							<block type="logic_compare" id="is339vZ4itc9vwiE5WkT"
+								intask="true">
+								<field name="OP">EQ</field>
+								<value name="A">
+									<block type="math_number" id="3lr-S{Q0?zo--:qgUBbm"
+										intask="true">
+										<field name="NUM">30</field>
+									</block>
+								</value>
+								<value name="B">
+									<block type="math_number" id="/vYG|aA=QBViz{W@0zB+"
+										intask="true">
+										<field name="NUM">12</field>
+									</block>
+								</value>
+							</block>
+						</value>
+						<statement name="DO1">
+							<block type="controls_flow_statements" id="FAbl-mb!^h7DV~CA9tS@"
+								intask="true">
+								<field name="FLOW">BREAK</field>
+							</block>
+						</statement>
+					</repetitions>
+				</block>
+			</statement>
+		</block>
+		<block type="robControls_forEach" id="~nE7K3Y[NrA*kh@D)5%|"
+			intask="true">
+			<mutation list_type="Number"></mutation>
+			<field name="TYPE">Number</field>
+			<field name="VAR">item</field>
+			<value name="LIST">
+				<block type="variables_get" id="/u4@fjXX}RY6NC*fz_cj" intask="true">
+					<mutation datatype="Array_Number"></mutation>
+					<field name="VAR">item2</field>
+				</block>
+			</value>
+			<statement name="DO">
+				<block type="robControls_if" id="V[pDe.F`S.@o#B-*5tw2" intask="true">
+					<mutation elseif="1"></mutation>
+					<repetitions>
+						<value name="IF0">
+							<block type="logic_compare" id="~+boxNet|x*GJD+KUV?O"
+								intask="true">
+								<field name="OP">EQ</field>
+								<value name="A">
+									<block type="math_number" id="fQ8n]xy%bm|(XuCJbr/h"
+										intask="true">
+										<field name="NUM">30</field>
+									</block>
+								</value>
+								<value name="B">
+									<block type="math_number" id="h}.AaR2TJkh1*g2B=n9S"
+										intask="true">
+										<field name="NUM">20</field>
+									</block>
+								</value>
+							</block>
+						</value>
+						<statement name="DO0">
+							<block type="controls_flow_statements" id="~t1tAH^yt~=Phy4qkEp;"
+								intask="true">
+								<field name="FLOW">CONTINUE</field>
+							</block>
+						</statement>
+						<value name="IF1">
+							<block type="logic_compare" id="ERqa@IPU`_B6eLu-IjZ]"
+								intask="true">
+								<field name="OP">EQ</field>
+								<value name="A">
+									<block type="math_number" id="Jg*]D=l4g4iDqxPXk2U|"
+										intask="true">
+										<field name="NUM">30</field>
+									</block>
+								</value>
+								<value name="B">
+									<block type="math_number" id="%F;|AjoOC[(#X`PCi]k2"
+										intask="true">
+										<field name="NUM">20</field>
+									</block>
+								</value>
+							</block>
+						</value>
+						<statement name="DO1">
+							<block type="controls_flow_statements" id=")hoZu^S9SwnJI8HQDSV8"
+								intask="true">
+								<field name="FLOW">BREAK</field>
+							</block>
+						</statement>
+					</repetitions>
+				</block>
+			</statement>
+		</block>
+		<block type="controls_whileUntil" id="@OPlQA[*RSLSZ%,!46];"
+			intask="true">
+			<field name="MODE">WHILE</field>
+			<value name="BOOL">
+				<block type="logic_boolean" id="gHFEvy/E=Anq6%R@BPwT" intask="true">
+					<field name="BOOL">TRUE</field>
+				</block>
+			</value>
+			<statement name="DO">
+				<block type="robControls_if" id="t`umovre:yPAQb|](|);" intask="true">
+					<mutation elseif="1"></mutation>
+					<repetitions>
+						<value name="IF0">
+							<block type="logic_compare" id="EkqAJI/VM]@J1nsR9^6q"
+								intask="true">
+								<field name="OP">EQ</field>
+								<value name="A">
+									<block type="math_number" id="aF7-:w*q8sVC+Gs6dzJ0"
+										intask="true">
+										<field name="NUM">30</field>
+									</block>
+								</value>
+								<value name="B">
+									<block type="math_number" id="Rb{)]@wqfbs{VMX7]9ix"
+										intask="true">
+										<field name="NUM">20</field>
+									</block>
+								</value>
+							</block>
+						</value>
+						<statement name="DO0">
+							<block type="controls_flow_statements" id="f6pQ.gDFp2(LDEjTmi1r"
+								intask="true">
+								<field name="FLOW">CONTINUE</field>
+							</block>
+						</statement>
+						<value name="IF1">
+							<block type="logic_compare" id="oc.6Gj?O;H~~}zWl[cuX"
+								intask="true">
+								<field name="OP">EQ</field>
+								<value name="A">
+									<block type="math_number" id="sK`cVjwsEgZcB=3},i?Z"
+										intask="true">
+										<field name="NUM">30</field>
+									</block>
+								</value>
+								<value name="B">
+									<block type="math_number" id="Lp`M2;uP,fG.^9g8^w6="
+										intask="true">
+										<field name="NUM">20</field>
+									</block>
+								</value>
+							</block>
+						</value>
+						<statement name="DO1">
+							<block type="controls_flow_statements" id="{]5E3eX.=|bU3x{YV;85"
+								intask="true">
+								<field name="FLOW">BREAK</field>
+							</block>
+						</statement>
+					</repetitions>
+				</block>
+			</statement>
+		</block>
+		<block type="controls_repeat_ext" id="V)MvzH8ULCNCL9@Ln@B}"
+			intask="true">
+			<value name="TIMES">
+				<block type="math_number" id="N1e!D2/Hk)wU[nN;+!qZ" intask="true">
+					<field name="NUM">10</field>
+				</block>
+			</value>
+			<statement name="DO">
+				<block type="robControls_if" id="x_;C8[q`-!)w4xX0`ybp" intask="true">
+					<mutation elseif="1"></mutation>
+					<repetitions>
+						<value name="IF0">
+							<block type="logic_compare" id="?YfgX`MhqT^L}0,/Z^p@"
+								intask="true">
+								<field name="OP">EQ</field>
+								<value name="A">
+									<block type="math_number" id="TkNi0rls}1m:6Q?BPa:o"
+										intask="true">
+										<field name="NUM">30</field>
+									</block>
+								</value>
+								<value name="B">
+									<block type="math_number" id="t5@cajZ54/h-5VEt7e#4"
+										intask="true">
+										<field name="NUM">20</field>
+									</block>
+								</value>
+							</block>
+						</value>
+						<statement name="DO0">
+							<block type="controls_flow_statements" id="jXyPQEuVSyO{+NhCv-Dr"
+								intask="true">
+								<field name="FLOW">BREAK</field>
+							</block>
+						</statement>
+						<value name="IF1">
+							<block type="logic_compare" id="05~U!_N*mISP5b:t{x_e"
+								intask="true">
+								<field name="OP">EQ</field>
+								<value name="A">
+									<block type="math_number" id="iVz=S:9[+pt/-U.7ePit"
+										intask="true">
+										<field name="NUM">30</field>
+									</block>
+								</value>
+								<value name="B">
+									<block type="math_number" id="#o!*Mxtj`h)-/=hF.J0n"
+										intask="true">
+										<field name="NUM">20</field>
+									</block>
+								</value>
+							</block>
+						</value>
+						<statement name="DO1">
+							<block type="controls_flow_statements" id="1Ol!Qdv*a@@%O5VVvaT,"
+								intask="true">
+								<field name="FLOW">CONTINUE</field>
+							</block>
+						</statement>
+					</repetitions>
+				</block>
+			</statement>
+		</block>
+	</instance>
+</block_set>

@@ -1,0 +1,16 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-243" y="42">
+    <block type="math_random_int" id="718" inline="true" >
+      <value name="FROM">
+        <block type="math_number" id="719" >
+          <field name="NUM">1</field>
+        </block>
+      </value>
+      <value name="TO">
+        <block type="math_number" id="720" >
+          <field name="NUM">100</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

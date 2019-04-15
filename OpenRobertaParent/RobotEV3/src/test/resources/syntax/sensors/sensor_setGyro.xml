@@ -1,0 +1,14 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-30" y="210">
+    <block type="robSensors_gyro_getSample" id="140" >
+      <field name="MODE">ANGLE</field>
+      <field name="SENSORPORT">2</field>
+    </block>
+  </instance>
+  <instance x="-26" y="250">
+    <block type="robSensors_gyro_getSample" id="144" >
+      <field name="MODE">RATE</field>
+      <field name="SENSORPORT">4</field>
+    </block>
+  </instance>
+</block_set>

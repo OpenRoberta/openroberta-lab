@@ -1,0 +1,181 @@
+{
+	"ops": [
+		{
+			"opc": "GetSample",
+			"port": "A",
+			"sensorType": "buttons"
+		},
+		{
+			"mode": "TEXT",
+			"opc": "displayTextAction"
+		},
+		{
+			"opc": "GetSample",
+			"port": "B",
+			"sensorType": "buttons"
+		},
+		{
+			"mode": "TEXT",
+			"opc": "displayTextAction"
+		},
+		{
+			"opc": "GetSample",
+			"port": "0",
+			"sensorType": "pin"
+		},
+		{
+			"mode": "TEXT",
+			"opc": "displayTextAction"
+		},
+		{
+			"opc": "GetSample",
+			"port": "1",
+			"sensorType": "pin"
+		},
+		{
+			"mode": "TEXT",
+			"opc": "displayTextAction"
+		},
+		{
+			"opc": "GetSample",
+			"port": "2",
+			"sensorType": "pin"
+		},
+		{
+			"mode": "TEXT",
+			"opc": "displayTextAction"
+		},
+		{
+			"opc": "GetSample",
+			"port": "3",
+			"sensorType": "pin"
+		},
+		{
+			"mode": "TEXT",
+			"opc": "displayTextAction"
+		},
+		{
+			"opc": "GetSample",
+			"port": "UP",
+			"sensorType": "gesture"
+		},
+		{
+			"mode": "TEXT",
+			"opc": "displayTextAction"
+		},
+		{
+			"opc": "GetSample",
+			"port": "DOWN",
+			"sensorType": "gesture"
+		},
+		{
+			"mode": "TEXT",
+			"opc": "displayTextAction"
+		},
+		{
+			"opc": "GetSample",
+			"port": "FACE_DOWN",
+			"sensorType": "gesture"
+		},
+		{
+			"mode": "TEXT",
+			"opc": "displayTextAction"
+		},
+		{
+			"opc": "GetSample",
+			"port": "FACE_UP",
+			"sensorType": "gesture"
+		},
+		{
+			"mode": "TEXT",
+			"opc": "displayTextAction"
+		},
+		{
+			"opc": "GetSample",
+			"port": "SHAKE",
+			"sensorType": "gesture"
+		},
+		{
+			"mode": "TEXT",
+			"opc": "displayTextAction"
+		},
+		{
+			"opc": "GetSample",
+			"port": "FREEFALL",
+			"sensorType": "gesture"
+		},
+		{
+			"mode": "TEXT",
+			"opc": "displayTextAction"
+		},
+		{
+			"opc": "GetSample",
+			"sensorType": "sound"
+		},
+		{
+			"mode": "TEXT",
+			"opc": "displayTextAction"
+		},
+		{
+			"opc": "GetSample",
+			"sensorType": "compass"
+		},
+		{
+			"mode": "TEXT",
+			"opc": "displayTextAction"
+		},
+		{
+			"opc": "GetSample",
+			"port": "1",
+			"sensorType": "timer"
+		},
+		{
+			"mode": "TEXT",
+			"opc": "displayTextAction"
+		},
+		{
+			"opc": "GetSample",
+			"port": "1",
+			"sensorType": "createResetTimer"
+		},
+		{
+			"opc": "GetSample",
+			"sensorType": "temperature"
+		},
+		{
+			"mode": "TEXT",
+			"opc": "displayTextAction"
+		},
+		{
+			"opc": "GetSample",
+			"sensorType": "light"
+		},
+		{
+			"mode": "TEXT",
+			"opc": "displayTextAction"
+		},
+		{
+			"mode": "ANALOG",
+			"opc": "GetSample",
+			"port": "1",
+			"sensorType": "pin"
+		},
+		{
+			"mode": "TEXT",
+			"opc": "displayTextAction"
+		},
+		{
+			"mode": "DIGITAL",
+			"opc": "GetSample",
+			"port": "0",
+			"sensorType": "pin"
+		},
+		{
+			"mode": "TEXT",
+			"opc": "displayTextAction"
+		}
+	],
+	"functionDeclaration": {
+		
+	}
+}

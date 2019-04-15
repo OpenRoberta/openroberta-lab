@@ -1,0 +1,68 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="134" y="55">
+    <block type="robControls_start" id="32" deletable="false">
+      <mutation declare="true"></mutation>
+      <field name="DEBUG">FALSE</field>
+      <statement name="ST">
+        <block type="robGlobalvariables_declare" id="34" inline="true" deletable="false" movable="false">
+          <mutation next="false" declaration_type="Colour"></mutation>
+          <field name="VAR">variablenName</field>
+          <field name="TYPE">Colour</field>
+          <value name="VALUE">
+            <block type="robSensors_colour_getSample" id="52">
+              <mutation mode="COLOUR"></mutation>
+              <field name="MODE">COLOUR</field>
+              <field name="SENSORPORT">3</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <block type="robProcedures_callnoreturn" id="118" inline="false">
+      <mutation name="macheEtwas">
+        <arg name="x" type="Number"></arg>
+      </mutation>
+      <value name="ARG0">
+        <block type="robSensors_infrared_getSample" id="147">
+          <mutation mode="DISTANCE"></mutation>
+          <field name="MODE">DISTANCE</field>
+          <field name="SENSORPORT">4</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="527" y="355">
+    <block type="robProcedures_defnoreturn" id="67">
+      <mutation declare="true"></mutation>
+      <field name="NAME">macheEtwas</field>
+      <statement name="ST">
+        <block type="robLocalVariables_declare" id="71" deletable="false" movable="false">
+          <mutation next="false" declaration_type="Number"></mutation>
+          <field name="VAR">x</field>
+          <field name="TYPE">Number</field>
+        </block>
+      </statement>
+      <statement name="STACK">
+        <block type="robActions_display_text" id="91" inline="false">
+          <value name="OUT">
+            <block type="robSensors_ultrasonic_getSample" id="104">
+              <mutation mode="DISTANCE"></mutation>
+              <field name="MODE">DISTANCE</field>
+              <field name="SENSORPORT">4</field>
+            </block>
+          </value>
+          <value name="COL">
+            <block type="math_number" id="93">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+          <value name="ROW">
+            <block type="math_number" id="94">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

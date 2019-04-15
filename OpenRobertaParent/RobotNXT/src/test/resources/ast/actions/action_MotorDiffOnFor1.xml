@@ -1,0 +1,18 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+    <instance x="-667" y="54">
+    <block type="robActions_motorDiff_on_for" id="200" inline="true" disabled="true">
+      <field name="DIRECTION">BACKWARDS</field>
+      <comment pinned="true" h="80" w="160">asdasdasd</comment>
+      <value name="POWER">
+        <block type="math_number" id="201" disabled="true">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+      <value name="DISTANCE">
+        <block type="math_number" id="202" disabled="true">
+          <field name="NUM">20</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

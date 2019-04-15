@@ -1,0 +1,22 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-99" y="51">
+    <block type="math_arithmetic" id="599" inline="true">
+      <field name="OP">ADD</field>
+      <value name="A">
+        <block type="math_number" id="638">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="B">
+        <block type="math_number" id="640">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="C">
+        <block type="math_number" id="640">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

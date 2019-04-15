@@ -1,0 +1,19 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+ <instance x="-8" y="1">
+    <block type="robActions_play_tone" id="414" inline="false" disabled="true"></block>
+    <block type="robActions_play_tone" id="417" inline="false" disabled="true">
+      <value name="FREQUENCE">
+        <block type="math_number" id="418" disabled="true">
+          <field name="NUM">300</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_play_tone" id="420" inline="false" disabled="true">
+      <value name="DURATION">
+        <block type="math_number" id="422" disabled="true">
+          <field name="NUM">100</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

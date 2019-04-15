@@ -1,0 +1,51 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="1" y="7">
+    <block type="robControls_start" id="34" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+    </block>
+    <block type="robActions_display_text" id="36" inline="false" intask="true">
+      <value name="OUT">
+        <block type="text" id="37" intask="true">
+          <field name="TEXT">Hallo</field>
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id="38" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id="39" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_display_picture" id="52" inline="false" intask="true">
+      <field name="PICTURE">OLDGLASSES</field>
+      <value name="X">
+        <block type="math_number" id="53" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="Y">
+        <block type="math_number" id="54" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_display_clear" id="66" intask="true"></block>
+    <block type="robActions_display_picture" id="68" inline="false" intask="true">
+      <field name="PICTURE">EYESOPEN</field>
+      <value name="X">
+        <block type="math_number" id="53" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="Y">
+        <block type="math_number" id="54" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

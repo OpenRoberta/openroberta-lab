@@ -1,0 +1,79 @@
+include: "classpath:/robotCommon.yml"
+block:
+  RELAY_ACTION:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.actors.arduino.RelayAction
+      type: [robactions_set_relay]
+  # Bob3
+  BOB3_BODYLED:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.actors.arduino.bob3.BodyLEDAction
+      type: [bob3Actions_set_led]
+  BOB3_CODEPAD:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor
+      type: [bob3Sensors_getCode,robSensors_code_getSample]
+  BOB3_SENDIR:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction
+      type: [bob3Communication_sendBlock]
+  BOB3_RECVIR:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction
+      type: [bob3Communication_receiveBlock]
+  BOB3_SENSOR_GET_SAMPLE :
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor
+      type: [bob3Sensors_getSample_bob3 ]
+  BOB3_REMEMBER :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction
+      type: [bob3Actions_remember]
+  BOB3_RECALL :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.actors.arduino.bob3.RecallAction
+      type: [bob3Actions_recall]
+  BOB3_RGB_LED_ON:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.actors.arduino.bob3.LedOnAction
+      type: [makeblockActions_leds_on]
+  BOB3_RGB_LED_OFF:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.actors.arduino.bob3.LedOffAction
+      type: [makeblockActions_leds_off]
+  #MBOT
+  ARDU_JOYSTICK_GETSAMPLE:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensors.arduino.mbot.Joystick
+      type: [robSensors_joystick_getSample]
+  FLAMESENSOR_GET_SAMPLE:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensors.arduino.mbot.FlameSensor
+      type: [robSensors_flame_getSample]
+  IR_SENDER:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.actors.arduino.mbot.SendIRAction
+      type: [robCommunication_ir_sendBlock]
+  IR_RECEIVER:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.actors.arduino.mbot.ReceiveIRAction
+      type: [robCommunication_ir_receiveBlock]
+  DATA_SEND_ACTION:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction
+      type: [robActions_sendData]
+  PLOT_POINT_ACTION:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction
+      type: [robactions_plot_point]
+  PLOT_CLEAR_ACTION:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction
+      type: [robactions_plot_clear]
+
+configuration:
+  SENSEBOX: [robBrick_senseBox-Brick]
+  SENSEBOX_ACCELEROMETER: [robConf_accelerometer]
+  SENSEBOX_COMPASS: [robConf_compass]
+  SENSEBOX_SDCARD: [robConf_sdcard]
+  SENSEBOX_PLOTTING: [robConf_plotting]

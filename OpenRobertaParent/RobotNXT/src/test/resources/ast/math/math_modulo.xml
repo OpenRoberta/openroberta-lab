@@ -1,0 +1,16 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+    <instance x="-36" y="424">
+    <block type="math_modulo" id="201" inline="true">
+      <value name="DIVIDEND">
+        <block type="math_number" id="220">
+          <field name="NUM">10</field>
+        </block>
+      </value>
+      <value name="DIVISOR">
+        <block type="math_number" id="221">
+          <field name="NUM">2</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

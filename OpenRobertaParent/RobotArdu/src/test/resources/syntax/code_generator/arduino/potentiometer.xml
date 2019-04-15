@@ -1,0 +1,43 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="2.0" description="" tags="">
+  <instance x="154" y="37">
+    <block type="robControls_start_ardu" id=";dhakC#.!9?vU,6O+~zZ" intask="true" deletable="false">
+      <mutation declare="false">
+      </mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robControls_loopForever_ardu" id="[NV.4dpXd4HsJ8R^%S8]" intask="true" deletable="false" movable="false">
+      <statement name="DO">
+        <block type="robActions_display_text_i2c" id="OP:7@_SY`%dA)|5K5X-I" intask="true">
+          <field name="ACTORPORT">L</field>
+          <value name="OUT">
+            <block type="robSensors_potentiometer_getSample" id="j48mrqK4bl74T|YhS(KB" intask="true">
+              <mutation mode="VALUE">
+              </mutation>
+              <field name="MODE">VALUE</field>
+              <field name="SENSORPORT">P</field>
+              <field name="SLOT">
+              </field>
+            </block>
+          </value>
+          <value name="ROW">
+            <block type="math_number" id="uLv-eAY=9Spi0?:DYlpr" intask="true">
+              <field name="NUM">1</field>
+            </block>
+          </value>
+          <value name="COL">
+            <block type="math_number" id="X1tQ.Fe:SJ]/k_7K=QU?" intask="true">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+        <block type="robControls_wait_time" id="m|mZ#oz+2ppRVf=MC(v9" intask="true">
+          <value name="WAIT">
+            <block type="math_number" id="Mb44;Vc}V,sQ,r{ni19g" intask="true">
+              <field name="NUM">500</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

@@ -1,0 +1,38 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="nibo" xmlversion="2.0" description="" tags="">
+	<instance x="273" y="50">
+		<block type="robControls_start_ardu" id="9gQ`lvA-06F0GogyKtF*"
+			intask="true" deletable="false">
+			<mutation declare="false"></mutation>
+			<field name="DEBUG">FALSE</field>
+		</block>
+		<block type="robControls_loopForever_ardu" id="-mRBXSb~6CKn0k/kuv{4"
+			intask="true" deletable="false" movable="false">
+			<statement name="DO">
+				<block type="robControls_if" id="subjL@JZWcS#feq~GW{+" intask="true">
+					<mutation elseif="1"></mutation>
+					<repetitions>
+						<value name="IF0">
+                        <block type="robSensors_pintouch_getSample" id="=TM{Uh{ywkVtoiAfEg8m" intask="true">
+                          <mutation mode="PRESSED">
+                          </mutation>
+                          <field name="MODE">PRESSED</field>
+                          <field name="SENSORPORT">1</field>
+                          <field name="SLOT">0</field>
+                        </block>
+						</value>
+						<value name="IF1">
+                            <block type="robSensors_pintouch_getSample" id="=TM{Uh{ywkVtoiAfEg8m" intask="true">
+                              <mutation mode="PRESSED">
+                              </mutation>
+                              <field name="MODE">PRESSED</field>
+                              <field name="SENSORPORT">2</field>
+                              <field name="SLOT">1</field>
+                            </block>
+						</value>
+					</repetitions>
+				</block>
+			</statement>
+		</block>
+	</instance>
+</block_set>

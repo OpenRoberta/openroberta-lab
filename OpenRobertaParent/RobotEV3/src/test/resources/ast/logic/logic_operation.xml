@@ -1,0 +1,7 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="263" y="-422">
+    <block type="logic_operation" id="96" inline="true">
+      <field name="OP">AND</field>
+    </block>
+  </instance>
+</block_set>

@@ -1,0 +1,22 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="5" y="28">
+    <block type="robProcedures_defnoreturn" id="296">
+      <mutation declare="false"></mutation>
+      <field name="NAME">Funktionsblock</field>
+      <statement name="STACK">
+        <block type="robActions_play_setVolume" id="355" inline="false">
+          <value name="VOLUME">
+            <block type="math_number" id="356">
+              <field name="NUM">50</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+  <instance x="6" y="189">
+    <block type="robProcedures_callnoreturn" id="305" disabled="true">
+      <mutation name="Funktionsblock"></mutation>
+    </block>
+  </instance>
+</block_set>

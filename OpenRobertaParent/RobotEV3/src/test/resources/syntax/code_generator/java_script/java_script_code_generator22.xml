@@ -1,0 +1,49 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="138" y="63">
+    <block type="robControls_start" id="`#WLe*nXzngn4_H4KUnD" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robActions_display_text" id="tOM(hiOq8lVK(|c_=lx?" intask="true">
+      <value name="OUT">
+        <block type="math_random_int" id="WY3`lY$EMkC}]`Wr:3{e" intask="true">
+          <value name="FROM">
+            <block type="math_number" id="5~~%9ekh?@#2;M[06n+~" intask="true">
+              <field name="NUM">1</field>
+            </block>
+          </value>
+          <value name="TO">
+            <block type="math_number" id="C7/sxc^s.a^L$T(T8YPE" intask="true">
+              <field name="NUM">100</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id="PjAV9VP_rG{Q7WLJ9oi(" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id="@sAA[EKk`,G`qGUTqB*l" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_display_text" id="tOM(hiOq8lVK(|c_=lx?" intask="true">
+      <value name="OUT">
+        <block type="math_random_float" id="w#A2?TnzT=n/}T0ZnC}K" intask="true"></block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id="PjAV9VP_rG{Q7WLJ9oi(" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id="@sAA[EKk`,G`qGUTqB*l" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

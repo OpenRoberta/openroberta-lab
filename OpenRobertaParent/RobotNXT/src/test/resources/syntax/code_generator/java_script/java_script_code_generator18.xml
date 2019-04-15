@@ -1,0 +1,86 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="138" y="38">
+    <block type="robControls_start" id="ERi)xF(,Ezd{5haPu3h`" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robActions_motorDiff_on_for" id=".:kAk$/^Cl9ulu8TZt}a" intask="true">
+      <field name="DIRECTION">FOREWARD</field>
+      <value name="POWER">
+        <block type="math_number" id="h#)gy%x?_pp?bN*w-0:}" intask="true">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+      <value name="DISTANCE">
+        <block type="math_constant" id="%QQ%wWAt=WDs~r{U;=0T" intask="true">
+          <field name="CONSTANT">PI</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motorDiff_on_for" id=".:kAk$/^Cl9ulu8TZt}a" intask="true">
+      <field name="DIRECTION">FOREWARD</field>
+      <value name="POWER">
+        <block type="math_number" id="h#)gy%x?_pp?bN*w-0:}" intask="true">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+      <value name="DISTANCE">
+        <block type="math_constant" id="%QQ%wWAt=WDs~r{U;=0T" intask="true">
+          <field name="CONSTANT">E</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motorDiff_on_for" id=".:kAk$/^Cl9ulu8TZt}a" intask="true">
+      <field name="DIRECTION">FOREWARD</field>
+      <value name="POWER">
+        <block type="math_number" id="h#)gy%x?_pp?bN*w-0:}" intask="true">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+      <value name="DISTANCE">
+        <block type="math_constant" id="%QQ%wWAt=WDs~r{U;=0T" intask="true">
+          <field name="CONSTANT">GOLDEN_RATIO</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motorDiff_on_for" id=".:kAk$/^Cl9ulu8TZt}a" intask="true">
+      <field name="DIRECTION">FOREWARD</field>
+      <value name="POWER">
+        <block type="math_number" id="h#)gy%x?_pp?bN*w-0:}" intask="true">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+      <value name="DISTANCE">
+        <block type="math_constant" id="%QQ%wWAt=WDs~r{U;=0T" intask="true">
+          <field name="CONSTANT">SQRT2</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motorDiff_on_for" id=".:kAk$/^Cl9ulu8TZt}a" intask="true">
+      <field name="DIRECTION">FOREWARD</field>
+      <value name="POWER">
+        <block type="math_number" id="h#)gy%x?_pp?bN*w-0:}" intask="true">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+      <value name="DISTANCE">
+        <block type="math_constant" id="%QQ%wWAt=WDs~r{U;=0T" intask="true">
+          <field name="CONSTANT">SQRT1_2</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motorDiff_on_for" id=".:kAk$/^Cl9ulu8TZt}a" intask="true">
+      <field name="DIRECTION">FOREWARD</field>
+      <value name="POWER">
+        <block type="math_number" id="h#)gy%x?_pp?bN*w-0:}" intask="true">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+      <value name="DISTANCE">
+        <block type="math_constant" id="%QQ%wWAt=WDs~r{U;=0T" intask="true">
+          <field name="CONSTANT">INFINITY</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

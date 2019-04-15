@@ -1,0 +1,36 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="calliope" xmlversion="" description="" tags="">
+	<instance x="138" y="37">
+		<block type="mbedControls_start" id="+G+Mng.8Q^!:cCD%XET|"
+			intask="true" deletable="false">
+			<mutation declare="false"></mutation>
+		</block>
+		<block type="mbedActions_leds_on" id="taB,lykJ-GtblFL_JGl{"
+			intask="true">
+			<value name="COLOR">
+				<block type="mbedColour_picker" id="AoLd-kVg]a@l!MY`?@t@"
+					intask="true">
+					<field name="COLOUR">#ff0000</field>
+				</block>
+			</value>
+		</block>
+		<block type="mbedActions_leds_on" id="m!qS#a_JMgtn_#oaYW#2"
+			intask="true">
+			<value name="COLOR">
+				<block type="mbedColour_picker" id="1wIMs5#aml`Icg+/0sg?"
+					intask="true">
+					<field name="COLOUR">#009900</field>
+				</block>
+			</value>
+		</block>
+		<block type="mbedActions_leds_on" id="y}EFTX6yy4W6~F;J:PCq"
+			intask="true">
+			<value name="COLOR">
+				<block type="mbedColour_picker" id="CB(`8iZO?+-aV:{Z2omd"
+					intask="true">
+					<field name="COLOUR">#9999ff</field>
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

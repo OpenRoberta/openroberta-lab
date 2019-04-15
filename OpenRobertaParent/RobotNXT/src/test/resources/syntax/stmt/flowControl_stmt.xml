@@ -1,0 +1,78 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+      <instance x="-38" y="98">
+    <block type="controls_whileUntil" id="151" inline="false">
+      <field name="MODE">WHILE</field>
+      <value name="BOOL">
+        <block type="logic_compare" id="152" inline="true">
+          <field name="OP">EQ</field>
+          <value name="A">
+            <block type="math_number" id="153">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_number" id="154">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <statement name="DO">
+        <block type="text_print" id="353" inline="false">
+          <value name="TEXT">
+            <block type="text" id="371">
+              <field name="TEXT">123</field>
+            </block>
+          </value>
+        </block>
+        <block type="text_print" id="372" inline="false">
+          <value name="TEXT">
+            <block type="text" id="373">
+              <field name="TEXT">123</field>
+            </block>
+          </value>
+        </block>
+        <block type="controls_whileUntil" id="374" inline="false">
+          <field name="MODE">UNTIL</field>
+          <value name="BOOL">
+            <block type="logic_compare" id="375" inline="true">
+              <field name="OP">EQ</field>
+              <value name="A">
+                <block type="math_number" id="376">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_number" id="377">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+            </block>
+          </value>
+          <statement name="DO">
+            <block type="text_print" id="378" inline="false">
+              <value name="TEXT">
+                <block type="text" id="379">
+                  <field name="TEXT">123</field>
+                </block>
+              </value>
+            </block>
+            <block type="text_print" id="380" inline="false">
+              <value name="TEXT">
+                <block type="text" id="381">
+                  <field name="TEXT">123</field>
+                </block>
+              </value>
+            </block>
+            <block type="controls_flow_statements" id="382">
+              <field name="FLOW">BREAK</field>
+            </block>
+          </statement>
+        </block>
+        <block type="controls_flow_statements" id="155">
+          <field name="FLOW">BREAK</field>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

@@ -1,0 +1,43 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="2.0" description="" tags="">
+  <instance x="-48" y="9">
+    <block type="robControls_start_ardu" id="qB?E/SzGVYgYG9QdM1D=" intask="true" deletable="false">
+      <mutation declare="false">
+      </mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robControls_loopForever_ardu" id="Uf3@L~6n#[`oK7462Rf;" intask="true" deletable="false" movable="false">
+      <statement name="DO">
+        <block type="robActions_display_text_i2c" id="yqADVPAp+mlOu]Y3[^#U" intask="true">
+          <field name="ACTORPORT">L</field>
+          <value name="OUT">
+            <block type="robSensors_moisture_getSample" id="_MSpujG8dgb*_Rqy@.%l" intask="true">
+              <mutation mode="VALUE">
+              </mutation>
+              <field name="MODE">VALUE</field>
+              <field name="SENSORPORT">F</field>
+              <field name="SLOT">
+              </field>
+            </block>
+          </value>
+          <value name="ROW">
+            <block type="math_number" id="x}Q0@`%#m#`S[v1O0xa[" intask="true">
+              <field name="NUM">1</field>
+            </block>
+          </value>
+          <value name="COL">
+            <block type="math_number" id="miZ?OB)LrF^*C6*oL#[I" intask="true">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+        <block type="robControls_wait_time" id="(l8yqJ~FrN|y]gv%AA!Y" intask="true">
+          <value name="WAIT">
+            <block type="math_number" id="Duxy-*Ov`N9q|3MIQZEj" intask="true">
+              <field name="NUM">500</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

@@ -1,0 +1,10 @@
+<toolbox_set id="toolbox" style="display: none">
+  <category name="TOOLBOX_ACTION" svg="true">
+    <block type="robBrick_motor_geared"/>
+  </category>
+  <category name="TOOLBOX_SENSOR" svg="true">
+    <block type="robBrick_ultrasonic"/>
+    <block type="robBrick_infrared"/>
+    <block type="robBrick_light"/>
+  </category>
+</toolbox_set>

@@ -1,0 +1,11 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-846" y="39">
+    <block type="text_print" id="522" inline="false" disabled="true">
+      <value name="TEXT">
+        <block type="text" id="525" disabled="true">
+          <field name="TEXT"></field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

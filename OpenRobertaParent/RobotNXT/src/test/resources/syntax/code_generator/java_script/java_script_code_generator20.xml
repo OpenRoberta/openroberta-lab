@@ -1,0 +1,174 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="563" y="-212">
+    <block type="robControls_start" id="ERi)xF(,Ezd{5haPu3h`" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robActions_display_text" id="OZbZmUiTx@{O:soWH~LI" intask="true">
+      <value name="OUT">
+        <block type="math_number_property" id="qp}uV:5Gae343)W7X:U}" intask="true">
+          <mutation divisor_input="false"></mutation>
+          <field name="PROPERTY">EVEN</field>
+          <value name="NUMBER_TO_CHECK">
+            <block type="math_number" id="PL,*`.F()L%EgNLqXu$t" intask="true">
+              <field name="NUM">3</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id="QL@MOkpGmTPV?q/QbrDE" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id="xCXNojl*Z]]=m+Sn~:H/" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_display_text" id="OZbZmUiTx@{O:soWH~LI" intask="true">
+      <value name="OUT">
+        <block type="math_number_property" id="qp}uV:5Gae343)W7X:U}" intask="true">
+          <mutation divisor_input="false"></mutation>
+          <field name="PROPERTY">ODD</field>
+          <value name="NUMBER_TO_CHECK">
+            <block type="math_number" id="PL,*`.F()L%EgNLqXu$t" intask="true">
+              <field name="NUM">3</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id="QL@MOkpGmTPV?q/QbrDE" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id="xCXNojl*Z]]=m+Sn~:H/" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_display_text" id="OZbZmUiTx@{O:soWH~LI" intask="true">
+      <value name="OUT">
+        <block type="math_number_property" id="qp}uV:5Gae343)W7X:U}" intask="true">
+          <mutation divisor_input="false"></mutation>
+          <field name="PROPERTY">PRIME</field>
+          <value name="NUMBER_TO_CHECK">
+            <block type="math_number" id="PL,*`.F()L%EgNLqXu$t" intask="true">
+              <field name="NUM">3</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id="QL@MOkpGmTPV?q/QbrDE" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id="xCXNojl*Z]]=m+Sn~:H/" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_display_text" id="OZbZmUiTx@{O:soWH~LI" intask="true">
+      <value name="OUT">
+        <block type="math_number_property" id="qp}uV:5Gae343)W7X:U}" intask="true">
+          <mutation divisor_input="false"></mutation>
+          <field name="PROPERTY">WHOLE</field>
+          <value name="NUMBER_TO_CHECK">
+            <block type="math_number" id="PL,*`.F()L%EgNLqXu$t" intask="true">
+              <field name="NUM">3</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id="QL@MOkpGmTPV?q/QbrDE" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id="xCXNojl*Z]]=m+Sn~:H/" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_display_text" id="OZbZmUiTx@{O:soWH~LI" intask="true">
+      <value name="OUT">
+        <block type="math_number_property" id="qp}uV:5Gae343)W7X:U}" intask="true">
+          <mutation divisor_input="false"></mutation>
+          <field name="PROPERTY">POSITIVE</field>
+          <value name="NUMBER_TO_CHECK">
+            <block type="math_number" id="PL,*`.F()L%EgNLqXu$t" intask="true">
+              <field name="NUM">3</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id="QL@MOkpGmTPV?q/QbrDE" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id="xCXNojl*Z]]=m+Sn~:H/" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_display_text" id="OZbZmUiTx@{O:soWH~LI" intask="true">
+      <value name="OUT">
+        <block type="math_number_property" id="qp}uV:5Gae343)W7X:U}" intask="true">
+          <mutation divisor_input="false"></mutation>
+          <field name="PROPERTY">NEGATIVE</field>
+          <value name="NUMBER_TO_CHECK">
+            <block type="math_number" id="PL,*`.F()L%EgNLqXu$t" intask="true">
+              <field name="NUM">3</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id="QL@MOkpGmTPV?q/QbrDE" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id="xCXNojl*Z]]=m+Sn~:H/" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_display_text" id="OZbZmUiTx@{O:soWH~LI" intask="true">
+      <value name="OUT">
+        <block type="math_number_property" id="qp}uV:5Gae343)W7X:U}" intask="true">
+          <mutation divisor_input="true"></mutation>
+          <field name="PROPERTY">DIVISIBLE_BY</field>
+          <value name="NUMBER_TO_CHECK">
+            <block type="math_number" id="PL,*`.F()L%EgNLqXu$t" intask="true">
+              <field name="NUM">3</field>
+            </block>
+          </value>
+          <value name="DIVISOR">
+            <block type="math_number" id="PL,*`.F()L%EgNLqXu$t" intask="true">
+              <field name="NUM">3</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id="QL@MOkpGmTPV?q/QbrDE" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id="xCXNojl*Z]]=m+Sn~:H/" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

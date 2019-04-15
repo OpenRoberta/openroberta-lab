@@ -1,0 +1,1439 @@
+<block type="variables_set" id="S{[rwytngh-^-ht9QhfJ" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="robLists_length" id="tzOB4!}jPJqkIt`o`^8^" intask="true">
+            <value name="VALUE">
+                <block type="variables_get" id="S;EC*M(WpiHb#e~:U!TM" intask="true">
+                    <mutation datatype="Array_Number"></mutation>
+                    <field name="VAR">input</field>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="K=#8!)I_Zi#ev(YE@;UK" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="XF@X#@,R!M.d)?5^u6r3" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="2gBV,m_-j140Gq/F!ON@" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="robLists_length" id="MWkTk-w88{qYKF)|3Ykx" intask="true">
+                    <value name="VALUE">
+                        <block type="variables_get" id="@NBcF/|:i!^!M~]C5TvT" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">input2</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="robControls_ifElse" id="=XU]go-[u%7e6O0YWkZN" intask="true">
+    <mutation else="1"></mutation>
+    <repetitions>
+        <value name="IF0">
+            <block type="robLists_isEmpty" id="%aO(D}JCS3.kPgI[Vb[D" intask="true">
+                <value name="VALUE">
+                    <block type="variables_get" id="kvW;MZ:|dkOd{*j2tkn2" intask="true">
+                        <mutation datatype="Array_Number"></mutation>
+                        <field name="VAR">input</field>
+                    </block>
+                </value>
+            </block>
+        </value>
+        <statement name="DO0">
+            <block type="variables_set" id="V9xO6~XTTA.~#~QR%n(u" intask="true">
+                <mutation datatype="Number"></mutation>
+                <field name="VAR">result</field>
+                <value name="VALUE">
+                    <block type="math_arithmetic" id="^V)vn!-kU-kNdsywB56K" intask="true">
+                        <field name="OP">ADD</field>
+                        <value name="A">
+                            <block type="variables_get" id="{Cq)2!Nch)EE!gCh7G^{" intask="true">
+                                <mutation datatype="Number"></mutation>
+                                <field name="VAR">result</field>
+                            </block>
+                        </value>
+                        <value name="B">
+                            <block type="math_number" id="iDpvor*_:!/,WbvRv9gX" intask="true">
+                                <field name="NUM">1</field>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+            </block>
+        </statement>
+        <statement name="ELSE">
+            <block type="variables_set" id="2Mq8Ed}E=O`n`-{OeKl7" intask="true">
+                <mutation datatype="Number"></mutation>
+                <field name="VAR">result</field>
+                <value name="VALUE">
+                    <block type="math_arithmetic" id="FMe*~v7@|7K*M{|rD:sw" intask="true">
+                        <field name="OP">ADD</field>
+                        <value name="A">
+                            <block type="variables_get" id="jFUp!Dopi/IXA,4,lkQg" intask="true">
+                                <mutation datatype="Number"></mutation>
+                                <field name="VAR">result</field>
+                            </block>
+                        </value>
+                        <value name="B">
+                            <block type="math_number" id="SQo*XID8rf@b{Ry7)yFp" intask="true">
+                                <field name="NUM">2</field>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+            </block>
+        </statement>
+    </repetitions>
+</block>
+<block type="robControls_ifElse" id=",eC*PTFN7iMS=asQ~sxX" intask="true">
+    <mutation else="1"></mutation>
+    <repetitions>
+        <value name="IF0">
+            <block type="robLists_isEmpty" id="1kyit6YuUeaRlT_{-9_T" intask="true">
+                <value name="VALUE">
+                    <block type="variables_get" id="2dRdJ[wpZ17_|r+DIw]3" intask="true">
+                        <mutation datatype="Array_Number"></mutation>
+                        <field name="VAR">input2</field>
+                    </block>
+                </value>
+            </block>
+        </value>
+        <statement name="DO0">
+            <block type="variables_set" id="k,.IsMj{CR[WiJPwXsZ8" intask="true">
+                <mutation datatype="Number"></mutation>
+                <field name="VAR">result</field>
+                <value name="VALUE">
+                    <block type="math_arithmetic" id="~ZRtx)!U6C[!.}-oa6HK" intask="true">
+                        <field name="OP">ADD</field>
+                        <value name="A">
+                            <block type="variables_get" id="g`)s4f1nLsLxe4e`}5S^" intask="true">
+                                <mutation datatype="Number"></mutation>
+                                <field name="VAR">result</field>
+                            </block>
+                        </value>
+                        <value name="B">
+                            <block type="math_number" id="KwNOsTMG0N6%`[.?i8EI" intask="true">
+                                <field name="NUM">1</field>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+            </block>
+        </statement>
+        <statement name="ELSE">
+            <block type="variables_set" id="E!+uT|smiWt0]M6^IyLy" intask="true">
+                <mutation datatype="Number"></mutation>
+                <field name="VAR">result</field>
+                <value name="VALUE">
+                    <block type="math_arithmetic" id="~y@q9Sd1?9/q[g1h_JmH" intask="true">
+                        <field name="OP">ADD</field>
+                        <value name="A">
+                            <block type="variables_get" id="kZv1E.nNhJB83mbZH6w%" intask="true">
+                                <mutation datatype="Number"></mutation>
+                                <field name="VAR">result</field>
+                            </block>
+                        </value>
+                        <value name="B">
+                            <block type="math_number" id="[KBvPK1sP..SAT]czoe6" intask="true">
+                                <field name="NUM">2</field>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+            </block>
+        </statement>
+    </repetitions>
+</block>
+<block type="text_comment" id="TmLd]QMRLzBEKOggWUvA" intask="true">
+    <field name="TEXT">8</field>
+</block>
+<block type="variables_set" id="HoB|EyG0EgBst_IJpqC@" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="1z;ig*veON*=F=D62D!n" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="(Qg?/lP5XA6O;OjeKq.%" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="robLists_indexOf" id="#3MuJxYE:CUzM,2cwvvV" intask="true">
+                    <field name="END">FIRST</field>
+                    <value name="VALUE">
+                        <block type="variables_get" id="GEWn4ibuEZ:Pz.RNbFqp" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">input</field>
+                        </block>
+                    </value>
+                    <value name="FIND">
+                        <block type="math_number" id="cNjvMOQkRRtB5E*#IBam" intask="true">
+                            <field name="NUM">3</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="vL%qn*Zc?EoFEU}amOap" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="jk2F9cDwoH3b:3*h#!4^" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="R(1oF)X=iE!{[a,BXBCJ" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="robLists_indexOf" id="`Q=Ay/XO*G?}J,p[rE2t" intask="true">
+                    <field name="END">LAST</field>
+                    <value name="VALUE">
+                        <block type="variables_get" id="uT#n~?8:LV!(]Y[+_d`r" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">input</field>
+                        </block>
+                    </value>
+                    <value name="FIND">
+                        <block type="math_number" id="eag8+T]X0kfKe|=|9zh+" intask="true">
+                            <field name="NUM">3</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="text_comment" id="^+e!jHI?O5lUqGxU#ImD" intask="true">
+    <field name="TEXT">14</field>
+</block>
+<block type="variables_set" id="9I%|FMeRLn{p8T/B(7f{" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="C]m#]oFE~s?Z*A[)W-iZ" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="{*qn16RMD%agMl6`cpg2" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="robLists_getIndex" id="{%iCzXZw1Pzand6O!Wnj" intask="true">
+                    <mutation statement="false" at="true"></mutation>
+                    <field name="MODE">GET</field>
+                    <field name="WHERE">FROM_START</field>
+                    <value name="VALUE">
+                        <block type="variables_get" id=")e?]@_*J%jB%Eh#tZ?6~" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">input</field>
+                        </block>
+                    </value>
+                    <value name="AT">
+                        <block type="math_number" id="J?]aV?h#UZ^E#l@UH;D!" intask="true">
+                            <field name="NUM">1</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="9xi-=i_.#eqKl{^H+#Ni" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="+#^l/gX%vUEtzeK}fY2v" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="h~WNjXdTW|s::lm}3_dv" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="robLists_getIndex" id="@[%fTd/Uf6-EnYjuzFfG" intask="true">
+                    <mutation statement="false" at="true"></mutation>
+                    <field name="MODE">GET</field>
+                    <field name="WHERE">FROM_END</field>
+                    <value name="VALUE">
+                        <block type="variables_get" id="lV8XxgRHU@bSOPhz^x-p" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">input</field>
+                        </block>
+                    </value>
+                    <value name="AT">
+                        <block type="math_number" id="uu%,;#O[YisUWJPG4!Q}" intask="true">
+                            <field name="NUM">1</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="8[9glWe^=9!9yjVdb=w)" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id=";bOlGOJ47YU9GX:piYc6" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="!]W.WQy~03_|n_[Nv0^0" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="robLists_getIndex" id="InQu}DKUSheA|9Lol[L+" intask="true">
+                    <mutation statement="false" at="false"></mutation>
+                    <field name="MODE">GET</field>
+                    <field name="WHERE">FIRST</field>
+                    <value name="VALUE">
+                        <block type="variables_get" id="0f[oRcGcZZj/K2+ZPe;|" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">input</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="?2Pk(JYgA8-RT0,M*!1g" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="YLeaJ!@?9%y2tJ}0]sC=" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="`wS;x`/k~RrBVdYPm_a#" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="robLists_getIndex" id="C1C=E=9zP[,KM]NA|,n}" intask="true">
+                    <mutation statement="false" at="false"></mutation>
+                    <field name="MODE">GET</field>
+                    <field name="WHERE">LAST</field>
+                    <value name="VALUE">
+                        <block type="variables_get" id="%^n*hp)G2)xwxdB@,a_1" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">input</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="text_comment" id="jh:pg49@%N}XnNx]Z!ly" intask="true">
+    <field name="TEXT">24</field>
+</block>
+<block type="variables_set" id="ps;T00[qKM[Ke9dZy_hp" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="BBHi8MON0b}c+397=)WM" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id=",I.ZUi8s)6ap0.830)tw" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="robLists_getIndex" id=":[gjfD4HCd|[|D|Cz6kl" intask="true">
+                    <mutation statement="false" at="true"></mutation>
+                    <field name="MODE">GET_REMOVE</field>
+                    <field name="WHERE">FROM_START</field>
+                    <value name="VALUE">
+                        <block type="variables_get" id="Q(GhL)`Q6=RojfG:h%MQ" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">input</field>
+                        </block>
+                    </value>
+                    <value name="AT">
+                        <block type="math_number" id="9/NFZlqo)F[iF%_th)QO" intask="true">
+                            <field name="NUM">1</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="k?C7BAq,1/G}R?3re`;|" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="0mXxoRc_]0yOOT5~!Vnh" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="O:3nz;GAeGbP/dhTuN^s" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="robLists_getIndex" id="FDJd61|F*x{W5;!A|@2a" intask="true">
+                    <mutation statement="false" at="true"></mutation>
+                    <field name="MODE">GET_REMOVE</field>
+                    <field name="WHERE">FROM_END</field>
+                    <value name="VALUE">
+                        <block type="variables_get" id="cZF`LkN8Dp1ymJs`P/dH" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">input</field>
+                        </block>
+                    </value>
+                    <value name="AT">
+                        <block type="math_number" id="JSg@c!#b|(wN2rN4:J^s" intask="true">
+                            <field name="NUM">1</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="%Q7J8Me{x*V(0#(B6Znk" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="i^5Jkjils(d}:H.QDqx}" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="@nu_D4d5*wizHpciv_IM" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="robLists_getIndex" id="QrjyGDwOz`dI~=VMAU`h" intask="true">
+                    <mutation statement="false" at="false"></mutation>
+                    <field name="MODE">GET_REMOVE</field>
+                    <field name="WHERE">FIRST</field>
+                    <value name="VALUE">
+                        <block type="variables_get" id="HJ1xqDxs}pqa`aci{f5d" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">input</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="%R]E/nUXc)`mZy!_@@}I" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="*2e]BVdS|V_^lIdJ23g~" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="7wj2[URb*3GkU2ge/DZY" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="robLists_getIndex" id="VmiHh(omj,*GF[HY@_th" intask="true">
+                    <mutation statement="false" at="false"></mutation>
+                    <field name="MODE">GET_REMOVE</field>
+                    <field name="WHERE">LAST</field>
+                    <value name="VALUE">
+                        <block type="variables_get" id="ZVK{U6u2y6I8k)ZcI+nJ" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">input</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="Dy2Ds^@Y.5~j}tYV|~Wm" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="I+c?np+Wb~K]-%CP7%3(" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="5xEg[ABN9Qw4(;*p?M07" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="robLists_length" id="/NbBxTZW)S))tJBUzSN!" intask="true">
+                    <value name="VALUE">
+                        <block type="variables_get" id="PG!.EA@[ZPRJAiv0aetT" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">input</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="text_comment" id="0B-A8@X{`,MaN]a9CCqA" intask="true">
+    <field name="TEXT">35</field>
+</block>
+<block type="robLists_setIndex" id="*sVJt3,|9FK;_LWw8a[{" intask="true">
+    <mutation at="true"></mutation>
+    <field name="MODE">INSERT</field>
+    <field name="WHERE">FROM_START</field>
+    <value name="LIST">
+        <block type="variables_get" id="*N3@gzSAZp*yRJ6c3=(Z" intask="true">
+            <mutation datatype="Array_Number"></mutation>
+            <field name="VAR">input</field>
+        </block>
+    </value>
+    <value name="AT">
+        <block type="math_number" id="goxAOG3KbtA[?F}+O=)e" intask="true">
+            <field name="NUM">0</field>
+        </block>
+    </value>
+    <value name="TO">
+        <block type="math_number" id="S8![170Dtd8y6O/lP-xz" intask="true">
+            <field name="NUM">1</field>
+        </block>
+    </value>
+</block>
+<block type="robLists_setIndex" id=",!n1hhjB(RBTQ^UzqpKN" intask="true">
+    <mutation at="true"></mutation>
+    <field name="MODE">INSERT</field>
+    <field name="WHERE">FROM_END</field>
+    <value name="LIST">
+        <block type="variables_get" id="%O1zklqg6yvuc7,b5r|U" intask="true">
+            <mutation datatype="Array_Number"></mutation>
+            <field name="VAR">input</field>
+        </block>
+    </value>
+    <value name="AT">
+        <block type="math_number" id="6P=X5iwy{6%.r`AtDkcA" intask="true">
+            <field name="NUM">1</field>
+        </block>
+    </value>
+    <value name="TO">
+        <block type="math_number" id="2yck4gAEj,|y9~44pY*6" intask="true">
+            <field name="NUM">2</field>
+        </block>
+    </value>
+</block>
+<block type="robLists_setIndex" id="s^KjB-ogZaRa==|,d2VB" intask="true">
+    <mutation at="false"></mutation>
+    <field name="MODE">INSERT</field>
+    <field name="WHERE">FIRST</field>
+    <value name="LIST">
+        <block type="variables_get" id="d#w3x5m=(q@5BR03qAGJ" intask="true">
+            <mutation datatype="Array_Number"></mutation>
+            <field name="VAR">input</field>
+        </block>
+    </value>
+    <value name="TO">
+        <block type="math_number" id="1b4;P.!DZ^!k8:l}}KM4" intask="true">
+            <field name="NUM">0</field>
+        </block>
+    </value>
+</block>
+<block type="robLists_setIndex" id="L,E4j:-_wJXpI2sqvaIy" intask="true">
+    <mutation at="false"></mutation>
+    <field name="MODE">INSERT</field>
+    <field name="WHERE">LAST</field>
+    <value name="LIST">
+        <block type="variables_get" id="wB@@{_v~-l)30_wKJQ8#" intask="true">
+            <mutation datatype="Array_Number"></mutation>
+            <field name="VAR">input</field>
+        </block>
+    </value>
+    <value name="TO">
+        <block type="math_number" id="ZiZS5cl1@4L%nW*^a2m!" intask="true">
+            <field name="NUM">4</field>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="Dup^/A0P}Tz+RKOP?L;G" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="=pS)vwzbbMiYNv(old([" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="%3-Z:VyhK8#[q11hTWek" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="robLists_length" id="gcl%JtUgrcwc3zug=[O_" intask="true">
+                    <value name="VALUE">
+                        <block type="variables_get" id="qX#HJzjs;omZAj*8!;KA" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">input</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="text_comment" id="Ojt?H26qdoSfnI1z{VD3" intask="true">
+    <field name="TEXT">40</field>
+</block>
+<block type="robLists_getIndex" id="mUwMoc6Huc+M.Z)NU/5K" intask="true">
+    <mutation statement="true" at="true"></mutation>
+    <field name="MODE">REMOVE</field>
+    <field name="WHERE">FROM_START</field>
+    <value name="VALUE">
+        <block type="variables_get" id="L/BE-O_I}|IGoEt|Xa+#" intask="true">
+            <mutation datatype="Array_Number"></mutation>
+            <field name="VAR">input</field>
+        </block>
+    </value>
+    <value name="AT">
+        <block type="math_number" id="y1/=Iz4c=h-dV2#FF0Ze" intask="true">
+            <field name="NUM">1</field>
+        </block>
+    </value>
+</block>
+<block type="robLists_getIndex" id="O:TK97UnRy3`Pl5@`(dN" intask="true">
+    <mutation statement="true" at="true"></mutation>
+    <field name="MODE">REMOVE</field>
+    <field name="WHERE">FROM_END</field>
+    <value name="VALUE">
+        <block type="variables_get" id="vR:u9ma7jKIlvKgQV1XK" intask="true">
+            <mutation datatype="Array_Number"></mutation>
+            <field name="VAR">input</field>
+        </block>
+    </value>
+    <value name="AT">
+        <block type="math_number" id="C~b@AM_fyvubQQfLU00T" intask="true">
+            <field name="NUM">1</field>
+        </block>
+    </value>
+</block>
+<block type="robLists_getIndex" id="}[f9UpFdk%ziE!3wK?pl" intask="true">
+    <mutation statement="true" at="false"></mutation>
+    <field name="MODE">REMOVE</field>
+    <field name="WHERE">FIRST</field>
+    <value name="VALUE">
+        <block type="variables_get" id="owl#XkO[VJ/s^^JhKw6F" intask="true">
+            <mutation datatype="Array_Number"></mutation>
+            <field name="VAR">input</field>
+        </block>
+    </value>
+</block>
+<block type="robLists_getIndex" id="/5N|Q^rl.c(LDMi8#EsO" intask="true">
+    <mutation statement="true" at="false"></mutation>
+    <field name="MODE">REMOVE</field>
+    <field name="WHERE">LAST</field>
+    <value name="VALUE">
+        <block type="variables_get" id="3*gpqB}8f0IF+zxHX*a4" intask="true">
+            <mutation datatype="Array_Number"></mutation>
+            <field name="VAR">input</field>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="Q8EHYn.Ol77W6A?g~K6S" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="fRm;lQLv}hW%k#;W/t%n" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="b#p0V@yMW53/Lq`6fzLe" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="robLists_length" id="LSF2nHd-C[oS2Z#`ctSH" intask="true">
+                    <value name="VALUE">
+                        <block type="variables_get" id="`e%Y_uNm?+E{JLxmJZlv" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">input</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="j]{yxfhTe5GUOH.~GlQ2" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="wzBd[~iq=}Itzn}Ca;JU" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="3C.v{bd|*`+=}t%+HW[I" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="robLists_getIndex" id="eGfTU,v1_q5iwam@cR;)" intask="true">
+                    <mutation statement="false" at="false"></mutation>
+                    <field name="MODE">GET</field>
+                    <field name="WHERE">LAST</field>
+                    <value name="VALUE">
+                        <block type="variables_get" id="*0Ez:a-F==D`GRsxPDn;" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">input</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="text_comment" id="-FZ!QCd9Bf?{bEBb-{/F" intask="true">
+    <field name="TEXT">42</field>
+</block>
+<block type="robLists_setIndex" id="nz#Tt_^mwUd^/#]N0Y8P" intask="true">
+    <mutation at="true"></mutation>
+    <field name="MODE">INSERT</field>
+    <field name="WHERE">FROM_START</field>
+    <value name="LIST">
+        <block type="variables_get" id="{WS~zMfOQzF-QP5k.V@L" intask="true">
+            <mutation datatype="Array_Number"></mutation>
+            <field name="VAR">input</field>
+        </block>
+    </value>
+    <value name="AT">
+        <block type="math_number" id="%`~:ml;dT)FkWD]A}MMA" intask="true">
+            <field name="NUM">0</field>
+        </block>
+    </value>
+    <value name="TO">
+        <block type="math_number" id="-;rDA5wT=FbCBJ6X1.O#" intask="true">
+            <field name="NUM">1</field>
+        </block>
+    </value>
+</block>
+<block type="robLists_setIndex" id="q:j.|*FA+HS~NI.j[jNo" intask="true">
+    <mutation at="true"></mutation>
+    <field name="MODE">INSERT</field>
+    <field name="WHERE">FROM_END</field>
+    <value name="LIST">
+        <block type="variables_get" id="kaEcQyn=TVxOFMKrTE|P" intask="true">
+            <mutation datatype="Array_Number"></mutation>
+            <field name="VAR">input</field>
+        </block>
+    </value>
+    <value name="AT">
+        <block type="math_number" id="x)Nj/iCu/6^a*#)th]ZM" intask="true">
+            <field name="NUM">1</field>
+        </block>
+    </value>
+    <value name="TO">
+        <block type="math_number" id="o*%V`-gP_W`soarkiPGS" intask="true">
+            <field name="NUM">2</field>
+        </block>
+    </value>
+</block>
+<block type="robLists_setIndex" id="L;E_kS*,kCPDJs/xI*?~" intask="true">
+    <mutation at="false"></mutation>
+    <field name="MODE">INSERT</field>
+    <field name="WHERE">FIRST</field>
+    <value name="LIST">
+        <block type="variables_get" id="YLTgdb`.htZ_*!advm8;" intask="true">
+            <mutation datatype="Array_Number"></mutation>
+            <field name="VAR">input</field>
+        </block>
+    </value>
+    <value name="TO">
+        <block type="math_number" id="EsQk]_JhAV9%|!{bQLl-" intask="true">
+            <field name="NUM">0</field>
+        </block>
+    </value>
+</block>
+<block type="robLists_setIndex" id="ITh^`LL/N(0krWC3Ovo/" intask="true">
+    <mutation at="false"></mutation>
+    <field name="MODE">INSERT</field>
+    <field name="WHERE">LAST</field>
+    <value name="LIST">
+        <block type="variables_get" id="7~}bX,!y(J1Y^c?+#A,e" intask="true">
+            <mutation datatype="Array_Number"></mutation>
+            <field name="VAR">input</field>
+        </block>
+    </value>
+    <value name="TO">
+        <block type="math_number" id="#Zp[=l`*Qc;c*u9/=(nz" intask="true">
+            <field name="NUM">4</field>
+        </block>
+    </value>
+</block>
+<block type="robLists_setIndex" id="taOyK*y6tda}rGFwwN1~" intask="true">
+    <mutation at="true"></mutation>
+    <field name="MODE">SET</field>
+    <field name="WHERE">FROM_START</field>
+    <value name="LIST">
+        <block type="variables_get" id="dv_Ll0,FC!F[B4=r,QCs" intask="true">
+            <mutation datatype="Array_Number"></mutation>
+            <field name="VAR">input</field>
+        </block>
+    </value>
+    <value name="AT">
+        <block type="math_number" id="_6va`%h/{mEJ_%8n8t{." intask="true">
+            <field name="NUM">2</field>
+        </block>
+    </value>
+    <value name="TO">
+        <block type="math_number" id="ja(.z/?A}a_e[bS;]7?{" intask="true">
+            <field name="NUM">3</field>
+        </block>
+    </value>
+</block>
+<block type="robLists_setIndex" id="=w3p~KZdGWHrWw?z|iNm" intask="true">
+    <mutation at="true"></mutation>
+    <field name="MODE">SET</field>
+    <field name="WHERE">FROM_START</field>
+    <value name="LIST">
+        <block type="variables_get" id="+jQ0%}]J8=%CNjh!bLMJ" intask="true">
+            <mutation datatype="Array_Number"></mutation>
+            <field name="VAR">input</field>
+        </block>
+    </value>
+    <value name="AT">
+        <block type="math_number" id="e#@TcTM_oq)g{9!vsD6Y" intask="true">
+            <field name="NUM">1</field>
+        </block>
+    </value>
+    <value name="TO">
+        <block type="math_number" id="OPGX7*{Z?Rka92Jr8(hp" intask="true">
+            <field name="NUM">2</field>
+        </block>
+    </value>
+</block>
+<block type="robLists_setIndex" id="k{#d%Ov(}7COk/tqkFeK" intask="true">
+    <mutation at="true"></mutation>
+    <field name="MODE">SET</field>
+    <field name="WHERE">FROM_END</field>
+    <value name="LIST">
+        <block type="variables_get" id="YIb],]fRLQ%pNZ;C)?H7" intask="true">
+            <mutation datatype="Array_Number"></mutation>
+            <field name="VAR">input</field>
+        </block>
+    </value>
+    <value name="AT">
+        <block type="math_number" id="l;@Z8qs-ub2/J!1`Wrtm" intask="true">
+            <field name="NUM">1</field>
+        </block>
+    </value>
+    <value name="TO">
+        <block type="math_number" id="+sFH(E*!Y/c%!1DMc[,L" intask="true">
+            <field name="NUM">4</field>
+        </block>
+    </value>
+</block>
+<block type="robLists_setIndex" id="m^ZEl0Q[e9Ke8`zO=(7H" intask="true">
+    <mutation at="false"></mutation>
+    <field name="MODE">SET</field>
+    <field name="WHERE">FIRST</field>
+    <value name="LIST">
+        <block type="variables_get" id="eKNydU?5]k#uw0{zXB%j" intask="true">
+            <mutation datatype="Array_Number"></mutation>
+            <field name="VAR">input</field>
+        </block>
+    </value>
+    <value name="TO">
+        <block type="math_number" id="nVZ]%kc0,SqMp5m97fu@" intask="true">
+            <field name="NUM">1</field>
+        </block>
+    </value>
+</block>
+<block type="robLists_setIndex" id="+L[Ujt]dj;s?/S5^sWei" intask="true">
+    <mutation at="false"></mutation>
+    <field name="MODE">SET</field>
+    <field name="WHERE">LAST</field>
+    <value name="LIST">
+        <block type="variables_get" id="Ck[}`mUt0BG:-iPcz*D#" intask="true">
+            <mutation datatype="Array_Number"></mutation>
+            <field name="VAR">input</field>
+        </block>
+    </value>
+    <value name="TO">
+        <block type="math_number" id="8H;u;zXV3:4Brf)6Gv}r" intask="true">
+            <field name="NUM">5</field>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id=":M`W2ZxNzgo8stwD3x6E" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="~P(JA~BIvp=9[ix8R97M" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="-*4:W+zOTSN:;;+sa]Ko" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="math_on_list" id=";~Y{8!yvmhaH9ws=#b|5" intask="true">
+                    <mutation op="SUM"></mutation>
+                    <field name="OP">SUM</field>
+                    <value name="LIST">
+                        <block type="variables_get" id="t{/:,yJLwGZ:tE[SXOA9" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">input</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="text_comment" id=",J%@[Q^XFhpKD#4Tck5f" intask="true">
+    <field name="TEXT">57</field>
+</block>
+<block type="variables_set" id="[GY*}t7cCZ+]J7,X|6d," intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="i6q+7AN6%;!sFP3y5Deu" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="W,[t-L?w%V{HUJ3SMu`*" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="math_on_list" id="r@YFP,Luswi+(]%`H)H1" intask="true">
+                    <mutation op="SUM"></mutation>
+                    <field name="OP">SUM</field>
+                    <value name="LIST">
+                        <block type="robLists_getSublist" id="P8*p@U1658.6G@%?UujT" intask="true">
+                            <mutation at1="true" at2="true"></mutation>
+                            <field name="WHERE1">FROM_START</field>
+                            <field name="WHERE2">FROM_START</field>
+                            <value name="LIST">
+                                <block type="variables_get" id="aqFuiXuT%0XA|5deW*(]" intask="true">
+                                    <mutation datatype="Array_Number"></mutation>
+                                    <field name="VAR">input</field>
+                                </block>
+                            </value>
+                            <value name="AT1">
+                                <block type="math_number" id="x4p0bV(6X|5V{c)LAY8a" intask="true">
+                                    <field name="NUM">1</field>
+                                </block>
+                            </value>
+                            <value name="AT2">
+                                <block type="math_number" id="bs2I!dd6~u/?sXa%6`Sz" intask="true">
+                                    <field name="NUM">3</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="!2z_(M2nh9pB{#2)ecsu" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="z`?(J@Z(KMddzgU2CFgz" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="=0,X@,uXC;6YYp8}yMDD" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="math_on_list" id="8TBXNBRjC0Zu{#G%C*nI" intask="true">
+                    <mutation op="SUM"></mutation>
+                    <field name="OP">SUM</field>
+                    <value name="LIST">
+                        <block type="robLists_getSublist" id="NJ8AA1VFFk(h^|?FgAK~" intask="true">
+                            <mutation at1="true" at2="true"></mutation>
+                            <field name="WHERE1">FROM_START</field>
+                            <field name="WHERE2">FROM_END</field>
+                            <value name="LIST">
+                                <block type="variables_get" id="2AZW*n%nBY5{C:]oFz_J" intask="true">
+                                    <mutation datatype="Array_Number"></mutation>
+                                    <field name="VAR">input</field>
+                                </block>
+                            </value>
+                            <value name="AT1">
+                                <block type="math_number" id="Mx=DTrOql.,bz36v7LHV" intask="true">
+                                    <field name="NUM">1</field>
+                                </block>
+                            </value>
+                            <value name="AT2">
+                                <block type="math_number" id="8J8{ulAAU}3D82Jd+7yT" intask="true">
+                                    <field name="NUM">1</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="D|K4L_rRm;8mpW=+QK/a" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="y_maFsZ2[PIY)vGtFY/K" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="c.4vbx*Co56Qw9G76WgO" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="math_on_list" id="gMmeWuil=P7W87LJN0J{" intask="true">
+                    <mutation op="SUM"></mutation>
+                    <field name="OP">SUM</field>
+                    <value name="LIST">
+                        <block type="robLists_getSublist" id="_-#t1_5OWXv;Kx-C9SDR" intask="true">
+                            <mutation at1="true" at2="false"></mutation>
+                            <field name="WHERE1">FROM_START</field>
+                            <field name="WHERE2">LAST</field>
+                            <value name="LIST">
+                                <block type="variables_get" id="Y!=h2Fw29C|g8@2=Mk:g" intask="true">
+                                    <mutation datatype="Array_Number"></mutation>
+                                    <field name="VAR">input</field>
+                                </block>
+                            </value>
+                            <value name="AT1">
+                                <block type="math_number" id=";ymO:V{iwMY1sR~?-?eQ" intask="true">
+                                    <field name="NUM">1</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="text_comment" id="@6%o:lESeS6;3^QMJ!(7" intask="true">
+    <field name="TEXT">89</field>
+</block>
+<block type="variables_set" id="%lO1ACAb)cDQ5(Evb7yv" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="SGTyXI.kVaj8EhXj9xrX" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="8sLvUJWA?*jme-FwHm*h" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="math_on_list" id="dI_bLVrUk?dLnfThe=1," intask="true">
+                    <mutation op="SUM"></mutation>
+                    <field name="OP">SUM</field>
+                    <value name="LIST">
+                        <block type="robLists_getSublist" id="EXSuif`FkEl^V0+2Y;`w" intask="true">
+                            <mutation at1="true" at2="true"></mutation>
+                            <field name="WHERE1">FROM_END</field>
+                            <field name="WHERE2">FROM_START</field>
+                            <value name="LIST">
+                                <block type="variables_get" id="A)X1#s}^V5f@r~##kq8Q" intask="true">
+                                    <mutation datatype="Array_Number"></mutation>
+                                    <field name="VAR">input</field>
+                                </block>
+                            </value>
+                            <value name="AT1">
+                                <block type="math_number" id="lFbDCvmvHm1z,|hI?eNI" intask="true">
+                                    <field name="NUM">3</field>
+                                </block>
+                            </value>
+                            <value name="AT2">
+                                <block type="math_number" id="K-83[/bBCNKj=?u5?GGP" intask="true">
+                                    <field name="NUM">4</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="Tr@DjTIH9DPCt(3O}(.v" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="hgO)PabdI9/`r*gO?dy~" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="}Pw3d!Jc7@TaOf8cvkcG" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="math_on_list" id="RaZ7Uh|*-y~j/OE|1{on" intask="true">
+                    <mutation op="SUM"></mutation>
+                    <field name="OP">SUM</field>
+                    <value name="LIST">
+                        <block type="robLists_getSublist" id="N%-Loxuj|%1a`[k0^f?S" intask="true">
+                            <mutation at1="true" at2="true"></mutation>
+                            <field name="WHERE1">FROM_END</field>
+                            <field name="WHERE2">FROM_END</field>
+                            <value name="LIST">
+                                <block type="variables_get" id="]{1J`]))b!i!HrM(^u~Y" intask="true">
+                                    <mutation datatype="Array_Number"></mutation>
+                                    <field name="VAR">input</field>
+                                </block>
+                            </value>
+                            <value name="AT1">
+                                <block type="math_number" id="V**R7Q!cH?TNXS,xzuI9" intask="true">
+                                    <field name="NUM">4</field>
+                                </block>
+                            </value>
+                            <value name="AT2">
+                                <block type="math_number" id="9z2?;r78|}*Z0G5WC)li" intask="true">
+                                    <field name="NUM">3</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="_?dE1]w,1oX-Q@4:6ZPQ" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id=",-EFnK*K+)io#3MC*0L0" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="sDKGte?b7[N+x.ITFFhP" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="math_on_list" id="Q/gbnWr^fN+wNaTt4PcS" intask="true">
+                    <mutation op="SUM"></mutation>
+                    <field name="OP">SUM</field>
+                    <value name="LIST">
+                        <block type="robLists_getSublist" id="MQAE_=x4X0Me}-|~TERE" intask="true">
+                            <mutation at1="true" at2="false"></mutation>
+                            <field name="WHERE1">FROM_END</field>
+                            <field name="WHERE2">LAST</field>
+                            <value name="LIST">
+                                <block type="variables_get" id="cor%+|No!q8]HtFB|?94" intask="true">
+                                    <mutation datatype="Array_Number"></mutation>
+                                    <field name="VAR">input</field>
+                                </block>
+                            </value>
+                            <value name="AT1">
+                                <block type="math_number" id="ePzYIK/mDUlqDwnE%f}," intask="true">
+                                    <field name="NUM">3</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="text_comment" id=")^zyiwrE`[z}I6c^oxdy" intask="true">
+    <field name="TEXT">120</field>
+</block>
+<block type="variables_set" id="~x]:F2XCQ^x3K`F~aRDI" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="Q?pEVD/[~sn#lF/xTou}" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="M(msz0(?SPVM!oad=P0W" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="math_on_list" id="lo-s:islw;KW2[5vg`fa" intask="true">
+                    <mutation op="SUM"></mutation>
+                    <field name="OP">SUM</field>
+                    <value name="LIST">
+                        <block type="robLists_getSublist" id="oSj05loa4HLdm1alk(Mv" intask="true">
+                            <mutation at1="false" at2="true"></mutation>
+                            <field name="WHERE1">FIRST</field>
+                            <field name="WHERE2">FROM_START</field>
+                            <value name="LIST">
+                                <block type="variables_get" id="l9D{~8dAsR8U:Tr^3!0-" intask="true">
+                                    <mutation datatype="Array_Number"></mutation>
+                                    <field name="VAR">input</field>
+                                </block>
+                            </value>
+                            <value name="AT2">
+                                <block type="math_number" id="OEe7Vfy8?#}Oe)FVqOp@" intask="true">
+                                    <field name="NUM">3</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="7.hVAQyiFlW]O:sMiRy+" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="Zu+|js-AZ|,q5OB/l#W-" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id=",[VT!1Kps~APgUmBUhoU" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="math_on_list" id="O4fx*6GT;[kOb!XjMIEs" intask="true">
+                    <mutation op="SUM"></mutation>
+                    <field name="OP">SUM</field>
+                    <value name="LIST">
+                        <block type="robLists_getSublist" id="}(6c!r2GG`18i(N/Uw2h" intask="true">
+                            <mutation at1="false" at2="true"></mutation>
+                            <field name="WHERE1">FIRST</field>
+                            <field name="WHERE2">FROM_END</field>
+                            <value name="LIST">
+                                <block type="variables_get" id="E@5c2ajMu3-9_*tu9xHB" intask="true">
+                                    <mutation datatype="Array_Number"></mutation>
+                                    <field name="VAR">input</field>
+                                </block>
+                            </value>
+                            <value name="AT2">
+                                <block type="math_number" id="G,V+C?=YO?(_}qA((KW+" intask="true">
+                                    <field name="NUM">3</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id=":7Z;tqT(mq:kK8^,O)=H" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="R4Nd~Ox(H6HK:O;9q//@" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="3i:C5w0Gm7eW`dv)s~`?" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="math_on_list" id="`7Vs-/}A#UB)AB?0?V|9" intask="true">
+                    <mutation op="SUM"></mutation>
+                    <field name="OP">SUM</field>
+                    <value name="LIST">
+                        <block type="robLists_getSublist" id="s:x#.rbGaw[tu?+loDj7" intask="true">
+                            <mutation at1="false" at2="false"></mutation>
+                            <field name="WHERE1">FIRST</field>
+                            <field name="WHERE2">LAST</field>
+                            <value name="LIST">
+                                <block type="variables_get" id="vb(gwy;t!|Bo!!+r(m1[" intask="true">
+                                    <mutation datatype="Array_Number"></mutation>
+                                    <field name="VAR">input</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="text_comment" id="xMz#AEOr@d?Cy3U:pKNo" intask="true">
+    <field name="TEXT">148</field>
+</block>
+<block type="variables_set" id="/}-1DBn[__PJHmsYk2]9" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="uS,8ElQ2^,NKo58H!?2g" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="CpS`RMShhIyq0hq?FH,u" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="math_on_list" id="gq=PDJJ|bK+[z*|B(U8x" intask="true">
+                    <mutation op="MIN"></mutation>
+                    <field name="OP">MIN</field>
+                    <value name="LIST">
+                        <block type="variables_get" id="q0a!1v=~j,O{Gm]S~xXW" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">input</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="X=f~yz;gD?g(/Z;|Wz9y" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="tP6XCpH_GkCxw%fq02Yy" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="A0IrawtcnY-{*`Hq=.22" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="math_on_list" id="GYyFD{|f#H1CWN!N4kJ[" intask="true">
+                    <mutation op="MAX"></mutation>
+                    <field name="OP">MAX</field>
+                    <value name="LIST">
+                        <block type="variables_get" id="o-rdKSZ;X[i8ZFoPjk40" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">input</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="text_comment" id="Y9iJMmOKAV)^]XGQr26m" intask="true">
+    <field name="TEXT">154</field>
+</block>
+<block type="variables_set" id="X]#5b8=3.G7P@L@.[|lg" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="VdDwCVF^j,c/`8}xWBvh" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="TU,Fr6r)FGQ:YG1(KJdG" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="math_on_list" id="%~50Qn~|oH|z4Q[?T!O%" intask="true">
+                    <mutation op="AVERAGE"></mutation>
+                    <field name="OP">AVERAGE</field>
+                    <value name="LIST">
+                        <block type="variables_get" id="SeU)kxSe7aRcVL#:3K|L" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">input</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="VcoZ/tMy%a8@{18@Okk?" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="NCO{HHKe=f-~mr7@,+DF" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id=",R!wr/.yvE4k2`.O`?f)" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="math_on_list" id="!mk#UAyyK))nH/qSL5Wi" intask="true">
+                    <mutation op="MEDIAN"></mutation>
+                    <field name="OP">MEDIAN</field>
+                    <value name="LIST">
+                        <block type="variables_get" id=";q,%/t:6*~ib[U]yJy=B" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">input</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="b~CbQ(F!1]k*5V1422:x" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">result</field>
+    <value name="VALUE">
+        <block type="math_arithmetic" id="LPm0kfR#6x`gA7ZLF:}S" intask="true">
+            <field name="OP">ADD</field>
+            <value name="A">
+                <block type="variables_get" id="K`UfA7x*,%Y8BL+LxC]#" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">result</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="math_on_list" id=")82GvBj8AsRCau@n#!vU" intask="true">
+                    <mutation op="STD_DEV"></mutation>
+                    <field name="OP">STD_DEV</field>
+                    <value name="LIST">
+                        <block type="variables_get" id="QqLP5VT6_iJuu2?7)i~s" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">input</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="text_comment" id="`6Wt7Y4(B6!Lq%SH2M8:" intask="true">
+    <field name="TEXT">161.414... </field>
+</block>
+<!-- <block type="mbedActions_display_text" id="5fnD@PQpbt*h72_qXUU5" intask="true">
+    <field name="TYPE">TEXT</field>
+    <value name="OUT">
+        <block type="variables_get" id="9qOVxTbrSnN5c}ct0.j/" intask="true">
+            <mutation datatype="Number"></mutation>
+            <field name="VAR">result</field>
+        </block>
+    </value>
+</block> -->
+<block type="text_comment" id="LnSxpk_R7g=^Is5[ysaL" intask="true">
+    <field name="TEXT">161.414 - sim, 161.5 - board, OK</field>
+</block>

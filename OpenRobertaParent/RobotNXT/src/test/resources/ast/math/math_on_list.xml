@@ -1,0 +1,90 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="-714" y="201">
+    <block type="math_on_list" id="184" inline="false" >
+      <field name="OP">SUM</field>
+      <value name="LIST">
+        <block type="lists_create_empty" id="194" >
+            <mutation list_type="Number"></mutation>
+            <field name="LIST_TYPE">Number</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-694" y="241">
+    <block type="math_on_list" id="210" inline="false" >
+      <field name="OP">MIN</field>
+      <value name="LIST">
+        <block type="lists_create_empty" id="194" >
+        <mutation list_type="Number"></mutation>
+            <field name="LIST_TYPE">Number</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-674" y="281">
+    <block type="math_on_list" id="210" inline="false" >
+      <field name="OP">MAX</field>
+      <value name="LIST">
+        <block type="lists_create_empty" id="194" >
+        <mutation list_type="Number"></mutation>
+            <field name="LIST_TYPE">Number</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-654" y="321">
+    <block type="math_on_list" id="210" inline="false" >
+      <field name="OP">AVERAGE</field>
+      <value name="LIST">
+             <block type="lists_create_empty" id="194" >
+             <mutation list_type="Number"></mutation>
+            <field name="LIST_TYPE">Number</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-634" y="361">
+    <block type="math_on_list" id="210" inline="false" >
+      <field name="OP">MEDIAN</field>
+      <value name="LIST">
+               <block type="lists_create_empty" id="194" >
+               <mutation list_type="Number"></mutation>
+            <field name="LIST_TYPE">Number</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-614" y="401">
+    <block type="math_on_list" id="210" inline="false" >
+      <field name="OP">MODE</field>
+      <value name="LIST">
+              <block type="lists_create_empty" id="194" >
+              <mutation list_type="Number"></mutation>
+            <field name="LIST_TYPE">Number</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-594" y="441">
+    <block type="math_on_list" id="210" inline="false" >
+      <field name="OP">STD_DEV</field>
+      <value name="LIST">
+               <block type="lists_create_empty" id="194" >
+               <mutation list_type="Number"></mutation>
+            <field name="LIST_TYPE">Number</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-574" y="481">
+    <block type="math_on_list" id="210" inline="false" >
+      <field name="OP">RANDOM</field>
+      <value name="LIST">
+               <block type="lists_create_empty" id="194" >
+               <mutation list_type="Number"></mutation>
+            <field name="LIST_TYPE">Number</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

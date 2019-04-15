@@ -1,0 +1,8 @@
+<block_set 
+    xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="2.0" description="" tags="">
+    <instance x="384" y="50">
+        <block type="robSensors_compass_calibrate" id="LiG96VfJ{UD/%Yo|fJOB" intask="true">
+            <field name="SENSORPORT">1</field>
+        </block>
+    </instance>
+</block_set>

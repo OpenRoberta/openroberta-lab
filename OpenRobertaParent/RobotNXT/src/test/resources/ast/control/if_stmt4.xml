@@ -1,0 +1,64 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+     <instance x="68" y="133">
+    <block type="robControls_ifElse" id="1" inline="false">
+      <mutation elseif="1" else="1"></mutation>
+      <repetitions>
+        <value name="IF0">
+          <block type="logic_compare" id="2" inline="true">
+            <field name="OP">EQ</field>
+            <value name="A">
+              <block type="math_number" id="3">
+                <field name="NUM">1</field>
+              </block>
+            </value>
+            <value name="B">
+              <block type="math_number" id="4">
+                <field name="NUM">1</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="math_change" id="5" inline="true">
+             <value name="VAR">
+        <block type="variables_get" id="69">
+          <mutation datatype="Number"></mutation>
+          <field name="VAR">variablenName</field>
+        </block>
+      </value>
+            <value name="DELTA">
+              <block type="math_number" id="6">
+                <field name="NUM">1</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <value name="IF1">
+          <block type="logic_compare" id="7" inline="true">
+            <field name="OP">EQ</field>
+            <value name="A">
+              <block type="math_number" id="8">
+                <field name="NUM">1</field>
+              </block>
+            </value>
+            <value name="B">
+              <block type="math_number" id="9">
+                <field name="NUM">1</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO1">
+          <block type="robSensors_encoder_reset" id="10">
+            <field name="SENSORPORT">A</field>
+          </block>
+        </statement>
+        <statement name="ELSE">
+          <block type="robSensors_encoder_reset" id="16">
+            <field name="SENSORPORT">A</field>
+          </block>
+        </statement>
+      </repetitions>
+    </block>
+  </instance>
+</block_set>

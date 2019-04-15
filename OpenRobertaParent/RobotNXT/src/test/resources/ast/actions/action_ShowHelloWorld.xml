@@ -1,0 +1,6 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+      <instance x="-76" y="1">
+    <block type="HELLO_WORLD_1" id="1" inline="false"></block>
+    <block type="HELLO_WORLD_2" id="2" inline="false"></block>
+  </instance>
+</block_set>

@@ -1,0 +1,18 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="-231" y="43">
+    <block type="variables_set" id="468" inline="true" >
+      <field name="VAR">item</field>
+      <value name="VALUE">
+        <block type="math_number_property" id="410" inline="true" >
+          <mutation divisor_input="false"></mutation>
+          <field name="PROPERTY">EVEN</field>
+          <value name="NUMBER_TO_CHECK">
+            <block type="math_number" id="424" >
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

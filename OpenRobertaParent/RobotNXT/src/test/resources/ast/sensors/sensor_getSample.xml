@@ -1,0 +1,39 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="-96" y="73">
+    <block type="controls_if" id="858" inline="false">
+      <value name="IF0">
+        <block type="robSensors_touch_getSample" id="859">
+          <field name="SENSORPORT">1</field>
+        </block>
+      </value>
+      <statement name="DO0">
+        <block type="variables_set" id="866" inline="true">
+          <field name="VAR">item</field>
+          <value name="VALUE">
+            <block type="robSensors_ultrasonic_getSample" id="926">
+                <field name="MODE">DISTANCE</field>
+              <field name="SENSORPORT">4</field>
+            </block>
+          </value>
+        </block>
+        <block type="variables_set" id="869" inline="true">
+          <field name="VAR">item</field>
+          <value name="VALUE">
+            <block type="robSensors_encoder_getSample" id="949">
+                <field name="MODE">ROTATION</field>
+              <field name="SENSORPORT">A</field>
+            </block>
+          </value>
+        </block>
+        <block type="variables_set" id="957" inline="true">
+          <field name="VAR">item</field>
+          <value name="VALUE">
+            <block type="robSensors_timer_getSample" id="963">
+              <field name="SENSORPORT">1</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

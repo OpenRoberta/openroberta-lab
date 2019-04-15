@@ -1,0 +1,20 @@
+<block type="robGlobalVariables_declare" id="~pm3==I?bU8iDP=Vf@_`" intask="true" deletable="false" movable="false">
+    <mutation next="true" declaration_type="Number" />
+    <field name="VAR">two</field>
+    <field name="TYPE">Number</field>
+    <value name="VALUE">
+        <block type="math_number" id="=qi?tjLB=gA`@l*|vW|U" intask="true">
+            <field name="NUM">3</field>
+        </block>
+    </value>
+</block>
+<block type="robGlobalVariables_declare" id="CJD5N_ag#EMD^U6BP5U`" intask="true" deletable="false" movable="false">
+    <mutation next="false" declaration_type="Number" />
+    <field name="VAR">summe</field>
+    <field name="TYPE">Number</field>
+    <value name="VALUE">
+        <block type="math_number" id="HVNT8h~CGx8[![?5{K6w" intask="true">
+            <field name="NUM">3</field>
+        </block>
+    </value>
+</block>

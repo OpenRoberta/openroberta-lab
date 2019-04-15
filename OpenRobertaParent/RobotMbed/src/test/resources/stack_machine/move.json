@@ -1,0 +1,62 @@
+{
+	"ops": [
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "30"
+		},
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "10"
+		},
+		{
+			"opc": "bothMotorsOn"
+		},
+		{
+			"opc": "bothMotorsStopAction"
+		},
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "30"
+		},
+		{
+			"opc": "motorOnAction",
+			"port": "A"
+		},
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "30"
+		},
+		{
+			"opc": "motorOnAction",
+			"port": "B"
+		},
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "30"
+		},
+		{
+			"opc": "motorOnAction",
+			"port": "AB"
+		},
+		{
+			"opc": "motorStop",
+			"port": "A"
+		},
+		{
+			"opc": "motorStop",
+			"port": "B"
+		},
+		{
+			"opc": "motorStop",
+			"port": "AB"
+		}
+	],
+	"functionDeclaration": {
+		
+	}
+}

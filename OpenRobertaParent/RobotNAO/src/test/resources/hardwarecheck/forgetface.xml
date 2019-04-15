@@ -1,0 +1,22 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="" description="" tags="undefined">
+	<instance x="384" y="50">
+		<block type="robControls_start" id="ZdWu[VpSOAV+ZBe@lBph"
+			intask="true" deletable="false">
+			<mutation declare="false" />
+			<field name="DEBUG">TRUE</field>
+		</block>
+		<block type="robActions_sayText" id="BH!9%lgeiIs^O.~1}iMp"
+			intask="true">
+			<value name="OUT">
+				<block type="naoActions_learnFace" id="[0XD@~g4;gG_9(!;HHni"
+					intask="true">
+					<value name="NAME">
+						<block type="text" id="591A[7xfd-{8i6aRI/FB" intask="true">
+							<field name="TEXT">roberta</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

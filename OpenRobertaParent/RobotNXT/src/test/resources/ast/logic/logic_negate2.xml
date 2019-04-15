@@ -1,0 +1,12 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="-667" y="123">
+    <block type="logic_negate" id="78" inline="true" disabled="true">
+      <comment pinned="false" h="80" w="160">asdasd</comment>
+      <value name="BOOL">
+        <block type="logic_boolean" id="93" disabled="true">
+          <field name="BOOL">TRUE</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

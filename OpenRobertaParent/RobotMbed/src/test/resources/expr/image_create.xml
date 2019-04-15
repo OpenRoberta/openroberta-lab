@@ -1,0 +1,41 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="" description="" tags="">
+  <instance x="13" y="12">
+    <block type="robControls_start" id="J5@?l;[s/OWYmRgjYPq9" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="mbedActions_display_image" id="sAJf@0#hw{rD5l[*s@,{" intask="true">
+      <mutation type="IMAGE"></mutation>
+      <field name="TYPE">IMAGE</field>
+      <value name="VALUE">
+        <block type="mbedImage_image" id="oH6yk0gZt;enRb-saDvI" intask="true">
+          <field name="P00">#</field>
+          <field name="P10">#</field>
+          <field name="P20">  </field>
+          <field name="P30">  </field>
+          <field name="P40">  </field>
+          <field name="P01">  </field>
+          <field name="P11">  </field>
+          <field name="P21">  </field>
+          <field name="P31">  </field>
+          <field name="P41">#</field>
+          <field name="P02">  </field>
+          <field name="P12">3</field>
+          <field name="P22">  </field>
+          <field name="P32">  </field>
+          <field name="P42">  </field>
+          <field name="P03">  </field>
+          <field name="P13">  </field>
+          <field name="P23">  </field>
+          <field name="P33">#</field>
+          <field name="P43">  </field>
+          <field name="P04">  </field>
+          <field name="P14">2</field>
+          <field name="P24">  </field>
+          <field name="P34">  </field>
+          <field name="P44">  </field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

@@ -1,0 +1,34 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="63" y="88">
+    <block type="robControls_start" id="dv@`#WoD(!oXDIC!u3gr" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robActions_motorDiff_curve" id="2/On8S30dv.5f{2XVQY_" intask="true">
+      <field name="DIRECTION">BACKWARD</field>
+      <value name="POWER_LEFT">
+        <block type="math_number" id="%c@=n*v=`Nmxh_oE6o{d" intask="true">
+          <field name="NUM">20</field>
+        </block>
+      </value>
+      <value name="POWER_RIGHT">
+        <block type="math_number" id="{H=q?6Up{bl5LNj@@U,I" intask="true">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motorDiff_curve" id=".D/:CroUB{aS9eIx-Rv5" intask="true">
+      <field name="DIRECTION">FOREWARD</field>
+      <value name="POWER_LEFT">
+        <block type="math_number" id="F^Sw#~Q#c]cCRE.=8DAD" intask="true">
+          <field name="NUM">30</field>
+        </block>
+      </value>
+      <value name="POWER_RIGHT">
+        <block type="math_number" id="5iv+#JL4~YdbOwJHhJqu" intask="true">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

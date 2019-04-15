@@ -1,0 +1,13 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="" description="" tags="">
+  <instance x="63" y="63">
+    <block type="robControls_start" id="e}eL8OcK-rB/J7#z8AX/" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+  </instance>
+  <instance x="87" y="113">
+    <block type="naoSensors_getCurrent" id="Uo0E9jZh^()J|LOS_JPq" intask="false">
+      <field name="joint">LHand</field>
+    </block>
+  </instance>
+</block_set>

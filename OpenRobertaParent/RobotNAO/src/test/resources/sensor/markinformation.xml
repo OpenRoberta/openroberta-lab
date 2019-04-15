@@ -1,0 +1,25 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="nao" xmlversion="" description="" tags="">
+	<instance x="349" y="50">
+		<block type="robControls_start" id="n1WM*kjgyAsIspAAm%Ww"
+			intask="true" deletable="false">
+			<mutation declare="false" />
+			<field name="DEBUG" />
+		</block>
+		<block type="robActions_sayText" id="1+EvnS#=e0:SzZ[y,y5v"
+			intask="true">
+			<value name="OUT">
+				<block type="naoSensors_getMarkInformation"
+					id="dp%@m.(ut|R-~8q|*Z~O" intask="true">
+					<field name="MODE" />
+					<value name="VALUE">
+						<block type="math_number" id="YXZHH-`TMiNs^Us(2Odl"
+							intask="true">
+							<field name="NUM">84</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

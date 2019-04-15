@@ -1,0 +1,43 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="14" y="87">
+    <block type="robText_append" id="146" inline="false" >
+      <value name="VAR">
+        <block type="variables_get" id="59">
+          <mutation datatype="String"></mutation>
+          <field name="VAR">item</field>
+        </block>
+      </value>
+      <value name="TEXT">
+        <block type="robSensors_touch_getSample" id="162" >
+          <field name="SENSORPORT">1</field>
+        </block>
+      </value>
+    </block>
+    <block type="robText_append" id="164" inline="false" >
+            <value name="VAR">
+        <block type="variables_get" id="59">
+          <mutation datatype="String"></mutation>
+          <field name="VAR">item</field>
+        </block>
+      </value>
+      <value name="TEXT">
+        <block type="math_number" id="167" >
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="robText_append" id="186" inline="false" >
+            <value name="VAR">
+        <block type="variables_get" id="59">
+          <mutation datatype="String"></mutation>
+          <field name="VAR">item</field>
+        </block>
+      </value>
+      <value name="TEXT">
+        <block type="text" id="189" >
+          <field name="TEXT">aaa</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

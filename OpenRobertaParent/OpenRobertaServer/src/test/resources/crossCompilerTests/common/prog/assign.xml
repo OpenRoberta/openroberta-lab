@@ -1,0 +1,10 @@
+<block type="variables_set" id="2-1" intask="true">
+	<mutation datatype="Number"/>
+	<field name="VAR">n</field>
+	<value name="VALUE">
+		<block type="variables_get" id="2-2" intask="true">
+			<mutation datatype="Number"/>
+			<field name="VAR">n</field>
+		</block>
+	</value>
+</block>

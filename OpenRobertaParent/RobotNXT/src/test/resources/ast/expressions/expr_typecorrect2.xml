@@ -1,0 +1,77 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+    <instance x="129" y="367">
+        <block type="logic_operation" id="234" inline="true">
+            <field name="OP">AND</field>
+            <value name="A">
+                <block type="logic_compare" id="227" inline="true">
+                    <field name="OP">EQ</field>
+                    <value name="A">
+                        <block type="math_number" id="290">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                    <value name="B">
+                        <block type="math_number" id="262">
+                            <field name="NUM">1</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+            <value name="B">
+                <block type="logic_operation" id="235" inline="true">
+                    <field name="OP">AND</field>
+                    <value name="A">
+                        <block type="logic_compare" id="239" inline="true">
+                            <field name="OP">NEQ</field>
+                            <value name="A">
+                                <block type="text" id="289">
+                                    <field name="TEXT">pid</field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="text" id="291">
+                                    <field name="TEXT">minscha</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                    <value name="B">
+                        <block type="logic_operation" id="236" inline="true">
+                            <field name="OP">AND</field>
+                            <value name="A">
+                                <block type="logic_compare" id="240" inline="true">
+                                    <field name="OP">EQ</field>
+                                    <value name="A">
+                                        <block type="text" id="289">
+                                            <field name="TEXT">pid</field>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="text" id="291">
+                                            <field name="TEXT">minscha</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_compare" id="241" inline="true">
+                                    <field name="OP">NEQ</field>
+                                    <value name="A">
+                                        <block type="logic_boolean" id="271">
+                                            <field name="BOOL">TRUE</field>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="logic_boolean" id="294">
+                                            <field name="BOOL">FALSE</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

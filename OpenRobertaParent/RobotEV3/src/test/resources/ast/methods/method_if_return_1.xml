@@ -1,0 +1,33 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="1" y="85">
+    <block type="robProcedures_defreturn" id="21" inline="false">
+      <mutation declare="true" return_type="Boolean"></mutation>
+      <field name="NAME">test</field>
+      <field name="TYPE">Boolean</field>
+      <repetitions>
+        <statement name="ST">
+          <block type="robLocalVariables_declare" id="96" deletable="false" movable="false">
+            <mutation next="false" declaration_type="Number"></mutation>
+            <field name="VAR">x</field>
+            <field name="TYPE">Number</field>
+          </block>
+        </statement>
+        <statement name="STACK">
+          <block type="robProcedures_ifreturn" id="101" inline="true">
+            <mutation value="1" return_type="Boolean"></mutation>
+            <value name="CONDITION">
+              <block type="robSensors_touch_getSample" id="104">
+                <field name="SENSORPORT">1</field>
+              </block>
+            </value>
+            <value name="VALUE">
+              <block type="logic_boolean" id="142">
+                <field name="BOOL">FALSE</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+      </repetitions>
+    </block>
+  </instance>
+</block_set>

@@ -1,0 +1,35 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-490" y="121">
+    <block type="lists_getIndex" id="1418" inline="true" >
+      <mutation statement="false" at="true"></mutation>
+      <field name="MODE">GET</field>
+      <field name="WHERE">FROM_START</field>
+      <value name="VALUE">
+        <block type="robLists_create_with" id="1428" inline="false" >
+          <mutation items="3"></mutation>
+          <field name="LIST_TYPE">Number</field>
+          <value name="ADD0">
+            <block type="math_number" id="1442" >
+              <field name="NUM">55</field>
+            </block>
+          </value>
+          <value name="ADD1">
+            <block type="math_number" id="1461" >
+              <field name="NUM">66</field>
+            </block>
+          </value>
+          <value name="ADD2">
+            <block type="math_number" id="1461" >
+              <field name="NUM">11</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="AT">
+        <block type="math_number" id="1464" >
+          <field name="NUM">1</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

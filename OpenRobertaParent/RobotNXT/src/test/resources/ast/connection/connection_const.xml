@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="63" y="313">
+    <block type="robCommunication_connection" id="6:IuZw.c:ShB70wh6(/t" intask="false">
+      <field name="CONNECTION">0</field>
+      <data>nxt</data>
+    </block>
+  </instance>
+</block_set>

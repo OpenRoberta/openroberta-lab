@@ -1,0 +1,7 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="1" y="86">
+    <block type="robActions_play_file" id="32">
+      <field name="FILE">1</field>
+    </block>
+  </instance>
+</block_set>

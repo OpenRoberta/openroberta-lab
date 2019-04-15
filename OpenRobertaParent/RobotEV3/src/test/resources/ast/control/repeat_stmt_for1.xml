@@ -1,0 +1,22 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+       <instance x="-93" y="190">
+    <block type="controls_for" id="336" inline="true">
+      <field name="VAR">i</field>
+      <value name="FROM">
+        <block type="math_number" id="337">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+      <value name="TO">
+        <block type="math_number" id="338">
+          <field name="NUM">10</field>
+        </block>
+      </value>
+      <value name="BY">
+        <block type="math_number" id="339">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

@@ -1,0 +1,21 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbit" xmlversion="2.0" description="" tags="">
+  <instance x="-204" y="136">
+    <block type="robControls_start" id="uw1X=m##`,/8|X3E(11(" intask="true" deletable="false">
+      <mutation declare="false">
+      </mutation>
+      <field name="DEBUG">
+      </field>
+    </block>
+    <block type="mbedActions_write_to_pin" id="CQa.D7DPKPkm(aK3;ZpY" intask="true">
+      <mutation protocol="DIGITAL">
+      </mutation>
+      <field name="VALUETYPE">DIGITAL</field>
+      <field name="PIN">0</field>
+      <value name="VALUE">
+        <block type="math_number" id="yQxC%c!R;]mw(J=.9SBc" intask="true">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

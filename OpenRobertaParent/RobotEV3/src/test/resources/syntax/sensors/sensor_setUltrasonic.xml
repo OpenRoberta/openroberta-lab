@@ -1,0 +1,16 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="1" y="57">
+    <block type="robSensors_ultrasonic_getSample" id="40" >
+      <mutation mode="DISTANCE"></mutation>
+      <field name="MODE">DISTANCE</field>
+      <field name="SENSORPORT">4</field>
+    </block>
+  </instance>
+  <instance x="1" y="98">
+    <block type="robSensors_ultrasonic_getSample" id="52" >
+      <mutation mode="PRESENCE"></mutation>
+      <field name="MODE">PRESENCE</field>
+      <field name="SENSORPORT">2</field>
+    </block>
+  </instance>
+</block_set>

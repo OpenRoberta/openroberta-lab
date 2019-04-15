@@ -1,0 +1,28 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="" description="" tags="">
+  <instance x="213" y="113">
+    <block type="robControls_start" id="-n6}Hh6j%!V|C74`[-v^" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="mbedActions_display_text" id="d2+yOm[2[PFOi.E[biVg" intask="true">
+    <field name="TYPE">TEXT</field>
+      <value name="OUT">
+        <block type="robSensors_pin_getSample" id="upcu-el7H75BFy@O(DGy" intask="true">
+			<mutation mode="ANALOG"/>
+			<field name="MODE">ANALOG</field>
+			<field name="SENSORPORT">1</field>
+		</block>
+      </value>
+    </block>
+    <block type="mbedActions_display_text" id="ACFg;26yT6s1N=df_P~A" intask="true">
+    <field name="TYPE">TEXT</field>
+      <value name="OUT">
+		<block type="robSensors_pin_getSample" id="upcu-el7H75BFy@O(DGy" intask="true">
+			<mutation mode="DIGITAL"/>
+			<field name="MODE">DIGITAL</field>
+			<field name="SENSORPORT">0</field>
+		</block>
+      </value>
+    </block>
+  </instance>
+</block_set>

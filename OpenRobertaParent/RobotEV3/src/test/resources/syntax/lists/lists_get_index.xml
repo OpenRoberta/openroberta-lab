@@ -1,0 +1,101 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="38" y="88">
+    <block type="robControls_start" id="yGy/Ee/o/a:JkdlIj]^9" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robActions_motorDiff_on" id="kLUJKB!:.gOg-(`|c.J~" intask="true">
+      <field name="DIRECTION">FOREWARD</field>
+      <value name="POWER">
+        <block type="robLists_getIndex" id="B~dAg/:{]mu|;qIlqJep" intask="true">
+          <mutation statement="false" at="true"></mutation>
+          <field name="MODE">GET</field>
+          <field name="WHERE">FROM_START</field>
+          <value name="VALUE">
+            <block type="robLists_create_with" id="suEj[8*6i|h?+%s;:%iF" intask="true">
+              <mutation items="3" list_type="Number"></mutation>
+              <field name="LIST_TYPE">Number</field>
+              <value name="ADD0">
+                <block type="math_number" id="bmo^rvQx{u*Iate@seHB" intask="true">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+              <value name="ADD1">
+                <block type="math_number" id="2CSnz4Gz6CdQsIm@a0)I" intask="true">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+              <value name="ADD2">
+                <block type="math_number" id="~_3ISs#v/E)7O]|yj?AK" intask="true">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+            </block>
+          </value>
+          <value name="AT">
+            <block type="math_number" id="{s*lN,_Q|#UbQh~`z+CF" intask="true">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motorDiff_on" id="4c~|^`?D6*B_kd|5iVkr" intask="true">
+      <field name="DIRECTION">FOREWARD</field>
+      <value name="POWER">
+        <block type="robLists_getIndex" id="e,L%9T|1:hf`J~{=N/T6" intask="true">
+          <mutation statement="false" at="false"></mutation>
+          <field name="MODE">GET_REMOVE</field>
+          <field name="WHERE">FIRST</field>
+          <value name="VALUE">
+            <block type="robLists_create_with" id="3-;zrV.[C,0OzK8ytQ}L" intask="true">
+              <mutation items="3" list_type="Number"></mutation>
+              <field name="LIST_TYPE">Number</field>
+              <value name="ADD0">
+                <block type="math_number" id="_77d8r9^ry-=96,9B/r]" intask="true">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+              <value name="ADD1">
+                <block type="math_number" id="*NR/7#/1}Z{DQ!]wCF/*" intask="true">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+              <value name="ADD2">
+                <block type="math_number" id="]OUYNa(XtgJBdX|B*uaz" intask="true">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+    <block type="robLists_getIndex" id="Vw8g,F=R8:ek],wB^#dZ" intask="true">
+      <mutation statement="true" at="false"></mutation>
+      <field name="MODE">REMOVE</field>
+      <field name="WHERE">LAST</field>
+      <value name="VALUE">
+        <block type="robLists_create_with" id="m]a4w|_:28vrb%~K-Z4V" intask="true">
+          <mutation items="3" list_type="Number"></mutation>
+          <field name="LIST_TYPE">Number</field>
+          <value name="ADD0">
+            <block type="math_number" id="TOCzp5YWQRA]d4.e_Fgh" intask="true">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+          <value name="ADD1">
+            <block type="math_number" id="E:i:r2/JJuUSuFvr?.wq" intask="true">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+          <value name="ADD2">
+            <block type="math_number" id="y@;ZKA*4uI~qUP3!,[tX" intask="true">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

@@ -1,0 +1,131 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="63" y="63">
+    <block type="robControls_start" id="/L8Sz6H-l[^9RyjXaN2N" intask="true" deletable="false">
+      <mutation declare="true"></mutation>
+      <field name="DEBUG">FALSE</field>
+      <statement name="ST">
+        <block type="robGlobalVariables_declare" id="]=UPEBKds?tpviYB]Y9_" intask="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Array_Boolean"></mutation>
+          <field name="VAR">item</field>
+          <field name="TYPE">Array_Boolean</field>
+          <value name="VALUE">
+            <block type="robLists_create_with" id="cVP{t1f,12MdJOCV4n9=" intask="true">
+              <mutation items="3" list_type="Boolean"></mutation>
+              <field name="LIST_TYPE">Boolean</field>
+              <value name="ADD0">
+                <block type="logic_boolean" id="n*-)q^JZDo[O|XU2kt%*" intask="true">
+                  <field name="BOOL">TRUE</field>
+                </block>
+              </value>
+              <value name="ADD1">
+                <block type="logic_boolean" id="3#a*(wRLG.eFns[i%LM*" intask="true">
+                  <field name="BOOL">TRUE</field>
+                </block>
+              </value>
+              <value name="ADD2">
+                <block type="logic_boolean" id="0D6_MLx]32vaxHLdg8z7" intask="true">
+                  <field name="BOOL">TRUE</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalVariables_declare" id="];m1zf.OO#~]v6WNf6n3" intask="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Array_String"></mutation>
+          <field name="VAR">item2</field>
+          <field name="TYPE">Array_String</field>
+          <value name="VALUE">
+            <block type="robLists_create_with" id="C_(p%j/kt@U{O7wYl90H" intask="true">
+              <mutation items="3" list_type="String"></mutation>
+              <field name="LIST_TYPE">String</field>
+              <value name="ADD0">
+                <block type="text" id="(lhSF|/G`4B6=.vvs9=L" intask="true">
+                  <field name="TEXT"></field>
+                </block>
+              </value>
+              <value name="ADD1">
+                <block type="text" id="947#]C~~q^+UUb8g7t_J" intask="true">
+                  <field name="TEXT"></field>
+                </block>
+              </value>
+              <value name="ADD2">
+                <block type="text" id="7mB7Do=P(h2)NfS@lu8x" intask="true">
+                  <field name="TEXT"></field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalVariables_declare" id="_k{PwEs?yW3#3|Vq(d89" intask="true" deletable="false" movable="false">
+          <mutation next="false" declaration_type="Number"></mutation>
+          <field name="VAR">item3</field>
+          <field name="TYPE">Number</field>
+          <value name="VALUE">
+            <block type="robSensors_timer_getSample" id="E0}p#@!12QeyH]4FLScj" intask="true">
+              <field name="SENSORPORT">1</field>
+              <data>ev3</data>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <block type="robControls_forEach" id="LnHl/n!hp%E1a]l_k6f%" intask="true">
+      <mutation list_type="Boolean"></mutation>
+      <field name="TYPE">Boolean</field>
+      <field name="VAR">item4</field>
+      <value name="LIST">
+        <block type="variables_get" id=":CYh%?I~*D4y~fcVaM(h" intask="true">
+          <mutation datatype="Array_Boolean"></mutation>
+          <field name="VAR">item</field>
+        </block>
+      </value>
+      <statement name="DO">
+        <block type="robSensors_timer_reset" id="C.hUh7XM3`qw?`n6I%G@" intask="true">
+          <field name="SENSORPORT">1</field>
+          <data>ev3</data>
+        </block>
+        <block type="variables_set" id="uM6oJtf|EgSP+f@%7`49" intask="true">
+          <mutation datatype="Number"></mutation>
+          <field name="VAR">item3</field>
+          <value name="VALUE">
+            <block type="robSensors_light_getSample" id=":JgUUtc2,YK^XSNe4!ar" intask="true">
+              <field name="MODE">RED</field>
+              <field name="SENSORPORT">1</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <block type="robControls_forEach" id="?JHo(F(4qau],dC/;Xe)" intask="true">
+      <mutation list_type="String"></mutation>
+      <field name="TYPE">String</field>
+      <field name="VAR">item5</field>
+      <value name="LIST">
+        <block type="variables_get" id="j?tS7CB%`t*wcAB|EnV-" intask="true">
+          <mutation datatype="Array_String"></mutation>
+          <field name="VAR">item2</field>
+        </block>
+      </value>
+      <statement name="DO">
+        <block type="robActions_motorDiff_on" id="Q,1@6GAFDXWz[fo!C/=9" intask="true">
+          <field name="DIRECTION">FOREWARD</field>
+          <value name="POWER">
+            <block type="robSensors_compass_getSample" id="5GGKH=kBxPMcmf4RdYBk" intask="true"></block>
+          </value>
+        </block>
+        <block type="robControls_if" id="kK!2EC:As8FrRsLI12,b" intask="true">
+          <value name="IF0">
+            <block type="robSensors_infrared_getSample" id="[F2B^GaW[Fv9hk+OjV8h" intask="true">
+              <mutation mode="SEEK"></mutation>
+              <field name="MODE">PRESENCE</field>
+              <field name="SENSORPORT">BOTH</field>
+            </block>
+          </value>
+          <statement name="DO0">
+            <block type="robActions_motorDiff_stop" id="%jR?yZ9q_r}yH0uF#Bgd" intask="true"></block>
+          </statement>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

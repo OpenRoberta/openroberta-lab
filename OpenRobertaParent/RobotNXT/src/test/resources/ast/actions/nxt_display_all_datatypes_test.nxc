@@ -1,0 +1,61 @@
+#define WHEELDIAMETER 5.6
+#define TRACKWIDTH 12.0
+#define MAXLINES 8 
+#include "NEPODefs.h" // contains NEPO declarations for the NXC NXT API resources 
+ 
+
+
+float item;
+bool item2;
+string item3;
+int item4;
+int item5;
+float item6[3];
+bool item7[3];
+string item8[3];
+int item9[3];
+int item10[3];
+task main() {
+    item = 0;
+    item2 = true;
+    item3 = "";
+    item4 = INPUT_WHITECOLOR;
+    item5 = NULL;
+    float __item6[] = {0, 0, 0};
+    item6 = __item6;
+    bool __item7[] = {true, true, true};
+    item7 = __item7;
+    string __item8[] = {"", "", ""};
+    item8 = __item8;
+    int __item9[] = {INPUT_WHITECOLOR, INPUT_WHITECOLOR, INPUT_WHITECOLOR};
+    item9 = __item9;
+    int __item10[] = {NULL, NULL, NULL};
+    item10 = __item10;
+    SetSensor(S1, SENSOR_TOUCH);
+    SetSensor(S3, SENSOR_COLORFULL);
+    SetSensor(S2, SENSOR_SOUND);
+    NumOut(0, (MAXLINES - 1) * MAXLINES, item);
+    BoolOut(0, (MAXLINES - 1) * MAXLINES, item2);
+    TextOut(0, (MAXLINES - 1) * MAXLINES, item3);
+    ColorOut(0, (MAXLINES - 1) * MAXLINES, item4);
+    NumOut(0, (MAXLINES - 1) * MAXLINES, item5);
+    ClearScreen();
+    NumOut(0, (MAXLINES - 1) * MAXLINES, 0);
+    BoolOut(0, (MAXLINES - 1) * MAXLINES, true);
+    TextOut(0, (MAXLINES - 1) * MAXLINES, "");
+    ColorOut(0, (MAXLINES - 1) * MAXLINES, INPUT_WHITECOLOR);
+    NumOut(0, (MAXLINES - 1) * MAXLINES, NULL);
+    NumOut(0, (MAXLINES - 1) * MAXLINES, (sqrt(213) + 213));
+    BoolOut(0, (MAXLINES - 1) * MAXLINES, true && true);
+    NumOut(0, (MAXLINES - 1) * MAXLINES, ( (213 + 213) ) == sqrt(213));
+    NumOut(0, (MAXLINES - 1) * MAXLINES, item6[sanitiseFromStart(ArrayLen(item6), 0)]);
+    BoolOut(0, (MAXLINES - 1) * MAXLINES, item7[sanitiseFromStart(ArrayLen(item7), 0)]);
+    TextOut(0, (MAXLINES - 1) * MAXLINES, item8[sanitiseFromStart(ArrayLen(item8), 0)]);
+    NumOut(0, (MAXLINES - 1) * MAXLINES, item9[sanitiseFromStart(ArrayLen(item9), 0)]);
+    NumOut(0, (MAXLINES - 1) * MAXLINES, item10[sanitiseFromStart(ArrayLen(item10), 0)]);
+    NumOut(0, (MAXLINES - 1) * MAXLINES, Sensor(S1));
+    BoolOut(0, (MAXLINES - 1) * MAXLINES, ( ( true ) ? ( true ) : ( true) ));
+    ColorOut(0, (MAXLINES - 1) * MAXLINES, SensorColor(S3, "COLOUR"));
+    NumOut(0, (MAXLINES - 1) * MAXLINES, Sensor(S2));
+}
+

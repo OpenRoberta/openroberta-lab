@@ -1,0 +1,43 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="2.0" description="" tags="">
+  <instance x="39" y="64">
+    <block type="robControls_start_ardu" id="0}VUjoDz:V)xjWqYjuPC" intask="true" deletable="false">
+      <mutation declare="false">
+      </mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robControls_loopForever_ardu" id="XPI[1dF2AnAWMMZxa}vK" intask="true" deletable="false" movable="false">
+      <statement name="DO">
+        <block type="robActions_display_text_i2c" id="]JZ[Nb*ucvY79,c[M]-_" intask="true">
+          <field name="ACTORPORT">L</field>
+          <value name="OUT">
+            <block type="robSensors_key_getSample" id="9eeKIwXKIX0uf67VXBWx" intask="true">
+              <mutation mode="PRESSED">
+              </mutation>
+              <field name="MODE">PRESSED</field>
+              <field name="SENSORPORT">T</field>
+              <field name="SLOT">
+              </field>
+            </block>
+          </value>
+          <value name="ROW">
+            <block type="math_number" id="%e6V|l+l5!W`IjP/=QTi" intask="true">
+              <field name="NUM">1</field>
+            </block>
+          </value>
+          <value name="COL">
+            <block type="math_number" id="|jJ{IougLeRaps11!i92" intask="true">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+        <block type="robControls_wait_time" id="`oiTI09rhKw#:kmUDLU!" intask="true">
+          <value name="WAIT">
+            <block type="math_number" id="Cd(8inkDrXQ/np#[J])a" intask="true">
+              <field name="NUM">10</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

@@ -1,0 +1,9 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="-581" y="98">
+    <block type="variables_get" id="21" disabled="true">
+    <mutation datatype="String"></mutation>
+      <field name="VAR">item</field>
+      <comment pinned="true" h="80" w="160">asdasd</comment>
+    </block>
+  </instance>
+</block_set>

@@ -1,0 +1,7 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="113" y="88">
+    <block type="makeblockSensors_temperature_getSample" id="zj6`A%Z~nuEp)DHG}MYF" intask="false">
+      <field name="SENSORPORT">4</field>
+    </block>
+  </instance>
+</block_set>

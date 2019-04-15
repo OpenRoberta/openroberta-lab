@@ -1,0 +1,5 @@
+<toolbox_set id="toolbox" style="display: none">
+    <category name="brick">
+        <block type="mbedBrick_microbit-Brick" />
+    </category>
+</toolbox_set>

@@ -1,0 +1,19 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="vorwerk" xmlversion="" description="" tags="">
+	<instance x="384" y="50">
+		<block type="robControls_start" id="..T~,KI.I*?g8NNti[bQ"
+			intask="true" deletable="false">
+			<mutation declare="false" />
+			<field name="DEBUG">FALSE</field>
+		</block>
+		<block type="vorwerkActions_brush_on" id="eY}2cNCCym22gl1y2mU:"
+			intask="true">
+			<value name="OUT">
+				<block type="math_number" id="=V7[DP,vNqJooa#iWfT/"
+					intask="true">
+					<field name="NUM">50</field>
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

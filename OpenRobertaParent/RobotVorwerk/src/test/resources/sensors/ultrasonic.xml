@@ -1,0 +1,151 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="vorwerk" xmlversion="" description="" tags="">
+	<instance x="155" y="124">
+		<block type="robControls_start" id="L#E;6cZpke5uD}4#h[O5"
+			intask="true" deletable="false">
+			<mutation declare="true" />
+			<field name="DEBUG">FALSE</field>
+			<statement name="ST">
+				<block type="robGlobalVariables_declare"
+					id="X.lz/=-;25z{^_!|qQy1" intask="true" deletable="false"
+					movable="false">
+					<mutation next="false" declaration_type="Number" />
+					<field name="VAR">item</field>
+					<field name="TYPE">Number</field>
+					<value name="VALUE">
+						<block type="math_number" id="LSgADqrnj_Us=.`_cY(X"
+							intask="true">
+							<field name="NUM">0</field>
+						</block>
+					</value>
+				</block>
+			</statement>
+		</block>
+		<block type="variables_set" id="G_GO.bBgpe9_26_aC@PD"
+			intask="true">
+			<mutation datatype="Number" />
+			<field name="VAR">item</field>
+			<value name="VALUE">
+				<block type="robSensors_ultrasonic_getSample"
+					id="qtnnFQ:5251L#vPfv4ho" intask="true">
+					<mutation mode="DISTANCE" />
+					<field name="MODE">DISTANCE</field>
+					<field name="SENSORPORT">LEFT_ULTRASONIC</field>
+					<field name="SLOT">LEFT</field>
+				</block>
+			</value>
+		</block>
+		<block type="variables_set" id=")]20)?q:v!9/G%@O^B{E"
+			intask="true">
+			<mutation datatype="Number" />
+			<field name="VAR">item</field>
+			<value name="VALUE">
+				<block type="robSensors_ultrasonic_getSample"
+					id="ezHgrc~lRo0cK,^V?9^Y" intask="true">
+					<mutation mode="DISTANCE" />
+					<field name="MODE">DISTANCE</field>
+					<field name="SENSORPORT">LEFT_ULTRASONIC</field>
+					<field name="SLOT">CENTER</field>
+				</block>
+			</value>
+		</block>
+		<block type="variables_set" id="JuoeBL[Dfe{c!q5NrMp:"
+			intask="true">
+			<mutation datatype="Number" />
+			<field name="VAR">item</field>
+			<value name="VALUE">
+				<block type="robSensors_ultrasonic_getSample"
+					id="QRd%DcMxB#]aX^1:ai;(" intask="true">
+					<mutation mode="DISTANCE" />
+					<field name="MODE">DISTANCE</field>
+					<field name="SENSORPORT">LEFT_ULTRASONIC</field>
+					<field name="SLOT">RIGHT</field>
+				</block>
+			</value>
+		</block>
+		<block type="variables_set" id="dEoOd{]):I|kB?0hLU^Q"
+			intask="true">
+			<mutation datatype="Number" />
+			<field name="VAR">item</field>
+			<value name="VALUE">
+				<block type="robSensors_ultrasonic_getSample"
+					id="z67*XB4aSliDJl.yC[dx" intask="true">
+					<mutation mode="DISTANCE" />
+					<field name="MODE">DISTANCE</field>
+					<field name="SENSORPORT">CENTER_ULTRASONIC</field>
+					<field name="SLOT">LEFT</field>
+				</block>
+			</value>
+		</block>
+		<block type="variables_set" id="Zeosv]%d_w2D%5mCJc]~"
+			intask="true">
+			<mutation datatype="Number" />
+			<field name="VAR">item</field>
+			<value name="VALUE">
+				<block type="robSensors_ultrasonic_getSample"
+					id="Rbv)I2}vn;,Id_X5Y9)O" intask="true">
+					<mutation mode="DISTANCE" />
+					<field name="MODE">DISTANCE</field>
+					<field name="SENSORPORT">CENTER_ULTRASONIC</field>
+					<field name="SLOT">CENTER</field>
+				</block>
+			</value>
+		</block>
+		<block type="variables_set" id="5H8%Iwqt}/_iIQ_vYVPf"
+			intask="true">
+			<mutation datatype="Number" />
+			<field name="VAR">item</field>
+			<value name="VALUE">
+				<block type="robSensors_ultrasonic_getSample"
+					id="8Kq}TXdNz0ELp,zlRVj." intask="true">
+					<mutation mode="DISTANCE" />
+					<field name="MODE">DISTANCE</field>
+					<field name="SENSORPORT">CENTER_ULTRASONIC</field>
+					<field name="SLOT">RIGHT</field>
+				</block>
+			</value>
+		</block>
+		<block type="variables_set" id="Iu|#0V{94c/^VD_[pSq_"
+			intask="true">
+			<mutation datatype="Number" />
+			<field name="VAR">item</field>
+			<value name="VALUE">
+				<block type="robSensors_ultrasonic_getSample"
+					id="i6+Z*CY(/NS@@hH!^38x" intask="true">
+					<mutation mode="DISTANCE" />
+					<field name="MODE">DISTANCE</field>
+					<field name="SENSORPORT">RIGHT_ULTRASONIC</field>
+					<field name="SLOT">LEFT</field>
+				</block>
+			</value>
+		</block>
+		<block type="variables_set" id="nBai9k|G^92EMF@K6MIW"
+			intask="true">
+			<mutation datatype="Number" />
+			<field name="VAR">item</field>
+			<value name="VALUE">
+				<block type="robSensors_ultrasonic_getSample"
+					id="ke5.rvN4F-iAj3jeB*eO" intask="true">
+					<mutation mode="DISTANCE" />
+					<field name="MODE">DISTANCE</field>
+					<field name="SENSORPORT">RIGHT_ULTRASONIC</field>
+					<field name="SLOT">CENTER</field>
+				</block>
+			</value>
+		</block>
+		<block type="variables_set" id="M+0AR#vZ@+Sw?OXtGSvu"
+			intask="true">
+			<mutation datatype="Number" />
+			<field name="VAR">item</field>
+			<value name="VALUE">
+				<block type="robSensors_ultrasonic_getSample"
+					id="a=C!6O_QUIo@q%kx^_0W" intask="true">
+					<mutation mode="DISTANCE" />
+					<field name="MODE">DISTANCE</field>
+					<field name="SENSORPORT">RIGHT_ULTRASONIC</field>
+					<field name="SLOT">RIGHT</field>
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

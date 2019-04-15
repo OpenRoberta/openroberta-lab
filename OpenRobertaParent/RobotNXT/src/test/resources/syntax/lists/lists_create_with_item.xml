@@ -1,0 +1,17 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="-326" y="36">
+    <block type="lists_repeat" id="932" inline="true" >
+    <field name="LIST_TYPE">Number</field>
+      <value name="ITEM">
+        <block type="math_number" id="979" >
+          <field name="NUM">1</field>
+        </block>
+      </value>
+      <value name="NUM">
+        <block type="math_number" id="933" >
+          <field name="NUM">5</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

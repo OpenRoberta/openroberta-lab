@@ -1,0 +1,144 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="1" y="7">
+    <block type="robControls_start" id="166" deletable="false">
+      <mutation declare="true"></mutation>
+      <field name="DEBUG">FALSE</field>
+      <statement name="ST">
+        <block type="robGlobalvariables_declare" id="325" inline="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Number"></mutation>
+          <field name="VAR">item</field>
+          <field name="TYPE">Number</field>
+          <value name="VALUE">
+            <block type="math_number" id="342">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalvariables_declare" id="332" inline="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="String"></mutation>
+          <field name="VAR">item2</field>
+          <field name="TYPE">String</field>
+          <value name="VALUE">
+            <block type="text" id="343">
+              <field name="TEXT">ss</field>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalvariables_declare" id="334" inline="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Boolean"></mutation>
+          <field name="VAR">item3</field>
+          <field name="TYPE">Boolean</field>
+          <value name="VALUE">
+            <block type="logic_boolean" id="344">
+              <field name="BOOL">TRUE</field>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalvariables_declare" id="336" inline="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Array_Number"></mutation>
+          <field name="VAR">item4</field>
+          <field name="TYPE">Array_Number</field>
+          <value name="VALUE">
+            <block type="robLists_create_with" id="345" inline="false">
+              <mutation items="3" list_type="Number"></mutation>
+              <field name="LIST_TYPE">Number</field>
+              <value name="ADD0">
+                <block type="math_number" id="346">
+                  <field name="NUM">1</field>
+                </block>
+              </value>
+              <value name="ADD1">
+                <block type="math_number" id="348">
+                  <field name="NUM">2</field>
+                </block>
+              </value>
+              <value name="ADD2">
+                <block type="math_number" id="350">
+                  <field name="NUM">3</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalvariables_declare" id="338" inline="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Array_String"></mutation>
+          <field name="VAR">item5</field>
+          <field name="TYPE">Array_String</field>
+          <value name="VALUE">
+            <block type="robLists_create_with" id="352" inline="false">
+              <mutation items="3" list_type="String"></mutation>
+              <field name="LIST_TYPE">String</field>
+              <value name="ADD0">
+                <block type="text" id="353">
+                  <field name="TEXT">a</field>
+                </block>
+              </value>
+              <value name="ADD2">
+                <block type="text" id="355">
+                  <field name="TEXT">b</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalvariables_declare" id="340" inline="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Array_Boolean"></mutation>
+          <field name="VAR">item6</field>
+          <field name="TYPE">Array_Boolean</field>
+          <value name="VALUE">
+            <block type="robLists_create_with" id="358" inline="false">
+              <mutation items="3" list_type="Boolean"></mutation>
+              <field name="LIST_TYPE">Boolean</field>
+              <value name="ADD0">
+                <block type="logic_boolean" id="359">
+                  <field name="BOOL">TRUE</field>
+                </block>
+              </value>
+              <value name="ADD1">
+                <block type="logic_boolean" id="361">
+                  <field name="BOOL">FALSE</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalvariables_declare" id="363" inline="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Array_Colour"></mutation>
+          <field name="VAR">item7</field>
+          <field name="TYPE">Array_Colour</field>
+          <value name="VALUE">
+            <block type="robLists_create_with" id="365" inline="false">
+              <mutation items="3" list_type="Colour"></mutation>
+              <field name="LIST_TYPE">Colour</field>
+              <value name="ADD0">
+                <block type="robColour_picker" id="369">
+                  <field name="COLOUR">#b30006</field>
+                </block>
+              </value>
+              <value name="ADD1">
+                <block type="robColour_picker" id="371">
+                  <field name="COLOUR">#000000</field>
+                </block>
+              </value>
+              <value name="ADD2">
+                <block type="robColour_picker" id="373">
+                  <field name="COLOUR">#585858</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalvariables_declare" id="366" inline="true" deletable="false" movable="false">
+          <mutation next="false" declaration_type="Colour"></mutation>
+          <field name="VAR">item8</field>
+          <field name="TYPE">Colour</field>
+          <value name="VALUE">
+            <block type="robColour_picker" id="368">
+              <field name="COLOUR">#585858</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

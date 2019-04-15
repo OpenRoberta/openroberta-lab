@@ -1,0 +1,13 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="34" y="-547">
+    <block type="math_number_property" id="344" inline="true">
+      <mutation divisor_input="false"></mutation>
+      <field name="PROPERTY">PRIME</field>
+      <value name="NUMBER_TO_CHECK">
+        <block type="math_number" id="417">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

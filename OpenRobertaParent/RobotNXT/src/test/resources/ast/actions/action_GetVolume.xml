@@ -1,0 +1,5 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="-2" y="189">
+    <block type="robActions_play_getVolume" id="50"></block>
+  </instance>
+</block_set>

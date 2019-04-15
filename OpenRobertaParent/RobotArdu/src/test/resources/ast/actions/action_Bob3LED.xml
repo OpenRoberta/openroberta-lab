@@ -1,0 +1,63 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="nibo" xmlversion="2.0" description="" tags="">
+	<instance x="273" y="50">
+		<block type="robControls_start_ardu" id="9gQ`lvA-06F0GogyKtF*"
+			intask="true" deletable="false">
+			<mutation declare="false"></mutation>
+			<field name="DEBUG">FALSE</field>
+		</block>
+		<block type="robControls_loopForever_ardu" id="-mRBXSb~6CKn0k/kuv{4"
+			intask="true" deletable="false" movable="false">
+			<statement name="DO">
+				<block type="makeblockActions_leds_on" id="UBoBt@hx8_)XS7):,L,%"
+					intask="true">
+					<field name="LEDSIDE">Left</field>
+					<value name="COLOR">
+						<block type="robColour_picker" id="YO?_G{?:FcA?g~[sewRB"
+							intask="true">
+							<field name="COLOUR">#FF0000</field>
+						</block>
+					</value>
+				</block>
+				<block type="makeblockActions_leds_on" id="lu~-)lQKp2q)B8:8%4!}"
+					intask="true">
+					<field name="LEDSIDE">Right</field>
+					<value name="COLOR">
+						<block type="robColour_picker" id="^p}ReA[VtHN873_yL4C#"
+							intask="true">
+							<field name="COLOUR">#6633aa</field>
+						</block>
+					</value>
+				</block>
+				<block type="makeblockActions_leds_on" id=";gRtC%w/B{cX-uTmbtRW"
+					intask="true">
+					<field name="LEDSIDE">Left</field>
+					<value name="COLOR">
+						<block type="robColour_picker" id="jH:U)X1@kszH}1mJ!H;g"
+							intask="true">
+							<field name="COLOUR">#ff00ff</field>
+						</block>
+					</value>
+				</block>
+				<block type="makeblockActions_leds_on" id=":Qb%@76UwTI}+i4V2Ci3"
+					intask="true">
+					<field name="LEDSIDE">Right</field>
+					<value name="COLOR">
+						<block type="robColour_picker" id="%GrK6EU+,G:5bBxp/9c^"
+							intask="true">
+							<field name="COLOUR">#77ffdd</field>
+						</block>
+					</value>
+				</block>
+				<block type="makeblockActions_leds_off" id="J5~X)iNY*7p/%8MvZv0M"
+					intask="true">
+					<field name="LEDSIDE">Left</field>
+				</block>
+				<block type="makeblockActions_leds_off" id="G0n/mbDNKS8L2n*fO~N!"
+					intask="true">
+					<field name="LEDSIDE">Right</field>
+				</block>
+			</statement>
+		</block>
+	</instance>
+</block_set>

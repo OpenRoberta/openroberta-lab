@@ -1,0 +1,8 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+    <instance x="-420" y="80">
+    <block type="robActions_play_file" id="394" collapsed="true" disabled="true">
+      <field name="FILE">1</field>
+      <comment pinned="false" h="80" w="160">asdasdasdasdasd</comment>
+    </block>
+  </instance>
+</block_set>

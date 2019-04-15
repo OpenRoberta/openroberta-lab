@@ -1,0 +1,44 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="63" y="88">
+    <block type="robControls_start" id="dv@`#WoD(!oXDIC!u3gr" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robActions_motorDiff_curve_for" id=":=4FxRS_yVYonO3w;tnY" intask="true">
+      <field name="DIRECTION">FOREWARD</field>
+      <value name="POWER_LEFT">
+        <block type="math_number" id="H[C-%4sgeA!I3f`|Ap}@" intask="true">
+          <field name="NUM">20</field>
+        </block>
+      </value>
+      <value name="POWER_RIGHT">
+        <block type="math_number" id="9a2uf*f:;/*L^T%:}K{o" intask="true">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+      <value name="DISTANCE">
+        <block type="math_number" id="9)5keJ7orwN*fmRLsOhf" intask="true">
+          <field name="NUM">20</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motorDiff_curve_for" id="@2F~#WWYwwUIrBx`J_W;" intask="true">
+      <field name="DIRECTION">BACKWARDS</field>
+      <value name="POWER_LEFT">
+        <block type="math_number" id="%rP^J_n.G#DZ#bilK-pp" intask="true">
+          <field name="NUM">30</field>
+        </block>
+      </value>
+      <value name="POWER_RIGHT">
+        <block type="math_number" id="W8n4f]zh6nB8,;VW:U(=" intask="true">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+      <value name="DISTANCE">
+        <block type="math_number" id="(QPplLAiS|r-;!/-;/4*" intask="true">
+          <field name="NUM">20</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

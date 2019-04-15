@@ -1,0 +1,34 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+	<instance x="68" y="133">
+		<block type="controls_if" id="75" inline="false">
+			<mutation else="1"/>
+			<repetitions>
+				<value name="IF0">
+					<block type="logic_compare" id="85" inline="true">
+						<field name="OP">EQ</field>
+					</block>
+				</value>
+				<statement name="DO0">
+					<block type="math_change" id="126" inline="true">
+						 <value name="VAR">
+        <block type="variables_get" id="69">
+          <mutation datatype="Number"></mutation>
+          <field name="VAR">variablenName</field>
+        </block>
+      </value>
+						<value name="DELTA">
+							<block type="math_number" id="127">
+								<field name="NUM">1</field>
+							</block>
+						</value>
+					</block>
+				</statement>
+				<statement name="ELSE">
+					<block type="robSensors_encoder_reset" id="242">
+						<field name="SENSORPORT">A</field>
+					</block>
+				</statement>
+			</repetitions>
+		</block>
+	</instance>
+</block_set>

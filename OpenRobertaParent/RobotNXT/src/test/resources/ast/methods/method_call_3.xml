@@ -1,0 +1,47 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="5" y="28">
+    <block type="robProcedures_defnoreturn" id="296">
+      <mutation declare="true"></mutation>
+      <field name="NAME">Funktionsblock</field>
+      <statement name="ST">
+        <block type="robLocalVariables_declare" id="300" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Number"></mutation>
+          <field name="VAR">x</field>
+          <field name="TYPE">Number</field>
+        </block>
+        <block type="robLocalVariables_declare" id="301" deletable="false" movable="false">
+          <mutation next="false" declaration_type="Number"></mutation>
+          <field name="VAR">x2</field>
+          <field name="TYPE">Number</field>
+        </block>
+      </statement>
+      <statement name="STACK">
+        <block type="robActions_play_setVolume" id="355" inline="false">
+          <value name="VOLUME">
+            <block type="math_number" id="356">
+              <field name="NUM">50</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+  <instance x="6" y="189">
+    <block type="robProcedures_callnoreturn" id="305" inline="false" disabled="true">
+      <mutation name="Funktionsblock">
+        <arg name="x" type="Number"></arg>
+        <arg name="x2" type="Number"></arg>
+      </mutation>
+      <value name="ARG0">
+        <block type="math_number" id="307" disabled="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ARG1">
+        <block type="math_number" id="326" disabled="true">
+          <field name="NUM">2</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

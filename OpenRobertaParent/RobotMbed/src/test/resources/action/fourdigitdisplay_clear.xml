@@ -1,0 +1,10 @@
+<block_set 
+    xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance x="409" y="23">
+        <block type="robControls_start" id="@](M5D4,a_}3YML7@k9q" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="mbedActions_fourDigitDisplay_clear" id="y4b)LXvMG~6%MWj7N3+o" intask="true"></block>
+    </instance>
+</block_set>

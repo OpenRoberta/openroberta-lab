@@ -1,0 +1,51 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="1" y="7">
+    <block type="robControls_start" id="34" intask="true" deletable="false">
+      <mutation declare="true"></mutation>
+      <statement name="ST">
+        <block type="robGlobalVariables_declare" id="118" inline="true" intask="true" deletable="false" movable="false">
+          <mutation next="false" declaration_type="Number"></mutation>
+          <field name="VAR">variablenName</field>
+          <field name="TYPE">Number</field>
+          <value name="VALUE">
+            <block type="math_number" id="119" intask="true">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <block type="robActions_play_tone" id="89" inline="false" intask="true">
+      <value name="FREQUENCE">
+        <block type="math_number" id="90" intask="true">
+          <field name="NUM">300</field>
+        </block>
+      </value>
+      <value name="DURATION">
+        <block type="math_number" id="91" intask="true">
+          <field name="NUM">100</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_play_setVolume" id="103" inline="false" intask="true">
+      <value name="VOLUME">
+        <block type="math_number" id="104" intask="true">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_play_file" id="111" intask="true">
+      <field name="FILE">0</field>
+    </block>
+    <block type="robActions_play_file" id="116" intask="true">
+      <field name="FILE">1</field>
+    </block>
+    <block type="variables_set" id="133" inline="false" intask="true">
+      <mutation datatype="Number"></mutation>
+      <field name="VAR">variablenName</field>
+      <value name="VALUE">
+        <block type="robActions_play_getVolume" id="126" intask="true"></block>
+      </value>
+    </block>
+  </instance>
+</block_set>

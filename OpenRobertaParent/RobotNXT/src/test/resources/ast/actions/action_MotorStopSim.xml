@@ -1,0 +1,12 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="45" y="117">
+    <block type="robControls_start" id="47" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="sim_motor_stop" id="45" intask="true">
+      <field name="MOTORPORT">B</field>
+      <field name="MODE">FLOAT</field>
+    </block>
+  </instance>
+</block_set>

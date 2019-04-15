@@ -1,0 +1,32 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="" description="" tags="">
+  <instance x="138" y="88">
+    <block type="robControls_start" id="620P}NBy3A}|E4i@Eq.O" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="naoActions_pointLookAt" id="MnV26T=UBa@,[B!;2J,T" intask="true">
+      <field name="MODE">1</field>
+      <field name="DIRECTION">1</field>
+      <value name="X">
+        <block type="math_number" id="j:j4x2UVJkK;6jOq9m|A" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="Y">
+        <block type="math_number" id="2lFl8H/WO7EfOG:GH#!G" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="Z">
+        <block type="math_number" id="QHOz@ZmTZ}C4zLE+dTrG" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="Speed">
+        <block type="math_number" id="3v9`vVyWvEjbqy6S5[@9" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

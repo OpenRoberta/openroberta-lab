@@ -1,0 +1,33 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="64" y="67">
+    <block type="controls_if" id="137" inline="false">
+      <value name="IF0">
+        <block type="logic_null" id="144"></block>
+      </value>
+      <statement name="DO0">
+        <block type="robActions_motorDiff_on" id="156" inline="false">
+          <field name="DIRECTION">FOREWARD</field>
+          <value name="POWER">
+            <block type="math_number" id="157">
+              <field name="NUM">50</field>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_motor_on_for" id="167" inline="false">
+          <field name="MOTORPORT">B</field>
+          <field name="MOTORROTATION">ROTATIONS</field>
+          <value name="POWER">
+            <block type="math_number" id="168">
+              <field name="NUM">30</field>
+            </block>
+          </value>
+          <value name="VALUE">
+            <block type="math_number" id="169">
+              <field name="NUM">1</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

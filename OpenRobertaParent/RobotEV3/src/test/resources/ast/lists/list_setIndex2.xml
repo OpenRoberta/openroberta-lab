@@ -1,0 +1,25 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="18" y="289">
+    <block type="lists_setIndex" id="359" inline="true" disabled="true">
+      <mutation at="true"></mutation>
+      <field name="MODE">INSERT</field>
+      <field name="WHERE">FROM_START</field>
+      <value name="LIST">
+        <block type="variables_get" id="360" disabled="true">
+        <mutation datatype="Array_Number"></mutation>
+          <field name="VAR">liste</field>
+        </block>
+      </value>
+      <value name="AT">
+        <block type="math_number" id="442" disabled="true">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+      <value name="TO">
+        <block type="math_number" id="440" disabled="true">
+          <field name="NUM">12</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

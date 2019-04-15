@@ -1,0 +1,45 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="calliope" xmlversion="" description="" tags="">
+	<instance x="13" y="13">
+		<block type="robControls_start" id="}#nRZiG{/E-^lR6T=|hP"
+			intask="true" deletable="false">
+			<mutation declare="false"></mutation>
+			<field name="DEBUG">FALSE</field>
+		</block>
+		<block type="mbedActions_display_image" id="6jgJh^u5+KN[BiC[,Ff9"
+			intask="true">
+			<mutation type="IMAGE"></mutation>
+			<field name="TYPE">IMAGE</field>
+			<value name="VALUE">
+				<block type="mbedImage_get_image" id="%8g0*r2rt;MJi{|2E16|"
+					intask="true">
+					<field name="IMAGE">HEART</field>
+				</block>
+			</value>
+		</block>
+		<block type="mbedActions_display_image" id="r#-L!f?q3KMTdyk6rJ`H"
+			intask="true">
+			<mutation type="ANIMATION"></mutation>
+			<field name="TYPE">ANIMATION</field>
+			<value name="VALUE">
+				<block type="robLists_create_with" id="WO,9rx2i|#|d:-3XlAMT"
+					intask="true">
+					<mutation items="2" list_type="Image"></mutation>
+					<field name="LIST_TYPE">Image</field>
+					<value name="ADD0">
+						<block type="mbedImage_get_image" id="Q?D1}VU)xK`w%)Dt|=)["
+							intask="true">
+							<field name="IMAGE">HEART_SMALL</field>
+						</block>
+					</value>
+					<value name="ADD1">
+						<block type="mbedImage_get_image" id="?(]W,8V6X;O;y;1rPj.T"
+							intask="true">
+							<field name="IMAGE">ASLEEP</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

@@ -1,0 +1,7 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="-31" y="223">
+    <block type="logic_null" id="113" collapsed="true" disabled="true">
+      <comment pinned="false" h="80" w="160">asdasdasd</comment>
+    </block>
+  </instance>
+</block_set>

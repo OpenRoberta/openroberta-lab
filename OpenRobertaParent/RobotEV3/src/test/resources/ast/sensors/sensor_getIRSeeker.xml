@@ -1,0 +1,17 @@
+<block_set 
+    xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="2.0" description="" tags="">
+    <instance x="258" y="138">
+        <block type="robSensors_irseeker_getSample" id="Z)?SAn*0,T-MLweUg+(U" intask="false">
+            <mutation mode="MODULATED"></mutation>
+            <field name="MODE">MODULATED</field>
+            <field name="SENSORPORT">1</field>
+        </block>
+    </instance>
+    <instance x="262" y="196">
+        <block type="robSensors_irseeker_getSample" id="i(sD#CXw-4j`M2mWT.l}" intask="false">
+            <mutation mode="UNMODULATED"></mutation>
+            <field name="MODE">UNMODULATED</field>
+            <field name="SENSORPORT">1</field>
+        </block>
+    </instance>
+</block_set>

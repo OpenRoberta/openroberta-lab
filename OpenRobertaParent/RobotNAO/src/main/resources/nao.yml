@@ -1,0 +1,160 @@
+include: "classpath:/robotCommon.yml"
+wait:
+  FSR_VALUE :
+    implementor: de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor
+    sensor: FSR
+    mode: VALUE
+  ELECTRICCURRENT_VALUE :
+    implementor: de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrentSensor
+    sensor: ELECTRIC_CURRENT
+    mode: VALUE
+  DETECTFACE_NAMEONE :
+    implementor: de.fhg.iais.roberta.syntax.sensor.nao.DetectFaceSensor
+    sensor: DETECT_FACE
+    mode: NAMEONE
+  DETECTMARK_IDONE :
+    implementor: de.fhg.iais.roberta.syntax.sensor.nao.DetectMarkSensor
+    sensor: DETECT_MARK
+    mode: IDONE
+    
+block:
+  SET_MODE:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.SetMode
+      type: [naoActions_mode]
+  APPLY_POSTURE:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.ApplyPosture
+      type: [naoActions_applyPosture]
+  SET_STIFFNESS:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.SetStiffness
+      type: [naoActions_stiffness]
+  AUTONOMOUS:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.Autonomous
+      type: [naoActions_autonomous]
+  HAND:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.Hand
+      type: [naoActions_hand]
+  MOVE_JOINT:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.MoveJoint
+      type: [naoActions_moveJoint]
+  WALK_DISTANCE:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.WalkDistance
+      type: [naoActions_walk]
+  TURN_DEGREES:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.TurnDegrees
+      type: [naoActions_turn]
+  Walk_To:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.WalkTo
+      type: [naoActions_walkTo]
+  WALK_ASYNC:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.WalkAsync
+      type: [naoActions_walk_async]
+  Stop:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.Stop
+      type: [naoActions_stop]
+  ANIMATION:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.Animation
+      type: [naoActions_animation]
+  POINT_LOOK_AT:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.PointLookAt
+      type: [naoActions_pointLookAt]
+  SET_VOLUME:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.SetVolume
+      type: [naoActions_setVolume]
+  GET_VOLUME:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.GetVolume
+      type: [naoActions_getVolume]
+  GET_LANGUAGE:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.GetLanguage
+      type: [naoActions_getLanguage]
+  PLAY_FILE:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.PlayFile
+      type: [naoActions_playFile]
+  TAKE_PICTURE:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.TakePicture
+      type: [naoActions_takePicture]
+  RECORD_VIDEO:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.RecordVideo
+      type: [naoActions_recordVideo]
+  RGB_LED:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.SetLeds
+      type: [naoActions_rgbLeds]
+  SET_INTENSITY:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.SetIntensity
+      type: [naoActions_setIntensity]
+  LED_OFF:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.LedOff
+      type: [naoActions_ledOff]
+  LED_RESET:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.LedReset
+      type: [naoActions_ledReset]
+  RANDOM_EYES_DURATION:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration
+      type: [naoActions_randomEyes]
+  RASTA_DURATION:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.RastaDuration
+      type: [naoActions_rasta]
+  LEARN_FACE:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.LearnFace
+      type: [naoActions_learnFace]
+  FORGET_FACE:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.nao.ForgetFace
+      type: [naoActions_forgetFace]
+  FSR_SENSOR:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor
+      type: [robSensors_fsr_getSample]
+  DETECT_MARK:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensor.nao.DetectMarkSensor
+      type: [robSensors_detectmark_getSample]
+  NAO_MARK_INFORMATION:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation
+      type: [naoSensors_getMarkInformation]
+  DETECT_FACE:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensor.nao.DetectFaceSensor
+      type: [robSensors_detectface_getSample]
+  NAO_FACE_INFORMATION:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation
+      type: [naoSensors_getFaceInformation]
+  NAO_SENSOR_GET_SAMPLE:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor
+      type: [naoSensors_getSample]
+  RECOGNIZE_WORD:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord
+      type: [naoSensors_recognizeWord]
+  ELECTRIC_CURRENT:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrentSensor
+      type: [robSensors_electriccurrent_getSample]

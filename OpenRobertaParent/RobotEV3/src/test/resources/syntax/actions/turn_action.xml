@@ -1,0 +1,25 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+      <instance x="-19" y="77">
+    <block type="robActions_motorDiff_turn" id="367" inline="false">
+      <field name="DIRECTION">RIGHT</field>
+      <value name="POWER">
+        <block type="math_number" id="368">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motorDiff_turn_for" id="323" inline="false">
+      <field name="DIRECTION">LEFT</field>
+      <value name="POWER">
+        <block type="math_number" id="324">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+      <value name="DISTANCE">
+        <block type="math_number" id="325">
+          <field name="NUM">20</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

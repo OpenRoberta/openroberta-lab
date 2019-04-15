@@ -1,0 +1,127 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="113" y="-37">
+    <block type="robControls_start" id="^4h{ubCV#a%6W[T4(TgH" intask="true" deletable="false">
+      <mutation declare="true"></mutation>
+      <field name="DEBUG">FALSE</field>
+      <statement name="ST">
+        <block type="robGlobalVariables_declare" id="T=.y+3Pml}Iv1D|uqv0)" intask="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Boolean"></mutation>
+          <field name="VAR">Element</field>
+          <field name="TYPE">Boolean</field>
+          <value name="VALUE">
+            <block type="math_number_property" id="Cghp`aVg#E-tqOZjsnE?" intask="true">
+              <mutation divisor_input="false"></mutation>
+              <field name="PROPERTY">PRIME</field>
+              <value name="NUMBER_TO_CHECK">
+                <block type="math_number" id="z`l.SqNJsu.4o-uoJ6SY" intask="true">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalVariables_declare" id="_mmRxn436yibJuIDPgas" intask="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Boolean"></mutation>
+          <field name="VAR">Element2</field>
+          <field name="TYPE">Boolean</field>
+          <value name="VALUE">
+            <block type="math_number_property" id="=8;piUEm(O]sY)QeV;_B" intask="true">
+              <mutation divisor_input="false"></mutation>
+              <field name="PROPERTY">WHOLE</field>
+              <value name="NUMBER_TO_CHECK">
+                <block type="math_number" id="F:Sb8]Q]yO`ap1Nouu{y" intask="true">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalVariables_declare" id="_axM|m6+A}Z9?az75]o2" intask="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Boolean"></mutation>
+          <field name="VAR">Element3</field>
+          <field name="TYPE">Boolean</field>
+          <value name="VALUE">
+            <block type="math_number_property" id="410" intask="true">
+              <mutation divisor_input="false"></mutation>
+              <field name="PROPERTY">EVEN</field>
+              <value name="NUMBER_TO_CHECK">
+                <block type="math_number" id="424" intask="true">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalVariables_declare" id="xY?dU6C-pQ/syBR9v)K~" intask="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Boolean"></mutation>
+          <field name="VAR">Element4</field>
+          <field name="TYPE">Boolean</field>
+          <value name="VALUE">
+            <block type="math_number_property" id="443" intask="true">
+              <mutation divisor_input="false"></mutation>
+              <field name="PROPERTY">ODD</field>
+              <value name="NUMBER_TO_CHECK">
+                <block type="math_number" id="EK@z1YJtG`rp!.stAJ^U" intask="true">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalVariables_declare" id="}0x@|0k/=dI:UF,UIMJE" intask="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Boolean"></mutation>
+          <field name="VAR">Element5</field>
+          <field name="TYPE">Boolean</field>
+          <value name="VALUE">
+            <block type="math_number_property" id="?-PT0GdMPn30tADG*Ny7" intask="true">
+              <mutation divisor_input="false"></mutation>
+              <field name="PROPERTY">POSITIVE</field>
+              <value name="NUMBER_TO_CHECK">
+                <block type="math_number" id="ViP{13`_+d2=B(9fjfA:" intask="true">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalVariables_declare" id="xT%.(6sn+JBKRI-#@.zq" intask="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Boolean"></mutation>
+          <field name="VAR">Element6</field>
+          <field name="TYPE">Boolean</field>
+          <value name="VALUE">
+            <block type="math_number_property" id="N9mW%CqH)HmJMDIYS)/u" intask="true">
+              <mutation divisor_input="true"></mutation>
+              <field name="PROPERTY">DIVISIBLE_BY</field>
+              <value name="NUMBER_TO_CHECK">
+                <block type="math_number" id="Ray,rOyA*mzBd1L5=4!4" intask="true">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+              <value name="DIVISOR">
+                <block type="math_number" id="c90;,ad(c(IM;}@vo-:t" intask="true">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalVariables_declare" id="sbFJn}vBUek4rKRmDdJW" intask="true" deletable="false" movable="false">
+          <mutation next="false" declaration_type="Boolean"></mutation>
+          <field name="VAR">Element7</field>
+          <field name="TYPE">Boolean</field>
+          <value name="VALUE">
+            <block type="math_number_property" id="6]e9a..Ju`,{w+V)zwA)" intask="true">
+              <mutation divisor_input="false"></mutation>
+              <field name="PROPERTY">NEGATIVE</field>
+              <value name="NUMBER_TO_CHECK">
+                <block type="math_number" id="pO9J/]T7COFWlkY9kK_@" intask="true">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

@@ -1,0 +1,17 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly">
+  <instance x="-15" y="2">
+    <block type="robBrick_EV3-Brick" id="1" inline="false" disabled="true">
+      <field name="WHEEL_DIAMETER">5</field>
+      <field name="TRACK_WIDTH">17</field>
+      <value name="S3">
+        <block type="robBrick_infrared" id="2" disabled="true"></block>
+      </value>
+      <value name="A">
+        <block type="robBrick_motor_middle" id="3" disabled="true">
+          <field name="MOTOR_REGULATION">TRUE</field>         
+          <field name="MOTOR_REVERSE">OFF</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

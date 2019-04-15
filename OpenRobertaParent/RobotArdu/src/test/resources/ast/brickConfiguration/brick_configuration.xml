@@ -1,0 +1,48 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly">
+  <instance x="263" y="63">
+    <block type="robBrick_ardu-Brick" id="fgFk8xvySqwSFpvBVC_X" intask="true" deletable="false">
+      <value name="S1">
+        <block type="robBrick_infrared" id="yk2DFH~AL(|jnQf+x~_l" intask="true"></block>
+      </value>
+      <value name="S2">
+        <block type="robBrick_infrared" id="gk^_iG:v(7x`U`R]KNr^" intask="true"></block>
+      </value>
+      <value name="MB">
+        <block type="robBrick_motor_ardu" id="i`o3~g2DU1X@^_Sd(!_?" intask="true"></block>
+      </value>
+      <value name="MA">
+        <block type="robBrick_motor_ardu" id="g?yeD2U8W3ym8d(y)rR0" intask="true"></block>
+      </value>
+      <value name="S3">
+        <block type="robBrick_light" id="@KciTI|?8(Z]f@00VfSF" intask="true"></block>
+      </value>
+      <value name="S4">
+        <block type="robBrick_compass" id="XOj}+(efkGI})K]-F2mi" intask="true"></block>
+      </value>
+      <value name="S5">
+        <block type="robBrick_ultrasonic" id="nK#f@.Y~8EO0CdeTjudm" intask="true"></block>
+      </value>
+      <value name="S6">
+        <block type="robBrick_ultrasonic" id="Pbk#Mh=/=:,[JR-1A6{(" intask="true"></block>
+      </value>
+      <value name="S7">
+        <block type="robBrick_ultrasonic" id="%[Z!zdjdspr.J:Rxq/!B" intask="true"></block>
+      </value>
+      <value name="S8">
+        <block type="robBrick_colour" id="WTEhGq.HlLNvm17vjyj`" intask="true"></block>
+      </value>
+      <value name="S9">
+        <block type="robBrick_colour" id=".-.a^G-y:C^0~/|J-%JU" intask="true"></block>
+      </value>
+      <value name="S10">
+        <block type="robBrick_ultrasonic" id="*!S-^WN/-k+p|+fmm*I@" intask="true"></block>
+      </value>
+      <value name="MC">
+        <block type="robBrick_motor_ardu" id="Zl7,UNw_}UH;G~A,o[.~" intask="true"></block>
+      </value>
+      <value name="MD">
+        <block type="robBrick_motor_ardu" id="|YQBpS,fh5Z)SysysFBl" intask="true"></block>
+      </value>
+    </block>
+  </instance>
+</block_set>

@@ -1,0 +1,47 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="187" y="138">
+    <block type="robControls_start" id="K^5V]1xXovI^7~$5Do*q" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robActions_display_text" id="qpIt3P)]/)?Pwyc{cgY8" intask="true">
+      <value name="OUT">
+        <block type="robSensors_gyro_getSample" id="*vtw7aV8{`m*PBZlP4iO" intask="true">
+          <field name="MODE">ANGLE</field>
+          <field name="SENSORPORT">2</field><field name="SLOT" />
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id=":}hE+p|bxuH@#dJ,HU-^" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id=",*/G:u5,Fy!0PVj/#kL[" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_display_text" id="qpIt3P)]/)?Pwyc{cgY8" intask="true">
+      <value name="OUT">
+        <block type="robSensors_gyro_getSample" id="*vtw7aV8{`m*PBZlP4iO" intask="true">
+          <field name="MODE">RATE</field>
+          <field name="SENSORPORT">2</field><field name="SLOT" />
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id=":}hE+p|bxuH@#dJ,HU-^" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id=",*/G:u5,Fy!0PVj/#kL[" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="robSensors_gyro_reset" id="~1*2Lw3W/KBMttOpZM6x" intask="true">
+      <field name="SENSORPORT">2</field>
+    </block>
+  </instance>
+</block_set>

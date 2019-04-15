@@ -1,0 +1,20 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+      <instance x="-29" y="436">
+    <block type="lists_getSublist" id="457" inline="true" disabled="true">
+      <mutation at1="true" at2="false"></mutation>
+      <field name="WHERE1">FROM_START</field>
+      <field name="WHERE2">LAST</field>
+      <value name="LIST">
+        <block type="variables_get" id="458" disabled="true">
+        <mutation datatype="Array_String"></mutation>
+          <field name="VAR">liste</field>
+        </block>
+      </value>
+      <value name="AT1">
+        <block type="math_number" id="461" disabled="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

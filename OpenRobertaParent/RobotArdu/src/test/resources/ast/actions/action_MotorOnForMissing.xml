@@ -1,0 +1,26 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+ <instance x="62" y="103">
+    <block type="robActions_motor_on_for" id="74" inline="false" disabled="true">
+      <field name="MOTORPORT">B</field>
+      <field name="MOTORROTATION">DEGREE</field>
+    </block>
+    <block type="robActions_motor_on_for" id="86" inline="false" disabled="true">
+      <field name="MOTORPORT">B</field>
+      <field name="MOTORROTATION">ROTATIONS</field>
+      <value name="POWER">
+        <block type="math_number" id="87" disabled="true">
+          <field name="NUM">30</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motor_on_for" id="89" inline="false" disabled="true">
+      <field name="MOTORPORT">B</field>
+      <field name="MOTORROTATION">ROTATIONS</field>
+      <value name="VALUE">
+        <block type="math_number" id="90" disabled="true">
+          <field name="NUM">30</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

@@ -1,0 +1,79 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="2.0" description="" tags="">
+  <instance x="144" y="42">
+    <block type="robControls_start_ardu" id="J_;}TY0ODYB~IRVORs-w" intask="true" deletable="false">
+      <mutation declare="false">
+      </mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robControls_loopForever_ardu" id="=,TE]N!:Lg|38o-T3O{I" intask="true" deletable="false" movable="false">
+      <statement name="DO">
+        <block type="robActions_display_text_i2c" id="gfJZG~7KNYK#8@8H6%gN" intask="true">
+          <field name="ACTORPORT">L</field>
+          <value name="OUT">
+            <block type="robSensors_infrared_getSample" id="[l}6Z@EpGS0Sr*p1Pk_u" intask="true">
+              <mutation mode="VALUE">
+              </mutation>
+              <field name="MODE">VALUE</field>
+              <field name="SENSORPORT">I</field>
+              <field name="SLOT">
+              </field>
+            </block>
+          </value>
+          <value name="ROW">
+            <block type="math_number" id="R_2)gTBVjHuxTTJ~@S`U" intask="true">
+              <field name="NUM">1</field>
+            </block>
+          </value>
+          <value name="COL">
+            <block type="math_number" id="]fiT0{*Q7v^1r?*I3OUb" intask="true">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+        <block type="robControls_wait_time" id="9:TTont9?H4jD@v!`RMR" intask="true">
+          <value name="WAIT">
+            <block type="math_number" id="79TNY2{X8D6aZN6@^G+N" intask="true">
+              <field name="NUM">2000</field>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_display_clear_i2c" id="h!.ub.R*@(g.)68_tfiJ" intask="true">
+          <field name="ACTORPORT">L</field>
+        </block>
+        <block type="robActions_display_text_i2c" id="b@9`64(RiUpVQ)]Q;4gi" intask="true">
+          <field name="ACTORPORT">L</field>
+          <value name="OUT">
+            <block type="robSensors_infrared_getSample" id="[fSKK4~mtytRd0Lk6+^r" intask="true">
+              <mutation mode="PRESENCE">
+              </mutation>
+              <field name="MODE">PRESENCE</field>
+              <field name="SENSORPORT">I</field>
+              <field name="SLOT">
+              </field>
+            </block>
+          </value>
+          <value name="ROW">
+            <block type="math_number" id="VyJ^PFI(1Pp,zIZl[a#`" intask="true">
+              <field name="NUM">1</field>
+            </block>
+          </value>
+          <value name="COL">
+            <block type="math_number" id="vIYvK#Wik*S?z~X{P8O~" intask="true">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+        <block type="robControls_wait_time" id="@NV{S9n:O,1O%fcig?hf" intask="true">
+          <value name="WAIT">
+            <block type="math_number" id="]PhTv05v7j9Zw~osVYY?" intask="true">
+              <field name="NUM">2000</field>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_display_clear_i2c" id="RMNYLLxlO-rub`Cl-1*=" intask="true">
+          <field name="ACTORPORT">L</field>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

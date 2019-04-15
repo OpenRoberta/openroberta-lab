@@ -1,0 +1,12 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+<instance x="1" y="55">
+    <block type="robActions_motor_on_for_ardu" id="42" inline="false">
+      <field name="MOTORPORT">A</field>
+      <value name="POWER">
+        <block type="math_number" id="43">
+          <field name="NUM">30</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

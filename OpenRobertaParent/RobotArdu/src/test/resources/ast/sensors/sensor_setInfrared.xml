@@ -1,0 +1,16 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-23" y="157">
+    <block type="robSensors_infrared_getSample" id="82">
+      <mutation mode="OBSTACLE"></mutation>
+      <field name="MODE">OBSTACLE</field>
+      <field name="SENSORPORT">4</field>
+    </block>
+  </instance>
+  <instance x="-19" y="199">
+    <block type="robSensors_infrared_getSample" id="91">
+      <mutation mode="PRESENCE"></mutation>
+      <field name="MODE">PRESENCE</field>
+      <field name="SENSORPORT">3</field>
+    </block>
+  </instance>
+</block_set>

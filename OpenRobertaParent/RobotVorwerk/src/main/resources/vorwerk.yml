@@ -1,0 +1,30 @@
+include: "classpath:/robotCommon.yml"
+block:
+  BRUSH_ON :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.vorwerk.BrushOn
+      type: [vorwerkActions_brush_on]
+  BRUSH_OFF :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.vorwerk.BrushOff
+      type: [vorwerkActions_brush_off]
+  VACUUM_ON :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.vorwerk.VacuumOn
+      type: [vorwerkActions_vacuum_on]
+  VACUUM_OFF :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.vorwerk.VacuumOff
+      type: [vorwerkActions_vacuum_off]
+  SIDE_BRUSH :
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.vorwerk.SideBrush
+      type: [vorwerkActions_side_brush]
+  DROP_OFF_SENSOR :
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensor.vorwerk.DropOffSensor
+      type: [robSensors_drop_off_getSample]
+  WALL_SENSOR :
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensor.vorwerk.WallSensor
+      type: [robSensors_wall_getSample]

@@ -1,0 +1,11 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="75" y="116">
+    <block type="robControls_wait_time" id="95" inline="true" >
+      <value name="WAIT">
+        <block type="math_number" id="96" >
+          <field name="NUM">500</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

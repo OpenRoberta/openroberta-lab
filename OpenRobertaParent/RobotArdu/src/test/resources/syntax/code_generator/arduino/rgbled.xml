@@ -1,0 +1,52 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="2.0" description="" tags="">
+  <instance x="44" y="43">
+    <block type="robControls_start_ardu" id="@TH0@4o44J#H%i-:o__t" intask="true" deletable="false">
+      <mutation declare="false">
+      </mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robControls_loopForever_ardu" id="Ts8lIdH^|5Hm]WFedSH_" intask="true" deletable="false" movable="false">
+      <statement name="DO">
+        <block type="robActions_led_on" id="lDX}%N14dupll~nlAgDm" intask="true">
+          <field name="ACTORPORT">R</field>
+          <value name="COLOR">
+            <block type="naoColour_rgb" id="}5Mo%q:TrW0j?sU1YvH~" intask="true">
+              <value name="RED">
+                <block type="math_number" id="*7Hv+KpK]L.uOa1IcZhz" intask="true">
+                  <field name="NUM">120</field>
+                </block>
+              </value>
+              <value name="GREEN">
+                <block type="math_number" id="`(x8wbFu;0^%5ReLsE[a" intask="true">
+                  <field name="NUM">120</field>
+                </block>
+              </value>
+              <value name="BLUE">
+                <block type="math_number" id="MC;w8o2dOx(i7UhoBGY=" intask="true">
+                  <field name="NUM">120</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robControls_wait_time" id="`kHqeCEOblEFXMY_ahQM" intask="true">
+          <value name="WAIT">
+            <block type="math_number" id="t?1MiYAOPp+^4xo0TZTR" intask="true">
+              <field name="NUM">1000</field>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_led_off" id="Ncl0v[~AU/r{)8qmWtIt" intask="true">
+          <field name="ACTORPORT">R</field>
+        </block>
+        <block type="robControls_wait_time" id="R+tw!JRy2,v1_^tiH|H;" intask="true">
+          <value name="WAIT">
+            <block type="math_number" id="S0WRiT`[aMc(nX-3#2pq" intask="true">
+              <field name="NUM">1000</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

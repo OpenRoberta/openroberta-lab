@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="38" y="238">
+    <block type="robSensors_battery_getSample" id="mMR~I50R!:SOs}7/UInG" intask="true">
+	<mutation mode="VALUE"/>
+	<field name="MODE">VALUE</field>
+	</block>
+  </instance>
+</block_set>

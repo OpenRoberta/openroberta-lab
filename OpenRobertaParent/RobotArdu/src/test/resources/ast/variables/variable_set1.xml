@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-23" y="-797">
+    <block type="variables_get" id="69">
+    <mutation datatype="String"></mutation>
+      <field name="VAR">item</field>
+    </block>
+  </instance>
+</block_set>

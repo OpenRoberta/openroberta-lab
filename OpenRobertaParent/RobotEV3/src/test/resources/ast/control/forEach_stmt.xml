@@ -1,0 +1,66 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+	<instance x="49" y="12">
+		<block type="robControls_start" id="138" deletable="false">
+			<mutation declare="true"></mutation>
+			<field name="DEBUG">FALSE</field>
+			<statement name="ST">
+				<block type="robGlobalvariables_declare" id="140" inline="true" deletable="false" movable="false">
+					<mutation next="false" declaration_type="Array_Colour"></mutation>
+					<field name="VAR">variablenName</field>
+					<field name="TYPE">Array_Colour</field>
+					<value name="VALUE">
+						<block type="robLists_create_with" id="314" inline="false">
+							<mutation items="3" list_type="Colour"></mutation>
+							<field name="LIST_TYPE">Colour</field>
+							<value name="ADD0">
+								<block type="robColour_picker" id="315">
+									<field name="COLOUR">#585858</field>
+								</block>
+							</value>
+							<value name="ADD1">
+								<block type="robColour_picker" id="316">
+									<field name="COLOUR">#b30006</field>
+								</block>
+							</value>
+							<value name="ADD2">
+								<block type="robColour_picker" id="317">
+									<field name="COLOUR">#0057a6</field>
+								</block>
+							</value>
+						</block>
+					</value>
+				</block>
+			</statement>
+		</block>
+		<block type="controls_forEach" id="274" inline="false">
+			<field name="TYPE">Colour</field>
+			<field name="VAR">variablenName2</field>
+			<value name="LIST">
+				<block type="variables_get" id="364">
+					<mutation datatype="Array_Colour"></mutation>
+					<field name="VAR">variablenName</field>
+				</block>
+			</value>
+			<statement name="DO">
+				<block type="robActions_display_text" id="347" inline="false">
+					<value name="OUT">
+						<block type="variables_get" id="361">
+							<mutation datatype="Colour"></mutation>
+							<field name="VAR">variablenName2</field>
+						</block>
+					</value>
+					<value name="COL">
+						<block type="math_number" id="349">
+							<field name="NUM">0</field>
+						</block>
+					</value>
+					<value name="ROW">
+						<block type="math_number" id="350">
+							<field name="NUM">0</field>
+						</block>
+					</value>
+				</block>
+			</statement>
+		</block>
+	</instance>
+</block_set>

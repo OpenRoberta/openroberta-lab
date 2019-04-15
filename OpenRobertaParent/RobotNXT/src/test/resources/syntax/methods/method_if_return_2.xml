@@ -1,0 +1,100 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="1" y="7">
+    <block type="robControls_start" id="21" deletable="false">
+      <mutation declare="true"></mutation>
+      <field name="DEBUG">FALSE</field>
+      <statement name="ST">
+        <block type="robGlobalvariables_declare" id="327" inline="true" deletable="false" movable="false">
+          <mutation next="false" declaration_type="Array_String"></mutation>
+          <field name="VAR">variablenName</field>
+          <field name="TYPE">Array_String</field>
+          <value name="VALUE">
+            <block type="robLists_create_with" id="329" inline="false">
+              <mutation items="3" list_type="String"></mutation>
+              <field name="LIST_TYPE">String</field>
+              <value name="ADD0">
+                <block type="text" id="330">
+                  <field name="TEXT">a</field>
+                </block>
+              </value>
+              <value name="ADD1">
+                <block type="text" id="331">
+                  <field name="TEXT">b</field>
+                </block>
+              </value>
+              <value name="ADD2">
+                <block type="text" id="332">
+                  <field name="TEXT">c</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <block type="robActions_display_text" id="401" inline="false">
+      <value name="OUT">
+        <block type="robProcedures_callreturn" id="418">
+          <mutation name="test" output_type="Colour"></mutation>
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id="403">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id="404">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="622" y="395">
+    <block type="robProcedures_defreturn" id="322" inline="false">
+      <mutation declare="false" return_type="Colour"></mutation>
+      <field name="NAME">test</field>
+      <field name="TYPE">Colour</field>
+      <repetitions>
+        <statement name="STACK">
+          <block type="robProcedures_ifreturn" id="431" inline="true">
+            <mutation value="1" return_type="Colour"></mutation>
+            <value name="CONDITION">
+              <block type="logic_boolean" id="437">
+                <field name="BOOL">TRUE</field>
+              </block>
+            </value>
+            <value name="VALUE">
+              <block type="robColour_picker" id="441">
+                <field name="COLOUR">#b30006</field>
+              </block>
+            </value>
+          </block>
+          <block type="robActions_display_text" id="355" inline="false">
+            <value name="OUT">
+              <block type="variables_get" id="424">
+                <mutation datatype="Array_String"></mutation>
+                <field name="VAR">variablenName</field>
+              </block>
+            </value>
+            <value name="COL">
+              <block type="math_number" id="420">
+                <field name="NUM">0</field>
+              </block>
+            </value>
+            <value name="ROW">
+              <block type="math_number" id="358">
+                <field name="NUM">0</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <value name="RETURN">
+          <block type="robColour_picker" id="427">
+            <field name="COLOUR">#585858</field>
+          </block>
+        </value>
+      </repetitions>
+    </block>
+  </instance>
+</block_set>

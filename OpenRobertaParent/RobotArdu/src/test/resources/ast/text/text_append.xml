@@ -1,0 +1,17 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="14" y="93">
+    <block type="robText_append" id="74" inline="false">
+<value name="VAR">
+        <block type="variables_get" id="52">
+          <mutation datatype="String"></mutation>
+          <field name="VAR">item</field>
+        </block>
+      </value>
+      <value name="TEXT">
+        <block type="text" id="75">
+          <field name="TEXT">text</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

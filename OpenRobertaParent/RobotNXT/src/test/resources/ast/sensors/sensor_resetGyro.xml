@@ -1,0 +1,7 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+      <instance x="-13" y="105">
+    <block type="robSensors_gyro_reset" id="45">
+      <field name="SENSORPORT">2</field>
+    </block>
+  </instance>
+</block_set>

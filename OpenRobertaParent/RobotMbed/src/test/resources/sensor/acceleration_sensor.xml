@@ -1,0 +1,53 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"	robottype="calliope" xmlversion="" description="" tags="" >
+	<instance x="88" y="63">
+		<block type="robControls_start" id="4*ke;53aZxvt]^g0K]Z7"
+			intask="true" deletable="false">
+			<mutation declare="false"></mutation>
+			<field name="DEBUG">FALSE</field>
+		</block>
+		<block type="mbedActions_display_text" id="xQqjnknN(r^0EhX_~:6,"
+			intask="true">
+			<field name="TYPE">TEXT</field>
+			<value name="OUT">
+				<block type="robSensors_accelerometer_getSample" id="v:6DKh[Q!=lWF22wmnP?" intask="true">
+					<mutation mode="VALUE"/>
+					<field name="MODE">VALUE</field>
+					<field name="SENSORPORT">X</field>
+				</block>
+			</value>
+		</block>
+		<block type="mbedActions_display_text" id="W1hjXySAaaaUhPbd.|1L"
+			intask="true">
+			<field name="TYPE">TEXT</field>
+			<value name="OUT">
+				<block type="robSensors_accelerometer_getSample" id="v:6DKh[Q!=lWF22wmnP?" intask="true">
+					<mutation mode="VALUE"/>
+					<field name="MODE">VALUE</field>
+					<field name="SENSORPORT">Y</field>
+				</block>
+			</value>
+		</block>
+		<block type="mbedActions_display_text" id="@`y/eB=LanBF{Ha@4#Xi"
+			intask="true">
+			<field name="TYPE">TEXT</field>
+			<value name="OUT">
+				<block type="robSensors_accelerometer_getSample" id="v:6DKh[Q!=lWF22wmnP?" intask="true">
+					<mutation mode="VALUE"/>
+					<field name="MODE">VALUE</field>
+					<field name="SENSORPORT">Z</field>
+				</block>
+			</value>
+		</block>
+		<block type="mbedActions_display_text" id="BE_X_kM@R-rr-|kVo@yb"
+			intask="true">
+			<field name="TYPE">TEXT</field>
+			<value name="OUT">
+				<block type="robSensors_accelerometer_getSample" id="v:6DKh[Q!=lWF22wmnP?" intask="true">
+					<mutation mode="VALUE"/>
+					<field name="MODE">VALUE</field>
+					<field name="SENSORPORT">STRENGTH</field>
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

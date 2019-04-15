@@ -1,0 +1,149 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="2.0" description="" tags="">
+  <instance x="91" y="-7">
+    <block type="robControls_start_ardu" id="qB?E/SzGVYgYG9QdM1D=" intask="true" deletable="false">
+      <mutation declare="true">
+      </mutation>
+      <field name="DEBUG">FALSE</field>
+      <statement name="ST">
+        <block type="robGlobalVariables_declare" id="JFMO_1{+u,,UCwy5h6`," intask="true" deletable="false" movable="false">
+          <mutation next="false" declaration_type="Number">
+          </mutation>
+          <field name="VAR">item</field>
+          <field name="TYPE">Number</field>
+          <value name="VALUE">
+            <block type="math_number" id="[x%~r#VCL-)cig(KI11p" intask="true">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <block type="robControls_loopForever_ardu" id="Uf3@L~6n#[`oK7462Rf;" intask="true" deletable="false" movable="false">
+      <statement name="DO">
+        <block type="variables_set" id="IngU._xC^U}j+d{ec/g," intask="true">
+          <mutation datatype="Number">
+          </mutation>
+          <field name="VAR">item</field>
+          <value name="VALUE">
+            <block type="robSensors_light_getSample" id="6(3l?GA{o!0;0}#V5V8^" intask="true">
+              <mutation mode="LIGHT">
+              </mutation>
+              <field name="MODE">LIGHT</field>
+              <field name="SENSORPORT">L2</field>
+              <field name="SLOT">
+              </field>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_display_text_i2c" id="SCc~J`Zj7~i`6,P!.a^E" intask="true">
+          <field name="ACTORPORT">L</field>
+          <value name="OUT">
+            <block type="text" id="vHv+R)fhA38L}{Rl:T(%" intask="true">
+              <field name="TEXT">Licht:</field>
+            </block>
+          </value>
+          <value name="ROW">
+            <block type="math_number" id="@X}`NBr-4w(bTqHIR[eM" intask="true">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+          <value name="COL">
+            <block type="math_number" id="X,zrGNyR#A:*A/LcZfB7" intask="true">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_display_text_i2c" id="xSj2[3T8YlqXx~]VHl/*" intask="true">
+          <field name="ACTORPORT">L</field>
+          <value name="OUT">
+            <block type="variables_get" id="B-PdR##Tn[LwKrm7rfXF" intask="true">
+              <mutation datatype="Number">
+              </mutation>
+              <field name="VAR">item</field>
+            </block>
+          </value>
+          <value name="ROW">
+            <block type="math_number" id="AP8Se[dx:?+r[3:%SaI#" intask="true">
+              <field name="NUM">1</field>
+            </block>
+          </value>
+          <value name="COL">
+            <block type="math_number" id="iEg@n{b#nE_7hxH,54+f" intask="true">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+        <block type="robControls_ifElse" id="7%nQBtdsnGgg.g53urf+" intask="true">
+          <mutation else="1">
+          </mutation>
+          <repetitions>
+            <value name="IF0">
+              <block type="logic_compare" id="jqjoTp(mwt;m}/iPPVC~" intask="true">
+                <field name="OP">GTE</field>
+                <value name="A">
+                  <block type="variables_get" id="]O1tLl~9EJGWoC[y6k0?" intask="true">
+                    <mutation datatype="Number">
+                    </mutation>
+                    <field name="VAR">item</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="math_number" id="d*]B+F*^1`Q;i-#DlbN_" intask="true">
+                    <field name="NUM">10</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="robActions_display_text_i2c" id="g#iRIeFm9.~rVVGnOTo#" intask="true">
+                <field name="ACTORPORT">L</field>
+                <value name="OUT">
+                  <block type="text" id="I];yF(M?w*vTe50Z@;g#" intask="true">
+                    <field name="TEXT">%</field>
+                  </block>
+                </value>
+                <value name="ROW">
+                  <block type="math_number" id="Bdu~21PZ;`unPXu0]2mQ" intask="true">
+                    <field name="NUM">1</field>
+                  </block>
+                </value>
+                <value name="COL">
+                  <block type="math_number" id="C26iJqpw:)]d(0NhN)A)" intask="true">
+                    <field name="NUM">7</field>
+                  </block>
+                </value>
+              </block>
+            </statement>
+            <statement name="ELSE">
+              <block type="robActions_display_text_i2c" id="T@#gX!Pfr@*(zSMNept!" intask="true">
+                <field name="ACTORPORT">L</field>
+                <value name="OUT">
+                  <block type="text" id="ZA8xwJGuIckMCa+]Pp7w" intask="true">
+                    <field name="TEXT">%</field>
+                  </block>
+                </value>
+                <value name="ROW">
+                  <block type="math_number" id="u{]IBpeYct6){3^nmI-w" intask="true">
+                    <field name="NUM">1</field>
+                  </block>
+                </value>
+                <value name="COL">
+                  <block type="math_number" id="8VARiDG:j8GUG16F*;1c" intask="true">
+                    <field name="NUM">6</field>
+                  </block>
+                </value>
+              </block>
+            </statement>
+          </repetitions>
+        </block>
+        <block type="robControls_wait_time" id="mC_(4xRpY1SO+Bb/A2i3" intask="true">
+          <value name="WAIT">
+            <block type="math_number" id="#+Y%,In6N!u*]@F/ZS1y" intask="true">
+              <field name="NUM">500</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

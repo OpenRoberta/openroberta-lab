@@ -1,0 +1,26 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="" description="" tags="">
+	<instance x="384" y="50">
+		<block type="robControls_start" id="DB|lwGYp~4QgUWI1PW1F"
+			intask="true" deletable="false">
+			<mutation declare="false" />
+			<field name="DEBUG" />
+		</block>
+		<block type="mbedActions_display_text" id="-]lGn62oZt)pDYAU{=F~"
+			intask="true">
+			<field name="TYPE">TEXT</field>
+			<value name="OUT">
+				<block type="math_number_property" id="P;E}x5Bu06IVU{[c/:N,"
+					intask="true">
+					<mutation divisor_input="false" />
+					<field name="PROPERTY">WHOLE</field>
+					<value name="NUMBER_TO_CHECK">
+						<block type="math_number" id="1G94h6W?i~5(siYvS:bq"
+							intask="true">
+							<field name="NUM">2</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

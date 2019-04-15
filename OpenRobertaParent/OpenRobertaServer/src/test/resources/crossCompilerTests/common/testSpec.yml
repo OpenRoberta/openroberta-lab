@@ -1,0 +1,69 @@
+robots:
+    ev3lejosv1:
+       template: ev3
+    ev3lejosv0:
+       template: ev3
+    ev3dev:
+       template: ev3
+    nxt:
+       template: nxt
+    microbit:
+       template: microbit
+    uno:
+       template: ardu
+    nano:
+       template: ardu
+    mega:
+       template: ardu
+    nao:
+       template: nao
+    bob3:
+       template: bob3
+    calliope2017:
+       template: calliope
+    calliope2016:
+       template: calliope
+    sensebox:
+       template: sensebox
+
+progs:
+    assign:
+       decl: default
+       exclude:
+       remark: "simple assignment. For testing the test only"
+    functionWithWithoutParameter:
+       fragment: functionWithWithoutParameter
+       decl: functionWithWithoutParameter
+       exclude:
+          ALL: "crashes all crosscompilers"
+          bob3: "LedColor is used in the program. Doesn't work here"
+       remark: "functions with various return types, with and without parameters"
+    listOperations:
+       decl: listOperations
+       exclude:
+          nxt: "no extendable lists"
+          bob3: "too small"
+       remark: "test of mutable lists"
+    mathAndLists:
+       decl: mathAndLists
+       exclude:
+          nxt: "no extendable lists"
+          bob3: ".text overflow. Test must be splitted"
+       remark: "list functions and math functions (sum of list items, ...) on lists"
+    mathFunctions:
+       decl: mathFunctions
+       exclude:
+          bob3: ".text overflow. Test must be splitted"
+       remark: "some math functions (min, sin, pi, ...), similar to mathLogic. For testing the test only"
+    mathLogic-1:
+       decl: mathLogic
+       exclude:
+          bob3: ".text overflow. Test must be splitted"
+       fragment: mathLogic
+       remark: "math functions (min, random, ...)"
+    mathLogic-2:
+       decl: mathLogic
+       exclude:
+          bob3: ".text overflow. Test must be splitted"
+       fragment: mathLogic
+       remark: "trigonometric functions (min, sin, pi, ...)"

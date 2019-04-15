@@ -1,0 +1,84 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="calliope" xmlversion="2.0" description="" tags="">
+	<instance x="409" y="-3">
+		<block type="robControls_start" id="Q?^lMDnzhvC)t16daUM2"
+			intask="true" deletable="false">
+			<mutation declare="true"></mutation>
+			<field name="DEBUG">TRUE</field>
+			<statement name="ST">
+				<block type="robGlobalVariables_declare" id=")VxI[%UMrd-xHx=P7ZwQ"
+					intask="true" deletable="false" movable="false">
+					<mutation next="false" declaration_type="Array_Image"></mutation>
+					<field name="VAR">item</field>
+					<field name="TYPE">Array_Image</field>
+					<value name="VALUE">
+						<block type="robLists_create_with" id="4~snTE}7-VF[@Q[R_a^/"
+							intask="true">
+							<mutation items="3" list_type="Image"></mutation>
+							<field name="LIST_TYPE">Image</field>
+							<value name="ADD0">
+								<block type="mbedImage_get_image" id="kdsJV2RE^(CdZJd64Yv,"
+									intask="true">
+									<field name="IMAGE">HEART</field>
+								</block>
+							</value>
+							<value name="ADD1">
+								<block type="mbedImage_get_image" id="rO#eHkzkG~=}8e~x8fF%"
+									intask="true">
+									<field name="IMAGE">HEART_SMALL</field>
+								</block>
+							</value>
+							<value name="ADD2">
+								<block type="mbedImage_get_image" id="Cv#SgAX!oRFqLM1WcqFQ"
+									intask="true">
+									<field name="IMAGE">HEART</field>
+								</block>
+							</value>
+						</block>
+					</value>
+				</block>
+			</statement>
+		</block>
+		<block type="robProcedures_callnoreturn" id="or,7o2ob0jRb}j!X%V-+"
+			intask="true">
+			<mutation name="doSomething">
+				<arg name="x" type="Array_Image"></arg>
+			</mutation>
+			<value name="ARG0">
+				<block type="variables_get" id="/!3A[R.0Pzalp_k9XZ0a" intask="true">
+					<mutation datatype="Array_Image"></mutation>
+					<field name="VAR">item</field>
+				</block>
+			</value>
+		</block>
+	</instance>
+	<instance x="1236" y="352">
+		<block type="robProcedures_defnoreturn" id="~yxRe6+x:C0nk!lrzkP@"
+			intask="true">
+			<mutation declare="true"></mutation>
+			<field name="NAME">doSomething</field>
+			<statement name="ST">
+				<block type="robLocalVariables_declare" id="#B%8@_@g]ss:zd}ni([,"
+					intask="true" deletable="false" movable="false">
+					<mutation next="true" declaration_type="Array_Image"></mutation>
+					<field name="VAR">x</field>
+					<field name="TYPE">Array_Image</field>
+				</block>
+			</statement>
+			<statement name="STACK">
+				<block type="mbedActions_display_image" id="(A=7`;f^Tqh*rh-7722x"
+					intask="true">
+					<mutation type="ANIMATION"></mutation>
+					<field name="TYPE">ANIMATION</field>
+					<value name="VALUE">
+						<block type="variables_get" id="Z^Pip1IKN:m/O9opBKbu"
+							intask="true">
+							<mutation datatype="Array_Image"></mutation>
+							<field name="VAR">x</field>
+						</block>
+					</value>
+				</block>
+			</statement>
+		</block>
+	</instance>
+</block_set>

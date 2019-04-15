@@ -1,0 +1,82 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="nao" xmlversion="" description="" tags="undefined">
+	<instance x="384" y="50">
+		<block type="robControls_start" id="X.1@-BP?O:FI{Lio/jS/"
+			intask="true" deletable="false">
+			<mutation declare="false" />
+			<field name="DEBUG">TRUE</field>
+		</block>
+		<block type="naoControls_wait_for" id="BY2]SL0SN8;;+cxo5{#M"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="I7%F!LbCYQ|2*0a:uXtg"
+					intask="true">
+					<field name="OP">GT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="3}yvEl|)j35Ki*RG2oIa"
+							intask="true">
+							<mutation input="ACCELEROMETER_VALUE" />
+							<field name="SENSORTYPE">ACCELEROMETER_VALUE</field>
+							<field name="SENSORPORT">X</field>
+							<field name="SLOT" />
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="a0v;gNP@N,4]#AILd}a}"
+							intask="true">
+							<field name="NUM">512</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="naoControls_wait_for" id="lo,{NIuotFI8;OD(Nd1y"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="_{Z.KxLA6/|Qb6HO)`V2"
+					intask="true">
+					<field name="OP">GT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="]ptI]c:?G~1-67.VwCH,"
+							intask="true">
+							<mutation input="ACCELEROMETER_VALUE" />
+							<field name="SENSORTYPE">ACCELEROMETER_VALUE</field>
+							<field name="SENSORPORT">Y</field>
+							<field name="SLOT" />
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="NR/*tv+bvQ=m[hWg)]@9"
+							intask="true">
+							<field name="NUM">512</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="naoControls_wait_for" id="IGe@dtVYL@Dlr_waLW/?"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="IJ|#=*Zyy=cLae#phNxm"
+					intask="true">
+					<field name="OP">GT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="9yn4Ki/T]YrL{G0XG~*1"
+							intask="true">
+							<mutation input="ACCELEROMETER_VALUE" />
+							<field name="SENSORTYPE">ACCELEROMETER_VALUE</field>
+							<field name="SENSORPORT">Z</field>
+							<field name="SLOT" />
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="wk!orY#SS,KLKzOP(]6F"
+							intask="true">
+							<field name="NUM">512</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

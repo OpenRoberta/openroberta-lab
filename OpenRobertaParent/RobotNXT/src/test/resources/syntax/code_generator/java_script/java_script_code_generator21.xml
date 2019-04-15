@@ -1,0 +1,101 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="138" y="63">
+    <block type="robControls_start" id="`#WLe*nXzngn4_H4KUnD" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robActions_display_text" id="kky3g0#XHNJ]c]z;}74k" intask="true">
+      <value name="OUT">
+        <block type="math_constrain" id="]c|si{s,dCt)CKm}+#F-" intask="true">
+          <value name="VALUE">
+            <block type="math_number" id=",kKX}}/tCjJ)r?N]hl8C" intask="true">
+              <field name="NUM">200</field>
+            </block>
+          </value>
+          <value name="LOW">
+            <block type="math_number" id="!Z,smmTAWjc,*{mll^Xd" intask="true">
+              <field name="NUM">1</field>
+            </block>
+          </value>
+          <value name="HIGH">
+            <block type="math_number" id="WPiFfwsO|*Dx:ttT,dFp" intask="true">
+              <field name="NUM">100</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id="MIR=19`j:qvPM{I:FIEI" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id="qtvBZ#?^}j-hFgY-QoLO" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_display_text" id="kky3g0#XHNJ]c]z;}74k" intask="true">
+      <value name="OUT">
+        <block type="math_constrain" id="]c|si{s,dCt)CKm}+#F-" intask="true">
+          <value name="VALUE">
+            <block type="math_number" id=",kKX}}/tCjJ)r?N]hl8C" intask="true">
+              <field name="NUM">-200</field>
+            </block>
+          </value>
+          <value name="LOW">
+            <block type="math_number" id="!Z,smmTAWjc,*{mll^Xd" intask="true">
+              <field name="NUM">1</field>
+            </block>
+          </value>
+          <value name="HIGH">
+            <block type="math_number" id="WPiFfwsO|*Dx:ttT,dFp" intask="true">
+              <field name="NUM">100</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id="MIR=19`j:qvPM{I:FIEI" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id="qtvBZ#?^}j-hFgY-QoLO" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_display_text" id="kky3g0#XHNJ]c]z;}74k" intask="true">
+      <value name="OUT">
+        <block type="math_constrain" id="]c|si{s,dCt)CKm}+#F-" intask="true">
+          <value name="VALUE">
+            <block type="math_number" id=",kKX}}/tCjJ)r?N]hl8C" intask="true">
+              <field name="NUM">20</field>
+            </block>
+          </value>
+          <value name="LOW">
+            <block type="math_number" id="!Z,smmTAWjc,*{mll^Xd" intask="true">
+              <field name="NUM">1</field>
+            </block>
+          </value>
+          <value name="HIGH">
+            <block type="math_number" id="WPiFfwsO|*Dx:ttT,dFp" intask="true">
+              <field name="NUM">100</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id="MIR=19`j:qvPM{I:FIEI" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id="qtvBZ#?^}j-hFgY-QoLO" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

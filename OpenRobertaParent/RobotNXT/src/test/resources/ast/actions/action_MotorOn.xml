@@ -1,0 +1,20 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="1" y="1">
+    <block type="robActions_motor_on" id="8" inline="true">
+      <field name="MOTORPORT">B</field>
+      <value name="POWER">
+        <block type="math_number" id="9">
+          <field name="NUM">30</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motor_on" id="8" inline="true">
+      <field name="MOTORPORT">C</field>
+      <value name="POWER">
+        <block type="math_number" id="9">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

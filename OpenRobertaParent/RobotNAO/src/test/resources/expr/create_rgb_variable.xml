@@ -1,0 +1,42 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="nao" xmlversion="" description="" tags="">
+	<instance x="63" y="63">
+		<block type="robControls_start" id="6r~c(|gC;wz*r;?m4#[8"
+			intask="true" deletable="false">
+			<mutation declare="true" />
+			<field name="DEBUG">TRUE</field>
+			<statement name="ST">
+				<block type="robGlobalVariables_declare"
+					id="nY;;X]#)60rqqB3;v-yz" intask="true" deletable="false"
+					movable="false">
+					<mutation next="false" declaration_type="Colour" />
+					<field name="VAR">item</field>
+					<field name="TYPE">Colour</field>
+					<value name="VALUE">
+						<block type="naoColour_rgb" id="r]!f8^dq^]%ny-kG4k0)"
+							intask="true">
+							<value name="RED">
+								<block type="math_number" id="@|-K|P-^|5#Gk3IQ8_.|"
+									intask="true">
+									<field name="NUM">0</field>
+								</block>
+							</value>
+							<value name="GREEN">
+								<block type="math_number" id=")oauK8oG-G;cpkmv:{*Z"
+									intask="true">
+									<field name="NUM">100</field>
+								</block>
+							</value>
+							<value name="BLUE">
+								<block type="math_number" id="Lz8mT~{e98(zJU=EvFcB"
+									intask="true">
+									<field name="NUM">68</field>
+								</block>
+							</value>
+						</block>
+					</value>
+				</block>
+			</statement>
+		</block>
+	</instance>
+</block_set>

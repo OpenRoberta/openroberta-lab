@@ -1,0 +1,36 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+       <instance x="-7" y="1">
+    <block type="robActions_display_text" id="266" inline="false" disabled="true"></block>
+    <block type="robActions_display_text" id="270" inline="false" disabled="true">
+      <value name="OUT">
+        <block type="text" id="271" disabled="true">
+          <field name="TEXT">Hallo</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_display_text" id="274" inline="false" disabled="true">
+      <value name="OUT">
+        <block type="text" id="275" disabled="true">
+          <field name="TEXT">Hallo</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id="277" disabled="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_display_text" id="278" inline="false" disabled="true">
+      <value name="OUT">
+        <block type="text" id="279" disabled="true">
+          <field name="TEXT">Hallo</field>
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id="280" disabled="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

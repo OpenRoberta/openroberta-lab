@@ -1,0 +1,92 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="134" y="55">
+    <block type="robControls_start" id="32" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robActions_display_text" id="286" inline="false">
+      <value name="OUT">
+        <block type="robProcedures_callreturn" id="261" inline="false">
+          <mutation name="macheEtwas" output_type="Number">
+            <arg name="x" type="Colour"></arg>
+          </mutation>
+          <value name="ARG0">
+            <block type="robSensors_colour_getSample" id="52">
+              <mutation mode="COLOUR"></mutation>
+              <field name="MODE">COLOUR</field>
+              <field name="SENSORPORT">3</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id="288">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id="289">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="266" y="354">
+    <block type="robProcedures_defreturn" id="157" inline="false">
+      <mutation declare="true" return_type="Number"></mutation>
+      <field name="NAME">macheEtwas</field>
+      <field name="TYPE">Number</field>
+      <repetitions>
+        <statement name="ST">
+          <block type="robLocalVariables_declare" id="160" deletable="false" movable="false">
+            <mutation next="false" declaration_type="Colour"></mutation>
+            <field name="VAR">x</field>
+            <field name="TYPE">Colour</field>
+          </block>
+        </statement>
+        <statement name="STACK">
+          <block type="robProcedures_ifreturn" id="212" inline="true">
+            <mutation value="1" return_type="Number"></mutation>
+            <value name="CONDITION">
+              <block type="robSensors_touch_getSample" id="219">
+                <field name="SENSORPORT">1</field>
+              </block>
+            </value>
+            <value name="VALUE">
+              <block type="robSensors_infrared_getSample" id="238">
+                <mutation mode="DISTANCE"></mutation>
+                <field name="MODE">DISTANCE</field>
+                <field name="SENSORPORT">4</field>
+              </block>
+            </value>
+          </block>
+          <block type="robActions_display_text" id="174" inline="false">
+            <value name="OUT">
+              <block type="robSensors_gyro_getSample" id="206">
+                <field name="MODE">ANGLE</field>
+                <field name="SENSORPORT">2</field>
+              </block>
+            </value>
+            <value name="COL">
+              <block type="math_number" id="176">
+                <field name="NUM">0</field>
+              </block>
+            </value>
+            <value name="ROW">
+              <block type="math_number" id="177">
+                <field name="NUM">0</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <value name="RETURN">
+          <block type="robSensors_ultrasonic_getSample" id="187">
+            <mutation mode="DISTANCE"></mutation>
+            <field name="MODE">DISTANCE</field>
+            <field name="SENSORPORT">4</field>
+          </block>
+        </value>
+      </repetitions>
+    </block>
+  </instance>
+</block_set>

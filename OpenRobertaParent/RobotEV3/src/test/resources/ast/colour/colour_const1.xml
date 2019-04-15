@@ -1,0 +1,7 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+<instance x="116" y="139">
+    <block type="robColour_picker" id="35" disabled="true">
+      <field name="COLOUR">#532115</field>
+    </block>
+  </instance>
+</block_set>

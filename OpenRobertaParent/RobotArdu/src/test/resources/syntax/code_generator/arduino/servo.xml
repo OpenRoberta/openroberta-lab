@@ -1,0 +1,43 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="2.0" description="" tags="">
+  <instance x="127" y="47">
+    <block type="robControls_start_ardu" id="CFD`_u#wJ9XZ)JPnR{=(" intask="true" deletable="false">
+      <mutation declare="false">
+      </mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robControls_loopForever_ardu" id="3=:f.a|S8.Kn-_Ap:l/Q" intask="true" deletable="false" movable="false">
+      <statement name="DO">
+        <block type="robActions_motor_on_for_ardu" id="wWqw7Zuk+`KUR)+2D|||" intask="true">
+          <field name="MOTORPORT">SERVO</field>
+          <value name="POWER">
+            <block type="math_number" id="Dy#ytr1sQ2WFyWrdDQ_!" intask="true">
+              <field name="NUM">90</field>
+            </block>
+          </value>
+        </block>
+        <block type="robControls_wait_time" id="PJ8Y#AM)Q(]KeIX3Pt!4" intask="true">
+          <value name="WAIT">
+            <block type="math_number" id="6-FH^k@H2xrO#)8_ZEMj" intask="true">
+              <field name="NUM">1000</field>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_motor_on_for_ardu" id="s4a:tFw^p=.]!:Pi*0I3" intask="true">
+          <field name="MOTORPORT">SERVO</field>
+          <value name="POWER">
+            <block type="math_number" id="#(Im@~I/H5?yCF!jo:7j" intask="true">
+              <field name="NUM">270</field>
+            </block>
+          </value>
+        </block>
+        <block type="robControls_wait_time" id=":,`Y;s=z92KmB@~.)fNU" intask="true">
+          <value name="WAIT">
+            <block type="math_number" id="6Oq4Gtq0DTH^;`gRWKbD" intask="true">
+              <field name="NUM">2000</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

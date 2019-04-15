@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="10" y="63">
+    <block type="lists_create_empty" id="307">
+    <mutation list_type="String"></mutation>
+        <field name="LIST_TYPE">String</field>
+    </block>
+  </instance>
+</block_set>

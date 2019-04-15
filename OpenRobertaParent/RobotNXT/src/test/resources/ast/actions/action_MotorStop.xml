@@ -1,0 +1,8 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+   <instance x="-76" y="95">
+    <block type="robActions_motor_stop" id="127">
+      <field name="MOTORPORT">A</field>
+      <field name="MODE">FLOAT</field>
+    </block>
+  </instance>
+</block_set>

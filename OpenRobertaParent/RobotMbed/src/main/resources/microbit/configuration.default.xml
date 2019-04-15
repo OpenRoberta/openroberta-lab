@@ -1,0 +1,5 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbit" xmlversion="">
+    <instance x="138" y="88">
+        <block id="1" type="mbedBrick_microbit-Brick" />
+    </instance>
+</block_set>

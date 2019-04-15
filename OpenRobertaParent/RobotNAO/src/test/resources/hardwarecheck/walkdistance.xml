@@ -1,0 +1,23 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="nao" xmlversion="" description="" tags="undefined">
+	<instance x="384" y="50">
+		<block type="robControls_start" id="-VwmUf{x+.U6K-H~z*g,"
+			intask="true" deletable="false">
+			<mutation declare="false" />
+			<field name="DEBUG">TRUE</field>
+		</block>
+		<block type="naoActions_walk" id="eDRa3aGOj2TohIC;pl.R"
+			intask="true">
+			<field name="DIRECTION">FOREWARD</field>
+			<value name="POWER">
+				<block type="robSensors_ultrasonic_getSample"
+					id="hBZ)sxR:`IpNULtFsxFw" intask="true">
+					<mutation mode="VALUE" />
+					<field name="MODE">DISTANCE</field>
+					<field name="SENSORPORT"></field>
+					<field name="SLOT" />
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

@@ -1,0 +1,23 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="-7" y="54">
+    <block type="robActions_motorDiff_on_for" id="190" inline="false" disabled="true">
+      <field name="DIRECTION">FOREWARD</field>
+    </block>
+    <block type="robActions_motorDiff_on_for" id="193" inline="false" disabled="true">
+      <field name="DIRECTION">FOREWARD</field>
+      <value name="POWER">
+        <block type="math_number" id="194" disabled="true">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motorDiff_on_for" id="196" inline="false" disabled="true">
+      <field name="DIRECTION">FOREWARD</field>
+      <value name="DISTANCE">
+        <block type="math_number" id="198" disabled="true">
+          <field name="NUM">20</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

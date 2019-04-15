@@ -1,0 +1,16 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="" description="" tags="">
+  <instance x="138" y="163">
+    <block type="robControls_start" id="620P}NBy3A}|E4i@Eq.O" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="naoActions_walk" id="oQs*:G%7JGd/1BXY|Y`w" intask="true">
+      <field name="DIRECTION">BACKWARD</field>
+      <value name="POWER">
+        <block type="math_number" id=")mo^]Mw.:l^f]rkJ~Nq=" intask="true">
+          <field name="NUM">70</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

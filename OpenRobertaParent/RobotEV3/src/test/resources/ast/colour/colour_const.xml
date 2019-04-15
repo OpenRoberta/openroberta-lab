@@ -1,0 +1,38 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="41" y="101">
+    <block type="robControls_if" id="31" inline="false" disabled="true">
+      <value name="IF0">
+        <block type="logic_compare" id="34" inline="true" disabled="true">
+          <field name="OP">EQ</field>
+          <value name="A">
+            <block type="robColour_picker" id="94" disabled="true">
+              <field name="COLOUR">#ffffff</field>
+            </block>
+          </value>
+          <value name="B">
+            <block type="robSensors_colour_getSample" id="86" disabled="true">
+              <mutation mode="RGB"></mutation>
+              <field name="MODE">RGB</field>
+              <field name="SENSORPORT">3</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <statement name="DO0">
+        <block type="robActions_motorDiff_on_for" id="61" inline="false" disabled="true">
+          <field name="DIRECTION">FOREWARD</field>
+          <value name="POWER">
+            <block type="math_number" id="62" disabled="true">
+              <field name="NUM">50</field>
+            </block>
+          </value>
+          <value name="DISTANCE">
+            <block type="math_number" id="63" disabled="true">
+              <field name="NUM">20</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

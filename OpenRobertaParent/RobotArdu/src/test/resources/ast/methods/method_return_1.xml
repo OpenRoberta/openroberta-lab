@@ -1,0 +1,45 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="1" y="85">
+    <block type="robProcedures_defreturn" id="21" inline="false">
+      <mutation declare="true" return_type="Number"></mutation>
+      <field name="NAME">test</field>
+      <field name="TYPE">Number</field>
+      <repetitions>
+        <statement name="ST">
+          <block type="robLocalVariables_declare" id="24" deletable="false" movable="false">
+            <mutation next="true" declaration_type="Number"></mutation>
+            <field name="VAR">x</field>
+            <field name="TYPE">Number</field>
+          </block>
+          <block type="robLocalVariables_declare" id="25" deletable="false" movable="false">
+            <mutation next="false" declaration_type="Number"></mutation>
+            <field name="VAR">x2</field>
+            <field name="TYPE">Number</field>
+          </block>
+        </statement>
+        <statement name="STACK">
+          <block type="robActions_motor_on_for" id="39" inline="false">
+            <field name="MOTORPORT">B</field>
+            <field name="MOTORROTATION">ROTATIONS</field>
+            <value name="POWER">
+              <block type="math_number" id="40">
+                <field name="NUM">30</field>
+              </block>
+            </value>
+            <value name="VALUE">
+              <block type="math_number" id="41">
+                <field name="NUM">1</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <value name="RETURN">
+          <block type="variables_get" id="67">
+            <mutation datatype="Number"></mutation>
+            <field name="VAR">x2</field>
+          </block>
+        </value>
+      </repetitions>
+    </block>
+  </instance>
+</block_set>

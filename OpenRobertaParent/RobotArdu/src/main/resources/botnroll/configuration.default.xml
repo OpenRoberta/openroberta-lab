@@ -1,0 +1,54 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ardu" xmlversion="" description="" tags="">
+    <instance x="138" y="88">
+        <block type="robBrick_ardu-Brick" id="1" intask="true" deletable="false">
+            <value name="S1">
+                <block type="robBrick_infrared" id="2" intask="true" deletable="false" movable="false"></block>
+            </value>
+            <value name="S2">
+                <block type="robBrick_infrared" id="3" intask="true" deletable="false" movable="false"></block>
+            </value>
+            <value name="MB">
+                <block type="robBrick_motor_middle" id="4" intask="true" deletable="false" movable="false">
+                    <field name="MOTOR_REGULATION">TRUE</field>
+                    <field name="MOTOR_REVERSE">OFF</field>
+                </block>
+            </value>
+            <value name="MA">
+                <block type="robBrick_motor_middle" id="5" intask="true" deletable="false" movable="false">
+                    <field name="MOTOR_REGULATION">TRUE</field>
+                    <field name="MOTOR_REVERSE">OFF</field>
+                </block>
+            </value>
+            <value name="S3">
+                <block type="robBrick_light" id="6" intask="true" deletable="false" movable="false"></block>
+            </value>
+            <value name="S4">
+                <block type="robBrick_compass" id="7" intask="true" deletable="false" movable="false"></block>
+            </value>
+            <value name="S5">
+                <block type="robBrick_ultrasonic" id="8" intask="true" deletable="false" movable="false"></block>
+            </value>
+            <value name="S6">
+                <block type="robBrick_ultrasonic" id="9" intask="true" deletable="false" movable="false"></block>
+            </value>
+            <value name="S7">
+                <block type="robBrick_ultrasonic" id="10" intask="true" deletable="false" movable="false"></block>
+            </value>
+            <value name="S8">
+                <block type="robBrick_colour" id="11" intask="true" deletable="false" movable="false"></block>
+            </value>
+            <value name="S9">
+                <block type="robBrick_colour" id="12" intask="true" deletable="false" movable="false"></block>
+            </value>
+            <value name="S10">
+                <block type="robBrick_ultrasonic" id="13" intask="true" deletable="false" movable="false"></block>
+            </value>
+            <value name="MC">
+                <block type="robBrick_motor_ardu" id="14" intask="true" deletable="false" movable="false"></block>
+            </value>
+            <value name="MD">
+                <block type="robBrick_motor_ardu" id="15" intask="true" deletable="false" movable="false"></block>
+            </value>
+        </block>
+    </instance>
+</block_set>

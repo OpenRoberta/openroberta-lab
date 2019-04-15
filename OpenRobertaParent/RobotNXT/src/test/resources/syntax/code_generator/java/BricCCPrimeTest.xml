@@ -1,0 +1,16 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="62" y="62">
+    <block type="robControls_start" id="$}@k0))c~d,.Cl:_Vdt]" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robControls_if" id="vk|]bq6$a;##4Q+`^HHV" intask="true">
+      <value name="IF0">
+        <block type="math_number_property" id=")%(QRiJC|lM?5Hc{G|n3" intask="true">
+          <mutation divisor_input="false"></mutation>
+          <field name="PROPERTY">PRIME</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

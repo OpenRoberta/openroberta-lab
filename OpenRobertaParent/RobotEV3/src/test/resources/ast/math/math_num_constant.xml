@@ -1,0 +1,7 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+     <instance x="-15" y="-845">
+    <block type="math_number" id="66">
+      <field name="NUM">0</field>
+    </block>
+  </instance>
+</block_set>

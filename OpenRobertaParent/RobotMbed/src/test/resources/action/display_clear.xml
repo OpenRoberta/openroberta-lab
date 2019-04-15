@@ -1,0 +1,9 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="" description="" tags="">
+  <instance x="13" y="13">
+    <block type="robControls_start" id="}#nRZiG{/E-^lR6T=|hP" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="mbedActions_display_clear" id="O6*I_a,.F_(Pl#=fY/dR" intask="true"></block>
+  </instance>
+</block_set>

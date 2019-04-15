@@ -1,0 +1,38 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="vorwerk" xmlversion="" description="" tags="">
+	<instance x="349" y="50">
+		<block type="robControls_start" id="^u1sNzqU#]*kNR8Ar0ng"
+			intask="true" deletable="false">
+			<mutation declare="true" />
+			<field name="DEBUG">FALSE</field>
+			<statement name="ST">
+				<block type="robGlobalVariables_declare"
+					id="W7sNZFXN}vH^#Z9iZ4SF" intask="true" deletable="false"
+					movable="false">
+					<mutation next="false" declaration_type="Number" />
+					<field name="VAR">item</field>
+					<field name="TYPE">Number</field>
+					<value name="VALUE">
+						<block type="math_number" id="jL6`aJvPo@AbZRe4vnsD"
+							intask="true">
+							<field name="NUM">0</field>
+						</block>
+					</value>
+				</block>
+			</statement>
+		</block>
+		<block type="variables_set" id="OO{Ta`fWB;[BORvMdFM8"
+			intask="true">
+			<mutation datatype="Number" />
+			<field name="VAR">item</field>
+			<value name="VALUE">
+				<block type="robSensors_wall_getSample"
+					id="HXhTn8l2JAS%6lSK*`ky" intask="true">
+					<mutation mode="DISTANCE" />
+					<field name="MODE">DISTANCE</field>
+					<field name="SLOT" />
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

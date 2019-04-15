@@ -1,0 +1,35 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="9" y="3">
+    <block type="robControls_start" id="lNJm52Yw5Y$weEY!]POz" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">TRUE</field>
+    </block>
+    <block type="robActions_display_picture" id="0do=whGfwxk6s~r]|,{N" intask="true">
+      <field name="PICTURE">OLDGLASSES</field>
+      <value name="X">
+        <block type="math_number" id="rcZBD$x;]+6(s[5xr4u_" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="Y">
+        <block type="math_number" id="I}5_0o|/~OKbHytVtzW`" intask="true">
+          <field name="NUM">11</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_display_picture" id="0do=whGfwxk6s~r]|,{N" intask="true">
+      <field name="PICTURE">EYESOPEN</field>
+      <value name="X">
+        <block type="math_number" id="rcZBD$x;]+6(s[5xr4u_" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="Y">
+        <block type="math_number" id="I}5_0o|/~OKbHytVtzW`" intask="true">
+          <field name="NUM">11</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_display_clear" id="(6duMV?9JOrw5H8Zeg71" intask="true"></block>
+  </instance>
+</block_set>

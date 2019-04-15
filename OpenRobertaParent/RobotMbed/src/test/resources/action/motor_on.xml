@@ -1,0 +1,36 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="calliope" xmlversion="" description="" tags="">
+	<instance x="163" y="62">
+		<block type="mbedControls_start" id="Q2XU]%wFv#A0o1dp+*K0"
+			intask="true" deletable="false">
+			<mutation declare="false"></mutation>
+		</block>
+		<block type="mbedActions_motor_on" id="{3r=h0rKU:M[[V]bdEBg"
+			intask="true">
+			<field name="MOTORPORT">A</field>
+			<value name="POWER">
+				<block type="math_number" id=".-Y5!*tf%U@Zi__(8F}^" intask="true">
+					<field name="NUM">30</field>
+				</block>
+			</value>
+		</block>
+		<block type="mbedActions_motor_on" id="lgH7ZpWWIW|I9{#4gwH9"
+			intask="true">
+			<field name="MOTORPORT">B</field>
+			<value name="POWER">
+				<block type="math_number" id="s2yge_X0|R;kQW5/Xc5T" intask="true">
+					<field name="NUM">30</field>
+				</block>
+			</value>
+		</block>
+		<block type="mbedActions_motor_on" id="X^[U@F~zEGolPV(l+woq"
+			intask="true">
+			<field name="MOTORPORT">AB</field>
+			<value name="POWER">
+				<block type="math_number" id="kTzNk:~9lmbFZ-Yrr8Z8" intask="true">
+					<field name="NUM">30</field>
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

@@ -1,0 +1,17 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-616" y="42">
+    <block type="text_join" id="192" inline="false">
+      <mutation items="3"></mutation>
+      <value name="ADD0">
+        <block type="text" id="176">
+          <field name="TEXT">text1</field>
+        </block>
+      </value>
+      <value name="ADD2">
+        <block type="text" id="193">
+          <field name="TEXT">text2</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

@@ -1,0 +1,41 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-143" y="-19">
+    <block type="robControls_if" id="310" inline="false" >
+      <value name="IF0">
+        <block type="logic_compare" id="331" inline="true" >
+          <field name="OP">EQ</field>
+          <value name="A">
+            <block type="math_number" id="338" >
+              <field name="NUM">0</field>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_trig" id="222" inline="false" >
+              <field name="OP">SIN</field>
+              <value name="NUM">
+                <block type="math_number" id="238" >
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+      <statement name="DO0">
+        <block type="robActions_motorDiff_on" id="341" inline="false" >
+          <field name="DIRECTION">FOREWARD</field>
+          <value name="POWER">
+            <block type="math_trig" id="354" inline="false" >
+              <field name="OP">ACOS</field>
+              <value name="NUM">
+                <block type="math_number" id="238" >
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

@@ -1,0 +1,16 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+   <instance x="9" y="47">
+    <block type="robActions_play_tone" id="23" inline="false">
+      <value name="FREQUENCE">
+        <block type="math_number" id="24">
+          <field name="NUM">300</field>
+        </block>
+      </value>
+      <value name="DURATION">
+        <block type="math_number" id="25">
+          <field name="NUM">100</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

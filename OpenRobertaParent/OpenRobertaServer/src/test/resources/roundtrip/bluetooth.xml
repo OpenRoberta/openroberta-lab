@@ -1,0 +1,66 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="97" y="7">
+    <block type="robControls_start" id="47" intask="true" deletable="false">
+      <mutation declare="true"></mutation>
+      <statement name="ST">
+        <block type="robGlobalVariables_declare" id="122" inline="true" intask="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Connection"></mutation>
+          <field name="VAR">variablenName2</field>
+          <field name="TYPE">Connection</field>
+          <value name="VALUE">
+            <block type="robCommunication_waitForConnection" id="167" intask="true"></block>
+          </value>
+        </block>
+        <block type="robGlobalVariables_declare" id="193" inline="true" intask="true" deletable="false" movable="false">
+          <mutation next="false" declaration_type="Connection"></mutation>
+          <field name="VAR">variablenName</field>
+          <field name="TYPE">Connection</field>
+          <value name="VALUE">
+            <block type="robCommunication_startConnection" id="195" inline="true" intask="true">
+              <value name="ADDRESS">
+                <block type="text" id="211" intask="true">
+                  <field name="TEXT"></field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <block type="robCommunication_sendBlock" id="217" inline="false" intask="true">
+      <value name="sendData">
+        <block type="text" id="223" intask="true">
+          <field name="TEXT"></field>
+        </block>
+      </value>
+      <value name="CONNECTION">
+        <block type="variables_get" id="221" intask="true">
+          <mutation datatype="Connection"></mutation>
+          <field name="VAR">variablenName</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_display_text" id="173" inline="false" intask="true">
+      <value name="OUT">
+        <block type="robCommunication_receiveBlock" id="187" inline="false" intask="true">
+          <value name="CONNECTION">
+            <block type="variables_get" id="190" intask="true">
+              <mutation datatype="Connection"></mutation>
+              <field name="VAR">variablenName2</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id="175" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id="176" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

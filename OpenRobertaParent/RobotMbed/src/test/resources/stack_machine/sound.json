@@ -1,0 +1,45 @@
+{
+	"ops": [
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "300"
+		},
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "100"
+		},
+		{
+			"opc": "ToneAction"
+		},
+		{
+			"duration": "2000",
+			"opc": "playNoteAction",
+			"frequency": "261.626"
+		},
+		{
+			"duration": "1000",
+			"opc": "playNoteAction",
+			"frequency": "261.626"
+		},
+		{
+			"duration": "500",
+			"opc": "playNoteAction",
+			"frequency": "261.626"
+		},
+		{
+			"duration": "250",
+			"opc": "playNoteAction",
+			"frequency": "261.626"
+		},
+		{
+			"duration": "125",
+			"opc": "playNoteAction",
+			"frequency": "261.626"
+		}
+	],
+	"functionDeclaration": {
+		
+	}
+}

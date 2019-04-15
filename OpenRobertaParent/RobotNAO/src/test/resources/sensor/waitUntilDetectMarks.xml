@@ -1,0 +1,34 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="nao" xmlversion="" description="" tags="undefined">
+	<instance x="349" y="50">
+		<block type="robControls_start" id="[2APIk*p?GWxy`?!MZ|m"
+			intask="true" deletable="false">
+			<mutation declare="false" />
+			<field name="DEBUG" />
+		</block>
+		<block type="robControls_wait_for" id="zk(_!jp@sJJ;]L;3]*J]"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="]b09^jCpH(ABgh4Hu@or"
+					intask="true">
+					<field name="OP">EQ</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="FMm)aoDQv~xd|cQcCI-_"
+							intask="true">
+							<mutation input="DETECTMARK_IDONE" />
+							<field name="SENSORTYPE">DETECTMARK_IDONE</field>
+							<field name="SENSORPORT" />
+							<field name="SLOT" />
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="Y*%`1k,EI[jc3,dSEA4p"
+							intask="true">
+							<field name="NUM">84</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

@@ -1,0 +1,20 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="calliope" xmlversion="" description="" tags="">
+	<instance x="38" y="38">
+		<block type="mbedControls_start" id="([cvA/ag]F6yf{0oxDI}"
+			intask="true" deletable="false">
+			<mutation declare="false"></mutation>
+		</block>
+		<block type="mbedActions_display_text" id="OP?E.7`[qM3ZJTb}(I:0"
+			intask="true">
+			<field name="TYPE">TEXT</field>
+			<value name="OUT">
+				<block type="mbedCommunication_receiveBlock" id="*)79(b*89UME;@`H3wIO"
+					intask="true">
+					<mutation datatype="String"></mutation>
+					<field name="TYPE">String</field>
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

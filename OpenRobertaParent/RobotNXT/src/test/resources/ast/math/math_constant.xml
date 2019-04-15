@@ -1,0 +1,12 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+    <instance x="131" y="-615">
+    <block type="math_trig" id="306" inline="false">
+      <field name="OP">COS</field>
+      <value name="NUM">
+        <block type="math_constant" id="325">
+          <field name="CONSTANT">E</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

@@ -1,0 +1,21 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-44" y="-399">
+    <block type="math_constrain" id="688" inline="true">
+      <value name="VALUE">
+        <block type="math_number" id="773">
+          <field name="NUM">8</field>
+        </block>
+      </value>
+      <value name="LOW">
+        <block type="math_number" id="689">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+      <value name="HIGH">
+        <block type="math_number" id="690">
+          <field name="NUM">100</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

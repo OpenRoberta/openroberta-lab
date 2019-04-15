@@ -1,0 +1,5 @@
+<toolbox_set id="toolbox" style="display: none">
+    <category name='Brick'>
+        <block type='mbedBrick_Calliope-Brick'></block>
+    </category>
+</toolbox_set>

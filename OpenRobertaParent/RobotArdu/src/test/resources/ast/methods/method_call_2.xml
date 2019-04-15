@@ -1,0 +1,21 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-28" y="85">
+    <block type="robProcedures_defreturn" id="278" inline="false">
+      <mutation declare="false" return_type="String"></mutation>
+      <field name="NAME">Funktionsblock</field>
+      <field name="TYPE">String</field>
+      <repetitions>
+        <value name="RETURN">
+          <block type="text" id="282">
+            <field name="TEXT"></field>
+          </block>
+        </value>
+      </repetitions>
+    </block>
+  </instance>
+  <instance x="-16" y="181">
+    <block type="robProcedures_callreturn" id="294" disabled="true">
+      <mutation name="Funktionsblock" output_type="String"></mutation>
+    </block>
+  </instance>
+</block_set>

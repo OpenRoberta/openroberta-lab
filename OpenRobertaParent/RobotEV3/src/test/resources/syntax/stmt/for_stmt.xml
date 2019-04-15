@@ -1,0 +1,68 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="0" y="-75">
+    <block type="controls_repeat_ext" id="97" inline="true">
+      <value name="TIMES">
+        <block type="math_number" id="98">
+          <field name="NUM">10</field>
+        </block>
+      </value>
+    </block>
+    <block type="controls_repeat_ext" id="99" inline="true">
+      <value name="TIMES">
+        <block type="math_number" id="100">
+          <field name="NUM">10</field>
+        </block>
+      </value>
+      <statement name="DO">
+        <block type="text_print" id="109" inline="false">
+          <value name="TEXT">
+            <block type="text" id="110">
+              <field name="TEXT">15</field>
+            </block>
+          </value>
+        </block>
+        <block type="text_print" id="111" inline="false">
+          <value name="TEXT">
+            <block type="text" id="112">
+              <field name="TEXT">15</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+  <instance x="27" y="200">
+    <block type="controls_repeat_ext" id="107" inline="true">
+      <value name="TIMES">
+        <block type="math_number" id="108">
+          <field name="NUM">10</field>
+        </block>
+      </value>
+      <statement name="DO">
+        <block type="controls_repeat_ext" id="105" inline="true">
+          <value name="TIMES">
+            <block type="math_number" id="106">
+              <field name="NUM">10</field>
+            </block>
+          </value>
+          <statement name="DO">
+            <block type="text_print" id="101" inline="false">
+              <value name="TEXT">
+                <block type="text" id="102">
+                  <field name="TEXT">15</field>
+                </block>
+              </value>
+            </block>
+            <block type="text_print" id="103" inline="false">
+              <value name="TEXT">
+                <block type="text" id="104">
+                  <field name="TEXT">15</field>
+                </block>
+              </value>
+            </block>
+          </statement>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

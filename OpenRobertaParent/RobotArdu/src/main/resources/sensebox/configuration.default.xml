@@ -1,0 +1,37 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="sensebox" xmlversion="2.0" description="" tags="">
+    <instance x="250" y="85">
+        <block type="robBrick_senseBox-Brick" id="DC@kFZs8?McKYe+9Bl3y" intask="true" deletable="false">
+            <mutation items="1"/>
+            <field name="BOX_ID"/>
+            <field name="NAME1">ID1</field>
+            <field name="ID1"/>
+        </block>
+    </instance>
+    <instance x="250" y="191">
+        <block type="robConf_led" id="Tris)a2:6F0Y.;)LAiy|" intask="true" deletable="false">
+            <field name="NAME">R</field>
+            <field name="INPUT">7</field>
+        </block>
+    </instance>
+    <instance x="250" y="299">
+        <block type="robConf_led" id="O)bMmWN5:W1`T:0!R@-a" intask="true" deletable="false">
+            <field name="NAME">G</field>
+            <field name="INPUT">8</field>
+        </block>
+    </instance>
+    <instance x="250" y="407">
+        <block type="robConf_accelerometer" id="9L:HO||CjNS(,!YiSk[P" intask="true" deletable="false">
+            <field name="NAME">B</field>
+        </block>
+    </instance>
+    <instance x="250" y="460">
+        <block type="robConf_gyro" id="9L:HO||CjNS(,!YiSk[P" intask="true" deletable="false">
+            <field name="NAME">K</field>
+        </block>
+    </instance>
+    <instance x="250" y="520">
+        <block type="robConf_compass" id="9L:HO||CjNS(,!YiSk[P" intask="true" deletable="false">
+            <field name="NAME">K2</field>
+        </block>
+    </instance>
+</block_set>

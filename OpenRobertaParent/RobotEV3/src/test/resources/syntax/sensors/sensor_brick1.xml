@@ -1,0 +1,10 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="ev3" xmlversion="" description="" tags="">
+	<instance x="-19" y="1">
+		<block type="robSensors_key_getSample" id="63">
+			<mutation mode="PRESSED" />
+			<field name="MODE">PRESSED</field>
+			<field name="SENSORPORT">ENTER</field>
+		</block>
+	</instance>
+</block_set>

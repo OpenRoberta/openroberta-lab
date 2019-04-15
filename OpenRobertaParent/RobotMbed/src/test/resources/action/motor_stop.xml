@@ -1,0 +1,19 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="calliope" xmlversion="" description="" tags="">
+	<instance x="38" y="38">
+		<block type="mbedControls_start" id="([cvA/ag]F6yf{0oxDI}"
+			intask="true" deletable="false">
+			<mutation declare="false"></mutation>
+		</block>
+		<block type="mbedActions_motor_stop" id="w,SH,Hf:MflU=A]C_bh|"
+			intask="true">
+			<field name="MOTORPORT">A</field>
+			<field name="MODE">FLOAT</field>
+		</block>
+		<block type="mbedActions_motor_stop" id="pFfN=wygj]|ie4m^Ajd2"
+			intask="true">
+			<field name="MOTORPORT">B</field>
+			<field name="MODE">NONFLOAT</field>
+		</block>
+	</instance>
+</block_set>

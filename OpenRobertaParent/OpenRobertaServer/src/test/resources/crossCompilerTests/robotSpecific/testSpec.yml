@@ -1,0 +1,40 @@
+robots:
+    ev3lejosv1:
+        dir: ev3
+        suffix: ".java"
+    ev3lejosv0:
+        dir: ev3
+        suffix: ".java"
+    ev3dev:
+        dir: ev3
+        suffix: ".py"
+    nxt:
+        dir: nxt
+        suffix: ".nxc"
+    microbit:
+        dir: microbit
+        suffix: ".py"
+    uno:
+        dir: ardu
+        suffix: ".ino"
+    nano:
+        dir: ardu
+        suffix: ".ino"
+    mega:
+        dir: ardu
+        suffix: ".ino"
+    nao:
+        dir: nao
+        suffix: ".py"
+    bob3:
+        dir: bob3
+        suffix: ".ino"
+    calliope2017:
+        dir: calliope
+        suffix: ".cpp"
+    calliope2016:
+        dir: calliope
+        suffix: ".cpp"
+    sensebox:
+        dir: sensebox
+        suffix: ".ino"

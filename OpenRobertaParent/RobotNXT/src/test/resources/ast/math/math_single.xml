@@ -1,0 +1,22 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="-7" y="-604">
+    <block type="math_single" id="287" inline="true">
+      <field name="OP">LN</field>
+      <value name="NUM">
+        <block type="math_arithmetic" id="248" inline="true">
+          <field name="OP">POWER</field>
+          <value name="A">
+            <block type="math_number" id="267">
+              <field name="NUM">5</field>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_number" id="268">
+              <field name="NUM">8</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

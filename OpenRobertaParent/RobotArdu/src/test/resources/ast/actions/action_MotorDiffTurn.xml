@@ -1,0 +1,12 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="29" y="89">
+    <block type="robActions_motorDiff_turn" id="173" inline="false">
+      <field name="DIRECTION">RIGHT</field>
+      <value name="POWER">
+        <block type="math_number" id="174">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

@@ -1,0 +1,18 @@
+{
+	"ops": [
+		{
+			"opc": "expr",
+			"expr": "COLOR_CONST",
+			"value": "#FF0000"
+		},
+		{
+			"opc": "ledOnAction"
+		},
+		{
+			"opc": "ledOffAction"
+		}
+	],
+	"functionDeclaration": {
+		
+	}
+}

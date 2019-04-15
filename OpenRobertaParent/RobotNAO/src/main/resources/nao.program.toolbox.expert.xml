@@ -1,0 +1,394 @@
+<toolbox_set id="toolbox" style="display: none">
+  <category name="TOOLBOX_ACTION" svg="true">
+    <category name="TOOLBOX_MOVE" svg="true">
+      <block type="naoActions_applyPosture"/>
+      <block type="naoActions_hand"/>
+      <block type="naoActions_moveJoint">
+        <value name="POWER">
+          <block type="math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+      </block>
+      <block type="naoActions_stiffness"/>
+    </category>
+    <category name="TOOLBOX_WALK" svg="true">
+      <block type="naoActions_walk">
+        <field name="DIRECTION">FOREWARD</field>
+        <value name="POWER">
+          <block type="math_number">
+            <field name="NUM">50</field>
+          </block>
+        </value>
+      </block>
+      <block type="naoActions_turn">
+        <field name="DIRECTION">LEFT</field>
+        <value name="POWER">
+          <block type="math_number">
+            <field name="NUM">90</field>
+          </block>
+        </value>
+      </block>
+      <block type="naoActions_walkTo">
+        <value name="X">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+        <value name="Y">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+        <value name="Theta">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+      </block>
+      <block type="naoActions_walk_async">
+        <value name="XSpeed">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+        <value name="YSpeed">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+        <value name="ZSpeed">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+      </block>
+      <block type="naoActions_stop"/>
+    </category>
+    <category name="TOOLBOX_ANIMATION" svg="true">
+      <block type="naoActions_animation"/>
+      <block type="naoActions_autonomous"/>
+      <block type="naoActions_pointLookAt">
+        <value name="X">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+        <value name="Y">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+        <value name="Z">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+        <value name="Speed">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+      </block>
+    </category>
+    <category name="TOOLBOX_SOUND" svg="true">
+      <block type="robActions_sayText">
+        <value name="OUT">
+          <block type="text">
+            <field name="TEXT">Hallo</field>
+          </block>
+        </value>
+      </block>
+      <block type="robActions_sayText_parameters">
+        <value name="OUT">
+          <block type="text">
+            <field name="TEXT">Hallo</field>
+          </block>
+        </value>
+        <value name="VOICESPEED">
+          <block type="math_number">
+            <field name="NUM">30</field>
+          </block>
+        </value>
+        <value name="VOICEPITCH">
+          <block type="math_number">
+            <field name="NUM">30</field>
+          </block>
+        </value>
+      </block>
+      <block type="naoActions_getLanguage"/>
+      <block type="robActions_setLanguage">
+        <field name="LANGUAGE">GERMAN</field>
+      </block>
+      <block type="naoActions_getVolume"/>
+      <block type="naoActions_setVolume">
+        <value name="VOLUME">
+          <block type="math_number">
+            <field name="NUM">50</field>
+          </block>
+        </value>
+      </block>
+    </category>
+    <category name="TOOLBOX_VISION" svg="true">
+      <block type="naoActions_learnFace">
+        <value name="NAME">
+          <block type="text">
+            <field name="TEXT">Roberta</field>
+          </block>
+        </value>
+      </block>
+      <block type="naoActions_forgetFace">
+        <value name="NAME">
+          <block type="text">
+            <field name="TEXT">Roberta</field>
+          </block>
+        </value>
+      </block>
+      <block type="naoActions_takePicture">
+        <value name="FILENAME">
+          <block type="text">
+            <field name="TEXT">RobertaPicture</field>
+          </block>
+        </value>
+      </block>
+      <block type="naoActions_recordVideo">
+        <value name="DURATION">
+          <block type="math_number">
+            <field name="NUM">5</field>
+          </block>
+        </value>
+        <value name="FILENAME">
+          <block type="text">
+            <field name="TEXT">RobertaVideo</field>
+          </block>
+        </value>
+      </block>
+    </category>
+    <category name="TOOLBOX_LIGHT" svg="true">
+      <block type="naoActions_rgbLeds">
+        <value name="COLOR">
+          <block type="naoColour_picker">
+            <field name="COLOUR">#ff0000</field>
+          </block>
+        </value>
+      </block>
+      <block type="naoActions_setIntensity">
+        <value name="INTENSITY">
+          <block type="math_number">
+            <field name="NUM">50</field>
+          </block>
+        </value>
+      </block>
+      <block type="naoActions_ledOff"/>
+      <block type="naoActions_ledReset"/>
+      <block type="naoActions_randomEyes">
+        <value name="DURATION">
+          <block type="math_number">
+            <field name="NUM">2</field>
+          </block>
+        </value>
+      </block>
+      <block type="naoActions_rasta">
+        <value name="DURATION">
+          <block type="math_number">
+            <field name="NUM">2</field>
+          </block>
+        </value>
+      </block>
+    </category>
+  </category>
+  <category name="TOOLBOX_SENSOR" svg="true">
+    <block type="robSensors_touch_getSample"/>
+    <block type="robSensors_ultrasonic_getSample"/>
+    <block type="robSensors_detectmark_getSample"/>
+    <block type="naoSensors_getMarkInformation">
+      <value name="VALUE">
+        <block type="math_number">
+          <field name="NUM">84</field>
+        </block>
+      </value>
+    </block>
+    <block type="robSensors_detectface_getSample"/>
+    <block type="naoSensors_getFaceInformation">
+      <value name="VALUE">
+        <block type="text">
+          <field name="TEXT">Roberta</field>
+        </block>
+      </value>
+    </block>
+    <block type="naoSensors_recognizeWord"/>
+    <block type="robSensors_gyro_getSample"/>
+    <block type="robSensors_accelerometer_getSample"/>
+    <block type="robSensors_fsr_getSample"/>
+    <block type="robSensors_electriccurrent_getSample"/>
+  </category>
+  <category name="TOOLBOX_CONTROL" svg="true">
+    <category name="TOOLBOX_DECISION" svg="true">
+      <block type="robControls_if"/>
+      <block type="robControls_ifElse"/>
+    </category>
+    <category name="TOOLBOX_LOOP" svg="true">
+      <block type="robControls_loopForever"/>
+      <block type="controls_whileUntil"/>
+      <block type="controls_repeat_ext">
+        <value name="TIMES">
+          <block type="math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+      </block>
+      <block type="robControls_for">
+        <value name="FROM">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <value name="TO">
+          <block type="math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+        <value name="BY">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+      </block>
+      <block type="robControls_forEach"/>
+      <block type="controls_flow_statements"/>
+    </category>
+    <category name="TOOLBOX_WAIT" svg="true">
+      <block type="robControls_wait_time">
+        <value name="WAIT">
+          <block type="math_number">
+            <field name="NUM">500</field>
+          </block>
+        </value>
+      </block>
+      <block type="robControls_wait"/>
+      <block type="robControls_wait_for">
+        <value name="WAIT0">
+          <block type="logic_compare">
+            <field name="OP">EQ</field>
+            <mutation operator_range="BOOL"/>
+            <value name="A">
+              <block type="robSensors_getSample"/>
+            </value>
+            <value name="B">
+              <block type="logic_boolean"/>
+            </value>
+          </block>
+        </value>
+      </block>
+    </category>
+  </category>
+  <category name="TOOLBOX_LOGIC" svg="true">
+    <block type="logic_compare"/>
+    <block type="logic_operation"/>
+    <block type="logic_negate"/>
+    <block type="logic_boolean"/>
+    <block type="logic_null"/>
+    <block type="logic_ternary"/>
+  </category>
+  <category name="TOOLBOX_MATH" svg="true">
+    <block type="math_number"/>
+    <block type="math_arithmetic"/>
+    <block type="math_single"/>
+    <block type="math_trig"/>
+    <block type="math_constant"/>
+    <block type="math_number_property"/>
+    <block type="robMath_change">
+      <value name="DELTA">
+        <block type="math_number">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+    </block>
+    <block type="math_round"/>
+    <block type="math_on_list"/>
+    <block type="math_modulo"/>
+    <block type="math_constrain">
+      <value name="LOW">
+        <block type="math_number">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+      <value name="HIGH">
+        <block type="math_number">
+          <field name="NUM">100</field>
+        </block>
+      </value>
+    </block>
+    <block type="math_random_int">
+      <value name="FROM">
+        <block type="math_number">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+      <value name="TO">
+        <block type="math_number">
+          <field name="NUM">100</field>
+        </block>
+      </value>
+    </block>
+    <block type="math_random_float"/>
+  </category>
+  <category name="TOOLBOX_TEXT" svg="true">
+    <block type="text"/>
+    <block type="text_comment"/>
+    <block type="robText_join"/>
+    <block type="robText_append"/>
+  </category>
+  <category name="TOOLBOX_LIST" svg="true">
+    <block type="robLists_create_with">
+      <mutation items="0" list_type="Number"/>
+    </block>
+    <block type="robLists_create_with">
+      <mutation items="3" list_type="Number"/>
+      <value name="ADD0">
+        <block type="math_number"/>
+      </value>
+      <value name="ADD1">
+        <block type="math_number"/>
+      </value>
+      <value name="ADD2">
+        <block type="math_number"/>
+      </value>
+    </block>
+    <block type="robLists_repeat">
+      <value name="NUM">
+        <block type="math_number">
+          <field name="NUM">5</field>
+        </block>
+      </value>
+    </block>
+    <block type="robLists_length"/>
+    <block type="robLists_isEmpty"/>
+    <block type="robLists_indexOf"/>
+    <block type="robLists_getIndex"/>
+    <block type="robLists_setIndex"/>
+    <block type="robLists_getSublist"/>
+  </category>
+  <category name="TOOLBOX_COLOUR" svg="true">
+    <block type="naoColour_picker"/>
+    <block type="naoColour_rgb">
+      <value name="RED">
+        <block type="math_number" intask="true">
+          <field name="NUM">120</field>
+        </block>
+      </value>
+      <value name="GREEN">
+        <block type="math_number" intask="true">
+          <field name="NUM">120</field>
+        </block>
+      </value>
+      <value name="BLUE">
+        <block type="math_number" intask="true">
+          <field name="NUM">120</field>
+        </block>
+      </value>
+    </block>
+  </category>
+  <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true"/>
+  <category name="TOOLBOX_PROCEDURE" custom="PROCEDURE" svg="true"/>
+</toolbox_set>

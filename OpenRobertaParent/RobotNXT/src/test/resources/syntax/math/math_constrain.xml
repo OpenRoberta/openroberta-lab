@@ -1,0 +1,22 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="-232" y="247">
+    <block type="math_constrain" id="686" inline="true" >
+      <value name="VALUE">
+        <block type="robSensors_ultrasonic_getSample" id="702" >
+          <field name="MODE">DISTANCE</field>
+          <field name="SENSORPORT">4</field>
+        </block>
+      </value>
+      <value name="LOW">
+        <block type="math_number" id="687" >
+          <field name="NUM">1</field>
+        </block>
+      </value>
+      <value name="HIGH">
+        <block type="math_number" id="688" >
+          <field name="NUM">100</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

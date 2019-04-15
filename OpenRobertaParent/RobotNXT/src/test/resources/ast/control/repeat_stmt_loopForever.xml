@@ -1,0 +1,20 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="1" y="379">
+    <block type="robControls_loopForever" id="11">
+      <statement name="DO">
+        <block type="text_print" id="29" inline="false">
+          <value name="TEXT">
+            <block type="robColour_picker" id="36">
+              <field name="COLOUR">#00642e</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <block type="robControls_loopForever" id="37">
+      <statement name="DO">
+        <block type="text_print" id="38" inline="false"></block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

@@ -1,0 +1,29 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+ <instance x="-436" y="284">
+    <block type="controls_forEach" id="340" inline="false">
+      <field name="TYPE">String</field>
+      <field name="VAR">j</field>
+      <value name="LIST">
+        <block type="lists_create_empty" id="382">
+        <mutation list_type="String"></mutation>
+            <field name="LIST_TYPE">String</field>
+        </block>
+      </value>
+      <statement name="DO">
+        <block type="robText_append" id="426" inline="false">
+           <value name="VAR">
+        <block type="variables_get" id="52">
+          <mutation datatype="String"></mutation>
+          <field name="VAR">item</field>
+        </block>
+      </value>
+          <value name="TEXT">
+            <block type="text" id="427">
+              <field name="TEXT">gg</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

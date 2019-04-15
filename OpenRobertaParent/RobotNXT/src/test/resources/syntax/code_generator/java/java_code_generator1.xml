@@ -1,0 +1,34 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="18" y="79">
+    <block type="robControls_start" id="27" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="controls_repeat_ext" id="121" inline="true">
+      <value name="TIMES">
+        <block type="math_number" id="122">
+          <field name="NUM">10</field>
+        </block>
+      </value>
+      <statement name="DO">
+        <block type="robActions_display_text" id="160" inline="false">
+          <value name="OUT">
+            <block type="text" id="161">
+              <field name="TEXT">Hallo</field>
+            </block>
+          </value>
+          <value name="COL">
+            <block type="math_number" id="162">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+          <value name="ROW">
+            <block type="math_number" id="163">
+              <field name="NUM">3</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

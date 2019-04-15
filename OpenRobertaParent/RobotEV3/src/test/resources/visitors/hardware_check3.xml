@@ -1,0 +1,96 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="ev3" xmlversion="" description="" tags="">
+	<instance x="55" y="187">
+		<block type="robControls_start" id="44" deletable="false">
+			<mutation declare="false"></mutation>
+			<field name="DEBUG">FALSE</field>
+		</block>
+		<block type="robControls_ifElse" id="501" inline="false">
+			<mutation else="1"></mutation>
+			<repetitions>
+				<value name="IF0">
+					<block type="robSensors_touch_getSample" id="503">
+						<field name="SENSORPORT">1</field>
+					</block>
+				</value>
+				<statement name="DO0">
+					<block type="robActions_brickLight_on" id="507">
+						<field name="SWITCH_COLOR">GREEN</field>
+						<field name="SWITCH_BLINK">ON</field>
+					</block>
+				</statement>
+				<statement name="ELSE">
+					<block type="robControls_ifElse" id="508" inline="false">
+						<mutation elseif="1" else="1"></mutation>
+						<repetitions>
+							<value name="IF0">
+								<block type="robSensors_touch_getSample" id="509">
+									<field name="SENSORPORT">1</field>
+								</block>
+							</value>
+							<statement name="DO0">
+								<block type="robActions_brickLight_on" id="510">
+									<field name="SWITCH_COLOR">GREEN</field>
+									<field name="SWITCH_BLINK">ON</field>
+								</block>
+							</statement>
+							<value name="IF1">
+								<block type="logic_compare" id="552" inline="true">
+									<field name="OP">EQ</field>
+									<value name="A">
+										<block type="math_number" id="577">
+											<field name="NUM">0</field>
+										</block>
+									</value>
+									<value name="B">
+										<block type="robSensors_ultrasonic_getSample" id="527">
+											<field name="MODE">DISTANCE</field>
+											<field name="SENSORPORT">4</field>
+										</block>
+									</value>
+								</block>
+							</value>
+							<statement name="DO1">
+								<block type="robActions_display_picture" id="607" inline="false">
+									<field name="PICTURE">FLOWERS</field>
+									<value name="X">
+										<block type="math_number" id="608">
+											<field name="NUM">15</field>
+										</block>
+									</value>
+									<value name="Y">
+										<block type="math_number" id="609">
+											<field name="NUM">15</field>
+										</block>
+									</value>
+								</block>
+							</statement>
+							<statement name="ELSE">
+								<block type="controls_whileUntil" id="633" inline="false">
+									<field name="MODE">UNTIL</field>
+									<value name="BOOL">
+										<block type="robSensors_key_getSample" id="661">
+											<mutation mode="PRESSED" />
+											<field name="MODE">PRESSED</field>
+											<field name="SENSORPORT">UP</field>
+										</block>
+									</value>
+									<statement name="DO">
+										<block type="robActions_motor_on" id="652" inline="false">
+											<field name="MOTORPORT">B</field>
+											<value name="POWER">
+												<block type="math_number" id="653">
+													<field name="NUM">30</field>
+												</block>
+											</value>
+										</block>
+									</statement>
+								</block>
+							</statement>
+						</repetitions>
+					</block>
+				</statement>
+			</repetitions>
+		</block>
+	</instance>
+</block_set>

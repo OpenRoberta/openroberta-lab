@@ -1,0 +1,57 @@
+<block type="robGlobalVariables_declare" id="c/WZkr]K)5C!|Kb[.yXq" intask="true" deletable="false" movable="false">
+    <mutation next="true" declaration_type="Array_Number"></mutation>
+    <field name="VAR">input</field>
+    <field name="TYPE">Array_Number</field>
+    <value name="VALUE">
+        <block type="robLists_create_with" id="CGmV2h3%aIkrlDz2(S4e" intask="true">
+            <mutation items="5" list_type="Number"></mutation>
+            <field name="LIST_TYPE">Number</field>
+            <value name="ADD0">
+                <block type="math_number" id="N~G,poPGt`Ok;epTHObe" intask="true">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+            <value name="ADD1">
+                <block type="math_number" id="*B_90({];)vRQ.,VaoTP" intask="true">
+                    <field name="NUM">2</field>
+                </block>
+            </value>
+            <value name="ADD2">
+                <block type="math_number" id="T+D^yS]*8o-J~]iwhBVX" intask="true">
+                    <field name="NUM">3</field>
+                </block>
+            </value>
+            <value name="ADD3">
+                <block type="math_number" id="e*ST+DAy{8rD:aa!~JM1" intask="true">
+                    <field name="NUM">4</field>
+                </block>
+            </value>
+            <value name="ADD4">
+                <block type="math_number" id="m;nw)P`6R(je+O{[+C`f" intask="true">
+                    <field name="NUM">3</field>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="robGlobalVariables_declare" id="D@k^)8aE5%.,P?b4x[!c" intask="true" deletable="false" movable="false">
+    <mutation next="true" declaration_type="Array_Number"></mutation>
+    <field name="VAR">input2</field>
+    <field name="TYPE">Array_Number</field>
+    <value name="VALUE">
+        <block type="robLists_create_with" id="0FNc^Ds+.|-w{0EcYFP2" intask="true">
+            <mutation items="0" list_type="Number"></mutation>
+            <field name="LIST_TYPE">Number</field>
+        </block>
+    </value>
+</block>
+<block type="robGlobalVariables_declare" id="HPhio?4KzJnOCCc*#?4d" intask="true" deletable="false" movable="false">
+    <mutation next="false" declaration_type="Number"></mutation>
+    <field name="VAR">result</field>
+    <field name="TYPE">Number</field>
+    <value name="VALUE">
+        <block type="math_number" id="k{nwJRowtz4mPcfmMvYL" intask="true">
+            <field name="NUM">0</field>
+        </block>
+    </value>
+</block>

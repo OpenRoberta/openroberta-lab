@@ -1,0 +1,18 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="103" y="38">
+    <block type="robProcedures_defnoreturn" id="180">
+      <mutation declare="false"></mutation>
+      <field name="NAME">do something</field>
+      <statement name="STACK">
+        <block type="robActions_motor_on" id="192" inline="false">
+          <field name="MOTORPORT">B</field>
+          <value name="POWER">
+            <block type="math_number" id="193">
+              <field name="NUM">30</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

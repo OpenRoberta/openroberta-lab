@@ -1,0 +1,31 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+      <instance x="-61" y="180">
+    <block type="logic_ternary" id="243" inline="false">
+      <value name="IF">
+        <block type="logic_compare" id="262" inline="true">
+          <field name="OP">EQ</field>
+          <value name="A">
+            <block type="math_number" id="281">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_number" id="282">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="THEN">
+        <block type="logic_boolean" id="321">
+          <field name="BOOL">FALSE</field>
+        </block>
+      </value>
+      <value name="ELSE">
+        <block type="logic_boolean" id="322">
+          <field name="BOOL">TRUE</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

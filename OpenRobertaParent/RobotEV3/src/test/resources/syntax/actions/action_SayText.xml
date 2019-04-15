@@ -1,0 +1,11 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="" description="" tags="">
+  <instance x="138" y="138">
+    <block type="naoActions_sayText" id="=2?#^?FoMo_|*P75M}tS" intask="true">
+      <value name="OUT">
+        <block type="text" id="lg/;-9.5OW!C03bsjPb@" intask="true">
+          <field name="TEXT">Hello world</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

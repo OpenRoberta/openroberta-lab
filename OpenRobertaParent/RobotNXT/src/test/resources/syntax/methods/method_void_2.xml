@@ -1,0 +1,24 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="93" y="21">
+    <block type="robControls_start" id="34" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robProcedures_callnoreturn" id="85">
+      <mutation name="test"></mutation>
+    </block>
+  </instance>
+  <instance x="443" y="153">
+    <block type="robProcedures_defnoreturn" id="42">
+      <mutation declare="false"></mutation>
+      <field name="NAME">test</field>
+      <statement name="STACK">
+        <block type="robActions_sensorLight_on" id="Xd-@5Bk]fE09eGz9U@Bt" intask="true">
+          <field name="SWITCH_COLOR">RED</field>
+          <field name="SWITCH_STATE">ON</field>
+          <field name="SENSORPORT">3</field>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

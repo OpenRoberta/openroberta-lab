@@ -1,0 +1,29 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+	<instance x="323" y="50">
+		<block type="robControls_start" id="H-dTu@:7~H-2cT6B|kvy" intask="true" deletable="false">
+			<mutation declare="false"></mutation>
+			<field name="DEBUG"></field>
+		</block>
+		<block type="robControls_loopForever" id="^_Z:cn:8KGh]68Ov:Iat" intask="true">
+			<statement name="DO">
+				<block type="robControls_loopForever" id="NyYz|@[HT1UzTA@O;FJ6" intask="true">
+					<statement name="DO">
+						<block type="controls_flow_statements" id="/Y:pWpOn-+T|{LFwq_MV" intask="true">
+							<field name="FLOW">BREAK</field>
+						</block>
+					</statement>
+				</block>
+				<block type="controls_flow_statements" id="?@eB]fFfH_0?kDdUc,Lh" intask="true">
+					<field name="FLOW">BREAK</field>
+				</block>
+			</statement>
+		</block>
+		<block type="robControls_loopForever" id="^hcL(DF?|;+=L/GT0JUx" intask="true">
+			<statement name="DO">
+				<block type="controls_flow_statements" id="m)PR@|z4ztRr8W^d1mv-" intask="true">
+					<field name="FLOW">BREAK</field>
+				</block>
+			</statement>
+		</block>
+	</instance>
+</block_set>

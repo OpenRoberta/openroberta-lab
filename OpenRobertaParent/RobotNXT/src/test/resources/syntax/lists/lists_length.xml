@@ -1,0 +1,27 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="-451" y="132">
+    <block type="lists_length" id="1214" inline="false" >
+      <value name="VALUE">
+        <block type="lists_create_with" id="1226" inline="false" >
+          <mutation items="3"></mutation>
+          <field name="LIST_TYPE">Number</field>
+          <value name="ADD0">
+            <block type="math_number" id="1241" >
+              <field name="NUM">0.1</field>
+            </block>
+          </value>
+          <value name="ADD1">
+            <block type="math_number" id="1260" >
+              <field name="NUM">0.0</field>
+            </block>
+          </value>
+          <value name="ADD2">
+            <block type="math_number" id="1260" >
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

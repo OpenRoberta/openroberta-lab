@@ -1,0 +1,24 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="137" y="188">
+    <block type="robActions_sensorLight_on" id="J+f/a5PkldeTIWfZ,-LJ" intask="false">
+      <field name="SWITCH_COLOR">RED</field>
+      <field name="SWITCH_STATE">ON</field>
+      <field name="SENSORPORT">1</field>
+    </block>
+    <block type="robActions_sensorLight_on" id="`s5ZG=A=wPPo92/31x2I" intask="false">
+      <field name="SWITCH_COLOR">GREEN</field>
+      <field name="SWITCH_STATE">ON</field>
+      <field name="SENSORPORT">2</field>
+    </block>
+    <block type="robActions_sensorLight_on" id="9M)Ye[5-Y1#FZVX#XKIx" intask="false">
+      <field name="SWITCH_COLOR">BLUE</field>
+      <field name="SWITCH_STATE">ON</field>
+      <field name="SENSORPORT">3</field>
+    </block>
+    <block type="robActions_sensorLight_on" id="jg{Qr2GxU^J@;QwS%!Jq" intask="false">
+      <field name="SWITCH_COLOR">RED</field>
+      <field name="SWITCH_STATE">OFF</field>
+      <field name="SENSORPORT">4</field>
+    </block>
+  </instance>
+</block_set>

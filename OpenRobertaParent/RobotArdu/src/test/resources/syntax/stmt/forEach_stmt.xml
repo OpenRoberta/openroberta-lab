@@ -1,0 +1,63 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="63" y="88">
+    <block type="robControls_start" id="V8|v7PN=P4R|!T]8`.Yj" intask="true" deletable="false">
+      <mutation declare="true"></mutation>
+      <field name="DEBUG">FALSE</field>
+      <statement name="ST">
+        <block type="robGlobalVariables_declare" id="Y2=EL`^*9VsS+;/3qP:1" intask="true" deletable="false" movable="false">
+          <mutation next="false" declaration_type="Array_Number"></mutation>
+          <field name="VAR">item2</field>
+          <field name="TYPE">Array_Number</field>
+          <value name="VALUE">
+            <block type="robLists_create_with" id="kB+LeJnAKMc=fR+1)MZ{" intask="true">
+              <mutation items="3" list_type="Number"></mutation>
+              <field name="LIST_TYPE">Number</field>
+              <value name="ADD0">
+                <block type="math_number" id="^4@,(tI.8|aJ!o{mp,ET" intask="true">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+              <value name="ADD1">
+                <block type="math_number" id="`FkNeMaae:iVpd,R4u56" intask="true">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+              <value name="ADD2">
+                <block type="math_number" id="3-BaVwKcV:Pv|1r/;Uy." intask="true">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <block type="robControls_forEach" id="ett~RBGAQZyB?UU0CI!v" intask="true">
+      <mutation list_type="Number"></mutation>
+      <field name="TYPE">Number</field>
+      <field name="VAR">item</field>
+      <value name="LIST">
+        <block type="variables_get" id="K/aZgTr3~e~1}nDvK{ps" intask="true">
+          <mutation datatype="Array_Number"></mutation>
+          <field name="VAR">item2</field>
+        </block>
+      </value>
+      <statement name="DO">
+        <block type="robActions_motorDiff_on_for" id="O-%{`9,59D}#rb-lX6eA" intask="true">
+          <field name="DIRECTION">FOREWARD</field>
+          <value name="POWER">
+            <block type="variables_get" id="I9`*5zx~ACKYlL*ZxgRa" intask="true">
+              <mutation datatype="Number"></mutation>
+              <field name="VAR">item</field>
+            </block>
+          </value>
+          <value name="DISTANCE">
+            <block type="math_number" id="Jr:~mek!O=Mi+B@B*#7a" intask="true">
+              <field name="NUM">100</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

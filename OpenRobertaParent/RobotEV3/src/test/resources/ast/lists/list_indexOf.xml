@@ -1,0 +1,18 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-97" y="351">
+    <block type="lists_indexOf" id="541" inline="true">
+      <field name="END">FIRST</field>
+      <value name="VALUE">
+        <block type="variables_get" id="542">
+          <mutation datatype="Array_String"></mutation>
+          <field name="VAR">liste</field>
+        </block>
+      </value>
+      <value name="FIND">
+        <block type="text" id="558">
+          <field name="TEXT">T1</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

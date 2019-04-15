@@ -1,0 +1,23 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-9" y="3">
+    <block type="robActions_display_picture" id="362" inline="false" disabled="true">
+      <field name="PICTURE">FLOWERS</field>
+    </block>
+    <block type="robActions_display_picture" id="365" inline="false" disabled="true">
+      <field name="PICTURE">OLDGLASSES</field>
+      <value name="X">
+        <block type="math_number" id="366" disabled="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_display_picture" id="368" inline="false" disabled="true">
+      <field name="PICTURE">TACHO</field>
+      <value name="Y">
+        <block type="math_number" id="370" disabled="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

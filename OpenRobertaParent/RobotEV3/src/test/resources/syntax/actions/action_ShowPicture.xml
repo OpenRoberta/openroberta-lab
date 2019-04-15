@@ -1,0 +1,17 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-74" y="64">
+    <block type="robActions_display_picture" id="296" inline="false">
+      <field name="PICTURE">EYESOPEN</field>
+      <value name="X">
+        <block type="math_number" id="297">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="Y">
+        <block type="math_number" id="298">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

@@ -1,0 +1,88 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="172" y="63">
+    <block type="robControls_start" id="57" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robControls_wait_for" id="73" inline="false" intask="true">
+      <value name="WAIT0">
+        <block type="logic_compare" id="74" inline="true" intask="true">
+          <mutation operator_range="NUM"></mutation>
+          <field name="OP">LT</field>
+          <value name="A">
+            <block type="robSensors_getSample" id="75" intask="true" deletable="false" movable="false">
+              <mutation input="COLOUR_LIGHT"></mutation>
+              <field name="SENSORTYPE">COLOUR_LIGHT</field>
+              <field name="SENSORPORT">3</field><field name="SLOT" />
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_number" id="81" intask="true">
+              <field name="NUM">30</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+    <block type="robControls_wait_for" id="85" inline="false" intask="true">
+      <value name="WAIT0">
+        <block type="logic_compare" id="86" inline="true" intask="true">
+          <mutation operator_range="COLOUR"></mutation>
+          <field name="OP">EQ</field>
+          <value name="A">
+            <block type="robSensors_getSample" id="87" intask="true" deletable="false" movable="false">
+              <mutation input="COLOUR_COLOUR"></mutation>
+              <field name="SENSORTYPE">COLOUR_COLOUR</field>
+              <field name="SENSORPORT">3</field><field name="SLOT" />
+            </block>
+          </value>
+          <value name="B">
+            <block type="robColour_picker" id="93" intask="true">
+              <field name="COLOUR">#b30006</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+    <block type="robControls_wait_for" id="94" inline="false" intask="true">
+      <value name="WAIT0">
+        <block type="logic_compare" id="86" inline="true" intask="true">
+          <mutation operator_range="COLOUR"></mutation>
+          <field name="OP">EQ</field>
+          <value name="A">
+            <block type="robSensors_getSample" id="87" intask="true" deletable="false" movable="false">
+              <mutation input="COLOUR_COLOUR"></mutation>
+              <field name="SENSORTYPE">COLOUR_COLOUR</field>
+              <field name="SENSORPORT">3</field><field name="SLOT" />
+            </block>
+          </value>
+          <value name="B">
+            <block type="robColour_picker" id="93" intask="true">
+              <field name="COLOUR">#00642e</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+    <block type="robControls_wait_for" id="99" inline="false" intask="true">
+      <value name="WAIT0">
+        <block type="logic_compare" id="74" inline="true" intask="true">
+          <mutation operator_range="NUM"></mutation>
+          <field name="OP">LT</field>
+          <value name="A">
+            <block type="robSensors_getSample" id="75" intask="true" deletable="false" movable="false">
+              <mutation input="COLOUR_LIGHT"></mutation>
+              <field name="SENSORTYPE">COLOUR_LIGHT</field>
+              <field name="SENSORPORT">3</field><field name="SLOT" />
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_number" id="81" intask="true">
+              <field name="NUM">45</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

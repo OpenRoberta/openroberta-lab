@@ -1,0 +1,23 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="nao" xmlversion="" description="" tags="undefined">
+	<instance x="384" y="50">
+		<block type="robControls_start" id="FInH#_UoHn*2?2jP*`Mn"
+			intask="true" deletable="false">
+			<mutation declare="false" />
+			<field name="DEBUG">TRUE</field>
+		</block>
+		<block type="naoActions_walk" id="QpDZGkytFMUephWZ8*#{"
+			intask="true">
+			<field name="DIRECTION">FOREWARD</field>
+			<value name="POWER">
+				<block type="robSensors_gyro_getSample"
+					id="D_fO%`sj_*7ZX1HJ4d.5" intask="true">
+					<mutation mode="ANGLE" />
+					<field name="MODE">ANGLE</field>
+					<field name="SENSORPORT">X</field>
+					<field name="SLOT" />
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

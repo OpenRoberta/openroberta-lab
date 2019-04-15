@@ -1,0 +1,90 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="151" y="57">
+    <block type="robControls_start" id="41" intask="true" deletable="false">
+      <mutation declare="true"></mutation>
+      <field name="DEBUG">FALSE</field>
+      <statement name="ST">
+        <block type="robGlobalvariables_declare" id="180" inline="true" intask="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Colour"></mutation>
+          <field name="VAR">variablenName</field>
+          <field name="TYPE">Colour</field>
+          <value name="VALUE">
+            <block type="robColour_picker" id="192" intask="true">
+              <field name="COLOUR">#585858</field>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalvariables_declare" id="182" inline="true" intask="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Colour"></mutation>
+          <field name="VAR">variablenName2</field>
+          <field name="TYPE">Colour</field>
+          <value name="VALUE">
+            <block type="robColour_picker" id="193" intask="true">
+              <field name="COLOUR">#000000</field>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalvariables_declare" id="184" inline="true" intask="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Colour"></mutation>
+          <field name="VAR">variablenName3</field>
+          <field name="TYPE">Colour</field>
+          <value name="VALUE">
+            <block type="robColour_picker" id="194" intask="true">
+              <field name="COLOUR">#0057a6</field>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalvariables_declare" id="186" inline="true" intask="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Colour"></mutation>
+          <field name="VAR">variablenName4</field>
+          <field name="TYPE">Colour</field>
+          <value name="VALUE">
+            <block type="robColour_picker" id="195" intask="true">
+              <field name="COLOUR">#00642e</field>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalvariables_declare" id="188" inline="true" intask="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Colour"></mutation>
+          <field name="VAR">variablenName5</field>
+          <field name="TYPE">Colour</field>
+          <value name="VALUE">
+            <block type="robColour_picker" id="196" intask="true">
+              <field name="COLOUR">#f7d117</field>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalvariables_declare" id="190" inline="true" intask="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Colour"></mutation>
+          <field name="VAR">variablenName6</field>
+          <field name="TYPE">Colour</field>
+          <value name="VALUE">
+            <block type="robColour_picker" id="197" intask="true">
+              <field name="COLOUR">#b30006</field>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalvariables_declare" id="198" inline="true" intask="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Colour"></mutation>
+          <field name="VAR">variablenName7</field>
+          <field name="TYPE">Colour</field>
+          <value name="VALUE">
+            <block type="robColour_picker" id="200" intask="true">
+              <field name="COLOUR">#ffffff</field>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalvariables_declare" id="201" inline="true" intask="true" deletable="false" movable="false">
+          <mutation next="false" declaration_type="Colour"></mutation>
+          <field name="VAR">variablenName8</field>
+          <field name="TYPE">Colour</field>
+          <value name="VALUE">
+            <block type="robColour_picker" id="203" intask="true">
+              <field name="COLOUR">#532115</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

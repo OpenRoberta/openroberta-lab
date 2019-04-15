@@ -1,0 +1,37 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="81" y="14">
+    <block type="logic_compare" id="7" inline="true">
+      <field name="OP">NEQ</field>
+      <value name="A">
+        <block type="logic_compare" id="34" inline="true">
+          <field name="OP">GT</field>
+          <value name="A">
+            <block type="math_number" id="26">
+              <field name="NUM">2</field>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_number" id="35">
+              <field name="NUM">2</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="B">
+        <block type="logic_compare" id="37" inline="true">
+          <field name="OP">LT</field>
+          <value name="A">
+            <block type="math_number" id="38">
+              <field name="NUM">6</field>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_number" id="39">
+              <field name="NUM">8</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

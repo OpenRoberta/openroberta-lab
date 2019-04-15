@@ -1,0 +1,634 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="nao" xmlversion="" description="" tags="undefined">
+	<instance x="384" y="50">
+		<block type="robControls_start" id="25_6`y0mRffm@N:!h.1{"
+			intask="true" deletable="false">
+			<mutation declare="false" />
+			<field name="DEBUG" />
+		</block>
+		<block type="robControls_wait_for" id="s89g0RqNDnG?KHU#GS}R"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="_z~:JzN0b2~OX`v!v-*`"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="wHO|N#9Ww;(nuTn4M|7~"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="HEAD" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">HEAD</field>
+							<field name="SLOT">YAW</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="spz7.NF~)]{EMBsvpw@1"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="b1Ty`ohr_-jNYeY^-MEY"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="Yp]ps2|7,/mmu7c~j?t4"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="^0F2mikB!nFkNU17K}Ob"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="HEAD" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">HEAD</field>
+							<field name="SLOT">PITCH</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="S/b`pCH/};|E{]lyQRUs"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="?#H?UbN*[^53*-N[R.D6"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="3^vDnrwpJTI}%d}?6Pg:"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="aFc+G[n|PQzCOh)IS;TP"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="SHOULDER" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">SHOULDER</field>
+							<field name="SLOT">LEFT_PITCH</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="v3Y3=oc=r4Jl_lp}i.M`"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="AZ:b:vbZE@^@%ALjQh|Z"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="Ig)0z@2k*8(Ji*Z0D@-1"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="21*U=]lljKp?yu@V#p_b"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="SHOULDER" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">SHOULDER</field>
+							<field name="SLOT">LEFT_ROLL</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="^Y5?iFY2bQ%gKN?a33x@"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="Am.5o7+LD^H6(ZEq;ESG"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="`x{Pfb_^z#hDRWp0{Ebv"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="z5HBPcl3KESTtW`#JbSD"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="SHOULDER" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">SHOULDER</field>
+							<field name="SLOT">RIGHT_PITCH</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="f}0f.5e4vXNIsI-]g?b."
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="6M]IlCI{;,6(DMc]oPx;"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="jtzaql_g*SgL[D]+]#HF"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="JS:j5RC,I_6Rtb:zheQ."
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="SHOULDER" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">SHOULDER</field>
+							<field name="SLOT">RIGHT_ROLL</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="g1zkF@[UASLHr|n4.QQY"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="-!OnIzPfv)(54@rqu!W."
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="65ZwARX!aJ5p{D:}i.Tp"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="%|0d)9M%`9axVr]I=P_u"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="ELBOW" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">ELBOW</field>
+							<field name="SLOT">LEFT_YAW</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="P7[`i3Af,P/BK:ZtRtbg"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="@M;:E_KfNIOzk^Ha^{gx"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="QDzwg6]Ja7,Y^h;-De@m"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="~}[[D2g?g`m)Tx@7K%{o"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="ELBOW" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">ELBOW</field>
+							<field name="SLOT">LEFT_ROLL</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="Zn=I}zE0BO92](N!bPWO"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="Hr|Q%k2dMl%sqHkq-mU|"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="=fRbFdm/%I[l*MjGLjH6"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="4=9_0xaXw.AeH{sV+@RC"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="ELBOW" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">ELBOW</field>
+							<field name="SLOT">RIGHT_YAW</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="|R(7KVBaoY3~r_Bs]+[("
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="4yTdL|BoYdv^|seirB87"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="y|2?.GMPSxs?|_2~K`F?"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="1PGQwL0-Eqbs]e^|_50z"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="ELBOW" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">ELBOW</field>
+							<field name="SLOT">RIGHT_ROLL</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="vGoq1f}i-E^TA_;85r~_"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="t}rR;:yz]eoR)~kG]%Mi"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="m4,jLoNX2|,Vzy2q7fcU"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="|+Uf55#*?cUABtiePX6m"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="WRIST" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">WRIST</field>
+							<field name="SLOT">LEFT_YAW</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="V]mOk`^/{gvQvvxs@n+f"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="Fd=p8qQ4A|z!XtN=[ytH"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="jr}I3gi-6i@evJ4p/P;T"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="T*-,KK]{M-fCXbMo3.V@"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="WRIST" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">WRIST</field>
+							<field name="SLOT">RIGHT_YAW</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="3(tldn^BTX;aW)mq!ni0"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="yRcr3*)gBk.Vg/`T8+Rt"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="S[TCVI9P_0AQG/fOWd~O"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="Ks~zP-%C/4DzWv^[*86!"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="HAND" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">HAND</field>
+							<field name="SLOT">LEFT</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="tBg(0P|nIU=SM2{%5XQ!"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="p#V6+C[cuk(DENSHcQV~"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="yvk7?2iHdC`!~5V|yzD]"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="jbYVaROdIarC4cK:_tH}"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="HAND" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">HAND</field>
+							<field name="SLOT">RIGHT</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="P5%DcM:8l2^D!6U/=nz`"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="Y(}Fk^piRe,.NnHv.8:R"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="rWuCjX28+XA(WZ-l3Rhg"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id=")b!H+=~zpl[*o_dcDE;S"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="HIP" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">HIP</field>
+							<field name="SLOT">LEFT_YAW_PITCH</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="sYjvfCPK_[^_s`ka7~,I"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="w~gZZN[o.e.)d,QI;+q)"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="_PJI`;[q@5D5V:WY[2YZ"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="^LL-o/!2`R?SS]uQ-kYd"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="HIP" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">HIP</field>
+							<field name="SLOT">LEFT_ROLL</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="b-iex1svjA[R)FB1G.~2"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="na?yVtkgJU`)t*E~^[aB"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="qh2Xj6ZSq5k=z?:%fL*P"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id=")TiW9!--*E/.=B[_%MB3"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="HIP" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">HIP</field>
+							<field name="SLOT">LEFT_PITCH</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="Oc~ct:dbC_hR-rN1O[^a"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="Z;q8Ii51pr8ZYt1zIRjz"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="`3X]9lpN_eJ52@CmFd(d"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="3`cB@wrD,*4wf5@s/Qy1"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="HIP" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">HIP</field>
+							<field name="SLOT">RIGHT_YAW_PITCH</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="L*]%7+~RC;Z4TRg^/!`z"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="|rh4NGxB)6+G?:H_.Ts-"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="c1FbodK6xy_j@6p*dL]o"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="li3+KO*MN+CC8{bjyLRa"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="HIP" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">HIP</field>
+							<field name="SLOT">RIGHT_ROLL</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="XtV+3e2L44OJ0:{@JRYp"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="JE@oIu^Y:^O[.;{IaL/G"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="g9XGJ5iW`UsqOKXL`T=2"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="qOp*zY(Y5Xt(fLXwuIPa"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="HIP" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">HIP</field>
+							<field name="SLOT">RIGHT_PITCH</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="-I;-Mk+a%#kh)r27?Vs{"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="?{y#?v33ANKl[9Mm6PK."
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="aWy*rjo6|il.:tClV{ZN"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="RMlQlD@HrzQ*bw39|m)["
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="KNEE" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">KNEE</field>
+							<field name="SLOT">LEFT_PITCH</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id=")BikgvwR4^zm=q0o_K[P"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="{F`?;4%Wlo5pE+Ps?J6k"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="WWzxKJb)SzrE:=MOIwqb"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="rtGtmy%Rba3h^V:zh|;a"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="KNEE" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">KNEE</field>
+							<field name="SLOT">RIGHT_PITCH</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="zYc3)20ZKH|Y8n!pY^0J"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="eUoZj+DeZT(fN!,|BP60"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="p+/HU=@ykgN!G_SAyEmg"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="lMub~HV9.G[{Dh|;4!|8"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="ANKLE" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">ANKLE</field>
+							<field name="SLOT">LEFT_PITCH</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="l~fV?Q[m^+c58M(qtHW^"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="ReZD^TF9*U9:muOmyK?N"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id=".GrRRzGruoSwC95;x6y/"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="h;b#5G5,cHeDKNvzmmxg"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="ANKLE" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">ANKLE</field>
+							<field name="SLOT">LEFT_ROLL</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="DI3Mxr/06|c}B[0rSbUy"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id=";TdXLSME?!^y3N54,J2t"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="WX!kd;I/0?KFIIHzgx66"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="w866;RtR|gDEBLvdjq!l"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="ANKLE" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">ANKLE</field>
+							<field name="SLOT">RIGHT_PITCH</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="nQ+dMf)W/tG+o%hU81/Z"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robControls_wait_for" id="}zDl9h0N;65WnueAW@7{"
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="FwTA%i;zlJ4iP(NzXAqA"
+					intask="true">
+					<field name="OP">LT</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="3yPKzJYW{9jBSS[IutJF"
+							intask="true">
+							<mutation input="ELECTRICCURRENT_VALUE" port="ANKLE" />
+							<field name="SENSORTYPE">ELECTRICCURRENT_VALUE</field>
+							<field name="SENSORPORT">ANKLE</field>
+							<field name="SLOT">RIGHT_ROLL</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="8S5b}]7I^GD@U4IiFd]B"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

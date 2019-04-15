@@ -1,0 +1,16 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="-50" y="75">
+    <block type="robActions_play_setVolume" id="137" inline="false">
+      <value name="VOLUME">
+        <block type="math_single" id="73" inline="true">
+          <field name="OP">ROOT</field>
+          <value name="NUM">
+            <block type="math_number" id="90">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

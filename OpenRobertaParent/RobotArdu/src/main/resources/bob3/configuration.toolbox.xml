@@ -1,0 +1,6 @@
+<toolbox_set id='toolbox' style='display: none'>
+    <category name='TOOLBOX_SENSOR' svg='true'>
+        <block type='robBrick_infrared'></block>
+        <block type='robBrick_touch'></block>
+    </category>
+</toolbox_set>

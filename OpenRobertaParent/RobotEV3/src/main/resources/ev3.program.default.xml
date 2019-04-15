@@ -1,0 +1,7 @@
+<block_set xmlns='http://www.w3.org/1999/xhtml'>
+    <instance>
+        <block type='robControls_start'>
+            <field name='DEBUG'>FALSE</field>
+        </block>
+    </instance>
+</block_set>

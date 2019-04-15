@@ -1,0 +1,11 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+       <instance x="-93" y="1">
+    <block type="controls_repeat_ext" id="312" inline="true">
+      <value name="TIMES">
+        <block type="math_number" id="313">
+          <field name="NUM">10</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

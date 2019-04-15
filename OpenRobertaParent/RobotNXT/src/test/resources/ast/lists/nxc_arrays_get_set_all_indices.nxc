@@ -1,0 +1,25 @@
+#define WHEELDIAMETER 5.6
+#define TRACKWIDTH 11.0
+#define MAXLINES 8 
+#include "NEPODefs.h" // contains NEPO declarations for the NXC NXT API resources 
+ 
+
+
+float item[3];
+float item2;
+task main() {
+    float __item[] = {0, 0, 0};
+    item = __item;
+    item2 = 0;
+    item[sanitiseFromStart(ArrayLen(item), 0)] = 0;
+    item[sanitiseFromEnd(ArrayLen(item), -1 - 0)] = 0;
+    item[sanitiseFromStart(ArrayLen(item), 0)] = 0;
+    item[sanitiseFromEnd(ArrayLen(item), -1)] = 0;
+    item[sanitiseFromStart(ArrayLen(item), 0)] = 0;
+    item2 = item[sanitiseFromStart(ArrayLen(item), 0)];
+    item2 = item[sanitiseFromEnd(ArrayLen(item), -1 - 0)];
+    item2 = item[sanitiseFromStart(ArrayLen(item), 0)];
+    item2 = item[sanitiseFromEnd(ArrayLen(item), -1)];
+    item2 = item[sanitiseFromStart(ArrayLen(item), 0)];
+}
+

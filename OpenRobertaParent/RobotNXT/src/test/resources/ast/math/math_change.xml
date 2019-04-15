@@ -1,0 +1,33 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="182" y="34">
+    <block type="robControls_start" id="64" deletable="false">
+      <mutation declare="true"></mutation>
+      <field name="DEBUG">FALSE</field>
+      <statement name="ST">
+        <block type="robGlobalvariables_declare" id="66" inline="true" deletable="false" movable="false">
+          <mutation next="false" declaration_type="Number"></mutation>
+          <field name="VAR">variablenName</field>
+          <field name="TYPE">Number</field>
+          <value name="VALUE">
+            <block type="math_number" id="67">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <block type="math_change" id="46" inline="true">
+      <value name="VAR">
+        <block type="variables_get" id="69">
+          <mutation datatype="Number"></mutation>
+          <field name="VAR">variablenName</field>
+        </block>
+      </value>
+      <value name="DELTA">
+        <block type="math_number" id="47">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

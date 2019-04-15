@@ -1,0 +1,18 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="1" y="85">
+    <block type="robProcedures_defreturn" id="21" inline="false">
+      <mutation declare="true" return_type="Boolean"></mutation>
+      <field name="NAME">test</field>
+      <field name="TYPE">Boolean</field>
+      <repetitions>
+        <statement name="ST">
+          <block type="robLocalVariables_declare" id="96" deletable="false" movable="false">
+            <mutation next="false" declaration_type="Number"></mutation>
+            <field name="VAR">x</field>
+            <field name="TYPE">Number</field>
+          </block>
+        </statement>
+      </repetitions>
+    </block>
+  </instance>
+</block_set>

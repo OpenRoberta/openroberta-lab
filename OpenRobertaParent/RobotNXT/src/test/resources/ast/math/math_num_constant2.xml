@@ -1,0 +1,8 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="1" y="1">
+    <block type="math_number" id="41" disabled="true">
+      <field name="NUM">0</field>
+      <comment pinned="false" h="80" w="160">rdgg</comment>
+    </block>
+  </instance>
+</block_set>

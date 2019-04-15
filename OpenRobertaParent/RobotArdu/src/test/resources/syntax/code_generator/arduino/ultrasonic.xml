@@ -1,0 +1,31 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="2.0" description="" tags="">
+  <instance x="127" y="47">
+    <block type="robControls_start_ardu" id="CFD`_u#wJ9XZ)JPnR{=(" intask="true" deletable="false">
+      <mutation declare="false">
+      </mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robControls_loopForever_ardu" id="3=:f.a|S8.Kn-_Ap:l/Q" intask="true" deletable="false" movable="false">
+      <statement name="DO">
+        <block type="robActions_display_text" id="=(|ELKgIQ8Rk?#y}#X=4" intask="true">
+          <field name="ACTORPORT">LCD</field>
+          <value name="OUT">
+            <block type="robSensors_ultrasonic_getSample" id="AL?e4zVFxBekpG_mXN4#" intask="true">
+              <mutation mode="DISTANCE">
+              </mutation>
+              <field name="MODE">DISTANCE</field>
+              <field name="SENSORPORT">ULTRASONIC</field>
+              <field name="SLOT">
+              </field>
+            </block>
+          </value>
+          <value name="ROW">
+            <block type="math_number" id="%d#;y6RZ%nJ9x*e_/kw@" intask="true">
+              <field name="NUM">1</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

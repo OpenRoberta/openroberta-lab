@@ -1,0 +1,52 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="2" y="46">
+    <block type="robControls_start" id="144" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="sim_motor_on" id="218" inline="false" intask="true">
+      <field name="MOTORPORT">B</field>
+      <value name="POWER">
+        <block type="math_number" id="219" intask="true">
+          <field name="NUM">30</field>
+        </block>
+      </value>
+    </block>
+    <block type="sim_motor_on" id="231" inline="false" intask="true">
+      <field name="MOTORPORT">C</field>
+      <value name="POWER">
+        <block type="math_number" id="219" intask="true">
+          <field name="NUM">30</field>
+        </block>
+      </value>
+    </block>
+    <block type="sim_motor_on_for" id="252" inline="false" intask="true">
+      <field name="MOTORPORT">B</field>
+      <field name="MOTORROTATION">ROTATIONS</field>
+      <value name="POWER">
+        <block type="math_number" id="253" intask="true">
+          <field name="NUM">30</field>
+        </block>
+      </value>
+      <value name="VALUE">
+        <block type="math_number" id="254" intask="true">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+    </block>
+    <block type="sim_motor_on_for" id="261" inline="false" intask="true">
+      <field name="MOTORPORT">C</field>
+      <field name="MOTORROTATION">DEGREE</field>
+      <value name="POWER">
+        <block type="math_number" id="253" intask="true">
+          <field name="NUM">30</field>
+        </block>
+      </value>
+      <value name="VALUE">
+        <block type="math_number" id="254" intask="true">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

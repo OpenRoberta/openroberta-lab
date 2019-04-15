@@ -1,0 +1,11 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="" description="" tags="">
+  <instance x="113" y="88">
+    <block type="robControls_start" id="620P}NBy3A}|E4i@Eq.O" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="naoActions_applyPosture" id="|a[yV0[:5SqFiKJ?]=LI" intask="true">
+      <field name="DIRECTION">LYINGBACK</field>
+    </block>
+  </instance>
+</block_set>

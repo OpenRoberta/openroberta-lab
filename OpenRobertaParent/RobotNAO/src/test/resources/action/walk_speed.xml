@@ -1,0 +1,25 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="" description="" tags="">
+  <instance x="138" y="88">
+    <block type="robControls_start" id="620P}NBy3A}|E4i@Eq.O" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="naoActions_walk_async" id="hpIiJeM{P_y=;vvY[i:m" intask="true">
+      <value name="XSpeed">
+        <block type="math_number" id="hEdM19]pE|Gh}*,/nSL]" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="YSpeed">
+        <block type="math_number" id="_M7QlHxbKZ[zG/t6my%4" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ZSpeed">
+        <block type="math_number" id="75f;oWj.rVcy,k]`p!0t" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

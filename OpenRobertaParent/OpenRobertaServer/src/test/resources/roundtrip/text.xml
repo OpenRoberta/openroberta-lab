@@ -1,0 +1,51 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="1" y="7">
+    <block type="robControls_start" id="38" intask="true" deletable="false">
+      <mutation declare="true"></mutation>
+      <statement name="ST">
+        <block type="robGlobalVariables_declare" id="40" inline="true" intask="true" deletable="false" movable="false">
+          <mutation next="false" declaration_type="String"></mutation>
+          <field name="VAR">variablenName</field>
+          <field name="TYPE">String</field>
+          <value name="VALUE">
+            <block type="text" id="42" intask="true">
+              <field name="TEXT"></field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <block type="variables_set" id="50" inline="false" intask="true">
+      <mutation datatype="String"></mutation>
+      <field name="VAR">variablenName</field>
+      <value name="VALUE">
+        <block type="robText_join" id="44" inline="false" intask="true">
+          <mutation items="2"></mutation>
+          <value name="ADD0">
+            <block type="text" id="52" intask="true">
+              <field name="TEXT">1</field>
+            </block>
+          </value>
+          <value name="ADD1">
+            <block type="text" id="57" intask="true">
+              <field name="TEXT">2</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+    <block type="robText_append" id="79" inline="true" intask="true">
+      <value name="VAR">
+        <block type="variables_get" id="83" intask="true">
+          <mutation datatype="String"></mutation>
+          <field name="VAR">variablenName</field>
+        </block>
+      </value>
+      <value name="TEXT">
+        <block type="text" id="80" intask="true">
+          <field name="TEXT">5</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

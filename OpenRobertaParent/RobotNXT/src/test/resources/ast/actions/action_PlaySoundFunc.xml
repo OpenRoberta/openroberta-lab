@@ -1,0 +1,50 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="138" y="213">
+    <block type="robControls_start" id="a_xv^NEjBss}^Hgr3=*W" intask="true" deletable="false">
+      <mutation declare="true"></mutation>
+      <field name="DEBUG">TRUE</field>
+      <statement name="ST">
+        <block type="robGlobalVariables_declare" id="i70!qM^4xZ;so#9`;.~T" intask="true" deletable="false" movable="false">
+          <mutation next="false" declaration_type="Number"></mutation>
+          <field name="VAR">Element</field>
+          <field name="TYPE">Number</field>
+          <value name="VALUE">
+            <block type="math_number" id="]9)jt:HN.iM:P9t0qmKX" intask="true">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <block type="robProcedures_callnoreturn" id="d8mL!ZDJnsc~FTQp9~|," intask="true">
+      <mutation name="macheEtwas"></mutation>
+    </block>
+  </instance>
+  <instance x="163" y="338">
+    <block type="robProcedures_defnoreturn" id="sE%F{-.^O;.wEb?t?u+1" intask="true">
+      <mutation declare="false"></mutation>
+      <field name="NAME">macheEtwas</field>
+      <statement name="STACK">
+        <block type="robActions_play_setVolume" id="n]RG_m)rCRLLM{bb1ay#" intask="true">
+          <value name="VOLUME">
+            <block type="math_number" id="H27`|}Gg]7%34pMUe8;p" intask="true">
+              <field name="NUM">50</field>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_play_tone" id="Q)-;0oG-m|U,w{aO|;Ic" intask="true">
+          <value name="FREQUENCE">
+            <block type="math_number" id="YKT;@(M^NoJQUq5}Udqo" intask="true">
+              <field name="NUM">300</field>
+            </block>
+          </value>
+          <value name="DURATION">
+            <block type="math_number" id="OL[[YeS[ux/!t/Os8rq]" intask="true">
+              <field name="NUM">100</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

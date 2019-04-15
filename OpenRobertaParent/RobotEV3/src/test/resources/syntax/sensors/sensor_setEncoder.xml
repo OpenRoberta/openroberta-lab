@@ -1,0 +1,14 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-20" y="94">
+    <block type="robSensors_encoder_getSample" id="110" >
+      <field name="MODE">ROTATION</field>
+      <field name="SENSORPORT">A</field>
+    </block>
+  </instance>
+  <instance x="-15" y="129">
+    <block type="robSensors_encoder_getSample" id="117" >
+      <field name="MODE">DEGREE</field>
+      <field name="SENSORPORT">D</field>
+    </block>
+  </instance>
+</block_set>

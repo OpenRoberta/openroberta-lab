@@ -1,0 +1,21 @@
+<block_set 
+    xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance x="384" y="50">
+        <block type="robControls_start" id="8NC}Z{-,K/nxwBCp]5SB" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="mbedActions_pin_set_pull" id="(PT[nG2(v?@JZ#0(s~~_" intask="true">
+            <field name="PIN_PULL">UP</field>
+            <field name="PIN_PORT">0</field>
+        </block>
+        <block type="mbedActions_pin_set_pull" id="w[4uSy}Gabm2x(NJfeyd" intask="true">
+            <field name="PIN_PULL">DOWN</field>
+            <field name="PIN_PORT">1</field>
+        </block>
+        <block type="mbedActions_pin_set_pull" id="T(10ub|epJUGm0cLqjoC" intask="true">
+            <field name="PIN_PULL">NONE</field>
+            <field name="PIN_PORT">2</field>
+        </block>
+    </instance>
+</block_set>   

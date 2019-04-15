@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+  <program>
+    <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+      <instance x="384" y="50">
+        <block type="robControls_start" id="bZHviGFXqzZESE9QIL_j" intask="true" deletable="false">
+          <mutation declare="false"/>
+          <field name="DEBUG"/>
+        </block>
+        <block type="mbedActions_leds_on" id="nqx@l}Za[u;aPLm4d{W:" intask="true">
+          <value name="COLOR">
+            <block type="mbedColour_picker" id="j!UJtfm%UV2vQ(BnJTyl" intask="true">
+              <field name="COLOUR">#ff0000</field>
+            </block>
+          </value>
+        </block>
+        <block type="robControls_wait_time" id="-iv2!jbisla=fktM.5Qm" intask="true">
+          <value name="WAIT">
+            <block type="math_number" id="sylLXLG)WVh(k~eATs?U" intask="true">
+              <field name="NUM">1000</field>
+            </block>
+          </value>
+        </block>
+        <block type="mbedActions_leds_on" id="}-i`-LJvWAYcc#}z3a3~" intask="true">
+          <value name="COLOR">
+            <block type="mbedColour_picker" id="1k(_YN#T7W=ykww{#a@w" intask="true">
+              <field name="COLOUR">#009900</field>
+            </block>
+          </value>
+        </block>
+        <block type="robControls_wait_time" id="Eb:^PlpBX*JX~+fh?}19" intask="true">
+          <value name="WAIT">
+            <block type="math_number" id="ISmi6-Z:jpl)[hsBSrnd" intask="true">
+              <field name="NUM">1000</field>
+            </block>
+          </value>
+        </block>
+      </instance>
+    </block_set>
+  </program>
+  <config>
+    <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+      <instance x="138" y="88">
+        <block type="mbedBrick_Calliope-Brick" id="1" intask="true"/>
+      </instance>
+    </block_set>
+  </config>
+</export>

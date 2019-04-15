@@ -1,0 +1,19 @@
+-- GRUPPE PROP
+
+>>>>>> PROP_1 <<<<<<
+ein
+Text für
+Properties 1
+;
+>>>>>> PROP_2 <<<<<<
+ein
+Text für
+Properties 2
+;
+  
+>>>>>> PROP_3 <<<<<<
+ein
+Text für
+Properties 3
+  
+;

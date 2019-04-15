@@ -1,0 +1,20 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+    <instance x="0" y="1">
+    <block type="robControls_activity" id="460" inline="true">
+      <comment pinned="true" h="268" w="300">h#,,</comment>
+      <value name="ACTIVITY">
+        <block type="variables_get" id="461">
+          <field name="VAR">zwei</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motor_on" id="496" inline="false" disabled="true">
+      <field name="MOTORPORT">B</field>
+      <value name="POWER">
+        <block type="math_number" id="497">
+          <field name="NUM">30</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

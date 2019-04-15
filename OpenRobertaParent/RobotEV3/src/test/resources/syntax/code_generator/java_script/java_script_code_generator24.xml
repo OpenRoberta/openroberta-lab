@@ -1,0 +1,25 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="187" y="138">
+    <block type="robControls_start" id="K^5V]1xXovI^7~$5Do*q" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robActions_display_text" id="qpIt3P)]/)?Pwyc{cgY8" intask="true">
+      <value name="OUT">
+        <block type="robActions_motor_getPower" id="/^J:+T^@Nrma:+GP4.Ln" intask="true">
+          <field name="MOTORPORT">B</field>
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id=":}hE+p|bxuH@#dJ,HU-^" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id=",*/G:u5,Fy!0PVj/#kL[" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

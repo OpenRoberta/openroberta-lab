@@ -1,0 +1,99 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="151" y="57">
+    <block type="robControls_start" id="41" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robActions_motorDiff_on" id="50" inline="false" intask="true">
+      <field name="DIRECTION">FOREWARD</field>
+      <value name="POWER">
+        <block type="math_number" id="51" intask="true">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motorDiff_on" id="63" inline="false" intask="true">
+      <field name="DIRECTION">BACKWARD</field>
+      <value name="POWER">
+        <block type="math_number" id="51" intask="true">
+          <field name="NUM">80</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motorDiff_turn" id="72" inline="false" intask="true">
+      <field name="DIRECTION">RIGHT</field>
+      <value name="POWER">
+        <block type="math_number" id="73" intask="true">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motorDiff_turn" id="79" inline="false" intask="true">
+      <field name="DIRECTION">LEFT</field>
+      <value name="POWER">
+        <block type="math_number" id="73" intask="true">
+          <field name="NUM">90</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motorDiff_stop" id="94" intask="true"></block>
+    <block type="robActions_motorDiff_turn_for" id="109" inline="false" intask="true">
+      <field name="DIRECTION">RIGHT</field>
+      <value name="POWER">
+        <block type="math_number" id="110" intask="true">
+          <field name="NUM">80</field>
+        </block>
+      </value>
+      <value name="DEGREE">
+        <block type="math_number" id="111" intask="true">
+          <field name="NUM">20</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motorDiff_turn_for" id="115" inline="false" intask="true">
+      <field name="DIRECTION">LEFT</field>
+      <value name="POWER">
+        <block type="math_number" id="110" intask="true">
+          <field name="NUM">80</field>
+        </block>
+      </value>
+      <value name="DEGREE">
+        <block type="math_number" id="111" intask="true">
+          <field name="NUM">15</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motorDiff_on_for" id="128" inline="false" intask="true">
+      <field name="DIRECTION">FOREWARD</field>
+      <value name="POWER">
+        <block type="math_number" id="129" intask="true">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+      <value name="DISTANCE">
+        <block type="math_number" id="130" intask="true">
+          <field name="NUM">26</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motorDiff_on_for" id="142" inline="false" intask="true">
+      <field name="DIRECTION">BACKWARDS</field>
+      <value name="POWER">
+        <block type="math_number" id="129" intask="true">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+      <value name="DISTANCE">
+        <block type="math_number" id="130" intask="true">
+          <field name="NUM">33</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_sensorLight_on" id="a4*=*n)LdB~|I+I:4mwS" intask="true">
+          <field name="SWITCH_COLOR">RED</field>
+          <field name="SWITCH_STATE">ON</field>
+          <field name="SENSORPORT">3</field>
+        </block>
+    <block type="robActions_brickLight_off" id="177" intask="true"></block>
+  </instance>
+</block_set>

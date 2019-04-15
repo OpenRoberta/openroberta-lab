@@ -1,0 +1,21 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+<instance x="9" y="-434">
+    <block type="logic_negate" id="103" inline="false">
+      <value name="BOOL">
+        <block type="logic_operation" id="131" inline="true">
+          <field name="OP">OR</field>
+          <value name="A">
+            <block type="logic_boolean" id="138">
+              <field name="BOOL">TRUE</field>
+            </block>
+          </value>
+          <value name="B">
+            <block type="logic_boolean" id="139">
+              <field name="BOOL">FALSE</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

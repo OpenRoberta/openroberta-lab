@@ -1,0 +1,73 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="2.0" description="" tags="">
+  <instance x="127" y="47">
+    <block type="robControls_start_ardu" id="CFD`_u#wJ9XZ)JPnR{=(" intask="true" deletable="false">
+      <mutation declare="false">
+      </mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robControls_loopForever_ardu" id="3=:f.a|S8.Kn-_Ap:l/Q" intask="true" deletable="false" movable="false">
+      <statement name="DO">
+        <block type="robActions_display_text" id="=(|ELKgIQ8Rk?#y}#X=4" intask="true">
+          <field name="ACTORPORT">LCD</field>
+          <value name="OUT">
+            <block type="robSensors_timer_getSample" id="Op6rdNm-5t-i|kf,csi4" intask="true">
+              <mutation mode="VALUE">
+              </mutation>
+              <field name="MODE">VALUE</field>
+              <field name="SENSORPORT">1</field>
+              <field name="SLOT">
+              </field>
+            </block>
+          </value>
+          <value name="ROW">
+            <block type="math_number" id="%d#;y6RZ%nJ9x*e_/kw@" intask="true">
+              <field name="NUM">1</field>
+            </block>
+          </value>
+        </block>
+        <block type="robControls_wait_time" id="4*_O[A]YzH1EvH`xHCN0" intask="true">
+          <value name="WAIT">
+            <block type="math_number" id="f9Udv5jkKtcEaPF015+i" intask="true">
+              <field name="NUM">500</field>
+            </block>
+          </value>
+        </block>
+        <block type="robSensors_timer_reset" id="zepLYuc8e~BZ5]vHc,*Y" intask="true">
+          <field name="SENSORPORT">1</field>
+        </block>
+        <block type="robControls_wait_time" id="8t0qF0FhaYo``%W15SCe" intask="true">
+          <value name="WAIT">
+            <block type="math_number" id="_m~5`E}Zq]WL{`^swN(3" intask="true">
+              <field name="NUM">500</field>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_display_text" id="jNSx/iT}0h)@WE5XNN^8" intask="true">
+          <field name="ACTORPORT">LCD</field>
+          <value name="OUT">
+            <block type="robSensors_timer_getSample" id="apwTT*.5C=/qoXLUE*,%" intask="true">
+              <mutation mode="VALUE">
+              </mutation>
+              <field name="MODE">VALUE</field>
+              <field name="SENSORPORT">1</field>
+              <field name="SLOT">
+              </field>
+            </block>
+          </value>
+          <value name="ROW">
+            <block type="math_number" id="gb@^=x!xBs@%b[z~_CIQ" intask="true">
+              <field name="NUM">1</field>
+            </block>
+          </value>
+        </block>
+        <block type="robControls_wait_time" id="^v-aH]X7m#ALiw*%bw`F" intask="true">
+          <value name="WAIT">
+            <block type="math_number" id="fuY-)5q)qrJM?LQks}9-" intask="true">
+              <field name="NUM">500</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

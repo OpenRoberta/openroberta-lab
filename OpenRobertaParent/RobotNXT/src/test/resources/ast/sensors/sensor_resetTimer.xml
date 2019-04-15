@@ -1,0 +1,7 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+    <instance x="-96" y="73">
+        <block type="robSensors_timer_reset" id="833">
+          <field name="SENSORPORT">1</field>
+        </block>
+  </instance>
+</block_set>

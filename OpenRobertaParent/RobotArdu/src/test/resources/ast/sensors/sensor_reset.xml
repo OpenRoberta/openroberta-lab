@@ -1,0 +1,22 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+    <instance x="-96" y="73">
+    <block type="controls_if" id="726" inline="false">
+      <value name="IF0">
+        <block type="robSensors_touch_getSample" id="729">
+          <field name="SENSORPORT">1</field>
+        </block>
+      </value>
+      <statement name="DO0">
+        <block type="robSensors_encoder_reset" id="817">
+          <field name="SENSORPORT">A</field>
+        </block>
+        <block type="robSensors_gyro_reset" id="830">
+          <field name="SENSORPORT">2</field>
+        </block>
+        <block type="robSensors_timer_reset" id="833">
+          <field name="SENSORPORT">1</field>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

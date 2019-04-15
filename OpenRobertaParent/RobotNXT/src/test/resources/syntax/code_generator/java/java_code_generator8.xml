@@ -1,0 +1,103 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="114" y="54">
+    <block type="robControls_start" id="29" deletable="false">
+      <mutation declare="true"></mutation>
+      <field name="DEBUG">FALSE</field>
+      <statement name="ST">
+        <block type="robGlobalvariables_declare" id="84" inline="true" deletable="false" movable="false">
+          <mutation next="true" datatype="Number"></mutation>
+          <field name="TYPE">Number</field>
+          <field name="VAR">item</field>
+          <value name="VALUE">
+            <block type="math_number" id="85">
+              <field name="NUM">10</field>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalvariables_declare" id="86" inline="true" deletable="false" movable="false">
+          <mutation next="true" datatype="String"></mutation>
+          <field name="TYPE">String</field>
+          <field name="VAR">item2</field>
+          <value name="VALUE">
+            <block type="text" id="90">
+              <field name="TEXT">TTTT</field>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalvariables_declare" id="88" inline="true" deletable="false" movable="false">
+          <mutation next="false" datatype="Boolean"></mutation>
+          <field name="TYPE">Boolean</field>
+          <field name="VAR">item3</field>
+          <value name="VALUE">
+            <block type="logic_boolean" id="91">
+              <field name="BOOL">TRUE</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <block type="robActions_display_text" id="109" inline="false">
+      <value name="OUT">
+        <block type="variables_get" id="143">
+          <mutation datatype="Number"></mutation>
+          <field name="VAR">item</field>
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id="111">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id="112">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_display_text" id="121" inline="false">
+      <value name="OUT">
+        <block type="variables_get" id="141">
+          <mutation datatype="String"></mutation>
+          <field name="VAR">item2</field>
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id="111">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id="112">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_display_text" id="121" inline="false">
+      <value name="OUT">
+        <block type="variables_get" id="138">
+          <mutation datatype="Boolean"></mutation>
+          <field name="VAR">item3</field>
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id="111">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id="112">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="variables_set" id="161" inline="false">
+      <mutation datatype="Boolean"></mutation>
+      <field name="VAR">item3</field>
+      <value name="VALUE">
+        <block type="logic_boolean" id="166">
+          <field name="BOOL">FALSE</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

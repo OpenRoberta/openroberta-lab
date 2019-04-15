@@ -1,0 +1,47 @@
+{
+	"ops": [
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "250"
+		},
+		{
+			"mode": "ANALOG",
+			"opc": "writePinAction",
+			"pin": "1"
+		},
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "250"
+		},
+		{
+			"mode": "ANALOG",
+			"opc": "writePinAction",
+			"pin": "2"
+		},
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "250"
+		},
+		{
+			"mode": "DIGITAL",
+			"opc": "writePinAction",
+			"pin": "0"
+		},
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "250"
+		},
+		{
+			"mode": "DIGITAL",
+			"opc": "writePinAction",
+			"pin": "2"
+		}
+	],
+	"functionDeclaration": {
+		
+	}
+}

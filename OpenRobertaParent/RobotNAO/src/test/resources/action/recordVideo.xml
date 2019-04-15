@@ -1,0 +1,22 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="" description="" tags="">
+  <instance x="63" y="63">
+    <block type="robControls_start" id="e}eL8OcK-rB/J7#z8AX/" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="naoActions_recordVideo" id="4q;^9twcQY0=wCv5(COX" intask="true">
+      <field name="RESOLUTION">0</field>
+      <field name="CAMERA">0</field>
+      <value name="DURATION">
+        <block type="math_number" id="L^PL7+O{~-}ad^)4*WF)" intask="true">
+          <field name="NUM">5</field>
+        </block>
+      </value>
+      <value name="FILENAME">
+        <block type="text" id="*sU}NBRDpXZwhm(;Y2|v" intask="true">
+          <field name="TEXT">RobertaVideo</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

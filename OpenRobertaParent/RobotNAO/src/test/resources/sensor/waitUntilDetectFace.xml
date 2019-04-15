@@ -1,0 +1,33 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="nao" xmlversion="" description="" tags="undefined">
+	<instance x="349" y="50">
+		<block type="robControls_start" id="F52uPG!/9Cv[M(E@)T9w"
+			intask="true" deletable="false">
+			<mutation declare="false" />
+			<field name="DEBUG" />
+		</block>
+		<block type="robControls_wait_for" id="zHyF8vWX2r`5`I4_~D0."
+			intask="true">
+			<value name="WAIT0">
+				<block type="logic_compare" id="Cx}-*8,j%%A|x?sE;9Z("
+					intask="true">
+					<field name="OP">EQ</field>
+					<value name="A">
+						<block type="robSensors_getSample" id=":AFgdq*qq;+s`|(cgu}T"
+							intask="true">
+							<mutation input="DETECTFACE_NAMEONE" />
+							<field name="SENSORTYPE">DETECTFACE_NAMEONE</field>
+							<field name="SENSORPORT" />
+							<field name="SLOT" />
+						</block>
+					</value>
+					<value name="B">
+						<block type="text" id="Jx(}TFo?yv@q!_uwQ|gH" intask="true">
+							<field name="TEXT">Roberta</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

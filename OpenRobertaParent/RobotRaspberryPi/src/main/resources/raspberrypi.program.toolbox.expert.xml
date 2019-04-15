@@ -1,0 +1,98 @@
+<toolbox_set id="toolbox" style="display: none">
+    <category name="TOOLBOX_ACTION" svg="true">
+        <block type="robActions_led_on">
+            <value name="COLOR">
+                <block type="naoColour_picker">
+                    <field name="COLOUR">#ff0000</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_set_led">
+            <value name="BRIGHTNESS">
+                <block type="math_number">
+                    <field name="NUM">50</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_led_off"/>
+        <block type="robActions_led_blink">
+            <value name="FREQUENCY">
+                <block type="math_number">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+            <value name="DURATION">
+                <block type="math_number">
+                    <field name="NUM">3</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_led_dim">
+            <value name="FROM">
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="TO">
+                <block type="math_number">
+                    <field name="NUM">100</field>
+                </block>
+            </value>
+            <value name="DURATION">
+                <block type="math_number">
+                    <field name="NUM">5</field>
+                </block>
+            </value>
+        </block>
+
+    </category>
+    <category name="TOOLBOX_SENSOR" svg="true">
+        <block type="robSensors_ultrasonic_getSample"/>
+    </category>
+    <category name="TOOLBOX_CONTROL" svg="true">
+        <category name="TOOLBOX_DECISION" svg="true">
+            <block type="robControls_if"/>
+            <block type="robControls_ifElse"/>
+        </category>
+        <category name="TOOLBOX_LOOP" svg="true">
+            <block type="robControls_loopForever"/>
+            <block type="controls_repeat_ext">
+                <value name="TIMES">
+                    <block type="math_number">
+                        <field name="NUM">10</field>
+                    </block>
+                </value>
+            </block>
+            <block type="controls_whileUntil"/>
+            <block type="controls_flow_statements"/>
+        </category>
+        <category name="TOOLBOX_WAIT" svg="true">
+            <block type="robControls_wait"/>
+            <block type="robControls_wait_time">
+                <value name="WAIT">
+                    <block type="math_number">
+                        <field name="NUM">2</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robControls_wait_for">
+                <value name="WAIT0">
+                    <block type="logic_compare">
+                        <value name="A">
+                            <block type="robSensors_getSample"/>
+                        </value>
+                        <value name="B">
+                            <block type="logic_boolean"/>
+                        </value>
+                    </block>
+                </value>
+            </block>
+        </category>
+    </category>
+    <category name="TOOLBOX_LOGIC" svg="true">
+        <block type="logic_compare"/>
+        <block type="logic_operation"/>
+        <block type="logic_boolean"/>
+    </category>
+    <category name="TOOLBOX_PROCEDURE" custom="PROCEDURE" svg="true"/>
+</toolbox_set>

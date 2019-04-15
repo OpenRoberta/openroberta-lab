@@ -1,0 +1,16 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="" description="" tags="">
+  <instance x="13" y="13">
+    <block type="robControls_start" id="}#nRZiG{/E-^lR6T=|hP" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="mbedActions_display_image" id="K,Eh.;T@)nw1HHy^.EVs" intask="true">
+      <mutation type="IMAGE"></mutation>
+      <field name="TYPE">IMAGE</field>
+      <value name="VALUE">
+        <block type="mbedImage_invert" id="1sAFp]:)m|VR}O,jF`/B" intask="true">
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

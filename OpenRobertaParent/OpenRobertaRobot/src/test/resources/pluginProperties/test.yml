@@ -1,0 +1,6 @@
+include: "classpath:/robotCommon.yml"
+
+sensortype:
+   PROGBLOCK1: [ CONF1, CONF2 ]
+   PROGBLOCK2: [ CONF3 ]
+

@@ -1,0 +1,7 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+      <instance x="-40" y="105">
+    <block type="robSensors_encoder_reset" id="114">
+      <field name="SENSORPORT">A</field>
+    </block>
+  </instance>
+</block_set>

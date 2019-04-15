@@ -1,0 +1,22 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="138" y="238">
+    <block type="robActions_motorDiff_curve_for" id="Tx1bk72ND?#pYhka:.,E" intask="false">
+      <field name="DIRECTION">FOREWARD</field>
+      <value name="POWER_LEFT">
+        <block type="math_number" id="xn~lv,g*N!+_Tv8Qo6c]" intask="false">
+          <field name="NUM">20</field>
+        </block>
+      </value>
+      <value name="POWER_RIGHT">
+        <block type="math_number" id="W*lw)n-2t.v3bR*P9z`:" intask="false">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+      <value name="DISTANCE">
+        <block type="math_number" id="H]6.P5gIk]2+FC2l@XL," intask="false">
+          <field name="NUM">20</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

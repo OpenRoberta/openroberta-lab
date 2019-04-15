@@ -1,0 +1,67 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="vorwerk" xmlversion="" description="" tags="">
+	<instance x="349" y="50">
+		<block type="robControls_start" id="mZ3N*~`.-1K#_n5XCAL4"
+			intask="true" deletable="false">
+			<mutation declare="true" />
+			<field name="DEBUG">FALSE</field>
+			<statement name="ST">
+				<block type="robGlobalVariables_declare"
+					id="ut/o]LoAsKuI^PQ2%72h" intask="true" deletable="false"
+					movable="false">
+					<mutation next="false" declaration_type="Number" />
+					<field name="VAR">item</field>
+					<field name="TYPE">Number</field>
+					<value name="VALUE">
+						<block type="math_number" id="%m2H4-.2hKk=xn3n]uQj"
+							intask="true">
+							<field name="NUM">0</field>
+						</block>
+					</value>
+				</block>
+			</statement>
+		</block>
+		<block type="variables_set" id="v|.EDKwq}oOu9kD2inJA"
+			intask="true">
+			<mutation datatype="Number" />
+			<field name="VAR">item</field>
+			<value name="VALUE">
+				<block type="robSensors_accelerometer_getSample"
+					id="G`~L}S3e*L`R2`(yDg-j" intask="true">
+					<mutation mode="VALUE" />
+					<field name="MODE">VALUE</field>
+					<field name="SENSORPORT">X</field>
+					<field name="SLOT" />
+				</block>
+			</value>
+		</block>
+		<block type="variables_set" id="A#K2r^Bg%E9y0-@G{_fd"
+			intask="true">
+			<mutation datatype="Number" />
+			<field name="VAR">item</field>
+			<value name="VALUE">
+				<block type="robSensors_accelerometer_getSample"
+					id="+MSwS^dm^6%Ls4Y[-0,p" intask="true">
+					<mutation mode="VALUE" />
+					<field name="MODE">VALUE</field>
+					<field name="SENSORPORT">Y</field>
+					<field name="SLOT" />
+				</block>
+			</value>
+		</block>
+		<block type="variables_set" id="^shodMWs%NWrU/H~zwa{"
+			intask="true">
+			<mutation datatype="Number" />
+			<field name="VAR">item</field>
+			<value name="VALUE">
+				<block type="robSensors_accelerometer_getSample"
+					id="8_E9{:18VHRyBrVYDJk/" intask="true">
+					<mutation mode="VALUE" />
+					<field name="MODE">VALUE</field>
+					<field name="SENSORPORT">Z</field>
+					<field name="SLOT" />
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

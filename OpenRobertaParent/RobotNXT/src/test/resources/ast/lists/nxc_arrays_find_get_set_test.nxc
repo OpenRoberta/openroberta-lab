@@ -1,0 +1,55 @@
+#define WHEELDIAMETER 5.6
+#define TRACKWIDTH 11.0
+#define MAXLINES 8 
+#include "NEPODefs.h" // contains NEPO declarations for the NXC NXT API resources 
+ 
+
+
+float item2;
+float item[3];
+bool item3[3];
+string item4[3];
+int item5[3];
+int item6[3];
+bool item7;
+string item8;
+int item9;
+int item10;
+task main() {
+    item2 = 0;
+    float __item[] = {0, 0, 0};
+    item = __item;
+    bool __item3[] = {true, true, true};
+    item3 = __item3;
+    string __item4[] = {"", "", ""};
+    item4 = __item4;
+    int __item5[] = {INPUT_WHITECOLOR, INPUT_WHITECOLOR, INPUT_WHITECOLOR};
+    item5 = __item5;
+    int __item6[] = {NULL, NULL, NULL};
+    item6 = __item6;
+    item7 = true;
+    item8 = "";
+    item9 = INPUT_WHITECOLOR;
+    item10 = NULL;
+    item2 = ArrFindFirstNum(item, 0);
+    item2 = ArrFindLastNum(item, 0);
+    item2 = ArrFindFirstBool(item3, true);
+    item2 = ArrFindLastBool(item3, true);
+    item2 = ArrFindFirstStr(item4, "");
+    item2 = ArrFindLastStr(item4, "");
+    item2 = ArrFindFirstNum(item5, INPUT_WHITECOLOR);
+    item2 = ArrFindLastNum(item5, INPUT_WHITECOLOR);
+    item2 = ArrFindFirstNum(item6, 0);
+    item2 = ArrFindLastNum(item6, 0);
+    item2 = item[sanitiseFromStart(ArrayLen(item), 0)];
+    item7 = item3[sanitiseFromStart(ArrayLen(item3), 0)];
+    item8 = item4[sanitiseFromStart(ArrayLen(item4), 0)];
+    item9 = item5[sanitiseFromStart(ArrayLen(item5), 0)];
+    item10 = item6[sanitiseFromStart(ArrayLen(item6), 0)];
+    item[sanitiseFromStart(ArrayLen(item), 0)] = 0;
+    item3[sanitiseFromStart(ArrayLen(item3), 0)] = true;
+    item4[sanitiseFromStart(ArrayLen(item4), 0)] = "";
+    item5[sanitiseFromStart(ArrayLen(item5), 0)] = INPUT_WHITECOLOR;
+    item6[sanitiseFromStart(ArrayLen(item6), 0)] = 0;
+}
+

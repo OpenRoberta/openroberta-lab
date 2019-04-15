@@ -1,0 +1,118 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+    <instance x="-14" y="27">
+    <block type="controls_whileUntil" id="113" inline="false">
+      <field name="MODE">WHILE</field>
+      <value name="BOOL">
+        <block type="logic_boolean" id="114">
+          <field name="BOOL">TRUE</field>
+        </block>
+      </value>
+    </block>
+    <block type="controls_whileUntil" id="115" inline="false">
+      <field name="MODE">UNTIL</field>
+      <value name="BOOL">
+        <block type="logic_compare" id="116" inline="true">
+          <field name="OP">EQ</field>
+          <value name="A">
+            <block type="math_number" id="117">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_number" id="118">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-13" y="211">
+    <block type="controls_whileUntil" id="119" inline="false">
+      <field name="MODE">UNTIL</field>
+      <value name="BOOL">
+        <block type="logic_boolean" id="120">
+          <field name="BOOL">TRUE</field>
+        </block>
+      </value>
+    </block>
+    <block type="controls_whileUntil" id="121" inline="false">
+      <field name="MODE">UNTIL</field>
+      <value name="BOOL">
+        <block type="logic_compare" id="122" inline="true">
+          <field name="OP">EQ</field>
+          <value name="A">
+            <block type="math_number" id="123">
+              <field name="NUM">15</field>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_number" id="124">
+              <field name="NUM">20</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <statement name="DO">
+        <block type="math_change" id="125" inline="true">
+           <value name="VAR">
+        <block type="variables_get" id="69">
+          <mutation datatype="Number"></mutation>
+          <field name="VAR">variablenName</field>
+        </block>
+      </value>
+          <value name="DELTA">
+            <block type="math_number" id="126">
+              <field name="NUM">1</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+  <instance x="-6" y="396">
+    <block type="controls_whileUntil" id="127" inline="false">
+      <field name="MODE">UNTIL</field>
+      <value name="BOOL">
+        <block type="logic_boolean" id="128">
+          <field name="BOOL">TRUE</field>
+        </block>
+      </value>
+      <statement name="DO">
+        <block type="controls_whileUntil" id="131" inline="false">
+          <field name="MODE">UNTIL</field>
+          <value name="BOOL">
+            <block type="logic_compare" id="132" inline="true">
+              <field name="OP">EQ</field>
+              <value name="A">
+                <block type="math_number" id="133">
+                  <field name="NUM">15</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_number" id="134">
+                  <field name="NUM">20</field>
+                </block>
+              </value>
+            </block>
+          </value>
+          <statement name="DO">
+            <block type="math_change" id="135" inline="true">
+               <value name="VAR">
+        <block type="variables_get" id="69">
+          <mutation datatype="Number"></mutation>
+          <field name="VAR">variablenName</field>
+        </block>
+      </value>
+              <value name="DELTA">
+                <block type="math_number" id="136">
+                  <field name="NUM">1</field>
+                </block>
+              </value>
+            </block>
+          </statement>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

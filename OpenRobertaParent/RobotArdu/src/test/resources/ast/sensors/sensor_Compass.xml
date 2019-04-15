@@ -1,0 +1,5 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="137" y="263">
+    <block type="robSensors_compass_getSample" id="b,;xW0y9{tOdLN5wJ/S0" intask="false"></block>
+  </instance>
+</block_set>

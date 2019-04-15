@@ -1,0 +1,23 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="-15" y="107">
+    <block type="robSensors_colour_getSample" id="65" >
+      <mutation mode="COLOUR"></mutation>
+      <field name="MODE">COLOUR</field>
+      <field name="SENSORPORT">3</field>
+    </block>
+  </instance>
+  <instance x="-13" y="147">
+    <block type="robSensors_colour_getSample" id="75" >
+    <mutation mode="LIGHT"></mutation>
+      <field name="MODE">LIGHT</field>
+      <field name="SENSORPORT">1</field>
+    </block>
+  </instance>
+  <instance x="-11" y="224">
+    <block type="robSensors_colour_getSample" id="75" >
+      <mutation mode="AMBIENTLIGHT"></mutation>
+      <field name="MODE">AMBIENTLIGHT</field>
+      <field name="SENSORPORT">4</field>
+    </block>
+  </instance>
+</block_set>

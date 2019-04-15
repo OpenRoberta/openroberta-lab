@@ -1,0 +1,147 @@
+<block_set 
+    xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance x="382" y="50">
+        <block type="robControls_start" id="MCc@q=k%KnURD7`{!~e%" intask="true" deletable="false">
+            <mutation declare="true"></mutation>
+            <field name="DEBUG"></field>
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id="CMl8OoF.b-/4}Qxc8Ov/" intask="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="Array_Number"></mutation>
+                    <field name="VAR">item</field>
+                    <field name="TYPE">Array_Number</field>
+                    <value name="VALUE">
+                        <block type="robLists_create_with" id="7TG~A4GW~xpPfAmvLo`^" intask="true">
+                            <mutation items="4" list_type="Number"></mutation>
+                            <field name="LIST_TYPE">Number</field>
+                            <value name="ADD0">
+                                <block type="math_number" id="4EhJ::4fT}xvXOv]YoLi" intask="true">
+                                    <field name="NUM">1</field>
+                                </block>
+                            </value>
+                            <value name="ADD1">
+                                <block type="math_number" id="XQ*UkI~,t3`OUF5LCw~S" intask="true">
+                                    <field name="NUM">2</field>
+                                </block>
+                            </value>
+                            <value name="ADD2">
+                                <block type="math_number" id="D~nm!KVwH(5ZsZ9K~J)r" intask="true">
+                                    <field name="NUM">3</field>
+                                </block>
+                            </value>
+                            <value name="ADD3">
+                                <block type="math_number" id="GV@nJ^`FGP01V.+y-3e3" intask="true">
+                                    <field name="NUM">4</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+        <block type="mbedActions_display_text" id="/7V{Gz,gRN8L]_=%CU`[" intask="true">
+            <field name="TYPE">TEXT</field>
+            <value name="OUT">
+                <block type="math_on_list" id="kla{q%gUT.Jk^Qs^gZ_0" intask="true">
+                    <mutation op="SUM"></mutation>
+                    <field name="OP">SUM</field>
+                    <value name="LIST">
+                        <block type="variables_get" id="!8OM!NF_{kk_HRcoqW;S" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">item</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_display_text" id="wF@q_W,CvOF}/all,Ayk" intask="true">
+            <field name="TYPE">TEXT</field>
+            <value name="OUT">
+                <block type="math_on_list" id="idHB0Z@0z/jccx-R:l1@" intask="true">
+                    <mutation op="MIN"></mutation>
+                    <field name="OP">MIN</field>
+                    <value name="LIST">
+                        <block type="variables_get" id="[7~0h+CA^@WWA^`bM4CB" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">item</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_display_text" id="2E^hr=noqfT@2tsKL;!K" intask="true">
+            <field name="TYPE">TEXT</field>
+            <value name="OUT">
+                <block type="math_on_list" id="ljvIr2pUB`(3JzgMexl[" intask="true">
+                    <mutation op="MAX"></mutation>
+                    <field name="OP">MAX</field>
+                    <value name="LIST">
+                        <block type="variables_get" id="AG5bo`a4B%;Y=:k+x1?%" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">item</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_display_text" id="NQqk:{2Mq/P.,Xa:o{*C" intask="true">
+            <field name="TYPE">TEXT</field>
+            <value name="OUT">
+                <block type="math_on_list" id="RV/JgE+MO:p/Ve%JzisS" intask="true">
+                    <mutation op="AVERAGE"></mutation>
+                    <field name="OP">AVERAGE</field>
+                    <value name="LIST">
+                        <block type="variables_get" id="/.B{e?!WK^dsjRk+WwM4" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">item</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_display_text" id="/EtYuB80)#NV*Wi:p};T" intask="true">
+            <field name="TYPE">TEXT</field>
+            <value name="OUT">
+                <block type="math_on_list" id="F%fEcbb(B:,-gQS_pcy)" intask="true">
+                    <mutation op="MEDIAN"></mutation>
+                    <field name="OP">MEDIAN</field>
+                    <value name="LIST">
+                        <block type="variables_get" id="Wy.U=/.aFXYys{upIVA." intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">item</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_display_text" id="7e!]+YZ56273iEcEU?x+" intask="true">
+            <field name="TYPE">TEXT</field>
+            <value name="OUT">
+                <block type="math_on_list" id="26/02W2d5gcp`_SBgY/H" intask="true">
+                    <mutation op="STD_DEV"></mutation>
+                    <field name="OP">STD_DEV</field>
+                    <value name="LIST">
+                        <block type="variables_get" id="H*_.vdfr~~!zc!p5oApT" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">item</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_display_text" id="IJ)Jts`@]2WR)W((J{F:" intask="true">
+            <field name="TYPE">TEXT</field>
+            <value name="OUT">
+                <block type="math_on_list" id="sq+|vkvZ}=nFNp?mME~6" intask="true">
+                    <mutation op="RANDOM"></mutation>
+                    <field name="OP">RANDOM</field>
+                    <value name="LIST">
+                        <block type="variables_get" id="Z1FzkZ-Jov_X2uvJ_lds" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">item</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

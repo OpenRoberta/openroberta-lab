@@ -1,0 +1,17 @@
+<block_set 
+    xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="2.0" description="" tags="">
+    <instance x="384" y="50">
+        <block type="robSensors_compass_getSample" id="SThl5Y1pgR4UJ)#TSIfx" intask="true">
+            <mutation mode="ANGLE"></mutation>
+            <field name="MODE">ANGLE</field>
+            <field name="SENSORPORT">2</field>
+        </block>
+    </instance>
+    <instance x="384" y="100">
+        <block type="robSensors_compass_getSample" id="EV],?tUEPl~Y,11oaXvO" intask="true">
+            <mutation mode="COMPASS"></mutation>
+            <field name="MODE">COMPASS</field>
+            <field name="SENSORPORT">4</field>
+        </block>
+    </instance>
+</block_set>

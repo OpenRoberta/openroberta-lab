@@ -1,0 +1,134 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="ev3" xmlversion="2.0" description="" tags="">
+	<instance x="384" y="50">
+		<block type="robControls_start" id="ht7;UpapMC=|;X[Hs^+Q"
+			intask="true" deletable="false">
+			<mutation declare="false"></mutation>
+			<field name="DEBUG">TRUE</field>
+		</block>
+		<block type="robActions_display_text" id="}@8p#L8JKPa~p!8P/[5V"
+			intask="true">
+			<value name="OUT">
+				<block type="robSensors_touch_getSample" id="iL+Gb+96Jrh|8}Fkru*^"
+					intask="true">
+					<field name="SENSORPORT">1</field>
+				</block>
+			</value>
+			<value name="COL">
+				<block type="math_number" id=",9}0UD*I_JmD,BxkmnBl" intask="true">
+					<field name="NUM">0</field>
+				</block>
+			</value>
+			<value name="ROW">
+				<block type="math_number" id="E?|7L.^.-,J#WS~C.@Ay" intask="true">
+					<field name="NUM">0</field>
+				</block>
+			</value>
+		</block>
+		<block type="robActions_display_text" id="g;FFfu;jjm1~h]xZsO8A"
+			intask="true">
+			<value name="OUT">
+				<block type="robSensors_ultrasonic_getSample" id="5xd_1`P!X+VCn]npyP[p"
+					intask="true">
+					<mutation mode="DISTANCE"></mutation>
+					<field name="MODE">DISTANCE</field>
+					<field name="SENSORPORT">4</field>
+					<data>ev3</data>
+				</block>
+			</value>
+			<value name="COL">
+				<block type="math_number" id="u,i_Ww%MA}B;nt[SJ|PC" intask="true">
+					<field name="NUM">0</field>
+				</block>
+			</value>
+			<value name="ROW">
+				<block type="math_number" id="`=8}nA+|Cqx[rn4)5d,p" intask="true">
+					<field name="NUM">0</field>
+				</block>
+			</value>
+		</block>
+		<block type="robActions_display_text" id="K@swHopM!Q(Z*ldXq)}T"
+			intask="true">
+			<value name="OUT">
+				<block type="robSensors_colour_getSample" id="48ufd6EK0D.{|zgd0@O%"
+					intask="true">
+					<mutation mode="COLOUR"></mutation>
+					<field name="MODE">COLOUR</field>
+					<field name="SENSORPORT">3</field>
+					<data>ev3</data>
+				</block>
+			</value>
+			<value name="COL">
+				<block type="math_number" id="yjU/Lm!AgERK)aqFz52{" intask="true">
+					<field name="NUM">0</field>
+				</block>
+			</value>
+			<value name="ROW">
+				<block type="math_number" id="[@Mrlwn}AL@{EV!6fO`J" intask="true">
+					<field name="NUM">0</field>
+				</block>
+			</value>
+		</block>
+		<block type="robActions_display_text" id="p?N00?x-G:tn)1D+:bzS"
+			intask="true">
+			<value name="OUT">
+				<block type="robSensors_infrared_getSample" id="A-N9M/H{BnSU@fU{{AfM"
+					intask="true">
+					<mutation mode="DISTANCE"></mutation>
+					<field name="MODE">DISTANCE</field>
+					<field name="SENSORPORT">4</field>
+				</block>
+			</value>
+			<value name="COL">
+				<block type="math_number" id="-!4X8O60^nSj@8*)A6X?" intask="true">
+					<field name="NUM">0</field>
+				</block>
+			</value>
+			<value name="ROW">
+				<block type="math_number" id="q}M`LvP6jm5W8evB0B2#" intask="true">
+					<field name="NUM">0</field>
+				</block>
+			</value>
+		</block>
+		<block type="robActions_display_text" id="^bi@_v]~;~^uXU6s3SSp"
+			intask="true">
+			<value name="OUT">
+				<block type="robSensors_encoder_getSample" id="I%@xuf;uE!:+KBSB4eFG"
+					intask="true">
+					<field name="MODE">ROTATION</field>
+					<field name="SENSORPORT">A</field>
+				</block>
+			</value>
+			<value name="COL">
+				<block type="math_number" id="jp(}13}Z87jSF0ah;X{G" intask="true">
+					<field name="NUM">0</field>
+				</block>
+			</value>
+			<value name="ROW">
+				<block type="math_number" id="^;xo/Eb_})ZT*jLHdie," intask="true">
+					<field name="NUM">0</field>
+				</block>
+			</value>
+		</block>
+		<block type="robActions_display_text" id="VmbU5W8vKR]JGs;tL/_*"
+			intask="true">
+			<value name="OUT">
+				<block type="robSensors_gyro_getSample" id="^v[FI,q#bPj5w]Ff|+on"
+					intask="true">
+					<field name="MODE">ANGLE</field>
+					<field name="SENSORPORT">2</field>
+				</block>
+			</value>
+			<value name="COL">
+				<block type="math_number" id="7RDg`+()(X|=0d[BZd9/" intask="true">
+					<field name="NUM">0</field>
+				</block>
+			</value>
+			<value name="ROW">
+				<block type="math_number" id="4%f5G)q(7fb:[0%nhtHS" intask="true">
+					<field name="NUM">0</field>
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

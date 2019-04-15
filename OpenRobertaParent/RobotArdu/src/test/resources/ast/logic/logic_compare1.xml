@@ -1,0 +1,17 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="81" y="14">
+    <block type="logic_compare" id="7" inline="true">
+      <field name="OP">EQ</field>
+      <value name="A">
+        <block type="math_number" id="26">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="B">
+        <block type="math_number" id="27">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

@@ -1,0 +1,9 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="-616" y="42">
+
+        <block type="text" id="193">
+          <field name="TEXT">text2</field>
+        </block>
+     
+  </instance>
+</block_set>

@@ -1,0 +1,21 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+      <instance x="-76" y="1">
+    <block type="robActions_display_text" id="259" inline="false">
+      <value name="OUT">
+        <block type="text" id="260">
+          <field name="TEXT">Hallo</field>
+        </block>
+      </value>
+      <value name="COL">
+        <block type="math_number" id="261">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ROW">
+        <block type="math_number" id="262">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

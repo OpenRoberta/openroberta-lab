@@ -1,0 +1,21 @@
+<block_set 
+    xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance x="382" y="50">
+        <block type="robControls_start" id="l0i{E3*r9V%yR|M.n12B" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="mbedActions_ledBar_set" id="e-QVIHYns=JAea@-tA3B" intask="true">
+            <value name="X">
+                <block type="math_number" id="vCyW*PCye((,HZErKz*|" intask="true">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="BRIGHTNESS">
+                <block type="math_number" id="?z577k,``x]{k-c-41vH" intask="true">
+                    <field name="NUM">5</field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

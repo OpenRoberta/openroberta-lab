@@ -1,0 +1,7 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="1" y="171">
+    <block type="logic_boolean" id="25">
+      <field name="BOOL">TRUE</field>
+    </block>
+  </instance>
+</block_set>

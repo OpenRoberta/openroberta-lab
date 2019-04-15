@@ -1,0 +1,61 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="ev3" xmlversion="2.0" description="" tags="">
+	<instance x="384" y="50">
+		<block type="robControls_start" id="N[`u;@Wg]MpmbG/,l}f4"
+			intask="true" deletable="false">
+			<mutation declare="false"></mutation>
+			<field name="DEBUG">TRUE</field>
+		</block>
+		<block type="robActions_motorDiff_on_for" id="sxrk~6_|g2!2T5])RGjf"
+			intask="true">
+			<field name="DIRECTION">FOREWARD</field>
+			<value name="POWER">
+				<block type="math_number" id="o|ut^f:Ns2{3j@309,N`" intask="true">
+					<field name="NUM">0</field>
+				</block>
+			</value>
+			<value name="DISTANCE">
+				<block type="math_number" id="B~E}oCv}M~4d`]a=!k.*" intask="true">
+					<field name="NUM">20</field>
+				</block>
+			</value>
+		</block>
+		<block type="robActions_motorDiff_turn_for" id="a,9AXc2~61{kMGn9F;lW"
+			intask="true">
+			<field name="DIRECTION">RIGHT</field>
+			<value name="POWER">
+				<block type="math_number" id="cM,YAii9.4SERmkYr0=h" intask="true">
+					<field name="NUM">0</field>
+				</block>
+			</value>
+			<value name="DEGREE">
+				<block type="math_number" id="ZRLj#!Q{O7kX4%+#`Ws!" intask="true">
+					<field name="NUM">20</field>
+				</block>
+			</value>
+		</block>
+		<block type="robActions_motorDiff_on" id="@bSu6Lnm=p/2=F+s;Sbq"
+			intask="true">
+			<field name="DIRECTION">FOREWARD</field>
+			<value name="POWER">
+				<block type="math_number" id="LYuWcYn26k(w)K.hB`N+" intask="true">
+					<field name="NUM">0</field>
+				</block>
+			</value>
+		</block>
+		<block type="robActions_motorDiff_curve" id="^F/%wPL4HRK2]AgkdP5W"
+			intask="true">
+			<field name="DIRECTION">FOREWARD</field>
+			<value name="POWER_LEFT">
+				<block type="math_number" id="Scjt/?LWLtjAH(R*hj]n" intask="true">
+					<field name="NUM">0</field>
+				</block>
+			</value>
+			<value name="POWER_RIGHT">
+				<block type="math_number" id="Q-hob54^1b+^Os0GwW5N" intask="true">
+					<field name="NUM">0</field>
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

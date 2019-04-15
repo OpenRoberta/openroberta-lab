@@ -1,0 +1,6 @@
+include: "classpath:/robotCommon.yml"
+block:
+  SHOW_PICTURE_ACTION:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction
+    type: [robActions_display_picture,robActions_display_picture_new]

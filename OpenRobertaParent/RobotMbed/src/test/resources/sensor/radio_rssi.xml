@@ -1,0 +1,18 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="calliope" xmlversion="2.0" description="" tags="">
+	<instance x="384" y="50">
+		<block type="robControls_start" id="EVjc/5w_di!zS:N**pBP"
+			intask="true" deletable="false">
+			<mutation declare="false"></mutation>
+			<field name="DEBUG">TRUE</field>
+		</block>
+		<block type="mbedActions_display_text" id="UuPyK,)?8zGADozasH@#"
+			intask="true">
+			<field name="TYPE">TEXT</field>
+			<value name="OUT">
+				<block type="mbedSensors_getRssi" id="A4d_Z6^ajLRqj:.uksX~"
+					intask="true"></block>
+			</value>
+		</block>
+	</instance>
+</block_set>

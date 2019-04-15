@@ -1,0 +1,62 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-66" y="-20">
+    <block type="math_trig" id="222" inline="false" >
+      <field name="OP">SIN</field>
+      <value name="NUM">
+        <block type="math_number" id="238" >
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-46" y="20">
+    <block type="math_trig" id="257" inline="false" >
+      <field name="OP">COS</field>
+      <value name="NUM">
+        <block type="math_number" id="238" >
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-26" y="60">
+    <block type="math_trig" id="257" inline="false" >
+      <field name="OP">TAN</field>
+      <value name="NUM">
+        <block type="math_number" id="238" >
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-6" y="100">
+    <block type="math_trig" id="257" inline="false" >
+      <field name="OP">ASIN</field>
+      <value name="NUM">
+        <block type="math_number" id="238" >
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="14" y="140">
+    <block type="math_trig" id="257" inline="false" >
+      <field name="OP">ACOS</field>
+      <value name="NUM">
+        <block type="math_number" id="238" >
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="34" y="180">
+    <block type="math_trig" id="257" inline="false" >
+      <field name="OP">ATAN</field>
+      <value name="NUM">
+        <block type="math_number" id="238" >
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

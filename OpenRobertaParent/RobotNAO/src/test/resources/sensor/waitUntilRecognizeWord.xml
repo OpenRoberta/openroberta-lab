@@ -1,0 +1,37 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="" description="" tags="undefined">
+  <instance x="188" y="113">
+    <block type="robControls_start" id="OpUge|OGoCJhjA*Er5TG" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="naoControls_wait_for" id="QnQ1BTf~5l2AF!xF(wWn" intask="true">
+      <value name="WAIT0">
+        <block type="logic_compare" id="|?I[EmdTFAI9^SgAEsM3" intask="true">
+          <field name="OP">EQ</field>
+          <value name="A">
+            <block type="naoSensors_getSample" id="bK=m%sslma+G:Ni3t0?g" intask="true" deletable="false" movable="false">
+              <mutation input="NAO_RECOGNIZEWORD"></mutation>
+              <field name="SENSORTYPE">NAO_RECOGNIZEWORD</field>
+              <value name="WORD">
+                <block type="robLists_create_with" id="c}*Gx@+B/t20RK-cZ*LI" intask="true">
+                  <mutation items="1" list_type="String"></mutation>
+                  <field name="LIST_TYPE">String</field>
+                  <value name="ADD0">
+                    <block type="text" id="nD^:tSYK=As8(Kj8m}Ko" intask="true">
+                      <field name="TEXT">OpenRoberta</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+          <value name="B">
+            <block type="text" id="1#1Bcj)_Ar_Eoj)VVMC8" intask="true">
+              <field name="TEXT">OpenRoberta</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

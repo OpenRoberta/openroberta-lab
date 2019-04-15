@@ -1,0 +1,29 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-69" y="10">
+    <block type="robControls_start" id="66" deletable="false">
+      <mutation declare="true"></mutation>
+      <field name="DEBUG">FALSE</field>
+      <statement name="ST">
+        <block type="robGlobalvariables_declare" id="68" inline="true" deletable="false" movable="false">
+          <mutation next="false" declaration_type="Number"></mutation>
+          <field name="VAR">variablenName</field>
+          <field name="TYPE">Number</field>
+          <value name="VALUE">
+            <block type="math_modulo" id="645" inline="true">
+              <value name="DIVIDEND">
+                <block type="math_number" id="654">
+                  <field name="NUM">1</field>
+                </block>
+              </value>
+              <value name="DIVISOR">
+                <block type="math_number" id="673">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

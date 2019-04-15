@@ -1,0 +1,80 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="151" y="30">
+    <block type="robControls_start" id="21" intask="true" deletable="false">
+      <mutation declare="true"></mutation>
+      <statement name="ST">
+        <block type="robGlobalVariables_declare" id="23" inline="true" intask="true" deletable="false" movable="false">
+          <mutation next="false" declaration_type="Number"></mutation>
+          <field name="VAR">variablenName</field>
+          <field name="TYPE">Number</field>
+          <value name="VALUE">
+            <block type="math_number" id="24" intask="true">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <block type="robActions_motor_on" id="36" inline="false" intask="true">
+      <field name="MOTORPORT">B</field>
+      <value name="POWER">
+        <block type="math_number" id="37" intask="true">
+          <field name="NUM">30</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motor_on" id="45" inline="false" intask="true">
+      <field name="MOTORPORT">A</field>
+      <value name="POWER">
+        <block type="math_number" id="37" intask="true">
+          <field name="NUM">10</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motor_on_for" id="30" inline="false" intask="true">
+      <field name="MOTORPORT">B</field>
+      <field name="MOTORROTATION">ROTATIONS</field>
+      <value name="POWER">
+        <block type="math_number" id="31" intask="true">
+          <field name="NUM">30</field>
+        </block>
+      </value>
+      <value name="VALUE">
+        <block type="math_number" id="32" intask="true">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motor_on_for" id="38" inline="false" intask="true">
+      <field name="MOTORPORT">A</field>
+      <field name="MOTORROTATION">DEGREE</field>
+      <value name="POWER">
+        <block type="math_number" id="31" intask="true">
+          <field name="NUM">30</field>
+        </block>
+      </value>
+      <value name="VALUE">
+        <block type="math_number" id="32" intask="true">
+          <field name="NUM">3</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motor_stop" id="48" intask="true">
+      <field name="MOTORPORT">A</field>
+      <field name="MODE">FLOAT</field>
+    </block>
+    <block type="robActions_motor_stop" id="50" intask="true">
+      <field name="MOTORPORT">B</field>
+      <field name="MODE">NONFLOAT</field>
+    </block>
+    <block type="variables_set" id="41" inline="false" intask="true">
+      <mutation datatype="Number"></mutation>
+      <field name="VAR">variablenName</field>
+      <value name="VALUE">
+        <block type="robActions_motor_getPower" id="63" intask="true">
+          <field name="MOTORPORT">B</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

@@ -1,0 +1,274 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="1" y="7">
+    <block type="robControls_start" id="38" intask="true" deletable="false">
+      <mutation declare="true"></mutation>
+      <statement name="ST">
+        <block type="robGlobalVariables_declare" id="127" inline="true" intask="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Array_String"></mutation>
+          <field name="VAR">variablenName</field>
+          <field name="TYPE">Array_String</field>
+          <value name="VALUE">
+            <block type="robLists_create_with" id="129" inline="false" intask="true">
+              <mutation items="3" list_type="String"></mutation>
+              <field name="LIST_TYPE">String</field>
+              <value name="ADD0">
+                <block type="text" id="130" intask="true">
+                  <field name="TEXT"></field>
+                </block>
+              </value>
+              <value name="ADD1">
+                <block type="text" id="131" intask="true">
+                  <field name="TEXT"></field>
+                </block>
+              </value>
+              <value name="ADD2">
+                <block type="text" id="132" intask="true">
+                  <field name="TEXT"></field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalVariables_declare" id="147" inline="true" intask="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Array_Boolean"></mutation>
+          <field name="VAR">variablenName2</field>
+          <field name="TYPE">Array_Boolean</field>
+          <value name="VALUE">
+            <block type="robLists_create_with" id="153" inline="false" intask="true">
+              <mutation items="3" list_type="Boolean"></mutation>
+              <field name="LIST_TYPE">Boolean</field>
+              <value name="ADD0">
+                <block type="logic_boolean" id="154" intask="true">
+                  <field name="BOOL">TRUE</field>
+                </block>
+              </value>
+              <value name="ADD1">
+                <block type="logic_boolean" id="155" intask="true">
+                  <field name="BOOL">TRUE</field>
+                </block>
+              </value>
+              <value name="ADD2">
+                <block type="logic_boolean" id="156" intask="true">
+                  <field name="BOOL">TRUE</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalVariables_declare" id="222" inline="true" intask="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Number"></mutation>
+          <field name="VAR">variablenName3</field>
+          <field name="TYPE">Number</field>
+          <value name="VALUE">
+            <block type="math_number" id="223" intask="true">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalVariables_declare" id="243" inline="true" intask="true" deletable="false" movable="false">
+          <mutation next="false" declaration_type="Boolean"></mutation>
+          <field name="VAR">variablenName4</field>
+          <field name="TYPE">Boolean</field>
+          <value name="VALUE">
+            <block type="logic_boolean" id="245" intask="true">
+              <field name="BOOL">TRUE</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <block type="variables_set" id="160" inline="false" intask="true">
+      <mutation datatype="Array_Boolean"></mutation>
+      <field name="VAR">variablenName2</field>
+      <value name="VALUE">
+        <block type="robLists_create_with" id="133" intask="true">
+          <mutation items="0" list_type="Boolean"></mutation>
+          <field name="LIST_TYPE">Boolean</field>
+        </block>
+      </value>
+    </block>
+    <block type="variables_set" id="179" inline="false" intask="true">
+      <mutation datatype="Array_String"></mutation>
+      <field name="VAR">variablenName</field>
+      <value name="VALUE">
+        <block type="robLists_create_with" id="163" inline="false" intask="true">
+          <mutation items="3" list_type="String"></mutation>
+          <field name="LIST_TYPE">String</field>
+          <value name="ADD0">
+            <block type="text" id="182" intask="true">
+              <field name="TEXT"></field>
+            </block>
+          </value>
+          <value name="ADD1">
+            <block type="text" id="183" intask="true">
+              <field name="TEXT"></field>
+            </block>
+          </value>
+          <value name="ADD2">
+            <block type="text" id="184" intask="true">
+              <field name="TEXT"></field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+    <block type="variables_set" id="200" inline="false" intask="true">
+      <mutation datatype="Array_String"></mutation>
+      <field name="VAR">variablenName</field>
+      <value name="VALUE">
+        <block type="robLists_repeat" id="190" inline="true" intask="true">
+          <mutation list_type="String"></mutation>
+          <field name="LIST_TYPE">String</field>
+          <value name="ITEM">
+            <block type="text" id="206" intask="true">
+              <field name="TEXT">sw</field>
+            </block>
+          </value>
+          <value name="NUM">
+            <block type="math_number" id="191" intask="true">
+              <field name="NUM">5</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+    <block type="variables_set" id="224" inline="false" intask="true">
+      <mutation datatype="Number"></mutation>
+      <field name="VAR">variablenName3</field>
+      <value name="VALUE">
+        <block type="robLists_length" id="215" inline="false" intask="true">
+          <value name="VALUE">
+            <block type="robLists_repeat" id="190" inline="true" intask="true">
+              <mutation list_type="String"></mutation>
+              <field name="LIST_TYPE">String</field>
+              <value name="ITEM">
+                <block type="text" id="206" intask="true">
+                  <field name="TEXT">sw</field>
+                </block>
+              </value>
+              <value name="NUM">
+                <block type="math_number" id="191" intask="true">
+                  <field name="NUM">5</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+    <block type="variables_set" id="246" inline="false" intask="true">
+      <mutation datatype="Boolean"></mutation>
+      <field name="VAR">variablenName4</field>
+      <value name="VALUE">
+        <block type="robLists_isEmpty" id="237" inline="true" intask="true">
+          <value name="VALUE">
+            <block type="robLists_repeat" id="190" inline="true" intask="true">
+              <mutation list_type="String"></mutation>
+              <field name="LIST_TYPE">String</field>
+              <value name="ITEM">
+                <block type="text" id="206" intask="true">
+                  <field name="TEXT">sw</field>
+                </block>
+              </value>
+              <value name="NUM">
+                <block type="math_number" id="191" intask="true">
+                  <field name="NUM">5</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+    <block type="variables_set" id="266" inline="false" intask="true">
+      <mutation datatype="Number"></mutation>
+      <field name="VAR">variablenName3</field>
+      <value name="VALUE">
+        <block type="robLists_indexOf" id="261" inline="true" intask="true">
+          <field name="END">FIRST</field>
+          <value name="VALUE">
+            <block type="variables_get" id="285" intask="true">
+              <mutation datatype="Array_String"></mutation>
+              <field name="VAR">variablenName</field>
+            </block>
+          </value>
+          <value name="FIND">
+            <block type="text" id="294" intask="true">
+              <field name="TEXT">a</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+    <block type="variables_set" id="323" inline="false" intask="true">
+      <mutation datatype="Boolean"></mutation>
+      <field name="VAR">variablenName4</field>
+      <value name="VALUE">
+        <block type="robLists_getIndex" id="319" inline="true" intask="true">
+          <mutation statement="false" at="true"></mutation>
+          <field name="MODE">GET</field>
+          <field name="WHERE">FROM_START</field>
+          <value name="VALUE">
+            <block type="variables_get" id="331" intask="true">
+              <mutation datatype="Array_String"></mutation>
+              <field name="VAR">variablenName</field>
+            </block>
+          </value>
+          <value name="AT">
+            <block type="math_number" id="329" intask="true">
+              <field name="NUM">5</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+    <block type="robLists_setIndex" id="370" inline="true" intask="true">
+      <mutation at="true"></mutation>
+      <field name="MODE">SET</field>
+      <field name="WHERE">FROM_START</field>
+      <value name="LIST">
+        <block type="variables_get" id="373" intask="true">
+          <mutation datatype="Array_String"></mutation>
+          <field name="VAR">variablenName</field>
+        </block>
+      </value>
+      <value name="AT">
+        <block type="math_number" id="394" intask="true">
+          <field name="NUM">10</field>
+        </block>
+      </value>
+      <value name="TO">
+        <block type="math_number" id="375" intask="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+    <block type="variables_set" id="410" inline="false" intask="true">
+      <mutation datatype="Array_Boolean"></mutation>
+      <field name="VAR">variablenName2</field>
+      <value name="VALUE">
+        <block type="robLists_getSublist" id="408" inline="true" intask="true">
+          <mutation at1="true" at2="true"></mutation>
+          <field name="WHERE1">FROM_START</field>
+          <field name="WHERE2">FROM_START</field>
+          <value name="LIST">
+            <block type="variables_get" id="415" intask="true">
+              <mutation datatype="Array_String"></mutation>
+              <field name="VAR">variablenName</field>
+            </block>
+          </value>
+          <value name="AT1">
+            <block type="math_number" id="417" intask="true">
+              <field name="NUM">10</field>
+            </block>
+          </value>
+          <value name="AT2">
+            <block type="math_number" id="417" intask="true">
+              <field name="NUM">10</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

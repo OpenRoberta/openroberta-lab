@@ -1,0 +1,27 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="" description="" tags="">
+	<instance x="63" y="63">
+		<block type="robControls_start" id="EAGiQ2J{;.(R.wAh)v]G"
+			intask="true" deletable="false">
+			<mutation declare="false"></mutation>
+			<field name="DEBUG">FALSE</field>
+		</block>
+		<block type="mbedActions_display_text" id="+yX/+t.ZZ[_q/L+t|-;k"
+			intask="true">
+			<field name="TYPE">TEXT</field>
+			<value name="OUT">
+				<block type="text" id="0Z-1OWc.x5(ZG9Gm`cFe" intask="true">
+					<field name="TEXT">Hallo</field>
+				</block>
+			</value>
+		</block>
+		<block type="mbedActions_display_text" id="ASL*8~Ck|gdhZ?85n+po"
+			intask="true">
+			<field name="TYPE">CHARACTER</field>
+			<value name="OUT">
+				<block type="text" id="d2JE`MN5[_p%7@IBS2RW" intask="true">
+					<field name="TEXT">H</field>
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

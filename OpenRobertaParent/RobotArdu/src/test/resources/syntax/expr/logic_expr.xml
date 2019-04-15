@@ -1,0 +1,411 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="144" y="64">
+    <block type="logic_compare" id="7" inline="true">
+      <field name="OP">EQ</field>
+      <value name="A">
+        <block type="logic_boolean" id="58">
+          <field name="BOOL">FALSE</field>
+        </block>
+      </value>
+      <value name="B">
+        <block type="logic_boolean" id="59">
+          <field name="BOOL">TRUE</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="149" y="107">
+    <block type="logic_compare" id="60" inline="true">
+      <field name="OP">NEQ</field>
+      <value name="A">
+        <block type="logic_boolean" id="61">
+          <field name="BOOL">TRUE</field>
+        </block>
+      </value>
+      <value name="B">
+        <block type="logic_boolean" id="62">
+          <field name="BOOL">FALSE</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="150" y="154">
+    <block type="logic_compare" id="63" inline="true">
+      <field name="OP">EQ</field>
+      <value name="A">
+        <block type="logic_boolean" id="64">
+          <field name="BOOL">FALSE</field>
+        </block>
+      </value>
+      <value name="B">
+        <block type="logic_boolean" id="65">
+          <field name="BOOL">FALSE</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="74" y="205">
+    <block type="logic_compare" id="66" inline="true">
+      <field name="OP">EQ</field>
+      <value name="A">
+        <block type="logic_compare" id="69" inline="true">
+          <field name="OP">LTE</field>
+          <value name="A">
+            <block type="math_number" id="93">
+              <field name="NUM">5</field>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_number" id="94">
+              <field name="NUM">7</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="B">
+        <block type="logic_compare" id="72" inline="true">
+          <field name="OP">GT</field>
+          <value name="A">
+            <block type="math_number" id="95">
+              <field name="NUM">8</field>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_number" id="96">
+              <field name="NUM">9</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="76" y="281">
+    <block type="logic_compare" id="97" inline="true">
+      <field name="OP">GTE</field>
+      <value name="A">
+        <block type="logic_compare" id="98" inline="true">
+          <field name="OP">NEQ</field>
+          <value name="A">
+            <block type="math_number" id="99">
+              <field name="NUM">5</field>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_number" id="100">
+              <field name="NUM">7</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="B">
+        <block type="logic_compare" id="101" inline="true">
+          <field name="OP">EQ</field>
+          <value name="A">
+            <block type="math_number" id="102">
+              <field name="NUM">8</field>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_number" id="103">
+              <field name="NUM">9</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="74" y="366">
+    <block type="logic_compare" id="104" inline="true">
+      <field name="OP">GTE</field>
+      <value name="A">
+        <block type="math_arithmetic" id="129" inline="true">
+          <field name="OP">ADD</field>
+          <value name="A">
+            <block type="math_number" id="106">
+              <field name="NUM">5</field>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_number" id="107">
+              <field name="NUM">7</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="B">
+        <block type="math_arithmetic" id="134" inline="true">
+          <field name="OP">DIVIDE</field>
+          <value name="A">
+            <block type="math_arithmetic" id="130" inline="true">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <block type="math_number" id="109">
+                  <field name="NUM">8</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_number" id="132">
+                  <field name="NUM">4</field>
+                </block>
+              </value>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_arithmetic" id="131" inline="true">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <block type="math_number" id="110">
+                  <field name="NUM">9</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_number" id="133">
+                  <field name="NUM">3</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="75" y="460">
+    <block type="logic_compare" id="137" inline="true">
+      <field name="OP">GTE</field>
+      <value name="A">
+        <block type="logic_compare" id="168" inline="true">
+          <field name="OP">EQ</field>
+          <value name="A">
+            <block type="math_arithmetic" id="138" inline="true">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <block type="math_number" id="139">
+                  <field name="NUM">5</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_number" id="140">
+                  <field name="NUM">7</field>
+                </block>
+              </value>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_arithmetic" id="169" inline="true">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <block type="math_number" id="170">
+                  <field name="NUM">5</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_number" id="171">
+                  <field name="NUM">7</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="B">
+        <block type="math_arithmetic" id="141" inline="true">
+          <field name="OP">DIVIDE</field>
+          <value name="A">
+            <block type="math_arithmetic" id="142" inline="true">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <block type="math_number" id="143">
+                  <field name="NUM">8</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_number" id="144">
+                  <field name="NUM">4</field>
+                </block>
+              </value>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_arithmetic" id="145" inline="true">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <block type="math_number" id="146">
+                  <field name="NUM">9</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_number" id="147">
+                  <field name="NUM">3</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-178" y="550">
+    <block type="logic_compare" id="178" inline="true">
+      <field name="OP">GTE</field>
+      <value name="A">
+        <block type="logic_compare" id="179" inline="true">
+          <field name="OP">EQ</field>
+          <value name="A">
+            <block type="math_arithmetic" id="180" inline="true">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <block type="math_number" id="181">
+                  <field name="NUM">5</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_number" id="182">
+                  <field name="NUM">7</field>
+                </block>
+              </value>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_arithmetic" id="183" inline="true">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <block type="math_number" id="184">
+                  <field name="NUM">5</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_number" id="185">
+                  <field name="NUM">7</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="B">
+        <block type="logic_operation" id="199" inline="true">
+          <field name="OP">AND</field>
+          <value name="A">
+            <block type="logic_compare" id="200" inline="true">
+              <field name="OP">EQ</field>
+              <value name="A">
+                <block type="math_arithmetic" id="201" inline="true">
+                  <field name="OP">ADD</field>
+                  <value name="A">
+                    <block type="math_number" id="202">
+                      <field name="NUM">5</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_number" id="203">
+                      <field name="NUM">7</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_arithmetic" id="204" inline="true">
+                  <field name="OP">ADD</field>
+                  <value name="A">
+                    <block type="math_number" id="205">
+                      <field name="NUM">5</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_number" id="206">
+                      <field name="NUM">7</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+          <value name="B">
+            <block type="logic_compare" id="207" inline="true">
+              <field name="OP">LTE</field>
+              <value name="A">
+                <block type="math_arithmetic" id="208" inline="true">
+                  <field name="OP">ADD</field>
+                  <value name="A">
+                    <block type="math_number" id="209">
+                      <field name="NUM">5</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_number" id="210">
+                      <field name="NUM">7</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_arithmetic" id="211" inline="true">
+                  <field name="OP">ADD</field>
+                  <value name="A">
+                    <block type="math_number" id="212">
+                      <field name="NUM">5</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_number" id="213">
+                      <field name="NUM">7</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-14" y="664">
+    <block type="logic_compare" id="227" inline="true">
+      <field name="OP">EQ</field>
+      <value name="A">
+        <block type="logic_negate" id="220" inline="false">
+          <value name="BOOL">
+            <block type="logic_compare" id="228" inline="true">
+              <field name="OP">EQ</field>
+              <value name="A">
+                <block type="math_arithmetic" id="229" inline="true">
+                  <field name="OP">ADD</field>
+                  <value name="A">
+                    <block type="math_number" id="230">
+                      <field name="NUM">5</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_number" id="231">
+                      <field name="NUM">7</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_arithmetic" id="232" inline="true">
+                  <field name="OP">ADD</field>
+                  <value name="A">
+                    <block type="math_number" id="233">
+                      <field name="NUM">5</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_number" id="234">
+                      <field name="NUM">7</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="B">
+        <block type="logic_boolean" id="241">
+          <field name="BOOL">TRUE</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

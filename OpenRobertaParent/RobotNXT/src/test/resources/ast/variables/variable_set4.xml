@@ -1,0 +1,117 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="1" y="7">
+    <block type="robControls_start" id="27" deletable="false">
+      <mutation declare="true"></mutation>
+      <statement name="ST">
+        <block type="robGlobalvariables_declare" id="31" inline="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Number"></mutation>
+          <field name="VAR">Element2</field>
+          <field name="TYPE">Number</field>
+          <value name="VALUE">
+            <block type="math_number" id="32">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalvariables_declare" id="33" inline="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="String"></mutation>
+          <field name="VAR">Element3</field>
+          <field name="TYPE">String</field>
+          <value name="VALUE">
+            <block type="text" id="43">
+              <field name="TEXT"></field>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalvariables_declare" id="35" inline="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Boolean"></mutation>
+          <field name="VAR">Element4</field>
+          <field name="TYPE">Boolean</field>
+          <value name="VALUE">
+            <block type="logic_boolean" id="44">
+              <field name="BOOL">TRUE</field>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalvariables_declare" id="37" inline="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Array_Number"></mutation>
+          <field name="VAR">Element5</field>
+          <field name="TYPE">Array_Number</field>
+          <value name="VALUE">
+            <block type="robLists_create_with" id="45" inline="false">
+              <mutation items="3" list_type="Number"></mutation>
+              <field name="LIST_TYPE">Number</field>
+              <value name="ADD0">
+                <block type="math_number" id="46">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+              <value name="ADD1">
+                <block type="math_number" id="47">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+              <value name="ADD2">
+                <block type="math_number" id="48">
+                  <field name="NUM">0</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalvariables_declare" id="39" inline="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Array_String"></mutation>
+          <field name="VAR">Element6</field>
+          <field name="TYPE">Array_String</field>
+          <value name="VALUE">
+            <block type="robLists_create_with" id="49" inline="false">
+              <mutation items="3" list_type="String"></mutation>
+              <field name="LIST_TYPE">String</field>
+              <value name="ADD0">
+                <block type="text" id="50">
+                  <field name="TEXT"></field>
+                </block>
+              </value>
+              <value name="ADD1">
+                <block type="text" id="51">
+                  <field name="TEXT"></field>
+                </block>
+              </value>
+              <value name="ADD2">
+                <block type="text" id="52">
+                  <field name="TEXT"></field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robGlobalvariables_declare" id="41" inline="true" deletable="false" movable="false">
+          <mutation next="false" declaration_type="Array_Boolean"></mutation>
+          <field name="VAR">Element</field>
+          <field name="TYPE">Array_Boolean</field>
+          <value name="VALUE">
+            <block type="robLists_create_with" id="53" inline="false">
+              <mutation items="3" list_type="Boolean"></mutation>
+              <field name="LIST_TYPE">Boolean</field>
+              <value name="ADD0">
+                <block type="logic_boolean" id="54">
+                  <field name="BOOL">TRUE</field>
+                </block>
+              </value>
+              <value name="ADD1">
+                <block type="logic_boolean" id="55">
+                  <field name="BOOL">TRUE</field>
+                </block>
+              </value>
+              <value name="ADD2">
+                <block type="logic_boolean" id="56">
+                  <field name="BOOL">TRUE</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

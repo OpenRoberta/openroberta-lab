@@ -1,0 +1,32 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="nao" xmlversion="" description="" tags="">
+	<instance x="384" y="50">
+		<block type="robControls_start" id=")Twz^sU|Fhhlse3vem4{"
+			intask="true" deletable="false">
+			<mutation declare="false" />
+			<field name="DEBUG" />
+		</block>
+		<block type="robActions_sayText" id="HZkV6a@Q](M@3H_W.6^#"
+			intask="true">
+			<value name="OUT">
+				<block type="robSensors_detectface_getSample"
+					id="JaA4@vP[#iAKXv3z]_A)" intask="true">
+					<mutation mode="NAMEONE" />
+					<field name="MODE">NAMEONE</field>
+					<field name="SLOT" />
+				</block>
+			</value>
+		</block>
+		<block type="robActions_sayText" id="IDsmT:tg4:rRN3nY!)k{"
+			intask="true">
+			<value name="OUT">
+				<block type="robSensors_detectface_getSample"
+					id="?0{AmQOsMhP,Bbe%d[[2" intask="true">
+					<mutation mode="NAMEALL" />
+					<field name="MODE">NAMEALL</field>
+					<field name="SLOT" />
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

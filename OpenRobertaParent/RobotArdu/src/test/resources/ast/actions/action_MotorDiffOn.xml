@@ -1,0 +1,12 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="69" y="196">
+    <block type="robActions_motorDiff_on" id="50" inline="false">
+      <field name="DIRECTION">FOREWARD</field>
+      <value name="POWER">
+        <block type="math_number" id="51">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

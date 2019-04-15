@@ -1,0 +1,17 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="" description="" tags="">
+  <instance x="113" y="63">
+    <block type="robControls_start" id="pVHZUZRX,RFL2de%aoCy" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="mbedActions_single_motor_stop" id="//Ptq^clvbsO`_-EBw3L" intask="true">
+      <field name="MODE">FLOAT</field>
+    </block>
+    <block type="mbedActions_single_motor_stop" id="=Nvg0s[*KP4#;cFWhBbT" intask="true">
+      <field name="MODE">NONFLOAT</field>
+    </block>
+    <block type="mbedActions_single_motor_stop" id="*HQ{TE^@9Pj[DJ4b?iIL" intask="true">
+      <field name="MODE">SLEEP</field>
+    </block>
+  </instance>
+</block_set>

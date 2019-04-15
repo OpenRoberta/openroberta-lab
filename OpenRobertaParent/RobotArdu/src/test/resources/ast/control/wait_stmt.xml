@@ -1,0 +1,27 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+   <instance x="100" y="50">
+		<block type="robControls_start" id="10" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+		<block type="robControls_wait_for" id="159" inline="false">
+			<value name="WAIT0">
+				<block type="logic_compare" id="160" inline="true">
+					<field name="OP">EQ</field>
+					<value name="A">
+						<block type="robSensors_getSample" id="161">
+							<mutation input="TIME"/>
+							<field name="SENSORTYPE">TIME</field>
+							<field name="SENSORPORT">1</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="math_number" id="179">
+							<field name="NUM">500</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

@@ -1,0 +1,97 @@
+{
+	"ops": [
+		{
+			"opc": "expr",
+			"expr": "STRING_CONST",
+			"value": "Hallo"
+		},
+		{
+			"mode": "TEXT",
+			"opc": "displayTextAction"
+		},
+		{
+			"opc": "expr",
+			"expr": "STRING_CONST",
+			"value": "Hallo"
+		},
+		{
+			"mode": "CHARACTER",
+			"opc": "displayTextAction"
+		},
+		{
+			"opc": "expr",
+			"expr": "IMAGE",
+			"value": "[0, 0, 0, 0, 0],[0, 0, 0, 0, 0],[0, 0, 0, 0, 0],[0, 0, 0, 0, 0],[0, 0, 0, 0, 0]"
+		},
+		{
+			"mode": "IMAGE",
+			"opc": "displayImageAction"
+		},
+		{
+			"mode": "IMAGE",
+			"opc": "displayImageAction"
+		},
+		{
+			"opc": "ClearDisplay"
+		},
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "5"
+		},
+		{
+			"opc": "displaySetBrightnessAction"
+		},
+		{
+			"opc": "displayGetBrightnessAction"
+		},
+		{
+			"opc": "displaySetBrightnessAction"
+		},
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "0"
+		},
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "0"
+		},
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "5"
+		},
+		{
+			"opc": "displaySetPixelAction"
+		},
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "0"
+		},
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "0"
+		},
+		{
+			"opc": "displayGetPixelAction"
+		},
+		{
+			"opc": "displaySetPixelAction"
+		},
+		{
+			"opc": "expr",
+			"expr": "STRING_CONST",
+			"value": "Hallo"
+		},
+		{
+			"opc": "serialWriteAction"
+		}
+	],
+	"functionDeclaration": {
+		
+	}
+}

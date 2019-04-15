@@ -1,0 +1,24 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="nao" xmlversion="" description="" tags="">
+	<instance x="349" y="50">
+		<block type="robControls_start" id="]0(qdMli5Z}!PrZaaw0!"
+			intask="true" deletable="false">
+			<mutation declare="false" />
+			<field name="DEBUG" />
+		</block>
+		<block type="robActions_sayText" id="?D~=do{Q6g~{G@8#W~Y{"
+			intask="true">
+			<value name="OUT">
+				<block type="naoSensors_getFaceInformation"
+					id="_m,2U7?gnO,O.-*+xHwG" intask="true">
+					<field name="MODE" />
+					<value name="VALUE">
+						<block type="text" id="[Sb1-?wmT@uO{cyTU*8)" intask="true">
+							<field name="TEXT">Roberta</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

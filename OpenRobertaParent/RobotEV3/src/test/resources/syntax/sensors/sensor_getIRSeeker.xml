@@ -1,0 +1,45 @@
+<block_set 
+    xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="2.0" description="" tags="">
+    <instance x="384" y="50">
+        <block type="robActions_display_text" id="KB!EucnQtZh4VDCX:sun" intask="true">
+            <value name="OUT">
+                <block type="robSensors_irseeker_getSample" id="yzL6Q6p+AOWh.teP0UVj" intask="true">
+                    <mutation mode="MODULATED"></mutation>
+                    <field name="MODE">MODULATED</field>
+                    <field name="SENSORPORT">1</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+            <value name="COL">
+                <block type="math_number" id="9_M#[gB|W-05NeI6`*m;" intask="true">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="ROW">
+                <block type="math_number" id="[%U-~aWjTsd#F@*H?T0+" intask="true">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_display_text" id="rmmMEGXRfmC2+eL.!%Bi" intask="true">
+            <value name="OUT">
+                <block type="robSensors_irseeker_getSample" id="!4jV8o,NlP2Xo{97ET,2" intask="true">
+                    <mutation mode="UNMODULATED"></mutation>
+                    <field name="MODE">UNMODULATED</field>
+                    <field name="SENSORPORT">1</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+            <value name="COL">
+                <block type="math_number" id="OtCGFsomR?|4h.fT[h{Z" intask="true">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="ROW">
+                <block type="math_number" id="+w@Zrob:L)]JV=cae3,a" intask="true">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

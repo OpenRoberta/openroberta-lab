@@ -1,0 +1,32 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance x="384" y="50">
+        <block type="robControls_start" id="ByhsQkz7OWz(abk~*u!_" intask="true" deletable="false">
+            <mutation declare="true"></mutation>
+            <field name="DEBUG"></field>
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id="GcjkWe([153v`Uig/2zi" intask="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="Number"></mutation>
+                    <field name="VAR">item</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
+                        <block type="math_number" id="2m:=2N5HWF,{reGA0o15" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+        <block type="variables_set" id="7j#B4bYLPQCZ!8@J)cJB" intask="true">
+            <mutation datatype="Number"></mutation>
+            <field name="VAR">item</field>
+            <value name="VALUE">
+                <block type="robSensors_timer_getSample" id="Bc?v.sU:}!vBx_;wAB-:" intask="true">
+                    <mutation mode="VALUE"></mutation>
+                    <field name="MODE">VALUE</field>
+                    <field name="SENSORPORT">1</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

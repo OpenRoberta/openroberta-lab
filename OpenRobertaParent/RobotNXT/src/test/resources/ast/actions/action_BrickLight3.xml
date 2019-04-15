@@ -1,0 +1,8 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="46" y="109">
+    <block type="robActions_brickLight_on" id="188" disabled="true">
+      <field name="SWITCH_COLOR">GREEN</field>
+      <field name="SWITCH_BLINK">DOUBLE_FLASH</field>
+    </block>
+  </instance>
+</block_set>

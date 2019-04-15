@@ -1,0 +1,58 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-58" y="49">
+    <block type="text_join" id="827" inline="false">
+      <mutation items="2"></mutation>
+      <value name="ADD0">
+        <block type="math_number" id="847">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ADD1">
+        <block type="math_number" id="918">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-52" y="150">
+    <block type="text_join" id="919" inline="false">
+      <mutation items="2"></mutation>
+      <value name="ADD0">
+        <block type="math_number" id="920">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ADD1">
+        <block type="text" id="939">
+          <field name="TEXT">16561</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-54" y="237">
+    <block type="text_join" id="940" inline="false">
+      <mutation items="2"></mutation>
+      <value name="ADD0">
+        <block type="math_number" id="941">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="ADD1">
+        <block type="robLists_create_with" id="974" inline="false">
+          <mutation items="2"></mutation>
+          <field name="LIST_TYPE">String</field>
+          <value name="ADD0">
+            <block type="text" id="975">
+              <field name="TEXT">16561</field>
+            </block>
+          </value>
+          <value name="ADD1">
+            <block type="text" id="976">
+              <field name="TEXT">16561</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

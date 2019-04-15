@@ -1,0 +1,8 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-93" y="290">
+    <block type="controls_forEach" id="354" inline="false">
+      <field name="TYPE">Number</field>
+      <field name="VAR">i</field>
+    </block>
+  </instance>
+</block_set>

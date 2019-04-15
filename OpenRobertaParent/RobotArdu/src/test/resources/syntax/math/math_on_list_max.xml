@@ -1,0 +1,28 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-28" y="-368">
+    <block type="math_on_list" id="266" inline="false" >
+      <field name="OP">MAX</field>
+      <value name="LIST">
+        <block type="lists_create_with" id="295" inline="false" >
+          <mutation items="3"></mutation>
+          <field name="LIST_TYPE">Number</field>
+          <value name="ADD0">
+            <block type="math_number" id="310" >
+              <field name="NUM">5</field>
+            </block>
+          </value>
+          <value name="ADD1">
+            <block type="math_number" id="329" >
+              <field name="NUM">3</field>
+            </block>
+          </value>
+          <value name="ADD2">
+            <block type="math_number" id="329" >
+              <field name="NUM">2</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

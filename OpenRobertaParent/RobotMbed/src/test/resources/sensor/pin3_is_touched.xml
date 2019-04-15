@@ -1,0 +1,40 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="calliope" xmlversion="" description="" tags="">
+	<instance x="63" y="38">
+		<block type="robControls_start" id="V6.1z67D{u^^b9,I^V?5"
+			intask="true" deletable="false">
+			<mutation declare="false"></mutation>
+			<field name="DEBUG">FALSE</field>
+		</block>
+		<block type="mbedActions_display_text" id="fU;tE0LekJH{6VzZX6:T"
+			intask="true">
+			<field name="TYPE">TEXT</field>
+			<value name="OUT">
+				<block type="robSensors_pintouch_getSample" id="yF5,YMW9Ndze[l*kbGW!"
+					intask="true">
+					<field name="PIN">0</field>
+				</block>
+			</value>
+		</block>
+		<block type="mbedActions_display_text" id="griw-|~wn9neq|HWL*~3"
+			intask="true">
+			<field name="TYPE">TEXT</field>
+			<value name="OUT">
+				<block type="robSensors_pintouch_getSample" id="Ji;/tOC{z_Vz@CL5IY/e"
+					intask="true">
+					<field name="PIN">2</field>
+				</block>
+			</value>
+		</block>
+		<block type="mbedActions_display_text" id="griw-|~wn9neq|HWL*~3"
+			intask="true">
+			<field name="TYPE">TEXT</field>
+			<value name="OUT">
+				<block type="robSensors_pintouch_getSample" id="Ji;/tOC{z_Vz@CL5IY/e"
+					intask="true">
+					<field name="PIN">3</field>
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

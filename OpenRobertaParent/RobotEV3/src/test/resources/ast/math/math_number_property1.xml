@@ -1,0 +1,18 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+    <instance x="64" y="-525">
+    <block type="math_number_property" id="344" inline="true">
+      <mutation divisor_input="true"></mutation>
+      <field name="PROPERTY">DIVISIBLE_BY</field>
+      <value name="NUMBER_TO_CHECK">
+        <block type="math_number" id="417">
+          <field name="NUM">8</field>
+        </block>
+      </value>
+      <value name="DIVISOR">
+        <block type="math_number" id="418">
+          <field name="NUM">5</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

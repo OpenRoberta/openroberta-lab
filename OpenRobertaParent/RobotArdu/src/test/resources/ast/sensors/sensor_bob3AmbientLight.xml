@@ -1,0 +1,36 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="bob3" xmlversion="2.0" description="" tags="">
+	<instance x="273" y="50">
+		<block type="robControls_start_ardu" id="9gQ`lvA-06F0GogyKtF*"
+			intask="true" deletable="false">
+			<mutation declare="true"></mutation>
+			<field name="DEBUG">FALSE</field>
+			<statement name="ST">
+				<block type="robGlobalVariables_declare" id="WuhJ/Yg9^z1S@HnIc;K+"
+					intask="true" deletable="false" movable="false">
+					<mutation next="false" declaration_type="Number"></mutation>
+					<field name="VAR">item</field>
+					<field name="TYPE">Number</field>
+					<value name="VALUE">
+						<block type="math_number" id="rJr9muWoN{T5rEf^o+kq" intask="true">
+							<field name="NUM">0</field>
+						</block>
+					</value>
+				</block>
+			</statement>
+		</block>
+		<block type="robControls_loopForever_ardu" id="-mRBXSb~6CKn0k/kuv{4"
+			intask="true" deletable="false" movable="false">
+			<statement name="DO">
+				<block type="variables_set" id="U]fFm]2(n,z[V}OI]T}q" intask="true">
+					<mutation datatype="Number"></mutation>
+					<field name="VAR">item</field>
+					<value name="VALUE">
+						<block type="robSensors_infrared_getSample" id="yw[sJ[PHx2Vp+o~FPXr,"
+							intask="true"></block>
+					</value>
+				</block>
+			</statement>
+		</block>
+	</instance>
+</block_set>

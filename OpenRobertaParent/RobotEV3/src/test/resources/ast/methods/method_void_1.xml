@@ -1,0 +1,25 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="103" y="38">
+    <block type="robProcedures_defnoreturn" id="180">
+      <mutation declare="true"></mutation>
+      <field name="NAME">do something</field>
+      <statement name="ST">
+        <block type="robLocalVariables_declare" id="189" deletable="false" movable="false">
+          <mutation next="false" declaration_type="Number"></mutation>
+          <field name="VAR">x</field>
+          <field name="TYPE">Number</field>
+        </block>
+      </statement>
+      <statement name="STACK">
+        <block type="robActions_motor_on" id="192" inline="false">
+          <field name="MOTORPORT">B</field>
+          <value name="POWER">
+            <block type="math_number" id="193">
+              <field name="NUM">30</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

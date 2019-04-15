@@ -1,0 +1,17 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+	<instance x="163" y="62">
+		<block type="mbedActions_play_tone" id="MP,aB/)!C!i|aw;hI=0Q"
+			intask="true">
+			<value name="FREQUENCE">
+				<block type="math_number" id="N}6WPw@O#2j5gtmC`LDk" intask="true">
+					<field name="NUM">50</field>
+				</block>
+			</value>
+			<value name="DURATION">
+				<block type="math_number" id="/LVJ_Z@RyIm}Uk!##!fw" intask="true">
+					<field name="NUM">500</field>
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

@@ -1,0 +1,34 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+    <instance x="213" y="213">
+        <block type="robBrick_EV3-Brick" id="1" intask="true" deletable="false">
+            <field name="WHEEL_DIAMETER">5.6</field>
+            <field name="TRACK_WIDTH">18</field>
+            <value name="S1">
+                <block type="robBrick_touch" id="2" intask="true"></block>
+            </value>
+            <value name="S2">
+                <block type="robBrick_gyro" id="3" intask="true"></block>
+            </value>
+            <value name="S3">
+                <block type="robBrick_colour" id="4" intask="true"></block>
+            </value>
+            <value name="S4">
+                <block type="robBrick_ultrasonic" id="5" intask="true"></block>
+            </value>
+            <value name="MB">
+                <block type="robBrick_motor_big" id="6" intask="true">
+                    <field name="MOTOR_REGULATION">TRUE</field>
+                    <field name="MOTOR_REVERSE">OFF</field>
+                    <field name="MOTOR_DRIVE">RIGHT</field>
+                </block>
+            </value>
+            <value name="MC">
+                <block type="robBrick_motor_big" id="7" intask="true">
+                    <field name="MOTOR_REGULATION">TRUE</field>
+                    <field name="MOTOR_REVERSE">OFF</field>
+                    <field name="MOTOR_DRIVE">LEFT</field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

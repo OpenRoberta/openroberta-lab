@@ -1,0 +1,35 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="2.0" description="" tags="">
+  <instance x="95" y="64">
+    <block type="robControls_start_ardu" id="os!`U@S(1k8_URlj.~qu" intask="true" deletable="false">
+      <mutation declare="false">
+      </mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robControls_loopForever_ardu" id="u,,P~,:XfvJcWhS?!AZt" intask="true" deletable="false" movable="false">
+      <statement name="DO">
+        <block type="robActions_set_relay" id="im[9hk,x4H5[nJFToO^{" intask="true">
+          <field name="ACTORPORT">R</field>
+          <field name="RELAYSTATE">OFF</field>
+        </block>
+        <block type="robControls_wait_time" id="1mZa0Oqs-~,s9!1Q;[CG" intask="true">
+          <value name="WAIT">
+            <block type="math_number" id="Bj5]mY/;hcxRqabP]gT," intask="true">
+              <field name="NUM">1000</field>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_set_relay" id="~w0lh{b)l8[;cBZ)RDls" intask="true">
+          <field name="ACTORPORT">R</field>
+          <field name="RELAYSTATE">ON</field>
+        </block>
+        <block type="robControls_wait_time" id="xgUc|@z5wN(8gz~2YsZP" intask="true">
+          <value name="WAIT">
+            <block type="math_number" id="Uisoy%@BSA`nWY440{I0" intask="true">
+              <field name="NUM">1000</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

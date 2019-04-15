@@ -1,0 +1,18 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-129" y="-18">
+    <block type="robActions_motor_on_for" id="395" inline="false" >
+      <field name="MOTORPORT">B</field>
+      <field name="MOTORROTATION">ROTATIONS</field>
+      <value name="POWER">
+        <block type="math_constant" id="361" >
+          <field name="CONSTANT">PI</field>
+        </block>
+      </value>
+      <value name="VALUE">
+        <block type="math_constant" id="376" >
+          <field name="CONSTANT">GOLDEN_RATIO</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

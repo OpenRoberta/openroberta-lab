@@ -1,0 +1,24 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="113" y="163">
+    <block type="robControls_start" id="47" intask="true" deletable="false">
+      <mutation declare="true"></mutation>
+      <field name="DEBUG">FALSE</field>
+      <statement name="ST">
+        <block type="robGlobalVariables_declare" id="49" inline="true" intask="true" deletable="false" movable="false">
+          <mutation next="false" declaration_type="Connection"></mutation>
+          <field name="VAR">variablenName</field>
+          <field name="TYPE">Connection</field>
+          <value name="VALUE">
+            <block type="robCommunication_startConnection" id="51" intask="true">
+              <value name="ADDRESS">
+                <block type="text" id="56" intask="true">
+                  <field name="TEXT">101010</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

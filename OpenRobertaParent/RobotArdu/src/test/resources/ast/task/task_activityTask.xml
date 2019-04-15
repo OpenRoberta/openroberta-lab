@@ -1,0 +1,12 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+    <instance x="66" y="175">
+    <block type="robControls_activity" id="342" inline="true">
+      <value name="ACTIVITY">
+        <block type="variables_get" id="343">
+          <mutation datatype="Number"></mutation>
+          <field name="VAR">zwei</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

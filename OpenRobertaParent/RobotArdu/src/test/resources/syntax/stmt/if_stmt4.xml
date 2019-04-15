@@ -1,0 +1,58 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+    <instance x="370" y="50">
+        <block type="robControls_start" id="9" intask="true" deletable="false">
+            <mutation declare="true"></mutation>
+            <field name="DEBUG">FALSE</field>
+            <statement name="ST">
+                <block type="robGlobalvariables_declare" id="25" inline="true" intask="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="String"></mutation>
+                    <field name="VAR">message</field>
+                    <field name="TYPE">String</field>
+                    <value name="VALUE">
+                        <block type="text" id="27" intask="true">
+                            <field name="TEXT">exit</field>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+        <block type="robControls_if" id="14" inline="false" intask="true">
+            <value name="IF0">
+                <block type="logic_compare" id="10" inline="true" intask="true">
+                    <mutation operator_range="NUM"></mutation>
+                    <field name="OP">EQ</field>
+                    <value name="A">
+                        <block type="variables_get" id="29" intask="true">
+                            <mutation datatype="String"></mutation>
+                            <field name="VAR">message</field>
+                        </block>
+                    </value>
+                    <value name="B">
+                        <block type="text" id="32" intask="true">
+                            <field name="TEXT">exit</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+            <statement name="DO0">
+                <block type="robActions_display_text" id="48" inline="false" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="49" intask="true">
+                            <field name="TEXT">done</field>
+                        </block>
+                    </value>
+                    <value name="COL">
+                        <block type="math_number" id="50" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                    <value name="ROW">
+                        <block type="math_number" id="51" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+    </instance>
+</block_set>

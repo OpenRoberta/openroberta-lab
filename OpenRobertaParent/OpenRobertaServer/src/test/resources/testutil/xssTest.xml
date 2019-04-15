@@ -1,0 +1,108 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+	<program>
+		<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+			robottype="ev3" xmlversion="2.0"
+			description="&lt;script&gt;alert(123);&lt;/script&gt;&lt;div style=&quot;text-align: center;&quot;&gt;&lt;b&gt;&lt;i&gt;&lt;strike&gt;123&lt;/strike&gt;&lt;/i&gt;&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;text-align: center;&quot;&gt;&lt;b&gt;&lt;i&gt;&lt;strike&gt;tyu&lt;/strike&gt;&lt;/i&gt;&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;text-align: center;&quot;&gt;&lt;b&gt;&lt;i&gt;&lt;strike&gt;rtyu&lt;/strike&gt;&lt;/i&gt;&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;text-align: center;&quot;&gt;&lt;b&gt;&lt;i&gt;&lt;strike&gt;&lt;br&gt;&lt;/strike&gt;&lt;/i&gt;&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;text-align: center;&quot;&gt;&lt;b&gt;&lt;i&gt;&lt;strike&gt;&lt;br&gt;&lt;/strike&gt;&lt;/i&gt;&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;text-align: center;&quot;&gt;&lt;b&gt;&lt;i&gt;&lt;strike&gt;rtyu&lt;/strike&gt;&lt;/i&gt;&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;text-align: center;&quot;&gt;&lt;b&gt;&lt;i&gt;&lt;strike&gt;rtyu&lt;/strike&gt;&lt;/i&gt;&lt;/b&gt;&lt;/div&gt;"
+			tags="">
+			<instance x="273" y="50">
+				<block type="robControls_start" id="oRi##Q9QRkakEjtV9U)f"
+					intask="true" deletable="false">
+					<mutation declare="false"></mutation>
+					<field name="DEBUG">FALSE</field>
+				</block>
+				<block type="robActions_motorDiff_on_for"
+					id="s@,3Is~gmbZvSZA[ZLB=" intask="true">
+					<field name="DIRECTION">FOREWARD</field>
+					<value name="POWER">
+						<block type="math_number" id="gIm/ulhO2?U+g,Zz9yUs"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+					<value name="DISTANCE">
+						<block type="math_number" id="DTFQcCNwZfoKLqu)rXpj"
+							intask="true">
+							<field name="NUM">20</field>
+						</block>
+					</value>
+				</block>
+				<block type="robActions_motorDiff_turn_for"
+					id="IU[Y`dV%q`:F!.=/jD5/" intask="true">
+					<field name="DIRECTION">RIGHT</field>
+					<value name="POWER">
+						<block type="robSensors_ultrasonic_getSample"
+							id="/u:RgTq_sh4-}21MGhs}" intask="true">
+							<mutation mode="DISTANCE"></mutation>
+							<field name="MODE">DISTANCE</field>
+							<field name="SENSORPORT">4</field>
+							<field name="SLOT"></field>
+						</block>
+					</value>
+					<value name="DEGREE">
+						<block type="math_number" id="A57w#iDRtUJ:_yG[.d~I"
+							intask="true">
+							<field name="NUM">20</field>
+						</block>
+					</value>
+				</block>
+				<block type="robActions_motorDiff_curve"
+					id=",?h140IeprkQm8zlNdX;" intask="true">
+					<field name="DIRECTION">FOREWARD</field>
+					<value name="POWER_LEFT">
+						<block type="robSensors_ultrasonic_getSample"
+							id="jPBZ!v[6?ampl)xPr_y}" intask="true">
+							<mutation mode="DISTANCE"></mutation>
+							<field name="MODE">DISTANCE</field>
+							<field name="SENSORPORT">4</field>
+							<field name="SLOT"></field>
+						</block>
+					</value>
+					<value name="POWER_RIGHT">
+						<block type="math_number" id="9]m*ufG4+%Oq)z2fL;Xj"
+							intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</instance>
+		</block_set>
+	</program>
+	<config>
+		<block_set robottype="ev3" xmlversion="2.0" description=""
+			tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+			<instance x="213" y="213">
+				<block type="robBrick_EV3-Brick" id="1" intask="true"
+					deletable="false">
+					<field name="WHEEL_DIAMETER">5.6</field>
+					<field name="TRACK_WIDTH">18</field>
+					<value name="S1">
+						<block type="robBrick_touch" id="2" intask="true" />
+					</value>
+					<value name="S2">
+						<block type="robBrick_gyro" id="3" intask="true" />
+					</value>
+					<value name="S3">
+						<block type="robBrick_colour" id="4" intask="true" />
+					</value>
+					<value name="S4">
+						<block type="robBrick_ultrasonic" id="5" intask="true" />
+					</value>
+					<value name="MB">
+						<block type="robBrick_motor_big" id="6" intask="true">
+							<field name="MOTOR_REGULATION">TRUE</field>
+							<field name="MOTOR_REVERSE">OFF</field>
+							<field name="MOTOR_DRIVE">RIGHT</field>
+						</block>
+					</value>
+					<value name="MC">
+						<block type="robBrick_motor_big" id="7" intask="true">
+							<field name="MOTOR_REGULATION">TRUE</field>
+							<field name="MOTOR_REVERSE">OFF</field>
+							<field name="MOTOR_DRIVE">LEFT</field>
+						</block>
+					</value>
+				</block>
+			</instance>
+		</block_set>
+	</config>
+</export>

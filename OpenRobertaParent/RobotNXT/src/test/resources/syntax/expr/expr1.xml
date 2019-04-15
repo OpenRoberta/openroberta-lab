@@ -1,0 +1,187 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="-197" y="106">
+    <block type="math_arithmetic" id="489" inline="true">
+      <field name="OP">ADD</field>
+      <value name="A">
+        <block type="math_number" id="490">
+          <field name="NUM">8</field>
+        </block>
+      </value>
+      <value name="B">
+        <block type="math_arithmetic" id="491" inline="true">
+          <field name="OP">ADD</field>
+          <value name="A">
+            <block type="math_number" id="492">
+              <field name="NUM">-3</field>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_number" id="493">
+              <field name="NUM">5</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-197" y="168">
+    <block type="math_arithmetic" id="517" inline="true">
+      <field name="OP">MINUS</field>
+      <value name="A">
+        <block type="math_number" id="518">
+          <field name="NUM">88</field>
+        </block>
+      </value>
+      <value name="B">
+        <block type="math_arithmetic" id="494" inline="true">
+          <field name="OP">ADD</field>
+          <value name="A">
+            <block type="math_number" id="495">
+              <field name="NUM">8</field>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_arithmetic" id="496" inline="true">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <block type="math_number" id="497">
+                  <field name="NUM">-3</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_number" id="498">
+                  <field name="NUM">5</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-282" y="255">
+    <block type="math_arithmetic" id="551" inline="true">
+      <field name="OP">MINUS</field>
+      <value name="A">
+        <block type="math_arithmetic" id="519" inline="true">
+          <field name="OP">MINUS</field>
+          <value name="A">
+            <block type="math_number" id="520">
+              <field name="NUM">88</field>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_arithmetic" id="521" inline="true">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <block type="math_number" id="522">
+                  <field name="NUM">8</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_arithmetic" id="523" inline="true">
+                  <field name="OP">ADD</field>
+                  <value name="A">
+                    <block type="math_number" id="524">
+                      <field name="NUM">-3</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_number" id="525">
+                      <field name="NUM">5</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="B">
+        <block type="math_arithmetic" id="526" inline="true">
+          <field name="OP">MINUS</field>
+          <value name="A">
+            <block type="math_number" id="527">
+              <field name="NUM">88</field>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_arithmetic" id="528" inline="true">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <block type="math_number" id="529">
+                  <field name="NUM">8</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_arithmetic" id="530" inline="true">
+                  <field name="OP">ADD</field>
+                  <value name="A">
+                    <block type="math_number" id="531">
+                      <field name="NUM">-3</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_number" id="532">
+                      <field name="NUM">5</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-263" y="363">
+    <block type="math_arithmetic" id="600" inline="true">
+      <field name="OP">MULTIPLY</field>
+      <value name="A">
+        <block type="math_number" id="601">
+          <field name="NUM">2</field>
+        </block>
+      </value>
+      <value name="B">
+        <block type="math_arithmetic" id="603" inline="true">
+          <field name="OP">MINUS</field>
+          <value name="A">
+            <block type="math_number" id="604">
+              <field name="NUM">2</field>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_number" id="605">
+              <field name="NUM">2</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-262" y="434">
+    <block type="math_arithmetic" id="621" inline="true">
+      <field name="OP">MINUS</field>
+      <value name="A">
+        <block type="math_number" id="622">
+          <field name="NUM">2</field>
+        </block>
+      </value>
+      <value name="B">
+        <block type="math_arithmetic" id="623" inline="true">
+          <field name="OP">MULTIPLY</field>
+          <value name="A">
+            <block type="math_number" id="624">
+              <field name="NUM">2</field>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_number" id="625">
+              <field name="NUM">2</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

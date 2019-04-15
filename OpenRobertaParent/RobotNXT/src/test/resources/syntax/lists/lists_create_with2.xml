@@ -1,0 +1,23 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="-361" y="124">
+    <block type="robLists_create_with" id="983" inline="false" >
+      <mutation items="3"></mutation>
+      <field name="LIST_TYPE">Boolean</field>
+      <value name="ADD0">
+        <block type="logic_boolean" id="1067" >
+          <field name="BOOL">TRUE</field>
+        </block>
+      </value>
+      <value name="ADD1">
+        <block type="logic_boolean" id="1071" >
+          <field name="BOOL">TRUE</field>
+        </block>
+      </value>
+      <value name="ADD2">
+        <block type="logic_boolean" id="1071" >
+          <field name="BOOL">FALSE</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

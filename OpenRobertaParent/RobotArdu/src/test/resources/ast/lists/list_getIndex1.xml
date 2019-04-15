@@ -1,0 +1,15 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="53" y="245">
+    <block type="lists_getIndex" id="99" inline="true" disabled="true">
+      <mutation statement="false" at="false"></mutation>
+      <field name="MODE">GET</field>
+      <field name="WHERE">RANDOM</field>
+      <value name="VALUE">
+        <block type="variables_get" id="100" disabled="true">
+          <mutation datatype="Array_String"></mutation>
+          <field name="VAR">liste</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

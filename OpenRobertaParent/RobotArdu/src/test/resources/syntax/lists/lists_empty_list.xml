@@ -1,0 +1,22 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-262" y="2">
+    <block type="lists_create_empty" id="841" >
+        <field name="LIST_TYPE">String</field>
+    </block>
+  </instance>
+    <instance x="8" y="43">
+    <block type="lists_create_empty" id="79" >
+      <field name="LIST_TYPE">Colour</field>
+    </block>
+  </instance>
+  <instance x="8" y="43">
+    <block type="lists_create_empty" id="79">
+      <field name="LIST_TYPE">Boolean</field>
+    </block>
+  </instance>
+  <instance x="8" y="43">
+    <block type="lists_create_empty" id="79">
+      <field name="LIST_TYPE">Number</field>
+    </block>
+  </instance>
+</block_set>

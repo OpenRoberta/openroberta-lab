@@ -1,0 +1,33 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="38" y="88">
+    <block type="robControls_start" id="3o+sJ1tg0DkbZWr}9;[u" intask="true" deletable="false">
+      <mutation declare="true"></mutation>
+      <field name="DEBUG">FALSE</field>
+      <statement name="ST">
+        <block type="robGlobalvariables_declare" id="fF9f5ol8xEw[WXO6tA)O" intask="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Number"></mutation>
+          <field name="VAR">item</field>
+          <field name="TYPE">Number</field>
+          <value name="VALUE">
+            <shadow type="math_number" id="~yVKyvfO8zk)TYMd7zI^" intask="true">
+              <field name="NUM">0</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="robGlobalvariables_declare" id="fl+3eU1kc;(:}/}/(5jQ" intask="true" deletable="false" movable="false">
+        <mutation next="false" declaration_type="Number"></mutation>
+          <field name="VAR">item2</field>
+          <field name="TYPE">Number</field>
+          <value name="VALUE">
+            <shadow type="math_number" id="HjW|)28$x6KPk#Ll5,AC" intask="true">
+              <field name="NUM">0</field>
+            </shadow>
+            <block type="math_number" id="HjW|)28$x6KPk#Ll5,AC" intask="true">
+              <field name="NUM">15</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

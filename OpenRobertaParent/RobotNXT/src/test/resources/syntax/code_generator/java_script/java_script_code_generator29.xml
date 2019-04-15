@@ -1,0 +1,21 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="13" y="13">
+    <block type="robControls_start" id=":WRU7dJeMB3ieBaXM9Fl" intask="true" deletable="false">
+      <mutation declare="true"></mutation>
+      <field name="DEBUG">FALSE</field>
+      <statement name="ST">
+        <block type="robGlobalVariables_declare" id="SS`6oK})m1l*nw_DeNz{" intask="true" deletable="false" movable="false">
+          <mutation next="false" declaration_type="Number"></mutation>
+          <field name="VAR">Element</field>
+          <field name="TYPE">Number</field>
+          <value name="VALUE">
+            <block type="robSensors_light_getSample" id="ckJ-/^zeKVKRqO+Z*cFd" intask="true">
+              <field name="MODE">RED</field>
+              <field name="SENSORPORT">1</field><field name="SLOT" />
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</block_set>

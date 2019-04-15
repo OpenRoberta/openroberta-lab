@@ -1,0 +1,11 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="" description="" tags="">
+  <instance x="88" y="63">
+    <block type="robControls_start" id="@3:UZ`_L3]4X7:W0=+[/" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="naoActions_mode" id="(}37`TuR@I3Ud[7ydgjP" intask="true">
+      <field name="DIRECTION">REST</field>
+    </block>
+  </instance>
+</block_set>

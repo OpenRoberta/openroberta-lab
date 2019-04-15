@@ -1,0 +1,5 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+     <instance x="4" y="145">
+    <block type="logic_null" id="236"></block>
+  </instance>
+</block_set>

@@ -1,0 +1,10 @@
+<toolbox_set id="toolbox" style="display: none">
+    <category name='Brick'>
+        <block type='naoBrick_NAO-Brick'>
+            <field name='IP_ADDRESS'>0.0.0.0</field>
+            <field name='PORT'>22</field>
+            <field name='USERNAME'>nao</field>
+            <field name='PASSWORD'>nao</field>
+        </block>
+    </category>
+</toolbox_set>

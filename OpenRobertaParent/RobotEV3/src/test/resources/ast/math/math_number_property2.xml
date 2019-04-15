@@ -1,0 +1,84 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+  <instance x="-683" y="152">
+    <block type="math_number_property" id="60" inline="true" disabled="true">
+      <mutation divisor_input="false"></mutation>
+      <field name="PROPERTY">EVEN</field>
+      <value name="NUMBER_TO_CHECK">
+        <block type="math_number" id="74" disabled="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-663" y="192">
+    <block type="math_number_property" id="95" inline="true" disabled="true">
+      <mutation divisor_input="false"></mutation>
+      <field name="PROPERTY">ODD</field>
+      <value name="NUMBER_TO_CHECK">
+        <block type="math_number" id="74" disabled="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-675" y="232">
+    <block type="math_number_property" id="95" inline="true" disabled="true">
+      <mutation divisor_input="false"></mutation>
+      <field name="PROPERTY">PRIME</field>
+      <value name="NUMBER_TO_CHECK">
+        <block type="math_number" id="74" disabled="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-676" y="268">
+    <block type="math_number_property" id="95" inline="true" disabled="true">
+      <mutation divisor_input="false"></mutation>
+      <field name="PROPERTY">WHOLE</field>
+      <value name="NUMBER_TO_CHECK">
+        <block type="math_number" id="74" disabled="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-659" y="311">
+    <block type="math_number_property" id="95" inline="true" disabled="true">
+      <mutation divisor_input="false"></mutation>
+      <field name="PROPERTY">POSITIVE</field>
+      <value name="NUMBER_TO_CHECK">
+        <block type="math_number" id="74" disabled="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-583" y="352">
+    <block type="math_number_property" id="95" inline="true" disabled="true">
+      <mutation divisor_input="false"></mutation>
+      <field name="PROPERTY">NEGATIVE</field>
+      <value name="NUMBER_TO_CHECK">
+        <block type="math_number" id="74" disabled="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="-603" y="541">
+    <block type="math_number_property" id="95" inline="true" disabled="true">
+      <mutation divisor_input="true"></mutation>
+      <field name="PROPERTY">DIVISIBLE_BY</field>
+      <value name="NUMBER_TO_CHECK">
+        <block type="math_number" id="74" disabled="true">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+      <value name="DIVISOR">
+        <block type="math_number" id="108" disabled="true">
+          <field name="NUM">10</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

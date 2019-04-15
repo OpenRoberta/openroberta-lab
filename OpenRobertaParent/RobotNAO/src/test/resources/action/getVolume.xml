@@ -1,0 +1,13 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="" description="" tags="">
+  <instance x="88" y="88">
+    <block type="robControls_start" id="620P}NBy3A}|E4i@Eq.O" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="naoActions_setVolume" id="Yb)XRXzG|a+-XI[^Z6L!" intask="true">
+      <value name="VOLUME">
+        <block type="naoActions_getVolume" id="e*4}a+X]S8},SH#_zVZ7" intask="true"></block>
+      </value>
+    </block>
+  </instance>
+</block_set>

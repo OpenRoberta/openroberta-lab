@@ -1,0 +1,52 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="" description="" tags="">
+  <instance x="138" y="163">
+    <block type="naoActions_rgbLeds" id="kgi647^Cby;~W.Wk2Yix" intask="false">
+      <field name="LED">EYES</field>
+      <value name="COLOR">
+        <block type="naoColour_picker" id="4m.u-zLy0l/vf.HH%o-+" intask="false">
+          <field name="COLOUR">#ffcc33</field>
+        </block>
+      </value>
+    </block>
+    <block type="naoActions_rgbLeds" id=")Vsd!9@NLHn^(Lf6,5yr" intask="false">
+      <field name="LED">LEFTEYE</field>
+      <value name="COLOR">
+        <block type="naoColour_picker" id=";7/F-HMJ#To#pqpr@-gP" intask="false">
+          <field name="COLOUR">#ffcc66</field>
+        </block>
+      </value>
+    </block>
+    <block type="naoActions_rgbLeds" id="tR0yx!+y#S`BiWVF=1#4" intask="false">
+      <field name="LED">RIGHTEYE</field>
+      <value name="COLOR">
+        <block type="naoColour_picker" id="8QFhelR8LmKe6_rFf`.|" intask="false">
+          <field name="COLOUR">#66cccc</field>
+        </block>
+      </value>
+    </block>
+    <block type="naoActions_rgbLeds" id="UdlKHP1WDZKdnXqIq[(v" intask="false">
+      <field name="LED">LEFTFOOT</field>
+      <value name="COLOR">
+        <block type="naoColour_picker" id="sCMs3pSwlfajL_R/^JYK" intask="false">
+          <field name="COLOUR">#336666</field>
+        </block>
+      </value>
+    </block>
+    <block type="naoActions_rgbLeds" id="2/eS~xFRTV~@-DB,aD*n" intask="false">
+      <field name="LED">RIGHTFOOT</field>
+      <value name="COLOR">
+        <block type="naoColour_picker" id="@0FMB/{fEvz+u2Iwz8v_" intask="false">
+          <field name="COLOUR">#ccccff</field>
+        </block>
+      </value>
+    </block>
+    <block type="naoActions_rgbLeds" id="OUl{]aF}`FMF)j!D`|9U" intask="false">
+      <field name="LED">ALL</field>
+      <value name="COLOR">
+        <block type="naoColour_picker" id="S#Pxjb{.RHA`gn1UU8:_" intask="false">
+          <field name="COLOUR">#663366</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</block_set>

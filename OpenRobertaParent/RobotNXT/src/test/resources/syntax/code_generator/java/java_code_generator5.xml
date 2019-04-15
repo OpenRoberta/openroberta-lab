@@ -1,0 +1,31 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+      <instance x="-8" y="1">
+    <block type="robControls_start" id="468" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robActions_motor_on" id="487" inline="false">
+      <field name="MOTORPORT">B</field>
+    </block>
+    <block type="robActions_motor_on_for" id="498" inline="false">
+      <field name="MOTORPORT">B</field>
+      <field name="MOTORROTATION">ROTATIONS</field>
+      <value name="POWER">
+        <block type="math_number" id="499">
+          <field name="NUM">30</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motorDiff_turn" id="512" inline="false">
+      <field name="DIRECTION">RIGHT</field>
+    </block>
+    <block type="robActions_play_setVolume" id="521" inline="false">
+      <value name="VOLUME">
+        <block type="math_number" id="522">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_play_tone" id="530" inline="false"></block>
+  </instance>
+</block_set>

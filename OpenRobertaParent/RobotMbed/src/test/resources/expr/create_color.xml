@@ -1,0 +1,38 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+	robottype="calliope" xmlversion="" description="" tags="">
+	<instance x="163" y="37">
+		<block type="robControls_start" id="#KE2p]WB[YElOqLp;F@o"
+			intask="true" deletable="false">
+			<mutation declare="false"></mutation>
+			<field name="DEBUG">FALSE</field>
+		</block>
+		<block type="mbedActions_display_text" id="2G7QV~7p9DB)B~^B9(Ll"
+			intask="true">
+			<field name="TYPE">TEXT</field>
+			<value name="OUT">
+				<block type="mbedColour_rgb" id="t#WmRkRZEGnn=W~}izDu" intask="true">
+					<value name="RED">
+						<block type="math_number" id="/6Qp!Q+xIP@e7f~0:Fr4" intask="true">
+							<field name="NUM">20</field>
+						</block>
+					</value>
+					<value name="GREEN">
+						<block type="math_number" id="?W=9vq+f:cz6X?eABN(c" intask="true">
+							<field name="NUM">25</field>
+						</block>
+					</value>
+					<value name="BLUE">
+						<block type="math_number" id="IFvV|Sa{Z?7/,;yUKc,x" intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+					<value name="WHITE">
+						<block type="math_number" id="IFvV|Sa{Z?7/,;yUKc,x" intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</instance>
+</block_set>

@@ -1,0 +1,70 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="106" y="16">
+    <block type="robControls_start" id="49" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="robControls_if" id="128" inline="false" intask="true">
+      <mutation elseif="1"></mutation>
+      <repetitions>
+        <value name="IF0">
+          <block type="logic_compare" id="131" inline="true" intask="true">
+            <mutation operator_range="NUM"></mutation>
+            <field name="OP">EQ</field>
+            <value name="A">
+              <block type="robSensors_touch_getSample" id="145" intask="true">
+                <field name="SENSORPORT">1</field><field name="SLOT" />
+              </block>
+            </value>
+            <value name="B">
+              <block type="logic_boolean" id="141" intask="true">
+                <field name="BOOL">TRUE</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="robActions_motorDiff_on" id="161" inline="false" intask="true">
+            <field name="DIRECTION">FOREWARD</field>
+            <value name="POWER">
+              <block type="math_number" id="162" intask="true">
+                <field name="NUM">50</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <value name="IF1">
+          <block type="logic_compare" id="157" inline="true" intask="true">
+            <mutation operator_range="NUM"></mutation>
+            <field name="OP">EQ</field>
+            <value name="A">
+              <block type="robSensors_touch_getSample" id="145" intask="true">
+                <field name="SENSORPORT">1</field><field name="SLOT" />
+              </block>
+            </value>
+            <value name="B">
+              <block type="logic_boolean" id="141" intask="true">
+                <field name="BOOL">FALSE</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO1">
+          <block type="robActions_motorDiff_on_for" id="183" inline="false" intask="true">
+            <field name="DIRECTION">BACKWARDS</field>
+            <value name="POWER">
+              <block type="math_number" id="184" intask="true">
+                <field name="NUM">50</field>
+              </block>
+            </value>
+            <value name="DISTANCE">
+              <block type="math_number" id="185" intask="true">
+                <field name="NUM">20</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+      </repetitions>
+    </block>
+  </instance>
+</block_set>

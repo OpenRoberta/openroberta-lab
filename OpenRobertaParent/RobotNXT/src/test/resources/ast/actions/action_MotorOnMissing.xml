@@ -1,0 +1,7 @@
+<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
+  <instance x="55" y="64">
+    <block type="robActions_motor_on" id="63" inline="false" disabled="true">
+      <field name="MOTORPORT">B</field>
+    </block>
+  </instance>
+</block_set>
