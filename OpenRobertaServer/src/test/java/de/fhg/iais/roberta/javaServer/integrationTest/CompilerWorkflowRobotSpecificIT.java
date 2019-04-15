@@ -85,7 +85,6 @@ public class CompilerWorkflowRobotSpecificIT {
     @Before
     public void setup() throws Exception {
         Properties baseServerProperties = Util1.loadProperties(null);
-        baseServerProperties.put("plugin.resourcedir", "..");
         serverProperties = new ServerProperties(baseServerProperties);
         robotCommunicator = new RobotCommunicator();
         pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);

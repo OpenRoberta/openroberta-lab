@@ -34,7 +34,13 @@ public class PluginProperties {
         Assert.notNull(tempDir);
         Assert.notNull(properties);
         this.robotName = robotName;
-        String tempResourceDir = resourceDir + properties.getProperty("robot.plugin.compiler.resources.dir");
+        final String pluginResourceDir = properties.getProperty("robot.plugin.compiler.resources.dir");
+        String tempResourceDir;
+        if ( pluginResourceDir != null && pluginResourceDir.length() > 0 && pluginResourceDir.startsWith("/") ) {
+            tempResourceDir = pluginResourceDir; // because plugin resource dir is an absolute path
+        } else {
+            tempResourceDir = resourceDir + pluginResourceDir; // because plugin resource dir is a relative path
+        }
         if ( !(tempResourceDir.endsWith("/") || tempResourceDir.endsWith("\\")) ) {
             tempResourceDir = tempResourceDir + "/";
         }

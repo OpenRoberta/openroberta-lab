@@ -1,20 +1,14 @@
 Open Roberta Lab
 ================
 
-Build status:
-
-* master [![master](https://travis-ci.org/OpenRoberta/robertalab.svg?branch=master)](https://travis-ci.org/OpenRoberta/robertalab/builds)
-* develop [![develop](https://travis-ci.org/OpenRoberta/robertalab.svg?branch=develop)](https://travis-ci.org/OpenRoberta/robertalab/builds)
-
-We use BrowserStack for Cross-Browser Testing
-
-[<img src="https://github.com/OpenRoberta/robertalab/blob/develop/Resources/images/browserstack-logo-600x315.png" width="200">](http://browserstack.com/)
-
 ### Introduction
 
-The steps below explain how to get started with the sources. If you just want to run the server locally, please have a look into the [wiki - installation](https://github.com/OpenRoberta/robertalab/wiki/Installation). If you want to contribute, please get in touch with us, see [wiki - Community](https://github.com/OpenRoberta/robertalab/wiki/Community) before you start.
+The steps below explain how to get started with the sources. If you just want to run the server locally, please have a look into
+the [wiki - installation](https://github.com/OpenRoberta/openroberta-lab/wiki/Installation). If you want to contribute, please get in touch with us,
+see [wiki - Community](https://github.com/OpenRoberta/openroberta-lab/wiki/Community) before you start.
 
-After a fresh git clone you get the **robertalab** project folder. It includes everything you need to setup and extend your own browser programming environment. License information is available in the **docs** folder.
+After a fresh git clone you get the **openroberta-lab** project folder. It includes almost everything you need to setup and extend your own browser programming environment.
+License information is available in the **docs** folder.
 
 Things you need on your computer:
 
@@ -23,7 +17,7 @@ Things you need on your computer:
 * Git
 * Web browser
 
-If you would like the server to compile code for the different systems, you need to install additional software:
+If you would like your local server to compile code for the different systems, you need to install additional software (crosscompiler, ...):
 
 on linux:
 * Arduino based robots
@@ -43,24 +37,26 @@ on windows:
 * micro:bit
   * install python
   * pip install uflash
+  
+The crossompiler need resources to work properly (header files, libraries, ...). These resources change little over time and are stored in a repository of its own:
 
+    https://github.com/OpenRoberta/ora-cc-rsc.git
 
-Please also check our wiki for detailed installation instructions, development procedure, coding conventions and further reading. We also use the github issue tracking system. Please file issues in the main project **robertalab**.
+Please clone that directory. When the openrobertalab server is started, you have to supply the path to these resources (see below). If the resources are not available,
+everything works fine (writing programs, import, export, creating accounts, etc.), but running programs on real robots doesn' work, because the crosscompiler will fail.
 
+Please also check our wiki for detailed installation instructions, development procedure, coding conventions and further reading. We also use the github issue tracking system.
+Please file issues in the main project **openroberta-lab**.
 
 ### Fast installation with maven
 
 #### Step 1: Clone the repository and compile
 
-    git clone https://github.com/OpenRoberta/robertalab.git # get the repository
-    cd robertalab        # cd into repository
-	cd OpenRobertaParent # cd to parent project
+    git clone https://github.com/OpenRoberta/openroberta-lab.git # get the repository
+    cd openroberta-lab   # cd into repository
     mvn clean install    # generate the server
-    cd ..                # return to the repository	
 
-Get a coffee! Might take some time.
-
-A successful build looks like:
+Might take some time. A successful build looks like:
 
     [INFO] ------------------------------------------------------------------------
     [INFO] Reactor Summary:
@@ -75,17 +71,10 @@ A successful build looks like:
     [INFO] Final Memory: 60M/540M
     [INFO] ------------------------------------------------------------------------
     
-    
 #### Step 2: Make sure you have a database
 If you have a fresh clone of the server, make sure that the OpenRobertaServer folder has a subfolder **db-x.y.z** with the database inside, where x.y.z is the current version from the server. The actual server version is found in the pom.xml of the OpenRobertaParent project. If you don't have a database, you can create an empty database with
 
     ./ora.sh --createEmptydb
-
-You can also create a specific db version:
-
-    ./ora.sh --createEmptydb x.y.z
-    
-If the server version is x.y.z-SNAPSHOT, remove the -SNAPSHOT. If you update the server later with git pull, your database will not be changed. 
 
 #### Step 3: Starting your own server instance using a unix-like shell (on either lin* or win*).
 
@@ -105,8 +94,8 @@ You can follow the test status on https://travis-ci.org/OpenRoberta/.
 
 Development happens in the `develop` branch. Please sent PRs against that branch.
 
-    git clone https://github.com/OpenRoberta/robertalab.git
-    cd robertalab
+    git clone https://github.com/OpenRoberta/openroberta-lab.git
+    cd openroberta-lab
     git checkout -b develop origin/develop
 	
 The project OpenRobertaServer contains the server logic, that accesses
@@ -127,13 +116,7 @@ Furthermore, the project OpenRobertaServer contains in directory staticResources
   * javascript resources for blockly (see: http://code.google.com/p/blockly/)
   * controller and models written in Javascript, which implement the GUI
 
-To run specific tests, use `mvn test` with the `-Dtest=` option to specify the
-test name and `-DfailIfNoTests=false` to avoid a failure if a test of such name
-is not present in every sub-project of the repository. Example:
-
-    mvn -Dtest=de.fhg.iais.roberta.syntax.codegen.PythonVisitorTest -DfailIfNoTests=false test
-
-If the tests report broken dependencies, make sure to run `mvn clean install`
+To run tests, use `mvn test`. Running `mvn clean install` will make a stable, reproducible build.
 first.
 
 #### Blockly
@@ -141,3 +124,9 @@ first.
 We are using Blockly, it is located in a separate repository. The build of the blockly is only done in the OpenRoberta/Blockly project and then copied to the OpenRobertaServer/staticResources. You can not build Blockly in OpenRobertaServer project directly.
 
 #### Have a look at the notes in LICENCE and NOTICE
+
+Build status:
+
+* master [![master](https://travis-ci.org/OpenRoberta/openroberta-lab.svg?branch=master)](https://travis-ci.org/OpenRoberta/openroberta-lab/builds)
+* develop [![develop](https://travis-ci.org/OpenRoberta/openroberta-lab.svg?branch=develop)](https://travis-ci.org/OpenRoberta/openroberta-lab/builds)
+

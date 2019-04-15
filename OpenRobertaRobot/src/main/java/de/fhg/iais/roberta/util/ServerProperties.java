@@ -16,7 +16,7 @@ public class ServerProperties {
     public static final String WHITE_LIST_KEY = "robot.whitelist";
     public static final String ROBOT_DEFAULT_PROPERTY_KEY = "robot.default";
     public static final String PLUGIN_TEMPDIR_PROPERTY_KEY = "plugin.tempdir";
-    public static final String PLUGIN_RESOURCE_PROPERTY_KEY = "plugin.resourcedir";
+    private static final String CROSSCOMPILER_RESOURCE_BASE = "robot.crosscompiler.resourcebase";
 
     private final Properties serverProperties;
     private final String defaultRobot;
@@ -58,19 +58,20 @@ public class ServerProperties {
         this.serverProperties.put(ROBOT_DEFAULT_PROPERTY_KEY, this.defaultRobot);
 
         // made a robust choice about the plugin resource directory
-        String resourceDir = getStringProperty(PLUGIN_RESOURCE_PROPERTY_KEY);
-        String suffix = "";
-        if ( resourceDir == null ) {
-            suffix = "OpenRobertaParent/";
-            resourceDir = System.getProperty("user.dir");
-            Assert.notNull(resourceDir, "could not get the 'user.dir' property");
+        String resourceDir = getStringProperty(CROSSCOMPILER_RESOURCE_BASE);
+        if ( resourceDir == null || resourceDir.trim().isEmpty() ) {
+            resourceDir = System.getenv(CROSSCOMPILER_RESOURCE_BASE.replace('.', '_'));
+            if ( resourceDir == null ) {
+                LOG.warn("could not allocate a the crosscompiler resource directory, use '.'. This will NOT work, if the directory is needed.");
+                resourceDir = "./";
+            }
+            Assert.notNull(resourceDir, "could not allocate a the crosscompiler resource directory");
         }
         if ( !(resourceDir.endsWith("/") || resourceDir.endsWith("\\")) ) {
             resourceDir = resourceDir + "/";
         }
-        this.resourceDir = resourceDir + suffix;
-        this.serverProperties.put(PLUGIN_RESOURCE_PROPERTY_KEY, this.resourceDir);
-        LOG.info("As resource directory " + this.resourceDir + " will be used");
+        this.resourceDir = resourceDir;
+        LOG.info("As crosscompiler resource directory " + this.resourceDir + " will be used");
 
         // made a robust choice about the plugin temporary directory
         String tempTempDir = getStringProperty(PLUGIN_TEMPDIR_PROPERTY_KEY);

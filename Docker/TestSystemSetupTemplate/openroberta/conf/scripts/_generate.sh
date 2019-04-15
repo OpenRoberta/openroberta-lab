@@ -34,7 +34,7 @@ esac
         git checkout -f $COMMIT
         LAST_COMMIT=$COMMIT
     fi
-    cd OpenRobertaParent; mvn clean install -DskipTests; cd ..
+    mvn clean install -DskipTests
     rm -rf $SERVERDIR/export
     ./ora.sh --export $SERVERDIR/export gzip
     cp $CONF/docker-for-lab/start.sh $SERVERDIR/export

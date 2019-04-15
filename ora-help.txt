@@ -17,11 +17,11 @@ Commands of the ora.sh script:
   --help                    get help (this text)
   
   --export INSTALLATION-DIR [gzip] create a self-contained installation. The installation dir must NOT exist. Parameter 'gzip' compresses in directory
-                            staticResources suitable files (as *.js, *.css, etc.) to save bandwith when staticResources are loaded.
-                            You are responsible to copy a usable database into directory 'db-<serverVersion>'.
-                            In the INSTALLATION-DIR there are two scripts for starting OpenRoberta:
-                            - start-ora-server-with-db-embedded.sh   uses an embedded hsqldb. For small systems (Raspberry Pi, for instance).
-                            - start-ora-server-and-db-server.sh      starts database and a server process. For large systems (the official release, e.g.)
+              staticResources suitable files (as *.js, *.css, etc.) to save bandwith when staticResources are loaded.
+              You are responsible to copy a usable database into directory 'db-<serverVersion>'.
+              In the INSTALLATION-DIR there are two scripts for starting OpenRoberta:
+              - start-ora-server-with-db-embedded.sh   uses an embedded hsqldb. For small systems (Raspberry Pi, for instance).
+              - start-ora-server-and-db-server.sh      starts database and a server process. For large systems (the official release, e.g.)
 							Both scripts detect any database from an earlier versions and upgrade them to the actual version. if NO database at all is found,
 							an empty database will be created.
 							Further scripts in the INSTALLATION-DIR (ONLY USABLE IN SERVER MODE!):
@@ -31,12 +31,14 @@ Commands of the ora.sh script:
 
 
   --createEmptydb [{VERSION}] create an empty database with all tables initialized as needed at path "OpenRobertaServer/db-VERSION". If the optional
-                            parameter VERSION is missing, the VERSION is retrieved by calling the server. In this case, "mvn install" must have run before
-                            - if the database exists, it is not recreated
-                            - if a table "PROGRAM" is found, it is assumed, that the setup has already been done and nothing happens.
-  --start-from-git [-rdbg]  if a developer wants to start the server from a Git working tree in embedded mode (that is fine for test), use this command.
-                            Note, that running the server from an IDE as eclipse is PREFERRED. You need a valid database. Command '--createEmptydb' creates it.
+              parameter VERSION is missing, the VERSION is retrieved by calling the server. In this case, "mvn install" must have run before
+              - if the database exists, it is not recreated
+              - if a table "PROGRAM" is found, it is assumed, that the setup has already been done and nothing happens.
+  --start-from-git [-rdbg] [{path-to-crosscompiler-resources}]
+              if a developer wants to start the server from a Git working tree in embedded mode (that is fine for test), use this command.
+              Note, that running the server from an IDE as eclipse is PREFERRED. You need a valid database. Command '--createEmptydb' creates it.
 							if '-rdbg' is found, a remote debug session (e.g. from an IDE as Eclipse) can be attached to the server (on port 8000).
+							Testing crosscompiler calls needs the path to the crosscompiler resources directory (optional)
 							Note: if you change a static resource using an IDE or editor, the browser has got your changes after a reload ("live update").
 
   --gui-sql-client [{VERSION}] start a sql client from a Git working tree in embedded mode using the actual db version or the (optional) VERSION.

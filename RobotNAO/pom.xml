@@ -9,25 +9,25 @@
 	OF ANY KIND, either express or implied. See the License for the specific 
 	language governing permissions and limitations under the License. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>de.fhg.iais.openroberta</groupId>
-		<artifactId>OpenRobertaParent</artifactId>
-		<version>3.3.2-SNAPSHOT</version>
-	</parent>
-	<artifactId>RobotNAO</artifactId>
-	<name>RobotNAO</name>
-	<description>the plugin for the NAO robot</description>
-	<dependencies>
-		<dependency>
-			<groupId>de.fhg.iais.openroberta</groupId>
-			<artifactId>OpenRobertaRobot</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey.contribs</groupId>
-			<artifactId>jersey-guice</artifactId>
-		</dependency>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>de.fhg.iais.openroberta</groupId>
+        <artifactId>OpenRobertaParent</artifactId>
+        <version>3.3.2-SNAPSHOT</version>
+    </parent>
+    <artifactId>RobotNAO</artifactId>
+    <name>RobotNAO</name>
+    <description>the plugin for the NAO robot</description>
+    <dependencies>
+        <dependency>
+            <groupId>de.fhg.iais.openroberta</groupId>
+            <artifactId>OpenRobertaRobot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey.contribs</groupId>
+            <artifactId>jersey-guice</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>de.fhg.iais.openroberta</groupId>
@@ -36,15 +36,15 @@
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
-	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.9</version>
-			</plugin>
+    </dependencies>
+    <build>
+        <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.9</version>
+            </plugin>
+            <!-- <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.6</version>
                 <configuration>
@@ -57,14 +57,14 @@
                 </configuration>
                 <executions>
                     <execution>
-                    <id>make-assembly</id>
-                    <phase>install</phase>
-                    <goals>
-                        <goal>single</goal>
-                    </goals>
+                        <id>make-assembly</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
                     </execution>
-            </executions>
-            </plugin>
-		</plugins>
-	</build>
+                </executions>
+            </plugin> -->
+        </plugins>
+    </build>
 </project>

@@ -50,9 +50,8 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
  * The tests in this class are integration tests. The front end is <b>not</b> tested. The tests deliver programs (either NEPO programs encoded in XML or native
  * programs encoded as expected by the crosscompilers) to the various crosscompilers and check whether the expected response is returned ("ok", "error").<br>
  * <br>
- * In src/test/crossCompilerTests/common the directory "template" contains a XML templates for each robot. Default configuration for
- * each robot is taken from each robot plugin. The directory "prog" contains program fragment to be inserted into all templates together with matching
- * configurations.<br>
+ * In src/test/crossCompilerTests/common the directory "template" contains a XML templates for each robot. Default configuration for each robot is taken from
+ * each robot plugin. The directory "prog" contains program fragment to be inserted into all templates together with matching configurations.<br>
  * <br>
  * Enjoy
  *
@@ -87,7 +86,6 @@ public class CompilerWorkflowRobotCommonIT {
     @Before
     public void setup() throws Exception {
         Properties baseServerProperties = Util1.loadProperties(null);
-        baseServerProperties.put("plugin.resourcedir", "..");
         serverProperties = new ServerProperties(baseServerProperties);
         robotCommunicator = new RobotCommunicator();
         pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);

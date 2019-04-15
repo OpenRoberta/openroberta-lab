@@ -2,9 +2,6 @@ language: java
 jdk:
   - oraclejdk8
 
-before_script:
-  - cd OpenRobertaParent
-
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 

@@ -51,10 +51,9 @@ Simple settings are, e.g.:
 
 9. PITFALL 1: 'goto dec' and others may opens a NEW editor. Thus a file may be accessed by more than one editor.
    BE CAREFUL: NEVER edit the same source at the same time with two editors. Changes will be LOST in almost allcases!
-10. PITFALL 2: as with Java nature, if you open a .ts-file as simple resource (i.e. OpenRobertaParent/WeDoInterpreter/ts/main.ts) instead as a ts resource
-   (i.e. OpenRobertaParent/WeDoInterpreter/ts/main.ts), on save the incrementaop compilation will NOT be done.
+10. PITFALL 2: as with Java nature, if you open a .ts-file as simple resource instead as a ts resource, on save the incremental compilation will NOT be done.
 10. PERSONAL REMARK: I have activated 'codelens'. It is EXPERIMENTAL. It gives reference counts of components and a used-by functionality when clicking on the
-   references (small italic font).
+    references (small italic font).
    
 The 'TypeScript IDE' is a nice and really fast ts editor and tsc plugin
 

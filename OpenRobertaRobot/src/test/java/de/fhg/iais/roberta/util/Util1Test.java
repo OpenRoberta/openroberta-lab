@@ -43,13 +43,6 @@ public class Util1Test {
     }
 
     @Test
-    public void testMissingProperty() {
-        ServerProperties serverProperties = new ServerProperties(Util1.loadProperties(null));
-        boolean browserVisibility = Boolean.parseBoolean(serverProperties.getStringProperty("does.not.exist"));
-        assertEquals(false, browserVisibility);
-    }
-
-    @Test
     public void testPow() {
         assertEquals(0, Util1.pow2(-1));
         assertEquals(1, Util1.pow2(0));

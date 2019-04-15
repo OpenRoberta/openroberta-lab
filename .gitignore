@@ -5,11 +5,9 @@
 **/phantomjsdriver.log
 **/.classpath
 **/.project
-DockerInstallation
-OpenRobertaParent/RobotEV3/**/*.jar
-OpenRobertaParent/OpenRobertaServer/userProjects/*
-OpenRobertaParent/OpenRobertaServer/db-*
-OpenRobertaParent/RobotNAO/resources/updateResources/roberta.zip
+RobotEV3/**/*.jar
+OpenRobertaServer/userProjects/*
+OpenRobertaServer/db-*
 .settings/
 .DS_Store
 .*

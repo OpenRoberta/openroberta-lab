@@ -31,9 +31,8 @@ echo "building branch $BRANCH with version $VERSION. Build all container is set 
 git pull
 git checkout $BRANCH
 git pull
-cd /opt/robertalab/OpenRobertaParent
+cd /opt/robertalab
 mvn clean install
-chmod +x RobotArdu/resources/linux/arduino-builder RobotArdu/resources/linux/tools-builder/ctags/5.8*/ctags
 
 cd /opt/robertalab
 rm -rf DockerInstallation

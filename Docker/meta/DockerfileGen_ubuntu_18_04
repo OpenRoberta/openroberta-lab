@@ -26,7 +26,7 @@ RUN apt-get install -y curl && \
 WORKDIR /opt
 RUN echo "cloning branch develop and executing mvn to fill the .m2 cache" && \
     git clone --depth=1 -b develop https://github.com/OpenRoberta/robertalab.git && \
-    cd /opt/robertalab/OpenRobertaParent && \
+    cd /opt/robertalab && \
     mvn clean install
  
 # prepare the entry point

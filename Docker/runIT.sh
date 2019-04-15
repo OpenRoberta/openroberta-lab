@@ -22,10 +22,7 @@ fi
 echo "building branch $BRANCH with version $VERSION [version is unused as long as no db-its are executed]"
 cd /opt
 git clone --depth=1 -b $BRANCH https://github.com/OpenRoberta/robertalab.git
-cd /opt/robertalab/OpenRobertaParent
-chmod +x RobotArdu/resources/linux/arduino-builder RobotArdu/resources/linux/tools-builder/ctags/5.8*/ctags
-chmod +x RobotArdu/resources/linux-arm/arduino-builder RobotArdu/resources/linux-arm/tools-builder/ctags/5.8*/ctags
-
+cd /opt/robertalab
 mvn clean install -DskipTests -DskipITs
 
 # execute all tests, including the integration tests

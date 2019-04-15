@@ -1,10 +1,10 @@
-FROM rbudde/openroberta_base:1
+FROM rbudde/openroberta_base:2
 
-ARG LAST_RUN_OF_BASE=2019-01-29
+ARG LAST_RUN_OF_BASE=2019-04-09
 
 EXPOSE 1999
 
-RUN mkdir --parent /opt/openRoberta/lib /opt/openRoberta/OpenRobertaParent
+RUN mkdir --parent /opt/openRoberta/lib /opt/openRoberta
 WORKDIR /opt/openRoberta
 
 COPY ["start.sh","./"]
@@ -12,7 +12,7 @@ RUN chmod ugo+rx ./start.sh
 
 COPY ["lib/","./lib/"]
 COPY ["staticResources/","./staticResources/"]
-COPY ["OpenRobertaParent/","./OpenRobertaParent/"]
+COPY ["./","./"]
 
 ENTRYPOINT ["./start.sh"]
 CMD []

@@ -1,26 +1,16 @@
 # preparation (done from time to time)
 
-## generate the "gen" image. This image can generate an OpenRoberta distribution.
-
-When the docker image "gen" is run, it GENERATES an OpenRoberta distribution. It is NO OpenRoberta distribution by itself.
-It gets version numbers independent from the OpenRoberta versions. During image creation a maven build is executed for
-branch develop to fill the /root/.m2 cache. This makes later builds much faster.
-
-```bash
-cd to-the-docker-directory-of-the-git-repo
-docker build -f meta/DockerfileGen_ubuntu_18_04 -t rbudde/openroberta_gen:1 .
-docker push rbudde/openroberta_gen:1
-```
-
 ## generate the "base" IMAGE. It contains the crosscompiler.
 
 The docker image "base" is used as basis for further images. It replaces crosscompiler for calliope and arduino by newer versions,
 because the crosscompiler packages are erroneous [28.11.2018]. Java 8 is installed, too (for ev3).
 
 ```bash
-cd to-the-docker-directory-of-the-git-repo
-docker build -f meta/DockerfileBase_ubuntu_18_04 -t rbudde/openroberta_base:1 .
-docker push rbudde/openroberta_base:1
+REPO=/data/openroberta/git/robertalab
+CC_RESOURCES=/data/openroberta/ora-CCresources
+cd $CC_RESOURCES
+docker build -f $REPO/Docker/meta/DockerfileBase_ubuntu_18_04 -t rbudde/openroberta_base:2 .
+docker push rbudde/openroberta_base:2
 ```
 ## generate the base for INTEGRATION TEST and DEBUG.
 
@@ -30,9 +20,11 @@ If called, it will checkout a branch and runs both the tests and the integration
 The debian stretch distributions contains invalid crosscompilers packages. This image is build by
 
 ```bash
-cd to-the-docker-directory-of-the-git-repo
-docker build -t rbudde/openroberta_it_ubuntu_18_04:1 -f testing/DockerfileIT_ubuntu_18_04 . --build-arg BRANCH=$BRANCH
-docker push rbudde/openroberta_it_ubuntu_18_04:1
+REPO=/data/openroberta/git/robertalab
+BRANCH=rbTest
+cd $REPO/Docker
+docker build -t rbudde/openroberta_it_ubuntu_18_04:2 -f testing/DockerfileIT_ubuntu_18_04 . --build-arg BRANCH=$BRANCH
+docker push rbudde/openroberta_it_ubuntu_18_04:2
 ```
 
 For debug you want to run an image, that contains mvn and git and all crosscompiler.
@@ -40,9 +32,10 @@ It should have executed a git clone and run a mvn clean install to get the (outd
 The entrypoint is "/bin/bash". This image is build by
 
 ```bash
-cd to-the-docker-directory-of-the-git-repo
-docker build -t rbudde/openroberta_debug_ubuntu_18_04:1 -f testing/DockerfileDebug_ubuntu_18_04 .
-docker push rbudde/openroberta_debug_ubuntu_18_04:1
+REPO=/data/openroberta/git/robertalab
+cd $REPO/Docker
+docker build -t rbudde/openroberta_debug_ubuntu_18_04:2 -f testing/DockerfileDebug_ubuntu_18_04 .
+docker push rbudde/openroberta_debug_ubuntu_18_04:2
 ```
 
 # run the integration tests and start a debug container
@@ -54,20 +47,20 @@ in case of success it returns 0, in case of errors/failures it returns 16
 
 ```bash
 export BRANCH='develop'
-docker run rbudde/openroberta_it_ubuntu_18_04:1 $BRANCH 1.2.3 # 1.2.3 is the db version and unused for tests
+docker run rbudde/openroberta_it_ubuntu_18_04:2 $BRANCH 1.2.3 # 1.2.3 is the db version and unused for tests
 ```
 
 ## debug container
 
 ```bash
-docker run -p 7100:1999 -it --entrypoint /bin/bash rbudde/openroberta_debug_ubuntu_18_04:1
+docker run -p 7100:1999 -it --entrypoint /bin/bash rbudde/openroberta_debug_ubuntu_18_04:2
 ```
 
 It starts a /bin/bash and you probably will either run a server:
 
 ```bash
 git checkout develop; git pull;
-cd OpenRobertaParent;mvn clean install -DskipTests;cd ..
+mvn clean install -DskipTests;cd ..
 ./ora.sh --createEmptydb
 ./ora.sh --start-from-git
 ```
@@ -76,12 +69,25 @@ or you want to run the integration tests (but many other tasks are possible :-)
 
 ```bash
 git checkout develop; git pull; git co anotherBranchToDebug
-cd OpenRobertaParent; mvn clean install -PrunIT
+mvn clean install -PrunIT
 ```
 
 # create the images for server, database, upgrade and embedded and run them
 
 this functionality is deprecated. It may be re-used later. See the directory `TestSystemSetupTemplate` for a much more flexible test setup.
+
+## generate the "gen" image. This image can generate an OpenRoberta distribution.
+
+When the docker image "gen" is run, it GENERATES an OpenRoberta distribution. It is NO OpenRoberta distribution by itself.
+It gets version numbers independent from the OpenRoberta versions. During image creation a maven build is executed for
+branch develop to fill the /root/.m2 cache. This makes later builds much faster.
+
+```bash
+REPO=/data/openroberta/git/robertalab
+cd $REPO/Docker
+docker build -f meta/DockerfileGen_ubuntu_18_04 -t rbudde/openroberta_gen:1 .
+docker push rbudde/openroberta_gen:1
+```
 
 ## define the variables used (set as needed!):
 
