@@ -1,0 +1,8 @@
+<block_set 
+    xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="2.0" description="" tags="">
+    <instance x="460" y="156">
+        <block type="robSensors_sound_getSample" id=",.MKj%CXna.-:qqw==`h" intask="true">
+            <field name="SENSORPORT">1</field>
+        </block>
+    </instance>
+</block_set>

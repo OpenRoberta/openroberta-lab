@@ -1,0 +1,7 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="" description="" tags="">
+  <instance x="88" y="88">
+    <block type="naoActions_setLanguage" id="(IJ9~.{_2-@tHX.i^w~r" intask="true">
+      <field name="LANGUAGE">GERMAN</field>
+    </block>
+  </instance>
+</block_set>

@@ -1,0 +1,1205 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!DOCTYPE html>
+<html lang="de">
+<head/>
+<body>
+<div id="helpContent">
+<div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robControls_start" class="help beginner">
+<h3 id="Programmier-BlöckeCalliope-»Programmstart«">
+<span style="color: rgb(0,0,0);">»Programmstart«</span>
+</h3>
+<p>Jedes Programm beginnt mit dem »Programmstart-Block«, welcher nicht gelöscht werden kann. Den ersten Block, den man verwenden möchte, verbindet man direkt mit der  »Sequenzverbindung« am Programmstart-Block. </p>
+<p>Einstellmöglichkeiten:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-plus">Erzeuge eine neue globale Variable.</li>
+<li class="typcn typcn-minus"><span>Entferne die globale Variable.</span></li>
+</ul> Wenn globale Variablen erzeugt wurden:<p>
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-pen">Text, Name der Variablen.</li>
+<li class="typcn typcn-arrow-down">Typ der Variablen.</li>
+<li class="typcn typcn-arrow-left">Wert, Anfangswert der Variablen.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<h2 id="Programmier-BlöckeCalliope-Aktion">Aktion</h2>
+<p>Die Kategorie »Aktion« beinhaltet Blöcke, mit denen der Roboter direkt eine Aktion ausführt. </p>
+<p>Zur Kategorie »Aktion« gehören folgende Programm-Blöcke:</p>
+<ul><li>Blöcke zur Steuerung des Displays</li>
+<li>Blöcke zur Steuerung der Statusleuchte</li>
+<li>Blöcke zur Steuerung des Lautsprechers</li>
+</ul><p>Im Experten-Modus ist die Kategorie »Aktion« nochmals unterteilt in folgende Unterkategorien:</p>
+<ul><li>Anzeige</li>
+<li>Statusleuchte</li>
+<li>Bewegung</li>
+<li>Klang</li>
+<li>Pin</li>
+</ul><p>Der Modus Experte beinhaltet alle Blöcke des Beginner-Modus.</p>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedActions_display_text" class="help beginner">
+<h3 id="Programmier-BlöckeCalliope-»ZeigeText/Zeichen«"><span style="color: rgb(0,0,0);">»Zeige Text/Zeichen«</span></h3>
+<p>Mit dem Block »Zeige Text/Zeichen« programmierst du einen Text, der auf dem Calliope dargestellt wird.</p>
+<p>Einstellmöglichkeiten und Eingabewert:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Text (Laufschrift über den Bildschirm) oder Zeichen (Buchstaben werden nacheinander angezeigt).</li>
+<li class="typcn typcn-arrow-left">Zeichenkette, anzuzeigender Text.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedActions_display_image" class="help beginner">
+<h3 id="Programmier-BlöckeCalliope-»ZeigeBild/Animation«"><span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">»Zeige Bild/Animation«</span></span></h3>
+<p>Mit dem Block »Zeige Bild/Animation« können selbst erstellte oder vordefinierte Bilder auf dem Display angezeigt werden.</p>
+<p>Einstellmöglichkeiten und Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Bild oder Animation (Bilder werden nacheinander angezeigt).</li>
+<li class="typcn typcn-arrow-left">Bild oder Liste von Bildern (als Animation).</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<p/>
+<div id="mbedActions_display_clear" class="help beginner">
+<h3 id="Programmier-BlöckeCalliope-»LöscheBildschirm«"><span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">»Lösche Bildschirm«</span></span></h3>
+<p>Mit dem Block »<span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">Lösche Bildschirm</span></span><span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">« kann der Bildschirminhalt gelöscht werden</span></span>.</p>
+</div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<p/>
+<div id="mbedActions_display_setBrightness" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»Setze Helligkeit«[Experten-Block]">»Setze Helligkeit«<span class="typcn typcn-star"></span></h3>
+<p>Mit dem Block »<span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">Setze Helligkeit</span></span><span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">« wird der Helligkeitswert aller LED's des Displays gesetzt. Bei 0 sind alle LED's aus, 9 ist der höchste Helligkeitswert.</span></span>.</p>
+<p>Eingabewert:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Zahl, gewünschte Helligkeit zwischen 0 und 9 eingeben.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<p/>
+<div id="mbedActions_display_getBrightness" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»gib Helligkeit«[Experten-Block]">»gib Helligkeit«<span class="typcn typcn-star"></span></h3>
+<p>Mit dem Block »<span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">gib Helligkeit</span></span><span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">« wird der Helligkeitswert aller LED's des Displays zurückgegeben. Bei 0 sind alle LED's aus, 9 ist der höchste Helligkeitswert.</span></span>.</p>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<p/>
+<div id="mbedActions_display_setPixel" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»Setze LED Helligkeit«[Experten-Block]">»Setze LED Helligkeit«<span class="typcn typcn-star"></span></h3>
+<p>Mit dem Block »<span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">Setze LED Helligkeit</span></span><span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">« wird der Helligkeitswert einer LED gesetzt. Bei 0 ist die LED aus, 9 ist der höchste Helligkeitswert. Mit x und y kannst du die LED aus dem Display bestimmen, oben links z.B. ist x 0 und y 0.</span></span>.</p>
+<p>Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Zahl, gewünschte Helligkeit zwischen 0 und 9 eingeben.</li>
+<li class="typcn typcn-arrow-left">Zahl, x-Koordinate [0-4]</li>
+<li class="typcn typcn-arrow-left">Zahl, y-Koordinate [0-4]</li>
+</ul></div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<p/>
+<div id="mbedActions_display_getPixel" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»gib LED Helligkeit«[Experten-Block]">»gib LED Helligkeit«<span class="typcn typcn-star"></span></h3>
+<p>Mit dem Block »<span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">gib LED Helligkeit</span></span><span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">« wird der Helligkeitswert einer LED an Position x y zurückgegeben. Bei 0 ist die LED aus, 9 ist der höchste Helligkeitswert.</span></span>.</p>
+<p>Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Zahl, x-Koordinate [0-4]</li>
+<li class="typcn typcn-arrow-left">Zahl, y-Koordinate [0-4]</li>
+</ul></div>
+</div></div></div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedActions_leds_on" class="help beginner">
+<h3 id="Programmier-BlöckeCalliope-»SchalteLEDanFarbe...«">»Schalte LED an Farbe...«</h3>
+<p>Mit dem Block »Schalte LED an Farbe...« kann die RGB-LED in einer bestimmten Farbe eingeschaltet werden.</p>
+<p>Eingabewert:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Farbe in der die RGB-LED leuchten soll.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedActions_leds_off" class="help beginner">
+<h3 id="Programmier-BlöckeCalliope-»SchalteLEDaus«">»Schalte LED aus«</h3>
+<p>Mit dem Block »Schalte LED aus« kannst du die RGB-LED ausschalten.</p>
+</div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedActions_play_note" class="help beginner">
+<h3 id="Programmier-BlöckeCalliope-»Spiele...«">»Spiele ...«</h3>
+<p>Mit dem Block »Spiele ...« bringst du deinen Roboter dazu, einen ganze, halbe, viertel, achtel oder sechzehntel Note abzuspielen.</p>
+<p>Einstellmöglichkeiten:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Länge der Note.</li>
+<li class="typcn typcn-arrow-down">Note die gespielt werden soll.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedActions_motor_on" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»MotorPort...Tempo«[Experten-Block]">»Motor Port ... Tempo«<span class="typcn typcn-star"></span></h3>
+<p>Der Block »<span style="color: rgb(0,0,255);"><span><span style="color: rgb(0,0,0);">Motor Port </span><span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">... Tempo</span></span></span></span><span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">« setzt </span></span>das Tempo (Geschwindigkeit) eines Motors auf einen neuen Wert.</p>
+<p>Einstellmöglichkeiten und Eingabewert:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Motor, wähle den Motor Port aus, für den dasTempo eingestellt werden soll.</li>
+<li class="typcn typcn-arrow-left">Zahl, Wert zwischen -100 und 100. Wenn die Zahl negativ ist, dreht sich der Motor rückwärts.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedActions_motor_stop" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»StoppeMotorPort«[Experten-Block]">»Stoppe Motor Port«<span class="typcn typcn-star"></span></h3>
+<p>Mit dem Block »<span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">Stoppe Motor Port</span></span><span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">« schaltet man den </span></span>Motor an einem ausgewählten Motor-Port aus. Du kannst eingestellen, ob der Motor langsam ausläuft oder gebremst wird.</p>
+<p>Einstellmöglichkeiten:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Motor, wähle den Motorport aus, der ausgeschaltet werden soll.</li>
+<li class="typcn typcn-arrow-down">Stoppmöglichkeiten; »auslaufen<span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">«</span></span>sorgt dafür, dass der Motor langsam ausläuft; »bremsen<span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">«</span></span>sorgt dafür, dass der Motor abrupt abgebremst wird.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedActions_single_motor_on" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»Motor an Tempo ...«[Experten-Block]">»Motor an Tempo ...«<span class="typcn typcn-star"></span></h3>
+<p>Der Block »Motor an <span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">... Tempo</span></span></span></span><span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">« setzt </span></span>das Tempo (Geschwindigkeit) eines Motors auf einen neuen Wert.</p>
+<p>Einstellmöglichkeiten und Eingabewert:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, Wert zwischen -100 und 100. Wenn die Zahl negativ ist, wird die Drehrichtung umgekehrt.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedActions_single_motor_stop" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»Motor Stoppe ...«[Experten-Block]">»Motor Stoppe ...«<span class="typcn typcn-star"></span></h3>
+<p>BEATE Mit dem Block »<span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">Motor Stoppe ...</span></span><span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">« schaltet man den </span></span>Motor aus. Du kannst eingestellen, ob der Motor langsam ausläuft, gebremst wird oder ...</p>
+<p>Einstellmöglichkeiten:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-down">Stoppmöglichkeiten; »auslaufen<span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">«</span></span>sorgt dafür, dass der Motor langsam ausläuft; »bremsen<span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">«</span></span>sorgt dafür, dass der Motor abrupt abgebremst wird; »sleep<span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">«</span></span>sorgt dafür, dass der Motor ...</li>
+</ul></div>
+</div></div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedActions_play_tone" class="help beginner">
+<h3 id="Programmier-BlöckeCalliope-»SpieleFrequenz...Dauer«[Experten-Block]">»Spiele Frequenz ... Dauer«<span class="typcn typcn-star"></span></h3>
+<p>Mit dem Block »Spiele Frequenz ... Dauer« kannst du die Frequenz (Höhe eines Tons) und die Zeit (wie lange der Ton gespielt wird) programmieren. Der Ton wird über den eingebauten Lautsprecher deines Calliope mini abgespielt, bis die eingestellte Dauer erreicht ist.</p><div class="aui-message hint shadowed information-macro">
+<div class="message-content">
+<p>Bitte beachte, dass das menschliche Gehör Frequenzen zwischen ca. 30 Hz bis ca. 15.000 Hz (15 kHz) wahrnehmen kann - je nach Mensch und Alter kann dies unterschiedlich sein.</p>
+</div>
+</div>
+<p>Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Zahl, gewünschte Frequenz in Hz (Hertz) eingeben.</li>
+<li class="typcn typcn-arrow-left"> Zahl, gewünschte Dauer des Tons in Millisekunden (ms) eingeben.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedActions_write_to_pin" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»Schreibe...WertaufPin...«[Experten-Block]">»Schreibe ... Wert auf Pin ...«<span class="typcn typcn-star"></span></h3>
+<p>Mit dem Block »Schreibe ... Wert auf Pin ...« kannst du einen analogen oder digitalen Wert auf einen der Pins schreiben.</p>
+<p>Einstellmöglichkeiten und Eingabewert:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Analog oder digital.</li>
+<li class="typcn typcn-arrow-down">Ein- und Ausgabepin 0 bis 3.</li>
+<li class="typcn typcn-arrow-left">Zu schreibender Wert.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedActions_fourDigitDisplay_show" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»Schreibe 4-Ziffern Display«[Experten-Block]">»Schreibe 4-Ziffern Display«<span class="typcn typcn-star"></span></h3>
+<p>BEATE Zeigt die Zahl [0-9999] auf dem Grove 4-Digit Display von Seeed an. Position [0-3] gibt dabei die Startposition der Zahl an. Das Display muss mit dem A1 (rechten) Grove Anschluss verbunden werden.</p>
+<p>Einstellmöglichkeiten und Eingabewert:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl [0-9999], wird auf dem Display von Seeed angezeigt</li>
+<li class="typcn typcn-arrow-left">Zahl [0-3], Startposition der Zahl</li>
+<li class="typcn typcn-arrow-left">logischer Wert</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedActions_fourDigitDisplay_clear" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»Lösche Bildschirm 4-Ziffern Display«[Experten-Block]">»Lösche Bildschirm 4-Ziffern Display«<span class="typcn typcn-star"></span></h3>
+<p>BEATE Löscht die Anzeige des Grove 4-Digit Display von Seeed.</p>
+</div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedActions_ledBar_set" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»Setze LED Leiste ... Helligkeit ...«[Experten-Block]">»Setze LED Leiste ... Helligkeit ...«<span class="typcn typcn-star"></span></h3>
+<p>BEATE Setzt die angegebene LED [0-9] auf der Grove LED Bar v2.0 von Seeed auf die gewünschte Helligkeit [0-8]. Die LED Leiste muss mit dem A1 (rechten) Grove Anschluss verbunden werden.</p>
+<p>Einstellmöglichkeiten und Eingabewert:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl [0-9], LED</li>
+<li class="typcn typcn-arrow-left">Zahl [0-8], Helligkeit</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<h2 id="Programmier-BlöckeCalliope-Sensoren">Sensoren</h2>
+<p>Die Kategorie »Sensoren« beinhaltet Blöcke für alle Standardsensoren des Calliope-Systems:</p>
+<ul><li>Taste</li>
+<li>Lage</li>
+<li>Kompasssensor</li>
+<li>Zeitgeber</li>
+<li>Mikrofon</li>
+<li>Empfangsstärke</li>
+<li>Temperatursensor</li>
+<li>Umgebungslicht</li>
+<li>Ein- und Ausgabepins</li>
+<li>Kreiselsensor</li>
+<li>Beschleunigungssensor</li>
+</ul><p>Eine Besonderheit der Sensor-Blöcke im Unterschied zu den Aktion-Blöcke ist, dass viele Sensor-Blöcke einen »Wert« zurückgeben. Den Wert-Typ, den ein Sensor-Block zurückgibt, erkennst du an der Farbe des Konnektors. Der Konnektor ist das Verbindungsstück, mit denen NEPO-Blöcke in andere Blöcke eingefügt werden können.</p>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robSensors_key_getSample" class="help beginner"><h3 id="Programmier-BlöckeCalliope-»Taste...gedrückt?«">»Taste ... gedrückt?«</h3>
+<p>Mit dem Block »Taste ... gedrückt?« kannst du einem anderen Block »mitteilen«,  ob die ausgewählte Taste gedrückt wurde oder nicht. Dieser Block gibt die logischen Werte <em>wahr = gedrückt</em> oder <em>falsch = nicht gedrückt</em> zurück.</p>
+<p>Einstellmöglichkeiten:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Port, wähle die Taste aus, die du abfragen möchtest.</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Logischer Wert: »wahr«, wenn die Taste gedrückt ist, sonst »falsch«.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robSensors_pintouch_getSample" class="help beginner"><h3 id="Programmier-BlöckeCalliope-»Pin...gedrückt?«">»Pin ... gedrückt?«</h3>
+<p>Mit dem Block »Pin ... gedrückt?« kannst du einem anderen Block »mitteilen«,  ob der ausgewählte Pin berührt wird oder nicht. Dieser Block gibt die logischen Werte <em>wahr = gedrückt</em> oder <em>falsch = nicht gedrückt</em> zurück.</p>
+<p>Einstellmöglichkeiten:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Pin, wähle den Pin aus, den du abfragen willst.</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Logischer Wert: »wahr«, wenn der Pin berührt wird, sonst »falsch«.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robSensors_pin_getSample" class="help expert"><h3 id="Programmier-BlöckeCalliope-»gibanalogen/digitalenWertPin...«[Experten-Block]">»gib analogen/digitalen Wert Pin ...«<span class="typcn typcn-star"></span></h3>
+<p>Mit dem Block »gib analogen/digitalen Wert Pin ...« kannst du den Eingabewert an dem ausgewählten Pin auslesen, wenn du dort ein anderes Gerät oder Zusatzmodul angeschlossen hast. </p>
+<p>Einstellmöglichkeiten:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Analog/Digital; welche Art von Signal möchtest du einlesen?</li>
+<li class="typcn typcn-arrow-down">Pin, wähle den Pin aus, den du abfragen willst.</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Zahl; aktueller Wert des Eingangssignals.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robSensors_gesture_getSample" class="help beginner"><h3 id="Programmier-BlöckeCalliope-»Lage...aktiv?«">»Lage ... aktiv?«</h3>
+<p>Mit dem Block »Lage ... aktiv?« kannst du einem anderen Block »mitteilen«, ob sich der Calliope in einer bestimmten Lage befindet.</p>
+<p>Befindet sich der Calliope in der abgefragten Lage liefert der »Lage ... aktiv?« Block  »wahr«, sonst »falsch«.</p>
+<p>Mögliche Abfragen:</p>
+<ul>
+<li>aufrecht: USB-Anschluss des Calliope zeigt nach oben</li>
+<li>kopfüber: USB-Anschluss des Calliope zeigt nach unten</li>
+<li>auf der Vorderseite: Calliope-Beschriftung zeigt nach unten</li>
+<li>auf der Rückseite: Calliope-Beschriftung zeigt nach oben</li>
+<li>geschüttelt: Calliope wird geschüttelt</li>
+<li>frei fallend: Calliope wird nach unten beschleunigt BEATE</li>
+</ul>
+<p></p>
+<p>Einstellmöglichkeiten:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Lage, die abgefragt werden soll.</li>
+</ul>
+<p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Logischer Wert: »wahr«, wenn er sich in der Lage befindet, sonst »falsch«.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robSensors_compass_getSample" class="help beginner"><h3 id="Programmier-BlöckeCalliope-»gibWertKompasssensor«">»gib Wert Kompasssensor«</h3>
+<p>Mit dem Block »gib Wert Kompasssensor« kannst du in Grad die Abweichung von der Ausgangsrichtung des Calliope auslesen.</p>
+<p>Dazu musst du vorher den Calliope kalibrieren, indem du durch Bewegung und Rotation des Calliope einen Kreis zeichnest</p>
+<p><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Zahl, Abweichung in Grad.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robSensors_sound_getSample" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»gibGeraeuschMikrofon«[Experten-Block]">»gib Geräusch Mikrofon«<span class="typcn typcn-star"></span></h3>
+<p>Der Block »gib Geräusch Mikrofon« gibt den aktuellen Wert des Geräuschsensors im Intervall 0 (leise) und 100 (laut) zurück. </p>
+<p><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Zahl, aktueller Wert des Geräuschsensors von 0 bis 100</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robSensors_timer_getSample" class="help beginner">
+<h3 id="Programmier-BlöckeCalliope-»gibWertZeitgeber«">»gib Wert Zeitgeber«</h3>
+<p>Mit dem Block »Gib Wert Zeitgeber« kannst du einem anderen Block den aktuellen Stand des internen Zeitgebers in Millisekunden "mitteilen". Der Zeitgeber wird automatisch mit dem Beginn eines Programms gestartet.</p>
+<p>Einstellmöglichkeiten:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Zeitgeber-Nummer, wähle den Zeitgeber aus, dessen Wert du ermitteln möchtest.</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Zahl, aktueller Wert des Zeitgebers.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedSensors_timer_reset" class="help beginner">
+<h3 id="Programmier-BlöckeCalliope-»SetzeZeitgeber«">»Setze Zeitgeber«</h3>
+<p>Mit dem Block »Setze Zeitgeber« kannst du den internen Zeitgeber auf den Wert 0 zurückgesetzen.</p>
+<p>Einstellmöglichkeiten:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Zeitgeber-Nummer, wähle den Zeitgeber aus, den du zurücksetzen möchtest.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robSensors_temperature_getSample" class="help beginner"><h3 id="Programmier-BlöckeCalliope-»gibWertTemperatursensor«">»gib Wert Temperatursensor«</h3>
+<p>Mit dem Block »gib Wert Temperatursensor« kannst du die aktuell gemessene Temperatur als Zahl auslesen. </p>
+<p>Bitte beachte, dass sich der Temperatursensor am Prozessor befindet und durch dessen Wärme einen höheren Wert anzeigt als die Umgebungstemperatur.</p>
+<p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Zahl; aktulle Temperatur in Grad Celsius.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robSensors_rssi_getSample" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»gibWertEmpfangsstaerke«[Experten-Block]">»gib Wert Empfangsstärke«<span class="typcn typcn-star"></span></h3>
+<p>Der Block »gib Wert Empfangsstärke« gibt die Signalstärke der letzten Nachricht zurück. </p>
+<p><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Zahl, Signalstärke der letzten Nachricht.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robSensors_light_getSample" class="help beginner"><h3 id="Programmier-BlöckeCalliope-»gibWertUmgebungslicht«">»gib Wert Umgebungslicht«</h3>
+<p>Mit dem Block »gib Wert Umgebungslicht« kannst du Helligkeit messen.</p>
+<p><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Zahl; Helligkeit von 0 bis 100.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robSensors_gyro_getSample" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»gibWinkelKreiselsensor«[Experten-Block]">»gib Winkel Kreiselsensor«<span class="typcn typcn-star"></span></h3>
+<p>Der Block »gib Winkel Kreiselsensor« gibt den aktuellen Wert des Kreiselsensors zurück. </p>
+<p><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Zahl, Wert des Kreiselsensors.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robSensors_accelerometer_getSample" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»gibWertBeschleunigungssensor«[Experten-Block]">»gib Wert Beschleunigungssensor«<span class="typcn typcn-star"></span></h3>
+<p>Der Block »gib Wert Beschleunigungssensor« gibt den Wert für Neigung und Drehung zurück. </p>
+<p><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Zahl, Wert des Beschleunigungssensors.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<h2 style="text-align: left;" id="Programmier-BlöckeCalliope-Kontrolle">Kontrolle</h2>
+<p style="text-align: left;">Die Kategorie »Kontrolle« beinhaltet Blöcke, mit denen der Programmablauf gesteuert werden kann. Die Kategorie umfasst folgende Blöcke:</p>
+<ul style="text-align: left;"><li>Wenn mache</li>
+<li>Wenn mache sonst</li>
+<li>Wiederhole unendlich oft</li>
+<li>Wiederhole n mal</li>
+<li>Wiederhole solange/bis (Experten-Block)</li>
+<li>Für Wert aus der Liste (Experten-Block)</li>
+<li>Zähle von bis (Experten-Block)</li>
+<li>Die Schleife abbrechen/mit der nächsten Iteration der Schleife fortfahren (Experten-Block)</li>
+<li>Warte</li>
+<li>Warte bis</li>
+</ul></div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robControls_if" class="help beginner">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»Wennmache«">»Wenn mache«</h3>
+<p style="text-align: left;">Mit dem Block »Wenn mache« kannst du gezielt Aktionen auslösen, die von einer Bedingung abhängen. Der »Wenn mache«-Block benötigt einen logischen Wert als Eingabewert. Falls die Bedingung in »Wenn« erfüllt (wahr) ist, wird der eingefügte Block (oder die Blöcke) ausgeführt. Bei einem verschachtelten »Wenn mache« Block, also wenn eine weitere Unterscheidung eingefügt wurde, wird zuerst die erste »Wenn« Bedingung abgefragt und, falls diese nicht erfüllt ist (Bedingung = falsch), wird die zweite »sonst wenn« Bedingung geprüft. Auch diese zweite Bedingung benötigt wieder einen logischen Wert als Eingabewert.</p>
+<p style="text-align: left;">Die Bedingungen können beliebig durch Anklicken des »+« Plus-Symbols erweitert und durch das »-« Minus-Symbol wieder bis auf eine einzige Bedingung reduziert werden.</p>
+<p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-plus">Eine weitere Bedingung am Ende anfügen.</li>
+<li class="typcn typcn-minus">Die letzte Bedingung löschen.</li>
+<li class="typcn typcn-arrow-left">Logischer Wert, »wahr« oder »falsch«.</li>
+<li class="typcn typcn-arrow-left">Blöcke, die nur dann ausgeführt werden, wenn die zugehörige Bedingung »wahr« ist.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robControls_ifElse" class="help beginner">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»Wennmachesonst«">»Wenn mache sonst«</h3>
+<p style="text-align: left;">Mit dem Block »Wenn mache sonst« kannst du gezielt Aktionen auslösen, die von einer Bedingung abhängen. Der »Wenn mache sonst«-Block benötigt hierfür einen logischen Wert als Eingabewert. Falls die Bedingung  erfüllt (wahr) ist, wird der dort eingefügte Block (oder die Blöcke) ausgeführt, ansonsten (Bedingung nicht erfüllt = falsch) wird der Block (bzw. die Blöcke), der bei »sonst« eingefügt wurde, ausgeführt. Bei einem verschachtelten »Wenn mache sonst« Block, also wenn eine weitere Unterscheidung dazugefügt wurde, wird zuerst die erste »Wenn« Bedingung abgefragt und, falls diese nicht erfüllt ist, wird die zweite »sonst wenn« Bedingung geprüft. Auch diese zweite Bedingung benötigt wieder einen logischen Wert als Eingabewert. Nur wenn beide Bedingungen nicht erfüllt sind, wird der Block ausgeführt, der bei »sonst« eingefügt wurde.</p>
+<p style="text-align: left;">Die Bedingungen können beliebig durch anklicken des »+« Plus-Symbols erweitert und durch das »-« Minus-Symbol wieder bis auf eine einzige Bedingung reduziert werden.</p>
+<p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-plus">Eine weitere Bedingung am Ende anfügen.</li>
+<li class="typcn typcn-minus">Die letzte Bedingung löschen.</li>
+<li class="typcn typcn-arrow-left">Logischer Wert, »wahr« oder »falsch«.</li>
+<li class="typcn typcn-arrow-left">Blöcke, die nur dann ausgeführt werden, wenn die zugehörige Bedingung »wahr« ist.</li>
+<li class="typcn typcn-arrow-left">Blöcke, die nur dann ausgeführt werden, wenn die zugehörige Bedingung »falsch« ist.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robControls_loopForever" class="help beginner">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»Wiederholeunendlichoft«">»Wiederhole unendlich oft«</h3>
+<p style="text-align: left;">Mit dem Block »Wiederhole unendlich oft« kannst du Blöcke endlos von deinem Roboter ausführen lassen. Alle Blöcke, die sich im »Wiederhole unendlich oft«-Block befinden, werden immer wieder ausgeführt. Die Blöcke werden dabei von oben nach unten ausgeführt. Sobald der letzte Block ausgeführt wurde, beginnt das Programm wieder mit dem ersten Block. Deshalb wird dieser Block auch »Endlosschleife« genannt.</p>
+<p style="text-align: left;">Eingaben:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Blöcke, die wiederholt ausgeführt werden.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="controls_repeat_ext" class="help beginner">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»Wiederholenmal«">»Wiederhole n mal«</h3>
+<p style="text-align: left;">Mit dem Block »Wiederhole n mal« kannst du andere Blöcke beliebig oft von deinem Roboter ausführen lassen. Alle Blöcke, die sich im Block »Wiederhole n mal« befinden, werden so oft ausgeführt, wie im Eingabefeld eingestellt ist. Die Blöcke werden dabei von oben nach unten ausgeführt. Sobald der letzte Block ausgeführt wurde, beginnt das Programm wieder mit dem ersten Block, bis die eingestellte Wiederholungszahl erreicht ist. Deshalb wird dieser Block auch »Schleife« genannt.</p><div class="aui-message hint shadowed information-macro">
+<div class="message-content">
+<p>Nur ganzzahlige Werte können eingegeben werden.</p>
+</div>
+</div>
+<p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Zahl, wie oft die enthaltenen Blöcke wiederholt werden sollen.</li>
+<li class="typcn typcn-arrow-left">Blöcke, die wiederholt ausgeführt werden.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="controls_whileUntil" class="help expert">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»Wiederholesolange/bis«[Experten-Block]">»Wiederhole solange/bis«<span class="typcn typcn-star"></span></h3>
+<p style="text-align: left;">Mit dem Block »Wiederhole solange/bis« kannst du andere Blöcke beliebig oft von deinem Roboter ausführen lassen. Alle Blöcke, die sich im Block »Wiederhole solange/bis« befinden, werden immer wieder ausgeführt, solange bzw. bis die Bedingung im Eingabefeld erfüllt ist. Die Blöcke werden dabei von oben nach unten ausgeführt. Sobald der letzte Block ausgeführt wurde, beginnt das Programm wieder mit dem ersten Block, solange bzw. bis die Bedingung im Eingabefeld erfüllt ist. Deshalb wird dieser Block auch »bedingte Schleife« genannt.</p>
+<p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">»solange« oder »bis«, um den Typ der bedingten Wiederholung zu bestimmen.</li>
+<li class="typcn typcn-arrow-left">Logischer Wert, »wahr« oder »falsch«.</li>
+<li class="typcn typcn-arrow-left">Blöcke, die wiederholt ausgeführt werden.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robControls_forEach" class="help expert">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»FürWertausderListe«[Experten-Block]">»Für Wert ... aus der Liste«<span class="typcn typcn-star"></span></h3>
+<p style="text-align: left;">Mit dem Block »Für Wert ... aus der Liste« werden nacheinander alle Werte einer Liste an eine Variable übergeben und können dann in der so genannten Schleife verarbeitet werden. Mit jedem Schleifendurchlauf wird das nächste Element aus der Liste geholt, bis die Liste vollständig abgearbeitet ist. Der Wert des Listenelements wird an die Variable Element gebunden und kann in den enthaltenen Blöcken verwendet werden.</p>
+<p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Typ der Listenelemente, »Zahl«, »Zeichenkette«, »logischer Wert«, »Farbe«, »Bild«</li>
+<li class="typcn typcn-pen">Lokale Variable (Name frei wählbar), an die nacheinander die Listenelemente übergeben werden.</li>
+<li class="typcn typcn-arrow-left">Liste, die Elemente des festgelegten Typs enthält. Wenn die Listenelemente nicht den richtigen Typ haben, kann die Liste nicht als Eingabewert verwendet werden.</li>
+<li class="typcn typcn-arrow-left">Blöcke, die wiederholt ausgeführt werden.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robControls_for" class="help expert">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»Zählevonbis«[Experten-Block]">»Zähle von bis«<span class="typcn typcn-star"></span></h3>
+<p style="text-align: left;">Mit dem Block »Zähle von bis« kannst du andere Blöcke mehrfach von deinem Roboter ausführen lassen. Alle Blöcke, die sich im Block »Zähle von bis« befinden, werden so oft ausgeführt, bis die Zählung im Eingabefeld abgearbeitet ist. Die Blöcke werden dabei von oben nach unten ausgeführt. Sobald der letzte Block ausgeführt wurde, beginnt das Programm wieder mit dem ersten Block, solange die Zählbedingung im Eingabefeld erfüllt ist, d.h. der Endwert der Zählung noch nicht erreicht ist. Die Werte der Zählung werden jeweils an die Zählvariable gebunden, deren Name frei eingestellt werden kann. Der Wert der Zählvariablen kann im den Blöcken der Schleife verwendet werden. Der letzte Eingabewert gibt an, in welcher Schrittweite gezählt wird.</p>
+<p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-pen">Variable, frei wählbarer Name für die Zählvariable.</li>
+<li class="typcn typcn-arrow-left">Zahl, Anfangswert der Zählschleife.</li>
+<li class="typcn typcn-arrow-left">Zahl, Endwert der Zählschleife.</li>
+<li class="typcn typcn-arrow-left">Zahl, Schrittweite für die Zählschleife.</li>
+<li class="typcn typcn-arrow-left">Blöcke, die wiederholt ausgeführt werden.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="controls_flow_statements" class="help expert">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»DieSchleifeabbrechen/mitdernächstenIterationderSchleifefortfahren«[Experten-Block]">»Die Schleife abbrechen/mit der nächsten Iteration der Schleife fortfahren«<span class="typcn typcn-star"></span></h3>
+<p style="text-align: left;">Mit dem Block »Die Schleife abbrechen/mit der nächsten Iteration der Schleife fortfahren« kann eine Schleife vorzeitig beendet bzw. wieder zum Anfang der Schleife gesprungen werden. Sobald dieser Block in einer Reihe von Blöcken erscheint, werden alle nachfolgenden Blöcke bis zum Ende der Schleife ignoriert.</p>
+<p style="text-align: left;">Einstellmöglichkeiten:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Abbruchverhalten, »Die Schleife abbrechen« oder »mit der nächsten Iteration der Schleife fortfahren«.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robControls_wait_time" class="help beginner">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»Warte«">»Warte«</h3>
+<p style="text-align: left;">Mit dem Block »Warte« kannst du dein Programm an der Stelle "anhalten", an der du den Block eingefügt hast. Dein Programm bleibt dann für die angegebene Dauer an dieser Stelle stehen. Nach Ablauf der angegebenen Zeit wird dann der nachfolgende Block ausgeführt. Beispielsweise kannst du dadurch einen Text in dem Display deines Roboters exakt für diese Zeit anzeigen lassen.</p>
+<p style="text-align: left;">Einstellmöglichkeiten:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Zahl, Wartezeit in Millisekunden.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robControls_wait_for" class="help beginner">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»Wartebis«">»Warte bis«</h3>
+<p style="text-align: left;">Mit dem Block »Warte bis« kannst du dein Programm an der Stelle "anhalten", an der du den »Warte bis«-Block eingefügt hast. Dein Programm wartet dann so lange, bis die Bedingung erfüllt (wahr) ist. Den »Warte bis«-Block kannst du mit dem "+"-Zeichen um zusätzliche Bedingungen erweitern. Dein Programm wartet dann solange, bis (mindestens) eine der Bedingung deines »Warte bis«-Blocks erfüllt ist.</p>
+<p style="text-align: left;">Einstelmöglichkeiten und Eingabewert:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-plus">Eine weitere Wartebedingung am Ende anfügen.</li>
+<li class="typcn typcn-minus">Die letzte Wartebedingung löschen.</li>
+<li class="typcn typcn-arrow-left">Logischer Wert, »wahr« oder »falsch«.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<h2 id="Programmier-BlöckeCalliope-Logik">Logik</h2>
+<p style="text-align: left;">Mit den »Logik«-Blöcken kannst du Bedingungen selbst zusammenfügen. Mit diesen Bedingungen kannst du Zustände, Werte und Ereignisse zueinander in Beziehung setzen, z.B. Sensorwerte miteinander vergleichen.</p>
+<p style="text-align: left;">Folgende »Logik«-Blöcke stehen dir bei NEPO zur Verfügung:</p>
+<ul style="text-align: left;"><li>Vergleiche</li>
+<li>und/oder</li>
+<li>nicht (Experten-Block)</li>
+<li>wahr/falsch</li>
+<li>null (Experten-Block)</li>
+<li>teste (Experten-Block)</li>
+</ul></div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="logic_compare" class="help beginner">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»Vergleiche«">»Vergleiche«</h3>
+<p style="text-align: left;">Mit dem Block »Vergleiche« kannst du verschiedene Eingabewerte (Zahl, Farbe, logischer Wert, Text) gleichen Typs miteinander vergleichen. Stimmt der Vergleich wird der logische Wert »wahr« zurückgegeben, sonst »falsch«.</p>
+<p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Linker Eingabewert für den Vergleich.</li>
+<li class="typcn typcn-arrow-down">Vergleich, wähle aus, wie verglichen werden soll.</li>
+<li class="typcn typcn-arrow-left">Rechter Eingabewert für den Vergleich.</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Logischer Wert, »wahr« oder »falsch«.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="logic_operation" class="help beginner">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»und/oder«">»und/oder«</h3>
+<p style="text-align: left;">Mit dem Block »und/oder« kannst du logische Werte zueinander in Beziehung setzen. Der »und/oder« Block liefert bei der Einstellung »und« nur dann den logischen Wert »wahr«, wenn beide Eingabewerte des Blocks gleichzeitig »wahr« sind. Bei der Einstellung »oder« genügt es, wenn eine der beiden Eingabewerte »wahr« ist, damit der »und/oder« Block als logischen Wert »wahr« liefert.</p>
+<p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Logischer Wert für die Verknüpfung.</li>
+<li class="typcn typcn-arrow-down">Wähle die logische Verknüpfung.</li>
+<li class="typcn typcn-arrow-left">Logischer Wert für die Verknüpfung.</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Logischer Wert, »wahr« oder »falsch«.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="logic_negate" class="help expert">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»nicht«[Experten-Block]">»nicht«<span class="typcn typcn-star"></span></h3>
+<p style="text-align: left;">Mit dem Block »nicht« kannst du einen logischen Wert umkehren. Der logische Wert ergibt sich aus der logischen Umkehrung des Eingabewertes, aus »wahr« wird »falsch« und umgekehrt.</p>
+<p style="text-align: left;">Eingabewert:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Logischer Wert für die Umkehrung.</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Logischer Wert, Ergebnis der Umkehrung.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="logic_boolean" class="help beginner">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»wahr/falsch«">»wahr/falsch«</h3>
+<p style="text-align: left;">Mit dem Block »wahr/falsch« kannst du entweder den logischen Wert »wahr« oder »falsch« an einen anderen Block übermitteln.</p>
+<p style="text-align: left;"> Einstellmöglichkeiten:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Logischer Wert, wähle den Wert, der ausgegeben werden soll.</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Logischer Wert.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="logic_null" class="help expert">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»null«[Experten-Block]">»null«<span class="typcn typcn-star"></span></h3>
+<p style="text-align: left;">Der Block »null« ist ein Platzhalter für eine Eingabe, die noch unbestimmt ist. Wenn z.B. eine neue Verbindungsvariable für die Kommunikation erzeugt wird und noch nicht belegt ist, wird der Anfangswert auf »null« gesetzt.</p>
+<p style="text-align: left;"><p>Rückgabewert:</p>
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Logischer Wert, »null«.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="logic_ternary" class="help expert">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»teste«[Experten-Block]">»teste«<span class="typcn typcn-star"></span></h3>
+<p style="text-align: left;">Mit dem Block »teste« kannst du einen Test durchführen und je nach Ergebnis unterschiedliche Ergebnisse zurückgeben.</p>
+<p style="text-align: left;">Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Logischer Wert für den Test; wenn kein Block angegeben wird, wird "wahr" angenommen.</li>
+<li class="typcn typcn-arrow-left">Beliebiger Wert, der mit einem Block bestimmt werden kann.</li>
+<li class="typcn typcn-arrow-left">Beliebiger Wert, der mit einem Block bestimmt werden kann.</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Wert von beliebigem Typ.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<h2 style="text-align: left;" id="Programmier-BlöckeCalliope-Mathematik">Mathematik</h2>
+<p style="text-align: left;">Mit den »Mathematik«-Blöcken kannst du rechnen und Werte einstellen.</p>
+<p style="text-align: left;">Folgende »Mathematik«-Blöcke stehen dir bei NEPO zur Verfügung:</p>
+<ul style="text-align: left;">
+<li>Wert</li>
+<li>Rechnen</li>
+<li>Mathematische Funktionen (Experten-Block)</li>
+<li>Trigonometrische Funktionen (Experten-Block)</li>
+<li>Konstanten (Experten-Block)</li>
+<li>Zahleneigenschaft (Experten-Block)</li>
+<li>Erhöhe um x (Experten-Block)</li>
+<li>runden (Experten-Block)</li>
+<li>Liste auswerten (Experten-Block)</li>
+<li>Rest von (Experten-Block)</li>
+<li>Begrenze (Experten-Block)</li>
+<li>Ganzzahlige Zufallswerte (Experten-Block)</li>
+<li>Zufallszahl (Experten-Block)</li>
+</ul></div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="math_number" class="help beginner">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»Wert«">»Wert«</h3>
+<p style="text-align: left;">Mit dem Block »Wert« kannst du Zahlen an einen anderen Block übermitteln.</p>
+<p style="text-align: left;"> Eingabewert:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-pen">Zahl</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right"> Zahl</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="math_arithmetic" class="help beginner">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»Rechnen«">»Rechnen«</h3>
+<p style="text-align: left;">Mit dem Block »Rechnen« kannst du Zahlen addieren, subtrahieren, multiplizieren, dividieren oder potenzieren. Dieser Block ist nur in Verbindung mit einem anderen Block nutzbar, der eine Zahl als Eingabewert benötigt.</p>
+<p style="text-align: left;"> Einstellmöglichkeiten und Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left"> Zahl</li>
+<li class="typcn typcn-arrow-down"> Berechnung, wähle einen Operator aus.</li>
+<li class="typcn typcn-arrow-left">Zahl</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right"> Zahl, das Ergebnis der Berechnung.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="math_single" class="help expert">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»MathematischeFunktionen«[Experten-Block]">»Mathematische Funktionen«<span class="typcn typcn-star"></span></h3>
+<p style="text-align: left;">Mit dem Block »Mathematische Funktionen« können einige elementare mathematische Funktionen berechnet werden.</p>
+<p style="text-align: left;">Einstellmöglichkeiten und Eingabewert:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Mathematische Funktion, Quadratwurzel, Absolutwert, Invertieren, ln (natürlicher Logarithmus), log10 (dekadischer Logarithmus), e^ (Exponentialfunktion) 10^ (Zehner-Exponent)</li>
+<li class="typcn typcn-arrow-left">Zahl, auf die die mathematische Funktion angewandt wird.</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right"> Zahl, das Ergebnis der Funktion.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="math_trig" class="help expert">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»TrigonometrischeFunktionen«[Experten-Block]">»Trigonometrische Funktionen«<span class="typcn typcn-star"></span></h3>
+<p style="text-align: left;">Mit dem Block »Trigonometrische Funktionen« können Sinus, Cosinus, Tangens und die zugehörigen Umkehrfunktionen berechnet werden. Die Eingabewerte werden im Bogenmaß erwartet (siehe Hinweis oben).</p>
+<p style="text-align: left;">Einstellmöglichkeiten und Eingabewert:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Trigonometrische Funktion, wähle eine Funktion aus.</li>
+<li class="typcn typcn-arrow-left">Zahl, im Bogenmaß</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right"> Zahl, das Ergebnis der trigonometrischen Berechnung.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="math_constant" class="help expert">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»Konstanten«[Experten-Block]">»Konstanten«<span class="typcn typcn-star"></span></h3>
+<p style="text-align: left;">Der Block »Konstanten« stellt einige mathematische Konstanten bereit. »π« (3,1415...), »e« (2,718...), »φ« (1,618...), »sqrt(2)« (1,414...), »sqrt(½)« (0,7071...), »∞«.</p>
+<p style="text-align: left;">Einstellmöglichkeiten:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Mathematische Konstanten, wähle eine Konstante aus.</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right"> Zahl, Wert der mathematischen Konstante. Der Wert von Unendlich ist »infinity«.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="math_number_property" class="help expert">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»Zahleneigenschaft«[Experten-Block]">»Zahleneigenschaft«<span class="typcn typcn-star"></span></h3>
+<p style="text-align: left;">Mit dem Block »Zahleneigenschaft« wird geprüft, ob eine eingegebene Zahl eine bestimmte Eigenschaft aufweist. »gerade«, »ungerade«, »ist Primzahl«, »ganze Zahl«, »positiv«, »negativ«, »teilbar durch«.</p>
+<p style="text-align: left;">Einstellmöglichkeiten und Eingabewert:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Zahl, die mit einem Block geprüft wird.</li>
+<li class="typcn typcn-arrow-down">Zahleneigenschaft, wähle, was geprüft werden soll.</li>
+<li class="typcn typcn-arrow-left">Zahl; ein zweiter Eingabewert ist nur bei der Wahl von »ist teilbar durch« erforderlich.</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Logischer Wert, »wahr« oder »falsch«, je nachdem, ob die geprüfte Zahl die untersuchte Eigenschaft hat.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robMath_change" class="help expert">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»Erhöheumx«[Experten-Block]">»Erhöhe um x«<span class="typcn typcn-star"></span></h3>
+<p style="text-align: left;">Mit dem Block »Erhöhe um x« wird der Wert einer numerischen Variable um einen Betrag erhöht.</p>
+<p style="text-align: left;">Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Variable, deren Wert verändert werden soll.</li>
+<li class="typcn typcn-arrow-left">Zahl.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="math_round" class="help expert">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»runden«[Experten-Block]">»runden«<span class="typcn typcn-star"></span></h3>
+<p style="text-align: left;">Mit dem Block »runden« können Werte gerundet werden. Beim Runden werden die Nachkommastellen auf 0 gesetzt. Es wird je nach Größe der Nachkommastellen automatisch auf- oder abgerundet. Man kann jedoch auch einstellen, dass stets auf- bzw. stets abgerundet werden soll.</p>
+<p style="text-align: left;">Einstellmöglichkeiten und Eingabewert:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Art der Rundung, wähle, wie gerundet werden soll.</li>
+<li class="typcn typcn-arrow-left">Zahl</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Zahl, gerundete Ganzzahl</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="math_on_list" class="help expert">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»Listeauswerten«[Experten-Block]">»Liste auswerten«<span class="typcn typcn-star"></span></h3>
+<p style="text-align: left;">Mit dem Block »Liste auswerten« können verschiedene Analysen einer Liste vorgenommen werden:</p>
+<ul style="text-align: left;"><li>Summe - alle Werte der Liste werden zusammengezählt</li>
+<li>Minimalwert - der kleinste Wert der Liste wird ausgegeben</li>
+<li>Maximalwert - der größte Wert der Liste wird ausgegeben</li>
+<li>Mittelwert - aus den Werten der Liste wird der Mittelwert bestimmt</li>
+<li>Median - der Median (Zentralwert) einer Liste wird ausgegeben</li>
+<li>Standardabweichung - die Standardabweichung (Varianz) der Listenwerte wird ausgegeben</li>
+<li>Zufallswert - einer der Listenwerte wird per Zufall gewählt und ausgegeben</li>
+</ul><p style="text-align: left;">Einstellmöglichkeiten und Eingabewert:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Art der Listenauswertung</li>
+<li class="typcn typcn-arrow-left">Liste mit Zahlen</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Zahl, Ergebnis der eingestellten Listenauswertung.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="math_modulo" class="help expert">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»Restvon«[Experten-Block]">»Rest von«<span class="typcn typcn-star"></span></h3>
+<p style="text-align: left;">Der Block »Rest von« führt eine Division durch und liefert den Rest der Division, der nicht mehr durch den Divisor geteilt werden konnte.</p>
+<p style="text-align: left;">Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Zahl, die geteilt wird (Dividend)</li>
+<li class="typcn typcn-arrow-left">Zahl, durch die geteilt wird (Divisor bzw. Teiler)</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Zahl, Rest der Division</li></ul>
+</div></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="math_constrain" class="help expert">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»Begrenze«[Experten-Block]">»Begrenze«<span class="typcn typcn-star"></span></h3>
+<p style="text-align: left;">Der Block »Begrenze« sorgt dafür, dass Grenzwerte nicht überschritten werden. Er erfordert drei Eingabewerte:</p>
+<ol style="text-align: left;"><li>zu prüfender Wert</li>
+<li>untere Grenze</li>
+<li>obere Grenze</li>
+</ol><p style="text-align: left;">Der Rückgabewert ist</p>
+<ul style="text-align: left;">
+<li>der zu prüfende Wert, wenn gilt: untere Grenze ≤ zu prüfender Wert ≤ obere Grenze</li>
+<li>untere Grenze, wenn zu prüfender Wert < untere Grenze</li>
+<li>obere Grenze, wenn zu prüfender Wert > obere Grenze</li>
+</ul>
+<p style="text-align: left;">Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Zahl, die begrenzt wird.</li>
+<li class="typcn typcn-arrow-left">Zahl, untere Grenze.</li>
+<li class="typcn typcn-arrow-left">Zahl, obere Grenze.</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Zahl, die innerhalb der eingestellten Grenzen liegt.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="math_random_int" class="help expert">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»GanzzahligeZufallswerte«[Experten-Block]">»Ganzzahlige Zufallswerte«<span class="typcn typcn-star"></span></h3>
+<p style="text-align: left;">Mit dem Block »Ganzzahlige Zufallswerte« können ganzzahlige Zufallswerte innerhalb selbst gewählter Grenzen erzeugt werden.</p>
+<p style="text-align: left;">Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Zahl, untere Grenze</li>
+<li class="typcn typcn-arrow-left">Zahl, obere Grenze</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Zahl, eine ganzzahlige Zufallszahl, die innerhalb der eingestellten Grenzen liegt</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="math_random_float" class="help expert">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»Zufallszahl«[Experten-Block]">»Zufallszahl«<span class="typcn typcn-star"></span></h3>
+<p style="text-align: left;">Mit dem Block »Zufallszahl« wird eine Zufallszahl zwischen 0,0 und 1,0 bestimmt.</p>
+<p style="text-align: left;"><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Zahl, eine positive Zufallszahl kleiner oder gleich 1.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<h2 style="text-align: left;" id="Programmier-BlöckeCalliope-Text">Text</h2>
+<p style="text-align: left;">Mit den »Text«-Blöcken können einfache Operationen mit Texten durchgeführt werden.</p>
+<p style="text-align: left;">Folgende »Text«-Blöcke stehen dir bei NEPO zur Verfügung:</p>
+<ul style="text-align: left;"><li>Text</li>
+<li>Kommentar erstellen</li>
+<li>Erstelle Text (Experten-Block)</li>
+<li>Text anhängen (Experten-Block)</li>
+</ul></div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="text" class="help beginner">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»Text«">»Text«</h3>
+<p style="text-align: left;">Mit dem einfachen »Text«-Block wird ein Stück Text bereitgestellt.</p>
+<p style="text-align: left;">Eingabewert:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-pen">Zeichenkette, bestehend aus beliebigen Zeichen</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Text, bestehend aus beliebigen Zeichen</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="text_comment" class="help beginner">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»Kommentar«">»Kommentar erstellen«</h3>
+<p style="text-align: left;">Mit diesem Block kannst du dein Programm dokumentieren.</p>
+<p> Dieser Kommentar wird auch im generierten Source-Code zu sehen sein.</p>
+<p style="text-align: left;">Eingabewert:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-pen">Zeichenkette, bestehend aus beliebigen Zeichen</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Kommentar, bestehend aus beliebigen Zeichen</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robText_join" class="help expert">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»ErstelleText«[Experten-Block]">»Erstelle Text«<span class="typcn typcn-star"></span></h3>
+<p style="text-align: left;">Mit dem »Erstelle Text«-Block wird ein Stück Text aus verschiedenen Eingabewerten zusammengesetzt. Mit dem +-Zeichen können weitere Eingabemöglichkeiten geschaffen werden. Alle Eingaben werden zu einer kontinuierlichen Zeichenkette zusammengefügt. </p>
+<p style="text-align: left;">Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-plus">Weitere Eingabemöglichkeiten bereitstellen.</li>
+<li class="typcn typcn-minus">Letzte Eingabemöglichkeit entfernen (bei mehr als 2 Eingabemöglichkeiten).</li>
+<li class="typcn typcn-arrow-left">Beliebiger Wert, Zahl, Text, logischer Wert, Farbe.</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Zeichenkette, bestehend aus beliebigen Zeichen.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robText_append" class="help expert">
+<h3 style="text-align: left;" id="Programmier-BlöckeCalliope-»Textanhängen«[Experten-Block]">»Text anhängen«<span class="typcn typcn-star"></span></h3>
+<p style="text-align: left;">Mit dem »Text anhängen«-Block können Zeichenketten erweitert werden, z.B. indem an empfangene Nachrichten eine Signatur angehängt wird.</p>
+<p style="text-align: left;">Eingabemöglichkeiten:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Text, Zeichenkette, an die Text angehängt werden soll</li>
+<li class="typcn typcn-arrow-left">Text, Zeichenkette, die an einen Text angehängt werden soll</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<h2 style="text-align: left;" id="Programmier-BlöckeCalliope-Variablen">Variablen</h2>
+<p style="text-align: left;">Mit den »Variablen«-Blöcken können globale Variablen mit unterschiedlichen Wertetypen angelegt werden. In diesen globalen Variablen können Werte abgespeichert werden, die an einer beliebigen Stelle im Programm verwendet werden können. Jede Variable muss, bevor sie verwendet werden kann, angelegt werden. Dies erfolgt durch einen Klick auf das »+«-Zeichen im Block »Start«. Einer Variablen muss ein Name und ein Werttyp zugewiesen werden. Durch einen erneuten Klick auf das »+«-Zeichen können beliebig viele weitere Variablen angelegt werden.</p>
+<p style="text-align: left;">Der Name einer Variablen kann im Programm nur einmal vergeben werden.</p>
+<p style="text-align: left;">Einstellmöglichkeiten:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-plus">Füge eine neue Variable am Ende ein.</li>
+<li class="typcn typcn-minus">Lösche diese Variable.</li>
+<li class="typcn typcn-pen">Variablenname, Sonderzeichen und Leerzeichen sind nicht zugelassen.</li>
+<li class="typcn typcn-arrow-down">Variablentyp, wähle den Typ deiner Variablen.</li>
+<li class="typcn typcn-arrow-left">Anfangswert der Variablen.</li>
+</ul><p style="text-align: left;">Folgende »Variablen«-Blöcke stehen dir bei NEPO zur Verfügung:</p>
+<ul style="text-align: left;"><li>Schreibe Variable</li>
+<li>Lies Variable</li>
+</ul></div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="variables_set" class="help beginner">
+<h3 id="Programmier-BlöckeCalliope-»SchreibeVariable«">»Schreibe Variable«</h3>
+<p>Mit dem Block »Schreibe Variable« kannst du den Wert einer Variablen verändern. Je nach Typ der Variablen (Zahl, Zeichenkette, logischer Wert, Liste, Farbe) kann der Variablen ein passender Wert übergeben werden.</p>
+<p>Einstellmöglichkeit und Eingabewert:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Variable, deren Wert verändert werden soll.</li>
+<li class="typcn typcn-arrow-left">Wert, auf den die Variable gesetzt werden soll.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="variables_get" class="help beginner">
+<h3 id="Programmier-BlöckeCalliope-»LiesVariable«">»Lies Variable«</h3>
+<p>Mit dem Block »lies Variable« kannst du den Wert einer Variablen an einen anderen Block übergeben. Der Typ des Ausgabewertes entspricht immer dem Typ, mit dem die Variablen im Block »Start« initialisiert wurde.</p>
+<p>Einstellmöglichkeit:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Variable, deren Wert gelesen werden soll.</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Wert, der in der Variablen gespeichert ist.</li>
+</ul>
+</div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<h2 id="Programmier-BlöckeCalliope-Listen[Experten-Blöcke]">Listen<span class="typcn typcn-star"></span></h2>
+<p>Eine Liste steht für eine Sequenz von Daten (mit den gleichen Wertetypen), bei der die Elemente eine feste Reihenfolge besitzen.  Um den Block »Liste« nutzen zu können muss eine Variable mit dem Typ »Liste« angelegt werden. NEPO bietet verschiedene Wertetypen für Listen an: Zahl; Zeichenkette, logische Werte, Farbe, Bild.</p>
+<p>Folgende »Listen«-Blöcke stehen bei NEPO zur Verfügung:</p>
+<ul><li>Erzeuge Liste</li>
+<li>Länge einer Liste</li>
+<li>ist leer?</li>
+<li>Suche in der Liste</li>
+<li>Nimm Listenelement</li>
+<li>Setze Listenelement</li>
+</ul></div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robLists_create_with" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»ErzeugeListe«[Experten-Block]">»Erzeuge Liste«<span class="typcn typcn-star"></span></h3>
+<p>Der Block »Erzeuge eine leere Liste« erzeugt eine Liste ohne Inhalt. Der Block »Liste« erzeugt eine Liste mit einigen voreingestellten Werten. Mit + und - können weitere Listenelemente am Ende hinzugefügt bzw. entfernt werden. Wenn das letzte Element einer Liste entfernt wurde, liegt eine leere Liste vor.</p>
+<p>Einstellmöglichkeiten:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Typ, »Zahl«, »logischer Wert«, »Zeichenkette«, »Farbe« oder »Verbindung«.</li>
+<li class="typcn typcn-plus">Erzeuge ein weiteres Listenelement am Ende der bestehenden Liste.</li>
+<li class="typcn typcn-minus"> Lösche das Listenelement am Ende der bestehenden Liste.</li>
+<li class="typcn typcn-arrow-left">Werte, die dem Listentyp entsprechen. Hiermit können Anfangswerte gesetzt werden.</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Leere Liste oder eine Liste mit Elementen gleichen Typs.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robLists_length" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»Länge«[Experten-Block]">»Länge«<span class="typcn typcn-star"></span></h3>
+<p>Der Block »Länge« gibt als Wert die Länge einer Liste zurück, die als Eingabewert angegeben wird. Eine leere Liste hat die Länge 0.</p>
+<p>Eingabewert
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Liste</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Zahl, Anzahl der Listenelemente</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robLists_isEmpty" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»istleer?«[Experten-Block]">»ist leer?«<span class="typcn typcn-star"></span></h3>
+<p>Eine als Eingabewert gegebene Liste wird geprüft, ob sie leer ist.</p>
+<p>Eingabewert
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Liste.</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Logischer Wert, entweder »wahr« oder »falsch«</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robLists_indexOf" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»SucheinderListe«[Experten-Block]">»Suche in der Liste«<span class="typcn typcn-star"></span></h3>
+<p>Eine Liste wird durchsucht, ob ein Element darin enthalten ist. Wenn das Element enthalten ist, wird die Listenposition zurückgegeben. Wenn das Element nicht enthalten ist, ist das Ergebnis -1.</p>
+<p>Einstellmöglichkeiten:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Liste, die untersucht werden soll.</li>
+<li class="typcn typcn-arrow-down">Position für den Treffer, entweder »ersten« oder »letzten« Treffer suchen.</li>
+<li class="typcn typcn-arrow-left">Wert, der mit den Listentyp übereinstimmt.</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">
+<p>Zahl, die Position, an der das Element in der Liste steht.</p>
+<p>Beachte: Die Zählung der Listenpositionen beginnt bei 0.</p>
+</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robLists_getIndex" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»NimmListenelement«[Experten-Block]">»Nimm Listenelement«<span class="typcn typcn-star"></span></h3>
+<p>Mit diesem Block wird auf ein Element einer Liste zugegriffen.</p>
+<p>Es wird eine Liste als Eingabe übergeben. Danach wird angegeben, auf welches Element der Liste zugegriffen werden soll. </p>
+<p>Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Liste, die bearbeitet werden soll.</li>
+<li class="typcn typcn-arrow-left">Zahl, Listenposition. Beachte: Die Zählung der Listenpositionen beginnt bei 0.</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Das spezifizierte Listenelement, das an der angegebenen Listenposition gefunden wurde. »undefined« (undefiniert), wenn die Listenposition nicht existiert. </li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robLists_setIndex" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»SetzeListenelement«[Experten-Block]">»Setze Listenelement«<span class="typcn typcn-star"></span></h3>
+<p>In einer als Eingabewert übergebenen Liste wird ein näher spezifiziertes Element durch einen neuen Wert ersetzt.</p>
+<p>Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Liste, die bearbeitet werden soll.</li>
+<li class="typcn typcn-arrow-left">Zahl, Listenposition. Beachte: Die Zählung der Listenpositionen beginnt bei 0.</li>
+<li class="typcn typcn-arrow-left">Listenelement, das an der zuvor bestimmten Listenposition gesetzt oder eingefügt wird.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<h2 id="Programmier-BlöckeCalliope-Funktionen[Experten-Blöcke]">Funktionen<span class="typcn typcn-star"></span></h2>
+<p>Mit den Blöcken der Kategorie »Funktion« (in Java auch Methode oder Teilprogramm genannt) kannst du dein Programm übersichtlicher gestalten. NEPO bietet verschiedene Funktionsblöcke an:</p>
+<ul><li>Funktionsblock ohne/mit Eingabe- und ohne Rückgabewert</li>
+<li>Funktionsblock ohne/mit Eingabe- und mit Rückgabewert</li>
+<li>Wenn-Abfrage innerhalb einer Funktion</li>
+</ul>
+<p></p>
+<p>Mit elementaren Funktionsblöcken lassen sich einfache und komplexe Funktionen programmieren, die über Funktionsaufrufe genutzt werden können. Jede programmierte Funktion steht sofort als zusätzlich nutzbarer Block in der Kategorie »Funktion« zur Verfügung. Dies sind</p>
+<ul><li>Funktionsaufrufe ohne/mit Eingabe- und ohne Rückgabewert</li>
+<li>Funktionsaufrufe ohne/mit Eingabe- und mit Rückgabewert</li>
+</ul><p>Je nach Anzahl der Eingabe- und Rückgabewerte variiert die Auswahl an Funktionsblöcken.</p>
+<p>Jede Funktionen in NEPO erhält automatisch einen eindeutigen Namen (macheEtwas1, macheEtwas2, ...). Dieser Name kann frei verändert werden. Ein Überschreiben einer einmal definierten Funktion ist nicht möglich.</p>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robProcedures_defnoreturn" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-Funktionsblockohne/mitEingabe-undohneRückgabewert[Experten-Block]">Funktionsblock ohne/mit Eingabe- und ohne Rückgabewert<span class="typcn typcn-star"></span></h3>
+<p>In einem Funktionsblock ohne/mit Eingabe- und Rückgabewert wird eine Folge von Anweisungen zusammengefasst. Die Eingabewerte werden durch die lokalen Variablen im Funktionsblock festgelegt. Mit dem »+«-Zeichen können lokale Variablen als Eingabewerte für den Funktionsblock erzeugt werden. Lokale Variablen werden nicht initialisiert.</p>
+<p>Falls in einen Funktionsblock eine Wenn-Abfrage eingebaut wird, kann es zu einem vorzeitigen Abbruch der Funktion kommen.</p>
+<p>Der Funktionsblock steht nach seiner Definition als zusätzlicher Block in der Kategorie »Funktion« zur Verfügung. Auf diese Weise kann die Lesbarkeit komplexer Programme wesentlich vereinfacht werden.</p>
+<p>Einstellmöglichkeiten:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-pen">Funktionsname, ohne Leer- und Sonderzeichen</li>
+<li class="typcn typcn-plus">Erzeuge eine lokale Variable, der über den Funktionsaufruf ein Wert zugewiesen wird.</li>
+<li class="typcn typcn-minus">Lösche eine lokale Variable.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robProcedures_defreturn" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-Funktionsblockohne/mitEingabe-undmitRückgabewerten[Experten-Block]">Funktionsblock ohne/mit Eingabe- und mit Rückgabewerten<span class="typcn typcn-star"></span></h3>
+<p>In einem Funktionsblock ohne/mit Eingabe- und mit Rückgabewert wird eine Folge von Anweisungen zusammengefasst. Mit dem »+«-Zeichen können lokale Variablen als Eingabewerte für den Funktionsblock erzeugt werden. Nachdem alle Anweisungen durchlaufen wurden, wird abschließend ein Wert als Funktionswert zurückgegeben.</p>
+<p>Falls in einen Funktionsblock eine Wenn-Abfrage eingebaut wird, kann es zu einem vorzeitigen Abbruch der Funktion kommen, und es kann ein alternativer Funktionswert zurückgegeben werden.</p>
+<p>Der Funktionsblock steht nach seiner Definition als zusätzlicher Block in der Kategorie »Funktion« zur Verfügung. Auf diese Weise kann die Lesbarkeit komplexer Programme wesentlich vereinfacht werden.</p>
+<p>Einstellmöglichkeiten:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-pen">Funktionsname, ohne Leer- und Sonderzeichen</li>
+<li class="typcn typcn-plus">Erzeuge eine lokale Variable, der über den Funktionsaufruf ein Wert zugewiesen wird.</li>
+<li class="typcn typcn-minus">Lösche eine lokale Variable.</li>
+<li class="typcn typcn-arrow-down">Datentyp für den Rückgabewert. »Zahl«, »logischer Wert«, »Zeichenkette«, »Farbe«, »Bild«, »Liste Zahl«, »Liste logischer Wert«, »Liste Zeichenkette«, »Liste Farbe«, »Liste Bild«.</li>
+<li class="typcn typcn-arrow-left">Wert, der dem eingestellten Datentyp des Rückgabewertes entspricht.</li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Wert, der im Rückgabeblock berechnet wurde.</li>
+</ul>
+</div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="robProcedures_ifreturn" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-Wenn-AbfrageinnerhalbeinerFunktion[Experten-Block]">Wenn-Abfrage innerhalb einer Funktion<span class="typcn typcn-star"></span></h3>
+<p>Die Wenn-Abfrage innerhalb einer Funktion ist von besonderer Bedeutung. Sobald der Funktionsablauf auf eine Wenn-Abfrage trifft, wird die Gültigkeit der Bedingung geprüft.</p>
+<h4 id="Programmier-BlöckeCalliope-Wenn-AbfrageinnerhalbeinerFunktionmitRückgabewert:">Wenn-Abfrage innerhalb einer Funktion mit Rückgabewert:</h4>
+<ul><li>Wenn die Bedingung erfüllt ist, wird der weitere Funktionsablauf ignoriert und die Funktion wird beendet. Der zweite übergebene Wert wird als Funktionswert zurückgegeben. Ein eventuell mit der Funktion definierter Rückgabewert wird nicht weiter berücksichtig. Der Rückgabewert-Typ wird durch den Typ des Rückgabewerts der umgebenden Funktion festgelegt.</li>
+<li>Wenn die Bedingung nicht erfüllt ist, wird der Funktionsablauf fortgesetzt. Ein eventuell mit der Funktion definierter Rückgabewert wird als Funktionswert zurückgegeben, wenn der Funktionsablauf das Funktionsende erreicht.</li>
+</ul><h4 id="Programmier-BlöckeCalliope-Wenn-AbfrageinnerhalbeinerFunktionohneRückgabewert:">Wenn-Abfrage innerhalb einer Funktion ohne Rückgabewert:</h4>
+<ul><li>Eine Wenn-Abfrage innerhalb einer Funktion ohne Rückgabewert hat nur die Bedingung als Eingabewert.</li>
+<li>Wenn die Bedingung erfüllt ist, wird der weitere Funktionsablauf ignoriert und die Funktion wird beendet.</li>
+<li>Wenn die Bedingung nicht erfüllt ist, wird der Funktionsablauf fortgesetzt.</li>
+</ul><p>Einstellgabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Logischer Wert, der aus einer Bedingung bestimmt wird.</li>
+<li class="typcn typcn-arrow-left"><span>Wert, dessen Typ am Ende des Funktionsblock eingestellt ist.</span></li>
+</ul><p>Rückgabewert:</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Wert, dessen Typ am Ende des Funktionsblock eingestellt ist.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<h2 id="Programmier-BlöckeCalliope-Farben">Farben</h2>
+<p>Im Bereich Farben findest du alle Farben, die der Calliope anzeigen kann.</p>
+<p>Außerdem kannst du eine eigene Farbe mit den Rot-, Grün- und Blau-Anteilen angeben.</p>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedColour_rgb" class="help beginner">
+<h3 id="Programmier-BlöckeCalliope-»Farbemitrot,grün,blau«[Experten-Block]">»Farbe mit rot, grün, blau«<span class="typcn typcn-star"></span></h3>
+<p>Mit dem Block <span style="color: rgb(0,0,0);">»Farbe mit rot, grün, blau«</span><span style="color: rgb(0,0,0);"> kannst du eigene Farben erstellen. Hierzu kannst du die Stärke von Rot, Grün und Blau in deiner Farbe angeben.</span></p>
+<p>Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Zahl; Rotanteil [0-255]</li>
+<li class="typcn typcn-arrow-left">Zahl; Grünanteil [0-255]</li>
+<li class="typcn typcn-arrow-left">Zahl; Blauanteil [0-255]</li>
+
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<h2 id="Programmier-BlöckeCalliope-Bilder">Bilder</h2>
+<p>Die Kategorie »Bilder« beinhaltet Blöcke, mit denen du eigene oder vorgegeben Bilder erstellen, auswählen oder verändern kannst.</p>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedImage_image" class="help beginner">
+<h3 id="Programmier-BlöckeCalliope-»ErstelleBild«">»Erstelle Bild«
+</h3>
+<p>Mit dem Block <span style="color: rgb(0,0,0);">»Erstelle Bild« kannst du eigene Bilder für die Anzeige des Calliope erstellen. Jede einzelne LED ist durch einen Punkt im Raster dargestellt.</span></p>
+<p><span style="color: rgb(0,0,0);">Du kannst für jede LED eine Helligkeit zwischen 0 und 9 angeben, in der die jeweilige LED leuchten soll oder eine<span style="color: rgb(0,0,0);">»#« um die LED einfach einzuschalten</span>.</span></p>
+<p><span style="color: rgb(0,0,0);">Ist das Feld leer, wird die LED nicht eingeschaltet.</span></p>
+<p>Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Zahl; Helligkeit der LED im Raster [0-9, #].</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedImage_get_image" class="help beginner">
+<h3 id="Programmier-BlöckeCalliope-»Bild«">
+<span style="color: rgb(0,0,0);">»Bild«</span>
+</h3>
+<p>Mit dem Block <span style="color: rgb(0,0,0);">»Bild« kannst du ein vordefiniertes Bild auswählen</span><span style="color: rgb(0,0,0);"><span>.</span></span></p>
+<p>Auswahlmöglichkeiten:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Bild, vordefiniertes Bild.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedImage_invert" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»invertiere ...«[Experten-Block]">»invertiere«<span class="typcn typcn-star"></span></h3>
+<p>Mit dem Block <span style="color: rgb(0,0,0);">»invertiere« kannst du die Helligkeit des Bildes invertieren</span><span style="color: rgb(0,0,0);"><span>.</span></span></p>
+<p>Eingabewert:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Bild, das verändert werden soll</li>
+</ul></div></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedImage_shift" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»verschiebe ...«[Experten-Block]">»verschiebe«<span class="typcn typcn-star"></span></h3>
+<p>Mit dem Block <span style="color: rgb(0,0,0);">»verschiebe« kannst du ein Bild verschieben</span><span style="color: rgb(0,0,0);"><span>.</span></span></p>
+<p>Auswahlmöglichkeiten:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Richtung, in die das Bild verschoben wird</li>
+<li class="typcn typcn-arrow-down">Anzahl der Pixel, die das Bild verschoben wird</li>
+</ul>
+<p>Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Bild, das verschoben wird</li>
+<li class="typcn typcn-arrow-down">Richtung, in die das Bild verschoben wird</li>
+<li class="typcn typcn-arrow-left">Anzahl der Pixel, die das Bild verschoben wird</li></ul></div></div></div>
+</div>
+<div class="cell normal" data-type="normal">
+<div class="innerCell">
+<h2 id="Programmier-BlöckeCalliope-Nachrichten[Experten-Blöcke]">Nachrichten<span class="typcn typcn-star"></span></h2>
+<p>Calliopes können Nachrichten untereinander austauschen.</p>
+<p>Du kannst Nachrichten senden, die alle Calliopes in der Umgebung erhalten oder du kannst einen Kanal festlegen, so dass nur die Calliopes mit diesem eingestellten Kanal die Nachrichten erhalten.</p>
+<p>Und du kannst Nachrichten empfangen, wobei das Programm nicht pausiert. Es kann also sein, dass keine Nachricht empfangen wird.</p>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedCommunication_sendBlock" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»SendeNachricht«[Experten-Block]">»Sende Nachricht mit Stärke«<span class="typcn typcn-star"></span></h3>
+<p>Der Calliope sendet eine Nachricht. Alle Calliope in der näheren Umgebung können diese Nachricht empfangen. Je größer die Stärke gewählt wird desto weiter ist das Signal zu empfangen.</p>
+<p>Eingabewerte:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">»Zahl«, »logischer Wert« oder »Zeichenkette«; Nachricht, die gesendet werden soll</li>
+<li class="typcn typcn-arrow-left">Zahl; Stärke mit der gesendet wird (zwischen 0 und 7).</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedCommunication_receiveBlock" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»EmpfangeNachricht«[Experten-Block]">»Empfange Nachricht«<span class="typcn typcn-star"></span></h3>
+<p>Mit dem Block <span style="color: rgb(0,0,0);">»Empfange Nachricht« kannst du Nachrichten von anderen Calliopes empfangen und einem anderen Block</span><span style="color: rgb(0,0,0);"><span style="color: rgb(0,0,0);"> »mitteilen«.</span></span></p>
+<p>Einstellmöglichkeiten:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Nachrichtentyp, »Zahl«, »logischer Wert« oder »Zeichenkette«.</li>
+</ul></div>
+</div>
+</div><div class="cell normal" data-type="normal">
+<div class="innerCell">
+<div id="mbedCommunication_setChannel" class="help expert">
+<h3 id="Programmier-BlöckeCalliope-»SetzeKanalAuf«[Experten-Block]">»setze Kanal auf«<span class="typcn typcn-star"></span></h3>
+<p>Bestimmt den Kanal für die Nachrichtenübertragung für ein- und ausgehende Nachrichten.</p>
+<p>Eingabewert:
+</p>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Zahl; Mögliche Kanäle sind 0 bis 255.</li>
+</ul></div>
+</div>
+</div>
+</body>
+</html>
