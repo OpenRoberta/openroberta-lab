@@ -280,7 +280,7 @@ case "$cmd" in
                   fi
                   rm -rf $DATA/conf
                   rm $DATA/logs/*
-                  cp -r $SRC/conf $DATA/conf
+                  cp -r $SRC/openroberta/conf $DATA/conf
                   cp $SRC/operating.md $DATA
                   bash $DATA/conf/scripts/run.sh test-info ;;
 
