@@ -38,12 +38,13 @@ esac
     rm -rf $SERVERDIR/export
     ./ora.sh --export $SERVERDIR/export gzip
     cp $CONF/docker-for-lab/start.sh $SERVERDIR/export
-    DOCKERRM=$(docker rmi rbudde/openroberta_lab_$SERVER_NAME:1 2>/dev/null)
+    chmod ugo+x $SERVERDIR/export/start.sh
+    DOCKERRM=$(docker rmi rbudde/openroberta_lab_$SERVER_NAME:2 2>/dev/null)
     case "$DOCKERRM" in
-        '') echo "found no docker image 'rbudde/openroberta_lab_$SERVER_NAME:1'. No image removed" ;;
-        * ) echo "removed docker image 'rbudde/openroberta_lab_$SERVER_NAME:1'" ;;
+        '') echo "found no docker image 'rbudde/openroberta_lab_$SERVER_NAME:2'. No image removed" ;;
+        * ) echo "removed docker image 'rbudde/openroberta_lab_$SERVER_NAME:2'" ;;
     esac
-    docker build -f $CONF/docker-for-lab/DockerfileLab -t rbudde/openroberta_lab_$SERVER_NAME:1 $SERVERDIR/export
+    docker build -f $CONF/docker-for-lab/DockerfileLab -t rbudde/openroberta_lab_$SERVER_NAME:2 $SERVERDIR/export
     
     DATE_DEPLOY=$(date --rfc-3339=seconds)
     cat >$SERVERDIR/deploy.txt <<.EOF

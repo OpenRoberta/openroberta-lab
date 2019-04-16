@@ -53,9 +53,9 @@ The names of the servers are (b.t.w.: this matches the virtual host names of the
 
 See `$SERVER/dev1` for example. The name of the docker images and the name of the running containers are:
 
-* test: image is `rbudde/openroberta_lab_test:1` and container has name `test`
-* dev: image is `rbudde/openroberta_lab_dev:1` and container has name `dev`
-* dev1 up to dev9: images are `rbudde/openroberta_lab_dev1:1` to `rbudde/openroberta_lab_dev9:1` and container have names `dev1` to `dev9`
+* test: image is `rbudde/openroberta_lab_test:2` and container has name `test`
+* dev: image is `rbudde/openroberta_lab_dev:2` and container has name `dev`
+* dev1 up to dev9: images are `rbudde/openroberta_lab_dev1:2` to `rbudde/openroberta_lab_dev9:2` and container have names `dev1` to `dev9`
 
 Generating the images is done by using the data from `decl.sh`:
 

@@ -4,15 +4,11 @@ ARG LAST_RUN_OF_BASE=2019-04-09
 
 EXPOSE 1999
 
-RUN mkdir --parent /opt/openRoberta/lib /opt/openRoberta
-WORKDIR /opt/openRoberta
+RUN mkdir --parent /opt/openroberta-lab/lib
+WORKDIR /opt/openroberta-lab
 
-COPY ["start.sh","./"]
-RUN chmod ugo+rx ./start.sh
-
-COPY ["lib/","./lib/"]
-COPY ["staticResources/","./staticResources/"]
 COPY ["./","./"]
+RUN chmod ugo+rx ./start.sh
 
 ENTRYPOINT ["./start.sh"]
 CMD []
