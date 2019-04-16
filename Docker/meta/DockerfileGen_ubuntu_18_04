@@ -25,8 +25,8 @@ RUN apt-get install -y curl && \
 # shallow clone of develop. Branch defaults to "develop". Run mvn once to install most all the artifacts needed in /root/.m2
 WORKDIR /opt
 RUN echo "cloning branch develop and executing mvn to fill the .m2 cache" && \
-    git clone --depth=1 -b develop https://github.com/OpenRoberta/robertalab.git && \
-    cd /opt/robertalab && \
+    git clone --depth=1 -b develop https://github.com/OpenRoberta/openroberta-lab.git && \
+    cd /opt/openroberta-lab && \
     mvn clean install
  
 # prepare the entry point
@@ -34,5 +34,5 @@ ARG LAST_RUN_OF_COPY_GENLAB=2019-01-08
 WORKDIR /opt
 COPY ["./genLab.sh","./"]
 RUN chmod +x ./genLab.sh
-WORKDIR /opt/robertalab
+WORKDIR /opt/openroberta-lab
 ENTRYPOINT ["/opt/genLab.sh"]

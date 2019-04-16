@@ -21,8 +21,8 @@ then
 fi
 echo "building branch $BRANCH with version $VERSION [version is unused as long as no db-its are executed]"
 cd /opt
-git clone --depth=1 -b $BRANCH https://github.com/OpenRoberta/robertalab.git
-cd /opt/robertalab
+git clone --depth=1 -b $BRANCH https://github.com/OpenRoberta/openroberta-lab.git
+cd /opt/openroberta-lab
 mvn clean install -DskipTests -DskipITs
 
 # execute all tests, including the integration tests

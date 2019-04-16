@@ -6,11 +6,11 @@ ARG LAST_RUN_OF_BASE=2019-04-11-15:51:00
 WORKDIR /opt
 ARG BRANCH=develop
 
-RUN git clone --depth=1 -b $BRANCH https://github.com/OpenRoberta/robertalab.git
-WORKDIR /opt/robertalab
+RUN git clone --depth=1 -b $BRANCH https://github.com/OpenRoberta/openroberta-lab.git
+WORKDIR /opt/openroberta-lab
 RUN ( mvn clean install -PrunIT || echo '!!!!!!!!!! runIT crashed. Should NOT happen !!!!!!!!!!' ) && \
     cd /opt && \
-    rm -rf robertalab 
+    rm -rf openroberta-lab 
 
 # prepare the entry point
 WORKDIR /opt

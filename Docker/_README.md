@@ -6,8 +6,8 @@ The docker image "base" is used as basis for further images. It replaces crossco
 because the crosscompiler packages are erroneous [28.11.2018]. Java 8 is installed, too (for ev3).
 
 ```bash
-REPO=/data/openroberta/git/robertalab
-CC_RESOURCES=/data/openroberta/ora-CCresources
+REPO=/data/openroberta/git/openroberta-lab
+CC_RESOURCES=/data/openroberta/git/ora-cc-rsc
 cd $CC_RESOURCES
 docker build -f $REPO/Docker/meta/DockerfileBase_ubuntu_18_04 -t rbudde/openroberta_base:2 .
 docker push rbudde/openroberta_base:2
@@ -20,8 +20,8 @@ If called, it will checkout a branch and runs both the tests and the integration
 The debian stretch distributions contains invalid crosscompilers packages. This image is build by
 
 ```bash
-REPO=/data/openroberta/git/robertalab
-BRANCH=rbTest
+REPO=/data/openroberta/git/openroberta-lab
+BRANCH=develop
 cd $REPO/Docker
 docker build -t rbudde/openroberta_it_ubuntu_18_04:2 -f testing/DockerfileIT_ubuntu_18_04 . --build-arg BRANCH=$BRANCH
 docker push rbudde/openroberta_it_ubuntu_18_04:2
@@ -32,7 +32,7 @@ It should have executed a git clone and run a mvn clean install to get the (outd
 The entrypoint is "/bin/bash". This image is build by
 
 ```bash
-REPO=/data/openroberta/git/robertalab
+REPO=/data/openroberta/git/openroberta-lab
 cd $REPO/Docker
 docker build -t rbudde/openroberta_debug_ubuntu_18_04:2 -f testing/DockerfileDebug_ubuntu_18_04 .
 docker push rbudde/openroberta_debug_ubuntu_18_04:2

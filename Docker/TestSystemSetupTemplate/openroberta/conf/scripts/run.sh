@@ -91,7 +91,7 @@ case "$CMD" in
               SERVERNAMES=$(cat $SERVER/servers.txt)
               set $SERVERNAMES
               for SERVERNAME do
-                  echo '******************** decl.sh of server $SERVERNAME'
+                  echo "******************** decl.sh of server $SERVERNAME"
                   cat $SERVER/$SERVERNAME/decl.sh
               done ;;
     prune)    echo '******************** '$DATE' ********************'

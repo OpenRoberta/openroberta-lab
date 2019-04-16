@@ -31,16 +31,16 @@ echo "building branch $BRANCH with version $VERSION. Build all container is set 
 git pull
 git checkout $BRANCH
 git pull
-cd /opt/robertalab
+cd /opt/openroberta-lab
 mvn clean install
 
-cd /opt/robertalab
+cd /opt/openroberta-lab
 rm -rf DockerInstallation
-./ora.sh --export /opt/robertalab/DockerInstallation
+./ora.sh --export /opt/openroberta-lab/DockerInstallation
 
 cp Docker/Dockerfile* Docker/*.sh DockerInstallation
 
-cd /opt/robertalab/DockerInstallation
+cd /opt/openroberta-lab/DockerInstallation
 
 LAST_COMMIT=$(git rev-list HEAD...HEAD~1)
 DOCKER_VERSION=$BRANCH-$VERSION
