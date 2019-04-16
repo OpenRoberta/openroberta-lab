@@ -1,13 +1,20 @@
 Open Roberta Lab
 ================
 
+### please read the file IMPORTANT_CHANGE.MD
+
+escpecially if you have forked or cloned the robertalab repository in the past!
+
+
 ### Introduction
+
+The source of the openroberta lab are stored in the Github repository `https://github.com/OpenRoberta/openroberta-lab`.
 
 The steps below explain how to get started with the sources. If you just want to run the server locally, please have a look into
 the [wiki - installation](https://github.com/OpenRoberta/openroberta-lab/wiki/Installation). If you want to contribute, please get in touch with us,
 see [wiki - Community](https://github.com/OpenRoberta/openroberta-lab/wiki/Community) before you start.
 
-After a fresh git clone you get the **openroberta-lab** project folder. It includes almost everything you need to setup and extend your own browser programming environment.
+After a fresh git clone you get the **openroberta-lab** project folder. It includes almost everything you need to setup and extend your own openrobertalab server.
 License information is available in the **docs** folder.
 
 Things you need on your computer:
@@ -43,7 +50,7 @@ The crossompiler need resources to work properly (header files, libraries, ...).
     https://github.com/OpenRoberta/ora-cc-rsc.git
 
 Please clone that directory. When the openrobertalab server is started, you have to supply the path to these resources (see below). If the resources are not available,
-everything works fine (writing programs, import, export, creating accounts, etc.), but running programs on real robots doesn' work, because the crosscompiler will fail.
+everything works fine (writing programs, import, export, creating accounts, etc.), but running programs on real robots doesn't work, because the crosscompiler will fail.
 
 Please also check our wiki for detailed installation instructions, development procedure, coding conventions and further reading. We also use the github issue tracking system.
 Please file issues in the main project **openroberta-lab**.
@@ -53,15 +60,11 @@ Please file issues in the main project **openroberta-lab**.
 #### Step 1: Clone the repository and compile
 
     git clone https://github.com/OpenRoberta/openroberta-lab.git # get the repository
-    cd openroberta-lab   # cd into repository
-    mvn clean install    # generate the server
+    cd openroberta-lab                                           # cd into repository
+    mvn clean install                                            # generate the server
 
-Might take some time. A successful build looks like:
+Might take some time. The last lines of a successful build looks like:
 
-    [INFO] ------------------------------------------------------------------------
-    [INFO] Reactor Summary:
-    [INFO]
-    [INFO] RobertaParent ...................................... SUCCESS [  2.479 s]
     ...
     [INFO] ------------------------------------------------------------------------
     [INFO] BUILD SUCCESS
@@ -80,7 +83,7 @@ If you have a fresh clone of the server, make sure that the OpenRobertaServer fo
 
     ./ora.sh --start-from-git [optional-path-to-crosscompiler-resources] # start the server using the default properties
 
-You can also run `./ora.sh --help` for more options.
+You can also run `./ora.sh --help` to see more commands for administration of the server.
 
 #### Step 4: Accessing your programming environment
 
@@ -96,7 +99,7 @@ Development happens in the `develop` branch. Please sent PRs against that branch
 
     git clone https://github.com/OpenRoberta/openroberta-lab.git
     cd openroberta-lab
-    git checkout -b develop origin/develop
+    git checkout develop
 	
 The project OpenRobertaServer contains the server logic, that accesses
 * a database with Hibernate-based DAO objects
@@ -116,8 +119,7 @@ Furthermore, the project OpenRobertaServer contains in directory staticResources
   * javascript resources for blockly (see: http://code.google.com/p/blockly/)
   * controller and models written in Javascript, which implement the GUI
 
-To run tests, use `mvn test`. Running `mvn clean install` will make a stable, reproducible build.
-first.
+To run tests, use `mvn test`. Running `mvn clean install` will make a stable, reproducible build with all unit tests executed.
 
 #### Blockly
 

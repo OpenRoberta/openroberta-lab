@@ -282,7 +282,7 @@ case "$cmd" in
                   rm $DATA/logs/*
                   cp -r $SRC/openroberta/conf $DATA/conf
                   cp $SRC/operating.md $DATA
-                  bash $DATA/conf/scripts/run.sh test-info ;;
+                  bash $DATA/conf/scripts/run.sh -q test-info ;;
 
 *)                echo "invalid command: $cmd - exit 1"
                   exit 1 ;;
