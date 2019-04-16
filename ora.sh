@@ -272,6 +272,18 @@ case "$cmd" in
 
 --alive)          _aliveFn $* ;;
 
+--test-setup-update) DATA='/data/openroberta'; SRC='Docker/TestSystemSetupTemplate'
+                  if [ ! -d $DATA ]
+                  then
+                      echo "directory '$DATA' not found. Exit 12"
+                      exit 12
+                  fi
+                  rm -rf $DATA/conf
+                  rm $DATA/logs/*
+                  cp -r $SRC/conf $DATA/conf
+                  cp $SRC/operating.md $DATA
+                  bash $DATA/conf/scripts/run.sh test-info ;;
+
 *)                echo "invalid command: $cmd - exit 1"
                   exit 1 ;;
 esac

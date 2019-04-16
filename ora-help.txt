@@ -47,6 +47,11 @@ Commands of the ora.sh script:
 
 The following commands are used rarely:
   
+  --test-setup-update       expects the test server setup in /data/openroberta and copies (potentially updated) resources from the git controlled
+                            directory Docker/TestSystemSetupTemplate into /data/openroberta.
+                            Needs (usually) root privileges. Must be run on a test machine from an up-to-date git repository. 
+                            Prints an overview of the test setup
+
   --java                    check whether java and javac are on the path and the JDK version is ok (used internally)
 
   --alive {SERVERURL} {-q} {EVERY} {TIMEOUT} {MAIL} check after EVERY sec (default: 60) if the server is alive.

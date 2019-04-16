@@ -78,7 +78,7 @@ If you have a fresh clone of the server, make sure that the OpenRobertaServer fo
 
 #### Step 3: Starting your own server instance using a unix-like shell (on either lin* or win*).
 
-    ./ora.sh --start-from-git # start the server using the default properties
+    ./ora.sh --start-from-git [optional-path-to-crosscompiler-resources] # start the server using the default properties
 
 You can also run `./ora.sh --help` for more options.
 

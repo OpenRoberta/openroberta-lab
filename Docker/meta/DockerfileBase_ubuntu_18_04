@@ -26,13 +26,13 @@ RUN wget http://de.archive.ubuntu.com/ubuntu/pool/universe/n/newlib/libnewlib-de
     dpkg -i libnewlib-dev_3.0.0.20180802-2_all.deb libnewlib-arm-none-eabi_3.0.0.20180802-2_all.deb && \
     rm libnewlib-dev_3.0.0.20180802-2_all.deb libnewlib-arm-none-eabi_3.0.0.20180802-2_all.deb
     
-WORKDIR /opt/ora-CCresources/
+WORKDIR /opt/ora-cc-rsc/
 COPY ./ ./
-RUN cd /opt/ora-CCresources/RobotArdu/arduino-builder/linux;     chmod ugo+rx arduino-builder     tools-builder/ctags/5.8*/ctags     && \
-    cd /opt/ora-CCresources/RobotArdu/arduino-builder/linux-arm; chmod ugo+rx arduino-builder     tools-builder/ctags/5.8*/ctags     && \
-    cd /opt/ora-CCresources/RobotArdu/arduino-builder/osx;       chmod ugo+rx arduino-builder     tools-builder/ctags/5.8*/ctags     && \
-    cd /opt/ora-CCresources/RobotArdu/arduino-builder/windows;   chmod ugo+rx arduino-builder.exe tools-builder/ctags/5.8*/ctags.exe && \
-    cd /opt/ora-CCresources/RobotMbed;                           chmod ugo+rx compile* && \
-    cd /opt/ora-CCresources/RobotNXT;                            chmod ugo+rx osx/* windows/*
+RUN cd /opt/ora-cc-rsc/RobotArdu/arduino-builder/linux;     chmod ugo+rx arduino-builder     tools-builder/ctags/5.8*/ctags     && \
+    cd /opt/ora-cc-rsc/RobotArdu/arduino-builder/linux-arm; chmod ugo+rx arduino-builder     tools-builder/ctags/5.8*/ctags     && \
+    cd /opt/ora-cc-rsc/RobotArdu/arduino-builder/osx;       chmod ugo+rx arduino-builder     tools-builder/ctags/5.8*/ctags     && \
+    cd /opt/ora-cc-rsc/RobotArdu/arduino-builder/windows;   chmod ugo+rx arduino-builder.exe tools-builder/ctags/5.8*/ctags.exe && \
+    cd /opt/ora-cc-rsc/RobotMbed;                           chmod ugo+rx compile* && \
+    cd /opt/ora-cc-rsc/RobotNXT;                            chmod ugo+rx osx/* windows/*
 
-ENV robot_crosscompiler_resourcebase=/opt/ora-CCresources/
+ENV robot_crosscompiler_resourcebase=/opt/ora-cc-rsc/

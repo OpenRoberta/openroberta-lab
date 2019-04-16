@@ -5,12 +5,9 @@
 **/phantomjsdriver.log
 **/.classpath
 **/.project
-RobotEV3/**/*.jar
-OpenRobertaServer/userProjects/*
+**/.settings
 OpenRobertaServer/db-*
-.settings/
 .DS_Store
-.*
 .idea
 *.iml
 **/*.log

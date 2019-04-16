@@ -66,20 +66,33 @@ case "$CMD" in
               source $SCRIPTDIR/_dbContainerStart.sh ;;
     stopDbC)  source $SCRIPTDIR/_dbContainerStop.sh ;;
     network)  echo '******************** '$DATE' ********************'
-              echo '******************** network inspect ********************'
+              echo '******************** network inspect'
               docker network inspect ora-net ;;
-    info)     echo '******************** '$DATE' ********************'
-              echo '******************** system df ********************'
+    docker-info) echo '******************** '$DATE' ********************'
+              echo '******************** system df'
               docker system df
-              echo '******************** all images ********************'
+              echo '******************** all images'
               docker images
-              echo '******************** all container ********************'
+              echo '******************** all container'
               docker ps -a ;;
     logs)     echo '******************** '$DATE' ********************'
               set $(docker ps --format "{{.Names}}")
               for NAME do
-                  echo "******************** $NAME ********************"
+                  echo "******************** $NAME"
                   docker logs --tail 10 $NAME
+              done ;;
+    test-info) echo '******************** '$DATE' ********************'
+              echo '******************** server.txt'
+              cat $SERVER/server.txt
+              echo '******************** autodeploy.txt'
+              cat $SERVER/autodeploy.txt
+              echo '******************** databases.txt'
+              cat $BASE/db/databases.txt
+              SERVERNAMES=$(cat $SERVER/server.txt)
+              set $SERVERNAMES
+              for SERVERNAME do
+                  echo '******************** decl.sh of server $SERVERNAME'
+                  cat $SERVER/$SERVERNAME/decl.sh
               done ;;
     prune)    echo '******************** '$DATE' ********************'
               echo '******************** removing all exited container ********************'

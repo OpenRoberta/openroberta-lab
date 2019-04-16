@@ -31,10 +31,10 @@ function isServerNameValid {
 
 function isDirectoryValid {
     if [ ! -d $1 ]
-then
-    echo "the directory '$1' is invalid. Exit 12"
-    exit 12
-fi
+    then
+        echo "the directory '$1' is invalid. Exit 12"
+        exit 12
+    fi
 }
 
 function setServerNamesintoSERVER_NAMES {
