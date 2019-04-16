@@ -82,13 +82,13 @@ case "$CMD" in
                   docker logs --tail 10 $NAME
               done ;;
     test-info) echo '******************** '$DATE' ********************'
-              echo '******************** server.txt'
-              cat $SERVER/server.txt
+              echo '******************** servers.txt'
+              cat $SERVER/servers.txt
               echo '******************** autodeploy.txt'
               cat $SERVER/autodeploy.txt
               echo '******************** databases.txt'
               cat $BASE/db/databases.txt
-              SERVERNAMES=$(cat $SERVER/server.txt)
+              SERVERNAMES=$(cat $SERVER/servers.txt)
               set $SERVERNAMES
               for SERVERNAME do
                   echo '******************** decl.sh of server $SERVERNAME'
