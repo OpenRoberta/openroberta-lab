@@ -404,9 +404,9 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     
     @Override
     public Void visitAssertStmt(AssertStmt<Void> assertStmt) {
-        this.sb.append("if !(");
+        this.sb.append("if (!(");
         assertStmt.getAssert().visit(this);
-        this.sb.append(") ");
+        this.sb.append(")) {");
         incrIndentation();
         nlIndent();
         this.sb.append("System.out.println(\"Assertion failed: \" + \"").append(assertStmt.getMsg()).append("\" + ");
@@ -415,6 +415,8 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         ((Binary<Void>)assertStmt.getAssert()).getRight().visit(this);
         this.sb.append(");");
         decrIndentation();
+        nlIndent();
+        this.sb.append("}");
         return null;
     }
     
