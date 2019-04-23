@@ -13,3 +13,4 @@ OpenRobertaServer/db-*
 **/*.log
 **/*.pyc
 **/*.py~
+logs

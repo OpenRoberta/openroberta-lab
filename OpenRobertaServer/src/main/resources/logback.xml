@@ -14,7 +14,7 @@
     <appender name="STDOUT_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>stdout.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>stdout-%d.log.zip</fileNamePattern>
+            <fileNamePattern>logs/stdout-%d{yyyy/MM}.log.zip</fileNamePattern>
         </rollingPolicy>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
@@ -36,7 +36,7 @@
     <appender name="STATISTICS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>statistics.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>statistics-%d.log.zip</fileNamePattern>
+            <fileNamePattern>logs/statistics-%d{yyyy/MM}.log.zip</fileNamePattern>
         </rollingPolicy>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
