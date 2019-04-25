@@ -11,6 +11,6 @@ OpenRobertaServer/db-*
 .idea
 *.iml
 **/*.log
+**/*.log.zip
 **/*.pyc
 **/*.py~
-logs
