@@ -1,8 +1,6 @@
 #!/bin/bash
 
 isServerNameValid $SERVER_NAME
-SERVERDIR=$SERVER/$SERVER_NAME
-isDirectoryValid $SERVERDIR
 
 echo "stopping the server container '$SERVER_NAME'"
 DOCKERSTOP=$(docker stop $SERVER_NAME 2>/dev/null)

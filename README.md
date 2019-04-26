@@ -83,7 +83,20 @@ If you have a fresh clone of the server, make sure that the OpenRobertaServer fo
 
     ./ora.sh --start-from-git [optional-path-to-crosscompiler-resources] # start the server using the default properties
 
-You can also run `./ora.sh --help` to see more commands for administration of the server.
+You can also run `./ora.sh --help` to see more commands for administration of the server. If you have Eclipse installed and
+
+* the repositories base directory is imported as maven project (this will import all submodules automatically)
+* a maven build in the repositories base directory has been executed and a database is created (see above!)
+* a run configuration is created with
+  * OpenRobertaServer as project
+  * de.fhg.iais.roberta.main.ServerStarter as main class
+  * and the program arguments are set to
+
+        -d server.staticresources.dir=./staticResources
+        -d robot.crosscompiler.resourcebase=[optional-path-to-crosscompiler-resources]
+        -d database.parentdir=. -d server.tutorial.dir=../Resources/tutorial
+
+* then the server can be started with this run configuration
 
 #### Step 4: Accessing your programming environment
 

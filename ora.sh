@@ -80,7 +80,7 @@ function _checkJava {
   echo "$checkJava"
 }
 
-function _exportApplication {
+function _export {
   exportpath="$1"
 	case "$2" in
 	  '')     gzip='no' ;;
@@ -90,11 +90,12 @@ function _exportApplication {
 	esac
   if [ -e "$exportpath" ] && [ ! -z "$(ls -A $exportpath)" ]
   then
-    echo "target directory \"$exportpath\" exists and is not empty - exit 1"
-    exit 1
+    echo "target directory \"$exportpath\" exists and is not empty - exit 12"
+    exit 12
   else
     :
   fi
+  
   _mkAndCheckDir "$exportpath"
   exportpath=$(cd "$exportpath"; pwd)
 	serverVersion=$(java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.Administration version)
@@ -105,6 +106,15 @@ function _exportApplication {
   echo "copying all jars"
   _mkAndCheckDir "${exportpath}/lib"
   cp OpenRobertaServer/target/resources/*.jar "$exportpath/lib"
+  
+	if [[ -d "Resources/tutorial" ]]
+	then
+		echo "copying tutorials"
+		_mkAndCheckDir "${exportpath}/tutorial"
+		cp -r Resources/tutorial/* "${exportpath}/tutorial"
+	else
+	  echo "no tutorials to copy"
+	fi
 
   echo 'copying the staticResources'
 	cp -r OpenRobertaServer/staticResources ${exportpath}/staticResources
@@ -122,14 +132,6 @@ function _exportApplication {
 			      ;;
 	esac
 	
-	if [[ -d "Resources/tutorial" ]]
-	then
-		echo "tutorials are copied"
-		_mkAndCheckDir "${exportpath}/tutorial"
-		cp -r Resources/tutorial/* "${exportpath}/tutorial"
-	else
-	  echo "no tutorials to copy"
-	fi
   echo 'scripts for start&stop of the server/db are copied'
   cp Resources/shScriptsForExport/*.sh ${exportpath}
   chmod ugo+rx ${exportpath}/*.sh
@@ -171,7 +173,7 @@ shift
 serverTargetDir="OpenRobertaServer/target/resources"
 
 case "$cmd" in
---export)         _exportApplication $* ;;
+--export)         _export $* ;;
 
 --start-from-git) echo 'the script expects, that a mvn build was successful; if the start fails or the system is frozen, make sure that a database exists and NO *.lck file exists'
                   echo '1. step: make an optional upgrade of the db 2. step: start the server'
@@ -272,17 +274,16 @@ case "$cmd" in
 
 --alive)          _aliveFn $* ;;
 
---test-setup-update) DATA='/data/openroberta'; SRC='Docker/TestSystemSetupTemplate'
+--test-setup-update) DATA='/data/openroberta'
                   if [ ! -d $DATA ]
                   then
                       echo "directory '$DATA' not found. Exit 12"
                       exit 12
                   fi
                   rm -rf $DATA/conf
-                  rm $DATA/logs/*
-                  cp -r $SRC/openroberta/conf $DATA/conf
-                  cp $SRC/operating.md $DATA
-                  bash $DATA/conf/scripts/run.sh -q test-info ;;
+                  cp -r Docker/openroberta/conf $DATA/conf
+                  cp Docker/_README.md $DATA
+                  echo "configuration data copied to $DATA/conf" ;;
 
 *)                echo "invalid command: $cmd - exit 1"
                   exit 1 ;;

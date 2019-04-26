@@ -29,38 +29,38 @@ case "$CMD" in
     gen)      SERVER_NAME=$1; shift
               isServerNameValid $SERVER_NAME
               echo "$DATE: generating the server '$SERVER_NAME'"
-              source $SCRIPTDIR/_generate.sh
+              source $SCRIPTDIR/_gen.sh
               echo "generating the server '$SERVER_NAME' finished" ;;
-    start)    setServerNamesintoSERVER_NAMES $1
-              for SERVER_NAME in $SERVER_NAMES; do
-                  source $SCRIPTDIR/_stop.sh
-                  source $SCRIPTDIR/_start.sh
-              done ;;
-    stop)     setServerNamesintoSERVER_NAMES $1
-              for SERVER_NAME in $SERVER_NAMES; do
-                  source $SCRIPTDIR/_stop.sh
-              done ;;
-    deploy)   setServerNamesintoSERVER_NAMES $1
-              for SERVER_NAME in $SERVER_NAMES; do
-                  echo "$DATE: deploying (generating,starting) the server '$SERVER_NAME'"
-                  $SCRIPTDIR/run.sh -q gen $SERVER_NAME
-                  $SCRIPTDIR/run.sh -q start $SERVER_NAME
-              done ;;
+    start)    SERVER_NAME=$1
+              source $SCRIPTDIR/_stop.sh
+              source $SCRIPTDIR/_start.sh ;;
+    stop)     SERVER_NAME=$1
+              source $SCRIPTDIR/_stop.sh ;;
+    deploy)   SERVER_NAME=$1
+              echo "$DATE: deploying (generating,starting) the server '$SERVER_NAME'"
+              $SCRIPTDIR/run.sh -q gen $SERVER_NAME
+              $SCRIPTDIR/run.sh -q start $SERVER_NAME ;;
     autoDeploy) source $SCRIPTDIR/_autodeploy.sh ;;
     startAll) echo '******************** '$DATE' ********************'
               echo 'start database container and all server container'
               $SCRIPTDIR/run.sh -q startDbC
               sleep 10
-              $SCRIPTDIR/run.sh -q start ;;
+              serversDOTtxt2SERVER_NAMES
+              for SERVER_NAME in $SERVER_NAMES; do
+                  $SCRIPTDIR/run.sh -q start $SERVER_NAME
+              done ;;
     stopAll)  echo '******************** '$DATE' ********************'
               echo 'stop database container and all server container'
-              $SCRIPTDIR/run.sh -q stop
+              serversDOTtxt2SERVER_NAMES
+              for SERVER_NAME in $SERVER_NAMES; do
+                  $SCRIPTDIR/run.sh -q stop $SERVER_NAME
+              done
               $SCRIPTDIR/run.sh -q stopDbC ;;
     genNet)   echo "$DATE: generating the openroberta bridge network 'ora-net'"
               docker network create --driver bridge ora-net
               echo "generating the openroberta bridge network 'ora-net' finished" ;;
     genDbC)   echo "$DATE: generating the database image rbudde/openroberta_db:2.4.0"
-              docker build -f $CONF/docker-for-db/DockerfileDb -t rbudde/openroberta_db:2.4.0 $CONF/docker-for-db
+              docker build -f $CONF_DIR/docker-for-db/DockerfileDb -t rbudde/openroberta_db:2.4.0 $CONF_DIR/docker-for-db
               echo "generating the database image rbudde/openroberta_db:2.4.0 finished" ;;
     startDbC) source $SCRIPTDIR/_dbContainerStop.sh
               source $SCRIPTDIR/_dbContainerStart.sh ;;
@@ -83,16 +83,16 @@ case "$CMD" in
               done ;;
     test-info) echo '******************** '$DATE' ********************'
               echo '******************** servers.txt'
-              cat $SERVER/servers.txt
+              cat $SERVER_DIR/servers.txt
               echo '******************** autodeploy.txt'
-              cat $SERVER/autodeploy.txt
+              cat $SERVER_DIR/autodeploy.txt
               echo '******************** databases.txt'
-              cat $BASE/db/databases.txt
-              SERVERNAMES=$(cat $SERVER/servers.txt)
+              cat $BASE_DIR/db/databases.txt
+              SERVERNAMES=$(cat $SERVER_DIR/servers.txt)
               set $SERVERNAMES
               for SERVERNAME do
                   echo "******************** decl.sh of server $SERVERNAME"
-                  cat $SERVER/$SERVERNAME/decl.sh
+                  cat $SERVER_DIR/$SERVERNAME/decl.sh
               done ;;
     prune)    echo '******************** '$DATE' ********************'
               echo '******************** removing all exited container ********************'

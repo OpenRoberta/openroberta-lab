@@ -16,8 +16,8 @@ The database may be run in 'server' mode,
 Commands of the ora.sh script:
   --help                    get help (this text)
   
-  --export INSTALLATION-DIR [gzip] create a self-contained installation. The installation dir must NOT exist. Parameter 'gzip' compresses in directory
-              staticResources suitable files (as *.js, *.css, etc.) to save bandwith when staticResources are loaded.
+  --export INSTALLATION-DIR [gzip]  create a self-contained installation. The INSTALLATION-DIR must NOT exist.
+              Parameter 'gzip' compresses in directory staticResources suitable files (as *.js, *.css, etc.) to save bandwith when staticResources are loaded.
               You are responsible to copy a usable database into directory 'db-<serverVersion>'.
               In the INSTALLATION-DIR there are two scripts for starting OpenRoberta:
               - start-ora-server-with-db-embedded.sh   uses an embedded hsqldb. For small systems (Raspberry Pi, for instance).

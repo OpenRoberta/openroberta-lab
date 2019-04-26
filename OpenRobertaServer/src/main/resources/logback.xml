@@ -67,6 +67,7 @@
         <appender-ref ref="STATISTICS" />
         <appender-ref ref="STATISTICS_FILE" />
     </logger>
-    <!-- <logger name="de.fhg.iais.roberta.persistence.util.DbExecutor" level="DEBUG" /> -->
+    
+    <logger name="de.fhg.iais.roberta.main.Administration" level="INFO" />
 
 </configuration>

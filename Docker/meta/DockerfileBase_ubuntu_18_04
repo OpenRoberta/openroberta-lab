@@ -28,11 +28,4 @@ RUN wget http://de.archive.ubuntu.com/ubuntu/pool/universe/n/newlib/libnewlib-de
     
 WORKDIR /opt/ora-cc-rsc/
 COPY ./ ./
-RUN cd /opt/ora-cc-rsc/RobotArdu/arduino-builder/linux;     chmod ugo+rx arduino-builder     tools-builder/ctags/5.8*/ctags     && \
-    cd /opt/ora-cc-rsc/RobotArdu/arduino-builder/linux-arm; chmod ugo+rx arduino-builder     tools-builder/ctags/5.8*/ctags     && \
-    cd /opt/ora-cc-rsc/RobotArdu/arduino-builder/osx;       chmod ugo+rx arduino-builder     tools-builder/ctags/5.8*/ctags     && \
-    cd /opt/ora-cc-rsc/RobotArdu/arduino-builder/windows;   chmod ugo+rx arduino-builder.exe tools-builder/ctags/5.8*/ctags.exe && \
-    cd /opt/ora-cc-rsc/RobotMbed;                           chmod ugo+rx compile* && \
-    cd /opt/ora-cc-rsc/RobotNXT;                            chmod ugo+rx osx/* windows/*
-
 ENV robot_crosscompiler_resourcebase=/opt/ora-cc-rsc/

@@ -1,25 +1,25 @@
 #!/bin/bash
 
-if [ -f "$SERVER/autodeploy.txt" ]
+if [ -f "$SERVER_DIR/autodeploy.txt" ]
 then
-    flock -n 9 9>$SERVER/lockfile
+    flock -n 9 9>$SERVER_DIR/lockfile
     RC=$?
     case "$RC" in
-        0)  [ "$DEBUG" = 'true' ] && echo "$DATE: got the lock for file '$SERVER/lockfile'"
-            AUTODEPLOY_SERVERS=$(cat $SERVER/autodeploy.txt)
+        0)  [ "$DEBUG" = 'true' ] && echo "$DATE: got the lock for file '$SERVER_DIR/lockfile'"
+            AUTODEPLOY_SERVERS=$(cat $SERVER_DIR/autodeploy.txt)
             AUTODEPLOY_SERVERS=$(echo $AUTODEPLOY_SERVERS)
             if [ "$AUTODEPLOY_SERVERS" = '' ]
             then
-                [ "$DEBUG" = 'true' ] && echo "$DATE: empty file '$SERVER/autodeploy.txt' found. Nothing to do"
+                [ "$DEBUG" = 'true' ] && echo "$DATE: empty file '$SERVER_DIR/autodeploy.txt' found. Nothing to do"
             else
                 set $AUTODEPLOY_SERVERS
                 UPDATED_SERVERS=$((0))
                 for SERVER_NAME do
                     [ "$DEBUG" = 'true' ] && echo "$DATE: checking server '$SERVER_NAME'"
                     isServerNameValid $SERVER_NAME
-                    SERVERDIR=$SERVER/$SERVER_NAME
-                    isDirectoryValid $SERVERDIR
-                    cd $SERVERDIR
+                    SERVER_DIR_OF_ONE_SERVER=$SERVER_DIR/$SERVER_NAME
+                    isDirectoryValid $SERVER_DIR_OF_ONE_SERVER
+                    cd $SERVER_DIR_OF_ONE_SERVER
                     source ./decl.sh
                     if [ "$GIT_UPTODATE" == 'true' ]
                     then
@@ -28,7 +28,7 @@ then
                     [ "$DEBUG" = 'true' ] && echo "$DATE: for server '$SERVER_NAME' checking branch '$BRANCH'"
                     case "$GIT_REPO" in
                         /*) : ;;
-                        *)  GIT_REPO=$BASE/$GIT_REPO
+                        *)  GIT_REPO=$BASE_DIR/$GIT_REPO
                     esac
                     cd $GIT_REPO
                     git checkout -f .
@@ -52,8 +52,8 @@ then
                     $SCRIPTDIR/run.sh -q prune
                 fi
             fi ;; 
-        *) echo "$DATE: '$SERVER/lockfile' was LOCKED. Trying again later" ;;
+        *) echo "$DATE: '$SERVER_DIR/lockfile' was LOCKED. Trying again later" ;;
     esac
 else
-    [ "$DEBUG" = 'true' ] && echo "$DATE: no file '$SERVER/autodeploy.txt' found. Nothing to do"
+    [ "$DEBUG" = 'true' ] && echo "$DATE: no file '$SERVER_DIR/autodeploy.txt' found. Nothing to do"
 fi

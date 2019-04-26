@@ -1,10 +1,10 @@
 #!/bin/bash
 
 isServerNameValid $SERVER_NAME
-SERVERDIR=$SERVER/$SERVER_NAME
-isDirectoryValid $SERVERDIR
+SERVER_DIR_OF_ONE_SERVER=$SERVER_DIR/$SERVER_NAME
+isDirectoryValid $SERVER_DIR_OF_ONE_SERVER
 
-source $SERVERDIR/decl.sh
+source $SERVER_DIR_OF_ONE_SERVER/decl.sh
 isDefined PORT
 isDefined DATE_SETUP
 isDefined BRANCH
@@ -12,12 +12,23 @@ isDefined GIT_REPO
 isDefined GIT_UPTODATE true false
 case "$GIT_REPO" in
     /*) : ;;
-    *)  GIT_REPO=$BASE/$GIT_REPO
+    *)  GIT_REPO=$BASE_DIR/$GIT_REPO
+esac
+case "$BRANCH" in
+    master) DEBUG=true
+            question 'do you really want to generate the docker container for MASTER?'
+            if [ "$GIT_UPTODATE" != 'true' ]
+            then
+               echo 'because we have manual updates before deplying master (log level, piwick, ...), GIT_UPTODATE must be "true". Exit 12'
+               exit 12
+            fi
+            question 'do you have modified the MASTER branch as usual before deployment?' ;;
+     *)     : ;;
 esac
 
-# ----- AQUIRE A FILE LOCK. Checkout commit, build binaries, export, build container -----
+# ----- AQUIRE A FILE LOCK. Checkout, build binaries, export, build container -----
 ( flock -w 1200 9 || (echo "$DATE: deployement of $SERVER_NAME was delayed for more than 20 minutes. Exit 12"; exit 12) 
-    [ "$DEBUG" = 'true' ] && echo "$DATE: got the lock for file '$SERVER/lockfile'"
+    [ "$DEBUG" = 'true' ] && echo "$DATE: got the lock for file '$SERVER_DIR/lockfile'"
     cd $GIT_REPO
     if [ "$GIT_UPTODATE" == 'true' ]
     then
@@ -35,19 +46,19 @@ esac
         LAST_COMMIT=$COMMIT
     fi
     mvn clean install -DskipTests
-    rm -rf $SERVERDIR/export
-    ./ora.sh --export $SERVERDIR/export gzip
-    cp $CONF/docker-for-lab/start.sh $SERVERDIR/export
-    chmod ugo+x $SERVERDIR/export/start.sh
+    rm -rf $SERVER_DIR_OF_ONE_SERVER/export
+    ./ora.sh --export $SERVER_DIR_OF_ONE_SERVER/export gzip
+    cp $CONF_DIR/docker-for-lab/start.sh $SERVER_DIR_OF_ONE_SERVER/export
+    chmod ugo+x $SERVER_DIR_OF_ONE_SERVER/export/start.sh
     DOCKERRM=$(docker rmi rbudde/openroberta_lab_$SERVER_NAME:2 2>/dev/null)
     case "$DOCKERRM" in
         '') echo "found no docker image 'rbudde/openroberta_lab_$SERVER_NAME:2'. No image removed" ;;
         * ) echo "removed docker image 'rbudde/openroberta_lab_$SERVER_NAME:2'" ;;
     esac
-    docker build -f $CONF/docker-for-lab/DockerfileLab -t rbudde/openroberta_lab_$SERVER_NAME:2 $SERVERDIR/export
+    docker build -f $CONF_DIR/docker-for-lab/DockerfileLab -t rbudde/openroberta_lab_$SERVER_NAME:2 $SERVER_DIR_OF_ONE_SERVER/export
     
     DATE_DEPLOY=$(date --rfc-3339=seconds)
-    cat >$SERVERDIR/deploy.txt <<.EOF
+    cat >$SERVER_DIR_OF_ONE_SERVER/deploy.txt <<.EOF
 HOSTNAME = $HOSTNAME
 DATE_SETUP = $DATE_SETUP
 DATE_DEPLOY = $DATE_DEPLOY
@@ -57,4 +68,4 @@ LAST_COMMIT = $LAST_COMMIT
 PORT = $PORT
 .EOF
 
-) 9>$SERVER/lockfile
+) 9>$SERVER_DIR/lockfile
