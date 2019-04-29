@@ -58,6 +58,8 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
+import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
@@ -1389,5 +1391,14 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                 throw new DbcException("Invalid hardware component " + userDefinedName);
         }
     }
-
+    
+    @Override
+    public Void visitAssertStmt(AssertStmt<Void> assertStmt) {
+        return null;
+    }
+    
+    @Override
+    public Void visitDebugAction(DebugAction<Void> debugAction) {
+        return null;
+    }
 }
