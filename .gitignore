@@ -6,6 +6,7 @@
 **/.classpath
 **/.project
 **/.settings
+**/.pydevproject
 OpenRobertaServer/db-*
 .DS_Store
 .idea
