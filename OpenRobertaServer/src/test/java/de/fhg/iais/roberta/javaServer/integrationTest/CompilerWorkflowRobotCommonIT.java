@@ -86,7 +86,8 @@ public class CompilerWorkflowRobotCommonIT {
     private ClientAdmin restAdmin;
 
     @BeforeClass
-    public static void setupOraCcRsc() {
+    public static void setupClass() throws Exception {
+        ServerStarter.initLoggingBeforeFirstUse(new String[0]);
         if ( System.getenv(ORA_CC_RSC_ENVVAR) == null ) {
             LOG.error("the environment variable \"" + ORA_CC_RSC_ENVVAR + "\" must contain the absolute path to the ora-cc-rsc repository - test fails");
             fail();

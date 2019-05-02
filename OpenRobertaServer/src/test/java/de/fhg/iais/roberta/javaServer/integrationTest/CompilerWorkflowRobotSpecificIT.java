@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -61,8 +62,9 @@ public class CompilerWorkflowRobotSpecificIT {
     private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflowRobotSpecificIT.class);
 
     private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
-    private static final boolean CROSSCOMPILER_CALL = true;
+    private static final boolean CROSSCOMPILER_CALL = false;
     private static final boolean SHOW_SUCCESS = true;
+    private static final String ORA_CC_RSC_ENVVAR = ServerProperties.CROSSCOMPILER_RESOURCE_BASE.replace('.', '_');
 
     private JSONObject robots;
     private String resourceBase;
@@ -81,6 +83,15 @@ public class CompilerWorkflowRobotSpecificIT {
 
     private ClientProgram restProgram;
     private ClientAdmin restAdmin;
+
+    @BeforeClass
+    public static void setupClass() throws Exception {
+        ServerStarter.initLoggingBeforeFirstUse(new String[0]);
+        if ( System.getenv(ORA_CC_RSC_ENVVAR) == null ) {
+            LOG.error("the environment variable \"" + ORA_CC_RSC_ENVVAR + "\" must contain the absolute path to the ora-cc-rsc repository - test fails");
+            fail();
+        }
+    }
 
     @Before
     public void setup() throws Exception {
