@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -65,6 +66,7 @@ public class CompilerWorkflowRobotCommonIT {
     private static final boolean SHOW_SUCCESS = true;
     private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
     private static final String RESOURCE_BASE = "/crossCompilerTests/common/";
+    private static final String ORA_CC_RSC_ENVVAR = ServerProperties.CROSSCOMPILER_RESOURCE_BASE.replace('.', '_');
 
     private JSONObject robotsFromTestSpec;
     private JSONObject progsFromTestSpec;
@@ -82,6 +84,14 @@ public class CompilerWorkflowRobotCommonIT {
 
     private ClientProgram restProgram;
     private ClientAdmin restAdmin;
+
+    @BeforeClass
+    public static void setupOraCcRsc() {
+        if ( System.getenv(ORA_CC_RSC_ENVVAR) == null ) {
+            LOG.error("the environment variable \"" + ORA_CC_RSC_ENVVAR + "\" must contain the absolute path to the ora-cc-rsc repository - test fails");
+            fail();
+        }
+    }
 
     @Before
     public void setup() throws Exception {

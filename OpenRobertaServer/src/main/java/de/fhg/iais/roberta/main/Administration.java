@@ -49,6 +49,7 @@ import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
  * a class with a static main method, responsible for some administrative work, like<br>
  * <br>
  * - database setup<br>
+ * - database backup<br>
  *
  * @author rbudde
  */
@@ -100,9 +101,6 @@ public class Administration {
             case "dbShutdown":
                 dbShutdown();
                 break;
-            case "dbCheckpoint":
-                dbCheckpoint();
-                break;
             case "checkXSS":
                 checkAndPatchAllProgramsForXSS();
                 break;
@@ -129,8 +127,8 @@ public class Administration {
                 // update_db();
                 break;
             default:
-                Administration.LOG.error("invalid argument: " + this.args[0] + " - exit 4");
-                System.exit(4);
+                Administration.LOG.error("invalid argument: " + this.args[0] + " - exit 12");
+                System.exit(12);
         }
     }
 
@@ -146,11 +144,15 @@ public class Administration {
     }
 
     /**
-     * backup the database. Needs the second parameter from the main args, which has to be the database URI (e.g. "jdbc:hsqldb:hsql://localhost/openroberta-db")
+     * backup the database. Needs as arg parameter<br>
+     * 1. the database URI (e.g. "jdbc:hsqldb:hsql://localhost/openroberta-db")<br>
+     * 2. the base directory to store the backup into<br>
+     * &nbsp;&nbsp;&nbsp;a. if the db server is runing in a docker container, the path is probably "/opt/administration/dbBackup"<br>
+     * &nbsp;&nbsp;&nbsp;b. otherwise the path is probably "./backup"<br>
      */
     private void dbBackup() {
         Administration.LOG.info("info: database backup makes sense in SERVER mode ONLY ***");
-        expectArgs(2);
+        expectArgs(3);
         SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
         Session nativeSession = sessionFactoryWrapper.getNativeSession();
         DbExecutor dbExecutor = DbExecutor.make(nativeSession);
@@ -161,31 +163,10 @@ public class Administration {
 
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
-        String backupFileName = "backup/dbBackup-" + now.format(formatter) + "-u" + users + "-p" + programs + ".tgz";
+        String backupFileName = this.args[2] + "/dbBackup-" + now.format(formatter) + "-u" + users + "-p" + programs + ".tgz";
 
         dbExecutor.ddl("BACKUP DATABASE TO '" + backupFileName + "' NOT BLOCKING;");
         LOG.info("backup succeeded for a database with " + users + " users and " + programs + " programs");
-
-        nativeSession.getTransaction().commit();
-        nativeSession.close();
-    }
-
-    /**
-     * backup the database. Needs the second parameter from the main args, which has to be the database URI (e.g. "jdbc:hsqldb:hsql://localhost/openroberta-db")
-     */
-    private void dbCheckpoint() {
-        expectArgs(3);
-        String checkpoint = "checkpoint" + ("-d".equals(this.args[1]) ? " defrag" : "");
-        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[2]);
-        Session nativeSession = sessionFactoryWrapper.getNativeSession();
-        DbExecutor dbExecutor = DbExecutor.make(nativeSession);
-        nativeSession.beginTransaction();
-
-        long users = ((BigInteger) dbExecutor.oneValueSelect("select count(*) from USER")).longValue();
-        long programs = ((BigInteger) dbExecutor.oneValueSelect("select count(*) from PROGRAM;")).longValue();
-
-        dbExecutor.ddl(checkpoint);
-        LOG.info(checkpoint + " succeeded for a database with " + users + " users and " + programs + " programs");
 
         nativeSession.getTransaction().commit();
         nativeSession.close();

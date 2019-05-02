@@ -13,6 +13,7 @@ import org.codehaus.jettison.json.JSONObject;
 import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -78,6 +79,11 @@ public class RestInterfaceTest {
     private ClientUser restUser;
     private ClientProgram restProgram;
     private ClientConfiguration restConfiguration;
+
+    @BeforeClass
+    public static void setupClass() throws Exception {
+        ServerStarter.initLoggingBeforeFirstUse(new String[0]);
+    }
 
     @Before
     public void setup() throws Exception {

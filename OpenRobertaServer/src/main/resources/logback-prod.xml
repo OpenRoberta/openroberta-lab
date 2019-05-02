@@ -1,0 +1,70 @@
+<configuration>
+
+<!-- this configuration file for logback needs two environment variables (e.g. set by calling System.setenv(...)
+     - ADMINISTRATION_DIR is the base directory for administration data (logging, db backups). If not defined, defaults to "."
+     - LOG_LEVEL is the root level for logging both the standard logs and the statistics. If not defined, defaults to "INFO"
+  -->
+
+    <property name="PATTERN_STATISTICS"
+        value='STATISTICS {"time":"%d", "sessionId":"%X{sessionId}", "robotName":"%X{robotName}", "logLevel":"%level", "message":%msg}%n' />
+
+    <property name="PATTERN_LOG"
+        value='%d [%thread] session-id=[%X{sessionId}] user-id=[%X{userId}] robot-name=[%X{robotName}] %-1level %logger{36} - %msg%n' />
+
+    <appender name="LOG" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${PATTERN_LOG}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="STATISTICS" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${PATTERN_STATISTICS}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${ADMINISTRATION_DIR}/logging/log-%d{yyyy/MM}.log.zip</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${PATTERN_LOG}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="STATISTICS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${ADMINISTRATION_DIR}/logging/statistics-%d{yyyy/MM}.log.zip</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${PATTERN_STATISTICS}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="STATISTICS_ERROR" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <pattern>${PATTERN_STATISTICS}</pattern>
+        </encoder>
+    </appender>
+
+    <root level="${LOG_LEVEL}">
+        <appender-ref ref="LOG" />
+        <appender-ref ref="LOG_FILE" />
+        <appender-ref ref="STATISTICS_ERROR" />
+    </root>
+
+    <logger name="statistics" level="INFO" additivity="false">
+        <appender-ref ref="STATISTICS" />
+        <appender-ref ref="STATISTICS_FILE" />
+    </logger>
+
+    <logger name="de.fhg.iais.roberta.brick.CompilerWorkflow" level="DEBUG" />
+    <logger name="org.hibernate" level="WARN" />
+
+    <logger name="de.fhg.iais.roberta.main.Administration" level="INFO" />
+    <logger name="de.fhg.iais.roberta.main.ServerStarter" level="INFO" />
+
+</configuration>

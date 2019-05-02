@@ -31,6 +31,9 @@ import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceFilter;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.joran.JoranConfigurator;
+import ch.qos.logback.core.joran.spi.JoranException;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.guice.RobertaGuiceServletConfig;
 import de.fhg.iais.roberta.javaServer.websocket.Ev3SensorLoggingWS;
@@ -63,7 +66,10 @@ import joptsimple.OptionSpec;
  * @author rbudde
  */
 public class ServerStarter {
-    private static final Logger LOG = LoggerFactory.getLogger(ServerStarter.class);
+    private static Logger LOG; // assigned in main(...), consider it as final!
+    private static final String LOG_CONFIGFILE = "server.log.configfile=";
+    private static final String ADMIN_DIR_KEY = "server.administration.dir=";
+    private static final String LOG_LEVEL_KEY = "server.log.level=";
 
     private final ServerProperties serverProperties; // for the startup
     private Injector injector;
@@ -74,6 +80,8 @@ public class ServerStarter {
      * @param args a sequence of -d key=value and -D plugin:key=value for server resp. plugin proerty modifications
      */
     public static void main(String[] args) throws Exception {
+        initLoggingBeforeFirstUse(args);
+
         OptionParser parser = new OptionParser();
         OptionSpec<String> serverDefineOpt = parser.acceptsAll(asList("d", "server-property")).withRequiredArg().ofType(String.class);
         OptionSpec<String> pluginDefineOpt = parser.acceptsAll(asList("D", "plugin-property")).withRequiredArg().ofType(String.class);
@@ -229,48 +237,36 @@ public class ServerStarter {
     }
 
     /**
-     * setup the hibernate.connection.url<br>
-     * <b>Note:</b> the "hibernate.connection.url" property is added to the properties!
+     * First initialize logging. This is tricky, because we have to avoid any call to a method, that expects logging initialized already. In this case, a
+     * default initialization would occur. This is NOT wanted. The variables needed for logging are read from the args assuming a fixed layout (see
+     * "openRoberta.properties" for details)
      *
-     * @param properties for configuring OpenRoberta, merged from property file and runtime arguments.
+     * @param args the command line arguments. Needed to extract three optional logging parameter given by -d KEY=VAL
      */
-    private void setupPropertyForDatabaseConnection(Properties properties) {
-        String serverVersionForDbDirectory = properties.getProperty("openRobertaServer.version").replace("-SNAPSHOT", "");
-        String databaseParentDir = properties.getProperty("database.parentdir");
-        String databaseUri = properties.getProperty("database.uri");
-        String databaseName = properties.getProperty("database.name");
-        String databaseMode = properties.getProperty("database.mode");
-        String dbUrl;
-        if ( "embedded".equals(databaseMode) ) {
-            dbUrl = "jdbc:hsqldb:file:" + databaseParentDir + "/db-" + serverVersionForDbDirectory + "/" + databaseName + ";ifexists=true";
-        } else if ( "server".equals(databaseMode) ) {
-            dbUrl = "jdbc:hsqldb:hsql://" + databaseUri + "/" + databaseName;
-        } else {
-            throw new DbcException("invalid database mode (use either embedded or server): " + databaseMode);
+    public static void initLoggingBeforeFirstUse(String[] args) throws JoranException {
+        String configFile = "/logback.xml";
+        String adminDir = ".";
+        String logLevel = "INFO";
+        for ( String serverDefine : args ) {
+            if ( serverDefine.startsWith(LOG_CONFIGFILE) ) {
+                configFile = serverDefine.substring(LOG_CONFIGFILE.length() + 1, serverDefine.length() - 1);
+            } else if ( serverDefine.startsWith(ADMIN_DIR_KEY) ) {
+                adminDir = serverDefine.substring(ADMIN_DIR_KEY.length() + 1, serverDefine.length() - 1);
+            } else if ( serverDefine.startsWith(LOG_LEVEL_KEY) ) {
+                logLevel = serverDefine.substring(LOG_LEVEL_KEY.length());
+            }
         }
-        properties.put("hibernate.connection.url", dbUrl);
-    }
-
-    /**
-     * returns the guice injector configured in this class. This not dangerous, but you should ask yourself, why you need that ...</b>
-     *
-     * @return the injector
-     */
-    public Injector getInjectorForTests() {
-        return this.injector;
-    }
-
-    private void logTheNumberOfStoredPrograms() {
-        try {
-            DbSession session = this.injector.getInstance(SessionFactoryWrapper.class).getSession();
-            List<?> numberOfProgramsInList = session.getSession().createSQLQuery("select count(*) from PROGRAM").list();
-            ServerStarter.LOG.info("Number of programs stored in the database: " + numberOfProgramsInList);
-            session.close();
-        } catch ( Exception e ) {
-            ServerStarter.LOG.error("Server could not connect to the database (exit 20)", e);
-            System.exit(20);
-        }
-
+        System.setProperty("ADMINISTRATION_DIR", adminDir);
+        System.setProperty("LOG_LEVEL", logLevel);
+        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+        JoranConfigurator jc = new JoranConfigurator();
+        jc.setContext(context);
+        context.reset();
+        jc.doConfigure(ServerStarter.class.getResource(configFile));
+        LOG = LoggerFactory.getLogger(ServerStarter.class); // here the initialization occurs
+        LOG.info("log config resource used: " + configFile);
+        LOG.info("administration directory: " + adminDir);
+        LOG.info("root logging level: " + logLevel);
     }
 
     /**
@@ -340,6 +336,51 @@ public class ServerStarter {
         }
         LOG.info(sb.toString());
         return robotPlugins;
+    }
+
+    /**
+     * returns the guice injector configured in this class. This not dangerous, but you should ask yourself, why you need that ...</b>
+     *
+     * @return the injector
+     */
+    public Injector getInjectorForTests() {
+        return this.injector;
+    }
+
+    /**
+     * setup the hibernate.connection.url<br>
+     * <b>Note:</b> the "hibernate.connection.url" property is added to the properties!
+     *
+     * @param properties for configuring OpenRoberta, merged from property file and runtime arguments.
+     */
+    private void setupPropertyForDatabaseConnection(Properties properties) {
+        String serverVersionForDbDirectory = properties.getProperty("openRobertaServer.version").replace("-SNAPSHOT", "");
+        String databaseParentDir = properties.getProperty("database.parentdir");
+        String databaseUri = properties.getProperty("database.uri");
+        String databaseName = properties.getProperty("database.name");
+        String databaseMode = properties.getProperty("database.mode");
+        String dbUrl;
+        if ( "embedded".equals(databaseMode) ) {
+            dbUrl = "jdbc:hsqldb:file:" + databaseParentDir + "/db-" + serverVersionForDbDirectory + "/" + databaseName + ";ifexists=true";
+        } else if ( "server".equals(databaseMode) ) {
+            dbUrl = "jdbc:hsqldb:hsql://" + databaseUri + "/" + databaseName;
+        } else {
+            throw new DbcException("invalid database mode (use either embedded or server): " + databaseMode);
+        }
+        properties.put("hibernate.connection.url", dbUrl);
+    }
+
+    private void logTheNumberOfStoredPrograms() {
+        try {
+            DbSession session = this.injector.getInstance(SessionFactoryWrapper.class).getSession();
+            List<?> numberOfProgramsInList = session.getSession().createSQLQuery("select count(*) from PROGRAM").list();
+            ServerStarter.LOG.info("Number of programs stored in the database: " + numberOfProgramsInList);
+            session.close();
+        } catch ( Exception e ) {
+            ServerStarter.LOG.error("Server could not connect to the database (exit 20)", e);
+            System.exit(20);
+        }
+
     }
 
     /**

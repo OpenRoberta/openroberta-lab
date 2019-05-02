@@ -2,72 +2,31 @@
 
     <property name="PATTERN_STATISTICS"
         value='STATISTICS {"time":"%d", "sessionId":"%X{sessionId}", "robotName":"%X{robotName}", "logLevel":"%level", "message":%msg}%n' />
-    <property name="PATTERN_STDOUT"
+
+    <property name="PATTERN_LOG"
         value='%d [%thread] session-id=[%X{sessionId}] user-id=[%X{userId}] robot-name=[%X{robotName}] %-1level %logger{36} - %msg%n' />
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="LOG" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>${PATTERN_STDOUT}</pattern>
-        </encoder>
-    </appender>
-
-    <appender name="STDOUT_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>stdout.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/stdout-%d{yyyy/MM}.log.zip</fileNamePattern>
-        </rollingPolicy>
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>INFO</level>
-        </filter>
-        <encoder>
-            <pattern>${PATTERN_STDOUT}</pattern>
+            <pattern>${PATTERN_LOG}</pattern>
         </encoder>
     </appender>
 
     <appender name="STATISTICS" class="ch.qos.logback.core.ConsoleAppender">
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>INFO</level>
-        </filter>
         <encoder>
             <pattern>${PATTERN_STATISTICS}</pattern>
         </encoder>
     </appender>
 
-    <appender name="STATISTICS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>statistics.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/statistics-%d{yyyy/MM}.log.zip</fileNamePattern>
-        </rollingPolicy>
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>INFO</level>
-        </filter>
-        <encoder>
-            <pattern>${PATTERN_STATISTICS}</pattern>
-        </encoder>
-    </appender>
-
-    <appender name="STATISTICS_ERROR" class="ch.qos.logback.core.ConsoleAppender">
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>ERROR</level>
-        </filter>
-        <encoder>
-            <pattern>${PATTERN_STATISTICS}</pattern>
-        </encoder>
-    </appender>
-
-    <root level="${log.level}">
-        <appender-ref ref="STDOUT" />
-        <appender-ref ref="STATISTICS_ERROR" />
-        <appender-ref ref="STDOUT_FILE" />
+    <root level="INFO">
+        <appender-ref ref="LOG" />
+        <!-- <appender-ref ref="STATISTICS" /> -->
     </root>
 
     <logger name="de.fhg.iais.roberta.brick.CompilerWorkflow" level="DEBUG" />
     <logger name="org.hibernate" level="WARN" />
-    <logger name="statistics" level="INFO" additivity="false">
-        <appender-ref ref="STATISTICS" />
-        <appender-ref ref="STATISTICS_FILE" />
-    </logger>
-    
+
     <logger name="de.fhg.iais.roberta.main.Administration" level="INFO" />
+    <logger name="de.fhg.iais.roberta.main.ServerStarter" level="INFO" />
 
 </configuration>

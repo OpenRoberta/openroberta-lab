@@ -3,4 +3,5 @@
 java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
      -d server.staticresources.dir=./staticResources -d database.mode=server -d database.uri=ora-db-server \
      -d robot.crosscompiler.resourcebase=/opt/ora-cc-rsc \
+     -d server.tutorial.dir=/opt/administration/tutorial
 	   $*

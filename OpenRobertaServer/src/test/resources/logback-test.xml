@@ -5,6 +5,7 @@
             </pattern>
         </encoder>
     </appender>
+    
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
         <file>target/workflow.log</file>
         <append>true</append>
@@ -18,6 +19,7 @@
         <appender-ref ref="STDOUT"/>
     </root>
 
+    <!-- used in class PerformanceUserIT (usually disabled) for server performance testing -->
     <logger name="workflow" level="debug">
         <appender-ref ref="FILE"/>
     </logger>

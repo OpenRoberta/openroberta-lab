@@ -8,6 +8,11 @@ function trapSignals {
 	java -cp lib/\* de.fhg.iais.roberta.main.Administration dbShutdown "$URI"
 }
 
+function log { 
+  echo $1
+  echo $1 >>$DB_LOGFILE
+}
+
 case "$1" in
     '') echo 'at least one parameter declaring a database is required. Exit 12'
 	    exit 12 ;;
@@ -15,6 +20,8 @@ case "$1" in
 esac
 
 DB_BASEDIR=/opt/db
+DB_BACKUPDIR=/opt/administration/dbBackup
+DB_LOGFILE=/opt/administration/logs/ora-db.log
 trap trapSignals SIGINT
 
 PARMS=''
@@ -32,10 +39,13 @@ for PARM do
 	let "I = $I + 1"
 done
 
-echo "the database server will use base directory $DB_BASEDIR"
-echo "the database server will serve the databases $*"
+log "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+log "the database server will use base directory $DB_BASEDIR"
+log "and serve the databases $*"
+log "database backups with openroberta-db-<DB-RESP-SERVER-NAME>"
+log "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
-eval "java -Xmx4G -cp lib/\* org.hsqldb.Server $PARMS &"
+eval "java -Xmx4G -cp lib/\* org.hsqldb.Server $PARMS >>$DB_LOGFILE &"
 child="$!"
 echo "waiting for child with pid $child to terminate"
 wait "$child"

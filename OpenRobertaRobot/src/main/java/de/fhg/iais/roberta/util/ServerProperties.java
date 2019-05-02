@@ -11,12 +11,12 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class ServerProperties {
-    private static final Logger LOG = LoggerFactory.getLogger(ServerProperties.class);
+    private static Logger LOG = LoggerFactory.getLogger(ServerProperties.class);
     public static final String NAME_OF_SIM = "sim";
     public static final String WHITE_LIST_KEY = "robot.whitelist";
     public static final String ROBOT_DEFAULT_PROPERTY_KEY = "robot.default";
     public static final String PLUGIN_TEMPDIR_PROPERTY_KEY = "plugin.tempdir";
-    private static final String CROSSCOMPILER_RESOURCE_BASE = "robot.crosscompiler.resourcebase";
+    public static final String CROSSCOMPILER_RESOURCE_BASE = "robot.crosscompiler.resourcebase";
 
     private final Properties serverProperties;
     private final String defaultRobot;
@@ -57,7 +57,7 @@ public class ServerProperties {
         this.robotsOnWhiteList = Collections.unmodifiableList(Arrays.asList(whiteListItems));
         this.serverProperties.put(ROBOT_DEFAULT_PROPERTY_KEY, this.defaultRobot);
 
-        // made a robust choice about the plugin resource directory
+        // made a robust choice about the crosscompiler resource directory
         String resourceDir = getStringProperty(CROSSCOMPILER_RESOURCE_BASE);
         if ( resourceDir == null || resourceDir.trim().isEmpty() ) {
             resourceDir = System.getenv(CROSSCOMPILER_RESOURCE_BASE.replace('.', '_'));
