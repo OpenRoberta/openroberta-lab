@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.javaServer.restServices.all.controller;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
@@ -36,15 +37,20 @@ import de.fhg.iais.roberta.generated.restEntities.SaveResponse;
 import de.fhg.iais.roberta.generated.restEntities.ShareCreateRequest;
 import de.fhg.iais.roberta.generated.restEntities.ShareDeleteRequest;
 import de.fhg.iais.roberta.generated.restEntities.ShareRequest;
+import de.fhg.iais.roberta.generated.restEntities.ShareResponse;
+import de.fhg.iais.roberta.generated.restEntities.UserGroupProgramListRequest;
 import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.javaServer.restServices.all.service.ProjectService;
-import de.fhg.iais.roberta.persistence.AccessRightProcessor;
 import de.fhg.iais.roberta.persistence.ConfigurationProcessor;
 import de.fhg.iais.roberta.persistence.LikeProcessor;
 import de.fhg.iais.roberta.persistence.ProgramProcessor;
+import de.fhg.iais.roberta.persistence.ProgramShareProcessor;
+import de.fhg.iais.roberta.persistence.UserGroupProcessor;
 import de.fhg.iais.roberta.persistence.UserProcessor;
 import de.fhg.iais.roberta.persistence.bo.Program;
+import de.fhg.iais.roberta.persistence.bo.ProgramShare;
 import de.fhg.iais.roberta.persistence.bo.User;
+import de.fhg.iais.roberta.persistence.bo.UserGroup;
 import de.fhg.iais.roberta.persistence.dao.ConfigurationDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
@@ -79,7 +85,6 @@ public class ClientProgramController {
             SaveResponse response = SaveResponse.make();
             SaveRequest saveRequest = SaveRequest.make(request.getData());
             ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
-            int userId = httpSessionState.getUserId();
             String robot = getRobot(httpSessionState);
             Long timestamp = saveRequest.getTimestamp();
             Timestamp programTimestamp = timestamp == null ? null : new Timestamp(timestamp);
@@ -87,25 +92,15 @@ public class ClientProgramController {
             String programText = saveRequest.getProgXML();
             String configName = saveRequest.getConfigName();
             String configText = saveRequest.getConfXML();
-            Boolean isShared = saveRequest.getShared();
+            String ownerName = saveRequest.getOwnerAccount();
             boolean isSaveCommand = saveRequest.getCmd().equals("save");
-            Program program;
-            if ( isSaveCommand ) {
-                program =
-                    programProcessor
-                        .persistProgramText(
-                            programName,
-                            programText,
-                            configName,
-                            configText,
-                            userId,
-                            robot,
-                            userId,
-                            programTimestamp,
-                            !(isShared == null ? false : isShared));
-            } else {
-                program = programProcessor.persistProgramText(programName, programText, configName, configText, userId, robot, userId, null, true);
+
+            if ( !isSaveCommand ) {
+                programTimestamp = null;
             }
+
+            Program program = programProcessor.persistProgramText(programName, ownerName, programText, configName, configText, robot, programTimestamp);
+
             response.setLastChanged((program != null) ? program.getLastChanged().getTime() : -1);
             UtilForREST.addResultInfo(response, programProcessor);
             Statistics.info("ProgramSave", "success", programProcessor.succeeded());
@@ -284,6 +279,62 @@ public class ClientProgramController {
     }
 
     @POST
+    @Path("/userGroupMembers/names")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getInfosOfProgramsOfUserGroupMembers(@OraData DbSession dbSession, FullRestRequest fullRequest) {
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        try {
+            ListingNamesResponse response = ListingNamesResponse.make();
+            UserGroupProgramListRequest request = UserGroupProgramListRequest.make(fullRequest.getData());
+
+            ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
+            UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
+            UserGroupProcessor userGroupProcessor = new UserGroupProcessor(dbSession, httpSessionState, isPublicServer);
+            String robot = getRobot(httpSessionState);
+
+            User user = httpSessionState.isUserLoggedIn() ? userProcessor.getUser(httpSessionState.getUserId()) : null;
+            if ( user == null ) {
+                LOG.error("Unauthorized");
+                return UtilForREST.makeBaseResponseForError(Key.USER_ERROR_NOT_LOGGED_IN, httpSessionState, null);
+            }
+
+            String groupName = request.getGroupName();
+            UserGroup userGroup = userGroupProcessor.getGroup(groupName, user);
+            if ( userGroup == null ) {
+                return UtilForREST.makeBaseResponseForError(userGroupProcessor.getMessage(), httpSessionState, null);
+            }
+
+            JSONArray programInfo = programProcessor.getProgramInfoForUserGroupMembers(userGroup, robot);
+            if ( programInfo == null ) {
+                return UtilForREST.makeBaseResponseForError(programProcessor.getMessage(), httpSessionState, null);
+            }
+
+            //Set the result info before you get the shared programs, because if the programInfo can be gathered the call is already successful
+            UtilForREST.addResultInfo(response, programProcessor);
+
+            JSONArray sharedPrograms = programProcessor.getProgramsSharedWithUserGroup(userGroup, robot);
+            if ( sharedPrograms != null ) {
+                for ( int i = 0; i < sharedPrograms.length(); i++ ) {
+                    programInfo.put(sharedPrograms.get(i));
+                }
+            }
+
+            response.setProgramNames(programInfo);
+            return UtilForREST.responseWithFrontendInfo(response, httpSessionState, null);
+        } catch ( Exception e ) {
+            dbSession.rollback();
+            String errorTicketId = Util.getErrorTicketId();
+            LOG.error("Exception. Error ticket: {}", errorTicketId, e);
+            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, null); // TODO: redesign error ticker number and add then: append("parameters", errorTicketId);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
+        }
+    }
+
+    @POST
     @Path("/examples/names")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -341,7 +392,11 @@ public class ClientProgramController {
                 String robotType2 = jaxbImportExport.getConfig().getBlockSet().getRobottype();
                 if ( robotType1.equals(robot) && robotType2.equals(robot) ) {
                     response.setProgramName(programName);
-                    Pair<String, String> progConfPair = transformBetweenVersions(httpSessionState.getRobotFactory(), JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet()), JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet()));
+                    Pair<String, String> progConfPair =
+                        transformBetweenVersions(
+                            httpSessionState.getRobotFactory(),
+                            JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet()),
+                            JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet()));
                     response.setProgXML(progConfPair.getFirst());
                     response.setConfXML(progConfPair.getSecond());
                     UtilForREST.addSuccessInfo(response, Key.PROGRAM_IMPORT_SUCCESS);
@@ -374,10 +429,10 @@ public class ClientProgramController {
     public Response shareProgram(@OraData DbSession dbSession, FullRestRequest request) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
         try {
-            BaseResponse response = BaseResponse.make();
+            ShareResponse response = ShareResponse.make();
             ShareRequest shareRequest = ShareRequest.make(request.getData());
             UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
-            AccessRightProcessor accessRightProcessor = new AccessRightProcessor(dbSession, httpSessionState);
+            ProgramShareProcessor programShareProcessor = new ProgramShareProcessor(dbSession, httpSessionState);
             int userId = httpSessionState.getUserId();
             String robot = getRobot(httpSessionState);
             if ( !httpSessionState.isUserLoggedIn() ) {
@@ -387,11 +442,27 @@ public class ClientProgramController {
                 User user = userProcessor.getUser(userId);
                 if ( !this.isPublicServer || ((user != null) && user.isActivated()) ) {
                     String programName = shareRequest.getProgramName();
-                    String userToShareName = shareRequest.getUserToShare();
-                    String right = shareRequest.getRight();
-                    accessRightProcessor.shareToUser(userId, robot, programName, userId, userToShareName, right);
-                    UtilForREST.addResultInfo(response, accessRightProcessor);
-                    Statistics.info("ProgramShare", "success", accessRightProcessor.succeeded());
+                    JSONObject shareData = shareRequest.getShareData();
+                    String entityLabel = shareData.getString("label");
+                    String entityType = shareData.getString("type");
+                    String right = shareData.getString("right");
+
+                    Set<ProgramShare> shares = programShareProcessor.shareToEntity(userId, robot, programName, entityLabel, entityType, right);
+
+                    JSONArray jsonShares = new JSONArray();
+                    JSONObject tmpJsonObj;
+                    for ( ProgramShare share : shares ) {
+                        tmpJsonObj = new JSONObject();
+                        tmpJsonObj.put("type", share.getEntityType());
+                        tmpJsonObj.put("label", share.getEntityLabel());
+                        tmpJsonObj.put("right", share.getRelation().toString());
+                        jsonShares.put(tmpJsonObj);
+                    }
+
+                    response.setSharedWith(jsonShares);
+
+                    UtilForREST.addResultInfo(response, programShareProcessor);
+                    Statistics.info("ProgramShare", "success", programShareProcessor.succeeded());
                     return UtilForREST.responseWithFrontendInfo(response, httpSessionState, null);
                 } else {
                     return UtilForREST.makeBaseResponseForError(Key.ACCOUNT_NOT_ACTIVATED_TO_SHARE, httpSessionState, null);
@@ -467,7 +538,7 @@ public class ClientProgramController {
             ShareCreateRequest shareCreateRequest = ShareCreateRequest.make(request.getData());
 
             ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
-            AccessRightProcessor accessRightProcessor = new AccessRightProcessor(dbSession, httpSessionState);
+            ProgramShareProcessor accessRightProcessor = new ProgramShareProcessor(dbSession, httpSessionState);
             UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
             ConfigurationProcessor configurationProcessor = new ConfigurationProcessor(dbSession, httpSessionState);
 
@@ -478,7 +549,7 @@ public class ClientProgramController {
                 return UtilForREST.makeBaseResponseForError(Key.USER_ERROR_NOT_LOGGED_IN, httpSessionState, null);
             } else {
                 String programName = shareCreateRequest.getProgramName();
-                int galleryId = userProcessor.getUser("Gallery").getId();
+                User galleryUser = userProcessor.getUser("Gallery");
                 // generating a unique name for the program owned by the gallery.
                 User user = userProcessor.getUser(userId);
                 String userAccount = user.getAccount();
@@ -499,12 +570,12 @@ public class ClientProgramController {
                         }
                         // make a copy of the user program and store it as a gallery owned program
                         Program programCopy =
-                            programProcessor.persistProgramText(programName, program.getProgramText(), null, confText, galleryId, robot, userId, null, true);
+                            programProcessor.persistProgramText(programName, galleryUser.getAccount(), program.getProgramText(), null, confText, robot, null);
                         if ( programProcessor.succeeded() ) {
                             if ( programCopy != null ) {
                                 response.setLastChanged(programCopy.getLastChanged().getTime());
                                 // share the copy of the program with the origin user
-                                accessRightProcessor.shareToUser(galleryId, robot, programName, userId, userAccount, "X_WRITE");
+                                accessRightProcessor.shareToUser(galleryUser.getId(), robot, programName, userId, userAccount, "X_WRITE");
                             } else {
                                 LOG.error("TODO: check potential error: the saved program should never be null");
                             }
@@ -547,7 +618,7 @@ public class ClientProgramController {
             BaseResponse response = BaseResponse.make();
             ShareDeleteRequest shareDeleteRequest = ShareDeleteRequest.make(request.getData());
             ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
-            AccessRightProcessor accessRightProcessor = new AccessRightProcessor(dbSession, httpSessionState);
+            ProgramShareProcessor accessRightProcessor = new ProgramShareProcessor(dbSession, httpSessionState);
             UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
             int userId = httpSessionState.getUserId();
             String robot = getRobot(httpSessionState);
@@ -561,7 +632,7 @@ public class ClientProgramController {
                 String author = shareDeleteRequest.getAuthor();
                 accessRightProcessor.shareDelete(owner, robot, programName, author, userId);
                 UtilForREST.addResultInfo(response, accessRightProcessor);
-                // if this program was shared from the gallery we need to delete the copy of it as well
+                // if this program was shared from the gallery, we need to delete the copy of it as well
                 if ( owner.equals("Gallery") ) {
                     int galleryId = userProcessor.getUser(owner).getId();
                     programProcessor.deleteByName(programName, galleryId, robot, userId);

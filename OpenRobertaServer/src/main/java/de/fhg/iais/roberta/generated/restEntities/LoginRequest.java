@@ -15,6 +15,8 @@ import org.json.JSONObject;
 public class LoginRequest extends BaseRequest {
     protected String accountName;
     protected String password;
+    protected String userGroupOwner;
+    protected String userGroupName;
     
     /**
      * the request description for the /login REST request
@@ -38,11 +40,13 @@ public class LoginRequest extends BaseRequest {
     /**
      * the request description for the /login REST request
      */
-    public static LoginRequest makeFromProperties(String cmd,String accountName,String password) {
+    public static LoginRequest makeFromProperties(String cmd,String accountName,String password,String userGroupOwner,String userGroupName) {
         LoginRequest entity = new LoginRequest();
         entity.setCmd(cmd);
         entity.setAccountName(accountName);
         entity.setPassword(password);
+        entity.setUserGroupOwner(userGroupOwner);
+        entity.setUserGroupName(userGroupName);
         entity.immutable();
         return entity;
     }
@@ -69,6 +73,10 @@ public class LoginRequest extends BaseRequest {
                     setAccountName(jsonO.getString(key));
                 } else if ("password".equals(key)) {
                     setPassword(jsonO.getString(key));
+                } else if ("userGroupOwner".equals(key)) {
+                    setUserGroupOwner(jsonO.optString(key));
+                } else if ("userGroupName".equals(key)) {
+                    setUserGroupName(jsonO.optString(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
@@ -157,6 +165,66 @@ public class LoginRequest extends BaseRequest {
     }
     
     /**
+     * GET userGroupOwner. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public String getUserGroupOwner() {
+        if (!this.immutable) {
+            throw new RuntimeException("no userGroupOwner from an object under construction: " + toString());
+        }
+        return this.userGroupOwner;
+    }
+    
+    /**
+     * is the property defined? The property maybe undefined as it is not a required property
+     *
+     * @return true if the property is defined (has been set)
+     */
+    public boolean userGroupOwnerDefined() {
+        return this.userGroupOwner != null;
+    }
+    
+    /**
+     * SET userGroupOwner. Object must be mutable.
+     */
+    public LoginRequest setUserGroupOwner(String userGroupOwner) {
+        if (this.immutable) {
+            throw new RuntimeException("userGroupOwner assigned to an immutable object: " + toString());
+        }
+        this.userGroupOwner = userGroupOwner;
+        return this;
+    }
+    
+    /**
+     * GET userGroupName. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public String getUserGroupName() {
+        if (!this.immutable) {
+            throw new RuntimeException("no userGroupName from an object under construction: " + toString());
+        }
+        return this.userGroupName;
+    }
+    
+    /**
+     * is the property defined? The property maybe undefined as it is not a required property
+     *
+     * @return true if the property is defined (has been set)
+     */
+    public boolean userGroupNameDefined() {
+        return this.userGroupName != null;
+    }
+    
+    /**
+     * SET userGroupName. Object must be mutable.
+     */
+    public LoginRequest setUserGroupName(String userGroupName) {
+        if (this.immutable) {
+            throw new RuntimeException("userGroupName assigned to an immutable object: " + toString());
+        }
+        this.userGroupName = userGroupName;
+        return this;
+    }
+    
+    /**
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
@@ -172,6 +240,12 @@ public class LoginRequest extends BaseRequest {
             }
             jsonO.put("accountName", this.accountName);
             jsonO.put("password", this.password);
+            if (this.userGroupOwner != null) {
+                jsonO.put("userGroupOwner", this.userGroupOwner);
+            }
+            if (this.userGroupName != null) {
+                jsonO.put("userGroupName", this.userGroupName);
+            }
         } catch (JSONException e) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
@@ -180,7 +254,7 @@ public class LoginRequest extends BaseRequest {
     
     @Override
     public String toString() {
-        return "LoginRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", accountName=" + this.accountName + ", password=" + this.password + " ]";
+        return "LoginRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", accountName=" + this.accountName + ", password=" + this.password + ", userGroupOwner=" + this.userGroupOwner + ", userGroupName=" + this.userGroupName + " ]";
     }
     @Override
     public int hashCode() {

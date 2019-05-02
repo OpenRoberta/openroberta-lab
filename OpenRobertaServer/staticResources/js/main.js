@@ -52,7 +52,9 @@ require.config({
 		'robot.model': '../app/roberta/models/robot.model',
 		'tour.controller': '../app/roberta/controller/tour.controller',
 		'user.controller': '../app/roberta/controller/user.controller',
-		'user.model': '../app/roberta/models/user.model',
+		'userGroup.controller' : '../app/roberta/controller/userGroup.controller',
+        'userGroup.model' : '../app/roberta/models/userGroup.model',
+        'user.model': '../app/roberta/models/user.model',
 		'rest.robot': '../app/roberta/rest/robot',
 		'socket.controller': '../app/roberta/controller/socket.controller',
 		'webview.controller': '../app/roberta/controller/webview.controller',
@@ -128,7 +130,7 @@ require(['require', 'wrap', 'log', 'jquery', 'jquery-cookie', 'guiState.controll
 	'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'menu.controller', 'multSim.controller', 'user.controller',
 	'robot.controller', 'program.controller', 'progSim.controller', 'progCode.controller', 'progDelete.controller', 'progHelp.controller',
 	'legal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
-	'progTutorial.controller', 'tutorialList.controller', 'volume-meter', 'user.model', 'webview.controller', 'sourceCodeEditor.controller', 'codeflask', 'stackmachineJsHelper'], function(
+	'progTutorial.controller', 'tutorialList.controller', 'userGroup.controller', 'volume-meter', 'user.model', 'webview.controller', 'sourceCodeEditor.controller', 'codeflask', 'stackmachineJsHelper'], function(
 		require) {
 	$ = require('jquery', 'jquery-cookie');
 	WRAP = require('wrap');
@@ -160,7 +162,8 @@ require(['require', 'wrap', 'log', 'jquery', 'jquery-cookie', 'guiState.controll
 	socketController = require('socket.controller');
 	tutorialController = require('progTutorial.controller');
 	tutorialListController = require('tutorialList.controller');
-	webviewController = require('webview.controller');
+	userGroupController = require('userGroup.controller');
+    webviewController = require('webview.controller');
 	sourceCodeEditorController = require('sourceCodeEditor.controller');
 	codeflask = require('codeflask');
 	stackmachineJsHelper = require('stackmachineJsHelper');
@@ -201,6 +204,7 @@ function init() {
 		progRunController.init();
 		menuController.init();
 		tutorialController.init();
+        userGroupController.init();
 
 		// immediately remove old cookies TODO remove this and jquery-cookie after 30 days
 		var cookies = $.cookie();

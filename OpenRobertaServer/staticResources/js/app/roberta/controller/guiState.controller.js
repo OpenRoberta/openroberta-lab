@@ -36,10 +36,12 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
 
             //GUISTATE.socket.portNames = [];
             //GUISTATE.socket.vendorIds = [];
-
-            GUISTATE.program.name = 'NEPOprog';
-            GUISTATE.program.shared = false;
+            
             GUISTATE.program.toolbox.level = 'beginner';
+            setProgramOwnerName(null);
+            setProgramAuthorName(null);
+            setProgramShareRelation(null);
+            setProgramName('NEPOprog');
 
             if (GUISTATE.server.theme !== 'default') {
                 var themePath = '../theme/' + GUISTATE.server.theme + '.json';
@@ -282,6 +284,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         $('#head-navi-icon-robot').addClass('typcn-' + robotGroup);
 
         checkSim();
+        setProgramOwnerName(null);
+        setProgramAuthorName(null);
+        setProgramShareRelation(null);
         if (!opt_init) {
             setProgramSaved(true);
             setConfigurationSaved(true);
@@ -786,10 +791,66 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
     exports.getProgramName = getProgramName;
 
     function setProgramName(name) {
-        $('#tabProgramName').html(name);
+        var displayName = name;
+        if (getProgramShareRelation() && getProgramShareRelation() !== 'NONE' && getProgramOwnerName() !== getUserAccountName()) {
+            var owner = getProgramOwnerName(),
+                author = getProgramAuthorName(),
+                relation = getProgramShareRelation(),
+                icon = '',
+                content = '',
+                suffix = '';
+            
+            if (owner === 'Gallery') { // user has uploaded this program to the gallery
+                icon = 'th-large-outline';
+                if(relation === 'READ') {
+                    content = author;
+                }
+            } else if (owner === 'Roberta') { // user loads a program from the example program list
+                icon = 'roberta';
+            } else if (relation == 'WRITE') { // user loads a program, owned by another user, but with WRITE rights
+                icon = 'pencil';
+                suffix = '<span style="color:#33B8CA;">' + owner + '</span>';
+            } else if (relation == 'READ') { // user loads a program, owned by another user, but with READ rights
+                icon = 'eye';
+                suffix = '<span style="color:#33B8CA;">' + owner + '</span>';
+            }
+
+            displayName += ' <b><span style="color:#33B8CA;" class="typcn typcn-' + icon + ' progName">' + content + '</span></b>' + suffix;
+        }
+        $('#tabProgramName').html(displayName);
         GUISTATE.program.name = name;
     }
     exports.setProgramName = setProgramName;
+    
+    function getProgramOwnerName() {
+        return GUISTATE.program.owner || getUserAccountName();
+    }
+    exports.getProgramOwnerName = getProgramOwnerName;
+    
+    function setProgramOwnerName(name) {
+        GUISTATE.program.owner = name;
+    }
+    exports.setProgramOwnerName = setProgramOwnerName;
+    
+    function getProgramAuthorName() {
+        return GUISTATE.program.author || getUserAccountName();
+    }
+    exports.getProgramAuthorName = getProgramAuthorName;
+    
+    function setProgramAuthorName(name) {
+        GUISTATE.program.author = name;
+    }
+    exports.setProgramAuthorName = setProgramAuthorName;
+    
+    function getProgramShareRelation() {
+        return GUISTATE.program.shared;
+    }
+    exports.getProgramShareRelation = getProgramShareRelation;
+    
+    function setProgramShareRelation(relation) {
+        GUISTATE.program.shared = relation;
+    }
+    exports.setProgramShareRelation = setProgramShareRelation;
 
     function getConfigurationName() {
         return GUISTATE.configuration.name;
@@ -929,6 +990,21 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
     }
     exports.isUserAccountActivated = isUserAccountActivated;
 
+    function isUserMemberOfUserGroup() {
+        return GUISTATE.user.userGroup != "";
+    }
+    exports.isUserMemberOfUserGroup = isUserMemberOfUserGroup;
+
+    function getUserUserGroup() {
+        return GUISTATE.user.userGroup;
+    }
+    exports.getUserUserGroup = getUserUserGroup;
+    
+    function getUserUserGroupOwner() {
+        return GUISTATE.user.userGroupOwner;
+    }
+    exports.getUserUserGroupOwner = getUserUserGroupOwner;
+
     function setLogin(result) {
         setState(result);
         GUISTATE.user.accountName = result.userAccountName;
@@ -939,6 +1015,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         }
         GUISTATE.user.id = result.userId;
         GUISTATE.user.isAccountActivated = result.isAccountActivated;
+        GUISTATE.user.userGroup = result.userGroupName;
+        GUISTATE.user.userGroupOwner = result.userGroupOwner;
 
         $('.nav > li > ul > .login, .logout').removeClass('disabled');
         $('.nav > li > ul > .login.unavailable').addClass('disabled');
@@ -949,6 +1027,12 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         $('#menuSaveConfig').parent().addClass('disabled');
         setProgramSaved(true);
         setConfigurationSaved(true);
+        
+        if (isUserMemberOfUserGroup()) {
+            $('#registerUserName, #registerUserEmail').prop('disabled', true);
+            $('#userGroupMemberDefaultPasswordHint').removeClass('hidden');
+        }
+        
         if (GUISTATE.gui.view == 'tabGalleryList') {
             $('#galleryList').find('button[name="refresh"]').trigger('click');
         }
@@ -956,10 +1040,24 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
     exports.setLogin = setLogin;
 
     function setLogout() {
+
+        if (isUserMemberOfUserGroup()) {
+            $('#registerUserName, #registerUserEmail').prop('disabled', false);
+            $('#userGroupMemberDefaultPasswordHint').addClass('hidden');
+        }
+        
         GUISTATE.user.id = -1;
         GUISTATE.user.accountName = '';
         GUISTATE.user.name = '';
+        GUISTATE.user.userGroup = '';
+        GUISTATE.user.userGroupOwner = '';
+        if (getView() === 'tabUserGroupList') {
+            $('#tabProgram').click();
+        }
         setProgramName('NEPOprog');
+        setProgramOwnerName(null);
+        setProgramAuthorName(null);
+        setProgramShareRelation(null);
         GUISTATE.program.shared = false;
         $('.nav > li > ul > .logout, .login').removeClass('disabled');
         $('.nav > li > ul > .login').addClass('disabled');
@@ -978,30 +1076,29 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
 
     function setProgram(result, opt_owner, opt_author) {
         if (result) {
-            GUISTATE.program.name = result.name;
             GUISTATE.program.shared = result.programShared;
             GUISTATE.program.timestamp = result.lastChanged;
             setProgramSaved(true);
             setConfigurationSaved(true);
             var name = result.name;
+            
+            setProgramShareRelation(result.programShared);
             if (opt_owner) {
-                if (opt_owner === 'Gallery' && GUISTATE.program.shared == 'X_WRITE') { // user has uploaded this program to the gallery
-                    name += ' <b><span style="color:#33B8CA;" class="typcn typcn-th-large-outline progName"></span></b>';
-                } else if (opt_owner === 'Gallery' && GUISTATE.program.shared == 'READ') { // user loads a program from the gallery
-                    name += ' <b><span style="color:#33B8CA;" class="typcn typcn-th-large-outline progName">' + opt_author + '</span></b>';
-                } else if (opt_owner === 'Roberta') { // user loads a program from the example program list
-                    name += ' <b><span style="color:#33B8CA;" class="typcn typcn-roberta progName"></span></b>';
-                } else if (GUISTATE.program.shared == 'WRITE') { // user loads a program, owned by another user, but with WRITE rights
-                    name += ' <b><span style="color:#33B8CA;" class="typcn typcn-pencil progName"></span></b><span style="color:#33B8CA;">' + opt_owner
-                            + '</span>';
-                } else if (GUISTATE.program.shared == 'READ') { // user loads a program, owned by another user, but with READ rights
-                    name += ' <b><span style="color:#33B8CA;" class="typcn typcn-eye progName"></span></b><span style="color:#33B8CA;">' + opt_owner
-                            + '</span>';
-                } else {
-                    console.log("Program with undefined rights from " + opt_owner + " loaded.");
-                }
+                setProgramOwnerName(opt_owner);
+            } else if (result.parameters && result.parameters.OWNER_NAME) {
+                setProgramOwnerName(result.parameters.OWNER_NAME);
+            } else {
+                setProgramOwnerName(null);
             }
-            $('#tabProgramName').html(name);
+            
+            if (opt_author) {
+                setProgramAuthorName(opt_author);
+            } else if (result.parameters && result.parameters.AUTHOR_NAME) {
+                setProgramAuthorName(result.parameters.AUTHOR_NAME);
+            } else {
+                setProgramOwnerName(null);
+            }
+            setProgramName(result.name);
         }
     }
     exports.setProgram = setProgram;

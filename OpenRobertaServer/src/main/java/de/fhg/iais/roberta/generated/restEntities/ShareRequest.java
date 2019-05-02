@@ -14,8 +14,7 @@ import org.json.JSONObject;
  */
 public class ShareRequest extends BaseRequest {
     protected String programName;
-    protected String userToShare;
-    protected String right;
+    protected JSONObject shareData;
     
     /**
      * the request description for the /share REST request
@@ -39,12 +38,11 @@ public class ShareRequest extends BaseRequest {
     /**
      * the request description for the /share REST request
      */
-    public static ShareRequest makeFromProperties(String cmd,String programName,String userToShare,String right) {
+    public static ShareRequest makeFromProperties(String cmd,String programName,JSONObject shareData) {
         ShareRequest entity = new ShareRequest();
         entity.setCmd(cmd);
         entity.setProgramName(programName);
-        entity.setUserToShare(userToShare);
-        entity.setRight(right);
+        entity.setShareData(shareData);
         entity.immutable();
         return entity;
     }
@@ -69,10 +67,8 @@ public class ShareRequest extends BaseRequest {
                     setCmd(jsonO.optString(key));
                 } else if ("programName".equals(key)) {
                     setProgramName(jsonO.getString(key));
-                } else if ("userToShare".equals(key)) {
-                    setUserToShare(jsonO.getString(key));
-                } else if ("right".equals(key)) {
-                    setRight(jsonO.getString(key));
+                } else if ("shareData".equals(key)) {
+                    setShareData(jsonO.getJSONObject(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
@@ -108,11 +104,8 @@ public class ShareRequest extends BaseRequest {
         if ( programName == null) {
             _message = "required property programName of ShareRequest-object is not set: " + toString();
         }
-        if ( userToShare == null) {
-            _message = "required property userToShare of ShareRequest-object is not set: " + toString();
-        }
-        if ( right == null) {
-            _message = "required property right of ShareRequest-object is not set: " + toString();
+        if ( shareData == null) {
+            _message = "required property shareData of ShareRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -143,44 +136,23 @@ public class ShareRequest extends BaseRequest {
     }
     
     /**
-     * GET userToShare. Object must be immutable. Never return null or an undefined/default value.
+     * GET shareData. Object must be immutable. Never return null or an undefined/default value.
      */
-    public String getUserToShare() {
+    public JSONObject getShareData() {
         if (!this.immutable) {
-            throw new RuntimeException("no userToShare from an object under construction: " + toString());
+            throw new RuntimeException("no shareData from an object under construction: " + toString());
         }
-        return this.userToShare;
+        return this.shareData;
     }
     
     /**
-     * SET userToShare. Object must be mutable.
+     * SET shareData. Object must be mutable.
      */
-    public ShareRequest setUserToShare(String userToShare) {
+    public ShareRequest setShareData(JSONObject shareData) {
         if (this.immutable) {
-            throw new RuntimeException("userToShare assigned to an immutable object: " + toString());
+            throw new RuntimeException("shareData assigned to an immutable object: " + toString());
         }
-        this.userToShare = userToShare;
-        return this;
-    }
-    
-    /**
-     * GET right. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public String getRight() {
-        if (!this.immutable) {
-            throw new RuntimeException("no right from an object under construction: " + toString());
-        }
-        return this.right;
-    }
-    
-    /**
-     * SET right. Object must be mutable.
-     */
-    public ShareRequest setRight(String right) {
-        if (this.immutable) {
-            throw new RuntimeException("right assigned to an immutable object: " + toString());
-        }
-        this.right = right;
+        this.shareData = shareData;
         return this;
     }
     
@@ -199,8 +171,7 @@ public class ShareRequest extends BaseRequest {
                 jsonO.put("cmd", this.cmd);
             }
             jsonO.put("programName", this.programName);
-            jsonO.put("userToShare", this.userToShare);
-            jsonO.put("right", this.right);
+            jsonO.put("shareData", this.shareData);
         } catch (JSONException e) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
@@ -209,7 +180,7 @@ public class ShareRequest extends BaseRequest {
     
     @Override
     public String toString() {
-        return "ShareRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", programName=" + this.programName + ", userToShare=" + this.userToShare + ", right=" + this.right + " ]";
+        return "ShareRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", programName=" + this.programName + ", shareData=" + this.shareData + " ]";
     }
     @Override
     public int hashCode() {

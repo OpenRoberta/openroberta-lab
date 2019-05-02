@@ -13,6 +13,17 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         COMM.json("/program/listing/names", {}, successFn, "load program list");
     }
     exports.loadProgList = loadProgList;
+    
+    /**
+     * 
+     */
+    function loadProgListFromUserGroupMembers(userGroupName, successFn) {
+        COMM.json("/program/userGroupMembers/names", {
+            "cmd" : "getInfosOfProgramsOfUserGroupMembers",
+            "groupName" : userGroupName,
+        }, successFn, 'load program list of the members of the user group "' + userGroupName + '" from the server.');
+    }
+    exports.loadProgListFromUserGroupMembers = loadProgListFromUserGroupMembers;
 
     /**
      * Refresh example list

@@ -40,10 +40,12 @@ import de.fhg.iais.roberta.main.MailManagement;
 import de.fhg.iais.roberta.persistence.LostPasswordProcessor;
 import de.fhg.iais.roberta.persistence.PendingEmailConfirmationsProcessor;
 import de.fhg.iais.roberta.persistence.ProcessorStatus;
+import de.fhg.iais.roberta.persistence.UserGroupProcessor;
 import de.fhg.iais.roberta.persistence.UserProcessor;
 import de.fhg.iais.roberta.persistence.bo.LostPassword;
 import de.fhg.iais.roberta.persistence.bo.PendingEmailConfirmations;
 import de.fhg.iais.roberta.persistence.bo.User;
+import de.fhg.iais.roberta.persistence.bo.UserGroup;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
@@ -119,8 +121,36 @@ public class ClientUser {
                 UserProcessor up = new UserProcessor(dbSession, httpSessionState);
                 String userAccountName = request.getAccountName();
                 String password = request.getPassword();
-                User user = up.getUser(userAccountName, password);
+
+                UserGroup userGroup = null;
+                String userGroupOwnerAccount = request.getUserGroupOwner();
+                String userGroupName = request.getUserGroupName();
+
+                User user;
+
+                if ( userGroupOwnerAccount != null && userGroupName != null ) {
+                    UserGroupProcessor ugp = new UserGroupProcessor(dbSession, httpSessionState, this.isPublicServer);
+
+                    User userGroupOwner = up.getUser(userGroupOwnerAccount);
+                    if ( userGroupOwner == null ) {
+                        UtilForREST.addResultInfo(response, up);
+                        return UtilForREST.makeBaseResponseForError(Key.GROUP_GET_ONE_ERROR_NOT_FOUND, httpSessionState, this.brickCommunicator);
+                    }
+
+                    userGroup = ugp.getGroup(userGroupName, userGroupOwner);
+                    if ( userGroup == null ) {
+                        return UtilForREST.makeBaseResponseForError(ugp.getMessage(), httpSessionState, this.brickCommunicator);
+                    }
+
+                    user = up.getUser(userGroup, userAccountName, password);
+                } else {
+                    user = up.getUser(userAccountName, password);
+                    userGroupName = "";
+                    userGroupOwnerAccount = "";
+                }
+
                 UtilForREST.addResultInfo(response, up);
+
                 if ( user != null ) {
                     int id = user.getId();
                     String account = user.getAccount();
@@ -132,6 +162,8 @@ public class ClientUser {
                     response.setUserAccountName(account);
                     response.setUserName(name);
                     response.setIsAccountActivated(user.isActivated());
+                    response.setUserGroupName(userGroupName);
+                    response.setUserGroupOwner(userGroupOwnerAccount);
                     ClientUser.LOG.info("login: user {} (id {}) logged in", account, id);
                     Statistics.info("UserLogin", "success", true);
                     AliveData.rememberLogin();
@@ -295,16 +327,25 @@ public class ClientUser {
             String role = request.getRole();
             //String tag = request.getString("tag");
             boolean isYoungerThen14 = request.getIsYoungerThen14();
-            User user = up.getUser(account);
-            String oldEmail = user.getEmail();
-            up.updateUser(account, userName, role, email, null, isYoungerThen14);
-            if ( this.isPublicServer && !oldEmail.equals(email) && up.succeeded() ) {
-                String lang = request.getLanguage();
-                PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
-                sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang, isYoungerThen14);
-                up.deactivateAccount(user.getId());
+
+            User user = httpSessionState.isUserLoggedIn() ? up.getUser(httpSessionState.getUserId()) : null;
+            if ( user == null ) {
+                return UtilForREST.makeBaseResponseForError(Key.USER_ERROR_NOT_LOGGED_IN, httpSessionState, this.brickCommunicator);
+            } else {
+                if ( !user.getAccount().equals(account) || user.getUserGroup() != null ) {
+                    return UtilForREST.makeBaseResponseForError(Key.USER_UPDATE_ERROR_ACCOUNT_WRONG, httpSessionState, this.brickCommunicator);
+                } else {
+                    String oldEmail = user.getEmail();
+                    up.updateUser(account, userName, role, email, null, isYoungerThen14);
+                    if ( this.isPublicServer && !oldEmail.equals(email) && up.succeeded() ) {
+                        String lang = request.getLanguage();
+                        PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
+                        sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang, isYoungerThen14);
+                        up.deactivateAccount(user.getId());
+                    }
+                    UtilForREST.addResultInfo(response, up);
+                }
             }
-            UtilForREST.addResultInfo(response, up);
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
         } catch ( Exception e ) {
             dbSession.rollback();

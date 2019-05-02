@@ -24,7 +24,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'configuration.
                     UTIL.response(result);
                     if (result.rc === 'ok') {
                         MSG.displayInformation(result, "MESSAGE_CONFIGURATION_DELETED", result.message, confName);
-                        $('.bootstrap-table').find('button[name="refresh"]').trigger('click');
+                        $('#confList').find('button[name="refresh"]').trigger('click');
                         LOG.info('delete configuration "' + confName);
                     }
                 });

@@ -9,7 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the response for the /listing/names request<br><br>
+ * the response for the /program/listing/names request<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -17,14 +17,14 @@ public class ListingNamesResponse extends BaseResponse {
     protected JSONArray programNames;
     
     /**
-     * the response for the /listing/names request
+     * the response for the /program/listing/names request
      */
     public static ListingNamesResponse make() {
         return new ListingNamesResponse();
     }
     
     /**
-     * the response for the /listing/names request
+     * the response for the /program/listing/names request
      */
     public static ListingNamesResponse makeFromString(String jsonS) {
         try {
@@ -36,7 +36,7 @@ public class ListingNamesResponse extends BaseResponse {
     }
     
     /**
-     * the response for the /listing/names request
+     * the response for the /program/listing/names request
      */
     public static ListingNamesResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,JSONArray programNames) {
         ListingNamesResponse entity = new ListingNamesResponse();
@@ -62,7 +62,7 @@ public class ListingNamesResponse extends BaseResponse {
     }
     
     /**
-     * the response for the /listing/names request
+     * the response for the /program/listing/names request
      */
     public static ListingNamesResponse make(JSONObject jsonO) {
         return make().merge(jsonO).immutable();

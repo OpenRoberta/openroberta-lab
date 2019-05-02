@@ -37,9 +37,9 @@ public class PersistLostPasswordTest {
 
         //Create list of users
         for ( int userNumber = 0; userNumber < PersistLostPasswordTest.TOTAL_USERS; userNumber++ ) {
-            User user = this.userDao.loadUser("account-" + userNumber);
+            User user = this.userDao.loadUser(null, "account-" + userNumber);
             if ( user == null ) {
-                User user2 = new User("account-" + userNumber);
+                User user2 = new User(null, "account-" + userNumber);
                 user2.setEmail("stuff-" + userNumber);
                 user2.setPassword("pass-" + userNumber);
                 user2.setRole(Role.STUDENT);
@@ -61,7 +61,7 @@ public class PersistLostPasswordTest {
         Assert.isTrue(userList.size() == 5);
 
         for ( int userNumber = 0; userNumber < PersistLostPasswordTest.TOTAL_USERS; userNumber++ ) {
-            User user = this.userDao.loadUser("account-" + userNumber);
+            User user = this.userDao.loadUser(null, "account-" + userNumber);
             LostPassword lostPassword = this.lostPasswordDao.loadLostPassword(user.getId());
             if ( lostPassword == null ) {
                 LostPassword lostPassword2 = new LostPassword(user.getId());
@@ -89,7 +89,7 @@ public class PersistLostPasswordTest {
             this.hSession.save(user);
             this.hSession.commit();
         }
-        User userChanged = this.userDao.loadUser("account-2");
+        User userChanged = this.userDao.loadUser(null, "account-2");
         Assert.isTrue(userChanged.isPasswordCorrect("1"));
     }
 

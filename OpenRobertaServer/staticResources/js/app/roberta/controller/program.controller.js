@@ -150,7 +150,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
         var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
         var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
 
-        PROGRAM.saveProgramToServer(GUISTATE_C.getProgramName(), xmlProgramText, configName, xmlConfigText, GUISTATE_C.getProgramShared() ? true : false, GUISTATE_C.getProgramTimestamp(), function(
+        PROGRAM.saveProgramToServer(GUISTATE_C.getProgramName(), GUISTATE_C.getProgramOwnerName(), xmlProgramText, configName, xmlConfigText, GUISTATE_C.getProgramTimestamp(), function(
                 result) {
             if (result.rc === 'ok') {
                 GUISTATE_C.setProgramTimestamp(result.lastChanged);
@@ -176,14 +176,15 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
             var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
             var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
             var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
+            var userAccountName = GUISTATE_C.getUserAccountName();
 
             LOG.info('saveAs program ' + GUISTATE_C.getProgramName());
-            PROGRAM.saveAsProgramToServer(progName, xmlProgramText, configName, xmlConfigText, GUISTATE_C.getProgramTimestamp(), function(result) {
+            PROGRAM.saveAsProgramToServer(progName, userAccountName, xmlProgramText, configName, xmlConfigText, GUISTATE_C.getProgramTimestamp(), function(result) {
                 UTIL.response(result);
                 if (result.rc === 'ok') {
                     result.name = progName;
                     result.programShared = false;
-                    GUISTATE_C.setProgram(result);
+                    GUISTATE_C.setProgram(result, userAccountName, userAccountName);
                     MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM_AS", result.message, GUISTATE_C.getProgramName());
                 }
             });

@@ -45,8 +45,13 @@ public class DbUpgrader {
             /*
              * 4.x.x ... ... ... copy the implementation from above. Start with a clone of the upgrader class DbUpgrader3_1_0
              */
+            DbUpgraderUserGroups dbUpgraderUserGroups = new DbUpgraderUserGroups(sessionFactoryWrapper);
+            boolean upgradeDoneUserGroups = dbUpgraderUserGroups.isUpgradeDone();
+            if ( !upgradeDoneUserGroups ) {
+                dbUpgraderUserGroups.run();
+            }
 
-            boolean atLeastOneUpgrade = !upgradeDone3_1_0; // OR of !upgradeDone*
+            boolean atLeastOneUpgrade = !upgradeDone3_1_0 || !upgradeDoneUserGroups; // OR of !upgradeDone*
             if ( !atLeastOneUpgrade ) {
                 LOG.info("no db upgrades needed");
             }

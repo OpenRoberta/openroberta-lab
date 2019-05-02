@@ -7,6 +7,17 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     var $formRegister;
     var $formUserPasswordChange;
     var $formSingleModal;
+
+    var $h3Login;
+    var $h3Register;
+    var $h3Lost;
+    
+    var $formUserGroupLogin;
+    var $articleLostUserGroupPassword;
+    
+    var $h3LoginUserGroupLogin;
+    var $h3LostPasswordUsergroupLogin;
+    
     var $modalAnimateTime = 300;
     var $msgAnimateTime = 150;
     var $msgShowTime = 2000;
@@ -33,6 +44,11 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
      * Update user
      */
     function updateUserToServer() {
+        if (GUISTATE_C.isUserMemberOfUserGroup()) {
+            $("#login-user").modal('hide');
+            return;
+        }
+        
         $formRegister.validate();
         if ($formRegister.valid()) {
             USER.updateUserToServer(GUISTATE_C.getUserAccountName(), $('#registerUserName').val(), $("#registerUserEmail").val(), $('#registerUserAge').val(), GUISTATE_C.getLanguage(), function(
@@ -134,12 +150,48 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     }
 
     /**
+     * Login member of user-group
+     */
+    function loginToUserGroup() {
+        $formUserGroupLogin.validate();
+        if ($formUserGroupLogin.valid()) {
+            
+            var values = $formUserGroupLogin.serializeArray(),
+                valuesObj = {};
+            
+            for (var i = 0; i < values.length; i++) {
+                if (typeof values[i].name === 'undefined' || typeof values[i].value === 'undefined') {
+                    continue;
+                }
+                valuesObj[values[i].name] = values[i].value;
+            }
+            USER.loginUserGroup(valuesObj.userGroupOwner, valuesObj.userGroupName, valuesObj.userGroupName + ":" + valuesObj.accountName, valuesObj.password, function(result) {
+                if (result.rc === "ok") {
+                    $('#menuDeleteUser, #menuGroupPanel').parent().addClass('unavailable');
+                    GUISTATE_C.setLogin(result);
+                    MSG.displayInformation(result, "MESSAGE_USER_LOGIN", result.message, GUISTATE_C.getUserName());
+                    if (valuesObj.password === valuesObj.userGroupName + ":" + valuesObj.accountName) {
+                        $('#passOld').val(valuesObj.password);
+                        $('#grOldPassword').hide();
+                        $('#change-user-password').modal('show');
+                    }
+                } else {
+                    MSG.displayInformation(result, "MESSAGE_USER_LOGIN", result.message, GUISTATE_C.getUserName());
+                }
+            });
+        }
+    }
+
+    /**
      * Logout user
      */
     function logout() {
         USER.logout(function(result) {
             UTIL.response(result);
             if (result.rc === "ok") {
+                if (GUISTATE_C.isUserMemberOfUserGroup()) {
+                    $('#menuDeleteUser, #menuGroupPanel').parent().removeClass('unavailable');
+                }
                 GUISTATE_C.setLogout();
             }
             MSG.displayInformation(result, "MESSAGE_USER_LOGOUT", result.message, GUISTATE_C.getUserName());
@@ -212,6 +264,51 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
                 label.insertBefore(element.parent());
             },
             messages : {
+                loginAccountName : {
+                    required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
+                    loginRegex : Blockly.Msg["VALIDATION_CONTAINS_SPECIAL_CHARACTERS"]
+                },
+                loginPassword : {
+                    required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"]
+                }
+            }
+        });
+    }
+
+    function validateLoginUserGroupMember() {
+        $formUserGroupLogin.removeData('validator');
+        $.validator.addMethod("loginRegex", function(value, element) {
+            return this.optional(element) || /^[a-zA-Z0-9=+!?.,%#+&^@_\- ]+$/gi.test(value);
+        }, "This field contains nonvalid symbols.");
+        $formUserGroupLogin.validate({
+            rules : {
+                usergroupLoginOwner : {
+                    required : true,
+                    loginRegex : true
+                },
+                usergroupLoginUserGroup : {
+                    required : true
+                },
+                usergroupLoginAccount : {
+                    required : true,
+                    loginRegex : true
+                },
+                usergroupLoginPassword : {
+                    required : true,
+                },
+            },
+            errorClass : "form-invalid",
+            errorPlacement : function(label, element) {
+                label.insertBefore(element.parent());
+            },
+            messages : {
+                usergroupLoginOwner : {
+                    required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
+                    loginRegex : Blockly.Msg["VALIDATION_CONTAINS_SPECIAL_CHARACTERS"]
+                },
+                usergroupLoginUserGroup : {
+                    required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"]
+                },
                 loginAccountName : {
                     required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
                     loginRegex : Blockly.Msg["VALIDATION_CONTAINS_SPECIAL_CHARACTERS"]
@@ -374,7 +471,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     }
 
     //header change of the modal login
-    function hederChange($oldHeder, $newHeder) {
+    function headerChange($oldHeder, $newHeder) {
         $oldHeder.addClass('hidden');
         $newHeder.removeClass('hidden');
     }
@@ -449,33 +546,33 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         // Login form change between sub-form
         $('#login_register_btn').onWrap('click', function() {
             showRegisterForm();
-            hederChange($h3Login, $h3Register);
+            headerChange($h3Login, $h3Register);
             modalAnimate($formLogin, $formRegister);
             UTIL.setFocusOnElement($('#registerAccountName'));
 
         });
         $('#register_login_btn').onWrap('click', function() {
-            hederChange($h3Register, $h3Login);
+            headerChange($h3Register, $h3Login);
             modalAnimate($formRegister, $formLogin);
             UTIL.setFocusOnElement($('#loginAccountName'));
         });
         $('#login_lost_btn').onWrap('click', function() {
-            hederChange($h3Login, $h3Lost);
+            headerChange($h3Login, $h3Lost);
             modalAnimate($formLogin, $formLost);
             UTIL.setFocusOnElement($('#lost_email'));
         });
         $('#lost_login_btn').onWrap('click', function() {
-            hederChange($h3Lost, $h3Login);
+            headerChange($h3Lost, $h3Login);
             modalAnimate($formLost, $formLogin)
             UTIL.setFocusOnElement($('#loginAccountName'));
         });
         $('#lost_register_btn').onWrap('click', function() {
-            hederChange($h3Lost, $h3Register);
+            headerChange($h3Lost, $h3Register);
             modalAnimate($formLost, $formRegister);
             UTIL.setFocusOnElement($('#registerAccountName'));
         });
         $('#register_lost_btn').onWrap('click', function() {
-            hederChange($h3Register, $h3Lost);
+            headerChange($h3Register, $h3Lost);
             modalAnimate($formRegister, $formLost);
             UTIL.setFocusOnElement($('#lost_email'));
         });
@@ -483,6 +580,38 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         validateLoginUser();
         validateRegisterUser();
         validateLostPassword();
+    }
+
+    function initUserGroupLoginModal() {
+        $('#usergroupLoginPopup').onWrap('hidden.bs.modal', function() {
+            $formUserGroupLogin.validate().resetForm();
+            $formUserGroupLogin.find('input, select').val('');
+        });
+        $formUserGroupLogin.onWrap('submit', function(e) {
+            e.preventDefault();
+            loginToUserGroup();
+        });
+        
+        $formUserGroupLogin.find('input, select').focus(function(e) {
+            var $hint = $(this).parent().next('.hint');
+            $formUserGroupLogin.find('.hint').not($hint).slideUp($msgAnimateTime);
+            $hint.slideDown($msgAnimateTime);
+        });
+
+        // Login form change between sub-form
+        $('#lostPasswordUsergroupLogin').onWrap('click', function() {
+            headerChange($h3LoginUserGroupLogin, $h3LostPasswordUsergroupLogin);
+            modalAnimate($formUserGroupLogin, $articleLostUserGroupPassword);
+            UTIL.setFocusOnElement($articleLostUserGroupPassword);
+
+        });
+        $('#loginUsergroupLogin').onWrap('click', function() {
+            headerChange($h3LostPasswordUsergroupLogin, $h3LoginUserGroupLogin);
+            modalAnimate($articleLostUserGroupPassword, $formUserGroupLogin);
+            UTIL.setFocusOnElement($('#usergroupLoginOwner'));
+        });
+
+        validateLoginUserGroupMember();
     }
 
     function initStatusTextModal() {
@@ -540,11 +669,18 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             $h3Register = $('#registerInfoLabel');
             $h3Lost = $('#forgotPasswordLabel');
 
+            $formUserGroupLogin = $('#loginUsergroupLoginForm');
+            $articleLostUserGroupPassword = $('#lostPasswordUsergroupLoginArticle');
+
+            $h3LoginUserGroupLogin = $('#loginUsergroupLoginTitle');
+            $h3LostPasswordUsergroupLogin = $('#lostPasswordUsergroupLoginTitle');
+
             $('#iconDisplayLogin').onWrap('click', function() {
                 showUserInfo();
             }, 'icon user click');
 
             initLoginModal();
+            initUserGroupLoginModal();
             initStatusTextModal();
             initUserPasswordChangeModal();
             ready.resolve();
@@ -576,7 +712,11 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         $("#register_lost_btn").hide();
         $formLogin.hide();
         $formRegister.show();
-        $("#login-user").modal('show');
+        if (GUISTATE_C.isUserMemberOfUserGroup()) {
+            $('#change-user-password').modal('show');
+        } else {
+            $("#login-user").modal('show');
+        }
     }
     exports.showUserDataForm = showUserDataForm;
 
@@ -590,6 +730,14 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         $("#login-user").modal('show');
     }
     exports.showLoginForm = showLoginForm;
+
+    function showUserGroupLoginForm() {
+        $("#lostPasswordUsergroupLoginTitle").addClass('hidden');
+        $formUserGroupLogin.show();
+        $articleLostUserGroupPassword.hide();
+        $("#usergroupLoginPopup").modal('show');
+    }
+    exports.showUserGroupLoginForm = showUserGroupLoginForm;
 
     function showDeleteUserModal() {
         UTIL.showSingleModal(function() {

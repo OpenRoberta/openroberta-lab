@@ -8,7 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the request description for the /delete REST request<br><br>
+ * the request description for the /program/delete REST request<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -17,14 +17,14 @@ public class DeleteRequest extends BaseRequest {
     protected String author;
     
     /**
-     * the request description for the /delete REST request
+     * the request description for the /program/delete REST request
      */
     public static DeleteRequest make() {
         return new DeleteRequest();
     }
     
     /**
-     * the request description for the /delete REST request
+     * the request description for the /program/delete REST request
      */
     public static DeleteRequest makeFromString(String jsonS) {
         try {
@@ -36,7 +36,7 @@ public class DeleteRequest extends BaseRequest {
     }
     
     /**
-     * the request description for the /delete REST request
+     * the request description for the /program/delete REST request
      */
     public static DeleteRequest makeFromProperties(String cmd,String programName,String author) {
         DeleteRequest entity = new DeleteRequest();
@@ -48,7 +48,7 @@ public class DeleteRequest extends BaseRequest {
     }
     
     /**
-     * the request description for the /delete REST request
+     * the request description for the /program/delete REST request
      */
     public static DeleteRequest make(JSONObject jsonO) {
         return make().merge(jsonO).immutable();

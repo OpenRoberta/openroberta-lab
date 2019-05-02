@@ -1954,22 +1954,54 @@ div.galleryDescription, div.tutorialOverview {
 
 #progList table tbody tr.selected,
 #confList table tbody tr.selected,
-#relationsList table tbody tr.selected {
+#relationsList table tbody tr.selected,
+#userGroupList table tbody tr.selected,
+#userGroupMemberList table tbody tr.selected {
     background-color: #BACC1E;
 }
 
-#progList .fixed-table-container tbody .selected td {
+#progList .fixed-table-container tbody .selected td,
+#userGroupList .fixed-table-container tbody .selected td,
+#userGroupMemberList .fixed-table-container tbody .selected td {
     background-color: #BACC1E;
 }
 
 #progList table tbody tr:hover,
 #confList table tbody tr:hover,
-#relationsList table tbody tr:hover {
+#relationsList table tbody tr:hover,
+#userGroupList table tbody tr:hover,
+#userGroupMemberList table tbody tr:hover {
     background-color: #BACC1E;
 }
 
 #progList .fixed-table-container tbody td:hover:not(a.showRelations) {
     background-color: #BACC1E;
+}
+
+
+#progListScopeSelect {
+	display: inline-block;
+	float: left;
+	width: auto;
+	margin-right: 3px;
+	height: 48px;
+	min-width: 25vw;
+}
+
+@media only screen and (max-width: 767px) {
+	/* Manually set bootstrap < sm rules */
+	
+	#progListToolbar .bars.pull-left {
+		margin-bottom: 68px;
+	}
+	
+	#progListScopeSelect {
+		position: absolute;
+		right: 0;
+		bottom: calc(-100% - 10px);
+		width: calc(100vw - 32px);
+		margin: 0;
+	}
 }
 
 input[type=range] {
@@ -2076,7 +2108,9 @@ input[type=range]:focus::-ms-fill-upper {
 #confList table thead,
 #show-relations table thead,
 #showMultipleSimPrograms table thead,
-#logList table thead {
+#logList table thead,
+#userGroupList table thead,
+#userGroupMemberList table thead {
     text-transform: uppercase;
     background-color: #898989;
     color: #ffffff;
@@ -2123,6 +2157,23 @@ input[type=range]:focus::-ms-fill-upper {
     margin-left: 68px;
 }
 
+
+#create-user-group .modal-body {
+	margin-bottom: 1em 0 2.5em;
+}
+
+#userGroupList .btn-group > .btn:not(.dropdown-toggle),
+#userGroupMemberList .btn-group > .btn:not(.dropdown-toggle) {
+	border-radius: 2px;
+}
+
+.pull-none .pull-right {
+	margin-left: 3px;
+}
+.pull-none .pull-left {
+	margin-right: 3px;
+}
+
 @media only screen and (max-width: 767px) {
     #main-section {
         padding-top: 56px;
@@ -2142,7 +2193,7 @@ input[type=range]:focus::-ms-fill-upper {
 
     #roberta {
         width: 80px;
-        height: 90px;;
+        height: 90px;
         bottom: -6px;
         right: -10px;
     }

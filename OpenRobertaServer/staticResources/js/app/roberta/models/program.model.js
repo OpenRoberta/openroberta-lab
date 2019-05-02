@@ -17,14 +17,14 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - that represents the program
      * 
      */
-    function saveAsProgramToServer(programName, xmlProgramText, configName, xmlConfigText, timestamp, successFn) {
+    function saveAsProgramToServer(programName, ownerAccount, xmlProgramText, configName, xmlConfigText, timestamp, successFn) {
         COMM.json("/program/save", {
             "cmd" : "saveAs",
             "programName" : programName,
+            "ownerAccount": ownerAccount,
             "progXML" : xmlProgramText,
             "configName" : configName,
             "confXML" : xmlConfigText,
-            "shared" : false,
             "timestamp" : timestamp
         }, successFn, "save program to server with new name '" + programName + "'");
     }
@@ -45,14 +45,14 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      * 
      */
-    function saveProgramToServer(programName, xmlProgramText, configName, xmlConfigText, programShared, timestamp, successFn) {
+    function saveProgramToServer(programName, ownerAccount, xmlProgramText, configName, xmlConfigText, timestamp, successFn) {
         COMM.json("/program/save", {
             "cmd" : "save",
             "programName" : programName,
+            "ownerAccount": ownerAccount,
             "progXML" : xmlProgramText,
             "configName" : configName,
             "confXML" : xmlConfigText,
-            "shared" : programShared,
             "timestamp" : timestamp
         }, successFn, "save program '" + programName + "' to server");
     }
@@ -87,13 +87,12 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - administration rights of the user
      * 
      */
-    function shareProgram(programName, shareWith, right, successFn) {
+    function shareProgram(programName, shareObj, successFn) {
         COMM.json("/program/share", {
             "cmd" : "shareP",
             "programName" : programName,
-            "userToShare" : shareWith,
-            "right" : right
-        }, successFn, "share program '" + programName + "' with user '" + shareWith + "' having right '" + right + "'");
+            "shareData" : shareObj
+        }, successFn, "share program '" + programName + "' with '" + shareObj.label + "'(" + shareObj.type + ") having right '" + shareObj.right + "'");
     }
 
     exports.shareProgram = shareProgram;

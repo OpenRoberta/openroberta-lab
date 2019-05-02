@@ -6,6 +6,7 @@ import org.hibernate.Query;
 
 import de.fhg.iais.roberta.persistence.bo.Role;
 import de.fhg.iais.roberta.persistence.bo.User;
+import de.fhg.iais.roberta.persistence.bo.UserGroup;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
@@ -20,7 +21,8 @@ public class UserDao extends AbstractDao<User> {
     }
 
     /**
-     * ...
+     * Persists a user in the database.
+     * Currently not used for user group members, because user group members can not be changed.
      *
      * @param account
      * @param password
@@ -28,14 +30,14 @@ public class UserDao extends AbstractDao<User> {
      * @return the created user object; returns <code>null</code> if creation is unsuccessful (e.g. user already exists)
      * @throws Exception
      */
-    public User persistUser(String account, String password, String roleAsString) throws Exception {
+    public User persistUser(UserGroup userGroup, String account, String password, String roleAsString) throws Exception {
         Assert.notNull(account);
         Assert.notNull(password);
         Role role = Role.valueOf(roleAsString);
         Assert.notNull(role);
-        User user = loadUser(account);
+        User user = loadUser(null, account);
         if ( user == null ) {
-            user = new User(account);
+            user = new User(userGroup, account);
             user.setPassword(password);
             user.setRole(role);
             this.session.save(user);
@@ -45,9 +47,34 @@ public class UserDao extends AbstractDao<User> {
         }
     }
 
-    public User loadUser(String account) {
+    public User loadUser(UserGroup group, String account) {
         Assert.notNull(account);
-        Query hql = this.session.createQuery("from User where account=:account");
+        Query hql;
+        if ( group == null ) {
+            hql = this.session.createQuery("from User where userGroup is null and account=:account");
+            hql.setString("account", account);
+        } else {
+            hql = this.session.createQuery("from User where userGroup=:userGroup and account=:account");
+            hql.setEntity("userGroup", group);
+            hql.setString("account", account);
+        }
+        return getOneOrNoUser(hql);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<User> loadUsersOfGroup(UserGroup group) {
+        Assert.notNull(group);
+        Query hql = this.session.createQuery("from User where userGroup=:group");
+        hql.setEntity("group", group);
+        return hql.list();
+    }
+
+    public User loadUserOfGroupByGroupOwner(User groupOwner, String account) {
+        Assert.notNull(account);
+        Assert.notNull(groupOwner);
+
+        Query hql = this.session.createQuery("from User where userGroup.owner=:owner and account=:account");
+        hql.setEntity("owner", groupOwner);
         hql.setString("account", account);
 
         return getOneOrNoUser(hql);
