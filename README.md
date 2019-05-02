@@ -77,13 +77,13 @@ Might take some time. The last lines of a successful build looks like:
 #### Step 2: Make sure you have a database
 If you have a fresh clone of the server, make sure that the OpenRobertaServer folder has a subfolder **db-x.y.z** with the database inside, where x.y.z is the current version from the server. The actual server version is found in the pom.xml of the OpenRobertaParent project. If you don't have a database, you can create an empty database with
 
-    ./ora.sh --createEmptydb
+    ./ora.sh create-empty-db
 
 #### Step 3: Starting your own server instance using a unix-like shell (on either lin* or win*).
 
-    ./ora.sh --start-from-git [optional-path-to-crosscompiler-resources] # start the server using the default properties
+    ./ora.sh start-from-git [optional-path-to-crosscompiler-resources] # start the server using the default properties
 
-You can also run `./ora.sh --help` to see more commands for administration of the server. If you have Eclipse installed and
+You can also run `./ora.sh help` to see more commands for administration of the server. If you have Eclipse installed and
 
 * the repositories base directory is imported as maven project (this will import all submodules automatically)
 * a maven build in the repositories base directory has been executed and a database is created (see above!)

@@ -65,6 +65,8 @@ case "$CMD" in
     startDbC) source $SCRIPTDIR/_dbContainerStop.sh
               source $SCRIPTDIR/_dbContainerStart.sh ;;
     stopDbC)  source $SCRIPTDIR/_dbContainerStop.sh ;;
+    backupDb) DATABASE_NAME=$1
+              source $SCRIPTDIR/_dbContainerBackup.sh ;;
     network)  echo '******************** '$DATE' ********************'
               echo '******************** network inspect'
               docker network inspect ora-net ;;

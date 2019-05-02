@@ -95,15 +95,6 @@ function _export {
   echo "copying all jars"
   _mkAndCheckDir "${exportpath}/lib"
   cp OpenRobertaServer/target/resources/*.jar "$exportpath/lib"
-  
-  if [[ -d "Resources/tutorial" ]]
-  then
-    echo "copying tutorials"
-    _mkAndCheckDir "${exportpath}/tutorial"
-    cp -r Resources/tutorial/* "${exportpath}/tutorial"
-  else
-    echo "no tutorials to copy"
-  fi
 
   echo 'copying the staticResources'
   cp -r OpenRobertaServer/staticResources ${exportpath}/staticResources
@@ -124,9 +115,6 @@ function _export {
   echo 'scripts for start&stop of the server/db are copied'
   cp admin.sh ${exportpath}
   chmod ugo+rx admin.sh
-  
-  _mkAndCheckDir "${exportpath}/administration/logs"
-  _mkAndCheckDir "${exportpath}/administration/dbBackup"
   
   echo "NOTE: You are responsible to supply a usable database in directory db-${serverVersionForDb}"
 }

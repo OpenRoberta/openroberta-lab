@@ -72,13 +72,13 @@ CONF_DIR=$BASE_DIR/conf
 SCRIPT_DIR=$CONF_DIR/scripts
 SERVER_DIR=$BASE_DIR/server
 DATABASE_DIR=$BASE_DIR/db
-LOG_DIR=$BASE_DIR/logs
+DB_ADMIN_DIR=$BASE_DIR/db/dbAdmin
 
 isDirectoryValid $BASE_DIR
 isDirectoryValid $CONF_DIR
 isDirectoryValid $SCRIPT_DIR
 isDirectoryValid $SERVER_DIR
 isDirectoryValid $DATABASE_DIR
-isDirectoryValid $LOG_DIR
+isDirectoryValid $DB_ADMIN_DIR
 
 DATABASE_SERVER_PORT=9001

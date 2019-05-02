@@ -25,7 +25,7 @@ docker build -f $REPO/Docker/meta/DockerfileBase_ubuntu_18_04 -t rbudde/openrobe
 docker push rbudde/openroberta_base:2
 ```
 
-## generate the base for INTEGRATION TEST and DEBUG.
+## generate the image for INTEGRATION TEST and DEBUG.
 
 Using the configuration file DockerfileIT_* you create an image, built upon the "base" image, that contains all crosscompiler, mvn and git.
 It has executed a git clone of the main git repository `openroberta-lab` and has executed a `mvn clean install`. This is done to fill the
@@ -35,8 +35,8 @@ If called, it will checkout a branch and runs both the tests and the integration
 ```bash
 REPO=/data/openroberta/git/openroberta-lab
 BRANCH=develop
-cd $REPO/Docker
-docker build -t rbudde/openroberta_it_ubuntu_18_04:2 -f testing/DockerfileIT_ubuntu_18_04 . --build-arg BRANCH=$BRANCH
+cd $REPO/Docker/testing
+docker build -t rbudde/openroberta_it_ubuntu_18_04:2 -f DockerfileIT_ubuntu_18_04 . --build-arg BRANCH=$BRANCH
 docker push rbudde/openroberta_it_ubuntu_18_04:2
 ```
 
@@ -246,8 +246,8 @@ It starts a /bin/bash and you probably will either run a server:
 ```bash
 git checkout develop; git pull;
 mvn clean install -DskipTests
-./ora.sh --createEmptydb
-./ora.sh --start-from-git
+./ora.sh create-empty-db
+./ora.sh start-from-git
 ```
 
 or you want to run the integration tests (but many other tasks are possible :-)

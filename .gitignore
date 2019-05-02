@@ -13,5 +13,6 @@ OpenRobertaServer/db-*
 *.iml
 **/*.log
 **/*.log.zip
+**/admin
 **/*.pyc
 **/*.py~

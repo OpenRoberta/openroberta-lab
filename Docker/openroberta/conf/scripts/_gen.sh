@@ -47,7 +47,7 @@ esac
     fi
     mvn clean install -DskipTests
     rm -rf $SERVER_DIR_OF_ONE_SERVER/export
-    ./ora.sh --export $SERVER_DIR_OF_ONE_SERVER/export gzip
+    ./ora.sh export $SERVER_DIR_OF_ONE_SERVER/export gzip
     cp $CONF_DIR/docker-for-lab/start.sh $SERVER_DIR_OF_ONE_SERVER/export
     chmod ugo+x $SERVER_DIR_OF_ONE_SERVER/export/start.sh
     DOCKERRM=$(docker rmi rbudde/openroberta_lab_$SERVER_NAME:2 2>/dev/null)

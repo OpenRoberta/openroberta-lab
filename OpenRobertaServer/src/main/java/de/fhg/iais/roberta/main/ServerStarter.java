@@ -68,7 +68,7 @@ import joptsimple.OptionSpec;
 public class ServerStarter {
     private static Logger LOG; // assigned in main(...), consider it as final!
     private static final String LOG_CONFIGFILE = "server.log.configfile=";
-    private static final String ADMIN_DIR_KEY = "server.administration.dir=";
+    private static final String ADMIN_DIR_KEY = "server.admin.dir=";
     private static final String LOG_LEVEL_KEY = "server.log.level=";
 
     private final ServerProperties serverProperties; // for the startup
@@ -249,11 +249,11 @@ public class ServerStarter {
         String logLevel = "INFO";
         for ( String serverDefine : args ) {
             if ( serverDefine.startsWith(LOG_CONFIGFILE) ) {
-                configFile = serverDefine.substring(LOG_CONFIGFILE.length() + 1, serverDefine.length() - 1);
+                configFile = extractValue(serverDefine.substring(LOG_CONFIGFILE.length()));
             } else if ( serverDefine.startsWith(ADMIN_DIR_KEY) ) {
-                adminDir = serverDefine.substring(ADMIN_DIR_KEY.length() + 1, serverDefine.length() - 1);
+                adminDir = extractValue(serverDefine.substring(ADMIN_DIR_KEY.length()));
             } else if ( serverDefine.startsWith(LOG_LEVEL_KEY) ) {
-                logLevel = serverDefine.substring(LOG_LEVEL_KEY.length());
+                logLevel = extractValue(serverDefine.substring(LOG_LEVEL_KEY.length()));
             }
         }
         System.setProperty("ADMINISTRATION_DIR", adminDir);
@@ -265,7 +265,7 @@ public class ServerStarter {
         jc.doConfigure(ServerStarter.class.getResource(configFile));
         LOG = LoggerFactory.getLogger(ServerStarter.class); // here the initialization occurs
         LOG.info("log config resource used: " + configFile);
-        LOG.info("administration directory: " + adminDir);
+        LOG.info("admin directory: " + adminDir);
         LOG.info("root logging level: " + logLevel);
     }
 
@@ -285,7 +285,7 @@ public class ServerStarter {
         }
         List<String> robotWhitelist = serverProperties.getRobotWhitelist();
         Map<String, IRobotFactory> robotPlugins = new HashMap<>();
-        String resourceDir = serverProperties.getResourceDir();
+        String resourceDir = serverProperties.getCrosscompilerResourceDir();
         String tempDir = serverProperties.getTempDir();
         for ( String robotName : robotWhitelist ) {
             if ( robotName.equals("sim") ) {
@@ -408,6 +408,15 @@ public class ServerStarter {
         } catch ( Exception e ) {
             LOG.error("Server could not check robot names in the database (exit 20)", e);
             System.exit(20);
+        }
+    }
+
+    private static String extractValue(String valueMaybeQuoted) {
+        char first = valueMaybeQuoted.charAt(0);
+        if ( first == '\'' || first == '"' ) {
+            return valueMaybeQuoted.substring(1, valueMaybeQuoted.length() - 1);
+        } else {
+            return valueMaybeQuoted;
         }
     }
 

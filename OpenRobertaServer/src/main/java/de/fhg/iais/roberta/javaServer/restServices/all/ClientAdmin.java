@@ -105,11 +105,11 @@ public class ClientAdmin {
                 server.put("isPublic", this.serverProperties.getBooleanProperty("server.public"));
                 server.put("robots", robots);
                 String staticRecourcesDir = this.serverProperties.getStringProperty("server.staticresources.dir");
-                String pathToTutorial = this.serverProperties.getStringProperty("server.tutorial.dir");
+                String pathToTutorial = this.serverProperties.getStringProperty("server.admin.dir") + "/tutorial";
                 JSONObject tutorial =
-                    (pathToTutorial == null || pathToTutorial.trim().isEmpty() || !new File(pathToTutorial).isDirectory())
-                        ? new JSONObject()
-                        : Util.getJSONObjectsFromDirectory(pathToTutorial);
+                    new File(pathToTutorial).isDirectory() //
+                        ? Util.getJSONObjectsFromDirectory(pathToTutorial) //
+                        : new JSONObject();
                 server.put("tutorial", tutorial);
                 String pathToHelp = staticRecourcesDir + File.separator + "help";
                 List<String> help = Util.getListOfFileNamesFromDirectory(pathToHelp, "html");

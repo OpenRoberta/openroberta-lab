@@ -36,7 +36,7 @@ mvn clean install
 
 cd /opt/openroberta-lab
 rm -rf DockerInstallation
-./ora.sh --export /opt/openroberta-lab/DockerInstallation
+./ora.sh export /opt/openroberta-lab/DockerInstallation
 
 cp Docker/Dockerfile* Docker/*.sh DockerInstallation
 

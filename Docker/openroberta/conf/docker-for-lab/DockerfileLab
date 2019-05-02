@@ -2,7 +2,7 @@ FROM rbudde/openroberta_base:2
 
 ARG LAST_RUN_OF_BASE=2019-04-30
 
-VOLUME /opt/administration
+VOLUME /opt/admin
 EXPOSE 1999
 
 RUN mkdir --parent /opt/openroberta-lab/lib

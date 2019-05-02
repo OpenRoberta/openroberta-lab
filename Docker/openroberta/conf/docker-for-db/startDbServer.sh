@@ -2,50 +2,48 @@
 # start of the openroberta database server in a docker container.
 # needs the list of databases to serve as runtime arguments
 
-function trapSignals {
-	echo "signal caught. The database server will SHUTDOWN"
-	URI='jdbc:hsqldb:hsql://localhost/openroberta-db'
-	java -cp lib/\* de.fhg.iais.roberta.main.Administration dbShutdown "$URI"
-}
-
 function log { 
   echo $1
   echo $1 >>$DB_LOGFILE
 }
 
 case "$1" in
-    '') echo 'at least one parameter declaring a database is required. Exit 12'
+  '') log 'at least one parameter declaring at least one database is required. Exit 12'
 	    exit 12 ;;
 	*)  : ;;
 esac
 
 DB_BASEDIR=/opt/db
-DB_BACKUPDIR=/opt/administration/dbBackup
-DB_LOGFILE=/opt/administration/logs/ora-db.log
-trap trapSignals SIGINT
+DB_ADMIN=/opt/dbAdmin
+DB_LOGFILE="$DB_ADMIN/ora-db.log"
 
-PARMS=''
+HSQL_DB_DECLS=''
 I=0
 
-for PARM do
-    case "$PARM" in
+for DB_NAME do
+    case "$DB_NAME" in
     master)   : ;;
     test|dev) : ;;
     dev[1-9]) : ;;
-	  *)        echo "invalid name. Parameter must be 'test','dev','dev1'..'dev9', but is '$PARM'. Aborting"
+	  *)        log "invalid name. Parameter must be 'test','dev','dev1'..'dev9', but is '$DB_NAME'. Exit 12"
 	            exit 12 ;;
 	esac
-	PARMS="$PARMS --database.$I file:$DB_BASEDIR/$PARM/openroberta-db --dbname.$I openroberta-db-$PARM"
+	HSQL_DB_DECLS="$HSQL_DB_DECLS --database.$I file:$DB_BASEDIR/$DB_NAME/openroberta-db --dbname.$I openroberta-db-$DB_NAME"
 	let "I = $I + 1"
 done
 
-log "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-log "the database server will use base directory $DB_BASEDIR"
-log "and serve the databases $*"
-log "database backups with openroberta-db-<DB-RESP-SERVER-NAME>"
-log "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+log 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+log "the db server starting at $(date) will serve the databases $*"
+log "db admin dir $DB_ADMIN stores logs and backups"
+log 'mount db admin dir with -v on container start (often /data/openroberta/dbAdmin)'
+log 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 
-eval "java -Xmx4G -cp lib/\* org.hsqldb.Server $PARMS >>$DB_LOGFILE &"
+function trapSignals {
+  log "signal caught. The database server will SHUTDOWN"
+  kill -INT $child
+}
+trap trapSignals TERM INT
+eval "java -Xmx4G -cp lib/\* org.hsqldb.Server $HSQL_DB_DECLS | tee -a $DB_LOGFILE &"
 child="$!"
-echo "waiting for child with pid $child to terminate"
+log "waiting for child with pid $child to terminate"
 wait "$child"

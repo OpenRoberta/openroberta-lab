@@ -38,14 +38,9 @@ The following commands are used rarely:
 
   java                    check whether java and javac are on the path and the JDK version is ok (used internally)
 
-The following commands are deprecated:
+The following command is deprecated:
 
   alive {SERVERURL} {-q} {EVERY} {TIMEOUT} check after EVERY sec (default: 60) if the server is alive.
                            The server is assumed to have crashed, if it does not answer within TIMEOUT sec (default: 10).
                            -q is the quiet mode: report crashes only. Example: ./ora.sh alive localhost:1999 120 5
 
-  update-lejos {SERVERURL} {LEJOSVERSION} update an ev3 robot running the lejos os. Its ip-address is expected in lejosipaddr.
-                            If a password is requested: it is "", thus simply hit 'return'
-                            - scp the ev3menu.jar, which replaces the original lejos menu
-                            - scp openroberta specific libraries needed by the user programs at runtime
-                            - create a file on the lejos based robot with the address of the server

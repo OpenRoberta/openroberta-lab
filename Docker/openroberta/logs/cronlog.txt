@@ -1,1 +1,0 @@
-logging from the cronjob, that triggers the autoDeploy-feature of the test server

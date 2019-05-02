@@ -21,7 +21,7 @@ public class ServerProperties {
     private final Properties serverProperties;
     private final String defaultRobot;
     private final List<String> robotsOnWhiteList;
-    private final String resourceDir;
+    private final String crosscompilerResourceDir;
     private final String tempDir;
 
     /**
@@ -58,20 +58,19 @@ public class ServerProperties {
         this.serverProperties.put(ROBOT_DEFAULT_PROPERTY_KEY, this.defaultRobot);
 
         // made a robust choice about the crosscompiler resource directory
-        String resourceDir = getStringProperty(CROSSCOMPILER_RESOURCE_BASE);
-        if ( resourceDir == null || resourceDir.trim().isEmpty() ) {
-            resourceDir = System.getenv(CROSSCOMPILER_RESOURCE_BASE.replace('.', '_'));
-            if ( resourceDir == null ) {
-                LOG.warn("could not allocate a the crosscompiler resource directory, use '.'. This will NOT work, if the directory is needed.");
-                resourceDir = "./";
+        String crosscompilerResourceDir = getStringProperty(CROSSCOMPILER_RESOURCE_BASE);
+        if ( crosscompilerResourceDir == null || crosscompilerResourceDir.trim().isEmpty() ) {
+            crosscompilerResourceDir = System.getenv(CROSSCOMPILER_RESOURCE_BASE.replace('.', '_'));
+            if ( crosscompilerResourceDir == null ) {
+                LOG.warn("could not allocate a the crosscompiler resource directory, using '.' as default. This will NOT work, if the directory is needed.");
+                crosscompilerResourceDir = "./";
             }
-            Assert.notNull(resourceDir, "could not allocate a the crosscompiler resource directory");
         }
-        if ( !(resourceDir.endsWith("/") || resourceDir.endsWith("\\")) ) {
-            resourceDir = resourceDir + "/";
+        if ( !(crosscompilerResourceDir.endsWith("/") || crosscompilerResourceDir.endsWith("\\")) ) {
+            crosscompilerResourceDir = crosscompilerResourceDir + "/";
         }
-        this.resourceDir = resourceDir;
-        LOG.info("As crosscompiler resource directory " + this.resourceDir + " will be used");
+        this.crosscompilerResourceDir = crosscompilerResourceDir;
+        LOG.info("As crosscompiler resource directory " + this.crosscompilerResourceDir + " will be used");
 
         // made a robust choice about the plugin temporary directory
         String tempTempDir = getStringProperty(PLUGIN_TEMPDIR_PROPERTY_KEY);
@@ -128,8 +127,8 @@ public class ServerProperties {
         return this.defaultRobot;
     }
 
-    public String getResourceDir() {
-        return this.resourceDir;
+    public String getCrosscompilerResourceDir() {
+        return this.crosscompilerResourceDir;
     }
 
     public String getTempDir() {
