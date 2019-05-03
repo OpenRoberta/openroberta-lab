@@ -440,7 +440,7 @@ public class ClientProgram {
                         }
                     }
                     handleRunProgramError(response, messageKey, token, wasRobotWaiting);
-                    httpSessionState.setProcessing(false);                   
+                    httpSessionState.setProcessing(false);
                 } else if ( cmd.equals("compileN") ) {
                     final String programName = request.getString("name");
                     final String programText = request.optString("programText");
@@ -543,7 +543,6 @@ public class ClientProgram {
                             } else {
                                 if ( messageKey != null ) {
                                     LOG.info(messageKey.toString());
-                                    handleRunProgramError(response, messageKey, token, true);
                                 }
                             }
                         }

@@ -524,7 +524,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         if (GUISTATE.robot.time > 0) {
             return true;
         }
-        if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AUTO) {
+        if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AUTO || GUISTATE.gui.connection === GUISTATE.gui.connectionType.LOCAL) {
             return true;
         }
         if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AGENTORTOKEN) {

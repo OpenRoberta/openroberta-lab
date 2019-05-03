@@ -31,33 +31,33 @@ public class VorwerkCompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
         if ( data.getErrorMessage() != null ) {
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
             return;
         }
         try {
             VorwerkConfiguration configuration = (VorwerkConfiguration) data.getRobotConfiguration();
             this.vorwerkCommunicator.setCredentials(configuration.getIpAddress(), configuration.getUserName(), configuration.getPassword());
-            generatedSourceCode =
+            this.generatedSourceCode =
                 VorwerkPythonVisitor.generate((VorwerkConfiguration) data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true, language);
             LOG.info("vorwerk code generated");
         } catch ( Exception e ) {
             LOG.error("vorwerk code generation failed", e);
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
         }
     }
 
     @Override
     public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
         storeGeneratedProgram(token, programName, ".py");
-        if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+        if ( this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
             try {
-                final String tempDir = pluginProperties.getTempDir();
-                String programLocation = tempDir + token + File.separator + programName + File.separator + "src";
+                final String tempDir = this.pluginProperties.getTempDir();
+                String programLocation = tempDir + token + File.separator + programName + File.separator + "source";
                 this.vorwerkCommunicator.uploadFile(programLocation, programName + ".py");
-                workflowResult = Key.COMPILERWORKFLOW_SUCCESS;
+                this.workflowResult = Key.COMPILERWORKFLOW_SUCCESS;
             } catch ( Exception e ) {
-                LOG.error("Uploading the generated program to " + this.vorwerkCommunicator.getIp() + " failed", e);
-                workflowResult = Key.VORWERK_PROGRAM_UPLOAD_ERROR;
+                LOG.error("Uploading the generated program to " + this.vorwerkCommunicator.getIp() + " failed", e.getCause());
+                this.workflowResult = Key.VORWERK_PROGRAM_UPLOAD_ERROR;
             }
         }
     }
