@@ -50,35 +50,31 @@ function isDirectoryValid {
     fi
 }
 
-function serversDOTtxt2SERVER_NAMES {
-    if [ -f "$SERVER_DIR/servers.txt" ]
-    then
-        local SERVERS=$(cat $SERVER_DIR/servers.txt)
-        SERVER_NAMES=$SERVERS
-    else
-        echo "$SERVER_DIR/servers.txt is missing. Exit 12"
-        exit 12
-    fi
-}    
+isDirectoryValid ${BASE_DIR}
+isDirectoryValid ${SCRIPT_DIR} # defined in "run.sh"
+
+CONF_DIR=${BASE_DIR}/conf
+SERVER_DIR=${BASE_DIR}/server
+GIT_DIR=${BASE_DIR}/git
+DATABASE_DIR=${BASE_DIR}/db
+DB_ADMIN_DIR=${BASE_DIR}/db/dbAdmin
+
+isDirectoryValid ${CONF_DIR}
+isDirectoryValid ${SERVER_DIR}
+isDirectoryValid ${GIT_DIR}
+isDirectoryValid ${DATABASE_DIR}
+isDirectoryValid $DB_ADMIN_DIR
+
+isDefined INAME
+isDefined DATABASE_SERVER_PORT
+isDefined DOCKER_NETWORK_NAME
+
+isDefined SERVERS
+isDefined AUTODEPLOY
+isDefined DATABASES
 
 HOSTNAME=$(hostname)
 if [ "$QUIET" != true ]
 then
-    echo "working on host $HOSTNAME"
+    echo "working on host ${HOSTNAME} for installation ${INAME}"
 fi
-
-BASE_DIR=/data/openroberta
-CONF_DIR=$BASE_DIR/conf
-SCRIPT_DIR=$CONF_DIR/scripts
-SERVER_DIR=$BASE_DIR/server
-DATABASE_DIR=$BASE_DIR/db
-DB_ADMIN_DIR=$BASE_DIR/db/dbAdmin
-
-isDirectoryValid $BASE_DIR
-isDirectoryValid $CONF_DIR
-isDirectoryValid $SCRIPT_DIR
-isDirectoryValid $SERVER_DIR
-isDirectoryValid $DATABASE_DIR
-isDirectoryValid $DB_ADMIN_DIR
-
-DATABASE_SERVER_PORT=9001

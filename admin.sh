@@ -2,6 +2,12 @@
 
 # admin script
 
+if [[ ! $(cat /proc/1/sched | head -n 1 | grep init) ]]
+then
+   echo 'running in a docker container - exit 12 to avoid destruction and crash :-)'
+   exit 12
+fi
+
 DB_URI='jdbc:hsqldb:hsql://localhost/openroberta-db'
 JAVA_LIB_DIR='./lib'
 ADMIN_DIR='./admin'
@@ -46,7 +52,6 @@ then
   echo ''
   echo '<CMD>s are:'
   echo '  backup [backup-dir]     access the database server and create a backup in directory [backup-dir]'
-  echo '                          If running in docker, the backup-dir is /opt/dbAdmin/dbBackup'
   echo '  shutdown                access the database and issue a "shutdown" command'
   echo '  sqlclient               read SELECT commands from the terminal and execute them. Be careful, do NOT block the database'
   echo '  sqlexec <SQL>           execute the well-quoted <SQL> command'
@@ -74,8 +79,15 @@ function propagateSignal() {
   kill -TERM "$child" 2>/dev/null
 }
 
-# show the database URI for those commands, which need them
+ADMIN_LOG_FILE="$ADMIN_DIR/logs/admin.log"
+
+# get the command
+CMD="$1"; shift
+
+# show the database URI for commands, which need them
 case "$CMD" in
+  version)               : ;;
+  version-for-db)        : ;;
   upgrade)               : ;;
   start-embedded-server) : ;;
   start-2-server)        : ;;
@@ -84,9 +96,7 @@ case "$CMD" in
                          echo '' ;;
 esac
 
-ADMIN_LOG_FILE="$ADMIN_DIR/logs/dbAdmin.log"
-
-CMD="$1"; shift
+# process the command
 case "$CMD" in
   'backup')         DB_BACKUP_DIR=$1; shift
                     java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration dbBackup $DB_URI $DB_BACKUP_DIR>>$ADMIN_LOG_FILE 2>&1 ;;
@@ -119,7 +129,7 @@ case "$CMD" in
 
 # ----------------------------------------------------------------------------------------------------------------------------------------
   'start-embedded-server')
-      SERVERLOGFILE="$ADMIN_DIR/logs/embedded-server.log"
+      SERVER_LOG_FILE="$ADMIN_DIR/logs/embedded-server.log"
 
       serverVersionForDb=$(java -cp lib/\* de.fhg.iais.roberta.main.Administration version-for-db)
       database=db-${serverVersionForDb}/openroberta-db
@@ -129,11 +139,11 @@ case "$CMD" in
       dbfiles=$(echo db-*)
       if [[ -z $dbfiles ]]; then 
           echo "A POTENTIAL PROBLEM: No databases found. An empty database for version ${serverVersionForDb} will be created."
-          java -cp lib/\* de.fhg.iais.roberta.main.Administration createemptydb jdbc:hsqldb:file:${database}
+          java -cp lib/\* de.fhg.iais.roberta.main.Administration createemptydb jdbc:hsqldb:file:${database} >>$ADMIN_LOG_FILE 2>&1
       fi
 
       echo 'check for database upgrade'
-      java $XMX -cp lib/\* de.fhg.iais.roberta.main.Administration upgrade . >>$SERVERLOGFILE 2>&1
+      java $XMX -cp lib/\* de.fhg.iais.roberta.main.Administration upgrade . >>$ADMIN_LOG_FILE 2>&1
 
       echo 'create admin dirs, if they do not exist'
       mkdir -p ./admin/logs
@@ -146,7 +156,7 @@ case "$CMD" in
            -d database.parentdir=. \
            -d database.mode=embedded \
            -d server.admin.dir=$ADMIN_DIR \
-           $* >>$SERVERLOGFILE 2>&1 &
+           $* >>$SERVER_LOG_FILE 2>&1 &
       child=$!
       wait "$child"
       ;;
@@ -155,9 +165,8 @@ case "$CMD" in
       echo 'DEPRECATED. Use docker container. Have a look at Docker/README.md'
       # exit 12
       mkdir -p $ADMIN_DIR/logs
-      DBLOGFILE="$ADMIN_DIR/logs/db.log"
-      SERVERLOGFILE="$ADMIN_DIR/logs/server.log"
-      ADMINLOGFILE="$ADMIN_DIR/logs/admin.log"
+      DB_LOG_FILE="$ADMIN_DIR/logs/db.log"
+      SERVER_LOG_FILE="$ADMIN_DIR/logs/server.log"
       serverVersionForDb=$(java -cp lib/\* de.fhg.iais.roberta.main.Administration version-for-db)
       database=db-${serverVersionForDb}/openroberta-db
 
@@ -167,23 +176,23 @@ case "$CMD" in
       dbfiles=$(echo db-*)
       if [[ -z $dbfiles ]]; then 
           echo "A POTENTIAL PROBLEM: No databases found. An empty database for version ${serverVersionForDb} will be created."
-          java -cp lib/\* de.fhg.iais.roberta.main.Administration createemptydb jdbc:hsqldb:file:${database} >>$ADMINLOGFILE 2>&1
+          java -cp lib/\* de.fhg.iais.roberta.main.Administration createemptydb jdbc:hsqldb:file:${database} >>$ADMIN_LOG_FILE 2>&1
       fi
 
       # MUST be called from an 'exported' dir (see 'ora.sh'). Dir '.' MUST be the db parent dir (i.e. contain 'db-* dirs)
       echo 'check for database upgrade'
-      java $XMX -cp lib/\* de.fhg.iais.roberta.main.Administration upgrade . >>$ADMINLOGFILE 2>&1
+      java $XMX -cp lib/\* de.fhg.iais.roberta.main.Administration upgrade . >>$ADMIN_LOG_FILE 2>&1
 
       echo 'start the database server and the openroberta server as separate processes'
       echo "the database server will use database directory $database"
-      java $XMX -cp lib/\* org.hsqldb.Server --database.0 file:$database --dbname.0 openroberta-db >>$DBLOGFILE 2>&1 &
+      java $XMX -cp lib/\* org.hsqldb.Server --database.0 file:$database --dbname.0 openroberta-db >>$DB_LOG_FILE 2>&1 &
       sleep 10 # time for the database to initialize
       java $REMOTEDEBUG $XMX -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
            -d server.staticresources.dir=./staticResources \
            -d database.parentdir=. \
            -d database.mode=server \
            -d server.admin.dir=$ADMIN_DIR \
-           $* >>$SERVERLOGFILE 2>&1 &
+           $* >>$SERVER_LOG_FILE 2>&1 &
       ;;
 # ----------------------------------------------------------------------------------------------------------------------------------------
   '')               echo "no command. Script terminates" ;;

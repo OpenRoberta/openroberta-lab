@@ -1,0 +1,1 @@
+logging of cron jobs (autodeploy!) and init scripts (system startup, shutdown, restart)

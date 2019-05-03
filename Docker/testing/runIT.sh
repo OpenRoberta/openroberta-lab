@@ -4,8 +4,8 @@ if [[ ! $(cat /proc/1/sched | head -n 1 | grep init) ]]
 then
    echo 'running in a docker container :-)'
 else
-   echo 'not running in a docker container - exit 1 to avoid destruction and crash :-)'
-   exit 1
+   echo 'not running in a docker container - exit 12 to avoid destruction and crash :-)'
+   exit 12
 fi
 BRANCH=$1
 if [ -z "$BRANCH" ]

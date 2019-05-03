@@ -211,16 +211,19 @@ configurationCleanUp) serverVersionForDb="$1"
 
 alive)          _aliveFn $* ;;
 
-test-setup-update) DATA='/data/openroberta'
-                if [ ! -d $DATA ]
+test-setup-update) case "$1" in
+                     '') basedir='/data/openroberta' ;;
+                     *)  basedir="$1"
+                   esac
+                if [ ! -d $basedir ]
                 then
-                  echo "directory '$DATA' not found. Exit 12"
+                  echo "basedir '$basedir' not found. Exit 12"
                   exit 12
                 fi
-                rm -rf $DATA/conf
-                cp -r Docker/openroberta/conf $DATA/conf
-                cp Docker/_README.md $DATA
-                echo "configuration data copied to $DATA/conf" ;;
+                rm -rf $basedir/conf
+                cp -r Docker/openroberta/conf $basedir/conf
+                cp Docker/_README.md $basedir
+                echo "configuration data copied to $basedir/conf" ;;
 
 *)              echo "invalid command: $cmd - exit 1"
                 exit 1 ;;

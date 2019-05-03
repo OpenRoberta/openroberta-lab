@@ -53,12 +53,29 @@ docker push rbudde/openroberta_debug_ubuntu_18_04:2
 
 # Operating Instructions for the Test and Prod Server
 
+Our test server serves many different instances of the openroberta lab server. Our prod server runs the prod version of the openroberta lab server.
+They are setup in the same way. The following text describes the test server setup (the prod setup is the same, but uses the server named `master`).
+
+## Directory structure
+
+The template for this framework is contained in dir `Docker/openroberta`. It contains the directories
+
+* conf - contains an example of an apache2 configuration and 2 dirs `docker-*`, used to generate docker images for the db and the jetty server
+* scripts - contains shell scripts to administrate the framework. The main script id `run.sh`. Call it w.o. parameter to get help.
+* git - here one or more git repos, used to generate the openroberta server instances, are contained. At least one git repo is needed, usually a clone
+  from https://github.com/OpenRoberta/openroberta-lab.git
+* server - contains the servers. Each server has a name (master,test,dev,dev1...dev9), which is the name of a directory. This directory stores all
+  data to configure the server in file `decl.sh`. In dir `export` all artifacts making up the server are stored during server
+  generation. In dir `admin` all logging data and the tuorials are stored.
+  Each server has an associated docker image (and usually a running container), whose name is essentially the server's name.
+* db - contains the databases. Each database has a name (master,test,dev,dev1...dev9) matching the name of the jetty server who needs this data.
+  the name of the database is the name of a directory, which in turn contains all database files. All databases are served by one Hsqldb server instance.
+  dir `dbAdmin` contains logging data and all database backups (when created :-)
+  There is one docker image (and usually a running container), whose name is essentially `ora-db-server`.
+
 ## Overview
 
-The test server serves many different instances of the openroberta lab server. The prod server runs the prod version of the openroberta lab server.
-They are setup in the same way. The following text describes the test server setup, the prod setup is the same, but uses only the server named `master`.
-
-All running instances are generated from a branch or a commit of a git repository.
+All running openroberta instances are generated from a branch or a commit of a git repository.
 
 * Each instance of the openroberta lab server is running in a docker container of its own.
 * Each instance of the openroberta lab server is connected to a database dedicated to this openroberta lab server. All databases are published by one
@@ -67,14 +84,15 @@ All running instances are generated from a branch or a commit of a git repositor
 If you want to deploy the `develop` branch on server `dev4`, for instance, do the following (the variables used are explained below):
 
 * modify in the directory `$SERVER_DIR/dev4` the file `decl.sh` as you need it (set the branch name, e.g.)
-* be sure, that in `$DATABASE_DIR/dev4` a valid database is available. Check whether `$DATABASE_DIR/databases.txt` contains `dev4`. It not, add it and restart
-  the database server by `$SCRIPT_DIR/run.sh startDbC`
+* be sure, that in `$DATABASE_DIR/dev4` a valid database is available. Check whether `decl.sh` contains `dev4` in variable `DATABASES`. It not,
+  add it and restart the database server by `$SCRIPT_DIR/run.sh startDbC`
 
-Assuming that the network `ora-net` is created, the database container is running, then you (re-)deploy `dev4` by executing
+All container of an openroberta test instance use a bridge network with (unique!) name `$DOCKER_NETWORK_NAME`.
+Assuming that the network is created, the database container is running, then you may (re-)deploy `dev4` by executing
 
 ```bash
 $SCRIPT_DIR/run.sh deploy dev4 # 'deploy dev4' is a shorthand for 'gen dev4' and 'start dev4'
-$SCRIPT_DIR/run.sh info        # show the state of all server
+docker ps                      # the container for dev4 should be running
 ```
 
 ## Apache2 configuration
@@ -90,42 +108,47 @@ and so on. B.t.w.: the ports are not fixed. But they must be consistent between 
 
 * `localhost:1999` is configured by `lab.open-roberta.org.443` and `lab.open-roberta.org.80`
 
-## General structure
+## Conventions
 
-All data is stored relative to a directory, usually `/data/openroberta`. We use the following abbreviations:
+All data is stored relative to a base directory (your choice, we use `/data/openroberta`). Abbreviations:
 
 ```bash
-BASE_DIR=/data/openroberta
+# BASE_DIR is the directory, in which the configuration file 'decl.sh' is found
 CONF_DIR=$BASE_DIR/conf
 SCRIPT_DIR=$CONF_DIR/scripts
 SERVER_DIR=$BASE_DIR/server
 DATABASE_DIR=$BASE_DIR/db
 ```
 
+The whole setup has a unique name `$INAME`, defined in `decl.sh`.
+
 ## The openroberta lab servers
 
-The ports `1999` to `1989` are used by up to 11 openroberta lab server. Each of these servers is based on an embedded jetty.
+The ports `1999` to `1989` are used by up to 11 openroberta server. Each of these servers is based on an embedded jetty.
 The names of the servers are (b.t.w.: this matches the virtual host names of the apache configuration):
 
+* master: configuration is in `$SERVER_DIR/master/decl.sh`
 * test: configuration is in `$SERVER_DIR/test/decl.sh`
 * dev: configuration is in `$SERVER_DIR/dev/decl.sh`
 * dev1 up to dev9: configuration is in `$SERVER_DIR/dev1/decl.sh` up to `$SERVER_DIR/dev9/decl.sh`
 
 The name of the docker images and the name of the running containers are:
 
-* test: image is `rbudde/openroberta_lab_test:2` and container has name `test`
-* dev: image is `rbudde/openroberta_lab_dev:2` and container has name `dev`
-* dev1 up to dev9: images are `rbudde/openroberta_lab_dev1:2` to `rbudde/openroberta_lab_dev9:2` and container have names `dev1` to `dev9`
+* test: image is `rbudde/openroberta_${INAME}_test:2` and container has name `${INAME}-test`
+* dev: image is `rbudde/openroberta_${INAME}_dev:2` and container has name `${INAME}-dev`
+* dev1 up to dev9: images are `rbudde/openroberta_${INAME}_dev1:2` to `rbudde/openroberta_${INAME}_dev9:2` and
+  container have names `${INAME}-dev1` to `${INAME}-dev9`
 
-Generating the images is done by using the data from `decl.sh`. Generation will:
+Generating the images is done by using the data from `decl.sh` from the server directory. Generation will:
 
-* pull actual data into a Git repo and checkout the branch/commit as declared (you can suppress this step by setting `GIT_UPTODATE=true`)
+* pull actual data into a Git repo and checkout the branch/commit as declared
+  (you can suppress this step by setting `GIT_UPTODATE=true`)
 * run `mvn clean install -DskipTests`
-* export the server into an export directory
+* export the server into the export directory
 * create the docker image from that directory
 
 Note: by using `flock` the generation of images is done sequentially. A new request for image generation is blocked as long as another
-generation is running. So it is safe, that many test server share one git repository. This increases the performance of server generation a lot.
+generation is running. So it is safe, that many test server share one git repository. This increases the performance of server generation a lot. If the branch `master` is deployed, we advise to use one git repo exclusively for this (relevant :-) branch
 
 ## database server
 
@@ -141,16 +164,16 @@ These databases are served by one database server. The database files are locate
 * `$DATABASE_DIR/dev`
 * `$DATABASE_DIR/dev1` to `$BASE/db/dev9`
 
-The database server is deployed in a docker container with name `ora-db-server` created from the docker image `rbudde/openroberta_db:2.4.0`.
-The database server is listening to the port `$DATABASE_SERVER_PORT` as defined in `$SCRIPT_DIR/__defs.sh`. This is `9001` by default.
+The database server is deployed in a docker container with name `ora-${INAME}-db-server` created from the docker image `rbudde/openroberta-${INAME}-db-server:2.4.0`.
+The database server is listening to the port `$DATABASE_SERVER_PORT` as defined in `config.sh`. This is often the
+Hsqldb default `9001`.
 
 ## Scripting
 
 Everything is done with the help of the shell script `$SCRIPT_DIR/run.sh`. I tried to make these scripts as robust as possible. Please send any
 problems, improvements, ideas to reinhard.budde at iais.fraunhofer.de
 
-The main commands of the script are (run `$SCRIPT_DIR/run.sh help` to see the names) the following. Note, that if the server name is missing,
-_all_ servers found in file `$SERVER_DIR/servers.txt` are taken into account:
+The main commands of the script are (run `$SCRIPT_DIR/run.sh help` to see the names) the following:
 
 * `gen <name>`: generate the docker image for server <name>. Use the configuration found in `$SERVER_DIR/<name>`.
 * `start [<name>]`: start a container with the image generated for server <name>. Before doing that, stop a container running sever <name>
@@ -159,8 +182,8 @@ _all_ servers found in file `$SERVER_DIR/servers.txt` are taken into account:
 
 Rarely used are commands:
 
-* `genDbC`: generate the database container `rbudde/openroberta_db:2.4.0`. Used once when the test server is setup.
-* `startDbC`: (re-)start the database container servicing the databases, whose names are found in file `$DATABASE_DIR/databases.txt`
+* `genDbC`: generate the database container `rbudde/openroberta${INAME}-db-server:2.4.0`. Used once when the test server is setup.
+* `startDbC`: (re-)start the database container servicing the databases, whose names are found in variable `DATABASES` in `config.sh`.
 * `stopDbC`: stop the database container
 * `prune`: remove all stale data from the docker installation. IMPORTANT to call, if you are low with disc space.
 
@@ -169,18 +192,18 @@ Getting information:
 * `info`: show images and running containers
 * `network`: show the ora-net network
 * `logs`: show the last 10 lines of all logs of all running containers. B.t.w.: `docker logs -f <name>` is convenient to see how a server works.
-* of course, docker commands can help, too: `docker logs -f dev1` or `docker ps`
+* of course, docker commands can help, too: `docker logs -f <name>` or `docker ps`
 
 ## Init scripts and automatic deploy
 
 The shell script `$SCRIPT_DIR/run.sh` has two more commands, that are used to initialize the test setup (on server restart, for example) and to
 deploy one or more servers automatically if new commits hit the remote repo.
  
-* `autoDeploy`: usually called from cron. Reads the server names from file `$SERVER_DIR/autodeploy.txt` and re-deploys each server, if the git
+* `autoDeploy`: usually called from cron. It takes server names from variable `AUTODEPLOY` from `config.sh` and re-deploys each server, if the git
   repository connected to this server has got new commits. Use `crontab -e` to add the following line to the crontab to run this is:
   
 ```bash
-*/5 * * * * bash /data/openroberta/conf/scripts/run.sh -q autoDeploy >>/data/openroberta/logs/cronlog.txt
+*/5 * * * * bash <BASE_DIR>/scripts/run.sh -q autoDeploy >><BASE_DIR>/logs/cronlog.txt
 ```
 
 * `startAll` and `stopAll`: usually called from the configuration file `robertalab` found in `/etc/init.d`. A typical script is:
@@ -199,13 +222,13 @@ deploy one or more servers automatically if new commits hit the remote repo.
 
 # Author: Reinhard
 
-BASE=/data/openroberta
-SCRIPTS=$BASE/conf/scripts
+BASE_DIR=<BASE_DIR>
+SCRIPTS=$BASE_DIR/conf/scripts
 case "$1" in
-    start)   bash $SCRIPTS/run.sh -q startAll                              >>/data/openroberta/logs/init.txt ;;
-    stop)    bash $SCRIPTS/run.sh -q stopAll                               >>/data/openroberta/logs/init.txt ;;
-    restart) bash $SCRIPTS/run.sh -q startAll                              >>/data/openroberta/logs/init.txt ;;
-    *)       echo "invalid command \"$1\". Usage: $0 {start|stop|restart}" >>/data/openroberta/logs/init.txt
+    start)   bash $SCRIPTS/run.sh -q startAll                              >>$BASE_DIR/logs/init.txt ;;
+    stop)    bash $SCRIPTS/run.sh -q stopAll                               >>$BASE_DIR/logs/init.txt ;;
+    restart) bash $SCRIPTS/run.sh -q startAll                              >>$BASE_DIR/logs/init.txt ;;
+    *)       echo "invalid command \"$1\". Usage: $0 {start|stop|restart}" >>$BASE_DIR/logs/init.txt
              exit 12 ;;
 esac
 ```

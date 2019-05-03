@@ -1,4 +1,5 @@
 #!/bin/bash
 
-echo "stopping the database container 'ora-db-server'"
-docker stop 'ora-db-server'
+CONTAINER=ora-${INAME}-db-server
+echo "stopping the database container '${CONTAINER}', if running"
+docker stop "${CONTAINER}" >>/dev/null

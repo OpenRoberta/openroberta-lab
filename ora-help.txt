@@ -32,11 +32,11 @@ Commands of the ora.sh script:
 
 The following commands are used rarely:
   
-  test-setup-update       expects the test server setup in /data/openroberta and copies (potentially updated) resources from the git controlled
-                            directory Docker/openroberta/conf into /data/openroberta/conf. Needs root privileges.
-                            Must be run on a test machine from an up-to-date git repository. 
+  test-setup-update [{base-dir}]
+             expects the test server setup in {base-dir} (defaults to /data/openroberta) and copies all resources from the git-dir 'Docker/openroberta/conf'
+             into {base-dir}/conf. Needs root privileges. Must be executed on a test machine from an up-to-date git repository. 
 
-  java                    check whether java and javac are on the path and the JDK version is ok (used internally)
+  java       check whether java and javac are on the path and the JDK version is ok (used internally)
 
 The following command is deprecated:
 
