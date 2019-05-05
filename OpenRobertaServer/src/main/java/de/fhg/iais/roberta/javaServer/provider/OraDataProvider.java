@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.javaServer.provider;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -20,6 +22,7 @@ import com.sun.jersey.spi.inject.Injectable;
 import com.sun.jersey.spi.inject.InjectableProvider;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.main.IIpToCountry;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
@@ -45,6 +48,9 @@ public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
 
     @Inject
     private RobotCommunicator robotCommunicator;
+
+    @Inject
+    private IIpToCountry ipToCountry;
 
     @Inject
     private ServerProperties serverProperties;
@@ -80,7 +86,25 @@ public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
             if ( httpSessionState == null ) {
                 long sessionNumber = SESSION_COUNTER.incrementAndGet();
                 LOG.info("session #" + sessionNumber + " created");
+                String remoteAddr = "";
+                if ( OraDataProvider.this.servletRequest != null ) {
+                    remoteAddr = OraDataProvider.this.servletRequest.getHeader("X-FORWARDED-FOR");
+                    if ( remoteAddr == null || "".equals(remoteAddr) ) {
+                        remoteAddr = OraDataProvider.this.servletRequest.getRemoteAddr();
+                    }
+                }
+                String addrAsString = OraDataProvider.this.servletRequest.getRemoteAddr();
+                InetAddress addrAsIp;
+                String countryCode = "..";
+                try {
+                    addrAsIp = InetAddress.getByName(addrAsString);
+                    countryCode = ipToCountry.getCountryCode(addrAsIp);
+                } catch ( IOException e ) {
+                    LOG.error("Could not evaluate the actual ip as a country code. Likely a problem with the IpToCountry file.");
+                }
+
                 httpSessionState = HttpSessionState.init(this.robotCommunicator, this.robotPluginMap, this.serverProperties, sessionNumber);
+                httpSessionState.setCountryCode(countryCode);
                 httpSession.setAttribute(OPEN_ROBERTA_STATE, httpSessionState);
             }
             return httpSessionState;

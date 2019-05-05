@@ -83,7 +83,7 @@ public class ClientAdmin {
                     userAgentString = userAgentList.get(0);
                 }
                 UserAgent userAgent = UserAgent.parseUserAgentString(userAgentString);
-                Statistics.infoUserAgent("Initialization", userAgent, request);
+                Statistics.infoUserAgent("Initialization", userAgent, httpSessionState.getCountryCode(), request);
 
                 JSONObject server = new JSONObject();
                 server.put("defaultRobot", this.serverProperties.getDefaultRobot());
@@ -175,7 +175,7 @@ public class ClientAdmin {
                     if ( httpSessionState.getRobotName() != robot ) {
                         // disconnect previous robot
                         // TODO consider keeping it so that we can switch between robot and simulation
-                        //      see: https://github.com/OpenRoberta/robertalab/issues/43
+                        // see: https://github.com/OpenRoberta/robertalab/issues/43
                         this.brickCommunicator.disconnect(httpSessionState.getToken());
                         // TODO remove this and use a communicator
                         if ( robot.equals("oraSim") ) {

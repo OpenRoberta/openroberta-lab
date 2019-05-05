@@ -70,22 +70,26 @@ public final class Statistics {
      * throws a DbcException.
      *
      * @param action the general action or category of the log
+     * @param string
      * @param request
      * @param args variable number of key value pairs, these are put in a json array
      */
-    public static void infoUserAgent(String action, UserAgent userAgent, JSONObject request) {
+    public static void infoUserAgent(String action, UserAgent userAgent, String countryCode, JSONObject request) {
         try {
-            STAT.info(
-                toJsonString(
-                    action,
-                    "Browser",
-                    userAgent.getBrowser() + "/" + userAgent.getBrowserVersion(),
-                    "OS",
-                    userAgent.getOperatingSystem().getName(),
-                    "DeviceType",
-                    userAgent.getOperatingSystem().getDeviceType().getName(),
-                    "ScreenSize",
-                    request.getString("screenSize")));
+            STAT
+                .info(
+                    toJsonString(
+                        countryCode,
+                        "countryCode",
+                        action,
+                        "Browser",
+                        userAgent.getBrowser() + "/" + userAgent.getBrowserVersion(),
+                        "OS",
+                        userAgent.getOperatingSystem().getName(),
+                        "DeviceType",
+                        userAgent.getOperatingSystem().getDeviceType().getName(),
+                        "ScreenSize",
+                        request.getString("screenSize")));
         } catch ( Exception e ) {
             LOG.error("Logging statistics failed for: " + action);
         }

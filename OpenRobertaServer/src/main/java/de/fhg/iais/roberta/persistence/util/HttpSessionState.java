@@ -27,6 +27,8 @@ public class HttpSessionState implements Serializable {
     private long sessionNumber;
     private Map<String, IRobotFactory> robotPluginMap;
 
+    private String countryCode;
+
     public HttpSessionState(
         RobotCommunicator robotCommunicator,
         Map<String, IRobotFactory> robotPluginMap,
@@ -141,5 +143,13 @@ public class HttpSessionState implements Serializable {
 
     public void setProcessing(boolean processing) {
         this.processing = processing;
+    }
+
+    public String getCountryCode() {
+        return this.countryCode;
+    }
+
+    public void setCountryCode(String code) {
+        this.countryCode = code;
     }
 }

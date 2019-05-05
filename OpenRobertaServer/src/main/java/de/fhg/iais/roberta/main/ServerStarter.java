@@ -119,6 +119,7 @@ public class ServerStarter {
      * @param pluginDefines
      * @return the server
      */
+    @SuppressWarnings("unused")
     public Server start(List<String> pluginDefines) throws IOException {
         String host = serverProperties.getStringProperty("server.ip");
         int httpPort = serverProperties.getIntProperty("server.port", 0);
@@ -153,7 +154,8 @@ public class ServerStarter {
         // configure robot plugins
         RobotCommunicator robotCommunicator = new RobotCommunicator();
         Map<String, IRobotFactory> robotPluginMap = configureRobotPlugins(robotCommunicator, serverProperties, pluginDefines);
-        RobertaGuiceServletConfig robertaGuiceServletConfig = new RobertaGuiceServletConfig(serverProperties, robotPluginMap, robotCommunicator);
+        IIpToCountry ipToCountry = configureIpToCountryDb();
+        RobertaGuiceServletConfig robertaGuiceServletConfig = new RobertaGuiceServletConfig(serverProperties, robotPluginMap, robotCommunicator, ipToCountry);
 
         // 1. REST API with /rest prefix
         ServletContextHandler restHttpHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
@@ -234,6 +236,32 @@ public class ServerStarter {
         logTheNumberOfStoredPrograms();
 
         return server;
+    }
+
+    /**
+     * To get rid of Matomo, logging of the country code will be handled with the help of the ipToCountry class which maps the ip to the country code before
+     * something is logged.<br>
+     * In case the server is public make sure that there is database IpToCountry.csv available in the folder defined in the "server.iptocountry.dir" property,
+     * downloaded from
+     * <a href="http://software77.net/geo-ip/?DL=1">http://software77.net</a>
+     * 
+     * @return ipToCountry of type IIpToCountry
+     */
+    private IIpToCountry configureIpToCountryDb() {
+        Boolean isPublicServer = serverProperties.getBooleanProperty("server.public");
+
+        IIpToCountry ipToCountry;
+        if ( isPublicServer ) {
+            String pathIpToCountryDb = serverProperties.getStringProperty("server.iptocountry.dir");
+            try {
+                ipToCountry = new IpToCountry(pathIpToCountryDb);
+            } catch ( IOException e ) {
+                throw new DbcException("Path to IpToCountry or IpToCountry seems to be invalid. Server does NOT start", e);
+            }
+        } else {
+            ipToCountry = new IpToCountryDefault();
+        }
+        return ipToCountry;
     }
 
     /**

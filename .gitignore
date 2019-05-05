@@ -16,3 +16,5 @@ OpenRobertaServer/db-*
 **/admin
 **/*.pyc
 **/*.py~
+**/*.csv
+dbIptoCountry/
