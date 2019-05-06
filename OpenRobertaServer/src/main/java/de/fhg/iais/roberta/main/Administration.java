@@ -55,6 +55,7 @@ import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
  */
 public class Administration {
     private static final Logger LOG = LoggerFactory.getLogger(Administration.class);
+    private static int exitCode = 0; // in case of error, set to 12
 
     private final String[] args;
 
@@ -67,8 +68,14 @@ public class Administration {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        Administration adminWork = new Administration(args);
-        adminWork.run();
+        try {
+            Administration adminWork = new Administration(args);
+            adminWork.run();
+        } catch ( Exception e ) {
+            LOG.error("exception in run method", 3);
+            exitCode = 12;
+        }
+        System.exit(exitCode);
     }
 
     /**
@@ -101,22 +108,22 @@ public class Administration {
             case "dbShutdown":
                 dbShutdown();
                 break;
-            case "checkXSS":
-                checkAndPatchAllProgramsForXSS();
-                break;
             case "sqlclient":
                 sqlclient();
                 break;
-            case "sql":
-                runSql();
+            case "sqlexec":
+                sqlexec();
                 break;
             case "upgrade":
                 upgrade();
                 break;
-            case "configurationCleanUp":
-                removeUnusedConfigurations();
-                break;
             // old stuff for some old problematic upgrades of the database
+            case "configurationCleanUp":
+                // removeUnusedConfigurations();
+                break;
+            case "checkXSS":
+                // checkAndPatchAllProgramsForXSS();
+                break;
             case "conf:xml2text":
                 // confXml2text();
                 break;
@@ -129,6 +136,16 @@ public class Administration {
             default:
                 Administration.LOG.error("invalid argument: " + this.args[0] + " - exit 12");
                 System.exit(12);
+        }
+    }
+
+    private String version(boolean isForDatabase) {
+        Properties serverProperties = Util1.loadProperties(false, null);
+        String version = serverProperties.getProperty("openRobertaServer.version");
+        if ( isForDatabase ) {
+            return version.replace("-SNAPSHOT", "");
+        } else {
+            return version;
         }
     }
 
@@ -194,42 +211,6 @@ public class Administration {
     }
 
     /**
-     * upgrade the database. Needs as parameter from the main args the database parent directory<br>
-     * Accesses the database in embedded mode!
-     */
-    private void upgrade() {
-        expectArgs(2);
-        String versionForDb = version(true);
-        Upgrader.checkForUpgrade(versionForDb, new File(this.args[1]));
-    }
-
-    private void runSql() {
-        expectArgs(3);
-        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
-        Session nativeSession = sessionFactoryWrapper.getNativeSession();
-        String sqlQuery = this.args[2];
-        if ( DbExecutor.isSelect(sqlQuery) ) {
-            nativeSession.beginTransaction();
-            @SuppressWarnings("unchecked")
-            List<Object[]> resultSet = nativeSession.createSQLQuery(sqlQuery).list(); //NOSONAR : no sql injection possible here. Dangerous sql of course :-)
-            Administration.LOG.info("result set has " + resultSet.size() + " rows");
-            for ( Object object : resultSet ) {
-                if ( object instanceof Object[] ) {
-                    Administration.LOG.info(">>>  " + Arrays.toString((Object[]) object));
-                } else {
-                    Administration.LOG.info(">>>  " + object.toString());
-                }
-            }
-            nativeSession.getTransaction().rollback();
-            nativeSession.close();
-        } else {
-            // better not: dbExecutor.sqlStmt(sqlQuery);
-            System.out.println("for safety reasons only a SELECT statements is processed");
-        }
-
-    }
-
-    /**
      * runs a sql client. Reads commands from a terminal and executes them.<br>
      * Needs a second parameter from the main args, which has to be the database URI (e.g. "jdbc:hsqldb:hsql://localhost/openroberta-db")
      */
@@ -267,59 +248,50 @@ public class Administration {
                 }
             }
         } catch ( IOException e ) {
-            // termination is OK
+            // termination is OK, it's an sql client
         } finally {
             LOG.info("sqlclient terminates");
         }
     }
 
-    private String version(boolean isForDatabase) {
-        Properties serverProperties = Util1.loadProperties(false, null);
-        String version = serverProperties.getProperty("openRobertaServer.version");
-        if ( isForDatabase ) {
-            return version.replace("-SNAPSHOT", "");
+    private void sqlexec() {
+        expectArgs(3);
+        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
+        Session nativeSession = sessionFactoryWrapper.getNativeSession();
+        String sqlQuery = this.args[2];
+        if ( DbExecutor.isSelect(sqlQuery) ) {
+            nativeSession.beginTransaction();
+            @SuppressWarnings("unchecked")
+            List<Object[]> resultSet = nativeSession.createSQLQuery(sqlQuery).list(); //NOSONAR : no sql injection possible here. Dangerous sql of course :-)
+            Administration.LOG.info("result set has " + resultSet.size() + " rows");
+            for ( Object object : resultSet ) {
+                if ( object instanceof Object[] ) {
+                    Administration.LOG.info(">>>  " + Arrays.toString((Object[]) object));
+                } else {
+                    Administration.LOG.info(">>>  " + object.toString());
+                }
+            }
+            nativeSession.getTransaction().rollback();
+            nativeSession.close();
         } else {
-            return version;
+            // better not: dbExecutor.sqlStmt(sqlQuery);
+            System.out.println("for safety reasons only a SELECT statements is processed");
         }
+
     }
 
-    private String xml2Ast2xml(String updatedProgram) throws Exception, JAXBException {
-        BlockSet program = JaxbHelper.xml2BlockSet(updatedProgram);
-        //        EV3Factory modeFactory = new EV3Factory(null);
-        Jaxb2ProgramAst<Void> transformer = new Jaxb2ProgramAst<>(null);
-        transformer.transform(program);
-        BlockSet blockSet = astToJaxb(transformer.getTree());
-        String newXml = jaxbToXml(blockSet);
-        return newXml;
+    /**
+     * upgrade the database. Needs as parameter from the main args the database parent directory<br>
+     * Accesses the database in embedded mode!
+     */
+    private void upgrade() {
+        expectArgs(2);
+        String versionForDb = version(true);
+        Upgrader.checkForUpgrade(versionForDb, new File(this.args[1]));
     }
 
-    private List<Object[]> selectEV3programByName(Session nativeSession, String sqlGetProgramByName, String name) {
-        SQLQuery selectByProgramName = nativeSession.createSQLQuery(sqlGetProgramByName);
-        selectByProgramName.setString("name", name);
-        @SuppressWarnings("unchecked")
-        List<Object[]> result = selectByProgramName.list();
-        return result;
-    }
-
-    private boolean isSimulationProgram(int robotId) {
-        return robotId == 43;
-    }
-
-    private void expectArgs(int number) {
-        if ( this.args == null || this.args.length < number ) {
-            Administration.LOG.error("not enough arguments - exit 8");
-            System.exit(8);
-        }
-    }
-
-    private String renameBlocksInProgram(String program, Map<String, String> blockNames) {
-        for ( Entry<String, String> entry : blockNames.entrySet() ) {
-            program = replaceWord(program, entry.getKey(), entry.getValue());
-        }
-        return program;
-    }
-
-    public void removeUnusedConfigurations() {
+    @SuppressWarnings("unused")
+    private void removeUnusedConfigurations() {
         SessionFactoryWrapper sessionFactory = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
         DbSession session = sessionFactory.getSession();
         ConfigurationDao configurationDao = new ConfigurationDao(session);
@@ -353,7 +325,8 @@ public class Administration {
      * using the unchecked version of the getter and then saves them back with the setter that checks
      * for XSS. That setter will also print the relevant information about the author.
      */
-    public void checkAndPatchAllProgramsForXSS() {
+    @SuppressWarnings("unused")
+    private void checkAndPatchAllProgramsForXSS() {
         SessionFactoryWrapper sessionFactory = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
         DbSession session = sessionFactory.getSession();
         ProgramDao programDao = new ProgramDao(session);
@@ -385,8 +358,45 @@ public class Administration {
         session.createSqlQuery("shutdown").executeUpdate();
     }
 
-    private String replaceWord(String source, String oldWord, String newWord) {
+    // -------------------- helper ---------------------------------------------------------------------------------
 
+    private String xml2Ast2xml(String updatedProgram) throws Exception, JAXBException {
+        BlockSet program = JaxbHelper.xml2BlockSet(updatedProgram);
+        //        EV3Factory modeFactory = new EV3Factory(null);
+        Jaxb2ProgramAst<Void> transformer = new Jaxb2ProgramAst<>(null);
+        transformer.transform(program);
+        BlockSet blockSet = astToJaxb(transformer.getTree());
+        String newXml = jaxbToXml(blockSet);
+        return newXml;
+    }
+
+    private List<Object[]> selectEV3programByName(Session nativeSession, String sqlGetProgramByName, String name) {
+        SQLQuery selectByProgramName = nativeSession.createSQLQuery(sqlGetProgramByName);
+        selectByProgramName.setString("name", name);
+        @SuppressWarnings("unchecked")
+        List<Object[]> result = selectByProgramName.list();
+        return result;
+    }
+
+    private boolean isSimulationProgram(int robotId) {
+        return robotId == 43;
+    }
+
+    private String renameBlocksInProgram(String program, Map<String, String> blockNames) {
+        for ( Entry<String, String> entry : blockNames.entrySet() ) {
+            program = replaceWord(program, entry.getKey(), entry.getValue());
+        }
+        return program;
+    }
+
+    private void expectArgs(int number) {
+        if ( this.args == null || this.args.length < number ) {
+            Administration.LOG.error("not enough arguments - exit 8");
+            System.exit(8);
+        }
+    }
+
+    private String replaceWord(String source, String oldWord, String newWord) {
         return source.replaceAll(oldWord, newWord);
     }
 

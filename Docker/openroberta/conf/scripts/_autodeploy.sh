@@ -7,7 +7,7 @@ then
     case "$RC" in
         0)  [ "$DEBUG" = 'true' ] && echo "$DATE: got the lock for file '${GIT_DIR}/lockfile'"
             UPDATED_SERVERS=$((0))
-            for SERVER_NAME in $SERVERS
+            for SERVER_NAME in $AUTODEPLOY
             do
                 [ "$DEBUG" = 'true' ] && echo "$DATE: checking server '${SERVER_NAME}'"
                 isServerNameValid ${SERVER_NAME}
@@ -17,12 +17,13 @@ then
                 source ./decl.sh
                 if [ "$GIT_UPTODATE" == 'true' ]
                 then
-                    echo "$DATE: for server '${SERVER_NAME}' GIT_UPTODATE is true. This makes no sense"
+                    echo "$DATE: for server '${SERVER_NAME}' GIT_UPTODATE is true. This makes no sense. Exit 12"
+                    exit 12
                 fi
                 [ "$DEBUG" = 'true' ] && echo "$DATE: for server '${SERVER_NAME}' checking branch '$BRANCH'"
                 case "${GIT_REPO}" in
                     /*) : ;;
-                    *)  GIT_REPO=${BASE_DIR}/${GIT_REPO}
+                    *)  GIT_REPO=${BASE_DIR}/git/${GIT_REPO}
                 esac
                 cd ${GIT_REPO}
                 git checkout -f .

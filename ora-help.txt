@@ -20,7 +20,6 @@ Commands of the ora.sh script:
               In the INSTALLATION-DIR is the admin script './admin.sh'. Use './admin.sh start-embedded-server' to start (on small systems as RaspberryPI)
               a server with embedded database. The script detects a database from an earlier versions and upgrades them to the actual version. If NO database
               at all is found, a  empty database is created. Run './admin.sh help' for more administration commands.
-							Further scripts in the INSTALLATION-DIR (ONLY USABLE IN SERVER MODE!):
 
   create-empty-db [{VERSION}] create an empty database at path "OpenRobertaServer/db-VERSION". If the parameter VERSION is missing, the VERSION is got from
               the installation. In this case, "mvn install" must have run. An existing datatbase is NOT overwritten.
@@ -36,11 +35,10 @@ The following commands are used rarely:
              expects the test server setup in {base-dir} (defaults to /data/openroberta) and copies all resources from the git-dir 'Docker/openroberta/conf'
              into {base-dir}/conf. Needs root privileges. Must be executed on a test machine from an up-to-date git repository. 
 
-  java       check whether java and javac are on the path and the JDK version is ok (used internally)
+  java       check whether java and javac are on the path and the JDK version is ok
 
-The following command is deprecated:
+The following command is used very rarely (better use frameworks as nagios, ...):
 
-  alive {SERVERURL} {-q} {EVERY} {TIMEOUT} check after EVERY sec (default: 60) if the server is alive.
+  alive {-q/-Q} {SERVERURL} {EVERY} {TIMEOUT} check after EVERY sec (default: 60) if the server is alive.
                            The server is assumed to have crashed, if it does not answer within TIMEOUT sec (default: 10).
-                           -q is the quiet mode: report crashes only. Example: ./ora.sh alive localhost:1999 120 5
-
+                           -q shows every result, but not the curl-call, -Q reports crashes only. Example: ./ora.sh alive http://localhost:1999 -q 120 5

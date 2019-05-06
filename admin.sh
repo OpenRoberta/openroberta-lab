@@ -2,7 +2,7 @@
 
 # admin script
 
-if [[ ! $(cat /proc/1/sched | head -n 1 | grep init) ]]
+if [[ -f /proc/1/sched && $(cat /proc/1/sched | head -n 1 | grep init) ]]
 then
    echo 'running in a docker container - exit 12 to avoid destruction and crash :-)'
    exit 12
@@ -14,7 +14,7 @@ ADMIN_DIR='./admin'
 QUIET='no'
 XMX=''
 RDBG=''
-
+ 
 while true
 do
   case "$1" in
@@ -47,8 +47,7 @@ then
   echo ''
   echo 'admin.sh [-q] [-adminDir <adminDir>] [-Xmx<size>] -rdbg [-lib <java-lib-dir>] [-dbUri <db-uri>] <CMD>'
   echo ''
-  echo 'Many commands expect a db URI. The db-uri defaults to "jdbc:hsqldb:hsql://localhost/openroberta-db". But:'
-  echo 'Often the db-name is a bit longer, as "openroberta-db-<DB-RESPECTIVE-SERVER-NAME>"'
+  echo 'Many commands expect a db URI. The db-uri defaults to "jdbc:hsqldb:hsql://localhost/openroberta-db"'
   echo ''
   echo '<CMD>s are:'
   echo '  backup [backup-dir]     access the database server and create a backup in directory [backup-dir]'
@@ -63,14 +62,14 @@ then
   echo '  start-embedded-server   start the server in embedded mode. For small machines, on a RaspberryPI for instance.'
   echo '                          the admin (defaults to ./admin) dir needs subdirectories logs and tutorial'
   echo '                          Use -d robot.crosscompiler.resourcebase=... to supply crosscompiler resources (*.h, ...)'
-  echo '                          -rdbg allows remote dbugging. Misuse will habe a dramatic impact on performance'
+  echo '                          -rdbg allows remote debugging(may have impact on performance'
   echo '  start-2-server          start the database and the jetty server. DEPRECATED. Use DOCKER.'
   echo '                          the admin (defaults to ./admin) dir needs subdirectories logs and tutorial'
   echo '                          Use -d robot.crosscompiler.resourcebase=... to supply crosscompiler resources (*.h, ...)'
-  echo '                          -rdbg allows remote dbugging. Misuse will habe a dramatic impact on performance'
+  echo '                          -rdbg allows remote debugging(may have impact on performance'
   echo ''
   
-  echo "logging/backup/tutorials via $ADMIN_DIR"
+  echo "the dir '$ADMIN_DIR' is used for various admin tasks as logging, database backups, tutorials"
 fi
 
 # needed for both start-* command. Expects a PID in variable 'child'
@@ -97,11 +96,14 @@ case "$CMD" in
 esac
 
 # process the command
+RC=0
 case "$CMD" in
   'backup')         DB_BACKUP_DIR=$1; shift
-                    java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration dbBackup $DB_URI $DB_BACKUP_DIR>>$ADMIN_LOG_FILE 2>&1 ;;
+                    java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration dbBackup $DB_URI $DB_BACKUP_DIR>>$ADMIN_LOG_FILE 2>&1
+                    RC=$? ;;
   'shutdown')       echo "shutdown the database"
-                    java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration dbShutdown "$DB_URI" >>$ADMIN_LOG_FILE 2>&1 ;;
+                    java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration dbShutdown "$DB_URI" >>$ADMIN_LOG_FILE 2>&1
+                    RC=$? ;;
   'sqlclient')      echo "command line sql client. Type commands, exit with an empty line"
                     java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration sqlclient "$DB_URI" ;;
   'sqlGui')         serverVersionForDb=$(java -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration version-for-db)
@@ -116,16 +118,20 @@ case "$CMD" in
                     java -jar "${hsqldbJar}" --driver org.hsqldb.jdbc.JDBCDriver --url "$DB_URI" --user orA --password Pid ;;
   'sqlexec')        SQL="$1";
                     echo "execute the sql statement '$SQL'"
-                    java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration sql "$DB_URI" "$SQL" ;;
-  'version')        java -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration version ;;
-  'version-for-db') java -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration version-for-db ;;
+                    java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration sqlexec "$DB_URI" "$SQL"
+                    RC=$? ;;
+  'version')        java -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration version
+                    RC=$? ;;
+  'version-for-db') java -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration version-for-db
+                    RC=$? ;;
   'upgrade')        case "$1" in
                       '') echo 'database parent directory is missing - exit 12'
                           exit 12 ;;
                       *)  DB_PARENTDIR="$1"; shift ;;
                     esac
                     DB_VERSION=$(java -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration version-for-db)
-                    java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration upgrade "$DB_PARENTDIR" >>$ADMIN_LOG_FILE 2>&1 ;;
+                    java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration upgrade "$DB_PARENTDIR" >>$ADMIN_LOG_FILE 2>&1
+                    RC=$? ;;
 
 # ----------------------------------------------------------------------------------------------------------------------------------------
   'start-embedded-server')
@@ -145,9 +151,10 @@ case "$CMD" in
       echo 'check for database upgrade'
       java $XMX -cp lib/\* de.fhg.iais.roberta.main.Administration upgrade . >>$ADMIN_LOG_FILE 2>&1
 
-      echo 'create admin dirs, if they do not exist'
-      mkdir -p ./admin/logs
-      mkdir -p ./admin/tutorial
+      echo "create subdirs of admin dir ${ADMIN_DIR}, if they do not exist"
+      mkdir -p ${ADMIN_DIR}/logs
+      mkdir -p ${ADMIN_DIR}/dbBackup
+      mkdir -p ${ADMIN_DIR}/tutorial
       
       echo 'start the server with embedded database'
       trap propagateSignal SIGTERM SIGINT
@@ -164,7 +171,12 @@ case "$CMD" in
   'start-2-server')
       echo 'DEPRECATED. Use docker container. Have a look at Docker/README.md'
       # exit 12
-      mkdir -p $ADMIN_DIR/logs
+      
+      echo "create subdirs of admin dir ${ADMIN_DIR}, if they do not exist"
+      mkdir -p ${ADMIN_DIR}/logs
+      mkdir -p ${ADMIN_DIR}/dbBackup
+      mkdir -p ${ADMIN_DIR}/tutorial
+      
       DB_LOG_FILE="$ADMIN_DIR/logs/db.log"
       SERVER_LOG_FILE="$ADMIN_DIR/logs/server.log"
       serverVersionForDb=$(java -cp lib/\* de.fhg.iais.roberta.main.Administration version-for-db)
@@ -195,6 +207,12 @@ case "$CMD" in
            $* >>$SERVER_LOG_FILE 2>&1 &
       ;;
 # ----------------------------------------------------------------------------------------------------------------------------------------
-  '')               echo "no command. Script terminates" ;;
-  *)                echo "invalid command. Ignored: \"$CMD\"" ;;
+  '') echo "no command. Script terminates" ;;
+  *)  echo "invalid command. Ignored: \"$CMD\""
+      RC=$? ;;
 esac
+
+if [ $RC -ne 0 ]
+then
+  echo '*** the command did NOT succeed. Look into console output and logfiles ***'
+fi

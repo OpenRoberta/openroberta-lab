@@ -10,28 +10,34 @@ function _mkAndCheckDir {
 }
 
 function _aliveFn {
+  case "$1" in
+    '-q') quiet=result; shift ;;
+    '-Q') quiet=down; shift ;;
+    *)    quiet=false ;;
+  esac
   serverUrl="$1"
   shift
   every="${1:-60}"
   timeout="${2:-30}"
 
   while :; do
-    if [[ "$quiet" == 'true' ]]
+    if [[ "$quiet" == 'false' ]]
     then
-       curl --max-time $timeout "http://$serverUrl/rest/alive" > /dev/null
-       rc=$?
-    else
-       curl --max-time $timeout "http://$serverUrl/rest/alive"
+       curl --max-time $timeout "$serverUrl/rest/alive"
        rc=$?
        if [[ $rc == 0 ]]
        then
-          echo "ok `date`"
+          echo "curl ok at `date`"
        fi
+    else
+       curl --max-time $timeout "$serverUrl/rest/alive" >/dev/null 2>&1
+       rc=$?
     fi
     if [[ $rc != 0 ]]
     then
        echo "***** server seems to be down at `date` ******"
-    else
+    elif [[ "$quiet" != 'down' ]]
+    then
        echo "ok at `date`"
     fi
     sleep $every
@@ -160,8 +166,7 @@ start-from-git) echo 'the script expects, that a mvn build was successful; if th
                      -d robot.crosscompiler.resourcebase="$CC_RESOURCE_DIR" \
                      $* ;;
 
-''|help|-h)     $0 --java
-                cat ora-help.txt ;;
+''|help|-h)     cat ora-help.txt ;;
 
 java)           _checkJava ;;
 
