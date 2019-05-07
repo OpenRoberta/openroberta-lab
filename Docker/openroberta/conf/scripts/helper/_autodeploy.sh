@@ -37,14 +37,14 @@ then
                     echo "$DATE: $DIFF new commits found in branch $BRANCH. A reset --hard to origin/$BRANCH is executed"
                     git reset --hard origin/$BRANCH
                     echo "$DATE: the server ${SERVER_NAME} will be deployed now"
-                    ${SCRIPT_DIR}/run.sh deploy ${SERVER_NAME}
+                    ${SCRIPT_MAIN}/run.sh deploy ${SERVER_NAME}
                     UPDATED_SERVERS=$(($UPDATED_SERVERS + 1))
                 fi
             done
             if [ $UPDATED_SERVERS -gt 0 ]
             then
                 [ "$DEBUG" = 'true' ] && echo "$UPDATED_SERVERS server(s) have been updated. Removing stale docker data now"
-                ${SCRIPT_DIR}/run.sh -q prune
+                ${SCRIPT_MAIN}/run.sh -q prune
             fi ;; 
         *) echo "$DATE: '${GIT_DIR}/lockfile' was LOCKED. Trying again later" ;;
     esac

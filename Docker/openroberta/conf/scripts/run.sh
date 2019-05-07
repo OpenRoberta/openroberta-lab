@@ -5,8 +5,8 @@
 DEBUG=false
 
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/../.. && pwd )"
-SCRIPT_DIR="${BASE_DIR}/conf/scripts"
-chmod ugo+rx ${SCRIPT_DIR}/run.sh
+SCRIPT_MAIN="${BASE_DIR}/conf/scripts"
+SCRIPT_HELPER="${SCRIPT_MAIN}/helper"
 
 CMD=$1; shift
 if [ "$CMD" == '-q' ]
@@ -14,7 +14,7 @@ then
     CMD=$1; shift
     QUIET='true'
 else
-    source ${SCRIPT_DIR}/_help.sh
+    source ${SCRIPT_HELPER}/_help.sh
 fi
 if [ "$CMD" == '-D' ]
 then
@@ -23,41 +23,41 @@ then
 fi
 
 source ${BASE_DIR}/config.sh
-source ${SCRIPT_DIR}/__defs.sh
+source ${SCRIPT_HELPER}/__defs.sh
 
 DATE=$(date '+%Y-%m-%d %H:%M:%S')
 
 [ "$DEBUG" = 'true' ] && echo "$DATE: executing command '$CMD'"
 case "$CMD" in
-    help)     [ "$QUIET" == true ] && source ${SCRIPT_DIR}/_help.sh ;;
+    help)     [ "$QUIET" == true ] && source ${SCRIPT_HELPER}/_help.sh ;;
     gen)      SERVER_NAME=$1; shift
               isServerNameValid ${SERVER_NAME}
               echo "$DATE: generating the server '${SERVER_NAME}'"
-              source ${SCRIPT_DIR}/_gen.sh
+              source ${SCRIPT_HELPER}/_gen.sh
               echo "generating the server '${SERVER_NAME}' finished" ;;
     start)    SERVER_NAME=$1
-              source ${SCRIPT_DIR}/_stop.sh
-              source ${SCRIPT_DIR}/_start.sh ;;
+              source ${SCRIPT_HELPER}/_stop.sh
+              source ${SCRIPT_HELPER}/_start.sh ;;
     stop)     SERVER_NAME=$1
-              source ${SCRIPT_DIR}/_stop.sh ;;
+              source ${SCRIPT_HELPER}/_stop.sh ;;
     deploy)   SERVER_NAME=$1
               echo "$DATE: deploying (generating,starting) the server '${SERVER_NAME}'"
-              ${SCRIPT_DIR}/run.sh -q gen ${SERVER_NAME}
-              ${SCRIPT_DIR}/run.sh -q start ${SERVER_NAME} ;;
-    autoDeploy) source ${SCRIPT_DIR}/_autodeploy.sh ;;
+              ${SCRIPT_MAIN}/run.sh -q gen ${SERVER_NAME}
+              ${SCRIPT_MAIN}/run.sh -q start ${SERVER_NAME} ;;
+    autoDeploy) source ${SCRIPT_HELPER}/_autodeploy.sh ;;
     startAll) echo '******************** '$DATE' ********************'
               echo 'start database container and all server container'
-              ${SCRIPT_DIR}/run.sh -q startDbC
+              ${SCRIPT_MAIN}/run.sh -q startDbC
               sleep 10
               for SERVER_NAME in $SERVERS; do
-                  ${SCRIPT_DIR}/run.sh -q start ${SERVER_NAME}
+                  ${SCRIPT_MAIN}/run.sh -q start ${SERVER_NAME}
               done ;;
     stopAll)  echo '******************** '$DATE' ********************'
               echo 'stop database container and all server container'
               for SERVER_NAME in $SERVERS; do
-                  ${SCRIPT_DIR}/run.sh -q stop ${SERVER_NAME}
+                  ${SCRIPT_MAIN}/run.sh -q stop ${SERVER_NAME}
               done
-              ${SCRIPT_DIR}/run.sh -q stopDbC ;;
+              ${SCRIPT_MAIN}/run.sh -q stopDbC ;;
     genNet)   isDefined DOCKER_NETWORK_NAME
               question "do you have double-checked, that the bridge network name '$DOCKER_NETWORK_NAME' is NOT used elsewhere?"
               question 'really?'
@@ -67,11 +67,11 @@ case "$CMD" in
     genDbC)   echo "$DATE: generating the database image rbudde/openroberta_db:2.4.0"
               docker build -f ${CONF_DIR}/docker-for-db/DockerfileDb -t rbudde/openroberta_db_server:2.4.0 ${CONF_DIR}/docker-for-db
               echo "generating the database image rbudde/openroberta_db:2.4.0 finished" ;;
-    startDbC) source ${SCRIPT_DIR}/_dbContainerStop.sh
-              source ${SCRIPT_DIR}/_dbContainerStart.sh ;;
-    stopDbC)  source ${SCRIPT_DIR}/_dbContainerStop.sh ;;
+    startDbC) source ${SCRIPT_HELPER}/_dbContainerStop.sh
+              source ${SCRIPT_HELPER}/_dbContainerStart.sh ;;
+    stopDbC)  source ${SCRIPT_HELPER}/_dbContainerStop.sh ;;
     backupDb) DATABASE_NAME=$1
-              source ${SCRIPT_DIR}/_dbContainerBackup.sh ;;
+              source ${SCRIPT_HELPER}/_dbContainerBackup.sh ;;
     network)  echo '******************** '$DATE' ********************'
               echo '******************** network inspect'
               docker network inspect $DOCKER_NETWORK_NAME ;;
@@ -103,7 +103,7 @@ case "$CMD" in
               echo '******************** remove unused containers, networks, images ********************'
               docker system prune --force ;;
     test)     echo '******************** TEST MODE START ********************'
-              source ${SCRIPT_DIR}/_test.sh
+              source ${SCRIPT_HELPER}/_test.sh
               echo '******************** TEST MODE TERMINATED ***************' ;;
     *)        echo "$DATE: invalid command: '$CMD'" ;;
 esac

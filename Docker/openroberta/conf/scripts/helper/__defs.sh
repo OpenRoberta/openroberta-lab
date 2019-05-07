@@ -51,7 +51,7 @@ function isDirectoryValid {
 }
 
 isDirectoryValid ${BASE_DIR}
-isDirectoryValid ${SCRIPT_DIR} # defined in "run.sh"
+isDirectoryValid ${SCRIPT_HELPER} # defined in "run.sh", must be valid (otherwise this check couldn't be executed)
 
 CONF_DIR=${BASE_DIR}/conf
 SERVER_DIR=${BASE_DIR}/server
