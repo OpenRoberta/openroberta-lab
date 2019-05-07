@@ -1,6 +1,7 @@
 General Remarks For Using OpenRoberta From The Command Line.
 
-The OpenRoberta sources are contained in a git repository. First generate the software artifacts by calling.
+The OpenRoberta sources are contained in a git repository. First generate the software artifacts by calling 'mvn clean install -DskipTests'.
+
 Top level in the git repository is a script 'ora.sh' to be used from the command line to configure the OpenRoberta application.
 Remarks about the database:
 The database may be run in 'embedded' mode. This is for local test/debug and small servers as the RaspBerryPI:
@@ -31,14 +32,23 @@ Commands of the ora.sh script:
 
 The following commands are used rarely:
   
-  test-setup-update [{base-dir}]
-             expects the test server setup in {base-dir} (defaults to /data/openroberta) and copies all resources from the git-dir 'Docker/openroberta/conf'
-             into {base-dir}/conf. Needs root privileges. Must be executed on a test machine from an up-to-date git repository. 
+  new-test-setup {base-dir}
+             creates a new test server setup in {base-dir}. {base-dir} must not exist. Afterwards you have to edit '{base-dir}/config.sh' CAREFULLY.
+             Needs root privileges. Must be executed on a test machine from an UP-TO-DATE git repository. 
+  new-server-in-test-setup {base-dir} {server-name}
+             creates a server in the existing test server setup '{base-dir}'. The dirs '{base-dir}/server/{server-name}' and '{base-dir}/db/{server-name}' must not exist.
+             Afterwards you have to edit '{base-dir}/server/{server-name}/decl.sh' CAREFULLY and to think about whether an empty database is ok or not.
+             In '{base-dir}/config.sh' {server-name} can be added to the variables SERVERS, AUTODEPLOY and DATABASES.
+             Needs root privileges. Must be executed on a test machine from an UP-TO-DATE git repository. 
+  update-test-setup [{base-dir}]
+             expects the test server setup in {base-dir}. Copies all resources from the git-dir 'Docker/openroberta/conf'
+             into {base-dir}/conf. Needs root privileges. Must be executed on a test machine from an UP-TO-DATE git repository. 
 
   java       check whether java and javac are on the path and the JDK version is ok
 
-The following command is used very rarely (better use frameworks as nagios, ...):
+The following command is used very rarely (better use frameworks like nagios, ...):
 
-  alive {-q/-Q} {SERVERURL} {EVERY} {TIMEOUT} check after EVERY sec (default: 60) if the server is alive.
-                           The server is assumed to have crashed, if it does not answer within TIMEOUT sec (default: 10).
-                           -q shows every result, but not the curl-call, -Q reports crashes only. Example: ./ora.sh alive http://localhost:1999 -q 120 5
+  alive {-q/-Q} {SERVERURL} {EVERY} {TIMEOUT}
+             check after EVERY sec (default: 60) if the server is alive.
+             The server is assumed to have crashed, if it does not answer within TIMEOUT sec (default: 10).
+             -q shows every result, but not the curl-call, -Q reports crashes only. Example: ./ora.sh alive http://localhost:1999 -q 120 5

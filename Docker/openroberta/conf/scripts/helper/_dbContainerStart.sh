@@ -5,7 +5,7 @@ do
     isServerNameValid $DATABASE_NAME
 done  
 
-CONTAINER=ora-${INAME}-db-server
+CONTAINER=${INAME}-db-server
 
 DOCKERRM=$(docker rm ${CONTAINER} 2>/dev/null)
 case "$DOCKERRM" in

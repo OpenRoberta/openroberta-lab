@@ -5,11 +5,8 @@ SERVER_DIR_OF_ONE_SERVER=${SERVER_DIR}/${SERVER_NAME}
 isDirectoryValid $SERVER_DIR_OF_ONE_SERVER
 
 source $SERVER_DIR_OF_ONE_SERVER/decl.sh
-isDefined PORT
-isDefined DATE_SETUP
-isDefined BRANCH
-isDefined GIT_REPO
-isDefined GIT_UPTODATE true false
+isDeclShValid
+
 case "${GIT_REPO}" in
     /*) : ;;
     *)  GIT_REPO=${BASE_DIR}/git/${GIT_REPO}

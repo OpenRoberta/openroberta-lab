@@ -69,7 +69,7 @@ nextVersionSnapshot="$nextVersion-SNAPSHOT"
 git checkout master
 git merge --no-ff $HOTFIX
 $SCRIPT/helper/_bumpVersion.sh "$PARENT" "$thisVersion" "hotfix version $thisVersion"
-git tag "V-$thisVersion" -m "hotfix version $thisVersion"
+git tag "ORA-$thisVersion" -m "hotfix version $thisVersion"
 
 git checkout develop
 $SCRIPT/helper/_bumpVersion.sh "$PARENT" "$thisVersion" "preparing integration of hotfix (version $thisVersion)"

@@ -99,13 +99,13 @@ esac
 RC=0
 case "$CMD" in
   'backup')         DB_BACKUP_DIR=$1; shift
-                    java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration dbBackup $DB_URI $DB_BACKUP_DIR>>$ADMIN_LOG_FILE 2>&1
+                    java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration db-backup $DB_URI $DB_BACKUP_DIR>>$ADMIN_LOG_FILE 2>&1
                     RC=$? ;;
   'shutdown')       echo "shutdown the database"
-                    java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration dbShutdown "$DB_URI" >>$ADMIN_LOG_FILE 2>&1
+                    java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration db-shutdown "$DB_URI" >>$ADMIN_LOG_FILE 2>&1
                     RC=$? ;;
   'sqlclient')      echo "command line sql client. Type commands, exit with an empty line"
-                    java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration sqlclient "$DB_URI" ;;
+                    java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration sql-client "$DB_URI" ;;
   'sqlGui')         serverVersionForDb=$(java -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration version-for-db)
                     hsqldbJar="$JAVA_LIB_DIR/hsqldb-2.4.0.jar"
                     if [ -e ${hsqldbJar} ]
@@ -118,7 +118,7 @@ case "$CMD" in
                     java -jar "${hsqldbJar}" --driver org.hsqldb.jdbc.JDBCDriver --url "$DB_URI" --user orA --password Pid ;;
   'sqlexec')        SQL="$1";
                     echo "execute the sql statement '$SQL'"
-                    java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration sqlexec "$DB_URI" "$SQL"
+                    java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration sql-exec "$DB_URI" "$SQL"
                     RC=$? ;;
   'version')        java -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration version
                     RC=$? ;;
@@ -145,7 +145,7 @@ case "$CMD" in
       dbfiles=$(echo db-*)
       if [[ -z $dbfiles ]]; then 
           echo "A POTENTIAL PROBLEM: No databases found. An empty database for version ${serverVersionForDb} will be created."
-          java -cp lib/\* de.fhg.iais.roberta.main.Administration createemptydb jdbc:hsqldb:file:${database} >>$ADMIN_LOG_FILE 2>&1
+          java -cp lib/\* de.fhg.iais.roberta.main.Administration create-empty-db jdbc:hsqldb:file:${database} >>$ADMIN_LOG_FILE 2>&1
       fi
 
       echo 'check for database upgrade'
@@ -188,7 +188,7 @@ case "$CMD" in
       dbfiles=$(echo db-*)
       if [[ -z $dbfiles ]]; then 
           echo "A POTENTIAL PROBLEM: No databases found. An empty database for version ${serverVersionForDb} will be created."
-          java -cp lib/\* de.fhg.iais.roberta.main.Administration createemptydb jdbc:hsqldb:file:${database} >>$ADMIN_LOG_FILE 2>&1
+          java -cp lib/\* de.fhg.iais.roberta.main.Administration create-empty-db jdbc:hsqldb:file:${database} >>$ADMIN_LOG_FILE 2>&1
       fi
 
       # MUST be called from an 'exported' dir (see 'ora.sh'). Dir '.' MUST be the db parent dir (i.e. contain 'db-* dirs)

@@ -15,6 +15,7 @@ then
                 isDirectoryValid $SERVER_DIR_OF_ONE_SERVER
                 cd $SERVER_DIR_OF_ONE_SERVER
                 source ./decl.sh
+                isDeclShValid
                 if [ "$GIT_UPTODATE" == 'true' ]
                 then
                     echo "$DATE: for server '${SERVER_NAME}' GIT_UPTODATE is true. This makes no sense. Exit 12"

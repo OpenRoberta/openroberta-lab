@@ -4,7 +4,7 @@
 function trapSignals {
 	echo "signal caught. The database server will terminate with SHUTDOWN COMPACT"
 	URI='jdbc:hsqldb:hsql://localhost/openroberta-db'
-	java -cp lib/\* de.fhg.iais.roberta.main.Administration dbShutdown "$URI"
+	java -cp lib/\* de.fhg.iais.roberta.main.Administration db-shutdown "$URI"
 }
 
 echo "usage: startDbServer.sh <database version as x.y.z>"

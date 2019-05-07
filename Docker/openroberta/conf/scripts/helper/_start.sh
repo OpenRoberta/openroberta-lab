@@ -6,9 +6,7 @@ isDirectoryValid $SERVER_DIR_OF_ONE_SERVER
 
 cd $SERVER_DIR_OF_ONE_SERVER
 source ./decl.sh
-isDefined PORT
-isDefined LOG_LEVEL
-isDefined LOG_CONFIG_FILE
+isDeclShValid
 
 case "${SERVER_NAME}" in
     master) question 'do you really want to start a docker image with the MASTER server?'
@@ -23,7 +21,7 @@ docker run -d --name=${CONTAINER} \
 --network $DOCKER_NETWORK_NAME -p $PORT:1999 \
 -v $SERVER_DIR_OF_ONE_SERVER/admin:/opt/admin \
 $IMAGE \
--d database.uri=ora-${INAME}-db-server \
+-d database.uri=${INAME}-db-server \
 -d database.name=openroberta-db-${SERVER_NAME} \
 -d server.log.configfile=$LOG_CONFIG_FILE \
 -d server.log.level=$LOG_LEVEL \

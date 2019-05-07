@@ -185,16 +185,16 @@ create-empty-db) serverVersionForDb="$1"
                 esac
                 echo "creating an empty db using the url $databaseurl"
                 main='de.fhg.iais.roberta.main.Administration'
-                java -cp ${JAVA_LIBS}/\* "${main}" createemptydb "$databaseurl" ;;
+                java -cp ${JAVA_LIBS}/\* "${main}" create-empty-db "$databaseurl" ;;
 
-checkXSS)       serverVersionForDb="$1"
+check-xss)      serverVersionForDb="$1"
                 if [[ "$serverVersionForDb" == '' ]]
                 then
                   serverVersionForDb=$(java -cp ./${JAVA_LIBS}/\* de.fhg.iais.roberta.main.Administration version-for-db)
                 fi
                 databaseurl="jdbc:hsqldb:file:OpenRobertaServer/db-$serverVersionForDb/openroberta-db"
                 main='de.fhg.iais.roberta.main.Administration'
-                java -cp ${JAVA_LIBS}/\* "${main}" checkXSS "$databaseurl" ;;
+                java -cp ${JAVA_LIBS}/\* "${main}" check-xss "$databaseurl" ;;
                   
 renameRobot)    serverVersionForDb="$1"
                 if [[ "$serverVersionForDb" == '' ]]
@@ -212,23 +212,48 @@ configurationCleanUp) serverVersionForDb="$1"
                 fi
                 databaseurl="jdbc:hsqldb:file:OpenRobertaServer/db-$serverVersionForDb/openroberta-db"
                 main='de.fhg.iais.roberta.main.Administration'
-                java -cp ${JAVA_LIBS}/\* "${main}" configurationCleanUp "$databaseurl" ;;
+                java -cp ${JAVA_LIBS}/\* "${main}" configuration-clean-up "$databaseurl" ;;
 
 alive)          _aliveFn $* ;;
 
-test-setup-update) case "$1" in
-                     '') basedir='/data/openroberta' ;;
-                     *)  basedir="$1"
-                   esac
-                if [ ! -d $basedir ]
+new-test-setup) base_dir="$1"
+                if [[ -d $base_dir ]]
                 then
-                  echo "basedir '$basedir' not found. Exit 12"
+                  echo "basedir '$base_dir' exists. Exit 12"
                   exit 12
                 fi
-                rm -rf $basedir/conf
-                cp -r Docker/openroberta/conf $basedir/conf
-                cp Docker/_README.md $basedir
-                echo "configuration data copied to $basedir/conf" ;;
+                cp -r Docker/openroberta $base_dir
+                cp Docker/_README.md $base_dir
+                echo "new test server setup created in $base_dir. Edit 'config.sh' and setup db and servers now" ;;
+new-server-in-test-setup)
+                base_dir="$1"
+                server_name="$2"
+                if [[ ! -d $base_dir || ! -f $base_dir/config.sh ]]
+                then
+                  echo "basedir '$base_dir' no valid dir for test server setup. Exit 12"
+                  exit 12
+                fi
+                server_dir="$base_dir/server/$server_name"
+                db_dir="$base_dir/db/$server_name"
+                if [[ -d "$server_dir" ||  -d "$db_dir" ]]
+                then
+                  echo "server dir or db dir for '$server_name' found. Exit 12"
+                  exit 12
+                fi
+                cp -r Docker/openroberta/server/_server-template $server_dir
+                cp -r Docker/openroberta/db/_empty-db-template $db_dir
+                echo "new db and new server $server_name created in ${base_dir}. Edit '$base_dir/config.sh' and '$server_dir/decl.sh'" ;;
+update-test-setup)
+                base_dir="$1"
+                if [[ ! -d $base_dir || ! -f $base_dir/config.sh ]]
+                then
+                  echo "basedir '$base_dir' no valid dir for test server setup. Exit 12"
+                  exit 12
+                fi
+                rm -rf $base_dir/conf
+                cp -r Docker/openroberta/conf $base_dir/conf
+                cp Docker/_README.md $base_dir
+                echo "configuration data copied to $base_dir/conf" ;;
 
 *)              echo "invalid command: $cmd - exit 1"
                 exit 1 ;;

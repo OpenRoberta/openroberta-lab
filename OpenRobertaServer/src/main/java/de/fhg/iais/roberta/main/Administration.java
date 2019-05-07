@@ -99,29 +99,29 @@ public class Administration {
                 LOG.info("*** " + cmd + " ***");
         }
         switch ( cmd ) {
-            case "createemptydb":
+            case "create-empty-db":
                 createEmptyDatabase();
                 break;
-            case "dbBackup":
+            case "db-backup":
                 dbBackup();
                 break;
-            case "dbShutdown":
+            case "db-shutdown":
                 dbShutdown();
                 break;
-            case "sqlclient":
+            case "sql-client":
                 sqlclient();
                 break;
-            case "sqlexec":
+            case "sql-exec":
                 sqlexec();
                 break;
             case "upgrade":
                 upgrade();
                 break;
             // old stuff for some old problematic upgrades of the database
-            case "configurationCleanUp":
+            case "configuration-clean-up":
                 // removeUnusedConfigurations();
                 break;
-            case "checkXSS":
+            case "check-xss":
                 // checkAndPatchAllProgramsForXSS();
                 break;
             case "conf:xml2text":
