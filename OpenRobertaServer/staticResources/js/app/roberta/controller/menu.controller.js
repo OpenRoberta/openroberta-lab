@@ -697,6 +697,13 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 parentConnection.connect(childConnection);
                 return false;
             }
+            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '5')) {
+                var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_eval_expr');
+                expr.initSvg();
+                expr.render();
+                expr.setInTask(false);            
+                return false;
+            }
         });
     }
 });

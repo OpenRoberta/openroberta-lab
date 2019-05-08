@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-04-05 15:17:30.522427",
+		"lastupdated": "2019-05-08 19:35:19.186060",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1508,6 +1508,8 @@
 	"ACTION_LCDI2C_SENSEBOX": "OLED Display I²C",
 	"SWITCH": "switch",
 	"SWITCH_LED_MATRIX_TOOLTIP": "Enables/Disables the LED matrix to use the dual purpose pins.",
+	"ACTION_EVAL": "eval",
+	"ACTION_EVAL_AS": "as",
 	"ACTION_PLOTTING": "plot",
 	"ACTION_PLOT_POINT": "plot a point",
 	"ACTION_PLOT_POINT_TOOLTIP": "plot a point with specified value (Y axis) at the specified tickmark (X axis)",
