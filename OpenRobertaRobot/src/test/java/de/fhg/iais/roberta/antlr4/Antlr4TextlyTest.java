@@ -13,6 +13,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.textly.generated.TextlyLexer;
 import de.fhg.iais.roberta.textly.generated.TextlyParser;
 import de.fhg.iais.roberta.textly.generated.TextlyParser.ExprContext;
+import de.fhg.iais.roberta.textly.generated.TextlyParser.StmtContext;
 
 public class Antlr4TextlyTest {
     private static final boolean DO_ASSERT = true;
@@ -53,6 +54,28 @@ public class Antlr4TextlyTest {
         String r = "(expr (expr 2) - (expr - (expr 2)))";
         assertEquals(r, p1);
         assertEquals(r, p2);
+    }
+
+    @Test
+    public void testStmt1() throws Exception {
+        String p = stmt2String("if (1+2*3==7 || 1*2+3==5 && !1+2==4) { a:=5*6;b:=!!1==2; };");
+        String r =
+            ""
+                + "(stmt (ifThenR if ( (expr "
+                + "(expr (expr (expr 1) + (expr (expr 2) * (expr 3))) == (expr 7)) "
+                + "|| "
+                + "(expr (expr (expr (expr (expr 1) * (expr 2)) + (expr 3)) == (expr 5)) && (expr ! (expr (expr (expr 1) + (expr 2)) == (expr 4))))"
+                + ") ) "
+                + "(stmtl { "
+                + "(stmt a := (expr (expr 5) * (expr 6)) ;) "
+                + "(stmt b := (expr ! (expr ! (expr (expr 1) == (expr 2)))) ;) })) ;)";
+        assertEquals(r, p);
+    }
+
+    private String stmt2String(String expr) throws Exception {
+        TextlyParser parser = mkParser(expr);
+        StmtContext tree = parser.stmt();
+        return tree.toStringTree(parser);
     }
 
     private String expr2String(String expr) throws Exception {
