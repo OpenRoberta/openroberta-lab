@@ -17,10 +17,7 @@ import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
- * This class represents the <b>math_number</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code numerical
- * value.<br/>
- * <br>
- * To create an instance from this class use the method {@link #make(String, BlocklyBlockProperties, BlocklyComment)}.<br>
+ * This class represents the blockly block for constant numbers in the AST . Object from this class represent one read-only numerical value.
  */
 public class NumConst<V> extends Expr<V> {
     private final String value;
@@ -33,15 +30,26 @@ public class NumConst<V> extends Expr<V> {
     }
 
     /**
-     * creates instance of {@link NumConst}. This instance is read only and can not be modified.
+     * factory method: create an AST instance of {@link NumConst}
      *
      * @param value of the numerical constant; must be <b>non-empty</b> string,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link NumConst}
+     * @return read only object representing the number constant in the AST
      */
     public static <V> NumConst<V> make(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new NumConst<V>(value, properties, comment);
+        return new NumConst<>(value, properties, comment);
+    }
+
+    /**
+     * factory method: create an AST instance of {@link NumConst}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in this case no graphical regeneration is required.</b>
+     *
+     * @param value of the numerical constant; must be <b>non-empty</b> string,
+     * @return read only object representing the number constant in the AST
+     */
+    public static <V> NumConst<V> make(String value) {
+        return new NumConst<>(value, BlocklyBlockProperties.make("1", "1"), null);
     }
 
     /**

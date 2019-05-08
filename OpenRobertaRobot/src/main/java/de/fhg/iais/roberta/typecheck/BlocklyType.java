@@ -44,7 +44,8 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 public enum BlocklyType {
     // @formatter:off
     ANY("", false),
-    COMPARABLE("", false,ANY), ADDABLE("", false,ANY),
+    COMPARABLE("", false,ANY),
+    ADDABLE("", false,ANY),
     ARRAY("Array", false,COMPARABLE),
     ARRAY_NUMBER("Array_Number",true, COMPARABLE),
     ARRAY_STRING("Array_String", true,COMPARABLE),
@@ -53,17 +54,22 @@ public enum BlocklyType {
     ARRAY_IMAGE("Array_Image", true, COMPARABLE),
     ARRAY_CONNECTION("Array_Connection", true, COMPARABLE),
     BOOLEAN("Boolean", false,COMPARABLE),
-    NUMBER("Number", false,COMPARABLE, ADDABLE), NUMBER_INT("Number",false, COMPARABLE, ADDABLE),
+    NUMBER("Number", false,COMPARABLE, ADDABLE),
+    NUMBER_INT("Number",false, COMPARABLE, ADDABLE),
     STRING("String", false,COMPARABLE, ADDABLE),
     COLOR("Colour", false,ANY), //
     IMAGE("Image", false, ANY),
     PREDEFINED_IMAGE("PredefinedImage", false, ANY),
     NULL("", false,STRING, COLOR),
-    REF("", false,NULL), PRIM("",false, NUMBER, BOOLEAN),
+    REF("", false,NULL),
+    PRIM("",false, NUMBER, BOOLEAN),
     NOTHING("", false, REF, PRIM),
     VOID("",false),
     CONNECTION("Connection",false, ANY),
-    CAPTURED_TYPE("",false), R("",false), S("",false), T("",false);
+    CAPTURED_TYPE("",false),
+    R("",false),
+    S("",false),
+    T("",false);
     // @formatter:on
 
     private final String blocklyName;

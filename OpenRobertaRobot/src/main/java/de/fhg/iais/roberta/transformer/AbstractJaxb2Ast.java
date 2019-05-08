@@ -282,7 +282,7 @@ abstract public class AbstractJaxb2Ast<V> {
                     .make(
                         BlocklyType.get(arg.getType()),
                         arg.getName(),
-                        BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false),
+                        BlocklyBlockProperties.make("1", "1"),
                         null);
             parameters.addExpr(parametar);
         }

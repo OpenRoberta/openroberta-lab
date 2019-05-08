@@ -16,14 +16,14 @@ public class StmtFlowContrTest {
     @Test
     public void make() throws Exception {
         StmtFlowCon<Void> flowCon =
-            StmtFlowCon.make(Flow.BREAK, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false), null);
+            StmtFlowCon.make(Flow.BREAK, BlocklyBlockProperties.make("1", "1"), null);
         Assert.assertEquals("\nStmtFlowCon [BREAK]", flowCon.toString());
     }
 
     @Test
     public void getFlow() throws Exception {
         StmtFlowCon<Void> flowCon =
-            StmtFlowCon.make(Flow.BREAK, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false), null);
+            StmtFlowCon.make(Flow.BREAK, BlocklyBlockProperties.make("1", "1"), null);
         Assert.assertEquals(Flow.BREAK, flowCon.getFlow());
     }
 

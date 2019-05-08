@@ -14,26 +14,26 @@ public class NullConstTest {
 
     @Test
     public void make() throws Exception {
-        NullConst<Void> nullConst = NullConst.make(BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false), null);
+        NullConst<Void> nullConst = NullConst.make(BlocklyBlockProperties.make("1", "1"), null);
         String a = "NullConst [null]";
         Assert.assertEquals(a, nullConst.toString());
     }
 
     @Test
     public void getValue() throws Exception {
-        NullConst<Void> nullConst = NullConst.make(BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false), null);
+        NullConst<Void> nullConst = NullConst.make(BlocklyBlockProperties.make("1", "1"), null);
         Assert.assertEquals(null, nullConst.getValue());
     }
 
     @Test
     public void getPresedance() throws Exception {
-        NullConst<Void> nullConst = NullConst.make(BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false), null);
+        NullConst<Void> nullConst = NullConst.make(BlocklyBlockProperties.make("1", "1"), null);
         Assert.assertEquals(999, nullConst.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
-        NullConst<Void> nullConst = NullConst.make(BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false), null);
+        NullConst<Void> nullConst = NullConst.make(BlocklyBlockProperties.make("1", "1"), null);
         Assert.assertEquals(Assoc.NONE, nullConst.getAssoc());
     }
 

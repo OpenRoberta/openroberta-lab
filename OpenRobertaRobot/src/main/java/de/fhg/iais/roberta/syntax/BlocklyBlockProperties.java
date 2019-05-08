@@ -3,14 +3,12 @@ package de.fhg.iais.roberta.syntax;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
- * This class is describing properties of a current state of Blockly block in the AST.
+ * This class describes the blockly-related properties (most of them are graphical properties) of a block from the AST.
  * <p>
- * Information contained in this class is used after to recreate Blockly block from AST.<br>
- * Every class from AST representing Blockly block must contain instance of this class.<br>
+ * Information contained in this class is used to recreate a blockly block when the AST is used to regenerate the original source.<br>
+ * Every object that can be part of the AST (subclasses of Phrase<V>) should contain an instance an instance of this class, otherwise their graphical
+ * representation cannot be regenerated.<br>
  * <br>
- * To create a object from this class {@link #make(String, String, boolean, boolean, Boolean, Boolean, Boolean)}
- *
- * @author kcvejoski
  */
 public class BlocklyBlockProperties {
     private final String blockType;
@@ -49,7 +47,8 @@ public class BlocklyBlockProperties {
     }
 
     /**
-     * Creates object of type {@link BlocklyBlockProperties}.
+     * factory method: create an object, that saves the blockly-related properties of a block for later regeneration.<br>
+     * The names of the parameter should be self-explaining.
      *
      * @param blockType type of the block (<i>name of the block defined in blockly</i>); must be non-empty string
      * @param blocklyId id of the block when is transformed to XML; must be non-empty string
@@ -72,6 +71,18 @@ public class BlocklyBlockProperties {
         Boolean shadow,
         Boolean errorAttribute) {
         return new BlocklyBlockProperties(blockType, blocklyId, disabled, collapsed, inline, deletable, movable, inTask, shadow, errorAttribute);
+    }
+
+    /**
+     * factory method: create an object, that has a kind of blockly-related default properties.<br>
+     * <b>Main use: either testing or textual representation of programs (because in this case no graphical regeneration is required.</b>
+     *
+     * @param blockType
+     * @param blocklyId
+     * @return
+     */
+    public static BlocklyBlockProperties make(String blockType, String blocklyId) {
+        return BlocklyBlockProperties.make(blockType, blocklyId, false, false, false, false, false, true, false, false);
     }
 
     /**

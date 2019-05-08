@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.visitor.codegen;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import org.apache.commons.text.WordUtils;
 
 import de.fhg.iais.roberta.components.Configuration;
@@ -34,6 +33,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
+import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -102,6 +102,18 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     private final MbedUsedHardwareCollectorVisitor codePreprocess;
     private final Configuration configuration;
     ArrayList<VarDeclaration<Void>> usedVars;
+
+    /**
+     * initialize the C++ code generator visitor for tests. <b>Will be removed in the future, if tests with textual representations of Nepo (instead of
+     * blockly-based graphical representation have been finished.</b>
+     * 
+     * @param programPhrases
+     */
+    public CalliopeCppVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases) {
+        super(programPhrases, 0);
+        this.codePreprocess = null;
+        this.configuration = null;
+    }
 
     /**
      * initialize the C++ code generator visitor.
@@ -608,6 +620,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         return null;
     }
 
+    @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
         throw new DbcException("Not supported list function " + listRepeat.getClass().getName());
     }
@@ -823,17 +836,19 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         return null;
     }
 
+    @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append(
-            "MicroBitColor("
-                + colorConst.getRedChannelInt()
-                + ", "
-                + colorConst.getGreenChannelInt()
-                + ", "
-                + colorConst.getBlueChannelInt()
-                + ", "
-                + 255
-                + ")");
+        this.sb
+            .append(
+                "MicroBitColor("
+                    + colorConst.getRedChannelInt()
+                    + ", "
+                    + colorConst.getGreenChannelInt()
+                    + ", "
+                    + colorConst.getBlueChannelInt()
+                    + ", "
+                    + 255
+                    + ")");
         return null;
     }
 

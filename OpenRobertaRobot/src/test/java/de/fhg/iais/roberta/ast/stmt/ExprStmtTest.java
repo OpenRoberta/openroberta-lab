@@ -14,7 +14,7 @@ public class ExprStmtTest {
 
     @Test
     public void make() throws Exception {
-        NumConst<Void> expr = NumConst.make("0", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false), null);
+        NumConst<Void> expr = NumConst.make("0", BlocklyBlockProperties.make("1", "1"), null);
         ExprStmt<Void> exprStmt = ExprStmt.make(expr);
 
         String a = "\nexprStmt NumConst [0]";
@@ -23,7 +23,7 @@ public class ExprStmtTest {
 
     @Test
     public void getExpr() throws Exception {
-        NumConst<Void> expr = NumConst.make("0", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false), null);
+        NumConst<Void> expr = NumConst.make("0", BlocklyBlockProperties.make("1", "1"), null);
         ExprStmt<Void> exprStmt = ExprStmt.make(expr);
 
         Assert.assertEquals("NumConst [0]", exprStmt.getExpr().toString());

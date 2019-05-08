@@ -1,22 +1,6 @@
 grammar Textly;
 
-stmtl   :   '{' stmt* '}'                                # StmtList
-        ;
-        
-stmt    :   expr SEMI                                    # ExprStmt
-        |   ifThenR SEMI                                 # IfStmt
-        |   'repeat' expr 'times' stmtl SEMI             # RepeatStmt
-        |   VAR ASSIGN expr SEMI                         # AssignStmt
-        ;
-        
-ifThenR :   'if' '(' expr ')' stmtl ifElseR?             # IfThen
-        ;
-
-ifElseR :   'else' stmtl                                 # IfElse
-        |   'else' ifThenR                               # IfElseIf
-        ;
-        
-expr	:	(ADD | SUB) expr                             # Unary
+expr	:	(ADD | SUB) expr                                 # Unary
         |   expr (MUL | DIV ) expr                       # Binary
         |   expr (ADD | SUB) expr                        # Binary
         |   expr EQUAL expr                              # Binary

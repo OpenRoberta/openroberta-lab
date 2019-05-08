@@ -20,7 +20,7 @@ public class SensorExprTest {
             TouchSensor
                 .make(
                     new SensorMetaDataBean("1", SC.TOUCH, "EMPTY_SLOT", false),
-                    BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false),
+                    BlocklyBlockProperties.make("1", "1"),
                     null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
         String a = "SensorExpr [TouchSensor [1, TOUCH, EMPTY_SLOT]]";
@@ -33,7 +33,7 @@ public class SensorExprTest {
             TouchSensor
                 .make(
                     new SensorMetaDataBean("1", SC.TOUCH, "EMPTY_SLOT", false),
-                    BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false),
+                    BlocklyBlockProperties.make("1", "1"),
                     null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
         String a = "TouchSensor [1, TOUCH, EMPTY_SLOT]";
@@ -46,7 +46,7 @@ public class SensorExprTest {
             TouchSensor
                 .make(
                     new SensorMetaDataBean("1", SC.TOUCH, "EMPTY_SLOT", false),
-                    BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false),
+                    BlocklyBlockProperties.make("1", "1"),
                     null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
         Assert.assertEquals(999, sensorExpr.getPrecedence());
@@ -58,7 +58,7 @@ public class SensorExprTest {
             TouchSensor
                 .make(
                     new SensorMetaDataBean("1", SC.TOUCH, "EMPTY_SLOT", false),
-                    BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false, false),
+                    BlocklyBlockProperties.make("1", "1"),
                     null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
         Assert.assertEquals(Assoc.NONE, sensorExpr.getAssoc());

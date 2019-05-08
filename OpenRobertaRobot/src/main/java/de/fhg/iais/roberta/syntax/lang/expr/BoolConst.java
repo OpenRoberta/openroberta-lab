@@ -41,7 +41,11 @@ public class BoolConst<V> extends Expr<V> {
      * @return read only object of class {@link BoolConst}
      */
     public static <V> BoolConst<V> make(boolean value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new BoolConst<V>(value, properties, comment);
+        return new BoolConst<>(value, properties, comment);
+    }
+
+    public static <V> BoolConst<V> make(boolean value) {
+        return new BoolConst<>(value, BlocklyBlockProperties.make("1", "1"), null);
     }
 
     /**
