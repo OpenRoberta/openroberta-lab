@@ -38,20 +38,24 @@ if [ "$QUIET" = 'no' ]
 then
   echo 'THIS SCRIPT EXECUTES DANGEROUS COMMANDS. MISUSE MAY CRASH THE OPENROBERTA SERVER.'
   echo 'Execute this script from the base directory of an openroberta installation created by the "./ora.sh export" command'
-  echo 'Defaults:'
-  echo '-dbUri = jdbc:hsqldb:hsql://localhost/openroberta-db'
-  echo '-java-lib-dir = ./lib'
-  echo '-adminDir = ./admin'
-  echo '-Xmx = '
-  echo '-rdbg = '
+  echo 'Parameter preceding the command:'
+  echo '-dbUri <db-uri>                default: jdbc:hsqldb:hsql://localhost/openroberta-db'
+  echo '-java-lib-dir <java-lib-dir>   default: ./lib'
+  echo '-adminDir <adminDir>           default: ./admin'
+  echo '-Xmx                           e.g. -Xmx4G, default: ""'
+  echo '-rdbg                          using port 8000 for the remote client, default: no remote debug'
+  echo '-q                             quiet mode, default: verbode'
   echo ''
   echo 'admin.sh [-q] [-adminDir <adminDir>] [-Xmx<size>] -rdbg [-lib <java-lib-dir>] [-dbUri <db-uri>] <CMD>'
   echo ''
-  echo 'Many commands expect a db URI. The db-uri defaults to "jdbc:hsqldb:hsql://localhost/openroberta-db"'
+  echo 'Many commands expect a db URI'
+  echo '  database server:   the URI is "jdbc:hsqldb:hsql://localhost/openroberta-db". Maybe added "-{db-name-like-test,dev,...}}'
+  echo '  embedded database: the URI is "jdbc:hsqldb:file:{path-to-db-DIR}/openroberta-db", assuming, that "openroberta-db" is the db name'
   echo ''
   echo '<CMD>s are:'
   echo '  backup [backup-dir]     access the database server and create a backup in directory [backup-dir]'
   echo '  shutdown                access the database and issue a "shutdown" command'
+  echo '  sqlgui                  start a sql client with graphical user interface (GUI :-)'
   echo '  sqlclient               read SELECT commands from the terminal and execute them. Be careful, do NOT block the database'
   echo '  sqlexec <SQL>           execute the well-quoted <SQL> command'
   echo '  upgrade [db-parent-dir] upgrade the database, if necessary. The database is accessed in embedded mode.'
@@ -106,7 +110,7 @@ case "$CMD" in
                     RC=$? ;;
   'sqlclient')      echo "command line sql client. Type commands, exit with an empty line"
                     java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration sql-client "$DB_URI" ;;
-  'sqlGui')         serverVersionForDb=$(java -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration version-for-db)
+  'sqlgui')         serverVersionForDb=$(java -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration version-for-db)
                     hsqldbJar="$JAVA_LIB_DIR/hsqldb-2.4.0.jar"
                     if [ -e ${hsqldbJar} ]
                     then

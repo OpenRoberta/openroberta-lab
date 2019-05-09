@@ -123,6 +123,6 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
 
     @Override
     public final String getMenuVersion() {
-        return this.pluginProperties.getStringProperty("robot.menu.verision");
+        return this.pluginProperties.getStringProperty("robot.menu.version");
     }
 }
