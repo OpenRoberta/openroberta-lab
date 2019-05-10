@@ -8,7 +8,7 @@
 		</block>
 		<block type="vorwerkActions_motor_on_for"
 			id="i)lnnHsPyd6^,mx*JQ?1" intask="true">
-			<field name="MOTORPORT">LEFT_MOTOR</field>
+			<field name="MOTORPORT">LEFT</field>
 			<field name="MOTORROTATION">DISTANCE</field>
 			<value name="POWER">
 				<block type="math_number" id="h|UmF/aa^txK=KER)Mi]"
@@ -25,7 +25,7 @@
 		</block>
 		<block type="vorwerkActions_motor_on_for"
 			id="NOE4ouP.9_VY{Q_k7dC^" intask="true">
-			<field name="MOTORPORT">RIGHT_MOTOR</field>
+			<field name="MOTORPORT">RIGHT</field>
 			<field name="MOTORROTATION">DISTANCE</field>
 			<value name="POWER">
 				<block type="math_number" id="-dqycxPmlTKEk:%l..OU"

@@ -8,11 +8,11 @@
 		</block>
 		<block type="vorwerkActions_motor_stop"
 			id="Pt6AsO%kyG#79wdm98H-" intask="true">
-			<field name="MOTORPORT">LEFT_MOTOR</field>
+			<field name="MOTORPORT">LEFT</field>
 		</block>
 		<block type="vorwerkActions_motor_stop"
 			id="`FH4}cz7yii;s8/Xu!7=" intask="true">
-			<field name="MOTORPORT">RIGHT_MOTOR</field>
+			<field name="MOTORPORT">RIGHT</field>
 		</block>
 	</instance>
 </block_set>
