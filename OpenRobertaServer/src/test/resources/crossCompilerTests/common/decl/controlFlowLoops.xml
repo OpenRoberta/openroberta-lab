@@ -1,0 +1,24 @@
+<block type="robGlobalVariables_declare" id="UYh^PJ{Diu[)-{`#1?Fy" intask="true" deletable="false" movable="false">
+	<mutation next="true" declaration_type="Number">
+	</mutation>
+	<field name="VAR">x</field>
+	<field name="TYPE">Number</field>
+	<value name="VALUE">
+		<block type="math_number" id="V5Pr6U7;Y|Qfe?@);/FJ"
+			intask="true">
+			<field name="NUM">0</field>
+		</block>
+	</value>
+</block>
+<block type="robGlobalVariables_declare" id="z#/oq4:C~3n{KkoFc4r," intask="true" deletable="false" movable="false">
+	<mutation next="false" declaration_type="Number">
+	</mutation>
+	<field name="VAR">y</field>
+	<field name="TYPE">Number</field>
+	<value name="VALUE">
+		<block type="math_number" id="a~Ch(`z6=k|L!;f}/S_g"
+			intask="true">
+			<field name="NUM">1</field>
+		</block>
+	</value>
+</block>

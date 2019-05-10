@@ -27,10 +27,14 @@ robots:
        template: sensebox
 
 progs:
-    controll_flow_decisons:
-       decl: controll_flow_decisons
+    controlFlowDecisons:
+       decl: controlFlowDecisons
        exclude:
        remark: "all combinations for IF-THEN-ELSE upto two levels"
+    controlFlowLoops:
+       decl: controlFlowLoops
+       exclude:
+       remark: "all combinations of loops"   
     assign:
        decl: default
        exclude:
