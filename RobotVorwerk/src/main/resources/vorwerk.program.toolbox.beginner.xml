@@ -20,7 +20,6 @@
       </value>
     </block>
     <block type="robActions_motorDiff_stop"/>
-    <block type="mbedActions_play_note"/>
     <block type="vorwerkActions_play_file"/>
   </category>
   <category name="TOOLBOX_SENSOR" svg="true">

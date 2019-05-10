@@ -107,7 +107,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
         nlIndent();
-        this.sb.append("hal.wait(15)");
+        this.sb.append("hal.wait(50)");
         decrIndentation();
         return null;
     }

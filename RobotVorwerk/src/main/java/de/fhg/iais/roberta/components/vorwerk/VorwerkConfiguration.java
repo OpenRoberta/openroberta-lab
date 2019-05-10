@@ -20,10 +20,10 @@ public class VorwerkConfiguration extends Configuration {
     private final String password;
     static {
         Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
-        ConfigurationComponent motorA = new ConfigurationComponent(SC.LARGE, true, "left", BlocklyConstants.NO_SLOT, "LEFT_MOTOR", motorAproperties);
+        ConfigurationComponent motorA = new ConfigurationComponent(SC.LARGE, true, "left", BlocklyConstants.NO_SLOT, "LEFT", motorAproperties);
 
         Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
-        ConfigurationComponent motorB = new ConfigurationComponent(SC.LARGE, true, "right", BlocklyConstants.NO_SLOT, "RIGHT_MOTOR", motorBproperties);
+        ConfigurationComponent motorB = new ConfigurationComponent(SC.LARGE, true, "right", BlocklyConstants.NO_SLOT, "RIGHT", motorBproperties);
 
         ConfigurationComponent leftUltrasonic =
             new ConfigurationComponent(SC.ULTRASONIC, false, "left_ultrasonic", "NO_SLOT", "LEFT_ULTRASONIC", Collections.emptyMap());
