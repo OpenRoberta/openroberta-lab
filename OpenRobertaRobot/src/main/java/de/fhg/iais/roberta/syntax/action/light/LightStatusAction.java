@@ -82,7 +82,7 @@ public class LightStatusAction<V> extends Action<V> {
         Status status = LightStatusAction.Status.RESET;
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = helper.extractFields(block, (short) 1);
-        String port = helper.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.NO_PORT);
+        String port = helper.extractField(fields, BlocklyConstants.ACTORPORT, "0");
         if ( block.getType().equals(BlocklyConstants.ROB_ACTIONS_BRICK_LIGHT_OFF)
             || block.getType().equals("mbedActions_leds_off")
             || block.getType().equals("robActions_leds_off") ) {
@@ -95,7 +95,7 @@ public class LightStatusAction<V> extends Action<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
-        if ( !this.port.toString().equals(BlocklyConstants.NO_PORT) ) {
+        if ( !this.port.toString().equals("0") ) {
             Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.ACTORPORT, getPort().toString());
         }
         return jaxbDestination;

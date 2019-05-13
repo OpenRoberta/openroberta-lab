@@ -259,9 +259,7 @@ public interface IMbedVisitor<V>
     }
 
     @Override
-    default V visitLightAction(LightAction<V> lightAction) {
-        throw new DbcException("Not supported!");
-    }
+    V visitLightAction(LightAction<V> lightAction);
 
     default V visitRadioRssiSensor(RadioRssiSensor<V> radioRssiSensor) {
         throw new DbcException("Not supported!");

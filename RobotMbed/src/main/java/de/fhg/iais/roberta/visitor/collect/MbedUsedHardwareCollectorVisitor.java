@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
+import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
@@ -38,10 +39,13 @@ import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 
 /**
@@ -57,6 +61,7 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
     private boolean fourDigitDisplayUsed;
     private boolean ledBarUsed;
     private boolean humidityUsed;
+    private boolean calliBotUsed;
 
     public MbedUsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, Configuration configuration) {
         super(configuration);
@@ -85,6 +90,10 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
 
     public boolean isHumidityUsed() {
         return this.humidityUsed;
+    }
+
+    public boolean isCalliBotUsed() {
+        return this.calliBotUsed;
     }
 
     @Override
@@ -219,12 +228,27 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
         ledOnAction.getLedColor().visit(this);
+        int port = Integer.parseInt(ledOnAction.getPort());
+        if ( port > 0 ) {
+            this.calliBotUsed = true;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitLightAction(LightAction<Void> lightAction) {
+        this.calliBotUsed = true;
         return null;
     }
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         motorOnAction.getParam().getSpeed().visit(this);
+        if ( motorOnAction.getUserDefinedPort().equals("0")
+            || motorOnAction.getUserDefinedPort().equals("2")
+            || motorOnAction.getUserDefinedPort().equals("3") ) {
+            this.calliBotUsed = true;
+        }
         return null;
     }
 
@@ -241,6 +265,11 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+        if ( motorStopAction.getUserDefinedPort().equals("0")
+            || motorStopAction.getUserDefinedPort().equals("2")
+            || motorStopAction.getUserDefinedPort().equals("3") ) {
+            this.calliBotUsed = true;
+        }
         return null;
     }
 
@@ -285,19 +314,37 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
     }
 
     @Override
+    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+        String port = ultrasonicSensor.getPort();
+        if ( port.equals("2") ) {
+            this.calliBotUsed = true;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+        this.calliBotUsed = true;
+        return null;
+    }
+
+    @Override
     public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPull) {
         return null;
     }
 
     @Override
     public Void visitBothMotorsOnAction(BothMotorsOnAction<Void> bothMotorsOnAction) {
-        // TODO Auto-generated method stub
+        bothMotorsOnAction.getSpeedA().visit(this);
+        bothMotorsOnAction.getSpeedB().visit(this);
+        if ( bothMotorsOnAction.getPortA().equals("LEFT") ) {
+            this.calliBotUsed = true;
+        }
         return null;
     }
 
     @Override
     public Void visitBothMotorsStopAction(BothMotorsStopAction<Void> bothMotorsStopAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -311,4 +358,5 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
     public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction<Void> switchLedMatrixAction) {
         return null;
     }
+
 }

@@ -13,9 +13,9 @@ public class LedOnActionTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=138, y=37], "
                 + "MainTask [], "
-                + "LedOnAction [ ColorConst [#ff0000] ], "
-                + "LedOnAction [ ColorConst [#009900] ], "
-                + "LedOnAction [ ColorConst [#9999ff] ]]]]";
+                + "LedOnAction [ 0, ColorConst [#ff0000] ], "
+                + "LedOnAction [ 0, ColorConst [#009900] ], "
+                + "LedOnAction [ 0, ColorConst [#9999ff] ]]]]";
 
         String result = this.h.generateTransformerString("/action/led_on_three_colors.xml");
 
@@ -24,7 +24,7 @@ public class LedOnActionTest {
 
     @Test
     public void make_MissingColor_InstanceOfLedOnActionClassWithMissingLedClor() throws Exception {
-        String expectedResult = "BlockAST [project=[[Location [x=163, y=62], MainTask [], LedOnAction [ EmptyExpr [defVal=COLOR] ]]]]";
+        String expectedResult = "BlockAST [project=[[Location [x=163, y=62], MainTask [], LedOnAction [ 0, EmptyExpr [defVal=COLOR] ]]]]";
 
         String result = this.h.generateTransformerString("/action/led_on_missing_color.xml");
 

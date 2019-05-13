@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-05-08 19:35:19.186060",
+		"lastupdated": "2019-05-15 13:36:21.239840",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1510,6 +1510,11 @@
 	"SWITCH_LED_MATRIX_TOOLTIP": "Enables/Disables the LED matrix to use the dual purpose pins.",
 	"ACTION_EVAL": "eval",
 	"ACTION_EVAL_AS": "as",
+	"CB_LEFT": "Calli:bot left",
+	"CB_RIGHT": "Calli:bot right",
+	"CB_BOTH": "Calli:bot both",
+	"CB_ALL": "Calli:bot all",
+	"PORT_INTERNAL": "Port internal",
 	"ACTION_PLOTTING": "plot",
 	"ACTION_PLOT_POINT": "plot a point",
 	"ACTION_PLOT_POINT_TOOLTIP": "plot a point with specified value (Y axis) at the specified tickmark (X axis)",

@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.action.mbed;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -30,10 +31,13 @@ import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
  */
 public class LedOnAction<V> extends Action<V> {
     private final Expr<V> ledColor;
+    private final String port;
 
-    private LedOnAction(Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private LedOnAction(String port, Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("LED_ON_ACTION"), properties, comment);
+        Assert.nonEmptyString(port);
         Assert.notNull(ledColor);
+        this.port = port;
         this.ledColor = ledColor;
         setReadOnly();
     }
@@ -46,8 +50,12 @@ public class LedOnAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link LedOnAction}
      */
-    private static <V> LedOnAction<V> make(Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LedOnAction<>(ledColor, properties, comment);
+    private static <V> LedOnAction<V> make(String port, Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new LedOnAction<>(port, ledColor, properties, comment);
+    }
+
+    public String getPort() {
+        return this.port;
     }
 
     /**
@@ -59,7 +67,7 @@ public class LedOnAction<V> extends Action<V> {
 
     @Override
     public String toString() {
-        return "LedOnAction [ " + this.ledColor + " ]";
+        return "LedOnAction [ " + this.port + ", " + this.ledColor + " ]";
     }
 
     @Override
@@ -75,11 +83,12 @@ public class LedOnAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 1);
         List<Value> values = helper.extractValues(block, (short) 1);
-
+        String port = helper.extractField(fields, BlocklyConstants.ACTORPORT, "0");
         Phrase<V> ledColor = helper.extractValue(values, new ExprParam(BlocklyConstants.COLOR, BlocklyType.COLOR));
 
-        return LedOnAction.make(helper.convertPhraseToExpr(ledColor), helper.extractBlockProperties(block), helper.extractComment(block));
+        return LedOnAction.make(port, helper.convertPhraseToExpr(ledColor), helper.extractBlockProperties(block), helper.extractComment(block));
 
     }
 
@@ -89,6 +98,9 @@ public class LedOnAction<V> extends Action<V> {
         Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
 
         Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.COLOR, this.ledColor);
+        if ( !this.port.toString().equals("0") ) {
+            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.ACTORPORT, this.port);
+        }
 
         return jaxbDestination;
 

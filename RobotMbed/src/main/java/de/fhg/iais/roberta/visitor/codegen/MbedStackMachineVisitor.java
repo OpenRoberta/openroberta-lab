@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
+import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
@@ -360,6 +361,12 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitDebugAction(DebugAction<V> debugAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public V visitLightAction(LightAction<V> lightAction) {
         // TODO Auto-generated method stub
         return null;
     }
