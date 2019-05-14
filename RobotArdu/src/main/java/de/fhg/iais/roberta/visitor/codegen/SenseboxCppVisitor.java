@@ -201,7 +201,9 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
             portName = cc.getUserDefinedPortName();
         }
         if ( portName != null ) {
-            this.sb.append("_display_").append(portName).append(".clearDisplay();");
+            this.sb.append("_plot_").append(portName).append(".clear();");
+            nlIndent();
+            this.sb.append("_plot_").append(portName).append(".drawPlot();");
             nlIndent();
         }
         return null;
