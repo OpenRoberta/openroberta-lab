@@ -710,9 +710,9 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                     nlIndent();
                     break;
                 case SC.RFID:
-                    this.sb.append("#define SS_PIN_" + blockName + " " + cc.getProperty("RST"));
+                    this.sb.append("#define SS_PIN_" + blockName + " " + cc.getProperty("SDA"));
                     nlIndent();
-                    this.sb.append("#define RST_PIN_" + blockName + " " + cc.getProperty("SDA"));
+                    this.sb.append("#define RST_PIN_" + blockName + " " + cc.getProperty("RST"));
                     nlIndent();
                     this.sb.append("MFRC522 _mfrc522_" + blockName + "(SS_PIN_" + blockName + ", RST_PIN_" + blockName + ");");
                     nlIndent();

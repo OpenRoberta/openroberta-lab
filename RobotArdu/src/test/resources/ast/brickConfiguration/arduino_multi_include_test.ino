@@ -12,11 +12,11 @@ RobertaFunctions rob;
 String item;
 bool item2;
 Servo _servo_S;
-#define SS_PIN_R6 9
-#define RST_PIN_R6 10
+#define SS_PIN_R6 10
+#define RST_PIN_R6 9
 MFRC522 _mfrc522_R6(SS_PIN_R6, RST_PIN_R6);
-#define SS_PIN_R7 9
-#define RST_PIN_R7 10
+#define SS_PIN_R7 10
+#define RST_PIN_R7 9
 MFRC522 _mfrc522_R7(SS_PIN_R7, RST_PIN_R7);
 Servo _servo_S2;
 String _readRFIDData()

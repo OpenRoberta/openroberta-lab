@@ -10,8 +10,8 @@ RobertaFunctions rob;
 
 String item;
 bool item2;
-#define SS_PIN_R 9
-#define RST_PIN_R 10
+#define SS_PIN_R 10
+#define RST_PIN_R 9
 MFRC522 _mfrc522_R(SS_PIN_R, RST_PIN_R);
 String _readRFIDData()
 {
