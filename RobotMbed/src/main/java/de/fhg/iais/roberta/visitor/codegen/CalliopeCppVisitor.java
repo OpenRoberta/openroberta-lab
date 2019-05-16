@@ -106,7 +106,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     /**
      * initialize the C++ code generator visitor for tests. <b>Will be removed in the future, if tests with textual representations of Nepo (instead of
      * blockly-based graphical representation have been finished.</b>
-     * 
+     *
      * @param programPhrases
      */
     public CalliopeCppVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases) {
@@ -891,10 +891,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
         switch ( radioReceiveAction.getType() ) {
+            case BOOLEAN:
             case NUMBER:
                 this.sb.append("atoi((char*)_uBit.radio.datagram.recv().getBytes())");
                 break;
-            case BOOLEAN:
             case STRING:
                 this.sb.append("ManagedString(_uBit.radio.datagram.recv())");
                 break;
