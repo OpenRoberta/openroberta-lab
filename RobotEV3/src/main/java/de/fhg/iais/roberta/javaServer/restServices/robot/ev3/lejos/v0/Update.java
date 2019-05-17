@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.javaServer.restServices.robot.ev3.lejos.v0;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.util.AliveData;
 
 /**
@@ -29,8 +31,8 @@ public class Update {
     private final String robotUpdateResourcesDir;
 
     @Inject
-    public Update(@Named("robot.plugin.ev3lejos.v0.updateResources.dir") String robotUpdateResourcesDir) {
-        this.robotUpdateResourcesDir = robotUpdateResourcesDir;
+    public Update(@Named("robotPluginMap") Map<String, IRobotFactory> robotPluginMap) {
+        this.robotUpdateResourcesDir = robotPluginMap.get("ev3lejosv0").getPluginProperties().getUpdateDir();
     }
 
     @GET

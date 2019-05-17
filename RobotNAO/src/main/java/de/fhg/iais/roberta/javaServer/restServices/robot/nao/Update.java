@@ -8,37 +8,39 @@ import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+
+import de.fhg.iais.roberta.factory.IRobotFactory;
 
 /*
  * REST service for fetching NAO python package with HAL
  */
-@Path("/update/nao/v2-1-4-3")
+@Path("/update/nao")
 public class Update {
-    private static final Logger LOG = LoggerFactory.getLogger(Update.class);
+
     private final String robotUpdateResourcesDir;
 
     @Inject
-    public Update(@Named("robot.plugin.nao.updateResources.dir") String robotUpdateResourcesDir) {
-        this.robotUpdateResourcesDir = robotUpdateResourcesDir;
+    public Update(@Named("robotPluginMap") Map<String, IRobotFactory> robotPluginMap) {
+        this.robotUpdateResourcesDir = robotPluginMap.get("nao").getPluginProperties().getUpdateDir();
     }
 
     @GET
-    @Path("/hal")
+    @Path("{version}/hal")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response getHal() throws FileNotFoundException {
-        File hal = new File(this.robotUpdateResourcesDir + "/roberta.zip");
+    public Response getHal(@PathParam("version") String version) throws FileNotFoundException {
+        version = version.equals("2-1-4-3") ? "2-1" : version;
+        File hal = new File(this.robotUpdateResourcesDir + "/" + version + "/roberta.zip");
         return Response
             .ok(hal, MediaType.APPLICATION_OCTET_STREAM)
             .header("Content-Disposition", "attachment; filename=\"" + hal.getName() + "\"")
@@ -47,11 +49,12 @@ public class Update {
     }
 
     @GET
-    @Path("/hal/checksum")
+    @Path("{version}/hal/checksum")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getChecksum() throws IOException, NoSuchAlgorithmException {
+    public Response getChecksum(@PathParam("version") String version) throws IOException, NoSuchAlgorithmException {
+        version = version.equals("v2-1-4-3") ? "v2-1" : version;
         MessageDigest digest = MessageDigest.getInstance("SHA-1");
-        java.nio.file.Path path = Paths.get(this.robotUpdateResourcesDir + "/roberta.zip");
+        java.nio.file.Path path = Paths.get(this.robotUpdateResourcesDir + "/" + version + "/roberta.zip");
         byte[] bytes = Files.readAllBytes(path);
         digest.update(bytes);
         byte[] result = digest.digest();

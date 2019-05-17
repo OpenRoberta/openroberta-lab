@@ -5,12 +5,13 @@ import java.util.ArrayList;
 import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
 public interface IRobotFactory {
 
-    public BlocklyDropdownFactory getBlocklyDropdownFactory();
+    BlocklyDropdownFactory getBlocklyDropdownFactory();
 
     /**
      * Get the compiler workflow object for this robot.
@@ -44,7 +45,7 @@ public interface IRobotFactory {
     String getRealName();
 
     Boolean hasSim();
-    
+
     Boolean hasMultipleSim();
 
     String getInfo();
@@ -78,4 +79,6 @@ public interface IRobotFactory {
     default String getMenuVersion() {
         return null;
     }
+
+    PluginProperties getPluginProperties();
 }

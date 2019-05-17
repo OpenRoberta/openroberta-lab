@@ -3,18 +3,16 @@ package de.fhg.iais.roberta.util;
 import java.util.Properties;
 
 import org.apache.commons.lang3.SystemUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class PluginProperties {
-    private static final Logger LOG = LoggerFactory.getLogger(PluginProperties.class);
 
     private final String robotName;
     private final String resourceDir;
     private final String tempDir;
     private final String compilerDir;
+    private final String updateDir;
     private final Properties pluginProperties;
 
     /**
@@ -34,17 +32,8 @@ public class PluginProperties {
         Assert.notNull(tempDir);
         Assert.notNull(properties);
         this.robotName = robotName;
-        final String pluginResourceDir = properties.getProperty("robot.plugin.compiler.resources.dir");
-        String tempResourceDir;
-        if ( pluginResourceDir != null && pluginResourceDir.length() > 0 && pluginResourceDir.startsWith("/") ) {
-            tempResourceDir = pluginResourceDir; // because plugin resource dir is an absolute path
-        } else {
-            tempResourceDir = resourceDir + pluginResourceDir; // because plugin resource dir is a relative path
-        }
-        if ( !(tempResourceDir.endsWith("/") || tempResourceDir.endsWith("\\")) ) {
-            tempResourceDir = tempResourceDir + "/";
-        }
-        this.resourceDir = tempResourceDir;
+        this.resourceDir = resourceDirPath(resourceDir, properties.getProperty("robot.plugin.compiler.resources.dir"));
+        this.updateDir = resourceDirPath(resourceDir, properties.getProperty("robot.plugin.update.dir"));
         this.tempDir = tempDir;
         String tempCompilerDir = properties.getProperty("robot.plugin.compiler." + getOs() + ".dir");
         if ( SystemUtils.IS_OS_WINDOWS && tempCompilerDir != null && tempCompilerDir.equals("") ) {
@@ -52,6 +41,19 @@ public class PluginProperties {
         }
         this.compilerDir = ""; // TODO: set tempCompilerDir;
         this.pluginProperties = properties;
+    }
+
+    private String resourceDirPath(String baseDir, String pluginExtensionDir) {
+        String tempResourceDir;
+        if ( pluginExtensionDir != null && pluginExtensionDir.length() > 0 && pluginExtensionDir.startsWith("/") ) {
+            tempResourceDir = pluginExtensionDir; // because plugin resource dir is an absolute path
+        } else {
+            tempResourceDir = baseDir + pluginExtensionDir; // because plugin resource dir is a relative path
+        }
+        if ( !(tempResourceDir.endsWith("/") || tempResourceDir.endsWith("\\")) ) {
+            tempResourceDir = tempResourceDir + "/";
+        }
+        return tempResourceDir;
     }
 
     public String getRobotName() {
@@ -64,6 +66,10 @@ public class PluginProperties {
 
     public String getCompilerBinDir() {
         return this.compilerDir;
+    }
+
+    public String getUpdateDir() {
+        return this.updateDir;
     }
 
     public String getTempDir() {
