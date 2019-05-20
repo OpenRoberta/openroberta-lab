@@ -39,7 +39,7 @@ public class Update {
     @Path("{version}/hal")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getHal(@PathParam("version") String version) throws FileNotFoundException {
-        version = version.equals("2-1-4-3") ? "2-1" : version;
+        version = version.equals("v2-1-4-3") ? "2-1-4" : version;
         File hal = new File(this.robotUpdateResourcesDir + "/" + version + "/roberta.zip");
         return Response
             .ok(hal, MediaType.APPLICATION_OCTET_STREAM)
@@ -52,7 +52,7 @@ public class Update {
     @Path("{version}/hal/checksum")
     @Produces(MediaType.TEXT_PLAIN)
     public Response getChecksum(@PathParam("version") String version) throws IOException, NoSuchAlgorithmException {
-        version = version.equals("v2-1-4-3") ? "v2-1" : version;
+        version = version.equals("v2-1-4-3") ? "2-1-4" : version;
         MessageDigest digest = MessageDigest.getInstance("SHA-1");
         java.nio.file.Path path = Paths.get(this.robotUpdateResourcesDir + "/" + version + "/roberta.zip");
         byte[] bytes = Files.readAllBytes(path);
