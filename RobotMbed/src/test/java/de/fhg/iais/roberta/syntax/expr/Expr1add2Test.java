@@ -55,7 +55,6 @@ public class Expr1add2Test {
         LOG.info("" + and);
 
         Binary<BlocklyType> mix = Binary.make(Op.ADD, n1, b1, "");
-        LOG.info("" + mix);
         TypecheckVisitor tcMix = TypecheckVisitor.makeVisitorAndTypecheck(mix);
         Assert.assertEquals(1, tcMix.getErrorCount());
         LOG.info("" + mix);

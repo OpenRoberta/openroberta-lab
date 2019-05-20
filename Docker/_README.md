@@ -94,7 +94,7 @@ Configuration examples exist in the directory apache2. On the test server:
 * `localhost:1998` is configured by `dev.open-roberta.org.443`  and `dev.open-roberta.org.80`
 * `localhost:1997` is configured by `dev1.open-roberta.org.443` and `dev1.open-roberta.org.80`
 
-and so on. B.t.w.: the ports are not fixed. But they must be consistent between apache2 and lab server. On the prod server
+and so on. B.t.w.: the ports are not fixed. But they must be consistent between apache2 and lab server. For defaults see the listing below. On the prod server
 
 * `localhost:1999` is configured by `lab.open-roberta.org.443` and `lab.open-roberta.org.80`
 
@@ -117,10 +117,17 @@ The whole setup has a unique name `$INAME`, defined in `decl.sh`.
 The ports `1999` to `1989` are used by up to 11 openroberta server. Each of these servers is based on an embedded jetty.
 The names of the servers are (b.t.w.: this matches the virtual host names of the apache configuration):
 
-* master: configuration is in `$SERVER_DIR/master/decl.sh`
-* test: configuration is in `$SERVER_DIR/test/decl.sh`
-* dev: configuration is in `$SERVER_DIR/dev/decl.sh`
-* dev1 up to dev9: configuration is in `$SERVER_DIR/dev1/decl.sh` up to `$SERVER_DIR/dev9/decl.sh`
+* test: configuration is in `$SERVER_DIR/master/decl.sh` (usually port 1999)
+* dev: configuration is in `$SERVER_DIR/dev/decl.sh` (usually port 1998)
+* dev1: configuration is in `$SERVER_DIR/dev/decl.sh` (usually port 1997)
+* dev2: configuration is in `$SERVER_DIR/dev/decl.sh` (usually port 1996)
+* dev3: configuration is in `$SERVER_DIR/dev/decl.sh` (usually port 1995)
+* dev4: configuration is in `$SERVER_DIR/dev/decl.sh` (usually port 1994)
+* dev5: configuration is in `$SERVER_DIR/dev/decl.sh` (usually port 1993)
+* dev6: configuration is in `$SERVER_DIR/dev/decl.sh` (usually port 1992)
+* dev7: configuration is in `$SERVER_DIR/dev/decl.sh` (usually port 1991)
+* dev8: configuration is in `$SERVER_DIR/dev/decl.sh` (usually port 1990)
+* dev9: configuration is in `$SERVER_DIR/dev/decl.sh` (usually port 1989)
 
 The name of the docker images and the name of the running containers are:
 
