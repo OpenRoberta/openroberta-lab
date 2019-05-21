@@ -18,8 +18,8 @@ _Note:_ If the git repository `ora-cc-rsc` is changed, the base image and all im
 occur often. But better do not forget.
 
 ```bash
-REPO=/data/openroberta/git/openroberta-lab
-CC_RESOURCES=/data/openroberta/git/ora-cc-rsc
+REPO=/data/openroberta-lab/git/openroberta-lab
+CC_RESOURCES=/data/openroberta-lab/git/ora-cc-rsc
 cd $CC_RESOURCES
 docker build -f $REPO/Docker/meta/DockerfileBase_ubuntu_18_04 -t rbudde/openroberta_base:2 .
 docker push rbudde/openroberta_base:2
@@ -33,7 +33,7 @@ It has executed a git clone of the main git repository `openroberta-lab` and has
 If called, it will checkout a branch and runs both the tests and the integration tests.
 
 ```bash
-REPO=/data/openroberta/git/openroberta-lab
+REPO=/data/openroberta-lab/git/openroberta-lab
 BRANCH=develop
 cd $REPO/Docker/testing
 docker build -t rbudde/openroberta_it_ubuntu_18_04:2 -f DockerfileIT_ubuntu_18_04 . --build-arg BRANCH=$BRANCH
@@ -45,7 +45,7 @@ It has executed a git clone of the main git repository `openroberta-lab` and has
 (mvn) cache and speeds up later builds considerably. The entrypoint is "/bin/bash". This image is build by
 
 ```bash
-REPO=/data/openroberta/git/openroberta-lab
+REPO=/data/openroberta-lab/git/openroberta-lab
 cd $REPO/Docker
 docker build -t rbudde/openroberta_debug_ubuntu_18_04:2 -f testing/DockerfileDebug_ubuntu_18_04 .
 docker push rbudde/openroberta_debug_ubuntu_18_04:2
@@ -58,20 +58,21 @@ They are setup in the same way. The following text describes the test server set
 
 ## Directory structure
 
-The template for this framework is contained in dir `Docker/openroberta`. It contains the directories
+The template for this framework is contained in directory `Docker/openroberta`. It contains the directories
 
 * conf - contains an example of an apache2 configuration and 2 dirs `docker-*`, used to generate docker images for the db and the jetty server
-* scripts - contains shell scripts to administrate the framework. The main script id `run.sh`. Call it w.o. parameter to get help.
+* conf/scripts - contains shell scripts to administrate the framework. The main script id `run.sh`. Call it w.o. parameter to get help.
+  the directory `helper` contains scripts, that are sourced from `run.sh` and do the "real" work.
 * git - here one or more git repos, used to generate the openroberta server instances, are contained. At least one git repo is needed, usually a clone
   from https://github.com/OpenRoberta/openroberta-lab.git
 * server - contains the servers. Each server has a name (master,test,dev,dev1...dev9), which is the name of a directory. This directory stores all
-  data to configure the server in file `decl.sh`. In dir `export` all artifacts making up the server are stored during server
-  generation. In dir `admin` all logging data and the tuorials are stored.
+  data to configure the server in file `decl.sh`. In directory `export` all artifacts making up the server are stored during server
+  generation. In directory `admin` all logging data and the tutorials are stored.
   Each server has an associated docker image (and usually a running container), whose name is essentially the server's name.
 * db - contains the databases. Each database has a name (master,test,dev,dev1...dev9) matching the name of the jetty server who needs this data.
   the name of the database is the name of a directory, which in turn contains all database files. All databases are served by one Hsqldb server instance.
-  dir `dbAdmin` contains logging data and all database backups (when created :-)
-  There is one docker image (and usually a running container), whose name is essentially `ora-db-server`.
+  Directory `dbAdmin` stores logging data and all database backups (when created :-)
+  There is one docker image `rbudde/openroberta_db_server` and usually a running container, whose name is essentially `ora-db-server`.
 
 ## Overview
 
@@ -83,9 +84,9 @@ All running openroberta instances are generated from a branch or a commit of a g
 
 If you want to deploy the `develop` branch on server `dev4`, for instance, do the following (the variables used are explained below):
 
-* modify in the directory `$SERVER_DIR/dev4` the file `decl.sh` as you need it (set the branch name, e.g.)
+* make sure, that in the directory `$SERVER_DIR/dev4` the file `decl.sh` contains the expected data (branch name, port number for accessing the server, e.g.)
 * be sure, that in `$DATABASE_DIR/dev4` a valid database is available. Check whether `decl.sh` contains `dev4` in variable `DATABASES`. It not,
-  add it and restart the database server by `$SCRIPT_DIR/run.sh startDbC`
+  add it and restart the database server by `$SCRIPT_DIR/run.sh start-dbc`
 
 All container of an openroberta test instance use a bridge network with (unique!) name `$DOCKER_NETWORK_NAME`.
 Assuming that the network is created, the database container is running, then you may (re-)deploy `dev4` by executing
@@ -110,7 +111,7 @@ and so on. B.t.w.: the ports are not fixed. But they must be consistent between 
 
 ## Conventions
 
-All data is stored relative to a base directory (your choice, we use `/data/openroberta`). Abbreviations:
+All data is stored relative to a base directory (your choice, we use `/data/openroberta-lab`). Abbreviations:
 
 ```bash
 # BASE_DIR is the directory, in which the configuration file 'decl.sh' is found
@@ -173,40 +174,31 @@ Hsqldb default `9001`.
 Everything is done with the help of the shell script `$SCRIPT_DIR/run.sh`. I tried to make these scripts as robust as possible. Please send any
 problems, improvements, ideas to reinhard.budde at iais.fraunhofer.de
 
-The main commands of the script are (run `$SCRIPT_DIR/run.sh help` to see the names) the following:
-
-* `gen <name>`: generate the docker image for server <name>. Use the configuration found in `$SERVER_DIR/<name>`.
-* `start [<name>]`: start a container with the image generated for server <name>. Before doing that, stop a container running sever <name>
-* `stop [<name>]`: stop a container for server <name>. Remove the exited container.
-* `deploy [<name>]`: shortcut for gen and start for server <name>.
-
-Rarely used are commands:
-
-* `genDbC`: generate the database container `rbudde/openroberta${INAME}-db-server:2.4.0`. Used once when the test server is setup.
-* `startDbC`: (re-)start the database container servicing the databases, whose names are found in variable `DATABASES` in `config.sh`.
-* `stopDbC`: stop the database container
-* `prune`: remove all stale data from the docker installation. IMPORTANT to call, if you are low with disc space.
-
-Getting information:
-
-* `info`: show images and running containers
-* `network`: show the ora-net network
-* `logs`: show the last 10 lines of all logs of all running containers. B.t.w.: `docker logs -f <name>` is convenient to see how a server works.
-* of course, docker commands can help, too: `docker logs -f <name>` or `docker ps`
+The main commands of the script can be seen if you run `$SCRIPT_DIR/run.sh` without parameter. The following sequence of commands is advised:
+* clone the openroberta-lab repository into directory `git`.
+* generate the bridge network for this instance of the framework (the name is defined in `config.sh`).
+* create the databases needed in directory `db` and put their names into `config.sh`.
+* start the database server. Have a look at the log (`docker ps; docker logs <name-of-container>`) to check for errors.
+* setup your servers in `server/<server-name>/decl.sh` and put their names into `config.sh`. Note, that `test, dev, dev1...dev9` are the
+  only names accepted as server names.
+* generate and start your servers `$SCRIPT_DIR/run.sh deploy <server-name>`. Have a look at the log (`docker ps; docker logs <name-of-container>`)
+  to check for errors.
+* enable autodeploy (see below).
+* add init functionality for server (re-)boots (see below).
 
 ## Init scripts and automatic deploy
 
-The shell script `$SCRIPT_DIR/run.sh` has two more commands, that are used to initialize the test setup (on server restart, for example) and to
+The shell script `$SCRIPT_DIR/run.sh` has commands, that are used to initialize the test setup (on server restart, for example) and to
 deploy one or more servers automatically if new commits hit the remote repo.
  
-* `autoDeploy`: usually called from cron. It takes server names from variable `AUTODEPLOY` from `config.sh` and re-deploys each server, if the git
+* `auto-deploy`: usually called from cron. It takes server names from variable `AUTODEPLOY` from `config.sh` and re-deploys each server, if the git
   repository connected to this server has got new commits. Use `crontab -e` to add the following line to the crontab to run this is:
   
 ```bash
-*/5 * * * * bash <BASE_DIR>/scripts/run.sh -q autoDeploy >><BASE_DIR>/logs/cronlog.txt
+*/5 * * * * bash <BASE_DIR>/scripts/run.sh -q auto-deploy >><BASE_DIR>/logs/cronlog.txt
 ```
 
-* `startAll` and `stopAll`: usually called from the configuration file `robertalab` found in `/etc/init.d`. A typical script is:
+* `start-all` and `stop-all`: usually called from the configuration file `robertalab` found in `/etc/init.d`. A typical script is:
 
 ```bash
 #!/bin/sh
@@ -225,9 +217,9 @@ deploy one or more servers automatically if new commits hit the remote repo.
 BASE_DIR=<BASE_DIR>
 SCRIPTS=$BASE_DIR/conf/scripts
 case "$1" in
-    start)   bash $SCRIPTS/run.sh -q startAll                              >>$BASE_DIR/logs/init.txt ;;
-    stop)    bash $SCRIPTS/run.sh -q stopAll                               >>$BASE_DIR/logs/init.txt ;;
-    restart) bash $SCRIPTS/run.sh -q startAll                              >>$BASE_DIR/logs/init.txt ;;
+    start)   bash $SCRIPTS/run.sh -q start-all                             >>$BASE_DIR/logs/init.txt ;;
+    stop)    bash $SCRIPTS/run.sh -q stop-all                              >>$BASE_DIR/logs/init.txt ;;
+    restart) bash $SCRIPTS/run.sh -q start-all                             >>$BASE_DIR/logs/init.txt ;;
     *)       echo "invalid command \"$1\". Usage: $0 {start|stop|restart}" >>$BASE_DIR/logs/init.txt
              exit 12 ;;
 esac
@@ -291,7 +283,7 @@ It gets version numbers independent from the OpenRoberta versions. During image 
 branch develop to fill the /root/.m2 cache. This makes later builds much faster.
 
 ```bash
-REPO=/data/openroberta/git/robertalab
+REPO=/data/openroberta-lab/git/robertalab
 cd $REPO/Docker
 docker build -f meta/DockerfileGen_ubuntu_18_04 -t rbudde/openroberta_gen:1 .
 docker push rbudde/openroberta_gen:1
@@ -302,7 +294,7 @@ docker push rbudde/openroberta_gen:1
 this is a setting usable on the test machine:
 
 ```bash
-export HOME="/data/openroberta
+export HOME="/data/openroberta-lab
 export VERSION='3.2.2'
 export BRANCH='develop'
 export GITREPO="$HOME/git/robertalab"

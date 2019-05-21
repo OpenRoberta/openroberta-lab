@@ -13,7 +13,7 @@ case "$DOCKERRM" in
     * ) echo "removed old container '${CONTAINER}'" ;;
 esac
 
-echo "starting the database image rbudde/openroberta_db:2.4.0 as '${CONTAINER}' for the databases $*"
+echo "starting the database image rbudde/openroberta_db:2.4.0 as '${CONTAINER}' for the database/s $DATABASES"
 DOCKERID=$(docker run -d --name=${CONTAINER} \
                   --network $DOCKER_NETWORK_NAME \
                   -v ${DATABASE_DIR}:/opt/db \
