@@ -107,40 +107,21 @@ public class CalliopeCompilerWorkflow extends AbstractCompilerWorkflow {
         final String compilerResourcesDir = this.pluginProperties.getCompilerResourceDir();
         final String tempDir = this.pluginProperties.getTempDir();
 
-        final String runningInContainer = this.pluginProperties.getStringProperty("robot.containerised");
-
         final StringBuilder sb = new StringBuilder();
         String scriptName = compilerResourcesDir + "../compile." + (SystemUtils.IS_OS_WINDOWS ? "bat" : "sh");
         String bluetooth = radioUsed ? "" : "-b";
         Path path = Paths.get(tempDir + token + "/" + mainFile);
         Path base = Paths.get("");
 
-        String[] executableWithParameters;
-
-        if ( runningInContainer.equals("true") ) {
-            executableWithParameters =
-                new String[] {
-                    "docker",
-                    "exec",
-                    "calliope-arm-gcc",
-                    "/opt/calliope/compile.sh",
-                    compilerBinDir,
-                    mainFile,
-                    base.resolve(path).toAbsolutePath().normalize().toString() + "/",
-                    "/opt/calliope/libs2017/",
-                    bluetooth
-                };
-        } else {
-            executableWithParameters =
-                new String[] {
-                    scriptName,
-                    compilerBinDir,
-                    mainFile,
-                    base.resolve(path).toAbsolutePath().normalize().toString() + "/",
-                    compilerResourcesDir,
-                    bluetooth
-                };
-        }
+        String[] executableWithParameters =
+            new String[] {
+                scriptName,
+                compilerBinDir,
+                mainFile,
+                base.resolve(path).toAbsolutePath().normalize().toString() + "/",
+                compilerResourcesDir,
+                bluetooth
+            };
         try {
             ProcessBuilder procBuilder = new ProcessBuilder(executableWithParameters);
 
