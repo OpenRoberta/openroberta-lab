@@ -378,10 +378,19 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         String port = lightStatusAction.getPort();
-        if ( port.equals("0") ) {
-            this.sb.append("_uBit.rgb.off();");
-        } else {
-            this.sb.append("_cbSetRGBLed(&_i2c, ").append(port).append(", 0);");
+        switch ( port ) {
+            case "0":
+                this.sb.append("_uBit.rgb.off();");
+                break;
+            case "1":
+            case "2":
+            case "3":
+            case "4":
+            case "5":
+                this.sb.append("_cbSetRGBLed(&_i2c, ").append(port).append(", 0);");
+                break;
+            default:
+                throw new DbcException("LedOffAction; invalid port: " + port);
         }
         return null;
     }
@@ -936,7 +945,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
                 this.sb.append(");");
                 break;
             default:
-                throw new IllegalArgumentException("LedOnAction; invalid port: " + port);
+                throw new DbcException("LedOnAction; invalid port: " + port);
         }
         return null;
     }
@@ -949,7 +958,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         } else if ( mode.equals("LOW") ) {
             mode = "0";
         } else {
-            throw new IllegalArgumentException("LightAction; invalid mode: " + mode);
+            throw new DbcException("LightAction; invalid mode: " + mode);
         }
         this.sb.append("_cbSetLed(&_i2c, _cbLedState, ").append(lightAction.getPort()).append(", ").append(mode).append(");");
         return null;
