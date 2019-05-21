@@ -13,10 +13,11 @@ public class SenseboxActorTest {
     public void sdCardOledOffTest() throws Exception {
         Configuration config =
             this.senseboxHelper.regenerateConfiguration(Util1.readResourceContent("/ast/actions/sensebox_write_sdcard_display_clear_test_config.xml"));
-        this.senseboxHelper.compareExistingAndGeneratedSource(
-            "/ast/actions/sensebox_write_sdcard_display_clear_test.ino",
-            "/ast/actions/sensebox_write_sdcard_display_clear_test.xml",
-            config);
+        this.senseboxHelper
+            .compareExistingAndGeneratedSource(
+                "/ast/actions/sensebox_write_sdcard_display_clear_test.ino",
+                "/ast/actions/sensebox_write_sdcard_display_clear_test.xml",
+                config);
     }
 
     @Test
@@ -30,9 +31,16 @@ public class SenseboxActorTest {
     public void serialOledSendDataTest() throws Exception {
         Configuration config =
             this.senseboxHelper.regenerateConfiguration(Util1.readResourceContent("/ast/actions/sensebox_serial_oled_upload_test_config.xml"));
-        this.senseboxHelper.compareExistingAndGeneratedSource(
-            "/ast/actions/sensebox_serial_oled_upload_test.ino",
-            "/ast/actions/sensebox_serial_oled_upload_test.xml",
-            config);
+        this.senseboxHelper
+            .compareExistingAndGeneratedSource(
+                "/ast/actions/sensebox_serial_oled_upload_test.ino",
+                "/ast/actions/sensebox_serial_oled_upload_test.xml",
+                config);
+    }
+
+    @Test
+    public void plottingAccelerometerValuesTest() throws Exception {
+        Configuration config = this.senseboxHelper.regenerateConfiguration(Util1.readResourceContent("/ast/actions/sensebox_plotting_test_config.xml"));
+        this.senseboxHelper.compareExistingAndGeneratedSource("/ast/actions/sensebox_plotting_test.ino", "/ast/actions/sensebox_plotting_test.xml", config);
     }
 }
