@@ -31,6 +31,14 @@ progs:
        decl: controlFlowDecisons
        exclude:
        remark: "all combinations for IF-THEN-ELSE upto two levels"
+    controlFlowLoops:
+       decl: controlFlowLoops
+       exclude:
+       remark: "all combinations of loops"
+    controlFlowNestedLoops:
+       decl: controlFlowNestedLoops
+       exclude:
+       remark: "all combinations of nested loops"
     assign:
        decl: default
        exclude:

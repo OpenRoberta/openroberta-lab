@@ -1,4 +1,8 @@
-<block type="robActions_assert" id="spYPX,vd2Z30^h|wTg8{" intask="true">
+<block type="text_comment" id="hBqGkFpZB=0.Bv[cDB5L" intask="true">
+	<field name="TEXT">Control Flow Loop -- Start</field>
+</block>
+<block type="robActions_assert" id="spYPX,vd2Z30^h|wTg8{"
+	intask="true">
 	<field name="TEXT">pos-0</field>
 	<value name="OUT">
 		<block type="logic_compare" id="tWQTGA?IQ)!;bq:fF8t:"
@@ -21,7 +25,8 @@
 		</block>
 	</value>
 </block>
-<block type="controls_repeat_ext" id="k%{u(s%ry_j_GOB#f#H7" intask="true">
+<block type="controls_repeat_ext" id="k%{u(s%ry_j_GOB#f#H7"
+	intask="true">
 	<value name="TIMES">
 		<block type="math_number" id="TJt@.6FIbeRb:LD_TJ7!"
 			intask="true">
@@ -57,7 +62,8 @@
 		</block>
 	</statement>
 </block>
-<block type="robActions_assert" id="YO*oKP~]I[/f,ntat0,T" intask="true">
+<block type="robActions_assert" id="YO*oKP~]I[/f,ntat0,T"
+	intask="true">
 	<field name="TEXT">pos-1</field>
 	<value name="OUT">
 		<block type="logic_compare" id="QYbEl#nat@KG2L^~o^h?"
@@ -80,7 +86,8 @@
 		</block>
 	</value>
 </block>
-<block type="controls_whileUntil" id="BV{Du/Yn8v]}{f4CaR=W"	intask="true">
+<block type="controls_whileUntil" id="BV{Du/Yn8v]}{f4CaR=W"
+	intask="true">
 	<field name="MODE">UNTIL</field>
 	<value name="BOOL">
 		<block type="logic_compare" id="xQx2{jMBUgDBg+WpYU%/"
@@ -131,7 +138,8 @@
 		</block>
 	</statement>
 </block>
-<block type="robActions_assert" id="MF9_Xff/)TF)Y_FD:bCR" intask="true">
+<block type="robActions_assert" id="MF9_Xff/)TF)Y_FD:bCR"
+	intask="true">
 	<field name="TEXT">pos-2</field>
 	<value name="OUT">
 		<block type="logic_compare" id="qAfn!Rkvh0ZhpDpHX.Gp"
@@ -154,7 +162,8 @@
 		</block>
 	</value>
 </block>
-<block type="controls_whileUntil" id="q/[SZ~!si(sa6FB1RGc*" intask="true">
+<block type="controls_whileUntil" id="q/[SZ~!si(sa6FB1RGc*"
+	intask="true">
 	<field name="MODE">WHILE</field>
 	<value name="BOOL">
 		<block type="logic_compare" id="6U%Ltwr)zcb,#s:((B/E"
@@ -205,7 +214,8 @@
 		</block>
 	</statement>
 </block>
-<block type="robActions_assert" id="k8_T1]mevi:Z32*8=#t(" intask="true">
+<block type="robActions_assert" id="k8_T1]mevi:Z32*8=#t("
+	intask="true">
 	<field name="TEXT">pos-3</field>
 	<value name="OUT">
 		<block type="logic_compare" id="KD=86gs[iWlRJ46]zMQB"
@@ -228,7 +238,8 @@
 		</block>
 	</value>
 </block>
-<block type="robControls_for" id="Q_n3R|qo0[eo{9j+q!ps" intask="true">
+<block type="robControls_for" id="Q_n3R|qo0[eo{9j+q!ps"
+	intask="true">
 	<field name="VAR">i</field>
 	<value name="FROM">
 		<block type="math_number" id="ErZv_l*?}(CLfPsad~TF"
@@ -277,7 +288,8 @@
 		</block>
 	</statement>
 </block>
-<block type="robActions_assert" id="DBU9b.8_3Ci[rSMp+U4w" intask="true">
+<block type="robActions_assert" id="DBU9b.8_3Ci[rSMp+U4w"
+	intask="true">
 	<field name="TEXT">pos-4</field>
 	<value name="OUT">
 		<block type="logic_compare" id="r0QJ6PwmK(VvZH-n42!U"
@@ -300,7 +312,8 @@
 		</block>
 	</value>
 </block>
-<block type="robControls_for" id="58rysACawprInp?c2=O7" intask="true">
+<block type="robControls_for" id="58rysACawprInp?c2=O7"
+	intask="true">
 	<field name="VAR">j</field>
 	<value name="FROM">
 		<block type="math_number" id="04OL`Fj~2RToN*bO14U|"
@@ -349,7 +362,8 @@
 		</block>
 	</statement>
 </block>
-<block type="robActions_assert" id="1fUMCUG,SrdGMn|pi5pq" intask="true">
+<block type="robActions_assert" id="1fUMCUG,SrdGMn|pi5pq"
+	intask="true">
 	<field name="TEXT">pos-5</field>
 	<value name="OUT">
 		<block type="logic_compare" id="QU0k^@A4:3hN~YI,rRy^"
@@ -372,7 +386,8 @@
 		</block>
 	</value>
 </block>
-<block type="robControls_for" id="qOCpUXvRlmlVIsvmwku0" intask="true">
+<block type="robControls_for" id="qOCpUXvRlmlVIsvmwku0"
+	intask="true">
 	<field name="VAR">k</field>
 	<value name="FROM">
 		<block type="math_number" id="QFog4w*C9}BMM*~iczag"
@@ -421,7 +436,8 @@
 		</block>
 	</statement>
 </block>
-<block type="robActions_assert" id="QGn~/0:8e}c0NUm-vNpg" intask="true">
+<block type="robActions_assert" id="QGn~/0:8e}c0NUm-vNpg"
+	intask="true">
 	<field name="TEXT">pos-6</field>
 	<value name="OUT">
 		<block type="logic_compare" id="AYYJ%iRvq{ylYW+Dm5T["
@@ -444,7 +460,8 @@
 		</block>
 	</value>
 </block>
-<block type="robControls_for" id="/N_AM!k|s}dy9--#Z;O)" intask="true">
+<block type="robControls_for" id="/N_AM!k|s}dy9--#Z;O)"
+	intask="true">
 	<field name="VAR">o</field>
 	<value name="FROM">
 		<block type="math_number" id="UgfK@mRd*LztaK5wcRx^"
@@ -493,7 +510,8 @@
 		</block>
 	</statement>
 </block>
-<block type="robActions_assert" id="iJ^#`])6#m[6Q0ejXPgC" intask="true">
+<block type="robActions_assert" id="iJ^#`])6#m[6Q0ejXPgC"
+	intask="true">
 	<field name="TEXT">pos-7</field>
 	<value name="OUT">
 		<block type="logic_compare" id="MsAN[~J,2vYOiCqdyLl7"
@@ -516,7 +534,8 @@
 		</block>
 	</value>
 </block>
-<block type="robControls_for" id="=O1lXrIYI^F}!6O,_5*0" intask="true">
+<block type="robControls_for" id="=O1lXrIYI^F}!6O,_5*0"
+	intask="true">
 	<field name="VAR">p</field>
 	<value name="FROM">
 		<block type="math_number" id="xOGt,+=U(53]4TlL3JX-"
@@ -565,7 +584,8 @@
 		</block>
 	</statement>
 </block>
-<block type="robActions_assert" id="oOhqi:}1#TD+T=,LoKO(" intask="true">
+<block type="robActions_assert" id="oOhqi:}1#TD+T=,LoKO("
+	intask="true">
 	<field name="TEXT">pos-8</field>
 	<value name="OUT">
 		<block type="logic_compare" id="Xkea`yOC34h=PctUs[hP"
@@ -588,7 +608,8 @@
 		</block>
 	</value>
 </block>
-<block type="robControls_for" id="4hclDivEUKBE)I~7oiE:" intask="true">
+<block type="robControls_for" id="4hclDivEUKBE)I~7oiE:"
+	intask="true">
 	<field name="VAR">m</field>
 	<value name="FROM">
 		<block type="math_number" id="b8_yIIEyM,4E0jzkm=|g"
@@ -640,44 +661,6 @@
 		<block type="variables_set" id="3?3l/i9g`:0WixNU;]Br"
 			intask="true">
 			<mutation datatype="Number">
-				<block type="robActions_debug" id="hgFlCW^-4lWQuT;y2TL2"
-					intask="true">
-					<value name="OUT">
-						<block type="logic_ternary" id="6cdE-sD7_l=5;Mo~h/bo"
-							intask="true">
-							<value name="IF">
-								<block type="logic_compare" id="I0J@ipgrhpw52^]n(NB."
-									intask="true">
-									<field name="OP">EQ</field>
-									<value name="A">
-										<block type="variables_get" id="d#K;IC1:Ol5=hp,Cy1Q4"
-											intask="true">
-											<mutation datatype="Number">
-											</mutation>
-											<field name="VAR">x</field>
-										</block>
-									</value>
-									<value name="B">
-										<block type="math_number" id="/Zt{se,hyUApWmd+;|2Y"
-											intask="true">
-											<field name="NUM">30</field>
-										</block>
-									</value>
-								</block>
-							</value>
-							<value name="THEN">
-								<block type="text" id="]S;ytkuR2p%TA.,t`%,*" intask="true">
-									<field name="TEXT">Control Flow Loops: success</field>
-								</block>
-							</value>
-							<value name="ELSE">
-								<block type="text" id="6-WqD*DT)fDC[.i{HrTO" intask="true">
-									<field name="TEXT">Control Flow Loops: FAIL</field>
-								</block>
-							</value>
-						</block>
-					</value>
-				</block>
 			</mutation>
 			<field name="VAR">x</field>
 			<value name="VALUE">
@@ -703,7 +686,8 @@
 		</block>
 	</statement>
 </block>
-<block type="robActions_assert" id=".#6[^A/oV-2[=L_O[hmI" intask="true">
+<block type="robActions_assert" id=".#6[^A/oV-2[=L_O[hmI"
+	intask="true">
 	<field name="TEXT">pos-9</field>
 	<value name="OUT">
 		<block type="logic_compare" id="5KDd]w0:~13|k1TsVqX("
@@ -726,7 +710,8 @@
 		</block>
 	</value>
 </block>
-<block type="robControls_loopForever" id="e!^4^OWi|/qq2gD.G~gD" intask="true">
+<block type="robControls_loopForever" id="e!^4^OWi|/qq2gD.G~gD"
+	intask="true">
 	<statement name="DO">
 		<block type="robControls_if" id="n!wcJzW]YLVuy79:.2JC"
 			intask="true">
@@ -852,7 +837,8 @@
 		</block>
 	</statement>
 </block>
-<block type="robActions_assert" id="dcN81zcTw-p+PkD6NcP." intask="true">
+<block type="robActions_assert" id="dcN81zcTw-p+PkD6NcP."
+	intask="true">
 	<field name="TEXT">pos-10</field>
 	<value name="OUT">
 		<block type="logic_compare" id="*MJU_9vly`+G,H.j=WCl"
@@ -875,7 +861,8 @@
 		</block>
 	</value>
 </block>
-<block type="robActions_debug" id="hgFlCW^-4lWQuT;y2TL2" intask="true">
+<block type="robActions_debug" id="hgFlCW^-4lWQuT;y2TL2"
+	intask="true">
 	<value name="OUT">
 		<block type="logic_ternary" id="6cdE-sD7_l=5;Mo~h/bo"
 			intask="true">
@@ -911,4 +898,7 @@
 			</value>
 		</block>
 	</value>
-</block>  
+</block>
+<block type="text_comment" id="5NwzP/]8Bn.:j?0,xW!k" intask="true">
+	<field name="TEXT">Control Flow Loop -- End</field>
+</block>

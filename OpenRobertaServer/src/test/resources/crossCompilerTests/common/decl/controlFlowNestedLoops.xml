@@ -1,0 +1,12 @@
+<block type="robGlobalVariables_declare" id="h=+}`#i95K+R8sg,;).:"
+	intask="true" deletable="false" movable="false">
+	<mutation next="false" declaration_type="Number"></mutation>
+	<field name="VAR">X</field>
+	<field name="TYPE">Number</field>
+	<value name="VALUE">
+		<block type="math_number" id="]H}XLVNBeb0RnqsEq,:7"
+			intask="true">
+			<field name="NUM">0</field>
+		</block>
+	</value>
+</block>
