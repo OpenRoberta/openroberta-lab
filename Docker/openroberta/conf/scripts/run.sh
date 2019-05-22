@@ -35,15 +35,18 @@ case "$CMD" in
                  echo "$DATE: generating the server '${SERVER_NAME}'"
                  source ${SCRIPT_HELPER}/_gen.sh
                  echo "generating the server '${SERVER_NAME}' finished" ;;
-    start)       SERVER_NAME=$1
+    start)       SERVER_NAME=$1; shift
                  source ${SCRIPT_HELPER}/_stop.sh
                  source ${SCRIPT_HELPER}/_start.sh ;;
     stop)        SERVER_NAME=$1
                  source ${SCRIPT_HELPER}/_stop.sh ;;
-    deploy)      SERVER_NAME=$1
+    deploy)      SERVER_NAME=$1; shift
                  echo "$DATE: deploying (generating,starting) the server '${SERVER_NAME}'"
                  ${SCRIPT_MAIN}/run.sh -q gen ${SERVER_NAME}
                  ${SCRIPT_MAIN}/run.sh -q start ${SERVER_NAME} ;;
+    admin)       SERVER_NAME=$1; shift
+                 ADMIN_CMD=$1; shift
+                 source ${SCRIPT_HELPER}/_containerAdmin.sh ;;
     auto-deploy) source ${SCRIPT_HELPER}/_autodeploy.sh ;;
     start-all)   echo '******************** '$DATE' ********************'
                  echo 'start database container and all server container'

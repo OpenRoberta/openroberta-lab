@@ -44,7 +44,7 @@ then
   echo '-adminDir <adminDir>           default: ./admin'
   echo '-Xmx                           e.g. -Xmx4G, default: ""'
   echo '-rdbg                          using port 8000 for the remote client, default: no remote debug'
-  echo '-q                             quiet mode, default: verbode'
+  echo '-q                             quiet mode, default: verbose'
   echo ''
   echo 'admin.sh [-q] [-adminDir <adminDir>] [-Xmx<size>] -rdbg [-lib <java-lib-dir>] [-dbUri <db-uri>] <CMD>'
   echo ''

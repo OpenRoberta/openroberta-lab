@@ -47,7 +47,8 @@ esac
     rm -rf $SERVER_DIR_OF_ONE_SERVER/export
     ./ora.sh export $SERVER_DIR_OF_ONE_SERVER/export gzip
     cp ${CONF_DIR}/docker-for-lab/start.sh $SERVER_DIR_OF_ONE_SERVER/export
-    chmod ugo+x $SERVER_DIR_OF_ONE_SERVER/export/start.sh
+    cp ${CONF_DIR}/docker-for-lab/admin.sh $SERVER_DIR_OF_ONE_SERVER/export
+    chmod ugo+x $SERVER_DIR_OF_ONE_SERVER/export/*.sh
     IMAGE="rbudde/openroberta_${INAME}_$SERVER_NAME:2"
     DOCKERRM=$(docker rmi $IMAGE 2>/dev/null)
     case "$DOCKERRM" in

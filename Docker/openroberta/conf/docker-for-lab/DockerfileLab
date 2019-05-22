@@ -9,7 +9,7 @@ RUN mkdir --parent /opt/openroberta-lab/lib
 WORKDIR /opt/openroberta-lab
 
 COPY ["./","./"]
-RUN chmod ugo+rx ./start.sh
+RUN chmod ugo+rx ./*.sh
 
 ENTRYPOINT ["./start.sh"]
 CMD []
