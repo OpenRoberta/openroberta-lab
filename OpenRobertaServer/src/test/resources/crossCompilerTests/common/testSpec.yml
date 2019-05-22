@@ -30,10 +30,12 @@ progs:
     controlFlowDecisons:
        decl: controlFlowDecisons
        exclude:
+          bob3: "too small"
        remark: "all combinations for IF-THEN-ELSE upto two levels"
     controlFlowLoops:
        decl: controlFlowLoops
        exclude:
+          bob3: "too small"
        remark: "all combinations of loops"
     controlFlowNestedLoops:
        decl: controlFlowNestedLoops
