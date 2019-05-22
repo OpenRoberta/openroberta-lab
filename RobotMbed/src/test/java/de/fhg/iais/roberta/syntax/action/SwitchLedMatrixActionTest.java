@@ -1,8 +1,8 @@
 package de.fhg.iais.roberta.syntax.action;
 
-import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
-import org.junit.Assert;
 import org.junit.Test;
+
+import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
 
 public class SwitchLedMatrixActionTest {
     private final HelperCalliopeForXmlTest h = new HelperCalliopeForXmlTest();

@@ -927,17 +927,6 @@ public class AstToLejosJavaVisitorTest {
 
     @Test
     public void check_twoNestedloopsFirstWithBreakAndContinueInWaitSecondNot_returnsFirstLoopLabeled() throws Exception {
-        final String BRICK_CONFIGURATION =
-            "" //
-                + "    brickConfiguration = new EV3Configuration.Builder()\n"
-                + "    .setWheelDiameter(5.6)\n"
-                + "    .setTrackWidth(17.0)\n"
-                + "    .addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.NONE))\n"
-                + "    .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))\n"
-                + "    .addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH))\n"
-                + "    .addSensor(SensorPort.S2, new Sensor(SensorType.ULTRASONIC))\n"
-                + "    .addSensor(SensorPort.S3, new Sensor(SensorType.COLOR))\n"
-                + "    .build();\n\n";
         String a =
             "" //
                 + IMPORTS

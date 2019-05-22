@@ -10,10 +10,9 @@ import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
 
 public class MotorDurationTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
-
     @Test
     public void clearDisplay() throws Exception {
+        new HelperEv3ForXmlTest(); // needed; global variable set :-<
         NumConst<Void> numConst = NumConst.make("0", BlocklyBlockProperties.make("1", "1"), null);
         MotorDuration<Void> motorDuration = new MotorDuration<>(MotorMoveMode.DEGREE, numConst);
         String a = "MotorDuration [type=DEGREE, value=NumConst [0]]";

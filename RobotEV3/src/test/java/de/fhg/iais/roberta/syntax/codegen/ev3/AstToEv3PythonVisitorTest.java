@@ -68,10 +68,6 @@ public class AstToEv3PythonVisitorTest {
         "" //
             + "        '2':Hal.makeGyroSensor(ev3dev.INPUT_2),\n";
 
-    private static final String CFG_ULTRASONIC_SENSOR_2 =
-        "" //
-            + "        '2':Hal.makeUltrasonicSensor(ev3dev.INPUT_2),\n";
-
     private static final String CFG_COLOR_SENSOR =
         "" //
             + "        '3':Hal.makeColorSensor(ev3dev.INPUT_3),\n";

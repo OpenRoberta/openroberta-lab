@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
@@ -20,8 +17,6 @@ import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class RaspberryPiCommunicator {
-    private static final Logger LOG = LoggerFactory.getLogger(RaspberryPiCommunicator.class);
-    //ports on the robot
     int sshPort = 22;
     private final PluginProperties pluginProperties;
 

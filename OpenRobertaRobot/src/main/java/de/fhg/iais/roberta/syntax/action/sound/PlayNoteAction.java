@@ -32,7 +32,7 @@ public class PlayNoteAction<V> extends Action<V> {
 
     private PlayNoteAction(String port, String duration, String frequency, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("PLAY_NOTE_ACTION"), properties, comment);
-        Assert.isTrue(NumberUtils.isNumber(duration) && NumberUtils.isNumber(frequency));
+        Assert.isTrue(NumberUtils.isCreatable(duration) && NumberUtils.isCreatable(frequency));
         this.duration = duration;
         this.frequency = frequency;
         this.port = port;
@@ -55,7 +55,7 @@ public class PlayNoteAction<V> extends Action<V> {
     /**
      * @return port.
      */
-    public String  getPort() {
+    public String getPort() {
         return this.port;
     }
 

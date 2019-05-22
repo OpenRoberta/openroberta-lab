@@ -119,7 +119,6 @@ public class ServerStarter {
      * @param pluginDefines
      * @return the server
      */
-    @SuppressWarnings("unused")
     public Server start(List<String> pluginDefines) throws IOException {
         String host = serverProperties.getStringProperty("server.ip");
         int httpPort = serverProperties.getIntProperty("server.port", 0);
@@ -242,9 +241,8 @@ public class ServerStarter {
      * To get rid of Matomo, logging of the country code will be handled with the help of the ipToCountry class which maps the ip to the country code before
      * something is logged.<br>
      * In case the server is public make sure that there is database IpToCountry.csv available in the folder defined in the "server.iptocountry.dir" property,
-     * downloaded from
-     * <a href="http://software77.net/geo-ip/?DL=1">http://software77.net</a>
-     * 
+     * downloaded from <a href="http://software77.net/geo-ip/?DL=1">http://software77.net</a>
+     *
      * @return ipToCountry of type IIpToCountry
      */
     private IIpToCountry configureIpToCountryDb() {

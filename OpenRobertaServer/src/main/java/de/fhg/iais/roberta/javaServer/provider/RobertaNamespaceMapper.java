@@ -4,8 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import org.eclipse.jetty.util.ConcurrentHashSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 
@@ -15,20 +14,20 @@ import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
  * returning null and let JAXB generate non-intuitive prefixes. <br>
  * <br>
  * For each marshalling process one object of this class has to be created.
- * 
+ *
  * @author rbudde
  */
 public class RobertaNamespaceMapper extends NamespacePrefixMapper {
 
     private static final Map<String, String> allNs;
     static {
-        Map<String, String> t = new HashMap<String, String>();
+        Map<String, String> t = new HashMap<>();
         t.put("http://de.fhg.iais.roberta.blockly", "b");
         t.put("http://www.w3.org/2001/XMLSchema-instance", "xsi");
         t.put("http://www.w3.org/XML/1998/namespace", "ns");
         allNs = Collections.unmodifiableMap(t);
     }
-    private final Set<String> usedNs = new ConcurrentHashSet<String>();
+    private final Set<String> usedNs = ConcurrentHashMap.newKeySet();
 
     @Override
     public String getPreferredPrefix(String namespaceUri, String suggestion, boolean requirePrefix) {

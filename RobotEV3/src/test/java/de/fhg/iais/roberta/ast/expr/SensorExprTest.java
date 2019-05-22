@@ -12,16 +12,11 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
 
 public class SensorExprTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
-
     @Test
     public void make() throws Exception {
+        new HelperEv3ForXmlTest(); // needed; global variable set :-<
         TouchSensor<Void> touchSensor =
-            TouchSensor
-                .make(
-                    new SensorMetaDataBean("1", SC.TOUCH, "EMPTY_SLOT", false),
-                    BlocklyBlockProperties.make("1", "1"),
-                    null);
+            TouchSensor.make(new SensorMetaDataBean("1", SC.TOUCH, "EMPTY_SLOT", false), BlocklyBlockProperties.make("1", "1"), null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
         String a = "SensorExpr [TouchSensor [1, TOUCH, EMPTY_SLOT]]";
         Assert.assertEquals(a, sensorExpr.toString());
@@ -30,11 +25,7 @@ public class SensorExprTest {
     @Test
     public void getSensor() throws Exception {
         TouchSensor<Void> touchSensor =
-            TouchSensor
-                .make(
-                    new SensorMetaDataBean("1", SC.TOUCH, "EMPTY_SLOT", false),
-                    BlocklyBlockProperties.make("1", "1"),
-                    null);
+            TouchSensor.make(new SensorMetaDataBean("1", SC.TOUCH, "EMPTY_SLOT", false), BlocklyBlockProperties.make("1", "1"), null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
         String a = "TouchSensor [1, TOUCH, EMPTY_SLOT]";
         Assert.assertEquals(a, sensorExpr.getSens().toString());
@@ -43,11 +34,7 @@ public class SensorExprTest {
     @Test
     public void getPresedance() throws Exception {
         TouchSensor<Void> touchSensor =
-            TouchSensor
-                .make(
-                    new SensorMetaDataBean("1", SC.TOUCH, "EMPTY_SLOT", false),
-                    BlocklyBlockProperties.make("1", "1"),
-                    null);
+            TouchSensor.make(new SensorMetaDataBean("1", SC.TOUCH, "EMPTY_SLOT", false), BlocklyBlockProperties.make("1", "1"), null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
         Assert.assertEquals(999, sensorExpr.getPrecedence());
     }
@@ -55,11 +42,7 @@ public class SensorExprTest {
     @Test
     public void getAssoc() throws Exception {
         TouchSensor<Void> touchSensor =
-            TouchSensor
-                .make(
-                    new SensorMetaDataBean("1", SC.TOUCH, "EMPTY_SLOT", false),
-                    BlocklyBlockProperties.make("1", "1"),
-                    null);
+            TouchSensor.make(new SensorMetaDataBean("1", SC.TOUCH, "EMPTY_SLOT", false), BlocklyBlockProperties.make("1", "1"), null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
         Assert.assertEquals(Assoc.NONE, sensorExpr.getAssoc());
     }

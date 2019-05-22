@@ -3,8 +3,6 @@ package de.fhg.iais.roberta.persistence;
 import java.util.List;
 
 import org.codehaus.jettison.json.JSONArray;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.persistence.bo.Configuration;
 import de.fhg.iais.roberta.persistence.bo.ConfigurationData;
@@ -19,8 +17,6 @@ import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util1;
 
 public class ConfigurationProcessor extends AbstractProcessor {
-    private static final Logger LOG = LoggerFactory.getLogger(ConfigurationProcessor.class);
-
     public ConfigurationProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
         super(dbSession, httpSessionState);
     }

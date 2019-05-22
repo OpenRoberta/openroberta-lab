@@ -11,10 +11,10 @@ import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
 
 public class MotionParamTest {
-    private final HelperBotNrollForXmlTest h = new HelperBotNrollForXmlTest();
-
     @Test
     public void make() throws Exception {
+        new HelperBotNrollForXmlTest(); // needed; global variable set :-<
+
         NumConst<Void> numConst = NumConst.make("0", BlocklyBlockProperties.make("1", "1"), null);
         MotorDuration<Void> motorDuration = new MotorDuration<>(MotorMoveMode.DEGREE, numConst);
         MotionParam<Void> motionParam = new MotionParam.Builder<Void>().speed(numConst).duration(motorDuration).build();

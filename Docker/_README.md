@@ -25,7 +25,7 @@ docker build -f $REPO/Docker/meta/DockerfileBase_ubuntu_18_04 -t rbudde/openrobe
 docker push rbudde/openroberta_base:2
 ```
 
-## generate the image for INTEGRATION TEST and DEBUG.
+## generate the image for INTEGRATION TEST.
 
 Using the configuration file DockerfileIT_* you create an image, built upon the "base" image, that contains all crosscompiler, mvn and git.
 It has executed a git clone of the main git repository `openroberta-lab` and has executed a `mvn clean install`. This is done to fill the
@@ -38,17 +38,6 @@ BRANCH=develop
 cd $REPO/Docker/testing
 docker build -t rbudde/openroberta_it_ubuntu_18_04:2 -f DockerfileIT_ubuntu_18_04 . --build-arg BRANCH=$BRANCH
 docker push rbudde/openroberta_it_ubuntu_18_04:2
-```
-
-For debug you want to run an image, built upon the "base" image, that contains all crosscompiler, mvn and git.
-It has executed a git clone of the main git repository `openroberta-lab` and has executed a `mvn clean install`. This is done to fill the
-(mvn) cache and speeds up later builds considerably. The entrypoint is "/bin/bash". This image is build by
-
-```bash
-REPO=/data/openroberta-lab/git/openroberta-lab
-cd $REPO/Docker
-docker build -t rbudde/openroberta_debug_ubuntu_18_04:2 -f testing/DockerfileDebug_ubuntu_18_04 .
-docker push rbudde/openroberta_debug_ubuntu_18_04:2
 ```
 
 # Operating Instructions for the Test and Prod Server
@@ -275,6 +264,19 @@ mvn clean install -PrunIT
 # deprecated functionality: create the server, database, upgrade and embedded images in a docker container and run them
 
 this functionality is deprecated. It may be re-used later. See the directory `TestSystemSetupTemplate` for a much more flexible test setup.
+
+## generate the image for TEST and DEBUG.
+
+For debug you want to run an image, built upon the "base" image, that contains all crosscompiler, mvn and git.
+It has executed a git clone of the main git repository `openroberta-lab` and has executed a `mvn clean install`. This is done to fill the
+(mvn) cache and speeds up later builds considerably. The entrypoint is "/bin/bash". This image is build by
+
+```bash
+REPO=/data/openroberta-lab/git/openroberta-lab
+cd $REPO/Docker
+docker build -t rbudde/openroberta_debug_ubuntu_18_04:2 -f testing/DockerfileDebug_ubuntu_18_04 .
+docker push rbudde/openroberta_debug_ubuntu_18_04:2
+```
 
 ## generate the "gen" image. This image can generate an OpenRoberta distribution.
 

@@ -22,9 +22,9 @@ import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
+import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
-import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
@@ -43,7 +43,6 @@ import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractLanguageVisitor;
 
@@ -264,11 +263,12 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitEmptyList(EmptyList<Void> emptyList) {
-        this.sb.append(
-            "new ArrayList<"
-                + getLanguageVarTypeFromBlocklyType(emptyList.getTypeVar()).substring(0, 1).toUpperCase()
-                + getLanguageVarTypeFromBlocklyType(emptyList.getTypeVar()).substring(1).toLowerCase()
-                + ">()");
+        this.sb
+            .append(
+                "new ArrayList<"
+                    + getLanguageVarTypeFromBlocklyType(emptyList.getTypeVar()).substring(0, 1).toUpperCase()
+                    + getLanguageVarTypeFromBlocklyType(emptyList.getTypeVar()).substring(1).toLowerCase()
+                    + ">()");
         return null;
     }
 
@@ -401,7 +401,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.getValue().replaceAll("[<>\\$]", ""))).append("\"");
         return null;
     }
-    
+
     @Override
     public Void visitAssertStmt(AssertStmt<Void> assertStmt) {
         this.sb.append("if (!(");
@@ -410,16 +410,16 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         incrIndentation();
         nlIndent();
         this.sb.append("System.out.println(\"Assertion failed: \" + \"").append(assertStmt.getMsg()).append("\" + ");
-        ((Binary<Void>)assertStmt.getAssert()).getLeft().visit(this);
-        this.sb.append(" + \"").append(((Binary<Void>)assertStmt.getAssert()).getOp().toString()).append("\" + ");
-        ((Binary<Void>)assertStmt.getAssert()).getRight().visit(this);
+        ((Binary<Void>) assertStmt.getAssert()).getLeft().visit(this);
+        this.sb.append(" + \"").append(((Binary<Void>) assertStmt.getAssert()).getOp().toString()).append("\" + ");
+        ((Binary<Void>) assertStmt.getAssert()).getRight().visit(this);
         this.sb.append(");");
         decrIndentation();
         nlIndent();
         this.sb.append("}");
         return null;
     }
-    
+
     @Override
     public Void visitDebugAction(DebugAction<Void> debugAction) {
         this.sb.append("System.out.println(");
@@ -427,7 +427,6 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         this.sb.append(");");
         return null;
     }
-    
 
     @Override
     protected String getLanguageVarTypeFromBlocklyType(BlocklyType type) {
@@ -612,50 +611,52 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     }
 
     protected static Map<Binary.Op, String> binaryOpSymbols() {
-        return Collections.unmodifiableMap(
-            Stream
-                .of(
+        return Collections
+            .unmodifiableMap(
+                Stream
+                    .of(
 
-                    entry(Binary.Op.ADD, "+"),
-                    entry(Binary.Op.MINUS, "-"),
-                    entry(Binary.Op.MULTIPLY, "*"),
-                    entry(Binary.Op.DIVIDE, "/"),
-                    entry(Binary.Op.MOD, "%"),
-                    entry(Binary.Op.EQ, "=="),
-                    entry(Binary.Op.NEQ, "!="),
-                    entry(Binary.Op.LT, "<"),
-                    entry(Binary.Op.LTE, "<="),
-                    entry(Binary.Op.GT, ">"),
-                    entry(Binary.Op.GTE, ">="),
-                    entry(Binary.Op.AND, "&&"),
-                    entry(Binary.Op.OR, "||"),
-                    entry(Binary.Op.MATH_CHANGE, "+="),
-                    entry(Binary.Op.TEXT_APPEND, "+="),
-                    entry(Binary.Op.IN, ":"),
-                    entry(Binary.Op.ASSIGNMENT, "="),
-                    entry(Binary.Op.ADD_ASSIGNMENT, "+="),
-                    entry(Binary.Op.MINUS_ASSIGNMENT, "-="),
-                    entry(Binary.Op.MULTIPLY_ASSIGNMENT, "*="),
-                    entry(Binary.Op.DIVIDE_ASSIGNMENT, "/="),
-                    entry(Binary.Op.MOD_ASSIGNMENT, "%=")
+                        entry(Binary.Op.ADD, "+"),
+                        entry(Binary.Op.MINUS, "-"),
+                        entry(Binary.Op.MULTIPLY, "*"),
+                        entry(Binary.Op.DIVIDE, "/"),
+                        entry(Binary.Op.MOD, "%"),
+                        entry(Binary.Op.EQ, "=="),
+                        entry(Binary.Op.NEQ, "!="),
+                        entry(Binary.Op.LT, "<"),
+                        entry(Binary.Op.LTE, "<="),
+                        entry(Binary.Op.GT, ">"),
+                        entry(Binary.Op.GTE, ">="),
+                        entry(Binary.Op.AND, "&&"),
+                        entry(Binary.Op.OR, "||"),
+                        entry(Binary.Op.MATH_CHANGE, "+="),
+                        entry(Binary.Op.TEXT_APPEND, "+="),
+                        entry(Binary.Op.IN, ":"),
+                        entry(Binary.Op.ASSIGNMENT, "="),
+                        entry(Binary.Op.ADD_ASSIGNMENT, "+="),
+                        entry(Binary.Op.MINUS_ASSIGNMENT, "-="),
+                        entry(Binary.Op.MULTIPLY_ASSIGNMENT, "*="),
+                        entry(Binary.Op.DIVIDE_ASSIGNMENT, "/="),
+                        entry(Binary.Op.MOD_ASSIGNMENT, "%=")
 
-                )
-                .collect(entriesToMap()));
+                    )
+                    .collect(entriesToMap()));
     }
 
     protected static Map<Unary.Op, String> unaryOpSymbols() {
-        return Collections.unmodifiableMap(
-            Stream
-                .of(
+        return Collections
+            .unmodifiableMap(
+                Stream
+                    .of(
 
-                    entry(Unary.Op.PLUS, "+"),
-                    entry(Unary.Op.NEG, "-"),
-                    entry(Unary.Op.NOT, "!"),
-                    entry(Unary.Op.POSTFIX_INCREMENTS, "++"),
-                    entry(Unary.Op.PREFIX_INCREMENTS, "++")
+                        entry(Unary.Op.PLUS, "+"),
+                        entry(Unary.Op.NEG, "-"),
+                        entry(Unary.Op.NOT, "!"),
+                        entry(Unary.Op.POSTFIX_INCREMENTS, "++"),
+                        entry(Unary.Op.PREFIX_INCREMENTS, "++")
 
-                )
-                .collect(entriesToMap()));
+                    )
+                    .collect(entriesToMap()));
     }
 
 }

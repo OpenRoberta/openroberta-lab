@@ -11,8 +11,6 @@ import org.hibernate.Session;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
@@ -21,7 +19,6 @@ import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class SeleniumHelper {
-    private static final Logger LOG = LoggerFactory.getLogger(SeleniumHelper.class);
     private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
 
     public int port;

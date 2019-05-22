@@ -9,12 +9,8 @@ import static org.junit.Assert.fail;
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Util1Test {
-    private static final Logger LOG = LoggerFactory.getLogger(Util1Test.class);
-
     @Test
     public void testJavaIdentifier() {
         assertTrue(Util1.isValidJavaIdentifier("P"));
