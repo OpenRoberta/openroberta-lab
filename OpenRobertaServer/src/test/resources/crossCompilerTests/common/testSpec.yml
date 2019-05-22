@@ -20,13 +20,21 @@ robots:
     bob3:
        template: bob3
     calliope2017:
-       template: calliope
+       template: calliope  
     calliope2016:
        template: calliope
     sensebox:
        template: sensebox
 
 progs:
+    logicBooleanOp:
+       decl: logicBooleanOp
+       exclude:
+       remark: "all combinations for boolean operator"
+    logicBooleanOpTernary:
+       decl: logicBooleanOpTernary
+       exclude:
+       remark: "all combinations for ternary operator"
     controlFlowDecisons:
        decl: controlFlowDecisons
        exclude:

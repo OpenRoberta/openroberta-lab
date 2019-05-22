@@ -1,0 +1,1096 @@
+<block type="text_comment" id="myRNtkfvwB3G~/SM(}@." intask="true">
+	<field name="TEXT">Logic Boolean Operators -- Start</field>
+</block>
+<block type="robControls_if" id="a:`ou1TQs3(]-qZd[Lqe"
+	intask="true">
+	<value name="IF0">
+		<block type="logic_operation" id="|Z:;w#(*nV^o`]1UK4Af"
+			intask="true">
+			<field name="OP">AND</field>
+			<value name="A">
+				<block type="logic_boolean" id="7nEuzN6`lND)k80BO8s#"
+					intask="true">
+					<field name="BOOL">TRUE</field>
+				</block>
+			</value>
+			<value name="B">
+				<block type="logic_boolean" id="p=/qX2gZj8VSx~;oiSwv"
+					intask="true">
+					<field name="BOOL">TRUE</field>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="robMath_change" id="t`e3oL3!:i+j[cjmj=MC"
+			intask="true">
+			<value name="VAR">
+				<block type="variables_get" id="^Swi-a[|Y-3%G/pEA;2v"
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+			<value name="DELTA">
+				<block type="math_number" id="cEqg*5O]YD[4Z}`5#)l,"
+					intask="true">
+					<field name="NUM">1</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="robControls_if" id="tYGX:UPQS38w-x[p:;|."
+	intask="true">
+	<value name="IF0">
+		<block type="logic_operation" id="C[L]Sju|`KB.RoIGpVDC"
+			intask="true">
+			<field name="OP">AND</field>
+			<value name="A">
+				<block type="logic_boolean" id="`#yC39gu.-_2QjAXmLf*"
+					intask="true">
+					<field name="BOOL">TRUE</field>
+				</block>
+			</value>
+			<value name="B">
+				<block type="logic_boolean" id="Eg+6UrD8_2RO}0_gINMo"
+					intask="true">
+					<field name="BOOL">FALSE</field>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="robMath_change" id="{t~z]Too3)|LbQ`m2F:v"
+			intask="true">
+			<value name="VAR">
+				<block type="variables_get" id="-8xWCI:w-%IS5qOW.F#."
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+			<value name="DELTA">
+				<block type="math_number" id="YcMZ]DZ:X=lLgqFnO`*D"
+					intask="true">
+					<field name="NUM">1000</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="robControls_if" id="I~G)#LjK2n|i{%tapUkp"
+	intask="true">
+	<value name="IF0">
+		<block type="logic_operation" id="(dF6tA]|O_dzsH+VN[w?"
+			intask="true">
+			<field name="OP">AND</field>
+			<value name="A">
+				<block type="logic_boolean" id="Fjp1UmA|MCLR+%`xE-*V"
+					intask="true">
+					<field name="BOOL">FALSE</field>
+				</block>
+			</value>
+			<value name="B">
+				<block type="logic_boolean" id="E3}wdoI?z8|xZPw_JOcu"
+					intask="true">
+					<field name="BOOL">TRUE</field>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="robMath_change" id="=pvQK}ncj~o/Klzu+QY6"
+			intask="true">
+			<value name="VAR">
+				<block type="variables_get" id="9/X_=~WI)yh1gioB@=,b"
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+			<value name="DELTA">
+				<block type="math_number" id="{bMTAnmF@60NHxY7rv3."
+					intask="true">
+					<field name="NUM">1000</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="robControls_if" id="{+xU!_n5=L#i{n,HNyIF"
+	intask="true">
+	<value name="IF0">
+		<block type="logic_operation" id="KYa|[]#ey8pBCLBD^O[D"
+			intask="true">
+			<field name="OP">AND</field>
+			<value name="A">
+				<block type="logic_boolean" id="b=U%Rb6u5(t__Vw];)5Q"
+					intask="true">
+					<field name="BOOL">FALSE</field>
+				</block>
+			</value>
+			<value name="B">
+				<block type="logic_boolean" id="7})a3t^.g8qs8!!5nmAp"
+					intask="true">
+					<field name="BOOL">FALSE</field>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="robMath_change" id="D@Q}wymj(}I?^Ap1C4u}"
+			intask="true">
+			<value name="VAR">
+				<block type="variables_get" id="hd3@a9P#lPTU#TZ+T3YS"
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+			<value name="DELTA">
+				<block type="math_number" id="!aR,7XYRP#EG-wJMpq{z"
+					intask="true">
+					<field name="NUM">1000</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="robActions_assert" id="s`{Ken^a-9|zE%7V_/~8"
+	intask="true">
+	<field name="TEXT">pos-1</field>
+	<value name="OUT">
+		<block type="logic_compare" id="c.eSO/DOnd2etvl,4uCK"
+			intask="true" deletable="false" movable="false">
+			<field name="OP">EQ</field>
+			<value name="A">
+				<block type="math_number" id=".)[HvGEI+`P;8|Zr8/GN"
+					intask="true">
+					<field name="NUM">1</field>
+				</block>
+			</value>
+			<value name="B">
+				<block type="variables_get" id="ojA#f~=jFxo=MtOn%+Zp"
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+		</block>
+	</value>
+</block>
+<block type="robControls_if" id="U7(5~qLRSq7:p9@eE62Y"
+	intask="true">
+	<value name="IF0">
+		<block type="logic_negate" id="r[p;rRH/C|qeDS+2Swb0"
+			intask="true">
+			<value name="BOOL">
+				<block type="logic_operation" id="#=G+E3U5_nxTDe?{_j7/"
+					intask="true">
+					<field name="OP">AND</field>
+					<value name="A">
+						<block type="logic_boolean" id="j6@FO{vM#FZFa6mrT~aZ"
+							intask="true">
+							<field name="BOOL">TRUE</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="logic_boolean" id="poT77CO_GdVrV,fUN-(("
+							intask="true">
+							<field name="BOOL">TRUE</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="robMath_change" id="HE1UdCR/sR#Of?yfmCSj"
+			intask="true">
+			<value name="VAR">
+				<block type="variables_get" id=":L5-iERjy9~b~Xq+r~^0"
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+			<value name="DELTA">
+				<block type="math_number" id="C]n,^4rUW!@qufdCdsKw"
+					intask="true">
+					<field name="NUM">1000</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="robControls_if" id="H;/%w^1piu!NXQ11Nqw,"
+	intask="true">
+	<value name="IF0">
+		<block type="logic_negate" id="xdZ=ZZdu0EE}^fl{m-a("
+			intask="true">
+			<value name="BOOL">
+				<block type="logic_operation" id="!3fM(?ySHttd0W,Dy-=V"
+					intask="true">
+					<field name="OP">AND</field>
+					<value name="A">
+						<block type="logic_boolean" id="RREAy;^FY^aS+ob_J=`}"
+							intask="true">
+							<field name="BOOL">TRUE</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="logic_boolean" id="o0wJKMMb2hp0-b@5Gxy{"
+							intask="true">
+							<field name="BOOL">FALSE</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="robMath_change" id="zasB.Plw|RfNCQ[yqdJR"
+			intask="true">
+			<value name="VAR">
+				<block type="variables_get" id=";L.plBW%(b*e9s5}!QiA"
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+			<value name="DELTA">
+				<block type="math_number" id="lsQd:Z0{*-}C5/eHi+mO"
+					intask="true">
+					<field name="NUM">1</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="robControls_if" id="M@2V*S1c3)Q~EsaIc}=*"
+	intask="true">
+	<value name="IF0">
+		<block type="logic_negate" id="L[n8@qza#2B3Fe@c%VpG"
+			intask="true">
+			<value name="BOOL">
+				<block type="logic_operation" id="`B}#gU5`!VAwQM=El6%3"
+					intask="true">
+					<field name="OP">AND</field>
+					<value name="A">
+						<block type="logic_boolean" id="1^FtIkD!SCYV8,xljGWn"
+							intask="true">
+							<field name="BOOL">FALSE</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="logic_boolean" id="|{?+J1yrgEMDa:8wijjC"
+							intask="true">
+							<field name="BOOL">TRUE</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="robMath_change" id="ai?gG)Yt}{psm#%XwHuZ"
+			intask="true">
+			<value name="VAR">
+				<block type="variables_get" id="+L=:.8q[*PzA6`zS!0,X"
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+			<value name="DELTA">
+				<block type="math_number" id=")d5)9:SeG7DOw)(TPRhM"
+					intask="true">
+					<field name="NUM">1</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="robControls_if" id="{QCi[[Gt|g8|P-TtM/#:"
+	intask="true">
+	<value name="IF0">
+		<block type="logic_negate" id="p(sY8e|q[qM+^SQC_!^F"
+			intask="true">
+			<value name="BOOL">
+				<block type="logic_operation" id="^[^].YUDh#v[1=_5dr1a"
+					intask="true">
+					<field name="OP">AND</field>
+					<value name="A">
+						<block type="logic_boolean" id="t)vLf;a^vdzW!GWB::LS"
+							intask="true">
+							<field name="BOOL">FALSE</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="logic_boolean" id="0(fya%#(L,~X4_2}/00="
+							intask="true">
+							<field name="BOOL">FALSE</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="robMath_change" id="JEI_cKkI;gx{d(kj*3i#"
+			intask="true">
+			<value name="VAR">
+				<block type="variables_get" id="w8w*F?W]Y|ODF)`jcogF"
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+			<value name="DELTA">
+				<block type="math_number" id="}ag]:3vVZR`QA@F({|*w"
+					intask="true">
+					<field name="NUM">1</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="robActions_assert" id="+%84[;PpR+2F#CtdpP)s"
+	intask="true">
+	<field name="TEXT">pos-2</field>
+	<value name="OUT">
+		<block type="logic_compare" id="#pJBe%!fWIh*M#/`_4NT"
+			intask="true" deletable="false" movable="false">
+			<field name="OP">EQ</field>
+			<value name="A">
+				<block type="math_number" id="{jd)v.al4/C-8j1QePLd"
+					intask="true">
+					<field name="NUM">4</field>
+				</block>
+			</value>
+			<value name="B">
+				<block type="variables_get" id="oI6PGACmmErOvBP=8%u."
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+		</block>
+	</value>
+</block>
+<block type="robControls_if" id="Q4BmYQd3Gz0T~qOt5.8`"
+	intask="true">
+	<value name="IF0">
+		<block type="logic_operation" id="EtMi|s*(F:u;y669)SYO"
+			intask="true">
+			<field name="OP">OR</field>
+			<value name="A">
+				<block type="logic_boolean" id="d,zChjy04s1Sc2*=5n2a"
+					intask="true">
+					<field name="BOOL">TRUE</field>
+				</block>
+			</value>
+			<value name="B">
+				<block type="logic_boolean" id="(A~,S,xAU5AG#um-2dm7"
+					intask="true">
+					<field name="BOOL">TRUE</field>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="robMath_change" id="Q%sR_V5M]CQDkVw!At4("
+			intask="true">
+			<value name="VAR">
+				<block type="variables_get" id="ZW]zc_DBm,RM~YPX(MfN"
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+			<value name="DELTA">
+				<block type="math_number" id="wn%`aiT*xZ]azC[T3hT]"
+					intask="true">
+					<field name="NUM">1</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="robControls_if" id="ZkqE/KHSW@`rB^ksPvD~"
+	intask="true">
+	<value name="IF0">
+		<block type="logic_operation" id="03O6^83MWr6K5pvIY#4P"
+			intask="true">
+			<field name="OP">OR</field>
+			<value name="A">
+				<block type="logic_boolean" id="fjrLMA(4+J[MW1#JeZL%"
+					intask="true">
+					<field name="BOOL">TRUE</field>
+				</block>
+			</value>
+			<value name="B">
+				<block type="logic_boolean" id="*wkPV(Lg@Zr/yEAmu%-l"
+					intask="true">
+					<field name="BOOL">FALSE</field>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="robMath_change" id="keIYS-)=DAhnS%{}[-Kq"
+			intask="true">
+			<value name="VAR">
+				<block type="variables_get" id="!-EWS4jRtZ/-I,kfimi3"
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+			<value name="DELTA">
+				<block type="math_number" id="0oBCiLS3D(Xn`}kj-TGx"
+					intask="true">
+					<field name="NUM">1</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="robControls_if" id="do;2_1f[^/1A1.QAH{zS"
+	intask="true">
+	<value name="IF0">
+		<block type="logic_operation" id=".Ybd*ekYeWqs:,Zpc)PR"
+			intask="true">
+			<field name="OP">OR</field>
+			<value name="A">
+				<block type="logic_boolean" id="Gi%D28BP~bDKRj8IjmGr"
+					intask="true">
+					<field name="BOOL">FALSE</field>
+				</block>
+			</value>
+			<value name="B">
+				<block type="logic_boolean" id="b`fQQuKMKVg2Ty8Owu19"
+					intask="true">
+					<field name="BOOL">TRUE</field>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="robMath_change" id="wc=hj7Cat[%j`JlPA.J9"
+			intask="true">
+			<value name="VAR">
+				<block type="variables_get" id="CxqnG#^hcca{l-rvWsOx"
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+			<value name="DELTA">
+				<block type="math_number" id="X/d{7K/Hf](b2;Cy;Fc:"
+					intask="true">
+					<field name="NUM">1</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="robControls_if" id="YX,o~UCBo{,#;Q25U*NB"
+	intask="true">
+	<value name="IF0">
+		<block type="logic_operation" id="=zg=VhN``#H%gn74U:TL"
+			intask="true">
+			<field name="OP">OR</field>
+			<value name="A">
+				<block type="logic_boolean" id="~|wDGpD.|pbt`s{-7@w3"
+					intask="true">
+					<field name="BOOL">FALSE</field>
+				</block>
+			</value>
+			<value name="B">
+				<block type="logic_boolean" id="{-3qrBy3o_F*zd^)+rBV"
+					intask="true">
+					<field name="BOOL">FALSE</field>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="robMath_change" id="a8Iv%Hp4K7sHaBl7?3@V"
+			intask="true">
+			<value name="VAR">
+				<block type="variables_get" id="Fcabt+pN+}pOWcZ5ypw~"
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+			<value name="DELTA">
+				<block type="math_number" id="NX9_#6_1f;%9KYE%xFRu"
+					intask="true">
+					<field name="NUM">1000</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="robActions_assert" id="(Hbs5tg~(9_.Xqboa5CJ"
+	intask="true">
+	<field name="TEXT">pos-3</field>
+	<value name="OUT">
+		<block type="logic_compare" id="@Qz+.t)[7m=Na5CAyof7"
+			intask="true" deletable="false" movable="false">
+			<field name="OP">EQ</field>
+			<value name="A">
+				<block type="math_number" id="kZ2~K%RpO25{GMn?W8u|"
+					intask="true">
+					<field name="NUM">7</field>
+				</block>
+			</value>
+			<value name="B">
+				<block type="variables_get" id="3TV}lzhTDkB4*h4=4C^s"
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+		</block>
+	</value>
+</block>
+<block type="robControls_if" id="HP6}or-RIOBA~EHL?R2n"
+	intask="true">
+	<value name="IF0">
+		<block type="logic_negate" id="xVjEEGsKl76S4@Qxlf*;"
+			intask="true">
+			<value name="BOOL">
+				<block type="logic_operation" id="Al[v*zRvKRx*jwj~uFR7"
+					intask="true">
+					<field name="OP">OR</field>
+					<value name="A">
+						<block type="logic_boolean" id="!mEc}`aX|Swo{Y_B]HS}"
+							intask="true">
+							<field name="BOOL">TRUE</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="logic_boolean" id="?)Y[^,mVGG9H=dhc,KXB"
+							intask="true">
+							<field name="BOOL">TRUE</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="robMath_change" id="7VV0__]bR5RF)LFp*V?h"
+			intask="true">
+			<value name="VAR">
+				<block type="variables_get" id=":szXXAAk0S~(!pI4X}Dv"
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+			<value name="DELTA">
+				<block type="math_number" id="y+`{UVs+*hLR1P+2:p,`"
+					intask="true">
+					<field name="NUM">1000</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="robControls_if" id="zjJCpd_0n_f.@Ss71~VP"
+	intask="true">
+	<value name="IF0">
+		<block type="logic_negate" id="y./bgr#cY|H2a~!#=b:O"
+			intask="true">
+			<value name="BOOL">
+				<block type="logic_operation" id="QQkxn^3q~3wX6TN1cL0)"
+					intask="true">
+					<field name="OP">OR</field>
+					<value name="A">
+						<block type="logic_boolean" id="ju|-4QYI9{/K9_-i.|gV"
+							intask="true">
+							<field name="BOOL">TRUE</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="logic_boolean" id="--HBsL7Erq4g_~V_i#|l"
+							intask="true">
+							<field name="BOOL">FALSE</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="robMath_change" id="[ii1Ub]#84cNsEXoAbyg"
+			intask="true">
+			<value name="VAR">
+				<block type="variables_get" id="aZ9tIHu)bO{ICB~nh;C+"
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+			<value name="DELTA">
+				<block type="math_number" id="{##(Oh;,dv*8qt~UnwO*"
+					intask="true">
+					<field name="NUM">1000</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="robControls_if" id="56O_ud*xrCAVKvlrfQ3/"
+	intask="true">
+	<value name="IF0">
+		<block type="logic_negate" id="OM,g^8vK=Eev:9?Q%_eG"
+			intask="true">
+			<value name="BOOL">
+				<block type="logic_operation" id="#;s1Vqt%eGNfK~8@GJdU"
+					intask="true">
+					<field name="OP">OR</field>
+					<value name="A">
+						<block type="logic_boolean" id="MpY?9PAGXs]jpBv[{^80"
+							intask="true">
+							<field name="BOOL">FALSE</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="logic_boolean" id="F1on2L!T98ipP1lW?Ip)"
+							intask="true">
+							<field name="BOOL">TRUE</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="robMath_change" id="G@U[g6?~){ikMMDD^y?:"
+			intask="true">
+			<value name="VAR">
+				<block type="variables_get" id="ua=[L_yRQj+UEDZdzjW:"
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+			<value name="DELTA">
+				<block type="math_number" id="o(sqO2(#T^OmZje?a+9x"
+					intask="true">
+					<field name="NUM">1000</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="robControls_if" id="cCG=#a=L/}#Z|TJq%L?h"
+	intask="true">
+	<value name="IF0">
+		<block type="logic_negate" id="v=mbI[+.D/FOHHAxw/gO"
+			intask="true">
+			<value name="BOOL">
+				<block type="logic_operation" id="MP4E^p`-ui:vs2=W@2s+"
+					intask="true">
+					<field name="OP">OR</field>
+					<value name="A">
+						<block type="logic_boolean" id="q,B%PYWD@lz]3j}=}vQ@"
+							intask="true">
+							<field name="BOOL">FALSE</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="logic_boolean" id="OY,xPhY85_8dOkW_F3uI"
+							intask="true">
+							<field name="BOOL">FALSE</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="robMath_change" id="QewYmLSC%;-B=U~`hB}]"
+			intask="true">
+			<value name="VAR">
+				<block type="variables_get" id="eZEjQ*m3*(NQqfsVW4(+"
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+			<value name="DELTA">
+				<block type="math_number" id="%_T+@euP+_[^E|C|2SN!"
+					intask="true">
+					<field name="NUM">1</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="robActions_assert" id="k@)b)bt+Ix|*XtujX~@L"
+	intask="true">
+	<field name="TEXT">pos-4</field>
+	<value name="OUT">
+		<block type="logic_compare" id=":vyj0CsCq@vAzEq7[gp}"
+			intask="true" deletable="false" movable="false">
+			<field name="OP">EQ</field>
+			<value name="A">
+				<block type="math_number" id="oU_=bQ:IVd~M%bl1k2I+"
+					intask="true">
+					<field name="NUM">8</field>
+				</block>
+			</value>
+			<value name="B">
+				<block type="variables_get" id="!%Nc=zXPy;0KsU9XxnFm"
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+		</block>
+	</value>
+</block>
+<block type="robControls_if" id="O3{lQ78R9@gcyr+qevL2"
+	intask="true">
+	<value name="IF0">
+		<block type="logic_operation" id="p8_tJ_1`Er0mMHEqHsjn"
+			intask="true">
+			<field name="OP">AND</field>
+			<value name="A">
+				<block type="logic_operation" id="6l-8qMvw0)VH6JWZO2Q2"
+					intask="true">
+					<field name="OP">AND</field>
+					<value name="A">
+						<block type="logic_boolean" id="Q9;QZQY:#h@qUlUaG,|P"
+							intask="true">
+							<field name="BOOL">TRUE</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="logic_boolean" id="=z!pq,tP?W*RJvJLV*6?"
+							intask="true">
+							<field name="BOOL">TRUE</field>
+						</block>
+					</value>
+				</block>
+			</value>
+			<value name="B">
+				<block type="logic_operation" id="_Ua~XXGDAppvho+Uy)n["
+					intask="true">
+					<field name="OP">AND</field>
+					<value name="A">
+						<block type="logic_boolean" id="hTRkb{kRpO(k1YIIuNN5"
+							intask="true">
+							<field name="BOOL">TRUE</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="logic_boolean" id="?4vbJQYSL5(B;i)TOP~w"
+							intask="true">
+							<field name="BOOL">TRUE</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="robMath_change" id="sIRnHf1)H38}nDa;s72z"
+			intask="true">
+			<value name="VAR">
+				<block type="variables_get" id="SIr7#|=-qD(C:oV.P.Qt"
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+			<value name="DELTA">
+				<block type="math_number" id="octG^2`g`%TN_sw%ToXE"
+					intask="true">
+					<field name="NUM">1</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="robControls_if" id="B)r7gsV,NIsfaB4C=Ev+"
+	intask="true">
+	<value name="IF0">
+		<block type="logic_operation" id="j?gMTM94rH`8k?,=9CzD"
+			intask="true">
+			<field name="OP">OR</field>
+			<value name="A">
+				<block type="logic_operation" id="L)63*VOT.5rW?X]sA4IM"
+					intask="true">
+					<field name="OP">AND</field>
+					<value name="A">
+						<block type="logic_boolean" id="uxJqO`;(H24:fwE%kf#a"
+							intask="true">
+							<field name="BOOL">TRUE</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="logic_boolean" id="Naz)kOWc.XoOz(=brR57"
+							intask="true">
+							<field name="BOOL">FALSE</field>
+						</block>
+					</value>
+				</block>
+			</value>
+			<value name="B">
+				<block type="logic_operation" id="^31#EmE_Cntyl=}|(UE6"
+					intask="true">
+					<field name="OP">AND</field>
+					<value name="A">
+						<block type="logic_boolean" id="jq!#-U8z4kI?syPluk=l"
+							intask="true">
+							<field name="BOOL">FALSE</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="logic_boolean" id="tQjfn%8k8Oy8)up^;*pa"
+							intask="true">
+							<field name="BOOL">TRUE</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="robMath_change" id="i%9;,eX}-P]n#}I!*%ey"
+			intask="true">
+			<value name="VAR">
+				<block type="variables_get" id="XbX]_8Th8u~i6rb*+res"
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+			<value name="DELTA">
+				<block type="math_number" id="q96%_b8aAqO=64;TX7@)"
+					intask="true">
+					<field name="NUM">1000</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="robControls_if" id="X}69!0!(|PPz;+p|w1Rr"
+	intask="true">
+	<value name="IF0">
+		<block type="logic_operation" id="Ylwl~D~gJY?IcDB`RZq5"
+			intask="true">
+			<field name="OP">AND</field>
+			<value name="A">
+				<block type="logic_negate" id="QKG(c7F3jz%NnI|)v+*v"
+					intask="true">
+					<value name="BOOL">
+						<block type="logic_operation" id="{e.TuuS=nI(yWdQqu[Jz"
+							intask="true">
+							<field name="OP">OR</field>
+							<value name="A">
+								<block type="logic_boolean" id="0I}z1eO4R7S3/rx%Tj90"
+									intask="true">
+									<field name="BOOL">TRUE</field>
+								</block>
+							</value>
+							<value name="B">
+								<block type="logic_boolean" id="FsYu%s-j:K[s7*E[M[9R"
+									intask="true">
+									<field name="BOOL">TRUE</field>
+								</block>
+							</value>
+						</block>
+					</value>
+				</block>
+			</value>
+			<value name="B">
+				<block type="logic_negate" id="v4CaZhG3U=gSmZXx@M,t"
+					intask="true">
+					<value name="BOOL">
+						<block type="logic_operation" id="gyvpU3K_{xjtX:kNt5+Q"
+							intask="true">
+							<field name="OP">OR</field>
+							<value name="A">
+								<block type="logic_boolean" id="d/8`+?sy12Cn#TLY,sGA"
+									intask="true">
+									<field name="BOOL">TRUE</field>
+								</block>
+							</value>
+							<value name="B">
+								<block type="logic_boolean" id="(gLw|Aryp~oh,~NbJeOm"
+									intask="true">
+									<field name="BOOL">TRUE</field>
+								</block>
+							</value>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="robMath_change" id="8PLBa5BnlAM+aqvE0cNT"
+			intask="true">
+			<value name="VAR">
+				<block type="variables_get" id="dB!J(.5y1F#TlzlvWiAJ"
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+			<value name="DELTA">
+				<block type="math_number" id="]tP1H/=.oy5{@3aTXGh1"
+					intask="true">
+					<field name="NUM">1000</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="robControls_if" id="0*;^q{/J({x;)dF)(F1m"
+	intask="true">
+	<value name="IF0">
+		<block type="logic_operation" id="n;9l{JMEkM-D)jFtz[I-"
+			intask="true">
+			<field name="OP">OR</field>
+			<value name="A">
+				<block type="logic_negate" id="TA1.{KaH1#:jP!6#i:~D"
+					intask="true">
+					<value name="BOOL">
+						<block type="logic_operation" id="S`*kD:P)-KzV[7SJ#48?"
+							intask="true">
+							<field name="OP">AND</field>
+							<value name="A">
+								<block type="logic_boolean" id="TCIJ3zGXjLC3OysUH7K!"
+									intask="true">
+									<field name="BOOL">TRUE</field>
+								</block>
+							</value>
+							<value name="B">
+								<block type="logic_boolean" id="3,*cWv!4)B=@f3mJy9NU"
+									intask="true">
+									<field name="BOOL">FALSE</field>
+								</block>
+							</value>
+						</block>
+					</value>
+				</block>
+			</value>
+			<value name="B">
+				<block type="logic_negate" id="LT}Z^``2`eu]]JV6@O%G"
+					intask="true">
+					<value name="BOOL">
+						<block type="logic_operation" id="cyIB.nRW20QXPAXTxH#B"
+							intask="true">
+							<field name="OP">AND</field>
+							<value name="A">
+								<block type="logic_boolean" id="Dcs3Lnr/G;]p+7PniWN7"
+									intask="true">
+									<field name="BOOL">TRUE</field>
+								</block>
+							</value>
+							<value name="B">
+								<block type="logic_boolean" id="LlbK;r`rV#*sY2_!p:Vp"
+									intask="true">
+									<field name="BOOL">FALSE</field>
+								</block>
+							</value>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="robMath_change" id="RP-XgMSB^~5Ezb:cl`94"
+			intask="true">
+			<value name="VAR">
+				<block type="variables_get" id="qz6=3:)GWHt8UibLzF_["
+					intask="true">
+					<mutation datatype="Number">
+					</mutation>
+					<field name="VAR">x</field>
+				</block>
+			</value>
+			<value name="DELTA">
+				<block type="math_number" id="[Je4_RD]tq?G!`Pl:(B_"
+					intask="true">
+					<field name="NUM">1</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="robActions_debug" id="{Sw(_V2%g_GO=9GuQb5R"
+	intask="true">
+	<value name="OUT">
+		<block type="logic_ternary" id="%,muMKQ`Mb[hS8}vRVt!"
+			intask="true">
+			<value name="IF">
+				<block type="logic_compare" id="AY=FJ_MD_H(Vz]^Z;qd8"
+					intask="true">
+					<field name="OP">EQ</field>
+					<value name="A">
+						<block type="math_number" id="VPb]cjorb1IG/@z0f:hf"
+							intask="true">
+							<field name="NUM">10</field>
+						</block>
+					</value>
+					<value name="B">
+						<block type="variables_get" id="]vQ%CQn)uLdyZ_DL%1{n"
+							intask="true">
+							<mutation datatype="Number">
+							</mutation>
+							<field name="VAR">x</field>
+						</block>
+					</value>
+				</block>
+			</value>
+			<value name="THEN">
+				<block type="text" id="eAv(UGB7QSgWPHhe1S5q" intask="true">
+					<field name="TEXT">Logic Boolean operators Test: success</field>
+				</block>
+			</value>
+			<value name="ELSE">
+				<block type="text" id="|v+^7X93B`7`_=6=VX5m" intask="true">
+					<field name="TEXT">Logic Boolean operators Test: FAIL</field>
+				</block>
+			</value>
+		</block>
+	</value>
+</block>
+<block type="text_comment" id="eS8,bK0/=?[8sR|LB3ik" intask="true">
+	<field name="TEXT">Logic Boolean Operators -- End</field>
+</block>
