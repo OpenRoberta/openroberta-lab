@@ -13,6 +13,7 @@ The docker image "base" is used as basis for further images. It contains all sof
 
 * the crosscompiler binaries itself. They are installed by calling `apt`
 * header etc. to use together with the cross compiler. They are copied from a clone of the git repository `ora-cc-rsc`.
+* openroberta helper libraries for lejos, nao and raspberryPi.
 
 _Note:_ If the git repository `ora-cc-rsc` is changed, the base image and all images built upon the base image must be rebuilt. This doesn't
 occur often. But better do not forget.
@@ -21,6 +22,12 @@ occur often. But better do not forget.
 REPO=/data/openroberta-lab/git/openroberta-lab
 CC_RESOURCES=/data/openroberta-lab/git/ora-cc-rsc
 cd $CC_RESOURCES
+
+git checkout develop; git pull
+git checkout master; git pull
+git merge develop
+
+mvn clean install
 docker build -f $REPO/Docker/meta/DockerfileBase_ubuntu_18_04 -t rbudde/openroberta_base:2 .
 docker push rbudde/openroberta_base:2
 ```
