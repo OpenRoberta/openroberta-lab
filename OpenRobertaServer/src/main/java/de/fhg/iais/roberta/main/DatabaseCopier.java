@@ -12,8 +12,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.hibernate.Session;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
@@ -54,8 +52,6 @@ import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
  * @author rbudde
  */
 public class DatabaseCopier {
-    private static final Logger LOG = LoggerFactory.getLogger(DatabaseCopier.class);
-
     private static final int COMMIT_HIGH_WATER_MARK = 1000;
     private static final String DB_DRIVER = "org.hsqldb.jdbcDriver";
 
@@ -64,20 +60,29 @@ public class DatabaseCopier {
     private static final String DB_CONNECTION_COPY = "jdbc:hsqldb:hsql://localhost:9002/openroberta-db-copy";
     private static final String DB_CONNECTION = "jdbc:hsqldb:hsql://localhost:9001/openroberta-db";
 
-    private static final String DB_USER = "orA";
-    private static final String DB_PASSWORD = "Pid";
+    private final String dbUser;
+    private final String dbPassword;
 
-    private DatabaseCopier() {
+    private DatabaseCopier(String dbUser, String dbPassword) {
+        this.dbUser = dbUser;
+        this.dbPassword = dbPassword;
     }
 
     public static void main(String[] args) throws Exception {
-        DatabaseCopier copier = new DatabaseCopier();
+        p("usage: java -cp OpenRobertaServer/target/resources/\\* de.fhg.iais.roberta.main.DatabaseCopier DBUSER DBPASSWORD");
+        if ( args == null || args.length != 2 ) {
+            p("invalid parameter. Exit 12");
+            System.exit(12);
+        }
+        @SuppressWarnings("unused")
+        DatabaseCopier copier = new DatabaseCopier(args[0], args[1]);
         // copier.createDatabaseWithoutConstraints();
         // copier.copyDatabase();
         // copier.enforceConstraints();
         // copier.shutdownCopy();
     }
 
+    @SuppressWarnings("unused")
     private void createDatabaseWithoutConstraints() {
         SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", DB_CONNECTION_COPY_CREATE);
         Session nativeSession = sessionFactoryWrapper.getNativeSession();
@@ -88,6 +93,7 @@ public class DatabaseCopier {
         nativeSession.close();
     }
 
+    @SuppressWarnings("unused")
     private void copyDatabase() {
         Connection dbConnectionFrom = null;
         Statement statementFrom = null;
@@ -123,7 +129,7 @@ public class DatabaseCopier {
             copyTable(statementFrom, dbConnectionTo, "CONFIGURATION", 11);
             copyTable(statementFrom, dbConnectionTo, "CONFIGURATION_DATA", 2);
         } catch ( Exception e ) {
-            LOG.error("exception when connecting to database or copying sql", e);
+            p("exception when connecting to database or copying sql", e);
         } finally {
             closeQuietly(statementFrom);
             closeQuietly(dbConnectionFrom);
@@ -135,7 +141,7 @@ public class DatabaseCopier {
         throws Exception {
         PreparedStatement preparedStatementTo = null;
         int counter = 0;
-        LOG.info("starting to copy table " + tableName);
+        p("starting to copy table " + tableName);
         try {
             int numberOfUpdates = 0;
             StringBuilder prep = new StringBuilder();
@@ -167,24 +173,23 @@ public class DatabaseCopier {
                 if ( numberOfUpdates > COMMIT_HIGH_WATER_MARK ) {
                     numberOfUpdates = 0;
                     dbConnectionTo.commit();
-                    LOG.info("commit: " + counter);
+                    p("commit: " + counter);
                 }
             }
         } catch ( Exception e ) {
-            LOG.error("exception when connecting to database or copying sql", e);
+            p("exception when connecting to database or copying sql", e);
         } finally {
             dbConnectionTo.commit();
-            LOG.info("number of updates to table " + tableName + ": " + counter);
+            p("number of updates to table " + tableName + ": " + counter);
             closeQuietly(preparedStatementTo);
         }
-        // TODO Auto-generated method stub
-
     }
 
     private static void copyTable(Statement statementFrom, Connection dbConnectionTo, String tableName, int numberOfColumns) throws Exception {
         copyTable(statementFrom, dbConnectionTo, tableName, numberOfColumns, -1, -1);
     }
 
+    @SuppressWarnings("unused")
     private void shutdownCopy() {
         Connection dbConnectionTo = null;
         Statement statementTo = null;
@@ -194,13 +199,14 @@ public class DatabaseCopier {
             statementTo = dbConnectionTo.createStatement();
             statementTo.executeUpdate("shutdown compact");
         } catch ( Exception e ) {
-            LOG.error("exception when connecting to database or shutting down the server", e);
+            p("exception when connecting to database or shutting down the server", e);
         } finally {
             closeQuietly(statementTo);
             closeQuietly(dbConnectionTo);
         }
     }
 
+    @SuppressWarnings("unused")
     private void enforceConstraints() {
         Connection dbConnectionTo = null;
         Statement statementTo = null;
@@ -210,7 +216,7 @@ public class DatabaseCopier {
             statementTo = dbConnectionTo.createStatement();
             sqlFile(statementTo, this.getClass().getResourceAsStream(DbSetup.DB_CREATE_CONSTRAINTS_SQL));
         } catch ( Exception e ) {
-            LOG.error("exception when connecting to database or executing sql", e);
+            p("exception when connecting to database or executing sql", e);
         } finally {
             closeQuietly(statementTo);
             closeQuietly(dbConnectionTo);
@@ -236,7 +242,7 @@ public class DatabaseCopier {
                         // leeres stmt
                     } else {
                         count++;
-                        LOG.info("executing: " + sqlStmt);
+                        p("executing: " + sqlStmt);
                         statementTo.executeUpdate(sqlStmt);
                     }
                     sb = new StringBuilder();
@@ -245,9 +251,9 @@ public class DatabaseCopier {
                     sb.append(" \n");
                 }
             }
-            LOG.info(count + " SQL-statements executed");
+            p(count + " SQL-statements executed");
         } catch ( Exception e ) {
-            LOG.error("Exception in sql stmt: " + count, e);
+            p("Exception in sql stmt: " + count, e);
         } finally {
             if ( sqlStmtFileStream != null ) {
                 try {
@@ -269,22 +275,31 @@ public class DatabaseCopier {
         }
     }
 
-    private static Connection getDBConnection(String dbUri) {
+    private Connection getDBConnection(String dbUri) {
         Connection dbConnection = null;
         try {
             Class.forName(DB_DRIVER);
         } catch ( ClassNotFoundException e ) {
-            LOG.error("driver not found", e);
+            p("driver not found", e);
             System.exit(12);
         }
 
         try {
-            dbConnection = DriverManager.getConnection(dbUri, DB_USER, DB_PASSWORD);
+            dbConnection = DriverManager.getConnection(dbUri, dbUser, dbPassword);
             return dbConnection;
         } catch ( SQLException e ) {
-            LOG.error("db connection failed", e);
+            p("db connection failed", e);
             System.exit(12);
         }
         return dbConnection;
+    }
+
+    private static void p(String msg) {
+        System.out.println(msg);
+    }
+
+    private static void p(String msg, Exception e) {
+        System.out.println(msg);
+        e.printStackTrace(System.out);
     }
 }
