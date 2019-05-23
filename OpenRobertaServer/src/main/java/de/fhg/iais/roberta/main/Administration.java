@@ -360,6 +360,7 @@ public class Administration {
 
     // -------------------- helper ---------------------------------------------------------------------------------
 
+    @SuppressWarnings("unused")
     private String xml2Ast2xml(String updatedProgram) throws Exception, JAXBException {
         BlockSet program = JaxbHelper.xml2BlockSet(updatedProgram);
         //        EV3Factory modeFactory = new EV3Factory(null);
@@ -370,6 +371,7 @@ public class Administration {
         return newXml;
     }
 
+    @SuppressWarnings("unused")
     private List<Object[]> selectEV3programByName(Session nativeSession, String sqlGetProgramByName, String name) {
         SQLQuery selectByProgramName = nativeSession.createSQLQuery(sqlGetProgramByName);
         selectByProgramName.setString("name", name);
@@ -378,10 +380,12 @@ public class Administration {
         return result;
     }
 
+    @SuppressWarnings("unused")
     private boolean isSimulationProgram(int robotId) {
         return robotId == 43;
     }
 
+    @SuppressWarnings("unused")
     private String renameBlocksInProgram(String program, Map<String, String> blockNames) {
         for ( Entry<String, String> entry : blockNames.entrySet() ) {
             program = replaceWord(program, entry.getKey(), entry.getValue());

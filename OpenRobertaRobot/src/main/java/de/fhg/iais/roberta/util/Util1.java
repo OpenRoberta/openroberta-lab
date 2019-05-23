@@ -244,16 +244,6 @@ public class Util1 {
         }
     }
 
-    private static void loadOwn(Properties properties, InputStream inputStream) throws IOException {
-        try {
-            Properties local = new Properties();
-            local.load(inputStream);
-            properties.putAll(local);
-        } finally {
-            inputStream.close();
-        }
-    }
-
     /**
      * Check whether a String is a valid Java identifier. It is checked, that no reserved word is used
      *

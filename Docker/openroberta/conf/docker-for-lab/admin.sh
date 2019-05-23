@@ -31,7 +31,7 @@ case "$CMD" in
                     wd=${PWD}
                     if [[ "$wd" == '/tmp' ]]
                     then
-                        find * -maxdepth 1 $age -exec rm -rf -- {} \;
+                        find . -maxdepth 1 ! -name '.' ! -name '..' $age -exec rm -rf -- {} \;
                         RC=$?
                     else
                         echo 'cd /tmp did not succeed. This is dangerous! Analyse!'

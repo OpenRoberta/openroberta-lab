@@ -25,7 +25,7 @@ cd $CC_RESOURCES
 
 git checkout develop; git pull
 git checkout master; git pull
-git merge develop
+echo 'is a "git merge develop" needed?'
 
 mvn clean install
 docker build -f $REPO/Docker/meta/DockerfileBase_ubuntu_18_04 -t rbudde/openroberta_base:2 .

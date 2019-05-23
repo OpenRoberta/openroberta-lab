@@ -2,8 +2,6 @@ package de.fhg.iais.roberta.factory;
 
 import java.util.ArrayList;
 
-import org.apache.commons.lang3.SystemUtils;
-
 import de.fhg.iais.roberta.codegen.Bob3CompilerWorkflow;
 import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
@@ -17,10 +15,6 @@ public class Bob3Factory extends AbstractRobotFactory {
 
     public Bob3Factory(PluginProperties pluginProperties) {
         super(pluginProperties);
-        String os = "linux";
-        if ( SystemUtils.IS_OS_WINDOWS ) {
-            os = "windows";
-        }
     }
 
     @Override
