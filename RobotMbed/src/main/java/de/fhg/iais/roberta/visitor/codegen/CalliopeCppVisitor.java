@@ -387,7 +387,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             case "3":
             case "4":
             case "5":
-                this.sb.append("_cbSetRGBLed(&_i2c, ").append(port).append(", 0);");
+                this.sb.append("_cbSetRGBLed(_buf, &_i2c, ").append(port).append(", 0);");
                 break;
             default:
                 throw new DbcException("LedOffAction; invalid port: " + port);
@@ -421,12 +421,12 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         switch ( port ) {
             case "0":
             case "2":
-                this.sb.append("_cbSetMotor(&_i2c, ").append(port).append(", ");
+                this.sb.append("_cbSetMotor(_buf, &_i2c, ").append(port).append(", ");
                 motorOnAction.getParam().getSpeed().visit(this);
                 this.sb.append(");");
                 break;
             case "3":
-                this.sb.append("_cbSetMotors(&_i2c, ");
+                this.sb.append("_cbSetMotors(_buf, &_i2c, ");
                 motorOnAction.getParam().getSpeed().visit(this);
                 this.sb.append(", ");
                 motorOnAction.getParam().getSpeed().visit(this);
@@ -474,10 +474,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         switch ( port ) {
             case "0":
             case "2":
-                this.sb.append("_cbSetMotor(&_i2c, ").append(port).append(", 0);");
+                this.sb.append("_cbSetMotor(_buf, &_i2c, ").append(port).append(", 0);");
                 break;
             case "3":
-                this.sb.append("_cbSetMotors(&_i2c, 0, 0);");
+                this.sb.append("_cbSetMotors(_buf, &_i2c, 0, 0);");
                 break;
             case "AB":
                 this.sb.append("_uBit.soundmotor.motorAOff()");
@@ -563,7 +563,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
                 this.sb.append("(_uBit.io.P2.readPulseHigh() * 0.017)");
                 break;
             case "2":
-                this.sb.append("_cbGetSampleUltrasonic(&_i2c)");
+                this.sb.append("_cbGetSampleUltrasonic(_buf, &_i2c)");
                 break;
             default:
                 throw new DbcException("UltrasonicSensor; Invalid ultrasonic port: " + port);
@@ -575,7 +575,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         String port = infraredSensor.getPort();
         if ( port.equals("1") || port.contentEquals("2") ) {
-            this.sb.append("_cbGetSampleInfrared(&_i2c, ").append(port).append(")");
+            this.sb.append("_cbGetSampleInfrared(_buf, &_i2c, ").append(port).append(")");
         } else {
             throw new DbcException("InfraredSensor; Invalid infrared port: " + port);
         }
@@ -676,7 +676,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         this.sb.append("_uBit.init();");
         if ( this.codePreprocess.isCalliBotUsed() ) {
             nlIndent();
-            this.sb.append("_cbInit(&_i2c, &_uBit);");
+            this.sb.append("_cbInit(_buf, &_i2c, &_uBit);");
         }
         generateUsedVars();
         nlIndent();
@@ -940,7 +940,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             case "3":
             case "4":
             case "5":
-                this.sb.append("_cbSetRGBLed(&_i2c, ").append(port).append(", ");
+                this.sb.append("_cbSetRGBLed(_buf, &_i2c, ").append(port).append(", ");
                 ledOnAction.getLedColor().visit(this);
                 this.sb.append(");");
                 break;
@@ -960,7 +960,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         } else {
             throw new DbcException("LightAction; invalid mode: " + mode);
         }
-        this.sb.append("_cbSetLed(&_i2c, _cbLedState, ").append(lightAction.getPort()).append(", ").append(mode).append(");");
+        this.sb.append("_cbSetLed(_buf, &_i2c, _cbLedState, ").append(lightAction.getPort()).append(", ").append(mode).append(");");
         return null;
     }
 
@@ -1126,7 +1126,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         if ( withWrapping ) {
             if ( this.codePreprocess.isCalliBotUsed() ) {
                 nlIndent();
-                this.sb.append("_cbStop(&_i2c);");
+                this.sb.append("_cbStop(_buf, &_i2c);");
             }
             nlIndent();
             this.sb.append("release_fiber();");
@@ -1242,6 +1242,8 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         if ( this.codePreprocess.isCalliBotUsed() ) {
             this.sb.append("MicroBitI2C _i2c(MICROBIT_PIN_P20, MICROBIT_PIN_P19);");
             nlIndent();
+            this.sb.append("char _buf[5] = { 0, 0, 0, 0, 0 };");
+            nlIndent();
             this.sb.append("uint8_t _cbLedState = 0x00;");
         }
     }
@@ -1269,7 +1271,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             bothMotorsOnAction.getSpeedB().visit(this);
             this.sb.append(");");
         } else if ( bothMotorsOnAction.getPortA().equals("LEFT") ) {
-            this.sb.append("_cbSetMotors(&_i2c, ");
+            this.sb.append("_cbSetMotors(_buf, &_i2c, ");
             bothMotorsOnAction.getSpeedA().visit(this);
             this.sb.append(", ");
             bothMotorsOnAction.getSpeedB().visit(this);
