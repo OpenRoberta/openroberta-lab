@@ -1,0 +1,50 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+            <instance x="73" y="20">
+                <block type="robControls_start" id="]iEx8lcTWa0dZr%+jIB(" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG"></field>
+                </block>
+                <block type="mbedActions_display_text" id=";jF}SPox[#AhU(*c;0}Y" intask="true">
+                    <field name="TYPE">TEXT</field>
+                    <value name="OUT">
+                        <block type="text" id="L4nd-}-9M9/mN}V/xv93" intask="true">
+                            <field name="TEXT">Hallo</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_leds_on" id=":moIOPb3)6W~)U*/3Z8A" intask="true">
+                    <field name="ACTORPORT">0</field>
+                    <value name="COLOR">
+                        <block type="mbedColour_picker" id="9@g(wUJt101Q2g.XlMH2" intask="true">
+                            <field name="COLOUR">#ff0000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_time" id="5Q~3UQ.5H1CUyIeyTb9N" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="#iGRt/OJU]!l8qX,~Gu2" intask="true">
+                            <field name="NUM">2000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedActions_leds_on" id="W[1x7LuKm[_s2iXMqM|x" intask="true">
+                    <field name="ACTORPORT">0</field>
+                    <value name="COLOR">
+                        <block type="mbedColour_picker" id="76Y5ieTe[J7J}-BExt.h" intask="true">
+                            <field name="COLOUR">#009900</field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+            <instance x="138" y="88">
+                <block type="mbedBrick_Calliope-Brick" id="1" intask="true"></block>
+            </instance>
+        </block_set>
+    </config>
+</export>

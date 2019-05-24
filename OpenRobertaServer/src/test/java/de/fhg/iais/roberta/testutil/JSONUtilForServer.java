@@ -126,8 +126,33 @@ public class JSONUtilForServer {
      */
     public static void assertEntityRc(Response response, String rc, Key message) throws JSONException {
         JSONObject entity = (JSONObject) response.getEntity();
-        Assert.assertEquals(rc, entity.getString("rc"));
-        String responseKey = entity.optString("message");
+        assertEntityRc(entity, rc, message);
+    }
+
+    /**
+     * given a response STRING, that contains a JSON entity with the property "rc" (return code"), assert that the value is as expected
+     *
+     * @param response the String with the JSON object to check
+     * @param rc the return code expected
+     * @param message the success or error message key, that is transformed by the client to a localized message
+     * @throws JSONException
+     */
+    public static void assertEntityRc(String response, String rc, Key message) throws JSONException {
+        JSONObject entity = new JSONObject(response);
+        assertEntityRc(entity, rc, message);
+    }
+
+    /**
+     * given a response JSON object with the property "rc" (return code"), assert that the value is as expected
+     *
+     * @param response the response JSON object to check
+     * @param rc the return code expected
+     * @param message the success or error message key, that is transformed by the client to a localized message
+     * @throws JSONException
+     */
+    public static void assertEntityRc(JSONObject response, String rc, Key message) throws JSONException {
+        Assert.assertEquals(rc, response.getString("rc"));
+        String responseKey = response.optString("message");
         if ( message != null ) {
             Assert.assertEquals(message.getKey(), responseKey);
         } else if ( responseKey != null ) {
