@@ -37,8 +37,10 @@ public class DockerIT {
 
     private static final int MAX_CONCURRENT_USERS = 10;
     private static final int MAX_TOTAL_USERS = 1000;
+    private static final String CHARSET_FOR_RANDOM_STRING = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789";
+    private static final int CHARSET_FOR_RANDOM_STRING_LENGTH = CHARSET_FOR_RANDOM_STRING.length();
     private static final String SERVER_URL = "http://localhost:1999/";
-    //    private static final String SERVER_URL = "http://ilya.iais.fraunhofer.de:1999/";
+    // private static final String SERVER_URL = "http://ilya.iais.fraunhofer.de:1999/";
 
     @SuppressWarnings("unchecked")
     private static final Future<Boolean>[] futures = (Future<Boolean>[]) new Future<?>[DockerIT.MAX_CONCURRENT_USERS];
@@ -111,22 +113,24 @@ public class DockerIT {
         HttpClientWrapper httpClientWrapper = new HttpClientWrapper();
 
         // create a user, then think 1-4 sec
+        final String randomString = getAlphaNumericString(10);
+        String suffix = "-" + randomString + "-" + userNumber;
         JSONObject request = JSONUtilForServer.mkD("" + //
             "{'cmd':'createUser';" + //
-            "'accountName':'pid-acc-" + userNumber + "';" + //
-            "'userName':'pid-user-" + userNumber + "';" + //
-            "'password':'dip-" + userNumber + "';" + //
+            "'accountName':'pid-acc" + suffix + "';" + //
+            "'userName':'pid-user" + suffix + "';" + //
+            "'password':'dip" + suffix + "';" + //
             "'isYoungerThen14':0;" + //
-            "'userEmail':'cavy-" + userNumber + "@home';" + //
+            "'userEmail':'cavy" + suffix + "@home';" + //
             "'role':'TEACHER'}");
         thinkTimeInMillisec += step(httpClientWrapper, "user", request, Key.USER_CREATE_SUCCESS, 1, 4);
 
         // login with user "pid-*" and create 2 programs, think 2-6 sec
-        request = JSONUtilForServer.mkD("{'cmd':'login';'accountName':'pid-acc-" + userNumber + "';'password':'dip-" + userNumber + "'}");
+        request = JSONUtilForServer.mkD("{'cmd':'login';'accountName':'pid-acc" + suffix + "';'password':'dip" + suffix + "'}");
         thinkTimeInMillisec += step(httpClientWrapper, "user", request, Key.USER_GET_ONE_SUCCESS, 2, 6);
-        request = JSONUtilForServer.mkD("{'cmd':'saveAsP';'programName':'p1';'programText':'<program>...</program>'}");
+        request = JSONUtilForServer.mkD("{'cmd':'saveAsP';'programName':'p1" + randomString + "';'programText':'<program>...</program>'}");
         thinkTimeInMillisec += step(httpClientWrapper, "program", request, Key.PROGRAM_SAVE_SUCCESS, 2, 6);
-        request = JSONUtilForServer.mkD("{'cmd':'saveAsP';'programName':'p2';'programText':'<program>...</program>'}");
+        request = JSONUtilForServer.mkD("{'cmd':'saveAsP';'programName':'p2" + randomString + "';'programText':'<program>...</program>'}");
         thinkTimeInMillisec += step(httpClientWrapper, "program", request, Key.PROGRAM_SAVE_SUCCESS, 2, 6);
 
         // set robot type, then think 10-14 sec
@@ -137,7 +141,7 @@ public class DockerIT {
         request = JSONUtilForServer.mkD("{'cmd':'compileP';'name':'calliProg'}");
         request.getJSONObject("data").put("program", this.calliProg);
         for ( int i = 0; i < 5; i++ ) {
-            //thinkTimeInMillisec += step(httpClientWrapper, "program", request, Key.COMPILERWORKFLOW_SUCCESS, 5, 10);
+            thinkTimeInMillisec += step(httpClientWrapper, "program", request, Key.COMPILERWORKFLOW_SUCCESS, 5, 10);
         }
 
         httpClientWrapper.shutdown();
@@ -167,5 +171,19 @@ public class DockerIT {
             Thread.sleep(think);
         }
         return think;
+    }
+
+    /**
+     * generate a random string of length n
+     *
+     * @param n the length of the string
+     * @return the random string
+     */
+    private String getAlphaNumericString(int n) {
+        StringBuilder sb = new StringBuilder(n);
+        for ( int i = 0; i < n; i++ ) {
+            sb.append(CHARSET_FOR_RANDOM_STRING.charAt(random.nextInt(CHARSET_FOR_RANDOM_STRING_LENGTH)));
+        }
+        return sb.toString();
     }
 }

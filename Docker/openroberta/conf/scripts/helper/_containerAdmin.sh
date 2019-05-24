@@ -4,8 +4,8 @@ isServerNameValid $SERVER_NAME
 
 CONTAINER="${INAME}-$SERVER_NAME"
 CMD="./admin.sh -q $ADMIN_CMD"
-echo "executing in $CONTAINER the sh command $CMD"
-docker exec -it ${CONTAINER} /bin/bash -c "$CMD"
+echo "executing in $CONTAINER the sh command $CMD at $(date)"
+docker exec ${CONTAINER} /bin/bash -c "$CMD"
 RC=$?
 if [ $RC -ne 0 ]
 then

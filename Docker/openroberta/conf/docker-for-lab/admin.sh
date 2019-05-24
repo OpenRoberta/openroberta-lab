@@ -27,11 +27,12 @@ RC=0
 case "$CMD" in
   cleanup-temp-user-dirs) # the rm -rf is scary. Should be really made robust against errors.
                     age='-mtime +1'
+                    age='-mmin +30'
                     cd /tmp
                     wd=${PWD}
                     if [[ "$wd" == '/tmp' ]]
                     then
-                        find . -maxdepth 1 ! -name '.' ! -name '..' $age -exec rm -rf -- {} \;
+                        find . -ignore_readdir_race -maxdepth 1 ! -name '.' ! -name '..' $age -exec rm -rf -- {} \;
                         RC=$?
                     else
                         echo 'cd /tmp did not succeed. This is dangerous! Analyse!'
@@ -44,7 +45,8 @@ case "$CMD" in
                     RC=12 ;;
 esac
 
-if [ $RC -ne 0 ]
+if [[ "$RC" -ne 0 ]]
 then
-  echo '*** the command did NOT succeed. Look into console output and logfiles ***'
+  echo '*** the command did NOT succeed (completely). Look into console output and logfiles. $(date) ***'
 fi
+exit 0
