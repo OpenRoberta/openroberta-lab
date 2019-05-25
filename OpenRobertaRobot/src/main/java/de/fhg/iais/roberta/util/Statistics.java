@@ -78,15 +78,15 @@ public final class Statistics {
         try {
             STAT
                 .info(
-                    toJsonString(
-                        countryCode,
-                        "countryCode",
+                    toJsonString(                        
                         action,
                         "Browser",
                         userAgent.getBrowser() + "/" + userAgent.getBrowserVersion(),
                         "OS",
                         userAgent.getOperatingSystem().getName(),
-                        "DeviceType",
+                        "CountryCode",                       
+                        countryCode,
+                         "DeviceType",
                         userAgent.getOperatingSystem().getDeviceType().getName(),
                         "ScreenSize",
                         request.getString("screenSize")));
@@ -141,9 +141,9 @@ public final class Statistics {
         }
 
         jsonArrArgs.put(jsonObjArgs);
-        jsonObjAction.put("args", jsonArrArgs);
         jsonObjAction.put("action", action);
-
+        jsonObjAction.put("args", jsonArrArgs);
+        
         return jsonObjAction.toString();
     }
 }
