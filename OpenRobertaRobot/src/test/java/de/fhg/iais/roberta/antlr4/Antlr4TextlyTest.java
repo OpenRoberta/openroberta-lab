@@ -27,15 +27,15 @@ public class Antlr4TextlyTest {
 
     @Test
     public void testExpr2() throws Exception {
-        String p = expr2String("a+b*c-(a+2*e)");
-        String r = "(expr (expr (expr a) + (expr (expr b) * (expr c))) - (expr ( (expr (expr a) + (expr (expr 2) * (expr e))) )))";
+        String p = expr2String("a+b*c-(-a+2*e)");
+        String r = "(expr (expr (expr a) + (expr (expr b) * (expr c))) - (expr ( (expr (expr - (expr a)) + (expr (expr 2) * (expr e))) )))";
         assertEquals(r, p);
     }
 
     @Test
     public void testExpr3() throws Exception {
         String p = expr2String("1+2");
-        String r = "(expr (expr - (expr 2)) - (expr 2))";
+        String r = "(expr (expr 1) + (expr 2))";
         assertEquals(r, p);
     }
 
