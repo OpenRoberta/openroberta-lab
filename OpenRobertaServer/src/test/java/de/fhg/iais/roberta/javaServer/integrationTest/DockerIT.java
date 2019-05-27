@@ -35,8 +35,9 @@ import de.fhg.iais.roberta.util.Key;
 public class DockerIT {
     private static final Logger LOG = LoggerFactory.getLogger("workflow");
 
-    private static final int MAX_CONCURRENT_USERS = 10;
-    private static final int MAX_TOTAL_USERS = 1000;
+    private static final int MAX_CONCURRENT_USERS = 20;
+    private static final int MAX_TOTAL_USERS = 20000;
+
     private static final String CHARSET_FOR_RANDOM_STRING = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789";
     private static final int CHARSET_FOR_RANDOM_STRING_LENGTH = CHARSET_FOR_RANDOM_STRING.length();
     private static final String SERVER_URL = "http://localhost:1999/";

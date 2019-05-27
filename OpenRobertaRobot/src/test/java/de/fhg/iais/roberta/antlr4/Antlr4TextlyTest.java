@@ -34,7 +34,7 @@ public class Antlr4TextlyTest {
 
     @Test
     public void testExpr3() throws Exception {
-        String p = expr2String("-2 - 2");
+        String p = expr2String("1+2");
         String r = "(expr (expr - (expr 2)) - (expr 2))";
         assertEquals(r, p);
     }

@@ -1,11 +1,11 @@
 FROM rbudde/openroberta_base:2
 
-ARG LAST_RUN_OF_BASE=2019-04-30
+ARG LAST_RUN_OF_BASE=2019-05-27
 
 VOLUME /opt/admin
 EXPOSE 1999
 
-RUN mkdir --parent /opt/openroberta-lab/lib
+RUN mkdir --parent /opt/openroberta-lab/lib /tmp/openrobertaTmp
 WORKDIR /opt/openroberta-lab
 
 COPY ["./","./"]

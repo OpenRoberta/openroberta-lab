@@ -25,17 +25,17 @@ CMD="$1"; shift
 
 RC=0
 case "$CMD" in
-  cleanup-temp-user-dirs) # the rm -rf is scary. Should be really made robust against errors.
-                    age='-mtime +1'
-                    age='-mmin +30'
-                    cd /tmp
-                    wd=${PWD}
-                    if [[ "$wd" == '/tmp' ]]
+  cleanup-temp-user-dirs) # the rm -rf is scary. Should be really made robust against errors. -mtime +1 is: older than 1 day
+                    AGE='-mtime +1'
+                    TMP_DIR='/tmp/openrobertaTmp'
+                    cd $TMP_DIR
+                    WD=$(pwd)
+                    if [[ "$WD" == $TMP_DIR ]]
                     then
-                        find . -ignore_readdir_race -maxdepth 1 ! -name '.' ! -name '..' $age -exec rm -rf -- {} \;
+                        find . -ignore_readdir_race -maxdepth 1 ! -name '.' ! -name '..' $AGE -exec rm -rf -- {} \;
                         RC=$?
                     else
-                        echo 'cd /tmp did not succeed. This is dangerous! Analyse!'
+                        echo "cd $TMP_DIR did not succeed. This is dangerous! Analyse!"
                         RC=12
                     fi ;;
 # ----------------------------------------------------------------------------------------------------------------------------------------

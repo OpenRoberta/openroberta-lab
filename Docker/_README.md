@@ -189,29 +189,44 @@ The main commands of the script can be seen if you run `$SCRIPT_DIR/run.sh` with
 * enable autodeploy (see below).
 * add init functionality for server (re-)boots (see below).
 
-## Init scripts and automatic deploy
+## Automatic deploy, database backup, removing temporary files and init scripts
 
-The shell script `$SCRIPT_DIR/run.sh` has commands, that are used to initialize the test setup (on server restart, for example) and to
-deploy one or more servers automatically if new commits hit the remote repo.
+The shell script `$SCRIPT_DIR/run.sh` has commands, that are used to administrate the framework.
  
 * `auto-deploy`: usually called from cron. It takes server names from variable `AUTODEPLOY` from `config.sh` and re-deploys each server, if the git
   repository connected to this server has got new commits. Use `crontab -e` to add the following line to the crontab to run this is:
   
 ```bash
-*/5 * * * * bash <BASE_DIR>/scripts/run.sh -q auto-deploy >><BASE_DIR>/logs/cronlog.txt
+*/5 * * * * bash <SCRIPT_DIR>/scripts/run.sh -q auto-deploy >><BASE_DIR>/logs/cronlog.txt
 ```
 
-* `start-all` and `stop-all`: usually called from the configuration file `robertalab` found in `/etc/init.d`. A typical script is:
+* `backup`: usually called from cron. It takes a database name and creates a database backup in the `dbAdmin` directory.
+  Use `crontab -e` to add the following line to the crontab to run this is:
+  
+```bash
+0 2 * * * bash <SCRIPT_DIR>/run.sh -q backup <database-name> >><BASE_DIR>/logs/cronlog.txt
+
+```
+
+* `cleanup-temp-user-dirs`: usually called from cron. It takes a server name and runs a shell in the corresponding container, that will remove temporary
+  old data allocated by the cross compiler. IKt is assumed, that temporary data is garbabge one day after their creation.
+  Use `crontab -e` to add the following line to the crontab to run this is:
+  
+```bash
+20 2 * * * bash <SCRIPT_DIR>/run.sh -q admin <server-name> cleanup-temp-user-dirs >><BASE_DIR>/logs/cronlog.txt
+```
+
+* `start-all` and `stop-all`: usually called from the configuration file `openrobertalab` found in `/etc/init.d`. A typical script is:
 
 ```bash
 #!/bin/sh
 ### BEGIN INIT INFO
-# Provides:          robertalab
+# Provides:          openrobertalab
 # Required-Start:    $remote_fs $syslog
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: openroberta service
+# Short-Description: openrobertalab service
 # Description:       Start, stop and restart the database server and the openroberta server declared in server/servers.txt
 ### END INIT INFO
 
@@ -228,22 +243,20 @@ case "$1" in
 esac
 ```
 
-Assuming systemd, after putting `robertalab` into `/etc/init.d`, the service is added with the commands:
+Assuming systemd, after putting `openrobertalab` into `/etc/init.d`, the service is added with the commands:
 
 ```bash
-chmod ugo+x /etc/init.d/robertalab
+chmod ugo+x /etc/init.d/openrobertalab
 
 systemctl daemon-reload
-systemctl enable robertalab
-systemctl start robertalab
+systemctl enable openrobertalab
+systemctl start openrobertalab
 
-systemctl status robertalab       # to see logging
-journalctl -u robertalab.service  # to see more logging
+systemctl status openrobertalab       # to see logging
+journalctl -u openrobertalab.service  # to see more logging
 ```
 
-# seldom used functioanlity: run the integration tests and start a debug container
-
-## integration tests
+# Run the integration tests
 
 The integration test container clones a branch, executes all tests, including the integration tests and
 in case of success it returns 0, in case of errors/failures it returns 16
@@ -253,7 +266,24 @@ export BRANCH='develop'
 docker run rbudde/openroberta_it_ubuntu_18_04:2 $BRANCH 1.2.3 # 1.2.3 is the db version and unused for tests
 ```
 
-## debug container
+# deprecated functionality: create the server, database, upgrade and embedded images in a docker container and run them
+
+this functionality is deprecated. It may be re-used later. See the directory `TestSystemSetupTemplate` for a much more flexible test setup.
+
+## generate the image for DEBUG (rarely used)
+
+For debug you want to run an image, built upon the "base" image, that contains all crosscompiler, mvn and git.
+It has executed a git clone of the main git repository `openroberta-lab` and has executed a `mvn clean install`. This is done to fill the
+(mvn) cache and speeds up later builds considerably. The entrypoint is "/bin/bash". This image is build by
+
+```bash
+REPO=/data/openroberta-lab/git/openroberta-lab
+cd $REPO/Docker
+docker build -t rbudde/openroberta_debug_ubuntu_18_04:2 -f testing/DockerfileDebug_ubuntu_18_04 .
+docker push rbudde/openroberta_debug_ubuntu_18_04:2
+```
+
+## runt the DEBUG container (rarely used)
 
 ```bash
 docker run -p 7100:1999 -it --entrypoint /bin/bash rbudde/openroberta_debug_ubuntu_18_04:2
@@ -273,23 +303,6 @@ or you want to run the integration tests (but many other tasks are possible :-)
 ```bash
 git checkout develop; git pull; git co anotherBranchToDebug
 mvn clean install -PrunIT
-```
-
-# deprecated functionality: create the server, database, upgrade and embedded images in a docker container and run them
-
-this functionality is deprecated. It may be re-used later. See the directory `TestSystemSetupTemplate` for a much more flexible test setup.
-
-## generate the image for TEST and DEBUG.
-
-For debug you want to run an image, built upon the "base" image, that contains all crosscompiler, mvn and git.
-It has executed a git clone of the main git repository `openroberta-lab` and has executed a `mvn clean install`. This is done to fill the
-(mvn) cache and speeds up later builds considerably. The entrypoint is "/bin/bash". This image is build by
-
-```bash
-REPO=/data/openroberta-lab/git/openroberta-lab
-cd $REPO/Docker
-docker build -t rbudde/openroberta_debug_ubuntu_18_04:2 -f testing/DockerfileDebug_ubuntu_18_04 .
-docker push rbudde/openroberta_debug_ubuntu_18_04:2
 ```
 
 ## generate the "gen" image. This image can generate an OpenRoberta distribution.
