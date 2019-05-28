@@ -66,9 +66,7 @@ case "$CMD" in
                echo "$DATE: generating the openroberta bridge network '$DOCKER_NETWORK_NAME'"
                docker network create --driver bridge $DOCKER_NETWORK_NAME
                echo "generating the openroberta bridge network '$DOCKER_NETWORK_NAME' finished" ;;
-    gen-dbc)   echo "$DATE: generating the database image rbudde/openroberta_db:2.4.0"
-               docker build -f ${CONF_DIR}/docker-for-db/DockerfileDb -t rbudde/openroberta_db_server:2.4.0 ${CONF_DIR}/docker-for-db
-               echo "generating the database image rbudde/openroberta_db:2.4.0 finished" ;;
+    gen-dbc)   source ${SCRIPT_HELPER}/_dbContainerGen.sh ;;
     start-dbc) source ${SCRIPT_HELPER}/_dbContainerStop.sh
                source ${SCRIPT_HELPER}/_dbContainerStart.sh ;;
     stop-dbc)  source ${SCRIPT_HELPER}/_dbContainerStop.sh ;;

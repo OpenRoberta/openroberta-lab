@@ -55,7 +55,7 @@ esac
         '') echo "found no docker image '$IMAGE' to remove. That is ok." ;;
         * ) echo "removed docker image '$IMAGE'"
     esac
-    docker build -f ${CONF_DIR}/docker-for-lab/DockerfileLab -t $IMAGE $SERVER_DIR_OF_ONE_SERVER/export
+    docker build --no-cache -f ${CONF_DIR}/docker-for-lab/DockerfileLab -t $IMAGE $SERVER_DIR_OF_ONE_SERVER/export
     
     DATE_DEPLOY=$(date --rfc-3339=seconds)
     cat >$SERVER_DIR_OF_ONE_SERVER/deploy.txt <<.EOF

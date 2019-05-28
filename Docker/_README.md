@@ -28,7 +28,7 @@ git checkout master; git pull
 echo 'is a "git merge develop" needed?'
 
 mvn clean install
-docker build -f $REPO/Docker/meta/DockerfileBase_ubuntu_18_04 -t rbudde/openroberta_base:2 .
+docker build --no-cache -t rbudde/openroberta_base:2 -f $REPO/Docker/meta/DockerfileBase_ubuntu_18_04 .
 docker push rbudde/openroberta_base:2
 ```
 
@@ -43,7 +43,7 @@ If called, it will checkout a branch and runs both the tests and the integration
 REPO=/data/openroberta-lab/git/openroberta-lab
 BRANCH=develop
 cd $REPO/Docker/testing
-docker build -t rbudde/openroberta_it_ubuntu_18_04:2 -f DockerfileIT_ubuntu_18_04 . --build-arg BRANCH=$BRANCH
+docker build --no-cache -t rbudde/openroberta_it_ubuntu_18_04:2 -f DockerfileIT_ubuntu_18_04 . --build-arg BRANCH=$BRANCH
 docker push rbudde/openroberta_it_ubuntu_18_04:2
 ```
 

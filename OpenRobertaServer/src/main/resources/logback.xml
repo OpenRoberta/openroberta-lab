@@ -20,8 +20,11 @@
 
     <root level="INFO">
         <appender-ref ref="LOG" />
-        <!-- <appender-ref ref="STATISTICS" /> -->
     </root>
+    
+    <logger name="statistics" level="INFO" additivity="false">
+        <appender-ref ref="LOG" />
+    </logger>
 
     <logger name="de.fhg.iais.roberta.brick.CompilerWorkflow" level="DEBUG" />
     <logger name="org.hibernate" level="WARN" />

@@ -9,14 +9,18 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.textly.generated.TextlyLexer;
 import de.fhg.iais.roberta.textly.generated.TextlyParser;
 import de.fhg.iais.roberta.textly.generated.TextlyParser.ExprContext;
 
 public class Antlr4TextlyTest {
+    private static final Logger LOG = LoggerFactory.getLogger(Antlr4TextlyTest.class);
+
     private static final boolean DO_ASSERT = true;
-    private static final boolean DO_PRINT = true;
+    private static final boolean DO_PRINT = false;
 
     @Test
     public void testExpr1() throws Exception {
@@ -72,7 +76,7 @@ public class Antlr4TextlyTest {
 
     private void assertEquals(String r, String p) {
         if ( DO_PRINT ) {
-            System.out.println(p);
+            LOG.info(p);
         }
         if ( DO_ASSERT ) {
             Assert.assertEquals(r, p);
