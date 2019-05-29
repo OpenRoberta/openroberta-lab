@@ -112,12 +112,13 @@ public abstract class AbstractSimVisitor<V> implements ILanguageVisitor<V> {
 
     @Override
     public V visitStringConst(StringConst<V> stringConst) {
-        this.sb.append(
-            "createConstant(CONST."
-                + stringConst.getKind().getName()
-                + ", '"
-                + StringEscapeUtils.escapeEcmaScript(stringConst.getValue().replaceAll("[<>\\$]", ""))
-                + "')");
+        this.sb
+            .append(
+                "createConstant(CONST."
+                    + stringConst.getKind().getName()
+                    + ", '"
+                    + StringEscapeUtils.escapeEcmaScript(stringConst.getValue().replaceAll("[<>\\$]", ""))
+                    + "')");
         return null;
     }
 
@@ -197,7 +198,7 @@ public abstract class AbstractSimVisitor<V> implements ILanguageVisitor<V> {
                 break;
             case TEXT_APPEND:
                 method = "createTextAppend(";
-                end = createClosingBracket();
+                // end = createClosingBracket();
                 break;
             default:
                 break;
@@ -740,7 +741,6 @@ public abstract class AbstractSimVisitor<V> implements ILanguageVisitor<V> {
         this.sb.append("]" + end);
         return null;
     }
-    
 
     @SuppressWarnings("unchecked")
     @Override
@@ -749,9 +749,9 @@ public abstract class AbstractSimVisitor<V> implements ILanguageVisitor<V> {
         this.sb.append("createAssertStmt(");
         assertStmt.getAssert().visit(this);
         this.sb.append(", createConstant(CONST.STRING_CONST, \"").append(assertStmt.getMsg()).append("\"), ");
-        ((Binary<Void>)assertStmt.getAssert()).getLeft().visit((IVisitor<Void>) this);
-        this.sb.append(", createConstant(CONST.STRING_CONST, \"").append(((Binary<Void>)assertStmt.getAssert()).getOp()).append("\"), ");
-        ((Binary<Void>)assertStmt.getAssert()).getRight().visit((IVisitor<Void>) this);
+        ((Binary<Void>) assertStmt.getAssert()).getLeft().visit((IVisitor<Void>) this);
+        this.sb.append(", createConstant(CONST.STRING_CONST, \"").append(((Binary<Void>) assertStmt.getAssert()).getOp()).append("\"), ");
+        ((Binary<Void>) assertStmt.getAssert()).getRight().visit((IVisitor<Void>) this);
         this.sb.append(end);
         return null;
     }
