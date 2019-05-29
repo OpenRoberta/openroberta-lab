@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.components.ev3;
+package de.fhg.iais.roberta.components.ev3lejos;
 
 import java.net.URI;
 
