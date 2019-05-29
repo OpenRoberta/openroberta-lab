@@ -1131,6 +1131,9 @@ table [data-toggle="collapse"].collapsed:after {
 .robotSpecial span.img-ev3dev {
     background-image: url("/css/img/ev3dev.png");
 }
+.robotSpecial span.img-ev3c4ev3 {
+    background-image: url("/css/img/ev3c4ev3.png");
+}
 .robotSpecial span.img-calliope2017 {
     background-image: url("/css/img/calliope2017.png");
     width: 178px;
