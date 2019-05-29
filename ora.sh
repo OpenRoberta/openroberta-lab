@@ -118,7 +118,7 @@ function _export {
          ;;
   esac
   
-  echo 'scripts for start&stop of the server/db are copied'
+  echo 'script for start of the server/db are copied'
   cp admin.sh ${exportpath}
   chmod ugo+rx admin.sh
   

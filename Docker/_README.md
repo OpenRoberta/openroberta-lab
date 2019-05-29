@@ -194,14 +194,14 @@ The main commands of the script can be seen if you run `$SCRIPT_DIR/run.sh` with
 The shell script `$SCRIPT_DIR/run.sh` has commands, that are used to administrate the framework.
  
 * `auto-deploy`: usually called from cron. It takes server names from variable `AUTODEPLOY` from `config.sh` and re-deploys each server, if the git
-  repository connected to this server has got new commits. Use `crontab -e` to add the following line to the crontab to run this is:
+  repository connected to this server has got new commits. Use `crontab -e` to add the following line to the crontab to look for commits every 5 minutes:
   
 ```bash
 */5 * * * * bash <SCRIPT_DIR>/scripts/run.sh -q auto-deploy >><BASE_DIR>/logs/cronlog.txt
 ```
 
 * `backup`: usually called from cron. It takes a database name and creates a database backup in the `dbAdmin` directory.
-  Use `crontab -e` to add the following line to the crontab to run this is:
+  Use `crontab -e` to add the following line to the crontab to generate a database backup every night at 2 o'clock:
   
 ```bash
 0 2 * * * bash <SCRIPT_DIR>/run.sh -q backup <database-name> >><BASE_DIR>/logs/cronlog.txt
@@ -210,7 +210,7 @@ The shell script `$SCRIPT_DIR/run.sh` has commands, that are used to administrat
 
 * `cleanup-temp-user-dirs`: usually called from cron. It takes a server name and runs a shell in the corresponding container, that will remove temporary
   old data allocated by the cross compiler. IKt is assumed, that temporary data is garbabge one day after their creation.
-  Use `crontab -e` to add the following line to the crontab to run this is:
+  Use `crontab -e` to add the following line to the crontab to remove garbage every night 20 minutes after 2:
   
 ```bash
 20 2 * * * bash <SCRIPT_DIR>/run.sh -q admin <server-name> cleanup-temp-user-dirs >><BASE_DIR>/logs/cronlog.txt
@@ -234,10 +234,12 @@ The shell script `$SCRIPT_DIR/run.sh` has commands, that are used to administrat
 
 BASE_DIR=<BASE_DIR>
 SCRIPTS=$BASE_DIR/conf/scripts
+export SYSTEMCALL=true
 case "$1" in
     start)   bash $SCRIPTS/run.sh -q start-all                             >>$BASE_DIR/logs/init.txt ;;
     stop)    bash $SCRIPTS/run.sh -q stop-all                              >>$BASE_DIR/logs/init.txt ;;
-    restart) bash $SCRIPTS/run.sh -q start-all                             >>$BASE_DIR/logs/init.txt ;;
+    restart) bash $SCRIPTS/run.sh -q stop-all                              >>$BASE_DIR/logs/init.txt
+             bash $SCRIPTS/run.sh -q start-all                             >>$BASE_DIR/logs/init.txt ;;
     *)       echo "invalid command \"$1\". Usage: $0 {start|stop|restart}" >>$BASE_DIR/logs/init.txt
              exit 12 ;;
 esac
@@ -255,6 +257,21 @@ systemctl start openrobertalab
 systemctl status openrobertalab       # to see logging
 journalctl -u openrobertalab.service  # to see more logging
 ```
+
+## Note about the -d command lone arguments for the openrobertalab server container
+
+The global properties needed for the openrobertalab server are found in resource `/openroberta.properties`. At start time these parameter can be modified
+by an arbitrary number of command line arguments like `-d KEY=VALUE`. The final list of these `-d` arguments is build as follows:
+
+* script `start.sh`: the shell script `start.sh` is inside the openrobertalab server container and starts the JVM with main class `ServerStarter`.
+  It contains some `-d` arguments, that are the
+  same for _all_ openrobertalab server container and adds more `-d` arguments (passed by the script that starts the container) by adding `$*`
+* script `_start.sh`: the docker container is started (via the main script `run.sh`) by the bash statements found in `_start.sh`. Here more `-d` statements are added,
+  that refer to the OpenRoberta server instance (master, test, dev). They adds database names, network names, logging level, logging configuration and mount points.
+  Furthermore the script adds as the last level of `-d` additions those founds invariable `START_ARGS`
+* variable `START_ARGS`: every OpenRoberta server has a configuration file `decl.sh`. Here the shell variable `START_ARGS` can define more `-d` arguments.
+  *NOTE:* this is the place for the last deployer-defined additions as declaring the list of robot plugins to use, whether this is the public server or not, and so on.
+  It is possible, but _not_ adviced to overwrite properties already defined at the two places described above
 
 # Run the integration tests
 

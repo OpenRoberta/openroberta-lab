@@ -7,4 +7,4 @@ java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
      -d database.mode=server \
      -d robot.crosscompiler.resourcebase=/opt/ora-cc-rsc \
      -d server.admin.dir=/opt/admin \
-	   $*
+     $*

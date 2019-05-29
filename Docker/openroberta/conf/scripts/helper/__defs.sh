@@ -2,13 +2,18 @@
 
 # ask a question. If the user answers "y", everything is fine. Otherwise exit 12
 function question {
-  echo -n "$1 (\"y\" if ok) "
-  local ANSWER
-  read ANSWER
-  case "$ANSWER" in
-    y) : ;;
-    *) exit 12 ;;
-  esac
+  if [ "$SYSTEMCALL" == 'true' ]
+  then
+    echo "SYSTEMCALL. Automatic 'y' for question: $1"
+  else
+    echo -n "$1 (\"y\" if ok) "
+    local ANSWER
+    read ANSWER
+    case "$ANSWER" in
+      y) : ;;
+      *) exit 12 ;;
+    esac
+  fi
 }
 
 function isDefined {

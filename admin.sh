@@ -18,19 +18,19 @@ RDBG=''
 while true
 do
   case "$1" in
-    -adminDir) ADMIN_DIR=$2
-               shift; shift ;;
-    -q)        QUIET='yes'
-               shift ;;
-    -Xmx*)     XMX=$1
-               shift ;;
-    -rdg)      RDBG='-agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=y'
-               shift ;;
-    -lib)      JAVA_LIB_DIR=$2
-               shift; shift ;;
-    -dbUri)    DB_URI=$2
-               shift; shift ;;
-    *)         break ;;
+    -dbUri)        DB_URI=$2
+                   shift; shift ;;
+    -java-lib-dir) JAVA_LIB_DIR=$2
+                   shift; shift ;;
+    -admin-dir)    ADMIN_DIR=$2
+                   shift; shift ;;
+    -Xmx*)         XMX=$1
+                   shift ;;
+    -rdg)          RDBG='-agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=y'
+                   shift ;;
+    -q)            QUIET='yes'
+                   shift ;;
+    *)             break ;;
   esac
 done
 
@@ -39,25 +39,26 @@ then
   echo 'THIS SCRIPT EXECUTES DANGEROUS COMMANDS. MISUSE MAY CRASH THE OPENROBERTA SERVER.'
   echo 'Execute this script from the base directory of an openroberta installation created by the "./ora.sh export" command'
   echo 'Parameter preceding the command:'
-  echo '-dbUri <db-uri>                default: jdbc:hsqldb:hsql://localhost/openroberta-db'
-  echo '-java-lib-dir <java-lib-dir>   default: ./lib'
-  echo '-adminDir <adminDir>           default: ./admin'
-  echo '-Xmx                           e.g. -Xmx4G, default: ""'
-  echo '-rdbg                          using port 8000 for the remote client, default: no remote debug'
-  echo '-q                             quiet mode, default: verbose'
+  echo '-dbUri <db-uri>     the database uri to use; default: jdbc:hsqldb:hsql://localhost/openroberta-db'
+  echo '-java-lib-dir <dir> directory with the installation dir (containing the jars); default: ./lib'
+  echo '-admin-dir <dir>    directory for log, database backups, ...; default: ./admin'
+  echo '-Xmx                heap memory, e.g. -Xmx4G; default is the java default'
+  echo '-rdbg               enable remote debug using port 8000; default: no remote debug'
+  echo '-q                  quiet mode, default: verbose'
   echo ''
-  echo 'admin.sh [-q] [-adminDir <adminDir>] [-Xmx<size>] -rdbg [-lib <java-lib-dir>] [-dbUri <db-uri>] <CMD>'
+  echo 'admin.sh  [-dbUri <db-uri>] [-java-lib-dir <dir>] [-admin-dir <dir>] [-Xmx<size>] [-rdbg] [-q] <CMD>'
   echo ''
-  echo 'Many commands expect a db URI'
-  echo '  database server:   the URI is "jdbc:hsqldb:hsql://localhost/openroberta-db". Maybe added "-{db-name-like-test,dev,...}}'
-  echo '  embedded database: the URI is "jdbc:hsqldb:file:{path-to-db-DIR}/openroberta-db", assuming, that "openroberta-db" is the db name'
+  echo 'Many commands expect a db URI. Usually this is for:'
+  echo '  database server:   "jdbc:hsqldb:hsql://localhost/openroberta-db"'
+  echo '  embedded database: "jdbc:hsqldb:file:{path-to-db-DIR}/openroberta-db"'
   echo ''
   echo '<CMD>s are:'
   echo '  backup [backup-dir]     access the database server and create a backup in directory [backup-dir]'
   echo '  shutdown                access the database and issue a "shutdown" command'
   echo '  sqlgui                  start a sql client with graphical user interface (GUI :-)'
   echo '  sqlclient               read SELECT commands from the terminal and execute them. Be careful, do NOT block the database'
-  echo '  sqlexec <SQL>           execute the well-quoted <SQL> command'
+  echo '  sqlexec <SQL>           execute a single <SQL> command'
+  echo '  create-empty-db         create an empty database'
   echo '  upgrade [db-parent-dir] upgrade the database, if necessary. The database is accessed in embedded mode.'
   echo '                          Only for local server as RaspberryPI, NEVER prod! The version to upgrade to is read from the installation'
   echo '  version                 print the server version (may be suffixed with -SNAPSHOT) and terminate'
@@ -65,12 +66,10 @@ then
   echo ''
   echo '  start-embedded-server   start the server in embedded mode. For small machines, on a RaspberryPI for instance.'
   echo '                          the admin (defaults to ./admin) dir needs subdirectories logs and tutorial'
-  echo '                          Use -d robot.crosscompiler.resourcebase=... to supply crosscompiler resources (*.h, ...)'
-  echo '                          -rdbg allows remote debugging(may have impact on performance'
+  echo '                          Use -d robot.crosscompiler.resourcebase=... to supply crosscompiler resources (*.h, ...; get them from repo ora-cc-rsc)'
   echo '  start-2-server          start the database and the jetty server. DEPRECATED. Use DOCKER.'
   echo '                          the admin (defaults to ./admin) dir needs subdirectories logs and tutorial'
-  echo '                          Use -d robot.crosscompiler.resourcebase=... to supply crosscompiler resources (*.h, ...)'
-  echo '                          -rdbg allows remote debugging(may have impact on performance'
+  echo '                          Use -d robot.crosscompiler.resourcebase=... to supply crosscompiler resources (*.h, ...; get them from repo ora-cc-rsc)'
   echo ''
   
   echo "the dir '$ADMIN_DIR' is used for various admin tasks as logging, database backups, tutorials"
@@ -81,6 +80,10 @@ function propagateSignal() {
   echo "Caught signal. Propagate this to child process $child" 
   kill -TERM "$child" 2>/dev/null
 }
+
+mkdir -p "$ADMIN_DIR/logs"
+mkdir -p "$ADMIN_DIR/tutorial"
+mkdir -p "$ADMIN_DIR/dbBackup"
 
 ADMIN_LOG_FILE="$ADMIN_DIR/logs/admin.log"
 
@@ -102,40 +105,44 @@ esac
 # process the command
 RC=0
 case "$CMD" in
-  'backup')         DB_BACKUP_DIR=$1; shift
-                    java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration db-backup $DB_URI $DB_BACKUP_DIR>>$ADMIN_LOG_FILE 2>&1
-                    RC=$? ;;
-  'shutdown')       echo "shutdown the database"
-                    java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration db-shutdown "$DB_URI" >>$ADMIN_LOG_FILE 2>&1
-                    RC=$? ;;
-  'sqlclient')      echo "command line sql client. Type commands, exit with an empty line"
-                    java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration sql-client "$DB_URI" ;;
-  'sqlgui')         serverVersionForDb=$(java -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration version-for-db)
-                    hsqldbJar="$JAVA_LIB_DIR/hsqldb-2.4.0.jar"
-                    if [ -e ${hsqldbJar} ]
-                    then
-                      echo "using ${hsqldbJar} for starting the sql client with GUI"
-                    else
-                      echo "hsqldb not found - exit 12"
-                      exit 12
-                    fi
-                    java -jar "${hsqldbJar}" --driver org.hsqldb.jdbc.JDBCDriver --url "$DB_URI" --user orA --password Pid ;;
-  'sqlexec')        SQL="$1";
-                    echo "execute the sql statement '$SQL'"
-                    java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration sql-exec "$DB_URI" "$SQL"
-                    RC=$? ;;
-  'version')        java -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration version
-                    RC=$? ;;
-  'version-for-db') java -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration version-for-db
-                    RC=$? ;;
-  'upgrade')        case "$1" in
-                      '') echo 'database parent directory is missing - exit 12'
-                          exit 12 ;;
-                      *)  DB_PARENTDIR="$1"; shift ;;
-                    esac
-                    DB_VERSION=$(java -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration version-for-db)
-                    java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration upgrade "$DB_PARENTDIR" >>$ADMIN_LOG_FILE 2>&1
-                    RC=$? ;;
+  'backup')          DB_BACKUP_DIR=$1; shift
+                     java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration db-backup $DB_URI $DB_BACKUP_DIR>>$ADMIN_LOG_FILE 2>&1
+                     RC=$? ;;
+  'shutdown')        echo "shutdown the database"
+                     java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration db-shutdown "$DB_URI" >>$ADMIN_LOG_FILE 2>&1
+                     RC=$? ;;
+  'sqlclient')       echo "command line sql client. Type commands, exit with an empty line"
+                     java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration sql-client "$DB_URI" ;;
+  'sqlgui')          serverVersionForDb=$(java -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration version-for-db)
+                     hsqldbJar="$JAVA_LIB_DIR/hsqldb-2.4.0.jar"
+                     if [ -e ${hsqldbJar} ]
+                     then
+                       echo "using ${hsqldbJar} for starting the sql client with GUI"
+                     else
+                       echo "hsqldb not found - exit 12"
+                       exit 12
+                     fi
+                     java -jar "${hsqldbJar}" --driver org.hsqldb.jdbc.JDBCDriver --url "$DB_URI" --user orA --password Pid ;;
+  'sqlexec')         SQL="$1";
+                     echo "execute the sql statement '$SQL'"
+                     java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration sql-exec "$DB_URI" "$SQL"
+                     RC=$? ;;
+  'create-empty-db') serverVersionForDb=$(java -cp lib/\* de.fhg.iais.roberta.main.Administration version-for-db)
+                     database=db-${serverVersionForDb}/openroberta-db
+                     java -cp lib/\* de.fhg.iais.roberta.main.Administration create-empty-db jdbc:hsqldb:file:${database} >>$ADMIN_LOG_FILE 2>&1
+                     RC=$? ;;
+  'version')         java -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration version
+                     RC=$? ;;
+  'version-for-db')  java -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration version-for-db
+                     RC=$? ;;
+  'upgrade')         case "$1" in
+                       '') echo 'database parent directory is missing - exit 12'
+                           exit 12 ;;
+                       *)  DB_PARENTDIR="$1"; shift ;;
+                     esac
+                     DB_VERSION=$(java -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration version-for-db)
+                     java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration upgrade "$DB_PARENTDIR" >>$ADMIN_LOG_FILE 2>&1
+                     RC=$? ;;
 
 # ----------------------------------------------------------------------------------------------------------------------------------------
   'start-embedded-server')
@@ -155,14 +162,9 @@ case "$CMD" in
       echo 'check for database upgrade'
       java $XMX -cp lib/\* de.fhg.iais.roberta.main.Administration upgrade . >>$ADMIN_LOG_FILE 2>&1
 
-      echo "create subdirs of admin dir ${ADMIN_DIR}, if they do not exist"
-      mkdir -p ${ADMIN_DIR}/logs
-      mkdir -p ${ADMIN_DIR}/dbBackup
-      mkdir -p ${ADMIN_DIR}/tutorial
-      
       echo 'start the server with embedded database'
       trap propagateSignal SIGTERM SIGINT
-      java $REMOTEDEBUG $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.ServerStarter \
+      java $RDBG $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.ServerStarter \
            -d server.staticresources.dir=./staticResources \
            -d database.parentdir=. \
            -d database.mode=embedded \
@@ -175,11 +177,6 @@ case "$CMD" in
   'start-2-server')
       echo 'DEPRECATED. Use docker container. Have a look at Docker/README.md'
       # exit 12
-      
-      echo "create subdirs of admin dir ${ADMIN_DIR}, if they do not exist"
-      mkdir -p ${ADMIN_DIR}/logs
-      mkdir -p ${ADMIN_DIR}/dbBackup
-      mkdir -p ${ADMIN_DIR}/tutorial
       
       DB_LOG_FILE="$ADMIN_DIR/logs/db.log"
       SERVER_LOG_FILE="$ADMIN_DIR/logs/server.log"
@@ -203,7 +200,7 @@ case "$CMD" in
       echo "the database server will use database directory $database"
       java $XMX -cp lib/\* org.hsqldb.Server --database.0 file:$database --dbname.0 openroberta-db >>$DB_LOG_FILE 2>&1 &
       sleep 10 # time for the database to initialize
-      java $REMOTEDEBUG $XMX -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
+      java $RDBG $XMX -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
            -d server.staticresources.dir=./staticResources \
            -d database.parentdir=. \
            -d database.mode=server \
