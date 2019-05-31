@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+import static de.fhg.iais.roberta.components.ev3c4ev3.ByteUtils.setBytes;
+import static de.fhg.iais.roberta.components.ev3c4ev3.ByteUtils.setWord;
+
 /**
  * Represent a UF2 file in 'file container' mode.
  * Specifications of this file format can be found here: https://github.com/Microsoft/uf2
@@ -107,26 +110,6 @@ public class Uf2FileContainer {
         setWord(uf2Block, 512 - 4, UF2_END_BLOCK_MAGIC_CONSTANT);
 
         return uf2Block;
-    }
-
-    private static void setBytes(byte[] block, int offset, byte[] bytes) {
-        System.arraycopy(bytes, 0, block, offset, bytes.length);
-    }
-
-    /**
-     * set 4 bytes in the block byte array
-     *
-     * @param block block to which set the 4 bytes
-     * @param offset offset to where put the bytes in the block
-     * @param word the 4 bytes to write represented as an integer
-     */
-    private static void setWord(byte[] block, int offset, int word) {
-        byte[] wordInBytes = intToWord(word);
-        setBytes(block, offset, wordInBytes);
-    }
-
-    private static byte[] intToWord(int value) {
-        return ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(value).array();
     }
 
     public String toBase64() {
