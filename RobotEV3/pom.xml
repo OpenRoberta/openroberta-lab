@@ -49,4 +49,20 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <nonFilteredFileExtensions>
+                        <!-- without this configuration the test for the Uf2FileContainer and RbfBuilder fail (the files are longer when loaded from the resources) -->
+                        <nonFilteredFileExtension>uf2</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>rbf</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
