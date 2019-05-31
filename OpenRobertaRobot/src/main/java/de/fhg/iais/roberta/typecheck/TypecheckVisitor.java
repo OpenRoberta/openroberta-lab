@@ -111,8 +111,10 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
- * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
- * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
+ * A helper class for unit tests to validate that all ASTs built from blockly XML are using compatible types.
+ *
+ * <p>This helper can be used in tests to validate the constraints on blockly toolboxes (generic ones and robot specific
+ * ones).</p>
  */
 public class TypecheckVisitor implements ILanguageVisitor<BlocklyType>, ISensorVisitor<BlocklyType>, IAllActorsVisitor<BlocklyType> {
     private final int ERROR_LIMIT_FOR_TYPECHECK = 10;
@@ -126,19 +128,15 @@ public class TypecheckVisitor implements ILanguageVisitor<BlocklyType>, ISensorV
     /**
      * initialize the typecheck visitor.
      *
-     * @param programName name of the program
-     * @param brickConfiguration hardware configuration of the brick
-     * @param phrase
+     * @param phrase to typecheck
      */
     TypecheckVisitor(Phrase<BlocklyType> phrase) {
         this.phrase = phrase;
     }
 
     /**
-     * typecheck an AST. This is done ba an visitor, which is an instance of this class<br>
+     * typecheck an AST. This is done by a visitor, which is an instance of this class<br>
      *
-     * @param programName name of the program
-     * @param brickConfiguration hardware configuration of the brick
      * @param phrase to typecheck
      * @return the typecheck visitor (to get information about errors and the derived type)
      */
@@ -179,9 +177,9 @@ public class TypecheckVisitor implements ILanguageVisitor<BlocklyType>, ISensorV
     }
 
     /**
-     * return the type that was inferenced by the typechecker for the given phrase
+     * return the type that was inferred by the typechecker for the given phrase
      *
-     * @return the resulting type.May be <code>null</code> if type errors occurred
+     * @return the resulting type. May be <code>null</code> if type errors occurred
      */
     public BlocklyType getResultType() {
         return this.resultType;
