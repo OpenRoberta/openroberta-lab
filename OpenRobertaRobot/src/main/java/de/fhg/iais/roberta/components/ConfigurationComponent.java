@@ -13,20 +13,17 @@ public final class ConfigurationComponent {
     private final boolean isActor;
     private final String userDefinedPortName;
     private final String portName;
-    private final String slotName;
     private final Map<String, String> componentProperties;
 
     public ConfigurationComponent(
-        String compnentType,
+        String componentType,
         boolean isActor,
         String portName,
-        String slotName,
         String userDefinedName,
         Map<String, String> componentProperties) {
-        this.componentType = compnentType;
+        this.componentType = componentType;
         this.isActor = isActor;
         this.portName = portName;
-        this.slotName = slotName;
         this.userDefinedPortName = userDefinedName;
         this.componentProperties = Collections.unmodifiableMap(new HashMap<>(componentProperties));
     }
@@ -66,10 +63,6 @@ public final class ConfigurationComponent {
         return this.portName;
     }
 
-    public String getSlotName() {
-        return this.slotName;
-    }
-
     public String getUserDefinedPortName() {
         return this.userDefinedPortName;
     }
@@ -102,8 +95,6 @@ public final class ConfigurationComponent {
             + this.userDefinedPortName
             + ", portName="
             + this.portName
-            + ", slotName="
-            + this.slotName
             + ", componentProperties="
             + this.componentProperties
             + "]";

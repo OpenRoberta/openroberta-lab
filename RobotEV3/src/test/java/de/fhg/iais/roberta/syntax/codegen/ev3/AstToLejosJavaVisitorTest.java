@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
 
 public class AstToLejosJavaVisitorTest {
@@ -100,12 +99,12 @@ public class AstToLejosJavaVisitorTest {
     public static void setupConfigurationForAllTests() {
 
         Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
-        ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", BlocklyConstants.NO_SLOT, "A", motorAproperties);
+        ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", "A", motorAproperties);
 
         Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
-        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", BlocklyConstants.NO_SLOT, "B", motorBproperties);
-        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", BlocklyConstants.NO_SLOT, "1", Collections.emptyMap());
-        ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S2", BlocklyConstants.NO_SLOT, "2", Collections.emptyMap());
+        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
+        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", Collections.emptyMap());
+        ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S2", "2", Collections.emptyMap());
         //        ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", BlocklyConstants.NO_SLOT, "3", Collections.emptyMap());
         //        ConfigurationComponent ultrasonicSensor4 = new ConfigurationComponent("ULTRASONIC", false, "S4", BlocklyConstants.NO_SLOT, "4", Collections.emptyMap());
         final Configuration.Builder builder = new Configuration.Builder();
@@ -172,13 +171,13 @@ public class AstToLejosJavaVisitorTest {
     public void test2() throws Exception {
 
         Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
-        ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", BlocklyConstants.NO_SLOT, "A", motorAproperties);
+        ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", "A", motorAproperties);
 
         Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
-        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", BlocklyConstants.NO_SLOT, "B", motorBproperties);
-        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", BlocklyConstants.NO_SLOT, "1", Collections.emptyMap());
-        ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S2", BlocklyConstants.NO_SLOT, "2", Collections.emptyMap());
-        ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", BlocklyConstants.NO_SLOT, "3", Collections.emptyMap());
+        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
+        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", Collections.emptyMap());
+        ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S2", "2", Collections.emptyMap());
+        ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", "3", Collections.emptyMap());
         //        ConfigurationComponent ultrasonicSensor4 = new ConfigurationComponent("ULTRASONIC", false, "S4", BlocklyConstants.NO_SLOT, "4", Collections.emptyMap());
         final Configuration.Builder builder = new Configuration.Builder();
         Configuration brickConfigurationNew =
@@ -230,14 +229,14 @@ public class AstToLejosJavaVisitorTest {
     public void test3() throws Exception {
 
         Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
-        ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", BlocklyConstants.NO_SLOT, "A", motorAproperties);
+        ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", "A", motorAproperties);
 
         Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
-        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", BlocklyConstants.NO_SLOT, "B", motorBproperties);
-        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", BlocklyConstants.NO_SLOT, "1", Collections.emptyMap());
-        ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S2", BlocklyConstants.NO_SLOT, "2", Collections.emptyMap());
-        ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", BlocklyConstants.NO_SLOT, "3", Collections.emptyMap());
-        ConfigurationComponent ultrasonicSensor4 = new ConfigurationComponent("ULTRASONIC", false, "S4", BlocklyConstants.NO_SLOT, "4", Collections.emptyMap());
+        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
+        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", Collections.emptyMap());
+        ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S2", "2", Collections.emptyMap());
+        ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", "3", Collections.emptyMap());
+        ConfigurationComponent ultrasonicSensor4 = new ConfigurationComponent("ULTRASONIC", false, "S4", "4", Collections.emptyMap());
         final Configuration.Builder builder = new Configuration.Builder();
         Configuration brickConfigurationNew =
             builder
@@ -294,14 +293,14 @@ public class AstToLejosJavaVisitorTest {
     public void test4() throws Exception {
 
         Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
-        ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", BlocklyConstants.NO_SLOT, "A", motorAproperties);
+        ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", "A", motorAproperties);
 
         Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
-        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", BlocklyConstants.NO_SLOT, "B", motorBproperties);
-        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", BlocklyConstants.NO_SLOT, "1", Collections.emptyMap());
-        ConfigurationComponent gyro = new ConfigurationComponent("GYRO", false, "S2", BlocklyConstants.NO_SLOT, "2", Collections.emptyMap());
-        ConfigurationComponent infrared = new ConfigurationComponent("INFRARED", false, "S3", BlocklyConstants.NO_SLOT, "3", Collections.emptyMap());
-        ConfigurationComponent ultrasonicSensor4 = new ConfigurationComponent("ULTRASONIC", false, "S4", BlocklyConstants.NO_SLOT, "4", Collections.emptyMap());
+        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
+        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", Collections.emptyMap());
+        ConfigurationComponent gyro = new ConfigurationComponent("GYRO", false, "S2", "2", Collections.emptyMap());
+        ConfigurationComponent infrared = new ConfigurationComponent("INFRARED", false, "S3", "3", Collections.emptyMap());
+        ConfigurationComponent ultrasonicSensor4 = new ConfigurationComponent("ULTRASONIC", false, "S4", "4", Collections.emptyMap());
         final Configuration.Builder builder = new Configuration.Builder();
         Configuration brickConfigurationNew =
             builder

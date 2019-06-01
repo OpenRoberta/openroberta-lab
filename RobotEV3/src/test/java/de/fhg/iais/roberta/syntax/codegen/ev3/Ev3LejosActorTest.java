@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
 
 public class Ev3LejosActorTest {
@@ -16,10 +15,10 @@ public class Ev3LejosActorTest {
 
     public static Configuration makeConfigurationWithMediumAndOther() {
         Map<String, String> motorAproperties = HelperEv3ForXmlTest.createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
-        ConfigurationComponent motorA = new ConfigurationComponent("OTHER", true, "A", BlocklyConstants.NO_SLOT, "A", motorAproperties);
+        ConfigurationComponent motorA = new ConfigurationComponent("OTHER", true, "A", "A", motorAproperties);
 
         Map<String, String> motorBproperties = HelperEv3ForXmlTest.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
-        ConfigurationComponent motorB = new ConfigurationComponent("MEDIUM", true, "B", BlocklyConstants.NO_SLOT, "B", motorBproperties);
+        ConfigurationComponent motorB = new ConfigurationComponent("MEDIUM", true, "B", "B", motorBproperties);
 
         final Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(18f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB));

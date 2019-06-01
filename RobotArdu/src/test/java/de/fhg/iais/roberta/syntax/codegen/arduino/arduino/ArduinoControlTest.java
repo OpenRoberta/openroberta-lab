@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.test.ardu.HelperArduinoForXmlTest;
 
 public class ArduinoControlTest {
@@ -16,7 +15,7 @@ public class ArduinoControlTest {
     @Test
     public void listsTest() throws Exception {
         Map<String, String> ledPins = HelperArduinoForXmlTest.createMap("INPUT", "13");
-        ConfigurationComponent led = new ConfigurationComponent("LED", true, "LED", BlocklyConstants.NO_SLOT, "L", ledPins);
+        ConfigurationComponent led = new ConfigurationComponent("LED", true, "LED", "L", ledPins);
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(led));
         this.arduinoHelper.compareExistingAndGeneratedSource("/ast/control/arduino_loops_test.ino", "/ast/control/arduino_loops_test.xml", builder.build());

@@ -13,7 +13,6 @@ import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -96,7 +95,6 @@ public class Jaxb2ConfigurationAstHelper {
                     factory.getConfigurationComponentTypeByBlocklyName(blocklyName),
                     isActor,
                     portName,
-                    BlocklyConstants.NO_SLOT,
                     userDefinedName,
                     properties);
             allComponents.add(cc);
@@ -120,7 +118,7 @@ public class Jaxb2ConfigurationAstHelper {
         for ( int i = 1; i < firstBlock.getField().size(); i++ ) {
             m.put(firstBlock.getField().get(i).getName(), firstBlock.getField().get(i).getValue());
         }
-        return new ConfigurationComponent(componentType, true, null, null, userDefinedName, m);
+        return new ConfigurationComponent(componentType, true, null, userDefinedName, m);
     }
 
 }

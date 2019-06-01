@@ -9,7 +9,6 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.factory.Ev3LejosV0Factory;
 import de.fhg.iais.roberta.mode.action.Language;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
@@ -26,16 +25,16 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
 
     public static Configuration makeConfiguration() {
         Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
-        ConfigurationComponent motorA = new ConfigurationComponent("LARGE", true, "A", BlocklyConstants.NO_SLOT, "A", motorAproperties);
+        ConfigurationComponent motorA = new ConfigurationComponent("LARGE", true, "A", "A", motorAproperties);
 
         Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
-        ConfigurationComponent motorB = new ConfigurationComponent("MEDIUM", true, "B", BlocklyConstants.NO_SLOT, "B", motorBproperties);
+        ConfigurationComponent motorB = new ConfigurationComponent("MEDIUM", true, "B", "B", motorBproperties);
 
         Map<String, String> motorCproperties = createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
-        ConfigurationComponent motorC = new ConfigurationComponent("LARGE", true, "C", BlocklyConstants.NO_SLOT, "C", motorCproperties);
+        ConfigurationComponent motorC = new ConfigurationComponent("LARGE", true, "C", "C", motorCproperties);
 
         Map<String, String> motorDproperties = createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
-        ConfigurationComponent motorD = new ConfigurationComponent("MEDIUM", true, "D", BlocklyConstants.NO_SLOT, "D", motorDproperties);
+        ConfigurationComponent motorD = new ConfigurationComponent("MEDIUM", true, "D", "D", motorDproperties);
 
         final Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(18f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, motorC, motorD));
@@ -46,23 +45,23 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
 
     public static Configuration makeStandardEv3DevConfiguration() {
         Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
-        ConfigurationComponent motorB = new ConfigurationComponent("MEDIUM", true, "B", BlocklyConstants.NO_SLOT, "B", motorBproperties);
+        ConfigurationComponent motorB = new ConfigurationComponent("MEDIUM", true, "B", "B", motorBproperties);
 
         Map<String, String> motorCproperties = createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
-        ConfigurationComponent motorC = new ConfigurationComponent("LARGE", true, "C", BlocklyConstants.NO_SLOT, "C", motorCproperties);
+        ConfigurationComponent motorC = new ConfigurationComponent("LARGE", true, "C", "C", motorCproperties);
 
         Map<String, String> touchSensorProperties = createMap();
-        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", BlocklyConstants.NO_SLOT, "1", touchSensorProperties);
+        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", touchSensorProperties);
 
         Map<String, String> gyroSensorProperties = createMap();
-        ConfigurationComponent gyroSensor = new ConfigurationComponent("GYRO", false, "S2", BlocklyConstants.NO_SLOT, "2", gyroSensorProperties);
+        ConfigurationComponent gyroSensor = new ConfigurationComponent("GYRO", false, "S2", "2", gyroSensorProperties);
 
         Map<String, String> colourSensorProperties = createMap();
-        ConfigurationComponent colourSensor = new ConfigurationComponent("COLOR", false, "S3", BlocklyConstants.NO_SLOT, "3", colourSensorProperties);
+        ConfigurationComponent colourSensor = new ConfigurationComponent("COLOR", false, "S3", "3", colourSensorProperties);
 
         Map<String, String> ultrasonicSensorProperties = createMap();
         ConfigurationComponent ultrasonicSensor =
-            new ConfigurationComponent("ULTRASONIC", false, "S4", BlocklyConstants.NO_SLOT, "4", ultrasonicSensorProperties);
+            new ConfigurationComponent("ULTRASONIC", false, "S4", "4", ultrasonicSensorProperties);
 
         final Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(18f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorB, motorC, touchSensor, gyroSensor, colourSensor, ultrasonicSensor));

@@ -9,7 +9,6 @@ import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.factory.SenseboxFactory;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformers.arduino.Jaxb2ArduinoConfigurationTransformer;
 import de.fhg.iais.roberta.util.PluginProperties;
@@ -34,16 +33,16 @@ public class HelperSenseboxForXmlTest extends AbstractHelperForXmlTest {
 
     public static Configuration makeConfiguration() {
         Map<String, String> wireless = createMap("NAME", "W", "SSID", "mySSID", "PASSWORD", "myPassw0rd", "Connector", "XBEE1");
-        ConfigurationComponent wirelessComponent = new ConfigurationComponent("WIRELESS", true, "W", BlocklyConstants.NO_SLOT, "W", wireless);
+        ConfigurationComponent wirelessComponent = new ConfigurationComponent("WIRELESS", true, "W", "W", wireless);
 
         Map<String, String> humidity = createMap("NAME", "H", "I2C", "I2C");
-        ConfigurationComponent humidityComponent = new ConfigurationComponent("HUMIDITY", false, "H", BlocklyConstants.NO_SLOT, "H", humidity);
+        ConfigurationComponent humidityComponent = new ConfigurationComponent("HUMIDITY", false, "H", "H", humidity);
 
         Map<String, String> temperature = createMap("NAME", "T", "I2C", "I2C");
-        ConfigurationComponent temperatureComponent = new ConfigurationComponent("TEMPERATURE", false, "T", BlocklyConstants.NO_SLOT, "T", temperature);
+        ConfigurationComponent temperatureComponent = new ConfigurationComponent("TEMPERATURE", false, "T", "T", temperature);
 
         Map<String, String> lightVeml = createMap("NAME", "V", "I2C", "I2C");
-        ConfigurationComponent lightVemlComponent = new ConfigurationComponent("LIGHTVEML", false, "V", BlocklyConstants.NO_SLOT, "V", lightVeml);
+        ConfigurationComponent lightVemlComponent = new ConfigurationComponent("LIGHTVEML", false, "V", "V", lightVeml);
 
         final Configuration.Builder builder = new Configuration.Builder();
         builder

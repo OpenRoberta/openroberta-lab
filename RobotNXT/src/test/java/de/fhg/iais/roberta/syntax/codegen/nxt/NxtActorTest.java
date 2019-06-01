@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
 
 public class NxtActorTest {
@@ -17,7 +16,7 @@ public class NxtActorTest {
     private static Configuration makeOtherConsumerConfiguration() {
         Map<String, String> otherPowerConsumerproperties =
             HelperNxtForXmlTest.createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
-        ConfigurationComponent otherPowerConsumer = new ConfigurationComponent("LARGE", true, "A", BlocklyConstants.NO_SLOT, "A", otherPowerConsumerproperties);
+        ConfigurationComponent otherPowerConsumer = new ConfigurationComponent("LARGE", true, "A", "A", otherPowerConsumerproperties);
 
         final Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(12f).setWheelDiameter(5.6f).addComponents(Arrays.asList(otherPowerConsumer));
@@ -25,9 +24,9 @@ public class NxtActorTest {
     }
 
     public static Configuration makeDisplayConfiguration() {
-        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", BlocklyConstants.NO_SLOT, "1", Collections.emptyMap());
-        ConfigurationComponent soundSensor = new ConfigurationComponent("SOUND", false, "S2", BlocklyConstants.NO_SLOT, "2", Collections.emptyMap());
-        ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", BlocklyConstants.NO_SLOT, "3", Collections.emptyMap());
+        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", Collections.emptyMap());
+        ConfigurationComponent soundSensor = new ConfigurationComponent("SOUND", false, "S2", "2", Collections.emptyMap());
+        ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", "3", Collections.emptyMap());
         final Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(12f).setWheelDiameter(5.6f).addComponents(Arrays.asList(touchSensor, soundSensor, colorSensor));
         return builder.build();
