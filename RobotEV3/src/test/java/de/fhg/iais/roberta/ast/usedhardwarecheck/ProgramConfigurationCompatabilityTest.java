@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
 import de.fhg.iais.roberta.visitor.validate.AbstractBrickValidatorVisitor;
@@ -23,14 +22,14 @@ public class ProgramConfigurationCompatabilityTest {
     public void ev3program_configuration_compatibility_4_errors() throws Exception {
 
         Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
-        ConfigurationComponent motorA = new ConfigurationComponent("LARGE", true, "A", BlocklyConstants.NO_SLOT, "A", motorAproperties);
+        ConfigurationComponent motorA = new ConfigurationComponent("LARGE", true, "A", "A", motorAproperties);
 
         Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
-        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", BlocklyConstants.NO_SLOT, "B", motorBproperties);
+        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
 
-        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", BlocklyConstants.NO_SLOT, "1", createMap("TYPE", "TOUCH"));
+        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", createMap("TYPE", "TOUCH"));
         ConfigurationComponent ultrasonicSensor =
-            new ConfigurationComponent("ULTRASONIC", false, "S2", BlocklyConstants.NO_SLOT, "2", createMap("TYPE", "ULTRASONIC"));
+            new ConfigurationComponent("ULTRASONIC", false, "S2", "2", createMap("TYPE", "ULTRASONIC"));
 
         final Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, touchSensor, ultrasonicSensor));
@@ -58,16 +57,16 @@ public class ProgramConfigurationCompatabilityTest {
         Configuration.Builder builder = new Configuration.Builder();
 
         Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
-        ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", BlocklyConstants.NO_SLOT, "A", motorAproperties);
+        ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", "A", motorAproperties);
 
         Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
-        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", BlocklyConstants.NO_SLOT, "B", motorBproperties);
+        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
 
-        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", BlocklyConstants.NO_SLOT, "1", createMap("TYPE", "TOUCH"));
-        ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S2", BlocklyConstants.NO_SLOT, "2", createMap("TYPE", "COLOR"));
-        ConfigurationComponent gyroSensor = new ConfigurationComponent("GYRO", false, "S3", BlocklyConstants.NO_SLOT, "3", createMap("TYPE", "GYRO"));
+        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", createMap("TYPE", "TOUCH"));
+        ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S2", "2", createMap("TYPE", "COLOR"));
+        ConfigurationComponent gyroSensor = new ConfigurationComponent("GYRO", false, "S3", "3", createMap("TYPE", "GYRO"));
         ConfigurationComponent ultrasonicSensor =
-            new ConfigurationComponent("ULTRASONIC", false, "S4", BlocklyConstants.NO_SLOT, "4", createMap("TYPE", "ULTRASONIC"));
+            new ConfigurationComponent("ULTRASONIC", false, "S4", "4", createMap("TYPE", "ULTRASONIC"));
 
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, touchSensor, colorSensor, gyroSensor, ultrasonicSensor));
 

@@ -20,25 +20,25 @@ public class VorwerkConfiguration extends Configuration {
     private final String password;
     static {
         Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
-        ConfigurationComponent motorA = new ConfigurationComponent(SC.LARGE, true, "left", BlocklyConstants.NO_SLOT, "LEFT", motorAproperties);
+        ConfigurationComponent motorA = new ConfigurationComponent(SC.LARGE, true, "left", "LEFT", motorAproperties);
 
         Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
-        ConfigurationComponent motorB = new ConfigurationComponent(SC.LARGE, true, "right", BlocklyConstants.NO_SLOT, "RIGHT", motorBproperties);
+        ConfigurationComponent motorB = new ConfigurationComponent(SC.LARGE, true, "right", "RIGHT", motorBproperties);
 
         ConfigurationComponent leftUltrasonic =
-            new ConfigurationComponent(SC.ULTRASONIC, false, "left_ultrasonic", "NO_SLOT", "LEFT_ULTRASONIC", Collections.emptyMap());
+            new ConfigurationComponent(SC.ULTRASONIC, false, "left_ultrasonic", "LEFT_ULTRASONIC", Collections.emptyMap());
         ConfigurationComponent centerUltrasonic =
-            new ConfigurationComponent(SC.ULTRASONIC, false, "center_ultrasonic", "NO_SLOT", "CENTER_ULTRASONIC", Collections.emptyMap());
+            new ConfigurationComponent(SC.ULTRASONIC, false, "center_ultrasonic", "CENTER_ULTRASONIC", Collections.emptyMap());
         ConfigurationComponent rightUltrasonic =
-            new ConfigurationComponent(SC.ULTRASONIC, false, "right_ultrasonic", "NO_SLOT", "RIGHT_ULTRASONIC", Collections.emptyMap());
-        ConfigurationComponent leftTouch = new ConfigurationComponent(SC.TOUCH, false, "left", "NO_SLOT", "LEFT_TOUCH", Collections.emptyMap());
-        ConfigurationComponent rightTouch = new ConfigurationComponent(SC.TOUCH, false, "right", "NO_SLOT", "RIGHT_TOUCH", Collections.emptyMap());
-        ConfigurationComponent leftDropoff = new ConfigurationComponent(SC.TOUCH, false, "left", "NO_SLOT", "LEFT_DROPOFF", Collections.emptyMap());
-        ConfigurationComponent rightDropoff = new ConfigurationComponent(SC.TOUCH, false, "right", "NO_SLOT", "RIGHT_DROPOFF", Collections.emptyMap());
-        ConfigurationComponent x = new ConfigurationComponent(SC.ACCELEROMETER, false, "x", "NO_SLOT", "X", Collections.emptyMap());
-        ConfigurationComponent y = new ConfigurationComponent(SC.ACCELEROMETER, false, "y", "NO_SLOT", "Y", Collections.emptyMap());
-        ConfigurationComponent z = new ConfigurationComponent(SC.ACCELEROMETER, false, "z", "NO_SLOT", "Z", Collections.emptyMap());
-        ConfigurationComponent strength = new ConfigurationComponent(SC.ACCELEROMETER, false, "strength", "NO_SLOT", "STRENGTH", Collections.emptyMap());
+            new ConfigurationComponent(SC.ULTRASONIC, false, "right_ultrasonic", "RIGHT_ULTRASONIC", Collections.emptyMap());
+        ConfigurationComponent leftTouch = new ConfigurationComponent(SC.TOUCH, false, "left", "LEFT_TOUCH", Collections.emptyMap());
+        ConfigurationComponent rightTouch = new ConfigurationComponent(SC.TOUCH, false, "right", "RIGHT_TOUCH", Collections.emptyMap());
+        ConfigurationComponent leftDropoff = new ConfigurationComponent(SC.TOUCH, false, "left", "LEFT_DROPOFF", Collections.emptyMap());
+        ConfigurationComponent rightDropoff = new ConfigurationComponent(SC.TOUCH, false, "right", "RIGHT_DROPOFF", Collections.emptyMap());
+        ConfigurationComponent x = new ConfigurationComponent(SC.ACCELEROMETER, false, "x", "X", Collections.emptyMap());
+        ConfigurationComponent y = new ConfigurationComponent(SC.ACCELEROMETER, false, "y", "Y", Collections.emptyMap());
+        ConfigurationComponent z = new ConfigurationComponent(SC.ACCELEROMETER, false, "z", "Z", Collections.emptyMap());
+        ConfigurationComponent strength = new ConfigurationComponent(SC.ACCELEROMETER, false, "strength", "STRENGTH", Collections.emptyMap());
 
         components =
             Lists

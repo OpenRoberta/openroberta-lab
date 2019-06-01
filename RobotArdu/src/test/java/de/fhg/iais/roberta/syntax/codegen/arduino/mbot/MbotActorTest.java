@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.test.ardu.HelperMBotForXmlTest;
 
 public class MbotActorTest {
@@ -17,9 +16,9 @@ public class MbotActorTest {
 
     private Configuration makeMbotStandardConfiguration() {
         Map<String, String> motorRightConfig = HelperMBotForXmlTest.createMap("MOTOR_DRIVE", "RIGHT");
-        ConfigurationComponent motorRight = new ConfigurationComponent("GEARED_MOTOR", true, "M2", BlocklyConstants.NO_SLOT, "2", motorRightConfig);
+        ConfigurationComponent motorRight = new ConfigurationComponent("GEARED_MOTOR", true, "M2", "2", motorRightConfig);
         Map<String, String> motorLeftConfig = HelperMBotForXmlTest.createMap("MOTOR_DRIVE", "LEFT");
-        ConfigurationComponent motorleft = new ConfigurationComponent("GEARED_MOTOR", true, "M1", BlocklyConstants.NO_SLOT, "1", motorLeftConfig);
+        ConfigurationComponent motorleft = new ConfigurationComponent("GEARED_MOTOR", true, "M1", "1", motorLeftConfig);
         Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorleft, motorRight));
         return builder.build();

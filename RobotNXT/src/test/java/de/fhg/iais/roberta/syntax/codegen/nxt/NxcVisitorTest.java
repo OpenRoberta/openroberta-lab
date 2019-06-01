@@ -33,15 +33,15 @@ public class NxcVisitorTest {
     @BeforeClass
     public static void setupConfigurationForAllTests() {
         Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
-        ConfigurationComponent motorA = new ConfigurationComponent("LARGE", true, "A", BlocklyConstants.NO_SLOT, "A", motorAproperties);
+        ConfigurationComponent motorA = new ConfigurationComponent("LARGE", true, "A", "A", motorAproperties);
 
         Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
-        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", BlocklyConstants.NO_SLOT, "B", motorBproperties);
+        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
 
-        ConfigurationComponent sensorS1 = new ConfigurationComponent("TOUCH", true, "S1", BlocklyConstants.NO_SLOT, "1", Collections.emptyMap());
-        ConfigurationComponent sensorS2 = new ConfigurationComponent("SOUND", true, "S2", BlocklyConstants.NO_SLOT, "2", Collections.emptyMap());
-        ConfigurationComponent sensorS3 = new ConfigurationComponent("COLOR", true, "S3", BlocklyConstants.NO_SLOT, "3", Collections.emptyMap());
-        ConfigurationComponent sensorS4 = new ConfigurationComponent("LIGHT", true, "S4", BlocklyConstants.NO_SLOT, "4", Collections.emptyMap());
+        ConfigurationComponent sensorS1 = new ConfigurationComponent("TOUCH", true, "S1", "1", Collections.emptyMap());
+        ConfigurationComponent sensorS2 = new ConfigurationComponent("SOUND", true, "S2", "2", Collections.emptyMap());
+        ConfigurationComponent sensorS3 = new ConfigurationComponent("COLOR", true, "S3", "3", Collections.emptyMap());
+        ConfigurationComponent sensorS4 = new ConfigurationComponent("LIGHT", true, "S4", "4", Collections.emptyMap());
 
         final Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(11f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, sensorS1, sensorS2, sensorS3, sensorS4));
