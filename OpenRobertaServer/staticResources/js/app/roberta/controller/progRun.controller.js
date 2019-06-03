@@ -74,11 +74,15 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
         GUISTATE_C.setState(result);
         if (result.rc == "ok") {
             var filename = GUISTATE_C.getProgramName();
-            if (GUISTATE_C.getRobot() !== 'sensebox') {
-                filename += '.hex';
-            } else {
+            if (GUISTATE_C.getRobot() === 'sensebox') {
                 filename += '.bin';
                 result.compiledCode = UTIL.base64decode(result.compiledCode);
+            } else if (GUISTATE_C.getRobot() === 'ev3c4ev3') {
+                filename += '.uf2';
+                result.compiledCode = UTIL.base64decode(result.compiledCode);
+                // TODO: Update the popup message to tell the user to start the program (selecting it in the EV3 menu)
+            } else {
+                filename += '.hex';
             }
             if (GUISTATE_C.isProgramToDownload() || navigator.userAgent.toLowerCase().match(/iPad|iPhone|android/i) != null) {
                 // either the user doesn't want to see the modal anymore or he uses a smartphone / tablet, where you cannot choose the download folder.
