@@ -1,4 +1,4 @@
-grammar Textly0;
+grammar Exprly;
 
 expression: expr;
 

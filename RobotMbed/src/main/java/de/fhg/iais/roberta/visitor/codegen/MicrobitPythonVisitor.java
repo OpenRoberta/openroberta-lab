@@ -91,6 +91,17 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     private boolean stdDevUsed;
 
     /**
+     * initialize the C++ code generator visitor for tests. <b>Will be removed in the future, if tests with textual representations of Nepo (instead of
+     * blockly-based graphical representation have been finished.</b>
+     *
+     * @param programPhrases
+     */
+    public MicrobitPythonVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases) {
+        super(programPhrases, 0);
+        usedHardwareVisitor = null;
+    }
+
+    /**
      * initialize the Python code generator visitor.
      *
      * @param brickConfiguration hardware configuration of the brick
@@ -681,6 +692,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         return null;
     }
 
+    @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
         return null;
     }
