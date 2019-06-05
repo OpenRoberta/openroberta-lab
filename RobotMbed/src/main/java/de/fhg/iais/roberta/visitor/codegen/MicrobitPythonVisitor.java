@@ -429,7 +429,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
         switch ( lengthOfIsEmptyFunct.getFunctName() ) {
-            case LISTS_LENGTH:
+            case LIST_LENGTH:
                 this.sb.append("len( ");
                 lengthOfIsEmptyFunct.getParam().get(0).visit(this);
                 this.sb.append(")");
@@ -681,6 +681,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         return null;
     }
 
+    @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
         return null;
     }

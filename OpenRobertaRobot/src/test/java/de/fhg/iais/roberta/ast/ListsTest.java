@@ -35,7 +35,7 @@ public class ListsTest<V> {
 
     @Test
     public void listLength() throws Exception {
-        String a = "BlockAST [project=[[Location [x=14, y=197], LengthOfFunct [LISTS_LENGTH, [Var [item]]]]]]";
+        String a = "BlockAST [project=[[Location [x=14, y=197], LengthOfFunct [LIST_LENGTH, [Var [item]]]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/lists/list_length.xml"));
     }

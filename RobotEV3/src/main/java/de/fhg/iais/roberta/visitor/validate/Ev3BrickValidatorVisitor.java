@@ -88,5 +88,4 @@ public final class Ev3BrickValidatorVisitor extends AbstractBrickValidatorVisito
         showPictureAction.getY().visit(this);
         return null;
     }
-
 }

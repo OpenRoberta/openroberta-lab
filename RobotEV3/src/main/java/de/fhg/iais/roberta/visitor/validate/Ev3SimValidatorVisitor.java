@@ -32,4 +32,5 @@ public final class Ev3SimValidatorVisitor extends AbstractSimValidatorVisitor im
         showPictureAction.getY().visit(this);
         return null;
     }
+
 }

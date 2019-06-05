@@ -1,4 +1,4 @@
-import { NativeTest } from 'interpreter.nativeTest';
+import { RobotWeDoBehaviourTest } from 'interpreter.robotWeDoBehaviourTest';
 import { Interpreter } from 'interpreter.interpreter';
 import * as U from 'interpreter.util';
 import * as FS from 'fs';
@@ -66,7 +66,7 @@ function processOps( fileName: string ) {
     try {
         const generatedCodeAsString = FS.readFileSync( baseDirectory + fileName + '.json', 'utf8' );
         const generatedCode = JSON.parse( generatedCodeAsString );
-        new Interpreter().run( generatedCode, new NativeTest( showOpLog, showDebug ), function() { callbackOnTermination( fileName ); } );
+        new Interpreter(generatedCode, new RobotWeDoBehaviourTest( showOpLog, showDebug ), function() { callbackOnTermination( fileName ); } ).run(0);
     } catch ( e ) {
         p( MARK + ' ' + fileName + '.json not readable. Compilation error? ' + MARK );
         allResults[fileName] = 'NOT_FOUND';

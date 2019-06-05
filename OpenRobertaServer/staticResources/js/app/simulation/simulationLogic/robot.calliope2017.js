@@ -8,8 +8,8 @@ define([ 'simulation.robot.calliope' ], function(Calliope) {
      * 
      * @class
      */
-    function Calliope2017(pose) {
-        Calliope.call(this, pose);
+    function Calliope2017(pose, num, robotBehaviour) {
+        Calliope.call(this, pose, num, robotBehaviour);
     }
     Calliope2017.prototype = Object.create(Calliope.prototype);
     Calliope2017.prototype.constructor = Calliope2017;

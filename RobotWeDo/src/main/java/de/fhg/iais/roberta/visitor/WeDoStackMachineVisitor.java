@@ -16,9 +16,9 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
@@ -28,7 +28,6 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.collect.WedoUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IWeDoVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
-import de.fhg.iais.roberta.visitor.lang.codegen.C;
 
 public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IWeDoVisitor<V> {
     protected ArrayList<VarDeclaration<Void>> usedVars;
@@ -215,7 +214,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
         sensorGetSample.getSensor().visit(this);
         return null;
     }
-    
+
     @Override
     public V visitAssertStmt(AssertStmt<V> assertStmt) {
         // TODO Auto-generated method stub

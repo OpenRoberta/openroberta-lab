@@ -765,7 +765,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
             case LIST_IS_EMPTY:
                 this.sb.append(".isEmpty()");
                 break;
-            case LISTS_LENGTH:
+            case LIST_LENGTH:
                 this.sb.append(".size()");
                 break;
             default:

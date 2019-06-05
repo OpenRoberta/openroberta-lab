@@ -215,7 +215,7 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
         switch ( lengthOfIsEmptyFunct.getFunctName() ) {
-            case LISTS_LENGTH:
+            case LIST_LENGTH:
                 this.sb.append("BlocklyMethods.length( ");
                 lengthOfIsEmptyFunct.getParam().get(0).visit(this);
                 this.sb.append(")");

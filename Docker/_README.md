@@ -214,7 +214,11 @@ The shell script `$SCRIPT_DIR/run.sh` has commands, that are used to administrat
 
 * `cleanup-temp-user-dirs`: usually called from cron. It takes a server name and runs a shell in the corresponding container, that will remove temporary
   old data allocated by the cross compiler. It is assumed, that these crosscompiler-allocated files are used not longer than one day after their creation.
+<<<<<<< HEAD
   Use `crontab -e` to add the following line to the crontab to remove garbage every night 20 minutes after two o'clock:
+=======
+  Use `crontab -e` to add the following line to the crontab to remove garbage every night 20 minutes after 2:
+>>>>>>> #74 V0.1 new sim
   
 ```bash
 20 2 * * * bash <SCRIPT_DIR>/run.sh -q admin <server-name> cleanup-temp-user-dirs >><BASE_DIR>/logs/cronlog.txt

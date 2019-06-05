@@ -1,4 +1,4 @@
-define(['simulation.simulation', 'robertaLogic.constants', 'simulation.robot'], function(SIM, CONSTANTS, Robot) {
+define( ['simulation.simulation', 'interpreter.constants', 'simulation.robot'], function( SIM, C, Robot ) {
 
     /**
      * Creates a new Ev3 for a simulation.
@@ -10,10 +10,14 @@ define(['simulation.simulation', 'robertaLogic.constants', 'simulation.robot'], 
      *
      * @class
      */
-    function Ev3(pose, num) {
-        Robot.call(this, pose);
+    function Ev3( pose, num, robotBehaviour ) {
+        Robot.call( this, pose, robotBehaviour );
+
+
         num = num || 0;
         this.id = num;
+        this.left = 0;
+        this.right = 0;
         this.ultraSensor = {
             x: 0,
             y: -20,
@@ -189,44 +193,48 @@ define(['simulation.simulation', 'robertaLogic.constants', 'simulation.robot'], 
             '<radialGradient id="LIGHTGRAY' + this.id + '" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">' +
             '<stop offset="0%" style="stop-color:rgb(255,255,255);stop-opacity:0" />' +
             '<stop offset="100%" style="stop-color:rgb(211,211,211);stop-opacity:1" />' + '</radialGradient>' + '</defs>' + '</svg>';
-        $("#simRobotContent").append(this.svg);
-        $("#svg" + this.id).hide();
+        $( "#simRobotContent" ).append( this.svg );
+        $( "#svg" + this.id ).hide();
 
-        this.timer = {
-            timer1: false,
-            timer2: false,
-            timer3: false,
-            timer4: false,
-            timer5: false
-        };
 
     }
-
-    Ev3.prototype = Object.create(Robot.prototype);
+    Ev3.prototype = Object.create( Robot.prototype );
     Ev3.prototype.constructor = Ev3;
+
+    Ev3.prototype.time = 0;
+    Ev3.prototype.timer = {
+        timer1: false,
+        timer2: false,
+        timer3: false,
+        timer4: false,
+        timer5: false
+    };
+
 
     Ev3.prototype.reset = function() {
         this.encoder.left = 0;
         this.encoder.right = 0;
+        this.left = 0;
+        this.right = 0;
         this.led.color = "LIGHTGRAY";
-        this.led.mode = "OFF";
+        this.led.mode = C.OFF;
         this.led.blink = 0;
         // Ev3.time = 0;
-        for (var key in this.timer) {
+        for ( var key in this.timer ) {
             this.timer[key] = 0;
         }
         var that = this;
-        for (var property in that.buttons) {
-            $('#' + property + that.id).off('mousedown touchstart');
-            $('#' + property + that.id).on('mousedown touchstart', function() {
-                that.buttons[this.id.replace(/\d+$/, "")] = true;
-            });
-            $('#' + property + that.id).off('mouseup touchend');
-            $('#' + property + that.id).on('mouseup touchend', function() {
-                that.buttons[this.id.replace(/\d+$/, "")] = false;
-            });
+        for ( var property in that.buttons ) {
+            $( '#' + property + that.id ).off( 'mousedown touchstart' );
+            $( '#' + property + that.id ).on( 'mousedown touchstart', function() {
+                that.buttons[this.id.replace( /\d+$/, "" )] = true;
+            } );
+            $( '#' + property + that.id ).off( 'mouseup touchend' );
+            $( '#' + property + that.id ).on( 'mouseup touchend', function() {
+                that.buttons[this.id.replace( /\d+$/, "" )] = false;
+            } );
         }
-        $("#display" + this.id).html('');
+        $( "#display" + this.id ).html( '' );
         this.tone.duration = 0;
         this.tone.frequency = 0;
         this.webAudio.volume = 0.5;
@@ -236,17 +244,17 @@ define(['simulation.simulation', 'robertaLogic.constants', 'simulation.robot'], 
         || window.webkitAudioContext // Safari and old versions of Chrome
         || false;
     var context;
-    if (AudioContext) {
+    if ( AudioContext ) {
         context = new AudioContext();
 
         var oscillator = context.createOscillator();
         oscillator.type = 'square';
         var gainNode = context.createGain();
-        oscillator.start(0);
+        oscillator.start( 0 );
 
-        oscillator.connect(gainNode);
-        gainNode.connect(context.destination);
-        gainNode.gain.setValueAtTime(0, 0);
+        oscillator.connect( gainNode );
+        gainNode.connect( context.destination );
+        gainNode.gain.setValueAtTime( 0, 0 );
 
     } else {
         context = null;
@@ -258,7 +266,7 @@ define(['simulation.simulation', 'robertaLogic.constants', 'simulation.robot'], 
 
     var SpeechSynthesis = window.speechSynthesis;
 
-    if (!SpeechSynthesis) {
+    if ( !SpeechSynthesis ) {
         context = null;
         console.log(
             "Sorry, but the Speech Synthesis API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox"
@@ -268,37 +276,37 @@ define(['simulation.simulation', 'robertaLogic.constants', 'simulation.robot'], 
     //sayText also to be in included in constructor
     Ev3.prototype.sayText = {
         language: "en-US",
-        say: function(text, lang, speed, pitch) {
+        say: function( text, lang, speed, pitch ) {
             // IE apparently doesnt support default parameters, this prevents it from crashing the whole simulation
-            speed = (speed === undefined) ? 30 : speed;
-            pitch = (pitch === undefined) ? 50 : pitch;
+            speed = ( speed === undefined ) ? 30 : speed;
+            pitch = ( pitch === undefined ) ? 50 : pitch;
             // Clamp values
-            speed = Math.max(0, Math.min(100, speed));
-            pitch = Math.max(0, Math.min(100, pitch));
+            speed = Math.max( 0, Math.min( 100, speed ) );
+            pitch = Math.max( 0, Math.min( 100, pitch ) );
             // Convert to SpeechSynthesis values
             speed = speed * 0.015 + 0.5; // use range 0.5 - 2; range should be 0.1 - 10, but some voices dont accept values beyond 2
             pitch = pitch * 0.02 + 0.001; // use range 0.0 - 2.0; + 0.001 as some voices dont accept 0
 
-            var utterThis = new SpeechSynthesisUtterance(text);
-            if (lang === "") {
-                console.log("Language is not supported!");
+            var utterThis = new SpeechSynthesisUtterance( text );
+            if ( lang === "" ) {
+                console.log( "Language is not supported!" );
             } else {
                 var voices = SpeechSynthesis.getVoices();
-                for (var i = 0; i < voices.length; i++) {
-                    if (voices[i].lang.indexOf(lang) !== -1 || voices[i].lang.indexOf(lang.substr(0, 2)) !== -1) {
+                for ( var i = 0; i < voices.length; i++ ) {
+                    if ( voices[i].lang.indexOf( lang ) !== -1 || voices[i].lang.indexOf( lang.substr( 0, 2 ) ) !== -1 ) {
                         utterThis.voice = voices[i];
                         break;
                     }
                 }
-                if (utterThis.voice === null) {
-                    console.log("Language \"" + lang +
+                if ( utterThis.voice === null ) {
+                    console.log( "Language \"" + lang +
                         "\" could not be found. Try a different browser or for chromium add the command line flag \"--enable-speech-dispatcher\"."
                     );
                 }
             }
             utterThis.pitch = pitch;
             utterThis.rate = speed;
-            SpeechSynthesis.speak(utterThis);
+            SpeechSynthesis.speak( utterThis );
         }
     };
     //tone also to be included in constructor
@@ -306,53 +314,53 @@ define(['simulation.simulation', 'robertaLogic.constants', 'simulation.robot'], 
         duration: 0,
         timer: 0,
         file: {
-            0: function(a) {
+            0: function( a ) {
                 var ts = a.context.currentTime;
-                a.oscillator.frequency.setValueAtTime(600, ts);
-                a.gainNode.gain.setValueAtTime(a.volume, ts);
+                a.oscillator.frequency.setValueAtTime( 600, ts );
+                a.gainNode.gain.setValueAtTime( a.volume, ts );
                 ts += 1;
-                a.gainNode.gain.setValueAtTime(0, ts);
+                a.gainNode.gain.setValueAtTime( 0, ts );
             },
-            1: function(a) {
+            1: function( a ) {
                 var ts = a.context.currentTime;
-                for (var i = 0; i < 2; i++) {
-                    a.oscillator.frequency.setValueAtTime(600, ts);
-                    a.gainNode.gain.setValueAtTime(a.volume, ts);
-                    ts += (150 / 1000.0);
-                    a.gainNode.gain.setValueAtTime(0, ts);
-                    ts += (25 / 1000.0);
+                for ( var i = 0; i < 2; i++ ) {
+                    a.oscillator.frequency.setValueAtTime( 600, ts );
+                    a.gainNode.gain.setValueAtTime( a.volume, ts );
+                    ts += ( 150 / 1000.0 );
+                    a.gainNode.gain.setValueAtTime( 0, ts );
+                    ts += ( 25 / 1000.0 );
                 }
             },
-            2: function(a) {
+            2: function( a ) {
                 const
                     C2 = 523;
                 var ts = a.context.currentTime;
-                for (var i = 4; i < 8; i++) {
-                    a.oscillator.frequency.setValueAtTime(C2 * i / 4, ts);
-                    a.gainNode.gain.setValueAtTime(a.volume, ts);
-                    ts += (100 / 1000.0);
-                    a.gainNode.gain.setValueAtTime(0, ts);
-                    ts += (25 / 1000.0);
+                for ( var i = 4; i < 8; i++ ) {
+                    a.oscillator.frequency.setValueAtTime( C2 * i / 4, ts );
+                    a.gainNode.gain.setValueAtTime( a.volume, ts );
+                    ts += ( 100 / 1000.0 );
+                    a.gainNode.gain.setValueAtTime( 0, ts );
+                    ts += ( 25 / 1000.0 );
                 }
             },
-            3: function(a) {
+            3: function( a ) {
                 const
                     C2 = 523;
                 var ts = a.context.currentTime;
-                for (var i = 7; i >= 4; i--) {
-                    a.oscillator.frequency.setValueAtTime(C2 * i / 4, ts);
-                    a.gainNode.gain.setValueAtTime(a.volume, ts);
-                    ts += (100 / 1000.0);
-                    a.gainNode.gain.setValueAtTime(0, ts);
-                    ts += (25 / 1000.0);
+                for ( var i = 7; i >= 4; i-- ) {
+                    a.oscillator.frequency.setValueAtTime( C2 * i / 4, ts );
+                    a.gainNode.gain.setValueAtTime( a.volume, ts );
+                    ts += ( 100 / 1000.0 );
+                    a.gainNode.gain.setValueAtTime( 0, ts );
+                    ts += ( 25 / 1000.0 );
                 }
             },
-            4: function(a) {
+            4: function( a ) {
                 var ts = a.context.currentTime;
-                a.oscillator.frequency.setValueAtTime(100, ts);
-                a.gainNode.gain.setValueAtTime(a.volume, ts);
-                ts += (500 / 1000.0);
-                a.gainNode.gain.setValueAtTime(0, ts);
+                a.oscillator.frequency.setValueAtTime( 100, ts );
+                a.gainNode.gain.setValueAtTime( a.volume, ts );
+                ts += ( 500 / 1000.0 );
+                a.gainNode.gain.setValueAtTime( 0, ts );
             }
         }
     };
@@ -366,65 +374,66 @@ define(['simulation.simulation', 'robertaLogic.constants', 'simulation.robot'], 
      *            motors/wheels, display, led ...
      *
      */
-    Ev3.prototype.update = function(actions) {
-        // update debug
-        this.debug = actions.debug || this.debug;
+    Ev3.prototype.update = function() {
         // update pose
-        if (actions.motors) {
-            var left = actions.motors.powerLeft || 0;
-            if (left > 100) {
-                left = 100;
-            } else if (left < -100) {
-                left = -100;
+        const motors = this.robotBehaviour.getActionState( "motors", true );
+        if ( motors ) {
+            const left = motors["c"];
+            if ( left !== undefined ) {
+                if ( left > 100 ) {
+                    left = 100;
+                } else if ( left < -100 ) {
+                    left = -100;
+                }
+                this.left = left * C.MAXPOWER;
             }
-            var right = actions.motors.powerRight || 0;
-            if (right > 100) {
-                right = 100;
-            } else if (right < -100) {
-                right = -100;
+            const right = motors["b"]
+            if ( right !== undefined ) {
+                if ( right > 100 ) {
+                    right = 100;
+                } else if ( right < -100 ) {
+                    right = -100;
+                }
+                this.right = right * C.MAXPOWER;
             }
-            this.left = left * CONSTANTS.MAXPOWER;
-            this.right = right * CONSTANTS.MAXPOWER;
-        } else {
-            this.left = 0;
-            this.right = 0;
         }
-        this.pose.theta = (this.pose.theta + 2 * Math.PI) % (2 * Math.PI);
+        this.pose.theta = ( this.pose.theta + 2 * Math.PI ) % ( 2 * Math.PI );
         this.encoder.left += this.left * SIM.getDt();
         this.encoder.right += this.right * SIM.getDt();
-        if (actions.encoder) {
-            if (actions.encoder.leftReset) {
+        const encoder = this.robotBehaviour.getActionState( "encoder", true );
+        if ( encoder ) {
+            if ( encoder.leftReset ) {
                 this.encoder.left = 0;
             }
-            if (actions.encoder.rightReset) {
+            if ( encoder.rightReset ) {
                 this.encoder.right = 0;
             }
         }
-        if (this.frontLeft.bumped && this.left > 0) {
+        if ( this.frontLeft.bumped && this.left > 0 ) {
             this.left *= -1;
         }
-        if (this.backLeft.bumped && this.left < 0) {
+        if ( this.backLeft.bumped && this.left < 0 ) {
             this.left *= -1;
         }
-        if (this.frontRight.bumped && this.right > 0) {
+        if ( this.frontRight.bumped && this.right > 0 ) {
             this.right *= -1;
         }
-        if (this.backRight.bumped && this.right < 0) {
+        if ( this.backRight.bumped && this.right < 0 ) {
             this.right *= -1;
         }
-        if (this.right == this.left) {
+        if ( this.right == this.left ) {
             var moveXY = this.right * SIM.getDt();
-            var mX = Math.cos(this.pose.theta) * moveXY;
-            var mY = Math.sqrt(Math.pow(moveXY, 2) - Math.pow(mX, 2));
+            var mX = Math.cos( this.pose.theta ) * moveXY;
+            var mY = Math.sqrt( Math.pow( moveXY, 2 ) - Math.pow( mX, 2 ) );
             this.pose.x += mX;
-            if (moveXY >= 0) {
-                if (this.pose.theta < Math.PI) {
+            if ( moveXY >= 0 ) {
+                if ( this.pose.theta < Math.PI ) {
                     this.pose.y += mY;
                 } else {
                     this.pose.y -= mY;
                 }
             } else {
-                if (this.pose.theta > Math.PI) {
+                if ( this.pose.theta > Math.PI ) {
                     this.pose.y += mY;
                 } else {
                     this.pose.y -= mY;
@@ -432,27 +441,27 @@ define(['simulation.simulation', 'robertaLogic.constants', 'simulation.robot'], 
             }
             this.pose.thetaDiff = 0;
         } else {
-            var R = CONSTANTS.TRACKWIDTH / 2 * ((this.left + this.right) / (this.left - this.right));
-            var rot = (this.left - this.right) / CONSTANTS.TRACKWIDTH;
-            var iccX = this.pose.x - (R * Math.sin(this.pose.theta));
-            var iccY = this.pose.y + (R * Math.cos(this.pose.theta));
-            this.pose.x = (Math.cos(rot * SIM.getDt()) * (this.pose.x - iccX) - Math.sin(rot * SIM.getDt()) * (this.pose.y - iccY)) + iccX;
-            this.pose.y = (Math.sin(rot * SIM.getDt()) * (this.pose.x - iccX) + Math.cos(rot * SIM.getDt()) * (this.pose.y - iccY)) + iccY;
+            var R = C.TRACKWIDTH / 2 * ( ( this.left + this.right ) / ( this.left - this.right ) );
+            var rot = ( this.left - this.right ) / C.TRACKWIDTH;
+            var iccX = this.pose.x - ( R * Math.sin( this.pose.theta ) );
+            var iccY = this.pose.y + ( R * Math.cos( this.pose.theta ) );
+            this.pose.x = ( Math.cos( rot * SIM.getDt() ) * ( this.pose.x - iccX ) - Math.sin( rot * SIM.getDt() ) * ( this.pose.y - iccY ) ) + iccX;
+            this.pose.y = ( Math.sin( rot * SIM.getDt() ) * ( this.pose.x - iccX ) + Math.cos( rot * SIM.getDt() ) * ( this.pose.y - iccY ) ) + iccY;
             this.pose.thetaDiff = rot * SIM.getDt();
             this.pose.theta = this.pose.theta + this.pose.thetaDiff;
         }
-        var sin = Math.sin(this.pose.theta);
-        var cos = Math.cos(this.pose.theta);
-        this.frontRight = this.translate(sin, cos, this.frontRight);
-        this.frontLeft = this.translate(sin, cos, this.frontLeft);
-        this.backRight = this.translate(sin, cos, this.backRight);
-        this.backLeft = this.translate(sin, cos, this.backLeft);
-        this.backMiddle = this.translate(sin, cos, this.backMiddle);
+        var sin = Math.sin( this.pose.theta );
+        var cos = Math.cos( this.pose.theta );
+        this.frontRight = this.translate( sin, cos, this.frontRight );
+        this.frontLeft = this.translate( sin, cos, this.frontLeft );
+        this.backRight = this.translate( sin, cos, this.backRight );
+        this.backLeft = this.translate( sin, cos, this.backLeft );
+        this.backMiddle = this.translate( sin, cos, this.backMiddle );
 
-        this.touchSensor = this.translate(sin, cos, this.touchSensor);
-        this.colorSensor = this.translate(sin, cos, this.colorSensor);
-        this.ultraSensor = this.translate(sin, cos, this.ultraSensor);
-        this.mouse = this.translate(sin, cos, this.mouse);
+        this.touchSensor = this.translate( sin, cos, this.touchSensor );
+        this.colorSensor = this.translate( sin, cos, this.colorSensor );
+        this.ultraSensor = this.translate( sin, cos, this.ultraSensor );
+        this.mouse = this.translate( sin, cos, this.mouse );
 
         this.touchSensor.x1 = this.frontRight.rx;
         this.touchSensor.y1 = this.frontRight.ry;
@@ -460,87 +469,99 @@ define(['simulation.simulation', 'robertaLogic.constants', 'simulation.robot'], 
         this.touchSensor.y2 = this.frontLeft.ry;
 
         //update led(s)
-        if (actions.led) {
-            if (actions.led.color) {
-                this.led.color = actions.led.color.toUpperCase();
-                this.led.blinkColor = actions.led.color.toUpperCase();
+        const led = this.robotBehaviour.getActionState( "led", true );
+        if ( led ) {
+            const color = led["color"];
+            const mode = led["mode"];
+            if ( color ) {
+                this.led.color = color.toUpperCase();
+                this.led.blinkColor = color.toUpperCase();
             }
-            switch (actions.led.mode) {
-                case "OFF":
+            switch ( mode ) {
+                case C.OFF:
                     this.led.timer = 0;
                     this.led.blink = 0;
                     this.led.color = 'LIGHTGRAY';
                     break;
-                case "ON":
+                case C.ON:
                     this.led.timer = 0;
                     this.led.blink = 0;
                     break;
-                case "FLASH":
+                case C.FLASH:
                     this.led.blink = 2;
                     break;
-                case "DOUBLE_FLASH":
+                case C.DOUBLE_FLASH:
                     this.led.blink = 4;
                     break;
             }
         }
-        if (this.led.blink > 0) {
-            if (this.led.timer > 0.5 && this.led.blink == 2) {
+        if ( this.led.blink > 0 ) {
+            if ( this.led.timer > 0.5 && this.led.blink == 2 ) {
                 this.led.color = this.led.blinkColor;
-            } else if (this.led.blink == 4 && (this.led.timer > 0.5 && this.led.timer < 0.67 || this.led.timer > 0.83)) {
+            } else if ( this.led.blink == 4 && ( this.led.timer > 0.5 && this.led.timer < 0.67 || this.led.timer > 0.83 ) ) {
                 this.led.color = this.led.blinkColor;
             } else {
                 this.led.color = 'LIGHTGRAY';
             }
             this.led.timer += SIM.getDt();
-            if (this.led.timer > 1.0) {
+            if ( this.led.timer > 1.0 ) {
                 this.led.timer = 0;
             }
         }
-        $("#led" + this.id).attr("fill", "url('#" + this.led.color + this.id + "')");
+        $( "#led" + this.id ).attr( "fill", "url('#" + this.led.color + this.id + "')" );
         // update display
-        if (actions.display) {
-            if (actions.display.text) {
-                $("#display" + this.id).html($("#display" + this.id).html() + '<text x=' + actions.display.x * 10 + ' y=' + (actions.display.y + 1) *
-                    16 + '>' + actions.display.text + '</text>');
+        const display = this.robotBehaviour.getActionState( "display", true );
+        if ( display ) {
+            const text = display.text;
+            const x = display.x;
+            const y = display.y;
+            if ( text ) {
+                $( "#display" + this.id ).html( $( "#display" + this.id ).html() + '<text x=' + x * 10 + ' y=' + ( y + 1 ) *
+                    16 + '>' + text + '</text>' );
             }
-            if (actions.display.picture) {
-                $("#display" + this.id).html(this.display[actions.display.picture]);
+            if ( display.picture ) {
+                $( "#display" + this.id ).html( this.display[display.picture] );
             }
-            if (actions.display.clear) {
-                $("#display" + this.id).html('');
+            if ( display.clear ) {
+                $( "#display" + this.id ).html( '' );
             }
         }
         // update tone
-        if (actions.volume && AudioContext) {
-            this.webAudio.volume = actions.volume / 100.0;
+        const volume = this.robotBehaviour.getActionState( "volume", true );
+        if ( volume && AudioContext ) {
+            this.webAudio.volume = volume / 100.0;
         }
-        if (actions.tone && AudioContext) {
+        const tone = this.robotBehaviour.getActionState( "tone", true );
+        if ( tone && AudioContext ) {
             var ts = this.webAudio.context.currentTime;
-            if (actions.tone.frequency) {
-                this.webAudio.oscillator.frequency.setValueAtTime(actions.tone.frequency, ts);
-                this.webAudio.gainNode.gain.setValueAtTime(this.webAudio.volume, ts);
+            if ( tone.frequency ) {
+                this.webAudio.oscillator.frequency.setValueAtTime( tone.frequency, ts );
+                this.webAudio.gainNode.gain.setValueAtTime( this.webAudio.volume, ts );
             }
-            if (actions.tone.duration) {
-                ts += actions.tone.duration / 1000.0;
-                this.webAudio.gainNode.gain.setValueAtTime(0, ts);
+            if ( tone.duration ) {
+                ts += tone.duration / 1000.0;
+                this.webAudio.gainNode.gain.setValueAtTime( 0, ts );
             }
-            if (actions.tone.file !== undefined) {
-                this.tone.file[actions.tone.file](this.webAudio);
+            if ( tone.file !== undefined ) {
+                this.tone.file[tone.file]( this.webAudio );
             }
         }
         // update sayText
-        if (actions.language !== null && actions.language !== undefined && SpeechSynthesis) {
-            this.sayText.language = actions.language;
+        const language = this.robotBehaviour.getActionState( "language", true );
+        if ( language !== null && SpeechSynthesis ) {
+            this.sayText.language = language;
         }
-        if (actions.sayText && SpeechSynthesis) {
-            if (actions.sayText.text) {
-                this.sayText.say(actions.sayText.text, this.sayText.language, actions.sayText.speed, actions.sayText.pitch);
+        const sayText = this.robotBehaviour.getActionState( "sayText", true );
+        if ( sayText && SpeechSynthesis ) {
+            if ( sayText.text ) {
+                this.sayText.say( sayText.text, this.sayText.language, sayText.speed, sayText.pitch );
             }
         }
         // update timer
-        if (actions.timer) {
-            for (var key in actions.timer) {
-                if (actions.timer[key] == 'reset') {
+        var timer = this.robotBehaviour.getActionState( "timer", false );
+        if ( timer ) {
+            for ( var key in timer ) {
+                if ( timer[key] == 'reset' ) {
                     this.timer[key] = 0;
                 }
             }
@@ -558,11 +579,11 @@ define(['simulation.simulation', 'robertaLogic.constants', 'simulation.robot'], 
      * @returns the translated point
      *
      */
-    Ev3.prototype.translate = function(sin, cos, point) {
+    Ev3.prototype.translate = function( sin, cos, point ) {
         point.rx = this.pose.x - point.y * cos + point.x * sin;
         point.ry = this.pose.y - point.y * sin - point.x * cos;
         return point;
     };
 
     return Ev3;
-});
+} );

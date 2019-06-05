@@ -11,10 +11,18 @@
 			"value": "10"
 		},
 		{
-			"opc": "bothMotorsOn"
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": 0
 		},
 		{
-			"opc": "bothMotorsStopAction"
+			"opc": "bothMotorsOnAction",
+			"portA": "a",
+			"portB": "b"
+		},
+		{
+			"opc": "motorStop",
+			"port": "ab"
 		},
 		{
 			"opc": "expr",
@@ -22,8 +30,14 @@
 			"value": "30"
 		},
 		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": 0
+		},
+		{
 			"opc": "motorOnAction",
-			"port": "A"
+			"port": "a",
+			"name": "a"
 		},
 		{
 			"opc": "expr",
@@ -31,8 +45,14 @@
 			"value": "30"
 		},
 		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": 0
+		},
+		{
 			"opc": "motorOnAction",
-			"port": "B"
+			"port": "b",
+			"name": "b"
 		},
 		{
 			"opc": "expr",
@@ -40,20 +60,26 @@
 			"value": "30"
 		},
 		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": 0
+		},
+		{
 			"opc": "motorOnAction",
-			"port": "AB"
+			"port": "ab",
+			"name": "ab"
 		},
 		{
 			"opc": "motorStop",
-			"port": "A"
+			"port": "a"
 		},
 		{
 			"opc": "motorStop",
-			"port": "B"
+			"port": "b"
 		},
 		{
 			"opc": "motorStop",
-			"port": "AB"
+			"port": "ab"
 		}
 	],
 	"functionDeclaration": {

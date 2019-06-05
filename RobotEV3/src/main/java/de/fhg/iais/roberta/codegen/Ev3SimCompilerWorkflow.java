@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.visitor.codegen.Ev3SimVisitor;
+import de.fhg.iais.roberta.visitor.codegen.Ev3StackMachineVisitor;
 
 public class Ev3SimCompilerWorkflow extends AbstractCompilerWorkflow {
 
@@ -28,7 +28,7 @@ public class Ev3SimCompilerWorkflow extends AbstractCompilerWorkflow {
     {
         if ( data.getErrorMessage() == null ) {
             try {
-                this.generatedSourceCode = Ev3SimVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), language);
+                this.generatedSourceCode = Ev3StackMachineVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), language);
                 this.crosscompilerResponse = "ev3 simulation code generated";
                 this.workflowResult = Key.COMPILERWORKFLOW_SUCCESS;
             } catch ( Exception e ) {

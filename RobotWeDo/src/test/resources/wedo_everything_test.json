@@ -32,7 +32,7 @@
     {
       "GetSample": "gyro",
       "opc": "GetSample",
-      "PORT": "1",
+      "port": "1",
       "name": "W",
       "slot": "UP"
     },
@@ -43,7 +43,7 @@
     {
       "GetSample": "infrared",
       "opc": "GetSample",
-      "PORT": "2",
+      "port": "2",
       "name": "W"
     },
     {
@@ -53,7 +53,7 @@
     {
       "GetSample": "timer",
       "opc": "GetSample",
-      "PORT": "1"
+      "port": "1"
     },
     {
       "opc": "AssignStmt",
@@ -71,7 +71,7 @@
     },
     {
       "opc": "motorOnAction",
-      "PORT": "1",
+      "port": "1",
       "name": "W"
     },
     {
@@ -86,12 +86,12 @@
     },
     {
       "opc": "motorOnAction",
-      "PORT": "1",
+      "port": "1",
       "name": "W"
     },
     {
       "opc": "motorStop",
-      "PORT": "1",
+      "port": "1",
       "name": "W"
     },
     {
@@ -183,7 +183,7 @@
         {
           "GetSample": "gyro",
           "opc": "GetSample",
-          "PORT": "1",
+          "port": "1",
           "name": "W",
           "slot": "UP"
         },
@@ -220,7 +220,7 @@
         {
           "GetSample": "infrared",
           "opc": "GetSample",
-          "PORT": "2",
+          "port": "2",
           "name": "W"
         },
         {
@@ -256,7 +256,7 @@
         {
           "GetSample": "timer",
           "opc": "GetSample",
-          "PORT": "1"
+          "port": "1"
         },
         {
           "opc": "expr",

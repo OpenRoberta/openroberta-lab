@@ -81,6 +81,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.C;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor<V> {
@@ -509,32 +510,60 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitGetSubFunct(GetSubFunct<V> getSubFunct) {
-        throw new DbcException("Operation not supported");
+        getSubFunct.getParam().forEach(x -> x.visit(this));
+
+        JSONObject o =
+            mk(C.EXPR)
+                .put(C.EXPR, C.LIST_OPERATION)
+                .put(C.OP, C.LIST_GET_SUBLIST)
+                .put(C.POSITION, getSubFunct.getStrParam().stream().map(x -> x.toString().toLowerCase()).toArray());
+
+        return app(o);
     }
 
     @Override
     public V visitIndexOfFunct(IndexOfFunct<V> indexOfFunct) {
-        throw new DbcException("Operation not supported");
+        indexOfFunct.getParam().forEach(x -> x.visit(this));
+        JSONObject o =
+            mk(C.EXPR).put(C.EXPR, C.LIST_OPERATION).put(C.OP, C.LIST_FIND_ITEM).put(C.POSITION, indexOfFunct.getLocation().toString().toLowerCase());
+        return app(o);
     }
 
     @Override
     public V visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<V> lengthOfIsEmptyFunct) {
-        throw new DbcException("Operation not supported");
+        lengthOfIsEmptyFunct.getParam().get(0).visit(this);
+        JSONObject o = mk(C.EXPR).put(C.EXPR, C.LIST_OPERATION).put(C.OP, lengthOfIsEmptyFunct.getFunctName().toString().toLowerCase());
+        return app(o);
     }
 
     @Override
     public V visitListCreate(ListCreate<V> listCreate) {
-        throw new DbcException("Operation not supported");
+        listCreate.getValue().visit(this);
+        int n = listCreate.getValue().get().size();
+
+        JSONObject o = mk(C.EXPR).put(C.EXPR, C.CREATE_LIST).put(C.NUMBER, n);
+        return app(o);
     }
 
     @Override
     public V visitListSetIndex(ListSetIndex<V> listSetIndex) {
-        throw new DbcException("Operation not supported");
+        listSetIndex.getParam().forEach(x -> x.visit(this));
+        JSONObject o =
+            mk(C.LIST_OPERATION)
+                .put(C.OP, listSetIndex.getElementOperation().toString().toLowerCase())
+                .put(C.POSITION, listSetIndex.getLocation().toString().toLowerCase());
+        return app(o);
     }
 
     @Override
     public V visitListGetIndex(ListGetIndex<V> listGetIndex) {
-        throw new DbcException("Operation not supported");
+        listGetIndex.getParam().forEach(x -> x.visit(this));
+        JSONObject o =
+            mk(C.EXPR)
+                .put(C.EXPR, C.LIST_OPERATION)
+                .put(C.OP, listGetIndex.getElementOperation().toString().toLowerCase())
+                .put(C.POSITION, listGetIndex.getLocation().toString().toLowerCase());
+        return app(o);
     }
 
     @Override
@@ -563,7 +592,9 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitMathOnListFunct(MathOnListFunct<V> mathOnListFunct) {
-        throw new DbcException("Operation not supported");
+        mathOnListFunct.getParam().forEach(x -> x.visit(this));
+        JSONObject o = mk(C.EXPR).put(C.EXPR, C.MATH_ON_LIST).put(C.OP, mathOnListFunct.getFunctName().toString().toLowerCase());
+        return app(o);
     }
 
     @Override

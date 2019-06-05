@@ -8,8 +8,8 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
      * 
      * @class
      */
-    function Microbit(pose) {
-        Mbed.call(this, pose);
+    function Microbit(pose, robotBehaviour) {
+        Mbed.call(this, pose, robotBehaviour);
     }
     Microbit.prototype = Object.create(Mbed.prototype);
     Microbit.prototype.constructor = Microbit;

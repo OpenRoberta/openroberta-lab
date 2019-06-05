@@ -6,7 +6,7 @@
 			"value": "250"
 		},
 		{
-			"mode": "ANALOG",
+			"mode": "analog",
 			"opc": "writePinAction",
 			"pin": "1"
 		},
@@ -16,7 +16,7 @@
 			"value": "250"
 		},
 		{
-			"mode": "ANALOG",
+			"mode": "analog",
 			"opc": "writePinAction",
 			"pin": "2"
 		},
@@ -26,7 +26,7 @@
 			"value": "250"
 		},
 		{
-			"mode": "DIGITAL",
+			"mode": "digital",
 			"opc": "writePinAction",
 			"pin": "0"
 		},
@@ -36,7 +36,7 @@
 			"value": "250"
 		},
 		{
-			"mode": "DIGITAL",
+			"mode": "digital",
 			"opc": "writePinAction",
 			"pin": "2"
 		}

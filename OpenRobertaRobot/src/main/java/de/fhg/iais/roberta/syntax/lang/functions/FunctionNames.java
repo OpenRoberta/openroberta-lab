@@ -45,7 +45,7 @@ public enum FunctionNames {
     RIGHT( 10, Assoc.LEFT ),
     TEXT( 10, Assoc.LEFT, "TEXT" ),
     NUMBER( 10, Assoc.LEFT, "NUMBER" ),
-    LISTS_LENGTH( 10, Assoc.LEFT, BlocklyConstants.LISTS_LENGTH, BlocklyConstants.ROB_LISTS_LENGTH ),
+    LIST_LENGTH( 10, Assoc.LEFT, BlocklyConstants.LISTS_LENGTH, BlocklyConstants.ROB_LISTS_LENGTH ),
     GET_SUBLIST( 10, Assoc.LEFT );
 
     private final String[] values;

@@ -5,6 +5,7 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.IHardwareVisitor;
 
 public interface IBluetoothVisitor<V> extends IHardwareVisitor<V> {
@@ -14,34 +15,44 @@ public interface IBluetoothVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param bluetoothReceiveActionbluetoothReceiveAction to be visited
      */
-    V visitBluetoothReceiveAction(BluetoothReceiveAction<V> bluetoothReceiveAction);
+    default V visitBluetoothReceiveAction(BluetoothReceiveAction<V> bluetoothReceiveAction) {
+        throw new DbcException("Not implemented!");
+    }
 
     /**
      * visit a {@link BluetoothConnectAction}.
      *
      * @param bluetoothConnectAction to be visited
      */
-    V visitBluetoothConnectAction(BluetoothConnectAction<V> bluetoothConnectAction);
+    default V visitBluetoothConnectAction(BluetoothConnectAction<V> bluetoothConnectAction) {
+        throw new DbcException("Not implemented!");
+    }
 
     /**
      * visit a {@link BluetoothSendAction}.
      *
      * @param bluetoothSendAction to be visited
      */
-    V visitBluetoothSendAction(BluetoothSendAction<V> bluetoothSendAction);
+    default V visitBluetoothSendAction(BluetoothSendAction<V> bluetoothSendAction) {
+        throw new DbcException("Not implemented!");
+    }
 
     /**
      * visit a {@link BluetoothWaitForConnectionAction}.
      *
      * @param bluetoothWaitForConnection to be visited
      */
-    V visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<V> bluetoothWaitForConnection);
+    default V visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<V> bluetoothWaitForConnection) {
+        throw new DbcException("Not implemented!");
+    }
 
     /**
      * visit a {@link BluetoothCheckConnectAction}.
      *
      * @param bluetoothCheckConnectAction to be visited
      */
-    V visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<V> bluetoothCheckConnectAction);
+    default V visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<V> bluetoothCheckConnectAction) {
+        throw new DbcException("Not implemented!");
+    }
 
 }

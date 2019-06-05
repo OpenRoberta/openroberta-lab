@@ -56,7 +56,6 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
             // TODO think about what could happen here.
             break;
         }
-        console.log(wedo);
     }
     exports.update = update;
 

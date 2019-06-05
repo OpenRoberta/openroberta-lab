@@ -6,8 +6,8 @@
 			"value": "Hallo"
 		},
 		{
-			"mode": "TEXT",
-			"opc": "displayTextAction"
+			"mode": "text",
+			"opc": "ShowTextAction"
 		},
 		{
 			"opc": "expr",
@@ -15,21 +15,98 @@
 			"value": "Hallo"
 		},
 		{
-			"mode": "CHARACTER",
-			"opc": "displayTextAction"
+			"mode": "character",
+			"opc": "ShowTextAction"
 		},
 		{
 			"opc": "expr",
-			"expr": "IMAGE",
-			"value": "[0, 0, 0, 0, 0],[0, 0, 0, 0, 0],[0, 0, 0, 0, 0],[0, 0, 0, 0, 0],[0, 0, 0, 0, 0]"
+			"expr": "image",
+			"value": [
+				[
+					0,
+					0,
+					0,
+					0,
+					0
+				],
+				[
+					0,
+					0,
+					0,
+					0,
+					0
+				],
+				[
+					0,
+					0,
+					0,
+					0,
+					0
+				],
+				[
+					0,
+					0,
+					0,
+					0,
+					0
+				],
+				[
+					0,
+					0,
+					0,
+					0,
+					0
+				]
+			]
 		},
 		{
-			"mode": "IMAGE",
-			"opc": "displayImageAction"
+			"mode": "image",
+			"opc": "ShowImageAction"
 		},
 		{
-			"mode": "IMAGE",
-			"opc": "displayImageAction"
+			"opc": "expr",
+			"expr": "image",
+			"value": [
+				[
+					0,
+					255,
+					0,
+					255,
+					0
+				],
+				[
+					255,
+					255,
+					255,
+					255,
+					255
+				],
+				[
+					255,
+					255,
+					255,
+					255,
+					255
+				],
+				[
+					0,
+					255,
+					255,
+					255,
+					0
+				],
+				[
+					0,
+					0,
+					255,
+					0,
+					0
+				]
+			]
+		},
+		{
+			"mode": "image",
+			"opc": "ShowImageAction"
 		},
 		{
 			"opc": "ClearDisplay"
@@ -43,7 +120,10 @@
 			"opc": "displaySetBrightnessAction"
 		},
 		{
-			"opc": "displayGetBrightnessAction"
+			"GetSample": "display",
+			"opc": "GetSample",
+			"port": "brightness",
+			"name": "calliope"
 		},
 		{
 			"opc": "displaySetBrightnessAction"
@@ -64,7 +144,7 @@
 			"value": "5"
 		},
 		{
-			"opc": "displaySetPixelAction"
+			"opc": "displaySetPixelBrightnessAction"
 		},
 		{
 			"opc": "expr",
@@ -77,10 +157,20 @@
 			"value": "0"
 		},
 		{
-			"opc": "displayGetPixelAction"
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "0"
 		},
 		{
-			"opc": "displaySetPixelAction"
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "0"
+		},
+		{
+			"opc": "displayGetPixelBrightnessAction"
+		},
+		{
+			"opc": "displaySetPixelBrightnessAction"
 		},
 		{
 			"opc": "expr",

@@ -1,5 +1,5 @@
-define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.controller', 'webview.controller', 'socket.controller', 'wedo.model', 'jquery' ], function(
-        exports, UTIL, LOG, MSG, GUISTATE, HELP_C, WEBVIEW_C, SOCKET_C, WEDO, $) {
+define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.controller', 'webview.controller', 'socket.controller', 'jquery' ], function(exports,
+        UTIL, LOG, MSG, GUISTATE, HELP_C, WEBVIEW_C, SOCKET_C, $) {
 
     /**
      * Init robot
@@ -551,7 +551,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AGENTORTOKEN) {
             return true;
         }
-        if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.WEBVIEW && WEDO.getConnectedBricks().length > 0) {
+        if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.WEBVIEW && WEBVIEW_C.getWeDo().getConnectedBricks().length > 0) {
             return true;
         }
         return false;

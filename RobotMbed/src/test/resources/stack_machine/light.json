@@ -3,13 +3,19 @@
 		{
 			"opc": "expr",
 			"expr": "COLOR_CONST",
-			"value": "#FF0000"
+			"value": [
+				255,
+				0,
+				0
+			]
 		},
 		{
 			"opc": "ledOnAction"
 		},
 		{
-			"opc": "ledOffAction"
+			"opc": "statusLightAction",
+			"port": "internal",
+			"name": "calliope"
 		}
 	],
 	"functionDeclaration": {

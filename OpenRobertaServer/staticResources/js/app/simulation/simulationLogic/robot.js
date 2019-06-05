@@ -10,8 +10,9 @@ define([ 'simulation.simulation', 'robertaLogic.constants' ], function(SIM, CONS
      * 
      * @class
      */
-    function Robot(pose) {
+    function Robot(pose, robotBehaviour) {
         this.pose = pose;
+        this.robotBehaviour = robotBehaviour
 
         var initialPose = {
             x : pose.x,
@@ -69,6 +70,10 @@ define([ 'simulation.simulation', 'robertaLogic.constants' ], function(SIM, CONS
     Robot.prototype.time = 0;
     Robot.prototype.timer = {};
     Robot.prototype.debug = false;
+    
+    Robot.prototype.replaceState = function (robotBehaviour) {
+        this.robotBehaviour = robotBehaviour;
+    }
     /**
      * Update all actions of the robot. The new pose is calculated with the
      * forward kinematics equations for a differential drive robot.

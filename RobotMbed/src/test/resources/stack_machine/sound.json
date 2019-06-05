@@ -14,29 +14,69 @@
 			"opc": "ToneAction"
 		},
 		{
-			"duration": "2000",
-			"opc": "playNoteAction",
-			"frequency": "261.626"
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "261.626"
 		},
 		{
-			"duration": "1000",
-			"opc": "playNoteAction",
-			"frequency": "261.626"
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "2000"
 		},
 		{
-			"duration": "500",
-			"opc": "playNoteAction",
-			"frequency": "261.626"
+			"opc": "ToneAction"
 		},
 		{
-			"duration": "250",
-			"opc": "playNoteAction",
-			"frequency": "261.626"
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "261.626"
 		},
 		{
-			"duration": "125",
-			"opc": "playNoteAction",
-			"frequency": "261.626"
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "1000"
+		},
+		{
+			"opc": "ToneAction"
+		},
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "261.626"
+		},
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "500"
+		},
+		{
+			"opc": "ToneAction"
+		},
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "261.626"
+		},
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "250"
+		},
+		{
+			"opc": "ToneAction"
+		},
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "261.626"
+		},
+		{
+			"opc": "expr",
+			"expr": "NUM_CONST",
+			"value": "125"
+		},
+		{
+			"opc": "ToneAction"
 		}
 	],
 	"functionDeclaration": {

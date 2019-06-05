@@ -92,13 +92,13 @@ require.config({
         'robertaLogic.timer' : '../app/simulation/robertaLogic/timer',
         'robertaLogic.gyro' : '../app/simulation/robertaLogic/gyro',
 
-        'interpreter.constants' : '../app/wedoInterpreter/interpreter.constants',
-        'interpreter.interpreter' : '../app/wedoInterpreter/interpreter.interpreter',
-        'interpreter.nativeInterface' : '../app/wedoInterpreter/interpreter.nativeInterface',
-        'interpreter.nativeWeDo' : '../app/wedoInterpreter/interpreter.nativeWeDo',
-        'interpreter.nativeTest' : '../app/wedoInterpreter/interpreter.nativeTest',
-        'interpreter.state' : '../app/wedoInterpreter/interpreter.state',
-        'interpreter.util' : '../app/wedoInterpreter/interpreter.util'
+        'interpreter.constants': '../app/wedoInterpreter/interpreter.constants',
+        'interpreter.interpreter': '../app/wedoInterpreter/interpreter.interpreter',
+        'interpreter.aRobotBehaviour': '../app/wedoInterpreter/interpreter.aRobotBehaviour',
+        'interpreter.robotWeDoBehaviour': '../app/wedoInterpreter/interpreter.robotWeDoBehaviour',
+        'interpreter.robotMbedBehaviour': '../app/wedoInterpreter/interpreter.robotMbedBehaviour',
+        'interpreter.state': '../app/wedoInterpreter/interpreter.state',
+        'interpreter.util': '../app/wedoInterpreter/interpreter.util'
 
     },
     shim : {
