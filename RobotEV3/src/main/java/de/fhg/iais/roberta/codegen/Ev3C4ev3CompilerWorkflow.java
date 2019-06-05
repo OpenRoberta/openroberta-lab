@@ -31,14 +31,16 @@ public class Ev3C4ev3CompilerWorkflow extends AbstractCompilerWorkflow {
 
     private final String tempDir;
     private final C4Ev3SourceCompiler compiler;
-    private final RbfBuilder rbfBuilder = new RbfBuilder();
+    private final RbfBuilder rbfBuilder;
 
     private String uf2InBase64;
 
     public Ev3C4ev3CompilerWorkflow(PluginProperties pluginProperties) {
         super(pluginProperties);
+        String compilerResourceDir = pluginProperties.getCompilerResourceDir();
         tempDir = pluginProperties.getTempDir();
-        compiler = new C4Ev3SourceCompiler(pluginProperties.getCompilerResourceDir());
+        compiler = new C4Ev3SourceCompiler(compilerResourceDir);
+        rbfBuilder = new RbfBuilder(compilerResourceDir);
     }
 
     @Override

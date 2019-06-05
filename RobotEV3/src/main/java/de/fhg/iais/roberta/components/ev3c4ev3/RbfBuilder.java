@@ -1,58 +1,126 @@
 package de.fhg.iais.roberta.components.ev3c4ev3;
 
+import de.fhg.iais.roberta.util.dbc.DbcException;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static de.fhg.iais.roberta.components.ev3c4ev3.ByteUtils.setWord;
 
 /**
- * Builder to create rbf files, used by the EV3 to show a program in the menu
+ * Builder to create rbf files, used by the EV3 to show a program in the menu.
+ * An rbf file is an executable file that contains EV3 VM instructions. This builder
+ * patches an existing rbf file (contained in the cross compiler resources folder)
+ * that starts a program given the executable file name.
+ * The rbf file to patch contains a placeholder that this builder replaces with the
+ * name of the executable to run.
  */
 public class RbfBuilder {
 
-    private static final int RBF_MAGIC_CONSTANT = 0x4f47454c; // LEGO
-    private static final byte[] RBF_CONSTANT_BEFORE_COMMAND = { (byte) 0x68,(byte) 0x00,(byte) 0x01,(byte) 0x00,(byte) 0x00,(byte) 0x00,(byte) 0x00,(byte) 0x00,(byte) 0x1C,(byte) 0x00,(byte) 0x00,(byte) 0x00,(byte) 0x00,(byte) 0x00,(byte) 0x00,(byte) 0x00,(byte) 0x08,(byte) 0x00,(byte) 0x00,(byte) 0x00,(byte) 0x60,(byte) 0x80 };
-    private static final byte[] RBF_CONSTANT_AFTER_COMMAND = { (byte) 0x44,(byte) 0x85,(byte) 0x82,(byte) 0xE8,(byte) 0x03,(byte) 0x40,(byte) 0x86,(byte) 0x40,(byte) 0x0A };
+    private static final Logger LOG = LoggerFactory.getLogger(RbfBuilder.class);
 
-    private static final int LENGTH_MAGIC_CONSTANT = 4;
-    private static final int LENGTH_RBF_FILE_SIZE = 4;
+    private static final String EXECUTABLE_PLACEHOLDER = "--executableName--";
+    private static final String EXECUTABLE_PLACEHOLDER_HEX_STRING = Hex.encodeHexString(EXECUTABLE_PLACEHOLDER.getBytes(StandardCharsets.UTF_8));
 
-    private static final int OFFSET_MAGIC_CONSTANT = 0;
     private static final int OFFSET_RBF_FILE_SIZE = 4;
-    private static final int OFFSET_COMMAND = LENGTH_MAGIC_CONSTANT + LENGTH_RBF_FILE_SIZE + RBF_CONSTANT_BEFORE_COMMAND.length;
+
+    private final String compilerResourceDir;
+
+    public RbfBuilder(String compilerResourceDir) {
+        this.compilerResourceDir = compilerResourceDir;
+    }
 
     /**
-     * Build the rbf file to execute the specified command.
-     * The command may be just the name of the executable to execute.
-     * @param command
-     * @return bytes of the rbf file
+     * Build the rbf file to execute the specified file.
+     *
+     * @param executableFileName file name of the executable on the EV3 file system
+     * @return content of the rbf file
      */
-    public byte[] build(String command) {
-        byte[] commandBytes = command.getBytes(StandardCharsets.UTF_8);
-        int rbfSize = getRbfSize(commandBytes);
-        byte[] rbf = new byte[rbfSize];
-
-        setWord(rbf, OFFSET_MAGIC_CONSTANT, RBF_MAGIC_CONSTANT);
-        setWord(rbf, OFFSET_RBF_FILE_SIZE, rbfSize);
-        System.arraycopy(RBF_CONSTANT_BEFORE_COMMAND, 0, rbf, 8, RBF_CONSTANT_BEFORE_COMMAND.length);
-        System.arraycopy(commandBytes, 0, rbf, OFFSET_COMMAND, commandBytes.length);
-        System.arraycopy(RBF_CONSTANT_AFTER_COMMAND, 0, rbf, getOffsetConstantAfterCommand(commandBytes), RBF_CONSTANT_AFTER_COMMAND.length);
-
-        return rbf;
+    public byte[] build(String executableFileName) {
+        byte[] executableFileNameBytes = executableFileName.getBytes(StandardCharsets.UTF_8);
+        byte[] rbfToPatch = loadRbfToPatch();
+        return patch(rbfToPatch, executableFileNameBytes);
     }
 
-    private static int getRbfSize(byte[] commandBytes) {
-        return LENGTH_MAGIC_CONSTANT
-            + LENGTH_RBF_FILE_SIZE
-            + RBF_CONSTANT_BEFORE_COMMAND.length
-            + commandBytes.length
-            + 1 // null byte to terminate the command string
-            + RBF_CONSTANT_AFTER_COMMAND.length;
+    private byte[] loadRbfToPatch() {
+        try {
+            return FileUtils.readFileToByteArray(new File(compilerResourceDir + "c4ev3/launcher/launcher.rbf"));
+        } catch ( IOException e ) {
+            LOG.error("cannot load rbf file to patch: {}", e);
+            throw new DbcException("cannot load rbf file to patch", e);
+        }
     }
 
-    private static int getOffsetConstantAfterCommand(byte[] commandBytes) {
-        return OFFSET_COMMAND
-            + commandBytes.length
-            + 1; // null byte to terminate the command string
+    /**
+     * Return a new array that contains the same bytes of the rbfToPatch parameter except the 4 bytes of the size and the placeholder
+     * @param rbfToPatch
+     * @param executableFileName
+     * @return
+     */
+    byte[] patch(byte[] rbfToPatch, byte[] executableFileName) {
+        int rbfSize = getRbfSize(rbfToPatch, executableFileName);
+        byte[] patchedRbf = new byte[rbfSize];
+        byte[][] rbfPrefixAndPostfix = splitRbfFileAtPlaceholder(rbfToPatch);
+
+        byte[] prefix = rbfPrefixAndPostfix[0];
+        byte[] postfix = rbfPrefixAndPostfix[1];
+
+        addPrefixToRbf(patchedRbf, prefix);
+        addExecutableNameToRbf(patchedRbf, executableFileName, prefix);
+        addPostfixToRbf(patchedRbf, postfix, prefix, executableFileName);
+        setWord(patchedRbf, OFFSET_RBF_FILE_SIZE, rbfSize);
+
+        return patchedRbf;
+    }
+
+    private int getRbfSize(byte[] rbfToPatch, byte[] executableFileName) {
+        return rbfToPatch.length - EXECUTABLE_PLACEHOLDER.length() + executableFileName.length;
+    }
+
+    private byte[][] splitRbfFileAtPlaceholder(byte[] rbf) {
+        String rbfToPatchAsHexString = Hex.encodeHexString(rbf);
+        String[] rbfPrefixAndPostfixAsHexStrings = rbfToPatchAsHexString.split(EXECUTABLE_PLACEHOLDER_HEX_STRING);
+        try {
+            return new byte[][] {
+                Hex.decodeHex(rbfPrefixAndPostfixAsHexStrings[0]),
+                Hex.decodeHex(rbfPrefixAndPostfixAsHexStrings[1])
+            };
+        } catch ( DecoderException e ) {
+            LOG.error("unexpected hex string cannot be decoded: {}", e);
+            throw new DbcException("unexpected hex string cannot be decoded", e);
+        }
+    }
+
+    private void addPrefixToRbf(byte[] rbf, byte[] prefix) {
+        System.arraycopy(prefix, 0, rbf, 0, prefix.length);
+    }
+
+    /**
+     * @param rbf
+     * @param executableFileName
+     * @param prefix used to compute the offset
+     */
+    private void addExecutableNameToRbf(byte[] rbf, byte[] executableFileName, byte[] prefix) {
+        int offset = prefix.length;
+        System.arraycopy(executableFileName, 0, rbf, offset, executableFileName.length);
+    }
+
+    /**
+     *
+     * @param rbf
+     * @param postfix
+     * @param prefix used to compute the offset
+     * @param executableFileName used to compute the offset
+     */
+    private void addPostfixToRbf(byte[] rbf, byte[] postfix, byte[] prefix, byte[] executableFileName) {
+        int offset = prefix.length + executableFileName.length;
+        System.arraycopy(postfix, 0, rbf, offset, postfix.length);
     }
 
 }
