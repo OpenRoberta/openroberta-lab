@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.components.ev3c4ev3;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +24,13 @@ public class C4Ev3SourceCompiler {
 
     private String getCompilerExecutableFileName () {
         // TODO: Return the file name depending on the os
+        if ( SystemUtils.IS_OS_LINUX ) {
+            return "arm-linux-gnueabi-gcc";
+        } else if (SystemUtils.IS_OS_MAC) {
+            return "arm-none-linux-gnueabi-gcc";
+        } else if (SystemUtils.IS_OS_WINDOWS) {
+            return "";
+        }
         return "arm-none-linux-gnueabi-gcc";
     }
 
@@ -33,7 +41,8 @@ public class C4Ev3SourceCompiler {
             "-o", binaryOutputFile,
             "-I", compilerResourcesDir + "c4ev3/include",
             "-L", compilerResourcesDir  + "c4ev3/lib",
-            "-l", "ev3api"
+            "-l", "ev3api",
+            "-Os"
         };
     }
 

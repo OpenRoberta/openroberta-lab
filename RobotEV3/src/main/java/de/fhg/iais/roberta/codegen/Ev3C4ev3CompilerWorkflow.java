@@ -23,7 +23,7 @@ public class Ev3C4ev3CompilerWorkflow extends AbstractCompilerWorkflow {
 
     private static final Logger LOG = LoggerFactory.getLogger(Ev3C4ev3CompilerWorkflow.class);
 
-    public static final String GENERATED_SOURCE_CODE_EXTENSION = ".cpp";
+    public static final String GENERATED_SOURCE_CODE_EXTENSION = ".c";
     private static final String GENERATED_BINARY_EXTENSION = ".elf";
     private static final String GENERATED_RBF_EXTENSION = ".rbf";
 
