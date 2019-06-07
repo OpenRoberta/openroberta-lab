@@ -36,6 +36,8 @@ on linux:
   * sudo apt-get install gcc-arm-none-eabi srecord libssl-dev
 * micro:bit
   * pip install uflash
+* EV3 (c4ev3)
+  * sudo apt-get install arm-linux-gnueabi-gcc
  
 on windows:
 * Calliope
