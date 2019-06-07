@@ -1,11 +1,21 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
+import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
+import de.fhg.iais.roberta.inter.mode.action.IMotorMoveMode;
+import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.MotorMoveMode;
+import de.fhg.iais.roberta.mode.action.MotorStopMode;
+import de.fhg.iais.roberta.mode.action.TurnDirection;
+import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.communication.*;
+import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
+import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
@@ -14,10 +24,12 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
+import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.functions.*;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
@@ -29,6 +41,7 @@ import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 
 public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<Void> {
@@ -82,16 +95,26 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     protected void generateProgramPrefix(boolean withWrapping) {
-        this.sb.append("#include <ev3.h>");
+        generateConstants();
+        generateImports();
+    }
+
+    private void generateImports() {
+        this.sb.append("#include <ev3.h>\n");
+        this.sb.append("#include <math.h>\n");
+        this.sb.append("#include \"NEPODefs.h\"\n");
         nlIndent();
-        this.sb.append("#include \"NEPODefs.h\"");
+    }
+
+    private void generateConstants() {
+        this.sb.append("#define WHEEL_DIAMETER " + brickConfiguration.getWheelDiameterCM() + "\n");
+        this.sb.append("#define TRACK_WIDTH " + brickConfiguration.getTrackWidthCM() + "\n");
         nlIndent();
     }
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         mainTask.getVariables().visit(this);
-        nlIndent();
         this.sb.append("int main () {");
         incrIndentation();
         nlIndent();
@@ -102,6 +125,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     protected void generateProgramSuffix(boolean withWrapping) {
+        nlIndent();
         nlIndent();
         this.sb.append("FreeEV3();");
         nlIndent();
@@ -115,30 +139,182 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         String port = motorOnAction.getUserDefinedPort();
+        MotorDuration<Void> duration = motorOnAction.getParam().getDuration();
+        Expr<Void> speedExpression = motorOnAction.getParam().getSpeed();
         if ( isActorOnPort(port) ) {
-            final boolean isReverse = isMotorReverse(port);
-            final boolean isDuration = motorOnAction.getParam().getDuration() != null;
-            final boolean isRegulated = isMotorRegulated(port); // TODO: currently ignored. Does c4ev3 support it?
-
-            String methodNamePart = isReverse ? "OnFwdReg" : "OnRevReg";
-
-            if ( isDuration ) {
-
+            boolean isReverse = isMotorReverse(port);
+            boolean isRegulated = isMotorRegulated(port);
+            if ( duration != null ) {
+                generateRotateMotorForDuration(port, speedExpression, motorOnAction.getDurationMode(), duration.getValue());
             } else {
-                this.sb.append(methodNamePart + "(" + getPrefixedOutputPort(port) + ", Speed(");
-                motorOnAction.getParam().getSpeed().visit(this);
-                this.sb.append("));");
+                generateTurnOnMotor(port, speedExpression, isReverse, isRegulated);
             }
         }
         return null;
     }
 
-    /**
-     * TODO: This method is redefined in different places, can we create a class to contain the set of used sensors and add this method there? this class could be located in OpenRobertaRobot (same place as UsedActor)
-     *
-     * @param port
-     * @return
-     */
+    private void generateRotateMotorForDuration(String port, Expr<Void> speedExpression, IMotorMoveMode durationMode, Expr<Void> durationExpression) {
+        this.sb.append("RotateMotorForAngle(" + getPrefixedOutputPort(port) + ", ");
+        visitSpeedExpression(speedExpression);
+        this.sb.append(", ");
+        if ( durationMode == MotorMoveMode.ROTATIONS ) {
+            this.sb.append("360 * ");
+        }
+        durationExpression.visit(this);
+        this.sb.append(");");
+    }
+
+    private void generateTurnOnMotor(String port, Expr<Void> speedExpression, boolean isReverse, boolean isRegulated) {
+        String methodNamePart = isReverse ? "OnRev" : "OnFwd";
+        if ( isRegulated ) {
+            methodNamePart += "Reg";
+        }
+        this.sb.append(methodNamePart + "(" + getPrefixedOutputPort(port) + ", ");
+        visitSpeedExpression(speedExpression);
+        this.sb.append(");");
+    }
+
+    @Override
+    public Void visitDriveAction(DriveAction<Void> driveAction) {
+        MotorDuration<Void> duration = driveAction.getParam().getDuration();
+        Expr<Void> speedExpression = driveAction.getParam().getSpeed();
+        boolean reverse = isReverseGivenBrickConfigurationAndAction(driveAction.getDirection());
+        if ( duration != null ) {
+            generateDriveForDistance(speedExpression, duration.getValue(), reverse);
+        } else {
+            generateDrive(speedExpression, reverse);
+        }
+        return null;
+    }
+
+    private void generateDriveForDistance(Expr<Void> speedExpression, Expr<Void> distanceExpression, boolean reverse) {
+        this.sb.append("RotateMotorForAngle(" + getDriveMotorPorts() + ", ");
+        visitSpeedExpression(speedExpression, reverse);
+        this.sb.append(", ");
+        visitDistanceOfDrive(distanceExpression);
+        this.sb.append(");");
+    }
+
+    private void visitDistanceOfDrive(Expr<Void> distanceExpression) {
+        this.sb.append("(");
+        distanceExpression.visit(this);
+        this.sb.append(" * 360) / (M_PI * WHEEL_DIAMETER)");
+    }
+
+    private void generateDrive(Expr<Void> speedExpression, boolean reverse) {
+        String methodName = reverse ? "OnRevSync" : "OnFwdSync";
+        this.sb.append(methodName + "(" + getDriveMotorPorts() + ", ");
+        visitSpeedExpression(speedExpression);
+        this.sb.append(");");
+    }
+
+    @Override
+    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
+        String port = motorGetPowerAction.getUserDefinedPort();
+        if ( isActorOnPort(port) ) {
+            this.sb.append("MotorPower(OUT_" + motorGetPowerAction.getUserDefinedPort() + ")");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
+        String port = motorSetPowerAction.getUserDefinedPort();
+        this.sb.append("SetPower(" + getPrefixedOutputPort(port) + ", ");
+        visitSpeedExpression(motorSetPowerAction.getPower(), isMotorReverse(port));
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+        String port = motorStopAction.getUserDefinedPort();
+        if ( motorStopAction.getMode() == MotorStopMode.FLOAT ) {
+            this.sb.append("Float(" + getPrefixedOutputPort(port) + ");");
+        } else {
+            this.sb.append("Off(" + getPrefixedOutputPort(port) + ");");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
+        this.sb.append("Off(" + getDriveMotorPorts() + ");");
+        return null;
+    }
+
+    @Override
+    public Void visitCurveAction(CurveAction<Void> curveAction) {
+        MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
+        boolean isReverse = isReverseGivenBrickConfigurationAndAction(curveAction.getDirection());
+        this.sb.append(duration != null ? "SteerDriveForDistance(" : "SteerDrive(");
+        this.sb.append(getLeftDriveMotorPort() + ", " + getRightDriveMotorPort() + ", ");
+        visitSpeedExpression(curveAction.getParamLeft().getSpeed(), isReverse);
+        this.sb.append(", ");
+        visitSpeedExpression(curveAction.getParamRight().getSpeed(), isReverse);
+        if ( duration != null ) {
+            this.sb.append(", ");
+            duration.getValue().visit(this);
+        }
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitTurnAction(TurnAction<Void> turnAction) {
+        MotorDuration<Void> duration = turnAction.getParam().getDuration();
+        Expr<Void> speedExpression = turnAction.getParam().getSpeed();
+        int turn = getTurn(turnAction);
+        if ( duration != null ) {
+            generateTurnForDistance(speedExpression, duration.getValue(), turn);
+        } else {
+            generateTurn(speedExpression, turn);
+        }
+        return null;
+    }
+
+    private int getTurn(TurnAction<Void> turnAction) {
+        int turn = 100;
+        if ( isAnyDriveMotorReverse() ) {
+            turn *= -1;
+        }
+        if ( turnAction.getDirection() == TurnDirection.LEFT ) {
+            turn *= -1;
+        }
+        return turn;
+    }
+
+    private void generateTurnForDistance(Expr<Void> speedExpression, Expr<Void> distanceExpression, int turn) {
+        this.sb.append("RotateMotorForAngleWithTurn(" + getDriveMotorPorts() + ", ");
+        visitSpeedExpression(speedExpression);
+        this.sb.append(", ");
+        visitDistanceOfTurn(distanceExpression);
+        this.sb.append(", " + turn + ");");
+    }
+
+    private void visitDistanceOfTurn(Expr<Void> distanceExpression) {
+        this.sb.append("(");
+        distanceExpression.visit(this);
+        this.sb.append(" * TRACK_WIDTH / WHEEL_DIAMETER)");
+    }
+
+    private void generateTurn(Expr<Void> speedExpression, int turn) {
+        this.sb.append("OnFwdSyncEx(" + getDriveMotorPorts() + ", ");
+        visitSpeedExpression(speedExpression);
+        this.sb.append(", " + turn + ", RESET_NONE);");
+
+    }
+
+    private void visitSpeedExpression(Expr<Void> speedExpression) {
+        visitSpeedExpression(speedExpression, false);
+    }
+
+    private void visitSpeedExpression(Expr<Void> speedExpression, boolean reverse) {
+        this.sb.append(reverse ? "-Speed(" : "Speed(");
+        speedExpression.visit(this);
+        this.sb.append(")");
+    }
+
     private boolean isActorOnPort(String port) {
         if ( port != null ) {
             for ( UsedActor actor : this.usedActors ) {
@@ -160,40 +336,56 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return regulatedProperty != null && regulatedProperty.equals(PROPERTY_TRUE);
     }
 
-    private static String getPrefixedOutputPort(String port ) {
+    private static String getPrefixedOutputPort(String port) {
         return PREFIX_OUTPUT_PORT + port;
     }
 
-    @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
+    private String getDriveMotorPorts() {
+        ConfigurationComponent leftMotor = this.brickConfiguration.getFirstMotor(SC.LEFT);
+        ConfigurationComponent rightMotor = this.brickConfiguration.getFirstMotor(SC.RIGHT);
+        String leftMotorPort = leftMotor.getUserDefinedPortName();
+        String rightMotorPort = rightMotor.getUserDefinedPortName();
+        return PREFIX_OUTPUT_PORT + createSortedPorts(leftMotorPort, rightMotorPort);
+    }
 
+    private static String createSortedPorts(String port1, String port2) {
+        Assert.isTrue(port1.length() == 1 && port2.length() == 1);
+        char[] charArray = (port1 + port2).toCharArray();
+        Arrays.sort(charArray);
+        String port = new String(charArray);
+        return port;
+    }
+
+    private String getLeftDriveMotorPort() {
+        return getPrefixedOutputPort(brickConfiguration.getFirstMotor(SC.LEFT).getUserDefinedPortName());
+    }
+
+    private String getRightDriveMotorPort() {
+        return getPrefixedOutputPort(brickConfiguration.getFirstMotor(SC.RIGHT).getUserDefinedPortName());
+    }
+
+
+    private boolean isReverseGivenBrickConfigurationAndAction(IDriveDirection direction) {
+        boolean reverse = isAnyDriveMotorReverse();
+        boolean localReverse = direction == DriveDirection.BACKWARD;
+        return (reverse && !localReverse) || (localReverse && !reverse);
+    }
+
+    private boolean isAnyDriveMotorReverse() {
+        ConfigurationComponent leftMotor = this.brickConfiguration.getFirstMotor(SC.LEFT);
+        ConfigurationComponent rightMotor = this.brickConfiguration.getFirstMotor(SC.RIGHT);
+        return leftMotor.isReverse() || rightMotor.isReverse();
+    }
+
+    @Override
+    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+        this.sb.append("LcdClear();");
         return null;
     }
 
     @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        String port = motorStopAction.getUserDefinedPort();
-        this.sb.append("Off(" + getPrefixedOutputPort(port) + ");");
-        return null;
-    }
-
-    @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
+    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+        //this.sb.append("LcdText(TEXT_COLOR_BLACK, " + showTextAction.getX() + ", " + showTextAction.getY() + ", ");
         return null;
     }
 

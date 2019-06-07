@@ -1,10 +1,5 @@
 package de.fhg.iais.roberta.util.test.ev3;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import org.junit.Assert;
-
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.factory.Ev3LejosV0Factory;
@@ -13,9 +8,14 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
+import de.fhg.iais.roberta.visitor.codegen.Ev3C4ev3Visitor;
 import de.fhg.iais.roberta.visitor.codegen.Ev3JavaVisitor;
 import de.fhg.iais.roberta.visitor.codegen.Ev3PythonVisitor;
 import de.fhg.iais.roberta.visitor.codegen.Ev3SimVisitor;
+import org.junit.Assert;
+
+import java.util.Arrays;
+import java.util.Map;
 
 public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
 
@@ -133,6 +133,13 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
     public String generateJavaScript(String pathToProgramXml) throws Exception {
         Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
         String code = Ev3SimVisitor.generate(getRobotConfiguration(), transformer.getTree(), Language.ENGLISH);
+        // System.out.println(code); // only needed for EXTREME debugging
+        return code;
+    }
+
+    public String generateC4ev3(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
+        Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
+        String code = Ev3C4ev3Visitor.generate("Test", brickConfiguration, transformer.getTree(), false, Language.ENGLISH);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }
