@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
+import com.google.common.collect.Lists;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
@@ -35,20 +36,27 @@ import de.fhg.iais.roberta.syntax.lang.functions.*;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.collect.Ev3UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<Void> {
 
+    private static final List<String> ev3SensorPorts = Lists.newArrayList("1", "2", "3", "4");
+
     // TODO: Are those constants already defined somewhere?
     private static final String PROPERTY_ON = "ON";
-    private static final String PROPERTY_TRUE = "TRUE";
 
     private static final String PREFIX_OUTPUT_PORT = "OUT_";
     private static final String PREFIX_IN_PORT = "IN_";
@@ -71,6 +79,14 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         this.brickConfiguration = brickConfiguration;
         this.language = language;
         this.usedActors = checkVisitor.getUsedActors();
+    }
+
+    private static String getPrefixedOutputPort(String port) {
+        return PREFIX_OUTPUT_PORT + port;
+    }
+
+    private static String getPrefixedInputPort(String port) {
+        return PREFIX_IN_PORT + port;
     }
 
     /**
@@ -99,17 +115,16 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         generateImports();
     }
 
-    private void generateImports() {
-        this.sb.append("#include <ev3.h>\n");
-        this.sb.append("#include <math.h>\n");
-        this.sb.append("#include \"NEPODefs.h\"\n");
-        nlIndent();
-    }
-
     private void generateConstants() {
         this.sb.append("#define WHEEL_DIAMETER " + brickConfiguration.getWheelDiameterCM() + "\n");
         this.sb.append("#define TRACK_WIDTH " + brickConfiguration.getTrackWidthCM() + "\n");
         nlIndent();
+    }
+
+    private void generateImports() {
+        this.sb.append("#include <ev3.h>\n");
+        this.sb.append("#include <math.h>\n");
+        this.sb.append("#include \"NEPODefs.h\"\n");
     }
 
     @Override
@@ -120,7 +135,21 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         nlIndent();
         this.sb.append("InitEV3();");
         nlIndent();
+        generateSensorInitialization();
+        nlIndent();
         return null;
+    }
+
+    private void generateSensorInitialization() {
+        this.sb.append("setAllSensorMode(").append(getDefaultSensorModesString()).append( ");");
+    }
+
+    private String getDefaultSensorModesString() {
+        return ev3SensorPorts.stream()
+            .map(brickConfiguration::optConfigurationComponent)
+            .map(configuration -> configuration == null ? null : "DEFAULT_MODE_" + configuration.getComponentType())
+            .map(componentType -> componentType == null ? "NO_SEN" : componentType)
+            .collect(Collectors.joining(", "));
     }
 
     @Override
@@ -136,6 +165,92 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         nlIndent();
     }
 
+
+    @Override
+    public Void visitMathConst(MathConst<Void> mathConst) {
+        String constantName = getCMathConstantName(mathConst.getMathConst());
+        this.sb.append(constantName);
+        return null;
+    }
+
+    private String getCMathConstantName (MathConst.Const constant) {
+        switch ( constant ) {
+            case PI:
+                return "M_PI";
+            case E:
+                return "M_E";
+            case GOLDEN_RATIO:
+                return "GOLDEN_RATIO";
+            case SQRT2:
+                return "M_SQRT2";
+            case SQRT1_2:
+                return "M_SQRT1_2";
+            // IEEE 754 floating point representation
+            case INFINITY:
+                return "HUGE_VAL";
+            default:
+                throw new DbcException("unknown constant");
+        }
+    }
+
+    @Override
+    public Void visitBinary(Binary<Void> binary) {
+        return null;
+    }
+
+    @Override
+    public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
+        return null;
+    }
+
+    @Override
+    public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
+        return null;
+    }
+
+    @Override
+    public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
+        this.sb.append("Wait(");
+        waitTimeStmt.getTime().visit(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
+        return null;
+    }
+
+    @Override
+    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
+        return null;
+    }
+
+    @Override
+    public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
+        return null;
+    }
+
+    @Override
+    public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
+        return null;
+    }
+
+    @Override
+    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
+        return null;
+    }
+
+    @Override
+    public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
+        return null;
+    }
+
+    @Override
+    public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
+        return null;
+    }
+
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         String port = motorOnAction.getUserDefinedPort();
@@ -143,7 +258,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         Expr<Void> speedExpression = motorOnAction.getParam().getSpeed();
         if ( isActorOnPort(port) ) {
             boolean isReverse = isMotorReverse(port);
-            boolean isRegulated = isMotorRegulated(port);
+            boolean isRegulated = brickConfiguration.isMotorRegulated(port);
             if ( duration != null ) {
                 generateRotateMotorForDuration(port, speedExpression, motorOnAction.getDurationMode(), duration.getValue());
             } else {
@@ -331,15 +446,6 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return reverseProperty != null && reverseProperty.equals(PROPERTY_ON);
     }
 
-    private boolean isMotorRegulated(String port) {
-        String regulatedProperty = this.brickConfiguration.getConfigurationComponent(port).getOptProperty(SC.MOTOR_REGULATION);
-        return regulatedProperty != null && regulatedProperty.equals(PROPERTY_TRUE);
-    }
-
-    private static String getPrefixedOutputPort(String port) {
-        return PREFIX_OUTPUT_PORT + port;
-    }
-
     private String getDriveMotorPorts() {
         ConfigurationComponent leftMotor = this.brickConfiguration.getFirstMotor(SC.LEFT);
         ConfigurationComponent rightMotor = this.brickConfiguration.getFirstMotor(SC.RIGHT);
@@ -364,7 +470,6 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return getPrefixedOutputPort(brickConfiguration.getFirstMotor(SC.RIGHT).getUserDefinedPortName());
     }
 
-
     private boolean isReverseGivenBrickConfigurationAndAction(IDriveDirection direction) {
         boolean reverse = isAnyDriveMotorReverse();
         boolean localReverse = direction == DriveDirection.BACKWARD;
@@ -375,6 +480,32 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         ConfigurationComponent leftMotor = this.brickConfiguration.getFirstMotor(SC.LEFT);
         ConfigurationComponent rightMotor = this.brickConfiguration.getFirstMotor(SC.RIGHT);
         return leftMotor.isReverse() || rightMotor.isReverse();
+    }
+
+    @Override
+    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
+        this.sb.append("readSensor(" ).append(getPrefixedInputPort(touchSensor.getPort())).append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+        String port = ultrasonicSensor.getPort();
+        this.sb.append("ReadSensorInMode(").append(getPrefixedInputPort(port)).append(", ");
+        if ( ultrasonicSensor.getMode().equals(SC.DISTANCE) ) {
+            this.sb.append("US_DIST_CM");
+        } else {
+            this.sb.append("US_LISTEN");
+        }
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+        String port = soundSensor.getPort();
+        this.sb.append("readSensor(").append(getPrefixedInputPort(port) + ")");
+        return null;
     }
 
     @Override
@@ -429,66 +560,4 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
-    @Override
-    public Void visitMathConst(MathConst<Void> mathConst) {
-        return null;
-    }
-
-    @Override
-    public Void visitBinary(Binary<Void> binary) {
-        return null;
-    }
-
-    @Override
-    public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
-        return null;
-    }
-
-    @Override
-    public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
-        return null;
-    }
-
-    @Override
-    public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
-        this.sb.append("Wait(");
-        waitTimeStmt.getTime().visit(this);
-        this.sb.append(");");
-        return null;
-    }
-
-    @Override
-    public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        return null;
-    }
-
-    @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
-        return null;
-    }
-
-    @Override
-    public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        return null;
-    }
-
-    @Override
-    public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
-        return null;
-    }
-
-    @Override
-    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
-        return null;
-    }
-
-    @Override
-    public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
-        return null;
-    }
-
-    @Override
-    public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        return null;
-    }
 }

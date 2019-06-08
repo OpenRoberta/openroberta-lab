@@ -21,6 +21,7 @@ public class Ast2C4ev3VisitorTest {
         "" //
             + "int main() {\n"
             + "    InitEV3();\n"
+            + "    setAllSensorMode(NO_SEN,NO_SEN,NO_SEN,NO_SEN);\n"
             + "    \n";
 
     private static final String END_MAIN =
