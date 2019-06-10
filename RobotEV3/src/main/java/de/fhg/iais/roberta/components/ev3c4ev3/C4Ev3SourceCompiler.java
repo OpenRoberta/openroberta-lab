@@ -25,9 +25,9 @@ public class C4Ev3SourceCompiler {
     private String getCompilerExecutableFileName () {
         // TODO: Return the file name depending on the os
         if ( SystemUtils.IS_OS_LINUX ) {
-            return "arm-linux-gnueabi-gcc";
+            return "arm-linux-gnueabi-g++";
         } else if (SystemUtils.IS_OS_MAC) {
-            return "arm-none-linux-gnueabi-gcc";
+            return "arm-none-linux-gnueabi-g++";
         } else if (SystemUtils.IS_OS_WINDOWS) {
             return "";
         }
@@ -42,6 +42,8 @@ public class C4Ev3SourceCompiler {
             "-I", compilerResourcesDir + "c4ev3/include",
             "-L", compilerResourcesDir  + "c4ev3/lib",
             "-l", "ev3api",
+            "-static-libstdc++",
+            "-std=c++11",
             "-Os"
         };
     }

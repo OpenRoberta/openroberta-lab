@@ -4,9 +4,7 @@ import com.google.common.collect.Lists;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
-import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
-import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.inter.mode.action.IMotorMoveMode;
+import de.fhg.iais.roberta.inter.mode.action.*;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
@@ -18,6 +16,8 @@ import de.fhg.iais.roberta.syntax.action.communication.*;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
+import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -29,13 +29,12 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.lang.expr.Binary;
-import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
+import de.fhg.iais.roberta.syntax.lang.expr.*;
 import de.fhg.iais.roberta.syntax.lang.functions.*;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -79,6 +78,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         this.brickConfiguration = brickConfiguration;
         this.language = language;
         this.usedActors = checkVisitor.getUsedActors();
+        this.loopsLabels = checkVisitor.getloopsLabelContainer();
     }
 
     private static String getPrefixedOutputPort(String port) {
@@ -124,12 +124,14 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     private void generateImports() {
         this.sb.append("#include <ev3.h>\n");
         this.sb.append("#include <math.h>\n");
-        this.sb.append("#include \"NEPODefs.h\"\n");
+        this.sb.append("#include <list>\n");
+        this.sb.append("#include \"NEPODefs.h\"");
     }
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         mainTask.getVariables().visit(this);
+        nlIndent();
         this.sb.append("int main () {");
         incrIndentation();
         nlIndent();
@@ -193,6 +195,63 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         }
     }
 
+    @Override public Void visitColorConst(ColorConst<Void> colorConst) {
+        String colorConstant = getColorConstantByHex(colorConst.getHexValueAsString());
+        this.sb.append(colorConstant);
+        return null;
+    }
+
+    private String getColorConstantByHex (String hex) {
+        String color;
+        switch ( hex.toUpperCase() ) {
+            case "#000000":
+                color = "BLACK";
+                break;
+            case "#0057A6":
+                color = "BLUE";
+                break;
+            case "#00642E":
+                color = "GREEN";
+                break;
+            case "#F7D117":
+                color = "YELLOW";
+                break;
+            case "#B30006":
+                color = "RED";
+                break;
+            case "#FFFFFF":
+                color = "WHITE";
+                break;
+            case "#532115":
+                color = "BROWN";
+                break;
+            case "#EE82EE":
+                color = "VIOLET";
+                break;
+            case "#800080":
+                color = "PURPLE";
+                break;
+            case "#00FF00":
+                color = "LIME";
+                break;
+            case "#FFA500":
+                color = "ORANGE";
+                break;
+            case "#FF00FF":
+                color = "MAGENTA";
+                break;
+            case "#DC143C":
+                color = "CRIMSON";
+                break;
+            case "#585858":
+                color = "NULL";
+                break;
+            default:
+                throw new DbcException("Invalid color constant: " + hex);
+        }
+        return "INPUT_" + color + "COLOR";
+    }
+
     @Override
     public Void visitBinary(Binary<Void> binary) {
         return null;
@@ -200,7 +259,56 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
+        Expr<Void> condition = repeatStmt.getExpr();
+        boolean isWaitStmt = repeatStmt.getMode() == RepeatStmt.Mode.WAIT;
+        if(!isWaitStmt) {
+            increaseLoopCounter();
+        }
+        switch ( repeatStmt.getMode() ) {
+            case UNTIL:
+            case WHILE:
+            case FOREVER:
+                generateCodeFromStmtCondition("while", condition);
+                break;
+            case TIMES:
+            case FOR:
+                generateCodeFromStmtConditionFor("for", condition);
+                break;
+            case WAIT:
+                generateCodeFromStmtCondition("if", condition);
+                break;
+            case FOR_EACH:
+                generateForEachPrefix(condition);
+        }
+        incrIndentation();
+        repeatStmt.getList().visit(this);
+        if ( !isWaitStmt ) {
+            addContinueLabelToLoop();
+        } else {
+            appendBreakStmt();
+        }
+        decrIndentation();
+        nlIndent();
+        this.sb.append("}");
+        addBreakLabelToLoop(isWaitStmt);
         return null;
+    }
+
+    private void generateForEachPrefix(Expr<Void> expression) {
+        ((VarDeclaration<Void>) ((Binary<Void>) expression).getLeft()).visit(this);
+        this.sb.append(";");
+        nlIndent();
+        // TODO: Implement ArrayLen in NEPOdefs
+        this.sb.append("for(int i = 0; i < ArrayLen(");
+        this.sb.append(((Var<Void>) ((Binary<Void>) expression).getRight()).getValue());
+        this.sb.append("); ++i) {");
+        incrIndentation();
+        nlIndent();
+        this.sb.append(((VarDeclaration<Void>) ((Binary<Void>) expression).getLeft()).getName());
+        this.sb.append(" = ");
+        this.sb.append(((Var<Void>) ((Binary<Void>) expression).getRight()).getValue());
+        this.sb.append("[i];");
+        decrIndentation();
     }
 
     @Override
@@ -490,38 +598,191 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        String port = ultrasonicSensor.getPort();
-        this.sb.append("ReadSensorInMode(").append(getPrefixedInputPort(port)).append(", ");
-        if ( ultrasonicSensor.getMode().equals(SC.DISTANCE) ) {
-            this.sb.append("US_DIST_CM");
-        } else {
-            this.sb.append("US_LISTEN");
-        }
-        this.sb.append(")");
+        String mode = getUltrasonicSensorModeConstant(ultrasonicSensor.getMode());
+        generateReadSensorInMode(ultrasonicSensor.getPort(), mode);
         return null;
+    }
+
+    private String getUltrasonicSensorModeConstant (String mode) {
+        if ( mode.equals(SC.DISTANCE) ) {
+            return "US_DIST_CM";
+        } else {
+            return "US_LISTEN";
+        }
     }
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        String port = soundSensor.getPort();
-        this.sb.append("readSensor(").append(getPrefixedInputPort(port) + ")");
+        generateReadSensor(soundSensor.getPort());
         return null;
     }
 
     @Override
+    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+        String port = gyroSensor.getPort();
+        String mode = gyroSensor.getMode();
+        if (isGyroResetMode(mode)) {
+            generateResetGyroSensor(port);
+        } else {
+            generateReadSensorInMode(port, getGyroSensorReadModeConstant(mode));
+        }
+        return null;
+    }
+
+    private boolean isGyroResetMode(String mode) {
+        return mode.equals(SC.RESET);
+    }
+
+    private String getGyroSensorReadModeConstant(String mode) {
+        if (mode.equals(SC.ANGLE)) {
+            return "GYRO_ANG";
+        } else {
+            return "GYRO_RATE";
+        }
+    }
+
+    private void generateResetGyroSensor (String port) {
+        this.sb.append("ResetGyroSensor(" + getPrefixedInputPort(port) + ");");
+    }
+
+    private void generateReadSensorInMode(String port, String mode) {
+        this.sb.append("ReadSensorInMode(" + getPrefixedInputPort(port) + ", " + mode + ")");
+    }
+
+    private void generateReadSensor(String port) {
+        this.sb.append("readSensor(" + getPrefixedInputPort(port) + ")");
+    }
+
+    @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        this.sb.append("LcdClear();");
+        this.sb.append("LcdClean();");
         return null;
     }
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        //this.sb.append("LcdText(TEXT_COLOR_BLACK, " + showTextAction.getX() + ", " + showTextAction.getY() + ", ");
+        this.sb.append(this.getLcdFunctionNameForMsg(showTextAction.getMsg()) + "(");
+        showTextAction.getMsg().visit(this);
+        this.sb.append(", ");
+        showTextAction.getX().visit(this);
+        this.sb.append(", ");
+        showTextAction.getY().visit(this);
+        this.sb.append(");");
         return null;
+    }
+
+    private String getLcdFunctionNameForMsg(Expr<Void> msg) {
+        switch ( msg.getVarType() ) {
+            case STRING:
+                return "LcdTextString";
+            case BOOLEAN:
+                return "LcdTextBool";
+            case COLOR:
+                return "LcdTextColor";
+            case ARRAY_BOOLEAN:// TODO: Handle
+            case ARRAY_STRING: // TODO: Handle
+            case ARRAY_NUMBER: // TODO: Handle
+            case ARRAY_COLOUR: // TODO: Handle
+            case NOTHING:
+                return getLcdFunctionNameForMsgOfTypeNothing(msg);
+            case CAPTURED_TYPE:
+                return getLcdFunctionNameForMsgOfTypeCapturedType(msg);
+            default:
+                return "LcdTextNum";
+        }
+    }
+
+
+    private String getLcdFunctionNameForMsgOfTypeNothing (Expr<Void> msg) {
+        String blockType = msg.getProperty().getBlockType().toString();
+        if ( blockType.contains("isPressed") || blockType.contains("logic_ternary") ) {
+            return "LcdTextBool";
+        } else if ( blockType.contains("colour") ) {
+            return "LcdTextColor";
+        } else if ( blockType.contains("robSensors") || blockType.contains("robActions") || msg.toString().contains("POWER") ) {
+            return "LcdTextNum";
+        } else {
+            return "LcdTextString";
+        }
+    }
+
+    private String getLcdFunctionNameForMsgOfTypeCapturedType(Expr<Void> msg) {
+        String msgString = msg.toString();
+        if (msgString.contains("Number")
+                ||msgString.contains("ADD")
+                ||msgString.contains("MINUS")
+                ||msgString.contains("MULTIPLY")
+                ||msgString.contains("DIVIDE")
+                ||msgString.contains("MOD")
+                ||msgString.contains("NEG")
+                ||msgString.contains("LISTS_LENGTH")
+                ||msgString.contains("IndexOfFunct")
+                ||msgString.contains("[ListGetIndex [GET, FROM_START, [ListCreate [NUMBER")
+                ||msgString.contains("[ListGetIndex [GET, FROM_START, [ListCreate [CONNECTION")
+                ||msgString.contains("MotorGetPower")
+                ||msgString.contains("VolumeAction") ) {
+            return "LcdTextNum";
+        } else if (msgString.contains("EQ")
+                ||msgString.contains("NEQ")
+                ||msgString.contains("LT")
+                ||msgString.contains("LTE")
+                ||msgString.contains("GT")
+                ||msgString.contains("GTE")
+                ||msgString.contains("LIST_IS_EMPTY")
+                ||msgString.contains("AND")
+                ||msgString.contains("OR")
+                ||msgString.contains("NOT")
+                ||msgString.contains("[ListGetIndex [GET, FROM_START, [ListCreate [BOOLEAN")
+                ||msgString.contains("BluetoothConnectAction") ) {
+            return "LcdTextBool";
+        } else {
+            return "LcdTextString";
+        }
     }
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
+        return null;
+    }
+
+    @Override public Void visitLightAction(LightAction<Void> lightAction) {
+        String pattern = getLedPattern(lightAction.getColor(), lightAction.getMode());
+        this.sb.append("SetLedPattern(" + pattern + ");");
+        return null;
+    }
+
+    private String getLedPattern (IBrickLedColor color, ILightMode mode) {
+        return "LED_" + getLedPatternColorPrefix(color) + getLedPatternModePostfix(mode);
+    }
+
+    private String getLedPatternColorPrefix(IBrickLedColor color) {
+        return color.toString();
+    }
+
+    private String getLedPatternModePostfix (ILightMode mode) {
+        switch ( mode.toString() ) {
+            case SC.ON:
+                return "";
+            case "FLASH":
+                return "_FLASH";
+            case "DOUBLE_FLASH":
+                return "_PULSE";
+            default:
+                throw new DbcException("Unknown LightMode");
+        }
+    }
+
+    @Override public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+        switch ( lightStatusAction.getStatus() ) {
+            case OFF:
+                this.sb.append("SetLedPattern(LED_BLACK);");
+                break;
+            case RESET:
+                // TODO: Implement
+                break;
+            default:
+                throw new DbcException("Invalid LED status mode!");
+        }
         return null;
     }
 

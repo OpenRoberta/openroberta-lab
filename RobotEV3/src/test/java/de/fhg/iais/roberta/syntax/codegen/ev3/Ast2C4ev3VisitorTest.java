@@ -15,6 +15,7 @@ public class Ast2C4ev3VisitorTest {
             + "#define TRACK_WIDTH 18.0\n"
             + "#include <ev3.h>\n"
             + "#include <math.h>\n"
+            + "#include <list>\n"
             + "#include \"NEPODefs.h\"\n";
 
     private static final String BEGIN_MAIN =
