@@ -209,7 +209,7 @@ The shell script `$SCRIPT_DIR/run.sh` has commands, that are used to administrat
 ```
 
 * `cleanup-temp-user-dirs`: usually called from cron. It takes a server name and runs a shell in the corresponding container, that will remove temporary
-  old data allocated by the cross compiler. IKt is assumed, that temporary data is garbabge one day after their creation.
+  old data allocated by the cross compiler. It is assumed, that these crosscompiler-allocated files are used not longer than one day after their creation.
   Use `crontab -e` to add the following line to the crontab to remove garbage every night 20 minutes after 2:
   
 ```bash
@@ -245,6 +245,9 @@ case "$1" in
 esac
 ```
 
+If the variable `SYSTEMCALL` is set to true, it is assumed, that `run.sh` is called from a system service. All security
+questions, that are asked in interactive mode, are then answered with `y`.
+
 Assuming systemd, after putting `openrobertalab` into `/etc/init.d`, the service is added with the commands:
 
 ```bash
@@ -258,7 +261,7 @@ systemctl status openrobertalab       # to see logging
 journalctl -u openrobertalab.service  # to see more logging
 ```
 
-## Note about the -d command lone arguments for the openrobertalab server container
+## Note about the -d command line arguments for the openrobertalab server container
 
 The global properties needed for the openrobertalab server are found in resource `/openroberta.properties`. At start time these parameter can be modified
 by an arbitrary number of command line arguments like `-d KEY=VALUE`. The final list of these `-d` arguments is build as follows:
@@ -300,7 +303,7 @@ docker build -t rbudde/openroberta_debug_ubuntu_18_04:2 -f testing/DockerfileDeb
 docker push rbudde/openroberta_debug_ubuntu_18_04:2
 ```
 
-## runt the DEBUG container (rarely used)
+## run the DEBUG container (rarely used)
 
 ```bash
 docker run -p 7100:1999 -it --entrypoint /bin/bash rbudde/openroberta_debug_ubuntu_18_04:2
@@ -418,5 +421,4 @@ SERVER_PORT_ON_HOST=7301 DBSERVER_PORT_ON_HOST=9301 DB_PARENTDIR=/tmp/ora1 docke
 SERVER_PORT_ON_HOST=7302 DBSERVER_PORT_ON_HOST=9302 DB_PARENTDIR=/tmp/ora2 docker-compose -p ora2 -f dc-server-db-server.yml up -d
 ```
 
-Note: when the container terminate, the message "... exited with code 130" is no error, but signals termination with CTRL-C
-
+Note: when a container terminates, the message "... exited with code 130" is no error, but signals termination with CTRL-C

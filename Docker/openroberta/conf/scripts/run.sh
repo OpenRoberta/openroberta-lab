@@ -102,6 +102,12 @@ case "$CMD" in
                docker volume rm $(docker volume ls -q -f dangling=true)
                echo '******************** remove unused containers, networks, images ********************'
                docker system prune --force ;;
+    alive)     LAB_URL="$1"; shift
+               REPORT_ALWAYS=true
+               case "$1" in
+                 false) REPORT_ALWAYS=false ;;
+               esac
+               source ${SCRIPT_HELPER}/_alive.sh ;;
     test)      echo '******************** TEST MODE START ********************'
                source ${SCRIPT_HELPER}/_test.sh
                echo '******************** TEST MODE TERMINATED ***************' ;;
