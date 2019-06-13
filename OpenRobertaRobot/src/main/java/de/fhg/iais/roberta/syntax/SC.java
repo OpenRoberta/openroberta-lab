@@ -73,6 +73,7 @@ public interface SC {
     String ANALOG_PIN = "ANALOG_PIN";
     String ENCODER = "ENCODER";
     String LCD = "LCD";
+    String ESCAPE = "ESCAPE";
 
     String STEPMOTOR = "STEPMOTOR";
     String LCDI2C = "LCDI2C";

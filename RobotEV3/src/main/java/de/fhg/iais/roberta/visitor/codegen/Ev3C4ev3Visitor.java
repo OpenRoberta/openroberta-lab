@@ -26,18 +26,18 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.*;
 import de.fhg.iais.roberta.syntax.lang.functions.*;
+import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.*;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.collect.Ev3UsedHardwareCollectorVisitor;
@@ -143,7 +143,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateSensorInitialization() {
-        this.sb.append("setAllSensorMode(").append(getDefaultSensorModesString()).append( ");");
+        this.sb.append("setAllSensorMode(").append(getDefaultSensorModesString()).append(");");
     }
 
     private String getDefaultSensorModesString() {
@@ -167,7 +167,6 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         nlIndent();
     }
 
-
     @Override
     public Void visitMathConst(MathConst<Void> mathConst) {
         String constantName = getCMathConstantName(mathConst.getMathConst());
@@ -175,7 +174,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
-    private String getCMathConstantName (MathConst.Const constant) {
+    private String getCMathConstantName(MathConst.Const constant) {
         switch ( constant ) {
             case PI:
                 return "M_PI";
@@ -195,13 +194,14 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         }
     }
 
-    @Override public Void visitColorConst(ColorConst<Void> colorConst) {
+    @Override
+    public Void visitColorConst(ColorConst<Void> colorConst) {
         String colorConstant = getColorConstantByHex(colorConst.getHexValueAsString());
         this.sb.append(colorConstant);
         return null;
     }
 
-    private String getColorConstantByHex (String hex) {
+    private String getColorConstantByHex(String hex) {
         String color;
         switch ( hex.toUpperCase() ) {
             case "#000000":
@@ -254,14 +254,71 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitBinary(Binary<Void> binary) {
+        // TODO: Clean
+        Binary.Op op = binary.getOp();
+        if ( op == Binary.Op.ADD || op == Binary.Op.MINUS || op == Binary.Op.DIVIDE || op == Binary.Op.MULTIPLY ) {
+            this.sb.append("(");
+        }
+        generateSubExpr(this.sb, false, binary.getLeft(), binary);
+        String sym = getBinaryOperatorSymbol(op);
+        this.sb.append(whitespace() + sym + whitespace());
+        switch ( op ) {
+            case TEXT_APPEND:
+                if ( binary.getRight().getVarType().toString().contains("NUMBER") ) {
+                    this.sb.append("NumToStr(");
+                    generateSubExpr(this.sb, false, binary.getRight(), binary);
+                    this.sb.append(")");
+                } else {
+                    generateSubExpr(this.sb, false, binary.getRight(), binary);
+                }
+                break;
+            case DIVIDE:
+                this.sb.append("((");
+                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+                this.sb.append(")*1.0)");
+                break;
+
+            default:
+                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+        }
+        if ( op == Binary.Op.ADD || op == Binary.Op.MINUS || op == Binary.Op.DIVIDE || op == Binary.Op.MULTIPLY ) {
+            this.sb.append(")");
+        }
         return null;
+    }
+
+    @Override
+    public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
+        if(isSensorColorExpression(assignStmt.getExpr()) || isEV3IRSeekExpression(assignStmt.getExpr())) {
+            generateAssignmentOfList(assignStmt);
+            return null;
+        }
+        return super.visitAssignStmt(assignStmt);
+    }
+
+    private boolean isSensorColorExpression (Expr<Void> expression) {
+        return expression instanceof SensorExpr && ((SensorExpr)expression).getSens() instanceof ColorSensor;
+    }
+
+    private void generateAssignmentOfList(AssignStmt<Void> assignStmt) {
+        this.sb.append("_copyList(");
+        assignStmt.getExpr().visit(this);
+        this.sb.append(", ");
+        assignStmt.getName().visit(this);
+        this.sb.append(");");
+    }
+
+    private boolean isEV3IRSeekExpression (Expr<Void> expression) {
+        return expression instanceof SensorExpr
+            && ((SensorExpr)expression).getSens() instanceof InfraredSensor
+            && ((InfraredSensor) ((SensorExpr)expression).getSens()).getMode().equals(SC.PRESENCE);
     }
 
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
         Expr<Void> condition = repeatStmt.getExpr();
         boolean isWaitStmt = repeatStmt.getMode() == RepeatStmt.Mode.WAIT;
-        if(!isWaitStmt) {
+        if ( !isWaitStmt ) {
             increaseLoopCounter();
         }
         switch ( repeatStmt.getMode() ) {
@@ -272,7 +329,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
                 break;
             case TIMES:
             case FOR:
-                generateCodeFromStmtConditionFor("for", condition);
+                generateCodeFromStmtConditionFor(condition);
                 break;
             case WAIT:
                 generateCodeFromStmtCondition("if", condition);
@@ -294,20 +351,40 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
+    private  void generateCodeFromStmtConditionFor(Expr<Void> expr) {
+        final ExprList<Void> expressions = (ExprList<Void>) expr;
+        Expr<Void> counterName = expressions.get().get(0);
+        Expr<Void> counterInitialValue = expressions.get().get(1);
+        Expr<Void> counterTargetValue = expressions.get().get(2);
+        Expr<Void> counterStep = expressions.get().get(3);
+        this.sb.append("for (" + "float ");
+        counterName.visit(this);
+        this.sb.append(" = ");
+        counterInitialValue.visit(this);
+        this.sb.append("; ");
+        counterName.visit(this);
+        this.sb.append(" < ");
+        counterTargetValue.visit(this);
+        this.sb.append("; ");
+        counterName.visit(this);
+        this.sb.append(" += ");
+        counterStep.visit(this);
+        this.sb.append(") {");
+    }
+
     private void generateForEachPrefix(Expr<Void> expression) {
         ((VarDeclaration<Void>) ((Binary<Void>) expression).getLeft()).visit(this);
         this.sb.append(";");
         nlIndent();
-        // TODO: Implement ArrayLen in NEPOdefs
         this.sb.append("for(int i = 0; i < ArrayLen(");
         this.sb.append(((Var<Void>) ((Binary<Void>) expression).getRight()).getValue());
         this.sb.append("); ++i) {");
         incrIndentation();
         nlIndent();
         this.sb.append(((VarDeclaration<Void>) ((Binary<Void>) expression).getLeft()).getName());
-        this.sb.append(" = ");
+        this.sb.append(" = _getListElementByIndex(");
         this.sb.append(((Var<Void>) ((Binary<Void>) expression).getRight()).getValue());
-        this.sb.append("[i];");
+        this.sb.append(", i);");
         decrIndentation();
     }
 
@@ -591,8 +668,43 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
+    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
+        String port = encoderSensor.getPort();
+        switch ( encoderSensor.getMode() ) {
+            case SC.DEGREE:
+                generateGetEncoderInDegrees(port);
+                break;
+            case SC.ROTATION:
+                generateGetEncoderInRotations(port);
+                break;
+            case SC.DISTANCE:
+                generateGetEncoderInDistance(port);
+                break;
+            default:
+                throw new DbcException("Unknown encoder mode");
+        }
+        return null;
+    }
+
+    private void generateGetEncoderInDegrees(String port) {
+        this.sb.append("MotorRotationCount(" + getPrefixedOutputPort(port) + ")");
+    }
+
+    private void generateGetEncoderInRotations(String port) {
+        this.sb.append("(");
+        this.generateGetEncoderInDegrees(port);
+        this.sb.append(" / 360.0)");
+    }
+
+    private void generateGetEncoderInDistance(String port) {
+        this.sb.append("(");
+        this.generateGetEncoderInRotations(port);
+        this.sb.append(" * M_PI * WHEEL_DIAMETER)");
+    }
+
+    @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("readSensor(" ).append(getPrefixedInputPort(touchSensor.getPort())).append(")");
+        this.sb.append("readSensor(").append(getPrefixedInputPort(touchSensor.getPort())).append(")");
         return null;
     }
 
@@ -603,7 +715,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
-    private String getUltrasonicSensorModeConstant (String mode) {
+    private String getUltrasonicSensorModeConstant(String mode) {
         if ( mode.equals(SC.DISTANCE) ) {
             return "US_DIST_CM";
         } else {
@@ -621,7 +733,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         String port = gyroSensor.getPort();
         String mode = gyroSensor.getMode();
-        if (isGyroResetMode(mode)) {
+        if ( isGyroResetMode(mode) ) {
             generateResetGyroSensor(port);
         } else {
             generateReadSensorInMode(port, getGyroSensorReadModeConstant(mode));
@@ -634,15 +746,107 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private String getGyroSensorReadModeConstant(String mode) {
-        if (mode.equals(SC.ANGLE)) {
+        if ( mode.equals(SC.ANGLE) ) {
             return "GYRO_ANG";
         } else {
             return "GYRO_RATE";
         }
     }
 
-    private void generateResetGyroSensor (String port) {
+    private void generateResetGyroSensor(String port) {
         this.sb.append("ResetGyroSensor(" + getPrefixedInputPort(port) + ");");
+    }
+
+    @Override
+    public Void visitColorSensor(ColorSensor<Void> colorSensor) {
+        if ( isColorSensorRGBMode(colorSensor.getMode()) ) {
+            generateReadColorSensorRGB(colorSensor.getPort());
+        } else {
+            generateReadSensorInMode(colorSensor.getPort(), getColorSensorReadModeConstant(colorSensor.getMode()));
+        }
+        return null;
+    }
+
+    private boolean isColorSensorRGBMode(String mode){
+        return mode.equals(SC.RGB);
+    }
+
+    private void generateReadColorSensorRGB(String port) {
+        this.sb.append("ReadColorSensorRGB(" +  getPrefixedInputPort(port) + ")");
+    }
+
+    private String getColorSensorReadModeConstant(String mode) {
+        switch ( mode ) {
+            case SC.COLOUR:
+                return "COL_COLOR";
+            case SC.LIGHT:
+                return "COL_REFLECT";
+            case SC.AMBIENTLIGHT:
+                return "COL_AMBIENT";
+            case SC.RGB:
+                throw new IllegalArgumentException("Use the dedicated function defined in NEPODefs.h to read RGB values from color sensor");
+            default:
+                throw new DbcException("Unknown color sensor mode");
+        }
+    }
+
+    @Override
+    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+        String port = infraredSensor.getPort();
+        switch ( infraredSensor.getMode() ) {
+            case SC.DISTANCE:
+                generateEV3IRDistance(port);
+                break;
+            case SC.PRESENCE:
+                generateEV3IRSeeker(port);
+                break;
+            default:
+                throw new DbcException("Unknown Infrared sensor mode");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        String functionName = getFunctionNameForCompassMode(compassSensor.getMode());
+        this.sb.append(functionName + "(" + getPrefixedInputPort(compassSensor.getPort()) + ")");
+        return null;
+    }
+
+    private String getFunctionNameForCompassMode(String mode) {
+        switch ( mode ) {
+            case SC.COMPASS:
+                return "ReadCompass";
+            case SC.ANGLE:
+                return "ReadCompass";
+            default:
+                throw new DbcException("Unknown compass sensor mode");
+        }
+    }
+
+    private void generateEV3IRDistance (String port) {
+        generateReadSensorInMode(port, "IR_PROX");
+    }
+
+    private void generateEV3IRSeeker (String port) {
+        this.sb.append("_ReadIRSeekAllChannels("+ getPrefixedInputPort(port) + ")");
+    }
+
+    @Override
+    public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
+        generateReadSensorInMode(irSeekerSensor.getPort(), getIRSeekerSensorModeConstant(irSeekerSensor.getMode()));
+        return null;
+    }
+
+    private String getIRSeekerSensorModeConstant (String mode) {
+        switch ( mode ) {
+            case SC.MODULATED:
+                return "";
+            case SC.UNMODULATED:
+                return "";
+            default:
+                throw new DbcException("Unknown IR seeker sensor mode");
+        }
     }
 
     private void generateReadSensorInMode(String port, String mode) {
@@ -651,6 +855,31 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     private void generateReadSensor(String port) {
         this.sb.append("readSensor(" + getPrefixedInputPort(port) + ")");
+    }
+
+    @Override
+    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+        this.sb.append("ButtonIsDown(" + getKeyConstant(keysSensor.getPort()) + ")");
+        return null;
+    }
+
+    private String getKeyConstant (String keyPort) {
+        switch ( keyPort ) {
+            case SC.ENTER:
+                return "BTNCENTER";
+            case SC.RIGHT:
+                return "BTNRIGHT";
+            case SC.LEFT:
+                return "BTNLEFT";
+            case SC.UP:
+                return "BTNUP";
+            case SC.DOWN:
+                return "BTNDOWN";
+            case SC.ESCAPE:
+                return "BTNEXIT";
+            default:
+                throw new DbcException("Unknown key port");
+        }
     }
 
     @Override
@@ -674,15 +903,17 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     private String getLcdFunctionNameForMsg(Expr<Void> msg) {
         switch ( msg.getVarType() ) {
             case STRING:
+            case ARRAY_STRING:
                 return "LcdTextString";
             case BOOLEAN:
+            case ARRAY_BOOLEAN:
                 return "LcdTextBool";
             case COLOR:
+            case ARRAY_COLOUR:
                 return "LcdTextColor";
-            case ARRAY_BOOLEAN:// TODO: Handle
-            case ARRAY_STRING: // TODO: Handle
-            case ARRAY_NUMBER: // TODO: Handle
-            case ARRAY_COLOUR: // TODO: Handle
+            case NUMBER:
+            case ARRAY_NUMBER:
+                return "LcdTextNum";
             case NOTHING:
                 return getLcdFunctionNameForMsgOfTypeNothing(msg);
             case CAPTURED_TYPE:
@@ -692,9 +923,12 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         }
     }
 
-
-    private String getLcdFunctionNameForMsgOfTypeNothing (Expr<Void> msg) {
+    private String getLcdFunctionNameForMsgOfTypeNothing(Expr<Void> msg) {
         String blockType = msg.getProperty().getBlockType().toString();
+        if ( msg.toString().contains("LIGHT") ) {
+            return "LcdTextNum"; // FIXME
+        }
+
         if ( blockType.contains("isPressed") || blockType.contains("logic_ternary") ) {
             return "LcdTextBool";
         } else if ( blockType.contains("colour") ) {
@@ -708,32 +942,32 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     private String getLcdFunctionNameForMsgOfTypeCapturedType(Expr<Void> msg) {
         String msgString = msg.toString();
-        if (msgString.contains("Number")
-                ||msgString.contains("ADD")
-                ||msgString.contains("MINUS")
-                ||msgString.contains("MULTIPLY")
-                ||msgString.contains("DIVIDE")
-                ||msgString.contains("MOD")
-                ||msgString.contains("NEG")
-                ||msgString.contains("LISTS_LENGTH")
-                ||msgString.contains("IndexOfFunct")
-                ||msgString.contains("[ListGetIndex [GET, FROM_START, [ListCreate [NUMBER")
-                ||msgString.contains("[ListGetIndex [GET, FROM_START, [ListCreate [CONNECTION")
-                ||msgString.contains("MotorGetPower")
-                ||msgString.contains("VolumeAction") ) {
+        if ( msgString.contains("Number")
+            || msgString.contains("ADD")
+            || msgString.contains("MINUS")
+            || msgString.contains("MULTIPLY")
+            || msgString.contains("DIVIDE")
+            || msgString.contains("MOD")
+            || msgString.contains("NEG")
+            || msgString.contains("LISTS_LENGTH")
+            || msgString.contains("IndexOfFunct")
+            || msgString.contains("[ListGetIndex [GET, FROM_START, [ListCreate [NUMBER")
+            || msgString.contains("[ListGetIndex [GET, FROM_START, [ListCreate [CONNECTION")
+            || msgString.contains("MotorGetPower")
+            || msgString.contains("VolumeAction") ) {
             return "LcdTextNum";
-        } else if (msgString.contains("EQ")
-                ||msgString.contains("NEQ")
-                ||msgString.contains("LT")
-                ||msgString.contains("LTE")
-                ||msgString.contains("GT")
-                ||msgString.contains("GTE")
-                ||msgString.contains("LIST_IS_EMPTY")
-                ||msgString.contains("AND")
-                ||msgString.contains("OR")
-                ||msgString.contains("NOT")
-                ||msgString.contains("[ListGetIndex [GET, FROM_START, [ListCreate [BOOLEAN")
-                ||msgString.contains("BluetoothConnectAction") ) {
+        } else if ( msgString.contains("EQ")
+            || msgString.contains("NEQ")
+            || msgString.contains("LT")
+            || msgString.contains("LTE")
+            || msgString.contains("GT")
+            || msgString.contains("GTE")
+            || msgString.contains("LIST_IS_EMPTY")
+            || msgString.contains("AND")
+            || msgString.contains("OR")
+            || msgString.contains("NOT")
+            || msgString.contains("[ListGetIndex [GET, FROM_START, [ListCreate [BOOLEAN")
+            || msgString.contains("BluetoothConnectAction") ) {
             return "LcdTextBool";
         } else {
             return "LcdTextString";
@@ -741,17 +975,53 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
-    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
+    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
+        String soundConstant = getSoundConstantByFileName(playFileAction.getFileName());
+        this.sb.append("_PlaySound(" + soundConstant + ");");
         return null;
     }
 
-    @Override public Void visitLightAction(LightAction<Void> lightAction) {
+    private String getSoundConstantByFileName (String fileName) {
+        switch ( fileName ) {
+            case "0":
+                return "SOUND_CLICK";
+            case "1":
+                return "SOUND_DOUBLE_BEEP";
+            case "2":
+                return "SOUND_DOWN";
+            case "3":
+                return "SOUND_UP";
+            case "4":
+                return "SOUND_LOW_BEEP";
+            default:
+                throw new DbcException("Unknown system sound file");
+        }
+    }
+
+    @Override
+    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
+        this.sb.append("SetVolume(");
+        volumeAction.getVolume().visit(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
+        String picture = showPictureAction.getPicture().toString();
+        this.sb.append("LcdBmpFile(TEXT_COLOR_BLACK, 0, 0, " + picture + ");");
+        // TODO: Implement
+        return null;
+    }
+
+    @Override
+    public Void visitLightAction(LightAction<Void> lightAction) {
         String pattern = getLedPattern(lightAction.getColor(), lightAction.getMode());
         this.sb.append("SetLedPattern(" + pattern + ");");
         return null;
     }
 
-    private String getLedPattern (IBrickLedColor color, ILightMode mode) {
+    private String getLedPattern(IBrickLedColor color, ILightMode mode) {
         return "LED_" + getLedPatternColorPrefix(color) + getLedPatternModePostfix(mode);
     }
 
@@ -759,7 +1029,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return color.toString();
     }
 
-    private String getLedPatternModePostfix (ILightMode mode) {
+    private String getLedPatternModePostfix(ILightMode mode) {
         switch ( mode.toString() ) {
             case SC.ON:
                 return "";
@@ -772,7 +1042,8 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         }
     }
 
-    @Override public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+    @Override
+    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         switch ( lightStatusAction.getStatus() ) {
             case OFF:
                 this.sb.append("SetLedPattern(LED_BLACK);");
