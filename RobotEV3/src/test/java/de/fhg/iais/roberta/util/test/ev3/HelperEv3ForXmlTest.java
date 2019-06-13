@@ -15,7 +15,10 @@ import de.fhg.iais.roberta.visitor.codegen.Ev3SimVisitor;
 import org.junit.Assert;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
+
+import static java.util.Collections.emptyMap;
 
 public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
 
@@ -69,6 +72,63 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
         configuration.setRobotName("ev3dev");
         return configuration;
     }
+
+    public static Configuration makeTouchUltrasonicColorConfiguration () {
+        Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
+        ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", "A", motorAproperties);
+
+        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
+        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
+
+        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", Collections.emptyMap());
+        ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S2", "2", Collections.emptyMap());
+        ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", "3", Collections.emptyMap());
+        //        ConfigurationComponent ultrasonicSensor4 = new ConfigurationComponent("ULTRASONIC", false, "S4", BlocklyConstants.NO_SLOT, "4", Collections.emptyMap());
+        final Configuration.Builder builder = new Configuration.Builder();
+        return builder
+            .setTrackWidth(17f)
+            .setWheelDiameter(5.6f)
+            .addComponents(Arrays.asList(motorA, motorB, touchSensor, ultrasonicSensor, colorSensor))
+            .build();
+    }
+
+    public static Configuration makeTouchUltrasonicColorUltrasonicConfiguration () {
+        Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
+        ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", "A", motorAproperties);
+
+        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
+        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
+
+        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", Collections.emptyMap());
+        ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S2", "2", Collections.emptyMap());
+        ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", "3", Collections.emptyMap());
+        ConfigurationComponent ultrasonicSensor4 = new ConfigurationComponent("ULTRASONIC", false, "S4", "4", Collections.emptyMap());
+        final Configuration.Builder builder = new Configuration.Builder();
+        return builder
+            .setTrackWidth(17f)
+            .setWheelDiameter(5.6f)
+            .addComponents(Arrays.asList(motorA, motorB, touchSensor, ultrasonicSensor, colorSensor, ultrasonicSensor4))
+            .build();
+    }
+
+    public static Configuration makeTouchGyroInfraredUltrasonic () {
+        Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
+        ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", "A", motorAproperties);
+
+        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
+        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
+        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", Collections.emptyMap());
+        ConfigurationComponent gyro = new ConfigurationComponent("GYRO", false, "S2", "2", Collections.emptyMap());
+        ConfigurationComponent infrared = new ConfigurationComponent("INFRARED", false, "S3", "3", Collections.emptyMap());
+        ConfigurationComponent ultrasonicSensor4 = new ConfigurationComponent("ULTRASONIC", false, "S4", "4", Collections.emptyMap());
+        final Configuration.Builder builder = new Configuration.Builder();
+        return builder
+                .setTrackWidth(17f)
+                .setWheelDiameter(5.6f)
+                .addComponents(Arrays.asList(motorA, motorB, touchSensor, infrared, ultrasonicSensor4, gyro))
+                .build();
+    }
+
 
     /**
      * Generate java code as string from a given program fragment. Do not prepend and append wrappings.

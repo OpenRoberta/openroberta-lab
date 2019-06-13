@@ -1,17 +1,16 @@
 package de.fhg.iais.roberta.syntax.codegen.ev3;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
+import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AstToLejosJavaVisitorTest {
     private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
@@ -169,19 +168,7 @@ public class AstToLejosJavaVisitorTest {
 
     @Test
     public void test2() throws Exception {
-
-        Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
-        ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", "A", motorAproperties);
-
-        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
-        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
-        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", Collections.emptyMap());
-        ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S2", "2", Collections.emptyMap());
-        ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", "3", Collections.emptyMap());
-        //        ConfigurationComponent ultrasonicSensor4 = new ConfigurationComponent("ULTRASONIC", false, "S4", BlocklyConstants.NO_SLOT, "4", Collections.emptyMap());
-        final Configuration.Builder builder = new Configuration.Builder();
-        Configuration brickConfigurationNew =
-            builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, touchSensor, ultrasonicSensor, colorSensor)).build();
+        Configuration brickConfigurationNew = HelperEv3ForXmlTest.makeTouchUltrasonicColorConfiguration();
         brickConfigurationNew.setRobotName("lejosEv3V1");
         final String BRICK_CONFIGURATION =
             "" //
@@ -227,23 +214,7 @@ public class AstToLejosJavaVisitorTest {
 
     @Test
     public void test3() throws Exception {
-
-        Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
-        ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", "A", motorAproperties);
-
-        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
-        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
-        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", Collections.emptyMap());
-        ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S2", "2", Collections.emptyMap());
-        ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", "3", Collections.emptyMap());
-        ConfigurationComponent ultrasonicSensor4 = new ConfigurationComponent("ULTRASONIC", false, "S4", "4", Collections.emptyMap());
-        final Configuration.Builder builder = new Configuration.Builder();
-        Configuration brickConfigurationNew =
-            builder
-                .setTrackWidth(17f)
-                .setWheelDiameter(5.6f)
-                .addComponents(Arrays.asList(motorA, motorB, touchSensor, ultrasonicSensor, colorSensor, ultrasonicSensor4))
-                .build();
+        Configuration brickConfigurationNew = HelperEv3ForXmlTest.makeTouchUltrasonicColorUltrasonicConfiguration();
         brickConfigurationNew.setRobotName("lejosEv3V1");
 
         final String BRICK_CONFIGURATION =
@@ -291,23 +262,7 @@ public class AstToLejosJavaVisitorTest {
 
     @Test
     public void test4() throws Exception {
-
-        Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
-        ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", "A", motorAproperties);
-
-        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
-        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
-        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", Collections.emptyMap());
-        ConfigurationComponent gyro = new ConfigurationComponent("GYRO", false, "S2", "2", Collections.emptyMap());
-        ConfigurationComponent infrared = new ConfigurationComponent("INFRARED", false, "S3", "3", Collections.emptyMap());
-        ConfigurationComponent ultrasonicSensor4 = new ConfigurationComponent("ULTRASONIC", false, "S4", "4", Collections.emptyMap());
-        final Configuration.Builder builder = new Configuration.Builder();
-        Configuration brickConfigurationNew =
-            builder
-                .setTrackWidth(17f)
-                .setWheelDiameter(5.6f)
-                .addComponents(Arrays.asList(motorA, motorB, touchSensor, infrared, ultrasonicSensor4, gyro))
-                .build();
+        Configuration brickConfigurationNew = HelperEv3ForXmlTest.makeTouchGyroInfraredUltrasonic();
         brickConfigurationNew.setRobotName("lejosEv3V1");
 
         final String BRICK_CONFIGURATION =
