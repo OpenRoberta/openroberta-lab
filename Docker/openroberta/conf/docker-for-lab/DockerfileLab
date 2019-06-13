@@ -5,6 +5,12 @@ ARG LAST_RUN_OF_BASE=2019-05-27
 VOLUME /opt/admin
 EXPOSE 1999
 
+RUN apt-get install locales
+RUN locale-gen de_DE.UTF-8 
+ENV LANG de_DE.UTF-8 
+ENV LANGUAGE de_DE:de 
+ENV LC_ALL de_DE.UTF-8
+
 RUN mkdir --parent /opt/openroberta-lab/lib /tmp/openrobertaTmp
 WORKDIR /opt/openroberta-lab
 
