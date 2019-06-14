@@ -37,7 +37,7 @@ on linux:
 * micro:bit
   * pip install uflash
 * EV3 (c4ev3)
-  * sudo apt-get install arm-linux-gnueabi-gcc
+  * sudo apt-get install g++-arm-linux-gnueabi
  
 on windows:
 * Calliope
