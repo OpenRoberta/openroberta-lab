@@ -160,6 +160,16 @@ public class ExprlyAstTest {
     }
 
     /**
+     * create a correct AST programmatically for a assignment expression.
+     * Check that the AST is ok.<br>
+     */
+    @Test
+    public void assign1Text() throws Exception {
+        Expr<Void> assign = expr2AST("x:= (25+3*7)");
+        checkCode(assign);
+    }
+
+    /**
      * function to check the generated code with the ast
      */
     private void checkCode(Expr<Void> expr) {
