@@ -47,6 +47,194 @@ public class Var<V> extends Expr<V> {
     }
 
     /**
+     * factory method: create an AST instance of {@link Var}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param name of the type of the variable; must be <b>not</b> null,
+     * @param value name of the variable; must be <b>non-empty</b> string,
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
+     * @return read only object of class {@link Var}
+     */
+    public static <V> Var<V> make(String blocklyName, String value, BlocklyBlockProperties properties, BlocklyComment comment) {
+        if ( blocklyName.trim().toUpperCase().equals("ANY") ) {
+            return new Var<V>(BlocklyType.ANY, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("COMPARABLE") ) {
+            return new Var<V>(BlocklyType.COMPARABLE, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("ADDABLE") ) {
+            return new Var<V>(BlocklyType.ADDABLE, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("ARRAY") ) {
+            return new Var<V>(BlocklyType.ARRAY, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("ARRAY_NUMBER") ) {
+            return new Var<V>(BlocklyType.ARRAY_NUMBER, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("ARRAY_STRING") ) {
+            return new Var<V>(BlocklyType.ARRAY_STRING, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("ARRAY_COLOUR") ) {
+            return new Var<V>(BlocklyType.ARRAY_COLOUR, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("ARRAY_BOOLEAN") ) {
+            return new Var<V>(BlocklyType.ARRAY_BOOLEAN, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("ARRAY_IMAGE") ) {
+            return new Var<V>(BlocklyType.ARRAY_IMAGE, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("ARRAY_CONNECTION") ) {
+            return new Var<V>(BlocklyType.ARRAY_CONNECTION, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("BOOLEAN") ) {
+            return new Var<V>(BlocklyType.BOOLEAN, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("NUMBER") ) {
+            return new Var<V>(BlocklyType.NUMBER, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("NUMBER_INT") ) {
+            return new Var<V>(BlocklyType.NUMBER_INT, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("STRING") ) {
+            return new Var<V>(BlocklyType.STRING, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("COLOR") ) {
+            return new Var<V>(BlocklyType.COLOR, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("IMAGE") ) {
+            return new Var<V>(BlocklyType.IMAGE, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("PREDEFINED_IMAGE") ) {
+            return new Var<V>(BlocklyType.PREDEFINED_IMAGE, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("NULL") ) {
+            return new Var<V>(BlocklyType.NULL, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("REF") ) {
+            return new Var<V>(BlocklyType.REF, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("PRIM") ) {
+            return new Var<V>(BlocklyType.PRIM, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("NOTHING") ) {
+            return new Var<V>(BlocklyType.NOTHING, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("VOID") ) {
+            return new Var<V>(BlocklyType.VOID, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("CONNECTION") ) {
+            return new Var<V>(BlocklyType.CONNECTION, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("CAPTURED_TYPE") ) {
+            return new Var<V>(BlocklyType.CAPTURED_TYPE, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("R") ) {
+            return new Var<V>(BlocklyType.R, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("S") ) {
+            return new Var<V>(BlocklyType.S, value, properties, comment);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("T") ) {
+            return new Var<V>(BlocklyType.T, value, properties, comment);
+        }
+        return null;
+    }
+
+    /**
+     * factory method: create an AST instance of {@link Var}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param name of the type of the variable; must be <b>not</b> null,
+     * @param value name of the variable; must be <b>non-empty</b> string,
+     * @return read only object of class {@link Var}
+     */
+    public static <V> Var<V> make(String blocklyName, String value) {
+        if ( blocklyName.trim().toUpperCase().equals("ANY") ) {
+            return new Var<V>(BlocklyType.ANY, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("COMPARABLE") ) {
+            return new Var<V>(BlocklyType.COMPARABLE, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("ADDABLE") ) {
+            return new Var<V>(BlocklyType.ADDABLE, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("ARRAY") ) {
+            return new Var<V>(BlocklyType.ARRAY, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("ARRAY_NUMBER") ) {
+            return new Var<V>(BlocklyType.ARRAY_NUMBER, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("ARRAY_STRING") ) {
+            return new Var<V>(BlocklyType.ARRAY_STRING, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("ARRAY_COLOUR") ) {
+            return new Var<V>(BlocklyType.ARRAY_COLOUR, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("ARRAY_BOOLEAN") ) {
+            return new Var<V>(BlocklyType.ARRAY_BOOLEAN, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("ARRAY_IMAGE") ) {
+            return new Var<V>(BlocklyType.ARRAY_IMAGE, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("ARRAY_CONNECTION") ) {
+            return new Var<V>(BlocklyType.ARRAY_CONNECTION, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("BOOLEAN") ) {
+            return new Var<V>(BlocklyType.BOOLEAN, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("NUMBER") ) {
+            return new Var<V>(BlocklyType.NUMBER, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("NUMBER_INT") ) {
+            return new Var<V>(BlocklyType.NUMBER_INT, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("STRING") ) {
+            return new Var<V>(BlocklyType.STRING, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("COLOR") ) {
+            return new Var<V>(BlocklyType.COLOR, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("IMAGE") ) {
+            return new Var<V>(BlocklyType.IMAGE, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("PREDEFINED_IMAGE") ) {
+            return new Var<V>(BlocklyType.PREDEFINED_IMAGE, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("NULL") ) {
+            return new Var<V>(BlocklyType.NULL, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("REF") ) {
+            return new Var<V>(BlocklyType.REF, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("PRIM") ) {
+            return new Var<V>(BlocklyType.PRIM, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("NOTHING") ) {
+            return new Var<V>(BlocklyType.NOTHING, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("VOID") ) {
+            return new Var<V>(BlocklyType.VOID, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("CONNECTION") ) {
+            return new Var<V>(BlocklyType.CONNECTION, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("CAPTURED_TYPE") ) {
+            return new Var<V>(BlocklyType.CAPTURED_TYPE, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("R") ) {
+            return new Var<V>(BlocklyType.R, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("S") ) {
+            return new Var<V>(BlocklyType.S, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        if ( blocklyName.trim().toUpperCase().equals("T") ) {
+            return new Var<V>(BlocklyType.T, value, BlocklyBlockProperties.make("1", "1"), null);
+        }
+        return null;
+    }
+
+    /**
      * @return name of the variable
      */
     public String getValue() {

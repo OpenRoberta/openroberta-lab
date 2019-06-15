@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
+import org.apache.commons.lang3.ObjectUtils.Null;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -33,6 +35,16 @@ public class NullConst<V> extends Expr<V> {
      */
     public static <V> NullConst<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
         return new NullConst<V>(properties, comment);
+    }
+
+    /**
+     * factory method: creates instance of {@link NullConst}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @return read only object of class {@link NullConst}
+     */
+    public static <V> NullConst<V> make() {
+        return new NullConst<V>(BlocklyBlockProperties.make("1", "1"), null);
     }
 
     /**

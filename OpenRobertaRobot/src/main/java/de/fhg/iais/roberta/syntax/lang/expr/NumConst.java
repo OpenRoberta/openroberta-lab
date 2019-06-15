@@ -53,6 +53,17 @@ public class NumConst<V> extends Expr<V> {
     }
 
     /**
+     * factory method: create an AST instance of {@link NumConst}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in this case no graphical regeneration is required.</b>
+     *
+     * @param numerical constant ,
+     * @return read only object representing the number constant in the AST
+     */
+    public static <V> NumConst<V> make(int value) {
+        return new NumConst<>(Integer.toString(value), BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
      * @return value of the numerical constant
      */
     public String getValue() {

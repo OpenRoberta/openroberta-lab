@@ -47,6 +47,17 @@ public class ColorConst<V> extends Expr<V> {
         return new ColorConst<>(hexValue, properties, comment);
     }
 
+    /**
+     * factory method: create an AST instance of {@link ColorConst}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param value that the color constant will have; must be <b>non-empty</b> string,
+     * @return read only object of class {@link ColorConst}.
+     */
+    public static <V> ColorConst<V> make(String hexValue) {
+        return new ColorConst<>(hexValue, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
     public String getHexValueAsString() {
         return this.hexValue;
     }
@@ -96,7 +107,7 @@ public class ColorConst<V> extends Expr<V> {
 
     @Override
     public String toString() {
-        return "ColorConst [" + hexValue + "]";
+        return "ColorConst [" + this.hexValue + "]";
     }
 
     @Override

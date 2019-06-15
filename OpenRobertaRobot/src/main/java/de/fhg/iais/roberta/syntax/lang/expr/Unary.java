@@ -8,9 +8,9 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -49,6 +49,18 @@ public class Unary<V> extends Expr<V> {
      */
     public static <V> Unary<V> make(Op op, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new Unary<V>(op, expr, properties, comment);
+    }
+
+    /**
+     * factory method: create an AST instance of {@link Unary}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param op operator; ; must be <b>not</b> null,
+     * @param expr expression over which the operation is performed; must be <b>not</b> null and <b>read only</b>,,
+     * @return read only object of class {@link Unary}
+     */
+    public static <V> Unary<V> make(Op op, Expr<V> expr) {
+        return new Unary<V>(op, expr, BlocklyBlockProperties.make("1", "1"), null);
     }
 
     /**
