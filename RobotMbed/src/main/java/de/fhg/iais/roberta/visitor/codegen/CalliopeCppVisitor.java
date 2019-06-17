@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.text.WordUtils;
+import org.w3c.dom.css.RGBColor;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
@@ -57,6 +58,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
+import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
@@ -71,6 +73,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
+import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
@@ -1317,23 +1320,24 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     }
 
     private void writeToSerial(Expr<Void> valueToWrite) {
-        // default TxBufferSize seems to be 20 which has to be extended for longer Strings
-        if ( (valueToWrite).getVarType().equals(BlocklyType.STRING) ) {
-            this.sb.append("_uBit.serial.setTxBufferSize(");
+        if ( valueToWrite instanceof RgbColor<?>
+            || valueToWrite instanceof ColorConst<?>
+            || (valueToWrite instanceof Var && ((Var<Void>) valueToWrite).getVarType().equals(BlocklyType.COLOR)) ) {
+            this.sb.append("_uBit.serial.setTxBufferSize(ManagedString(_castColorToString(");
             valueToWrite.visit(this);
-            this.sb.append(".length() + 2);");
+            this.sb.append(")).length() + 2);");
             nlIndent();
             this.sb.append("_uBit.serial.send(");
+            this.sb.append("_castColorToString(");
             valueToWrite.visit(this);
-        } else if ( valueToWrite.getVarType().equals(BlocklyType.COLOR) ) {
-            this.sb.append("_uBit.serial.setTxBufferSize(9);");
-            nlIndent();
-            this.sb.append("_uBit.serial.send(");
-            this.sb.append("ManagedString(\"");
-            this.sb.append(((ColorConst<Void>) valueToWrite).getHexValueAsString());
-            this.sb.append("\")");
+            this.sb.append(")");
         } else {
-            this.sb.append("_uBit.serial.send(ManagedString(");
+            this.sb.append("_uBit.serial.setTxBufferSize(ManagedString((");
+            valueToWrite.visit(this);
+            this.sb.append(")).length() + 2);");
+            nlIndent();
+            this.sb.append("_uBit.serial.send(");
+            this.sb.append("ManagedString(");
             valueToWrite.visit(this);
             this.sb.append(")");
         }
@@ -1368,6 +1372,22 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitDebugAction(DebugAction<Void> debugAction) {
         writeToSerial(debugAction.getValue());
+        return null;
+    }
+
+    @Override
+    public Void visitAssertStmt(AssertStmt<Void> assertStmt) {
+        if ( ((Binary<Void>) assertStmt.getAssert()).getLeft().getVarType().equals(BlocklyType.COLOR) ) {
+            this.sb.append("assertNepo((");
+            assertStmt.getAssert().visit(this);
+            this.sb.append("), \"").append(assertStmt.getMsg()).append("\", \"");
+            ((Binary<Void>) assertStmt.getAssert()).getLeft().visit(this);
+            this.sb.append("\", \"").append(((Binary<Void>) assertStmt.getAssert()).getOp().toString()).append("\", \"");
+            ((Binary<Void>) assertStmt.getAssert()).getRight().visit(this);
+            this.sb.append("\");");
+        } else {
+            super.visitAssertStmt(assertStmt);
+        }
         return null;
     }
 }
