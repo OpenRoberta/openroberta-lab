@@ -55,9 +55,6 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     private static final List<String> ev3SensorPorts = Lists.newArrayList("1", "2", "3", "4");
 
-    // TODO: Are those constants already defined somewhere?
-    private static final String PROPERTY_ON = "ON";
-
     private static final String PREFIX_OUTPUT_PORT = "OUT_";
     private static final String PREFIX_IN_PORT = "IN_";
 
@@ -217,6 +214,24 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         }
     }
 
+    @Override public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
+        if ( isSingleMathFunctAbs(mathSingleFunct.getFunctName())) {
+            this.generateSingleMathFunctAbs(mathSingleFunct);
+            return null;
+        }
+        return super.visitMathSingleFunct(mathSingleFunct);
+    }
+
+    private boolean isSingleMathFunctAbs(FunctionNames functionName) {
+        return functionName.equals(FunctionNames.ABS);
+    }
+
+    private void generateSingleMathFunctAbs (MathSingleFunct<Void> mathSingleFunct) {
+        this.sb.append("abs(");
+        mathSingleFunct.getParam().get(0).visit(this);
+        this.sb.append(")");
+    }
+
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
         String colorConstant = getColorConstantByHex(colorConst.getHexValueAsString());
@@ -284,7 +299,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         }
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
         String sym = getBinaryOperatorSymbol(op);
-        this.sb.append(whitespace() + sym + whitespace());
+        this.sb.append(" " + sym + " ");
         switch ( op ) {
             case TEXT_APPEND:
                 if ( binary.getRight().getVarType().toString().contains("NUMBER") ) {
@@ -409,26 +424,121 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
+        Expr<Void> n = mathConstrainFunct.getParam().get(0);
+        Expr<Void> min = mathConstrainFunct.getParam().get(1);
+        Expr<Void> max = mathConstrainFunct.getParam().get(2);
+        this.sb.append("std::min(std::max(");
+        n.visit(this);
+        this.sb.append(", ");
+        min.visit(this);
+        this.sb.append("), ");
+        max.visit(this);
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
+        if (mathPropNeedFunctionCall(mathNumPropFunct.getFunctName())) {
+            generateFunctionCallForMathProp(mathNumPropFunct);
+        } else {
+            generateInlineMathProp(mathNumPropFunct);
+        }
         return null;
+    }
+
+    private boolean mathPropNeedFunctionCall (FunctionNames functionName) {
+        try {
+            getMathPropFunctionName(functionName);
+            return true;
+        } catch ( DbcException e ) {
+            return false;
+        }
+    }
+
+    private void generateFunctionCallForMathProp(MathNumPropFunct<Void> mathNumPropFunct) {
+        this.sb.append(getMathPropFunctionName(mathNumPropFunct.getFunctName()) + "(");
+        mathNumPropFunct.getParam().get(0).visit(this);
+        this.sb.append(")");
+    }
+
+    private String getMathPropFunctionName (FunctionNames functionName) {
+        switch ( functionName) {
+            case PRIME:
+                return "IsPrime";
+            case WHOLE:
+                return "IsWhole";
+            default:
+                throw new DbcException("Unknown function name");
+        }
+    }
+
+    private void generateInlineMathProp (MathNumPropFunct<Void> mathNumPropFunct) {
+        Expr<Void> n = mathNumPropFunct.getParam().get(0);
+        switch ( mathNumPropFunct.getFunctName() ) {
+            case EVEN:
+                this.sb.append("(((int) ");
+                n.visit(this);
+                this.sb.append(" ) % 2 == 0)");
+                break;
+            case ODD:
+                this.sb.append("(((int) ");
+                n.visit(this);
+                this.sb.append(" ) % 2 != 0)");
+                break;
+            case POSITIVE:
+                this.sb.append("( ");
+                n.visit(this);
+                this.sb.append(" > 0)");
+                break;
+            case NEGATIVE:
+                this.sb.append("( ");
+                n.visit(this);
+                this.sb.append(" < 0)");
+                break;
+            case DIVISIBLE_BY:
+                this.sb.append("(((int) ");
+                n.visit(this);
+                this.sb.append(" ) % ((int) ");
+                mathNumPropFunct.getParam().get(1).visit(this);
+                this.sb.append(" ) == 0)");
+                break;
+            default:
+                throw new DbcException("Unknown math prop");
+        }
     }
 
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
+        this.sb.append("rand()");
         return null;
     }
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
+        Expr<Void> min = mathRandomIntFunct.getParam().get(0);
+        Expr<Void> max = mathRandomIntFunct.getParam().get(1);
+        this.sb.append("((rand() % (");
+        min.visit(this);
+        this.sb.append(" - ");
+        max.visit(this);
+        this.sb.append(")) + ");
+        min.visit(this);
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
+        List<Expr<Void>> texts = textJoinFunct.getParam().get();
+        for (int i = 0; i < texts.size(); i++) {
+            this.sb.append("((std::string) ");
+            texts.get(i).visit(this);
+            this.sb.append(")");
+            if (i < texts.size() - 1) {
+                this.sb.append(" + ");
+            }
+        }
         return null;
     }
 
@@ -624,7 +734,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     private boolean isMotorReverse(String port) {
         String reverseProperty = this.brickConfiguration.getConfigurationComponent(port).getOptProperty(SC.MOTOR_REVERSE);
-        return reverseProperty != null && reverseProperty.equals(PROPERTY_ON);
+        return reverseProperty != null && reverseProperty.equals(SC.ON);
     }
 
     private String getDriveMotorPorts() {
