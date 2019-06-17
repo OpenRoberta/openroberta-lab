@@ -73,6 +73,19 @@ public final class Binary<V> extends Expr<V> {
     }
 
     /**
+     * factory method: create an AST instance of {@link Binary}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param op operator; must be <b>not</b> null,
+     * @param left expression on the left hand side; must be <b>not</b> null and <b>read only</b>,
+     * @param right expression on the right hand side; must be <b>not</b> null and <b>read only</b>,
+     * @return read only object representing the binary expression
+     */
+    public static <V> Binary<V> make(Op op, Expr<V> left, Expr<V> right) {
+        return new Binary<>(op, left, right, "", BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
      * @return the operation in the binary expression. See enum {@link Op} for all possible operations
      */
     public Op getOp() {

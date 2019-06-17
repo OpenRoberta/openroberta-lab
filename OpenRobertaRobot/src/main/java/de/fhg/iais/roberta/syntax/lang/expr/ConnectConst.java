@@ -43,10 +43,21 @@ public class ConnectConst<V> extends Expr<V> {
      * @param value of the numerical constant; must be <b>non-empty</b> string,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link NumConst}
+     * @return read only object of class {@link ConnectConst}
      */
     public static <V> ConnectConst<V> make(String dataValue, String value, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new ConnectConst<V>(dataValue, value, properties, comment);
+    }
+
+    /**
+     * factory method: create an AST instance of {@link ConnectConst}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param value of the numerical constant; must be <b>non-empty</b> string,
+     * @return read only object of class {@link ConnectConst}
+     */
+    public static <V> ConnectConst<V> make(String dataValue, String value) {
+        return new ConnectConst<V>(dataValue, value, BlocklyBlockProperties.make("1", "1"), null);
     }
 
     /**

@@ -9,9 +9,9 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
@@ -41,13 +41,46 @@ public class RgbColor<V> extends Expr<V> {
     /**
      * creates instance of {@link RgbColor}. This instance is read only and can not be modified.
      *
-     * @param value that the boolean constant will have,
+     * @param value that the color constant will have,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of class {@link RgbColor}
      */
     public static <V> RgbColor<V> make(Expr<V> R, Expr<V> G, Expr<V> B, Expr<V> A, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new RgbColor<V>(R, G, B, A, properties, comment);
+    }
+
+    /**
+     * factory method: create an AST instance of {@link RgbColor}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in this case no graphical regeneration is required.</b>
+     *
+     * @param value that the color constant will have,
+     * @return read only object of class {@link RgbColor}
+     */
+    public static <V> RgbColor<V> make(Expr<V> R, Expr<V> G, Expr<V> B, Expr<V> A) {
+        return new RgbColor<V>(R, G, B, A, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
+     * factory method: create an AST instance of {@link RgbColor}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in this case no graphical regeneration is required.</b>
+     *
+     * @param value that the color constant will have,
+     * @return read only object of class {@link RgbColor}
+     */
+    public static <V> RgbColor<V> make(int R, int G, int B, int A) {
+        return new RgbColor<V>(NumConst.make(R), NumConst.make(G), NumConst.make(B), NumConst.make(A), BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
+     * factory method: create an AST instance of {@link RgbColor}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in this case no graphical regeneration is required.</b>
+     *
+     * @param value that the color constant will have,
+     * @return read only object of class {@link RgbColor}
+     */
+    public static <V> RgbColor<V> make(String R, String G, String B, String A) {
+        return new RgbColor<V>(NumConst.make(R), NumConst.make(G), NumConst.make(B), NumConst.make(A), BlocklyBlockProperties.make("1", "1"), null);
     }
 
     public Expr<V> getR() {
@@ -107,13 +140,14 @@ public class RgbColor<V> extends Expr<V> {
         Phrase<V> green = helper.extractValue(values, new ExprParam(BlocklyConstants.GREEN, BlocklyType.NUMBER_INT));
         Phrase<V> blue = helper.extractValue(values, new ExprParam(BlocklyConstants.BLUE, BlocklyType.NUMBER_INT));
         Phrase<V> alpha = helper.extractValue(values, new ExprParam(BlocklyConstants.ALPHA, BlocklyType.NUMBER_INT));
-        return RgbColor.make(
-            helper.convertPhraseToExpr(red),
-            helper.convertPhraseToExpr(green),
-            helper.convertPhraseToExpr(blue),
-            helper.convertPhraseToExpr(alpha),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return RgbColor
+            .make(
+                helper.convertPhraseToExpr(red),
+                helper.convertPhraseToExpr(green),
+                helper.convertPhraseToExpr(blue),
+                helper.convertPhraseToExpr(alpha),
+                helper.extractBlockProperties(block),
+                helper.extractComment(block));
     }
 
     @Override

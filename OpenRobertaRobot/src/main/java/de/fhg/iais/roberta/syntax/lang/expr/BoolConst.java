@@ -44,8 +44,26 @@ public class BoolConst<V> extends Expr<V> {
         return new BoolConst<>(value, properties, comment);
     }
 
+    /**
+     * factory method: create an AST instance of {@link BoolConst}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param value that the boolean constant will have,
+     * @return read only object of class {@link BoolConst}
+     */
     public static <V> BoolConst<V> make(boolean value) {
         return new BoolConst<>(value, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
+     * factory method: create an AST instance of {@link Binary}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param value of the const,
+     * @return read only object representing the binary expression
+     */
+    public static <V> BoolConst<V> make(String value) {
+        return new BoolConst<>(Boolean.parseBoolean(value.toLowerCase()), BlocklyBlockProperties.make("1", "1"), null);
     }
 
     /**

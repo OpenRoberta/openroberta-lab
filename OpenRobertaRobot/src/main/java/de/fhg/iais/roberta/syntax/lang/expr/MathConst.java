@@ -47,6 +47,30 @@ public class MathConst<V> extends Expr<V> {
     }
 
     /**
+     * factory method: creates instance of {@link BoolConst}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param mathConstStr, that represents the Const value,
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
+     * @return read only object of class {@link MathConst}
+     */
+    public static <V> MathConst<V> make(String mathConstStr, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new MathConst<V>(Const.get(mathConstStr), properties, comment);
+    }
+
+    /**
+     * factory method: creates instance of {@link BoolConst}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param mathConstStr, that represents the Const value,
+     * @return read only object of class {@link MathConst}
+     */
+    public static <V> MathConst<V> make(String mathConstStr) {
+        return new MathConst<V>(Const.get(mathConstStr), BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
      * @return math constant.
      */
     public Const getMathConst() {

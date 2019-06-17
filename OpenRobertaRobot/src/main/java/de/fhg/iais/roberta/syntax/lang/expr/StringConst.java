@@ -43,6 +43,17 @@ public class StringConst<V> extends Expr<V> {
     }
 
     /**
+     * factory method: creates instance of {@link StringConst}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param value that the string constant will have,
+     * @return read only object of class {@link StringConst}
+     */
+    public static <V> StringConst<V> make(String value) {
+        return new StringConst<V>(value, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
      * @return the value of the string constant
      */
     public String getValue() {
