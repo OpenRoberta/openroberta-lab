@@ -21,7 +21,12 @@ import static de.fhg.iais.roberta.components.ev3c4ev3.ByteUtils.setWord;
 public class Uf2FileContainer {
 
     private static final int UF2_BLOCK_SIZE = 512;
+    /**
+     * TODO: Since we are now using c++ with static linking of libstdcc+, the generate binaries are bigger.
+     * check if the EV3 supports bigger payload sizes, to reduce the transfer time (which now takes around 8 seconds)
+     */
     private static final int UF2_BLOCK_PAYLOAD_SIZE = 256;
+    //private static final int UF2_BLOCK_PAYLOAD_SIZE = 400;
 
     private static final int UF2_START_BLOCK_MAGIC_CONSTANT_1 = 0x0A324655;
     private static final int UF2_START_BLOCK_MAGIC_CONSTANT_2 = 0x9E5D5157;
@@ -31,10 +36,11 @@ public class Uf2FileContainer {
     private static final int OFFSET_MAGIC_CONSTANT_1 = 0;
     private static final int OFFSET_MAGIC_CONSTANT_2 = 4;
     private static final int OFFSET_FLAGS = 8;
-    private static final int OFFSET_FILE_SIZE = 28;
     private static final int OFFSET_OFFSET_CURRENT_FILE = 12;
     private static final int OFFSET_BLOCK_PAYLOAD_SIZE = 16;
-    private static final int OFFSET_CURRENT_FILE_BLOCKS_COUNT = 20;
+    private static final int OFFSET_CURRENT_FILE_SEQUENTIAL_BLOCK_COUNT = 20;
+    private static final int OFFSET_CURRENT_FILE_BLOCKS_COUNT = 24;
+    private static final int OFFSET_FILE_SIZE = 28;
 
     private final List<byte[]> fileContentBlocks = new ArrayList<>();
 
@@ -97,6 +103,7 @@ public class Uf2FileContainer {
         setWord(uf2Block, OFFSET_FLAGS, UF2_FILE_CONTAINER_FLAG);
         setWord(uf2Block, OFFSET_OFFSET_CURRENT_FILE, blockIndex * UF2_BLOCK_PAYLOAD_SIZE);
         setWord(uf2Block, OFFSET_BLOCK_PAYLOAD_SIZE, UF2_BLOCK_PAYLOAD_SIZE); // length
+        setWord(uf2Block, OFFSET_CURRENT_FILE_SEQUENTIAL_BLOCK_COUNT, blockIndex);
         setWord(uf2Block, OFFSET_CURRENT_FILE_BLOCKS_COUNT, blocksCount);
         setWord(uf2Block, OFFSET_FILE_SIZE, fileSize);
 
