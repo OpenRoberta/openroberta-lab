@@ -386,6 +386,8 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                     }
                 } else if (domId === 'menuRobotInfo') {
                     ROBOT_C.showRobotInfo();
+                } else if (domId === 'menuWlan') {
+                    ROBOT_C.showWlanForm();
                 }
             }
         }, 'robot clicked');

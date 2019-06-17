@@ -387,6 +387,14 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
                 'robot' : robotGroup
             });
         }
+        
+        if(getRobotHasWlan(robot)) {
+            GUISTATE.robot.hasWlan = true;
+            $('#robotWlan').removeClass('hidden');
+        } else {
+            GUISTATE.robot.hasWlan = false;
+            $('#robotWlan').addClass('hidden');
+        }
     }
 
     exports.setRobot = setRobot;
@@ -506,6 +514,19 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         return false;
     }
     exports.getIsRobotBeta = getIsRobotBeta;
+    
+    function getRobotHasWlan(robotName) {
+        for ( var robot in getRobots()) {
+            if (!getRobots().hasOwnProperty(robot)) {
+                continue;
+            }
+            if (getRobots()[robot].name == robotName && getRobots()[robot].hasWlan == true) {
+                return true;
+            }
+        }
+        return false;
+    }
+    exports.getRobotHasWlan = getRobotHasWlan;
 
     function getRobotInfo(robotName) {
         for ( var robot in getRobots()) {

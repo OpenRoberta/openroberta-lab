@@ -38,9 +38,8 @@ public class SenseboxFactory extends AbstractRobotFactory {
         return null;
     }
 
-    @Override
-    public AbstractProgramValidatorVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
-        return new SenseboxBrickValidatorVisitor(brickConfiguration);
+    public AbstractProgramValidatorVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration, String SSID, String password) {
+        return new SenseboxBrickValidatorVisitor(brickConfiguration, SSID, password);
     }
 
     @Override
@@ -48,4 +47,8 @@ public class SenseboxFactory extends AbstractRobotFactory {
         return SenseboxCppVisitor.generate(brickConfiguration, phrasesSet, withWrapping);
     }
 
+    @Override
+    public AbstractProgramValidatorVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
+        return null;
+    }
 }

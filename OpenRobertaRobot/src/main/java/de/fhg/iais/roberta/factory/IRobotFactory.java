@@ -72,6 +72,10 @@ public interface IRobotFactory {
 
     AbstractProgramValidatorVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration);
 
+    default AbstractProgramValidatorVisitor getRobotProgramCheckVisitor(Configuration robotConfiguration, String SSID, String password) {
+        return null;
+    }
+
     String getGroup();
 
     String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping);
@@ -81,4 +85,7 @@ public interface IRobotFactory {
     }
 
     PluginProperties getPluginProperties();
+
+    Boolean hasWlanCredentials();
+
 }

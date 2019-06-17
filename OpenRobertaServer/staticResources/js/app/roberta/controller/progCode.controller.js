@@ -35,7 +35,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.co
 
             var language = GUISTATE_C.getLanguage();
 
-            PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function(result) {
+            PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(result) {
                 PROG_C.reloadProgram(result, true);
                 if (result.rc == "ok") {
                     GUISTATE_C.setState(result);
@@ -62,8 +62,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.co
             var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
             var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
             var language = GUISTATE_C.getLanguage();
-
-            PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function(result) {
+            PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(result) {
                 PROG_C.reloadProgram(result);
                 if (result.rc == "ok") {
                     GUISTATE_C.setState(result);

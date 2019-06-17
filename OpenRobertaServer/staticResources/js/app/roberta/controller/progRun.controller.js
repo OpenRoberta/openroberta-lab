@@ -47,22 +47,22 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
 
         var connectionType = GUISTATE_C.getConnectionTypeEnum();
         if (GUISTATE_C.getConnection() == connectionType.AUTO || GUISTATE_C.getConnection() == connectionType.LOCAL) {
-            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
+            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(result) {
                 runForAutoConnection(result);
                 PROG_C.reloadProgram(result);
             });
         } else if (GUISTATE_C.getConnection() == connectionType.AGENT || GUISTATE_C.getConnection() == connectionType.AGENTORTOKEN && GUISTATE_C.getIsAgent()) {
-            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
+            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(result) {
                 runForAgentConnection(result);
                 PROG_C.reloadProgram(result);
             });
         } else if (GUISTATE_C.getConnection() == connectionType.WEBVIEW) {
-            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
+            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(result) {
                 runForWebviewConnection(result);
                 PROG_C.reloadProgram(result);
             });
         } else {
-            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
+            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(result) {
                 runForToken(result);
                 PROG_C.reloadProgram(result);
             });

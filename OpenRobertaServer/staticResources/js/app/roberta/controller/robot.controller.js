@@ -67,7 +67,48 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
         $('#iconDisplayRobotState').onWrap('click', function() {
             showRobotInfo();
         }, 'icon robot click');
+        
+        $('#wlan-form').removeData('validator');
+        $.validator.addMethod("wlanRegex", function(value, element) {
+            return this.optional(element) || /^[a-zA-Z0-9=+!?.,%#+&^@_\-]+$/gi.test(value);
+        }, "This field contains nonvalid symbols.");
+        $('#wlan-form').validate({
+            rules : {
+                wlanSsid : {
+                    required : true,
+                    wlanRegex : true
+                },
+                wlanPassword : {
+                    required : true,
+                    wlanRegex : true
+                },
+            },
+            errorClass : "form-invalid",
+            errorPlacement : function(label, element) {
+                label.insertBefore(element);
+            },
+            messages : {
+                wlanSsid : {
+                    required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
+                    wlanRegex : Blockly.Msg["VALIDATION_CONTAINS_SPECIAL_CHARACTERS"]
+                },
+                wlanPassword : {
+                    required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
+                    wlanRegex : Blockly.Msg["VALIDATION_CONTAINS_SPECIAL_CHARACTERS"]
+                }
+            }
+        });
 
+        $('#setWlanCredentials').onWrap('click', function(e) {
+            e.preventDefault();
+            $('#wlan-form').validate();
+                if ($('#wlan-form').valid()) {
+                PROGRAM_C.SSID = document.getElementById("wlanSsid").value;
+                PROGRAM_C.password = document.getElementById("wlanPassword").value;
+                $("#menu-wlan").modal('hide');
+            }
+        }, 'wlan form submitted');
+        
         $('#doUpdateFirmware').onWrap('click', function() {
             $('#set-token').modal('hide');
             $('#confirmUpdateFirmware').modal('hide');
@@ -221,6 +262,14 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
         }
     }
     exports.showRobotInfo = showRobotInfo;
+    
+    /**
+     * Show WLAN credentials form to save them for further REST calls.
+     */
+    function showWlanForm() {
+        $("#menu-wlan").modal('show');
+    }
+    exports.showWlanForm = showWlanForm;
 
     /**
      * Handle firmware conflict between server and robot
@@ -260,6 +309,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
      * Switch robot
      */
     function switchRobot(robot, opt_continue, opt_callback) {
+        
+        PROGRAM_C.SSID = null;
+        PROGRAM_C.password = null;
+        document.getElementById("wlanSsid").value = "";
+        document.getElementById("wlanPassword").value = "";
 
         var further;
         // no need to ask for saving programs if you switch the robot in between a group

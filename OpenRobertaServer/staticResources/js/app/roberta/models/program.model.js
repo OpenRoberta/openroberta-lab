@@ -208,14 +208,20 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - XML representation of the program
      * @param xmlTextConfig
      *            {String} - XML representation of the robot configuration
+     * @param SSID
+     *            {String} - WLAN SSID for WiFi enabled robots
+     * @param password
+     *            {String} - WLAN password for WiFi enabled robots
      */
-    function showSourceProgram(programName, configName, xmlTextProgram, xmlTextConfig, language, successFn) {
+    function showSourceProgram(programName, configName, xmlTextProgram, xmlTextConfig, SSID, password, language, successFn) {
         COMM.json("/program", {
             "cmd" : "showSourceP",
             "name" : programName,
             "configuration" : configName,
             "programText" : xmlTextProgram,
             "configurationText" : xmlTextConfig,
+            "SSID" : SSID,
+            "password" : password,
             "language" : language
         }, successFn, "show source code of program '" + programName + "'");
     }
@@ -233,28 +239,35 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - XML representation of the program
      * @param xmlTextConfig
      *            {String} - XML representation of the robot configuration
-     * 
+     * @param SSID
+     *            {String} - WLAN SSID for WiFi enabled robots
+     * @param password
+     *            {String} - WLAN password for WiFi enabled robots
      */
-    function runOnBrick(programName, configName, xmlTextProgram, xmlTextConfig, language, successFn) {
+    function runOnBrick(programName, configName, xmlTextProgram, xmlTextConfig, SSID, password, language, successFn) {
         COMM.json("/program", {
             "cmd" : "runP",
             "name" : programName,
             "configuration" : configName,
             "programText" : xmlTextProgram,
             "configurationText" : xmlTextConfig,
+            "SSID" : SSID,
+            "password" : password,
             "language" : language
         }, successFn, "run program '" + programName + "' with configuration '" + configName + "'");
     }
 
     exports.runOnBrick = runOnBrick;
 
-    function runOnBrickBack(programName, configName, xmlTextProgram, xmlTextConfig, language, successFn) {
+    function runOnBrickBack(programName, configName, xmlTextProgram, xmlTextConfig, SSID, password, language, successFn) {
         COMM.json("/program", {
             "cmd" : "runPBack",
             "name" : programName,
             "configuration" : configName,
             "programText" : xmlTextProgram,
             "configurationText" : xmlTextConfig,
+            "SSID" : SSID,
+            "password" : password,
             "language" : language
         }, successFn, "run program '" + programName + "' with configuration '" + configName + "'");
     }
@@ -272,7 +285,6 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - XML representation of the program
      * @param xmlTextConfig
      *            {String} - XML representation of the robot configuration
-     * 
      */
     function runInSim(programName, configName, xmlTextProgram, xmlTextConfig, language, successFn) {
         COMM.json("/program", {

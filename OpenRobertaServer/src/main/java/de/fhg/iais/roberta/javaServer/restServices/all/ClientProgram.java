@@ -139,6 +139,8 @@ public class ClientProgram {
                     final String programText = request.getString("programText");
                     final String configName = request.optString("configuration", null);
                     String configurationText = request.optString("configurationText", null);
+                    final String SSID = request.optString("SSID", null);
+                    final String password = request.optString("password", null);
                     final ILanguage language = Language.findByAbbr(request.optString("language"));
                     if ( configName != null ) {
                         configurationText = configurationProcessor.getConfigurationText(configName, userId, robot);
@@ -153,10 +155,17 @@ public class ClientProgram {
                     if ( transformer.getErrorMessage() != null ) {
                         forMessages.setError(transformer.getErrorMessage());
                     } else {
-                        final AbstractProgramValidatorVisitor programChecker = robotFactory.getRobotProgramCheckVisitor(transformer.getRobotConfiguration());
-                        programConfigurationCompatibilityCheck(response, transformer, programChecker);
-
-                        compilerWorkflow.generateSourceCode(token, programName, transformer, language);
+                        if ( !SSID.equals("null") || !password.equals("null") ) {
+                            compilerWorkflow.generateSourceCode(token, programName, transformer, SSID, password, language);
+                            final AbstractProgramValidatorVisitor programChecker =
+                                robotFactory.getRobotProgramCheckVisitor(transformer.getRobotConfiguration(), SSID, password);
+                            programConfigurationCompatibilityCheck(response, transformer, programChecker);
+                        } else {
+                            final AbstractProgramValidatorVisitor programChecker =
+                                robotFactory.getRobotProgramCheckVisitor(transformer.getRobotConfiguration());
+                            programConfigurationCompatibilityCheck(response, transformer, programChecker);
+                            compilerWorkflow.generateSourceCode(token, programName, transformer, language);
+                        }
                         String sourceCode = compilerWorkflow.getGeneratedSourceCode();
                         if ( sourceCode == null ) {
                             forMessages.setError(compilerWorkflow.getWorkflowResult());

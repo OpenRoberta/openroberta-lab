@@ -49,6 +49,28 @@ public class SenseboxCompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     @Override
+    public void generateSourceCode(
+        String token,
+        String programName,
+        BlocklyProgramAndConfigTransformer data,
+        String SSID,
+        String password,
+        ILanguage language) {
+        if ( data.getErrorMessage() != null ) {
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            return;
+        }
+        try {
+            Configuration configuration = (data.getRobotConfiguration());
+            this.generatedSourceCode = SenseboxCppVisitor.generate(configuration, data.getProgramTransformer().getTree(), SSID, password, true);
+            LOG.info("senseBox c++ code generated");
+        } catch ( Exception e ) {
+            LOG.error("senseBox c++ code generation failed", e);
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+        }
+    }
+
+    @Override
     public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
         this.storeGeneratedProgram(token, programName, ".ino");
         if ( this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {

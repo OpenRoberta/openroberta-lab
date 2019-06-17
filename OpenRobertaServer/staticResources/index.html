@@ -136,6 +136,7 @@ limitations under the License.
                         <ul id="navigation-robot" class="dropdown-menu">
                             <li id="robotConnect"><a href="#" id="menuConnect" class="typcn typcn-wi-fi" lkey="Blockly.Msg.MENU_CONNECT">verbinden ...</a></li>
                             <li><a href="#" id="menuRobotInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_ROBOT_STATE_INFO">Roboterinformationen</a></li>
+                            <li id="robotWlan" class="hidden"><a href="#" id="menuWlan" class="typcn typcn-wi-fi" lkey="Blockly.Msg.MENU_ROBOT_WLAN">WLAN Zugangsdaten ...</a></li>
                             <li class="divider"></li>
                             <li class="robotType"><a href="#" class="typcn menu-robot"></a></li>
                             <li class="hidden anchor"></li>
@@ -452,6 +453,45 @@ limitations under the License.
     </div>
     <!--  ################## END TABS ################## -->
     <!-- ################## POPUPS ################## -->
+    
+    <!-- Popup for WLAN credentials begin -->
+    <div class="modal fade" id="menu-wlan" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" lkey="Blockly.Msg.MENU_WLAN_CREDENTIALS" id="wlanLabel"></h3>
+                </div>
+                <div id="div-wlan-forms">
+                    <form id="wlan-form">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="wlanSsid" lkey="Blockly.Msg.POPUP_WLAN_SSID"></label>
+                                <div class="input-group">
+                                    <span class="input-group-addon typcn input-typcn typcn-user"></span> <input type="text" class="form-control"
+                                        id="wlanSsid" name="wlanSsid" autofocus />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="wlanPassword" lkey="Blockly.Msg.POPUP_PASSWORD"></label>
+                                <div class="input-group">
+                                    <span class="input-group-addon typcn input-typcn typcn-lock-closed"></span> <input type="password" class="form-control"
+                                        id="wlanPassword" name="wlanPassword" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                        	<label lkey="Blockly.Msg.POPUP_WLAN_SECURITY_INFORMATION"></label>
+                            <button type="submit" class="btn btn-primary" id="setWlanCredentials">OK</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Popup for WLAN credentials end -->
+    
 
     <!-- Popup login -->
     <div class="modal fade" id="login-user" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel"

@@ -15,6 +15,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
         initEvents();
         initProgramForms();
         LOG.info('init program view');
+        exports.SSID = '';
+        exports.password = '';
     }
     exports.init = init;
 

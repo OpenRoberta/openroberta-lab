@@ -125,4 +125,9 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
     public final String getMenuVersion() {
         return this.pluginProperties.getStringProperty("robot.menu.version");
     }
+
+    @Override
+    public final Boolean hasWlanCredentials() {
+        return this.pluginProperties.getStringProperty("robot.haswlan") != null ? true : false; // TODO: a bit strange - consider robot.beta = false :-)
+    }
 }

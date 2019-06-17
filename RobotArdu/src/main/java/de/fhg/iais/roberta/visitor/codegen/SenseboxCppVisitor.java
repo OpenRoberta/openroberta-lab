@@ -51,8 +51,15 @@ import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
 public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implements IArduinoVisitor<Void> {
     private final boolean isListsUsed;
+    private final String SSID;
+    private final String password;
 
-    public SenseboxCppVisitor(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
+    public SenseboxCppVisitor(
+        Configuration brickConfiguration,
+        ArrayList<ArrayList<Phrase<Void>>> programPhrases,
+        String SSID,
+        String password,
+        int indentation) {
         super(brickConfiguration, programPhrases, indentation);
         SenseboxUsedHardwareCollectorVisitor codePreprocessVisitor = new SenseboxUsedHardwareCollectorVisitor(programPhrases);
         this.usedVars = codePreprocessVisitor.getVisitedVars();
@@ -60,6 +67,8 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
         this.usedSensors = codePreprocessVisitor.getUsedSensors();
         this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
         this.isListsUsed = codePreprocessVisitor.isListsUsed();
+        this.SSID = SSID;
+        this.password = password;
     }
 
     @Override
@@ -145,7 +154,18 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
      * @param withWrapping if false the generated code will be without the surrounding configuration code
      */
     public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
-        SenseboxCppVisitor astVisitor = new SenseboxCppVisitor(brickConfiguration, programPhrases, withWrapping ? 1 : 0);
+        SenseboxCppVisitor astVisitor = new SenseboxCppVisitor(brickConfiguration, programPhrases, "", "", withWrapping ? 1 : 0);
+        astVisitor.generateCode(withWrapping);
+        return astVisitor.sb.toString();
+    }
+
+    public static String generate(
+        Configuration brickConfiguration,
+        ArrayList<ArrayList<Phrase<Void>>> programPhrases,
+        String SSID,
+        String password,
+        boolean withWrapping) {
+        SenseboxCppVisitor astVisitor = new SenseboxCppVisitor(brickConfiguration, programPhrases, SSID, password, withWrapping ? 1 : 0);
         astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
     }
@@ -601,9 +621,9 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                         .append("_bee_")
                         //.append(usedConfigurationBlock.getUserDefinedPortName())
                         .append("->connectToWifi(\"")
-                        .append(usedConfigurationBlock.getProperty("SSID"))
+                        .append(this.SSID)
                         .append("\",\"")
-                        .append(usedConfigurationBlock.getProperty("PASSWORD"))
+                        .append(this.password)
                         .append("\");");
                     this.nlIndent();
                     this.sb.append("delay(1000);");

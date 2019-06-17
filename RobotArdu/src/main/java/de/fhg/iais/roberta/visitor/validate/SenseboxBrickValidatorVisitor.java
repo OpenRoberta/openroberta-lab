@@ -30,8 +30,13 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor implements ISensorVisitor<Void>, IArduinoVisitor<Void> {
 
-    public SenseboxBrickValidatorVisitor(Configuration brickConfiguration) {
+    private final String SSID;
+    private final String password;
+
+    public SenseboxBrickValidatorVisitor(Configuration brickConfiguration, String SSID, String password) {
         super(brickConfiguration);
+        this.SSID = SSID;
+        this.password = password;
     }
 
     @Override
@@ -63,6 +68,10 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
 
     @Override
     public Void visitDataSendAction(SendDataAction<Void> sendDataAction) {
+        if ( SSID.equals("") || password.equals("") ) {
+            sendDataAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_WLAN_CREDENTIALS_MISSING"));
+            return null;
+        }
         if ( (sendDataAction.getDestination().equals("SENSEMAP") && !this.robotConfiguration.isComponentTypePresent(SC.WIRELESS)) ) {
             sendDataAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
             return null;

@@ -54,7 +54,7 @@ public class HelperSenseboxForXmlTest extends AbstractHelperForXmlTest {
 
     public String generateCpp(String pathToProgramXml, Configuration configuration) throws Exception {
         Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = SenseboxCppVisitor.generate(configuration, transformer.getTree(), true);
+        String code = SenseboxCppVisitor.generate(configuration, transformer.getTree(), "mySSID", "myPassw0rd", true);
         return code + '\n';
     }
 

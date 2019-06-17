@@ -80,6 +80,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         exports.robot.time = -1;
         exports.robot.robotPort = '';
         exports.robot.socket = null;
+        exports.robot.hasWlan = false;
 
         var getInitFromServer = function() {
             return COMM.json("/admin", {

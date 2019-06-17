@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-05-25 09:42:12.023148",
+		"lastupdated": "2019-06-19 09:26:54.273364",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1518,6 +1518,11 @@
 	"CB_BOTH": "Calli:bot both",
 	"CB_ALL": "Calli:bot all",
 	"PORT_INTERNAL": "Port internal",
+	"CONFIGURATION_ERROR_WLAN_CREDENTIALS_MISSING": "Missing WLAN credentials, please enter them in robot -> WLAN credentials ... !",
+	"MENU_WLAN_CREDENTIALS": "WLAN credentials",
+	"POPUP_WLAN_SSID": "SSID",
+	"MENU_ROBOT_WLAN": "WLAN credentials ...",
+	"POPUP_WLAN_SECURITY_INFORMATION": "Please note that the data provided in this dialog window is private and will not be stored in the OpenRoberta lab; it will only be used for program creation and during the compilation process. Make sure that for each new session you enter these credentials again. Please keep in mind that exposing this information to public may pose security risks.",
 	"ACTION_PLOTTING": "plot",
 	"ACTION_PLOT_POINT": "plot a point",
 	"ACTION_PLOT_POINT_TOOLTIP": "plot a point with specified value (Y axis) at the specified tickmark (X axis)",
