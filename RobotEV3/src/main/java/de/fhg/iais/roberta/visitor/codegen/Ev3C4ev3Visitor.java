@@ -138,7 +138,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         this.sb.append("int main () {");
         incrIndentation();
         nlIndent();
-        this.sb.append("InitEV3();");
+        this.sb.append("NEPOInitEV3();");
         nlIndent();
         generateSensorInitialization();
         nlIndent();

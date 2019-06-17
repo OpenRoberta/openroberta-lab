@@ -30,7 +30,7 @@ public class Ast2C4ev3VisitorTest {
     private static final String MAIN_INIT_EV3 =
         "" //
             + "int main() {\n"
-            + "    InitEV3();\n";
+            + "    NEPOInitEV3();\n";
 
     private static final String BEGIN_MAIN_DEFAULT =
         "" //

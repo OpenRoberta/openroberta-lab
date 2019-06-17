@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public class Ev3C4ev3CompilerWorkflow extends AbstractCompilerWorkflow {
 
@@ -28,6 +29,9 @@ public class Ev3C4ev3CompilerWorkflow extends AbstractCompilerWorkflow {
     private static final String GENERATED_RBF_EXTENSION = ".rbf";
 
     private static final String EV3_PROGRAMS_FOLDER_PATH = "../prjs/BrkProg_SAVE/";
+
+    private static final String JUST_COPIED_FLAG_FILE_NAME = EV3_PROGRAMS_FOLDER_PATH + "NEPO-just-uploaded.txt";
+    private static final byte[] JUST_COPIED_FLAG_FILE_CONTENT = "NEPO".getBytes(StandardCharsets.UTF_8);
 
     private final String tempDir;
     private final C4Ev3SourceCompiler compiler;
@@ -99,6 +103,7 @@ public class Ev3C4ev3CompilerWorkflow extends AbstractCompilerWorkflow {
             return false;
         }
         addRbfToUf2(uf2, programName);
+        addJustUploadedFlagToUf2(uf2);
         this.uf2InBase64 = uf2.toBase64();
         return true;
     }
@@ -109,6 +114,10 @@ public class Ev3C4ev3CompilerWorkflow extends AbstractCompilerWorkflow {
 
     private void addRbfToUf2(Uf2FileContainer uf2, String programName) {
         uf2.add(rbfBuilder.build(getBinaryFileNameInEv3Storage(programName)), getRbfFileNameInEv3Storage(programName));
+    }
+
+    private void addJustUploadedFlagToUf2(Uf2FileContainer uf2) {
+        uf2.add(JUST_COPIED_FLAG_FILE_CONTENT, JUST_COPIED_FLAG_FILE_NAME);
     }
 
     private String getBinaryFileNameInEv3Storage(String programName) {
