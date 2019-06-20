@@ -75,6 +75,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.codegen.utilities.TTSLanguageMapper;
 import de.fhg.iais.roberta.visitor.collect.Ev3UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
@@ -184,43 +185,10 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         return null;
     }
 
-    private String getLanguageString(ILanguage language) {
-        switch ( (Language) language ) {
-            case GERMAN:
-                return "de";
-            case ENGLISH:
-                return "en";
-            case FRENCH:
-                return "fr";
-            case SPANISH:
-                return "es";
-            case ITALIAN:
-                return "it";
-            case DUTCH:
-                return "nl";
-            case FINNISH:
-                return "fi";
-            case POLISH:
-                return "pl";
-            case RUSSIAN:
-                return "ru";
-            case TURKISH:
-                return "tu";
-            case CZECH:
-                return "cs";
-            case PORTUGUESE:
-                return "pt-pt";
-            case DANISH:
-                return "da";
-            default:
-                return "en";
-        }
-    }
-
     @Override
     public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
         this.sb.append("hal.setLanguage(\"");
-        this.sb.append(this.getLanguageString(setLanguageAction.getLanguage()));
+        this.sb.append(TTSLanguageMapper.getLanguageString(setLanguageAction.getLanguage()));
         this.sb.append("\")");
         return null;
     }
@@ -957,7 +925,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
         if ( this.isSayTextUsed ) {
             this.sb.append("\nhal.setLanguage(\"");
-            this.sb.append(this.getLanguageString(this.language));
+            this.sb.append(TTSLanguageMapper.getLanguageString(this.language));
             this.sb.append("\")");
         }
     }

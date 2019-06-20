@@ -1190,4 +1190,38 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
+    @Override
+    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
+        this.sb.append("Say(ToString(");
+        sayTextAction.getMsg().visit(this); // TODO: Handle cases where the expression is not a string
+        this.sb.append("), \"" + TTSLanguageMapper.getLanguageString(this.language) + "\", ");
+        this.generateSpeedAndPitchArgumentsOrDefault(sayTextAction);
+        this.sb.append(");");
+        return null;
+    }
+
+    private void generateSpeedAndPitchArgumentsOrDefault(SayTextAction<Void> sayTextAction) {
+        Expr<Void> speed = sayTextAction.getSpeed();
+        Expr<Void> pitch = sayTextAction.getPitch();
+        if (!isExprEmptyBlock(speed) && !isExprEmptyBlock(pitch)) {
+            generateSpeedAndPitchArguments(speed, pitch);
+        } else {
+            generateDefaultSpeedAndPitchArguments();
+        }
+    }
+
+    private boolean isExprEmptyBlock(Expr<Void> expr) {
+        BlockType emptyBlock = BlockTypeContainer.getByName("EMPTY_EXPR");
+        return expr.getKind().equals(emptyBlock);
+    }
+
+    private void generateSpeedAndPitchArguments (Expr<Void> speed, Expr<Void> pitch) {
+        speed.visit(this);
+        this.sb.append(", ");
+        pitch.visit(this);
+    }
+
+    private void generateDefaultSpeedAndPitchArguments () {
+        this.sb.append("30, 50");
+    }
 }

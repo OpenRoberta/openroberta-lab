@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.fhg.iais.roberta.visitor.codegen.utilities.TTSLanguageMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -257,45 +258,11 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         }
         return null;
     }
-
-    private String getLanguageString(ILanguage language) {
-        switch ( (Language) language ) {
-            case GERMAN:
-                return "de";
-            case ENGLISH:
-                return "en";
-            case FRENCH:
-                return "fr";
-            case SPANISH:
-                return "es";
-            case ITALIAN:
-                return "it";
-            case DUTCH:
-                return "nl";
-            case FINNISH:
-                return "fi";
-            case POLISH:
-                return "pl";
-            case RUSSIAN:
-                return "ru";
-            case TURKISH:
-                return "tu";
-            case CZECH:
-                return "cs";
-            case PORTUGUESE:
-                return "pt-pt";
-            case DANISH:
-                return "da";
-            default:
-                return "en";
-        }
-    }
-
     @Override
     public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
         if ( !this.brickConfiguration.getRobotName().equals("ev3lejosV0") ) {
             this.sb.append("hal.setLanguage(\"");
-            this.sb.append(getLanguageString(setLanguageAction.getLanguage()));
+            this.sb.append(TTSLanguageMapper.getLanguageString(setLanguageAction.getLanguage()));
             this.sb.append("\");");
         }
         return null;
@@ -702,7 +669,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         if ( this.isSayTextUsed && !this.brickConfiguration.getRobotName().equals("ev3lejosV0") ) {
             nlIndent();
             this.sb.append("hal.setLanguage(\"");
-            this.sb.append(getLanguageString(this.language));
+            this.sb.append(TTSLanguageMapper.getLanguageString(this.language));
             this.sb.append("\");");
         }
         return null;
