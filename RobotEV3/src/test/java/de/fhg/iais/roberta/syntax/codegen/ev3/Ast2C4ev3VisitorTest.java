@@ -71,7 +71,7 @@ public class Ast2C4ev3VisitorTest {
             "" //
                 + CONSTANTS_AND_IMPORTS
                 + BEGIN_MAIN_DEFAULT
-                + "DrawString(\"Hallo\", 0, 3);\n"
+                + "DrawString(ToString(\"Hallo\"), 0, 3);\n"
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/code_generator/java/java_code_generator.xml", expectedCode);
     }
@@ -83,7 +83,7 @@ public class Ast2C4ev3VisitorTest {
                 + CONSTANTS_AND_IMPORTS
                 + BEGIN_MAIN_DEFAULT
                 + "for (float ___k0 = 0; ___k0 < 10; ___k0 += 1) {\n"
-                + "    DrawString(\"Hallo\", 0, 3);\n"
+                + "    DrawString(ToString(\"Hallo\"), 0, 3);\n"
                 + "}\n"
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/code_generator/java/java_code_generator1.xml", expectedCode);
@@ -97,7 +97,7 @@ public class Ast2C4ev3VisitorTest {
                 + BEGIN_MAIN__TOUCH_ULTRASONIC_COLOR
                 + "if ( readSensor(IN_1) ) {\n"
                 + "    SetLedPattern(LED_GREEN);\n"
-                + "} else if ( INPUT_REDCOLOR == ReadSensorInMode(IN_3, COL_COLOR) ) {\n"
+                + "} else if ( Red == ReadSensorInMode(IN_3, COL_COLOR) ) {\n"
                 + "    while ( true ) {\n"
                 + "        LcdPicture(LCD_COLOR_BLACK, 0, 0, EYESOPEN);\n"
                 + "        OnFwdReg(OUT_B, Speed(30));\n"
@@ -183,7 +183,7 @@ public class Ast2C4ev3VisitorTest {
             "" //
                 + CONSTANTS_AND_IMPORTS
                 + BEGIN_MAIN_DEFAULT
-                + "DrawString(\"Hallo\", 0, 0);\n"
+                + "DrawString(ToString(\"Hallo\"), 0, 0);\n"
                 + "PlayToneEx(300, 3000, GetVolume());"
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/code_generator/java/java_code_generator6.xml", expectedCode);
@@ -210,12 +210,12 @@ public class Ast2C4ev3VisitorTest {
             "" //
                 + CONSTANTS_AND_IMPORTS
                 + "double ___item = 10;\n"
-                + "String ___item2 = \"TTTT\";\n"
+                + "std::string ___item2 = \"TTTT\";\n"
                 + "bool ___item3 = true;\n"
                 + BEGIN_MAIN_DEFAULT
-                + "DrawNumber(___item, 0, 0);\n"
-                + "DrawString(___item2, 0, 0);\n"
-                + "DrawBool(___item3, 0, 0);\n"
+                + "DrawString(ToString(___item), 0, 0);\n"
+                + "DrawString(ToString(___item2), 0, 0);\n"
+                + "DrawString(ToString(___item3), 0, 0);\n"
                 + "___item3 = false;\n"
                 + END_MAIN;
 
@@ -245,13 +245,13 @@ public class Ast2C4ev3VisitorTest {
             "" //
                 + CONSTANTS_AND_IMPORTS
                 + "double ___item = 0;\n"
-                + "String ___item2 = \"ss\";\n"
+                + "std::string ___item2 = \"ss\";\n"
                 + "bool ___item3 = true;\n"
                 + "std::list<double> ___item4 = {1, 2, 3};\n"
-                + "std::list<String> ___item5 = {\"a\", \"b\"};\n"
+                + "std::list<std::string> ___item5 = {\"a\", \"b\"};\n"
                 + "std::list<bool> ___item6 = {true, false};\n"
-                + "std::list<unsigned int> ___item7 = {INPUT_REDCOLOR, INPUT_BLACKCOLOR, INPUT_NULLCOLOR};\n"
-                + "unsigned int ___item8 = INPUT_NULLCOLOR;\n"
+                + "std::list<Color> ___item7 = {Red, Black, Transparent};\n"
+                + "Color ___item8 = Transparent;\n"
                 + BEGIN_MAIN_DEFAULT
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/task/task_mainTask.xml", expectedCode);
@@ -311,7 +311,7 @@ public class Ast2C4ev3VisitorTest {
                 + "double ___variablenName = 0;\n"
                 + "bool ___variablenName2 = true;\n"
                 + "void test1(double ___x, double ___x2) {\n"
-                + "    DrawString(\"Hallo\", ___x, ___x2);\n"
+                + "    DrawString(ToString(\"Hallo\"), ___x, ___x2);\n"
                 + "}\n"
                 + "void test2 () {\n"
                 + "    if (___variablenName2) return;\n"
@@ -329,13 +329,13 @@ public class Ast2C4ev3VisitorTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS
-                + "std::list<String> ___variablenName = {\"a\", \"b\", \"c\"};\n"
-                + "double test(double ___x, std::list<String> ___x2) {\n"
-                + "    DrawString(___x2, ___x, 0);"
+                + "std::list<std::string> ___variablenName = {\"a\", \"b\", \"c\"};\n"
+                + "double test(double ___x, std::list<std::string> ___x2) {\n"
+                + "    DrawString(ToString(___x2), ___x, 0);"
                 + "    return ___x;\n"
                 + "}\n"
                 + BEGIN_MAIN_DEFAULT
-                + "DrawString(test(0, ___variablenName), 0, 0);\n"
+                + "DrawString(ToString(test(0, ___variablenName)), 0, 0);\n"
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/methods/method_return_1.xml", expectedCode);
     }
@@ -345,13 +345,13 @@ public class Ast2C4ev3VisitorTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS
-                + "std::list<String> ___variablenName = {\"a\", \"b\", \"c\"};\n"
-                + "unsigned int test() {\n"
-                + "    DrawString(___variablenName, 0, 0);"
-                + "    return INPUT_NULLCOLOR;\n"
+                + "std::list<std::string> ___variablenName = {\"a\", \"b\", \"c\"};\n"
+                + "Color test() {\n"
+                + "    DrawString(ToString(___variablenName), 0, 0);"
+                + "    return Transparent;\n"
                 + "}\n"
                 + BEGIN_MAIN_DEFAULT
-                + "DrawString(test(), 0, 0);\n"
+                + "DrawString(ToString(test()), 0, 0);\n"
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/methods/method_return_2.xml", expectedCode);
     }
@@ -362,14 +362,14 @@ public class Ast2C4ev3VisitorTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS
-                + "std::list<String> ___variablenName = {\"a\", \"b\", \"c\"};\n"
-                + "unsigned int test() {\n"
-                + "    if (true) return INPUT_REDCOLOR;\n"
-                + "    DrawString(___variablenName, 0, 0);"
-                + "    return INPUT_NULLCOLOR;\n"
+                + "std::list<std::string> ___variablenName = {\"a\", \"b\", \"c\"};\n"
+                + "Color test() {\n"
+                + "    if (true) return Red;\n"
+                + "    DrawString(ToString(___variablenName), 0, 0);"
+                + "    return Transparent;\n"
                 + "}\n"
                 + BEGIN_MAIN_DEFAULT
-                + "DrawString(test(), 0, 0);\n"
+                + "DrawString(ToString(test()), 0, 0);\n"
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/methods/method_if_return_2.xml", expectedCode);
     }
@@ -380,10 +380,10 @@ public class Ast2C4ev3VisitorTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS
-                + "String ___message = \"exit\";\n"
+                + "std::string ___message = \"exit\";\n"
                 + BEGIN_MAIN_DEFAULT
                 + "if (___message == \"exit\") {\n"
-                + "    DrawString(\"done\", 0, 0);\n"
+                + "    DrawString(ToString(\"done\"), 0, 0);\n"
                 + "}\n"
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/stmt/if_stmt4.xml", expectedCode);
@@ -395,7 +395,7 @@ public class Ast2C4ev3VisitorTest {
             "" //
                 + CONSTANTS_AND_IMPORTS
                 + "double ___item;\n"
-                + "String ___item2 = \"cc\";\n"
+                + "std::string ___item2 = \"cc\";\n"
                 + BEGIN_MAIN_DEFAULT
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/code_generator/java/java_code_generator11.xml", expectedCode);

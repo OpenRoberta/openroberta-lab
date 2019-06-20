@@ -9,9 +9,7 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
-import de.fhg.iais.roberta.syntax.MotorDuration;
-import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.syntax.*;
 import de.fhg.iais.roberta.syntax.action.communication.*;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
@@ -39,6 +37,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.*;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.collect.Ev3UsedHardwareCollectorVisitor;
@@ -187,6 +186,23 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         nlIndent();
     }
 
+
+    @Override
+    protected String getLanguageVarTypeFromBlocklyType(BlocklyType type) {
+        switch ( type ) {
+            case STRING:
+                return "std::string";
+            case COLOR:
+                return "Color";
+            case ARRAY_STRING:
+                return "std::list<std::string>";
+            case ARRAY_COLOUR:
+                return "std::list<Color>";
+            default:
+                return super.getLanguageVarTypeFromBlocklyType(type);
+        }
+    }
+
     @Override
     public Void visitMathConst(MathConst<Void> mathConst) {
         String constantName = getCMathConstantName(mathConst.getMathConst());
@@ -240,54 +256,38 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private String getColorConstantByHex(String hex) {
-        String color;
         switch ( hex.toUpperCase() ) {
             case "#000000":
-                color = "BLACK";
-                break;
+                return "Black";
             case "#0057A6":
-                color = "BLUE";
-                break;
+                return "Blue";
             case "#00642E":
-                color = "GREEN";
-                break;
+                return "Green";
             case "#F7D117":
-                color = "YELLOW";
-                break;
+                return "Yellow";
             case "#B30006":
-                color = "RED";
-                break;
+                return "Red";
             case "#FFFFFF":
-                color = "WHITE";
-                break;
+                return "White";
             case "#532115":
-                color = "BROWN";
-                break;
+                return "Brown";
             case "#EE82EE":
-                color = "VIOLET";
-                break;
+                return "Violet";
             case "#800080":
-                color = "PURPLE";
-                break;
+                return "Purple";
             case "#00FF00":
-                color = "LIME";
-                break;
+                return "Lime";
             case "#FFA500":
-                color = "ORANGE";
-                break;
+                return "Orange";
             case "#FF00FF":
-                color = "MAGENTA";
-                break;
+                return "Magenta"; // TODO: is this defined?
             case "#DC143C":
-                color = "CRIMSON";
-                break;
+                return "Crismon";
             case "#585858":
-                color = "NULL";
-                break;
+                return "Transparent";
             default:
                 throw new DbcException("Invalid color constant: " + hex);
         }
-        return "INPUT_" + color + "COLOR";
     }
 
     @Override
@@ -532,7 +532,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
         List<Expr<Void>> texts = textJoinFunct.getParam().get();
         for (int i = 0; i < texts.size(); i++) {
-            this.sb.append("((std::string) ");
+            this.sb.append("ToString(");
             texts.get(i).visit(this);
             this.sb.append(")");
             if (i < texts.size() - 1) {
@@ -1030,87 +1030,14 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        this.sb.append(this.getLcdFunctionNameForMsg(showTextAction.getMsg()) + "(");
+        this.sb.append("DrawString(ToString(");
         showTextAction.getMsg().visit(this);
-        this.sb.append(", ");
+        this.sb.append("), ");
         showTextAction.getX().visit(this);
         this.sb.append(", ");
         showTextAction.getY().visit(this);
         this.sb.append(");");
         return null;
-    }
-
-    private String getLcdFunctionNameForMsg(Expr<Void> msg) {
-        switch ( msg.getVarType() ) {
-            case STRING:
-            case ARRAY_STRING:
-                return "DrawString";
-            case BOOLEAN:
-            case ARRAY_BOOLEAN:
-                return "DrawBool";
-            case COLOR:
-            case ARRAY_COLOUR:
-                return "DrawColorName";
-            case NUMBER:
-            case ARRAY_NUMBER:
-                return "DrawNumber";
-            case NOTHING:
-                return getLcdFunctionNameForMsgOfTypeNothing(msg);
-            case CAPTURED_TYPE:
-                return getLcdFunctionNameForMsgOfTypeCapturedType(msg);
-            default:
-                return "DrawNumber";
-        }
-    }
-
-    private String getLcdFunctionNameForMsgOfTypeNothing(Expr<Void> msg) {
-        String blockType = msg.getProperty().getBlockType().toString();
-        if ( msg.toString().contains("LIGHT") ) {
-            return "DrawNumber"; // FIXME
-        }
-
-        if ( blockType.contains("isPressed") || blockType.contains("logic_ternary") ) {
-            return "DrawBool";
-        } else if ( blockType.contains("colour") ) { // TODO: Fix rgb array
-            return "DrawColorName";
-        } else if ( blockType.contains("robSensors") || blockType.contains("robActions") || msg.toString().contains("POWER") ) {
-            return "DrawNumber";
-        } else {
-            return "DrawString";
-        }
-    }
-
-    private String getLcdFunctionNameForMsgOfTypeCapturedType(Expr<Void> msg) {
-        String msgString = msg.toString();
-        if ( msgString.contains("Number")
-            || msgString.contains("ADD")
-            || msgString.contains("MINUS")
-            || msgString.contains("MULTIPLY")
-            || msgString.contains("DIVIDE")
-            || msgString.contains("MOD")
-            || msgString.contains("NEG")
-            || msgString.contains("LISTS_LENGTH")
-            || msgString.contains("IndexOfFunct")
-            || msgString.contains("[ListGetIndex [GET, FROM_START, [ListCreate [NUMBER")
-            || msgString.contains("[ListGetIndex [GET, FROM_START, [ListCreate [CONNECTION")
-            || msgString.contains("MotorGetPower")
-            || msgString.contains("VolumeAction") ) {
-            return "DrawNum";
-        } else if ( msgString.contains("EQ")
-            || msgString.contains("NEQ")
-            || msgString.contains("LT")
-            || msgString.contains("LTE")
-            || msgString.contains("GT")
-            || msgString.contains("GTE")
-            || msgString.contains("LIST_IS_EMPTY")
-            || msgString.contains("AND")
-            || msgString.contains("OR")
-            || msgString.contains("NOT")
-            || msgString.contains("[ListGetIndex [GET, FROM_START, [ListCreate [BOOLEAN")
-            || msgString.contains("BluetoothConnectAction") ) {
-            return "DrawBool";
-        }
-        return "DrawString";
     }
 
     @Override
@@ -1259,8 +1186,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
-    @Override
-    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
+    @Override public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
         return null;
     }
 
