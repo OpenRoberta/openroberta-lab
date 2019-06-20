@@ -241,21 +241,24 @@ public class ServerStarter {
      * To get rid of Matomo, logging of the country code will be handled with the help of the ipToCountry class which maps the ip to the country code before
      * something is logged.<br>
      * In case the server is public make sure that there is database IpToCountry.csv available in the folder defined in the "server.iptocountry.dir" property,
-     * downloaded from <a href="http://software77.net/geo-ip/?DL=1">http://software77.net</a>
+     * downloaded from <a href="http://software77.net/geo-ip/?DL=1">http://software77.net</a></br>
+     * If "server.iptocountry.dir" property is provided a valid database is expected and will be used, regardless of whether the server is public or not.
      *
      * @return ipToCountry of type IIpToCountry
      */
     private IIpToCountry configureIpToCountryDb() {
         Boolean isPublicServer = serverProperties.getBooleanProperty("server.public");
+        String pathIpToCountryDb = serverProperties.getStringProperty("server.iptocountry.dir");
 
         IIpToCountry ipToCountry;
-        if ( isPublicServer ) {
-            String pathIpToCountryDb = serverProperties.getStringProperty("server.iptocountry.dir");
+        if ( pathIpToCountryDb != null ) {
             try {
                 ipToCountry = new IpToCountry(pathIpToCountryDb);
             } catch ( IOException e ) {
-                throw new DbcException("Path to IpToCountry or IpToCountry seems to be invalid. Server does NOT start", e);
+                throw new DbcException("Path to IpToCountry.cvs or IpToCountry.cvs seems to be invalid. Server does NOT start", e);
             }
+        } else if ( isPublicServer ) {
+            throw new DbcException("Path to IpToCountry is obligatorily for public server. Server does NOT start");
         } else {
             ipToCountry = new IpToCountryDefault();
         }

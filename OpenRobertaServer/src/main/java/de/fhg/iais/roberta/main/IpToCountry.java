@@ -43,6 +43,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
+import de.fhg.iais.roberta.util.dbc.DbcException;
+
 /**
  * Converts IP addresses to country codes using the database available from
  * http://software77.net/geo-ip/
@@ -188,6 +190,8 @@ public class IpToCountry implements IIpToCountry {
         this.fileLastModified = file.lastModified();
         if ( file.exists() && file.canRead() ) {
             loadFile(file);
+        } else {
+            throw new DbcException("IpToCountry.cs could not be found or is not readable. Server does NOT start");
         }
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);

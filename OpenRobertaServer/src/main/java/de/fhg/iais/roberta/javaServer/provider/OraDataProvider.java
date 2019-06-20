@@ -93,11 +93,10 @@ public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
                         remoteAddr = OraDataProvider.this.servletRequest.getRemoteAddr();
                     }
                 }
-                String addrAsString = OraDataProvider.this.servletRequest.getRemoteAddr();
                 InetAddress addrAsIp;
                 String countryCode = "..";
                 try {
-                    addrAsIp = InetAddress.getByName(addrAsString);
+                    addrAsIp = InetAddress.getByName(remoteAddr);
                     countryCode = ipToCountry.getCountryCode(addrAsIp);
                 } catch ( IOException e ) {
                     LOG.error("Could not evaluate the actual ip as a country code. Likely a problem with the IpToCountry file.");
