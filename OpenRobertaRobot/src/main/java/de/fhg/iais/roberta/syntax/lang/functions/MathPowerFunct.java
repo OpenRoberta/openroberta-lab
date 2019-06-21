@@ -49,6 +49,30 @@ public class MathPowerFunct<V> extends Expr<V> {
     }
 
     /**
+     * factory method: create read only instance from {@link MathPowerFunct}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param name of the function; must be <b>not</b> null,
+     * @param param list of parameters for the function; must be <b>not</b> null,
+     * @return read only object of class {@link MathPowerFunct}
+     */
+    public static <V> MathPowerFunct<V> make(FunctionNames name, List<Expr<V>> param) {
+        return new MathPowerFunct<V>(name, param, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
+     * factory method: create read only instance from {@link MathPowerFunct}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param name of the function; must be <b>not</b> null,
+     * @param param list of parameters for the function; must be <b>not</b> null,
+     * @return read only object of class {@link MathPowerFunct}
+     */
+    public static <V> MathPowerFunct<V> make(String name, List<Expr<V>> param) {
+        return new MathPowerFunct<V>(FunctionNames.get(name), param, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
      * @return name of the function
      */
     public FunctionNames getFunctName() {

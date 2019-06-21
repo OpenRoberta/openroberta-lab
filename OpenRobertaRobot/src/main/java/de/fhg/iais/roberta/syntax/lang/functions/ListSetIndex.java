@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.general.IIndexLocation;
 import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -17,9 +18,9 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -64,6 +65,65 @@ public class ListSetIndex<V> extends Function<V> {
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
         return new ListSetIndex<V>(mode, name, param, properties, comment);
+    }
+
+    /**
+     * factory method: create read only instance from {@link ListSetIndex}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param mode; must be <b>not</b> null,
+     * @param name of the function; must be <b>not</b> null,
+     * @param param list of parameters for the function; must be <b>not</b> null,
+     * @return read only object of class {@link ListSetIndex}
+     */
+    public static <V> ListSetIndex<V> make(IListElementOperations mode, IIndexLocation name, List<Expr<V>> param) {
+        return new ListSetIndex<V>(mode, name, param, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
+     * factory method: create read only instance from {@link ListSetIndex}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param mode; must be <b>not</b> null,
+     * @param name of the function; must be <b>not</b> null,
+     * @param param list of parameters for the function; must be <b>not</b> null,
+     * @return read only object of class {@link ListSetIndex}
+     */
+    public static <V> ListSetIndex<V> make(String mode, String name, List<Expr<V>> param) {
+        IListElementOperations rnode = null;
+        IIndexLocation index = null;
+        if ( mode.trim().toUpperCase().equals("GET") ) {
+            rnode = ListElementOperations.GET;
+        }
+        if ( mode.trim().toUpperCase().equals("GET_REMOVE") ) {
+            rnode = ListElementOperations.GET_REMOVE;
+        }
+        if ( mode.trim().toUpperCase().equals("REMOVE") ) {
+            rnode = ListElementOperations.REMOVE;
+        }
+        if ( mode.trim().toUpperCase().equals("SET") ) {
+            rnode = ListElementOperations.SET;
+        }
+        if ( mode.trim().toUpperCase().equals("INSERT") ) {
+            rnode = ListElementOperations.INSERT;
+        }
+        if ( mode.trim().toUpperCase().equals("FIRST") ) {
+            index = IndexLocation.FIRST;
+        }
+        if ( mode.trim().toUpperCase().equals("LAST") ) {
+            index = IndexLocation.LAST;
+        }
+        if ( mode.trim().toUpperCase().equals("FROM_START") ) {
+            index = IndexLocation.FROM_START;
+        }
+        if ( mode.trim().toUpperCase().equals("FROM_END") ) {
+            index = IndexLocation.FROM_END;
+        }
+        if ( mode.trim().toUpperCase().equals("RANDOM") ) {
+            index = IndexLocation.RANDOM;
+        }
+
+        return new ListSetIndex<V>(rnode, index, param, BlocklyBlockProperties.make("1", "1"), null);
     }
 
     /**
@@ -128,12 +188,13 @@ public class ListSetIndex<V> extends Function<V> {
             exprParams.add(new ExprParam(BlocklyConstants.AT, BlocklyType.NUMBER_INT));
         }
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return ListSetIndex.make(
-            factory.getListElementOpertaion(op),
-            factory.getIndexLocation(helper.extractField(fields, BlocklyConstants.WHERE)),
-            params,
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return ListSetIndex
+            .make(
+                factory.getListElementOpertaion(op),
+                factory.getIndexLocation(helper.extractField(fields, BlocklyConstants.WHERE)),
+                params,
+                helper.extractBlockProperties(block),
+                helper.extractComment(block));
     }
 
     @Override

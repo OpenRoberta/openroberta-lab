@@ -6,6 +6,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.general.IIndexLocation;
+import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -13,9 +14,9 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -51,6 +52,46 @@ public class IndexOfFunct<V> extends Function<V> {
      */
     public static <V> IndexOfFunct<V> make(IIndexLocation name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new IndexOfFunct<V>(name, param, properties, comment);
+    }
+
+    /**
+     * factory method: create read only instance from {@link IndexOfFunct}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param name of the function; must be <b>not</b> null,
+     * @param param list of parameters for the function; must be <b>not</b> null
+     * @return read only object of class {@link IndexOfFunct}
+     */
+    public static <V> IndexOfFunct<V> make(IIndexLocation name, List<Expr<V>> param) {
+        return new IndexOfFunct<V>(name, param, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
+     * factory method: create read only instance from {@link IndexOfFunct}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param name of the function; must be <b>not</b> null,
+     * @param param list of parameters for the function; must be <b>not</b> null
+     * @return read only object of class {@link IndexOfFunct}
+     */
+    public static <V> IndexOfFunct<V> make(String name, List<Expr<V>> param) {
+        IIndexLocation index = null;
+        if ( name.trim().toUpperCase().equals("FIRST") ) {
+            index = IndexLocation.FIRST;
+        }
+        if ( name.trim().toUpperCase().equals("LAST") ) {
+            index = IndexLocation.LAST;
+        }
+        if ( name.trim().toUpperCase().equals("FROM_START") ) {
+            index = IndexLocation.FROM_START;
+        }
+        if ( name.trim().toUpperCase().equals("FROM_END") ) {
+            index = IndexLocation.FROM_END;
+        }
+        if ( name.trim().toUpperCase().equals("RANDOM") ) {
+            index = IndexLocation.RANDOM;
+        }
+        return new IndexOfFunct<V>(index, param, BlocklyBlockProperties.make("1", "1"), null);
     }
 
     /**

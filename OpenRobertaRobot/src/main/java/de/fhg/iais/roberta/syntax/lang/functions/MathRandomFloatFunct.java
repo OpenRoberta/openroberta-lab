@@ -36,6 +36,16 @@ public class MathRandomFloatFunct<V> extends Function<V> {
         return new MathRandomFloatFunct<V>(properties, comment);
     }
 
+    /**
+     * factory method: creates instance of {@link MathRandomFloatFunct}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @return read only object of class {@link MathRandomFloatFunct}
+     */
+    public static <V> MathRandomFloatFunct<V> make() {
+        return new MathRandomFloatFunct<V>(BlocklyBlockProperties.make("1", "1"), null);
+    }
+
     @Override
     public int getPrecedence() {
         return 10;

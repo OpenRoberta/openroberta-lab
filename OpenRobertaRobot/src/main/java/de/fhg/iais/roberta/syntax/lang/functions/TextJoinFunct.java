@@ -49,6 +49,17 @@ public class TextJoinFunct<V> extends Function<V> {
     }
 
     /**
+     * factory method: creates instance of {@link TextJoinFunct}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param param list of parameters for the function; must be <b>not</b> null,
+     * @return read only object of class {@link TextJoinFunct}
+     */
+    public static <V> TextJoinFunct<V> make(ExprList<V> param) {
+        return new TextJoinFunct<V>(param, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
      * @return list of parameters for the function
      */
     public ExprList<V> getParam() {

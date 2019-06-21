@@ -77,6 +77,64 @@ public class ListGetIndex<V> extends Function<V> {
     }
 
     /**
+     * factory method: create read only instance from {@link ListGetIndex}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param mode; must be <b>not</b> null,
+     * @param name of the function; must be <b>not</b> null,
+     * @param param list of parameters for the function; must be <b>not</b> null,
+     * @return read only object of class {@link ListGetIndex}
+     */
+    public static <V> ListGetIndex<V> make(IListElementOperations mode, IIndexLocation name, List<Expr<V>> param, String dataType) {
+        return new ListGetIndex<>(mode, name, param, dataType, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
+     * factory method: create read only instance from {@link ListGetIndex}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param mode; must be <b>not</b> null,
+     * @param name of the function; must be <b>not</b> null,
+     * @param param list of parameters for the function; must be <b>not</b> null,
+     * @return read only object of class {@link ListGetIndex}
+     */
+    public static <V> ListGetIndex<V> make(String mode, String name, List<Expr<V>> param, String dataType) {
+        IListElementOperations rnode = null;
+        IIndexLocation index = null;
+        if ( mode.trim().toUpperCase().equals("GET") ) {
+            rnode = ListElementOperations.GET;
+        }
+        if ( mode.trim().toUpperCase().equals("GET_REMOVE") ) {
+            rnode = ListElementOperations.GET_REMOVE;
+        }
+        if ( mode.trim().toUpperCase().equals("REMOVE") ) {
+            rnode = ListElementOperations.REMOVE;
+        }
+        if ( mode.trim().toUpperCase().equals("SET") ) {
+            rnode = ListElementOperations.SET;
+        }
+        if ( mode.trim().toUpperCase().equals("INSERT") ) {
+            rnode = ListElementOperations.INSERT;
+        }
+        if ( mode.trim().toUpperCase().equals("FIRST") ) {
+            index = IndexLocation.FIRST;
+        }
+        if ( mode.trim().toUpperCase().equals("LAST") ) {
+            index = IndexLocation.LAST;
+        }
+        if ( mode.trim().toUpperCase().equals("FROM_START") ) {
+            index = IndexLocation.FROM_START;
+        }
+        if ( mode.trim().toUpperCase().equals("FROM_END") ) {
+            index = IndexLocation.FROM_END;
+        }
+        if ( mode.trim().toUpperCase().equals("RANDOM") ) {
+            index = IndexLocation.RANDOM;
+        }
+        return new ListGetIndex<>(rnode, index, param, dataType, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
      * @return name of the function
      */
     public IIndexLocation getLocation() {

@@ -12,9 +12,9 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -50,6 +50,30 @@ public class MathNumPropFunct<V> extends Function<V> {
      */
     public static <V> MathNumPropFunct<V> make(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new MathNumPropFunct<V>(name, param, properties, comment);
+    }
+
+    /**
+     * factory method: create read only instance from {@link MathNumPropFunct}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param name of the function; must be <b>not</b> null,
+     * @param param list of parameters for the function; must be <b>not</b> null,
+     * @return read only object of class {@link MathNumPropFunct}
+     */
+    public static <V> MathNumPropFunct<V> make(FunctionNames name, List<Expr<V>> param) {
+        return new MathNumPropFunct<V>(name, param, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
+     * factory method: create read only instance from {@link MathNumPropFunct}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param name of the function; must be <b>not</b> null,
+     * @param param list of parameters for the function; must be <b>not</b> null,
+     * @return read only object of class {@link MathNumPropFunct}
+     */
+    public static <V> MathNumPropFunct<V> make(String name, List<Expr<V>> param) {
+        return new MathNumPropFunct<V>(FunctionNames.get(name), param, BlocklyBlockProperties.make("1", "1"), null);
     }
 
     /**
