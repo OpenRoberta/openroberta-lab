@@ -177,7 +177,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     protected void generateProgramSuffix(boolean withWrapping) {
         nlIndent();
         nlIndent();
-        this.sb.append("FreeEV3();");
+        this.sb.append("NEPOFreeEV3();");
         nlIndent();
         this.sb.append("return 0;");
         decrIndentation();

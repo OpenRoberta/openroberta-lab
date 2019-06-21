@@ -56,7 +56,7 @@ public class Ast2C4ev3VisitorTest {
     private static final String END_MAIN =
         "" //
             + "    \n"
-            + "    FreeEV3();\n"
+            + "    NEPOFreeEV3();\n"
             + "    return 0;\n"
             + "}\n";
 

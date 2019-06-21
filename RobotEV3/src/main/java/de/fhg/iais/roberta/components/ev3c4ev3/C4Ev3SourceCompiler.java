@@ -44,6 +44,7 @@ public class C4Ev3SourceCompiler {
             "-l", "ev3api",
             "-static-libstdc++",
             "-std=c++11",
+            "-pthread",
             "-Os",
 
             // flags to remove unused functions
