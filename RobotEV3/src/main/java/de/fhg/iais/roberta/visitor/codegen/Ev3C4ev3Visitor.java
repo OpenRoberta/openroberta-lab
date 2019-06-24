@@ -946,21 +946,41 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        String functionName = getFunctionNameForCompassMode(compassSensor.getMode());
-        this.sb.append(functionName + "(" + getPrefixedInputPort(compassSensor.getPort()) + ")");
+        if (isCompassCalibrateMode(compassSensor)) {
+            visitCalibrateCompass(compassSensor);
+        } else {
+            visitReadCompass(compassSensor);
+        }
+
         return null;
     }
 
-    private String getFunctionNameForCompassMode(String mode) {
+    private boolean isCompassCalibrateMode (CompassSensor<Void> compassSensor) {
+        return compassSensor.getMode().equals(SC.CALIBRATE);
+    }
+
+    private void visitCalibrateCompass (CompassSensor<Void> compassSensor) {
+        String port = getPrefixedInputPort(compassSensor.getPort());
+        nlIndent();
+        this.sb.append("StartHTCompassCalibration(" + port +");");
+        this.sb.append("Wait(40000);");
+        this.sb.append("StopHTCompassCalibration(" + port + ");");
+        nlIndent();
+    }
+
+    private void visitReadCompass (CompassSensor<Void> compassSensor) {
+        String mode = getCompassSensorReadModeConstant(compassSensor.getMode());
+        this.sb.append("ReadSensorInMode(" + getPrefixedInputPort(compassSensor.getPort()) + ", " + mode + ")");
+    }
+
+    private String getCompassSensorReadModeConstant(String mode) {
         switch ( mode ) {
             case SC.COMPASS:
-                return "ReadCompass";
+                return "NXT_COMPASS_COMPASS";
             case SC.ANGLE:
-                return "ReadCompass";
-            case SC.CALIBRATE:
-                // TODO: Implement
+                return "NXT_COMPASS_ANGLE";
             default:
-                throw new DbcException("Unknown compass sensor mode");
+                throw new DbcException("Unknown read compass mode");
         }
     }
 
