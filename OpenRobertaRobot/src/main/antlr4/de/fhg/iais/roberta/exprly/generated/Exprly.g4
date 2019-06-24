@@ -1,67 +1,53 @@
 grammar Exprly;
 
-expression: expr
-          | bool
-          | assingment
-          | function
-          ;
+expr     : VAR                                                       # VarName
+         | CONST                                                     # MathConst
+         | literal
+         | numExpr
+         | boolExpr
+         | colorExpr
+         | connExpr
+         | funCall
+         | '(' expr ')'
+         ;
+          
+literal  :  INT                                                     # IntConst
+         |  BOOL                                                    # BoolConstB
+         |  '"' STR '"'                                             # ConstStr
+         |  '[' (expr ',')* expr? ']'
+         ;
 
-expr    : math
-        | string
-        | color
-        | connection
-        | list ( '(' at=INT ')')?;
-
-math    :    op=(ADD | SUB) math                                    # Unary
-        |   math op=(MOD|POW) math                                  # Binary
-        |   math op=(MUL | DIV ) math                               # Binary
-        |   math op=(ADD | SUB) math                                # Binary
-        |   CONST                                                   # MathConst
-        |   'randInt' '(' arg=arg_list?')'                          # RandInt
-        |   'randFloat()'                                           # RandFloat
-        |   VAR                                                     # VarName
-        |   INT                                                     # IntConst
-        |   '(' math ')'                                            # Parentheses
+numExpr :  op=(ADD | SUB) expr                                     # Unary
+        |  expr op=(MOD|POW) expr                                  # Binary
+        |  expr op=(MUL | DIV ) expr                               # Binary
+        |  expr op=(ADD | SUB) expr                                # Binary
         ;
 
-bool    :       op=NOT bool                                         # UnaryB
-        |   bool op=AND bool                                        # BinaryB
-        |   bool op=OR bool                                         # BinaryB
-        |   bool op=EQUAL bool                                      # BinaryB
-        |   expr op=EQUAL expr                                      # Equality
-        |   bool op=NEQUAL bool                                     # BinaryB
-        |   expr op=NEQUAL expr                                     # NEquality
-        |   math op=GET math                                        # InEqualityMath
-        |   math op=LET math                                        # InEqualityMath
-        |   math op=GEQ math                                        # InEqualityMath
-        |   math op=LEQ math                                        # InEqualityMath
-        |   BOOL                                                    # BoolConstB
-        |   VAR                                                     # VarNameB
-        |   '(' bool ')'                                            # ParenthesesB
+bool    :   op=NOT expr                                             # Unary
+        |   expr op=AND expr                                        # Binary
+        |   expr op=OR expr                                         # Binary
+        |   expr op=EQUAL expr                                      # Binary
+        |   expr op=NEQUAL expr                                     # Binary
+        |   expr op=GET expr                                        # Binary
+        |   expr op=LET expr                                        # Binary
+        |   expr op=GEQ expr                                        # Binary
+        |   expr op=LEQ expr                                        # Binary
         ;
 
-string  : '"'STR '"'                                                # ConstStr
-        | VAR                                                       # VarString
-        | string OR string                                          # CatString
-        ;
-
-color   :    COLOR                                                  # Col
+color   :  COLOR                                                    # Col
         |  '(' r=INT ',' g=INT ',' b=INT ',' a=INT ')'              # RGB
         ;
 
-connection: 'Connection ' STR ',' STR;
+connExpr: 'connect' STR ',' STR;
 
-
-list    :  '[' ((expr|bool)',')* (expr|bool)? ']'
-        | VAR;
-
-assingment:       VAR ASSIGN (expr|bool);
-
-arg_list: ((expr|bool)',')* (expr|bool)
+arg_list: (expr ',')* expr
         ;
-
-
-function : VAR '(' (fname=FNAME ',')?  (lop=LELEMOP ',')? (index=INDEX ',')?  (btype=BTYPE ',')?  args=arg_list? ')';
+        
+*** this should be redone, see the gitter remarks ***
+function : VAR '(' (fname=FNAME ',')?  (lop=LELEMOP ',')? (index=INDEX ',')?  (btype=BTYPE ',')?  args=arg_list? ')'
+        |  'randInt' '(' arg=arg_list?')'                          # RandInt
+        |  'randFloat()'                                           # RandFloat
+;
 
 // LEXER RULES
 NEWLINE    :    '\r'? '\n' -> skip;
@@ -141,12 +127,12 @@ BTYPE   :  [Aa][Nn][Yy]
         |  'T'
         ;
 
-CONST   :  [Gg][Oo][Ll][Dd][Ee][Nn]'_'[Rr][Aa][Tt][Ii][Oo]
-        |  [Pp][Ii]
-        |  [Ee]
-        |  [Ss][Qq][Rr][Tt] '2'
-        |  [Ss][Qq][Rr][Tt] '1_2'
-        |  [Ii][Nn][Ff][Ii][Nn][Ii][Tt][Yy]
+CONST   :  'phi'
+        |  'pi'
+        |  'e'
+        |  'sqrt'
+        |  'sqrt_1_2'
+        |  'inf'
         ;
 
 LELEMOP : [Gg][Ee][Tt]
@@ -165,10 +151,10 @@ INDEX   : [Ff][Ii][Rr][Ss][Tt]
 
 BOOL    :  [Tt][Rr][Uu][Ee] | [Ff][Aa][Ll][Ss][Ee];
 
-COLOR   :  '#'HEX HEX HEX HEX HEX HEX;
+COLOR   :  '#' HEX HEX HEX HEX HEX HEX;
 HEX     :  ('A'..'F'|'a'..'f'|'0'..'9');
 
-VAR        :  ('a'..'z')('a'..'z''0'..'9')*;
+VAR     :  ('a'..'z')('a'..'z''0'..'9')*;
 STR     :  ('a'..'z'|'A'..'Z'|'0'..'9'|' ')+;
 
 AND     :   '&&';
