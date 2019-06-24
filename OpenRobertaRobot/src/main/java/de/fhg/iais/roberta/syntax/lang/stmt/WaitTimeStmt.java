@@ -10,9 +10,9 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -42,6 +42,17 @@ public class WaitTimeStmt<V> extends Stmt<V> {
      */
     public static <V> WaitTimeStmt<V> make(Expr<V> time, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new WaitTimeStmt<>(time, properties, comment);
+    }
+
+    /**
+     * factory method: create an AST instance of {@link WaitTimeStmt}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param time; must be <b>not</b> null and <b>read only</b>,
+     * @return
+     */
+    public static <V> WaitTimeStmt<V> make(Expr<V> time) {
+        return new WaitTimeStmt<>(time, BlocklyBlockProperties.make("1", "1"), null);
     }
 
     /**

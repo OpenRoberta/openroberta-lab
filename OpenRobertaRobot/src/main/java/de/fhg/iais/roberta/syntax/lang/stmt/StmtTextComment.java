@@ -41,12 +41,23 @@ public class StmtTextComment<V> extends Stmt<V> {
     }
 
     /**
+     * factory method: create an AST instance of {@link StmtTextComment}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @return read only object of class {@link StmtTextComment}
+     */
+    public static <V> StmtTextComment<V> make(String textComment) {
+        return new StmtTextComment<V>(textComment, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
      * @return the text comment
      */
     public String getTextComment() {
         return this.textComment;
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         appendNewLine(sb, 0, "StmtTextComment [" + this.textComment + "]");

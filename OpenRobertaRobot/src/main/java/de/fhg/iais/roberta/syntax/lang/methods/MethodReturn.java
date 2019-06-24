@@ -17,9 +17,9 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -71,6 +71,34 @@ public class MethodReturn<V> extends Method<V> {
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
         return new MethodReturn<V>(methodName, parameters, body, returnType, returnValue, properties, comment);
+    }
+
+    /**
+     * factory method: create an AST instance of {@link MethodReturn}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param methodName
+     * @param parameters
+     * @param body of the method
+     * @param return_ type of the method
+     * @return read only object of class {@link MethodReturn}
+     */
+    public static <V> MethodReturn<V> make(String methodName, ExprList<V> parameters, StmtList<V> body, BlocklyType returnType, Expr<V> returnValue) {
+        return new MethodReturn<V>(methodName, parameters, body, returnType, returnValue, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
+     * factory method: create an AST instance of {@link MethodReturn}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param methodName
+     * @param parameters
+     * @param body of the method
+     * @param return_ type of the method
+     * @return read only object of class {@link MethodReturn}
+     */
+    public static <V> MethodReturn<V> make(String methodName, ExprList<V> parameters, StmtList<V> body, String returnType, Expr<V> returnValue) {
+        return new MethodReturn<V>(methodName, parameters, body, BlocklyType.get(returnType), returnValue, BlocklyBlockProperties.make("1", "1"), null);
     }
 
     /**
@@ -126,14 +154,15 @@ public class MethodReturn<V> extends Method<V> {
         StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.STACK);
         Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.RETURN, BlocklyType.NULL));
 
-        return MethodReturn.make(
-            name,
-            exprList,
-            statement,
-            BlocklyType.get(helper.extractField(fields, BlocklyConstants.TYPE)),
-            helper.convertPhraseToExpr(expr),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return MethodReturn
+            .make(
+                name,
+                exprList,
+                statement,
+                BlocklyType.get(helper.extractField(fields, BlocklyConstants.TYPE)),
+                helper.convertPhraseToExpr(expr),
+                helper.extractBlockProperties(block),
+                helper.extractComment(block));
     }
 
     @Override

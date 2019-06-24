@@ -30,6 +30,16 @@ public class BluetoothWaitForConnectionAction<V> extends Action<V> {
         return new BluetoothWaitForConnectionAction<V>(properties, comment);
     }
 
+    /**
+     * factory method: create an AST instance of {@link MotorDriveStopAction}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @return read only object of class {@link MotorDriveStopAction}
+     */
+    public static <V> BluetoothWaitForConnectionAction<V> make() {
+        return new BluetoothWaitForConnectionAction<V>(BlocklyBlockProperties.make("1", "1"), null);
+    }
+
     @Override
     public String toString() {
         return "BluetoothWaitForConnectionAction []";

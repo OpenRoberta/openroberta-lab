@@ -16,9 +16,9 @@ import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -54,6 +54,23 @@ public class TurnAction<V> extends Action<V> {
      */
     private static <V> TurnAction<V> make(ITurnDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new TurnAction<V>(direction, param, properties, comment);
+    }
+
+    /**
+     * factory method: create an AST instance of {@link TurnAction}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param direction {@link TurnDirection} in which the robot will drive; must be <b>not</b> null,
+     * @param param {@link MotionParam} that set up the parameters for the movement of the robot (distance the robot should cover and speed); must be <b>not</b>
+     *        null,
+     * @return read only object of class {@link TurnAction}.
+     */
+    private static <V> TurnAction<V> make(ITurnDirection direction, MotionParam<V> param) {
+        return new TurnAction<V>(direction, param, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    private static <V> TurnAction<V> make(String direction, MotionParam<V> param) {
+        return new TurnAction<V>(TurnDirection.get(direction), param, BlocklyBlockProperties.make("1", "1"), null);
     }
 
     /**

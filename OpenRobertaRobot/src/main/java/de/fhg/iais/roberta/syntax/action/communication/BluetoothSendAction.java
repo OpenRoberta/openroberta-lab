@@ -80,6 +80,10 @@ public class BluetoothSendAction<V> extends Action<V> {
         return new BluetoothSendAction<>(dataValue, connection, msg, properties, comment);
     }
 
+    public static <V> BluetoothSendAction<V> make(String dataValue, Expr<V> connection, Expr<V> msg) {
+        return new BluetoothSendAction<>(dataValue, connection, msg, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
     public Expr<V> getConnection() {
         return this._connection;
     }

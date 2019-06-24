@@ -49,6 +49,18 @@ public class MotorStopAction<V> extends MoveAction<V> {
     }
 
     /**
+     * factory method: create an AST instance of {@link MotorStopAction}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param port {@link ActorPort} on which the motor is connected; must be <b>not</b> null,
+     * @param mode of stopping {@link MotorStopMode}; must be <b>not</b> null,
+     * @return read only object of class {@link MotorStopAction}
+     */
+    private static <V> MotorStopAction<V> make(String port, IMotorStopMode mode) {
+        return new MotorStopAction<V>(port, mode, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
      * @return stopping mode in which the motor is set.
      */
     public IMotorStopMode getMode() {

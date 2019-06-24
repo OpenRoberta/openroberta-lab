@@ -44,6 +44,17 @@ public class MotorGetPowerAction<V> extends MoveAction<V> {
         return new MotorGetPowerAction<V>(port, properties, comment);
     }
 
+    /**
+     * factory method: create an AST instance of {@link MotorGetPowerAction}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param port on which the motor is connected that we want to check; must be <b>not</b> null,
+     * @return read only object of class {@link MotorGetPowerAction}
+     */
+    private static <V> MotorGetPowerAction<V> make(String port) {
+        return new MotorGetPowerAction<V>(port, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
     @Override
     public String toString() {
         return "MotorGetPower [port=" + getUserDefinedPort() + "]";

@@ -16,9 +16,9 @@ import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -69,6 +69,19 @@ public class CurveAction<V> extends Action<V> {
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
         return new CurveAction<>(direction, paramLeft, paramRight, properties, comment);
+    }
+
+    /**
+     * factory method: create an AST instance of {@link CruveAction}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param direction {@link DriveDirection} in which the robot will drive; must be <b>not</b> null,
+     * @param param {@link MotionParam} that set up the parameters for the movement of the robot (distance the robot should cover and speed), must be <b>not</b>
+     *        null,
+     * @return read only object of class {@link CurveAction}
+     */
+    private static <V> CurveAction<V> make(IDriveDirection direction, MotionParam<V> paramLeft, MotionParam<V> paramRight) {
+        return new CurveAction<>(direction, paramLeft, paramRight, BlocklyBlockProperties.make("1", "1"), null);
     }
 
     /**

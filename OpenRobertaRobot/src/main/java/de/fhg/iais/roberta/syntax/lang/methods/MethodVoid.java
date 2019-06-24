@@ -57,6 +57,21 @@ public class MethodVoid<V> extends Method<V> {
     }
 
     /**
+     * factory method: create an AST instance of {@link MethodVoid}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param methodName
+     * @param parameters
+     * @param body of the method
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment that user has added to the block,
+     * @return read only object of class {@link MethodVoid}
+     */
+    public static <V> MethodVoid<V> make(String methodName, ExprList<V> parameters, StmtList<V> body) {
+        return new MethodVoid<V>(methodName, parameters, body, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
      * @return the body
      */
     public StmtList<V> getBody() {

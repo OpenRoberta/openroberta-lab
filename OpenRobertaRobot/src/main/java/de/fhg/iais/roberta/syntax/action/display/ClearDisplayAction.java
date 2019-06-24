@@ -40,6 +40,17 @@ public final class ClearDisplayAction<V> extends Action<V> {
         return new ClearDisplayAction<>(port, properties, comment);
     }
 
+    /**
+     * factory method: create an AST instance of {@link ClearDisplayAction}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param port
+     * @return read only object of class {@link ClearDisplayAction}
+     */
+    public static <V> ClearDisplayAction<V> make(String port) {
+        return new ClearDisplayAction<>(port, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
     @Override
     public String toString() {
         return "ClearDisplayAction []";

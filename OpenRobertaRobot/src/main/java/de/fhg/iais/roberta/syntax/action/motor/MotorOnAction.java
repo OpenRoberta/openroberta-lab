@@ -16,9 +16,9 @@ import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MoveAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -36,7 +36,7 @@ public final class MotorOnAction<V> extends MoveAction<V> {
 
     private MotorOnAction(String port, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(port, BlockTypeContainer.getByName("MOTOR_ON_ACTION"), properties, comment);
-        Assert.isTrue((param != null) && (port != null));
+        Assert.isTrue(param != null && port != null);
         this.param = param;
 
         setReadOnly();
@@ -53,6 +53,18 @@ public final class MotorOnAction<V> extends MoveAction<V> {
      */
     private static <V> MotorOnAction<V> make(String port, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new MotorOnAction<>(port, param, properties, comment);
+    }
+
+    /**
+     * factory method: create an AST instance of {@link MotorOnAction}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param port {@link ActorPort} on which the motor is connected,
+     * @param param {@link MotionParam} that set up the parameters for the movement of the robot (number of rotations or degrees and speed),
+     * @return read only object of class {@link MotorOnAction}
+     */
+    private static <V> MotorOnAction<V> make(String port, MotionParam<V> param) {
+        return new MotorOnAction<>(port, param, BlocklyBlockProperties.make("1", "1"), null);
     }
 
     /**

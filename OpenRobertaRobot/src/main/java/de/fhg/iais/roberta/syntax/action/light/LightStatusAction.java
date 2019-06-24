@@ -48,6 +48,17 @@ public class LightStatusAction<V> extends Action<V> {
     }
 
     /**
+     * factory method: create an AST instance of {@link LightStatusAction}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param status in which we want to set the lights (off or reset); must be <b>not</b> null,
+     * @return read only object of class {@link LightStatusAction}
+     */
+    public static <V> LightStatusAction<V> make(String port, Status status) {
+        return new LightStatusAction<>(port, status, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
      * @return status of the lights user wants to set.
      */
     public Status getStatus() {

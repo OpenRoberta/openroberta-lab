@@ -58,6 +58,32 @@ public class MethodIfReturn<V> extends Method<V> {
     }
 
     /**
+     * factory method: create an AST instance of {@link MethodIfReturn}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param condition expression, must be <b>not</b> null and read only
+     * @param returnType, see {@link BlocklyType} for all possible types
+     * @param returnValue
+     * @return read only object of class {@link MethodIfReturn}
+     */
+    public static <V> MethodIfReturn<V> make(Expr<V> condition, BlocklyType returnType, Expr<V> returnValue) {
+        return new MethodIfReturn<>(condition, returnType, returnValue, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
+     * factory method: create an AST instance of {@link MethodIfReturn}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param condition expression, must be <b>not</b> null and read only
+     * @param returnType, see {@link BlocklyType} for all possible types
+     * @param returnValue
+     * @return read only object of class {@link MethodIfReturn}
+     */
+    public static <V> MethodIfReturn<V> make(Expr<V> condition, String returnType, Expr<V> returnValue) {
+        return new MethodIfReturn<>(condition, BlocklyType.get(returnType), returnValue, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
      * @return the condition
      */
     public Expr<V> getCondition() {

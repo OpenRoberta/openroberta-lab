@@ -53,6 +53,18 @@ public class PlayNoteAction<V> extends Action<V> {
     }
 
     /**
+     * factory method: create an AST instance of {@link PlayNoteAction}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param duration of the sound, the note value,
+     * @param frequency of the sound, the note,
+     * @return read only object of class {@link PlayNoteAction}
+     */
+    private static <V> PlayNoteAction<V> make(String port, String duration, String frequency) {
+        return new PlayNoteAction<>(port, duration, frequency, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
      * @return port.
      */
     public String getPort() {

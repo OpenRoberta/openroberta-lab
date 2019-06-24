@@ -13,9 +13,9 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -37,7 +37,7 @@ public class ShowTextAction<V> extends Action<V> {
 
     private ShowTextAction(Expr<V> msg, Expr<V> column, Expr<V> row, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("SHOW_TEXT_ACTION"), properties, comment);
-        Assert.isTrue((msg != null) && (column != null) && (row != null));
+        Assert.isTrue(msg != null && column != null && row != null);
         this.msg = msg;
         this.x = column;
         this.y = row;
@@ -58,6 +58,20 @@ public class ShowTextAction<V> extends Action<V> {
      */
     private static <V> ShowTextAction<V> make(Expr<V> msg, Expr<V> x, Expr<V> y, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new ShowTextAction<>(msg, x, y, port, properties, comment);
+    }
+
+    /**
+     * factory method: create an AST instance of {@link ShowTextAction}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param msg that will be printed on the display of the brick; must be <b>not</b> null,
+     * @param x position where the message will start; must be <b>not</b> null,
+     * @param y position where the message will start; must be <b>not</b> null,
+     * @param port
+     * @return read only object of class {@link ShowTextAction}
+     */
+    private static <V> ShowTextAction<V> make(Expr<V> msg, Expr<V> x, Expr<V> y, String port) {
+        return new ShowTextAction<>(msg, x, y, port, BlocklyBlockProperties.make("1", "1"), null);
     }
 
     /**
@@ -84,7 +98,7 @@ public class ShowTextAction<V> extends Action<V> {
     /**
      * @return port of the display.
      */
-    public String  getPort() {
+    public String getPort() {
         return this.port;
     }
 

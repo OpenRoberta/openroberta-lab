@@ -52,6 +52,17 @@ public class SayTextAction<V> extends Action<V> {
     }
 
     /**
+     * factory method: create an AST instance of {@link SayTextAction}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param msg {@link Expr} that will be printed on the display of the brick; must be <b>not</b> null,
+     * @return read only object of class {@link SayTextAction}
+     */
+    private static <V> SayTextAction<V> make(Expr<V> msg, Expr<V> speed, Expr<V> pitch) {
+        return new SayTextAction<>(msg, speed, pitch, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
      * @return the message.
      */
     public Expr<V> getMsg() {

@@ -16,9 +16,9 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -33,13 +33,7 @@ public class LightAction<V> extends Action<V> {
     private static boolean isActor;
     private static boolean isBlink;
 
-    private LightAction(
-        String port,
-        IBrickLedColor color,
-        ILightMode mode,
-        Expr<V> rgbLedColor,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
+    private LightAction(String port, IBrickLedColor color, ILightMode mode, Expr<V> rgbLedColor, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("LIGHT_ACTION"), properties, comment);
         Assert.isTrue(mode != null);
         this.rgbLedColor = rgbLedColor;
@@ -66,6 +60,18 @@ public class LightAction<V> extends Action<V> {
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
         return new LightAction<>(port, color, mode, ledColor, properties, comment);
+    }
+
+    /**
+     * factory method: create an AST instance of {@link LightAction}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param color of the lights on the brick. All possible colors are defined in {@link BrickLedColor}; must be <b>not</b> null,
+     * @param blinkMode type of the blinking; must be <b>not</b> null,
+     * @return read only object of class {@link LightAction}
+     */
+    private static <V> LightAction<V> make(String port, IBrickLedColor color, ILightMode mode, Expr<V> ledColor) {
+        return new LightAction<>(port, color, mode, ledColor, BlocklyBlockProperties.make("1", "1"), null);
     }
 
     /**

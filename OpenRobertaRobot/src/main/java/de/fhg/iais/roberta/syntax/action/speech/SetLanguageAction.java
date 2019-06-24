@@ -6,12 +6,14 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
+import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -50,6 +52,27 @@ public final class SetLanguageAction<V> extends Action<V> {
      */
     private static <V> SetLanguageAction<V> make(ILanguage language, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new SetLanguageAction<V>(language, properties, comment);
+    }
+
+    /**
+     * factory method: create an AST instance of {@link Var}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param language {@link ILanguage} the speech engine of the robot is set to,
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
+     * @return read only object of class {@link SetLanguageAction}
+     */
+    private static <V> SetLanguageAction<V> make(String language, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new SetLanguageAction<V>(Language.findByAbbr(language), properties, comment);
+    }
+
+    private static <V> SetLanguageAction<V> make(ILanguage language) {
+        return new SetLanguageAction<V>(language, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    private static <V> SetLanguageAction<V> make(String language) {
+        return new SetLanguageAction<V>(Language.findByAbbr(language), BlocklyBlockProperties.make("1", "1"), null);
     }
 
     public ILanguage getLanguage() {

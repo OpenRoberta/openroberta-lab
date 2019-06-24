@@ -45,6 +45,17 @@ public class PlayFileAction<V> extends Action<V> {
     }
 
     /**
+     * factory method: create an AST instance of {@link PlayFileAction}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param filename of the sound; must be different then empty string,
+     * @return read only object of class {@link PlayFileAction}
+     */
+    private static <V> PlayFileAction<V> make(String filename) {
+        return new PlayFileAction<V>(filename, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
      * @return the name of the file that will be played
      */
     public String getFileName() {

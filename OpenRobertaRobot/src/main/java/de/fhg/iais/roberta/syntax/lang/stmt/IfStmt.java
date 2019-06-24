@@ -14,9 +14,9 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -75,6 +75,23 @@ public class IfStmt<V> extends Stmt<V> {
         int _else,
         int _elseIf) {
         return new IfStmt<V>(expr, thenList, elseList, false, properties, comment, _else, _elseIf);
+    }
+
+    /**
+     * factory method: create an AST instance of {@link IfStmt}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param expr list of all expressions that should be evaluated in the <b>if</b> parts,
+     * @param thenList all statements that are in the <b>then</b> parts,
+     * @param elseList all statements that are in the <b>else</b> parts,
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
+     * @param _else statement,
+     * @param _elseIf number of if statements
+     * @return read only object of class {@link IfStmt}
+     */
+    public static <V> IfStmt<V> make(List<Expr<V>> expr, List<StmtList<V>> thenList, StmtList<V> elseList, int _else, int _elseIf) {
+        return new IfStmt<V>(expr, thenList, elseList, false, BlocklyBlockProperties.make("1", "1"), null, _else, _elseIf);
     }
 
     /**

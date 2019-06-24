@@ -13,9 +13,9 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IBluetoothVisitor;
@@ -38,7 +38,6 @@ public class BluetoothReceiveAction<V> extends Action<V> {
         setReadOnly();
     }
 
-
     public static <V> BluetoothReceiveAction<V> make(
         Expr<V> bluetoothRecieveConnection,
         String channel,
@@ -48,6 +47,9 @@ public class BluetoothReceiveAction<V> extends Action<V> {
         return new BluetoothReceiveAction<V>(bluetoothRecieveConnection, channel, dataType, properties, comment);
     }
 
+    public static <V> BluetoothReceiveAction<V> make(Expr<V> bluetoothRecieveConnection, String channel, String dataType) {
+        return new BluetoothReceiveAction<V>(bluetoothRecieveConnection, channel, dataType, BlocklyBlockProperties.make("1", "1"), null);
+    }
 
     public Expr<V> getConnection() {
         return this.connection;

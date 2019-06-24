@@ -12,9 +12,9 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -39,6 +39,18 @@ public class BluetoothConnectAction<V> extends Action<V> {
      */
     public static <V> BluetoothConnectAction<V> make(Expr<V> address, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new BluetoothConnectAction<V>(address, properties, comment);
+    }
+
+    /**
+     * factory method: create an AST instance of {@link MotorDriveStopAction}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
+     * @return read only object of class {@link MotorDriveStopAction}
+     */
+    public static <V> BluetoothConnectAction<V> make(Expr<V> address) {
+        return new BluetoothConnectAction<V>(address, BlocklyBlockProperties.make("1", "1"), null);
     }
 
     public Expr<V> getAddress() {

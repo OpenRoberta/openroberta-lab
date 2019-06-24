@@ -69,6 +69,26 @@ public class MethodCall<V> extends Method<V> {
     }
 
     /**
+     * factory method: create an AST instance of {@link MethodCall}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param methodName
+     * @param parameters
+     * @param body of the method
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment that user has added to the block,
+     * @param return_ type of the method
+     * @return read only object of class {@link MethodCall}
+     */
+    public static <V> MethodCall<V> make(String methodName, ExprList<V> parameters, ExprList<V> parametersValues, BlocklyType returnType) {
+        return new MethodCall<>(methodName, parameters, parametersValues, returnType, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    public static <V> MethodCall<V> make(String methodName, ExprList<V> parameters, ExprList<V> parametersValues, String returnType) {
+        return new MethodCall<>(methodName, parameters, parametersValues, BlocklyType.get(returnType), BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
      * @return the methodName
      */
     @Override

@@ -33,6 +33,16 @@ public class MotorDriveStopAction<V> extends Action<V> {
         return new MotorDriveStopAction<V>(properties, comment);
     }
 
+    /**
+     * factory method: create an AST instance of {@link MotorDriveStopAction}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @return read only object of class {@link MotorDriveStopAction}
+     */
+    public static <V> MotorDriveStopAction<V> make() {
+        return new MotorDriveStopAction<V>(BlocklyBlockProperties.make("1", "1"), null);
+    }
+
     @Override
     public String toString() {
         return "StopAction []";

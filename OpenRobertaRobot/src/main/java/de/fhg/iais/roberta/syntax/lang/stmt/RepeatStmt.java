@@ -66,6 +66,19 @@ public class RepeatStmt<V> extends Stmt<V> {
     }
 
     /**
+     * factory method: create an AST instance of {@link RepeatStmt}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param mode of the repeat statement; must be <b>not</b> null; see enum {@link Mode} for all possible modes,
+     * @param expr that should be evaluated; must be <b>not</b> null and <b>read only</b>,
+     * @param list of statements; must be <b>not</b> null and <b>read only</b>,
+     * @return read only object of {@link RepeatStmt}
+     */
+    public static <V> RepeatStmt<V> make(Mode mode, Expr<V> expr, StmtList<V> list) {
+        return new RepeatStmt<>(mode, expr, list, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
      * @return mode of the repeat statement. See enum {@link Mode} for all possible modes
      */
     public Mode getMode() {
@@ -222,9 +235,9 @@ public class RepeatStmt<V> extends Stmt<V> {
         switch ( getMode() ) {
             case TIMES:
                 if ( getProperty().getBlockType().equals(BlocklyConstants.CONTROLS_REPEAT) ) {
-                    Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.TIMES, ((NumConst<?>) (((ExprList<?>) getExpr()).get().get(2))).getValue());
+                    Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.TIMES, ((NumConst<?>) ((ExprList<?>) getExpr()).get().get(2)).getValue());
                 } else {
-                    Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.TIMES, (((ExprList<?>) getExpr()).get().get(2)));
+                    Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.TIMES, ((ExprList<?>) getExpr()).get().get(2));
                 }
                 break;
 
@@ -242,9 +255,9 @@ public class RepeatStmt<V> extends Stmt<V> {
             case FOR:
                 ExprList<?> exprList = (ExprList<?>) getExpr();
                 Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.VAR, ((Var<?>) exprList.get().get(0)).getValue());
-                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.FROM, (exprList.get().get(1)));
-                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.TO, (exprList.get().get(2)));
-                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.BY, (exprList.get().get(3)));
+                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.FROM, exprList.get().get(1));
+                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.TO, exprList.get().get(2));
+                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.BY, exprList.get().get(3));
                 break;
 
             case FOR_EACH:

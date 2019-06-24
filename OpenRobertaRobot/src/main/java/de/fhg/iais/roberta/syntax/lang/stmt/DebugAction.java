@@ -33,6 +33,10 @@ public class DebugAction<V> extends Stmt<V> {
         return new DebugAction<>(value, properties, comment);
     }
 
+    public static <V> DebugAction<V> make(Expr<V> value) {
+        return new DebugAction<>(value, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
     public Expr<V> getValue() {
         return this.value;
     }

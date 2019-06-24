@@ -45,6 +45,21 @@ public class StmtFlowCon<V> extends Stmt<V> {
     }
 
     /**
+     * factory method: create an AST instance of {@link StmtFlowCon}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param flow; must be <b>not</b> null; see enum {@link Flow} for all the possible kind of flow controls,
+     * @return read only object of class {@link StmtFlowCon}
+     */
+    public static <V> StmtFlowCon<V> make(Flow flow) {
+        return new StmtFlowCon<V>(flow, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    public static <V> StmtFlowCon<V> make(String flow) {
+        return new StmtFlowCon<V>(Flow.get(flow), BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
      * @return the kind of control. See enum {@link Flow} for all the possible kind of flow controls
      */
     public Flow getFlow() {

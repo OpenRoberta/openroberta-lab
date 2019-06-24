@@ -11,9 +11,9 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -32,6 +32,10 @@ public class SerialWriteAction<V> extends Action<V> {
 
     public static <V> SerialWriteAction<V> make(Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new SerialWriteAction<>(value, properties, comment);
+    }
+
+    public static <V> SerialWriteAction<V> make(Expr<V> value) {
+        return new SerialWriteAction<>(value, BlocklyBlockProperties.make("1", "1"), null);
     }
 
     public Expr<V> getValue() {

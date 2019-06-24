@@ -72,6 +72,18 @@ public class PinWriteValueAction<V> extends Action<V> {
         return new PinWriteValueAction<>(pinValue, port, value, actorPortAndMode, properties, comment);
     }
 
+    /**
+     * factory method: create an AST instance of {@link PinWriteValueAction}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in these cases no graphical regeneration is required.</b>
+     *
+     * @param pin
+     * @param valueType see {@link PinValue}
+     * @return read only object of {@link PinWriteValueAction}
+     */
+    public static <V> PinWriteValueAction<V> make(String pinValue, String port, Expr<V> value, boolean actorPortAndMode) {
+        return new PinWriteValueAction<>(pinValue, port, value, actorPortAndMode, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
     public String getMode() {
         return this.pinValue;
     }
