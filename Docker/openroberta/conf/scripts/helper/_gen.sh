@@ -30,16 +30,27 @@ esac
     cd ${GIT_REPO}
     if [ "$GIT_UPTODATE" == 'true' ]
     then
-        echo "git repo is already uptodate, nothing pulled, nothing checked out"
+        echo 'git repo is already uptodate, nothing pulled, nothing checked out'
+        LAST_COMMIT="git working tree considered UPTODATE, is based on commit $(git rev-list HEAD...HEAD~1)"
     elif [ "$COMMIT" == '' ]
     then
-        echo "checking out branch $BRANCH and get the actual state"
-        git pull
-        git checkout -f $BRANCH
-        git pull
+        echo "checking out branch '$BRANCH'. Throw away the complete old state"
+        # this will remove files, that are VALUABLE, but not committed or untracked. This can happen, if GIT_UPTODATE=true
+        # get all from remote, remove working tree and index files, that are dirty
+        git fetch --all
+        git reset --hard
+        git clean -fd
+        # goto a branch different from the one to be checked out. Otherwise the -D will fail. Then checkout the branch, connect to the remote implicitly
+        case "$BRANCH" in
+          develop) git checkout master ;;
+          *)       git checkout develop ;;
+        esac
+        git branch -D $BRANCH
+        git checkout $BRANCH
+        # get the last commit for documentation
         LAST_COMMIT=$(git rev-list HEAD...HEAD~1)
     else
-        echo "checking out commit $COMMIT"
+        echo "checking out commit '$COMMIT'"
         git checkout -f $COMMIT
         LAST_COMMIT=$COMMIT
     fi
