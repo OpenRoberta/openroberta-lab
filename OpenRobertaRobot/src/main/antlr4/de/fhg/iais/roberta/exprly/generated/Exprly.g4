@@ -3,50 +3,42 @@ grammar Exprly;
 expr     : CONST                                                     # MathConst
          | VAR                                                       # VarName
          | literal                                                   # LiteralExp
-         | numExpr                                                   # NumExp
-         | boolExpr                                                  # BoolExp
-         | colorExpr                                                 # ColorExp
          | connExpr                                                  # ConnExp
          | funCall                                                   # FuncExp
          | '(' expr ')'                                              # Parenthese
+         | op=(ADD | SUB) expr                                       # UnaryN
+         | op=NOT expr                                               # UnaryB
+         | expr op=(MOD|POW) expr                                    # BinaryN
+         | expr op=(MUL | DIV ) expr                                 # BinaryN
+         | expr op=(ADD | SUB) expr                                  # BinaryN
+         | expr op=AND expr                                          # BinaryB
+         | expr op=OR expr                                           # BinaryB
+         | expr op=EQUAL expr                                        # BinaryB
+         | expr op=NEQUAL expr                                       # BinaryB
+         | expr op=GET expr                                          # BinaryB
+         | expr op=LET expr                                          # BinaryB
+         | expr op=GEQ expr                                          # BinaryB
+         | expr op=LEQ expr                                          # BinaryB
          ; 
           
-literal  :  INT                                                     # IntConst
-         |  FLOAT                                                   # FloatConst
-         |  BOOL                                                    # BoolConstB
-         |  '"' STR '"'                                             # ConstStr
-         |  '[' (expr ',')* expr? ']'                               # ListExpr
+literal  : INT                                                       # IntConst
+         | FLOAT                                                     # FloatConst
+         | BOOL                                                      # BoolConstB
+         | '"' STR '"'                                               # ConstStr
+         | COLOR                                                     # Col
+         | '(' r=INT ',' g=INT ',' b=INT ',' a=INT ')'               # RGB
+         | '[' (expr ',')* expr? ']'                                 # ListExpr
          ;
 
-numExpr :  op=(ADD | SUB) expr                                      # UnaryN
-        |  expr op=(MOD|POW) expr                                   # BinaryN
-        |  expr op=(MUL | DIV ) expr                                # BinaryN
-        |  expr op=(ADD | SUB) expr                                 # BinaryN
-        ;
+connExpr: 'connect' STR ',' STR
+         ;
 
-boolExpr:   op=NOT expr                                             # UnaryB
-        |   expr op=AND expr                                        # BinaryB
-        |   expr op=OR expr                                         # BinaryB
-        |   expr op=EQUAL expr                                      # BinaryB
-        |   expr op=NEQUAL expr                                     # BinaryB
-        |   expr op=GET expr                                        # BinaryB
-        |   expr op=LET expr                                        # BinaryB
-        |   expr op=GEQ expr                                        # BinaryB
-        |   expr op=LEQ expr                                        # BinaryB
-        ;
-
-colorExpr:  COLOR                                                   # Col
-        |  '(' r=INT ',' g=INT ',' b=INT ',' a=INT ')'              # RGB
-        ;
-
-connExpr: 'connect' STR ',' STR;
-
-args    : '('(expr ',')* expr? ')'                                  # ArgList
-        ;
-
-funCall : FNAME  (expr| args) 
-		;
+funCall : FNAME args
+		    ;
 		
+args    : '(' ( expr (',' expr)* )? ')'                             # ArgList
+        ;
+
 // LEXER RULES
 NEWLINE    :    '\r'? '\n' -> skip;
 
