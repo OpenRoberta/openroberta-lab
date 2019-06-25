@@ -1,155 +1,100 @@
 grammar Exprly;
 
-expr     : VAR                                                       # VarName
-         | CONST                                                     # MathConst
-         | literal
-         | numExpr
-         | boolExpr
-         | colorExpr
-         | connExpr
-         | funCall
-         | '(' expr ')'
-         ;
+expr     : CONST                                                     # MathConst
+         | VAR                                                       # VarName
+         | literal                                                   # LiteralExp
+         | numExpr                                                   # NumExp
+         | boolExpr                                                  # BoolExp
+         | colorExpr                                                 # ColorExp
+         | connExpr                                                  # ConnExp
+         | funCall                                                   # FuncExp
+         | '(' expr ')'                                              # Parenthese
+         ; 
           
 literal  :  INT                                                     # IntConst
+         |  FLOAT                                                   # FloatConst
          |  BOOL                                                    # BoolConstB
          |  '"' STR '"'                                             # ConstStr
-         |  '[' (expr ',')* expr? ']'
+         |  '[' (expr ',')* expr? ']'                               # ListExpr
          ;
 
-numExpr :  op=(ADD | SUB) expr                                     # Unary
-        |  expr op=(MOD|POW) expr                                  # Binary
-        |  expr op=(MUL | DIV ) expr                               # Binary
-        |  expr op=(ADD | SUB) expr                                # Binary
+numExpr :  op=(ADD | SUB) expr                                      # UnaryN
+        |  expr op=(MOD|POW) expr                                   # BinaryN
+        |  expr op=(MUL | DIV ) expr                                # BinaryN
+        |  expr op=(ADD | SUB) expr                                 # BinaryN
         ;
 
-bool    :   op=NOT expr                                             # Unary
-        |   expr op=AND expr                                        # Binary
-        |   expr op=OR expr                                         # Binary
-        |   expr op=EQUAL expr                                      # Binary
-        |   expr op=NEQUAL expr                                     # Binary
-        |   expr op=GET expr                                        # Binary
-        |   expr op=LET expr                                        # Binary
-        |   expr op=GEQ expr                                        # Binary
-        |   expr op=LEQ expr                                        # Binary
+boolExpr:   op=NOT expr                                             # UnaryB
+        |   expr op=AND expr                                        # BinaryB
+        |   expr op=OR expr                                         # BinaryB
+        |   expr op=EQUAL expr                                      # BinaryB
+        |   expr op=NEQUAL expr                                     # BinaryB
+        |   expr op=GET expr                                        # BinaryB
+        |   expr op=LET expr                                        # BinaryB
+        |   expr op=GEQ expr                                        # BinaryB
+        |   expr op=LEQ expr                                        # BinaryB
         ;
 
-color   :  COLOR                                                    # Col
+colorExpr:  COLOR                                                   # Col
         |  '(' r=INT ',' g=INT ',' b=INT ',' a=INT ')'              # RGB
         ;
 
 connExpr: 'connect' STR ',' STR;
 
-arg_list: (expr ',')* expr
+args    : '('(expr ',')* expr? ')'                                  # ArgList
         ;
-        
-*** this should be redone, see the gitter remarks ***
-function : VAR '(' (fname=FNAME ',')?  (lop=LELEMOP ',')? (index=INDEX ',')?  (btype=BTYPE ',')?  args=arg_list? ')'
-        |  'randInt' '(' arg=arg_list?')'                          # RandInt
-        |  'randFloat()'                                           # RandFloat
-;
 
+funCall : FNAME  (expr| args) 
+		;
+		
 // LEXER RULES
 NEWLINE    :    '\r'? '\n' -> skip;
 
 WS        :    (' '|'\t')+ -> skip;
 
-INT     :    ('0'..'9')+;
-
-FNAME   : [Tt][Ii][Mm][Ee]
-        | [Dd][Ii][Vv][Ii][Ss][Ii][Bb][Ll][Ee] '_' [Bb][Yy]
-        | [Mm][Aa][Xx]
-        | [Mm][Ii][Nn]
-        | [Ll][Ii][Ss][Tt][Ss] '_'[Rr][Ee][Pp][Ee][Aa][Tt]
-        | [Rr][Aa][Nn][Dd][Oo][Mm]
-        | [Ee][Vv][Ee][Nn]
-        | [Oo][Dd][Dd]
-        | [Pp][Rr][Ii][Mm][Ee]
-        | [Ww][Hh][Oo][Ll][Ee]
-        | [Pp][Oo][Ss][Ii][Tt][Ii][Vv][Ee]
-        | [Nn][Ee][Gg][Aa][Tt][Ii][Vv][Ee]
-        | [Ss][Uu][Mm]
-        | [Aa][Vv][Ee][Rr][Aa][Gg][Ee]
-        | [Mm][Ee][Dd][Ii][Aa][Nn]
-        | [Mm][Oo][Dd][Ee]
-        | [Ss][Tt][Dd] '_' [Dd][Ee][Vv]
-        | [Rr][Oo][Oo][Tt]
-        | [Aa][Bb][Ss]
-        | [Ll][Nn]
-        | [Ll][Oo][Gg] '10'
-        | [Ee][Xx][Pp]
-        | [Pp][Oo][Ww] '10'
-        | [Ss][Ii][Nn]
-        | [Cc][Oo][Ss]
-        | [Tt][Aa][Nn]
-        | [Aa][Ss][Ii][Nn]
-        | [Aa][Cc][Oo][Ss]
-        | [Aa][Tt][Aa][Nn]
-        | [Pp][Oo][Ww][Ee][Rr]
-        | [Rr][Oo][Uu][Nn][Dd]
-        | [Rr][Oo][Uu][Nn][Dd][Uu][Pp]
-        | [Rr][Oo][Uu][Nn][Dd][Dd][Oo][Ww][Nn]
-        | [Ll][Ii][Ss][Tt] '_' [Ii][Ss] '_' [Ee][Mm][Pp][Tt][Yy]
-        | [Ll][Ee][Ff][Tt]
-        | [Rr][Ii][Gg][Hh][Tt]
-        | [Tt][Ee][Xx][Tt]
-        | [Nn][Uu][Mm][Bb][Ee][Rr]
-        | [Ll][Ii][Ss][Tt][Ss] '_' [Ll][Ee][Nn][Gg][Tt][Hh]
-        | [Gg][Ee][Tt]'_' [Ss][Uu][Bb][Ll][Ii][Ss][Tt]
+FNAME   :  'sin'
+        |  'cos'
+        |  'tan'
+        |  'asin'
+        |  'acos'
+        |  'atan'
+        |  'exp'
+        |  'sqrt'
+        |  'e^'
+        |  'abs'
+        |  'log10'
+        |  'ln'
+        |  '10^'
+        |  'randInt'
+        |  'randFLoat'
+        |  'floor'
+        |  'ceil'
+        |  'isEven'
+        |  'isOdd'
+        |  'isPrime'
+        |  'isWhole'
+        |  'sum'
+        |  'max'
+        |  'min'
+        |  'avg'
+        |  'mean'
+        |  'sd'
+        |  'randItem'
         ;
-
-BTYPE   :  [Aa][Nn][Yy]
-        |  [Cc][Oo][Mm][Pp][Aa][Rr][Aa][Bb][Ll][Ee]
-        |  [Aa][Dd][Dd][Aa][Bb][Ll][Ee]
-        |  [Aa][Rr][Rr][Aa][Yy]
-        |  [Aa][Rr][Rr][Aa][Yy] '_' [Nn][Uu][Mm][Bb][Ee][Rr]
-        |  [Aa][Rr][Rr][Aa][Yy] '_' [Ss][Tt][Rr][Ii][Nn][Gg]
-        |  [Aa][Rr][Rr][Aa][Yy] '_' [Cc][Oo][Ll][Oo][Uu][Rr]
-        |  [Aa][Rr][Rr][Aa][Yy] '_' [Bb][Oo][Oo][Ll][Ee][Aa][Nn]
-        |  [Aa][Rr][Rr][Aa][Yy] '_' [Ii][Mm][Aa][Gg][Ee]
-        |  [Aa][Rr][Rr][Aa][Yy] '_' [Cc][Oo][Nn][Nn][Ee][Cc][Tt][Ii][Oo][Nn]
-        |  [Bb][Oo][Oo][Ll][Ee][Aa][Nn]
-        |  [Nn][Uu][Mm][Bb][Ee][Rr]
-        |  [Nn][Uu][Mm][Bb][Ee][Rr] '_' [Ii][Nn][Tt]
-        |  [Ss][Tt][Rr][Ii][Nn][Gg]
-        |  [Cc][Oo][Ll][Oo][Rr]
-        |  [Ii][Mm][Aa][Gg][Ee]
-        |  [Pp][Rr][Ee][Dd][Ee][Ff][Ii][Nn][Ee][Dd] '_' [Ii][Mm][Aa][Gg][Ee]
-        |  [Nn][Uu][Ll][Ll]
-        |  [Rr][Ee][Ff]
-        |  [Pp][Rr][Ii][Mm]
-        |  [Nn][Oo][Tt][Hh][Ii][Nn][Gg]
-        |  [Vv][Oo][Ii][Dd]
-        |  [Cc][Oo][Nn][Nn][Ee][Cc][Tt][Ii][Oo][Nn]
-        |  [Cc][Aa][Pp][Tt][Uu][Rr][Ee][Dd] '_' [Tt][Yy][Pp][Ee]
-        |  'R'
-        |  'S'
-        |  'T'
-        ;
-
+        
 CONST   :  'phi'
         |  'pi'
         |  'e'
-        |  'sqrt'
+        |  'sqrt2'
         |  'sqrt_1_2'
         |  'inf'
         ;
 
-LELEMOP : [Gg][Ee][Tt]
-        | [Gg][Ee][Tt] '_' [Rr][Ee][Mm][Oo][Vv][Ee]
-        | [Rr][Ee][Mm][Oo][Vv][Ee]
-        | [Ss][Ee][Tt]
-        | [Ii][Nn][Ss][Ee][Rr][Tt]
-        ;
 
-INDEX   : [Ff][Ii][Rr][Ss][Tt]
-        | [Ll][Aa][Ss][Tt]
-        | [Ff][Rr][Oo][Mm] '_' [Ss][Tt][Aa][Rr][Tt]
-        | [Ff][Rr][Oo][Mm] '_' [Ee][Nn][Dd]
-        | [Rr][Aa][Nn][Dd][Oo][Mm]
-        ;
+FLOAT   :    ('0'..'9')+ '.' ('0'..'9')+;
+INT     :    ('0'..'9')+;
 
-BOOL    :  [Tt][Rr][Uu][Ee] | [Ff][Aa][Ll][Ss][Ee];
+BOOL    :  'true' | 'false';
 
 COLOR   :  '#' HEX HEX HEX HEX HEX HEX;
 HEX     :  ('A'..'F'|'a'..'f'|'0'..'9');
@@ -172,5 +117,3 @@ MUL     :   '*';
 DIV     :   '/';
 ADD     :   '+';
 SUB     :   '-';
-SEMI    :   ';';
-ASSIGN  :   ':=';
