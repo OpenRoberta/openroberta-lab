@@ -55,12 +55,17 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
             }
             break;
         case "update":
+        	var theWedo = wedo[data.brickid];
             if (data.id) {
-                wedo[data.brickid][data.id][data.sensor.replace(/\s/g, '').toLowerCase()] = data.state;
+            	if ( theWedo[data.id] === undefined ) {
+                    theWedoU[data.id] = {};
+                }
+            	theWedo[data.id][data.sensor.replace(/\s/g, '').toLowerCase()] = data.state;
             } else {
-                wedo[data.brickid][data.sensor.replace(/\s/g, '').toLowerCase()] = data.state;
+            	theWedo[data.sensor.replace(/\s/g, '').toLowerCase()] = data.state;
             }
             break;
+            
         default:
             // TODO think about what could happen here.
             break;
@@ -70,17 +75,25 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     exports.update = update;
 
     function getSensorValue(brickid, sensor, id, slot) {
-        switch (sensor) {
+    	var theWedo = wedo[brickid];
+    	var thePort = theWedo[id];
+    	if ( thePort === undefined ) {
+           thePort = theWedo["1"] !== undefined ? theWedo["1"] : theWedo["2"];
+    	}
+    	var theSensor = thePort === undefined ? "undefined" : thePort[sensor];
+    	console.log( 'sensor object ' + ( theSensor === undefined ? "undefined" : theSensor.toString() ) );
+
+    	switch (sensor) {
         case "tiltsensor":
             if (slot === "ANY") {
-                return wedo[brickid][id][sensor] !== tiltMode.NO;
+                return parseInt(theSensor) !== parseInt(tiltMode.NO);
             } else {
-                return wedo[brickid][id][sensor] === tiltMode[slot];
+                return parseInt(theSensor) === parseInt(tiltMode[slot]);
             }
         case "motionsensor":
-            return parseInt(wedo[brickid][id][sensor]);
+            return parseInt(theSensor);
         case "button":
-            return wedo[brickid][sensor] === "true";
+            return theWedo[sensor] === "true";
         }
     }
     exports.getSensorValue = getSensorValue;
