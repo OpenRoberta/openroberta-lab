@@ -27,6 +27,25 @@ robots:
        template: sensebox
 
 progs:
+    stringConcat:
+       decl: stringConcat
+       exclude:
+          mega: "Comparison of string and char not possible"
+          nano: "Comparison of string and char not possible"
+          sensebox: "Comparison of string and char not possible"
+          nxt: "Comparison of string and char not possible"
+          bob3: "Comparison of string and char not possible"
+          uno: "Comparison of string and char not possible"
+       remark: "different combinations of string concatenation"
+    mathBrackets:
+       decl: mathBrackets
+       exclude:
+       remark: "different combinations for math brackets"
+    mathPower:
+       decl: mathPower
+       exclude:
+          nxt: "Nested calls to the same function are not supported"
+       remark: "different combinations for math power of"
     logicBooleanOp:
        decl: logicBooleanOp
        exclude:

@@ -1,0 +1,309 @@
+<block type="text_comment" id=".hJO{w6(^~mQEq}.8J=n" intask="true">
+          <field name="TEXT">String Concat -- Start --</field>
+        </block>
+        <block type="robText_append" id="b]BaF)E^xx2E7vyDI|AQ" intask="true">
+          <value name="VAR">
+            <block type="variables_get" id="zp.xQg`T|d-1L9`K@Hvk" intask="true">
+              <mutation datatype="String">
+              </mutation>
+              <field name="VAR">text</field>
+            </block>
+          </value>
+          <value name="TEXT">
+            <block type="text" id="=vs.PddhQzRg~/WY7%ZQ" intask="true">
+              <field name="TEXT"> one</field>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_assert" id="Y:~qM@xwRSA?nc)Yi4tm" intask="true">
+          <field name="TEXT">POS-1</field>
+          <value name="OUT">
+            <block type="logic_compare" id="8{2T].P0:~K{hbfRu(wy" intask="true" deletable="false" movable="false">
+              <field name="OP">EQ</field>
+              <value name="A">
+                <block type="text" id="+10`^de2_UnO^6zcZFJ/" intask="true">
+                  <field name="TEXT">start: one</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="variables_get" id="wRJ*x@i,I+N-#p=E8koF" intask="true">
+                  <mutation datatype="String">
+                  </mutation>
+                  <field name="VAR">text</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robText_append" id="F:4{Eww{D[(|T;8w6bRz" intask="true">
+          <value name="VAR">
+            <block type="variables_get" id="Y*-zG4*`J/:{Fgl[;ITR" intask="true">
+              <mutation datatype="String">
+              </mutation>
+              <field name="VAR">text</field>
+            </block>
+          </value>
+          <value name="TEXT">
+            <block type="robText_join" id="B~KOv;!::P~(ULJ]v{oU" intask="true">
+              <mutation items="2">
+              </mutation>
+              <value name="ADD0">
+                <block type="text" id=":eO|d!KE:(f{B]Zv2pv;" intask="true">
+                  <field name="TEXT"> two</field>
+                </block>
+              </value>
+              <value name="ADD1">
+                <block type="text" id="R-iu.oWZO({)O8QBy2K|" intask="true">
+                  <field name="TEXT"> three</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_assert" id="uTg{LhzwpmJ7l84dGf8u" intask="true">
+          <field name="TEXT">POS-2</field>
+          <value name="OUT">
+            <block type="logic_compare" id="V4LxTw-Op4PbVz8+C^6;" intask="true" deletable="false" movable="false">
+              <field name="OP">EQ</field>
+              <value name="A">
+                <block type="text" id="z*-|@YjX2G}aoXR-X;x0" intask="true">
+                  <field name="TEXT">start: one two three</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="variables_get" id="E/D6HJc6W+S0q)1O(]5e" intask="true">
+                  <mutation datatype="String">
+                  </mutation>
+                  <field name="VAR">text</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robText_append" id="^](L3jto=6E`CQer`3fV" intask="true">
+          <value name="VAR">
+            <block type="variables_get" id="#xzQ5Uz9R:|R-a0jj~0#" intask="true">
+              <mutation datatype="String">
+              </mutation>
+              <field name="VAR">text</field>
+            </block>
+          </value>
+          <value name="TEXT">
+            <block type="robText_join" id="Q}v6*@A0H#P,jc[0cf~P" intask="true">
+              <mutation items="2">
+              </mutation>
+              <value name="ADD0">
+                <block type="math_number" id="h`L^FCcAPp[0-:MEZB_u" intask="true">
+                  <field name="NUM">4</field>
+                </block>
+              </value>
+              <value name="ADD1">
+                <block type="math_number" id="mXRuxv8:mn^5(8#i{af(" intask="true">
+                  <field name="NUM">5</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_assert" id="u+~U_!{QHZ[/|Aal[A_0" intask="true">
+          <field name="TEXT">POS-3</field>
+          <value name="OUT">
+            <block type="logic_compare" id=")!-,c}gLC~Q%?Se@XPVx" intask="true" deletable="false" movable="false">
+              <field name="OP">EQ</field>
+              <value name="A">
+                <block type="text" id="-C,{K97LAv-Z~okR(TiV" intask="true">
+                  <field name="TEXT">start: one two three45</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="variables_get" id="A?v-wt_Bqa6+J1dw%6h|" intask="true">
+                  <mutation datatype="String">
+                  </mutation>
+                  <field name="VAR">text</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robText_append" id="N7Rdqx71taq-0,1%AM7]" intask="true">
+          <value name="VAR">
+            <block type="variables_get" id="z8;pTg;[B;1I3NIzniXN" intask="true">
+              <mutation datatype="String">
+              </mutation>
+              <field name="VAR">text</field>
+            </block>
+          </value>
+          <value name="TEXT">
+            <block type="robText_join" id="BqdZ].1JQcuKrZo6lQzg" intask="true">
+              <mutation items="2">
+              </mutation>
+              <value name="ADD0">
+                <block type="math_number" id="aRCDtTzBei!T,cU?%lM4" intask="true">
+                  <field name="NUM">6</field>
+                </block>
+              </value>
+              <value name="ADD1">
+                <block type="text" id="4~QTqcY`l%r=1Q^Prbh^" intask="true">
+                  <field name="TEXT"> seven</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_assert" id="-:/]DM6=vz7Y_2*uXeUv" intask="true">
+          <field name="TEXT">POS-4</field>
+          <value name="OUT">
+            <block type="logic_compare" id="efqm(tGr%i^^w,~LQs5Y" intask="true" deletable="false" movable="false">
+              <field name="OP">EQ</field>
+              <value name="A">
+                <block type="text" id="]?V{*aKZ;bbJYd|mypUK" intask="true">
+                  <field name="TEXT">start: one two three456 seven</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="variables_get" id="6jQ,xk3Q5Gz_j?Yp/1oc" intask="true">
+                  <mutation datatype="String">
+                  </mutation>
+                  <field name="VAR">text</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="variables_set" id="Hu|[pSCcB-A![kK*N4C0" intask="true">
+          <mutation datatype="String">
+          </mutation>
+          <field name="VAR">text</field>
+          <value name="VALUE">
+            <block type="robText_join" id="[h{Y83?C*-32(:FtxA]U" intask="true">
+              <mutation items="2">
+              </mutation>
+              <value name="ADD0">
+                <block type="robText_join" id="Af01bySGkKQYIk{RII@:" intask="true">
+                  <mutation items="2">
+                  </mutation>
+                  <value name="ADD0">
+                    <block type="variables_get" id="]f:o+lSRqkxOt61UBsfu" intask="true">
+                      <mutation datatype="String">
+                      </mutation>
+                      <field name="VAR">text</field>
+                    </block>
+                  </value>
+                  <value name="ADD1">
+                    <block type="variables_get" id="G3.:m)!G}*tKqTu2|8]p" intask="true">
+                      <mutation datatype="String">
+                      </mutation>
+                      <field name="VAR">eight</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+              <value name="ADD1">
+                <block type="text" id="JM5y{:_(xcXvoU`N[CiM" intask="true">
+                  <field name="TEXT"> nine</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_assert" id="p;/5X7o[:To[.j5|mUz+" intask="true">
+          <field name="TEXT">POS-5</field>
+          <value name="OUT">
+            <block type="logic_compare" id="et3a1Gdu~:7!~PjbL^0{" intask="true" deletable="false" movable="false">
+              <field name="OP">EQ</field>
+              <value name="A">
+                <block type="text" id="46S%kx=UOQ8[3C8VVfus" intask="true">
+                  <field name="TEXT">start: one two three456 seven eight nine</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="variables_get" id="]g|y`-|}#[7uj*r3rjyK" intask="true">
+                  <mutation datatype="String">
+                  </mutation>
+                  <field name="VAR">text</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="variables_set" id="Ph(tHBX:YLDk@X#JGp?#" intask="true">
+          <mutation datatype="String">
+          </mutation>
+          <field name="VAR">text</field>
+          <value name="VALUE">
+            <block type="robText_join" id="S{-qW*QXA,-1rdwN#%r4" intask="true">
+              <mutation items="2">
+              </mutation>
+              <value name="ADD0">
+                <block type="robText_join" id="#Pu?E)(m-|uJlVP)ws-{" intask="true">
+                  <mutation items="2">
+                  </mutation>
+                  <value name="ADD0">
+                    <block type="variables_get" id="D%JL+N~ZeOxYIsbyshd^" intask="true">
+                      <mutation datatype="String">
+                      </mutation>
+                      <field name="VAR">text</field>
+                    </block>
+                  </value>
+                  <value name="ADD1">
+                    <block type="text" id="^l7F;5p+;[Jvv/Q:dM:l" intask="true">
+                      <field name="TEXT">ten</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+              <value name="ADD1">
+                <block type="robText_join" id="*sHpJ{Nh|=#6p|^KLG%(" intask="true">
+                  <mutation items="2">
+                  </mutation>
+                  <value name="ADD0">
+                    <block type="text" id="T0YVmQrGue];Y-873%S:" intask="true">
+                      <field name="TEXT"> eleven</field>
+                    </block>
+                  </value>
+                  <value name="ADD1">
+                    <block type="text" id="%NP58mc/TBUG)/jQryry" intask="true">
+                      <field name="TEXT"> twelve</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_debug" id="=!PJFM4xx1fNBM1Wiv9P" intask="true">
+          <value name="OUT">
+            <block type="logic_ternary" id="4zKE#JLZ@)EJTc6Xf[wk" intask="true">
+              <value name="IF">
+                <block type="logic_compare" id="Q!g{v%|ISrSJ7`q]yWv6" intask="true">
+                  <field name="OP">EQ</field>
+                  <value name="A">
+                    <block type="text" id="9Nm,|r:{0HZRg8:fdsQq" intask="true">
+                      <field name="TEXT">start: one two three456 seven eight nine ten eleven twelve</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="variables_get" id=";`Ib;(a7;%_e]!q3u,-;" intask="true">
+                      <mutation datatype="String">
+                      </mutation>
+                      <field name="VAR">text</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+              <value name="THEN">
+                <block type="text" id="9s+4GX_/{!SrUCtzKyJ/" intask="true">
+                  <field name="TEXT">String Concat SUCCESS</field>
+                </block>
+              </value>
+              <value name="ELSE">
+                <block type="text" id="4Q-{s(R;s,B);{Zt1}w!" intask="true">
+                  <field name="TEXT">String Concat FAIL</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="text_comment" id=".#P4~av!?:AcCaBg}t^u" intask="true">
+          <field name="TEXT">String Concat -- End --</field>
+        </block>

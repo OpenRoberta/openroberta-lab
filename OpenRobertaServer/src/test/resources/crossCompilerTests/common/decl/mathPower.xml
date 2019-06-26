@@ -1,0 +1,11 @@
+<block type="robGlobalVariables_declare" id="wU/M_G_#Z#.0VatIAi|A" intask="true" deletable="false" movable="false">
+  <mutation next="false" declaration_type="Boolean">
+  </mutation>
+  <field name="VAR">result</field>
+  <field name="TYPE">Boolean</field>
+  <value name="VALUE">
+    <block type="logic_boolean" id="Al0HQ7]hck((}i;p|Psr" intask="true">
+      <field name="BOOL">FALSE</field>
+    </block>
+  </value>
+</block>

@@ -1,0 +1,22 @@
+<block type="robGlobalVariables_declare" id="guZrGw3AA(^o?MC*]+55" intask="true" deletable="false" movable="false">
+              <mutation next="true" declaration_type="String">
+              </mutation>
+              <field name="VAR">text</field>
+              <field name="TYPE">String</field>
+              <value name="VALUE">
+                <block type="text" id="j_wvuh6{w:O|a]hJBe/}" intask="true">
+                  <field name="TEXT">start:</field>
+                </block>
+              </value>
+            </block>
+            <block type="robGlobalVariables_declare" id="J^.(Y~~8CfH2];Af;eO0" intask="true" deletable="false" movable="false">
+              <mutation next="false" declaration_type="String">
+              </mutation>
+              <field name="VAR">eight</field>
+              <field name="TYPE">String</field>
+              <value name="VALUE">
+                <block type="text" id="n?C*L4%#L;x!!!SLfObY" intask="true">
+                  <field name="TEXT"> eight</field>
+                </block>
+              </value>
+            </block>

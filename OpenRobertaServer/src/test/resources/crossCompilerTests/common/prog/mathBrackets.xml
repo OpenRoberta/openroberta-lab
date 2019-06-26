@@ -1,0 +1,713 @@
+<block type="text_comment" id="E{@Zwgcb]W8ewSF-DQ^@" intask="true">
+          <field name="TEXT">Grundrechenarten Basics  --START--</field>
+        </block>
+        <block type="variables_set" id="fI?v?mMf%Yj[tT*#P}wb" intask="true">
+          <mutation datatype="Number">
+          </mutation>
+          <field name="VAR">ergebnis</field>
+          <value name="VALUE">
+            <block type="math_arithmetic" id="3{8z:nTl.AR09q2Bc.XA" intask="true">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <block type="math_number" id="PlBZ0bU+{9jZO)3e1Y{W" intask="true">
+                  <field name="NUM">2</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_arithmetic" id="{j4T!yhA79~^fY1K{;8[" intask="true">
+                  <field name="OP">DIVIDE</field>
+                  <value name="A">
+                    <block type="math_arithmetic" id="G4Wv?_Up~]{|pviYyIS#" intask="true">
+                      <field name="OP">MULTIPLY</field>
+                      <value name="A">
+                        <block type="math_number" id="ai[46:!486lwhv`P:SAP" intask="true">
+                          <field name="NUM">3</field>
+                        </block>
+                      </value>
+                      <value name="B">
+                        <block type="math_number" id="L96Oq~VKThZ]1717d+4l" intask="true">
+                          <field name="NUM">4</field>
+                        </block>
+                      </value>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_number" id="%G3#Uw2{[?@3d~%GMu[_" intask="true">
+                      <field name="NUM">5</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_assert" id="Uj55~Wp0?7/qD}()R.kf" intask="true">
+          <field name="TEXT">POS-1</field>
+          <value name="OUT">
+            <block type="logic_compare" id="JLCI!v9kX)%G,T^zoT!~" intask="true" deletable="false" movable="false">
+              <field name="OP">EQ</field>
+              <value name="A">
+                <block type="math_number" id="imQ@^c27T#]an7%auy;a" intask="true">
+                  <field name="NUM">4.4</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="variables_get" id="gq5Cx?I%a*KhgdsRc[ay" intask="true">
+                  <mutation datatype="Number">
+                  </mutation>
+                  <field name="VAR">ergebnis</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="variables_set" id="Bb=orLW^J`%,7n;4Ic()" intask="true">
+          <mutation datatype="Number">
+          </mutation>
+          <field name="VAR">ergebnis</field>
+          <value name="VALUE">
+            <block type="math_arithmetic" id="LZm!1{cp}q#o.ogluc-+" intask="true">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <block type="variables_get" id="*4zAc(nd;^HBs{C:L/vx" intask="true">
+                  <mutation datatype="Number">
+                  </mutation>
+                  <field name="VAR">ergebnis</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_arithmetic" id="tdE-XynUN?@0_6Vnj,LA" intask="true">
+                  <field name="OP">MULTIPLY</field>
+                  <value name="A">
+                    <block type="math_number" id="Z}_|J.;Y|fLSuyU~iH-)" intask="true">
+                      <field name="NUM">2</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_arithmetic" id="dSf8T}+XlPT}cg19Y^Cw" intask="true">
+                      <field name="OP">MULTIPLY</field>
+                      <value name="A">
+                        <block type="math_arithmetic" id="U-f.a8T~/2h,C5n^6Jfv" intask="true">
+                          <field name="OP">ADD</field>
+                          <value name="A">
+                            <block type="math_number" id="Y3sWxxJbdw=?SpObHLcJ" intask="true">
+                              <field name="NUM">3</field>
+                            </block>
+                          </value>
+                          <value name="B">
+                            <block type="math_number" id="=QZ|}Jei1hL~t=?o-;N6" intask="true">
+                              <field name="NUM">4</field>
+                            </block>
+                          </value>
+                        </block>
+                      </value>
+                      <value name="B">
+                        <block type="math_number" id="(R{my4yxgN4b/?PI)wd9" intask="true">
+                          <field name="NUM">5</field>
+                        </block>
+                      </value>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_assert" id="mOsA`aCgKr)eeS`pH=/a" intask="true">
+          <field name="TEXT">POS-2</field>
+          <value name="OUT">
+            <block type="logic_compare" id="qq8`[BMWD6oO2T1USe%z" intask="true" deletable="false" movable="false">
+              <field name="OP">EQ</field>
+              <value name="A">
+                <block type="math_number" id="-vH!xu7jJ|4rHa++IR}h" intask="true">
+                  <field name="NUM">74.4</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="variables_get" id="@;[XC^!vYckaYZj[hjc-" intask="true">
+                  <mutation datatype="Number">
+                  </mutation>
+                  <field name="VAR">ergebnis</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="variables_set" id="yZ[4Fp5/g5i6cYu?EeOV" intask="true">
+          <mutation datatype="Number">
+          </mutation>
+          <field name="VAR">ergebnis</field>
+          <value name="VALUE">
+            <block type="math_arithmetic" id="BIPZJ;tQg6CbO8d2|L_=" intask="true">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <block type="variables_get" id="v;W8hU-Z]RJ+/ub}f%U5" intask="true">
+                  <mutation datatype="Number">
+                  </mutation>
+                  <field name="VAR">ergebnis</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_arithmetic" id="Su?MbaV!F)cz**:`.o88" intask="true">
+                  <field name="OP">MULTIPLY</field>
+                  <value name="A">
+                    <block type="math_number" id="T`4=%j}0zQ4k0#RB^Srq" intask="true">
+                      <field name="NUM">2</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_arithmetic" id="MFnxSMk+r%PVT15r;^}n" intask="true">
+                      <field name="OP">MULTIPLY</field>
+                      <value name="A">
+                        <block type="math_number" id=")d;PKgf=0?{2?ni]ixfY" intask="true">
+                          <field name="NUM">3</field>
+                        </block>
+                      </value>
+                      <value name="B">
+                        <block type="math_arithmetic" id="^2_)M_:YVYG}-1Kmj{C{" intask="true">
+                          <field name="OP">ADD</field>
+                          <value name="A">
+                            <block type="math_number" id="?fV^Y8DDVck1%l*::p51" intask="true">
+                              <field name="NUM">4</field>
+                            </block>
+                          </value>
+                          <value name="B">
+                            <block type="math_number" id="Uo(a)bpx2e8c|PIrHH37" intask="true">
+                              <field name="NUM">5</field>
+                            </block>
+                          </value>
+                        </block>
+                      </value>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_assert" id="dV*yq_NKa[{Ut_dyF1I=" intask="true">
+          <field name="TEXT">POS-3</field>
+          <value name="OUT">
+            <block type="logic_compare" id="YZ{1gzI]tDP8?^z,(RI/" intask="true" deletable="false" movable="false">
+              <field name="OP">EQ</field>
+              <value name="A">
+                <block type="math_number" id="S)7yjp9R2}UTn]#QUp{B" intask="true">
+                  <field name="NUM">128.4</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="variables_get" id="Zzi9*G=xH_ui~3h?/l:v" intask="true">
+                  <mutation datatype="Number">
+                  </mutation>
+                  <field name="VAR">ergebnis</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="variables_set" id="YJP++V|okzbPk[*16OTw" intask="true">
+          <mutation datatype="Number">
+          </mutation>
+          <field name="VAR">ergebnis</field>
+          <value name="VALUE">
+            <block type="math_arithmetic" id="ttyiwY=P(:2Gy%3eTm~B" intask="true">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <block type="variables_get" id="--1C/in8T#gRDTkYRC~]" intask="true">
+                  <mutation datatype="Number">
+                  </mutation>
+                  <field name="VAR">ergebnis</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_arithmetic" id="|zzx8=[x%oqmQ!!uMk6z" intask="true">
+                  <field name="OP">ADD</field>
+                  <value name="A">
+                    <block type="math_number" id="j|I#|4X_z+MsJ^+r=5IA" intask="true">
+                      <field name="NUM">2</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_arithmetic" id="UZhV4xpQeDgcUwDZ]`k9" intask="true">
+                      <field name="OP">MULTIPLY</field>
+                      <value name="A">
+                        <block type="math_arithmetic" id="Q8wJGlP^SXjtKj.R-q~p" intask="true">
+                          <field name="OP">MINUS</field>
+                          <value name="A">
+                            <block type="math_arithmetic" id="Q)im/8N85.Xd2hFm05)u" intask="true">
+                              <field name="OP">MULTIPLY</field>
+                              <value name="A">
+                                <block type="math_number" id="w_`}dD#@[k_x9k~8:phh" intask="true">
+                                  <field name="NUM">3</field>
+                                </block>
+                              </value>
+                              <value name="B">
+                                <block type="math_number" id="%r^Nx0Z[Cp`8k1}_E]}N" intask="true">
+                                  <field name="NUM">4</field>
+                                </block>
+                              </value>
+                            </block>
+                          </value>
+                          <value name="B">
+                            <block type="math_number" id="1lS/jg1-M=geApaVBn!@" intask="true">
+                              <field name="NUM">5</field>
+                            </block>
+                          </value>
+                        </block>
+                      </value>
+                      <value name="B">
+                        <block type="math_number" id="U~^x!d`+OcQw1G|=7TzQ" intask="true">
+                          <field name="NUM">6</field>
+                        </block>
+                      </value>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_assert" id="nmn_7#r=4(DZLrKZVmLY" intask="true">
+          <field name="TEXT">POS-4</field>
+          <value name="OUT">
+            <block type="logic_compare" id="H*IVCa{=R4w[VcOMcz|V" intask="true" deletable="false" movable="false">
+              <field name="OP">EQ</field>
+              <value name="A">
+                <block type="math_number" id="C0QLldkE9S]^`G}%`9p," intask="true">
+                  <field name="NUM">172.4</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="variables_get" id="|Rp^?K;EZqskt8I6#7Ef" intask="true">
+                  <mutation datatype="Number">
+                  </mutation>
+                  <field name="VAR">ergebnis</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="variables_set" id="@Kqpo1wagzcW|}EIy*%I" intask="true">
+          <mutation datatype="Number">
+          </mutation>
+          <field name="VAR">ergebnis</field>
+          <value name="VALUE">
+            <block type="math_arithmetic" id="j2#vl3e},+sylJMJY*PW" intask="true">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <block type="variables_get" id="K(d8cB~U*9l}y3xm{KqR" intask="true">
+                  <mutation datatype="Number">
+                  </mutation>
+                  <field name="VAR">ergebnis</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_arithmetic" id="Kx?PY;jcS}D~O,e94r33" intask="true">
+                  <field name="OP">MULTIPLY</field>
+                  <value name="A">
+                    <block type="math_number" id="iBxHb6u8N!=Z_OL]:I5Z" intask="true">
+                      <field name="NUM">2</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_arithmetic" id="C@3*VXqe;IZ4y|5(IePp" intask="true">
+                      <field name="OP">MULTIPLY</field>
+                      <value name="A">
+                        <block type="math_arithmetic" id="@e#zXHe|N2)~@mc6@%3h" intask="true">
+                          <field name="OP">MULTIPLY</field>
+                          <value name="A">
+                            <block type="math_arithmetic" id="aU]R6!/)-6(Ewi*Xc(gE" intask="true">
+                              <field name="OP">ADD</field>
+                              <value name="A">
+                                <block type="math_number" id="GGN34LrJ/mrfs|,n]w0a" intask="true">
+                                  <field name="NUM">3</field>
+                                </block>
+                              </value>
+                              <value name="B">
+                                <block type="math_number" id="1wIEb]r_[gmBQ/P(2sli" intask="true">
+                                  <field name="NUM">4</field>
+                                </block>
+                              </value>
+                            </block>
+                          </value>
+                          <value name="B">
+                            <block type="math_number" id="Bf_MEr[cv[f?b9[H,_ne" intask="true">
+                              <field name="NUM">5</field>
+                            </block>
+                          </value>
+                        </block>
+                      </value>
+                      <value name="B">
+                        <block type="math_number" id="]Gl`bQCW@:T/ZcdY=Vkd" intask="true">
+                          <field name="NUM">6</field>
+                        </block>
+                      </value>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_assert" id="y9LJkyMA,JsKNQ,fG^uZ" intask="true">
+          <field name="TEXT">POS-5</field>
+          <value name="OUT">
+            <block type="logic_compare" id="7GK{nUf49gh@)W5YB6BZ" intask="true" deletable="false" movable="false">
+              <field name="OP">EQ</field>
+              <value name="A">
+                <block type="math_number" id="(zx3sJuk![W,2;CwPJ0/" intask="true">
+                  <field name="NUM">592.4</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="variables_get" id="V2P!D:L3#s?7)P{wMto(" intask="true">
+                  <mutation datatype="Number">
+                  </mutation>
+                  <field name="VAR">ergebnis</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="variables_set" id="(FWkBE=fW;bf.?5q0937" intask="true">
+          <mutation datatype="Number">
+          </mutation>
+          <field name="VAR">ergebnis</field>
+          <value name="VALUE">
+            <block type="math_arithmetic" id="DbZ=sV%ofsL:?y%HN{fP" intask="true">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <block type="variables_get" id="0;CygcD5BX}[~fJ`4TI?" intask="true">
+                  <mutation datatype="Number">
+                  </mutation>
+                  <field name="VAR">ergebnis</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_arithmetic" id="({qzXB9E]xuLrc;4gCp%" intask="true">
+                  <field name="OP">MULTIPLY</field>
+                  <value name="A">
+                    <block type="math_number" id="i+!%`m}c/yq_la{oI.+!" intask="true">
+                      <field name="NUM">2</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_arithmetic" id=")e%XgyD;Z!cxtTEHejGm" intask="true">
+                      <field name="OP">MULTIPLY</field>
+                      <value name="A">
+                        <block type="math_number" id="Ma2@b2(v_Mi0R}XO=G!B" intask="true">
+                          <field name="NUM">6</field>
+                        </block>
+                      </value>
+                      <value name="B">
+                        <block type="math_arithmetic" id="47^uOIIZx(qC:qr8@P*e" intask="true">
+                          <field name="OP">MULTIPLY</field>
+                          <value name="A">
+                            <block type="math_arithmetic" id="XyS=X=5C9)0Zvw[1SQOh" intask="true">
+                              <field name="OP">ADD</field>
+                              <value name="A">
+                                <block type="math_number" id="]D2%+5^ntC_B#NYq_a?b" intask="true">
+                                  <field name="NUM">3</field>
+                                </block>
+                              </value>
+                              <value name="B">
+                                <block type="math_number" id="-BEon}2[?{RLimVMbdZG" intask="true">
+                                  <field name="NUM">4</field>
+                                </block>
+                              </value>
+                            </block>
+                          </value>
+                          <value name="B">
+                            <block type="math_number" id="2UzIGGb.g{n:4uC?cQl@" intask="true">
+                              <field name="NUM">5</field>
+                            </block>
+                          </value>
+                        </block>
+                      </value>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_assert" id="?VZP+2l|p.kG8qC;q%*^" intask="true">
+          <field name="TEXT">POS-7</field>
+          <value name="OUT">
+            <block type="logic_compare" id="hJUpW,J[sNjy0]~ZMmEk" intask="true" deletable="false" movable="false">
+              <field name="OP">EQ</field>
+              <value name="A">
+                <block type="math_number" id="l*4X+s0e`BZ:uKJk4W}R" intask="true">
+                  <field name="NUM">1012.4</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="variables_get" id="B}sDoc8o(%%OBt?Q-E-w" intask="true">
+                  <mutation datatype="Number">
+                  </mutation>
+                  <field name="VAR">ergebnis</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="variables_set" id=":BLzDZCP2)j/UpRCYmAC" intask="true">
+          <mutation datatype="Number">
+          </mutation>
+          <field name="VAR">ergebnis</field>
+          <value name="VALUE">
+            <block type="math_arithmetic" id="]XeIVkSf%!U+#vu?})~m" intask="true">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <block type="variables_get" id="8Npt~!%ijMaPtN=4[]sV" intask="true">
+                  <mutation datatype="Number">
+                  </mutation>
+                  <field name="VAR">ergebnis</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_arithmetic" id="+}s82z%NSe*xttFrv7K5" intask="true">
+                  <field name="OP">ADD</field>
+                  <value name="A">
+                    <block type="math_number" id="sk`xHtlLdvxjGR2oYzO6" intask="true">
+                      <field name="NUM">2</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_arithmetic" id="hvKkUC~PM44.ass)1b|h" intask="true">
+                      <field name="OP">MINUS</field>
+                      <value name="A">
+                        <block type="math_arithmetic" id="3B%#[]smUEO~Y)YO-ZrS" intask="true">
+                          <field name="OP">DIVIDE</field>
+                          <value name="A">
+                            <block type="math_arithmetic" id="}a,bKS12U[}*5jATgl8-" intask="true">
+                              <field name="OP">ADD</field>
+                              <value name="A">
+                                <block type="math_number" id="n%DmyApPwzLOajbfC%gO" intask="true">
+                                  <field name="NUM">3</field>
+                                </block>
+                              </value>
+                              <value name="B">
+                                <block type="math_number" id="?;@WdhH|zA1BockzniqD" intask="true">
+                                  <field name="NUM">4</field>
+                                </block>
+                              </value>
+                            </block>
+                          </value>
+                          <value name="B">
+                            <block type="math_arithmetic" id="vNUgFA_EYqop0)486w*Q" intask="true">
+                              <field name="OP">MINUS</field>
+                              <value name="A">
+                                <block type="math_number" id="[z[DKcvIaidbHe9ZW:={" intask="true">
+                                  <field name="NUM">5</field>
+                                </block>
+                              </value>
+                              <value name="B">
+                                <block type="math_number" id="54.;?|qvpx0Z_4x)|TJ~" intask="true">
+                                  <field name="NUM">6</field>
+                                </block>
+                              </value>
+                            </block>
+                          </value>
+                        </block>
+                      </value>
+                      <value name="B">
+                        <block type="math_arithmetic" id="?G|8+hz%Tg/Qqfh[g9ol" intask="true">
+                          <field name="OP">ADD</field>
+                          <value name="A">
+                            <block type="math_arithmetic" id="}4]u}~~YSiye0u[zY6g(" intask="true">
+                              <field name="OP">MULTIPLY</field>
+                              <value name="A">
+                                <block type="math_number" id="jmVWK=/.z80vr+#QSCPr" intask="true">
+                                  <field name="NUM">7</field>
+                                </block>
+                              </value>
+                              <value name="B">
+                                <block type="math_number" id=":?b@s2}TGEke(LrAj-(s" intask="true">
+                                  <field name="NUM">8</field>
+                                </block>
+                              </value>
+                            </block>
+                          </value>
+                          <value name="B">
+                            <block type="math_arithmetic" id="C:UYfp?M*=egkrm8~vi4" intask="true">
+                              <field name="OP">ADD</field>
+                              <value name="A">
+                                <block type="math_number" id="abbXL|mmNzy^nYv#lb[M" intask="true">
+                                  <field name="NUM">9</field>
+                                </block>
+                              </value>
+                              <value name="B">
+                                <block type="math_number" id="tq!A--1jq[cI;6rJSC?(" intask="true">
+                                  <field name="NUM">10</field>
+                                </block>
+                              </value>
+                            </block>
+                          </value>
+                        </block>
+                      </value>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_assert" id="%wd`N1%!xnDQ`G!na82q" intask="true">
+          <field name="TEXT">POS-13</field>
+          <value name="OUT">
+            <block type="logic_compare" id=",VR`aKGFAcKT+?Wg/w,b" intask="true" deletable="false" movable="false">
+              <field name="OP">EQ</field>
+              <value name="A">
+                <block type="math_number" id="w_cWT[6pWXMgvhSEod8#" intask="true">
+                  <field name="NUM">932.4</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="variables_get" id="}P%/TfByW1=[rA=dk]Kx" intask="true">
+                  <mutation datatype="Number">
+                  </mutation>
+                  <field name="VAR">ergebnis</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="variables_set" id="hBZf/g~/RY9lCOh/T)S]" intask="true">
+          <mutation datatype="Number">
+          </mutation>
+          <field name="VAR">ergebnis</field>
+          <value name="VALUE">
+            <block type="math_arithmetic" id="rDFJ;fkC={)cv_R|`J^)" intask="true">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <block type="variables_get" id="PyQeM.[38/Qi9f@;]FM^" intask="true">
+                  <mutation datatype="Number">
+                  </mutation>
+                  <field name="VAR">ergebnis</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="math_arithmetic" id="sEQm^+rBCW(B%[RW51V7" intask="true">
+                  <field name="OP">MULTIPLY</field>
+                  <value name="A">
+                    <block type="math_number" id=".Iv^puPl40OZZi9EVkI_" intask="true">
+                      <field name="NUM">2</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_arithmetic" id="^0V7NO2jfOba7+4M8;c[" intask="true">
+                      <field name="OP">MULTIPLY</field>
+                      <value name="A">
+                        <block type="math_arithmetic" id="0tf(!Ok[#-08yO]vw!0?" intask="true">
+                          <field name="OP">ADD</field>
+                          <value name="A">
+                            <block type="math_arithmetic" id="[Ik.tzgile;0pnh3:lIi" intask="true">
+                              <field name="OP">ADD</field>
+                              <value name="A">
+                                <block type="math_number" id="NLdfJ;U]-QAa%O4hCQua" intask="true">
+                                  <field name="NUM">3</field>
+                                </block>
+                              </value>
+                              <value name="B">
+                                <block type="math_number" id="CH02}dCMU3z@HBMB4ll%" intask="true">
+                                  <field name="NUM">4</field>
+                                </block>
+                              </value>
+                            </block>
+                          </value>
+                          <value name="B">
+                            <block type="math_arithmetic" id="/Yy+[{8.O!A7T;,zxFYS" intask="true">
+                              <field name="OP">MULTIPLY</field>
+                              <value name="A">
+                                <block type="math_number" id="CJ,7}:3YG(UmY3Usk+Zc" intask="true">
+                                  <field name="NUM">5</field>
+                                </block>
+                              </value>
+                              <value name="B">
+                                <block type="math_number" id="Hx^_fw_lk?sS5|33NN?h" intask="true">
+                                  <field name="NUM">6</field>
+                                </block>
+                              </value>
+                            </block>
+                          </value>
+                        </block>
+                      </value>
+                      <value name="B">
+                        <block type="math_arithmetic" id="^Iostv!wMbeHas~[na)!" intask="true">
+                          <field name="OP">ADD</field>
+                          <value name="A">
+                            <block type="math_arithmetic" id="r7kC/Srd!YbBEp`xX;Li" intask="true">
+                              <field name="OP">MULTIPLY</field>
+                              <value name="A">
+                                <block type="math_number" id="=oq;E)1w|O#^Z.O02Flu" intask="true">
+                                  <field name="NUM">7</field>
+                                </block>
+                              </value>
+                              <value name="B">
+                                <block type="math_number" id="6%5:f?rN.clw6hZafO[!" intask="true">
+                                  <field name="NUM">8</field>
+                                </block>
+                              </value>
+                            </block>
+                          </value>
+                          <value name="B">
+                            <block type="math_arithmetic" id="C%}gw5RkuanxFi+a{{3W" intask="true">
+                              <field name="OP">MINUS</field>
+                              <value name="A">
+                                <block type="math_number" id="U/[U(L3{P9?M*_QUL_!5" intask="true">
+                                  <field name="NUM">9</field>
+                                </block>
+                              </value>
+                              <value name="B">
+                                <block type="math_number" id="qe?1?6d_fj34EdN2qt9P" intask="true">
+                                  <field name="NUM">10</field>
+                                </block>
+                              </value>
+                            </block>
+                          </value>
+                        </block>
+                      </value>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="robActions_debug" id="]H8n_exy-goJv8^[dQ*h" intask="true">
+          <value name="OUT">
+            <block type="logic_ternary" id="G]_8Q^GJ(Mmxr-SJ}+X=" intask="true">
+              <value name="IF">
+                <block type="logic_compare" id="(@W,g(u~=[B^%C9?g9eO" intask="true">
+                  <field name="OP">EQ</field>
+                  <value name="A">
+                    <block type="variables_get" id="Uw%KWDY=FzXT:!d7I0U!" intask="true">
+                      <mutation datatype="Number">
+                      </mutation>
+                      <field name="VAR">ergebnis</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_number" id="XC?BzI3wrGUaca3P:YYN" intask="true">
+                      <field name="NUM">5002.4</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+              <value name="THEN">
+                <block type="text" id="=#Fq@gZv%;tUihzXKHrY" intask="true">
+                  <field name="TEXT">SUCCESS</field>
+                </block>
+              </value>
+              <value name="ELSE">
+                <block type="text" id="C[Cq)P-Vu|qa*|%,~D[1" intask="true">
+                  <field name="TEXT">FAIL</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+        <block type="text_comment" id="^P%5Q9{)cM|+?-+]{#QX" intask="true">
+          <field name="TEXT">Grundrechenarten Basics  --END--</field>
+        </block>
