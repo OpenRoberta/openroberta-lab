@@ -171,7 +171,6 @@ public class ExprlyAstTest {
     @Test
     public void radomExp() throws Exception {
         Expr<Void> rand = expr2AST("e^randFloat()%exp(floor(randInt(1,10)))");
-        System.out.println(rand.toString());
         String t =
             "FunctionExpr [MathSingleFunct [EXP, [Binary [MOD, FunctionExpr [MathRandomFloatFunct []], "
                 + "FunctionExpr [MathSingleFunct [EXP, [FunctionExpr [MathSingleFunct [ROUNDDOWN, [FunctionExpr "
