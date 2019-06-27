@@ -34,7 +34,9 @@ public class ExprlyAstTest {
     @Test
     public void test1add2text() throws Exception {
         Expr<Void> add = expr2AST("(((1)+2))");
-        checkCode(add);
+        String t = "Binary [ADD, NumConst [1], NumConst [2]]";
+        Assert.assertEquals(t, add.toString());
+        //checkCode(add);
     }
 
     /**
@@ -43,7 +45,12 @@ public class ExprlyAstTest {
      */
     @Test
     public void modText() throws Exception {
-        Expr<Void> mod = expr2AST("3*2%2");
+        Expr<Void> mod = expr2AST("3*2%2^4%6");
+        String t =
+            "Binary [MULTIPLY, NumConst [3], Binary [MOD, NumConst [2], "
+                + "Binary [MOD, FunctionExpr [MathSingleFunct [POWER, [NumConst [2], NumConst [4]]]], "
+                + "NumConst [6]]]]";
+        Assert.assertEquals(t, mod.toString());
         checkCode(mod);
     }
 
@@ -54,6 +61,8 @@ public class ExprlyAstTest {
     @Test
     public void compareText() throws Exception {
         Expr<Void> comp = expr2AST("500>=0");
+        String t = "Binary [GTE, NumConst [500], NumConst [0]]";
+        Assert.assertEquals(t, comp.toString());
         checkCode(comp);
     }
 
@@ -63,7 +72,9 @@ public class ExprlyAstTest {
      */
     @Test
     public void mathConstText() throws Exception {
-        Expr<Void> con = expr2AST("pi");
+        Expr<Void> con = expr2AST("sin(pi)*sqrt(2)");
+        String t = "Binary [MULTIPLY, FunctionExpr [MathSingleFunct [SIN, [MathConst [PI]]]], " + "FunctionExpr [MathSingleFunct [ROOT, [NumConst [2]]]]]";
+        Assert.assertEquals(t, con.toString());
         checkCode(con);
     }
 
@@ -73,7 +84,9 @@ public class ExprlyAstTest {
      */
     @Test
     public void boolText() throws Exception {
-        Expr<Void> conj = expr2AST("True&&(!falSe)||FALSE==true");
+        Expr<Void> conj = expr2AST("true&&(!false)||x==true");
+        String t = "Binary [EQ, Binary [OR, Binary [AND, BoolConst [true], " + "Unary [NOT, BoolConst [false]]], Var [x]], BoolConst [true]]";
+        Assert.assertEquals(t, conj.toString());
         checkCode(conj);
     }
 
@@ -83,7 +96,9 @@ public class ExprlyAstTest {
      */
     @Test
     public void strText() throws Exception {
-        Expr<Void> str = expr2AST("String:Hallo");
+        Expr<Void> str = expr2AST("\"String Hallo\"");
+        String t = "StringConst [String Hallo]";
+        Assert.assertEquals(t, str.toString());
         checkCode(str);
     }
 
@@ -94,6 +109,8 @@ public class ExprlyAstTest {
     @Test
     public void colorText() throws Exception {
         Expr<Void> col = expr2AST("#F043BA");
+        String t = "ColorConst [#F043BA]";
+        Assert.assertEquals(t, col.toString());
         checkCode(col);
     }
 
@@ -104,6 +121,8 @@ public class ExprlyAstTest {
     @Test
     public void rgbText() throws Exception {
         Expr<Void> rgb = expr2AST("(23,255,0,45)");
+        String t = "RgbColor [NumConst [23], NumConst [255], NumConst [0], NumConst [45]]";
+        Assert.assertEquals(t, rgb.toString());
         checkCode(rgb);
     }
 
@@ -113,7 +132,9 @@ public class ExprlyAstTest {
      */
     @Test
     public void connectText() throws Exception {
-        Expr<Void> connect = expr2AST("Connection: con1,con2");
+        Expr<Void> connect = expr2AST("connect con1, con2");
+        String t = "ConnectConst [con2]";
+        Assert.assertEquals(t, connect.toString());
         checkCode(connect);
     }
 
@@ -125,8 +146,37 @@ public class ExprlyAstTest {
     @Test
     public void listmText() throws Exception {
         Expr<Void> list = expr2AST("[1,1+2,-(1+2)]");
-        String t = "NumConst [1], Binary [ADD, NumConst [1], NumConst [2]], Unary [NEG, Binary [ADD, NumConst [1], NumConst [2]]]";
+        String t = "NumConst [1], Binary [ADD, NumConst [1], NumConst [2]], " + "Unary [NEG, Binary [ADD, NumConst [1], NumConst [2]]]";
         Assert.assertEquals(t, list.toString());
+    }
+
+    /**
+     * create a correct AST programmatically for a function with a list argument
+     * Check that the AST is ok (but without checking the generated code).<br>
+     */
+    @Test
+    public void average() throws Exception {
+        Expr<Void> avg = expr2AST("avg([1,1+2, 10^-(1+2)])");
+        String t =
+            "FunctionExpr [MathSingleFunct [AVERAGE, [NumConst [1], Binary [ADD, NumConst [1], "
+                + "NumConst [2]], FunctionExpr [MathSingleFunct [POW10, [Unary [NEG, Binary [ADD, NumConst [1], "
+                + "NumConst [2]]]]]]]]]";
+        Assert.assertEquals(t, avg.toString());
+    }
+
+    /**
+     * create a correct AST programmatically for a function with a list argument
+     * Check that the AST is ok (but without checking the generated code).<br>
+     */
+    @Test
+    public void radomExp() throws Exception {
+        Expr<Void> rand = expr2AST("e^randFloat()%exp(floor(randInt(1,10)))");
+        System.out.println(rand.toString());
+        String t =
+            "FunctionExpr [MathSingleFunct [EXP, [Binary [MOD, FunctionExpr [MathRandomFloatFunct []], "
+                + "FunctionExpr [MathSingleFunct [EXP, [FunctionExpr [MathSingleFunct [ROUNDDOWN, [FunctionExpr "
+                + "[MathRandomIntFunct [[NumConst [1], NumConst [10]]]]]]]]]]]]]]";
+        Assert.assertEquals(t, rand.toString());
     }
 
     /**
@@ -136,6 +186,8 @@ public class ExprlyAstTest {
     @Test
     public void equalitytext() throws Exception {
         Expr<Void> neq = expr2AST("2==2");
+        String t = "Binary [EQ, NumConst [2], NumConst [2]]";
+        Assert.assertEquals(t, neq.toString());
         checkCode(neq);
     }
 
@@ -146,28 +198,9 @@ public class ExprlyAstTest {
     @Test
     public void equalityNtext() throws Exception {
         Expr<Void> neq = expr2AST("#000000 != #FFFFFF");
+        String t = "Binary [NEQ, ColorConst [#000000], ColorConst [#FFFFFF]]";
+        Assert.assertEquals(t, neq.toString());
         checkCode(neq);
-    }
-
-    /**
-     * create a correct AST programmatically for a assignment expression.
-     * Check that the AST is ok.<br>
-     */
-    @Test
-    public void assignText() throws Exception {
-        Expr<Void> assign = expr2AST("x:= (24,45,46,255)");
-        checkCode(assign);
-    }
-
-    /**
-     * create a correct AST programmatically for a assignment expression.
-     * Check that the AST is ok.<br>
-     */
-    @Test
-    public void assign1Text() throws Exception {
-        // Parentheses are required in these assignment statements
-        Expr<Void> assign = expr2AST("x:= (25+3*7)");
-        checkCode(assign);
     }
 
     /**

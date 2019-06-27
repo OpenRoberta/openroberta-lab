@@ -1,5 +1,7 @@
 grammar Exprly;
 
+expression: expr;
+
 expr     : CONST                                                     # MathConst
          | VAR                                                       # VarName
          | literal                                                   # LiteralExp
@@ -8,7 +10,8 @@ expr     : CONST                                                     # MathConst
          | '(' expr ')'                                              # Parenthese
          | op=(ADD | SUB) expr                                       # UnaryN
          | op=NOT expr                                               # UnaryB
-         | expr op=(MOD|POW) expr                                    # BinaryN
+         | <assoc=right> expr op=POW  expr                           # BinaryN
+         | <assoc=right> expr op=MOD expr                            # BinaryN
          | expr op=(MUL | DIV ) expr                                 # BinaryN
          | expr op=(ADD | SUB) expr                                  # BinaryN
          | expr op=AND expr                                          # BinaryB
@@ -24,21 +27,18 @@ expr     : CONST                                                     # MathConst
 literal  : INT                                                       # IntConst
          | FLOAT                                                     # FloatConst
          | BOOL                                                      # BoolConstB
-         | '"' STR '"'                                               # ConstStr
+         | '"'  .*?  '"'                                             # ConstStr
          | COLOR                                                     # Col
          | '(' r=INT ',' g=INT ',' b=INT ',' a=INT ')'               # RGB
          | '[' (expr ',')* expr? ']'                                 # ListExpr
          ;
 
-connExpr: 'connect' STR ',' STR
+connExpr: 'connect' op0=(STR|VAR) ',' op1=(STR|VAR)                  # Conn
          ;
 
-funCall : FNAME args
-		    ;
+funCall : FNAME '('? ( expr (',' expr)* )? ')'?                      # Func
+		;
 		
-args    : '(' ( expr (',' expr)* )? ')'                             # ArgList
-        ;
-
 // LEXER RULES
 NEWLINE    :    '\r'? '\n' -> skip;
 
@@ -58,7 +58,7 @@ FNAME   :  'sin'
         |  'ln'
         |  '10^'
         |  'randInt'
-        |  'randFLoat'
+        |  'randFloat'
         |  'floor'
         |  'ceil'
         |  'isEven'
@@ -69,9 +69,8 @@ FNAME   :  'sin'
         |  'max'
         |  'min'
         |  'avg'
-        |  'mean'
+        |  'median'
         |  'sd'
-        |  'randItem'
         ;
         
 CONST   :  'phi'
@@ -83,21 +82,25 @@ CONST   :  'phi'
         ;
 
 
-FLOAT   :    ('0'..'9')+ '.' ('0'..'9')+;
 INT     :    ('0'..'9')+;
+
+FLOAT   :    INT+ '.' INT*
+        |    '.' INT+
+        ;
+
 
 BOOL    :  'true' | 'false';
 
 COLOR   :  '#' HEX HEX HEX HEX HEX HEX;
-HEX     :  ('A'..'F'|'a'..'f'|'0'..'9');
+HEX     :  ('A'..'F'|'0'..'9');
 
-VAR     :  ('a'..'z')('a'..'z''0'..'9')*;
-STR     :  ('a'..'z'|'A'..'Z'|'0'..'9'|' ')+;
+VAR     :  ('a'..'z')('a'..'z'|'0'..'9'|'_')*;
+STR     :  ('a'..'z'|'A'..'Z'|'0'..'9')+;
 
 AND     :   '&&';
 OR      :   '||';
 NOT     :   '!';
-EQUAL   :   '==';
+EQUAL   :   '=='; 
 NEQUAL  :   '!=';
 GET     :   '>';
 LET     :   '<';
