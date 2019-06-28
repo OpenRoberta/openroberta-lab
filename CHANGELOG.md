@@ -4,19 +4,107 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Fixed
+ - issue #171: updated the link to github releases on the start pop-up
+ 
 ### Added
- - issue #N/A:  a simple tutorial for Calliope
- - issue #N/A:  new plugin for Calliope simulation (a45bcf72)
- - issue #1138: sensebox OLED screen support for plotting mode
- - issue #1164: raspberry pi plugin
-
 ### Changed
- - issue #N/A:  background image for Calliope configuration updated 
- - issue #1138: sensebox default configuration updated
-
 ### Removed
 ### Deprecated
 ### Security
+
+## [3.4.1] - 2019-06-27
+
+### Fixed
+ - issue N/A:   checking out a safe branch for deployment
+ - issue N/A:   small corrections for docker dply and create-empty-db for admin.sh
+ - issue #8:    add cast from MicroBitColor to ManagedString in NepoDefs.h
+ - issue #37:   Tiltsensor does work now for WeDo
+ - issue #45:   the bug found a resolution alike to createMathChange method
+ - issue #105:  fix problem, also enable use of country flag in non public mode, if a database is provided
+ 
+### Added
+ - issue #N/A:  setting locale in ubuntu container
+ - issue #N/A:  'alive' function for cron; typos removed
+ - issue #174:  Edison robot plugin
+ 
+### Changed
+ - issue #171:  updated the link to github releases
+ - issue #100:  WLAN credentials are supplied by the user separate from programs and never stored in the database SenseBox uses this
+
+### Removed
+ - issue #N/A:  Removed slotname param from configuration and associated tests
+
+### Deprecated
+### Security
+
+## [3.4.0] - 2019-05-28
+
+### Fixed
+ - issue #N/A:  deployment, testing scripting improvements
+ - issue #N/A:  integration tests, logging init.
+ - issue #N/A:  refactoring for containerised deployments
+ - issue #N/A:  vorwerk error handling
+ - issue #4:    if in java code generation now surrounded with parens
+ - issue #12:   fixed rgb function for BOB3
+ - issue #22:   for plotting the plot is cleared and not the display (axes are not removed anymore when using clear plot block, but plot data is) for SenseBox
+ - issue #24:   improved codegeneration for calli:bot
+ - issue #988:  configuration block names now correctly work with upper/lower case names
+ - issue #1138: added missing RobertaFunctions header for SenseBox code generation
+ - issue #1177: improvements of integration tests, including better naming
+ - issue #1181: calliope serial write
+
+### Added
+ - issue #N/A:  integration test for if-then-else construct
+ - issue #N/A:  preparation for antlr4 usage
+ - issue #N/A:  first version of "eval expression" block
+ - issue #N/A:  reporting script in python to scan the apache log. Small error corrected for sensebox-testing helper.
+ - issue #N/A:  ev3 versions in properties get the correct value now (pom.xml addition)
+ - issue #N/A:  common integration tests added nestedLoops test programm
+ - issue #4:    assert/debug block returns null for NXT for now
+ - issue #11:   zipped log files added to gitignore
+ - issue #24:   implemented and adopted blocks and codegeneration for calli:bot
+ - issue #24:   create global buffer and adopt code generation for calli:bot
+ - issue #33:   added unit tests for plotting a value and clearing the plot. For SenseBox
+ - issue #39:   added access to the iptocountry db for public server only
+ - issue #1154: new calliope plugin for the new sim execution
+ - issue #1070: serial write to microbit
+ - issue #1177: added common integration tests for SenseBox
+ - issue #1179: debug and assert block
+ - issue #1179: not in task property set for debug/assert block
+ - issue #1183: Separated statistical log messages from info log messages. Implemented RollingFileAppender for saving logs in separate files. The rollover is set to daily for test purposes.
+ 
+### Changed
+ - issue #N/A:  rename Expedition plugin to RaspberryPi
+ - issue #N/A:  adapted to new folder structure
+ - issue #N/A:  deployment/startup scripts updated
+ - issue #N/A:  docker setup for production system
+ - issue #N/A:  ora-cc-rsc repositry restructured
+ - issue #N/A:  vorwerk icon
+ - issue #15:   swapped "RST" and "SDA" in the code generation and in tests
+ - issue #23:   boolean is treated as integer when assigning for Calliope (used to be String)
+ - issue #26:   path resources for updating NAO, EV3 robots
+ - issue #32:   modified the NAO update process to support NAO v5 and v6
+ - issue #39:   improve logging for statistics
+ - issue #1178: merged screen and plot configuration blocks fo SenseBox
+ - issue #1178: changed code generation to show plot axis and title for SenseBox
+ 
+### Removed
+ - issue #N/A:  USBInstaller, not needed resources
+ - issue #N/A:  all robot resources removed. Moved to ora-cc-rsc repository
+ - issue #N/A:  OpenRobertaParent folder
+ - issue #N/A:  integration test for controlFlowLoops removed: wrong XML
+ 
+### Deprecated
+ - issue #N/A:  robertalab repository, moved to openroberta-lab
+ 
+### Security
+
+## [3.3.1] - 2019-04-02
+
+Hotfix
+
+### Fixed
+ - issue #1176: field names added in configuration of SenseBox
 
 ## [3.3.0] - 2019-03-29
 
