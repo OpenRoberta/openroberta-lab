@@ -1,0 +1,33 @@
+include: "classpath:/robotCommon.yml"
+
+block:
+  IR_SEND:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.actors.edison.SendIRAction
+    type: [edisonCommunication_ir_sendBlock]
+  IR_RECV:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.actors.edison.ReceiveIRAction
+    type: [edisonCommunication_ir_receiveBlock]
+  SENSOR_RESET:
+    category: SENSOR
+    implementor: de.fhg.iais.roberta.syntax.sensors.edison.ResetSensor
+    type: [edisonSensors_sensor_reset]
+
+wait:
+  RECKEY_PRESSED :
+    implementor: de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor
+    sensor: RECKEY
+    mode: PRESSED
+  PLAYKEY_PRESSED :
+    implementor: de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor
+    sensor: PLAYKEY
+    mode: PRESSED
+  IRSEEKER_RCCODE:
+    implementor: de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor
+    sensor: IRLED
+    mode: RCCODE
+  LIGHT_LINE:
+    implementor: de.fhg.iais.roberta.syntax.sensor.generic.LightSensor
+    sensor: LINETRACKER
+    mode: LINE

@@ -83,6 +83,10 @@ public class RobotDownloadProgram {
                     fileName = programName + ".ino.hex";
                     filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
+                case "edison":
+                    fileName = programName + ".wav";
+
+                    break;
                 default:
                     LOG.error("unsupported firmware name " + state.getFirmwareName());
                     return Response.serverError().build();

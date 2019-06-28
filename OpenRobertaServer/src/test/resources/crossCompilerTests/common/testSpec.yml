@@ -6,7 +6,7 @@ robots:
     ev3dev:
        template: ev3
     ev3c4ev3:
-      template: ev3
+       template: ev3
     nxt:
        template: nxt
     microbit:
@@ -29,6 +29,8 @@ robots:
        template: sensebox
     wedo:
        template: wedo
+    edison:
+       template: edison
 
 progs:
     advancedListOperations:
@@ -45,6 +47,7 @@ progs:
     variablesNuStBo:
        decl: variablesNuStBo
        exclude:
+          edison:
        remark: "variable assignment for number, string and boolean"
     stringConcat:
        decl: stringConcat
@@ -55,14 +58,17 @@ progs:
           nxt: "Comparison of string and char not possible"
           bob3: "Comparison of string and char not possible"
           uno: "Comparison of string and char not possible"
+          edison: "Edison does not support Strings/chars"
        remark: "different combinations of string concatenation"
     mathBasics:
        decl: mathBasics
        exclude:
-       remark: "basic math operations"   
+          edison:
+       remark: "basic math operations"
     mathBrackets:
        decl: mathBrackets
        exclude:
+          edison:
        remark: "different combinations for math brackets"
     mathPower:
        decl: mathPower
@@ -73,34 +79,41 @@ progs:
        fragment: basicFunctions
        decl: basicFunctions
        exclude:
-          bob3: "too small"         
-       remark: "basic function calls"   
+          edison:
+          bob3: "too small"
+       remark: "basic function calls"
     logicBooleanOp:
        decl: logicBooleanOp
        exclude:
+          edison:
        remark: "all combinations for boolean operator"
     logicBooleanOpTernary:
        decl: logicBooleanOpTernary
        exclude:
+          edison: "AND/OR blocks not supported"
           wedo: "re-enable after simulation refactoring"
        remark: "all combinations for ternary operator"
     controlFlowDecisons:
        decl: controlFlowDecisons
        exclude:
+          edison:
        remark: "all combinations for IF-THEN-ELSE upto two levels"
     controlFlowLoops:
        decl: controlFlowLoops
        exclude:
+          edison:
           bob3: "too small"
        remark: "all combinations of loops"
     controlFlowNestedLoops:
        decl: controlFlowNestedLoops
        exclude:
           bob3: "too small"
+          edison:
        remark: "all combinations of nested loops"
     assign:
        decl: default
        exclude:
+          edison:
        remark: "simple assignment. For testing the test only"
     functionWithWithoutParameter:
        fragment: functionWithWithoutParameter
@@ -112,6 +125,7 @@ progs:
     listOperations:
        decl: listOperations
        exclude:
+          edison: "Lists are implemented as an Array in edison robot and thus not expandable"
           nxt: "no extendable lists"
           bob3: "too small"
           wedo: "re-enable after simulation refactoring"
@@ -119,6 +133,7 @@ progs:
     mathAndLists:
        decl: mathAndLists
        exclude:
+          edison: "Lists are implemented as an Array in edison robot and thus not expandable"
           nxt: "no extendable lists"
           bob3: ".text overflow. Test must be splitted"
           wedo: "re-enable after simulation refactoring"
@@ -126,11 +141,13 @@ progs:
     mathFunctions:
        decl: mathFunctions
        exclude:
+          edison:
           bob3: ".text overflow. Test must be splitted"
        remark: "some math functions (min, sin, pi, ...), similar to mathLogic. For testing the test only"
     mathLogic-1:
        decl: mathLogic
        exclude:
+          edison:
           bob3: ".text overflow. Test must be splitted"
        fragment: mathLogic
        remark: "math functions (min, random, ...)"
@@ -138,6 +155,7 @@ progs:
        decl: mathLogic
        exclude:
           bob3: ".text overflow. Test must be splitted"
+          edison: "edison only supports integers as numbers which would mean that f.e. sqrt(2) == 1 == sqrt(1/2)"
           wedo: "re-enable after simulation refactoring"
        fragment: mathLogic
        remark: "trigonometric functions (min, sin, pi, ...)"

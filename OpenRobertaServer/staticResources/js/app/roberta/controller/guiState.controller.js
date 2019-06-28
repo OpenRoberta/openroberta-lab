@@ -212,6 +212,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             break;
         case GUISTATE.gui.connectionType.LOCAL:
             break;
+        case GUISTATE.gui.connectionType.JSPLAY:
+            break;
         case GUISTATE.gui.connectionType.AGENT:
             break;
         case GUISTATE.gui.connectionType.WEBVIEW:
@@ -314,6 +316,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             break;
         case GUISTATE.gui.connectionType.LOCAL:
         case GUISTATE.gui.connectionType.AUTO:
+        case GUISTATE.gui.connectionType.JSPLAY:
             SOCKET_C.listRobotStop();
             $('#head-navi-icon-robot').removeClass('error');
             $('#head-navi-icon-robot').removeClass('busy');
@@ -539,7 +542,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         if (GUISTATE.robot.time > 0) {
             return true;
         }
-        if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AUTO || GUISTATE.gui.connection === GUISTATE.gui.connectionType.LOCAL) {
+        if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AUTO
+            || GUISTATE.gui.connection === GUISTATE.gui.connectionType.LOCAL
+            || GUISTATE.gui.connectionType.JSPLAY) {
             return true;
         }
         if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AGENTORTOKEN) {

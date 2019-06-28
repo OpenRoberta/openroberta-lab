@@ -57,11 +57,11 @@
 		<module>RobotMbed</module>
 		<module>RobotVorwerk</module>
 		<module>RobotWeDo</module>
+		<module>RobotEdison</module>
 		<module>RobotRaspberryPi</module>
 		<module>OpenRobertaServer</module>
 		<module>WedoInterpreter</module>
 	</modules>
-
 	<repositories>
 		<repository>
 			<id>ORA-releases</id>
@@ -75,7 +75,6 @@
 			</snapshots>
 		</repository>
 	</repositories>
-
 	<pluginRepositories>
 		<pluginRepository>
 			<id>NM-releases</id>
@@ -89,7 +88,6 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
-
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -142,6 +140,11 @@
 				<artifactId>RobotWedo</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>de.fhg.iais.openroberta</groupId>
+				<artifactId>RobotEdison</artifactId>
+				<version>${project.version}</version>
+			</dependency>
       <dependency>
         <groupId>de.fhg.iais.openroberta</groupId>
         <artifactId>OpenRobertaRobot</artifactId>
@@ -154,7 +157,6 @@
 				<artifactId>WedoInterpreter</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
@@ -323,7 +325,6 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -408,7 +409,7 @@
 					</dependency>
 				</dependencies>
 				<configuration>
-					<!-- Force alphabetical order to have a reproducible build -->
+          <!-- Force alphabetical order to have a reproducible build -->
 					<runOrder>alphabetical</runOrder>
 					<useSystemClassLoader>false</useSystemClassLoader>
 					<includes>

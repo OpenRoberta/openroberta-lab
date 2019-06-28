@@ -1,0 +1,6 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="" description="" tags="">
+    <instance x="213" y="213">
+        <block type="robBrick_Edison-Brick" id="1" intask="true" deletable="false">
+        </block>
+    </instance>
+</block_set>

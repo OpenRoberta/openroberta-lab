@@ -794,13 +794,13 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
         }
     }
 
-    private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
+    protected void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
         this.sb.append(stmtType).append(whitespace());
         expr.visit(this);
         this.sb.append(":");
     }
 
-    private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
+    protected void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
         this.sb.append(stmtType).append(whitespace());
         ExprList<Void> expressions = (ExprList<Void>) expr;
         expressions.get().get(0).visit(this);
@@ -813,12 +813,12 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
         this.sb.append(")):");
     }
 
-    private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
+    protected void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
         nlIndent();
         this.sb.append("break");
     }
 
-    private void appendTry() {
+    protected void appendTry() {
         increaseLoopCounter();
 
         if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
@@ -828,7 +828,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
         }
     }
 
-    private void appendExceptionHandling() {
+    protected void appendExceptionHandling() {
         if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
             decrIndentation();
             nlIndent();
@@ -847,7 +847,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
         this.currenLoop.removeLast();
     }
 
-    private void appendPassIfEmptyBody(RepeatStmt<Void> repeatStmt) {
+    protected void appendPassIfEmptyBody(RepeatStmt<Void> repeatStmt) {
         if ( repeatStmt.getList().get().isEmpty() ) {
             if ( repeatStmt.getMode() != RepeatStmt.Mode.WAIT ) {
                 nlIndent();

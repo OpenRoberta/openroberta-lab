@@ -37,7 +37,8 @@ define([ 'exports', 'message', 'comm' ], function(exports, MSG, COMM) {
             AUTO : 'autoConnection',
             AGENTORTOKEN : 'arduinoAgentOrToken',
             LOCAL : 'local',
-            WEBVIEW : 'webview'
+            WEBVIEW : 'webview',
+            JSPLAY : 'jsPlay' //Play file in the browser with JavaScript
         }
 
         exports.user = {};

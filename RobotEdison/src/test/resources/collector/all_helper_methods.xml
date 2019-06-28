@@ -1,0 +1,229 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="2.0" description="" tags="">
+    <instance x="273" y="50">
+        <block type="robControls_start" id="|!TTm!0@p31!n`){y-~J" intask="true" deletable="false">
+            <mutation declare="true"></mutation>
+            <field name="DEBUG">TRUE</field>
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id="Ot6!#7~Xu0AG_=d,0+Z]" intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="Array_Number"></mutation>
+                    <field name="VAR">listvar</field>
+                    <field name="TYPE">Array_Number</field>
+                    <value name="VALUE">
+                        <block type="robLists_repeat" id=".+E+zPjUcQDPC{Z/bBOl" intask="true">
+                            <mutation list_type="Number"></mutation>
+                            <field name="LIST_TYPE">Number</field>
+                            <value name="ITEM">
+                                <block type="math_integer" id="g(D4]uReSTC_3]fQGJtH" intask="true">
+                                    <field name="NUM">2</field>
+                                </block>
+                            </value>
+                            <value name="NUM">
+                                <block type="math_integer" id="1p`/8531U%64avwblw)T" intask="true">
+                                    <field name="NUM">8</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="robGlobalVariables_declare" id="lUV4@H]uAhzI2_kTu}#p" intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="Number"></mutation>
+                    <field name="VAR">numvar</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
+                        <block type="math_integer" id="7+HUSG5#d!O|2%1m8N;E" intask="true">
+                            <field name="NUM">45</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robGlobalVariables_declare" id="4z/sL~,f!EpLtg=Fjya^" intask="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="Boolean"></mutation>
+                    <field name="VAR">boolvar</field>
+                    <field name="TYPE">Boolean</field>
+                    <value name="VALUE">
+                        <block type="logic_boolean" id="0I~i@EI8|Wk@Y*3-Y!ZA" intask="true">
+                            <field name="BOOL">TRUE</field>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+        <block type="variables_set" id="!+@Sd,V5M4~F:!8EY0(V" intask="true">
+            <mutation datatype="Number"></mutation>
+            <field name="VAR">numvar</field>
+            <value name="VALUE">
+                <block type="math_on_list" id="T46Esl|19CrRq]YZf]eh" intask="true">
+                    <mutation op="SUM"></mutation>
+                    <field name="OP">SUM</field>
+                    <value name="LIST">
+                        <block type="variables_get" id="}!Y]dg!l78z[^iAiR~-]" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">listvar</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+        <block type="variables_set" id="/Kpw_`)IM_e;?H~jhYmK" intask="true">
+            <mutation datatype="Number"></mutation>
+            <field name="VAR">numvar</field>
+            <value name="VALUE">
+                <block type="math_on_list" id="gDrO_F:*Iyl,bA1T^oeW" intask="true">
+                    <mutation op="MIN"></mutation>
+                    <field name="OP">MIN</field>
+                    <value name="LIST">
+                        <block type="variables_get" id="@fJ{SiDg/B]XgkY^52)|" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">listvar</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+        <block type="variables_set" id="v[gBNI;tr`i9]e136,)e" intask="true">
+            <mutation datatype="Number"></mutation>
+            <field name="VAR">numvar</field>
+            <value name="VALUE">
+                <block type="math_on_list" id="aM6K}m~{rk#n7api!/fH" intask="true">
+                    <mutation op="MAX"></mutation>
+                    <field name="OP">MAX</field>
+                    <value name="LIST">
+                        <block type="variables_get" id="CDqFnUDfqIubX[CkxyM]" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">listvar</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+        <block type="variables_set" id="FyY^#6CIvM1YaVN(:LoZ" intask="true">
+            <mutation datatype="Number"></mutation>
+            <field name="VAR">numvar</field>
+            <value name="VALUE">
+                <block type="math_on_list" id="QChGJLs1W+`AYyGSFv;8" intask="true">
+                    <mutation op="AVERAGE"></mutation>
+                    <field name="OP">AVERAGE</field>
+                    <value name="LIST">
+                        <block type="variables_get" id="x^YB3%rElsdqPgazm,~t" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">listvar</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+        <block type="variables_set" id="T-*ErH!]|NpO;Dx)=MYc" intask="true">
+            <mutation datatype="Boolean"></mutation>
+            <field name="VAR">boolvar</field>
+            <value name="VALUE">
+                <block type="math_number_property" id="%_SRtA|8_C[TG([TmIwF" intask="true">
+                    <mutation divisor_input="false"></mutation>
+                    <field name="PROPERTY">PRIME</field>
+                    <value name="NUMBER_TO_CHECK">
+                        <block type="math_integer" id="N*^9tu_I:Z2jIER]7PKC" intask="true">
+                            <field name="NUM">5</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motor_on" id="H|jA{oq.kuK_NY.gV9=U" intask="true">
+            <field name="MOTORPORT">LMOTOR</field>
+            <value name="POWER">
+                <block type="math_integer" id="9G_MUua%Sg!Fx4q(HRsY" intask="true">
+                    <field name="NUM">23</field>
+                </block>
+            </value>
+        </block>
+        <block type="robCommunication_sendBlock" id="TP;E`!PJg2}pSULrd#OG" error_attribute="true" intask="true">
+            <mutation datatype="Number"></mutation>
+            <field name="TYPE">Number</field>
+            <data>edison</data>
+            <value name="sendData">
+                <block type="math_integer" id="5EN6I}631885n}_Eb#{y" intask="true">
+                    <field name="NUM">47000</field>
+                </block>
+            </value>
+        </block>
+        <block type="variables_set" id="0O7T6/I=@!{`g|bQMgmx" intask="true">
+            <mutation datatype="Number"></mutation>
+            <field name="VAR">numvar</field>
+            <value name="VALUE">
+                <block type="robCommunication_receiveBlock" id="!#4,;iN]R%!79X,ZiNLr" error_attribute="true" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="TYPE">Number</field>
+                    <data>edison</data>
+                </block>
+            </value>
+        </block>
+        <block type="variables_set" id="}j-:Z}ZQMI2%X]}?EJ%c" intask="true">
+            <mutation datatype="Number"></mutation>
+            <field name="VAR">numvar</field>
+            <value name="VALUE">
+                <block type="math_round" id="6~v%wcCYo*D+*-C}CmL7" intask="true">
+                    <field name="OP">ROUND</field>
+                    <value name="NUM">
+                        <block type="math_integer" id="sbxatsyHGX1837y/}+Jt" intask="true">
+                            <field name="NUM">4</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+        <block type="variables_set" id="tlFQ8*K3iYR1yd7KN+MM" intask="true">
+            <mutation datatype="Number"></mutation>
+            <field name="VAR">numvar</field>
+            <value name="VALUE">
+                <block type="math_round" id="rhRE;O9Mh/ReVn86)i~?" intask="true">
+                    <field name="OP">ROUNDUP</field>
+                    <value name="NUM">
+                        <block type="math_integer" id="_Y/c+G*1SbA/Q9jx46+D" intask="true">
+                            <field name="NUM">6</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+        <block type="variables_set" id="+YLdHnr{=sBy?zeYcy!." intask="true">
+            <mutation datatype="Number"></mutation>
+            <field name="VAR">numvar</field>
+            <value name="VALUE">
+                <block type="math_round" id="=7^A)Nt%*bN44mK1EZ~A" intask="true">
+                    <field name="OP">ROUNDDOWN</field>
+                    <value name="NUM">
+                        <block type="math_integer" id="A{[*Nm/~2uT`D{@G8*{D" intask="true">
+                            <field name="NUM">8</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+        <block type="variables_set" id="|ip`Y`,_(qE-JNuTC.nv" intask="true">
+            <mutation datatype="Number"></mutation>
+            <field name="VAR">numvar</field>
+            <value name="VALUE">
+                <block type="math_single" id="f^%KmTU4W2vF,O(f,H,K" intask="true">
+                    <field name="OP">ABS</field>
+                    <value name="NUM">
+                        <block type="math_integer" id="Fv)V1ChBLv29AphGjRew" intask="true">
+                            <field name="NUM">-10</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+        <block type="variables_set" id="vcaB@`B48a7IhUz6}zSA" intask="true">
+            <mutation datatype="Number"></mutation>
+            <field name="VAR">numvar</field>
+            <value name="VALUE">
+                <block type="math_single" id="f-WT.@:ydyqV62{{PAc)" intask="true">
+                    <field name="OP">NEG</field>
+                    <value name="NUM">
+                        <block type="math_integer" id="u./3262=;j=%WYVrJ`Tx" intask="true">
+                            <field name="NUM">5</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

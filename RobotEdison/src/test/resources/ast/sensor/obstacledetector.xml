@@ -1,0 +1,10 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="2.0" description="" tags="">
+    <instance x="239" y="178">
+        <block type="robSensors_infrared_getSample" id="Oeu%E`F:FQcz!6=+GikM" intask="false">
+            <mutation mode="OBSTACLEAHEAD"></mutation>
+            <field name="MODE">OBSTACLEAHEAD</field>
+            <field name="SENSORPORT">OBSTACLEDETECTOR</field>
+            <field name="SLOT"></field>
+        </block>
+    </instance>
+</block_set>

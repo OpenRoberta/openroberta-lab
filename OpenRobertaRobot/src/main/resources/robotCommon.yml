@@ -130,7 +130,7 @@ block:
   NUM_CONST:
       category: EXPR
       implementor: de.fhg.iais.roberta.syntax.lang.expr.NumConst
-      type: [math_number]
+      type: [math_number, math_integer]
   MATH_CONST:
       category: EXPR
       implementor: de.fhg.iais.roberta.syntax.lang.expr.MathConst
@@ -693,7 +693,8 @@ wait:
         implementor: de.fhg.iais.roberta.syntax.sensor.generic.WallSensor
         sensor: WALL
         mode: DISTANCE
-        
+
+
 mode:
   accelerometer: [DEFAULT,VALUE]
   axis: [DEFAULT,STRENGTH,VALUE,X,Y,Z]
@@ -705,7 +706,8 @@ mode:
   gyro: [ANGLE,RATE,DEFAULT,RESET,TILTED,VALUE,X,Y,Z]
   humidity: [HUMIDITY,TEMPERATURE,VALUE]
   temperature: [TEMPERATURE, PRESSURE]
-  infrared: [AMBIENTLIGHT,DEFAULT,DISTANCE,OBSTACLE,PRESENCE,SEEK,LINE,MODULATED,UNMODULATED,VALUE,REFLEXION]
+  #TODO-MAX move modes RCCODE, EDISON_CODE from robotCommon to edison if it is possible
+  infrared: [AMBIENTLIGHT,DEFAULT,DISTANCE,OBSTACLE,PRESENCE,SEEK,LINE,MODULATED,UNMODULATED,VALUE,REFLEXION, RCCODE, EDISON_CODE]
   keys: [PRESSED,WAIT_FOR_PRESS,WAIT_FOR_PRESS_AND_RELEASE]
   light: [AMBIENTLIGHT,DEFAULT,LEFT,LIGHT,LIGHT_VALUE,RED,RIGHT,VALUE]
   lightveml: [UVLIGHT]
