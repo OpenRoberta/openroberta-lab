@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
  - issue #171: updated the link to github releases on the start pop-up
  
 ### Added
+ - issue #174:  Edison robot plugin
+ - issue #174:  added typicon for edison
+ 
 ### Changed
 ### Removed
 ### Deprecated
@@ -17,18 +20,17 @@ All notable changes to this project will be documented in this file.
 ### Fixed
  - issue N/A:   checking out a safe branch for deployment
  - issue N/A:   small corrections for docker dply and create-empty-db for admin.sh
- - issue #8:    add cast from MicroBitColor to ManagedString in NepoDefs.h
+ - issue #8:    add cast from MicroBitColor to ManagedString in NepoDefs.h not to break serial output on calliope
  - issue #37:   Tiltsensor does work now for WeDo
- - issue #45:   the bug found a resolution alike to createMathChange method
+ - issue #45:   the bug found a resolution alike to createMathChange method; simulation can be opened now, if the "to (var) append text (string)" block is used
  - issue #105:  fix problem, also enable use of country flag in non public mode, if a database is provided
  
 ### Added
  - issue #N/A:  setting locale in ubuntu container
  - issue #N/A:  'alive' function for cron; typos removed
- - issue #174:  Edison robot plugin
  
 ### Changed
- - issue #171:  updated the link to github releases
+ - issue #171:  updated the link to github releases on the start pop-up
  - issue #100:  WLAN credentials are supplied by the user separate from programs and never stored in the database SenseBox uses this
 
 ### Removed

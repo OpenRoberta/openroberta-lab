@@ -1,5 +1,50 @@
 # Release notes
 
+## [3.4.1] - 2019-06-27
+
+### New features
+### General improvements
+ - ALL: deployment and administration improvements
+ 
+### Bug fixes
+ - WEDO:  Tiltsensor does work now
+ - SENSEBOX: WLAN credentials are supplied by the user separate from programs and never stored in the database
+ - CALLIOPE: serial write fixed for colours
+ - ALL: simulation can be opened now, if the "to (var) append text (string)" block is used
+ - ALL: updated the link to github releases on the start pop-up
+
+## [3.4.0] - 2019-05-28
+
+### New features
+ - CALLIOPE: implemented and adopted blocks and codegeneration for calli:bot
+ - CALIIOPE/SIM: new calliope plugin for the new sim execution
+ - MICROBIT: serial write implemented
+ - NAO: NAO update process supports NAO v5 and v6
+ - SENSEBOX: changed code generation to show plot axis and title
+ - ALL: robertalab repository moved to openroberta-lab
+ 
+### General improvements
+ - ALL: deployment, testing scripting improvements
+ - ALL: integration tests, logging init.
+ - ALL: refactoring for containerised deployments
+ - ALL: configuration block names now correctly work with upper/lower case names
+ - CALLIOPE: improved codegeneration for calli:bot
+ 
+### Bug fixes
+ - EV3: if in java code generation now surrounded with parens
+ - BOB3: fixed rgb function
+ - SENSEBOX: for plotting the plot is cleared and not the display (axes are not removed anymore when using clear plot block, but plot data is)
+ - SENSEBOX: added missing RobertaFunctions header for code generation
+ - CALLIOPE: serial write fixed
+ - ARDUINO: swapped "RST" and "SDA" in the code generation and in tests
+
+## [3.3.1] - 2019-04-02
+
+Hotfix
+
+### Bug fixes
+ - SENSEBOX: field names added in configuration of SenseBox
+
 ## [3.3.0] - 2019-03-29
 
 ### New features
