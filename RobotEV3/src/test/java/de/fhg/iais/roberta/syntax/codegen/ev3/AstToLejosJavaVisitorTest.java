@@ -49,6 +49,7 @@ public class AstToLejosJavaVisitorTest {
             + "    .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))\n"
             + "    .addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH))\n"
             + "    .addSensor(SensorPort.S2, new Sensor(SensorType.ULTRASONIC))\n"
+            + "    .addSensor(SensorPort.S3, new Sensor(SensorType.COLOR))\n"
             + "    .build();\n\n";
 
     private static final String BRICK_CONFIGURATION_DECL = "private static Configuration brickConfiguration;\n";
@@ -104,14 +105,14 @@ public class AstToLejosJavaVisitorTest {
         ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
         ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", Collections.emptyMap());
         ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S2", "2", Collections.emptyMap());
-        //        ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", BlocklyConstants.NO_SLOT, "3", Collections.emptyMap());
+        ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", "3", Collections.emptyMap());
         //        ConfigurationComponent ultrasonicSensor4 = new ConfigurationComponent("ULTRASONIC", false, "S4", BlocklyConstants.NO_SLOT, "4", Collections.emptyMap());
         final Configuration.Builder builder = new Configuration.Builder();
         brickConfiguration =
             builder
                 .setTrackWidth(17f)
                 .setWheelDiameter(5.6f)
-                .addComponents(Arrays.asList(motorA, motorB, touchSensor, ultrasonicSensor))//, colorSensor, ultrasonicSensor4))
+                .addComponents(Arrays.asList(motorA, motorB, touchSensor, ultrasonicSensor, colorSensor))// ultrasonicSensor4))
                 .build();
         brickConfiguration.setRobotName("lejosEv3V1");
     }
@@ -1077,6 +1078,29 @@ public class AstToLejosJavaVisitorTest {
                 + "}\n";
         assertCodeIsOk(a, "/syntax/code_generator/java/three_loops_with_nested_two_loops_inside_wait_second_contain_wait.xml");
     }
+
+    @Test
+    public void check_readColorSensorInDifferentModes() throws Exception {
+        String a =
+            "" //
+                + IMPORTS
+                + MAIN_CLASS
+                + BRICK_CONFIGURATION_DECL
+                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S3, SensorType.COLOR, ColorSensorMode.COLOUR), new UsedSensor(SensorPort.S3, SensorType.COLOR, ColorSensorMode.RED), new UsedSensor(SensorPort.S3, SensorType.COLOR, ColorSensorMode.AMBIENTLIGHT), new UsedSensor(SensorPort.S3, SensorType.COLOR, ColorSensorMode.RGB)));"
+                + HAL
+                + MAIN_METHOD
+                + "PickColor color = PickColor.WHITE;\n"
+                + "float light = 0;\n"
+                + "ArrayList<Float> rgb = new ArrayList<>(Arrays.asList((float) 0, (float) 0, (float) 0));"
+                + "public void run() throwsException {\n"
+                + " color = hal.getColorSensorColour(SensorPort.S3);\n"
+                + " light = hal.getColorSensorRed(SensorPort.S3);\n"
+                + " light = hal.getColorSensorAmbient(SensorPort.S3);\n"
+                + " rgb = hal.getColorSensorRgb(SensorPort.S3);\n"
+                + "}}\n";
+        assertCodeIsOk(a, "/syntax/code_generator/java/read_color_sensor_in_different_modes.xml");
+    }
+
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         assertCodeWithConfigIsOk(a, fileName, brickConfiguration);

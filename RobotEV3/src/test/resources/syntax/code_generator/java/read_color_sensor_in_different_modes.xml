@@ -1,0 +1,104 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="2.0" description="" tags="">
+    <instance x="380" y="56">
+        <block type="robControls_start" id="PpTf_jP:|h33J%B`6_cr" intask="true" deletable="false">
+            <mutation declare="true"></mutation>
+            <field name="DEBUG">FALSE</field>
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id="/SsK|@/mA82MS;MIUXSO" intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="Colour"></mutation>
+                    <field name="VAR">color</field>
+                    <field name="TYPE">Colour</field>
+                    <value name="VALUE">
+                        <block type="robColour_picker" id="lsE4n.~tL6KJcXolF:g_" intask="true">
+                            <field name="COLOUR">#FFFFFF</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robGlobalVariables_declare" id="fYBua2euPu:5}Kft/enP" intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="Number"></mutation>
+                    <field name="VAR">light</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
+                        <block type="math_number" id="Us8eU4Y!*7OLoA8o3yT`" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robGlobalVariables_declare" id="1y;}a#X_3A@|amqY*pC:" intask="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="Array_Number"></mutation>
+                    <field name="VAR">rgb</field>
+                    <field name="TYPE">Array_Number</field>
+                    <value name="VALUE">
+                        <block type="robLists_create_with" id="M{F-q.A(wt#M{O.B}!{]" intask="true">
+                            <mutation items="3" list_type="Number"></mutation>
+                            <field name="LIST_TYPE">Number</field>
+                            <value name="ADD0">
+                                <block type="math_number" id="p0;+eaubXub-+yb1id|M" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                            <value name="ADD1">
+                                <block type="math_number" id="2F]}P=6H+}hyq@OtU:w`" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                            <value name="ADD2">
+                                <block type="math_number" id="S-9kt1K1U!jL)*/[1Hco" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+        <block type="variables_set" id="z:8lMO043-:[CHcTHmPk" intask="true">
+            <mutation datatype="Colour"></mutation>
+            <field name="VAR">color</field>
+            <value name="VALUE">
+                <block type="robSensors_colour_getSample" id="N-_yXEEm^+E.0bN;f_eM" intask="true">
+                    <mutation mode="COLOUR"></mutation>
+                    <field name="MODE">COLOUR</field>
+                    <field name="SENSORPORT">3</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="variables_set" id="-BBvvXO.IU|;P**#nvE+" intask="true">
+            <mutation datatype="Number"></mutation>
+            <field name="VAR">light</field>
+            <value name="VALUE">
+                <block type="robSensors_colour_getSample" id="5-OoBm@~3:,z,JC#HWlf" intask="true">
+                    <mutation mode="LIGHT"></mutation>
+                    <field name="MODE">LIGHT</field>
+                    <field name="SENSORPORT">3</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="variables_set" id="dr-aVd#UoN2b|cd`f`-x" intask="true">
+            <mutation datatype="Number"></mutation>
+            <field name="VAR">light</field>
+            <value name="VALUE">
+                <block type="robSensors_colour_getSample" id="8-pq94_%L|i?Utk[_H^c" intask="true">
+                    <mutation mode="AMBIENTLIGHT"></mutation>
+                    <field name="MODE">AMBIENTLIGHT</field>
+                    <field name="SENSORPORT">3</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="variables_set" id="})Ko[~.i}Um|?DP:xVpm" intask="true">
+            <mutation datatype="Array_Number"></mutation>
+            <field name="VAR">rgb</field>
+            <value name="VALUE">
+                <block type="robSensors_colour_getSample" id="S-JhX=6.mxJa`ihdF:P/" intask="true">
+                    <mutation mode="RGB"></mutation>
+                    <field name="MODE">RGB</field>
+                    <field name="SENSORPORT">3</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

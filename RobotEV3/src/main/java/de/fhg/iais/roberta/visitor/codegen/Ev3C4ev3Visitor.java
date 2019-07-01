@@ -40,6 +40,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.*;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.codegen.utilities.TTSLanguageMapper;
 import de.fhg.iais.roberta.visitor.collect.Ev3UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
@@ -897,34 +898,46 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        if ( isColorSensorRGBMode(colorSensor.getMode()) ) {
-            generateReadColorSensorRGB(colorSensor.getPort());
+        if (isColorSensorInLightMode(colorSensor.getMode())) {
+            visitColorSensorLightMode(colorSensor);
         } else {
-            generateReadSensorInMode(colorSensor.getPort(), getColorSensorReadModeConstant(colorSensor.getMode()));
+            visitColorSensorColorMode(colorSensor);
         }
         return null;
     }
 
-    private boolean isColorSensorRGBMode(String mode){
-        return mode.equals(SC.RGB);
+    private boolean isColorSensorInLightMode (String mode) {
+        return mode.equals(SC.LIGHT) || mode.equals(SC.AMBIENTLIGHT);
     }
 
-    private void generateReadColorSensorRGB(String port) {
-        this.sb.append("ReadColorSensorRGB(" +  getPrefixedInputPort(port) + ")");
+    private void visitColorSensorLightMode (ColorSensor<Void> colorSensor) {
+        generateReadSensorInMode(colorSensor.getPort(), getColorSensorLightModeConstant(colorSensor.getMode()));
     }
 
-    private String getColorSensorReadModeConstant(String mode) {
+    private void visitColorSensorColorMode (ColorSensor<Void> colorSensor) {
+        String function = getReadColorSensorColorModeFunction(colorSensor.getMode());
+        this.sb.append(function + "(" + getPrefixedInputPort(colorSensor.getPort()) + ")");
+    }
+
+    private String getColorSensorLightModeConstant(String mode) {
         switch ( mode ) {
-            case SC.COLOUR:
-                return "COL_COLOR";
             case SC.LIGHT:
                 return "COL_REFLECT";
             case SC.AMBIENTLIGHT:
                 return "COL_AMBIENT";
-            case SC.RGB:
-                throw new IllegalArgumentException("Use the dedicated function defined in NEPODefs.h to read RGB values from color sensor");
             default:
-                throw new DbcException("Unknown color sensor mode");
+                throw new DbcException("Unknown color sensor light mode");
+        }
+    }
+
+    private String getReadColorSensorColorModeFunction(String mode) {
+        switch ( mode ) {
+            case SC.RGB:
+                return "ReadColorSensorRGB";
+            case SC.COLOUR:
+                return "ReadColorSensor";
+            default:
+                throw new DbcException("Unknown color sensor color mode");
         }
     }
 
@@ -1203,10 +1216,6 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
-        return null;
-    }
-
-    @Override public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
         return null;
     }
 

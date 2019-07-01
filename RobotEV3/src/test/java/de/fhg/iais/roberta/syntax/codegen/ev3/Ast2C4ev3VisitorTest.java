@@ -97,7 +97,7 @@ public class Ast2C4ev3VisitorTest {
                 + BEGIN_MAIN__TOUCH_ULTRASONIC_COLOR
                 + "if ( readSensor(IN_1) ) {\n"
                 + "    SetLedPattern(LED_GREEN);\n"
-                + "} else if ( Red == ReadSensorInMode(IN_3, COL_COLOR) ) {\n"
+                + "} else if ( Red == ReadColorSensor(IN_3) ) {\n"
                 + "    while ( true ) {\n"
                 + "        LcdPicture(LCD_COLOR_BLACK, 0, 0, EYESOPEN);\n"
                 + "        OnFwdReg(OUT_B, Speed(30));\n"
@@ -399,6 +399,23 @@ public class Ast2C4ev3VisitorTest {
                 + BEGIN_MAIN_DEFAULT
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/code_generator/java/java_code_generator11.xml", expectedCode);
+    }
+
+    @Test
+    public void testReadColorSensorInDifferentModes () throws Exception {
+        String expectedCode =
+            "" //
+                + CONSTANTS_AND_IMPORTS
+                + "Color ___color = White;\n"
+                + "double ___light = 0;\n"
+                + "std::list<double> ___rgb = {0, 0, 0};\n"
+                + BEGIN_MAIN_DEFAULT
+                + "___color = ReadColorSensor(IN_3);\n"
+                + "___light = ReadSensorInMode(IN_3, COL_REFLECT);\n"
+                + "___light = ReadSensorInMode(IN_3, COL_AMBIENT);\n"
+                + "___rgb = ReadColorSensorRGB(IN_3);\n"
+                + END_MAIN;
+        checkCodeGeneratorForInput("/syntax/code_generator/java/read_color_sensor_in_different_modes.xml", expectedCode);
     }
 
     private void checkCodeGeneratorForInput(String fileName, String expectedSourceCode) throws Exception {
