@@ -45,7 +45,7 @@ public class ExprList<V> extends Expr<V> {
      * @return list with elements of type {@link Expr}.
      */
     public final List<Expr<V>> get() {
-        Assert.isTrue(isReadOnly());
+        //Assert.isTrue(isReadOnly());
         return Collections.unmodifiableList(this.el);
     }
 

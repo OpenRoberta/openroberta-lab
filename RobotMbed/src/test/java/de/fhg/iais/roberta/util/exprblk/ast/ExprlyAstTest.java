@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -35,8 +36,9 @@ public class ExprlyAstTest {
     public void test1add2text() throws Exception {
         Expr<Void> add = expr2AST("(((1)+2))");
         String t = "Binary [ADD, NumConst [1], NumConst [2]]";
+        ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(add);
+        Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, add.toString());
-        //checkCode(add);
     }
 
     /**
@@ -50,8 +52,9 @@ public class ExprlyAstTest {
             "Binary [MULTIPLY, NumConst [3], Binary [MOD, NumConst [2], "
                 + "Binary [MOD, FunctionExpr [MathSingleFunct [POWER, [NumConst [2], NumConst [4]]]], "
                 + "NumConst [6]]]]";
+        ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(mod);
+        Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, mod.toString());
-        checkCode(mod);
     }
 
     /**
@@ -62,8 +65,9 @@ public class ExprlyAstTest {
     public void compareText() throws Exception {
         Expr<Void> comp = expr2AST("500>=0");
         String t = "Binary [GTE, NumConst [500], NumConst [0]]";
+        ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(comp);
+        Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, comp.toString());
-        checkCode(comp);
     }
 
     /**
@@ -74,8 +78,9 @@ public class ExprlyAstTest {
     public void mathConstText() throws Exception {
         Expr<Void> con = expr2AST("sin(pi)*sqrt(2)");
         String t = "Binary [MULTIPLY, FunctionExpr [MathSingleFunct [SIN, [MathConst [PI]]]], " + "FunctionExpr [MathSingleFunct [ROOT, [NumConst [2]]]]]";
+        ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(con);
+        Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, con.toString());
-        checkCode(con);
     }
 
     /**
@@ -86,8 +91,10 @@ public class ExprlyAstTest {
     public void boolText() throws Exception {
         Expr<Void> conj = expr2AST("true&&(!false)||x==true");
         String t = "Binary [EQ, Binary [OR, Binary [AND, BoolConst [true], " + "Unary [NOT, BoolConst [false]]], Var [x]], BoolConst [true]]";
+        ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(conj);
+        // Here the number of errors is 1 since the type of Var types is VOID by default and a bool is expected.
+        Assert.assertTrue(1 == c.check());
         Assert.assertEquals(t, conj.toString());
-        checkCode(conj);
     }
 
     /**
@@ -98,8 +105,9 @@ public class ExprlyAstTest {
     public void strText() throws Exception {
         Expr<Void> str = expr2AST("\"String Hallo\"");
         String t = "StringConst [String Hallo]";
+        ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(str);
+        Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, str.toString());
-        checkCode(str);
     }
 
     /**
@@ -110,8 +118,9 @@ public class ExprlyAstTest {
     public void colorText() throws Exception {
         Expr<Void> col = expr2AST("#F043BA");
         String t = "ColorConst [#F043BA]";
+        ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(col);
+        Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, col.toString());
-        checkCode(col);
     }
 
     /**
@@ -122,8 +131,9 @@ public class ExprlyAstTest {
     public void rgbText() throws Exception {
         Expr<Void> rgb = expr2AST("(23,255,0,45)");
         String t = "RgbColor [NumConst [23], NumConst [255], NumConst [0], NumConst [45]]";
+        ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(rgb);
+        Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, rgb.toString());
-        checkCode(rgb);
     }
 
     /**
@@ -134,8 +144,9 @@ public class ExprlyAstTest {
     public void connectText() throws Exception {
         Expr<Void> connect = expr2AST("connect con1, con2");
         String t = "ConnectConst [con2]";
+        ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(connect);
+        Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, connect.toString());
-        checkCode(connect);
     }
 
     /**
@@ -145,7 +156,9 @@ public class ExprlyAstTest {
      */
     @Test
     public void listmText() throws Exception {
-        Expr<Void> list = expr2AST("[1,1+2,-(1+2)]");
+        Expr<Void> list = expr2AST("([1,1+2,-(1+2)])");
+        ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(list);
+        Assert.assertTrue(0 == c.check());
         String t = "NumConst [1], Binary [ADD, NumConst [1], NumConst [2]], " + "Unary [NEG, Binary [ADD, NumConst [1], NumConst [2]]]";
         Assert.assertEquals(t, list.toString());
     }
@@ -158,9 +171,10 @@ public class ExprlyAstTest {
     public void average() throws Exception {
         Expr<Void> avg = expr2AST("avg([1,1+2, 10^-(1+2)])");
         String t =
-            "FunctionExpr [MathSingleFunct [AVERAGE, [NumConst [1], Binary [ADD, NumConst [1], "
-                + "NumConst [2]], FunctionExpr [MathSingleFunct [POW10, [Unary [NEG, Binary [ADD, NumConst [1], "
-                + "NumConst [2]]]]]]]]]";
+            "FunctionExpr [MathOnListFunct [AVERAGE, [NumConst [1], Binary [ADD, NumConst [1], NumConst [2]], "
+                + "FunctionExpr [MathSingleFunct [POWER, [NumConst [10], Unary [NEG, Binary [ADD, NumConst [1], NumConst [2]]]]]]]]]";
+        ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(avg);
+        Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, avg.toString());
     }
 
@@ -172,9 +186,13 @@ public class ExprlyAstTest {
     public void radomExp() throws Exception {
         Expr<Void> rand = expr2AST("e^randFloat()%exp(floor(randInt(1,10)))");
         String t =
-            "FunctionExpr [MathSingleFunct [EXP, [Binary [MOD, FunctionExpr [MathRandomFloatFunct []], "
-                + "FunctionExpr [MathSingleFunct [EXP, [FunctionExpr [MathSingleFunct [ROUNDDOWN, [FunctionExpr "
-                + "[MathRandomIntFunct [[NumConst [1], NumConst [10]]]]]]]]]]]]]]";
+            "Binary [MOD, FunctionExpr [MathSingleFunct [POWER, [MathConst [E], "
+                + "FunctionExpr [MathRandomFloatFunct []]]]], "
+                + "FunctionExpr [MathSingleFunct [EXP, [FunctionExpr "
+                + "[MathSingleFunct [ROUNDDOWN, [FunctionExpr [MathRandomIntFunct "
+                + "[[NumConst [1], NumConst [10]]]]]]]]]]]";
+        ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(rand);
+        Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, rand.toString());
     }
 
@@ -186,24 +204,95 @@ public class ExprlyAstTest {
     public void equalitytext() throws Exception {
         Expr<Void> neq = expr2AST("2==2");
         String t = "Binary [EQ, NumConst [2], NumConst [2]]";
+        ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(neq);
+        Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, neq.toString());
-        checkCode(neq);
     }
 
     /**
-     * create a correct AST programmatically for a inequality expression for colors.
-     * Check that the AST is ok.<br>
+     * create a correct AST programmatically for a equality expression with some errors.
+     * Check that the number of errors is the same as expected.<br>
      */
     @Test
-    public void equalityNtext() throws Exception {
-        Expr<Void> neq = expr2AST("#000000 != #FFFFFF");
-        String t = "Binary [NEQ, ColorConst [#000000], ColorConst [#FFFFFF]]";
-        Assert.assertEquals(t, neq.toString());
-        checkCode(neq);
+    public void typeCheckEq() throws Exception {
+        Expr<Void> eq = expr2AST(" \"Hello \" + 42 == !(0,0,0,0)");
+        ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(eq);
+        Assert.assertTrue(3 == c.check());
+        System.out.println("typeCheckEq Test:");
+        List<String> errors = c.getErrors();
+        for ( String s : errors ) {
+            System.out.println(s);
+        }
+        System.out.println("");
     }
 
     /**
-     * function to check the generated code with the ast
+     * create a correct AST programmatically for a single math function expression with some errors.
+     * Check that the number of errors is the same as expected.<br>
+     */
+    @Test
+    public void typeCheckMathSingleFunctCall() throws Exception {
+        Expr<Void> f = expr2AST("phi^true");
+        ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(f);
+        Assert.assertTrue(1 == c.check());
+        System.out.println("typeCheckMathSingleFunctionCall Test:");
+        List<String> errors = c.getErrors();
+        for ( String s : errors ) {
+            System.out.println(s);
+        }
+        System.out.println("");
+    }
+
+    /**
+     * create a correct AST programmatically for a math on list function expression with some errors.
+     * Check that the number of errors is the same as expected.<br>
+     */
+    @Test
+    public void typeCheckMathOnListFunct() throws Exception {
+        Expr<Void> l = expr2AST("sum(1, 2, 3, 4, 5)+avg([])-median([1, randFloat()])");
+        ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(l);
+        Assert.assertTrue(7 == c.check());
+        System.out.println("typeCheckMathOnListFunct Test:");
+        List<String> errors = c.getErrors();
+        for ( String s : errors ) {
+            System.out.println(s);
+        }
+        System.out.println("");
+    }
+
+    /**
+     * create a correct AST programmatically for a math on list function expression with some errors.
+     * Check that the number of errors is the same as expected.<br>
+     */
+    @Test
+    public void typeCheckMathOnListFunct1() throws Exception {
+        Expr<Void> l = expr2AST("sum(1, 2, 3, 4, 5)+avg([])-median([x, randFloat()])");
+        ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(l);
+        Assert.assertTrue(9 == c.check());
+        System.out.println("typeCheckMathOnListFunct1 Test:");
+        List<String> errors = c.getErrors();
+        for ( String s : errors ) {
+            System.out.println(s);
+        }
+        System.out.println("");
+
+    }
+
+    /**
+     * create a correct AST programmatically for a math on list function expression with some errors.
+     * Check that exception is thrown <br>
+     */
+    @Test
+    public void typeCheckMathRandFloatFunct() throws Exception {
+        try {
+            Expr<Void> l = expr2AST("randFloat(0, randInt(0, 2))");
+        } catch ( UnsupportedOperationException e ) {
+            System.out.println("Args.size() > 0 Error detected");
+        }
+    }
+
+    /**
+     * function to print C++ and Python code generated with the ast
      */
     private void checkCode(Expr<Void> expr) {
         ArrayList<Phrase<Void>> addInList = new ArrayList<>();

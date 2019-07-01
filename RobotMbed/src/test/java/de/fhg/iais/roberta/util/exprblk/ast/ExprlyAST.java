@@ -20,6 +20,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
@@ -127,7 +129,17 @@ public class ExprlyAST extends ExprlyBaseVisitor<Expr<Void>> {
 
     @Override
     public MathConst<Void> visitMathConst(@NotNull ExprlyParser.MathConstContext ctx) {
-        return MathConst.make(ctx.CONST().getText());
+        String c = ctx.CONST().getText();
+        if ( c.equals("phi") ) {
+            c = "golden_ratio";
+        }
+        if ( c.equals("inf") ) {
+            c = "infinity";
+        }
+        if ( c.equals("sqrt_1_2") ) {
+            c = "sqrt1_2";
+        }
+        return MathConst.make(c);
     }
 
     @Override
@@ -149,17 +161,10 @@ public class ExprlyAST extends ExprlyBaseVisitor<Expr<Void>> {
             return FunctionExpr.make(MathRandomIntFunct.make(args));
         }
         if ( f.equals("randFloat") ) {
-            if ( args.size() > 2 ) {
-                // throw exception
-                return null;
+            if ( args.size() > 0 ) {
+                throw new UnsupportedOperationException("randFloat function takes 0 arguments");
             }
             return FunctionExpr.make(MathRandomFloatFunct.make());
-        }
-        if ( f.equals("e^") ) {
-            f = "exp";
-        }
-        if ( f.equals("10^") ) {
-            f = "pow10";
         }
         if ( f.equals("sqrt") ) {
             f = "root";
@@ -172,12 +177,21 @@ public class ExprlyAST extends ExprlyBaseVisitor<Expr<Void>> {
         }
         if ( f.equals("isEven") || f.equals("isOdd") || f.equals("isPrime") || f.equals("isWhole") ) {
             f = f.substring(2);
+            return FunctionExpr.make(MathNumPropFunct.make(f, args));
         }
         if ( f.equals("avg") ) {
             f = "average";
+            return FunctionExpr.make(MathOnListFunct.make(f, args));
+        }
+        if ( f.equals("median") ) {
+            return FunctionExpr.make(MathOnListFunct.make(f, args));
         }
         if ( f.equals("sd") ) {
             f = "std_dev";
+            return FunctionExpr.make(MathOnListFunct.make(f, args));
+        }
+        if ( f.equals("min") || f.equals("max") || f.equals("sum") ) {
+            return FunctionExpr.make(MathOnListFunct.make(f, args));
         }
         try {
             return FunctionExpr.make(MathSingleFunct.make(f, args));

@@ -36,7 +36,7 @@ literal  : INT                                                       # IntConst
 connExpr: 'connect' op0=(STR|VAR) ',' op1=(STR|VAR)                  # Conn
          ;
 
-funCall : FNAME '('? ( expr (',' expr)* )? ')'?                      # Func
+funCall : FNAME '(' ( expr (',' expr)* )? ')'                        # Func
 		;
 		
 // LEXER RULES
@@ -52,11 +52,9 @@ FNAME   :  'sin'
         |  'atan'
         |  'exp'
         |  'sqrt'
-        |  'e^'
         |  'abs'
         |  'log10'
         |  'ln'
-        |  '10^'
         |  'randInt'
         |  'randFloat'
         |  'floor'
