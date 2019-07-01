@@ -50,10 +50,10 @@ public class CppVisitorTest {
             "" //
                 + IMPORTS
                 + "int _initTime = _uBit.systemTime();"
-                + "double item;"
+                + "double ___item;"
                 + MAIN
-                + "item = 0;\n"
-                + "item = ( _uBit.systemTime() - _initTime );"
+                + "___item = 0;\n"
+                + "___item = ( _uBit.systemTime() - _initTime );"
                 + END;
 
         assertCodeIsOk(expectedResult, "/action/timer_used.xml");
@@ -77,11 +77,11 @@ public class CppVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "MicroBitImage Element;"
-                + "MicroBitImage Element2;"
+                + "MicroBitImage ___Element;"
+                + "MicroBitImage ___Element2;"
                 + MAIN
-                + "Element = MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\");"
-                + "Element2 = MicroBitImage(\"255,255,255,255,255\\n255,255,0,255,255\\n0,0,0,0,0\\n0,255,0,255,0\\n0,255,255,255,0\\n\");"
+                + "___Element = MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\");"
+                + "___Element2 = MicroBitImage(\"255,255,255,255,255\\n255,255,0,255,255\\n0,0,0,0,0\\n0,255,0,255,0\\n0,255,255,255,0\\n\");"
                 + END;
 
         assertCodeIsOk(expectedResult, "/expr/image_get_image_defined_as_global_variables.xml");
@@ -741,16 +741,16 @@ public class CppVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "std::list<double> item;"
+                + "std::list<double> ___item;"
                 + MAIN
-                + "item = {1, 2, 3, 4};"
-                + "_uBit.display.scroll(ManagedString(_getListSum(item)));\n"
-                + "_uBit.display.scroll(ManagedString(_getListMin(item)));\n"
-                + "_uBit.display.scroll(ManagedString(_getListMax(item)));\n"
-                + "_uBit.display.scroll(ManagedString(_getListAverage(item)));\n"
-                + "_uBit.display.scroll(ManagedString(_getListMedian(item)));\n"
-                + "_uBit.display.scroll(ManagedString(_getListStandardDeviation(item)));\n"
-                + "_uBit.display.scroll(ManagedString((item)));"
+                + "___item = {1, 2, 3, 4};"
+                + "_uBit.display.scroll(ManagedString(_getListSum(___item)));\n"
+                + "_uBit.display.scroll(ManagedString(_getListMin(___item)));\n"
+                + "_uBit.display.scroll(ManagedString(_getListMax(___item)));\n"
+                + "_uBit.display.scroll(ManagedString(_getListAverage(___item)));\n"
+                + "_uBit.display.scroll(ManagedString(_getListMedian(___item)));\n"
+                + "_uBit.display.scroll(ManagedString(_getListStandardDeviation(___item)));\n"
+                + "_uBit.display.scroll(ManagedString((___item)));"
                 + END;
         assertCodeIsOk(expectedResult, "/action/math_on_list.xml");
     }
@@ -760,14 +760,14 @@ public class CppVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "void doSomething(std::list<MicroBitImage> & x);"
-                + "std::list<MicroBitImage> item;\n"
+                + "void doSomething(std::list<MicroBitImage> & ___x);"
+                + "std::list<MicroBitImage> ___item;\n"
                 + MAIN
-                + "item={MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\"),MicroBitImage(\"0,0,0,0,0\\n0,255,0,255,0\\n0,255,255,255,0\\n0,0,255,0,0\\n0,0,0,0,0\\n\"),MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\")};"
-                + "doSomething(item);"
+                + "___item={MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\"),MicroBitImage(\"0,0,0,0,0\\n0,255,0,255,0\\n0,255,255,255,0\\n0,0,255,0,0\\n0,0,0,0,0\\n\"),MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\")};"
+                + "doSomething(___item);"
                 + END
-                + "void doSomething(std::list<MicroBitImage> & x) {"
-                + "for(MicroBitImage&image:x){_uBit.display.print(image,0,0,255,200);_uBit.display.clear();}"
+                + "void doSomething(std::list<MicroBitImage> & ___x) {"
+                + "for(MicroBitImage&image:___x){_uBit.display.print(image,0,0,255,200);_uBit.display.clear();}"
                 + "}";
 
         assertCodeIsOk(expectedResult, "/function/user_defined_function.xml");
@@ -823,9 +823,9 @@ public class CppVisitorTest {
         String a =
             "" //
                 + IMPORTS
-                + "std::list<double> item2;"
+                + "std::list<double> ___item2;"
                 + MAIN
-                + "item2 = {0, 0, 0};"
+                + "___item2 = {0, 0, 0};"
                 + "while (true) {"
                 + "if (30 == 20) {"
                 + "     break;"
@@ -834,7 +834,7 @@ public class CppVisitorTest {
                 + "}"
                 + "_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "}"
-                + "for (int i = 1; i < 10; i += 1) {"
+                + "for (int ___i = 1; ___i < 10; ___i += 1) {"
                 + "if (30 == 20) {"
                 + "     continue;"
                 + "} else if (30 == 12) {"
@@ -842,7 +842,7 @@ public class CppVisitorTest {
                 + "}"
                 + "_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "}"
-                + "for (double item : item2) {"
+                + "for (double ___item : ___item2) {"
                 + "if (30 == 20) {"
                 + "     continue;"
                 + "} else if (30 == 20) {"
@@ -858,7 +858,7 @@ public class CppVisitorTest {
                 + "}"
                 + "_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "}"
-                + "for (int k0 = 0; k0 < 10; k0 += 1) {"
+                + "for (int ___k0 = 0; ___k0 < 10; ___k0 += 1) {"
                 + "if (30 == 20) {"
                 + "     break;"
                 + "} else if (30 == 20) {"
@@ -920,8 +920,8 @@ public class CppVisitorTest {
                 + "_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "}"
                 + "break_loop1:"
-                + "for (int i = 1; i < 10; i += 1) {"
-                + "     if (i < 10) {"
+                + "for (int ___i = 1; ___i < 10; ___i += 1) {"
+                + "     if (___i < 10) {"
                 + "         continue;"
                 + "     }"
                 + "     _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
@@ -949,8 +949,8 @@ public class CppVisitorTest {
                 + "     }"
                 + "     _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
                 + "   }"
-                + "for (int i = 1; i < 10; i += 1) {"
-                + "     if (i < 10) {"
+                + "for (int ___i = 1; ___i < 10; ___i += 1) {"
+                + "     if (___i < 10) {"
                 + "        continue;"
                 + "     }"
                 + "_uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
@@ -972,8 +972,8 @@ public class CppVisitorTest {
                 + "while (true) {"
                 + "   while (true) {"
                 + "     if (_uBit.buttonA.isPressed() == true) {"
-                + "         for (int i = 1; i < 10; i += 1) {"
-                + "             if (i < 10) {"
+                + "         for (int ___i = 1; ___i < 10; ___i += 1) {"
+                + "             if (___i < 10) {"
                 + "                 continue;"
                 + "             }"
                 + "             _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
@@ -982,8 +982,8 @@ public class CppVisitorTest {
                 + "         break;"
                 + "     }"
                 + "     if (_uBit.buttonA.isPressed() == true) {"
-                + "         for (int j = 1; j < 10; j += 1) {"
-                + "             if (j < 10) {"
+                + "         for (int ___j = 1; ___j < 10; ___j += 1) {"
+                + "             if (___j < 10) {"
                 + "                 continue;"
                 + "             }"
                 + "             _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
@@ -1011,8 +1011,8 @@ public class CppVisitorTest {
                 + "while (true) {"
                 + "   while (true) {"
                 + "     if (_uBit.buttonA.isPressed() == true) {"
-                + "         for (int j = 1; j < 10; j += 1) {"
-                + "             if (j < 10) {"
+                + "         for (int ___j = 1; ___j < 10; ___j += 1) {"
+                + "             if (___j < 10) {"
                 + "                 continue;"
                 + "             }"
                 + "             _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
@@ -1021,7 +1021,7 @@ public class CppVisitorTest {
                 + "         break;"
                 + "     }"
                 + "     if (_uBit.buttonA.isPressed() == true) {"
-                + "         for (int i = 1; i < 10; i += 1) {"
+                + "         for (int ___i = 1; ___i < 10; ___i += 1) {"
                 + "         while (true) {"
                 + "             if (_uBit.buttonA.isPressed() == true) {"
                 + "                 goto continue_loop3;"
@@ -1059,8 +1059,8 @@ public class CppVisitorTest {
                 + "while (true) {"
                 + "   while (true) {"
                 + "     if (_uBit.buttonA.isPressed() == true) {"
-                + "         for (int j = 1; j < 10; j += 1) {"
-                + "             if (j < 10) {"
+                + "         for (int ___j = 1; ___j < 10; ___j += 1) {"
+                + "             if (___j < 10) {"
                 + "                 continue;"
                 + "             }"
                 + "             _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);"
@@ -1069,7 +1069,7 @@ public class CppVisitorTest {
                 + "         break;"
                 + "     }"
                 + "     if (_uBit.buttonA.isPressed() == true) {"
-                + "         for (int i = 1; i < 10; i += 1) {"
+                + "         for (int ___i = 1; ___i < 10; ___i += 1) {"
                 + "         while (true) {"
                 + "             if (_uBit.buttonA.isPressed() == true) {"
                 + "                 goto continue_loop3;"

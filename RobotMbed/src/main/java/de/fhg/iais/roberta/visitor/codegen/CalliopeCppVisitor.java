@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.text.WordUtils;
-import org.w3c.dom.css.RGBColor;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
@@ -190,12 +189,18 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     }
 
     @Override
+    public Void visitVar(Var<Void> var) {
+        this.sb.append("___" + var.getValue());
+        return null;
+    }
+
+    @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar()));
         if ( var.getTypeVar().isArray() && var.getValue().getKind().hasName("EMPTY_EXPR") ) {
             this.sb.append(" &");
         }
-        this.sb.append(whitespace() + var.getName());
+        this.sb.append(whitespace() + "___" + var.getName());
         return null;
     }
 
@@ -203,7 +208,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         for ( final VarDeclaration<Void> var : this.usedVars ) {
             nlIndent();
             if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-                this.sb.append(var.getName());
+                this.sb.append("___" + var.getName());
                 this.sb.append(whitespace() + "=" + whitespace());
                 var.getValue().visit(this);
                 this.sb.append(";");

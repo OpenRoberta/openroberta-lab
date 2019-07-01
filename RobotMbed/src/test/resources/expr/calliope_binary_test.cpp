@@ -7,30 +7,30 @@
 #include <stdlib.h>
 MicroBit _uBit;
 
-ManagedString item;
-double item2;
-bool item3;
+ManagedString ___item;
+double ___item2;
+bool ___item3;
 
 int main()
 {
     _uBit.init();
-    item = ManagedString("23");
-    item2 = 0;
-    item3 = true;
+    ___item = ManagedString("23");
+    ___item2 = 0;
+    ___item3 = true;
     
-    item = item + ManagedString(ManagedString("23"));
-    item = item + ManagedString(0);
-    item = item + ManagedString(true);
-    item = item + ManagedString(item);
-    item = item + ManagedString(item2);
-    item = item + ManagedString(item3);
-    item2 = 5 + 1;
-    item2 = 4 - 2;
-    item2 = 3 * 3;
-    item2 = 2 / ((float) 4);
-    item2 = pow(1, 5);
-    item2 += 1;
-    item2 = (int) pow(1, 5) % ((int) pow(1, 5));
+    ___item = ___item + ManagedString(ManagedString("23"));
+    ___item = ___item + ManagedString(0);
+    ___item = ___item + ManagedString(true);
+    ___item = ___item + ManagedString(___item);
+    ___item = ___item + ManagedString(___item2);
+    ___item = ___item + ManagedString(___item3);
+    ___item2 = 5 + 1;
+    ___item2 = 4 - 2;
+    ___item2 = 3 * 3;
+    ___item2 = 2 / ((float) 4);
+    ___item2 = pow(1, 5);
+    ___item2 += 1;
+    ___item2 = (int) pow(1, 5) % ((int) pow(1, 5));
     release_fiber();
 }
 
