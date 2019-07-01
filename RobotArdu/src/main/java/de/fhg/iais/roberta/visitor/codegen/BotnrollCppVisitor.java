@@ -100,7 +100,8 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
 
         this.sb.append("(");
 
-        if ( (isVar && (varType.equals("STRING"))) || ((mode != null) && !mode.toString().equals("RED") && !mode.toString().equals("RGB")) ) {
+        if ( (isVar && (varType.equals("STRING")))
+            || ((mode != null) && !mode.toString().equals("RED") && !mode.toString().equals("RGB") && !mode.toString().equals("COLOUR")) ) {
             toChar = ".c_str()";
         }
 
