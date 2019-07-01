@@ -147,7 +147,7 @@ public class Ast2C4ev3VisitorTest {
                 + "    RotateMotorForAngle(OUT_B, Speed(30), 360 * 1);\n"
                 + "    OnFwdSyncEx(OUT_AB, Speed(50), 100, RESET_NONE);"
                 + "}\n"
-                + "if ( (((MotorRotationCount(OUT_A) / 360.0) + ReadSensorInMode(IN_3, IR_PROX))) == ReadSensorInMode(IN_4, US_DIST_CM) ) {\n"
+                + "if ( ((MotorRotationCount(OUT_A) / 360.0) + ReadSensorInMode(IN_3, IR_PROX)) == ReadSensorInMode(IN_4, US_DIST_CM) ) {\n"
                 + "    SetLedPattern(LED_BLACK);\n"
                 + "} else {\n"
                 + "    ResetGyroSensor(IN_2);\n"

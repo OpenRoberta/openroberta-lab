@@ -5,6 +5,8 @@ robots:
        template: ev3
     ev3dev:
        template: ev3
+    ev3c4ev3:
+      template: ev3
     nxt:
        template: nxt
     microbit:

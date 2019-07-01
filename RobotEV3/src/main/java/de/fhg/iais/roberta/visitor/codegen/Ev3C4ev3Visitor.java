@@ -9,6 +9,8 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
+import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.*;
 import de.fhg.iais.roberta.syntax.action.communication.*;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
@@ -33,6 +35,7 @@ import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.*;
 import de.fhg.iais.roberta.syntax.lang.functions.*;
+import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
@@ -250,6 +253,13 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
+    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
+        this.sb.append("pow(");
+        super.visitMathPowerFunct(mathPowerFunct);
+        return null;
+    }
+
+    @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
         String colorConstant = getColorConstantByHex(colorConst.getHexValueAsString());
         this.sb.append(colorConstant);
@@ -291,40 +301,98 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         }
     }
 
+//    @Override
+//    public Void visitBinary(Binary<Void> binary) {
+//        // TODO: Clean
+//        Binary.Op op = binary.getOp();
+//        if ( op == Binary.Op.ADD || op == Binary.Op.MINUS || op == Binary.Op.DIVIDE || op == Binary.Op.MULTIPLY ) {
+//            this.sb.append("(");
+//        }
+//        if (op == Binary.Op.MOD) {
+//            this.sb.append("fmod(");
+//        }
+//        generateSubExpr(this.sb, false, binary.getLeft(), binary);
+//        String sym = getBinaryOperatorSymbol(op);
+//        this.sb.append(" " + sym + " ");
+//        switch ( op ) {
+//            case TEXT_APPEND:
+//                if ( binary.getRight().getVarType().toString().contains("NUMBER") ) {
+//                    this.sb.append("ToString(");
+//                    generateSubExpr(this.sb, false, binary.getRight(), binary);
+//                    this.sb.append(")");
+//                } else {
+//                    generateSubExpr(this.sb, false, binary.getRight(), binary);
+//                }
+//                break;
+//            case DIVIDE:
+//                this.sb.append("((");
+//                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+//                this.sb.append(")*1.0)");
+//                break;
+//
+//            default:
+//                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+//        }
+//        if ( op == Binary.Op.ADD || op == Binary.Op.MINUS || op == Binary.Op.DIVIDE || op == Binary.Op.MULTIPLY || op == Binary.Op.MOD) {
+//            this.sb.append(")");
+//        }
+//        return null;
+//    }
+
+    // copied from AbstractCommonArduinoCppVisitor
     @Override
     public Void visitBinary(Binary<Void> binary) {
-        // TODO: Clean
         Binary.Op op = binary.getOp();
-        if ( op == Binary.Op.ADD || op == Binary.Op.MINUS || op == Binary.Op.DIVIDE || op == Binary.Op.MULTIPLY ) {
-            this.sb.append("(");
+        if ( op == Binary.Op.MOD ) {
+            appendFloatModulo(binary);
+            return null;
         }
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
         String sym = getBinaryOperatorSymbol(op);
-        this.sb.append(" " + sym + " ");
-        switch ( op ) {
-            case TEXT_APPEND:
-                if ( binary.getRight().getVarType().toString().contains("NUMBER") ) {
-                    this.sb.append("NumToStr(");
-                    generateSubExpr(this.sb, false, binary.getRight(), binary);
-                    this.sb.append(")");
-                } else {
-                    generateSubExpr(this.sb, false, binary.getRight(), binary);
-                }
-                break;
-            case DIVIDE:
-                this.sb.append("((");
-                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-                this.sb.append(")*1.0)");
-                break;
-
-            default:
-                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-        }
-        if ( op == Binary.Op.ADD || op == Binary.Op.MINUS || op == Binary.Op.DIVIDE || op == Binary.Op.MULTIPLY ) {
-            this.sb.append(")");
+        this.sb.append(whitespace() + sym + whitespace());
+        if ( op == Binary.Op.TEXT_APPEND ) {
+            convertToString(binary);
+            return null;
+        } else if ( op == Binary.Op.DIVIDE ) {
+            appendCastToFloat(binary);
+            return null;
+        } else {
+            generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
         }
         return null;
     }
+
+    private void appendFloatModulo(Binary<Void> binary) {
+        this.sb.append("fmod(");
+        generateSubExpr(this.sb, false, binary.getLeft(), binary);
+        this.sb.append(", ");
+        generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+        this.sb.append(")");
+    }
+
+    private void appendCastToFloat(Binary<Void> binary) {
+        this.sb.append("((double) ");
+        generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+        this.sb.append(")");
+    }
+
+    private void convertToString(Binary<Void> binary) {
+        switch ( binary.getRight().getVarType() ) {
+            case BOOLEAN:
+            case NUMBER:
+            case NUMBER_INT:
+            case COLOR:
+                this.sb.append("ToString(");
+                generateSubExpr(this.sb, false, binary.getRight(), binary);
+                this.sb.append(")");
+                break;
+            default:
+                generateSubExpr(this.sb, false, binary.getRight(), binary);
+                break;
+        }
+    }
+    // end copied from AbstractCommonArduinoCppVisitor
+
 
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
@@ -401,6 +469,14 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     @Override
+    public Void visitDebugAction(DebugAction<Void> debugAction) {
+        this.sb.append("printf(\"%s\\\n\", ToString(");
+        debugAction.getValue().visit(this);
+        this.sb.append(").c_str());");
+        return null;
+    }
+
+    @Override
     public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
         return null;
     }
@@ -413,26 +489,85 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
+
+    // copied from Arduino
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
+        if ( indexOfFunct.getParam().get(0).toString().contains("ListCreate ") ) {
+            this.sb.append("null");
+            return null;
+        }
+        String methodName = indexOfFunct.getLocation() == IndexLocation.LAST ? "_getLastOccuranceOfElement(" : "_getFirstOccuranceOfElement(";
+        this.sb.append(methodName);
+        indexOfFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        if ( indexOfFunct.getParam().get(1).getClass().equals(StringConst.class) ) {
+            this.sb.append("String(");
+            indexOfFunct.getParam().get(1).visit(this);
+            this.sb.append(")");
+        } else {
+            indexOfFunct.getParam().get(1).visit(this);
+        }
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
+        if ( lengthOfIsEmptyFunct.getParam().get(0).toString().contains("ListCreate ") ) {
+            this.sb.append("NULL");
+            return null;
+        }
+        if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
+            this.sb.append("(");
+            lengthOfIsEmptyFunct.getParam().get(0).visit(this);
+            this.sb.append(".size()");
+            this.sb.append(" == 0)");
+        } else {
+            this.sb.append("((int) ");
+            lengthOfIsEmptyFunct.getParam().get(0).visit(this);
+            this.sb.append(".size())");
+        }
         return null;
     }
+
+    // end copied from Arduino
+
+    // copied from calliope
+    /*
+     * TODO: I don't know why I am doing this, but it seems that without this a semicolon is lost, somehow... Artem Vinokurov 25.10.2018
+     */
+    @Override
+    public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
+        super.visitListSetIndex(listSetIndex);
+        this.sb.append(";");
+        return null;
+    }
+
+    /*
+     * TODO: There is something wrong with semicolon generation for calliope. Artem Vinokurov 25.10.2018
+     */
+    @Override
+    public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
+        super.visitListGetIndex(listGetIndex);
+        if ( ((ListElementOperations) listGetIndex.getElementOperation()).equals(ListElementOperations.REMOVE) ) {
+            this.sb.append(";");
+        }
+        return null;
+    }
+
+    // end copied from calliope
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
         Expr<Void> n = mathConstrainFunct.getParam().get(0);
         Expr<Void> min = mathConstrainFunct.getParam().get(1);
         Expr<Void> max = mathConstrainFunct.getParam().get(2);
-        this.sb.append("std::min(std::max(");
+        this.sb.append("std::min(std::max((double) ");
         n.visit(this);
-        this.sb.append(", ");
+        this.sb.append(", (double) ");
         min.visit(this);
-        this.sb.append("), ");
+        this.sb.append("), (double) ");
         max.visit(this);
         this.sb.append(")");
         return null;
