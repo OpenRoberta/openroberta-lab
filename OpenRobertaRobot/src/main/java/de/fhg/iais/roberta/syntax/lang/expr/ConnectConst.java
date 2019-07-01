@@ -67,6 +67,13 @@ public class ConnectConst<V> extends Expr<V> {
         return this.value;
     }
 
+    /**
+     * @return value of the dataValue constant
+     */
+    public String getDataValue() {
+        return this.dataValue;
+    }
+
     @Override
     public int getPrecedence() {
         return 999;

@@ -73,67 +73,6 @@ public class ExprlyTypechecker<T> {
     }
 
     /**
-     * Method to check type of the phrase passed as parameter
-     *
-     * @param ast, phrase to analyze
-     * @return BlocklyType of ast
-     */
-    public BlocklyType checkAST(Phrase<T> ast) throws UnsupportedOperationException {
-        if ( ast instanceof Binary<?> ) {
-            return visitBinary((Binary<T>) ast);
-        }
-        if ( ast instanceof Unary<?> ) {
-            return visitUnary((Unary<T>) ast);
-        }
-        if ( ast instanceof MathConst<?> ) {
-            return visitMathConst((MathConst<T>) ast);
-        }
-        if ( ast instanceof NumConst<?> ) {
-            return visitNumConst((NumConst<T>) ast);
-        }
-        if ( ast instanceof BoolConst<?> ) {
-            return visitBoolConst((BoolConst<T>) ast);
-        }
-        if ( ast instanceof StringConst<?> ) {
-            return visitStringConst((StringConst<T>) ast);
-        }
-        if ( ast instanceof ColorConst<?> ) {
-            return visitColorConst((ColorConst<T>) ast);
-        }
-        if ( ast instanceof RgbColor<?> ) {
-            return visitRgbColor((RgbColor<T>) ast);
-        }
-        if ( ast instanceof ConnectConst<?> ) {
-            return visitConnectConst((ConnectConst<T>) ast);
-        }
-        if ( ast instanceof Var<?> ) {
-            return visitVar((Var<T>) ast);
-        }
-        if ( ast instanceof ExprList<?> ) {
-            return visitExprList((ExprList<T>) ast);
-        }
-        if ( ast instanceof FunctionExpr<?> ) {
-            return visitFunctionExpr((FunctionExpr<T>) ast);
-        }
-        if ( ast instanceof MathNumPropFunct<?> ) {
-            return visitMathNumPropFunct((MathNumPropFunct<T>) ast);
-        }
-        if ( ast instanceof MathOnListFunct<?> ) {
-            return visitMathOnListFunct((MathOnListFunct<T>) ast);
-        }
-        if ( ast instanceof MathRandomFloatFunct<?> ) {
-            return visitMathRandomFloatFunct((MathRandomFloatFunct<T>) ast);
-        }
-        if ( ast instanceof MathRandomIntFunct<?> ) {
-            return visitMathRandomIntFunct((MathRandomIntFunct<T>) ast);
-        }
-        if ( ast instanceof MathSingleFunct<?> ) {
-            return visitMathSingleFunct((MathSingleFunct<T>) ast);
-        }
-        throw new UnsupportedOperationException("Expression " + ast.toString() + "cannot be checked");
-    }
-
-    /**
      * @param NumberConst Expression
      * @return Type of block
      */
@@ -237,7 +176,7 @@ public class ExprlyTypechecker<T> {
     }
 
     /**
-     * Method to check Unary expressions, writes errors in the log if there are any.
+     * Method to check Binary expressions, writes errors in the log if there are any.
      *
      * @param Binary Expression
      * @return Return Type of block
@@ -528,4 +467,66 @@ public class ExprlyTypechecker<T> {
         }
         return BlocklyType.NUMBER;
     }
+
+    /**
+     * Method to check type of the phrase passed as parameter
+     *
+     * @param ast, phrase to analyze
+     * @return BlocklyType of ast
+     */
+    public BlocklyType checkAST(Phrase<T> ast) throws UnsupportedOperationException {
+        if ( ast instanceof Binary<?> ) {
+            return visitBinary((Binary<T>) ast);
+        }
+        if ( ast instanceof Unary<?> ) {
+            return visitUnary((Unary<T>) ast);
+        }
+        if ( ast instanceof MathConst<?> ) {
+            return visitMathConst((MathConst<T>) ast);
+        }
+        if ( ast instanceof NumConst<?> ) {
+            return visitNumConst((NumConst<T>) ast);
+        }
+        if ( ast instanceof BoolConst<?> ) {
+            return visitBoolConst((BoolConst<T>) ast);
+        }
+        if ( ast instanceof StringConst<?> ) {
+            return visitStringConst((StringConst<T>) ast);
+        }
+        if ( ast instanceof ColorConst<?> ) {
+            return visitColorConst((ColorConst<T>) ast);
+        }
+        if ( ast instanceof RgbColor<?> ) {
+            return visitRgbColor((RgbColor<T>) ast);
+        }
+        if ( ast instanceof ConnectConst<?> ) {
+            return visitConnectConst((ConnectConst<T>) ast);
+        }
+        if ( ast instanceof Var<?> ) {
+            return visitVar((Var<T>) ast);
+        }
+        if ( ast instanceof ExprList<?> ) {
+            return visitExprList((ExprList<T>) ast);
+        }
+        if ( ast instanceof FunctionExpr<?> ) {
+            return visitFunctionExpr((FunctionExpr<T>) ast);
+        }
+        if ( ast instanceof MathNumPropFunct<?> ) {
+            return visitMathNumPropFunct((MathNumPropFunct<T>) ast);
+        }
+        if ( ast instanceof MathOnListFunct<?> ) {
+            return visitMathOnListFunct((MathOnListFunct<T>) ast);
+        }
+        if ( ast instanceof MathRandomFloatFunct<?> ) {
+            return visitMathRandomFloatFunct((MathRandomFloatFunct<T>) ast);
+        }
+        if ( ast instanceof MathRandomIntFunct<?> ) {
+            return visitMathRandomIntFunct((MathRandomIntFunct<T>) ast);
+        }
+        if ( ast instanceof MathSingleFunct<?> ) {
+            return visitMathSingleFunct((MathSingleFunct<T>) ast);
+        }
+        throw new UnsupportedOperationException("Expression " + ast.toString() + "cannot be checked");
+    }
+
 }

@@ -37,8 +37,10 @@ public class ExprlyAstTest {
         Expr<Void> add = expr2AST("(((1)+2))");
         String t = "Binary [ADD, NumConst [1], NumConst [2]]";
         ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(add);
+        ExprlyUnParser<Void> p = new ExprlyUnParser<Void>(add);
         Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, add.toString());
+        Assert.assertEquals(add.toString(), expr2AST(p.UnParse()).toString());
     }
 
     /**
@@ -48,6 +50,7 @@ public class ExprlyAstTest {
     @Test
     public void modText() throws Exception {
         Expr<Void> mod = expr2AST("3*2%2^4%6");
+        ExprlyUnParser<Void> p = new ExprlyUnParser<Void>(mod);
         String t =
             "Binary [MULTIPLY, NumConst [3], Binary [MOD, NumConst [2], "
                 + "Binary [MOD, FunctionExpr [MathSingleFunct [POWER, [NumConst [2], NumConst [4]]]], "
@@ -55,6 +58,7 @@ public class ExprlyAstTest {
         ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(mod);
         Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, mod.toString());
+        Assert.assertEquals(mod.toString(), expr2AST(p.UnParse()).toString());
     }
 
     /**
@@ -64,10 +68,12 @@ public class ExprlyAstTest {
     @Test
     public void compareText() throws Exception {
         Expr<Void> comp = expr2AST("500>=0");
+        ExprlyUnParser<Void> p = new ExprlyUnParser<Void>(comp);
         String t = "Binary [GTE, NumConst [500], NumConst [0]]";
         ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(comp);
         Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, comp.toString());
+        Assert.assertEquals(comp.toString(), expr2AST(p.UnParse()).toString());
     }
 
     /**
@@ -77,10 +83,12 @@ public class ExprlyAstTest {
     @Test
     public void mathConstText() throws Exception {
         Expr<Void> con = expr2AST("sin(pi)*sqrt(2)");
+        ExprlyUnParser<Void> p = new ExprlyUnParser<Void>(con);
         String t = "Binary [MULTIPLY, FunctionExpr [MathSingleFunct [SIN, [MathConst [PI]]]], " + "FunctionExpr [MathSingleFunct [ROOT, [NumConst [2]]]]]";
         ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(con);
         Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, con.toString());
+        Assert.assertEquals(con.toString(), expr2AST(p.UnParse()).toString());
     }
 
     /**
@@ -90,11 +98,13 @@ public class ExprlyAstTest {
     @Test
     public void boolText() throws Exception {
         Expr<Void> conj = expr2AST("true&&(!false)||x==true");
+        ExprlyUnParser<Void> p = new ExprlyUnParser<Void>(conj);
         String t = "Binary [EQ, Binary [OR, Binary [AND, BoolConst [true], " + "Unary [NOT, BoolConst [false]]], Var [x]], BoolConst [true]]";
         ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(conj);
         // Here the number of errors is 1 since the type of Var types is VOID by default and a bool is expected.
         Assert.assertTrue(1 == c.check());
         Assert.assertEquals(t, conj.toString());
+        Assert.assertEquals(conj.toString(), expr2AST(p.UnParse()).toString());
     }
 
     /**
@@ -104,10 +114,12 @@ public class ExprlyAstTest {
     @Test
     public void strText() throws Exception {
         Expr<Void> str = expr2AST("\"String Hallo\"");
+        ExprlyUnParser<Void> p = new ExprlyUnParser<Void>(str);
         String t = "StringConst [String Hallo]";
         ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(str);
         Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, str.toString());
+        Assert.assertEquals(str.toString(), expr2AST(p.UnParse()).toString());
     }
 
     /**
@@ -117,10 +129,12 @@ public class ExprlyAstTest {
     @Test
     public void colorText() throws Exception {
         Expr<Void> col = expr2AST("#F043BA");
+        ExprlyUnParser<Void> p = new ExprlyUnParser<Void>(col);
         String t = "ColorConst [#F043BA]";
         ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(col);
         Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, col.toString());
+        Assert.assertEquals(col.toString(), expr2AST(p.UnParse()).toString());
     }
 
     /**
@@ -130,10 +144,12 @@ public class ExprlyAstTest {
     @Test
     public void rgbText() throws Exception {
         Expr<Void> rgb = expr2AST("(23,255,0,45)");
+        ExprlyUnParser<Void> p = new ExprlyUnParser<Void>(rgb);
         String t = "RgbColor [NumConst [23], NumConst [255], NumConst [0], NumConst [45]]";
         ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(rgb);
         Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, rgb.toString());
+        Assert.assertEquals(rgb.toString(), expr2AST(p.UnParse()).toString());
     }
 
     /**
@@ -143,10 +159,12 @@ public class ExprlyAstTest {
     @Test
     public void connectText() throws Exception {
         Expr<Void> connect = expr2AST("connect con1, con2");
+        ExprlyUnParser<Void> p = new ExprlyUnParser<Void>(connect);
         String t = "ConnectConst [con2]";
         ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(connect);
         Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, connect.toString());
+        Assert.assertEquals(connect.toString(), expr2AST(p.UnParse()).toString());
     }
 
     /**
@@ -157,10 +175,12 @@ public class ExprlyAstTest {
     @Test
     public void listmText() throws Exception {
         Expr<Void> list = expr2AST("([1,1+2,-(1+2)])");
+        ExprlyUnParser<Void> p = new ExprlyUnParser<Void>(list);
         ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(list);
         Assert.assertTrue(0 == c.check());
         String t = "NumConst [1], Binary [ADD, NumConst [1], NumConst [2]], " + "Unary [NEG, Binary [ADD, NumConst [1], NumConst [2]]]";
         Assert.assertEquals(t, list.toString());
+        Assert.assertEquals(list.toString(), expr2AST(p.UnParse()).toString());
     }
 
     /**
@@ -170,12 +190,14 @@ public class ExprlyAstTest {
     @Test
     public void average() throws Exception {
         Expr<Void> avg = expr2AST("avg([1,1+2, 10^-(1+2)])");
+        ExprlyUnParser<Void> p = new ExprlyUnParser<Void>(avg);
         String t =
             "FunctionExpr [MathOnListFunct [AVERAGE, [NumConst [1], Binary [ADD, NumConst [1], NumConst [2]], "
                 + "FunctionExpr [MathSingleFunct [POWER, [NumConst [10], Unary [NEG, Binary [ADD, NumConst [1], NumConst [2]]]]]]]]]";
         ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(avg);
         Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, avg.toString());
+        Assert.assertEquals(avg.toString(), expr2AST(p.UnParse()).toString());
     }
 
     /**
@@ -185,15 +207,18 @@ public class ExprlyAstTest {
     @Test
     public void radomExp() throws Exception {
         Expr<Void> rand = expr2AST("e^randFloat()%exp(floor(randInt(1,10)))");
+        ExprlyUnParser<Void> p = new ExprlyUnParser<Void>(rand);
         String t =
             "Binary [MOD, FunctionExpr [MathSingleFunct [POWER, [MathConst [E], "
                 + "FunctionExpr [MathRandomFloatFunct []]]]], "
                 + "FunctionExpr [MathSingleFunct [EXP, [FunctionExpr "
                 + "[MathSingleFunct [ROUNDDOWN, [FunctionExpr [MathRandomIntFunct "
                 + "[[NumConst [1], NumConst [10]]]]]]]]]]]";
+        String g = p.UnParse();
         ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(rand);
         Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, rand.toString());
+        Assert.assertEquals(rand.toString(), expr2AST(p.UnParse()).toString());
     }
 
     /**
@@ -203,10 +228,12 @@ public class ExprlyAstTest {
     @Test
     public void equalitytext() throws Exception {
         Expr<Void> neq = expr2AST("2==2");
+        ExprlyUnParser<Void> p = new ExprlyUnParser<Void>(neq);
         String t = "Binary [EQ, NumConst [2], NumConst [2]]";
         ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(neq);
         Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, neq.toString());
+        Assert.assertEquals(neq.toString(), expr2AST(p.UnParse()).toString());
     }
 
     /**
