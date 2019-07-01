@@ -224,11 +224,11 @@ new-test-setup) base_dir="$1"
                 fi
                 cp -r Docker/openroberta $base_dir
                 cp Docker/_README.md $base_dir
-                echo "new test server setup created in $base_dir. Edit 'config.sh' and setup db and servers now" ;;
+                echo "new test server setup created in $base_dir. Edit 'decl.sh' and setup db and servers now" ;;
 new-server-in-test-setup)
                 base_dir="$1"
                 server_name="$2"
-                if [[ ! -d $base_dir || ! -f $base_dir/config.sh ]]
+                if [[ ! -d $base_dir || ! -f $base_dir/decl.sh ]]
                 then
                   echo "basedir '$base_dir' no valid dir for test server setup. Exit 12"
                   exit 12
@@ -242,18 +242,20 @@ new-server-in-test-setup)
                 fi
                 cp -r Docker/openroberta/server/_server-template $server_dir
                 cp -r Docker/openroberta/db/_empty-db-template $db_dir
-                echo "new db and new server $server_name created in ${base_dir}. Edit '$base_dir/config.sh' and '$server_dir/decl.sh'" ;;
+                echo "new db and new server $server_name created in ${base_dir}. Edit '$base_dir/decl.sh' and '$server_dir/decl.sh'" ;;
 update-test-setup)
                 base_dir="$1"
-                if [[ ! -d $base_dir || ! -f $base_dir/config.sh ]]
+                if [[ ! -d $base_dir || ! -f $base_dir/decl.sh ]]
                 then
                   echo "basedir '$base_dir' no valid dir for test server setup. Exit 12"
                   exit 12
                 fi
                 rm -rf $base_dir/conf
                 cp -r Docker/openroberta/conf $base_dir/conf
+                rm -rf $base_dir/scripts
+                cp -r Docker/openroberta/scripts $base_dir/scripts
                 cp Docker/_README.md $base_dir
-                echo "configuration data copied to $base_dir/conf" ;;
+                echo "configuration data copied to $base_dir/conf and $base_dir/scripts" ;;
 
 *)              echo "invalid command: $cmd - exit 1"
                 exit 1 ;;

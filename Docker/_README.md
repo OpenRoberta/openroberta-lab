@@ -216,7 +216,7 @@ The shell script `$SCRIPT_DIR/run.sh` has commands, that are used to administrat
 20 2 * * * bash <SCRIPT_DIR>/run.sh -q admin <server-name> cleanup-temp-user-dirs >><BASE_DIR>/logs/cronlog.txt
 ```
 
-* `start-all` and `stop-all`: usually called from the configuration file `openrobertalab` found in `/etc/init.d`. A typical script is:
+* `start-all` and `stop-all`: usually called from the configuration file `openrobertalab.sh` found in `/etc/init.d`. A typical script is:
 
 ```bash
 #!/bin/sh
@@ -233,7 +233,7 @@ The shell script `$SCRIPT_DIR/run.sh` has commands, that are used to administrat
 # Author: Reinhard
 
 BASE_DIR=<BASE_DIR>
-SCRIPTS=$BASE_DIR/conf/scripts
+SCRIPTS=$BASE_DIR/scripts
 export SYSTEMCALL=true
 case "$1" in
     start)   bash $SCRIPTS/run.sh -q start-all                             >>$BASE_DIR/logs/init.txt ;;

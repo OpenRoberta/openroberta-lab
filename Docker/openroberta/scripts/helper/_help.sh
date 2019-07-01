@@ -10,4 +10,4 @@ echo "       start-all | stop-all |                                             
 echo "       gen-dbc | start-dbc | stop-dbc | backup [<db>]                     generate database server, start and stop server using variable DATABASES"
 echo "       gen-net |                                                          generate the docker network $DOCKER_NETWORK_NAME"
 echo "       prune                                                              rm as much unused data from docker as possible"
-echo "       alive <dns> [<always-mail:default-is-true>]                        is server alive, e.g. lab.open-roberta.org? Send mail always or only when not alive"
+echo "       alive <url> [<always-mail:default-is-true>]                        is server alive, e.g. https://lab.open-roberta.org? Send mail always or only when not alive"

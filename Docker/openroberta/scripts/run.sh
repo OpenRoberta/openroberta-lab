@@ -4,8 +4,8 @@
 
 DEBUG=false
 
-BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/../.. && pwd )"
-SCRIPT_MAIN="${BASE_DIR}/conf/scripts"
+BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
+SCRIPT_MAIN="${BASE_DIR}/scripts"
 SCRIPT_HELPER="${SCRIPT_MAIN}/helper"
 
 CMD=$1; shift
@@ -22,7 +22,7 @@ then
     DEBUG=true
 fi
 
-source ${BASE_DIR}/config.sh
+source ${BASE_DIR}/decl.sh
 source ${SCRIPT_HELPER}/__defs.sh
 
 DATE=$(date '+%Y-%m-%d %H:%M:%S')
@@ -89,7 +89,7 @@ case "$CMD" in
                    docker logs --tail 10 $NAME
                done ;;
     test-info) echo '******************** '$DATE' ********************'
-               cat ${BASE_DIR}/config.sh
+               cat ${BASE_DIR}/decl.sh
                for SERVER_NAME in $SERVERS
                do
                    echo "******************** decl.sh of server ${SERVER_NAME}"

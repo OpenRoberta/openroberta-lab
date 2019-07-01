@@ -14,13 +14,12 @@ esac
 isDirectoryValid ${GIT_REPO}
 case "$BRANCH" in
     master) DEBUG=true
-            question 'do you really want to generate the docker container for MASTER?'
             if [ "$GIT_UPTODATE" != 'true' ]
             then
                echo 'because we have manual updates before deploying master (piwick, ...), GIT_UPTODATE must be "true". Exit 12'
                exit 12
             fi
-            question 'do you have modified the MASTER branch as usual before deployment?' ;;
+            question 'you deploy MASTER. Do you have modified the MASTER branch as usual before deployment?' ;;
      *)     : ;;
 esac
 
@@ -68,8 +67,15 @@ esac
     esac
     docker build --no-cache -f ${CONF_DIR}/docker-for-lab/DockerfileLab -t $IMAGE $SERVER_DIR_OF_ONE_SERVER/export
     
+    case "$BRANCH" in
+        master) MVN_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+                docker tag $IMAGE "rbudde/openroberta_${INAME}_$SERVER_NAME:${MVN_VERSION}" ;;
+        *)      ;;
+    esac
+    
     DATE_DEPLOY=$(date --rfc-3339=seconds)
-    cat >$SERVER_DIR_OF_ONE_SERVER/deploy.txt <<.EOF
+    cat >>$SERVER_DIR_OF_ONE_SERVER/history.txt <<.EOF
+==================================
 HOSTNAME = $HOSTNAME
 DATE_SETUP = $DATE_SETUP
 DATE_DEPLOY = $DATE_DEPLOY

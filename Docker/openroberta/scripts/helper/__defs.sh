@@ -81,7 +81,7 @@ function isDeclShValid {
 
 isDirectoryValid "${BASE_DIR}"
 isDirectoryValid "${SCRIPT_HELPER}" # defined in "run.sh", must be valid (otherwise this check couldn't be executed)
-isFileValid "${BASE_DIR}/config.sh"
+isFileValid "${BASE_DIR}/decl.sh"
 
 CONF_DIR=${BASE_DIR}/conf
 SERVER_DIR=${BASE_DIR}/server
