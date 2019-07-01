@@ -52,6 +52,11 @@ public class Ast2C4ev3VisitorTest {
             + MAIN_INIT_EV3
             + "    setAllSensorMode(DEFAULT_MODE_TOUCH, DEFAULT_MODE_GYRO, DEFAULT_MODE_INFRARED, DEFAULT_MODE_ULTRASONIC);\n\n";
 
+    private static final String BEGIN_MAIN__NO_SENSORS =
+        "" //
+            + MAIN_INIT_EV3
+            + "    setAllSensorMode(NO_SEN, NO_SEN, NO_SEN, NO_SEN);\n\n";
+
 
     private static final String END_MAIN =
         "" //
@@ -417,6 +422,26 @@ public class Ast2C4ev3VisitorTest {
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/code_generator/java/read_color_sensor_in_different_modes.xml", expectedCode);
     }
+
+    @Test
+    public void testRotateRegulatedUnregulatedForwardBackwardMotors () throws Exception {
+        Configuration configuration = HelperEv3ForXmlTest.makeRotateRegulatedUnregulatedForwardBackwardMotors();
+        String expectedCode =
+            "" //
+                + CONSTANTS_AND_IMPORTS__WITH_SMALLER_TRACK_WIDTH
+                + BEGIN_MAIN__NO_SENSORS
+                + "OnFwdReg(OUT_A, Speed(30));\n"
+                + "RotateMotorForAngle(OUT_A, Speed(30), 360 * 1);\n"
+                + "OnFwdReg(OUT_B, Speed(30));\n"
+                + "RotateMotorForAngle(OUT_B, Speed(30), 360 * 1);\n"
+                + "OnFwdEx(OUT_C, Speed(30), RESET_NONE);\n"
+                + "RotateMotorForAngle(OUT_C, Speed(30), 360 * 1);\n"
+                + "OnFwdEx(OUT_D, Speed(30), RESET_NONE);\n"
+                + "RotateMotorForAngle(OUT_D, Speed(30), 360 * 1);\n"
+                + END_MAIN;
+        checkCodeGeneratorForInput("/syntax/code_generator/java/rotate_regulated_unregulated_forward_backward_motors.xml", expectedCode, configuration);
+    }
+
 
     private void checkCodeGeneratorForInput(String fileName, String expectedSourceCode) throws Exception {
         checkCodeGeneratorForInput(fileName, expectedSourceCode, standardBrickConfiguration);

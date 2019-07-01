@@ -1102,6 +1102,45 @@ public class AstToLejosJavaVisitorTest {
     }
 
 
+    @Test
+    public void check_RotateRegulatedUnregulatedForwardBackwardMotors() throws Exception {
+        Configuration configuration = HelperEv3ForXmlTest.makeRotateRegulatedUnregulatedForwardBackwardMotors();
+        String a =
+            "" //
+                + IMPORTS
+                + MAIN_CLASS
+                + BRICK_CONFIGURATION_DECL
+                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();"
+                + HAL
+                + "public static void main(String[] args) {\n"
+                + " try {\n"
+                + "  brickConfiguration = new EV3Configuration.Builder()\n"
+                + "   .setWheelDiameter(5.6)\n"
+                + "   .setTrackWidth(17.0)\n"
+                + "   .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))\n"
+                + "   .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, DriveDirection.BACKWARD, MotorSide.NONE))\n"
+                + "   .addActor(ActorPort.C, new Actor(ActorType.LARGE, false, DriveDirection.FOREWARD, MotorSide.NONE))\n"
+                + "   .addActor(ActorPort.D, new Actor(ActorType.LARGE, false, DriveDirection.BACKWARD, MotorSide.NONE))\n"
+                + "   .build();\n"
+                + "  new Test().run();\n"
+                + " } catch ( Exception e ) {\n"
+                + "  Hal.displayExceptionWaitForKeyPress(e);\n"
+                + " }\n"
+                + "}"
+                + "public void run() throwsException {\n"
+                + " hal.turnOnRegulatedMotor(ActorPort.A, 30);\n"
+                + " hal.rotateRegulatedMotor(ActorPort.A, 30, MotorMoveMode.ROTATIONS, 1);\n"
+                + " hal.turnOnRegulatedMotor(ActorPort.B, 30);\n"
+                + " hal.rotateRegulatedMotor(ActorPort.B, 30, MotorMoveMode.ROTATIONS, 1);\n"
+                + " hal.turnOnUnregulatedMotor(ActorPort.C, 30);\n"
+                + " hal.rotateUnregulatedMotor(ActorPort.C, 30, MotorMoveMode.ROTATIONS, 1);\n"
+                + " hal.turnOnUnregulatedMotor(ActorPort.D, 30);\n"
+                + " hal.rotateUnregulatedMotor(ActorPort.D, 30, MotorMoveMode.ROTATIONS, 1);\n"
+                + "}}\n";
+        assertCodeWithConfigIsOk(a, "/syntax/code_generator/java/rotate_regulated_unregulated_forward_backward_motors.xml", configuration);
+    }
+
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         assertCodeWithConfigIsOk(a, fileName, brickConfiguration);
     }

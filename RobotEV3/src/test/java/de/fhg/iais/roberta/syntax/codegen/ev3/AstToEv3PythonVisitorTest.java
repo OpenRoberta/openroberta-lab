@@ -59,6 +59,13 @@ public class AstToEv3PythonVisitorTest {
             + "        'A':Hal.makeLargeMotor(ev3dev.OUTPUT_A, 'on', 'foreward'),\n"
             + "        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B, 'on', 'foreward'),\n";
 
+    private static final String CFG_MOTORS_REGULATED_UNREGULATED_FORWARD_BACKWARD =
+        "" //
+            + "        'A':Hal.makeLargeMotor(ev3dev.OUTPUT_A, 'on', 'foreward'),\n"
+            + "        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B, 'on', 'backward'),\n"
+            + "        'C':Hal.makeLargeMotor(ev3dev.OUTPUT_C, 'off', 'foreward'),\n"
+            + "        'D':Hal.makeLargeMotor(ev3dev.OUTPUT_D, 'off', 'backward'),\n";
+
     private static final String CFG_TOUCH_SENSOR =
         "" //
             + "        '1':Hal.makeTouchSensor(ev3dev.INPUT_1),\n";
@@ -310,6 +317,27 @@ public class AstToEv3PythonVisitorTest {
                 + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/code_generator/java/read_color_sensor_in_different_modes.xml");
+    }
+
+    @Test
+    public void testRotateRegulatedUnregulatedForwardBackwardMotors() throws Exception {
+        Configuration configuration = HelperEv3ForXmlTest.makeRotateRegulatedUnregulatedForwardBackwardMotors();
+        String a =
+            "" //
+                + IMPORTS
+                + make_globals(CFG_MOTORS_REGULATED_UNREGULATED_FORWARD_BACKWARD, "")
+                + "def run():\n"
+                + "    hal.turnOnRegulatedMotor('A', 30)\n"
+                + "    hal.rotateRegulatedMotor('A', 30, 'rotations', 1)\n"
+                + "    hal.turnOnRegulatedMotor('B', 30)\n"
+                + "    hal.rotateRegulatedMotor('B', 30, 'rotations', 1)\n"
+                + "    hal.turnOnUnregulatedMotor('C', 30)\n"
+                + "    hal.rotateUnregulatedMotor('C', 30, 'rotations', 1)\n"
+                + "    hal.turnOnUnregulatedMotor('D', 30)\n"
+                + "    hal.rotateUnregulatedMotor('D', 30, 'rotations', 1)\n\n"
+                + MAIN_METHOD;
+
+        assertCodeWithConfigIsOk(a, "/syntax/code_generator/java/rotate_regulated_unregulated_forward_backward_motors.xml", configuration);
     }
 
     @Test
@@ -878,7 +906,11 @@ public class AstToEv3PythonVisitorTest {
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {
-        String b = this.h.generatePython(fileName, brickConfiguration);
+        assertCodeWithConfigIsOk(a, fileName, brickConfiguration);
+    }
+
+    private void assertCodeWithConfigIsOk(String a, String fileName, Configuration configuration) throws Exception {
+        String b = this.h.generatePython(fileName, configuration);
         Assert.assertEquals(a, b);
         //Assert.assertEquals(a.replaceAll("\\s+", ""), b.replaceAll("\\s+", ""));
     }

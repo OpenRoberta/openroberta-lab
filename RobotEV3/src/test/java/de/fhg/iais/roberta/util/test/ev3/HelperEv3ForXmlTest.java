@@ -129,6 +129,26 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
                 .build();
     }
 
+    public static Configuration makeRotateRegulatedUnregulatedForwardBackwardMotors () {
+        Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
+        ConfigurationComponent motorA = new ConfigurationComponent("LARGE", true, "A", BlocklyConstants.NO_SLOT, "A", motorAproperties);
+
+        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "ON", "MOTOR_DRIVE", "NONE");
+        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", BlocklyConstants.NO_SLOT, "B", motorBproperties);
+
+        Map<String, String> motorCproperties = createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
+        ConfigurationComponent motorC = new ConfigurationComponent("LARGE", true, "C", BlocklyConstants.NO_SLOT, "C", motorCproperties);
+
+        Map<String, String> motorDproperties = createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "ON", "MOTOR_DRIVE", "NONE");
+        ConfigurationComponent motorD = new ConfigurationComponent("LARGE", true, "D", BlocklyConstants.NO_SLOT, "D", motorDproperties);
+
+        final Configuration.Builder builder = new Configuration.Builder();
+        return builder
+            .setTrackWidth(17f)
+            .setWheelDiameter(5.6f)
+            .addComponents(Arrays.asList(motorA, motorB, motorC, motorD))
+            .build();
+    }
 
     /**
      * Generate java code as string from a given program fragment. Do not prepend and append wrappings.

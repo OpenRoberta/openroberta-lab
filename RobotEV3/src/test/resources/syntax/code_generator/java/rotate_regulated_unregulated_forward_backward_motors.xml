@@ -1,0 +1,96 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="2.0" description="" tags="">
+    <instance x="256" y="50">
+        <block type="robControls_start" id="x(+]AgkV5;Rj.AXn:ZFx" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG">FALSE</field>
+        </block>
+        <block type="robActions_motor_on" id="Oip6Z{ICa)2nZw]OpZ;P" intask="true">
+            <field name="MOTORPORT">A</field>
+            <value name="POWER">
+                <block type="math_number" id="=_En[ql{|JoE|G=*?kuw" intask="true">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motor_on_for" id="[XLp;V{xcz[M9hjKvpP," intask="true">
+            <field name="MOTORPORT">A</field>
+            <field name="MOTORROTATION">ROTATIONS</field>
+            <value name="POWER">
+                <block type="math_number" id="+xl)@Enpw:HC(^dnBlko" intask="true">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+            <value name="VALUE">
+                <block type="math_number" id="^xEsdep~AQN2{q1z:?If" intask="true">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motor_on" id="vHG_,9gC+s#KK]]%!h]u" intask="true">
+            <field name="MOTORPORT">B</field>
+            <value name="POWER">
+                <block type="math_number" id="Sd|#*GIh/*2RDN4T!rDa" intask="true">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motor_on_for" id="A6~!7E5K9o-]^Luhrev?" intask="true">
+            <field name="MOTORPORT">B</field>
+            <field name="MOTORROTATION">ROTATIONS</field>
+            <value name="POWER">
+                <block type="math_number" id="eBEsBW!Kh}p/DxDg~hmO" intask="true">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+            <value name="VALUE">
+                <block type="math_number" id="?4|RM8AZr}l[emrCIGqx" intask="true">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motor_on" id="Jd]*Jd(-eDCpO`X{]Onv" intask="true">
+            <field name="MOTORPORT">C</field>
+            <value name="POWER">
+                <block type="math_number" id="LiL%djf.}kZdl)*IM[wz" intask="true">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motor_on_for" id="y)dl?}3)ye|m`v4.,9IP" intask="true">
+            <field name="MOTORPORT">C</field>
+            <field name="MOTORROTATION">ROTATIONS</field>
+            <value name="POWER">
+                <block type="math_number" id=",.tfU:dkm7r.x=tr!qfp" intask="true">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+            <value name="VALUE">
+                <block type="math_number" id="8j3UNN(B0iBtGTev)B-D" intask="true">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motor_on" id="-ydj;]6r?WuB!p5^-Z)3" intask="true">
+            <field name="MOTORPORT">D</field>
+            <value name="POWER">
+                <block type="math_number" id="3zj|d,b*[pT85C^.7n+{" intask="true">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motor_on_for" id="Y!n]|6?pXlrQM#G[qZkN" intask="true">
+            <field name="MOTORPORT">D</field>
+            <field name="MOTORROTATION">ROTATIONS</field>
+            <value name="POWER">
+                <block type="math_number" id="6)18DfXHoJvRVRRoBtkV" intask="true">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+            <value name="VALUE">
+                <block type="math_number" id="Se6.!|]%66+)PIMPR[MG" intask="true">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

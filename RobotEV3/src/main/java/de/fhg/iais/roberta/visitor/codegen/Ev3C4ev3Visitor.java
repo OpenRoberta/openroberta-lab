@@ -684,12 +684,11 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         MotorDuration<Void> duration = motorOnAction.getParam().getDuration();
         Expr<Void> speedExpression = motorOnAction.getParam().getSpeed();
         if ( isActorOnPort(port) ) {
-            boolean isReverse = isMotorReverse(port);
             boolean isRegulated = brickConfiguration.isMotorRegulated(port);
             if ( duration != null ) {
                 generateRotateMotorForDuration(port, speedExpression, motorOnAction.getDurationMode(), duration.getValue());
             } else {
-                generateTurnOnMotor(port, speedExpression, isReverse, isRegulated);
+                generateTurnOnMotor(port, speedExpression, isRegulated);
             }
         }
         return null;
@@ -706,13 +705,13 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         this.sb.append(");");
     }
 
-    private void generateTurnOnMotor(String port, Expr<Void> speedExpression, boolean isReverse, boolean isRegulated) {
-        String methodNamePart = isReverse ? "OnRev" : "OnFwd";
-        if ( isRegulated ) {
-            methodNamePart += "Reg";
-        }
-        this.sb.append(methodNamePart + "(" + getPrefixedOutputPort(port) + ", ");
+    private void generateTurnOnMotor(String port, Expr<Void> speedExpression, boolean isRegulated) {
+        String functionName = isRegulated ? "OnFwdReg" : "OnFwdEx";
+        this.sb.append(functionName + "(" + getPrefixedOutputPort(port) + ", ");
         visitSpeedExpression(speedExpression);
+        if(!isRegulated){
+            this.sb.append(", RESET_NONE");
+        }
         this.sb.append(");");
     }
 
