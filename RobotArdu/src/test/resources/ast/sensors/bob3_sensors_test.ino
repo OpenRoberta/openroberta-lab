@@ -5,24 +5,24 @@
 Bob3 rob;
 
     
-double item;
-bool item2;
+double ___item;
+bool ___item2;
 unsigned long __time = millis();
 
 void setup()
 {
-    item = 0;
-    item2 = true;
+    ___item = 0;
+    ___item2 = true;
     
 }
 
 void loop()
 {
-    item = rob.getIRLight();
-    item = rob.getIRSensor();
-    item = rob.getTemperature();
-    item = rob.getID();
-    item = (int) (millis() - __time);
-    item2 = ( rob.getArm(2) == 1 );
+    ___item = rob.getIRLight();
+    ___item = rob.getIRSensor();
+    ___item = rob.getTemperature();
+    ___item = rob.getID();
+    ___item = (int) (millis() - __time);
+    ___item2 = ( rob.getArm(2) == 1 );
     __time = millis();
 }

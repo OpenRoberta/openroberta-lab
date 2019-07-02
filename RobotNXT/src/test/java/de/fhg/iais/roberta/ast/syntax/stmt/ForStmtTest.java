@@ -10,7 +10,7 @@ public class ForStmtTest {
 
     @Test
     public void forStmt1() throws Exception {
-        String a = "for ( int k0 = 0; k0 < 10; k0+=1 ) {item3 += \"Proba\";item3 += \"Proba1\";for ( int k1 = 0; k1 < 10; k1+=1 ) {}}";
+        String a = "for ( int ___k0 = 0; ___k0 < 10; ___k0+=1 ) {___item3 += \"Proba\";___item3 += \"Proba1\";for ( int ___k1 = 0; ___k1 < 10; ___k1+=1 ) {}}";
 
         this.h.assertCodeIsOk(a, "/ast/control/repeat_stmt.xml");
     }

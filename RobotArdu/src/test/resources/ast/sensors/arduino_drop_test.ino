@@ -6,12 +6,12 @@
 
 RobertaFunctions rob;
 
-double item;
+double ___item;
 int _S_D = A0;
 void setup()
 {
     Serial.begin(9600); 
-    item = analogRead(_S_D)/10.24;
+    ___item = analogRead(_S_D)/10.24;
 }
 
 void loop()

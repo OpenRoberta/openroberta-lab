@@ -6,7 +6,7 @@
 
 RobertaFunctions rob;
 
-double item;
+double ___item;
 int _trigger_U = 7;
 int _echo_U = 6;
 double _signalToDistance = 0.03432/2;
@@ -25,7 +25,7 @@ void setup()
     Serial.begin(9600); 
     pinMode(_trigger_U, OUTPUT);
     pinMode(_echo_U, INPUT);
-    item = _getUltrasonicDistance();
+    ___item = _getUltrasonicDistance();
 }
 
 void loop()

@@ -17,10 +17,10 @@ BnrRoberta bnr(one, brm);
 byte colorsLeft[3]={0,0,0}; 
 byte colorsRight[3]={0,0,0};
     
-double item;
-bool item2;
-unsigned int item3;
-std::list<double> item4;
+double ___item;
+bool ___item2;
+unsigned int ___item3;
+std::list<double> ___item4;
 
 unsigned long __time = millis();
 void setup()
@@ -49,38 +49,38 @@ void setup()
     brm.setRgbStatus(ENABLE);
     brm.setRgbStatus(ENABLE);
     brm.setRgbStatus(ENABLE);
-    item = 0;
-    item2 = true;
-    item3 = RGB(0xFF, 0xFF, 0xFF);
-    item4 = {0, 0, 0};
+    ___item = 0;
+    ___item2 = true;
+    ___item3 = RGB(0xFF, 0xFF, 0xFF);
+    ___item4 = {0, 0, 0};
     
 }
 
 void loop()
 {
-    item = one.readAdc(0) / 10.23;
-    item2 = bnr.infraredSensorObstacle(1);
-    item2 = bnr.infraredSensorObstacle(2);
-    item2 = bnr.infraredSensorObstacle(3);
-    item2 = bnr.infraredSensorPresence(1);
-    item2 = bnr.infraredSensorPresence(2);
-    item2 = bnr.infraredSensorPresence(3);
-    item = bnr.readBearing();
-    item = bnr.ultrasonicDistance(0);
-    item = bnr.ultrasonicDistance(1);
-    item = bnr.ultrasonicDistance(2);
-    item = bnr.sonar();
-    item3 = bnr.colorSensorColor(colorsLeft, 1);
-    item3 = bnr.colorSensorColor(colorsRight, 2);
-    item = bnr.colorSensorLight(colorsLeft, 1);
-    item = bnr.colorSensorLight(colorsRight, 2);
-    item4 = {bnr.colorSensorRGB(colorsRight, 2)[0], bnr.colorSensorRGB(colorsRight, 2)[1], bnr.colorSensorRGB(colorsRight, 2)[2]};
-    item4 = {bnr.colorSensorRGB(colorsLeft, 1)[0], bnr.colorSensorRGB(colorsLeft, 1)[1], bnr.colorSensorRGB(colorsLeft, 1)[2]};
-    item2 = bnr.buttonIsPressed(1);
-    item2 = bnr.buttonIsPressed(2);
-    item2 = bnr.buttonIsPressed(3);
-    item2 = bnr.buttonIsPressed(123);
-    item = (int) (millis() - __time);
+    ___item = one.readAdc(0) / 10.23;
+    ___item2 = bnr.infraredSensorObstacle(1);
+    ___item2 = bnr.infraredSensorObstacle(2);
+    ___item2 = bnr.infraredSensorObstacle(3);
+    ___item2 = bnr.infraredSensorPresence(1);
+    ___item2 = bnr.infraredSensorPresence(2);
+    ___item2 = bnr.infraredSensorPresence(3);
+    ___item = bnr.readBearing();
+    ___item = bnr.ultrasonicDistance(0);
+    ___item = bnr.ultrasonicDistance(1);
+    ___item = bnr.ultrasonicDistance(2);
+    ___item = bnr.sonar();
+    ___item3 = bnr.colorSensorColor(colorsLeft, 1);
+    ___item3 = bnr.colorSensorColor(colorsRight, 2);
+    ___item = bnr.colorSensorLight(colorsLeft, 1);
+    ___item = bnr.colorSensorLight(colorsRight, 2);
+    ___item4 = {bnr.colorSensorRGB(colorsRight, 2)[0], bnr.colorSensorRGB(colorsRight, 2)[1], bnr.colorSensorRGB(colorsRight, 2)[2]};
+    ___item4 = {bnr.colorSensorRGB(colorsLeft, 1)[0], bnr.colorSensorRGB(colorsLeft, 1)[1], bnr.colorSensorRGB(colorsLeft, 1)[2]};
+    ___item2 = bnr.buttonIsPressed(1);
+    ___item2 = bnr.buttonIsPressed(2);
+    ___item2 = bnr.buttonIsPressed(3);
+    ___item2 = bnr.buttonIsPressed(123);
+    ___item = (int) (millis() - __time);
     __time = millis();
-    item = one.readBattery();
+    ___item = one.readBattery();
 }

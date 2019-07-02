@@ -130,7 +130,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                 return null;
             }
             if ( lightAction.getRgbLedColor().getClass().equals(Var.class) ) {
-                String tempVarName = ((Var<Void>) lightAction.getRgbLedColor()).getValue();
+                String tempVarName = "___" + ((Var<Void>) lightAction.getRgbLedColor()).getValue();
                 this.sb.append("analogWrite(_led_red_" + lightAction.getPort() + ", RCHANNEL(");
                 this.sb.append(tempVarName);
                 this.sb.append("));");
@@ -326,16 +326,17 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         nlIndent();
         this.sb.append("}");
         nlIndent();
-        this.sb.append(
-            "return String(((long)(_mfrc522_"
-                + sensorName
-                + ".uid.uidByte[0])<<24)\n    |((long)(_mfrc522_"
-                + sensorName
-                + ".uid.uidByte[1])<<16)\n    | ((long)(_mfrc522_"
-                + sensorName
-                + ".uid.uidByte[2])<<8)\n    | ((long)_mfrc522_"
-                + sensorName
-                + ".uid.uidByte[3]), HEX);");
+        this.sb
+            .append(
+                "return String(((long)(_mfrc522_"
+                    + sensorName
+                    + ".uid.uidByte[0])<<24)\n    |((long)(_mfrc522_"
+                    + sensorName
+                    + ".uid.uidByte[1])<<16)\n    | ((long)(_mfrc522_"
+                    + sensorName
+                    + ".uid.uidByte[2])<<8)\n    | ((long)_mfrc522_"
+                    + sensorName
+                    + ".uid.uidByte[3]), HEX);");
 
         decrIndentation();
         nlIndent();

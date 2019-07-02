@@ -11,9 +11,9 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
+import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
@@ -49,7 +49,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
 
     protected void generateUsedVars() {
         for ( VarDeclaration<Void> var : this.usedVars ) {
-            this.sb.append(var.getName());
+            this.sb.append("___" + var.getName());
             this.sb.append(" = ");
             var.getValue().visit(this);
             this.sb.append(";");
@@ -59,8 +59,8 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
-        this.sb.append(var.getName());
+        this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar()));
+        this.sb.append(whitespace() + "___" + var.getName());
         return null;
     }
 
@@ -362,6 +362,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
         return null;
     }
 
+    @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
         this.sb.append("RGB(");
         this.sb.append(colorConst.getRedChannelHex());
@@ -372,18 +373,18 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
         this.sb.append(")");
         return null;
     }
-    
+
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
         writeToSerial(serialWriteAction.getValue());
         return null;
     }
-    
+
     @Override
     public Void visitDebugAction(DebugAction<Void> debugAction) {
         writeToSerial(debugAction.getValue());
         return null;
     }
-    
+
     private void writeToSerial(Expr<Void> valueToWrite) {
         this.sb.append("Serial.println(");
         valueToWrite.visit(this);

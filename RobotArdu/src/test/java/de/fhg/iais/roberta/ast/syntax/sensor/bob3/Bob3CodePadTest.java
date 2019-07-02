@@ -10,7 +10,7 @@ public class Bob3CodePadTest {
 
     @Test
     public void getLeftArmRightArmLight() throws Exception {
-        final String a = "double item; void setup(){ item = 0; } void loop() { item = rob.getID();}";
+        final String a = "double ___item; void setup(){ ___item = 0; } void loop() { ___item = rob.getID();}";
 
         this.h.assertCodeIsOk(a, "/ast/sensors/sensor_bob3CodePad.xml", false);
     }

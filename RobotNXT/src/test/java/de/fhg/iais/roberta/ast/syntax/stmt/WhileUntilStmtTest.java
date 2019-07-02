@@ -17,11 +17,11 @@ public class WhileUntilStmtTest {
                 + "\nwhile ( !true ) {\n"
                 + "}\n"
                 + "\nwhile ( !(15 == 20) ) {\n"
-                + "    variablenName += 1;\n"
+                + "    ___variablenName += 1;\n"
                 + "}\n"
                 + "\nwhile ( !true ) {\n"
                 + "    \nwhile ( !(15 == 20) ) {\n"
-                + "        variablenName += 1;\n"
+                + "        ___variablenName += 1;\n"
                 + "    }\n"
                 + "}";
 

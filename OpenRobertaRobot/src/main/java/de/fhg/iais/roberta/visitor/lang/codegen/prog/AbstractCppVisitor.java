@@ -22,6 +22,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
+import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
@@ -74,6 +75,12 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
         this.sb.append(", ");
         rgbColor.getB().visit(this);
         this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitVar(Var<Void> var) {
+        this.sb.append("___" + var.getValue());
         return null;
     }
 
@@ -532,9 +539,9 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
         this.sb.append("assertNepo((");
         assertStmt.getAssert().visit(this);
         this.sb.append("), \"").append(assertStmt.getMsg()).append("\", ");
-        ((Binary<Void>)assertStmt.getAssert()).getLeft().visit(this);
-        this.sb.append(", \"").append(((Binary<Void>)assertStmt.getAssert()).getOp().toString()).append("\", ");
-        ((Binary<Void>)assertStmt.getAssert()).getRight().visit(this);
+        ((Binary<Void>) assertStmt.getAssert()).getLeft().visit(this);
+        this.sb.append(", \"").append(((Binary<Void>) assertStmt.getAssert()).getOp().toString()).append("\", ");
+        ((Binary<Void>) assertStmt.getAssert()).getRight().visit(this);
         this.sb.append(");");
         return null;
     }
@@ -699,50 +706,52 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     protected static Map<Binary.Op, String> binaryOpSymbols() {
-        return Collections.unmodifiableMap(
-            Stream
-                .of(
+        return Collections
+            .unmodifiableMap(
+                Stream
+                    .of(
 
-                    entry(Binary.Op.ADD, "+"),
-                    entry(Binary.Op.MINUS, "-"),
-                    entry(Binary.Op.MULTIPLY, "*"),
-                    entry(Binary.Op.DIVIDE, "/"),
-                    entry(Binary.Op.MOD, "%"),
-                    entry(Binary.Op.EQ, "=="),
-                    entry(Binary.Op.NEQ, "!="),
-                    entry(Binary.Op.LT, "<"),
-                    entry(Binary.Op.LTE, "<="),
-                    entry(Binary.Op.GT, ">"),
-                    entry(Binary.Op.GTE, ">="),
-                    entry(Binary.Op.AND, "&&"),
-                    entry(Binary.Op.OR, "||"),
-                    entry(Binary.Op.MATH_CHANGE, "+="),
-                    entry(Binary.Op.TEXT_APPEND, "+="),
-                    entry(Binary.Op.IN, ":"),
-                    entry(Binary.Op.ASSIGNMENT, "="),
-                    entry(Binary.Op.ADD_ASSIGNMENT, "+="),
-                    entry(Binary.Op.MINUS_ASSIGNMENT, "-="),
-                    entry(Binary.Op.MULTIPLY_ASSIGNMENT, "*="),
-                    entry(Binary.Op.DIVIDE_ASSIGNMENT, "/="),
-                    entry(Binary.Op.MOD_ASSIGNMENT, "%=")
+                        entry(Binary.Op.ADD, "+"),
+                        entry(Binary.Op.MINUS, "-"),
+                        entry(Binary.Op.MULTIPLY, "*"),
+                        entry(Binary.Op.DIVIDE, "/"),
+                        entry(Binary.Op.MOD, "%"),
+                        entry(Binary.Op.EQ, "=="),
+                        entry(Binary.Op.NEQ, "!="),
+                        entry(Binary.Op.LT, "<"),
+                        entry(Binary.Op.LTE, "<="),
+                        entry(Binary.Op.GT, ">"),
+                        entry(Binary.Op.GTE, ">="),
+                        entry(Binary.Op.AND, "&&"),
+                        entry(Binary.Op.OR, "||"),
+                        entry(Binary.Op.MATH_CHANGE, "+="),
+                        entry(Binary.Op.TEXT_APPEND, "+="),
+                        entry(Binary.Op.IN, ":"),
+                        entry(Binary.Op.ASSIGNMENT, "="),
+                        entry(Binary.Op.ADD_ASSIGNMENT, "+="),
+                        entry(Binary.Op.MINUS_ASSIGNMENT, "-="),
+                        entry(Binary.Op.MULTIPLY_ASSIGNMENT, "*="),
+                        entry(Binary.Op.DIVIDE_ASSIGNMENT, "/="),
+                        entry(Binary.Op.MOD_ASSIGNMENT, "%=")
 
-                )
-                .collect(entriesToMap()));
+                    )
+                    .collect(entriesToMap()));
     }
 
     protected static Map<Unary.Op, String> unaryOpSymbols() {
-        return Collections.unmodifiableMap(
-            Stream
-                .of(
+        return Collections
+            .unmodifiableMap(
+                Stream
+                    .of(
 
-                    entry(Unary.Op.PLUS, "+"),
-                    entry(Unary.Op.NEG, "-"),
-                    entry(Unary.Op.NOT, "!"),
-                    entry(Unary.Op.POSTFIX_INCREMENTS, "++"),
-                    entry(Unary.Op.PREFIX_INCREMENTS, "++")
+                        entry(Unary.Op.PLUS, "+"),
+                        entry(Unary.Op.NEG, "-"),
+                        entry(Unary.Op.NOT, "!"),
+                        entry(Unary.Op.POSTFIX_INCREMENTS, "++"),
+                        entry(Unary.Op.PREFIX_INCREMENTS, "++")
 
-                )
-                .collect(entriesToMap()));
+                    )
+                    .collect(entriesToMap()));
     }
 
 }

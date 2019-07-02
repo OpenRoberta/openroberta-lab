@@ -70,8 +70,8 @@ void setup()
 
 void loop()
 {
-    for (int i = 1; i < 100; i += 1) {
-        _plot_L.addDataPoint(i, _getValueFromBmx(1, 1));
+    for (int ___i = 1; ___i < 100; ___i += 1) {
+        _plot_L.addDataPoint(___i, _getValueFromBmx(1, 1));
         
         delay(100);
         delay(1);

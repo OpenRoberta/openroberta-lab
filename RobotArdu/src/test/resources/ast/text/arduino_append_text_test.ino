@@ -6,25 +6,25 @@
 
 RobertaFunctions rob;
 
-double item;
-bool item2;
-String item3;
-unsigned int item4;
+double ___item;
+bool ___item2;
+String ___item3;
+unsigned int ___item4;
 int _led_L = 13;
 void setup()
 {
     Serial.begin(9600); 
     pinMode(_led_L, OUTPUT);
-    item = 0;
-    item2 = true;
-    item3 = "";
-    item4 = RGB(0xFF, 0xFF, 0xFF);
+    ___item = 0;
+    ___item2 = true;
+    ___item3 = "";
+    ___item4 = RGB(0xFF, 0xFF, 0xFF);
 }
 
 void loop()
 {
-    item3 += String(item);
-    item3 += String(item2);
-    item3 += item3;
-    item3 += String(item4);
+    ___item3 += String(___item);
+    ___item3 += String(___item2);
+    ___item3 += ___item3;
+    ___item3 += String(___item4);
 }

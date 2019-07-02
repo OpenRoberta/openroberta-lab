@@ -8,26 +8,26 @@
 
 RobertaFunctions rob;
 
-std::list<double> item;
-std::list<bool> item2;
-std::list<String> item3;
-std::list<unsigned int> item4;
+std::list<double> ___item;
+std::list<bool> ___item2;
+std::list<String> ___item3;
+std::list<unsigned int> ___item4;
 int _led_L = 13;
 void setup()
 {
     Serial.begin(9600); 
     pinMode(_led_L, OUTPUT);
-    item = {0, 0, 0, 0};
-    item2 = {true, false, true, false, true, false, false, true};
-    item3 = {"a", "b", "c", "b"};
-    item4 = {RGB(0xff, 0xcc, 0x33), RGB(0xff, 0xff, 0x33), RGB(0x66, 0x00, 0x00), RGB(0x00, 0x00, 0x99), RGB(0x66, 0x33, 0xff), RGB(0xff, 0x99, 0x00)};
+    ___item = {0, 0, 0, 0};
+    ___item2 = {true, false, true, false, true, false, false, true};
+    ___item3 = {"a", "b", "c", "b"};
+    ___item4 = {RGB(0xff, 0xcc, 0x33), RGB(0xff, 0xff, 0x33), RGB(0x66, 0x00, 0x00), RGB(0x00, 0x00, 0x99), RGB(0x66, 0x33, 0xff), RGB(0xff, 0x99, 0x00)};
 }
 
 void loop()
 {
-    Serial.println(_getListElementByIndex(_getSubList(item, 0, 2), 0));
-    _setListElementByIndex(_getSubList(item3, 1, 2), 1, "b");
-    Serial.println(((int) _getSubList(item2, 0, 2).size()));
-    Serial.println(_getFirstOccuranceOfElement(_getSubList(item4, 2, 4), RGB(0x00, 0x00, 0x99)));
+    Serial.println(_getListElementByIndex(_getSubList(___item, 0, 2), 0));
+    _setListElementByIndex(_getSubList(___item3, 1, 2), 1, "b");
+    Serial.println(((int) _getSubList(___item2, 0, 2).size()));
+    Serial.println(_getFirstOccuranceOfElement(_getSubList(___item4, 2, 4), RGB(0x00, 0x00, 0x99)));
     delay(1000);
 }

@@ -9,8 +9,8 @@
 
 RobertaFunctions rob;
 
-String item;
-bool item2;
+String ___item;
+bool ___item2;
 Servo _servo_S;
 #define SS_PIN_R6 10
 #define RST_PIN_R6 9
@@ -44,14 +44,14 @@ void setup()
     SPI.begin();
     _mfrc522_R7.PCD_Init();
     _servo_S2.attach(8);
-    item = "";
-    item2 = true;
+    ___item = "";
+    ___item2 = true;
 }
 
 void loop()
 {
     _servo_S.write(90);
     _servo_S.write(90);
-    item = _readRFIDData();
-    item = _readRFIDData();
+    ___item = _readRFIDData();
+    ___item = _readRFIDData();
 }

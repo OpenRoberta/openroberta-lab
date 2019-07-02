@@ -15,7 +15,7 @@ public class MathSingleTest {
 
     @Test
     public void Test2() throws Exception {
-        final String a = "item=sqrt(0);";
+        final String a = "___item=sqrt(0);";
         this.h.assertCodeIsOk(a, "/syntax/math/math_single2.xml", false);
     }
 }

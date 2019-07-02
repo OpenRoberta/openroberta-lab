@@ -17,7 +17,7 @@ RobertaFunctions rob;
     
 unsigned long _time = millis();
 
-double datum;
+double ___datum;
 File _dataFile;
 char* _expression = "111111111111111111111112";
 #define OLED_RESET 4
@@ -36,16 +36,16 @@ void setup()
     _display_L.display();
     delay(100);
     _display_L.clearDisplay();
-    datum = 0;
+    ___datum = 0;
 }
 
 void loop()
 {
-    datum = sqrt(_randomIntegerInRange(1, 100));
+    ___datum = sqrt(_randomIntegerInRange(1, 100));
     _dataFile = SD.open("test.txt", FILE_WRITE);
     _dataFile.print(_expression);
     _dataFile.print(" : ");
-    _dataFile.println(datum);
+    _dataFile.println(___datum);
     _dataFile.close();
     _display_L.setCursor(0, 0);
     _display_L.setTextSize(1);
@@ -56,7 +56,7 @@ void loop()
     _display_L.setCursor(0, 5);
     _display_L.setTextSize(1);
     _display_L.setTextColor(WHITE, BLACK);
-    _display_L.println(datum);
+    _display_L.println(___datum);
     _display_L.display();
     
     _display_L.clearDisplay();

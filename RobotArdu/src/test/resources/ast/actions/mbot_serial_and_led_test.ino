@@ -13,12 +13,12 @@
 MeRGBLed _meRgbLed(7, 2);
 RobertaFunctions rob;
 
-unsigned int item;
+unsigned int ___item;
 
 void setup()
 {
     Serial.begin(9600); 
-    item = RGB(0xFF, 0xFF, 0xFF);
+    ___item = RGB(0xFF, 0xFF, 0xFF);
 }
 
 void loop()
@@ -28,9 +28,9 @@ void loop()
     _meRgbLed.show();
     _meRgbLed.setColor(1, 0xcc, 0x00, 0x00);
     _meRgbLed.show();
-    _meRgbLed.setColor(2, RCHANNEL(item), GCHANNEL(item), BCHANNEL(item));
+    _meRgbLed.setColor(2, RCHANNEL(___item), GCHANNEL(___item), BCHANNEL(___item));
     _meRgbLed.show();
-    _meRgbLed.setColor(1, RCHANNEL(item), GCHANNEL(item), BCHANNEL(item));
+    _meRgbLed.setColor(1, RCHANNEL(___item), GCHANNEL(___item), BCHANNEL(___item));
     _meRgbLed.show();
     _meRgbLed.setColor(2, 20, 150, 255);
     _meRgbLed.show();

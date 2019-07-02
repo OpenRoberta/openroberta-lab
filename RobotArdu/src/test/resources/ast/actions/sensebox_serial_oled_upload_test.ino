@@ -17,7 +17,7 @@ RobertaFunctions rob;
     
 unsigned long _time = millis();
 
-std::list<double> values;
+std::list<double> ___values;
 char* _temperature = "111111111111111111111112";
 char* _pressure = "111111111111111111111113";
 char* _humidity = "111111111111111111111114";
@@ -49,7 +49,7 @@ void setup()
     _display_L.display();
     delay(100);
     _display_L.clearDisplay();
-    values = {};
+    ___values = {};
 }
 
 void loop()
@@ -60,28 +60,28 @@ void loop()
     Serial.println(_bmp280_T.getPressure());
     Serial.println(_tsl_V.getIlluminance());
     Serial.println(_veml_V.getUvIntensity());
-    values.push_back(_hdc1080_H.getHumidity());
-    values.push_back(_hdc1080_H.getTemperature());
-    values.push_back(_bmp280_T.getTemperature());
-    values.push_back(_bmp280_T.getPressure());
-    values.push_back(_tsl_V.getIlluminance());
-    values.push_back(_veml_V.getUvIntensity());
-    for ( double value : values ) {
+    ___values.push_back(_hdc1080_H.getHumidity());
+    ___values.push_back(_hdc1080_H.getTemperature());
+    ___values.push_back(_bmp280_T.getTemperature());
+    ___values.push_back(_bmp280_T.getPressure());
+    ___values.push_back(_tsl_V.getIlluminance());
+    ___values.push_back(_veml_V.getUvIntensity());
+    for ( double ___value : ___values ) {
         _display_L.setCursor(0, 0);
         _display_L.setTextSize(1);
         _display_L.setTextColor(WHITE, BLACK);
-        _display_L.println(value);
+        _display_L.println(___value);
         _display_L.display();
         
         delay(250);
         delay(1);
     }
-    _osm.uploadMeasurement(_getListElementByIndex(values, 0), _temperature);
-    _osm.uploadMeasurement(_getListElementByIndex(values, 1), _temperature);
-    _osm.uploadMeasurement(_getListElementByIndex(values, 2), _temperature);
-    _osm.uploadMeasurement(_getListElementByIndex(values, 3), _temperature);
-    _osm.uploadMeasurement(_getListElementByIndex(values, 4), _temperature);
-    _osm.uploadMeasurement(_getListElementByIndex(values, 5), _temperature);
+    _osm.uploadMeasurement(_getListElementByIndex(___values, 0), _temperature);
+    _osm.uploadMeasurement(_getListElementByIndex(___values, 1), _temperature);
+    _osm.uploadMeasurement(_getListElementByIndex(___values, 2), _temperature);
+    _osm.uploadMeasurement(_getListElementByIndex(___values, 3), _temperature);
+    _osm.uploadMeasurement(_getListElementByIndex(___values, 4), _temperature);
+    _osm.uploadMeasurement(_getListElementByIndex(___values, 5), _temperature);
     
-    values = {};
+    ___values = {};
 }

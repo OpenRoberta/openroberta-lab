@@ -6,7 +6,7 @@
 
 RobertaFunctions rob;
 
-double item;
+double ___item;
 int _led_L = 13;
 unsigned long __time = millis();
 
@@ -14,7 +14,7 @@ void setup()
 {
     Serial.begin(9600); 
     pinMode(_led_L, OUTPUT);
-    item = (int) (millis() - __time);
+    ___item = (int) (millis() - __time);
 }
 
 void loop()

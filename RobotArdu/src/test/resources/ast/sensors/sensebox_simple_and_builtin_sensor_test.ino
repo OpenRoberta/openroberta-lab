@@ -9,8 +9,8 @@ RobertaFunctions rob;
     
 unsigned long _time = millis();
 
-bool item;
-double item2;
+bool ___item;
+double ___item2;
 int _potentiometer_P = 3;
 
 BMX055 _bmx055_A;
@@ -49,26 +49,26 @@ void setup()
     Serial.begin(9600); 
     _bmx055_A.begin();
     pinMode(_button_B, INPUT);
-    item = true;
-    item2 = 0;
+    ___item = true;
+    ___item2 = 0;
 }
 
 void loop()
 {
-    item = digitalRead(_button_B);
-    item2 = analogRead(_output_L)/10.24;
-    item2 = ((double)analogRead(_potentiometer_P))*5/1024;
-    item2 = analogRead(_mic_S);
-    item2 = _hcsr04_U.getDistance();
-    item2 = (int) (millis() - _time);
+    ___item = digitalRead(_button_B);
+    ___item2 = analogRead(_output_L)/10.24;
+    ___item2 = ((double)analogRead(_potentiometer_P))*5/1024;
+    ___item2 = analogRead(_mic_S);
+    ___item2 = _hcsr04_U.getDistance();
+    ___item2 = (int) (millis() - _time);
     _time = millis();
-    item2 = _getValueFromBmx(1, 1);
-    item2 = _getValueFromBmx(2, 1);
-    item2 = _getValueFromBmx(3, 1);
-    item2 = _getValueFromBmx(1, 2);
-    item2 = _getValueFromBmx(2, 2);
-    item2 = _getValueFromBmx(3, 2);
-    item2 = _getValueFromBmx(1, 3);
-    item2 = _getValueFromBmx(2, 3);
-    item2 = _getValueFromBmx(3, 3);
+    ___item2 = _getValueFromBmx(1, 1);
+    ___item2 = _getValueFromBmx(2, 1);
+    ___item2 = _getValueFromBmx(3, 1);
+    ___item2 = _getValueFromBmx(1, 2);
+    ___item2 = _getValueFromBmx(2, 2);
+    ___item2 = _getValueFromBmx(3, 2);
+    ___item2 = _getValueFromBmx(1, 3);
+    ___item2 = _getValueFromBmx(2, 3);
+    ___item2 = _getValueFromBmx(3, 3);
 }

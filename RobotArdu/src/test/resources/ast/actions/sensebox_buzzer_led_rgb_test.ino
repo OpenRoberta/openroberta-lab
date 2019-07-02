@@ -9,8 +9,8 @@ RobertaFunctions rob;
     
 unsigned long _time = millis();
 
-unsigned int item;
-unsigned int item2;
+unsigned int ___item;
+unsigned int ___item2;
 int _led_R2 = 8;
 int _buzzer_B = 5;
 int _led_red_R = 1;
@@ -28,8 +28,8 @@ void setup()
     pinMode(_led_blue_R, OUTPUT);
     pinMode(_led_L, OUTPUT);
     pinMode(_led_R1, OUTPUT);
-    item = RGB(0xFF, 0xFF, 0xFF);
-    item2 = RGB(120, 120, 120);
+    ___item = RGB(0xFF, 0xFF, 0xFF);
+    ___item2 = RGB(120, 120, 120);
 }
 
 void loop()
@@ -48,13 +48,13 @@ void loop()
     analogWrite(_led_green_R, 120);
     analogWrite(_led_blue_R, 120);
     
-    analogWrite(_led_red_R, RCHANNEL(item));
-    analogWrite(_led_green_R, GCHANNEL(item));
-    analogWrite(_led_blue_R, BCHANNEL(item));
+    analogWrite(_led_red_R, RCHANNEL(___item));
+    analogWrite(_led_green_R, GCHANNEL(___item));
+    analogWrite(_led_blue_R, BCHANNEL(___item));
     
-    analogWrite(_led_red_R, RCHANNEL(item2));
-    analogWrite(_led_green_R, GCHANNEL(item2));
-    analogWrite(_led_blue_R, BCHANNEL(item2));
+    analogWrite(_led_red_R, RCHANNEL(___item2));
+    analogWrite(_led_green_R, GCHANNEL(___item2));
+    analogWrite(_led_blue_R, BCHANNEL(___item2));
     
     analogWrite(_led_red_R, 0);
     analogWrite(_led_green_R, 0);

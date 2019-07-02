@@ -10,7 +10,7 @@ public class Bob3TemperatureSensorTest {
 
     @Test
     public void getLeftArmRightArmLight() throws Exception {
-        final String a = "double item; void setup(){ item = 0; } void loop() { item = rob.getTemperature();}";
+        final String a = "double ___item; void setup(){ ___item = 0; } void loop() { ___item = rob.getTemperature();}";
 
         this.h.assertCodeIsOk(a, "/ast/sensors/sensor_bob3Temperature.xml", false);
     }

@@ -273,7 +273,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                 return null;
             }
             if ( lightAction.getRgbLedColor().getClass().equals(Var.class) ) {
-                String tempVarName = ((Var<Void>) lightAction.getRgbLedColor()).getValue();
+                String tempVarName = "___" + ((Var<Void>) lightAction.getRgbLedColor()).getValue();
                 this.sb.append("analogWrite(_led_red_").append(lightAction.getPort()).append(", RCHANNEL(");
                 this.sb.append(tempVarName);
                 this.sb.append("));");

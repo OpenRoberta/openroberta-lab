@@ -7,8 +7,8 @@
 
 RobertaFunctions rob;
 
-double item;
-bool item2;
+double ___item;
+bool ___item2;
 int _RECV_PIN_I = 11;
 IRrecv _irrecv_I(_RECV_PIN_I);
 decode_results _results_I;
@@ -27,8 +27,8 @@ void setup()
     Serial.begin(9600); 
     pinMode(13, OUTPUT);
     _irrecv_I.enableIRIn();
-    item = _getIRResults();
-    item2 = _getIRResults();
+    ___item = _getIRResults();
+    ___item2 = _getIRResults();
 }
 
 void loop()

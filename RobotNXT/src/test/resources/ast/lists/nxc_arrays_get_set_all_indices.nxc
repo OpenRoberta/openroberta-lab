@@ -5,21 +5,21 @@
  
 
 
-float item[3];
-float item2;
+float ___item[3];
+float ___item2;
 task main() {
-    float __item[] = {0, 0, 0};
-    item = __item;
-    item2 = 0;
-    item[sanitiseFromStart(ArrayLen(item), 0)] = 0;
-    item[sanitiseFromEnd(ArrayLen(item), -1 - 0)] = 0;
-    item[sanitiseFromStart(ArrayLen(item), 0)] = 0;
-    item[sanitiseFromEnd(ArrayLen(item), -1)] = 0;
-    item[sanitiseFromStart(ArrayLen(item), 0)] = 0;
-    item2 = item[sanitiseFromStart(ArrayLen(item), 0)];
-    item2 = item[sanitiseFromEnd(ArrayLen(item), -1 - 0)];
-    item2 = item[sanitiseFromStart(ArrayLen(item), 0)];
-    item2 = item[sanitiseFromEnd(ArrayLen(item), -1)];
-    item2 = item[sanitiseFromStart(ArrayLen(item), 0)];
+    float _____item[] = {0, 0, 0};
+    ___item = _____item;
+    ___item2 = 0;
+    ___item[sanitiseFromStart(ArrayLen(___item), 0)] = 0;
+    ___item[sanitiseFromEnd(ArrayLen(___item), -1 - 0)] = 0;
+    ___item[sanitiseFromStart(ArrayLen(___item), 0)] = 0;
+    ___item[sanitiseFromEnd(ArrayLen(___item), -1)] = 0;
+    ___item[sanitiseFromStart(ArrayLen(___item), 0)] = 0;
+    ___item2 = ___item[sanitiseFromStart(ArrayLen(___item), 0)];
+    ___item2 = ___item[sanitiseFromEnd(ArrayLen(___item), -1 - 0)];
+    ___item2 = ___item[sanitiseFromStart(ArrayLen(___item), 0)];
+    ___item2 = ___item[sanitiseFromEnd(ArrayLen(___item), -1)];
+    ___item2 = ___item[sanitiseFromStart(ArrayLen(___item), 0)];
 }
 

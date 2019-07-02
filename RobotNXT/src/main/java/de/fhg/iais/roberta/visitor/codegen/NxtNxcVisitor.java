@@ -225,7 +225,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                     this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
                     this.sb.append("__");
                 }
-                this.sb.append(var.getName());
+                this.sb.append("___" + var.getName());
                 this.sb.append(var.getTypeVar().isArray() ? "[]" : "");
                 this.sb.append(" = ");
                 var.getValue().visit(this);
@@ -235,7 +235,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                     //this.sb.append("for(int i = 0; i < ArrayLen(" + var.getName() + "); i++) {");
                     //incrIndentation();
                     //nlIndent();
-                    this.sb.append(var.getName()).append(" = __" + var.getName() + ";");
+                    this.sb.append("___" + var.getName()).append(" = _____" + var.getName() + ";");
                     //decrIndentation();
                     //nlIndent();
                     //this.sb.append("}");
@@ -248,7 +248,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
-        this.sb.append(var.getName());
+        this.sb.append("___" + var.getName());
         if ( var.getTypeVar().isArray() ) {
             this.sb.append("[");
             if ( var.getValue().getKind().hasName("EMPTY_EXPR") ) {
@@ -320,15 +320,16 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                 ((VarDeclaration<Void>) ((Binary<Void>) repeatStmt.getExpr()).getLeft()).visit(this);
                 this.sb.append(";");
                 nlIndent();
-                this.sb.append("for(int i = 0; i < ArrayLen(");
+                this.sb.append("for(int ___i = 0; ___i < ArrayLen(___");
                 this.sb.append(((Var<Void>) ((Binary<Void>) repeatStmt.getExpr()).getRight()).getValue());
-                this.sb.append("); ++i) {");
+                this.sb.append("); ++___i) {");
                 incrIndentation();
                 nlIndent();
+                this.sb.append("___");
                 this.sb.append(((VarDeclaration<Void>) ((Binary<Void>) repeatStmt.getExpr()).getLeft()).getName());
-                this.sb.append(" = ");
+                this.sb.append(" = ___");
                 this.sb.append(((Var<Void>) ((Binary<Void>) repeatStmt.getExpr()).getRight()).getValue());
-                this.sb.append("[i];");
+                this.sb.append("[___i];");
                 decrIndentation();
         }
         incrIndentation();
@@ -1391,12 +1392,12 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                 throw new DbcException("Invalid hardware component " + userDefinedName);
         }
     }
-    
+
     @Override
     public Void visitAssertStmt(AssertStmt<Void> assertStmt) {
         return null;
     }
-    
+
     @Override
     public Void visitDebugAction(DebugAction<Void> debugAction) {
         return null;

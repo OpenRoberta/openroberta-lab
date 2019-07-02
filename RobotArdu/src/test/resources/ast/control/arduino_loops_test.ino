@@ -8,13 +8,13 @@
 
 RobertaFunctions rob;
 
-std::list<double> item2;
+std::list<double> ___item2;
 int _led_L = 13;
 void setup()
 {
     Serial.begin(9600); 
     pinMode(_led_L, OUTPUT);
-    item2 = {0, 0, 0};
+    ___item2 = {0, 0, 0};
 }
 
 void loop()
@@ -23,15 +23,15 @@ void loop()
         break;
         delay(1);
     }
-    for (int k0 = 0; k0 < 10; k0 += 1) {
+    for (int ___k0 = 0; ___k0 < 10; ___k0 += 1) {
         break;
         delay(1);
     }
-    for (int i = 1; i < 10; i += 1) {
+    for (int ___i = 1; ___i < 10; ___i += 1) {
         break;
         delay(1);
     }
-    for ( double item : item2 ) {
+    for ( double ___item : ___item2 ) {
         break;
         delay(1);
     }

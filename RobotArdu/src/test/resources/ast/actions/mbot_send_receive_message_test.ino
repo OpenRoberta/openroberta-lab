@@ -13,28 +13,28 @@
 MeIR _meIr;
 RobertaFunctions rob;
 
-String header;
-String temp;
+String ___header;
+String ___temp;
 
 void setup()
 {
     Serial.begin(9600); 
-    header = "my_message: ";
-    temp = "";
+    ___header = "my_message: ";
+    ___temp = "";
 }
 
 void loop()
 {
-    for (int i = 1; i < 10; i += 1) {
-        _meIr.sendString(header);
-        temp += String(i);
+    for (int ___i = 1; ___i < 10; ___i += 1) {
+        _meIr.sendString(___header);
+        ___temp += String(___i);
         _meIr.sendString("number is: ");
-        _meIr.sendString(temp);
+        _meIr.sendString(___temp);
         delay(1);
     }
-    for (int j = 1; j < 10; j += 1) {
-        temp = _meIr.getString();
-        Serial.println(temp);
+    for (int ___j = 1; ___j < 10; ___j += 1) {
+        ___temp = _meIr.getString();
+        Serial.println(___temp);
         delay(1);
     }
 }

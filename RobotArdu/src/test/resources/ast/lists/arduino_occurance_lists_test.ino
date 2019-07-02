@@ -8,22 +8,22 @@
 
 RobertaFunctions rob;
 
-std::list<String> item;
-double item2;
-bool item3;
+std::list<String> ___item;
+double ___item2;
+bool ___item3;
 int _led_L = 13;
 void setup()
 {
     Serial.begin(9600); 
     pinMode(_led_L, OUTPUT);
-    item = {"b", "v", "b"};
-    item2 = _getFirstOccuranceOfElement(item, String("v"));
-    item3 = false;
+    ___item = {"b", "v", "b"};
+    ___item2 = _getFirstOccuranceOfElement(___item, String("v"));
+    ___item3 = false;
 }
 
 void loop()
 {
-    item2 = _getLastOccuranceOfElement(item, String("v"));
-    item2 = null;
-    item3 = (item.size() == 0);
+    ___item2 = _getLastOccuranceOfElement(___item, String("v"));
+    ___item2 = null;
+    ___item3 = (___item.size() == 0);
 }

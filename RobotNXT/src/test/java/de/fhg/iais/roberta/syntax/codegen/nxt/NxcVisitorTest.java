@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
 
 public class NxcVisitorTest {
@@ -80,7 +79,7 @@ public class NxcVisitorTest {
                 + IMPORTS_CONSTANTS
                 + "task main() {"
 
-                + "        for ( int k0 = 0; k0 < 10; k0+=1 ) {\n"
+                + "        for ( int ___k0 = 0; ___k0 < 10; ___k0+=1 ) {\n"
                 + "           TextOut(0,(MAXLINES - 3) * MAXLINES,\"Hallo\");"
                 + "        }\n"
                 + SUFFIX
@@ -111,7 +110,7 @@ public class NxcVisitorTest {
                 + "        }\n"
                 + "        playFile(1);\n"
                 + "        setVolume(50);\n"
-                + "        for ( float i = 1; i < 10; i += 1 ) {\n\n"
+                + "        for ( float ___i = 1; ___i < 10; ___i += 1 ) {\n\n"
                 + "        RotateMotor(OUT_B,30,360.0*1);"
                 + "        }\n"
                 + SUFFIX
@@ -320,15 +319,15 @@ public class NxcVisitorTest {
         final String a =
             "" //
                 + IMPORTS_CONSTANTS
-                + "     void test(bool x);"
+                + "     void test(bool ___x);"
                 + "task main() {"
                 + "    SetSensor(S3, SENSOR_COLORFULL);\n"
 
                 + "        test(true);"
 
                 + "}\n"
-                + "     void test(bool x) {\n"
-                + "        if (x) return;"
+                + "     void test(bool ___x) {\n"
+                + "        if (___x) return;"
                 + "SetSensorColorGreen(3);"
                 + "    }";
 
@@ -341,23 +340,23 @@ public class NxcVisitorTest {
         final String a =
             "" //
                 + IMPORTS_CONSTANTS
-                + "     void test1(float x, float x2);"
+                + "     void test1(float ___x, float ___x2);"
                 + "    void test2();"
-                + "float variablenName;\n"
-                + "bool variablenName2;\n"
+                + "float ___variablenName;\n"
+                + "bool ___variablenName2;\n"
                 + "task main() {"
-                + "variablenName=0;\n"
-                + "variablenName2=true;\n"
+                + "___variablenName=0;\n"
+                + "___variablenName2=true;\n"
                 + "    SetSensor(S3, SENSOR_COLORFULL);\n"
                 + "        test1(0, 0);"
                 + "        test2();"
 
                 + "}\n"
-                + "     void test1(float x, float x2) {\n"
-                + "        TextOut(x,(MAXLINES - x2) * MAXLINES,\"Hallo\");\n"
+                + "     void test1(float ___x, float ___x2) {\n"
+                + "        TextOut(___x,(MAXLINES - ___x2) * MAXLINES,\"Hallo\");\n"
                 + "    }\n\n"
                 + "    void test2() {\n"
-                + "        if (variablenName2) return;"
+                + "        if (___variablenName2) return;"
                 + "SetSensorColorNone(3);"
                 + "    }";
 
@@ -425,10 +424,10 @@ public class NxcVisitorTest {
         final String a =
             "" //
                 + IMPORTS_CONSTANTS
-                + "string message;\n"
+                + "string ___message;\n"
                 + " task main() {"
-                + "message=\"exit\";"
-                + "        if (message == \"exit\") {\n"
+                + "___message=\"exit\";"
+                + "        if (___message == \"exit\") {\n"
                 + "           TextOut(0,(MAXLINES - 0) * MAXLINES,\"done\");"
                 + "        }\n"
 
@@ -442,10 +441,10 @@ public class NxcVisitorTest {
         final String a =
             "" //
                 + IMPORTS_CONSTANTS
-                + "    float item;\n"
-                + "    string item2;\n"
+                + "    float ___item;\n"
+                + "    string ___item2;\n"
                 + "task main() {"
-                + "    item2=\"cc\";\n"
+                + "    ___item2=\"cc\";\n"
                 + "}\n";
 
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator11.xml");
@@ -556,7 +555,7 @@ public class NxcVisitorTest {
                 + "     Wait(15);"
                 + "   }"
                 + "}"
-                + "for (int i = 1; i < 10; i += 1) {"
+                + "for (int ___i = 1; ___i < 10; ___i += 1) {"
                 + "}"
                 + "}"
                 + "}";
@@ -568,10 +567,10 @@ public class NxcVisitorTest {
         String a =
             "" //
                 + IMPORTS_CONSTANTS
-                + "float item2[3];"
+                + "float ___item2[3];"
                 + "task main() {"
-                + "float __item2[] = {0, 0, 0};"
-                + "item2=__item2;"
+                + "float _____item2[] = {0, 0, 0};"
+                + "___item2=_____item2;"
                 + "    SetSensor(S1, SENSOR_TOUCH);\n"
                 + "while (true) {"
                 + "if (30 == 20) {"
@@ -580,16 +579,16 @@ public class NxcVisitorTest {
                 + "     continue;"
                 + "}"
                 + "}"
-                + "for (int i = 1; i < 10; i += 1) {"
+                + "for (int ___i = 1; ___i < 10; ___i += 1) {"
                 + "if (30 == 20) {"
                 + "     continue;"
                 + "} else if (30 == 12) {"
                 + "     break;"
                 + "}"
                 + "}"
-                + "float item;"
-                + "for (int i=0; i<ArrayLen(item2); ++i) {"
-                + "item = item2[i];"
+                + "float ___item;"
+                + "for (int ___i=0; ___i<ArrayLen(___item2); ++___i) {"
+                + "___item = ___item2[___i];"
                 + "if (30 == 20) {"
                 + "     continue;"
                 + "} else if (30 == 20) {"
@@ -603,7 +602,7 @@ public class NxcVisitorTest {
                 + "     break;"
                 + "}"
                 + "}"
-                + "for (int k0 = 0; k0 < 10; k0 += 1) {"
+                + "for (int ___k0 = 0; ___k0 < 10; ___k0 += 1) {"
                 + "if (30 == 20) {"
                 + "     break;"
                 + "} else if (30 == 20) {"
@@ -671,8 +670,8 @@ public class NxcVisitorTest {
                 + "continue_loop1:"
                 + "}"
                 + "break_loop1:"
-                + "for (int i = 1; i < 10; i += 1) {"
-                + "     if (i < 10) {"
+                + "for (int ___i = 1; ___i < 10; ___i += 1) {"
+                + "     if (___i < 10) {"
                 + "         continue;"
                 + "     }"
                 + "}"
@@ -700,8 +699,8 @@ public class NxcVisitorTest {
                 + "     }"
                 + "     Wait(15);"
                 + "   }"
-                + "for (int i = 1; i < 10; i += 1) {"
-                + "     if (i < 10) {"
+                + "for (int ___i = 1; ___i < 10; ___i += 1) {"
+                + "     if (___i < 10) {"
                 + "        continue;"
                 + "     }"
                 + "}"
@@ -722,8 +721,8 @@ public class NxcVisitorTest {
                 + "while (true) {"
                 + "   while (true) {"
                 + "     if (Sensor(S1) == true) {"
-                + "         for (int i = 1; i < 10; i += 1) {"
-                + "             if (i < 10) {"
+                + "         for (int ___i = 1; ___i < 10; ___i += 1) {"
+                + "             if (___i < 10) {"
                 + "                 continue;"
                 + "             }"
                 + "         }"
@@ -731,8 +730,8 @@ public class NxcVisitorTest {
                 + "         break;"
                 + "     }"
                 + "     if (Sensor(S1) == true) {"
-                + "         for (int j = 1; j < 10; j += 1) {"
-                + "             if (j < 10) {"
+                + "         for (int ___j = 1; ___j < 10; ___j += 1) {"
+                + "             if (___j < 10) {"
                 + "                 continue;"
                 + "             }"
                 + "         }"
@@ -759,8 +758,8 @@ public class NxcVisitorTest {
                 + "while (true) {"
                 + "   while (true) {"
                 + "     if (Sensor(S1) == true) {"
-                + "         for (int j = 1; j < 10; j += 1) {"
-                + "             if (j < 10) {"
+                + "         for (int ___j = 1; ___j < 10; ___j += 1) {"
+                + "             if (___j < 10) {"
                 + "                 continue;"
                 + "             }"
                 + "         }"
@@ -768,7 +767,7 @@ public class NxcVisitorTest {
                 + "         break;"
                 + "     }"
                 + "     if (Sensor(S1) == true) {"
-                + "         for (int i = 1; i < 10; i += 1) {"
+                + "         for (int ___i = 1; ___i < 10; ___i += 1) {"
                 + "         while (true) {"
                 + "             if (Sensor(S1) == true) {"
                 + "                 goto continue_loop3;"
@@ -805,8 +804,8 @@ public class NxcVisitorTest {
                 + "while (true) {"
                 + "   while (true) {"
                 + "     if (Sensor(S1) == true) {"
-                + "         for (int j = 1; j < 10; j += 1) {"
-                + "             if (j < 10) {"
+                + "         for (int ___j = 1; ___j < 10; ___j += 1) {"
+                + "             if (___j < 10) {"
                 + "                 continue;"
                 + "             }"
                 + "         }"
@@ -814,7 +813,7 @@ public class NxcVisitorTest {
                 + "         break;"
                 + "     }"
                 + "     if (Sensor(S1) == true) {"
-                + "         for (int i = 1; i < 10; i += 1) {"
+                + "         for (int ___i = 1; ___i < 10; ___i += 1) {"
                 + "         while (true) {"
                 + "             if (Sensor(S1) == true) {"
                 + "                 goto continue_loop3;"

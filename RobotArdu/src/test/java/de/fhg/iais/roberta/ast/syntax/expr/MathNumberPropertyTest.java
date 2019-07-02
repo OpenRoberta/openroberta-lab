@@ -16,7 +16,7 @@ public class MathNumberPropertyTest {
 
     @Test
     public void Test1() throws Exception {
-        final String a = "item=(fmod(0,2)==0);";
+        final String a = "___item=(fmod(0,2)==0);";
 
         this.h.assertCodeIsOk(a, "/syntax/math/math_number_property1.xml", false);
     }

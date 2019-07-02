@@ -6,8 +6,8 @@
 
 RobertaFunctions rob;
 
-double item;
-double item2;
+double ___item;
+double ___item2;
 int _input_S = 0;
 int _input_S2 = A0;
 void setup()
@@ -15,8 +15,8 @@ void setup()
     Serial.begin(9600); 
     pinMode(_input_S, INPUT);
     pinMode(_input_S2, INPUT);
-    item = analogRead(_input_S2);
-    item2 = digitalRead(_input_S);
+    ___item = analogRead(_input_S2);
+    ___item2 = digitalRead(_input_S);
 }
 
 void loop()

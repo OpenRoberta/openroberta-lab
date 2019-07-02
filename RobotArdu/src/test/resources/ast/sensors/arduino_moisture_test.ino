@@ -6,12 +6,12 @@
 
 RobertaFunctions rob;
 
-double item;
+double ___item;
 int _moisturePin_M = A0;
 void setup()
 {
     Serial.begin(9600); 
-    item = analogRead(_moisturePin_M)/10.24;
+    ___item = analogRead(_moisturePin_M)/10.24;
 }
 
 void loop()

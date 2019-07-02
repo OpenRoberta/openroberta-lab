@@ -7,8 +7,8 @@
 
 RobertaFunctions rob;
 
-double item;
-double item2;
+double ___item;
+double ___item2;
 #define DHTPINH 2
 #define DHTTYPE DHT11
 DHT _dht_H(DHTPINH, DHTTYPE);
@@ -16,8 +16,8 @@ void setup()
 {
     Serial.begin(9600); 
     _dht_H.begin();
-    item = _dht_H.readHumidity();
-    item2 = _dht_H.readTemperature();
+    ___item = _dht_H.readHumidity();
+    ___item2 = _dht_H.readTemperature();
 }
 
 void loop()

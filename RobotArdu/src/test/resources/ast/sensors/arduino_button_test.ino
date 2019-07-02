@@ -6,13 +6,13 @@
 
 RobertaFunctions rob;
 
-bool item;
+bool ___item;
 int _taster_B = 2;
 void setup()
 {
     Serial.begin(9600); 
     pinMode(_taster_B, INPUT);
-    item = digitalRead(_taster_B);
+    ___item = digitalRead(_taster_B);
 }
 
 void loop()

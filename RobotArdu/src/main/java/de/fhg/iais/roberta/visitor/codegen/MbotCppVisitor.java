@@ -120,7 +120,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
         this.sb.append("_meRgbLed.setColor(");
         this.sb.append(lightAction.getPort());
         if ( lightAction.getRgbLedColor().getClass().equals(Var.class) ) {
-            String tempVarName = ((Var<Void>) lightAction.getRgbLedColor()).getValue();
+            String tempVarName = "___" + ((Var<Void>) lightAction.getRgbLedColor()).getValue();
             this.sb.append(", ");
             this.sb.append("RCHANNEL(");
             this.sb.append(tempVarName);
@@ -390,7 +390,6 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
         if ( !mainTask.getVariables().toString().equals("") ) {
             nlIndent();
         }
-        ;
         nlIndent();
         //generateConfigurationVariables();
         if ( this.isTimerSensorUsed ) {
@@ -577,8 +576,13 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
                     break;
                 case SC.DIFFERENTIAL_DRIVE:
                     nlIndent();
-                    this.sb.append(
-                        "MeDrive _meDrive(M" + this.configuration.getFirstMotorPort(SC.LEFT) + ", M" + this.configuration.getFirstMotorPort(SC.RIGHT) + ");");
+                    this.sb
+                        .append(
+                            "MeDrive _meDrive(M"
+                                + this.configuration.getFirstMotorPort(SC.LEFT)
+                                + ", M"
+                                + this.configuration.getFirstMotorPort(SC.RIGHT)
+                                + ");");
                     break;
                 case SC.LED_MATRIX:
                     nlIndent();

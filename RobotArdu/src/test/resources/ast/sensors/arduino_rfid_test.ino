@@ -8,8 +8,8 @@
 
 RobertaFunctions rob;
 
-String item;
-bool item2;
+String ___item;
+bool ___item2;
 #define SS_PIN_R 10
 #define RST_PIN_R 9
 MFRC522 _mfrc522_R(SS_PIN_R, RST_PIN_R);
@@ -34,8 +34,8 @@ void setup()
     Serial.begin(9600); 
     SPI.begin();
     _mfrc522_R.PCD_Init();
-    item = _readRFIDData();
-    item2 = _mfrc522_R.PICC_IsNewCardPresent();
+    ___item = _readRFIDData();
+    ___item2 = _mfrc522_R.PICC_IsNewCardPresent();
 }
 
 void loop()

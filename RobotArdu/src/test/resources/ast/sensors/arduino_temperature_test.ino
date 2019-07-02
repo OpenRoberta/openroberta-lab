@@ -6,12 +6,12 @@
 
 RobertaFunctions rob;
 
-double item;
+double ___item;
 int _TMP36_T = A0;
 void setup()
 {
     Serial.begin(9600); 
-    item = map(analogRead(_TMP36_T), 0, 410, -50, 150);
+    ___item = map(analogRead(_TMP36_T), 0, 410, -50, 150);
 }
 
 void loop()

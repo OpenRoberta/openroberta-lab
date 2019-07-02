@@ -8,26 +8,26 @@
 
 RobertaFunctions rob;
 
-std::list<double> item;
-std::list<double> item2;
+std::list<double> ___item;
+std::list<double> ___item2;
 int _led_L = 13;
 void setup()
 {
     Serial.begin(9600); 
     pinMode(_led_L, OUTPUT);
-    item = {0, 0, 0};
-    item2 = {0, 0, 0};
+    ___item = {0, 0, 0};
+    ___item2 = {0, 0, 0};
 }
 
 void loop()
 {
-    item2 = _getSubList(item, 0, 0);
-    item2 = _getSubList(item, 0, item.size() - 1 - 0);
-    item2 = _getSubList(item, 0, item.size() - 1);
-    item2 = _getSubList(item, item.size() - 1 - 0, 0);
-    item2 = _getSubList(item, item.size() - 1 - 0, item.size() - 1 - 0);
-    item2 = _getSubList(item, item.size() - 1 - 0, item.size() - 1);
-    item2 = _getSubList(item, 0, 0);
-    item2 = _getSubList(item, 0, item.size() - 1 - 0);
-    item2 = _getSubList(item, 0, item.size() - 1);
+    ___item2 = _getSubList(___item, 0, 0);
+    ___item2 = _getSubList(___item, 0, ___item.size() - 1 - 0);
+    ___item2 = _getSubList(___item, 0, ___item.size() - 1);
+    ___item2 = _getSubList(___item, ___item.size() - 1 - 0, 0);
+    ___item2 = _getSubList(___item, ___item.size() - 1 - 0, ___item.size() - 1 - 0);
+    ___item2 = _getSubList(___item, ___item.size() - 1 - 0, ___item.size() - 1);
+    ___item2 = _getSubList(___item, 0, 0);
+    ___item2 = _getSubList(___item, 0, ___item.size() - 1 - 0);
+    ___item2 = _getSubList(___item, 0, ___item.size() - 1);
 }

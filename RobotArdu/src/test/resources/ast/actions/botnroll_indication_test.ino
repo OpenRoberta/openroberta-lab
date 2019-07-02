@@ -17,10 +17,10 @@ BnrRoberta bnr(one, brm);
 byte colorsLeft[3]={0,0,0}; 
 byte colorsRight[3]={0,0,0};
     
-double item;
-bool item2;
-String item3;
-unsigned int item4;
+double ___item;
+bool ___item2;
+String ___item3;
+unsigned int ___item4;
 
 void setup()
 {
@@ -32,20 +32,20 @@ void setup()
     one.stop();
     bnr.setOne(one);
     bnr.setBrm(brm);
-    item = 0;
-    item2 = true;
-    item3 = "";
-    item4 = RGB(0xFF, 0xFF, 0xFF);
+    ___item = 0;
+    ___item2 = true;
+    ___item3 = "";
+    ___item4 = RGB(0xFF, 0xFF, 0xFF);
     
 }
 
 void loop()
 {
     one.lcd1("Hallo");
-    one.lcd1(item);
-    one.lcd1(bnr.boolToString(item2));
-    one.lcd1(item3.c_str());
-    one.lcd1(item4);
+    one.lcd1(___item);
+    one.lcd1(bnr.boolToString(___item2));
+    one.lcd1(___item3.c_str());
+    one.lcd1(___item4);
     one.lcd1(bnr.boolToString(true));
     one.lcd1(0);
     one.lcd1(RGB(0xFF, 0xFF, 0xFF));
