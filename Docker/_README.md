@@ -189,7 +189,7 @@ The main commands of the script can be seen if you run `$SCRIPT_DIR/run.sh` with
 * enable autodeploy (see below).
 * add init functionality for server (re-)boots (see below).
 
-## Automatic deploy, database backup, removing temporary files and init scripts
+## Automatic deploy, database backup, removing temporary files
 
 The shell script `$SCRIPT_DIR/run.sh` has commands, that are used to administrate the framework.
  
@@ -216,7 +216,9 @@ The shell script `$SCRIPT_DIR/run.sh` has commands, that are used to administrat
 20 2 * * * bash <SCRIPT_DIR>/run.sh -q admin <server-name> cleanup-temp-user-dirs >><BASE_DIR>/logs/cronlog.txt
 ```
 
-* `start-all` and `stop-all`: usually called from the configuration file `openrobertalab.sh` found in `/etc/init.d`. A typical script is:
+## Init scripts
+
+* `start-all` and `stop-all`: usually called from the configuration file `openrobertalab` found in `/etc/init.d`. A typical script is:
 
 ```bash
 #!/bin/sh
@@ -236,31 +238,65 @@ BASE_DIR=<BASE_DIR>
 SCRIPTS=$BASE_DIR/scripts
 export SYSTEMCALL=true
 case "$1" in
-    start)   bash $SCRIPTS/run.sh -q start-all                             >>$BASE_DIR/logs/init.txt ;;
-    stop)    bash $SCRIPTS/run.sh -q stop-all                              >>$BASE_DIR/logs/init.txt ;;
+    start)   bash $SCRIPTS/run.sh -q start-all                             >>$BASE_DIR/logs/init.txt
+             ;;
+    stop)    bash $SCRIPTS/run.sh -q stop-all                              >>$BASE_DIR/logs/init.txt
+             ;;
     restart) bash $SCRIPTS/run.sh -q stop-all                              >>$BASE_DIR/logs/init.txt
-             bash $SCRIPTS/run.sh -q start-all                             >>$BASE_DIR/logs/init.txt ;;
+             bash $SCRIPTS/run.sh -q start-all                             >>$BASE_DIR/logs/init.txt
+             ;;
     *)       echo "invalid command \"$1\". Usage: $0 {start|stop|restart}" >>$BASE_DIR/logs/init.txt
-             exit 12 ;;
+             exit 12
+             ;;
 esac
 ```
 
 If the variable `SYSTEMCALL` is set to true, it is assumed, that `run.sh` is called from a system service. All security
 questions, that are asked in interactive mode, are then answered with `y`.
 
-Assuming systemd, after putting `openrobertalab` into `/etc/init.d`, the service is added with the commands:
+After putting `openrobertalab` into `/etc/init.d`, the service is added with the commands:
 
 ```bash
 chmod ugo+x /etc/init.d/openrobertalab
 
-systemctl daemon-reload
 systemctl enable openrobertalab
-systemctl start openrobertalab
+systemctl start openrobertalab            # is the START really needed?
 
-systemctl status openrobertalab       # to see logging
-journalctl -u openrobertalab.service  # to see more logging
+systemctl daemon-reload                   # is the RELOAD really needed? reload all config files and (re-)start all services
+systemctl list-unit-files | grep enabled  # see all enabled services
+systemctl list-unit-files | grep running  # see all running services 
+
+systemctl status openrobertalab           # to see logging
+journalctl -u openrobertalab.service      # to see more logging
 ```
 
+## Saving the database backups from a server to another server
+
+This feature is needed to protect against data loss if a server crashes. As the database contains user data, the safety requirements for the machine to
+which the backups are copied, must be at least the safety requirements for the machine, that runs the database server. Ssh keys are used, thus a setup
+on both servers is needed. The two servers affected are called "SRC_S" and "TGT_S".
+
+* On the TGT_S the user `dbBackup` and the group `dbBackup` are created. The user is added to the group. The user's password has to be strong.
+* On the SRC_S the user `dbBackup` and the group `dbBackup` are created. The user is added to the group. The user's password has to be strong.
+* On the TGT_S the user `dbBackup` logs in and creates a ssh key using `ssh-keygen`. Using `ssh-copy-id` the public key is save on SRC_S for user `dbBackup`.
+* On the SRC_S with `chgrp` the directory `$BASE_DIR/db/dbAdmin/dbBackup/` is made accessible by group `dbBackup` and with `chmod` the directory
+  is made read-accessible for the group
+
+How does it work?
+
+* On SRC_S (for instance every day at 2:00 AM started by a cronjob) a database backup is generated. See the description above, how to achieve that.
+  The backup is readable by all members of group `dbBackup`, to which user `dbBackup` belongs.
+* On TGT_S (for instance every day at 3:00 AM started by a cronjob) the database backup is stored to protect us against data loss. This works, because
+  user `dbBackup` on TGT_S can use `scp` for user `dbBackup` on SRC_S because the ssh keys installed above allow that. The rights on SRC_S are restricted
+  to the rights of user `dbBackup` on SRC_S. Essentially this is the access to the backup directory.
+`The cronjob on TGT_S could look like (note, that the script runs as user `dbBackup`, and, that cron expects the command in one line).
+
+```bash
+0 3 * * * /usr/bin/sudo -u dbBackup <SCRIPT_DIR_ON_TGT_S>/run.sh -q backupSave
+          dbBackup@<SRC_S>:<BASE_DIR_ON_SRC_S>/db/dbAdmin/dbBackup/<db-name> db/dbAdmin/dbBackupSave
+          >><BASE_DIR>/logs/cronlog.txt 2>&1
+```
+
 ## Note about the -d command line arguments for the openrobertalab server container
 
 The global properties needed for the openrobertalab server are found in resource `/openroberta.properties`. At start time these parameter can be modified
