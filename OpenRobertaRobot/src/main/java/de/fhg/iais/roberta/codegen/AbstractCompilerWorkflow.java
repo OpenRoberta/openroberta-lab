@@ -1,11 +1,15 @@
 package de.fhg.iais.roberta.codegen;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.ProcessBuilder.Redirect;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.StringJoiner;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -24,6 +28,7 @@ public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
     protected final PluginProperties pluginProperties;
 
     protected Key workflowResult = Key.COMPILERWORKFLOW_SUCCESS;
+    protected String crosscompilerResponse = "";
     protected String generatedSourceCode = null;
 
     public AbstractCompilerWorkflow(PluginProperties pluginProperties) {
@@ -44,13 +49,52 @@ public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
     }
 
     @Override
-    public void setSourceCode(String sourceCode) {
+    public final void setSourceCode(String sourceCode) {
         this.generatedSourceCode = sourceCode;
     }
 
     @Override
-    public String getGeneratedSourceCode() {
+    public final String getGeneratedSourceCode() {
         return this.generatedSourceCode;
+    }
+
+    @Override
+    public final String getCrosscompilerResponse() {
+        return this.crosscompilerResponse;
+    }
+
+    /**
+     * run a crosscompiler in a process of its own
+     *
+     * @param executableWithParameters
+     * @return null if the call succeeds; a String with the error message(s) from the crosscompiler otherwise
+     */
+    protected final boolean runCrossCompiler(String[] executableWithParameters) {
+        int ecode = -1;
+        try {
+            ProcessBuilder procBuilder = new ProcessBuilder(executableWithParameters);
+            procBuilder.redirectErrorStream(true);
+            procBuilder.redirectInput(Redirect.INHERIT);
+            procBuilder.redirectOutput(Redirect.PIPE);
+            Process p = procBuilder.start();
+            final BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            StringJoiner sj = new StringJoiner(System.getProperty("line.separator"));
+            reader.lines().iterator().forEachRemaining(sj::add);
+            crosscompilerResponse = sj.toString();
+            ecode = p.waitFor();
+            p.destroy();
+        } catch ( Exception e ) {
+            crosscompilerResponse = "exception when calling the cross compiler";
+            LOG.error(crosscompilerResponse, e);
+            ecode = -1;
+        }
+        LOG.error("DEBUG INFO: " + crosscompilerResponse);
+        if ( ecode == 0 ) {
+            return true;
+        } else {
+            LOG.error("compilation of program failed with message: \n" + crosscompilerResponse);
+            return false;
+        }
     }
 
     protected final void storeGeneratedProgram(String token, String programName, String ext) {

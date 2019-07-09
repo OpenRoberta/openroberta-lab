@@ -111,4 +111,9 @@ public interface ICompilerWorkflow {
      * get the generated program source code.
      */
     String getGeneratedSourceCode();
+
+    /**
+     * get the response string from the crosscompiler. May be null if the compilation succeeded.
+     */
+    String getCrosscompilerResponse();
 }

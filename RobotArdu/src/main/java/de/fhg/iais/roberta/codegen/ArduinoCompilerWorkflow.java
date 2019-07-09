@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.codegen;
 
 import java.io.File;
-import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
@@ -89,7 +88,6 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
         final String compilerResourcesDir = this.pluginProperties.getCompilerResourceDir();
         final String tempDir = this.pluginProperties.getTempDir();
 
-        final StringBuilder sb = new StringBuilder();
         String scriptName = "";
         String os = "";
         if ( SystemUtils.IS_OS_LINUX ) {
@@ -120,40 +118,30 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
                 fqbnArg = "-fqbn=arduino:avr:nano:cpu=atmega328";
             }
 
-            final ProcessBuilder procBuilder =
-                new ProcessBuilder(
-                    new String[] {
-                        scriptName,
-                        "-hardware=" + compilerResourcesDir + "hardware/builtin",
-                        "-hardware=" + compilerResourcesDir + "hardware/additional",
-                        "-tools=" + compilerResourcesDir + "/" + os + "/tools-builder",
-                        "-libraries=" + compilerResourcesDir + "/libraries",
-                        fqbnArg,
-                        "-prefs=compiler.path=" + compilerBinDir,
-                        "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
-                        base.resolve(path).toAbsolutePath().normalize().toString() + "/source/" + mainFile + ".ino"
-                    });
+            String[] executableWithParameters =
+                new String[] {
+                    scriptName,
+                    "-hardware=" + compilerResourcesDir + "hardware/builtin",
+                    "-hardware=" + compilerResourcesDir + "hardware/additional",
+                    "-tools=" + compilerResourcesDir + "/" + os + "/tools-builder",
+                    "-libraries=" + compilerResourcesDir + "/libraries",
+                    fqbnArg,
+                    "-prefs=compiler.path=" + compilerBinDir,
+                    "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
+                    base.resolve(path).toAbsolutePath().normalize().toString() + "/source/" + mainFile + ".ino"
+                };
 
-            procBuilder.redirectInput(Redirect.INHERIT);
-            procBuilder.redirectOutput(Redirect.INHERIT);
-            procBuilder.redirectError(Redirect.INHERIT);
-            final Process p = procBuilder.start();
-            final int ecode = p.waitFor();
-            System.err.println("Exit code " + ecode);
-
-            if ( ecode != 0 ) {
+            boolean success = runCrossCompiler(executableWithParameters);
+            if ( success ) {
+                this.compiledHex = FileUtils.readFileToString(new File(path + "/target/" + mainFile + ".ino.hex"), "UTF-8");
+                final Base64.Encoder urec = Base64.getEncoder();
+                this.compiledHex = urec.encodeToString(this.compiledHex.getBytes());
+                return Key.COMPILERWORKFLOW_SUCCESS;
+            } else {
                 return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
             }
-            this.compiledHex = FileUtils.readFileToString(new File(path + "/target/" + mainFile + ".ino.hex"), "UTF-8");
-            final Base64.Encoder urec = Base64.getEncoder();
-            this.compiledHex = urec.encodeToString(this.compiledHex.getBytes());
-            return Key.COMPILERWORKFLOW_SUCCESS;
         } catch ( final Exception e ) {
-            if ( sb.length() > 0 ) {
-                LOG.error("build exception. Messages from the build script are:\n" + sb.toString(), e);
-            } else {
-                LOG.error("exception when preparing the build", e);
-            }
+            LOG.error("exception when preparing the build", e);
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         }
     }

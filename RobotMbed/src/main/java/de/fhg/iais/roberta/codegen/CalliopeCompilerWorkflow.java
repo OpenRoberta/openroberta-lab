@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.codegen;
 
 import java.io.File;
-import java.lang.ProcessBuilder.Redirect;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.EnumSet;
@@ -41,9 +41,9 @@ public class CalliopeCompilerWorkflow extends AbstractCompilerWorkflow {
         }
         try {
             this.generatedSourceCode = CalliopeCppVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true);
-            LOG.info("arduino c++ code generated");
+            LOG.info("Calliope c++ code generated");
         } catch ( Exception e ) {
-            LOG.error("arduino c++ code generation failed", e);
+            LOG.error("Calliope c++ code generation failed", e);
             this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
         }
     }
@@ -107,42 +107,29 @@ public class CalliopeCompilerWorkflow extends AbstractCompilerWorkflow {
         final String compilerResourcesDir = this.pluginProperties.getCompilerResourceDir();
         final String tempDir = this.pluginProperties.getTempDir();
 
-        final StringBuilder sb = new StringBuilder();
         String scriptName = compilerResourcesDir + "../compile." + (SystemUtils.IS_OS_WINDOWS ? "bat" : "sh");
         String bluetooth = radioUsed ? "" : "-b";
-        Path path = Paths.get(tempDir + token + "/" + mainFile);
-        Path base = Paths.get("");
+        Path pathToSrcFile = Paths.get(tempDir + token + "/" + mainFile);
 
         String[] executableWithParameters =
             new String[] {
                 scriptName,
                 compilerBinDir,
                 mainFile,
-                base.resolve(path).toAbsolutePath().normalize().toString() + "/",
+                Paths.get("").resolve(pathToSrcFile).toAbsolutePath().normalize().toString() + "/",
                 compilerResourcesDir,
                 bluetooth
             };
-        try {
-            ProcessBuilder procBuilder = new ProcessBuilder(executableWithParameters);
-
-            procBuilder.redirectInput(Redirect.INHERIT);
-            procBuilder.redirectOutput(Redirect.INHERIT);
-            procBuilder.redirectError(Redirect.INHERIT);
-            Process p = procBuilder.start();
-            int ecode = p.waitFor();
-            System.err.println("Exit code " + ecode);
-
-            if ( ecode != 0 ) {
+        boolean success = runCrossCompiler(executableWithParameters);
+        if ( success ) {
+            try {
+                this.compiledHex = FileUtils.readFileToString(new File(pathToSrcFile + "/target/" + mainFile + ".hex"), "UTF-8");
+                return Key.COMPILERWORKFLOW_SUCCESS;
+            } catch ( IOException e ) {
+                LOG.error("compilation of Calliope program successful, but reading the binary failed", e);
                 return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
             }
-            this.compiledHex = FileUtils.readFileToString(new File(path + "/target/" + mainFile + ".hex"), "UTF-8");
-            return Key.COMPILERWORKFLOW_SUCCESS;
-        } catch ( Exception e ) {
-            if ( sb.length() > 0 ) {
-                CalliopeCompilerWorkflow.LOG.error("build exception. Messages from the build script are:\n" + sb.toString(), e);
-            } else {
-                CalliopeCompilerWorkflow.LOG.error("exception when preparing the build", e);
-            }
+        } else {
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         }
     }

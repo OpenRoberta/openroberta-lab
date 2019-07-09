@@ -276,27 +276,30 @@ This feature is needed to protect against data loss if a server crashes. As the 
 which the backups are copied, must be at least the safety requirements for the machine, that runs the database server. Ssh keys are used, thus a setup
 on both servers is needed. The two servers affected are called "SRC_S" and "TGT_S".
 
-* On the TGT_S the user `dbBackup` and the group `dbBackup` are created. The user is added to the group. The user's password has to be strong.
-* On the SRC_S the user `dbBackup` and the group `dbBackup` are created. The user is added to the group. The user's password has to be strong.
-* On the TGT_S the user `dbBackup` logs in and creates a ssh key using `ssh-keygen`. Using `ssh-copy-id` the public key is save on SRC_S for user `dbBackup`.
-* On the SRC_S with `chgrp` the directory `$BASE_DIR/db/dbAdmin/dbBackup/` is made accessible by group `dbBackup` and with `chmod` the directory
-  is made read-accessible for the group
+* On the TGT_S: `adduser dbBackup --force-badname`. The user's password has to be strong.
+* On the TGT_S: `cd <BASE_DIR_ON_TGT_S>/db/dbAdmin; mkdir -p dbBackupSave/<db-name>; chgrp dbBackup dbBackupSave dbBackupSave/<db-name>; chmod -R g+rwx dbBackup`.
+* On the TGT_S: `su dbBackup; ssh-keygen -t rsa -b 4096`.
+* On the SRC_S: `adduser dbBackup --force-badname`. The user's password has to be strong.
+* On the SRC_S: `cd <BASE_DIR_ON_SRC_S>/db/dbAdmin; chgrp -R dbBackup dbBackup; chmod -R g+rwx dbBackup`
+* On the TGT_S: `ssh-copy-id -i /home/dbBackup/.ssh/id_rsa.pub dbBackup@<SRC_S>; ssh dbBackup@<SRC_S> # test whether successful or not`.
 
 How does it work?
 
 * On SRC_S (for instance every day at 2:00 AM started by a cronjob) a database backup is generated. See the description above, how to achieve that.
   The backup is readable by all members of group `dbBackup`, to which user `dbBackup` belongs.
-* On TGT_S (for instance every day at 3:00 AM started by a cronjob) the database backup is stored to protect us against data loss. This works, because
-  user `dbBackup` on TGT_S can use `scp` for user `dbBackup` on SRC_S because the ssh keys installed above allow that. The rights on SRC_S are restricted
+* On TGT_S (for instance every day at 3:00 AM started by a cronjob) the database backup is saved to protect us against data loss. This works, because
+  user `dbBackup` on TGT_S can use `scp` for user `dbBackup` on SRC_S and the ssh key installed above allows that. The rights on SRC_S are restricted
   to the rights of user `dbBackup` on SRC_S. Essentially this is the access to the backup directory.
-`The cronjob on TGT_S could look like (note, that the script runs as user `dbBackup`, and, that cron expects the command in one line).
+`
+The cronjob on TGT_S could look like (note, that the script runs as user `dbBackup`, and, that cron expects the command in one line).
 
 ```bash
 0 3 * * * /usr/bin/sudo -u dbBackup <SCRIPT_DIR_ON_TGT_S>/run.sh -q backupSave
-          dbBackup@<SRC_S>:<BASE_DIR_ON_SRC_S>/db/dbAdmin/dbBackup/<db-name> db/dbAdmin/dbBackupSave
+          dbBackup@<SRC_S>:<BASE_DIR_ON_SRC_S>/db/dbAdmin/dbBackup/<db-name> db/dbAdmin/dbBackupSave/<db-name>
           >><BASE_DIR>/logs/cronlog.txt 2>&1
 ```
-
+
+
 ## Note about the -d command line arguments for the openrobertalab server container
 
 The global properties needed for the openrobertalab server are found in resource `/openroberta.properties`. At start time these parameter can be modified
