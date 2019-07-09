@@ -202,6 +202,8 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
                 return "std::list<std::string>";
             case ARRAY_COLOUR:
                 return "std::list<Color>";
+            case CONNECTION:
+                return "BluetoothConnectionHandle";
             default:
                 return super.getLanguageVarTypeFromBlocklyType(type);
         }
@@ -1325,21 +1327,33 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReceiveAction) {
+        this.sb.append("NEPOReceiveStringFrom(");
+        bluetoothReceiveAction.getConnection().visit(this);
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
+        this.sb.append("NEPOConnectTo(");
+        bluetoothConnectAction.getAddress().visit(this);
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
+        this.sb.append("NEPOSendStringTo(");
+        bluetoothSendAction.getConnection().visit(this);
+        this.sb.append(", ");
+        bluetoothSendAction.getMsg().visit(this);
+        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
+        this.sb.append("NEPOWaitConnection()");
         return null;
     }
 
