@@ -36,6 +36,7 @@ body {
     width: 100%;
     font-family: 'Roboto', sans-serif;
     -webkit-transform: translate3d(0px, 0px, 0px);
+    overflow: hidden;
 }
 .pace {
     -webkit-pointer-events: none;
@@ -1757,11 +1758,11 @@ img.img-responsive {
 	padding: 16px;
 	background-color: #fff;
 	border: 1px solid #d8d8d8;
-	transition: bottom 1s ease-in-out;
+	transition: transform .25s ease-in-out;
 }
 
 #cookieDisclaimer.accepted {
-	bottom: -100%;
+	transform: translate(0, 100%);
 }
 
 
