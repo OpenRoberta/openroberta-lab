@@ -58,6 +58,7 @@ import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
+import de.fhg.iais.roberta.visitor.validate.AbstractConfigurationValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
@@ -73,7 +74,7 @@ public class ClientProgram {
     public ClientProgram(SessionFactoryWrapper sessionFactoryWrapper, RobotCommunicator brickCommunicator, ServerProperties serverProperties) {
         this.sessionFactoryWrapper = sessionFactoryWrapper;
         this.brickCommunicator = brickCommunicator;
-        this.isPublicServer = serverProperties.getBooleanProperty("server.public");
+        isPublicServer = serverProperties.getBooleanProperty("server.public");
     }
 
     @POST
@@ -92,7 +93,7 @@ public class ClientProgram {
                 ? httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup()
                 : httpSessionState.getRobotName();
         final JSONObject response = new JSONObject();
-        final DbSession dbSession = this.sessionFactoryWrapper.getSession();
+        final DbSession dbSession = sessionFactoryWrapper.getSession();
         try {
             final JSONObject request = fullRequest.getJSONObject("data");
             final String cmd = request.getString("cmd");
@@ -156,14 +157,17 @@ public class ClientProgram {
                         forMessages.setError(transformer.getErrorMessage());
                     } else {
                         if ( !SSID.equals("null") || !password.equals("null") ) {
-                            compilerWorkflow.generateSourceCode(token, programName, transformer, SSID, password, language);
                             final AbstractProgramValidatorVisitor programChecker =
                                 robotFactory.getRobotProgramCheckVisitor(transformer.getRobotConfiguration(), SSID, password);
                             programConfigurationCompatibilityCheck(response, transformer, programChecker);
+                            compilerWorkflow.generateSourceCode(token, programName, transformer, SSID, password, language);
                         } else {
                             final AbstractProgramValidatorVisitor programChecker =
                                 robotFactory.getRobotProgramCheckVisitor(transformer.getRobotConfiguration());
+                            final AbstractConfigurationValidatorVisitor configurationChecker =
+                                robotFactory.getRobotConfigurationCheckVisitor(transformer.getRobotConfiguration());
                             programConfigurationCompatibilityCheck(response, transformer, programChecker);
+                            configurationChecker.checkConfiguration();
                             compilerWorkflow.generateSourceCode(token, programName, transformer, language);
                         }
                         String sourceCode = compilerWorkflow.getGeneratedSourceCode();
@@ -243,7 +247,7 @@ public class ClientProgram {
                         Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN, null);
                     } else {
                         final User user = up.getUser(userId);
-                        if ( !this.isPublicServer || user != null && user.isActivated() ) {
+                        if ( !isPublicServer || user != null && user.isActivated() ) {
                             final String programName = request.getString("programName");
                             final String userToShareName = request.getString("userToShare");
                             final String right = request.getString("right");
@@ -265,7 +269,7 @@ public class ClientProgram {
                         // generating a unique name for the program owned by the gallery.
                         final User user = up.getUser(userId);
                         final String userAccount = user.getAccount();
-                        if ( !this.isPublicServer || user != null && user.isActivated() ) {
+                        if ( !isPublicServer || user != null && user.isActivated() ) {
                             // get the program from the origin user to share with the gallery
                             final Program program = pp.getProgram(programName, userAccount, robot, userAccount);
 
@@ -437,8 +441,8 @@ public class ClientProgram {
                             compilerWorkflow.generateSourceAndCompile(token, programName, programAndConfigTransformer, language);
                             messageKey = compilerWorkflow.getWorkflowResult();
                             if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS && token != null && !token.equals(ClientAdmin.NO_CONNECT) ) {
-                                this.brickCommunicator.setSubtype(httpSessionState.getRobotName());
-                                wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
+                                brickCommunicator.setSubtype(httpSessionState.getRobotName());
+                                wasRobotWaiting = brickCommunicator.theRunButtonWasPressed(token, programName);
                                 Statistics.info("ProgramRun", "LoggedIn", String.valueOf(httpSessionState.isUserLoggedIn()));
                             } else {
                                 if ( messageKey != null ) {
@@ -613,7 +617,7 @@ public class ClientProgram {
                 dbSession.close();
             }
         }
-        Util.addFrontendInfo(response, httpSessionState, this.brickCommunicator);
+        Util.addFrontendInfo(response, httpSessionState, brickCommunicator);
         MDC.clear();
         return Response.ok(response).build();
     }

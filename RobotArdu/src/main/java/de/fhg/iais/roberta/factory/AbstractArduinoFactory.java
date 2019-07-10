@@ -19,7 +19,7 @@ public abstract class AbstractArduinoFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return new ArduinoCompilerWorkflow(this.pluginProperties);
+        return new ArduinoCompilerWorkflow(pluginProperties);
     }
 
     @Override

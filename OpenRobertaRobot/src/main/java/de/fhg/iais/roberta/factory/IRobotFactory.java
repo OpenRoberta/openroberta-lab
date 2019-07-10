@@ -6,6 +6,7 @@ import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.PluginProperties;
+import de.fhg.iais.roberta.visitor.validate.AbstractConfigurationValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
@@ -69,6 +70,10 @@ public interface IRobotFactory {
     Boolean hasConfiguration();
 
     AbstractSimValidatorVisitor getSimProgramCheckVisitor(Configuration brickConfiguration);
+
+    default AbstractConfigurationValidatorVisitor getRobotConfigurationCheckVisitor(Configuration configuration) {
+        return null;
+    }
 
     AbstractProgramValidatorVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration);
 
