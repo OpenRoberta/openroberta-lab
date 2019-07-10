@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.StringJoiner;
 
 import org.apache.commons.io.FileUtils;
@@ -115,6 +116,18 @@ public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
         } catch ( Exception e ) {
             LOG.error("Storing the generated program " + programName + " into directory " + token + " failed", e);
             this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
+        }
+    }
+
+    protected final String getBase64Encoded(String path) {
+        try {
+            String compiledHex = FileUtils.readFileToString(new File(path), "UTF-8");
+            final Base64.Encoder urec = Base64.getEncoder();
+            compiledHex = urec.encodeToString(compiledHex.getBytes());
+            return compiledHex;
+        } catch ( IOException e ) {
+            LOG.error("Exception when reading the compiled code from " + path, e);
+            return null;
         }
     }
 }

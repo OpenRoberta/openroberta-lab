@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.codegen;
 
 import java.io.File;
-import java.lang.ProcessBuilder.Redirect;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
@@ -82,8 +82,6 @@ public class Bob3CompilerWorkflow extends AbstractCompilerWorkflow {
         final String compilerResourcesDir = this.pluginProperties.getCompilerResourceDir();
         final String tempDir = this.pluginProperties.getTempDir();
 
-        final StringBuilder sb = new StringBuilder();
-
         String scriptName = "";
         String os = "";
         if ( SystemUtils.IS_OS_LINUX ) {
@@ -105,43 +103,32 @@ public class Bob3CompilerWorkflow extends AbstractCompilerWorkflow {
         Path path = Paths.get(tempDir + token + "/" + mainFile);
         Path base = Paths.get("");
 
-        try {
-            ProcessBuilder procBuilder =
-                new ProcessBuilder(
-                    new String[] {
-                        scriptName,
-                        "-hardware=" + compilerResourcesDir + "hardware/builtin",
-                        "-hardware=" + compilerResourcesDir + "hardware/additional",
-                        "-tools=" + compilerResourcesDir + "/" + os + "/tools-builder",
-                        "-libraries=" + compilerResourcesDir + "/libraries",
-                        "-fqbn=nicai:avr:bob3",
-                        "-prefs=compiler.path=" + compilerBinDir,
-                        "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
-                        //                        "-verbose",
-                        base.resolve(path).toAbsolutePath().normalize().toString() + "/source/" + mainFile + ".ino"
-                    });
+        String[] executableWithParameters =
+            new String[] {
+                scriptName,
+                "-hardware=" + compilerResourcesDir + "hardware/builtin",
+                "-hardware=" + compilerResourcesDir + "hardware/additional",
+                "-tools=" + compilerResourcesDir + "/" + os + "/tools-builder",
+                "-libraries=" + compilerResourcesDir + "/libraries",
+                "-fqbn=nicai:avr:bob3",
+                "-prefs=compiler.path=" + compilerBinDir,
+                "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
+                //                        "-verbose",
+                base.resolve(path).toAbsolutePath().normalize().toString() + "/source/" + mainFile + ".ino"
+            };
 
-            procBuilder.redirectInput(Redirect.INHERIT);
-            procBuilder.redirectOutput(Redirect.INHERIT);
-            procBuilder.redirectError(Redirect.INHERIT);
-            Process p = procBuilder.start();
-            int ecode = p.waitFor();
-
-            if ( ecode != 0 ) {
-                LOG.error("Exit code " + ecode);
+        boolean success = runCrossCompiler(executableWithParameters);
+        if ( success ) {
+            try {
+                this.compiledHex = FileUtils.readFileToString(new File(path + "/target/" + mainFile + ".ino.hex"), "UTF-8");
+                Base64.Encoder urec = Base64.getEncoder();
+                this.compiledHex = urec.encodeToString(this.compiledHex.getBytes());
+                return Key.COMPILERWORKFLOW_SUCCESS;
+            } catch ( IOException e ) {
+                LOG.error("Exception when reading the compiled code", e);
                 return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
             }
-
-            this.compiledHex = FileUtils.readFileToString(new File(path + "/target/" + mainFile + ".ino.hex"), "UTF-8");
-            Base64.Encoder urec = Base64.getEncoder();
-            this.compiledHex = urec.encodeToString(this.compiledHex.getBytes());
-            return Key.COMPILERWORKFLOW_SUCCESS;
-        } catch ( Exception e ) {
-            if ( sb.length() > 0 ) {
-                Bob3CompilerWorkflow.LOG.error("build exception. Messages from the build script are:\n" + sb.toString(), e);
-            } else {
-                Bob3CompilerWorkflow.LOG.error("exception when preparing the build", e);
-            }
+        } else {
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         }
     }
