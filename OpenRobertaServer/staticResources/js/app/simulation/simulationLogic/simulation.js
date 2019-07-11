@@ -97,6 +97,8 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
             currentBackground = num;
         }
         var debug = robots[0].debug;
+        $("#simRobotContent").empty();
+        $("#simRobotModal").modal("hide");
         var moduleName = 'simulation.robot.' + simRobotType;
         require([moduleName], function (ROBOT) {
             createRobots(ROBOT, numRobots);
@@ -264,7 +266,8 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
             currentBackground = 2;
         }
         if (currentBackground > 1) {
-            if (isIE() || isEdge()) { // TODO IE and Edge: Input event not firing for file type of input
+            if (isIE() || isEdge()) { // TODO IE and Edge: Input event not
+										// firing for file type of input
                 $('.dropdown.sim, .simScene').show();
                 $('#simImport').hide();
             } else {
@@ -392,7 +395,7 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
                         addMouseEvents();
                     }, 205);
                     setTimeout(function () {
-                        //delete robot.button.Reset;
+                        // delete robot.button.Reset;
                         setPause(false);
                         for (var i = 0; i < robots.length; i++) {
                             robots[i].pause = false;              
@@ -1009,10 +1012,10 @@ define(['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.ma
     }
 });
 
-//http://paulirish.com/2011/requestanimationframe-for-smart-animating/
-//http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
-//requestAnimationFrame polyfill by Erik Möller
-//fixes from Paul Irish and Tino Zijdel
+// http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+// http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
+// requestAnimationFrame polyfill by Erik Möller
+// fixes from Paul Irish and Tino Zijdel
 (function () {
     var lastTime = 0;
     var vendors = ['ms', 'moz', 'webkit', 'o'];
