@@ -51,20 +51,23 @@ public class Util {
     }
 
     public static JSONObject addSuccessInfo(JSONObject response, Key key) throws JSONException {
-        Util.addResultInfo(response, "ok", key);
+        Util.addResultInfo(response, "ok", key, null);
         return response;
     }
 
-    public static JSONObject addErrorInfo(JSONObject response, Key key) throws JSONException {
-        Util.addResultInfo(response, "error", key);
+    public static JSONObject addErrorInfo(JSONObject response, Key key, String compilerResponse) throws JSONException {
+        Util.addResultInfo(response, "error", key, compilerResponse);
         return response;
     }
 
-    private static void addResultInfo(JSONObject response, String rc, Key key) throws JSONException {
+    private static void addResultInfo(JSONObject response, String restCallResultOkOrError, Key key, String compilerResponse) throws JSONException {
         String realKey = key.getKey();
-        response.put("rc", rc);
+        response.put("rc", restCallResultOkOrError);
         response.put("message", realKey);
         response.put("cause", realKey);
+        if ( compilerResponse != null ) {
+            response.put("compilerResponse", compilerResponse);
+        }
     }
 
     /**

@@ -141,16 +141,16 @@ public class ClientAdmin {
                             LOG.info("success: token " + token + " is registered in the session");
                             break;
                         case TOKEN_SET_ERROR_WRONG_ROBOTTYPE:
-                            Util.addErrorInfo(response, Key.TOKEN_SET_ERROR_WRONG_ROBOTTYPE);
+                            Util.addErrorInfo(response, Key.TOKEN_SET_ERROR_WRONG_ROBOTTYPE, null);
                             LOG.info("error: token " + token + " not registered in the session, wrong robot type");
                             break;
                         case TOKEN_SET_ERROR_NO_ROBOT_WAITING:
-                            Util.addErrorInfo(response, Key.TOKEN_SET_ERROR_NO_ROBOT_WAITING);
+                            Util.addErrorInfo(response, Key.TOKEN_SET_ERROR_NO_ROBOT_WAITING, null);
                             LOG.info("error: token " + token + " not registered in the session");
                             break;
                         default:
                             LOG.error("invalid response for token agreement: " + tokenAgreement);
-                            Util.addErrorInfo(response, Key.SERVER_ERROR);
+                            Util.addErrorInfo(response, Key.SERVER_ERROR, null);
                             break;
                     }
                 }
@@ -164,10 +164,10 @@ public class ClientAdmin {
                     if ( isPossible ) {
                         Util.addSuccessInfo(response, Key.ROBOT_FIRMWAREUPDATE_POSSIBLE);
                     } else {
-                        Util.addErrorInfo(response, Key.ROBOT_FIRMWAREUPDATE_IMPOSSIBLE);
+                        Util.addErrorInfo(response, Key.ROBOT_FIRMWAREUPDATE_IMPOSSIBLE, null);
                     }
                 } else {
-                    Util.addErrorInfo(response, Key.ROBOT_NOT_CONNECTED);
+                    Util.addErrorInfo(response, Key.ROBOT_NOT_CONNECTED, null);
                 }
             } else if ( cmd.equals("setRobot") ) {
                 String robot = request.getString("robot");
@@ -215,18 +215,18 @@ public class ClientAdmin {
                     }
                 } else {
                     LOG.error("Invalid command: " + cmd + " setting robot name to " + robot);
-                    Util.addErrorInfo(response, Key.ROBOT_DOES_NOT_EXIST);
+                    Util.addErrorInfo(response, Key.ROBOT_DOES_NOT_EXIST, null);
                 }
             } else {
                 LOG.error("Invalid command: " + cmd);
-                Util.addErrorInfo(response, Key.COMMAND_INVALID);
+                Util.addErrorInfo(response, Key.COMMAND_INVALID, null);
             }
             dbSession.commit();
         } catch ( Exception e ) {
             dbSession.rollback();
             String errorTicketId = Util1.getErrorTicketId();
             LOG.error("Exception. Error ticket: " + errorTicketId, e);
-            Util.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
+            Util.addErrorInfo(response, Key.SERVER_ERROR, null).append("parameters", errorTicketId);
         } finally {
             if ( dbSession != null ) {
                 dbSession.close();

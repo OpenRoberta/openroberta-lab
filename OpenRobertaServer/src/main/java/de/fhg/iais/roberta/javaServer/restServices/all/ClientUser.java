@@ -216,7 +216,7 @@ public class ClientUser {
                     pendingConfirmationProcessor.deleteEmailConfirmation(userActivationLink);
                     Util.addResultInfo(response, up);
                 } else {
-                    Util.addErrorInfo(response, Key.USER_ACTIVATION_INVALID_URL);
+                    Util.addErrorInfo(response, Key.USER_ACTIVATION_INVALID_URL, null);
                 }
             } else if ( cmd.equals("resendActivation") ) {
                 String account = request.getString("accountName");
@@ -253,14 +253,14 @@ public class ClientUser {
                 response.put("rc", "ok");
             } else {
                 ClientUser.LOG.error("Invalid command: " + cmd);
-                Util.addErrorInfo(response, Key.COMMAND_INVALID);
+                Util.addErrorInfo(response, Key.COMMAND_INVALID, null);
             }
             dbSession.commit();
         } catch ( Exception e ) {
             dbSession.rollback();
             String errorTicketId = Util1.getErrorTicketId();
             ClientUser.LOG.error("Exception. Error ticket: " + errorTicketId, e);
-            Util.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
+            Util.addErrorInfo(response, Key.SERVER_ERROR, null).append("parameters", errorTicketId);
         } finally {
             if ( dbSession != null ) {
                 dbSession.close();

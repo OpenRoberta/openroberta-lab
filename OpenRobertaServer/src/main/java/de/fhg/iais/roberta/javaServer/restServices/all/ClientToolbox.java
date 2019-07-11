@@ -73,14 +73,14 @@ public class ClientToolbox {
                 Util.addResultInfo(response, tp);
             } else {
                 LOG.error("Invalid command: " + cmd);
-                Util.addErrorInfo(response, Key.COMMAND_INVALID);
+                Util.addErrorInfo(response, Key.COMMAND_INVALID, null);
             }
             dbSession.commit();
         } catch ( Exception e ) {
             dbSession.rollback();
             String errorTicketId = Util1.getErrorTicketId();
             LOG.error("Exception. Error ticket: " + errorTicketId, e);
-            Util.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
+            Util.addErrorInfo(response, Key.SERVER_ERROR, null).append("parameters", errorTicketId);
         } finally {
             if ( dbSession != null ) {
                 dbSession.close();

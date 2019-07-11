@@ -482,9 +482,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
                 this.sb.append("_cbSetMotors(_buf, &_i2c, 0, 0);");
                 break;
             case "AB":
-                this.sb.append("_uBit.soundmotor.motorAOff()");
+                this.sb.append("_uBit.soundmotor.motorAOff();");
                 nlIndent();
-                port = "B";
+                this.sb.append("_uBit.soundmotor.motorBOff();");
+                break;
             case "A":
             case "B":
                 this.sb.append("_uBit.soundmotor.motor").append(port).append("Off();");

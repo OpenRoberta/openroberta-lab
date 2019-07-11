@@ -183,7 +183,7 @@ public class ClientProgram {
                         && !request.getString("owner").equals("Roberta")
                         && !request.getString("owner").equals("Gallery") ) {
                         ClientProgram.LOG.error("Unauthorized");
-                        Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
+                        Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN, null);
                     } else {
                         final String programName = request.getString("name");
                         final String ownerName = request.getString("owner");
@@ -232,15 +232,15 @@ public class ClientProgram {
                             Util.addSuccessInfo(response, Key.PROGRAM_IMPORT_SUCCESS);
                             Statistics.info("ProgramImport");
                         } else {
-                            Util.addErrorInfo(response, Key.PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE);
+                            Util.addErrorInfo(response, Key.PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE, null);
                         }
                     } else {
-                        Util.addErrorInfo(response, Key.PROGRAM_IMPORT_ERROR);
+                        Util.addErrorInfo(response, Key.PROGRAM_IMPORT_ERROR, null);
                     }
                 } else if ( cmd.equals("shareP") ) {
                     if ( !httpSessionState.isUserLoggedIn() ) {
                         ClientProgram.LOG.error("Unauthorized");
-                        Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
+                        Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN, null);
                     } else {
                         final User user = up.getUser(userId);
                         if ( !this.isPublicServer || user != null && user.isActivated() ) {
@@ -251,14 +251,14 @@ public class ClientProgram {
                             Util.addResultInfo(response, upp);
                             Statistics.info("ProgramShare");
                         } else {
-                            Util.addErrorInfo(response, Key.ACCOUNT_NOT_ACTIVATED_TO_SHARE);
+                            Util.addErrorInfo(response, Key.ACCOUNT_NOT_ACTIVATED_TO_SHARE, null);
                         }
                     }
 
                 } else if ( cmd.equals("shareWithGallery") ) {
                     if ( !httpSessionState.isUserLoggedIn() ) {
                         ClientProgram.LOG.error("Unauthorized");
-                        Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
+                        Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN, null);
                     } else {
                         final String programName = request.getString("programName");
                         final int galleryId = up.getUser("Gallery").getId();
@@ -295,20 +295,20 @@ public class ClientProgram {
                                     Util.addSuccessInfo(response, Key.GALLERY_UPLOAD_SUCCESS);
                                     Statistics.info("GalleryShare");
                                 } else {
-                                    Util.addErrorInfo(response, Key.GALLERY_UPLOAD_ERROR);
+                                    Util.addErrorInfo(response, Key.GALLERY_UPLOAD_ERROR, null);
                                 }
                             } else {
-                                Util.addErrorInfo(response, Key.GALLERY_UPLOAD_ERROR);
+                                Util.addErrorInfo(response, Key.GALLERY_UPLOAD_ERROR, null);
                             }
                         } else {
-                            Util.addErrorInfo(response, Key.ACCOUNT_NOT_ACTIVATED_TO_SHARE);
+                            Util.addErrorInfo(response, Key.ACCOUNT_NOT_ACTIVATED_TO_SHARE, null);
                         }
                     }
 
                 } else if ( cmd.equals("likeP") ) {
                     if ( !httpSessionState.isUserLoggedIn() ) {
                         ClientProgram.LOG.error("Unauthorized");
-                        Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
+                        Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN, null);
                     } else {
                         final String programName = request.getString("programName");
                         final String robotName = request.getString("robotName");
@@ -320,7 +320,7 @@ public class ClientProgram {
                             if ( lp.isOk() ) {
                                 // nothing to do
                             } else {
-                                Util.addErrorInfo(response, Key.LIKE_SAVE_ERROR_EXISTS);
+                                Util.addErrorInfo(response, Key.LIKE_SAVE_ERROR_EXISTS, null);
                             }
                         } else {
                             lp.deleteLike(programName, robotName, authorName);
@@ -333,7 +333,7 @@ public class ClientProgram {
                 } else if ( cmd.equals("shareDelete") ) {
                     if ( !httpSessionState.isUserLoggedIn() ) {
                         ClientProgram.LOG.error("Unauthorized");
-                        Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
+                        Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN, null);
                     } else {
                         final String programName = request.getString("programName");
                         final String owner = request.getString("owner");
@@ -352,7 +352,7 @@ public class ClientProgram {
                 } else if ( cmd.equals("deleteP") ) {
                     if ( !httpSessionState.isUserLoggedIn() ) {
                         ClientProgram.LOG.error("Unauthorized");
-                        Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
+                        Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN, null);
                     } else {
                         final String programName = request.getString("name");
                         final String author = request.getString("author");
@@ -363,7 +363,7 @@ public class ClientProgram {
                 } else if ( cmd.equals("loadPN") ) {
                     if ( !httpSessionState.isUserLoggedIn() ) {
                         ClientProgram.LOG.error("Unauthorized");
-                        Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
+                        Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN, null);
                     } else {
                         final JSONArray programInfo = pp.getProgramInfo(userId, robot, userId);
                         response.put("programNames", programInfo);
@@ -378,7 +378,7 @@ public class ClientProgram {
                 } else if ( cmd.equals("loadProgramEntity") ) {
                     if ( !httpSessionState.isUserLoggedIn() ) {
                         ClientProgram.LOG.error("Unauthorized");
-                        Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
+                        Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN, null);
                     } else {
                         final String programName = request.getString("name");
                         final String ownerName = request.getString("owner");
@@ -401,7 +401,7 @@ public class ClientProgram {
                 } else if ( cmd.equals("loadPR") ) {
                     if ( !httpSessionState.isUserLoggedIn() ) {
                         ClientProgram.LOG.error("Unauthorized");
-                        Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
+                        Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN, null);
                     } else {
                         final String programName = request.getString("name");
                         final JSONArray relations = pp.getProgramRelations(programName, userId, robot, userId);
@@ -448,7 +448,7 @@ public class ClientProgram {
                             }
                         }
                     }
-                    handleRunProgramError(response, messageKey, token, wasRobotWaiting);
+                    handleRunProgramError(response, messageKey, token, wasRobotWaiting, null);
                     httpSessionState.setProcessing(false);
                 } else if ( cmd.equals("compileN") ) {
                     final String programName = request.getString("name");
@@ -464,7 +464,7 @@ public class ClientProgram {
                         Util.addSuccessInfo(response, Key.COMPILERWORKFLOW_SUCCESS);
                         Statistics.info("ProgramCompileNative");
                     } else {
-                        Util.addErrorInfo(response, messageKey);
+                        Util.addErrorInfo(response, messageKey, null);
                     }
                 } else if ( cmd.equals("compileP") ) {
                     Key messageKey = null;
@@ -513,11 +513,11 @@ public class ClientProgram {
                             Util.addSuccessInfo(response, Key.COMPILERWORKFLOW_SUCCESS);
                             Statistics.info("ProgramCompile");
                         } else {
-                            Util.addErrorInfo(response, messageKey);
+                            Util.addErrorInfo(response, messageKey, null);
                         }
                     } else {
                         messageKey = Key.PROGRAM_IMPORT_ERROR;
-                        Util.addErrorInfo(response, messageKey);
+                        Util.addErrorInfo(response, messageKey, null);
                     }
                 } else if ( cmd.equals("runPBack") ) {
                     Key messageKey = null;
@@ -556,7 +556,7 @@ public class ClientProgram {
                             }
                         }
                     }
-                    handleRunProgramError(response, messageKey, token, true);
+                    handleRunProgramError(response, messageKey, token, true, null);
                 } else if ( cmd.equals("runPsim") ) {
                     boolean wasRobotWaiting = false;
 
@@ -593,11 +593,11 @@ public class ClientProgram {
                         }
                     }
                     //TODO program checks should be in compiler workflow and should be thoroughly revised
-                    handleRunProgramError(response, messageKey, token, wasRobotWaiting);
+                    handleRunProgramError(response, messageKey, token, wasRobotWaiting, null);
 
                 } else {
                     ClientProgram.LOG.error("Invalid command: " + cmd);
-                    Util.addErrorInfo(response, Key.COMMAND_INVALID);
+                    Util.addErrorInfo(response, Key.COMMAND_INVALID, null);
                 }
             }
             dbSession.commit();
@@ -605,7 +605,7 @@ public class ClientProgram {
             dbSession.rollback();
             final String errorTicketId = Util1.getErrorTicketId();
             ClientProgram.LOG.error("Exception. Error ticket: " + errorTicketId, e);
-            Util.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
+            Util.addErrorInfo(response, Key.SERVER_ERROR, null).append("parameters", errorTicketId);
         } finally {
             if ( dbSession != null ) {
                 dbSession.close();
@@ -668,19 +668,20 @@ public class ClientProgram {
         return blockSet;
     }
 
-    private static void handleRunProgramError(JSONObject response, Key messageKey, String token, boolean wasRobotWaiting) throws JSONException {
+    private static void handleRunProgramError(JSONObject response, Key messageKey, String token, boolean wasRobotWaiting, String compilerResponse)
+        throws JSONException {
         if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
             if ( token == null ) {
-                Util.addErrorInfo(response, Key.ROBOT_NOT_CONNECTED);
+                Util.addErrorInfo(response, Key.ROBOT_NOT_CONNECTED, null);
             } else {
                 if ( wasRobotWaiting ) {
                     Util.addSuccessInfo(response, Key.ROBOT_PUSH_RUN);
                 } else {
-                    Util.addErrorInfo(response, Key.ROBOT_NOT_WAITING);
+                    Util.addErrorInfo(response, Key.ROBOT_NOT_WAITING, null);
                 }
             }
         } else {
-            Util.addErrorInfo(response, messageKey);
+            Util.addErrorInfo(response, messageKey, compilerResponse);
         }
     }
 }
