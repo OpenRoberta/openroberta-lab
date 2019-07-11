@@ -62,6 +62,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     private static final String PREFIX_IN_PORT = "IN_";
 
     private final ILanguage language;
+    private final boolean isSayTextUsed;
 
     private final Configuration brickConfiguration;
 
@@ -80,6 +81,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         this.language = language;
         this.usedActors = checkVisitor.getUsedActors();
         this.loopsLabels = checkVisitor.getloopsLabelContainer();
+        this.isSayTextUsed = checkVisitor.isSayTextUsed();
     }
 
     private static String getPrefixedOutputPort(String port) {
@@ -142,6 +144,8 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         nlIndent();
         generateSensorInitialization();
         nlIndent();
+        generateTTSInitialization();
+        nlIndent();
         return null;
     }
 
@@ -167,6 +171,12 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     private void generateSensorInitialization() {
         this.sb.append("setAllSensorMode(").append(getDefaultSensorModesString()).append(");");
+    }
+
+    private void generateTTSInitialization () {
+        if (isSayTextUsed) {
+            this.sb.append("SetLanguage(\"" + TTSLanguageMapper.getLanguageString(language) + "\");");
+        }
     }
 
     private String getDefaultSensorModesString() {
@@ -817,11 +827,18 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private int getTurn(TurnAction<Void> turnAction) {
-        int turn = 100;
+        /**
+         * Turn is from -200 to 200
+         * O: motor run at the same power
+         * 100: one motor run at the specified power the other doesn't
+         * 200: one motor run at the specified power and the other at negative power
+         */
+        int turn = 200;
         if ( isAnyDriveMotorReverse() ) {
             turn *= -1;
         }
-        if ( turnAction.getDirection() == TurnDirection.LEFT ) {
+        //if ( turnAction.getDirection() == TurnDirection.LEFT ) {
+        if ( turnAction.getDirection() == TurnDirection.RIGHT ) {
             turn *= -1;
         }
         return turn;
@@ -1235,7 +1252,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-        this.sb.append("PlayNote(" + playNoteAction.getFrequency() + ", " + playNoteAction.getDuration() + ");");
+        this.sb.append("NEPOPlayTone(" + playNoteAction.getFrequency() + ", " + playNoteAction.getDuration() + ");");
         return null;
     }
 
@@ -1266,11 +1283,11 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        this.sb.append("PlayToneEx(");
+        this.sb.append("NEPOPlayTone(");
         toneAction.getFrequency().visit(this);
         this.sb.append(", ");
         toneAction.getDuration().visit(this);
-        this.sb.append(", GetVolume());");
+        this.sb.append(");");
         return null;
     }
 
@@ -1364,6 +1381,9 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
+        this.sb.append("SetLanguage(\"");
+        this.sb.append(TTSLanguageMapper.getLanguageString(setLanguageAction.getLanguage()));
+        this.sb.append("\");");
         return null;
     }
 
@@ -1371,7 +1391,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
         this.sb.append("Say(ToString(");
         sayTextAction.getMsg().visit(this); // TODO: Handle cases where the expression is not a string
-        this.sb.append("), \"" + TTSLanguageMapper.getLanguageString(this.language) + "\", ");
+        this.sb.append("), ");
         this.generateSpeedAndPitchArgumentsOrDefault(sayTextAction);
         this.sb.append(");");
         return null;

@@ -150,7 +150,7 @@ public class Ast2C4ev3VisitorTest {
                 + "if ( 5 < MotorPower(OUT_B) ) {\n"
                 + "    OnFwdReg(OUT_B, Speed(30));\n"
                 + "    RotateMotorForAngle(OUT_B, Speed(30), 360 * 1);\n"
-                + "    OnFwdSyncEx(OUT_AB, Speed(50), 100, RESET_NONE);"
+                + "    OnFwdSyncEx(OUT_AB, Speed(50), -200, RESET_NONE);"
                 + "}\n"
                 + "if ( ((MotorRotationCount(OUT_A) / 360.0) + ReadSensorInMode(IN_3, IR_PROX)) == ReadSensorInMode(IN_4, US_DIST_CM) ) {\n"
                 + "    SetLedPattern(LED_BLACK);\n"
@@ -175,9 +175,9 @@ public class Ast2C4ev3VisitorTest {
                 + BEGIN_MAIN_DEFAULT
                 + "OnFwdReg(OUT_B, Speed(0));\n"
                 + "RotateMotorForAngle(OUT_B, Speed(30), 360 * 0);\n"
-                + "OnFwdSyncEx(OUT_BC, Speed(0), 100, RESET_NONE);\n"
+                + "OnFwdSyncEx(OUT_BC, Speed(0), -200, RESET_NONE);\n"
                 + "SetVolume(50);\n"
-                + "PlayToneEx(0, 0, GetVolume());\n"
+                + "NEPOPlayTone(0, 0);\n"
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/code_generator/java/java_code_generator5.xml", expectedCode);
     }
@@ -189,7 +189,7 @@ public class Ast2C4ev3VisitorTest {
                 + CONSTANTS_AND_IMPORTS
                 + BEGIN_MAIN_DEFAULT
                 + "DrawString(ToString(\"Hallo\"), 0, 0);\n"
-                + "PlayToneEx(300, 3000, GetVolume());"
+                + "NEPOPlayTone(300, 3000);"
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/code_generator/java/java_code_generator6.xml", expectedCode);
     }
