@@ -100,7 +100,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
 
         $('#programNameTable').onWrap('click-row.bs.table', function($element, row) {
             loadFromListing(row);
-        }, "Load program from listing double clicked");
+        }, "Load program from listing clicked");
 
         $('#programNameTable').onWrap('check-all.bs.table', function($element, rows) {
             $('.deleteSomeProg').removeClass('disabled');

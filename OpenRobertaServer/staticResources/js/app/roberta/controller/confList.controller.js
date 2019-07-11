@@ -96,9 +96,9 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configu
             return false;
         }, "refresh configuration list clicked");
 
-        $('#confNameTable').onWrap('dbl-click-row.bs.table', function($element, row) {
+        $('#confNameTable').onWrap('click-row.bs.table', function($element, row) {
             configurationController.loadFromListing(row);
-        }, "Load configuration from listing double clicked");
+        }, "Load configuration from listing clicked");
 
         $('#confNameTable').onWrap('check-all.bs.table', function($element, rows) {
             $('.deleteSomeConf').removeClass('disabled');
