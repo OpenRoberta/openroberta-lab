@@ -62,7 +62,7 @@ public class CompilerWorkflowRobotSpecificIT {
     private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflowRobotSpecificIT.class);
 
     private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
-    private static final boolean CROSSCOMPILER_CALL = false;
+    private static final boolean CROSSCOMPILER_CALL = true;
     private static final boolean SHOW_SUCCESS = true;
     private static final String ORA_CC_RSC_ENVVAR = ServerProperties.CROSSCOMPILER_RESOURCE_BASE.replace('.', '_');
 
