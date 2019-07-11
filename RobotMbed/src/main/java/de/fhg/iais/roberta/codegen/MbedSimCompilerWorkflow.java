@@ -24,16 +24,19 @@ public class MbedSimCompilerWorkflow extends AbstractCompilerWorkflow {
 
     @Override
     public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
-        if ( data.getErrorMessage() != null ) {
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
-            return;
-        }
-        try {
-            generatedSourceCode = MbedSimVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree());
-            LOG.info("javascript mbed simulation code generated");
-        } catch ( Exception e ) {
-            LOG.error("javascript mbed simulation code generation failed", e);
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+        if ( data.getErrorMessage() == null ) {
+            try {
+                this.generatedSourceCode = MbedSimVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree());
+                this.crosscompilerResponse = "mbed simulation code generated";
+                this.workflowResult = Key.COMPILERWORKFLOW_SUCCESS;
+            } catch ( Exception e ) {
+                this.crosscompilerResponse = "mbed simulation code generation failed";
+                LOG.error(this.crosscompilerResponse, e);
+                this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+            }
+        } else {
+            this.crosscompilerResponse = "mbed simulation code generation with key " + data.getErrorMessage();
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
         }
     }
 

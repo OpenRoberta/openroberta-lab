@@ -29,15 +29,18 @@ public class DbTest {
             try {
                 h.assertXMLtransformation((String) object[1]);
             } catch ( Exception e ) {
-                System.out.println((int) object[0] + ": " + e);
-                System.out.println((String) object[1]);
+                println((int) object[0] + ": " + e);
+                println((String) object[1]);
             }
             counter++;
         }
 
-        System.out.println(resultSet.size());
-        System.out.println(counter);
+        println("" + resultSet.size());
+        println("" + counter);
         nativeSession.close();
     }
 
+    private static void println(String msg) {
+        System.out.println(msg);
+    }
 }

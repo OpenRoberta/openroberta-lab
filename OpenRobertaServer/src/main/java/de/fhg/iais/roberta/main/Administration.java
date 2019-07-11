@@ -90,10 +90,10 @@ public class Administration {
         String cmd = this.args[0];
         switch ( cmd ) {
             case "version":
-                System.out.println(version(false));
+                println(version(false));
                 return;
             case "version-for-db":
-                System.out.println(version(true));
+                println(version(true));
                 return;
             default:
                 LOG.info("*** " + cmd + " ***");
@@ -237,14 +237,16 @@ public class Administration {
                     List<Object> resultset = dbExecutor.select(sqlStmt);
                     for ( Object result : resultset ) {
                         if ( result instanceof Object[] ) {
-                            System.out.println(Arrays.toString((Object[]) result));
+                            println(Arrays.toString((Object[]) result));
+                        } else if ( result == null ) {
+                            println(null);
                         } else {
-                            System.out.println(result);
+                            println(result.toString());
                         }
                     }
                 } else {
-                    // better not: dbExecutor.sqlStmt(sqlStmt);
-                    System.out.println("for safety reasons only SELECT statements are processed");
+                    // better execute NOT: dbExecutor.sqlStmt(sqlStmt);
+                    println("for safety reasons only SELECT statements are processed");
                 }
             }
         } catch ( IOException e ) {
@@ -263,19 +265,19 @@ public class Administration {
             nativeSession.beginTransaction();
             @SuppressWarnings("unchecked")
             List<Object[]> resultSet = nativeSession.createSQLQuery(sqlQuery).list(); //NOSONAR : no sql injection possible here. Dangerous sql of course :-)
-            Administration.LOG.info("result set has " + resultSet.size() + " rows");
+            LOG.info("result set has " + resultSet.size() + " rows");
             for ( Object object : resultSet ) {
                 if ( object instanceof Object[] ) {
-                    Administration.LOG.info(">>>  " + Arrays.toString((Object[]) object));
+                    LOG.info(">>>  " + Arrays.toString((Object[]) object));
                 } else {
-                    Administration.LOG.info(">>>  " + object.toString());
+                    LOG.info(">>>  " + object.toString());
                 }
             }
             nativeSession.getTransaction().rollback();
             nativeSession.close();
         } else {
             // better not: dbExecutor.sqlStmt(sqlQuery);
-            System.out.println("for safety reasons only a SELECT statements is processed");
+            println("for safety reasons only SELECT statements is processed");
         }
 
     }
@@ -429,5 +431,9 @@ public class Administration {
         StringWriter writer = new StringWriter();
         m.marshal(blockSet, writer);
         return writer.toString();
+    }
+
+    private static void println(String msg) {
+        System.out.println(msg);
     }
 }

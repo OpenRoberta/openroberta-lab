@@ -30,19 +30,19 @@ public class RaspberryPiCompilerWorkflow extends AbstractCompilerWorkflow {
 
     @Override
     public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
-
         if ( data.getErrorMessage() != null ) {
             this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
-            return;
-        }
-        try {
-            this.generatedSourceCode =
-                RaspberryPiPythonVisitor
-                    .generate((RaspberryPiConfiguration) data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true, language);
-            LOG.info("vorwerk code generated");
-        } catch ( Exception e ) {
-            LOG.error("vorwerk code generation failed", e);
-            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+        } else {
+            try {
+                this.generatedSourceCode =
+                    RaspberryPiPythonVisitor
+                        .generate((RaspberryPiConfiguration) data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true, language);
+                LOG.info("RaspberryPi code generated");
+                this.workflowResult = Key.COMPILERWORKFLOW_SUCCESS;
+            } catch ( Exception e ) {
+                LOG.error("RaspberryPi code generation failed", e);
+                this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+            }
         }
     }
 

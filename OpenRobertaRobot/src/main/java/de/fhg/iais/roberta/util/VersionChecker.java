@@ -36,13 +36,13 @@ public class VersionChecker {
                 properties.load(resourceAsStream);
                 String version = properties.getProperty("version", "?");
                 if ( version.equals("?") || !versionValid(version) ) {
-                    System.out.println("version of " + propertyPrefix + " is " + version + " and considered NOT ACCEPTABLE");
+                    println("version of " + propertyPrefix + " is " + version + " and considered NOT ACCEPTABLE");
                     return false;
                 } else {
-                    System.out.println("version of " + propertyPrefix + " is " + version + " and considered ok");
+                    println("version of " + propertyPrefix + " is " + version + " and considered ok");
                 }
             } catch ( Exception e ) {
-                System.out.println("properties from /" + propertyPrefix + ".properties could not be loaded. Versioncheck fails");
+                println("properties from /" + propertyPrefix + ".properties could not be loaded. Versioncheck fails");
                 return false;
             }
         }
@@ -77,7 +77,7 @@ public class VersionChecker {
                     return false;
                 }
             } catch ( Exception e ) {
-                System.out.println("invalid version string. Either " + Arrays.toString(v1) + " or " + Arrays.toString(v2));
+                println("invalid version string. Either " + Arrays.toString(v1) + " or " + Arrays.toString(v2));
                 LOG.error(e.getMessage());
                 return false;
             }
@@ -93,5 +93,9 @@ public class VersionChecker {
             s = s.substring(0, s.length() - 8);
         }
         return s;
+    }
+
+    private static void println(String msg) {
+        System.out.println(msg);
     }
 }

@@ -93,14 +93,9 @@ public class CalliopeCompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     /**
-     * 1. Make target folder (if not exists).<br>
-     * 2. Clean target folder (everything inside).<br>
-     * 3. Compile .java files to .class.<br>
-     * 4. Make jar from class files and add META-INF entries.<br>
+     * create command to call the cross compiler and execute the call.
      *
-     * @param token
-     * @param mainFile
-     * @param mainPackage
+     * @return Key.COMPILERWORKFLOW_SUCCESS or Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED
      */
     private Key runBuild(String token, String mainFile, String mainPackage, boolean radioUsed) {
         final String compilerBinDir = this.pluginProperties.getCompilerBinDir();

@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 import org.junit.Assert;
 
-public class SearchMsgKeyRedundencies {
+public class SearchMsgKeyRedundancies {
 
     private Map<String, Set<String>> robMsgPairs, blocklyMsgPairs;
     private static int expectedKeyCount = 1800; // Should be 50% higher than the last known key count
@@ -25,13 +25,13 @@ public class SearchMsgKeyRedundencies {
      *        project
      * @throws IOException In case the files can not be opened
      */
-    public SearchMsgKeyRedundencies(File robKeyFile, File blocklyKeyFile) throws IOException {
+    public SearchMsgKeyRedundancies(File robKeyFile, File blocklyKeyFile) throws IOException {
         this.robMsgPairs = getMsgPairs(robKeyFile);
         this.blocklyMsgPairs = getMsgPairs(blocklyKeyFile);
 
-        System.out.println("Found " + this.robMsgPairs.size() + " unique messages in: " + robKeyFile.getName());
-        System.out.println("Found " + this.blocklyMsgPairs.size() + " unique messages in: " + blocklyKeyFile.getName());
-        System.out.println();
+        println("Found " + this.robMsgPairs.size() + " unique messages in: " + robKeyFile.getName());
+        println("Found " + this.blocklyMsgPairs.size() + " unique messages in: " + blocklyKeyFile.getName());
+        println("");
     }
 
     /**
@@ -42,13 +42,14 @@ public class SearchMsgKeyRedundencies {
     private Map<String, Set<String>> getMsgPairs(File msgKeyFile) throws IOException {
         Assert.assertNotNull(msgKeyFile);
 
-        int expectedKeyCountPerRedundancy = (int) Math.ceil(Math.sqrt((double) SearchMsgKeyRedundencies.expectedKeyCount));
+        int expectedKeyCountPerRedundancy = (int) Math.ceil(Math.sqrt(SearchMsgKeyRedundancies.expectedKeyCount));
         Pattern regex =
-            Pattern.compile(
-                "^Blockly\\.Msg\\.([A-Z0-9]+(?:_[A-Z0-9]+)*[a-z]?)(?!\\\\w|\\\\d)[ \\t]*\\=[ \\t]*(?:['\"](.*?)['\"]|Blockly\\.Msg\\.([A-Z0-9]+(?:_[A-Z0-9]+)*[a-z]?)(?!\\\\w|\\\\d));*$");
+            Pattern
+                .compile(
+                    "^Blockly\\.Msg\\.([A-Z0-9]+(?:_[A-Z0-9]+)*[a-z]?)(?!\\\\w|\\\\d)[ \\t]*\\=[ \\t]*(?:['\"](.*?)['\"]|Blockly\\.Msg\\.([A-Z0-9]+(?:_[A-Z0-9]+)*[a-z]?)(?!\\\\w|\\\\d));*$");
         String line;
-        Map<String, String> keys = new HashMap<String, String>(SearchMsgKeyRedundencies.expectedKeyCount),
-            directRedundants = new HashMap<String, String>(SearchMsgKeyRedundencies.expectedKeyCount / 2);
+        Map<String, String> keys = new HashMap<>(SearchMsgKeyRedundancies.expectedKeyCount),
+            directRedundants = new HashMap<>(SearchMsgKeyRedundancies.expectedKeyCount / 2);
         Map<String, Set<String>> result;
         LineNumberReader lineReader = new LineNumberReader(new FileReader(msgKeyFile));
 
@@ -65,7 +66,7 @@ public class SearchMsgKeyRedundencies {
 
         lineReader.close();
 
-        result = new HashMap<String, Set<String>>(keys.size(), 1f);
+        result = new HashMap<>(keys.size(), 1f);
 
         directRedundants.forEach(new BiConsumer<String, String>() {
 
@@ -95,7 +96,7 @@ public class SearchMsgKeyRedundencies {
                     return;
                 }
 
-                keyList = new HashSet<String>(expectedKeyCountPerRedundancy, .9f);
+                keyList = new HashSet<>(expectedKeyCountPerRedundancy, .9f);
                 keyList.add(key);
                 result.put(message, keyList);
             }
@@ -111,11 +112,11 @@ public class SearchMsgKeyRedundencies {
             @Override
             public void accept(String message, Set<String> keys) {
                 if ( keys.size() > 1 ) {
-                    System.out.printf("Redundant message definitions for the message: %s\n", message);
-                    System.out.print("Keys: ");
+                    printf("Redundant message definitions for the message: %s\n", message);
+                    print("Keys: ");
                     keys.forEach(key -> System.out.printf("%s, ", key));
-                    System.out.println();
-                    System.out.println();
+                    println();
+                    println();
                 }
             }
         });
@@ -125,17 +126,32 @@ public class SearchMsgKeyRedundencies {
             @Override
             public void accept(String message, Set<String> keys) {
                 if ( robMsgPairs.get(message) != null ) {
-                    System.out.printf("The message \"%s\" is redinfed in both files:\n", message);
-                    System.out.print("Roberta keys: ");
+                    printf("The message \"%s\" is redinfed in both files:\n", message);
+                    print("Roberta keys: ");
                     robMsgPairs.get(message).forEach(key -> System.out.printf("%s, ", key));
-                    System.out.println();
-                    System.out.print("Blockly keys: ");
+                    println();
+                    print("Blockly keys: ");
                     keys.forEach(key -> System.out.printf("%s, ", key));
-                    System.out.println();
-                    System.out.println();
+                    println();
+                    println();
                 }
             }
         });
+    }
 
+    private static void println(String msg) {
+        System.out.println(msg);
+    }
+
+    private static void println() {
+        System.out.println();
+    }
+
+    private static void print(String msg) {
+        System.out.print(msg);
+    }
+
+    private static void printf(String format, Object... params) {
+        System.out.printf(format, params);
     }
 }

@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.codegen;
 
-import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -87,8 +86,6 @@ public class NxtCompilerWorkflow extends AbstractCompilerWorkflow {
         final String compilerResourcesDir = this.pluginProperties.getCompilerResourceDir();
         final String tempDir = this.pluginProperties.getTempDir();
 
-        final StringBuilder sb = new StringBuilder();
-
         Path path = Paths.get(compilerResourcesDir);
         Path base = Paths.get("");
 
@@ -99,34 +96,15 @@ public class NxtCompilerWorkflow extends AbstractCompilerWorkflow {
             nbcCompilerFileName = compilerResourcesDir + "/osx/nbc";
         }
 
-        try {
-            ProcessBuilder procBuilder =
-                new ProcessBuilder(
-                    new String[] {
-                        nbcCompilerFileName,
-                        "-q",
-                        "-sm-",
-                        tempDir + token + "/" + mainFile + "/source/" + mainFile + ".nxc",
-                        "-O=" + tempDir + token + "/" + mainFile + "/target/" + mainFile + ".rxe",
-                        "-I=" + base.resolve(path).toAbsolutePath().normalize().toString()
-                    });
-            procBuilder.redirectInput(Redirect.INHERIT);
-            procBuilder.redirectOutput(Redirect.INHERIT);
-            procBuilder.redirectError(Redirect.INHERIT);
-            Process p = procBuilder.start();
-            int ecode = p.waitFor();
-
-            if ( ecode != 0 ) {
-                return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
-            }
-            return Key.COMPILERWORKFLOW_SUCCESS;
-        } catch ( Exception e ) {
-            if ( sb.length() > 0 ) {
-                NxtCompilerWorkflow.LOG.error("build exception. Messages from the build script are:\n" + sb.toString(), e);
-            } else {
-                NxtCompilerWorkflow.LOG.error("exception when preparing the build", e);
-            }
-            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
-        }
+        String[] executableWithParameters =
+            new String[] {
+                nbcCompilerFileName,
+                "-q",
+                "-sm-",
+                tempDir + token + "/" + mainFile + "/source/" + mainFile + ".nxc",
+                "-O=" + tempDir + token + "/" + mainFile + "/target/" + mainFile + ".rxe",
+                "-I=" + base.resolve(path).toAbsolutePath().normalize().toString()
+            };
+        return runCrossCompiler(executableWithParameters) ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
     }
 }

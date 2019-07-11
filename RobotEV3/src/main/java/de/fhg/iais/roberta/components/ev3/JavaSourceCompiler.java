@@ -5,11 +5,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.StringJoiner;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 
+import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaCompiler.CompilationTask;
@@ -25,12 +28,15 @@ public class JavaSourceCompiler {
     private static final Logger LOG = LoggerFactory.getLogger(JavaSourceCompiler.class);
 
     private CustomJavaFileManager fileManager;
-    private CompilerFeedback feedback;
     private final JavaCompiler compiler;
     private final String programName;
     private final String sourceCode;
     private final String packageName = "generated.main.";
     private final String classPath;
+
+    private boolean success;
+
+    private String compilerResponse;
 
     /**
      * @param programName Name of the program
@@ -53,30 +59,33 @@ public class JavaSourceCompiler {
         }
     }
 
-    private Boolean compile() {
+    private void compile() {
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
         List<JavaFileObject> javaFiles = getJavaFiles();
         List<String> compilationOptions = getCompilerProperties();
         CompilationTask task = this.compiler.getTask(null, this.fileManager, diagnostics, compilationOptions, null, javaFiles);
         Boolean isSuccess = task.call();
-        this.feedback = new CompilerFeedback(isSuccess, diagnostics);
-        return isSuccess;
+        this.success = isSuccess != null && isSuccess;
+        final StringJoiner sj = new StringJoiner(System.getProperty("line.separator"));
+        for ( Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics() ) {
+            sj.add(diagnostic.getMessage(Locale.ENGLISH));
+        }
+        compilerResponse = sj.toString();
     }
 
-    public boolean compileAndPackage(String pathToCrosscompilerBaseDir, String token) {
-        Boolean isSuccess = compile();
+    public void compileAndPackage(String pathToCrosscompilerBaseDir, String token) {
+        compile();
         File jarFile;
-        if ( isSuccess ) {
+        if ( success ) {
             ByteArrayOutputStream jarArchive = createJarArchive();
             jarFile = new File(pathToCrosscompilerBaseDir + "/" + token + "/target/" + this.programName + ".jar");
             try {
                 FileUtils.writeByteArrayToFile(jarFile, jarArchive.toByteArray());
             } catch ( IOException e ) {
-                JavaSourceCompiler.LOG.error("build exception. Messages from the build script are:\n" + e);
-                return false;
+                LOG.error("Exception when creating a jar", e);
+                success = false;
             }
         }
-        return isSuccess;
     }
 
     private List<JavaFileObject> getJavaFiles() {
@@ -96,24 +105,25 @@ public class JavaSourceCompiler {
         if ( SystemUtils.IS_OS_WINDOWS ) {
             separator = ";";
         }
-        compilationOptions.add(
-            this.classPath
-                + "dbusjava.jar"
-                + separator
-                + this.classPath
-                + "ev3classes.jar"
-                + separator
-                + this.classPath
-                + "EV3Runtime.jar"
-                + separator
-                + this.classPath
-                + "Java-WebSocket.jar"
-                + separator
-                + this.classPath
-                + "jna.jar"
-                + separator
-                + this.classPath
-                + "json.jar");
+        compilationOptions
+            .add(
+                this.classPath
+                    + "dbusjava.jar"
+                    + separator
+                    + this.classPath
+                    + "ev3classes.jar"
+                    + separator
+                    + this.classPath
+                    + "EV3Runtime.jar"
+                    + separator
+                    + this.classPath
+                    + "Java-WebSocket.jar"
+                    + separator
+                    + this.classPath
+                    + "jna.jar"
+                    + separator
+                    + this.classPath
+                    + "json.jar");
         return compilationOptions;
     }
 
@@ -145,29 +155,31 @@ public class JavaSourceCompiler {
         Manifest mf = new Manifest();
         mf.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
         mf.getMainAttributes().put(Attributes.Name.MAIN_CLASS, this.packageName + this.programName);
-        mf.getMainAttributes().put(
-            Attributes.Name.CLASS_PATH,
-            brickRuntime
-                + "/lib/ev3classes.jar "
-                + brickRuntime
-                + "/lib/dbusjava.jar "
-                + brickRuntime
-                + "/libjna/usr/share/java/jna.jar "
-                + brickRoberta
-                + "/EV3Runtime.jar "
-                + brickRoberta
-                + "/Java-WebSocket.jar "
-                + brickRoberta
-                + "/json.jar");
+        mf
+            .getMainAttributes()
+            .put(
+                Attributes.Name.CLASS_PATH,
+                brickRuntime
+                    + "/lib/ev3classes.jar "
+                    + brickRuntime
+                    + "/lib/dbusjava.jar "
+                    + brickRuntime
+                    + "/libjna/usr/share/java/jna.jar "
+                    + brickRoberta
+                    + "/EV3Runtime.jar "
+                    + brickRoberta
+                    + "/Java-WebSocket.jar "
+                    + brickRoberta
+                    + "/json.jar");
         return mf;
     }
 
-    public Boolean isSuccess() {
-        return this.feedback.isSuccess();
+    public boolean isSuccess() {
+        return this.success;
     }
 
-    public String getCompilationMessages() {
-        return this.feedback.toString();
+    public String getCompilerResponse() {
+        return this.compilerResponse;
     }
 
     public byte[] getCompiledClass() {

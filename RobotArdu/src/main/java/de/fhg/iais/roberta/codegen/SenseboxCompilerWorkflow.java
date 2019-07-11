@@ -1,12 +1,8 @@
 package de.fhg.iais.roberta.codegen;
 
-import java.io.File;
-import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Base64;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,22 +92,15 @@ public class SenseboxCompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     /**
-     * 1. Make target folder (if not exists).<br>
-     * 2. Clean target folder (everything inside).<br>
-     * 3. Compile .java files to .class.<br>
-     * 4. Make jar from class files and add META-INF entries.<br>
+     * create command to call the cross compiler and execute the call.
      *
-     * @param token
-     * @param mainFile
-     * @param mainPackage
+     * @return Key.COMPILERWORKFLOW_SUCCESS or Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED
      */
     private Key runBuild(String token, String mainFile, String mainPackage) {
-        final String robotName = this.pluginProperties.getRobotName();
         final String compilerBinDir = this.pluginProperties.getCompilerBinDir();
         final String compilerResourcesDir = this.pluginProperties.getCompilerResourceDir();
         final String tempDir = this.pluginProperties.getTempDir();
 
-        final StringBuilder sb = new StringBuilder();
         String scriptName = "";
         String os = "";
         if ( SystemUtils.IS_OS_LINUX ) {
@@ -129,58 +118,38 @@ public class SenseboxCompilerWorkflow extends AbstractCompilerWorkflow {
             scriptName = compilerResourcesDir + "arduino-builder/osx/arduino-builder";
             os = "arduino-builder/osx";
         }
+        String fqbnArg = "-fqbn=sensebox:samd:sb:power=on";
         Path path = Paths.get(tempDir + token + "/" + mainFile);
         Path base = Paths.get("");
 
-        try {
-            String fqbnArg = "-fqbn=sensebox:samd:sb:power=on";
-            String[] command =
-                new String[] {
-                    scriptName,
-                    "-hardware=" + compilerResourcesDir + "hardware/builtin",
-                    "-hardware=" + compilerResourcesDir + "hardware/additional",
-                    "-tools=" + compilerResourcesDir + "/" + os + "/tools-builder",
-                    "-tools=" + compilerResourcesDir + "hardware/additional",
-                    "-libraries=" + compilerResourcesDir + "/libraries",
-                    fqbnArg,
-                    "-prefs=compiler.path=" + compilerBinDir,
-                    "-vid-pid=0X04D8_0XEF66",
-                    "-ide-version=10805",
-                    "-prefs=build.warn_data_percentage=75",
-                    "-prefs=runtime.tools.arduinoOTA.path=" + compilerResourcesDir + "hardware/additional/arduino/tools/arduinoOTA/1.2.0",
-                    "-prefs=runtime.tools.CMSIS.path=" + compilerResourcesDir + "hardware/additional/arduino/tools/CMSIS/4.5.0",
-                    "-prefs=runtime.tools.CMSIS-Atmel.path=" + compilerResourcesDir + "hardware/additional/arduino/tools/CMSIS-Atmel/1.1.0",
-                    "-prefs=runtime.tools.openocd.path=" + compilerResourcesDir + "hardware/additional/arduino/tools/openocd/0.9.0-arduino6-static",
-                    "-prefs=runtime.tools.arm-none-eabi-gcc.path=" + compilerResourcesDir + "hardware/additional/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1",
-                    "-prefs=runtime.tools.bossac.path=" + compilerResourcesDir + "hardware/additional/arduino/tools/bossac/1.7.0",
+        String[] executableWithParameters =
+            new String[] {
+                scriptName,
+                "-hardware=" + compilerResourcesDir + "hardware/builtin",
+                "-hardware=" + compilerResourcesDir + "hardware/additional",
+                "-tools=" + compilerResourcesDir + "/" + os + "/tools-builder",
+                "-tools=" + compilerResourcesDir + "hardware/additional",
+                "-libraries=" + compilerResourcesDir + "/libraries",
+                fqbnArg,
+                "-prefs=compiler.path=" + compilerBinDir,
+                "-vid-pid=0X04D8_0XEF66",
+                "-ide-version=10805",
+                "-prefs=build.warn_data_percentage=75",
+                "-prefs=runtime.tools.arduinoOTA.path=" + compilerResourcesDir + "hardware/additional/arduino/tools/arduinoOTA/1.2.0",
+                "-prefs=runtime.tools.CMSIS.path=" + compilerResourcesDir + "hardware/additional/arduino/tools/CMSIS/4.5.0",
+                "-prefs=runtime.tools.CMSIS-Atmel.path=" + compilerResourcesDir + "hardware/additional/arduino/tools/CMSIS-Atmel/1.1.0",
+                "-prefs=runtime.tools.openocd.path=" + compilerResourcesDir + "hardware/additional/arduino/tools/openocd/0.9.0-arduino6-static",
+                "-prefs=runtime.tools.arm-none-eabi-gcc.path=" + compilerResourcesDir + "hardware/additional/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1",
+                "-prefs=runtime.tools.bossac.path=" + compilerResourcesDir + "hardware/additional/arduino/tools/bossac/1.7.0",
 
-                    "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
-                    base.resolve(path).toAbsolutePath().normalize().toString() + "/source/" + mainFile + ".ino"
-                };
-
-            ProcessBuilder procBuilder = new ProcessBuilder(command);
-
-            procBuilder.redirectInput(Redirect.INHERIT);
-            procBuilder.redirectOutput(Redirect.INHERIT);
-            procBuilder.redirectError(Redirect.INHERIT);
-            Process p = procBuilder.start();
-            int ecode = p.waitFor();
-
-            System.err.println("Exit code " + ecode);
-
-            if ( ecode != 0 ) {
-                return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
-            }
-            byte[] binary = FileUtils.readFileToByteArray(new File(path + "/target/" + mainFile + ".ino.bin"));
-            Base64.Encoder urec = Base64.getEncoder();
-            this.binaryInBase64 = urec.encodeToString(binary);
-            return Key.COMPILERWORKFLOW_SUCCESS;
-        } catch ( Exception e ) {
-            if ( sb.length() > 0 ) {
-                LOG.error("build exception. Messages from the build script are:\n" + sb.toString(), e);
-            } else {
-                LOG.error("exception when preparing the build", e);
-            }
+                "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
+                base.resolve(path).toAbsolutePath().normalize().toString() + "/source/" + mainFile + ".ino"
+            };
+        boolean success = runCrossCompiler(executableWithParameters);
+        if ( success ) {
+            this.binaryInBase64 = getBase64Encoded(path + "/target/" + mainFile + ".ino.bin");
+            return this.binaryInBase64 == null ? Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED : Key.COMPILERWORKFLOW_SUCCESS;
+        } else {
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         }
     }

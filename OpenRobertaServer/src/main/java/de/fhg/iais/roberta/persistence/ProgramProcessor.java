@@ -6,6 +6,8 @@ import java.util.List;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.persistence.bo.AccessRight;
 import de.fhg.iais.roberta.persistence.bo.Configuration;
@@ -28,6 +30,8 @@ import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Util1;
 
 public class ProgramProcessor extends AbstractProcessor {
+    private static final Logger LOG = LoggerFactory.getLogger(ProgramProcessor.class);
+
     public ProgramProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
         super(dbSession, httpSessionState);
     }
@@ -368,8 +372,7 @@ public class ProgramProcessor extends AbstractProcessor {
                 tempProgram.put(like == null ? false : true);
                 programs.put(tempProgram);
             } else {
-                // this should not happen!
-                System.out.println("User gallery owns programs that are not shared exactly with the origin user with right X_WRITE: " + program.getId());
+                LOG.error("User gallery owns programs that are not shared exactly with the origin user with right X_WRITE: " + program.getId());
             }
         }
         setSuccess(Key.PROGRAM_GET_ALL_SUCCESS, "" + programs.length());

@@ -1,12 +1,8 @@
 package de.fhg.iais.roberta.codegen;
 
-import java.io.File;
-import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Base64;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,21 +69,15 @@ public class BotnrollCompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     /**
-     * 1. Make target folder (if not exists).<br>
-     * 2. Clean target folder (everything inside).<br>
-     * 3. Compile .java files to .class.<br>
-     * 4. Make jar from class files and add META-INF entries.<br>
+     * create command to call the cross compiler and execute the call.
      *
-     * @param token
-     * @param mainFile
-     * @param mainPackage
+     * @return Key.COMPILERWORKFLOW_SUCCESS or Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED
      */
     private Key runBuild(String token, String mainFile, String mainPackage) {
         final String compilerBinDir = this.pluginProperties.getCompilerBinDir();
         final String compilerResourcesDir = this.pluginProperties.getCompilerResourceDir();
         final String tempDir = this.pluginProperties.getTempDir();
 
-        final StringBuilder sb = new StringBuilder();
         String scriptName = "";
         String os = "";
         if ( SystemUtils.IS_OS_LINUX ) {
@@ -109,41 +99,23 @@ public class BotnrollCompilerWorkflow extends AbstractCompilerWorkflow {
         Path path = Paths.get(tempDir + token + "/" + mainFile);
         Path base = Paths.get("");
 
-        try {
-            ProcessBuilder procBuilder =
-                new ProcessBuilder(
-                    new String[] {
-                        scriptName,
-                        "-hardware=" + compilerResourcesDir + "hardware/builtin",
-                        "-hardware=" + compilerResourcesDir + "hardware/additional",
-                        "-tools=" + compilerResourcesDir + "/" + os + "/tools-builder",
-                        "-libraries=" + compilerResourcesDir + "/libraries",
-                        "-fqbn=arduino:avr:uno",
-                        "-prefs=compiler.path=" + compilerBinDir,
-                        "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
-                        base.resolve(path).toAbsolutePath().normalize().toString() + "/source/" + mainFile + ".ino"
-                    });
-
-            procBuilder.redirectInput(Redirect.INHERIT);
-            procBuilder.redirectOutput(Redirect.INHERIT);
-            procBuilder.redirectError(Redirect.INHERIT);
-            Process p = procBuilder.start();
-            int ecode = p.waitFor();
-            System.err.println("Exit code " + ecode);
-
-            if ( ecode != 0 ) {
-                return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
-            }
-            this.compiledHex = FileUtils.readFileToString(new File(path + "/target/" + mainFile + ".ino.hex"), "UTF-8");
-            Base64.Encoder urec = Base64.getEncoder();
-            this.compiledHex = urec.encodeToString(this.compiledHex.getBytes());
-            return Key.COMPILERWORKFLOW_SUCCESS;
-        } catch ( Exception e ) {
-            if ( sb.length() > 0 ) {
-                LOG.error("build exception. Messages from the build script are:\n" + sb.toString(), e);
-            } else {
-                LOG.error("exception when preparing the build", e);
-            }
+        String[] executableWithParameters =
+            new String[] {
+                scriptName,
+                "-hardware=" + compilerResourcesDir + "hardware/builtin",
+                "-hardware=" + compilerResourcesDir + "hardware/additional",
+                "-tools=" + compilerResourcesDir + "/" + os + "/tools-builder",
+                "-libraries=" + compilerResourcesDir + "/libraries",
+                "-fqbn=arduino:avr:uno",
+                "-prefs=compiler.path=" + compilerBinDir,
+                "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
+                base.resolve(path).toAbsolutePath().normalize().toString() + "/source/" + mainFile + ".ino"
+            };
+        boolean success = runCrossCompiler(executableWithParameters);
+        if ( success ) {
+            this.compiledHex = getBase64Encoded(path + "/target/" + mainFile + ".ino.hex");
+            return this.compiledHex == null ? Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED : Key.COMPILERWORKFLOW_SUCCESS;
+        } else {
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         }
     }

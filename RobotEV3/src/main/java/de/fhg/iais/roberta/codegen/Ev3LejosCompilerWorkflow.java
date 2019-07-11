@@ -46,13 +46,14 @@ public class Ev3LejosCompilerWorkflow extends AbstractCompilerWorkflow {
             final String tempDir = this.pluginProperties.getTempDir();
 
             JavaSourceCompiler scp = new JavaSourceCompiler(programName, this.generatedSourceCode, compilerResourcesDir);
-            boolean isSuccess = scp.compileAndPackage(tempDir, token);
-            if ( !isSuccess ) {
-                LOG.error("build exception. Messages from the build script are:\n" + scp.getCompilationMessages());
-                this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
-            } else {
+            scp.compileAndPackage(tempDir, token);
+            this.crosscompilerResponse = scp.getCompilerResponse();
+            if ( scp.isSuccess() ) {
                 LOG.info("jar for program {} generated successfully", programName);
                 this.workflowResult = Key.COMPILERWORKFLOW_SUCCESS;
+            } else {
+                LOG.error("build exception. Messages from the compiler are:\n" + scp.getCompilerResponse());
+                this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
             }
         }
     }

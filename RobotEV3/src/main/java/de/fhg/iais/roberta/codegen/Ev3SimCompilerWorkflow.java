@@ -26,16 +26,19 @@ public class Ev3SimCompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) //
     {
-        if ( data.getErrorMessage() != null ) {
+        if ( data.getErrorMessage() == null ) {
+            try {
+                this.generatedSourceCode = Ev3SimVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), language);
+                this.crosscompilerResponse = "ev3 simulation code generated";
+                this.workflowResult = Key.COMPILERWORKFLOW_SUCCESS;
+            } catch ( Exception e ) {
+                this.crosscompilerResponse = "ev3 simulation code generation failed";
+                LOG.error(this.crosscompilerResponse, e);
+                this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+            }
+        } else {
+            this.crosscompilerResponse = "ev3 simulation code generation failed with key " + data.getErrorMessage();
             this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
-            return;
-        }
-        try {
-            this.generatedSourceCode = Ev3SimVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), language);
-            LOG.info("javascript ev3 simulation code generated");
-        } catch ( Exception e ) {
-            LOG.error("javascript ev3 simulation code generation failed", e);
-            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
         }
     }
 

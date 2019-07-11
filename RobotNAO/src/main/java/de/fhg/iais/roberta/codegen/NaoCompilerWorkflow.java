@@ -37,8 +37,6 @@ public class NaoCompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
         storeGeneratedProgram(token, programName, ".py");
-        // maybe copy from /src/ to /target/
-        // python -c "import py_compile; py_compile.compile('.../src/...py','.../target/....pyc')"
     }
 
     @Override

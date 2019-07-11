@@ -1,8 +1,5 @@
 package de.fhg.iais.roberta.codegen;
 
-import java.lang.ProcessBuilder.Redirect;
-
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,29 +72,14 @@ public class MicrobitCompilerWorkflow extends AbstractCompilerWorkflow {
 
         String scriptName = compilerResourcesDir + "/compile.py";
 
-        try {
-            ProcessBuilder procBuilder =
-                new ProcessBuilder(
-                    new String[] {
-                        compilerBinDir + "python",
-                        scriptName,
-                        sourceCode
-                    });
-
-            procBuilder.redirectInput(Redirect.INHERIT);
-            procBuilder.redirectError(Redirect.INHERIT);
-            Process p = procBuilder.start();
-
-            this.compiledHex = IOUtils.toString(p.getInputStream(), "US-ASCII");
-            return Key.COMPILERWORKFLOW_SUCCESS;
-        } catch ( Exception e ) {
-            if ( sb.length() > 0 ) {
-                MicrobitCompilerWorkflow.LOG.error("build exception. Messages from the build script are:\n" + sb.toString(), e);
-            } else {
-                MicrobitCompilerWorkflow.LOG.error("exception when preparing the build", e);
-            }
-            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
-        }
+        String[] executableWithParameters =
+            new String[] {
+                compilerBinDir + "python",
+                scriptName,
+                sourceCode
+            };
+        this.compiledHex = getBinaryFromCrossCompiler(executableWithParameters);
+        return this.compiledHex != null ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
     }
 
 }

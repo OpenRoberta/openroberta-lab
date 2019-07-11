@@ -35,10 +35,11 @@ class SearchMsgKeyOccurrences {
         checkMotorRegExp = Pattern.compile("checkIfMotorRegulated\\(.+?,\\s*\"" + keyPattern + "\"\\)"),
         directRegExp = Pattern.compile("Blockly\\.Msg(?:\\.|\\[[\"'])" + keyPattern + "(?:[^\\w]|$)"),
         helperRegExp =
-            Pattern.compile(
-                "\\.(?:showMsgOnTop\\(|display(?:(?:Popup)?Message\\(|Information\\(\\s*(?:\\{\\s*[\"']?\\w+?[\"']?\\s*:\\s*[\"']\\w+[\"']\\s*\\}|\\w+)\\s*,))\\s*[\"']"
-                    + keyPattern
-                    + "[\"']"),
+            Pattern
+                .compile(
+                    "\\.(?:showMsgOnTop\\(|display(?:(?:Popup)?Message\\(|Information\\(\\s*(?:\\{\\s*[\"']?\\w+?[\"']?\\s*:\\s*[\"']\\w+[\"']\\s*\\}|\\w+)\\s*,))\\s*[\"']"
+                        + keyPattern
+                        + "[\"']"),
         createButtonRegExp = Pattern.compile("\\.createButton\\_\\(.+?,\\-?\\d+,\\-?\\d+,[\"']" + keyPattern + "[\"']\\)"),
         categoryNameRegExp = Pattern.compile("\\<category(?:\\s+\\w+\\=(?:[\"][^\"]+[\"]|['][^']+[']))*\\s+name\\=[\"']" + keyPattern + "[\"']");
 
@@ -52,9 +53,9 @@ class SearchMsgKeyOccurrences {
         this.robKeyList = getKeyList(robKeyFile);
         this.blocklyKeyList = getKeyList(blocklyKeyFile);
         this.unusedKeys = new ArrayList<>(this.robKeyList);
-        this.unknownKeys = new ArrayList<String>(100);
-        System.out.println("Found " + this.robKeyList.size() + " message keys in: " + robKeyFile.getName());
-        System.out.println("Found " + this.blocklyKeyList.size() + " message keys in: " + blocklyKeyFile.getName());
+        this.unknownKeys = new ArrayList<>(100);
+        println("Found " + this.robKeyList.size() + " message keys in: " + robKeyFile.getName());
+        println("Found " + this.blocklyKeyList.size() + " message keys in: " + blocklyKeyFile.getName());
     }
 
     /**
@@ -62,7 +63,7 @@ class SearchMsgKeyOccurrences {
      * report in the following format:<br/>
      * <br/>
      * The directory {path} with {numFiles} files contained: {numFoundKeys} Roberta keys, {numFallbackKeys} Blockly keys and {numUnknownKeys} unregistered keys.
-     * 
+     *
      * @param dir A directory that contains files, or a single file
      * @param fileNamePattern A pattern, that the files need to match to be searched
      * @throws Exception In case a file cannot be opened
@@ -71,13 +72,14 @@ class SearchMsgKeyOccurrences {
         List<File> files = filterDir(dir, fileNamePattern);
         String dirPath = dir.getCanonicalPath();
         KeyCounter keyCounts = this.searchForKeys(files);
-        System.out.printf(
-            "The directory %s with %d files contained: %d Roberta keys, %d Blockly keys and %d unregistered keys.\n",
-            dirPath,
-            files.size(),
-            keyCounts.getRobertaKeyCount(),
-            keyCounts.getBlocklyKeyCount(),
-            keyCounts.getUnknownKeyCount());
+        System.out
+            .printf(
+                "The directory %s with %d files contained: %d Roberta keys, %d Blockly keys and %d unregistered keys.\n",
+                dirPath,
+                files.size(),
+                keyCounts.getRobertaKeyCount(),
+                keyCounts.getBlocklyKeyCount(),
+                keyCounts.getUnknownKeyCount());
     }
 
     /**
@@ -87,12 +89,12 @@ class SearchMsgKeyOccurrences {
         Collections.sort(this.unusedKeys);
         Collections.sort(this.unknownKeys);
         System.out.println("The following message keys seem to be unused:");
-        sysoList(this.unusedKeys);
-        System.out.println("The following message keys seem to be unknown:");
-        sysoList(this.unknownKeys);
-        System.out.println(this.robKeyList.size() + " message keys");
-        System.out.println(this.unusedKeys.size() + " unused message keys");
-        System.out.println(this.unknownKeys.size() + " unknown message keys");
+        printListLn(this.unusedKeys);
+        println("The following message keys seem to be unknown:");
+        printListLn(this.unknownKeys);
+        println(this.robKeyList.size() + " message keys");
+        println(this.unusedKeys.size() + " unused message keys");
+        println(this.unknownKeys.size() + " unknown message keys");
     }
 
     /**
@@ -108,7 +110,7 @@ class SearchMsgKeyOccurrences {
 
         Pattern regex = Pattern.compile("^Blockly.Msg.([^ =]+)");
         String line;
-        List<String> keys = new ArrayList<String>(1500);
+        List<String> keys = new ArrayList<>(1500);
 
         try (LineNumberReader lineReader = new LineNumberReader(new FileReader(msgKeyFile))) {
             while ( (line = lineReader.readLine()) != null ) {
@@ -132,7 +134,7 @@ class SearchMsgKeyOccurrences {
      * @throws IOException
      */
     private List<File> filterDir(File root, Pattern pattern) throws IOException {
-        List<File> resultDataList = new ArrayList<File>(250);
+        List<File> resultDataList = new ArrayList<>(250);
 
         if ( root.isDirectory() ) {
             File[] directoryFiles = root.listFiles();
@@ -180,7 +182,7 @@ class SearchMsgKeyOccurrences {
 
                 while ( (line = lineReader.readLine()) != null ) {
 
-                    usedPatterns = new ArrayList<Pattern>(4);
+                    usedPatterns = new ArrayList<>(4);
                     while ( matcher != null && matcher.find() || (matcher = this.matchLine(line, fileEnding, usedPatterns)) != null ) {
                         key = matcher.pattern().equals(keyRegexp) ? "ORA_" + matcher.group(1) : matcher.group(1);
 
@@ -188,7 +190,7 @@ class SearchMsgKeyOccurrences {
                             this.unusedKeys.remove(key);
                             keyCounter.addRobertaKey();
                         } else if ( this.blocklyKeyList.contains(key) && filePath.contains("blockly") ) {
-                            // Only accept the messages.js keys if they belong to the blockly core. 
+                            // Only accept the messages.js keys if they belong to the blockly core.
                             // If we reuse keys in our code we should define them.
                             keyCounter.addBlocklyKey();
                         } else {
@@ -206,16 +208,10 @@ class SearchMsgKeyOccurrences {
         return keyCounter;
     }
 
-    private void sysoList(List<String> msgList) {
-        for ( String msg : msgList ) {
-            System.out.println("  " + msg);
-        }
-    }
-
     /**
      * Matches a line against multiple patterns, depending on the file ending. If a pattern matches, the matcher is returned. In addition to that a list of
      * patterns is returned, that already matched to the given
-     * 
+     *
      * @param line The line that shall be matched against
      * @param fileEnding The file ending of the file, that contains the line
      * @param usedPatterns Patterns, that were already used for that line
@@ -274,6 +270,16 @@ class SearchMsgKeyOccurrences {
                 }
         }
         return matcher;
+    }
+
+    private void printListLn(List<String> msgList) {
+        for ( String msg : msgList ) {
+            println("  " + msg);
+        }
+    }
+
+    private static void println(String msg) {
+        System.out.println(msg);
     }
 
     private class KeyCounter {

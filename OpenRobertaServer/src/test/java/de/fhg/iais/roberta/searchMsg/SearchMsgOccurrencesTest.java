@@ -38,8 +38,8 @@ public class SearchMsgOccurrencesTest {
 
     @Ignore
     public void testMessageRedundency() throws Exception {
-        SearchMsgKeyRedundencies smr =
-            new SearchMsgKeyRedundencies(new File("../../../blockly/robMsg/robMessages.js"), new File("../../../blockly/msg/messages.js"));
+        SearchMsgKeyRedundancies smr =
+            new SearchMsgKeyRedundancies(new File("../../../blockly/robMsg/robMessages.js"), new File("../../../blockly/msg/messages.js"));
         smr.stastics();
     }
 }

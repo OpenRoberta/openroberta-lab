@@ -58,8 +58,7 @@ public class NxtSimCompilerWorkflow extends AbstractCompilerWorkflow {
 
     @Override
     public String getCompiledCode() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new DbcException("Operation not supported");
     }
 
 }

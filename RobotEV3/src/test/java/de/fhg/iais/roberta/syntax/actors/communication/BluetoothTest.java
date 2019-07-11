@@ -10,21 +10,18 @@ public class BluetoothTest {
     @Test
     public void connection() throws Exception {
         String a = "NXTConnectionvariablenName=hal.establishConnectionTo(\"101010\");publicvoidrun()throwsException{}";
-
         this.h.assertCodeIsOk(a, "/syntax/actions/action_BluetoothConnection.xml");
     }
 
     @Test
     public void connectionWait() throws Exception {
         String a = "NXTConnectionvariablenName=hal.waitForConnection();publicvoidrun()throwsException{}";
-
         this.h.assertCodeIsOk(a, "/syntax/actions/action_BluetoothConnectionWait.xml");
     }
 
     @Test
     public void send() throws Exception {
         String a = "NXTConnectionvariablenName2=hal.establishConnectionTo(\"\");publicvoidrun()throwsException{hal.sendMessage(\"\", variablenName2);}";
-        System.out.println(a);
         this.h.assertCodeIsOk(a, "/syntax/actions/action_BluetoothSend.xml");
     }
 
@@ -32,7 +29,6 @@ public class BluetoothTest {
     public void recive() throws Exception {
         String a =
             "NXTConnectionvariablenName2=hal.waitForConnection();publicvoidrun()throwsException{hal.drawText(String.valueOf(hal.readMessage(variablenName2)),0,0);}";
-
         this.h.assertCodeIsOk(a, "/syntax/actions/action_BluetoothReceive.xml");
     }
 }
