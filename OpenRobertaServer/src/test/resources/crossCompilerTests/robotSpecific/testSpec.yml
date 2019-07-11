@@ -8,6 +8,9 @@ robots:
     ev3dev:
         dir: ev3
         suffix: ".py"
+    ev3c4ev3:
+        dir: ev3
+        suffix: ".cpp"
     nxt:
         dir: nxt
         suffix: ".nxc"

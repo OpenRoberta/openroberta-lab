@@ -490,6 +490,14 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
+        this.sb.append("while ( true ) {");
+        incrIndentation();
+        visitStmtList(waitStmt.getStatements());
+        nlIndent();
+        this.sb.append("Wait(15);");
+        decrIndentation();
+        nlIndent();
+        this.sb.append("}");
         return null;
     }
 
@@ -1203,6 +1211,8 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
                 return "BTNDOWN";
             case SC.ESCAPE:
                 return "BTNEXIT";
+            case SC.ANY:
+                return "BTNANY";
             default:
                 throw new DbcException("Unknown key port");
         }
