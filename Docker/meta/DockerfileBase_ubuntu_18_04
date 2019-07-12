@@ -3,6 +3,8 @@ FROM ubuntu:18.04
 ARG LAST_RUN_OF_BASE=2019-04-09
 
 RUN apt-get update && apt-get -y upgrade && \
+    apt-get install -y locales && \
+    apt-get install -y tzdata && \
     apt-get install -y git maven && \
     apt-get install -y python-pip && \
     apt-get install -y libusb-0.1-4 && \
@@ -15,6 +17,16 @@ RUN apt-get update && apt-get -y upgrade && \
     update-java-alternatives -s java-1.8.0-openjdk-amd64 && \
     apt-get install -y wget && \
     apt-get clean
+
+RUN locale-gen de_DE.UTF-8
+ENV LANG de_DE.UTF-8 
+ENV LANGUAGE de_DE:de 
+ENV LC_ALL de_DE.UTF-8
+
+RUN ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime; \
+    export DEBIAN_FRONTEND=noninteractive; \
+    apt-get install -y tzdata; \
+    dpkg-reconfigure --frontend noninteractive tzdata
 
 RUN git config --global core.fileMode false && \
     git config --global user.email "reinhard.budde@iais.fraunhofer.de" && \

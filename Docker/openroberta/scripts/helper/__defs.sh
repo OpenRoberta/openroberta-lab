@@ -112,5 +112,5 @@ done
 HOSTNAME=$(hostname)
 if [ "$QUIET" != true ]
 then
-    echo "working on host ${HOSTNAME} for installation ${INAME}"
+    echo "working on host ${HOSTNAME} for installation ${INAME} at BASE_DIR $BASE_DIR"
 fi

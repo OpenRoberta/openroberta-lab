@@ -459,15 +459,17 @@ public class ClientProgram {
                     final String token = httpSessionState.getToken();
                     compilerWorkflow.compileSourceCode(token, programName, language, null);
                     final Key messageKey = compilerWorkflow.getWorkflowResult();
+                    final String compilerResponse = compilerWorkflow.getCrosscompilerResponse();
                     LOG.info("compile user supplied native program. Result: " + messageKey);
                     if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
                         Util.addSuccessInfo(response, Key.COMPILERWORKFLOW_SUCCESS);
                         Statistics.info("ProgramCompileNative");
                     } else {
-                        Util.addErrorInfo(response, messageKey, null);
+                        Util.addErrorInfo(response, messageKey, compilerResponse);
                     }
                 } else if ( cmd.equals("compileP") ) {
                     Key messageKey = null;
+                    String compilerResponse = null;
 
                     String programName = request.getString("name");
                     final String xmlText = request.getString("program");
@@ -513,14 +515,16 @@ public class ClientProgram {
                             Util.addSuccessInfo(response, Key.COMPILERWORKFLOW_SUCCESS);
                             Statistics.info("ProgramCompile");
                         } else {
-                            Util.addErrorInfo(response, messageKey, null);
+                            compilerResponse = compilerWorkflow.getCrosscompilerResponse();
+                            Util.addErrorInfo(response, messageKey, compilerResponse);
                         }
                     } else {
                         messageKey = Key.PROGRAM_IMPORT_ERROR;
-                        Util.addErrorInfo(response, messageKey, null);
+                        Util.addErrorInfo(response, messageKey, compilerResponse);
                     }
                 } else if ( cmd.equals("runPBack") ) {
                     Key messageKey = null;
+                    String compilerResponse = null;
                     final String token = httpSessionState.getToken();
                     final String programName = request.getString("name");
                     final String programText = request.optString("programText");
@@ -550,13 +554,12 @@ public class ClientProgram {
                                 response.put("rc", "ok");
                                 Statistics.info("ProgramRunBack", "LoggedIn", String.valueOf(httpSessionState.isUserLoggedIn()));
                             } else {
-                                if ( messageKey != null ) {
-                                    LOG.info(messageKey.toString());
-                                }
+                                LOG.error("Compiler workflow failed with key: " + messageKey);
+                                compilerResponse = compilerWorkflow.getCrosscompilerResponse();
                             }
                         }
                     }
-                    handleRunProgramError(response, messageKey, token, true, null);
+                    handleRunProgramError(response, messageKey, token, true, compilerResponse);
                 } else if ( cmd.equals("runPsim") ) {
                     boolean wasRobotWaiting = false;
 
@@ -594,7 +597,6 @@ public class ClientProgram {
                     }
                     //TODO program checks should be in compiler workflow and should be thoroughly revised
                     handleRunProgramError(response, messageKey, token, wasRobotWaiting, null);
-
                 } else {
                     ClientProgram.LOG.error("Invalid command: " + cmd);
                     Util.addErrorInfo(response, Key.COMMAND_INVALID, null);

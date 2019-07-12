@@ -37,9 +37,9 @@ function generate_output {
   $SLEEP
   if [ "$ALIVE" = true ]
   then
-    echo "Subject: At $LAB_URL: >>> Server ok <<<"
+    echo "Subject: Server $LAB_URL $REPORT_MESSAGE >>> Server ok <<<"
   else
-    echo "Subject: At $LAB_URL: >>> Problem!!! <<<"
+    echo "Subject: Server $LAB_URL $REPORT_MESSAGE >>> Problem!!! <<<"
     echo "Please check $LAB_URL !!!"
     echo " "
   fi

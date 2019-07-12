@@ -72,7 +72,7 @@ case "$CMD" in
     stop-dbc)    source ${SCRIPT_HELPER}/_dbContainerStop.sh ;;
     backup)      DATABASE_NAME=$1
                  source ${SCRIPT_HELPER}/_dbContainerBackup.sh ;;
-    backupSave)  FROM_PATH=$1; TO_PATH=$2
+    backup-save) FROM_PATH=$1; TO_PATH=$2
                  source ${SCRIPT_HELPER}/_dbBackupSave.sh ;;
     network)     echo '******************** '$DATE' ********************'
                  echo '******************** network inspect'
@@ -106,9 +106,16 @@ case "$CMD" in
                  docker system prune --force ;;
     alive)       LAB_URL="$1"; shift
                  REPORT_ALWAYS=true
-                 case "$1" in
-                   false) REPORT_ALWAYS=false ;;
-                 esac
+                 REPORT_MESSAGE="run at $HOSTNAME"
+                 while [ "$1" != '' ]
+                 do
+                   case "$1" in
+                     mail=always) REPORT_ALWAYS=true ;;
+                     mail=error)  REPORT_ALWAYS=false ;;
+                     msg=*)       SPLIT=(${1/=/ }); REPORT_MESSAGE=${SPLIT[1]} ;;
+                   esac
+                   shift
+                 done
                  source ${SCRIPT_HELPER}/_alive.sh ;;
     test)        echo '******************** TEST MODE START ********************'
                  source ${SCRIPT_HELPER}/_test.sh
