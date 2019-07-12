@@ -318,6 +318,16 @@ public class ExprlyAstTest {
         }
     }
 
+    @Test
+    public void testFromXml() throws Exception {
+        Phrase<Void> ast = this.h.generateAST("/expressionblock/eval_expr_1add2.xml");
+        String t = "Binary [ADD, NumConst [1], NumConst [2]]";
+        Assert.assertEquals(t, ast.toString());
+        checkCode((Expr<Void>) ast);
+        System.out.println("");
+
+    }
+
     /**
      * function to print C++ and Python code generated with the ast
      */

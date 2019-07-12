@@ -1,5 +1,5 @@
 grammar Exprly;
-
+ 
 expression: expr;
 
 expr     : CONST                                                     # MathConst
@@ -56,7 +56,7 @@ FNAME   :  'sin'
         |  'log10'
         |  'ln'
         |  'randInt'
-        |  'randFloat'
+        |  'randFloat' 
         |  'floor'
         |  'ceil'
         |  'isEven'

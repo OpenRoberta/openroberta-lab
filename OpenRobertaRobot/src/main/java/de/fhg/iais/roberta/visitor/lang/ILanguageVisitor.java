@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
+import de.fhg.iais.roberta.syntax.lang.expr.EvalExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
@@ -452,6 +453,11 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
 
     default V visitFunctionExpr(FunctionExpr<V> functionExpr) {
         functionExpr.getFunction().visit(this);
+        return null;
+    }
+
+    default V visitEvalExpr(EvalExpr<V> evalExpr) {
+        evalExpr.getExpr().visit(this);
         return null;
     }
 

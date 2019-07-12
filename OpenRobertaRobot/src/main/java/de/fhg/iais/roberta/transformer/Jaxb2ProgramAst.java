@@ -75,6 +75,8 @@ public class Jaxb2ProgramAst<V> extends AbstractJaxb2Ast<V> {
             return (Phrase<V>) method.invoke(null, block, this);
         } catch ( NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException
             | InvocationTargetException | DbcException e ) {
+            System.out.println("ERROR CLASS: " + className);
+            System.out.println("");
             throw new DbcException(e.getCause().getMessage());
         }
     }
