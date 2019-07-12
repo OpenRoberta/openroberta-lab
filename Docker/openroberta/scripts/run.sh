@@ -104,9 +104,15 @@ case "$CMD" in
                  docker volume rm $(docker volume ls -q -f dangling=true)
                  echo '******************** remove unused containers, networks, images ********************'
                  docker system prune --force ;;
-    alive)       LAB_URL="$1"; shift
+    alive)       case $ALIVE_ACTIVE in
+                   true) : ;;
+                   *)    echo "variable ALIVE_ACTIVE not true. Functionality not available. Exit 12"
+                         exit 12 ;;
+                 esac
+                 
+                 LAB_URL="$1"; shift
                  REPORT_ALWAYS=true
-                 REPORT_MESSAGE="run at $HOSTNAME"
+                 REPORT_MESSAGE="checked from host $HOSTNAME"
                  while [ "$1" != '' ]
                  do
                    case "$1" in

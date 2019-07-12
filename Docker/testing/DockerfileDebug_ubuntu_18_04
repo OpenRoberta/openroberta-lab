@@ -1,4 +1,5 @@
-FROM rbudde/openroberta_base:2
+ARG BASE_VERSION
+FROM rbudde/openroberta_base:$BASE_VERSION
 
 ARG LAST_RUN_OF_BASE=2018-11-28
 

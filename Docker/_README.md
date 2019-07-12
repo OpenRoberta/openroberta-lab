@@ -19,6 +19,7 @@ _Note:_ If the git repository `ora-cc-rsc` is changed, the base image and all im
 occur often. But better do not forget.
 
 ```bash
+BASE_VERSION=3
 REPO=/data/openroberta-lab/git/openroberta-lab
 CC_RESOURCES=/data/openroberta-lab/git/ora-cc-rsc
 cd $CC_RESOURCES
@@ -28,8 +29,9 @@ git checkout master; git pull
 echo 'is a "git merge develop" needed?'
 
 mvn clean install
-docker build --no-cache -t rbudde/openroberta_base:2 -f $REPO/Docker/meta/DockerfileBase_ubuntu_18_04 .
-docker push rbudde/openroberta_base:2
+docker build --no-cache --build-arg BASE_VERSION=$BASE_VERSION \
+       -t rbudde/openroberta_base:$BASE_VERSION -f $REPO/Docker/meta/DockerfileBase_ubuntu_18_04 .
+docker push rbudde/openroberta_base:$BASE_VERSION
 ```
 
 ## generate the image for INTEGRATION TEST.
@@ -40,11 +42,13 @@ It has executed a git clone of the main git repository `openroberta-lab` and has
 If called, it will checkout a branch and runs both the tests and the integration tests.
 
 ```bash
+BASE_VERSION=3
 REPO=/data/openroberta-lab/git/openroberta-lab
 BRANCH=develop
 cd $REPO/Docker/testing
-docker build --no-cache -t rbudde/openroberta_it_ubuntu_18_04:2 -f DockerfileIT_ubuntu_18_04 . --build-arg BRANCH=$BRANCH
-docker push rbudde/openroberta_it_ubuntu_18_04:2
+docker build --no-cache --build-arg BASE_VERSION=$BASE_VERSION --build-arg BRANCH=$BRANCH \
+       -t rbudde/openroberta_it_ubuntu_18_04:$BASE_VERSION -f DockerfileIT_ubuntu_18_04 .
+docker push rbudde/openroberta_it_ubuntu_18_04:$BASE_VERSION
 ```
 
 # Operating Instructions for the Test and Prod Server
@@ -57,7 +61,7 @@ They are setup in the same way. The following text describes the test server set
 The template for this framework is contained in directory `Docker/openroberta`. It contains the directories
 
 * conf - contains an example of an apache2 configuration and 2 dirs `docker-*`, used to generate docker images for the db and the jetty server
-* conf/scripts - contains shell scripts to administrate the framework. The main script id `run.sh`. Call it w.o. parameter to get help.
+* scripts - contains shell scripts to administrate the framework. The main script id `run.sh`. Call it w.o. parameter to get help.
   the directory `helper` contains scripts, that are sourced from `run.sh` and do the "real" work.
 * git - here one or more git repos, used to generate the openroberta server instances, are contained. At least one git repo is needed, usually a clone
   from https://github.com/OpenRoberta/openroberta-lab.git
@@ -138,9 +142,9 @@ The names of the servers are (b.t.w.: this matches the virtual host names of the
 
 The name of the docker images and the name of the running containers are:
 
-* test: image is `rbudde/openroberta_${INAME}_test:2` and container has name `${INAME}-test`
-* dev: image is `rbudde/openroberta_${INAME}_dev:2` and container has name `${INAME}-dev`
-* dev1 up to dev9: images are `rbudde/openroberta_${INAME}_dev1:2` to `rbudde/openroberta_${INAME}_dev9:2` and
+* test: image is `rbudde/openroberta_${INAME}_test:$BASE_VERSION` and container has name `${INAME}-test`
+* dev: image is `rbudde/openroberta_${INAME}_dev:$BASE_VERSION` and container has name `${INAME}-dev`
+* dev1 up to dev9: images are `rbudde/openroberta_${INAME}_dev1:$BASE_VERSION` to `rbudde/openroberta_${INAME}_dev9:$BASE_VERSION` and
   container have names `${INAME}-dev1` to `${INAME}-dev9`
 
 Generating the images is done by using the data from `decl.sh` from the server directory. Generation will:
@@ -214,6 +218,13 @@ The shell script `$SCRIPT_DIR/run.sh` has commands, that are used to administrat
   
 ```bash
 20 2 * * * bash <SCRIPT_DIR>/run.sh -q admin <server-name> cleanup-temp-user-dirs >><BASE_DIR>/logs/cronlog.txt
+```
+
+* `alive`: usually called from cron. It takes a server URL and checks whether the server is alive. It sends by default mail to admins (TODO: configure that).
+  Use `crontab -e` to add the following line to the crontab. call <SCRIPT_DIR>/run.sh -help to learn about other parameters of the call:
+  
+```bash
+20 2 * * * bash <SCRIPT_DIR>/run.sh -q alive <https://server-url> >><BASE_DIR>/logs/cronlog.txt
 ```
 
 ## Init scripts
@@ -294,7 +305,7 @@ How does it work?
 The cronjob on TGT_S could look like (note, that the script runs as user `dbBackup`, and, that cron expects the command in one line).
 
 ```bash
-0 3 * * * /usr/bin/sudo -u dbBackup <SCRIPT_DIR_ON_TGT_S>/run.sh -q backupSave
+0 3 * * * /usr/bin/sudo -u dbBackup <SCRIPT_DIR_ON_TGT_S>/run.sh -q backup-save
           dbBackup@<SRC_S>:<BASE_DIR_ON_SRC_S>/db/dbAdmin/dbBackup/<db-name> db/dbAdmin/dbBackupSave/<db-name>
           >><BASE_DIR>/logs/cronlog.txt 2>&1
 ```
@@ -322,7 +333,7 @@ in case of success it returns 0, in case of errors/failures it returns 16
 
 ```bash
 export BRANCH='develop'
-docker run rbudde/openroberta_it_ubuntu_18_04:2 $BRANCH 1.2.3 # 1.2.3 is the db version and unused for tests
+docker run rbudde/openroberta_it_ubuntu_18_04:$BASE_VERSION $BRANCH 1.2.3 # 1.2.3 is the db version and unused for tests
 ```
 
 # deprecated functionality: create the server, database, upgrade and embedded images in a docker container and run them
@@ -338,14 +349,15 @@ It has executed a git clone of the main git repository `openroberta-lab` and has
 ```bash
 REPO=/data/openroberta-lab/git/openroberta-lab
 cd $REPO/Docker
-docker build -t rbudde/openroberta_debug_ubuntu_18_04:2 -f testing/DockerfileDebug_ubuntu_18_04 .
-docker push rbudde/openroberta_debug_ubuntu_18_04:2
+docker build --build-arg BASE_VERSION=$BASE_VERSION \
+       -t rbudde/openroberta_debug_ubuntu_18_04:$BASE_VERSION  -f testing/DockerfileDebug_ubuntu_18_04 .
+docker push rbudde/openroberta_debug_ubuntu_18_04:$BASE_VERSION
 ```
 
 ## run the DEBUG container (rarely used)
 
 ```bash
-docker run -p 7100:1999 -it --entrypoint /bin/bash rbudde/openroberta_debug_ubuntu_18_04:2
+docker run -p 7100:1999 -it --entrypoint /bin/bash rbudde/openroberta_debug_ubuntu_18_04:$BASE_VERSION
 ```
 
 It starts a /bin/bash and you probably will either run a server:

@@ -98,6 +98,18 @@ isDirectoryValid $DB_ADMIN_DIR
 isDefined INAME
 isDefined DATABASE_SERVER_PORT
 isDefined DOCKER_NETWORK_NAME
+isDefined BASE_VERSION
+
+isDefined ALIVE_ACTIVE
+case $ALIVE_ACTIVE in
+  true)  isDefined ALIVE_MAIL_SMTP_SERVER
+         isDefined ALIVE_MAIL_SMTP_PORT
+         isDefined ALIVE_MAIL_SENDER
+         isDefined ALIVE_MAIL_RECEIVER ;;
+  false) : ;;
+  *)     echo "variable ALIVE_ACTIVE is '$ALIVE_ACTIVE' and not either true or false. Exit 12"
+         exit 12 ;;
+esac
 
 for NAME in $SERVERS; do
     isServerNameValid "$NAME"

@@ -6,30 +6,31 @@
 
 # LAB_URL: lab-url to check for liveness, e.g. https://lab.open-roberta.org
 # REPORT_ALWAYS: true: send mail always, false: only if problems detected
+# REPORT_MESSAGE: added to the subject: line
 
 SLEEP='sleep 1'
-SMTP=smtps.iais.fraunhofer.de
-PORT=25
-SENDER=lab-alive@open-roberta.org
-RECEIVER=( beate.jost@iais.fraunhofer.de reinhard.budde@iais.fraunhofer.de )
+ALIVE_MAIL_SMTP_SERVER=smtps.iais.fraunhofer.de
+ALIVE_MAIL_SMTP_PORT=25
+ALIVE_MAIL_SENDER=lab-alive@open-roberta.org
+ALIVE_MAIL_RECEIVER=( beate.jost@iais.fraunhofer.de reinhard.budde@iais.fraunhofer.de )
 
 function generate_output {
-  echo "helo $SMTP"
+  echo "helo $ALIVE_MAIL_SMTP_SERVER"
   $SLEEP
   
-  echo "mail from: ${SENDER}"
+  echo "mail from: ${ALIVE_MAIL_SENDER}"
   $SLEEP
-  for mailadress in "${RECEIVER[@]}"
+  for mailadress in "${ALIVE_MAIL_RECEIVER[@]}"
   do
     echo "rcpt to: ${mailadress}"
     $SLEEP
   done
   echo "data"
   $SLEEP
-  echo "From: ${SENDER}"
+  echo "From: ${ALIVE_MAIL_SENDER}"
   $SLEEP
   ASSEMBLE_TO=''
-  for mailadress in "${RECEIVER[@]}"
+  for mailadress in "${ALIVE_MAIL_RECEIVER[@]}"
   do
     ASSEMBLE_TO="$ASSEMBLE_TO$mailadress,"
   done
@@ -70,5 +71,5 @@ echo "*** checking liveness of $LAB_URL as seen by host $HOSTNAME with result al
 
 if [[ "$ALIVE" = false || "$REPORT_ALWAYS" = true ]]
 then
-    generate_output | sudo nc $SMTP $PORT
+    generate_output | sudo nc $ALIVE_MAIL_SMTP_SERVER $ALIVE_MAIL_SMTP_PORT
 fi
