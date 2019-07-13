@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Method;
 import java.util.List;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -29,9 +28,27 @@ public class EvalExpr<V> extends Expr<V> {
 
     private EvalExpr(String expr, String type, BlocklyBlockProperties properties, BlocklyComment comment) throws Exception {
         super(expr2AST(expr).getKind(), properties, comment);
-        this.exprBlock = expr2AST(expr);
+        Expr<V> exprBlk = expr2AST(expr);
         this.expr = expr;
         this.type = type;
+        if ( exprBlk instanceof ExprList<?> ) {
+            exprBlk.setReadOnly();
+            if ( this.type.equals("Array_Number") ) {
+                this.exprBlock = ListCreate.make(BlocklyType.NUMBER, (ExprList<V>) exprBlk);
+            } else if ( this.type.equals("Array_Boolean") ) {
+                this.exprBlock = ListCreate.make(BlocklyType.BOOLEAN, (ExprList<V>) exprBlk);
+            } else if ( this.type.equals("Array_String") ) {
+                this.exprBlock = ListCreate.make(BlocklyType.STRING, (ExprList<V>) exprBlk);
+            } else if ( this.type.equals("Array_Colour") ) {
+                this.exprBlock = ListCreate.make(BlocklyType.COLOR, (ExprList<V>) exprBlk);
+            } else if ( this.type.equals("Array_Connection") ) {
+                this.exprBlock = ListCreate.make(BlocklyType.CONNECTION, (ExprList<V>) exprBlk);
+            } else {
+                throw new IllegalArgumentException("Invalid type for EvalExpr");
+            }
+        } else {
+            this.exprBlock = exprBlk;
+        }
         this.setReadOnly();
     }
 
@@ -114,22 +131,17 @@ public class EvalExpr<V> extends Expr<V> {
      * @param block for transformation
      * @param helper class for making the transformation
      * @return corresponding AST object
-     * @throws Exception
+     * @throws Throwable
      */
     @SuppressWarnings("unchecked")
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) throws Exception {
-        Method method;
         List<Field> fields = helper.extractFields(block, (short) 2);
         String expr = helper.extractField(fields, "EXPRESSION");
         String type = helper.extractField(fields, "TYPE");
+        //Method method;
         //Expr<V> e = (Expr<V>) EvalExpr.make(expr, type, helper.extractBlockProperties(block), helper.extractComment(block)).getExpr();
-        //method = e.getClass().getMethod("jaxbToAst", Block.class, AbstractJaxb2Ast.class);
-        //Phrase<V> p = (Phrase<V>) EvalExpr.make(expr, type, helper.extractBlockProperties(block), helper.extractComment(block)).getExpr(); //(Phrase<V>) method.invoke(null, block, helper);
-        /*try {
-            return p;
-        } catch ( Exception e1 ) {
-            throw new RuntimeException("Problems here");
-        }*/
+        //method = Class.forName(e.getClass().getName()).getMethod("jaxbToAst", Block.class, AbstractJaxb2Ast.class);
+        //return (Phrase<V>) method.invoke(null, block, helper);
 
         return (Phrase<V>) EvalExpr.make(expr, type, helper.extractBlockProperties(block), helper.extractComment(block)).getExpr();
 

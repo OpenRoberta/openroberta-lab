@@ -60,9 +60,11 @@ public class ClientPing {
         }
         Date date = new Date();
         JSONObject response =
-            new JSONObject().put("version", this.openRobertaServerVersion).put("date", date.getTime()).put("dateAsString", date.toString()).put(
-                "logged",
-                logLen);
+            new JSONObject()
+                .put("version", this.openRobertaServerVersion)
+                .put("date", date.getTime())
+                .put("dateAsString", date.toString())
+                .put("logged", logLen);
         Util.addFrontendInfo(response, httpSessionState, this.brickCommunicator);
         MDC.clear();
         return Response.ok(response).build();

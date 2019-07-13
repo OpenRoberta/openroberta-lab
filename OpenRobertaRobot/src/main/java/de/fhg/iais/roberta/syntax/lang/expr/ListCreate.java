@@ -49,6 +49,17 @@ public class ListCreate<V> extends Expr<V> {
     }
 
     /**
+     * factory method: create an AST instance of {@linkListCreate}.<br>
+     * <b>Main use: either testing or textual representation of programs (because in this case no graphical regeneration is required.</b>
+     *
+     * @param exprList; must be <b>not</b> null and <b>read only</b>,
+     * @return read only object of class {@link ListCreate}
+     */
+    public static <V> ListCreate<V> make(BlocklyType typeVar, ExprList<V> exprList) {
+        return new ListCreate<V>(typeVar, exprList, BlocklyBlockProperties.make("1", "1"), null);
+    }
+
+    /**
      * @return value of the numerical constant
      */
     public ExprList<V> getValue() {
@@ -97,11 +108,12 @@ public class ListCreate<V> extends Expr<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 1);
         String filename = helper.extractField(fields, BlocklyConstants.LIST_TYPE);
-        return ListCreate.make(
-            BlocklyType.get(filename),
-            helper.blockToExprList(block, BlocklyType.ARRAY),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return ListCreate
+            .make(
+                BlocklyType.get(filename),
+                helper.blockToExprList(block, BlocklyType.ARRAY),
+                helper.extractBlockProperties(block),
+                helper.extractComment(block));
     }
 
     @Override
