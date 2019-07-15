@@ -162,16 +162,16 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
         this.sb.append(var.getName());
+        ExprList<Void> list;
 
         if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
             this.sb.append(" = ");
+            if ( var.getValue() instanceof EvalExpr<?> ) {
+                ((ListCreate<Void>) ((EvalExpr<Void>) var.getValue()).getExpr()).visit(this);
+                return null;
+            }
             if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
-                ExprList<Void> list;
-                if ( var.getValue() instanceof EvalExpr<?> ) {
-                    list = ((ListCreate<Void>) ((EvalExpr<Void>) var.getValue()).getExpr()).getValue();
-                } else {
-                    list = (ExprList<Void>) var.getValue();
-                }
+                list = (ExprList<Void>) var.getValue();
                 if ( list.get().size() == 2 ) {
                     list.get().get(1).visit(this);
                 } else {

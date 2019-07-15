@@ -160,12 +160,6 @@ public class EvalExpr<V> extends Expr<V> {
         List<Field> fields = helper.extractFields(block, (short) 2);
         String expr = helper.extractField(fields, "EXPRESSION");
         String type = helper.extractField(fields, "TYPE");
-        //Method method;
-        //Expr<V> e = (Expr<V>) EvalExpr.make(expr, type, helper.extractBlockProperties(block), helper.extractComment(block)).getExpr();
-        //method = Class.forName(e.getClass().getName()).getMethod("jaxbToAst", Block.class, AbstractJaxb2Ast.class);
-        //Phrase<V> p = (Phrase<V>) method.invoke(null, block, helper);
-        //return p;
-
         return (Phrase<V>) EvalExpr.make(expr, type, helper.extractBlockProperties(block), helper.extractComment(block));
 
     }
