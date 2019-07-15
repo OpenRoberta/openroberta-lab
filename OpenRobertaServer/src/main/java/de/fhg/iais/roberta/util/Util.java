@@ -44,10 +44,11 @@ public class Util {
 
     public static void addResultInfo(JSONObject response, AbstractProcessor processor) throws JSONException {
         String realKey = processor.getMessage().getKey();
-        response.put("rc", processor.getRC());
+        String responseCode = processor.succeeded() ? "ok" : "error";
+        response.put("rc", responseCode);
         response.put("message", realKey);
         response.put("cause", realKey);
-        response.put("parameter", processor.getParameter()); // if getParameters returns null, nothing bad happens :-)
+        response.put("parameters", processor.getParameters());
     }
 
     public static JSONObject addSuccessInfo(JSONObject response, Key key) throws JSONException {

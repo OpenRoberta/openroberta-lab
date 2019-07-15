@@ -1,7 +1,9 @@
 package de.fhg.iais.roberta.persistence;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -48,8 +50,14 @@ public class ProgramProcessor extends AbstractProcessor {
     public Program getProgram(String programName, String ownerName, String robotName, String authorName) {
         UserDao userDao = new UserDao(this.dbSession);
         User owner = userDao.loadUser(ownerName);
+        Map<String, String> processorParameters = new HashMap<>();
+        processorParameters.put("PROGRAM_NAME", programName);
+        processorParameters.put("OWNER_NAME", ownerName);
+        processorParameters.put("ROBOT_NAME", robotName);
+        processorParameters.put("AUTHOR_NAME", authorName);
+
         if ( !Util1.isValidJavaIdentifier(programName) ) {
-            setError(Key.PROGRAM_ERROR_ID_INVALID, programName);
+            setStatus(ProcessorStatus.FAILED, Key.PROGRAM_ERROR_ID_INVALID, processorParameters);
             return null;
         } else if ( this.httpSessionState.isUserLoggedIn() || owner.getId() < 3 ) {
             RobotDao robotDao = new RobotDao(this.dbSession);
@@ -58,20 +66,20 @@ public class ProgramProcessor extends AbstractProcessor {
             User author = userDao.loadUser(authorName);
             Program program = programDao.load(programName, owner, robot, author);
             if ( program != null ) {
-                setSuccess(Key.PROGRAM_GET_ONE_SUCCESS);
+                setStatus(ProcessorStatus.SUCCEEDED, Key.PROGRAM_GET_ONE_SUCCESS, processorParameters);
                 return program;
             } else {
                 program = getProgramWithAccessRight(programName, owner.getId(), authorName);
                 if ( program != null ) {
-                    setSuccess(Key.PROGRAM_GET_ONE_SUCCESS);
+                    setStatus(ProcessorStatus.SUCCEEDED, Key.PROGRAM_GET_ONE_SUCCESS, processorParameters);
                     return program;
                 } else {
-                    setError(Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND);
+                    setStatus(ProcessorStatus.FAILED, Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND, processorParameters);
                     return null;
                 }
             }
         } else {
-            setError(Key.PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN);
+            setStatus(ProcessorStatus.FAILED, Key.PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN, processorParameters);
             return null;
         }
     }
@@ -89,12 +97,12 @@ public class ProgramProcessor extends AbstractProcessor {
         if ( configName != null ) {
             Configuration config = configDao.load(configName, program.getOwner(), program.getRobot());
             if ( config == null ) {
-                setError(Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND);
+                setStatus(ProcessorStatus.FAILED, Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND, new HashMap<>());
                 return null;
             } else {
                 ConfigurationData configData = configDao.load(config.getConfigurationHash());
                 if ( configData == null ) {
-                    setError(Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND);
+                    setStatus(ProcessorStatus.FAILED, Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND, new HashMap<>());
                     return null;
                 } else {
                     return configData.getConfigurationText();
@@ -103,7 +111,7 @@ public class ProgramProcessor extends AbstractProcessor {
         } else if ( configHash != null ) {
             ConfigurationData configData = configDao.load(configHash);
             if ( configData == null ) {
-                setError(Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND);
+                setStatus(ProcessorStatus.FAILED, Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND, new HashMap<>());
                 return null;
             } else {
                 return configData.getConfigurationText();
@@ -178,7 +186,9 @@ public class ProgramProcessor extends AbstractProcessor {
             }
         }
 
-        setSuccess(Key.PROGRAM_GET_ALL_SUCCESS, "" + programInfos.length());
+        Map<String, String> processorParameters = new HashMap<>();
+        processorParameters.put("PROGRAM_LENGTH", "" + programInfos.length());
+        setStatus(ProcessorStatus.SUCCEEDED, Key.PROGRAM_GET_ALL_SUCCESS, processorParameters);
         return programInfos;
     }
 
@@ -209,7 +219,9 @@ public class ProgramProcessor extends AbstractProcessor {
             relation.put(accessRight.getRelation().toString());
             relations.put(relation);
         }
-        setSuccess(Key.PROGRAM_GET_ALL_SUCCESS, "" + relations.length());
+        Map<String, String> processorParameters = new HashMap<>();
+        processorParameters.put("RELATIONS_LENGTH", "" + relations.length());
+        setStatus(ProcessorStatus.SUCCEEDED, Key.PROGRAM_GET_ALL_SUCCESS, processorParameters);
         return relations;
     }
 
@@ -255,7 +267,9 @@ public class ProgramProcessor extends AbstractProcessor {
         boolean isOwner) //
     {
         if ( !Util1.isValidJavaIdentifier(programName) ) {
-            setError(Key.PROGRAM_ERROR_ID_INVALID, programName);
+            Map<String, String> processorParameters = new HashMap<>();
+            processorParameters.put("PROGRAM_NAME", programName);
+            setStatus(ProcessorStatus.FAILED, Key.PROGRAM_ERROR_ID_INVALID, processorParameters);
             return null;
         }
         if ( this.httpSessionState.isUserLoggedIn() ) {
@@ -273,12 +287,12 @@ public class ProgramProcessor extends AbstractProcessor {
                 confHash = confDao.persistConfigurationHash(configText);
             } else if ( configName != null && configText == null ) { // named configuration (must be persisted already! Check that!)
                 if ( confDao.load(configName, author, robot) == null ) {
-                    setError(Key.SERVER_ERROR);
+                    setStatus(ProcessorStatus.FAILED, Key.SERVER_ERROR, new HashMap<>());
                     return null;
                 }
                 confHash = null;
             } else { // illegal call (frontend error)
-                setError(Key.SERVER_ERROR);
+                setStatus(ProcessorStatus.FAILED, Key.SERVER_ERROR, new HashMap<>());
                 return null;
             }
             Pair<Key, Program> result;
@@ -289,13 +303,13 @@ public class ProgramProcessor extends AbstractProcessor {
             }
             // a bit strange, but necessary as Java has no N-tuple
             if ( result.getFirst() == Key.PROGRAM_SAVE_SUCCESS ) {
-                setSuccess(Key.PROGRAM_SAVE_SUCCESS);
+                setStatus(ProcessorStatus.SUCCEEDED, Key.PROGRAM_SAVE_SUCCESS, new HashMap<>());
             } else {
-                setError(result.getFirst());
+                setStatus(ProcessorStatus.FAILED, result.getFirst(), new HashMap<>());
             }
             return result.getSecond();
         } else {
-            setError(Key.USER_ERROR_NOT_LOGGED_IN);
+            setStatus(ProcessorStatus.FAILED, Key.USER_ERROR_NOT_LOGGED_IN, new HashMap<>());
             return null;
         }
     }
@@ -327,9 +341,9 @@ public class ProgramProcessor extends AbstractProcessor {
         Robot robot = robotDao.loadRobot(robotName);
         int rowCount = programDao.deleteByName(programName, owner, robot, author);
         if ( rowCount > 0 ) {
-            setSuccess(Key.PROGRAM_DELETE_SUCCESS);
+            setStatus(ProcessorStatus.SUCCEEDED, Key.PROGRAM_DELETE_SUCCESS, new HashMap<>());
         } else {
-            setError(Key.PROGRAM_DELETE_ERROR);
+            setStatus(ProcessorStatus.FAILED, Key.PROGRAM_DELETE_ERROR, new HashMap<>());
         }
     }
 
@@ -375,7 +389,9 @@ public class ProgramProcessor extends AbstractProcessor {
                 LOG.error("User gallery owns programs that are not shared exactly with the origin user with right X_WRITE: " + program.getId());
             }
         }
-        setSuccess(Key.PROGRAM_GET_ALL_SUCCESS, "" + programs.length());
+        Map<String, String> processorParameters = new HashMap<>();
+        processorParameters.put("PROGRAMS_LENGTH", "" + programs.length());
+        setStatus(ProcessorStatus.SUCCEEDED, Key.PROGRAM_GET_ALL_SUCCESS, processorParameters);
         return programs;
     }
 
@@ -390,7 +406,7 @@ public class ProgramProcessor extends AbstractProcessor {
             User author = userDao.get(authorId);
             Program program = programDao.load(programName, owner, robot, author);
             if ( program != null ) {
-                setSuccess(Key.PROGRAM_GET_ONE_SUCCESS);
+                setStatus(ProcessorStatus.SUCCEEDED, Key.PROGRAM_GET_ONE_SUCCESS, new HashMap<>());
                 JSONArray prog = new JSONArray();
                 prog.put(program.getRobot().getName());
                 prog.put(program.getName());
@@ -402,7 +418,7 @@ public class ProgramProcessor extends AbstractProcessor {
                 prog.put(program.getTags());
                 return prog;
             } else {
-                setError(Key.PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN);
+                setStatus(ProcessorStatus.FAILED, Key.PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN, new HashMap<>());
                 return null;
             }
         }

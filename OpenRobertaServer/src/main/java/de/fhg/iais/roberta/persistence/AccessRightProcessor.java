@@ -1,5 +1,8 @@
 package de.fhg.iais.roberta.persistence;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,7 +94,7 @@ public class AccessRightProcessor extends AbstractProcessor {
             }
         }
         if ( responseKey != null ) {
-            setError(responseKey);
+            setStatus(ProcessorStatus.FAILED, responseKey, new HashMap<>());
             return;
         }
 
@@ -99,17 +102,24 @@ public class AccessRightProcessor extends AbstractProcessor {
         try {
             if ( right.equals("NONE") ) {
                 accessRightDao.deleteAccessRight(userToShare, programToShare);
-                setSuccess(Key.ACCESS_RIGHT_DELETED);
+                setStatus(ProcessorStatus.SUCCEEDED, Key.ACCESS_RIGHT_DELETED, new HashMap<>());
             } else {
                 Relation relation = Relation.valueOf(right);
                 accessRightDao.persistAccessRight(userToShare, programToShare, relation);
-                setSuccess(Key.ACCESS_RIGHT_CHANGED);
+                setStatus(ProcessorStatus.SUCCEEDED, Key.ACCESS_RIGHT_CHANGED, new HashMap<>());
             }
         } catch ( Exception e ) {
             String msg =
                 "Invalid share request. Owner:" + owner + ", robot:" + robotName + ", program:" + programName + ", with:" + userToShare + ", right:" + right;
             AccessRightProcessor.LOG.error(msg);
-            setError(Key.SERVER_ERROR);
+            Map<String, String> processorParameters = new HashMap<>();
+            processorParameters.put(Key.SERVER_ERROR.getKey(), "Invalid share request");
+            processorParameters.put("owner", owner.toString());
+            processorParameters.put("robot", robotName);
+            processorParameters.put("program", programName);
+            processorParameters.put("with", userToShare.toString());
+            processorParameters.put("right", right);
+            setStatus(ProcessorStatus.FAILED, Key.SERVER_ERROR, processorParameters);
         }
     }
 }

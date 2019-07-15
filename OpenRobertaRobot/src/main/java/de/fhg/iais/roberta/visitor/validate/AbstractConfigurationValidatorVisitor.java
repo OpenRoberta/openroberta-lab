@@ -8,8 +8,12 @@ public abstract class AbstractConfigurationValidatorVisitor {
     protected Configuration robotConfiguration;
 
     public AbstractConfigurationValidatorVisitor(Configuration configuration) {
-        robotConfiguration = configuration;
+        this.robotConfiguration = configuration;
     }
 
     public abstract void checkConfiguration();
+
+    public abstract String getIncorrectPin();
+
+    public abstract String getFailingBlock();
 }

@@ -1,12 +1,15 @@
 package de.fhg.iais.roberta.persistence;
 
-import org.codehaus.jettison.json.JSONArray;
+import java.util.Map;
+
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
  * super class of the various processor implementations (program, user, ...). The processor objects are light-weight.<br>
@@ -20,53 +23,65 @@ public abstract class AbstractProcessor {
     protected final DbSession dbSession;
     protected final HttpSessionState httpSessionState;
 
-    private boolean success;
     private Key message;
-    private String[] parameter;
+    private ProcessorStatus status;
+    private Map<String, String> parameters;
 
     protected AbstractProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
         this.dbSession = dbSession;
         this.httpSessionState = httpSessionState;
     }
 
-    /**
-     * the command succeeded. Remember that.
-     */
-    public final void setSuccess(Key message, String... parameter) {
-        //Assert.isTrue(this.success == null);
-        this.success = true;
+    public void setParameters(Map<String, String> parameters) {
+        this.parameters = parameters;
+    }
+
+    public JSONObject getParameters() {
+        return new JSONObject(this.parameters);
+    }
+
+    public final void setStatus(ProcessorStatus status, Key message, Map<String, String> parameters) {
+        this.status = status;
         this.message = message;
-        this.parameter = parameter;
-        AbstractProcessor.LOG.info("Success: " + message);
+        this.parameters = parameters;
+        switch ( status ) {
+            case SUCCEEDED:
+                AbstractProcessor.LOG.info("Processor succeeded: " + message);
+                break;
+            case FAILED:
+                AbstractProcessor.LOG.info("Processor failed: " + message);
+                break;
+            default:
+                AbstractProcessor.LOG.info("Illegal processor state passed: " + message);
+                throw new DbcException("Illegal processor state passed: " + message);
+        }
     }
 
     /**
-     * the command failed. Remember that.
-     */
-    public final void setError(Key message, String... parameters) {
-        //Assert.isTrue(this.success == null);
-        this.success = false;
-        this.message = message;
-        this.parameter = parameters;
-        AbstractProcessor.LOG.error("Error. The error key is: " + message);
-    }
-
-    /**
-     * check the actual state of a processor. Note, that id neither setSuccess nor setError have been called, the method will return <b>false</b>.
+     * Returns the state of the processor, either SUCCEEDED or FAILED
      *
-     * @return true, if the processor is successful
+     * @return {@link ProcessorStatus}
      */
-    public final boolean isOk() {
-        return this.success;
+    public final ProcessorStatus getStatus() {
+        return this.status;
     }
 
     /**
-     * gets the return code of a processor: either "ok" or "error"
-     *
-     * @return the string describing success or error
+     * Check if processor state is SUCCEEDED or FAILED
+     * 
+     * @return return true if SUCCEEDED, false if FAILED and throw an {@link DbcException} otherwise
      */
-    public final String getRC() {
-        return this.success ? "ok" : "error";
+
+    public final boolean succeeded() {
+        switch ( this.status ) {
+            case SUCCEEDED:
+                return true;
+            case FAILED:
+                return false;
+            default:
+                AbstractProcessor.LOG.info("Illegal processor state passed: " + this.message);
+                throw new DbcException("Illegal processor state passed: " + this.message);
+        }
     }
 
     /**
@@ -80,23 +95,6 @@ public abstract class AbstractProcessor {
             return Key.SERVER_ERROR;
         } else {
             return this.message;
-        }
-    }
-
-    /**
-     * get the parameters for a message key, if they exist
-     *
-     * @return the parameters for a message key, null if they don't exist
-     */
-    public final JSONArray getParameter() {
-        if ( this.parameter == null || this.parameter.length == 0 ) {
-            return null;
-        } else {
-            JSONArray parametersJSONArray = new JSONArray();
-            for ( String p : this.parameter ) {
-                parametersJSONArray.put(p);
-            }
-            return parametersJSONArray;
         }
     }
 }

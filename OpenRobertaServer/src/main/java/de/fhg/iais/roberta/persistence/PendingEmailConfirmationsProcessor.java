@@ -1,5 +1,8 @@
 package de.fhg.iais.roberta.persistence;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import de.fhg.iais.roberta.persistence.bo.PendingEmailConfirmations;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.dao.PendingEmailConfirmationsDao;
@@ -15,7 +18,9 @@ public class PendingEmailConfirmationsProcessor extends AbstractProcessor {
 
     public PendingEmailConfirmations createEmailConfirmation(String account) throws Exception {
         if ( account == null || account.equals("") ) {
-            setError(Key.USER_UPDATE_ERROR_ACCOUNT_WRONG, account);
+            Map<String, String> processorParameters = new HashMap<>();
+            processorParameters.put("ACCOUNT", account);
+            setStatus(ProcessorStatus.FAILED, Key.USER_UPDATE_ERROR_ACCOUNT_WRONG, processorParameters);
         } else {
             UserDao userDao = new UserDao(this.dbSession);
             User user = userDao.loadUser(account);
@@ -28,17 +33,19 @@ public class PendingEmailConfirmationsProcessor extends AbstractProcessor {
     }
 
     public PendingEmailConfirmations createEmailConfirmation(int userId) throws Exception {
+        Map<String, String> processorParameters = new HashMap<>();
+        processorParameters.put("USER_ID", String.valueOf(userId));
         if ( userId <= 0 ) {
-            setError(Key.USER_CREATE_ERROR_GENERATE_CONFIRMATION, String.valueOf(userId));
+            setStatus(ProcessorStatus.FAILED, Key.USER_CREATE_ERROR_GENERATE_CONFIRMATION, processorParameters);
             return null;
         } else {
             PendingEmailConfirmationsDao confirmationsDao = new PendingEmailConfirmationsDao(this.dbSession);
             PendingEmailConfirmations confirmation = confirmationsDao.persistConfirmation(userId);
             if ( confirmation != null ) {
-                setSuccess(Key.USER_CREATE_GENERATE_CONFIRMATION_SUCCESS);
+                setStatus(ProcessorStatus.SUCCEEDED, Key.USER_CREATE_GENERATE_CONFIRMATION_SUCCESS, new HashMap<>());
                 return confirmation;
             } else {
-                setError(Key.USER_CREATE_GENERATE_CONFIRMATION_URL_USERID_NOT_SAVED_IN_DATABASE, String.valueOf(userId));
+                setStatus(ProcessorStatus.FAILED, Key.USER_CREATE_GENERATE_CONFIRMATION_URL_USERID_NOT_SAVED_IN_DATABASE, processorParameters);
                 return null;
             }
         }
@@ -50,7 +57,9 @@ public class PendingEmailConfirmationsProcessor extends AbstractProcessor {
         if ( confirmation != null ) {
             return confirmation;
         } else {
-            setError(Key.USER_ACTIVATION_INVALID_URL, urlPostfix);
+            Map<String, String> processorParameters = new HashMap<>();
+            processorParameters.put("POSTFIX_URL", urlPostfix);
+            setStatus(ProcessorStatus.FAILED, Key.USER_ACTIVATION_INVALID_URL, processorParameters);
             return null;
         }
     }

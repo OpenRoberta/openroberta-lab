@@ -3,6 +3,8 @@ package de.fhg.iais.roberta.javaServer.restServices.all;
 import java.io.StringWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -37,6 +39,7 @@ import de.fhg.iais.roberta.persistence.AccessRightProcessor;
 import de.fhg.iais.roberta.persistence.ConfigurationProcessor;
 import de.fhg.iais.roberta.persistence.DummyProcessor;
 import de.fhg.iais.roberta.persistence.LikeProcessor;
+import de.fhg.iais.roberta.persistence.ProcessorStatus;
 import de.fhg.iais.roberta.persistence.ProgramProcessor;
 import de.fhg.iais.roberta.persistence.UserProcessor;
 import de.fhg.iais.roberta.persistence.bo.Program;
@@ -57,6 +60,7 @@ import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.visitor.validate.AbstractConfigurationValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
@@ -74,7 +78,7 @@ public class ClientProgram {
     public ClientProgram(SessionFactoryWrapper sessionFactoryWrapper, RobotCommunicator brickCommunicator, ServerProperties serverProperties) {
         this.sessionFactoryWrapper = sessionFactoryWrapper;
         this.brickCommunicator = brickCommunicator;
-        isPublicServer = serverProperties.getBooleanProperty("server.public");
+        this.isPublicServer = serverProperties.getBooleanProperty("server.public");
     }
 
     @POST
@@ -86,14 +90,14 @@ public class ClientProgram {
         MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
         MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
         new ClientLogger().log(ClientProgram.LOG, fullRequest);
-
+        Map<String, String> responseParameters = new HashMap<>();
         final int userId = httpSessionState.getUserId();
         final String robot =
             httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup() != ""
                 ? httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup()
                 : httpSessionState.getRobotName();
         final JSONObject response = new JSONObject();
-        final DbSession dbSession = sessionFactoryWrapper.getSession();
+        final DbSession dbSession = this.sessionFactoryWrapper.getSession();
         try {
             final JSONObject request = fullRequest.getJSONObject("data");
             final String cmd = request.getString("cmd");
@@ -122,16 +126,13 @@ public class ClientProgram {
                 } else {
                     program = pp.persistProgramText(programName, programText, configName, configText, userId, robot, userId, null, true);
                 }
-                if ( pp.isOk() ) {
-                    if ( program != null ) {
-                        response.put("lastChanged", program.getLastChanged().getTime());
-                    } else {
-                        ClientProgram.LOG.error("TODO: check potential error: the saved program should never be null");
-                    }
+                if ( pp.succeeded() && program != null ) {
+                    response.put("lastChanged", program.getLastChanged().getTime());
+                } else {
+                    ClientProgram.LOG.error("TODO: check potential error: the saved program should never be null");
                 }
                 Util.addResultInfo(response, pp);
                 Statistics.info("ProgramSave");
-
             } else {
                 ICompilerWorkflow compilerWorkflow = robotFactory.getRobotCompilerWorkflow();
                 if ( cmd.equals("showSourceP") ) {
@@ -143,6 +144,7 @@ public class ClientProgram {
                     final String SSID = request.optString("SSID", null);
                     final String password = request.optString("password", null);
                     final ILanguage language = Language.findByAbbr(request.optString("language"));
+                    boolean configurationCorrect = true;
                     if ( configName != null ) {
                         configurationText = configurationProcessor.getConfigurationText(configName, userId, robot);
                     } else if ( configurationText == null ) {
@@ -154,8 +156,19 @@ public class ClientProgram {
                         BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
                     transformer.getRobotConfiguration().setRobotName(httpSessionState.getRobotName());
                     if ( transformer.getErrorMessage() != null ) {
-                        forMessages.setError(transformer.getErrorMessage());
+                        forMessages.setStatus(ProcessorStatus.FAILED, transformer.getErrorMessage(), responseParameters);
                     } else {
+                        final AbstractConfigurationValidatorVisitor configurationChecker =
+                            robotFactory.getRobotConfigurationCheckVisitor(transformer.getRobotConfiguration());
+                        if ( configurationChecker != null ) {
+                            try {
+                                configurationChecker.checkConfiguration();
+                            } catch ( DbcException e ) {
+                                configurationCorrect = false;
+                                responseParameters.put("{BLOCK}", configurationChecker.getFailingBlock());
+                                responseParameters.put("{PIN}", configurationChecker.getIncorrectPin());
+                            }
+                        }
                         if ( !SSID.equals("null") || !password.equals("null") ) {
                             final AbstractProgramValidatorVisitor programChecker =
                                 robotFactory.getRobotProgramCheckVisitor(transformer.getRobotConfiguration(), SSID, password);
@@ -164,19 +177,20 @@ public class ClientProgram {
                         } else {
                             final AbstractProgramValidatorVisitor programChecker =
                                 robotFactory.getRobotProgramCheckVisitor(transformer.getRobotConfiguration());
-                            final AbstractConfigurationValidatorVisitor configurationChecker =
-                                robotFactory.getRobotConfigurationCheckVisitor(transformer.getRobotConfiguration());
                             programConfigurationCompatibilityCheck(response, transformer, programChecker);
-                            configurationChecker.checkConfiguration();
                             compilerWorkflow.generateSourceCode(token, programName, transformer, language);
                         }
                         String sourceCode = compilerWorkflow.getGeneratedSourceCode();
                         if ( sourceCode == null ) {
-                            forMessages.setError(compilerWorkflow.getWorkflowResult());
+                            forMessages.setStatus(ProcessorStatus.FAILED, compilerWorkflow.getWorkflowResult(), responseParameters);
+                        } else if ( !configurationCorrect ) {
+                            response.put("sourceCode", sourceCode);
+                            response.put("fileExtension", robotFactory.getFileExtension());
+                            forMessages.setStatus(ProcessorStatus.FAILED, Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED, responseParameters);
                         } else {
                             response.put("sourceCode", sourceCode);
                             response.put("fileExtension", robotFactory.getFileExtension());
-                            forMessages.setSuccess(Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS);
+                            forMessages.setStatus(ProcessorStatus.SUCCEEDED, Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS, responseParameters);
                         }
                     }
                     Util.addResultInfo(response, forMessages);
@@ -247,7 +261,7 @@ public class ClientProgram {
                         Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN, null);
                     } else {
                         final User user = up.getUser(userId);
-                        if ( !isPublicServer || user != null && user.isActivated() ) {
+                        if ( !this.isPublicServer || user != null && user.isActivated() ) {
                             final String programName = request.getString("programName");
                             final String userToShareName = request.getString("userToShare");
                             final String right = request.getString("right");
@@ -269,7 +283,7 @@ public class ClientProgram {
                         // generating a unique name for the program owned by the gallery.
                         final User user = up.getUser(userId);
                         final String userAccount = user.getAccount();
-                        if ( !isPublicServer || user != null && user.isActivated() ) {
+                        if ( !this.isPublicServer || user != null && user.isActivated() ) {
                             // get the program from the origin user to share with the gallery
                             final Program program = pp.getProgram(programName, userAccount, robot, userAccount);
 
@@ -288,7 +302,7 @@ public class ClientProgram {
                                 // make a copy of the user program and store it as a gallery owned program
                                 final Program programCopy =
                                     pp.persistProgramText(programName, program.getProgramText(), null, confText, galleryId, robot, userId, null, true);
-                                if ( pp.isOk() ) {
+                                if ( pp.succeeded() ) {
                                     if ( programCopy != null ) {
                                         response.put("lastChanged", programCopy.getLastChanged().getTime());
                                         // share the copy of the program with the origin user
@@ -321,7 +335,7 @@ public class ClientProgram {
 
                         if ( like ) {
                             lp.createLike(programName, robotName, authorName);
-                            if ( lp.isOk() ) {
+                            if ( lp.succeeded() ) {
                                 // nothing to do
                             } else {
                                 Util.addErrorInfo(response, Key.LIKE_SAVE_ERROR_EXISTS, null);
@@ -427,7 +441,6 @@ public class ClientProgram {
                     } else if ( configurationText == null ) {
                         configurationText = robotFactory.getConfigurationDefault();
                     }
-
                     final BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                         BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
                     programAndConfigTransformer.getRobotConfiguration().setRobotName(httpSessionState.getRobotName());
@@ -441,8 +454,8 @@ public class ClientProgram {
                             compilerWorkflow.generateSourceAndCompile(token, programName, programAndConfigTransformer, language);
                             messageKey = compilerWorkflow.getWorkflowResult();
                             if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS && token != null && !token.equals(ClientAdmin.NO_CONNECT) ) {
-                                brickCommunicator.setSubtype(httpSessionState.getRobotName());
-                                wasRobotWaiting = brickCommunicator.theRunButtonWasPressed(token, programName);
+                                this.brickCommunicator.setSubtype(httpSessionState.getRobotName());
+                                wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
                                 Statistics.info("ProgramRun", "LoggedIn", String.valueOf(httpSessionState.isUserLoggedIn()));
                             } else {
                                 if ( messageKey != null ) {
@@ -617,7 +630,7 @@ public class ClientProgram {
                 dbSession.close();
             }
         }
-        Util.addFrontendInfo(response, httpSessionState, brickCommunicator);
+        Util.addFrontendInfo(response, httpSessionState, this.brickCommunicator);
         MDC.clear();
         return Response.ok(response).build();
     }

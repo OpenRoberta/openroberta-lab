@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.persistence;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -35,25 +36,25 @@ public class LikeProcessor extends AbstractProcessor {
 
             Robot robot = robotDao.loadRobot(robotName);
             if ( robot == null ) {
-                setError(Key.ROBOT_DOES_NOT_EXIST);
+                setStatus(ProcessorStatus.FAILED, Key.ROBOT_DOES_NOT_EXIST, new HashMap<>());
                 return null;
             }
             Program program = programDao.load(programName, gallery, robot, author);
             if ( program == null ) {
-                setError(Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND);
+                setStatus(ProcessorStatus.FAILED, Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND, new HashMap<>());
                 return null;
             }
             Pair<Key, Like> result = likeDao.persistsLike(userWhoLike, program);
 
             // a bit strange, but necessary as Java has no N-tuple
             if ( result.getFirst() == Key.LIKE_SAVE_SUCCESS ) {
-                setSuccess(Key.LIKE_SAVE_SUCCESS);
+                setStatus(ProcessorStatus.SUCCEEDED, Key.LIKE_SAVE_SUCCESS, new HashMap<>());
             } else {
-                setError(result.getFirst());
+                setStatus(ProcessorStatus.FAILED, result.getFirst(), new HashMap<>());
             }
             return result.getSecond();
         } else {
-            setError(Key.USER_ERROR_NOT_LOGGED_IN);
+            setStatus(ProcessorStatus.FAILED, Key.USER_ERROR_NOT_LOGGED_IN, new HashMap<>());
             return null;
         }
     }
@@ -62,10 +63,10 @@ public class LikeProcessor extends AbstractProcessor {
         LikeDao likeDao = new LikeDao(this.dbSession);
         Like like = likeDao.loadLike(user, program);
         if ( like != null ) {
-            setSuccess(Key.LIKE_GET_ONE_SUCCESS);
+            setStatus(ProcessorStatus.SUCCEEDED, Key.LIKE_GET_ONE_SUCCESS, new HashMap<>());
             return like;
         } else {
-            setError(Key.LIKE_GET_ONE_ERROR_NOT_FOUND);
+            setStatus(ProcessorStatus.FAILED, Key.LIKE_GET_ONE_ERROR_NOT_FOUND, new HashMap<>());
             return null;
         }
     }
@@ -77,7 +78,7 @@ public class LikeProcessor extends AbstractProcessor {
         for ( Like like : likesList ) {
             likes.put(like.getUser().getAccount());
         }
-        setSuccess(Key.LIKE_GET_ALL_SUCCESS);
+        setStatus(ProcessorStatus.SUCCEEDED, Key.LIKE_GET_ALL_SUCCESS, new HashMap<>());
         return likes;
     }
 
@@ -104,18 +105,18 @@ public class LikeProcessor extends AbstractProcessor {
 
         Robot robot = robotDao.loadRobot(robotName);
         if ( robot == null ) {
-            setError(Key.ROBOT_DOES_NOT_EXIST);
+            setStatus(ProcessorStatus.FAILED, Key.ROBOT_DOES_NOT_EXIST, new HashMap<>());
             return;
         }
         Program program = programDao.load(programName, gallery, robot, author);
         if ( program == null ) {
-            setError(Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND);
+            setStatus(ProcessorStatus.FAILED, Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND, new HashMap<>());
             return;
         }
         Like like = likeDao.loadLike(userWhoLike, program);
         if ( like != null ) {
             likeDao.deleteLike(like);
-            setSuccess(Key.LIKE_DELETE_SUCCESS);
+            setStatus(ProcessorStatus.SUCCEEDED, Key.LIKE_DELETE_SUCCESS, new HashMap<>());
             return;
         }
     }

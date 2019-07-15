@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.persistence;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.codehaus.jettison.json.JSONArray;
 
@@ -21,9 +23,11 @@ public class ConfigurationProcessor extends AbstractProcessor {
         super(dbSession, httpSessionState);
     }
 
-    public String getConfigurationText(String configName, int userId, String robotName) {
-        if ( !Util1.isValidJavaIdentifier(configName) ) {
-            setError(Key.CONFIGURATION_ERROR_ID_INVALID, configName);
+    public String getConfigurationText(String configurationName, int userId, String robotName) {
+        if ( !Util1.isValidJavaIdentifier(configurationName) ) {
+            Map<String, String> processorParameters = new HashMap<>();
+            processorParameters.put("CONFIG_NAME", configurationName);
+            setStatus(ProcessorStatus.FAILED, Key.CONFIGURATION_ERROR_ID_INVALID, processorParameters);
             return null;
         } else {
             ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
@@ -33,20 +37,20 @@ public class ConfigurationProcessor extends AbstractProcessor {
             if ( this.httpSessionState.isUserLoggedIn() ) {
                 UserDao userDao = new UserDao(this.dbSession);
                 User owner = userDao.get(userId);
-                configuration = configurationDao.load(configName, owner, robot);
+                configuration = configurationDao.load(configurationName, owner, robot);
             } else {
-                configuration = configurationDao.load(configName, null, robot);
+                configuration = configurationDao.load(configurationName, null, robot);
             }
             if ( configuration == null ) {
-                setError(Key.CONFIGURATION_GET_ONE_ERROR_NOT_FOUND);
+                setStatus(ProcessorStatus.FAILED, Key.CONFIGURATION_GET_ONE_ERROR_NOT_FOUND, new HashMap<>());
                 return null;
             } else {
                 ConfigurationData configurationData = configurationDao.load(configuration.getConfigurationHash());
                 if ( configurationData == null ) {
-                    setError(Key.CONFIGURATION_GET_ONE_ERROR_NOT_FOUND);
+                    setStatus(ProcessorStatus.FAILED, Key.CONFIGURATION_GET_ONE_ERROR_NOT_FOUND, new HashMap<>());
                     return null;
                 } else {
-                    setSuccess(Key.CONFIGURATION_GET_ONE_SUCCESS);
+                    setStatus(ProcessorStatus.SUCCEEDED, Key.CONFIGURATION_GET_ONE_SUCCESS, new HashMap<>());
                     return configurationData.getConfigurationText();
                 }
             }
@@ -64,7 +68,9 @@ public class ConfigurationProcessor extends AbstractProcessor {
      */
     public void updateConfiguration(String configurationName, int ownerId, String robotName, String configurationText, boolean mayExist) {
         if ( !Util1.isValidJavaIdentifier(configurationName) ) {
-            setError(Key.CONFIGURATION_ERROR_ID_INVALID, configurationName);
+            Map<String, String> processorParameters = new HashMap<>();
+            processorParameters.put("CONFIG_NAME", configurationName);
+            setStatus(ProcessorStatus.FAILED, Key.CONFIGURATION_ERROR_ID_INVALID, processorParameters);
             return;
         }
         this.httpSessionState.setConfigurationNameAndConfiguration(configurationName, configurationText);
@@ -75,12 +81,12 @@ public class ConfigurationProcessor extends AbstractProcessor {
             User owner = userDao.get(ownerId);
             Robot robot = robotDao.loadRobot(robotName);
             if ( configurationDao.persistConfigurationText(configurationName, owner, robot, configurationText, mayExist) ) {
-                setSuccess(Key.CONFIGURATION_SAVE_SUCCESS);
+                setStatus(ProcessorStatus.SUCCEEDED, Key.CONFIGURATION_SAVE_SUCCESS, new HashMap<>());
             } else {
-                setError(Key.CONFIGURATION_SAVE_ERROR);
+                setStatus(ProcessorStatus.FAILED, Key.CONFIGURATION_SAVE_ERROR, new HashMap<>());
             }
         } else {
-            setError(Key.USER_ERROR_NOT_LOGGED_IN);
+            setStatus(ProcessorStatus.FAILED, Key.USER_ERROR_NOT_LOGGED_IN, new HashMap<>());
         }
     }
 
@@ -100,7 +106,9 @@ public class ConfigurationProcessor extends AbstractProcessor {
             configurationInfo.put(program.getCreated().getTime());
             configurationInfo.put(program.getLastChanged().getTime());
         }
-        setSuccess(Key.CONFIGURATION_GET_ALL_SUCCESS, "" + configurationInfos.length());
+        Map<String, String> processorParameters = new HashMap<>();
+        processorParameters.put("CONFIG_LENGTH", "" + configurationInfos.length());
+        setStatus(ProcessorStatus.SUCCEEDED, Key.CONFIGURATION_GET_ALL_SUCCESS, processorParameters);
         return configurationInfos;
     }
 
@@ -112,9 +120,9 @@ public class ConfigurationProcessor extends AbstractProcessor {
         Robot robot = robotDao.loadRobot(robotName);
         int rowCount = configurationDao.deleteByName(configurationName, owner, robot);
         if ( rowCount > 0 ) {
-            setSuccess(Key.CONFIGURATION_DELETE_SUCCESS);
+            setStatus(ProcessorStatus.SUCCEEDED, Key.CONFIGURATION_DELETE_SUCCESS, new HashMap<>());
         } else {
-            setError(Key.CONFIGURATION_DELETE_ERROR);
+            setStatus(ProcessorStatus.FAILED, Key.CONFIGURATION_DELETE_ERROR, new HashMap<>());
         }
     }
 }

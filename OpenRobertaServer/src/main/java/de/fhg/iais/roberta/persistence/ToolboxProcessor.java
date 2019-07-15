@@ -1,5 +1,8 @@
 package de.fhg.iais.roberta.persistence;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.bo.Toolbox;
 import de.fhg.iais.roberta.persistence.bo.User;
@@ -18,7 +21,9 @@ public class ToolboxProcessor extends AbstractProcessor {
 
     public Toolbox getToolbox(String toolboxName, int userId, String robotName) {
         if ( !Util1.isValidJavaIdentifier(toolboxName) ) {
-            setError(Key.TOOLBOX_ERROR_ID_INVALID, toolboxName);
+            Map<String, String> processorParameters = new HashMap<>();
+            processorParameters.put("TOOLBOX_NAME", toolboxName);
+            setStatus(ProcessorStatus.FAILED, Key.TOOLBOX_ERROR_ID_INVALID, processorParameters);
             return null;
         } else {
             User owner = null;
@@ -32,9 +37,9 @@ public class ToolboxProcessor extends AbstractProcessor {
             Robot robot = robotDao.loadRobot(robotName);
             toolbox = toolboxDao.load(toolboxName, owner, robot);
             if ( toolbox == null ) {
-                setError(Key.TOOLBOX_GET_ONE_ERROR_NOT_FOUND);
+                setStatus(ProcessorStatus.FAILED, Key.TOOLBOX_GET_ONE_ERROR_NOT_FOUND, new HashMap<>());
             } else {
-                setSuccess(Key.TOOLBOX_GET_ONE_SUCCESS);
+                setStatus(ProcessorStatus.SUCCEEDED, Key.TOOLBOX_GET_ONE_SUCCESS, new HashMap<>());
             }
             return toolbox;
         }

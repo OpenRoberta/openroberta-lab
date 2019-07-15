@@ -1,5 +1,8 @@
 package de.fhg.iais.roberta.persistence;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import de.fhg.iais.roberta.persistence.bo.LostPassword;
 import de.fhg.iais.roberta.persistence.dao.LostPasswordDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
@@ -12,17 +15,19 @@ public class LostPasswordProcessor extends AbstractProcessor {
     }
 
     public LostPassword createLostPassword(int userId) throws Exception {
+        Map<String, String> processorParameters = new HashMap<>();
+        processorParameters.put("USER_ID", String.valueOf(userId));
         if ( userId <= 0 ) {
-            setError(Key.USER_PASSWORD_RECOVERY_GENERATE_URL_USERID_ERROR, String.valueOf(userId));
+            setStatus(ProcessorStatus.FAILED, Key.USER_PASSWORD_RECOVERY_GENERATE_URL_USERID_ERROR, processorParameters);
             return null;
         } else {
             LostPasswordDao lostPasswordDao = new LostPasswordDao(this.dbSession);
             LostPassword lostPassword = lostPasswordDao.persistLostPassword(userId);
             if ( lostPassword != null ) {
-                setSuccess(Key.USER_PASSWORD_RECOVERY_GENERATE_URL_SUCCESS);
+                setStatus(ProcessorStatus.SUCCEEDED, Key.USER_PASSWORD_RECOVERY_GENERATE_URL_SUCCESS, new HashMap<>());
                 return lostPassword;
             } else {
-                setError(Key.USER_PASSWORD_RECOVERY_GENERATE_URL_USERID_NOT_SAVED_IN_DATABASE, String.valueOf(userId));
+                setStatus(ProcessorStatus.FAILED, Key.USER_PASSWORD_RECOVERY_GENERATE_URL_USERID_NOT_SAVED_IN_DATABASE, processorParameters);
                 return null;
             }
         }
@@ -34,7 +39,9 @@ public class LostPasswordProcessor extends AbstractProcessor {
         if ( lostPassword != null ) {
             return lostPassword;
         } else {
-            setError(Key.USER_PASSWORD_RECOVERY_INVALID_URL, urlPostfix);
+            Map<String, String> processorParameters = new HashMap<>();
+            processorParameters.put("POSTFIX_URL", urlPostfix);
+            setStatus(ProcessorStatus.FAILED, Key.USER_PASSWORD_RECOVERY_INVALID_URL, processorParameters);
             return null;
         }
     }

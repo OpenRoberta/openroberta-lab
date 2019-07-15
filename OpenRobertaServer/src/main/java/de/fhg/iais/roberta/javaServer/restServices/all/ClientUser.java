@@ -3,6 +3,8 @@ package de.fhg.iais.roberta.javaServer.restServices.all;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.mail.MessagingException;
 import javax.ws.rs.Consumes;
@@ -12,8 +14,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import de.fhg.iais.roberta.util.*;
-import de.fhg.iais.roberta.util.Statistics;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
@@ -26,6 +26,7 @@ import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.main.MailManagement;
 import de.fhg.iais.roberta.persistence.LostPasswordProcessor;
 import de.fhg.iais.roberta.persistence.PendingEmailConfirmationsProcessor;
+import de.fhg.iais.roberta.persistence.ProcessorStatus;
 import de.fhg.iais.roberta.persistence.UserProcessor;
 import de.fhg.iais.roberta.persistence.bo.LostPassword;
 import de.fhg.iais.roberta.persistence.bo.PendingEmailConfirmations;
@@ -33,6 +34,13 @@ import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.util.AliveData;
+import de.fhg.iais.roberta.util.ClientLogger;
+import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.ServerProperties;
+import de.fhg.iais.roberta.util.Statistics;
+import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.Util1;
 
 @Path("/user")
 public class ClientUser {
@@ -62,6 +70,7 @@ public class ClientUser {
         MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
         MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
         new ClientLogger().log(ClientUser.LOG, fullRequest);
+        Map<String, String> responseParameters = new HashMap<>();
         final int userId = httpSessionState.getUserId();
         JSONObject response = new JSONObject();
         try {
@@ -130,7 +139,7 @@ public class ClientUser {
                 //String tag = request.getString("tag");
                 boolean isYoungerThen14 = request.getString("isYoungerThen14").equals("1");
                 up.createUser(account, password, userName, role, email, null, isYoungerThen14);
-                if ( this.isPublicServer && !email.equals("") && up.isOk() ) {
+                if ( this.isPublicServer && !email.equals("") && up.succeeded() ) {
                     String lang = request.getString("language");
                     PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
                     sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang, isYoungerThen14);
@@ -147,7 +156,7 @@ public class ClientUser {
                 User user = up.getUser(account);
                 String oldEmail = user.getEmail();
                 up.updateUser(account, userName, role, email, null, isYoungerThen14);
-                if ( this.isPublicServer && !oldEmail.equals(email) && up.isOk() ) {
+                if ( this.isPublicServer && !oldEmail.equals(email) && up.succeeded() ) {
                     String lang = request.getString("language");
                     PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
                     sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang, isYoungerThen14);
@@ -181,7 +190,7 @@ public class ClientUser {
                     isExpired = (currentTime.getTime() - lostPassword.getCreated().getTime()) / 3600000.0 > 24;
                 }
                 if ( isExpired ) {
-                    up.setSuccess(Key.USER_PASSWORD_RECOVERY_EXPIRED_URL);
+                    up.setStatus(ProcessorStatus.SUCCEEDED, Key.USER_PASSWORD_RECOVERY_EXPIRED_URL, responseParameters);
                 }
                 response.put("resetPasswordLinkExpired", isExpired);
                 Util.addResultInfo(response, up);
@@ -200,9 +209,9 @@ public class ClientUser {
                         };
                     try {
                         this.mailManagement.send(user.getEmail(), "reset", body, lang, false);
-                        up.setSuccess(Key.USER_PASSWORD_RECOVERY_SENT_MAIL_SUCCESS);
+                        up.setStatus(ProcessorStatus.SUCCEEDED, Key.USER_PASSWORD_RECOVERY_SENT_MAIL_SUCCESS, responseParameters);
                     } catch ( MessagingException e ) {
-                        up.setError(Key.USER_PASSWORD_RECOVERY_SENT_MAIL_FAIL);
+                        up.setStatus(ProcessorStatus.FAILED, Key.USER_PASSWORD_RECOVERY_SENT_MAIL_FAIL, responseParameters);
                     }
                 }
                 Util.addResultInfo(response, up);
@@ -272,6 +281,7 @@ public class ClientUser {
     }
 
     private void sendActivationMail(UserProcessor up, String urlPostfix, String account, String email, String lang, boolean isYoungerThen14) throws Exception {
+        Map<String, String> responseParameters = new HashMap<>();
         String[] body =
             {
                 account,
@@ -279,9 +289,9 @@ public class ClientUser {
             };
         try {
             this.mailManagement.send(email, "activate", body, lang, isYoungerThen14);
-            up.setSuccess(Key.USER_ACTIVATION_SENT_MAIL_SUCCESS);
+            up.setStatus(ProcessorStatus.SUCCEEDED, Key.USER_ACTIVATION_SENT_MAIL_SUCCESS, responseParameters);
         } catch ( Exception e ) {
-            up.setError(Key.USER_ACTIVATION_SENT_MAIL_FAIL);
+            up.setStatus(ProcessorStatus.FAILED, Key.USER_ACTIVATION_SENT_MAIL_FAIL, responseParameters);
         }
     }
 }

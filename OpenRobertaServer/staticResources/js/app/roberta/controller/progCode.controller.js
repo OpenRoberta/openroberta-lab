@@ -44,7 +44,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.co
                     GUISTATE_C.setProgramSource(result.sourceCode);
                     GUISTATE_C.setProgramFileExtension(result.fileExtension);
                 } else {
-                    MSG.displayInformation(result, result.message, result.message);
+                    MSG.displayInformation(result, result.message, result.message, result.parameters);
                 }
             });
         }, 'code refresh clicked');
@@ -72,7 +72,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.co
                     GUISTATE_C.setProgramFileExtension(result.fileExtension);
                     $('#blockly').openRightView('code', INITIAL_WIDTH);
                 } else {
-                    MSG.displayInformation(result, result.message, result.message);
+                    MSG.displayInformation(result, result.message, result.message, result.parameters);
                 }
             });
         }

@@ -66,6 +66,12 @@ define([ 'exports', 'log', 'jquery', 'blocks-msg' ], function(exports, LOG, $, B
                 value = value.replace("$", replaceWith);
             }
 
+            Object.keys(replaceWith).forEach(function(key) {
+                if (replaceWith.hasOwnProperty(key)) {
+                    value = value.replace(key, replaceWith[key]);
+                }
+            });
+            
             if (output === 'POPUP') {
                 displayPopupMessage(lkey, value, cancel);
             } else if (output === 'TOAST') {
