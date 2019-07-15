@@ -18,8 +18,10 @@ import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.lang.expr.EvalExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
+import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
@@ -160,10 +162,16 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
         this.sb.append(var.getName());
+
         if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
             this.sb.append(" = ");
             if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
-                ExprList<Void> list = (ExprList<Void>) var.getValue();
+                ExprList<Void> list;
+                if ( var.getValue() instanceof EvalExpr<?> ) {
+                    list = ((ListCreate<Void>) ((EvalExpr<Void>) var.getValue()).getExpr()).getValue();
+                } else {
+                    list = (ExprList<Void>) var.getValue();
+                }
                 if ( list.get().size() == 2 ) {
                     list.get().get(1).visit(this);
                 } else {
@@ -262,8 +270,7 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
         this.sb.append(")");
         return null;
     }
-   
-    
+
     protected void generateExprCode(Unary<Void> unary, StringBuilder sb) {
         if ( unary.getExpr().getPrecedence() < unary.getPrecedence() || unary.getOp() == Unary.Op.NEG ) {
             sb.append("(");

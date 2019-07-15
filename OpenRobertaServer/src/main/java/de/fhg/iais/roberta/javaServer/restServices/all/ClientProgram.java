@@ -604,7 +604,8 @@ public class ClientProgram {
         }
         Util.addFrontendInfo(response, httpSessionState, this.brickCommunicator);
         MDC.clear();
-        return Response.ok(response).build();
+        Response r = Response.ok(response).build();
+        return r;
     }
 
     private Key programConfigurationCompatibilityCheck(

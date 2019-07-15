@@ -11,13 +11,16 @@ import org.antlr.v4.runtime.CommonTokenStream;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.exprly.generated.ExprlyLexer;
 import de.fhg.iais.roberta.exprly.generated.ExprlyParser;
 import de.fhg.iais.roberta.exprly.generated.ExprlyParser.ExpressionContext;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
@@ -86,13 +89,32 @@ public class EvalExpr<V> extends Expr<V> {
         return this.exprBlock.toString();
     }
 
+    public Expr<V> getValue() {
+        return this.exprBlock;
+    }
+
     public Expr<V> getExpr() {
         return this.exprBlock;
     }
 
+    public String getType() {
+        return this.type;
+    }
+
+    public String getExprStr() {
+        return this.expr;
+    }
+
     @Override
     public Block astToBlock() {
-        return this.exprBlock.astToBlock();
+        Block jaxbDestination = new Block();
+        Mutation mutation = new Mutation();
+        mutation.setType(this.getType());
+        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.TYPE, this.getType());
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.EXPRESSION, this.getExprStr());
+        jaxbDestination.setMutation(mutation);
+        return jaxbDestination;
     }
 
     /**
@@ -141,9 +163,10 @@ public class EvalExpr<V> extends Expr<V> {
         //Method method;
         //Expr<V> e = (Expr<V>) EvalExpr.make(expr, type, helper.extractBlockProperties(block), helper.extractComment(block)).getExpr();
         //method = Class.forName(e.getClass().getName()).getMethod("jaxbToAst", Block.class, AbstractJaxb2Ast.class);
-        //return (Phrase<V>) method.invoke(null, block, helper);
+        //Phrase<V> p = (Phrase<V>) method.invoke(null, block, helper);
+        //return p;
 
-        return (Phrase<V>) EvalExpr.make(expr, type, helper.extractBlockProperties(block), helper.extractComment(block)).getExpr();
+        return (Phrase<V>) EvalExpr.make(expr, type, helper.extractBlockProperties(block), helper.extractComment(block));
 
     }
 }
