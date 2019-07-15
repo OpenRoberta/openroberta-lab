@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.util.exprblk.ast;
+package de.fhg.iais.roberta.syntax.lang.expr.eval.resources;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -40,7 +40,7 @@ public class ExprlyUnParser<T> {
      *
      * @param Phrase that will be UnParsed
      **/
-    ExprlyUnParser(Phrase<T> ast) {
+    public ExprlyUnParser(Phrase<T> ast) {
         this.se = "";
         this.e = ast;
     }

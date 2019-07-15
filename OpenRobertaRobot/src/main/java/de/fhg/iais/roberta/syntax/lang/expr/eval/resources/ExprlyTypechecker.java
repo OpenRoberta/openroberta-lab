@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.util.exprblk.ast;
+package de.fhg.iais.roberta.syntax.lang.expr.eval.resources;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -37,7 +37,7 @@ public class ExprlyTypechecker<T> {
      *
      * @param Phrase that will be checked
      **/
-    ExprlyTypechecker(Phrase<T> ast) {
+    public ExprlyTypechecker(Phrase<T> ast) {
         this.info = new LinkedList<>();
         this.e = ast;
     }

@@ -19,6 +19,9 @@ import de.fhg.iais.roberta.exprly.generated.ExprlyParser;
 import de.fhg.iais.roberta.exprly.generated.ExprlyParser.ExpressionContext;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.eval.resources.ExprlyAST;
+import de.fhg.iais.roberta.syntax.lang.expr.eval.resources.ExprlyTypechecker;
+import de.fhg.iais.roberta.syntax.lang.expr.eval.resources.ExprlyUnParser;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
 import de.fhg.iais.roberta.visitor.codegen.CalliopeCppVisitor;
@@ -349,7 +352,7 @@ public class ExprlyAstTest {
      */
     private Expr<Void> expr2AST(String expr) throws Exception {
         ExprlyParser parser = mkParser(expr);
-        ExprlyAST eval = new ExprlyAST();
+        ExprlyAST<Void> eval = new ExprlyAST<>();
         ExpressionContext expression = parser.expression();
         Expr<Void> block = eval.visitExpression(expression);
         return block;

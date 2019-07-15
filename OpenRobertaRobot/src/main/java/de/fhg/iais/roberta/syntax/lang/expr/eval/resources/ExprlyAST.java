@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.lang.expr;
+package de.fhg.iais.roberta.syntax.lang.expr.eval.resources;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -7,6 +7,20 @@ import org.antlr.v4.runtime.misc.NotNull;
 
 import de.fhg.iais.roberta.exprly.generated.ExprlyBaseVisitor;
 import de.fhg.iais.roberta.exprly.generated.ExprlyParser;
+import de.fhg.iais.roberta.syntax.lang.expr.Binary;
+import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
+import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
+import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
+import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
+import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
+import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
+import de.fhg.iais.roberta.syntax.lang.expr.Unary;
+import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
