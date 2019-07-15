@@ -822,7 +822,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     public Void visitListCreate(ListCreate<Void> listCreate) {
         this.sb.append("new ArrayList<>(");
 
-        if ( listCreate.getValue().get().size() > 1 ) {
+        if ( listCreate.getValue().get().size() > 0 ) {
             this.sb.append("Arrays.");
             if ( listCreate.getVarType() == BlocklyType.CONNECTION ) {
                 this.sb.append("<NXTConnection>");
