@@ -98,7 +98,6 @@ isDirectoryValid $DB_ADMIN_DIR
 isDefined INAME
 isDefined DATABASE_SERVER_PORT
 isDefined DOCKER_NETWORK_NAME
-isDefined BASE_VERSION
 
 isDefined ALIVE_ACTIVE
 case $ALIVE_ACTIVE in

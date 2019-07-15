@@ -6,6 +6,7 @@ isDirectoryValid $SERVER_DIR_OF_ONE_SERVER
 
 source $SERVER_DIR_OF_ONE_SERVER/decl.sh
 isDeclShValid
+isDefined BASE_VERSION
 
 case "${GIT_REPO}" in
     /*) : ;;

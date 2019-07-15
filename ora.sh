@@ -250,9 +250,8 @@ update-test-setup)
                   echo "basedir '$base_dir' no valid dir for test server setup. Exit 12"
                   exit 12
                 fi
-                rm -rf $base_dir/conf
+                rm -rf $base_dir/conf $base_dir/scripts
                 cp -r Docker/openroberta/conf $base_dir/conf
-                rm -rf $base_dir/scripts
                 cp -r Docker/openroberta/scripts $base_dir/scripts
                 cp Docker/_README.md $base_dir
                 echo "configuration data copied to $base_dir/conf and $base_dir/scripts" ;;

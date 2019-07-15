@@ -9,10 +9,13 @@
 # REPORT_MESSAGE: added to the subject: line
 
 SLEEP='sleep 1'
-ALIVE_MAIL_SMTP_SERVER=smtps.iais.fraunhofer.de
-ALIVE_MAIL_SMTP_PORT=25
-ALIVE_MAIL_SENDER=lab-alive@open-roberta.org
-ALIVE_MAIL_RECEIVER=( beate.jost@iais.fraunhofer.de reinhard.budde@iais.fraunhofer.de )
+
+isDefined ALIVE_MAIL_SMTP_SERVER
+isDefined ALIVE_MAIL_SMTP_PORT
+isDefined ALIVE_MAIL_SENDER
+isDefined ALIVE_MAIL_RECEIVER
+isDefined REPORT_ALWAYS
+isDefined REPORT_MESSAGE
 
 function generate_output {
   echo "helo $ALIVE_MAIL_SMTP_SERVER"

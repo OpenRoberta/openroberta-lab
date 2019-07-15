@@ -1,5 +1,7 @@
 DATE_SETUP='2019-04-19 14:10:00'
 
+BASE_VERSION='3'   # the version of the docker base image, FROM which this server image is derived from
+
 PORT=''            # port the jetty server will listen to, very often 1999
 LOG_LEVEL=''       # the logging level of the root logger. From DEBUG to ERROR
 LOG_CONFIG_FILE='' # logback configuration, very often /logback-prod.xml or /logback.xml

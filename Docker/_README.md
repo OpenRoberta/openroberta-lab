@@ -1,4 +1,4 @@
-# Operating Instructions for the Test and Prod Server using DOCKER container (2019-04-19 15:00:00)
+# Operating Instructions for the Test and Prod Server using DOCKER container (2019-07-16 17:00:00)
 
 At least to read:
 
@@ -16,36 +16,35 @@ The docker image "base" is used as basis for further images. It contains all sof
 * openroberta helper libraries for lejos, nao and raspberryPi.
 
 _Note:_ If the git repository `ora-cc-rsc` is changed, the base image and all images built upon the base image must be rebuilt. This doesn't
-occur often. But better do not forget.
+occur often. But better do not forget. The version of the base image (a simple number) should match a tag in the git repository `ora-cc-rsc`.
+This shall make clear, that the data from the tag is the data in the base image.
 
 ```bash
+BASE_DIR=/data/openroberta-lab
 BASE_VERSION=3
-REPO=/data/openroberta-lab/git/openroberta-lab
 CC_RESOURCES=/data/openroberta-lab/git/ora-cc-rsc
 cd $CC_RESOURCES
 
-git checkout develop; git pull
-git checkout master; git pull
-echo 'is a "git merge develop" needed?'
+git checkout develop; git pull; git checkout master; git pull
+git checkout tags/$BASE_VERSION
 
 mvn clean install
-docker build --no-cache --build-arg BASE_VERSION=$BASE_VERSION \
-       -t rbudde/openroberta_base:$BASE_VERSION -f $REPO/Docker/meta/DockerfileBase_ubuntu_18_04 .
+docker build --no-cache -t rbudde/openroberta_base:$BASE_VERSION -f $BASE_DIR/conf/docker-for-meta/DockerfileBase_ubuntu_18_04 .
 docker push rbudde/openroberta_base:$BASE_VERSION
 ```
 
 ## generate the image for INTEGRATION TEST.
 
-Using the configuration file DockerfileIT_* you create an image, built upon the "base" image, that contains all crosscompiler, mvn and git.
-It has executed a git clone of the main git repository `openroberta-lab` and has executed a `mvn clean install`. This is done to fill the
+Using the configuration file DockerfileIT_* you create an image, built upon the "base" image, that has executed a git clone of the
+main git repository `openroberta-lab` and has executed a `mvn clean install`. This is done to fill the
 (mvn) cache and speeds up later builds considerably. The entrypoint is defined as the bash script "runIT.sh".
 If called, it will checkout a branch and runs both the tests and the integration tests.
 
 ```bash
+BASE_DIR=/data/openroberta-lab
 BASE_VERSION=3
-REPO=/data/openroberta-lab/git/openroberta-lab
 BRANCH=develop
-cd $REPO/Docker/testing
+cd $BASE_DIR/conf/docker-for-test
 docker build --no-cache --build-arg BASE_VERSION=$BASE_VERSION --build-arg BRANCH=$BRANCH \
        -t rbudde/openroberta_it_ubuntu_18_04:$BASE_VERSION -f DockerfileIT_ubuntu_18_04 .
 docker push rbudde/openroberta_it_ubuntu_18_04:$BASE_VERSION
@@ -60,7 +59,7 @@ They are setup in the same way. The following text describes the test server set
 
 The template for this framework is contained in directory `Docker/openroberta`. It contains the directories
 
-* conf - contains an example of an apache2 configuration and 2 dirs `docker-*`, used to generate docker images for the db and the jetty server
+* conf - contains an example of an apache2 configuration and two directories `docker-*`, used to generate docker images for the db and the jetty server
 * scripts - contains shell scripts to administrate the framework. The main script id `run.sh`. Call it w.o. parameter to get help.
   the directory `helper` contains scripts, that are sourced from `run.sh` and do the "real" work.
 * git - here one or more git repos, used to generate the openroberta server instances, are contained. At least one git repo is needed, usually a clone
@@ -111,17 +110,17 @@ and so on. B.t.w.: the ports are not fixed. But they must be consistent between 
 
 ## Conventions
 
-All data is stored relative to a base directory (your choice, we use `/data/openroberta-lab`). Abbreviations:
+All data is stored relative to a base directory `$BASE_DIR` (your choice, we use `/data/openroberta-lab`). Abbreviations:
 
 ```bash
-# BASE_DIR is the directory, in which the configuration file 'decl.sh' is found
+BASE_DIR=/data/openroberta-lab # BASE_DIR is the directory, in which the main configuration file 'decl.sh' is found
 CONF_DIR=$BASE_DIR/conf
 SCRIPT_DIR=$CONF_DIR/scripts
 SERVER_DIR=$BASE_DIR/server
 DATABASE_DIR=$BASE_DIR/db
 ```
 
-The whole setup has a unique name `$INAME`, defined in `decl.sh`.
+The whole setup has a unique name `$INAME`, defined in `$BASE_DIR/decl.sh`.
 
 ## The openroberta lab servers
 
@@ -205,7 +204,7 @@ The shell script `$SCRIPT_DIR/run.sh` has commands, that are used to administrat
 ```
 
 * `backup`: usually called from cron. It takes a database name and creates a database backup in the `dbAdmin` directory.
-  Use `crontab -e` to add the following line to the crontab to generate a database backup every night at 2 o'clock:
+  Use `crontab -e` to add the following line to the crontab to generate a database backup every night at two o'clock:
   
 ```bash
 0 2 * * * bash <SCRIPT_DIR>/run.sh -q backup <database-name> >><BASE_DIR>/logs/cronlog.txt
@@ -214,7 +213,7 @@ The shell script `$SCRIPT_DIR/run.sh` has commands, that are used to administrat
 
 * `cleanup-temp-user-dirs`: usually called from cron. It takes a server name and runs a shell in the corresponding container, that will remove temporary
   old data allocated by the cross compiler. It is assumed, that these crosscompiler-allocated files are used not longer than one day after their creation.
-  Use `crontab -e` to add the following line to the crontab to remove garbage every night 20 minutes after 2:
+  Use `crontab -e` to add the following line to the crontab to remove garbage every night 20 minutes after two o'clock:
   
 ```bash
 20 2 * * * bash <SCRIPT_DIR>/run.sh -q admin <server-name> cleanup-temp-user-dirs >><BASE_DIR>/logs/cronlog.txt
@@ -347,10 +346,11 @@ It has executed a git clone of the main git repository `openroberta-lab` and has
 (mvn) cache and speeds up later builds considerably. The entrypoint is "/bin/bash". This image is build by
 
 ```bash
-REPO=/data/openroberta-lab/git/openroberta-lab
-cd $REPO/Docker
+BASE_DIR=/data/openroberta-lab
+BASE_VERSION=3
+cd $BASE_DIR/conf/docker-for-test
 docker build --build-arg BASE_VERSION=$BASE_VERSION \
-       -t rbudde/openroberta_debug_ubuntu_18_04:$BASE_VERSION  -f testing/DockerfileDebug_ubuntu_18_04 .
+       -t rbudde/openroberta_debug_ubuntu_18_04:$BASE_VERSION  -f DockerfileDebug_ubuntu_18_04 .
 docker push rbudde/openroberta_debug_ubuntu_18_04:$BASE_VERSION
 ```
 
@@ -380,12 +380,15 @@ mvn clean install -PrunIT
 
 When the docker image "gen" is run, it GENERATES an OpenRoberta distribution. It is NO OpenRoberta distribution by itself.
 It gets version numbers independent from the OpenRoberta versions. During image creation a maven build is executed for
-branch develop to fill the /root/.m2 cache. This makes later builds much faster.
+branch develop to fill the maven cache. This makes later builds much faster.
+
+As the bash script `genLab.sh` is missing, this build will not succeed.
 
 ```bash
-REPO=/data/openroberta-lab/git/robertalab
-cd $REPO/Docker
-docker build -f meta/DockerfileGen_ubuntu_18_04 -t rbudde/openroberta_gen:1 .
+BASE_DIR=/data/openroberta-lab
+BASE_VERSION=3
+cd $BASE_DIR/conf/docker-for-meta
+docker build -f DockerfileGen_ubuntu_18_04 -t rbudde/openroberta_gen:1 .
 docker push rbudde/openroberta_gen:1
 ```
 
