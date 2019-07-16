@@ -55,9 +55,7 @@ public class ExprlyAstTest {
         Expr<Void> mod = expr2AST("3*2%2^4%6");
         ExprlyUnParser<Void> p = new ExprlyUnParser<Void>(mod);
         String t =
-            "Binary [MULTIPLY, NumConst [3], Binary [MOD, NumConst [2], "
-                + "Binary [MOD, FunctionExpr [MathSingleFunct [POWER, [NumConst [2], NumConst [4]]]], "
-                + "NumConst [6]]]]";
+            "Binary [MULTIPLY, NumConst [3], Binary [MOD, NumConst [2], Binary [MOD, MathPowerFunct [POWER, [NumConst [2], NumConst [4]]], NumConst [6]]]]";
         ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(mod);
         Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, mod.toString());
@@ -195,8 +193,7 @@ public class ExprlyAstTest {
         Expr<Void> avg = expr2AST("avg([1,1+2, 10^-(1+2)])");
         ExprlyUnParser<Void> p = new ExprlyUnParser<Void>(avg);
         String t =
-            "FunctionExpr [MathOnListFunct [AVERAGE, [NumConst [1], Binary [ADD, NumConst [1], NumConst [2]], "
-                + "FunctionExpr [MathSingleFunct [POWER, [NumConst [10], Unary [NEG, Binary [ADD, NumConst [1], NumConst [2]]]]]]]]]";
+            "FunctionExpr [MathOnListFunct [AVERAGE, [NumConst [1], Binary [ADD, NumConst [1], NumConst [2]], MathPowerFunct [POWER, [NumConst [10], Unary [NEG, Binary [ADD, NumConst [1], NumConst [2]]]]]]]]";
         ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(avg);
         Assert.assertTrue(0 == c.check());
         Assert.assertEquals(t, avg.toString());
@@ -212,11 +209,7 @@ public class ExprlyAstTest {
         Expr<Void> rand = expr2AST("e^randFloat()%exp(floor(randInt(1,10)))");
         ExprlyUnParser<Void> p = new ExprlyUnParser<Void>(rand);
         String t =
-            "Binary [MOD, FunctionExpr [MathSingleFunct [POWER, [MathConst [E], "
-                + "FunctionExpr [MathRandomFloatFunct []]]]], "
-                + "FunctionExpr [MathSingleFunct [EXP, [FunctionExpr "
-                + "[MathSingleFunct [ROUNDDOWN, [FunctionExpr [MathRandomIntFunct "
-                + "[[NumConst [1], NumConst [10]]]]]]]]]]]";
+            "Binary [MOD, MathPowerFunct [POWER, [MathConst [E], FunctionExpr [MathRandomFloatFunct []]]], FunctionExpr [MathSingleFunct [EXP, [FunctionExpr [MathSingleFunct [ROUNDDOWN, [FunctionExpr [MathRandomIntFunct [[NumConst [1], NumConst [10]]]]]]]]]]]";
         String g = p.UnParse();
         ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(rand);
         Assert.assertTrue(0 == c.check());

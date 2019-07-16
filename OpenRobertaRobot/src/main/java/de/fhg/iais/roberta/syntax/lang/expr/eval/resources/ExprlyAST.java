@@ -20,12 +20,17 @@ import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
+import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 
 public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
 
@@ -205,6 +210,35 @@ public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
         }
         if ( f.equals("min") || f.equals("max") || f.equals("sum") ) {
             return FunctionExpr.make(MathOnListFunct.make(f, args));
+        }
+        if ( f.equals("lengthOf") ) {
+            return FunctionExpr.make(LengthOfIsEmptyFunct.make("lists_length", args));
+        }
+        if ( f.equals("setIndex") ) {
+
+        }
+        if ( f.equals("getIndex") ) {
+
+        }
+        if ( f.equals("repeatList") ) {
+            return FunctionExpr.make(ListRepeat.make("lists_repeat", args));
+        }
+        if ( f.equals("subList") ) {
+
+        }
+        if ( f.equals("print") ) {
+            return FunctionExpr.make(TextPrintFunct.make(args));
+        }
+        if ( f.equals("append") ) {
+            ExprList<V> args0 = ExprList.make();
+            for ( Expr<V> e : args ) {
+                args0.addExpr(e);
+            }
+            return FunctionExpr.make(TextJoinFunct.make(args0));
+
+        }
+        if ( f.equals("constrain") ) {
+            return FunctionExpr.make(MathConstrainFunct.make(args));
         }
         try {
             return FunctionExpr.make(MathSingleFunct.make(f, args));
