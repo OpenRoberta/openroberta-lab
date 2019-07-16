@@ -20,14 +20,26 @@ import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
-import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 
 public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
+
+    private final String varType;
+
+    public ExprlyAST() {
+        super();
+        this.varType = null;
+    }
+
+    public ExprlyAST(String varType) {
+        super();
+        this.varType = varType;
+    }
 
     @Override
     public ColorConst<V> visitCol(ExprlyParser.ColContext ctx) {
@@ -74,7 +86,7 @@ public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
             List<Expr<V>> args = new LinkedList<Expr<V>>();
             args.add(n0);
             args.add(n1);
-            return FunctionExpr.make(MathSingleFunct.make("power", args));
+            return MathPowerFunct.make("power", args);
         }
         if ( ctx.op.getType() == ExprlyParser.ADD ) {
             return Binary.make(Binary.Op.ADD, n0, n1, "");
@@ -229,7 +241,10 @@ public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
 
     @Override
     public Var<V> visitVarName(@NotNull ExprlyParser.VarNameContext ctx) {
-        return Var.make("VOID", ctx.VAR().getText());
+        if ( this.varType == null ) {
+            return Var.make("VOID", ctx.VAR().getText());
+        }
+        return Var.make(this.varType, ctx.VAR().getText());
     }
 
     @Override

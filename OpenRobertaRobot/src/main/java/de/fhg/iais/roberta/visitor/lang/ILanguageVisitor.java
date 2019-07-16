@@ -457,7 +457,11 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     }
 
     default V visitEvalExpr(EvalExpr<V> evalExpr) {
-        evalExpr.getExpr().visit(this);
+        if ( evalExpr.getExpr() instanceof ListCreate<?> ) {
+            ((ListCreate<V>) evalExpr.getExpr()).visit(this);
+        } else {
+            evalExpr.getExpr().visit(this);
+        }
         return null;
     }
 

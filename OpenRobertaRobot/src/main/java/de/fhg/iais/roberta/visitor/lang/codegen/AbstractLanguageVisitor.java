@@ -21,7 +21,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EvalExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
-import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
@@ -167,11 +166,7 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
             this.sb.append(" = ");
 
             if ( var.getValue() instanceof EvalExpr<?> ) {
-                if ( ((EvalExpr<?>) var.getValue()).getExpr() instanceof ListCreate<?> ) {
-                    ((ListCreate<Void>) ((EvalExpr<Void>) var.getValue()).getExpr()).visit(this);
-                } else {
-                    var.getValue().visit(this);
-                }
+                var.getValue().visit(this);
                 return null;
             }
 
