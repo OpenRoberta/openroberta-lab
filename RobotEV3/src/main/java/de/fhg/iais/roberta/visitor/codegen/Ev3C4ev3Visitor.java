@@ -145,6 +145,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         generateSensorInitialization();
         nlIndent();
         generateTTSInitialization();
+        generateGyroInitialization();
         nlIndent();
         return null;
     }
@@ -177,6 +178,16 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         if (isSayTextUsed) {
             this.sb.append("SetLanguage(\"" + TTSLanguageMapper.getLanguageString(language) + "\");");
         }
+    }
+
+    private void generateGyroInitialization () {
+        brickConfiguration.getSensors().stream()
+            .filter(s -> SC.GYRO.equals(s.getComponentType()))
+            .map(ConfigurationComponent::getUserDefinedPortName)
+            .forEach(port -> {
+                this.sb.append("ResetGyroSensor(" + getPrefixedInputPort(port) + ");");
+                nlIndent();
+            });
     }
 
     private String getDefaultSensorModesString() {
@@ -482,7 +493,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitDebugAction(DebugAction<Void> debugAction) {
-        this.sb.append("printf(\"%s\\\n\", ToString(");
+        this.sb.append("printf(\"%s\\n\", ToString(");
         debugAction.getValue().visit(this);
         this.sb.append(").c_str());");
         return null;

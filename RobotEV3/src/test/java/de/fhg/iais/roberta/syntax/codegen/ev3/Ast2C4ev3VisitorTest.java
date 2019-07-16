@@ -35,7 +35,8 @@ public class Ast2C4ev3VisitorTest {
     private static final String BEGIN_MAIN_DEFAULT =
         "" //
             + MAIN_INIT_EV3
-            + "    setAllSensorMode(DEFAULT_MODE_TOUCH, DEFAULT_MODE_GYRO, DEFAULT_MODE_COLOR, DEFAULT_MODE_ULTRASONIC);\n\n";
+            + "    setAllSensorMode(DEFAULT_MODE_TOUCH, DEFAULT_MODE_GYRO, DEFAULT_MODE_COLOR, DEFAULT_MODE_ULTRASONIC);\n"
+            + "    ResetGyroSensor(IN_2);\n\n";
 
     private static final String BEGIN_MAIN__TOUCH_ULTRASONIC_COLOR =
         "" //
@@ -50,7 +51,8 @@ public class Ast2C4ev3VisitorTest {
     private static final String BEGIN_MAIN__TOUCH_GYRO_INFRARED_ULTRASONIC =
         "" //
             + MAIN_INIT_EV3
-            + "    setAllSensorMode(DEFAULT_MODE_TOUCH, DEFAULT_MODE_GYRO, DEFAULT_MODE_INFRARED, DEFAULT_MODE_ULTRASONIC);\n\n";
+            + "    setAllSensorMode(DEFAULT_MODE_TOUCH, DEFAULT_MODE_GYRO, DEFAULT_MODE_INFRARED, DEFAULT_MODE_ULTRASONIC);\n"
+            + "    ResetGyroSensor(IN_2);\n\n";
 
     private static final String BEGIN_MAIN__NO_SENSORS =
         "" //
