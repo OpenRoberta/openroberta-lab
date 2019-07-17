@@ -318,7 +318,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
             case "#DC143C":
                 return "Crismon";
             case "#585858":
-                return "Transparent";
+                return "None";
             default:
                 throw new DbcException("Invalid color constant: " + hex);
         }

@@ -257,8 +257,8 @@ public class Ast2C4ev3VisitorTest {
                 + "std::list<double> ___item4 = ((std::list<double>){1, 2, 3});\n"
                 + "std::list<std::string> ___item5 = ((std::list<std::string>){\"a\", \"b\"});\n"
                 + "std::list<bool> ___item6 = ((std::list<bool>){true, false});\n"
-                + "std::list<Color> ___item7 = ((std::list<Color>){Red, Black, Transparent});\n"
-                + "Color ___item8 = Transparent;\n"
+                + "std::list<Color> ___item7 = ((std::list<Color>){Red, Black, None});\n"
+                + "Color ___item8 = None;\n"
                 + BEGIN_MAIN_DEFAULT
                 + END_MAIN;
         // TODO: Test list of bluetooth connections
@@ -356,7 +356,7 @@ public class Ast2C4ev3VisitorTest {
                 + "std::list<std::string> ___variablenName = ((std::list<std::string>){\"a\", \"b\", \"c\"});\n"
                 + "Color test() {\n"
                 + "    DrawString(ToString(___variablenName), 0, 0);"
-                + "    return Transparent;\n"
+                + "    return None;\n"
                 + "}\n"
                 + BEGIN_MAIN_DEFAULT
                 + "DrawString(ToString(test()), 0, 0);\n"
@@ -374,7 +374,7 @@ public class Ast2C4ev3VisitorTest {
                 + "Color test() {\n"
                 + "    if (true) return Red;\n"
                 + "    DrawString(ToString(___variablenName), 0, 0);"
-                + "    return Transparent;\n"
+                + "    return None;\n"
                 + "}\n"
                 + BEGIN_MAIN_DEFAULT
                 + "DrawString(ToString(test()), 0, 0);\n"
