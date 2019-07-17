@@ -254,13 +254,14 @@ public class Ast2C4ev3VisitorTest {
                 + "double ___item = 0;\n"
                 + "std::string ___item2 = \"ss\";\n"
                 + "bool ___item3 = true;\n"
-                + "std::list<double> ___item4 = {1, 2, 3};\n"
-                + "std::list<std::string> ___item5 = {\"a\", \"b\"};\n"
-                + "std::list<bool> ___item6 = {true, false};\n"
-                + "std::list<Color> ___item7 = {Red, Black, Transparent};\n"
+                + "std::list<double> ___item4 = ((std::list<double>){1, 2, 3});\n"
+                + "std::list<std::string> ___item5 = ((std::list<std::string>){\"a\", \"b\"});\n"
+                + "std::list<bool> ___item6 = ((std::list<bool>){true, false});\n"
+                + "std::list<Color> ___item7 = ((std::list<Color>){Red, Black, Transparent});\n"
                 + "Color ___item8 = Transparent;\n"
                 + BEGIN_MAIN_DEFAULT
                 + END_MAIN;
+        // TODO: Test list of bluetooth connections
         checkCodeGeneratorForInput("/syntax/task/task_mainTask.xml", expectedCode);
     }
 
@@ -336,7 +337,7 @@ public class Ast2C4ev3VisitorTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS
-                + "std::list<std::string> ___variablenName = {\"a\", \"b\", \"c\"};\n"
+                + "std::list<std::string> ___variablenName = ((std::list<std::string>){\"a\", \"b\", \"c\"});\n"
                 + "double test(double ___x, std::list<std::string> ___x2) {\n"
                 + "    DrawString(ToString(___x2), ___x, 0);"
                 + "    return ___x;\n"
@@ -352,7 +353,7 @@ public class Ast2C4ev3VisitorTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS
-                + "std::list<std::string> ___variablenName = {\"a\", \"b\", \"c\"};\n"
+                + "std::list<std::string> ___variablenName = ((std::list<std::string>){\"a\", \"b\", \"c\"});\n"
                 + "Color test() {\n"
                 + "    DrawString(ToString(___variablenName), 0, 0);"
                 + "    return Transparent;\n"
@@ -369,7 +370,7 @@ public class Ast2C4ev3VisitorTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS
-                + "std::list<std::string> ___variablenName = {\"a\", \"b\", \"c\"};\n"
+                + "std::list<std::string> ___variablenName = ((std::list<std::string>){\"a\", \"b\", \"c\"});\n"
                 + "Color test() {\n"
                 + "    if (true) return Red;\n"
                 + "    DrawString(ToString(___variablenName), 0, 0);"
@@ -415,7 +416,7 @@ public class Ast2C4ev3VisitorTest {
                 + CONSTANTS_AND_IMPORTS
                 + "Color ___color = White;\n"
                 + "double ___light = 0;\n"
-                + "std::list<double> ___rgb = {0, 0, 0};\n"
+                + "std::list<double> ___rgb = ((std::list<double>){0, 0, 0});\n"
                 + BEGIN_MAIN_DEFAULT
                 + "___color = ReadColorSensor(IN_3);\n"
                 + "___light = ReadSensorInMode(IN_3, COL_REFLECT);\n"

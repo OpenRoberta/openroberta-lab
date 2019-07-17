@@ -564,6 +564,30 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     // end copied from Arduino
 
+    @Override
+    public Void visitListCreate(ListCreate<Void> listCreate) {
+        this.sb.append("(" + getListCreateCasting(listCreate.getVarType()));
+        super.visitListCreate(listCreate);
+        this.sb.append(")");
+        return null;
+    }
+
+    private String getListCreateCasting (BlocklyType type) {
+        switch ( type ) {
+            case NUMBER:
+                return "(std::list<double>)";
+            case STRING:
+                return "(std::list<std::string>)";
+            case BOOLEAN:
+                return "(std::list<bool>)";
+            case COLOR:
+                return "(std::list<Color>)";
+                // TODO: Handle bluetooth connection
+            default:
+                throw new DbcException("unknown BlocklyType for ListCreate statement");
+        }
+    }
+
     // copied from calliope
     /*
      * TODO: I don't know why I am doing this, but it seems that without this a semicolon is lost, somehow... Artem Vinokurov 25.10.2018
