@@ -59,10 +59,8 @@ public class ProgramDao extends AbstractDao<Program> {
         User author,
         Timestamp timestamp) //
     {
-        Assert.notNull(name);
-        Assert.notNull(user);
-        Assert.notNull(robot);
-        Assert.notNull(author);
+        checkProgramValidity(name, user, robot, author, programText);
+
         Program program = load(name, user, robot, author);
         if ( program == null ) {
             if ( timestamp == null ) {
@@ -112,11 +110,7 @@ public class ProgramDao extends AbstractDao<Program> {
         User author,
         Timestamp timestamp) //
     {
-        Assert.notNull(name);
-        Assert.notNull(name);
-        Assert.notNull(user);
-        Assert.notNull(robot);
-        Assert.notNull(author);
+        checkProgramValidity(name, user, robot, author, programText);
 
         Program program = loadSharedForUpdate(name, user, robot, author);
         if ( program == null ) {
@@ -143,10 +137,7 @@ public class ProgramDao extends AbstractDao<Program> {
      * @return the program, null if the program is not found
      */
     public Program load(String name, User owner, Robot robot, User author) {
-        Assert.notNull(name);
-        Assert.notNull(owner);
-        Assert.notNull(robot);
-        Assert.notNull(author);
+        checkProgramValidity(name, owner, robot, author, null);
         Query hql = this.session.createQuery("from Program where name=:name and owner=:owner and robot=:robot and author=:author");
         hql.setString("name", name);
         hql.setEntity("owner", owner);
@@ -167,10 +158,7 @@ public class ProgramDao extends AbstractDao<Program> {
      * @return the program, null if the program is not found
      */
     private Program loadSharedForUpdate(String name, User user, Robot robot, User author) {
-        Assert.notNull(name);
-        Assert.notNull(user);
-        Assert.notNull(robot);
-        Assert.notNull(author);
+        checkProgramValidity(name, user, robot, author, null);
         Query hql = this.session.createQuery("from AccessRight where user=:user and program.name=:name and program.robot=:robot");
         hql.setString("name", name);
         hql.setEntity("user", user);
@@ -185,6 +173,19 @@ public class ProgramDao extends AbstractDao<Program> {
             }
         }
         return null; // .. because the right dowsn't exist, it's no write access :-)
+    }
+
+    private void checkProgramValidity(String name, User user, Robot robot, User author, String programText) {
+        Assert.notNull(name);
+        Assert.notNull(user);
+        Assert.notNull(robot);
+        Assert.notNull(author);
+        if ( programText != null && programText.contains("robottype=") ) {
+            String expectedRobotNameInProgramXml = "robottype=\"" + robot.getName() + "\"";
+            if ( !programText.contains(expectedRobotNameInProgramXml) ) {
+                Assert.fail("robot selection and robottype don't match. Multiple browser tabs in use?");
+            }
+        }
     }
 
     public int deleteByName(String name, User owner, Robot robot, User author) {
