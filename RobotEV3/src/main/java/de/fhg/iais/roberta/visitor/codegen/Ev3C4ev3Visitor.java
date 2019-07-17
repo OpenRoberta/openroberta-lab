@@ -572,6 +572,20 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
+    @Override
+    public Void visitListRepeat(ListRepeat<Void> listRepeat) {
+        boolean elementIsNumber = listRepeat.getElement().getVarType().equals(BlocklyType.NUMBER);
+        this.sb.append("_createListRepeat(");
+        listRepeat.getCounter().visit(this);
+        this.sb.append(", ");
+        if (elementIsNumber) {
+            this.sb.append("(double) ");
+        }
+        listRepeat.getElement().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
     private String getListCreateCasting (BlocklyType type) {
         switch ( type ) {
             case NUMBER:
