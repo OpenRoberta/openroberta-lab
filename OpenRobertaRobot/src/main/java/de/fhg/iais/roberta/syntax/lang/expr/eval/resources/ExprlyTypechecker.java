@@ -30,6 +30,7 @@ public class ExprlyTypechecker<T> {
     private final Phrase<T> e;
     private int errorCount = 0;
     private BlocklyType resultType;
+    private final BlocklyType expectedResultType;
 
     /**
      * Class constructor, creates an instance of {@link ExprlyTypechecker} for
@@ -37,8 +38,9 @@ public class ExprlyTypechecker<T> {
      *
      * @param Phrase that will be checked
      **/
-    public ExprlyTypechecker(Phrase<T> ast) {
+    public ExprlyTypechecker(Phrase<T> ast, BlocklyType rt) {
         this.info = new LinkedList<>();
+        this.expectedResultType = rt;
         this.e = ast;
     }
 
@@ -56,6 +58,13 @@ public class ExprlyTypechecker<T> {
         return this.resultType;
     }
 
+    /**
+     * @return Expected BlocklyType for the whole expression
+     */
+    public BlocklyType getExpectedResultType() {
+        return this.expectedResultType;
+    }
+
     public void addToInfo(String s) {
         this.info.add(s);
     }
@@ -66,10 +75,9 @@ public class ExprlyTypechecker<T> {
      * @return number of errors in the expression
      */
     public Integer check() {
-        this.resultType = checkAST(this.e);
-        int numErrors = this.errorCount;
         this.errorCount = 0;
-        return numErrors;
+        this.resultType = checkAST(this.e);
+        return this.errorCount;
     }
 
     /**
@@ -263,7 +271,7 @@ public class ExprlyTypechecker<T> {
      * @return Type of block
      */
     public BlocklyType visitExprList(ExprList<T> list) throws IllegalArgumentException {
-        // Get list of ecpressions in the list
+        // Get list of expressions in the list
         List<Expr<T>> eList = list.get();
         BlocklyType t;
         // Check if it's an empty list, by default we'll return Array type in that case
@@ -304,7 +312,7 @@ public class ExprlyTypechecker<T> {
                 || t.equals(BlocklyType.ARRAY_BOOLEAN)
                 || t.equals(BlocklyType.ARRAY_STRING)
                 || t.equals(BlocklyType.ARRAY_CONNECTION)
-                // Void is the default value od VAR, we'll put it here for now
+                // Void is the default value of VAR, we'll put it here for now
                 || t.equals(BlocklyType.VOID) ) {
                 return BlocklyType.ARRAY;
             }

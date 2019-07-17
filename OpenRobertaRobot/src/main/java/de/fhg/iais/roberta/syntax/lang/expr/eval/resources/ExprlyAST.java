@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.syntax.lang.expr.eval.resources;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -7,6 +9,9 @@ import org.antlr.v4.runtime.misc.NotNull;
 
 import de.fhg.iais.roberta.exprly.generated.ExprlyBaseVisitor;
 import de.fhg.iais.roberta.exprly.generated.ExprlyParser;
+import de.fhg.iais.roberta.inter.mode.general.IMode;
+import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
@@ -14,14 +19,19 @@ import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
+import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
+import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
@@ -31,6 +41,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 
 public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
 
@@ -175,6 +186,14 @@ public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
             args.add(visit(expr));
         }
 
+        for ( int i = 0; i < args.size(); i++ ) {
+            if ( args.get(i) instanceof ExprList<?> ) {
+                ExprList<V> e = (ExprList<V>) args.get(i);
+                e.setReadOnly();
+                args.set(i, ListCreate.make(BlocklyType.ARRAY, e));
+            }
+        }
+
         if ( f.equals("randInt") ) {
             return FunctionExpr.make(MathRandomIntFunct.make(args));
         }
@@ -214,17 +233,126 @@ public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
         if ( f.equals("lengthOf") ) {
             return FunctionExpr.make(LengthOfIsEmptyFunct.make("lists_length", args));
         }
-        if ( f.equals("setIndex") ) {
 
+        if ( f.contains("setIndex") ) {
+            if ( f.equals("setIndex") ) {
+                return FunctionExpr.make(ListSetIndex.make(ListElementOperations.SET, IndexLocation.FROM_START, args));
+            }
+            if ( f.equals("setIndexFromEnd") ) {
+                return FunctionExpr.make(ListSetIndex.make(ListElementOperations.SET, IndexLocation.FROM_END, args));
+            }
+            if ( f.equals("setIndexFirst") ) {
+                return FunctionExpr.make(ListSetIndex.make(ListElementOperations.SET, IndexLocation.FIRST, args));
+            }
+            if ( f.equals("setIndexLast") ) {
+                return FunctionExpr.make(ListSetIndex.make(ListElementOperations.SET, IndexLocation.LAST, args));
+            }
         }
-        if ( f.equals("getIndex") ) {
-
+        if ( f.contains("insertIndex") ) {
+            if ( f.equals("insertIndex") ) {
+                return FunctionExpr.make(ListSetIndex.make(ListElementOperations.INSERT, IndexLocation.FROM_START, args));
+            }
+            if ( f.equals("insertIndexFromEnd") ) {
+                return FunctionExpr.make(ListSetIndex.make(ListElementOperations.INSERT, IndexLocation.FROM_END, args));
+            }
+            if ( f.equals("insertIndexFirst") ) {
+                return FunctionExpr.make(ListSetIndex.make(ListElementOperations.INSERT, IndexLocation.FIRST, args));
+            }
+            if ( f.equals("insertIndexLast") ) {
+                return FunctionExpr.make(ListSetIndex.make(ListElementOperations.INSERT, IndexLocation.LAST, args));
+            }
+        }
+        if ( f.contains("getIndex") ) {
+            if ( f.equals("getIndex") ) {
+                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.GET, IndexLocation.FROM_START, args, "VOID"));
+            }
+            if ( f.equals("getIndexFromEnd") ) {
+                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.GET, IndexLocation.FROM_END, args, "VOID"));
+            }
+            if ( f.equals("getIndexFirst") ) {
+                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.GET, IndexLocation.FIRST, args, "VOID"));
+            }
+            if ( f.equals("getIndexLast") ) {
+                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.GET, IndexLocation.LAST, args, "VOID"));
+            }
+        }
+        if ( f.contains("getAndRemoveIndex") ) {
+            if ( f.equals("getAndRemoveIndex") ) {
+                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.GET_REMOVE, IndexLocation.FROM_START, args, "VOID"));
+            }
+            if ( f.equals("getAndRemoveIndexFromEnd") ) {
+                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.GET_REMOVE, IndexLocation.FROM_END, args, "VOID"));
+            }
+            if ( f.equals("getAndRemoveIndexFirst") ) {
+                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.GET_REMOVE, IndexLocation.FIRST, args, "VOID"));
+            }
+            if ( f.equals("getAndRemoveIndexLast") ) {
+                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.GET_REMOVE, IndexLocation.LAST, args, "VOID"));
+            }
+        }
+        if ( f.contains("removeIndex") ) {
+            if ( f.equals("removeIndex") ) {
+                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.REMOVE, IndexLocation.FROM_START, args, "VOID"));
+            }
+            if ( f.equals("removeIndexFromEnd") ) {
+                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.REMOVE, IndexLocation.FROM_END, args, "VOID"));
+            }
+            if ( f.equals("removeIndexFirst") ) {
+                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.REMOVE, IndexLocation.FIRST, args, "VOID"));
+            }
+            if ( f.equals("removeIndexLast") ) {
+                return FunctionExpr.make(ListGetIndex.make(ListElementOperations.REMOVE, IndexLocation.LAST, args, "VOID"));
+            }
         }
         if ( f.equals("repeatList") ) {
-            return FunctionExpr.make(ListRepeat.make("lists_repeat", args));
+            return FunctionExpr.make(ListRepeat.make(BlocklyType.VOID, args));
         }
-        if ( f.equals("subList") ) {
+        if ( f.contains("subList") ) {
 
+            if ( f.equals("subList") ) {
+                return FunctionExpr
+                    .make(
+                        GetSubFunct
+                            .make(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_START, IndexLocation.FROM_START)), args));
+            }
+            if ( f.equals("subListFromIndexToLast") ) {
+                return FunctionExpr
+                    .make(GetSubFunct.make(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_START, IndexLocation.LAST)), args));
+            }
+            if ( f.equals("subListFromIndexToEnd") ) {
+                return FunctionExpr
+                    .make(
+                        GetSubFunct
+                            .make(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_START, IndexLocation.FROM_END)), args));
+            }
+            if ( f.equals("subListFromFirstToIndex") ) {
+                return FunctionExpr
+                    .make(
+                        GetSubFunct.make(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FIRST, IndexLocation.FROM_START)), args));
+            }
+            if ( f.equals("subListFromFirstToLast") ) {
+                return FunctionExpr
+                    .make(GetSubFunct.make(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FIRST, IndexLocation.LAST)), args));
+            }
+            if ( f.equals("subListFromFirstToEnd") ) {
+                return FunctionExpr
+                    .make(GetSubFunct.make(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FIRST, IndexLocation.FROM_END)), args));
+            }
+            if ( f.equals("subListFromEndToIndex") ) {
+                return FunctionExpr
+                    .make(
+                        GetSubFunct
+                            .make(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_END, IndexLocation.FROM_START)), args));
+            }
+            if ( f.equals("subListFromEndToLast") ) {
+                return FunctionExpr
+                    .make(GetSubFunct.make(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_END, IndexLocation.LAST)), args));
+            }
+            if ( f.equals("subListFromEndToEnd") ) {
+                return FunctionExpr
+                    .make(
+                        GetSubFunct.make(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_END, IndexLocation.FROM_END)), args));
+            }
         }
         if ( f.equals("print") ) {
             return FunctionExpr.make(TextPrintFunct.make(args));
@@ -239,6 +367,9 @@ public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
         }
         if ( f.equals("constrain") ) {
             return FunctionExpr.make(MathConstrainFunct.make(args));
+        }
+        if ( f.equals("isEmpty") ) {
+            return FunctionExpr.make(LengthOfIsEmptyFunct.make("LIST_IS_EMPTY", args));
         }
         try {
             return FunctionExpr.make(MathSingleFunct.make(f, args));

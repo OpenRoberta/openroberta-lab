@@ -30,6 +30,7 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 public class EvalExpr<V> extends Expr<V> {
     private final String expr, type;
     private final Expr<V> exprBlock;
+    private final ExprlyTypechecker<V> checker;
 
     private EvalExpr(String expr, String type, BlocklyBlockProperties properties, BlocklyComment comment) throws Exception {
         super(expr2AST(expr).getKind(), properties, comment);
@@ -54,7 +55,7 @@ public class EvalExpr<V> extends Expr<V> {
         } else {
             this.exprBlock = exprBlk;
         }
-        ExprlyTypechecker<V> check = new ExprlyTypechecker<>(this.exprBlock);
+        this.checker = new ExprlyTypechecker<>(this.exprBlock, BlocklyType.get(this.type));
 
         this.setReadOnly();
     }

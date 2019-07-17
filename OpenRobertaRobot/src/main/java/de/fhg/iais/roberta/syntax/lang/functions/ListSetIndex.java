@@ -107,19 +107,19 @@ public class ListSetIndex<V> extends Function<V> {
         if ( mode.trim().toUpperCase().equals("INSERT") ) {
             rnode = ListElementOperations.INSERT;
         }
-        if ( mode.trim().toUpperCase().equals("FIRST") ) {
+        if ( name.trim().toUpperCase().equals("FIRST") ) {
             index = IndexLocation.FIRST;
         }
-        if ( mode.trim().toUpperCase().equals("LAST") ) {
+        if ( name.trim().toUpperCase().equals("LAST") ) {
             index = IndexLocation.LAST;
         }
-        if ( mode.trim().toUpperCase().equals("FROM_START") ) {
+        if ( name.trim().toUpperCase().equals("FROM_START") ) {
             index = IndexLocation.FROM_START;
         }
-        if ( mode.trim().toUpperCase().equals("FROM_END") ) {
+        if ( name.trim().toUpperCase().equals("FROM_END") ) {
             index = IndexLocation.FROM_END;
         }
-        if ( mode.trim().toUpperCase().equals("RANDOM") ) {
+        if ( name.trim().toUpperCase().equals("RANDOM") ) {
             index = IndexLocation.RANDOM;
         }
 
