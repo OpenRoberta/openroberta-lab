@@ -1,7 +1,7 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
     <program>
         <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0"
-            description="Test of all Calliope wait-until sensors&lt;br&gt;" tags="">
+                   description="Test of all Calliope wait-until sensors&lt;br&gt;" tags="">
             <instance x="407" y="-287">
                 <block type="robControls_start" id="rnqw!#0bQ3yqIc#S{LRh" intask="true" deletable="false">
                     <mutation declare="false"></mutation>
@@ -161,6 +161,46 @@
                             </value>
                             <value name="B">
                                 <block type="logic_boolean" id="l,nZBGv8.OHr%6@J-4g2" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedControls_wait_for" id="-]lj1dYlR`6``V1=iqmt" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="`51?j?NrMTP:F5Z40gO1" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="robSensors_infrared_getSample" id="/==}HxGsB6[U9]1E?J~l" intask="true">
+                                    <mutation mode="LINE"></mutation>
+                                    <field name="MODE">LINE</field>
+                                    <field name="SENSORPORT">2</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_boolean" id="7*/uzY|)lP3{z]2j!FEV" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedControls_wait_for" id="mPiMAxI}-0.5?~hI8iX2" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="co.E7S-Uk5G7J::Q)6/A" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="robSensors_infrared_getSample" id="s2|Qd`i#|mHdJiDbo7Ka" intask="true">
+                                    <mutation mode="LINE"></mutation>
+                                    <field name="MODE">LINE</field>
+                                    <field name="SENSORPORT">1</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_boolean" id=":0x}J{{k:o)GUCf`q,|f" intask="true">
                                     <field name="BOOL">TRUE</field>
                                 </block>
                             </value>
@@ -382,6 +422,86 @@
                             <value name="B">
                                 <block type="math_number" id="wI:Zh_xr+[7T.;1vz(76" intask="true">
                                     <field name="NUM">512</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedControls_wait_for" id="CV0c#3]{SsMB^^I14X1#" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="6V-UHVE*Y4[LdyWnhz!e" intask="true">
+                            <field name="OP">GT</field>
+                            <value name="A">
+                                <block type="robSensors_ultrasonic_getSample" id="h3bWhj#^VGz0RxeGsq=k" intask="true">
+                                    <mutation mode="DISTANCE"></mutation>
+                                    <field name="MODE">DISTANCE</field>
+                                    <field name="SENSORPORT">1</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="math_number" id="FY,]d@Twq|8qkTEPlOg^" intask="true">
+                                    <field name="NUM">5</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedControls_wait_for" id="{!lxZ|@SW#(U#?OX~/aF" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="7FC5QBUk:prLVi~ayms~" intask="true">
+                            <field name="OP">GT</field>
+                            <value name="A">
+                                <block type="robSensors_ultrasonic_getSample" id="{Rzo/u!NV-L{8TRe@j5h" intask="true">
+                                    <mutation mode="DISTANCE"></mutation>
+                                    <field name="MODE">DISTANCE</field>
+                                    <field name="SENSORPORT">2</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="math_number" id="4ia[3;4e!?bwh!e_-yY@" intask="true">
+                                    <field name="NUM">5</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedControls_wait_for" id="a-Fvk?^fo52uvlO@[ONh" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="3Z+M-D,Vr0%o`b,w-D-]" intask="true">
+                            <field name="OP">LT</field>
+                            <value name="A">
+                                <block type="robSensors_humidity_getSample" id="FO9ln/5`t1,vyk=Sc;#C" intask="true">
+                                    <mutation mode="HUMIDITY"></mutation>
+                                    <field name="MODE">HUMIDITY</field>
+                                    <field name="SENSORPORT">5</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="math_number" id="=hD7|u*ATdYX0P;^p]S}" intask="true">
+                                    <field name="NUM">80</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedControls_wait_for" id="P6erure[8ZnI~H!7^ALE" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="A3h%)1`6l5,Dqzom;u7m" intask="true">
+                            <field name="OP">GT</field>
+                            <value name="A">
+                                <block type="robSensors_humidity_getSample" id="akVcVJn_;uZVSar9B/|a" intask="true">
+                                    <mutation mode="TEMPERATURE"></mutation>
+                                    <field name="MODE">TEMPERATURE</field>
+                                    <field name="SENSORPORT">5</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="math_number" id="MJ`:G0ElU]D:FN*@(1,z" intask="true">
+                                    <field name="NUM">10</field>
                                 </block>
                             </value>
                         </block>
