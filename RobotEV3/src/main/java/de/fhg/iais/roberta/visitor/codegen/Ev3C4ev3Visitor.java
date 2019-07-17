@@ -225,6 +225,8 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
                 return "std::list<Color>";
             case CONNECTION:
                 return "BluetoothConnectionHandle";
+            case ARRAY_CONNECTION:
+                return "std::list<BluetoothConnectionHandle>";
             default:
                 return super.getLanguageVarTypeFromBlocklyType(type);
         }
@@ -596,7 +598,8 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
                 return "(std::list<bool>)";
             case COLOR:
                 return "(std::list<Color>)";
-                // TODO: Handle bluetooth connection
+            case CONNECTION:
+                return "(std::list<BluetoothConnectionHandle>)";
             default:
                 throw new DbcException("unknown BlocklyType for ListCreate statement");
         }

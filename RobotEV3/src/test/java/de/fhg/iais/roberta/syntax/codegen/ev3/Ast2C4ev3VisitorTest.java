@@ -259,9 +259,10 @@ public class Ast2C4ev3VisitorTest {
                 + "std::list<bool> ___item6 = ((std::list<bool>){true, false});\n"
                 + "std::list<Color> ___item7 = ((std::list<Color>){Red, Black, None});\n"
                 + "Color ___item8 = None;\n"
+                + "BluetoothConnectionHandle ___item9 = NEPOWaitConnection();\n"
+                + "std::list<BluetoothConnectionHandle> ___item10 = ((std::list<BluetoothConnectionHandle>){NEPOWaitConnection()});\n"
                 + BEGIN_MAIN_DEFAULT
                 + END_MAIN;
-        // TODO: Test list of bluetooth connections
         checkCodeGeneratorForInput("/syntax/task/task_mainTask.xml", expectedCode);
     }
 

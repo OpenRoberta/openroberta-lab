@@ -450,6 +450,8 @@ public class AstToLejosJavaVisitorTest {
                 + "        ArrayList<Boolean>item6=newArrayList<>(Arrays.<Boolean>asList(true,false));"
                 + "        ArrayList<PickColor>item7=newArrayList<>(Arrays.<PickColor>asList(PickColor.RED,PickColor.BLACK,PickColor.NONE));"
                 + "        PickColoritem8=PickColor.NONE;"
+                + "        NXTConnectionitem9=hal.waitForConnection();"
+                + "        ArrayList<NXTConnection>item10=newArrayList<>();"
                 + "    public void run() throwsException {\n"
 
                 + SUFFIX

@@ -138,6 +138,28 @@
             </block>
           </value>
         </block>
+        <block type="robGlobalVariables_declare" id=":[k%l.^vS*hlCM-czKQu" intask="true" deletable="false" movable="false">
+          <mutation next="true" declaration_type="Connection"></mutation>
+          <field name="VAR">item9</field>
+          <field name="TYPE">Connection</field>
+          <value name="VALUE">
+            <block type="robCommunication_waitForConnection" id=",#D?emsiC{.,g{cn4jY]" intask="true"></block>
+          </value>
+        </block>
+        <block type="robGlobalVariables_declare" id="0Otk03h7g/-KKS%9G!L]" intask="true" deletable="false" movable="false">
+          <mutation next="false" declaration_type="Array_Connection"></mutation>
+          <field name="VAR">item10</field>
+          <field name="TYPE">Array_Connection</field>
+          <value name="VALUE">
+            <block type="robLists_create_with" id="L8d_U:H,ujBy@Z.%FEHK" intask="true">
+              <mutation items="1" list_type="Connection"></mutation>
+              <field name="LIST_TYPE">Connection</field>
+              <value name="ADD0">
+                <block type="robCommunication_waitForConnection" id="+p7]5H*ao50vTURw3RWe" intask="true"></block>
+              </value>
+            </block>
+          </value>
+        </block>
       </statement>
     </block>
   </instance>
