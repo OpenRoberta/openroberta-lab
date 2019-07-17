@@ -22,8 +22,6 @@ import com.google.inject.name.Named;
 import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
-import de.fhg.iais.roberta.util.AliveData;
-import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.VersionChecker;
 
@@ -48,11 +46,7 @@ public class ClientPing {
     @Produces(MediaType.APPLICATION_JSON)
     public Response handle(@OraData HttpSessionState httpSessionState, JSONObject fullRequest, @PathParam("version") String version) throws Exception {
         VersionChecker.checkRestVersion(version);
-        AliveData.rememberClientCall();
-        MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
-        MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
-        MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
-        int logLen = new ClientLogger().log(LOG, fullRequest);
+        int logLen = Util.handleRequestInit(httpSessionState, LOG, fullRequest);
         int counter = pingCounterForLogging.incrementAndGet();
 
         if ( counter % EVERY_REQUEST == 0 ) {
@@ -60,9 +54,11 @@ public class ClientPing {
         }
         Date date = new Date();
         JSONObject response =
-            new JSONObject().put("version", this.openRobertaServerVersion).put("date", date.getTime()).put("dateAsString", date.toString()).put(
-                "logged",
-                logLen);
+            new JSONObject()
+                .put("version", this.openRobertaServerVersion)
+                .put("date", date.getTime())
+                .put("dateAsString", date.toString())
+                .put("logged", logLen);
         Util.addFrontendInfo(response, httpSessionState, this.brickCommunicator);
         MDC.clear();
         return Response.ok(response).build();

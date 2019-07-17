@@ -118,6 +118,7 @@ public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
             crosscompilerResponse = "cross compilation successful";
             return compiledHex;
         } catch ( Exception e ) {
+            crosscompilerResponse = "cross compiler could not be called: " + e.getMessage();
             LOG.error("exception when calling the cross compiler", e);
             return null;
         }

@@ -22,8 +22,6 @@ import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
-import de.fhg.iais.roberta.util.AliveData;
-import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
@@ -43,11 +41,7 @@ public class ClientToolbox {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response command(@OraData HttpSessionState httpSessionState, @OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
-        AliveData.rememberClientCall();
-        MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
-        MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
-        MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
-        new ClientLogger().log(LOG, fullRequest);
+        Util.handleRequestInit(httpSessionState, LOG, fullRequest);
         JSONObject response = new JSONObject();
         try {
             JSONObject request = fullRequest.getJSONObject("data");
@@ -73,14 +67,14 @@ public class ClientToolbox {
                 Util.addResultInfo(response, tp);
             } else {
                 LOG.error("Invalid command: " + cmd);
-                Util.addErrorInfo(response, Key.COMMAND_INVALID, null);
+                Util.addErrorInfo(response, Key.COMMAND_INVALID);
             }
             dbSession.commit();
         } catch ( Exception e ) {
             dbSession.rollback();
             String errorTicketId = Util1.getErrorTicketId();
             LOG.error("Exception. Error ticket: " + errorTicketId, e);
-            Util.addErrorInfo(response, Key.SERVER_ERROR, null).append("parameters", errorTicketId);
+            Util.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
         } finally {
             if ( dbSession != null ) {
                 dbSession.close();

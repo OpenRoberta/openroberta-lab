@@ -23,8 +23,6 @@ import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
-import de.fhg.iais.roberta.util.AliveData;
-import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
@@ -46,11 +44,7 @@ public class ClientConfiguration {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response command(@OraData HttpSessionState httpSessionState, JSONObject fullRequest) throws Exception {
-        AliveData.rememberClientCall();
-        MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
-        MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
-        MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
-        new ClientLogger().log(ClientConfiguration.LOG, fullRequest);
+        Util.handleRequestInit(httpSessionState, LOG, fullRequest);
         int userId = httpSessionState.getUserId();
         DbSession dbSession = this.sessionFactoryWrapper.getSession();
         final String robotName =
@@ -102,14 +96,14 @@ public class ClientConfiguration {
 
             } else {
                 ClientConfiguration.LOG.error("Invalid command: " + cmd);
-                Util.addErrorInfo(response, Key.COMMAND_INVALID, null);
+                Util.addErrorInfo(response, Key.COMMAND_INVALID);
             }
             dbSession.commit();
         } catch ( Exception e ) {
             dbSession.rollback();
             String errorTicketId = Util1.getErrorTicketId();
             ClientConfiguration.LOG.error("Exception. Error ticket: " + errorTicketId, e);
-            Util.addErrorInfo(response, Key.SERVER_ERROR, null).append("parameters", errorTicketId);
+            Util.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
         } finally {
             if ( dbSession != null ) {
                 dbSession.close();

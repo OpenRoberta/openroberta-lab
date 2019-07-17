@@ -1,9 +1,5 @@
 package de.fhg.iais.roberta.javaServer.restServices.all;
 
-import java.io.File;
-import java.util.Collection;
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -26,15 +22,11 @@ import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
-import de.fhg.iais.roberta.util.AliveData;
-import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.RandomUrlPostfix;
 import de.fhg.iais.roberta.util.ServerProperties;
-import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
-import eu.bitwalker.useragentutils.UserAgent;
 
 @Path("/admin")
 public class ClientAdmin {
@@ -62,13 +54,9 @@ public class ClientAdmin {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response command(@OraData HttpSessionState httpSessionState, @OraData DbSession dbSession, JSONObject fullRequest, @Context HttpHeaders httpHeaders)
-        throws Exception {
-
-        AliveData.rememberClientCall();
-        MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
-        MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
-        MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
-        new ClientLogger().log(LOG, fullRequest);
+        throws Exception //
+    {
+        Util.handleRequestInit(httpSessionState, LOG, fullRequest);
         JSONObject response = new JSONObject();
         try {
             JSONObject request = fullRequest.getJSONObject("data");
@@ -76,51 +64,7 @@ public class ClientAdmin {
             LOG.info("command is: " + cmd);
 
             response.put("cmd", cmd);
-            if ( cmd.equals("init") ) {
-                List<String> userAgentList = httpHeaders.getRequestHeader("User-Agent");
-                String userAgentString = "";
-                if ( userAgentList != null ) {
-                    userAgentString = userAgentList.get(0);
-                }
-                UserAgent userAgent = UserAgent.parseUserAgentString(userAgentString);
-                Statistics.infoUserAgent("Initialization", userAgent, httpSessionState.getCountryCode(), request);
-
-                JSONObject server = new JSONObject();
-                server.put("defaultRobot", this.serverProperties.getDefaultRobot());
-                JSONObject robots = new JSONObject();
-                Collection<String> availableRobots = this.serverProperties.getRobotWhitelist();
-                int i = 0;
-                for ( String robot : availableRobots ) {
-                    JSONObject robotDescription = new JSONObject();
-                    robotDescription.put("name", robot);
-                    if ( !ServerProperties.NAME_OF_SIM.equals(robot) ) {
-                        robotDescription.put("realName", httpSessionState.getRobotFactory(robot).getRealName());
-                        robotDescription.put("info", httpSessionState.getRobotFactory(robot).getInfo());
-                        robotDescription.put("beta", httpSessionState.getRobotFactory(robot).isBeta());
-                        robotDescription.put("group", httpSessionState.getRobotFactory(robot).getGroup());
-                        robotDescription.put("hasWlan", httpSessionState.getRobotFactory(robot).hasWlanCredentials());
-                    }
-                    robots.put("" + i, robotDescription);
-                    i++;
-                }
-                server.put("isPublic", this.serverProperties.getBooleanProperty("server.public"));
-                server.put("robots", robots);
-                String staticRecourcesDir = this.serverProperties.getStringProperty("server.staticresources.dir");
-                String pathToTutorial = this.serverProperties.getStringProperty("server.admin.dir") + "/tutorial";
-                JSONObject tutorial =
-                    new File(pathToTutorial).isDirectory() //
-                        ? Util.getJSONObjectsFromDirectory(pathToTutorial) //
-                        : new JSONObject();
-                server.put("tutorial", tutorial);
-                String pathToHelp = staticRecourcesDir + File.separator + "help";
-                List<String> help = Util.getListOfFileNamesFromDirectory(pathToHelp, "html");
-                server.put("help", help);
-                String theme = this.serverProperties.getStringProperty("server.theme");
-                server.put("theme", theme);
-                response.put("server", server);
-                LOG.info("success: create init object");
-                Util.addSuccessInfo(response, Key.INIT_SUCCESS);
-            } else if ( cmd.equals("setToken") ) {
+            if ( cmd.equals("setToken") ) {
                 String token = request.getString("token");
                 if ( NO_CONNECT != null && NO_CONNECT.equals(token) ) {
                     LOG.info("debug token is presented by a user. Download to robots is disabled for this user. Debugging feature and not risky.");
@@ -141,16 +85,16 @@ public class ClientAdmin {
                             LOG.info("success: token " + token + " is registered in the session");
                             break;
                         case TOKEN_SET_ERROR_WRONG_ROBOTTYPE:
-                            Util.addErrorInfo(response, Key.TOKEN_SET_ERROR_WRONG_ROBOTTYPE, null);
+                            Util.addErrorInfo(response, Key.TOKEN_SET_ERROR_WRONG_ROBOTTYPE);
                             LOG.info("error: token " + token + " not registered in the session, wrong robot type");
                             break;
                         case TOKEN_SET_ERROR_NO_ROBOT_WAITING:
-                            Util.addErrorInfo(response, Key.TOKEN_SET_ERROR_NO_ROBOT_WAITING, null);
+                            Util.addErrorInfo(response, Key.TOKEN_SET_ERROR_NO_ROBOT_WAITING);
                             LOG.info("error: token " + token + " not registered in the session");
                             break;
                         default:
                             LOG.error("invalid response for token agreement: " + tokenAgreement);
-                            Util.addErrorInfo(response, Key.SERVER_ERROR, null);
+                            Util.addErrorInfo(response, Key.SERVER_ERROR);
                             break;
                     }
                 }
@@ -164,10 +108,10 @@ public class ClientAdmin {
                     if ( isPossible ) {
                         Util.addSuccessInfo(response, Key.ROBOT_FIRMWAREUPDATE_POSSIBLE);
                     } else {
-                        Util.addErrorInfo(response, Key.ROBOT_FIRMWAREUPDATE_IMPOSSIBLE, null);
+                        Util.addErrorInfo(response, Key.ROBOT_FIRMWAREUPDATE_IMPOSSIBLE);
                     }
                 } else {
-                    Util.addErrorInfo(response, Key.ROBOT_NOT_CONNECTED, null);
+                    Util.addErrorInfo(response, Key.ROBOT_NOT_CONNECTED);
                 }
             } else if ( cmd.equals("setRobot") ) {
                 String robot = request.getString("robot");
@@ -215,18 +159,18 @@ public class ClientAdmin {
                     }
                 } else {
                     LOG.error("Invalid command: " + cmd + " setting robot name to " + robot);
-                    Util.addErrorInfo(response, Key.ROBOT_DOES_NOT_EXIST, null);
+                    Util.addErrorInfo(response, Key.ROBOT_DOES_NOT_EXIST);
                 }
             } else {
                 LOG.error("Invalid command: " + cmd);
-                Util.addErrorInfo(response, Key.COMMAND_INVALID, null);
+                Util.addErrorInfo(response, Key.COMMAND_INVALID);
             }
             dbSession.commit();
         } catch ( Exception e ) {
             dbSession.rollback();
             String errorTicketId = Util1.getErrorTicketId();
             LOG.error("Exception. Error ticket: " + errorTicketId, e);
-            Util.addErrorInfo(response, Key.SERVER_ERROR, null).append("parameters", errorTicketId);
+            Util.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
         } finally {
             if ( dbSession != null ) {
                 dbSession.close();

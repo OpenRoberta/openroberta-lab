@@ -17,8 +17,10 @@ import org.owasp.html.HtmlPolicyBuilder;
 import org.owasp.html.PolicyFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientAdmin;
+import de.fhg.iais.roberta.javaServer.restServices.all.ClientInit;
 import de.fhg.iais.roberta.persistence.AbstractProcessor;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData;
@@ -42,6 +44,45 @@ public class Util {
         Util.serverVersion = serverVersion;
     }
 
+    /**
+     * all REST services, excluded is only the /init request, have to call this method. It processes the init-token, which protects user and server against<br>
+     * - multiple frontend sessions connected to one backend session (see class {@link ClientInit})<br>
+     * - a frontend session not backed by a backend session (occurs when the server is restarted)<br>
+     * <b>Actually it only logs violations (once)</b>
+     *
+     * @param httpSessionState
+     * @param loggerForRequest
+     * @param fullRequest
+     * @return
+     */
+    public static int handleRequestInit(HttpSessionState httpSessionState, Logger loggerForRequest, JSONObject fullRequest) {
+        AliveData.rememberClientCall();
+        MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
+        MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
+        MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
+        int logLen = new ClientLogger().log(loggerForRequest, fullRequest);
+        String initToken = fullRequest.optString("initToken");
+        String errorMsgIfError;
+        if ( initToken == null ) {
+            errorMsgIfError = "frontend request has no initToken. This is a SEVERE error";
+        } else if ( !httpSessionState.isInitTokenInitialized() ) {
+            httpSessionState.setInitToken(); // TODO: this is an implicit repair after a severe error. Must be removed as soon as possible
+            errorMsgIfError = "initToken is not initialized in the session. This is a SEVERE error";
+        } else if ( !httpSessionState.getInitToken().equals(initToken) ) {
+            errorMsgIfError = "initToken from frontend and from session are different. This is a SEVERE error";
+            httpSessionState.setInitToken(initToken); // TODO: this is an implicit repair after a severe error. Must be removed as soon as possible.
+        } else {
+            errorMsgIfError = null;
+        }
+        if ( errorMsgIfError == null ) {
+            return logLen;
+        } else {
+            LOG.error(errorMsgIfError);
+            return logLen;
+            // throw new DbcKeyException(errorMsgIfError, Key.INIT_FAIL_HTTPSESSION_EXPECTED_BUT_NOT_FOUND, null);
+        }
+    }
+
     public static void addResultInfo(JSONObject response, AbstractProcessor processor) throws JSONException {
         String realKey = processor.getMessage().getKey();
         String responseCode = processor.succeeded() ? "ok" : "error";
@@ -52,23 +93,28 @@ public class Util {
     }
 
     public static JSONObject addSuccessInfo(JSONObject response, Key key) throws JSONException {
-        Util.addResultInfo(response, "ok", key, null);
+        Util.addResultInfo(response, "ok", key);
         return response;
     }
 
-    public static JSONObject addErrorInfo(JSONObject response, Key key, String compilerResponse) throws JSONException {
-        Util.addResultInfo(response, "error", key, compilerResponse);
+    public static JSONObject addErrorInfo(JSONObject response, Key key) throws JSONException {
+        Util.addResultInfo(response, "error", key);
         return response;
     }
 
-    private static void addResultInfo(JSONObject response, String restCallResultOkOrError, Key key, String compilerResponse) throws JSONException {
+    public static void addErrorInfo(JSONObject response, Key key, String compilerResponse) throws JSONException {
+        Util.addResultInfo(response, "error", key);
+        JSONObject parameters = new JSONObject();
+        parameters.put("MESSAGE", compilerResponse);
+        response.put("parameters", parameters);
+
+    }
+
+    private static void addResultInfo(JSONObject response, String restCallResultOkOrError, Key key) throws JSONException {
         String realKey = key.getKey();
         response.put("rc", restCallResultOkOrError);
         response.put("message", realKey);
         response.put("cause", realKey);
-        if ( compilerResponse != null ) {
-            response.put("compilerResponse", compilerResponse);
-        }
     }
 
     /**
@@ -84,11 +130,12 @@ public class Util {
             response.put("serverTime", new Date());
             response.put("server.version", Util.serverVersion);
             if ( httpSessionState != null ) {
+                response.put("initToken", httpSessionState.getInitToken());
                 String token = httpSessionState.getToken();
                 if ( token != null ) {
                     if ( token.equals(ClientAdmin.NO_CONNECT) ) {
                         response.put("robot.state", "wait");
-                    } else {
+                    } else if ( brickCommunicator != null ) {
                         RobotCommunicationData state = brickCommunicator.getState(token);
                         if ( state != null ) {
                             response.put("robot.wait", state.getRobotConnectionTime());

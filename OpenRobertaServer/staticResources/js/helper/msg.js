@@ -111,7 +111,11 @@ define([ 'exports', 'log', 'jquery', 'blocks-msg' ], function(exports, LOG, $, B
             $('.modal').modal('hide'); // close all opened popups
             displayMessage(successMessage, "TOAST", messageParam, false, opt_robot);
         } else {
-            displayMessage(errorMessage, "POPUP", messageParam, false, opt_robot);
+        	if (result.parameters === undefined) {
+        		displayMessage(errorMessage, "POPUP", messageParam, false, opt_robot);        		
+        	} else {
+        		displayMessage(errorMessage, "POPUP", result.parameters, false, opt_robot);        		
+        	}
         }
     }
     exports.displayInformation = displayInformation;

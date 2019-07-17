@@ -3,6 +3,7 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
      * prefix to be prepended to each URL used in ajax calls.
      */
     var urlPrefix = '/rest';
+    var initToken = undefined;
 
     /**
      * the default error fn. Should be replaced by an own implementation. Not
@@ -16,16 +17,24 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
     }
 
     /**
+     * remember the init token. It is added to each request to identify THIS front end process. May be resetted to 'undefined'
+     */
+    function setInitToken(newInitToken) {
+    	initToken = newInitToken;
+    }
+    exports.setInitToken = setInitToken;
+
+    /**
      * set a error fn. A error function must accept one parameter: the response.
      */
     function setErrorFn(newErrorFn) {
-        errorFn = newErrorFn;
+    	errorFn = newErrorFn;
     }
     exports.setErrorFn = setErrorFn;
-
+    
     /**
-     * URL-encode a JSON object, issue a GET and expect a JSON object as
-     * response.
+     * URL-encode a JSON object, issue a GET and expect a JSON object as response.
+     * No init token!
      */
     function get(url, data, successFn, message) {
         return $.ajax({
@@ -47,7 +56,8 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
         var log = LOG.reportToComm();
         var load = {
             log : log,
-            data : data
+            data : data,
+            initToken : initToken
         };
         return $.ajax({
             url : urlPrefix + url,

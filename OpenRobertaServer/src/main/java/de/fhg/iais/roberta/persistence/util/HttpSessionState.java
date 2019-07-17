@@ -16,6 +16,18 @@ public class HttpSessionState implements Serializable {
 
     private int userId = HttpSessionState.NO_USER;
     private String robotName;
+    /**
+     * the init function in ClientAdmin will set this token. The token is returned with each response and the front end must supply it with each request. Two
+     * cases are relevant for checking this token:
+     * <ul>
+     * <li>if it is already SET when the init function is called, it is likely, that the user opened a second tab and accessed the lab (again). This is a
+     * problem, as we cannot sync the two clients. Thus we will reject the call.
+     * <li>if it is NOT SET and another function than init is called, it is likely, that either a debug session is running or a user session moved from one
+     * server to another server. In the latter case the session must be migrated to the new server. <b>This is not yet implemented</b>
+     * </ul>
+     * The token is returned with each response and the front end must supply it with each request.
+     */
+    private String tokenSetOnInit = null;
     private String token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
     private String programName;
     private String program;
@@ -75,6 +87,24 @@ public class HttpSessionState implements Serializable {
     public void setRobotName(String robotName) {
         Assert.notNull(robotName);
         this.robotName = robotName;
+    }
+
+    public boolean isInitTokenInitialized() {
+        return tokenSetOnInit != null;
+    }
+
+    public String getInitToken() {
+        Assert.notNull(tokenSetOnInit, "init token not initialized. This is a SEVERE error");
+        return tokenSetOnInit;
+    }
+
+    public void setInitToken() {
+        Assert.isNull(tokenSetOnInit, "init token already initialized. This is a SEVERE error");
+        this.tokenSetOnInit = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
+    }
+
+    public void setInitToken(String initToken) {
+        this.tokenSetOnInit = initToken;
     }
 
     public String getToken() {

@@ -1,4 +1,4 @@
-define([ 'exports', 'comm' ], function(exports, COMM) {
+define([ 'exports', 'message', 'comm' ], function(exports, MSG, COMM) {
 
     /**
      * Initialize gui state object
@@ -83,15 +83,20 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         exports.robot.hasWlan = false;
 
         var getInitFromServer = function() {
-            return COMM.json("/admin", {
+        	COMM.setInitToken(undefined);
+            return COMM.json("/init", {
                 "cmd" : "init",
                 "screenSize" : [ window.screen.availWidth, window.screen.availHeight ]
             }, function(result) {
                 if (result.rc === 'ok') {
+                	COMM.setInitToken(result.initToken);
                     $.extend(exports.server, result.server);
                     exports.server.version = result["server.version"];
                     exports.server.time = result.serverTime;
                     ready.resolve();
+                } else {
+                	console.log("ERROR: " + result.message)
+                	// MSG.displayInformation(result, "", result.message);
                 }
             }, 'init gui state model');
         }
