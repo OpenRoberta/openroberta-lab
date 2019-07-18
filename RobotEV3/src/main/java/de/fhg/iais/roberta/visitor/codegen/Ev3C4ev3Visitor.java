@@ -143,7 +143,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         this.sb.append("NEPOInitEV3();");
         nlIndent();
         generateSensorInitialization();
-        nlIndent();
+        generateDebugInitialization(mainTask);
         generateTTSInitialization();
         generateGyroInitialization();
         nlIndent();
@@ -172,6 +172,24 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     private void generateSensorInitialization() {
         this.sb.append("setAllSensorMode(").append(getDefaultSensorModesString()).append(");");
+        nlIndent();
+    }
+
+    private void generateDebugInitialization (MainTask<Void> mainTask) {
+        boolean isDebug = mainTask.getDebug().equals("TRUE");
+        if (isDebug) {
+            this.sb.append("startLoggingThread(");
+            this.sb.append(getConnectedMotorPorts());
+            this.sb.append(");");
+            nlIndent();
+        }
+    }
+
+    private String getConnectedMotorPorts () {
+        String ports = brickConfiguration.getActors().stream()
+            .map(ConfigurationComponent::getUserDefinedPortName)
+            .collect(Collectors.joining());
+        return getMotorPortConstant(ports);
     }
 
     private void generateTTSInitialization () {
@@ -956,15 +974,13 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         ConfigurationComponent rightMotor = this.brickConfiguration.getFirstMotor(SC.RIGHT);
         String leftMotorPort = leftMotor.getUserDefinedPortName();
         String rightMotorPort = rightMotor.getUserDefinedPortName();
-        return PREFIX_OUTPUT_PORT + createSortedPorts(leftMotorPort, rightMotorPort);
+        return getMotorPortConstant(leftMotorPort + rightMotorPort);
     }
 
-    private static String createSortedPorts(String port1, String port2) {
-        Assert.isTrue(port1.length() == 1 && port2.length() == 1);
-        char[] charArray = (port1 + port2).toCharArray();
+    private static String getMotorPortConstant(String ports) {
+        char[] charArray = ports.toCharArray();
         Arrays.sort(charArray);
-        String port = new String(charArray);
-        return port;
+        return PREFIX_OUTPUT_PORT + new String(charArray);
     }
 
     private String getLeftDriveMotorPort() {
