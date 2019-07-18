@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-07-15 18:44:13.176511",
+		"lastupdated": "2019-07-18 10:57:35.992939",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -797,7 +797,7 @@
 	"ORA_COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED": "The program could not be transformed into the robots programming language.",
 	"ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED": "The robot configuration could not be transformed into the robots programming language.",
 	"ORA_COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED": "The program could not be saved because of an internal error.",
-	"ORA_COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED": "Please check the error messages in your progamming blocks and the configuration! Your program has errors so it cannot be compiled.",
+	"ORA_COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED": "Your program has errors so it cannot be compiled. The compiler messages are: {MESSAGE}",
 	"ORA_COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED": "The program could not be generated. Pin {PIN} is incorrect in block {BLOCK}",
 	"ORA_ROBOT_NOT_WAITING": "The robot does not wait for a run command.",
 	"ORA_ROBOT_PUSH_RUN": "Robot waited and now the jar is pushed to the robot",
@@ -1536,5 +1536,7 @@
 	"YEND": "end of Y axis",
 	"XTICK": "distance between X ticks",
 	"YTICK": "distance between Y ticks",
-	"ACTION_PLOT_TICKMARK": "at tickmark"
+	"ACTION_PLOT_TICKMARK": "at tickmark",
+	"INIT_FAIL_MULTIPLE_FRONTENDS_ONE_HTTPSESSION": "You are trying to connect to the openroberta-lab multiple times, e.g. by opening multiple tabs. This is not supported at the moment. Please close this view.",
+	"INIT_FAIL_HTTPSESSION_EXPECTED_BUT_NOT_FOUND": "The connection to the openroberta-lab was closed unexpectedly. This case is rare and may happen, if the openroberta-lab-server is restarted. Please start a new connection to the openroberta-lab, e.g. by closing and starting the browser or by hitting the »reload«-button."
 }

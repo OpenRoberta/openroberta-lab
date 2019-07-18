@@ -62,15 +62,25 @@ define([ 'exports', 'log', 'jquery', 'blocks-msg' ], function(exports, LOG, $, B
             if (value === undefined || value === '') {
                 value = messageId;
             }
-            if (value.indexOf("$") >= 0) {
-                value = value.replace("$", replaceWith);
-            }
-
-            Object.keys(replaceWith).forEach(function(key) {
-                if (replaceWith.hasOwnProperty(key)) {
-                    value = value.replace(key, replaceWith[key]);
+            
+            if( typeof replaceWith === "string" ) {
+                if (value.indexOf("$") >= 0) {
+                    value = value.replace("$", replaceWith);
+                } else {
+                    value = value.replace(/\{[^\}]+\}/g, replaceWith);
                 }
-            });
+            } else {
+                if (value.indexOf("$") >= 0) {
+                    var keys = Object.keys(replaceWith);
+                    value = value.replace("$", replaceWith[keys[0]]);
+                } else {
+                    Object.keys(replaceWith).forEach(function(key) {
+                        if (replaceWith.hasOwnProperty(key)) {
+                            value = value.replace("{" + key + "}", replaceWith[key]);
+                        }
+                    });
+                }
+            }
             
             if (output === 'POPUP') {
                 displayPopupMessage(lkey, value, cancel);

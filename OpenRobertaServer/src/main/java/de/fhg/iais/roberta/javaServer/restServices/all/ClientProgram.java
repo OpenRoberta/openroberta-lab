@@ -165,8 +165,8 @@ public class ClientProgram {
                                 configurationChecker.checkConfiguration();
                             } catch ( DbcException e ) {
                                 configurationCorrect = false;
-                                responseParameters.put("{BLOCK}", configurationChecker.getFailingBlock());
-                                responseParameters.put("{PIN}", configurationChecker.getIncorrectPin());
+                                responseParameters.put("BLOCK", configurationChecker.getFailingBlock());
+                                responseParameters.put("PIN", configurationChecker.getIncorrectPin());
                             }
                         }
                         if ( !SSID.equals("null") || !password.equals("null") ) {
