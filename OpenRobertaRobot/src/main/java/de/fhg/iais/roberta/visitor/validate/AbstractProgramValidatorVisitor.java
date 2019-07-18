@@ -642,6 +642,12 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
 
     @Override
     public Void visitEvalExpr(EvalExpr<Void> evalExpr) {
+        if ( evalExpr.hasSyntaxError() ) {
+            evalExpr.addInfo(NepoInfo.error("ERROR_SYNTAX_ERROR"));
+        } else {
+
+        }
+
         return null;
     }
 

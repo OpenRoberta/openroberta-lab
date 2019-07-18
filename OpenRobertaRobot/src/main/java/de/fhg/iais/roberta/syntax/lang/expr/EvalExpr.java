@@ -73,6 +73,10 @@ public class EvalExpr<V> extends Expr<V> {
         return new EvalExpr<V>(expr, type, BlocklyBlockProperties.make("1", "1"), null);
     }
 
+    public boolean hasSyntaxError() {
+        return this.syntaxError;
+    }
+
     @Override
     public int getPrecedence() {
         return this.exprBlock.getPrecedence();

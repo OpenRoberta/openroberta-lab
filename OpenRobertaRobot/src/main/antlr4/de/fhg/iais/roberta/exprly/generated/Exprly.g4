@@ -29,7 +29,6 @@ literal  : INT                                                       # IntConst
          | BOOL                                                      # BoolConstB
          | '"'  .*?  '"'                                             # ConstStr
          | COLOR                                                     # Col
-         | '(' r=INT ',' g=INT ',' b=INT ',' a=INT ')'               # RGB
          | '[' (expr ',')* expr? ']'                                 # ListExpr
          ;
 
@@ -104,6 +103,7 @@ FNAME   :  'sin'
         |  'print'
         |  'append'
         |  'constrain'
+        |  'getRGB'
         ;
         
 CONST   :  'phi'

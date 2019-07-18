@@ -3,6 +3,9 @@ package de.fhg.iais.roberta.syntax.lang.expr.eval.resources;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.fhg.iais.roberta.inter.mode.general.IIndexLocation;
+import de.fhg.iais.roberta.inter.mode.general.IMode;
+import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
@@ -11,17 +14,26 @@ import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
+import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 
 public class ExprlyTypechecker<T> {
@@ -74,10 +86,9 @@ public class ExprlyTypechecker<T> {
      *
      * @return number of errors in the expression
      */
-    public Integer check() {
+    public void check() {
         this.errorCount = 0;
         this.resultType = checkAST(this.e);
-        return this.errorCount;
     }
 
     /**
@@ -163,8 +174,7 @@ public class ExprlyTypechecker<T> {
             // If it should be boolean, check if it is
             if ( !t.equals(BlocklyType.BOOLEAN) ) {
                 this.errorCount++;
-                addToInfo(
-                    "Error number " + Integer.toString(this.errorCount) + " at unary expression " + unary.toString() + ": Boolean type expected at operand");
+                addToInfo(t.equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_OPERAND_TYPE");
             }
             return BlocklyType.BOOLEAN;
 
@@ -174,8 +184,7 @@ public class ExprlyTypechecker<T> {
             // If it is a number operation, check if the argument is boolean
             if ( !t.equals(BlocklyType.NUMBER) ) {
                 this.errorCount++;
-                addToInfo(
-                    "Error number " + Integer.toString(this.errorCount) + " at unary expression " + unary.toString() + ": Number type expected at operand");
+                addToInfo(t.equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_OPERAND_TYPE");
             }
             return BlocklyType.NUMBER;
         }
@@ -204,14 +213,12 @@ public class ExprlyTypechecker<T> {
             // Check if the left operand is a Number Type
             if ( !tl.equals(BlocklyType.NUMBER) ) {
                 this.errorCount++;
-                addToInfo(
-                    "Error number " + Integer.toString(this.errorCount) + " at expression " + binary.toString() + ": Number type expected at left operand");
+                addToInfo(tl.equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_OPERAND_TYPE");
             }
             // Check if the right operand is a Number Type
             if ( !tr.equals(BlocklyType.NUMBER) ) {
                 this.errorCount++;
-                addToInfo(
-                    "Error number " + Integer.toString(this.errorCount) + " at expression " + binary.toString() + ": Number type expected at right operand");
+                addToInfo(tr.equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_OPERAND_TYPE");
             }
             return BlocklyType.NUMBER;
         }
@@ -220,14 +227,12 @@ public class ExprlyTypechecker<T> {
             // Check if the left operand is a Boolean Type
             if ( !tl.equals(BlocklyType.BOOLEAN) ) {
                 this.errorCount++;
-                addToInfo(
-                    "Error number " + Integer.toString(this.errorCount) + " at expression " + binary.toString() + ": Boolean type expected at left operand");
+                addToInfo(tl.equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_OPERAND_TYPE");
             }
             if ( !tr.equals(BlocklyType.BOOLEAN) ) {
                 // Check if the right operand is a Boolean Type
                 this.errorCount++;
-                addToInfo(
-                    "Error number " + Integer.toString(this.errorCount) + " at expression " + binary.toString() + ": Boolean type expected at right operand");
+                addToInfo(tr.equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_OPERAND_TYPE");
             }
             return BlocklyType.BOOLEAN;
         }
@@ -236,8 +241,7 @@ public class ExprlyTypechecker<T> {
             // Check if both operands are of the same Type
             if ( !tl.equals(tr) ) {
                 this.errorCount++;
-                addToInfo(
-                    "Error number " + Integer.toString(this.errorCount) + " at expression " + binary.toString() + ": Both opperands should have the same type");
+                addToInfo(tr.equals(BlocklyType.VOID) || tl.equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_OPERAND_TYPE");
             }
             return BlocklyType.BOOLEAN;
         }
@@ -249,14 +253,12 @@ public class ExprlyTypechecker<T> {
             // Check if the left operand is a Number Type
             if ( !tl.equals(BlocklyType.NUMBER) ) {
                 this.errorCount++;
-                addToInfo(
-                    "Error number " + Integer.toString(this.errorCount) + " at expression " + binary.toString() + ": Number type expected at left operand");
+                addToInfo(tl.equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_OPERAND_TYPE");
             }
             // Check if the right operand is a Number Type
             if ( !tr.equals(BlocklyType.NUMBER) ) {
                 this.errorCount++;
-                addToInfo(
-                    "Error number " + Integer.toString(this.errorCount) + " at expression " + binary.toString() + ": Number type expected at right operand");
+                addToInfo(tr.equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_OPERAND_TYPE");
             }
             return BlocklyType.BOOLEAN;
         }
@@ -338,26 +340,15 @@ public class ExprlyTypechecker<T> {
         List<Expr<T>> args = mathNumPropFunct.getParam();
         // All the numProp functions take only one number as argument
         // Check that it's only one argument
-        if ( args.size() > 1 ) {
+        if ( args.size() != 1 ) {
             this.errorCount++;
-            this.info
-                .add(
-                    "Error number "
-                        + Integer.toString(this.errorCount)
-                        + " at expression "
-                        + mathNumPropFunct.toString()
-                        + ": NumProp Functions only take one argument");
+            this.info.add("INVALID_ARGUMENT_NUMBER");
         }
         // Check that is a number type
         for ( Expr<T> e : args ) {
             if ( !checkAST(e).equals(BlocklyType.NUMBER) ) {
                 this.errorCount++;
-                addToInfo(
-                    "Error number "
-                        + Integer.toString(this.errorCount)
-                        + " at expression "
-                        + mathNumPropFunct.toString()
-                        + ": Number type expected as argument");
+                addToInfo(checkAST(e).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
             }
         }
         return BlocklyType.BOOLEAN;
@@ -373,26 +364,15 @@ public class ExprlyTypechecker<T> {
         List<Expr<T>> args = mathOnListFunct.getParam();
         // All the list functions take only one list
         // Check that is only one
-        if ( args.size() > 1 ) {
+        if ( args.size() != 1 ) {
             this.errorCount++;
-            this.info
-                .add(
-                    "Error number "
-                        + Integer.toString(this.errorCount)
-                        + " at expression "
-                        + mathOnListFunct.toString()
-                        + ": List Functions only take one List type as argument");
+            this.info.add("INVALID_ARGUMENT_NUMBER");
         }
         // Check that all the elements are numbers
         for ( Expr<T> e : args ) {
             if ( !checkAST(e).equals(BlocklyType.ARRAY_NUMBER) ) {
                 this.errorCount++;
-                addToInfo(
-                    "Error number "
-                        + Integer.toString(this.errorCount)
-                        + " at expression "
-                        + mathOnListFunct.toString()
-                        + ": List Functions only take NumberList types as an argument");
+                addToInfo(checkAST(e).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
             }
         }
         return BlocklyType.NUMBER;
@@ -418,25 +398,14 @@ public class ExprlyTypechecker<T> {
         // Check that there are only 2 arguments
         if ( args.size() != 2 ) {
             this.errorCount++;
-            this.info
-                .add(
-                    "Error number "
-                        + Integer.toString(this.errorCount)
-                        + " at expression "
-                        + mathRandomIntFunct.toString()
-                        + ": RandomInt function only takes 2 arguments");
+            this.info.add("INVALID_ARGUMENT_NUMBER");
         }
 
         // Check that they're all number types
         for ( Expr<T> e : args ) {
             if ( !checkAST(e).equals(BlocklyType.NUMBER) ) {
                 this.errorCount++;
-                addToInfo(
-                    "Error number "
-                        + Integer.toString(this.errorCount)
-                        + " at expression "
-                        + mathRandomIntFunct.toString()
-                        + ": RandomInt function only takes Number types as arguments");
+                addToInfo(checkAST(e).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
             }
         }
         return BlocklyType.NUMBER;
@@ -449,31 +418,235 @@ public class ExprlyTypechecker<T> {
      * @return Return Type of function
      */
     public BlocklyType visitMathSingleFunct(MathSingleFunct<T> mathSingleFunct) {
-        // Get parammeters
+        // Get parameters
         List<Expr<T>> args = mathSingleFunct.getParam();
         // Check the number of parameters
         if ( args.size() > 2 ) {
             this.errorCount++;
-            addToInfo(
-                "Error number "
-                    + Integer.toString(this.errorCount)
-                    + " at expression "
-                    + mathSingleFunct.toString()
-                    + ": Math functions take up to 2 arguments");
+            addToInfo("INVALID_ARGUMENT_NUMBER");
         }
         // Check that they're all numbers
         for ( Expr<T> e : args ) {
             if ( !checkAST(e).equals(BlocklyType.NUMBER) ) {
                 this.errorCount++;
-                addToInfo(
-                    "Error number "
-                        + Integer.toString(this.errorCount)
-                        + " at expression "
-                        + mathSingleFunct.toString()
-                        + ": Math functions only take Number types as arguments");
+                addToInfo(checkAST(e).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
             }
         }
         return BlocklyType.NUMBER;
+    }
+
+    public BlocklyType visitMathConstrainFunct(MathConstrainFunct<T> mathConstrainFunct) {
+        // Get parameters
+        List<Expr<T>> args = mathConstrainFunct.getParam();
+        // Check the number of parameters
+        if ( args.size() != 3 ) {
+            this.errorCount++;
+            addToInfo("INVALID_ARGUMENT_NUMBER");
+        }
+        // Check that they're all numbers
+        for ( Expr<T> e : args ) {
+            if ( !checkAST(e).equals(BlocklyType.NUMBER) ) {
+                this.errorCount++;
+                addToInfo(checkAST(e).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
+            }
+        }
+        return BlocklyType.NUMBER;
+    }
+
+    public BlocklyType visitTextJoinFunct(TextJoinFunct<T> textJoinFunct) {
+        // Get parameters
+        List<Expr<T>> args = textJoinFunct.getParam().get();
+        // Check the number of parameters
+        if ( args.size() != 2 ) {
+            this.errorCount++;
+            addToInfo("INVALID_ARGUMENT_NUMBER");
+        }
+        // Check that they're all numbers
+        for ( Expr<T> e : args ) {
+            if ( !checkAST(e).equals(BlocklyType.STRING) ) {
+                this.errorCount++;
+                addToInfo(checkAST(e).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
+            }
+        }
+        return BlocklyType.STRING;
+    }
+
+    public BlocklyType visitTextPrintFunct(TextPrintFunct<T> textPrintFunct) {
+        // Get parameters
+        List<Expr<T>> args = textPrintFunct.getParam();
+        // Check the number of parameters
+        if ( args.size() != 1 ) {
+            this.errorCount++;
+            addToInfo("INVALID_ARGUMENT_NUMBER");
+        }
+
+        if ( !checkAST(args.get(0)).equals(BlocklyType.STRING) ) {
+            this.errorCount++;
+            addToInfo(checkAST(this.e).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
+        }
+
+        return BlocklyType.VOID;
+    }
+
+    public BlocklyType visitGetSubFunct(GetSubFunct<T> getSubFunct) {
+        // Get parameters
+        List<Expr<T>> args = getSubFunct.getParam();
+        List<IMode> mode = getSubFunct.getStrParam();
+        // Check the number of parameters
+        if ( mode.get(0).equals(IndexLocation.FROM_START) || mode.get(0).equals(IndexLocation.FROM_END) ) {
+            if ( mode.get(1).equals(IndexLocation.LAST) ) {
+                if ( args.size() != 2 ) {
+                    this.errorCount++;
+                    addToInfo("INVALID_ARGUMENT_NUMBER");
+                }
+            } else {
+                if ( args.size() != 3 ) {
+                    this.errorCount++;
+                    addToInfo("INVALID_ARGUMENT_NUMBER");
+                }
+            }
+        } else {
+            if ( mode.get(1).equals(IndexLocation.LAST) ) {
+                if ( args.size() != 1 ) {
+                    this.errorCount++;
+                    addToInfo("INVALID_ARGUMENT_NUMBER");
+                }
+            } else {
+                if ( args.size() != 2 ) {
+                    this.errorCount++;
+                    addToInfo("INVALID_ARGUMENT_NUMBER");
+                }
+            }
+        }
+        // Check that they're all type correct
+        for ( int i = 0; i < args.size(); i++ ) {
+            if ( i == 0 ) {
+                if ( !(checkAST(args.get(0)).equals(BlocklyType.ARRAY)
+                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_NUMBER)
+                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_BOOLEAN)
+                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_STRING)
+                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_CONNECTION)) ) {
+                    addToInfo(checkAST(args.get(0)).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
+                } else {
+                    if ( !checkAST(args.get(i)).equals(BlocklyType.NUMBER) ) {
+                        addToInfo(checkAST(args.get(i)).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
+                    }
+                }
+            }
+        }
+
+        if ( checkAST(args.get(0)).equals(BlocklyType.ARRAY) ) {
+            return BlocklyType.ARRAY;
+        } else if ( checkAST(args.get(0)).equals(BlocklyType.ARRAY_NUMBER) ) {
+            return BlocklyType.ARRAY_NUMBER;
+        } else if ( checkAST(args.get(0)).equals(BlocklyType.ARRAY_BOOLEAN) ) {
+            return BlocklyType.ARRAY_BOOLEAN;
+        } else if ( checkAST(args.get(0)).equals(BlocklyType.ARRAY_STRING) ) {
+            return BlocklyType.ARRAY_STRING;
+        } else if ( checkAST(args.get(0)).equals(BlocklyType.ARRAY_CONNECTION) ) {
+            return BlocklyType.ARRAY_CONNECTION;
+        }
+        return BlocklyType.ARRAY;
+    }
+
+    public BlocklyType visitListGetIndex(ListGetIndex<T> listGetIndex) {
+        // Get parameters
+        List<Expr<T>> args = listGetIndex.getParam();
+        IIndexLocation mode = listGetIndex.getLocation();
+        // Check the number of parameters
+        if ( mode.equals(IndexLocation.FROM_START) || mode.equals(IndexLocation.FROM_END) ) {
+            if ( args.size() != 2 ) {
+                //error
+            }
+        } else {
+            if ( args.size() != 1 ) {
+                //error
+            }
+        }
+        // Check that they're all type correct
+        for ( int i = 0; i < args.size(); i++ ) {
+            if ( i == 0 ) {
+                if ( !(checkAST(args.get(0)).equals(BlocklyType.ARRAY)
+                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_NUMBER)
+                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_BOOLEAN)
+                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_STRING)
+                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_CONNECTION)) ) {
+                    addToInfo(checkAST(args.get(0)).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
+                } else {
+                    if ( !checkAST(args.get(i)).equals(BlocklyType.NUMBER) ) {
+                        addToInfo(checkAST(args.get(i)).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
+                    }
+                }
+            }
+        }
+
+        if ( checkAST(args.get(0)).equals(BlocklyType.ARRAY) ) {
+            return BlocklyType.VOID;
+        } else if ( checkAST(args.get(0)).equals(BlocklyType.ARRAY_NUMBER) ) {
+            return BlocklyType.NUMBER;
+        } else if ( checkAST(args.get(0)).equals(BlocklyType.ARRAY_BOOLEAN) ) {
+            return BlocklyType.BOOLEAN;
+        } else if ( checkAST(args.get(0)).equals(BlocklyType.ARRAY_STRING) ) {
+            return BlocklyType.STRING;
+        } else if ( checkAST(args.get(0)).equals(BlocklyType.ARRAY_CONNECTION) ) {
+            return BlocklyType.CONNECTION;
+        }
+        return BlocklyType.VOID;
+    }
+
+    public BlocklyType visitListSetIndex(ListSetIndex<T> listSetIndex) {
+        // Get parameters
+        List<Expr<T>> args = listSetIndex.getParam();
+        IIndexLocation mode = listSetIndex.getLocation();
+        // Check the number of parameters
+        if ( mode.equals(IndexLocation.FROM_START) || mode.equals(IndexLocation.FROM_END) ) {
+            if ( args.size() != 3 ) {
+                //error
+            }
+        } else {
+            if ( args.size() != 2 ) {
+                //error
+            }
+        }
+        // Check that they're all type correct
+        for ( int i = 0; i < args.size(); i++ ) {
+            if ( i == 0 ) {
+                if ( !(checkAST(args.get(0)).equals(BlocklyType.ARRAY)
+                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_NUMBER)
+                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_BOOLEAN)
+                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_STRING)
+                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_CONNECTION)) ) {
+                    addToInfo(checkAST(args.get(0)).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
+                } else {
+                    if ( !checkAST(args.get(i)).equals(BlocklyType.NUMBER) ) {
+                        addToInfo(checkAST(args.get(i)).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
+                    }
+                }
+            }
+        }
+
+        if ( checkAST(args.get(0)).equals(BlocklyType.ARRAY) ) {
+            return BlocklyType.VOID;
+        } else if ( checkAST(args.get(0)).equals(BlocklyType.ARRAY_NUMBER) ) {
+            return BlocklyType.NUMBER;
+        } else if ( checkAST(args.get(0)).equals(BlocklyType.ARRAY_BOOLEAN) ) {
+            return BlocklyType.BOOLEAN;
+        } else if ( checkAST(args.get(0)).equals(BlocklyType.ARRAY_STRING) ) {
+            return BlocklyType.STRING;
+        } else if ( checkAST(args.get(0)).equals(BlocklyType.ARRAY_CONNECTION) ) {
+            return BlocklyType.CONNECTION;
+        }
+        return BlocklyType.VOID;
+    }
+
+    public BlocklyType visitListRepeat(ListRepeat<T> ListRepeat) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public BlocklyType visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<T> LengthOfIsEmptyFunct) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     /**
@@ -513,6 +686,9 @@ public class ExprlyTypechecker<T> {
         if ( ast instanceof Var<?> ) {
             return visitVar((Var<T>) ast);
         }
+        if ( ast instanceof ListCreate<?> ) {
+            return visitExprList(((ListCreate<T>) ast).getValue());
+        }
         if ( ast instanceof ExprList<?> ) {
             return visitExprList((ExprList<T>) ast);
         }
@@ -533,6 +709,30 @@ public class ExprlyTypechecker<T> {
         }
         if ( ast instanceof MathSingleFunct<?> ) {
             return visitMathSingleFunct((MathSingleFunct<T>) ast);
+        }
+        if ( ast instanceof LengthOfIsEmptyFunct<?> ) {
+            return visitLengthOfIsEmptyFunct((LengthOfIsEmptyFunct<T>) ast);
+        }
+        if ( ast instanceof ListSetIndex<?> ) {
+            return visitListSetIndex((ListSetIndex<T>) ast);
+        }
+        if ( ast instanceof ListGetIndex<?> ) {
+            return visitListGetIndex((ListGetIndex<T>) ast);
+        }
+        if ( ast instanceof ListRepeat<?> ) {
+            return visitListRepeat((ListRepeat<T>) ast);
+        }
+        if ( ast instanceof GetSubFunct<?> ) {
+            return visitGetSubFunct((GetSubFunct<T>) ast);
+        }
+        if ( ast instanceof TextPrintFunct<?> ) {
+            return visitTextPrintFunct((TextPrintFunct<T>) ast);
+        }
+        if ( ast instanceof TextJoinFunct<?> ) {
+            return visitTextJoinFunct((TextJoinFunct<T>) ast);
+        }
+        if ( ast instanceof MathConstrainFunct<?> ) {
+            return visitMathConstrainFunct((MathConstrainFunct<T>) ast);
         }
         throw new UnsupportedOperationException("Expression " + ast.toString() + "cannot be checked");
     }

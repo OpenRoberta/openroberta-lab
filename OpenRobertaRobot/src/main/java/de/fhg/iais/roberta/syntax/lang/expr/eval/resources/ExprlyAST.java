@@ -21,6 +21,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
+import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
@@ -142,21 +143,6 @@ public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
     }
 
     @Override
-    public RgbColor<V> visitRGB(@NotNull ExprlyParser.RGBContext ctx) throws IllegalArgumentException {
-        if ( 0 > Integer.parseInt(ctx.r.getText())
-            || Integer.parseInt(ctx.r.getText()) > 255
-            || 0 > Integer.parseInt(ctx.g.getText())
-            || Integer.parseInt(ctx.g.getText()) > 255
-            || 0 > Integer.parseInt(ctx.b.getText())
-            || Integer.parseInt(ctx.b.getText()) > 255
-            || 0 > Integer.parseInt(ctx.a.getText())
-            || Integer.parseInt(ctx.a.getText()) > 255 ) {
-            throw new IllegalArgumentException("Invalid RGB value, all values must be withn 0 and 255");
-        }
-        return RgbColor.make(ctx.r.getText(), ctx.g.getText(), ctx.b.getText(), ctx.a.getText());
-    }
-
-    @Override
     public MathConst<V> visitMathConst(@NotNull ExprlyParser.MathConstContext ctx) {
         String c = ctx.CONST().getText();
         if ( c.equals("phi") ) {
@@ -177,7 +163,7 @@ public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
     }
 
     @Override
-    public FunctionExpr<V> visitFunc(@NotNull ExprlyParser.FuncContext ctx) throws UnsupportedOperationException {
+    public Expr<V> visitFunc(@NotNull ExprlyParser.FuncContext ctx) throws UnsupportedOperationException {
 
         String f = ctx.FNAME().getText();
         List<Expr<V>> args = new LinkedList<Expr<V>>();
@@ -370,6 +356,15 @@ public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
         }
         if ( f.equals("isEmpty") ) {
             return FunctionExpr.make(LengthOfIsEmptyFunct.make("LIST_IS_EMPTY", args));
+        }
+        if ( f.equals("getRGB") ) {
+            if ( args.size() == 3 ) {
+                return RgbColor.make(args.get(0), args.get(1), args.get(2), NumConst.make(0));
+            } else if ( args.size() == 4 ) {
+                return RgbColor.make(args.get(0), args.get(1), args.get(2), args.get(4));
+            } else {
+                return NullConst.make();
+            }
         }
         try {
             return FunctionExpr.make(MathSingleFunct.make(f, args));
