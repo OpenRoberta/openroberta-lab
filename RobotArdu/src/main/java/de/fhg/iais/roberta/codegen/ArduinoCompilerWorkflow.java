@@ -94,9 +94,14 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
     public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
         loadValidatorVisitors(data.getRobotConfiguration());
         if ( this.validators != null ) {
-            this.validators.forEach(validator -> {
-                validator.validate();
-            });
+            try {
+                this.validators.forEach(validator -> {
+                    validator.validate();
+                });
+            } catch ( DbcException e ) {
+                this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+                return;
+            }
         }
         if ( data.getErrorMessage() != null ) {
             this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;

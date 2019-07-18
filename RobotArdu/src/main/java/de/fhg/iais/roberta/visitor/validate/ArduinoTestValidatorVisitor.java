@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.visitor.validate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -83,6 +84,9 @@ public class ArduinoTestValidatorVisitor extends AbstractConfigurationValidatorV
 
     @Override
     public Map<String, String> getResult() {
-        return null;
+        Map<String, String> result = new HashMap<>();
+        result.put("TESTKEY", getFailingBlock());
+        result.put("TESTVALUE", getIncorrectPin());
+        return result;
     }
 }
