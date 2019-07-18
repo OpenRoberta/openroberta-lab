@@ -1,10 +1,13 @@
 package de.fhg.iais.roberta.codegen;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.visitor.IVisitor;
 
 public interface ICompilerWorkflow {
 
@@ -116,4 +119,16 @@ public interface ICompilerWorkflow {
      * get the response string from the crosscompiler. May be null if the compilation succeeded.
      */
     String getCrosscompilerResponse();
+
+    /**
+     * returns a list of visitors for program and configuration validation loaded by names given in property files
+     */
+
+    default void loadValidatorVisitors(Configuration configuration) {
+    }
+
+    default List<IVisitor<Void>> getValidatorVisitors() {
+        return null;
+    }
+
 }

@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.visitor.validate;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -10,10 +9,9 @@ import java.util.stream.Stream;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public class ArduinoConfigurationValidatorVisitor extends AbstractConfigurationValidatorVisitor {
+public class ArduinoTestValidatorVisitor extends AbstractConfigurationValidatorVisitor {
 
-    private final List<String> freePins =
-        Stream.of("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "A0", "A1", "A2", "A3", "A4", "A5").collect(Collectors.toList());
+    private final List<String> freePins = Stream.of("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13").collect(Collectors.toList());
 
     private String incorrectPin;
     private String failingBlock;
@@ -22,7 +20,7 @@ public class ArduinoConfigurationValidatorVisitor extends AbstractConfigurationV
 
     int errorCount;
 
-    public ArduinoConfigurationValidatorVisitor(Configuration configuration) {
+    public ArduinoTestValidatorVisitor(Configuration configuration) {
         super(configuration);
     }
 
@@ -84,9 +82,6 @@ public class ArduinoConfigurationValidatorVisitor extends AbstractConfigurationV
 
     @Override
     public Map<String, String> getResult() {
-        Map<String, String> result = new HashMap<>();
-        result.put("BLOCK", getFailingBlock());
-        result.put("PIN", getIncorrectPin());
-        return result;
+        return null;
     }
 }

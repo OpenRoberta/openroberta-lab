@@ -1,7 +1,13 @@
 package de.fhg.iais.roberta.codegen;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
@@ -15,26 +21,78 @@ import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformers.arduino.Jaxb2ArduinoConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.PluginProperties;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.visitor.codegen.ArduinoCppVisitor;
+import de.fhg.iais.roberta.visitor.validate.IValidatorVisitor;
 
 public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ArduinoCompilerWorkflow.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractCompilerWorkflow.class);
     private String compiledHex = "error";
+    private List<IValidatorVisitor<Void>> validators;
 
     public ArduinoCompilerWorkflow(PluginProperties pluginProperties) {
         super(pluginProperties);
     }
 
     @Override
+    public void loadValidatorVisitors(Configuration configuration) {
+        LOG.debug("Loading validators...");
+        String validatorsPropertyEntry = this.pluginProperties.getStringProperty("robot.plugin.validators");
+        if ( validatorsPropertyEntry == null || validatorsPropertyEntry.equals("") ) {
+            // throw new DbcException("Program/Configuration validators not configured");
+            LOG.debug("No validators present.");
+            this.validators = null;
+            return;
+        }
+        List<String> validatorNames = Stream.of(this.pluginProperties.getStringProperty("robot.plugin.validators").split(",")).collect(Collectors.toList());
+        List<IValidatorVisitor<Void>> validators = new ArrayList<>();
+        validatorNames.forEach(validatorName -> {
+            LOG.debug("Loading validator " + validatorName);
+            try {
+                validators.add((IValidatorVisitor<Void>) Class.forName(validatorName).getConstructor(Configuration.class).newInstance(configuration));
+            } catch ( InstantiationException | IllegalAccessException | ClassNotFoundException | IllegalArgumentException | InvocationTargetException
+                | NoSuchMethodException | SecurityException e ) {
+                e.printStackTrace();
+                throw new DbcException(
+                    "Provided validator is not a validator, please validate that your provided validator is a validator that can perform validation.");
+            }
+        });
+        boolean methodFound = false;
+        for ( IValidatorVisitor<Void> validator : validators ) {
+            Method[] methods = validator.getClass().getDeclaredMethods();
+            for ( Method method : methods ) {
+                if ( method.getName().equals("validate") ) {
+                    LOG.debug("Validate method found for " + validator.getClass().getName());
+                    methodFound = true;
+                }
+            }
+            if ( !methodFound ) {
+                throw new DbcException("validate method not found for validator " + validator.getClass().getName());
+            }
+        }
+        this.validators = validators;
+    }
+
+    public List<IValidatorVisitor<Void>> getValidators() {
+        return this.validators;
+    }
+
+    @Override
     public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
+        loadValidatorVisitors(data.getRobotConfiguration());
+        if ( this.validators != null ) {
+            this.validators.forEach(validator -> {
+                validator.validate();
+            });
+        }
         if ( data.getErrorMessage() != null ) {
             this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
             return;
         }
         try {
-            final Configuration configuration = (data.getRobotConfiguration());
+            final Configuration configuration = data.getRobotConfiguration();
             this.generatedSourceCode = ArduinoCppVisitor.generate(configuration, data.getProgramTransformer().getTree(), true);
             LOG.info("arduino c++ code generated");
         } catch ( final Exception e ) {
@@ -70,7 +128,7 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
 
     /**
      * create command to call the cross compiler and execute the call.
-     * 
+     *
      * @return Key.COMPILERWORKFLOW_SUCCESS or Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED
      */
     private Key runBuild(String token, String mainFile, String mainPackage) {
