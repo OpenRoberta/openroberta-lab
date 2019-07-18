@@ -169,7 +169,7 @@ public class ClientProgram {
                                 responseParameters.put("PIN", configurationChecker.getIncorrectPin());
                             }
                         }
-                        if ( !SSID.equals("null") || !password.equals("null") ) {
+                        if ( (!SSID.equals("null") || !password.equals("null")) && (!SSID.equals("") || !password.equals("")) ) {
                             final AbstractProgramValidatorVisitor programChecker =
                                 robotFactory.getRobotProgramCheckVisitor(transformer.getRobotConfiguration(), SSID, password);
                             programConfigurationCompatibilityCheck(response, transformer, programChecker);
