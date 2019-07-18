@@ -5,7 +5,9 @@ import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -77,6 +79,15 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
 
     public List<IValidatorVisitor<Void>> getValidators() {
         return this.validators;
+    }
+
+    @Override
+    public Map<String, String> getValidationResults() {
+        Map<String, String> results = new HashMap<>();
+        this.validators.forEach(validator -> {
+            results.putAll(validator.getResult());
+        });
+        return results;
     }
 
     @Override

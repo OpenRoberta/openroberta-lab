@@ -58,9 +58,7 @@ import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.visitor.validate.AbstractConfigurationValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
@@ -138,7 +136,6 @@ public class ClientProgram {
                     final String SSID = request.optString("SSID", null);
                     final String password = request.optString("password", null);
                     final ILanguage language = Language.findByAbbr(request.optString("language"));
-                    boolean configurationCorrect = true;
                     if ( configName != null ) {
                         configurationText = configurationProcessor.getConfigurationText(configName, userId, robot);
                     } else if ( configurationText == null ) {
@@ -152,17 +149,6 @@ public class ClientProgram {
                     if ( transformer.getErrorMessage() != null ) {
                         forMessages.setStatus(ProcessorStatus.FAILED, transformer.getErrorMessage(), responseParameters);
                     } else {
-                        final AbstractConfigurationValidatorVisitor configurationChecker =
-                            robotFactory.getRobotConfigurationCheckVisitor(transformer.getRobotConfiguration());
-                        if ( configurationChecker != null ) {
-                            try {
-                                configurationChecker.checkConfiguration();
-                            } catch ( DbcException e ) {
-                                configurationCorrect = false;
-                                responseParameters.put("BLOCK", configurationChecker.getFailingBlock());
-                                responseParameters.put("PIN", configurationChecker.getIncorrectPin());
-                            }
-                        }
                         if ( (!SSID.equals("null") || !password.equals("null")) && (!SSID.equals("") || !password.equals("")) ) {
                             final AbstractProgramValidatorVisitor programChecker =
                                 robotFactory.getRobotProgramCheckVisitor(transformer.getRobotConfiguration(), SSID, password);
@@ -174,13 +160,10 @@ public class ClientProgram {
                             programConfigurationCompatibilityCheck(response, transformer, programChecker);
                             compilerWorkflow.generateSourceCode(token, programName, transformer, language);
                         }
+                        responseParameters = compilerWorkflow.getValidationResults();
                         String sourceCode = compilerWorkflow.getGeneratedSourceCode();
                         if ( sourceCode == null ) {
                             forMessages.setStatus(ProcessorStatus.FAILED, compilerWorkflow.getWorkflowResult(), responseParameters);
-                        } else if ( !configurationCorrect ) {
-                            response.put("sourceCode", sourceCode);
-                            response.put("fileExtension", robotFactory.getFileExtension());
-                            forMessages.setStatus(ProcessorStatus.FAILED, Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED, responseParameters);
                         } else {
                             response.put("sourceCode", sourceCode);
                             response.put("fileExtension", robotFactory.getFileExtension());

@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.codegen;
 
 import java.util.List;
+import java.util.Map;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -128,6 +129,10 @@ public interface ICompilerWorkflow {
     }
 
     default List<IVisitor<Void>> getValidatorVisitors() {
+        return null;
+    }
+
+    default Map<String, String> getValidationResults() {
         return null;
     }
 

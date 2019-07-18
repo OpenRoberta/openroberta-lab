@@ -11,7 +11,8 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class ArduinoTestValidatorVisitor extends AbstractConfigurationValidatorVisitor {
 
-    private final List<String> freePins = Stream.of("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13").collect(Collectors.toList());
+    private final List<String> freePins =
+        Stream.of("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "A0", "A1", "A2", "A3", "A4", "A5").collect(Collectors.toList());
 
     private String incorrectPin;
     private String failingBlock;
