@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.ws.rs.core.Response;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.codehaus.jettison.json.JSONException;
@@ -48,39 +50,20 @@ public class Util {
      * all REST services, excluded is only the /init request, have to call this method. It processes the init-token, which protects user and server against<br>
      * - multiple frontend sessions connected to one backend session (see class {@link ClientInit})<br>
      * - a frontend session not backed by a backend session (occurs when the server is restarted)<br>
-     * <b>Actually it only logs violations (once)</b>
      *
      * @param httpSessionState
      * @param loggerForRequest
      * @param fullRequest
      * @return
      */
-    public static int handleRequestInit(HttpSessionState httpSessionState, Logger loggerForRequest, JSONObject fullRequest) {
+    public static void handleRequestInit(HttpSessionState httpSessionState, Logger loggerForRequest, JSONObject fullRequest) {
         AliveData.rememberClientCall();
         MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
         MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
         MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
-        int logLen = new ClientLogger().log(loggerForRequest, fullRequest);
+        new ClientLogger().log(loggerForRequest, fullRequest);
         String initToken = fullRequest.optString("initToken");
-        String errorMsgIfError;
-        if ( initToken == null ) {
-            errorMsgIfError = "frontend request has no initToken. This is a SEVERE error";
-        } else if ( !httpSessionState.isInitTokenInitialized() ) {
-            httpSessionState.setInitToken(); // TODO: this is an implicit repair after a severe error. Must be removed as soon as possible
-            errorMsgIfError = "initToken is not initialized in the session. This is a SEVERE error";
-        } else if ( !httpSessionState.getInitToken().equals(initToken) ) {
-            errorMsgIfError = "initToken from frontend and from session are different. This is a SEVERE error";
-            httpSessionState.setInitToken(initToken); // TODO: this is an implicit repair after a severe error. Must be removed as soon as possible.
-        } else {
-            errorMsgIfError = null;
-        }
-        if ( errorMsgIfError == null ) {
-            return logLen;
-        } else {
-            LOG.error(errorMsgIfError);
-            return logLen;
-            // throw new DbcKeyException(errorMsgIfError, Key.INIT_FAIL_HTTPSESSION_EXPECTED_BUT_NOT_FOUND, null);
-        }
+        httpSessionState.validateInitToken(initToken);
     }
 
     public static void addResultInfo(JSONObject response, AbstractProcessor processor) throws JSONException {
@@ -107,7 +90,6 @@ public class Util {
         JSONObject parameters = new JSONObject();
         parameters.put("MESSAGE", compilerResponse);
         response.put("parameters", parameters);
-
     }
 
     private static void addResultInfo(JSONObject response, String restCallResultOkOrError, Key key) throws JSONException {
@@ -115,6 +97,20 @@ public class Util {
         response.put("rc", restCallResultOkOrError);
         response.put("message", realKey);
         response.put("cause", realKey);
+    }
+
+    /**
+     * generate a response with frontend info (see {@link #addFrontendInfo})
+     *
+     * @param response
+     * @param httpSessionState
+     * @param brickCommunicator
+     * @return
+     */
+    public static Response responseWithFrontendInfo(JSONObject response, HttpSessionState httpSessionState, RobotCommunicator brickCommunicator) {
+        Util.addFrontendInfo(response, httpSessionState, brickCommunicator);
+        MDC.clear();
+        return Response.ok(response).build();
     }
 
     /**

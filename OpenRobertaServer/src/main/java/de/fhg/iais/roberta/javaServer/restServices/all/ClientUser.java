@@ -18,7 +18,6 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 
 import com.google.inject.Inject;
 
@@ -270,9 +269,7 @@ public class ClientUser {
                 dbSession.close();
             }
         }
-        Util.addFrontendInfo(response, httpSessionState, this.brickCommunicator);
-        MDC.clear();
-        return Response.ok(response).build();
+        return Util.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
     }
 
     private void sendActivationMail(UserProcessor up, String urlPostfix, String account, String email, String lang, boolean isYoungerThen14) throws Exception {

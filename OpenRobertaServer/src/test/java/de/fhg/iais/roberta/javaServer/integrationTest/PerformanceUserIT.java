@@ -152,7 +152,7 @@ public class PerformanceUserIT {
         PerformanceUserIT.LOG.info("" + userNumber + ";start;");
         Random random = new Random(userNumber);
 
-        HttpSessionState s = HttpSessionState.init(this.robotCommunicator, this.robotPlugins, serverProperties, 1);
+        HttpSessionState s = HttpSessionState.initOnlyLegalForDebugging(this.robotPlugins, serverProperties, 1);
         Assert.assertTrue(!s.isUserLoggedIn());
 
         // create user "pid-*" with success

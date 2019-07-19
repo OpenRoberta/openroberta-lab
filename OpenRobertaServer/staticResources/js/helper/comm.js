@@ -20,7 +20,11 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
      * remember the init token. It is added to each request to identify THIS front end process. May be resetted to 'undefined'
      */
     function setInitToken(newInitToken) {
-    	initToken = newInitToken;
+    	if (initToken === undefined || newInitToken === undefined) {
+    		initToken = newInitToken;    		
+    	} else {
+    		window.close();
+    	}
     }
     exports.setInitToken = setInitToken;
 
@@ -59,13 +63,21 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
             data : data,
             initToken : initToken
         };
+        function successFnWrapper(response) {
+        	if (response !== undefined && response.message !== undefined && response.message.startsWith("ORA_INIT_FAIL_") ) {
+        		alert("SEVERE error. Multiple tabs? This tab is unusable NOW. Please CLOSE the window!");
+        		window.close();
+        	} else {
+        		successFn(response);
+        	}
+        }
         return $.ajax({
             url : urlPrefix + url,
             type : 'POST',
             contentType : 'application/json; charset=utf-8',
             dataType : 'json',
             data : JSON.stringify(load),
-            success : WRAP.fn3(successFn, message),
+            success : WRAP.fn3(successFnWrapper, message),
             error : errorFn
         });
     }

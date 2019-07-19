@@ -22,7 +22,6 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 
 import com.google.inject.Inject;
 
@@ -607,9 +606,7 @@ public class ClientProgram {
                 dbSession.close();
             }
         }
-        Util.addFrontendInfo(response, httpSessionState, this.brickCommunicator);
-        MDC.clear();
-        return Response.ok(response).build();
+        return Util.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
     }
 
     private Key programConfigurationCompatibilityCheck(

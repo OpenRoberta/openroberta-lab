@@ -101,8 +101,8 @@ public class RestInterfaceTest {
         this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.robotCommunicator, serverProperties);
         this.restConfiguration = new ClientConfiguration(this.sessionFactoryWrapper, this.robotCommunicator);
         Map<String, IRobotFactory> robotPlugins = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
-        this.sPid = HttpSessionState.init(this.robotCommunicator, robotPlugins, serverProperties, 1);
-        this.sMinscha = HttpSessionState.init(this.robotCommunicator, robotPlugins, serverProperties, 2);
+        this.sPid = HttpSessionState.initOnlyLegalForDebugging(robotPlugins, serverProperties, 1);
+        this.sMinscha = HttpSessionState.initOnlyLegalForDebugging(robotPlugins, serverProperties, 2);
     }
 
     /**

@@ -3,32 +3,44 @@ package de.fhg.iais.roberta.persistence.util;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.RandomUrlPostfix;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcKeyException;
 
+/**
+ * Objects of this class store the server-related state of the user's work with the openroberta-lab.
+ */
 public class HttpSessionState implements Serializable {
     private static final long serialVersionUID = 5423413372044585392L;
+    private static final Logger LOG = LoggerFactory.getLogger(HttpSessionState.class);
 
     public final static int NO_USER = -1;
 
-    private int userId = HttpSessionState.NO_USER;
-    private String robotName;
+    private Map<String, IRobotFactory> robotPluginMap;
+    private String defaultRobotName;
+    private long sessionNumber;
+
     /**
-     * the init function in ClientAdmin will set this token. The token is returned with each response and the front end must supply it with each request. Two
-     * cases are relevant for checking this token:
+     * the REST-service in ClientInit will set this token. The token is returned with each response and the front end must supply it with each request. The
+     * token is needed to detect two problematic cases in the client-server communication:
      * <ul>
-     * <li>if it is already SET when the init function is called, it is likely, that the user opened a second tab and accessed the lab (again). This is a
-     * problem, as we cannot sync the two clients. Thus we will reject the call.
-     * <li>if it is NOT SET and another function than init is called, it is likely, that either a debug session is running or a user session moved from one
-     * server to another server. In the latter case the session must be migrated to the new server. <b>This is not yet implemented</b>
+     * <li>if it is already SET when ClientInit is called, it is likely, that the user opened a second tab and accessed the lab (again). This is a problem, as
+     * we cannot sync the two clients. <i>Thus we will invalidate the old, previous state.</i>
+     * <li>if it is NOT SET and another function than init is called, it is likely, that either the server was restarted or a user session moved from one server
+     * to another server. In the latter case the session must be migrated to the new server. <i>This is not yet implemented. Actually we abort the request.</i>
      * </ul>
-     * The token is returned with each response and the front end must supply it with each request.
+     * The token value of "" is used for debugging purposes and will deactivate all consistency checks (see {@linkplain initOnlyLegalForDebugging})
      */
-    private String tokenSetOnInit = null;
-    private String token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
+    private String tokenSetOnInit;
+    private int userId;
+    private String robotName;
+    private String token;
     private String programName;
     private String program;
     private String configurationName;
@@ -36,30 +48,60 @@ public class HttpSessionState implements Serializable {
     private String toolboxName;
     private String toolbox;
     private boolean processing;
-    private long sessionNumber;
-    private Map<String, IRobotFactory> robotPluginMap;
 
     private String countryCode;
 
-    public HttpSessionState(
-        RobotCommunicator robotCommunicator,
-        Map<String, IRobotFactory> robotPluginMap,
-        ServerProperties serverProperties,
-        long sessionNumber) //
+    public HttpSessionState(Map<String, IRobotFactory> robotPluginMap, ServerProperties serverProperties, long sessionNumber) //
     {
         this.robotPluginMap = robotPluginMap;
-        this.robotName = serverProperties.getDefaultRobot();
+        this.defaultRobotName = serverProperties.getDefaultRobot();
         this.sessionNumber = sessionNumber;
+        reset();
+    }
+
+    public void reset() {
+        this.tokenSetOnInit = null;
+        this.userId = HttpSessionState.NO_USER;
+        this.robotName = defaultRobotName;
+        this.token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
+        this.programName = null;
+        this.program = null;
+        this.configurationName = null;
+        this.configuration = null;
+        this.toolboxName = null;
+        this.toolbox = null;
         this.setProcessing(false);
     }
 
-    public static HttpSessionState init(
-        RobotCommunicator robotCommunicator,
-        Map<String, IRobotFactory> robotPluginMap,
-        ServerProperties serverProperties,
-        long sessionNumber) //
+    /**
+     * factory method to create and initialize a {@linkplain HttpSessionState} object. This object stores the server-related state of the user's work with the
+     * openroberta-lab.
+     *
+     * @param robotPluginMap
+     * @param serverProperties
+     * @param sessionNumber
+     * @return
+     */
+    public static HttpSessionState init(Map<String, IRobotFactory> robotPluginMap, ServerProperties serverProperties, long sessionNumber) //
     {
-        return new HttpSessionState(robotCommunicator, robotPluginMap, serverProperties, sessionNumber);
+        return new HttpSessionState(robotPluginMap, serverProperties, sessionNumber);
+    }
+
+    /**
+     * factory method to create and initialize a {@linkplain HttpSessionState} object for debugging. Calling this method will disable consistency checks as
+     * multiple tabs detection, bypassing the /init REST-call.<br>
+     * <b>It must not be used outside of tests</b>
+     *
+     * @param robotPluginMap
+     * @param serverProperties
+     * @param sessionNumber
+     * @return
+     */
+    public static HttpSessionState initOnlyLegalForDebugging(Map<String, IRobotFactory> robotPluginMap, ServerProperties serverProperties, long sessionNumber) //
+    {
+        HttpSessionState state = new HttpSessionState(robotPluginMap, serverProperties, sessionNumber);
+        state.tokenSetOnInit = "";
+        return state;
     }
 
     public int getUserId() {
@@ -99,12 +141,42 @@ public class HttpSessionState implements Serializable {
     }
 
     public void setInitToken() {
-        Assert.isNull(tokenSetOnInit, "init token already initialized. This is a SEVERE error");
+        Assert.isFalse("".equals(tokenSetOnInit));
         this.tokenSetOnInit = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
     }
 
-    public void setInitToken(String initToken) {
-        this.tokenSetOnInit = initToken;
+    /**
+     * validate the init-token from the frontend-request and the init-token from the state stored in this object.<br>
+     * If an error is detected a {@linkplain DbcKeyException} is thrown.<br>
+     * <i>Only for debugging:</i> if the init-token in this object is set to "", all checks are disabled. This should <i>NEVER</i> happen, when a real server is
+     * started
+     *
+     * @param initToken the init token from the frontend-request
+     */
+    public void validateInitToken(String initToken) {
+        if ( "".equals(tokenSetOnInit) ) {
+            return; // DEBUG session
+        }
+        String errorMsgIfError;
+        Key errorKey;
+        if ( initToken == null ) {
+            errorMsgIfError = "frontend request has no initToken. This is a SEVERE error";
+            errorKey = Key.INIT_FAIL_HTTPSESSION_EXPECTED_BUT_NOT_FOUND;
+        } else if ( !isInitTokenInitialized() ) {
+            errorMsgIfError = "initToken is not initialized in the session. This is a SEVERE error";
+            errorKey = Key.INIT_FAIL_MULTIPLE_FRONTENDS_ONE_HTTPSESSION;
+        } else if ( !getInitToken().equals(initToken) ) {
+            errorMsgIfError = "initToken from frontend and from session are different. This is a SEVERE error";
+            errorKey = Key.INIT_FAIL_MULTIPLE_FRONTENDS_ONE_HTTPSESSION;
+        } else {
+            errorMsgIfError = null;
+            errorKey = null;
+        }
+        if ( errorMsgIfError != null || errorKey != null ) {
+            LOG.error(errorMsgIfError);
+            throw new DbcKeyException(errorMsgIfError, errorKey, null);
+        }
+
     }
 
     public String getToken() {

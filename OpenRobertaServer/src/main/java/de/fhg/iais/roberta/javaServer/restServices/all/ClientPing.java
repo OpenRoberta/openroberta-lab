@@ -14,7 +14,6 @@ import javax.ws.rs.core.Response;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -24,6 +23,7 @@ import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.VersionChecker;
+import de.fhg.iais.roberta.util.dbc.DbcKeyException;
 
 @Path("/{version:([^/]+/)?}ping")
 public class ClientPing {
@@ -31,6 +31,7 @@ public class ClientPing {
 
     private static final int EVERY_REQUEST = 100; // after arrival of EVERY_PING many ping requests , a log entry is written
     private static final AtomicInteger pingCounterForLogging = new AtomicInteger(0);
+    private static final AtomicInteger pingKeyExceptionsSuppressed = new AtomicInteger(0);
 
     private final String openRobertaServerVersion;
     private final RobotCommunicator brickCommunicator;
@@ -44,23 +45,27 @@ public class ClientPing {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response handle(@OraData HttpSessionState httpSessionState, JSONObject fullRequest, @PathParam("version") String version) throws Exception {
-        VersionChecker.checkRestVersion(version);
-        int logLen = Util.handleRequestInit(httpSessionState, LOG, fullRequest);
-        int counter = pingCounterForLogging.incrementAndGet();
-
-        if ( counter % EVERY_REQUEST == 0 ) {
-            LOG.info("/ping [count:" + counter + "]");
+    public Response command(@OraData HttpSessionState httpSessionState, JSONObject fullRequest, @PathParam("version") String version) throws Exception {
+        try {
+            VersionChecker.checkRestVersion(version);
+            Util.handleRequestInit(httpSessionState, LOG, fullRequest);
+            int counter = pingCounterForLogging.incrementAndGet();
+            if ( counter % EVERY_REQUEST == 0 ) {
+                LOG.info("/ping [count:" + counter + "]");
+            }
+            Date date = new Date();
+            JSONObject response =
+                new JSONObject().put("version", this.openRobertaServerVersion).put("date", date.getTime()).put("dateAsString", date.toString());
+            return Util.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
+        } catch ( DbcKeyException e ) {
+            int counter = pingKeyExceptionsSuppressed.incrementAndGet();
+            if ( counter % EVERY_REQUEST == 0 ) {
+                LOG.info("suppressed now " + counter + " DbcKeyExceptions. Last message was: " + e.getMessage());
+            }
+            return null;
+        } catch ( Exception e ) {
+            LOG.info("suppressed exception is: " + e.getMessage());
+            return null;
         }
-        Date date = new Date();
-        JSONObject response =
-            new JSONObject()
-                .put("version", this.openRobertaServerVersion)
-                .put("date", date.getTime())
-                .put("dateAsString", date.toString())
-                .put("logged", logLen);
-        Util.addFrontendInfo(response, httpSessionState, this.brickCommunicator);
-        MDC.clear();
-        return Response.ok(response).build();
     }
 }

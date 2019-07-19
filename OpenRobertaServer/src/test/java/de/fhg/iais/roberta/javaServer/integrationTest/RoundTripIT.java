@@ -80,10 +80,7 @@ public class RoundTripIT {
     private static DbSetup memoryDbSetup;
     private static RobotCommunicator brickCommunicator;
 
-    private static String buildXml;
     private static String connectionUrl;
-    private static String crosscompilerBasedir;
-    private static String crossCompilerResourcesDir;
 
     private static ClientUser restUser;
     private static ClientProgram restProgram;
@@ -183,13 +180,10 @@ public class RoundTripIT {
         server.stop();
     }
 
-    // TODO: properties have been refactored. Numbers don't work anymore
+    // TODO: properties have been refactored. This doesn't work anymore
     private void initialize() {
         ServerProperties serverProperties = new ServerProperties(Util1.loadProperties("classpath:/openRoberta.properties"));
-        buildXml = serverProperties.getStringProperty("robot.plugin.1.generated.programs.build.xml");
         connectionUrl = serverProperties.getStringProperty("hibernate.connection.url");
-        crosscompilerBasedir = null; // serverProperties.getTempDirForUserProjects();
-        crossCompilerResourcesDir = serverProperties.getStringProperty("robot.plugin.1.compiler.resources.dir");
         browserVisibility = Boolean.parseBoolean(serverProperties.getStringProperty("browser.visibility"));
 
         sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", connectionUrl);
@@ -202,7 +196,7 @@ public class RoundTripIT {
         restProgram = new ClientProgram(sessionFactoryWrapper, brickCommunicator, serverProperties);
         Map<String, IRobotFactory> robotPlugins = new HashMap<>();
         loadPlugin(robotPlugins);
-        s1 = HttpSessionState.init(brickCommunicator, robotPlugins, serverProperties, 1);
+        s1 = HttpSessionState.initOnlyLegalForDebugging(robotPlugins, serverProperties, 1);
     }
 
     private void setUpDatabase() throws Exception {

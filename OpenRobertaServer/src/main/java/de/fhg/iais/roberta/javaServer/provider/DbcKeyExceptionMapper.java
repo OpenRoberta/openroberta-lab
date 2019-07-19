@@ -28,11 +28,8 @@ public class DbcKeyExceptionMapper implements ExceptionMapper<DbcKeyException> {
             final String errorKey = e.getKey().getKey();
             final JSONObject response = new JSONObject();
             response.put("rc", "error");
-            response.put("message", errorKey);
-            response.put("cause", errorKey);
-            response.put("parameters", e.getParameter());
-            Util.addFrontendInfo(response, null, null);
-            return Response.ok(response).build();
+            response.put("message", errorKey).put("cause", errorKey).put("parameters", e.getParameter());
+            return Util.responseWithFrontendInfo(response, null, null);
         } catch ( Exception eInE ) {
             LOG.error("server error - exception in exception processor", eInE);
             return Response.ok(ERROR_IN_ERROR).build();

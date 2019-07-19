@@ -26,7 +26,6 @@ import de.fhg.iais.roberta.main.IIpToCountry;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.ServerProperties;
 
 @Provider
@@ -45,9 +44,6 @@ public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
 
     @Context
     private HttpServletRequest servletRequest;
-
-    @Inject
-    private RobotCommunicator robotCommunicator;
 
     @Inject
     private IIpToCountry ipToCountry;
@@ -102,7 +98,7 @@ public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
                     LOG.error("Could not evaluate the actual ip as a country code. Likely a problem with the IpToCountry file.");
                 }
 
-                httpSessionState = HttpSessionState.init(this.robotCommunicator, this.robotPluginMap, this.serverProperties, sessionNumber);
+                httpSessionState = HttpSessionState.init(this.robotPluginMap, this.serverProperties, sessionNumber);
                 httpSessionState.setCountryCode(countryCode);
                 httpSession.setAttribute(OPEN_ROBERTA_STATE, httpSessionState);
             }

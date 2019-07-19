@@ -124,7 +124,7 @@ public class StackMachineJsonIT {
         serverProperties = new ServerProperties(Util1.loadProperties("classpath:/wedoOpenRoberta.properties"));
         robotCommunicator = new RobotCommunicator();
         pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
-        httpSessionState = HttpSessionState.init(robotCommunicator, pluginMap, serverProperties, 1);
+        httpSessionState = HttpSessionState.initOnlyLegalForDebugging(pluginMap, serverProperties, 1);
         this.restProgram = new ClientProgram(this.sessionFactoryWrapper, robotCommunicator, serverProperties);
         this.restAdmin = new ClientAdmin(robotCommunicator, serverProperties);
         when(this.sessionFactoryWrapper.getSession()).thenReturn(this.dbSession);

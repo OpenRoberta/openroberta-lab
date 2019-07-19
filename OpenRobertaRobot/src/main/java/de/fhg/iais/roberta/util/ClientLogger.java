@@ -12,7 +12,7 @@ public class ClientLogger {
     public ClientLogger() {
     }
 
-    public int log(Logger forRequest, JSONObject request) {
+    public void log(Logger forRequest, JSONObject request) {
         try {
             if ( forRequest.isDebugEnabled() ) {
                 if ( SHORT_LOG ) {
@@ -31,21 +31,13 @@ public class ClientLogger {
             if ( logLength > 0 ) {
                 for ( int i = 0; i < logLength; i++ ) {
                     LOG.info("log entry: " + logs.getString(i));
-                    if (logs.getString(i).contains("simImport clicked")) {
+                    if ( logs.getString(i).contains("simImport clicked") ) {
                         Statistics.info("SimulationBackgroundUploaded");
                     }
                 }
-                LOG.info(logLength + (logLength == 1 ? " log entry" : " log entries") + " written");
             }
-            return logLength;
         } catch ( Exception e ) {
-            String msg = e.getMessage();
-            if ( msg.indexOf("JSONObject[\"log\"]") != -1 ) {
-                LOG.error("the request JSONObject has either no 'log' property or its value is no JSONArray");
-            } else {
-                LOG.info("Exception caught when the client payload of the request JSONObject was logged", e);
-            }
-            return 0;
+            LOG.error("Exception caught when the client payload of the request JSONObject was logged", e);
         }
     }
 }

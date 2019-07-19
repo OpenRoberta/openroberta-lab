@@ -17,7 +17,8 @@ The docker image "base" is used as basis for further images. It contains all sof
 
 _Note:_ If the git repository `ora-cc-rsc` is changed, the base image and all images built upon the base image must be rebuilt. This doesn't
 occur often. But better do not forget. The version of the base image (a simple number) should match a tag in the git repository `ora-cc-rsc`.
-This shall make clear, that the data from the tag is the data in the base image.
+This shall make clear, that the data from the tag is the data in the base image. The variable `BASE_VERSION` contains the number, which is both a tag name
+in git and a version number in docker.
 
 ```bash
 BASE_DIR=/data/openroberta-lab

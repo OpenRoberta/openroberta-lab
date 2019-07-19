@@ -1,13 +1,17 @@
 package de.fhg.iais.roberta.components.ev3c4ev3;
 
-import org.junit.Test;
-
-import java.io.File;
-
-import static de.fhg.iais.roberta.components.ev3c4ev3.ResourceUtils.*;
+import static de.fhg.iais.roberta.components.ev3c4ev3.ResourceUtils.getFileFromResources;
+import static de.fhg.iais.roberta.components.ev3c4ev3.ResourceUtils.getFileFromResourcesAsByteArray;
+import static de.fhg.iais.roberta.components.ev3c4ev3.ResourceUtils.getFileFromResourcesAsString;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+
+import org.junit.Ignore;
+import org.junit.Test;
+
+@Ignore
 public class Uf2FileContainerTest {
 
     @Test
@@ -23,7 +27,7 @@ public class Uf2FileContainerTest {
     }
 
     @Test
-    public void testAddTwoFiles() throws Exception  {
+    public void testAddTwoFiles() throws Exception {
         Uf2FileContainer container = new Uf2FileContainer();
         File file1 = getFileFromResources("/components/ev3c4ev3/uf2_file_to_add_1.txt");
         File file2 = getFileFromResources("/components/ev3c4ev3/uf2_file_to_add_2.txt");
@@ -37,7 +41,7 @@ public class Uf2FileContainerTest {
     }
 
     @Test
-    public void testToBase64  () throws Exception  {
+    public void testToBase64() throws Exception {
         Uf2FileContainer container = new Uf2FileContainer();
         File file1 = getFileFromResources("/components/ev3c4ev3/uf2_file_to_add_1.txt");
 

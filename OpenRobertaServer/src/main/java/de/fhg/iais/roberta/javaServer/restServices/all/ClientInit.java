@@ -61,11 +61,10 @@ public class ClientInit {
             LOG.info("INIT command. Trying to build a new HttpSessionState");
             response.put("cmd", "init");
             if ( httpSessionState.isInitTokenInitialized() ) {
-                LOG.error("init token was found during init: more than 1 tab? SEVERE ERROR. Request rejected");
-                // TODO: reactivateUtil.addErrorInfo(response, Key.INIT_FAIL_MULTIPLE_FRONTENDS_ONE_HTTPSESSION, null); and add } else {
-            } else {
-                httpSessionState.setInitToken();
+                LOG.error("init-token was found during init: reload/re-use of old session? more than 1 tab? NOTE: the old init-token will be destroyed");
+                httpSessionState.reset();
             }
+            httpSessionState.setInitToken();
             List<String> userAgentList = httpHeaders.getRequestHeader("User-Agent");
             String userAgentString = "";
             if ( userAgentList != null ) {

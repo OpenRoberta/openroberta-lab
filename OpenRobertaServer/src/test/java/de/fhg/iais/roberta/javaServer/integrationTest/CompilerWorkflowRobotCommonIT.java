@@ -100,7 +100,7 @@ public class CompilerWorkflowRobotCommonIT {
         serverProperties = new ServerProperties(baseServerProperties);
         robotCommunicator = new RobotCommunicator();
         pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
-        httpSessionState = HttpSessionState.init(robotCommunicator, pluginMap, serverProperties, 1);
+        httpSessionState = HttpSessionState.initOnlyLegalForDebugging(pluginMap, serverProperties, 1);
         JSONObject testSpecification = Util1.loadYAML("classpath:/crossCompilerTests/common/testSpec.yml");
         robotsFromTestSpec = testSpecification.getJSONObject("robots");
         progsFromTestSpec = testSpecification.getJSONObject("progs");

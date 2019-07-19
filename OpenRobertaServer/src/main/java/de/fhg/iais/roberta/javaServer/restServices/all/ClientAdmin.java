@@ -13,7 +13,6 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 
 import com.google.inject.Inject;
 
@@ -170,15 +169,13 @@ public class ClientAdmin {
             dbSession.rollback();
             String errorTicketId = Util1.getErrorTicketId();
             LOG.error("Exception. Error ticket: " + errorTicketId, e);
-            Util.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
+            Util.addErrorInfo(response, Key.SERVER_ERROR, errorTicketId);
         } finally {
             if ( dbSession != null ) {
                 dbSession.close();
             }
         }
-        Util.addFrontendInfo(response, httpSessionState, this.brickCommunicator);
-        MDC.clear();
-        return Response.ok(response).build();
+        return Util.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
     }
 
     private void addRobotUpdateInfo(JSONObject response, String robotMenuVersion, String serverMenuVersion) throws JSONException {
