@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.visitor.validate;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
@@ -40,6 +41,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.expr.eval.resources.ExprlyTypechecker;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
@@ -67,6 +69,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.hardware.actor.IAllActorsVisitor;
@@ -643,11 +646,21 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     @Override
     public Void visitEvalExpr(EvalExpr<Void> evalExpr) {
         if ( evalExpr.hasSyntaxError() ) {
-            evalExpr.addInfo(NepoInfo.error("ERROR_SYNTAX_ERROR"));
+            evalExpr.addInfo(NepoInfo.error("Syntax errors in expression, result might not be as expected"));
         } else {
-
+            ExprlyTypechecker<Void> checker = new ExprlyTypechecker<Void>(evalExpr.getExpr(), BlocklyType.get(evalExpr.getType()));
+            checker.check();
+            int numErrors = checker.getNumErrors();
+            if ( numErrors == 0 ) {
+                return null;
+            }
+            List<String> errors = checker.getErrors();
+            String s = Integer.toString(numErrors) + " errors found: ";
+            for ( String err : errors ) {
+                s += err + " ";
+            }
+            evalExpr.addInfo(NepoInfo.error(s));
         }
-
         return null;
     }
 

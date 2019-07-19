@@ -21,6 +21,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
@@ -29,6 +30,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
@@ -39,6 +41,7 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 public class ExprlyTypechecker<T> {
 
     private final LinkedList<String> info;
+    private final LinkedList<String> warnings;
     private final Phrase<T> e;
     private int errorCount = 0;
     private BlocklyType resultType;
@@ -46,12 +49,13 @@ public class ExprlyTypechecker<T> {
 
     /**
      * Class constructor, creates an instance of {@link ExprlyTypechecker} for
-     * the phrase pased as parameter
+     * the phrase passed as parameter
      *
      * @param Phrase that will be checked
      **/
     public ExprlyTypechecker(Phrase<T> ast, BlocklyType rt) {
-        this.info = new LinkedList<>();
+        this.info = new LinkedList<String>();
+        this.warnings = new LinkedList<String>();
         this.expectedResultType = rt;
         this.e = ast;
     }
@@ -61,6 +65,17 @@ public class ExprlyTypechecker<T> {
      **/
     public List<String> getErrors() {
         return this.info;
+    }
+
+    public List<String> getWarnings() {
+        return this.warnings;
+    }
+
+    /**
+     * @return list of errors detected
+     **/
+    public int getNumErrors() {
+        return this.errorCount;
     }
 
     /**
@@ -78,7 +93,11 @@ public class ExprlyTypechecker<T> {
     }
 
     public void addToInfo(String s) {
-        this.info.add(s);
+        this.info.add(s + "\n");
+    }
+
+    public void addToWarnings(String s) {
+        this.warnings.add(s + "\n");
     }
 
     /**
@@ -89,6 +108,10 @@ public class ExprlyTypechecker<T> {
     public void check() {
         this.errorCount = 0;
         this.resultType = checkAST(this.e);
+        if ( !this.resultType.equals(this.expectedResultType) ) {
+            this.errorCount++;
+            addToInfo("UNEXPECTED_RETURN_TYPE");
+        }
     }
 
     /**
@@ -169,12 +192,15 @@ public class ExprlyTypechecker<T> {
 
         // Get type of the operand
         BlocklyType t = checkAST(unary.getExpr());
+        if ( t.equals(BlocklyType.VOID) ) {
+            addToWarnings("WARNING_VARIABLE_TYPE in expr: " + unary.toString());
+        }
         // Check if the expression should should be boolean
         if ( unary.getOp().equals(Unary.Op.NOT) ) {
             // If it should be boolean, check if it is
-            if ( !t.equals(BlocklyType.BOOLEAN) ) {
+            if ( !t.equals(BlocklyType.BOOLEAN) && !t.equals(BlocklyType.VOID) ) {
                 this.errorCount++;
-                addToInfo(t.equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_OPERAND_TYPE");
+                addToInfo("INVALID_OPERAND_TYPE");
             }
             return BlocklyType.BOOLEAN;
 
@@ -182,9 +208,9 @@ public class ExprlyTypechecker<T> {
         } else if ( unary.getOp().equals(Unary.Op.PLUS) || unary.getOp().equals(Unary.Op.NEG) ) {
 
             // If it is a number operation, check if the argument is boolean
-            if ( !t.equals(BlocklyType.NUMBER) ) {
+            if ( !t.equals(BlocklyType.NUMBER) && !t.equals(BlocklyType.VOID) ) {
                 this.errorCount++;
-                addToInfo(t.equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_OPERAND_TYPE");
+                addToInfo("INVALID_OPERAND_TYPE");
             }
             return BlocklyType.NUMBER;
         }
@@ -199,10 +225,17 @@ public class ExprlyTypechecker<T> {
      * @return Return Type of block
      */
     public BlocklyType visitBinary(Binary<T> binary) throws UnsupportedOperationException {
-
         // Get type of the operands
         BlocklyType tl = checkAST(binary.getLeft());
         BlocklyType tr = checkAST(binary.getRight());
+
+        if ( tl.equals(BlocklyType.VOID) ) {
+            addToWarnings("WARNING_VARIABLE_TYPE in expr: " + binary.getLeft().toString());
+        }
+
+        if ( tr.equals(BlocklyType.VOID) ) {
+            addToWarnings("WARNING_VARIABLE_TYPE in expr: " + binary.getRight().toString());
+        }
 
         // Check if its a number operation
         if ( binary.getOp().equals(Binary.Op.ADD)
@@ -211,37 +244,37 @@ public class ExprlyTypechecker<T> {
             || binary.getOp().equals(Binary.Op.DIVIDE)
             || binary.getOp().equals(Binary.Op.MOD) ) {
             // Check if the left operand is a Number Type
-            if ( !tl.equals(BlocklyType.NUMBER) ) {
+            if ( !tl.equals(BlocklyType.NUMBER) && !tl.equals(BlocklyType.VOID) ) {
                 this.errorCount++;
-                addToInfo(tl.equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_OPERAND_TYPE");
+                addToInfo("INVALID_OPERAND_TYPE");
             }
             // Check if the right operand is a Number Type
-            if ( !tr.equals(BlocklyType.NUMBER) ) {
+            if ( !tr.equals(BlocklyType.NUMBER) && !tr.equals(BlocklyType.VOID) ) {
                 this.errorCount++;
-                addToInfo(tr.equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_OPERAND_TYPE");
+                addToInfo("INVALID_OPERAND_TYPE");
             }
             return BlocklyType.NUMBER;
         }
         // Check if the operation is a boolean operation
         if ( binary.getOp().equals(Binary.Op.AND) || binary.getOp().equals(Binary.Op.OR) ) {
             // Check if the left operand is a Boolean Type
-            if ( !tl.equals(BlocklyType.BOOLEAN) ) {
+            if ( !tl.equals(BlocklyType.BOOLEAN) && !tl.equals(BlocklyType.VOID) ) {
                 this.errorCount++;
-                addToInfo(tl.equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_OPERAND_TYPE");
+                addToInfo("INVALID_OPERAND_TYPE");
             }
-            if ( !tr.equals(BlocklyType.BOOLEAN) ) {
+            if ( !tr.equals(BlocklyType.BOOLEAN) && !tr.equals(BlocklyType.VOID) ) {
                 // Check if the right operand is a Boolean Type
                 this.errorCount++;
-                addToInfo(tr.equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_OPERAND_TYPE");
+                addToInfo("INVALID_OPERAND_TYPE");
             }
             return BlocklyType.BOOLEAN;
         }
         // Check if it's an equality or inequality operation
         if ( binary.getOp().equals(Binary.Op.EQ) || binary.getOp().equals(Binary.Op.NEQ) ) {
             // Check if both operands are of the same Type
-            if ( !tl.equals(tr) ) {
+            if ( !tl.equals(tr) && !tl.equals(BlocklyType.VOID) && !tr.equals(BlocklyType.VOID) ) {
                 this.errorCount++;
-                addToInfo(tr.equals(BlocklyType.VOID) || tl.equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_OPERAND_TYPE");
+                addToInfo("INVALID_OPERAND_TYPE");
             }
             return BlocklyType.BOOLEAN;
         }
@@ -251,14 +284,14 @@ public class ExprlyTypechecker<T> {
             || binary.getOp().equals(Binary.Op.GTE)
             || binary.getOp().equals(Binary.Op.LTE) ) {
             // Check if the left operand is a Number Type
-            if ( !tl.equals(BlocklyType.NUMBER) ) {
+            if ( !tl.equals(BlocklyType.NUMBER) && !tl.equals(BlocklyType.VOID) ) {
                 this.errorCount++;
-                addToInfo(tl.equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_OPERAND_TYPE");
+                addToInfo("INVALID_OPERAND_TYPE");
             }
             // Check if the right operand is a Number Type
-            if ( !tr.equals(BlocklyType.NUMBER) ) {
+            if ( !tr.equals(BlocklyType.NUMBER) && !tr.equals(BlocklyType.VOID) ) {
                 this.errorCount++;
-                addToInfo(tr.equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_OPERAND_TYPE");
+                addToInfo("INVALID_OPERAND_TYPE");
             }
             return BlocklyType.BOOLEAN;
         }
@@ -281,19 +314,23 @@ public class ExprlyTypechecker<T> {
             return BlocklyType.ARRAY;
         } else {
             // Get the type of the first element of the array
-            // The type of the list will be considered to be the type of the first element of the array
             t = checkAST(eList.get(0));
             for ( Expr<T> e : eList ) {
-                // If the types are different it's considered an error
-                if ( !checkAST(e).equals(t) && !checkAST(e).equals(BlocklyType.VOID) ) {
-                    this.errorCount++;
-                    this.info
-                        .add(
-                            "Error number "
-                                + Integer.toString(this.errorCount)
-                                + " at expression "
-                                + list.toString()
-                                + ": All expressions should have the same return type");
+                if ( !checkAST(e).equals(BlocklyType.VOID) ) {
+                    t = checkAST(e);
+                    break;
+                }
+            }
+            for ( Expr<T> e : eList ) {
+                // If it's a variable, store a warning to be able to recover later
+                if ( checkAST(e).equals(BlocklyType.VOID) ) {
+                    addToWarnings("WARNING_VARIABLE_TYPE in expr: " + e.toString());
+                } else {
+                    // If the types are different it's considered an error
+                    if ( !checkAST(e).equals(t) ) {
+                        this.errorCount++;
+                        this.info.add("INVALID_TYPE_FOR_LIST_ELEMENT");
+                    }
                 }
             }
             // Return type of array
@@ -346,9 +383,13 @@ public class ExprlyTypechecker<T> {
         }
         // Check that is a number type
         for ( Expr<T> e : args ) {
-            if ( !checkAST(e).equals(BlocklyType.NUMBER) ) {
-                this.errorCount++;
-                addToInfo(checkAST(e).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
+            if ( checkAST(e).equals(BlocklyType.VOID) ) {
+                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + e.toString());
+            } else {
+                if ( !checkAST(e).equals(BlocklyType.NUMBER) ) {
+                    this.errorCount++;
+                    addToInfo("INVALID_ARGUMENT_TYPE");
+                }
             }
         }
         return BlocklyType.BOOLEAN;
@@ -370,9 +411,13 @@ public class ExprlyTypechecker<T> {
         }
         // Check that all the elements are numbers
         for ( Expr<T> e : args ) {
-            if ( !checkAST(e).equals(BlocklyType.ARRAY_NUMBER) ) {
-                this.errorCount++;
-                addToInfo(checkAST(e).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
+            if ( checkAST(e).equals(BlocklyType.VOID) ) {
+                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + e.toString());
+            } else {
+                if ( !checkAST(e).equals(BlocklyType.ARRAY_NUMBER) && !checkAST(e).equals(BlocklyType.ARRAY) ) {
+                    this.errorCount++;
+                    addToInfo("INVALID_ARGUMENT_TYPE");
+                }
             }
         }
         return BlocklyType.NUMBER;
@@ -403,9 +448,13 @@ public class ExprlyTypechecker<T> {
 
         // Check that they're all number types
         for ( Expr<T> e : args ) {
-            if ( !checkAST(e).equals(BlocklyType.NUMBER) ) {
-                this.errorCount++;
-                addToInfo(checkAST(e).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
+            if ( checkAST(e).equals(BlocklyType.VOID) ) {
+                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + e.toString());
+            } else {
+                if ( !checkAST(e).equals(BlocklyType.NUMBER) ) {
+                    this.errorCount++;
+                    addToInfo("INVALID_ARGUMENT_TYPE");
+                }
             }
         }
         return BlocklyType.NUMBER;
@@ -427,9 +476,13 @@ public class ExprlyTypechecker<T> {
         }
         // Check that they're all numbers
         for ( Expr<T> e : args ) {
-            if ( !checkAST(e).equals(BlocklyType.NUMBER) ) {
-                this.errorCount++;
-                addToInfo(checkAST(e).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
+            if ( checkAST(e).equals(BlocklyType.VOID) ) {
+                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + e.toString());
+            } else {
+                if ( !checkAST(e).equals(BlocklyType.NUMBER) ) {
+                    this.errorCount++;
+                    addToInfo("INVALID_ARGUMENT_TYPE");
+                }
             }
         }
         return BlocklyType.NUMBER;
@@ -445,9 +498,13 @@ public class ExprlyTypechecker<T> {
         }
         // Check that they're all numbers
         for ( Expr<T> e : args ) {
-            if ( !checkAST(e).equals(BlocklyType.NUMBER) ) {
-                this.errorCount++;
-                addToInfo(checkAST(e).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
+            if ( checkAST(e).equals(BlocklyType.VOID) ) {
+                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + e.toString());
+            } else {
+                if ( !checkAST(e).equals(BlocklyType.NUMBER) ) {
+                    this.errorCount++;
+                    addToInfo("INVALID_ARGUMENT_TYPE");
+                }
             }
         }
         return BlocklyType.NUMBER;
@@ -463,9 +520,13 @@ public class ExprlyTypechecker<T> {
         }
         // Check that they're all numbers
         for ( Expr<T> e : args ) {
-            if ( !checkAST(e).equals(BlocklyType.STRING) ) {
-                this.errorCount++;
-                addToInfo(checkAST(e).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
+            if ( checkAST(e).equals(BlocklyType.VOID) ) {
+                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + e.toString());
+            } else {
+                if ( !checkAST(e).equals(BlocklyType.STRING) ) {
+                    this.errorCount++;
+                    addToInfo("INVALID_ARGUMENT_TYPE");
+                }
             }
         }
         return BlocklyType.STRING;
@@ -479,10 +540,13 @@ public class ExprlyTypechecker<T> {
             this.errorCount++;
             addToInfo("INVALID_ARGUMENT_NUMBER");
         }
-
-        if ( !checkAST(args.get(0)).equals(BlocklyType.STRING) ) {
-            this.errorCount++;
-            addToInfo(checkAST(this.e).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
+        if ( checkAST(args.get(0)).equals(BlocklyType.VOID) ) {
+            addToWarnings("WARNING_VARIABLE_TYPE in expr: " + args.get(0).toString());
+        } else {
+            if ( !checkAST(args.get(0)).equals(BlocklyType.STRING) ) {
+                this.errorCount++;
+                addToInfo("INVALID_ARGUMENT_TYPE");
+            }
         }
 
         return BlocklyType.VOID;
@@ -520,17 +584,24 @@ public class ExprlyTypechecker<T> {
         }
         // Check that they're all type correct
         for ( int i = 0; i < args.size(); i++ ) {
+            if ( checkAST(args.get(i)).equals(BlocklyType.VOID) ) {
+                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + args.get(i).toString());
+            } else {
+
+            }
             if ( i == 0 ) {
                 if ( !(checkAST(args.get(0)).equals(BlocklyType.ARRAY)
                     || checkAST(args.get(0)).equals(BlocklyType.ARRAY_NUMBER)
                     || checkAST(args.get(0)).equals(BlocklyType.ARRAY_BOOLEAN)
                     || checkAST(args.get(0)).equals(BlocklyType.ARRAY_STRING)
                     || checkAST(args.get(0)).equals(BlocklyType.ARRAY_CONNECTION)) ) {
-                    addToInfo(checkAST(args.get(0)).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
-                } else {
-                    if ( !checkAST(args.get(i)).equals(BlocklyType.NUMBER) ) {
-                        addToInfo(checkAST(args.get(i)).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
-                    }
+                    this.errorCount++;
+                    addToInfo("INVALID_ARGUMENT_TYPE");
+                }
+            } else {
+                if ( !checkAST(args.get(i)).equals(BlocklyType.NUMBER) ) {
+                    this.errorCount++;
+                    addToInfo("INVALID_ARGUMENT_TYPE");
                 }
             }
         }
@@ -556,25 +627,33 @@ public class ExprlyTypechecker<T> {
         // Check the number of parameters
         if ( mode.equals(IndexLocation.FROM_START) || mode.equals(IndexLocation.FROM_END) ) {
             if ( args.size() != 2 ) {
-                //error
+                this.errorCount++;
+                addToInfo("INVALID_ARGUMENT_NUMBER");
             }
         } else {
             if ( args.size() != 1 ) {
-                //error
+                this.errorCount++;
+                addToInfo("INVALID_ARGUMENT_NUMBER");
             }
         }
         // Check that they're all type correct
         for ( int i = 0; i < args.size(); i++ ) {
-            if ( i == 0 ) {
-                if ( !(checkAST(args.get(0)).equals(BlocklyType.ARRAY)
-                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_NUMBER)
-                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_BOOLEAN)
-                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_STRING)
-                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_CONNECTION)) ) {
-                    addToInfo(checkAST(args.get(0)).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
+            if ( checkAST(args.get(i)).equals(BlocklyType.VOID) ) {
+                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + args.get(i).toString());
+            } else {
+                if ( i == 0 ) {
+                    if ( !(checkAST(args.get(0)).equals(BlocklyType.ARRAY)
+                        || checkAST(args.get(0)).equals(BlocklyType.ARRAY_NUMBER)
+                        || checkAST(args.get(0)).equals(BlocklyType.ARRAY_BOOLEAN)
+                        || checkAST(args.get(0)).equals(BlocklyType.ARRAY_STRING)
+                        || checkAST(args.get(0)).equals(BlocklyType.ARRAY_CONNECTION)) ) {
+                        this.errorCount++;
+                        addToInfo("INVALID_ARGUMENT_TYPE");
+                    }
                 } else {
                     if ( !checkAST(args.get(i)).equals(BlocklyType.NUMBER) ) {
-                        addToInfo(checkAST(args.get(i)).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
+                        this.errorCount++;
+                        addToInfo("INVALID_ARGUMENT_TYPE");
                     }
                 }
             }
@@ -601,25 +680,33 @@ public class ExprlyTypechecker<T> {
         // Check the number of parameters
         if ( mode.equals(IndexLocation.FROM_START) || mode.equals(IndexLocation.FROM_END) ) {
             if ( args.size() != 3 ) {
-                //error
+                this.errorCount++;
+                addToInfo("INVALID_ARGUMENT_NUMBER");
             }
         } else {
             if ( args.size() != 2 ) {
-                //error
+                this.errorCount++;
+                addToInfo("INVALID_ARGUMENT_NUMBER");
             }
         }
-        // Check that they're all type correct
         for ( int i = 0; i < args.size(); i++ ) {
-            if ( i == 0 ) {
-                if ( !(checkAST(args.get(0)).equals(BlocklyType.ARRAY)
-                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_NUMBER)
-                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_BOOLEAN)
-                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_STRING)
-                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_CONNECTION)) ) {
-                    addToInfo(checkAST(args.get(0)).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
+            if ( checkAST(args.get(i)).equals(BlocklyType.VOID) ) {
+                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + args.get(i).toString());
+
+            } else {
+                if ( i == 0 ) {
+                    if ( !(checkAST(args.get(0)).equals(BlocklyType.ARRAY)
+                        || checkAST(args.get(0)).equals(BlocklyType.ARRAY_NUMBER)
+                        || checkAST(args.get(0)).equals(BlocklyType.ARRAY_BOOLEAN)
+                        || checkAST(args.get(0)).equals(BlocklyType.ARRAY_STRING)
+                        || checkAST(args.get(0)).equals(BlocklyType.ARRAY_CONNECTION)) ) {
+                        this.errorCount++;
+                        addToInfo("INVALID_ARGUMENT_TYPE");
+                    }
                 } else {
                     if ( !checkAST(args.get(i)).equals(BlocklyType.NUMBER) ) {
-                        addToInfo(checkAST(args.get(i)).equals(BlocklyType.VOID) ? "WARNING_VARIABLE_TYPE" : "INVALID_ARGUMENT_TYPE");
+                        this.errorCount++;
+                        addToInfo("INVALID_ARGUMENT_TYPE");
                     }
                 }
             }
@@ -639,14 +726,75 @@ public class ExprlyTypechecker<T> {
         return BlocklyType.VOID;
     }
 
-    public BlocklyType visitListRepeat(ListRepeat<T> ListRepeat) {
-        // TODO Auto-generated method stub
-        return null;
+    public BlocklyType visitListRepeat(ListRepeat<T> listRepeat) {
+        List<Expr<T>> args = listRepeat.getParam();
+        if ( args.size() != 2 ) {
+            this.errorCount++;
+            addToInfo("INVALID_ARGUMENT_NUMBER");
+        }
+        for ( int i = 0; i < args.size(); i++ ) {
+            if ( checkAST(args.get(i)).equals(BlocklyType.VOID) ) {
+                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + args.get(i).toString());
+            } else {
+                if ( i == 1 ) {
+                    if ( !checkAST(args.get(0)).equals(BlocklyType.NUMBER) ) {
+                        this.errorCount++;
+                        addToInfo("INVALID_ARGUMENT_TYPE");
+                    }
+                }
+            }
+        }
+        return BlocklyType.ARRAY;
     }
 
-    public BlocklyType visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<T> LengthOfIsEmptyFunct) {
-        // TODO Auto-generated method stub
-        return null;
+    public BlocklyType visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<T> lengthOfIsEmptyFunct) {
+        FunctionNames fname = lengthOfIsEmptyFunct.getFunctName();
+        List<Expr<T>> args = lengthOfIsEmptyFunct.getParam();
+        if ( args.size() != 1 ) {
+            this.errorCount++;
+            addToInfo("INVALID_ARGUMENT_NUMBER");
+        }
+
+        for ( int i = 0; i < args.size(); i++ ) {
+            if ( checkAST(args.get(i)).equals(BlocklyType.VOID) ) {
+                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + args.get(i).toString());
+            } else {
+                if ( !(checkAST(args.get(0)).equals(BlocklyType.ARRAY)
+                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_NUMBER)
+                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_BOOLEAN)
+                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_STRING)
+                    || checkAST(args.get(0)).equals(BlocklyType.ARRAY_CONNECTION)) ) {
+                    this.errorCount++;
+                    addToInfo("INVALID_ARGUMENT_TYPE");
+                }
+            }
+        }
+
+        if ( fname.equals(FunctionNames.LISTS_LENGTH) ) {
+            return BlocklyType.NUMBER;
+        } else if ( fname.equals(FunctionNames.LIST_IS_EMPTY) ) {
+            return BlocklyType.BOOLEAN;
+        }
+        throw new UnsupportedOperationException();
+    }
+
+    public BlocklyType visitMathPowerFunct(MathPowerFunct<T> mathPowerFunct) {
+        List<Expr<T>> args = mathPowerFunct.getParam();
+        if ( args.size() != 2 ) {
+            this.errorCount++;
+            addToInfo("INVALID_ARGUMENT_NUMBER");
+        }
+        for ( Expr<T> e : args ) {
+            if ( checkAST(e).equals(BlocklyType.VOID) ) {
+                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + e.toString());
+            } else {
+                if ( !checkAST(e).equals(BlocklyType.NUMBER) ) {
+                    this.errorCount++;
+                    addToInfo("INVALID_ARGUMENT_TYPE");
+                }
+            }
+        }
+        return BlocklyType.NUMBER;
     }
 
     /**
@@ -733,6 +881,9 @@ public class ExprlyTypechecker<T> {
         }
         if ( ast instanceof MathConstrainFunct<?> ) {
             return visitMathConstrainFunct((MathConstrainFunct<T>) ast);
+        }
+        if ( ast instanceof MathPowerFunct<?> ) {
+            return visitMathPowerFunct((MathPowerFunct<T>) ast);
         }
         throw new UnsupportedOperationException("Expression " + ast.toString() + "cannot be checked");
     }

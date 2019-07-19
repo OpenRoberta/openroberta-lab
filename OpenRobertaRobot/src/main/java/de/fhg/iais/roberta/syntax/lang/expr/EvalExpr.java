@@ -20,7 +20,6 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.eval.resources.ExprlyAST;
-import de.fhg.iais.roberta.syntax.lang.expr.eval.resources.ExprlyTypechecker;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
@@ -30,7 +29,6 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 public class EvalExpr<V> extends Expr<V> {
     private final String expr, type;
     private final Expr<V> exprBlock;
-    private final ExprlyTypechecker<V> checker;
     private boolean syntaxError = false;
 
     private EvalExpr(String expr, String type, BlocklyBlockProperties properties, BlocklyComment comment) throws Exception {
@@ -59,8 +57,6 @@ public class EvalExpr<V> extends Expr<V> {
         } else {
             this.exprBlock = exprBlk;
         }
-        this.checker = new ExprlyTypechecker<>(this.exprBlock, BlocklyType.get(this.type));
-
         this.setReadOnly();
     }
 
