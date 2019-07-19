@@ -37,7 +37,9 @@ RUN wget http://de.archive.ubuntu.com/ubuntu/pool/universe/n/newlib/libnewlib-de
     wget http://de.archive.ubuntu.com/ubuntu/pool/universe/n/newlib/libnewlib-arm-none-eabi_3.0.0.20180802-2_all.deb && \
     dpkg -i libnewlib-dev_3.0.0.20180802-2_all.deb libnewlib-arm-none-eabi_3.0.0.20180802-2_all.deb && \
     rm libnewlib-dev_3.0.0.20180802-2_all.deb libnewlib-arm-none-eabi_3.0.0.20180802-2_all.deb
-    
+
+RUN apt-get install g++-arm-linux-gnueabi
+
 WORKDIR /opt/ora-cc-rsc/
 COPY ./ ./
 ENV robot_crosscompiler_resourcebase=/opt/ora-cc-rsc/
