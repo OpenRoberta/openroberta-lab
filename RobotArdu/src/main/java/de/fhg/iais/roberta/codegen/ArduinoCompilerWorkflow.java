@@ -99,7 +99,7 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
                     validator.validate();
                 });
             } catch ( DbcException e ) {
-                this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+                this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED_WITH_PARAMETERS;
                 return;
             }
         }
