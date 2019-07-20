@@ -1129,3 +1129,12 @@ Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = 'If a value is true, then return a sec
 Blockly.Msg.PROCEDURES_IFRETURN_HELPURL = 'http://c2.com/cgi/wiki?GuardClause';
 /// warning - This appears if the user tries to use this block outside of a function definition.
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = 'Warning: This block may be used only within a function definition.';
+
+// Messages for exprBlock
+Blockly.Msg.SYNTAX_ERROR = 'Syntax error in expression!';
+Blockly.Msg.INVALID_OPERAND_TYPE = 'Invalid type of operand in expression!';
+Blockly.Msg.UNEXPECTED_RETURN_TYPE = 'Wrong type of return value from expression!';
+Blockly.Msg.INVALID_TYPE_FOR_LIST_ELEMENT = 'All elements on the list must have the same type.';
+Blockly.Msg.INVALID_ARGUMENT_NUMBER = 'Wrong number of arguents in function call.';
+Blockly.Msg.INVALID_ARGUMENT_TYPE = 'Wrong type of argument in function call.';
+Blockly.Msg.WARNING_VARIABLE_TYPE = 'Variable use might lead to unnexpected results, be sure that their type is correct.';

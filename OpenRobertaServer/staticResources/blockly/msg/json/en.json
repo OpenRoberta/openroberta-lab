@@ -1531,5 +1531,12 @@
 	"YEND": "end of Y axis",
 	"XTICK": "distance between X ticks",
 	"YTICK": "distance between Y ticks",
-	"ACTION_PLOT_TICKMARK": "at tickmark"
+	"ACTION_PLOT_TICKMARK": "at tickmark",	
+	"SYNTAX_ERROR" : "Syntax error in expression!",
+	"INVALID_OPERAND_TYPE" : "Invalid type of operand in expression!",
+	"UNEXPECTED_RETURN_TYPE" : "Wrong type of return value from expression!",
+	"INVALID_TYPE_FOR_LIST_ELEMENT" : "All elements on the list must have the same type.",
+	"INVALID_ARGUMENT_NUMBER" : "Wrong number of arguents in function call.",
+	"INVALID_ARGUMENT_TYPE" : "Wrong type of argument in function call.",
+	"WARNING_VARIABLE_TYPE" : "Variable use might lead to unnexpected results, be sure that their type is correct."
 }

@@ -93,11 +93,11 @@ public class ExprlyTypechecker<T> {
     }
 
     public void addToInfo(String s) {
-        this.info.add(s + "\n");
+        this.info.add(s + " ");
     }
 
     public void addToWarnings(String s) {
-        this.warnings.add(s + "\n");
+        this.warnings.add(s + " ");
     }
 
     /**

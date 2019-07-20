@@ -646,16 +646,19 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     @Override
     public Void visitEvalExpr(EvalExpr<Void> evalExpr) {
         if ( evalExpr.hasSyntaxError() ) {
-            evalExpr.addInfo(NepoInfo.error("Syntax errors in expression, result might not be as expected"));
+            evalExpr.addInfo(NepoInfo.error("SYNTAX_ERROR"));
         } else {
             ExprlyTypechecker<Void> checker = new ExprlyTypechecker<Void>(evalExpr.getExpr(), BlocklyType.get(evalExpr.getType()));
             checker.check();
             int numErrors = checker.getNumErrors();
+            if ( checker.getWarnings().size() != 0 ) {
+                evalExpr.addInfo(NepoInfo.warning("WARNING_VARIABLE_TYPE"));
+            }
             if ( numErrors == 0 ) {
                 return null;
             }
             List<String> errors = checker.getErrors();
-            String s = Integer.toString(numErrors) + " errors found: ";
+            String s = "";
             for ( String err : errors ) {
                 s += err + " ";
             }
