@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.fhg.iais.roberta.inter.mode.general.IIndexLocation;
+import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
@@ -13,6 +15,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
@@ -20,11 +23,20 @@ import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
+import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
+import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 
 public class ExprlyUnParser<T> {
     private String se;
@@ -303,7 +315,91 @@ public class ExprlyUnParser<T> {
         if ( ast instanceof MathSingleFunct<?> ) {
             return visitMathSingleFunct((MathSingleFunct<T>) ast);
         }
+        if ( ast instanceof ListCreate<?> ) {
+            return visitExprList(((ListCreate<T>) ast).getValue());
+        }
+        if ( ast instanceof LengthOfIsEmptyFunct<?> ) {
+            return visitLengthOfIsEmptyFunct((LengthOfIsEmptyFunct<T>) ast);
+        }
+        if ( ast instanceof ListSetIndex<?> ) {
+            return visitListSetIndex((ListSetIndex<T>) ast);
+        }
+        if ( ast instanceof ListGetIndex<?> ) {
+            return visitListGetIndex((ListGetIndex<T>) ast);
+        }
+        if ( ast instanceof ListRepeat<?> ) {
+            return visitListRepeat((ListRepeat<T>) ast);
+        }
+        if ( ast instanceof GetSubFunct<?> ) {
+            return visitGetSubFunct((GetSubFunct<T>) ast);
+        }
+        if ( ast instanceof TextPrintFunct<?> ) {
+            return visitTextPrintFunct((TextPrintFunct<T>) ast);
+        }
+        if ( ast instanceof TextJoinFunct<?> ) {
+            return visitTextJoinFunct((TextJoinFunct<T>) ast);
+        }
+        if ( ast instanceof MathConstrainFunct<?> ) {
+            return visitMathConstrainFunct((MathConstrainFunct<T>) ast);
+        }
+        if ( ast instanceof MathPowerFunct<?> ) {
+            return visitMathPowerFunct((MathPowerFunct<T>) ast);
+        }
         throw new UnsupportedOperationException("Expression " + ast.toString() + "cannot be checked");
+    }
+
+    private String visitMathPowerFunct(MathPowerFunct<T> mathPowerFunct) {
+        List<Expr<T>> args = mathPowerFunct.getParam();
+        return "(" + visitAST(args.get(0)) + ")^(" + visitAST(args.get(1)) + ")";
+    }
+
+    private String visitMathConstrainFunct(MathConstrainFunct<T> mathConstrainFunct) {
+        List<Expr<T>> args = mathConstrainFunct.getParam();
+        return "constrain(" + visitAST(args.get(0)) + "," + visitAST(args.get(1)) + ")";
+    }
+
+    private String visitTextJoinFunct(TextJoinFunct<T> textJoinFunct) {
+        List<Expr<T>> args = textJoinFunct.getParam().get();
+        return "cat(" + visitAST(args.get(0)) + "," + visitAST(args.get(1)) + ")";
+    }
+
+    private String visitTextPrintFunct(TextPrintFunct<T> textPrintFunct) {
+        List<Expr<T>> args = textPrintFunct.getParam();
+        return "cat(" + visitAST(args.get(0)) + ")";
+    }
+
+    private String visitGetSubFunct(GetSubFunct<T> getSubFunct) {
+        List<Expr<T>> args = getSubFunct.getParam();
+        List<IMode> mode = getSubFunct.getStrParam();
+        return null;
+    }
+
+    private String visitListRepeat(ListRepeat<T> listRepeat) {
+        List<Expr<T>> args = listRepeat.getParam();
+        return "repeatList(" + args.get(0) + "," + args.get(1) + ")";
+    }
+
+    private String visitListGetIndex(ListGetIndex<T> listGetIndex) {
+        List<Expr<T>> args = listGetIndex.getParam();
+        IIndexLocation mode = listGetIndex.getLocation();
+        return null;
+    }
+
+    private String visitListSetIndex(ListSetIndex<T> listSetIndex) {
+        List<Expr<T>> args = listSetIndex.getParam();
+        IIndexLocation mode = listSetIndex.getLocation();
+        return null;
+    }
+
+    private String visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<T> lengthOfIsEmptyFunct) {
+        FunctionNames fname = lengthOfIsEmptyFunct.getFunctName();
+        List<Expr<T>> args = lengthOfIsEmptyFunct.getParam();
+        if ( fname.equals(FunctionNames.LISTS_LENGTH) ) {
+            return "lengthOf(" + args.get(1) + ")";
+        } else if ( fname.equals(FunctionNames.LIST_IS_EMPTY) ) {
+            return "isEmpty(" + args.get(1) + ")";
+        }
+        return null;
     }
 
     // Fill the HashMap of Function Names

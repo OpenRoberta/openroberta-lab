@@ -101,7 +101,7 @@ FNAME   :  'sin'
         |  'subListFromEndToEnd'
         |  'subListFromEndToLast'
         |  'print'
-        |  'append'
+        |  'cat'
         |  'constrain'
         |  'getRGB'
         ;

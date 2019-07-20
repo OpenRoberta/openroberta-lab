@@ -173,7 +173,7 @@ public class ExprlyAstTest {
         ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(list, BlocklyType.ARRAY_NUMBER);
         c.check();
         Assert.assertTrue(0 == c.getNumErrors());
-        String t = "NumConst [1], Binary [ADD, NumConst [1], NumConst [2]], " + "Unary [NEG, Binary [ADD, NumConst [1], NumConst [2]]]";
+        String t = "NumConst [1], Binary [ADD, NumConst [1], NumConst [2]], Unary [NEG, Binary [ADD, NumConst [1], NumConst [2]]]";
         Assert.assertEquals(t, list.toString());
         Assert.assertEquals(list.toString(), expr2AST(p.UnParse()).toString());
     }
