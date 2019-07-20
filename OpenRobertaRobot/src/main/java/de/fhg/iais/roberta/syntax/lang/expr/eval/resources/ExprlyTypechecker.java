@@ -22,6 +22,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
@@ -42,11 +43,12 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 public class ExprlyTypechecker<T> {
 
     private final LinkedList<String> info;
-    private final LinkedList<String> warnings;
     private final Phrase<T> e;
     private int errorCount = 0;
     private BlocklyType resultType;
     private final BlocklyType expectedResultType;
+    //private final static Map<Binary.Op, String> bnames;
+    private final List<VarDeclaration<T>> vars;
 
     /**
      * Class constructor, creates an instance of {@link ExprlyTypechecker} for
@@ -56,9 +58,16 @@ public class ExprlyTypechecker<T> {
      **/
     public ExprlyTypechecker(Phrase<T> ast, BlocklyType rt) {
         this.info = new LinkedList<String>();
-        this.warnings = new LinkedList<String>();
         this.expectedResultType = rt;
         this.e = ast;
+        this.vars = null;
+    }
+
+    public ExprlyTypechecker(Phrase<T> ast, BlocklyType rt, List<VarDeclaration<T>> vars) {
+        this.info = new LinkedList<String>();
+        this.expectedResultType = rt;
+        this.e = ast;
+        this.vars = vars;
     }
 
     /**
@@ -66,13 +75,6 @@ public class ExprlyTypechecker<T> {
      **/
     public List<String> getErrors() {
         return this.info;
-    }
-
-    /**
-     * @return list of warnings detected
-     **/
-    public List<String> getWarnings() {
-        return this.warnings;
     }
 
     /**
@@ -98,10 +100,6 @@ public class ExprlyTypechecker<T> {
 
     public void addToInfo(String s) {
         this.info.add(s);
-    }
-
-    public void addToWarnings(String s) {
-        this.warnings.add(s);
     }
 
     /**
@@ -180,7 +178,14 @@ public class ExprlyTypechecker<T> {
      * @return Type of block
      */
     public BlocklyType visitVar(Var<T> var) {
-
+        if ( this.vars == null ) {
+            return var.getVarType();
+        }
+        for ( VarDeclaration<T> v : this.vars ) {
+            if ( var.getValue().equals(v.getName()) ) {
+                return v.getVarType();
+            }
+        }
         return var.getVarType();
     }
 
@@ -195,7 +200,11 @@ public class ExprlyTypechecker<T> {
         // Get type of the operand
         BlocklyType t = checkAST(unary.getExpr());
         if ( t.equals(BlocklyType.VOID) ) {
-            addToWarnings("WARNING_VARIABLE_TYPE in expr: " + unary.toString());
+            this.errorCount++;
+            addToInfo("UNDECLARED_VARIABLE");
+        } else if ( t.equals(BlocklyType.NOTHING) ) {
+            this.errorCount++;
+            addToInfo("UNNEXPECTED_METHOD");
         }
         // Check if the expression should should be boolean
         if ( unary.getOp().equals(Unary.Op.NOT) ) {
@@ -231,12 +240,12 @@ public class ExprlyTypechecker<T> {
         BlocklyType tl = checkAST(binary.getLeft());
         BlocklyType tr = checkAST(binary.getRight());
 
-        if ( tl.equals(BlocklyType.VOID) ) {
-            addToWarnings("WARNING_VARIABLE_TYPE in expr: " + binary.getLeft().toString());
-        }
-
-        if ( tr.equals(BlocklyType.VOID) ) {
-            addToWarnings("WARNING_VARIABLE_TYPE in expr: " + binary.getRight().toString());
+        if ( tl.equals(BlocklyType.VOID) || tr.equals(BlocklyType.VOID) ) {
+            this.errorCount++;
+            addToInfo("UNDECLARED_VARIABLE");
+        } else if ( tl.equals(BlocklyType.NOTHING) || tr.equals(BlocklyType.NOTHING) ) {
+            this.errorCount++;
+            addToInfo("UNNEXPECTED_METHOD");
         }
 
         // Check if its a number operation
@@ -325,12 +334,16 @@ public class ExprlyTypechecker<T> {
             for ( int k = 0; k < tList.size(); k++ ) {
                 // If it's a variable, store a warning to be able to recover later
                 if ( tList.get(k).equals(BlocklyType.VOID) ) {
-                    addToWarnings("WARNING_VARIABLE_TYPE IN EXPR: " + eList.get(k).toString());
+                    this.errorCount++;
+                    addToInfo("UNDECLARED_VARIABLE");
+                } else if ( tList.get(k).equals(BlocklyType.NOTHING) ) {
+                    this.errorCount++;
+                    addToInfo("UNNEXPECTED_METHOD");
                 } else {
                     // If the types are different it's considered an error
                     if ( !tList.get(k).equals(t) ) {
                         this.errorCount++;
-                        this.info.add("INVALID_TYPE_FOR_LIST_ELEMENT");
+                        addToInfo("INVALID_TYPE_FOR_LIST_ELEMENT");
                     }
                 }
             }
@@ -352,7 +365,6 @@ public class ExprlyTypechecker<T> {
                 || t.equals(BlocklyType.ARRAY_BOOLEAN)
                 || t.equals(BlocklyType.ARRAY_STRING)
                 || t.equals(BlocklyType.ARRAY_CONNECTION)
-                // Void is the default value of VAR, we'll put it here for now
                 || t.equals(BlocklyType.VOID) ) {
                 return BlocklyType.ARRAY;
             }
@@ -387,7 +399,11 @@ public class ExprlyTypechecker<T> {
         for ( Expr<T> e : args ) {
             t = checkAST(e);
             if ( t.equals(BlocklyType.VOID) ) {
-                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + e.toString());
+                this.errorCount++;
+                addToInfo("UNDECLARED_VARIABLE");
+            } else if ( t.equals(BlocklyType.NOTHING) ) {
+                this.errorCount++;
+                addToInfo("UNNEXPECTED_METHOD");
             } else {
                 if ( !t.equals(BlocklyType.NUMBER) ) {
                     this.errorCount++;
@@ -417,7 +433,11 @@ public class ExprlyTypechecker<T> {
         for ( Expr<T> e : args ) {
             t = checkAST(e);
             if ( t.equals(BlocklyType.VOID) ) {
-                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + e.toString());
+                this.errorCount++;
+                addToInfo("UNDECLARED_VARIABLE");
+            } else if ( t.equals(BlocklyType.NOTHING) ) {
+                this.errorCount++;
+                addToInfo("UNNEXPECTED_METHOD");
             } else {
                 if ( !t.equals(BlocklyType.ARRAY_NUMBER) && !checkAST(e).equals(BlocklyType.ARRAY) ) {
                     this.errorCount++;
@@ -456,7 +476,11 @@ public class ExprlyTypechecker<T> {
         for ( Expr<T> e : args ) {
             t = checkAST(e);
             if ( t.equals(BlocklyType.VOID) ) {
-                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + e.toString());
+                this.errorCount++;
+                addToInfo("UNDECLARED_VARIABLE");
+            } else if ( t.equals(BlocklyType.NOTHING) ) {
+                this.errorCount++;
+                addToInfo("UNNEXPECTED_METHOD");
             } else {
                 if ( !t.equals(BlocklyType.NUMBER) ) {
                     this.errorCount++;
@@ -486,7 +510,11 @@ public class ExprlyTypechecker<T> {
         for ( Expr<T> e : args ) {
             t = checkAST(e);
             if ( t.equals(BlocklyType.VOID) ) {
-                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + e.toString());
+                this.errorCount++;
+                addToInfo("UNDECLARED_VARIABLE");
+            } else if ( t.equals(BlocklyType.NOTHING) ) {
+                this.errorCount++;
+                addToInfo("UNNEXPECTED_METHOD");
             } else {
                 if ( !t.equals(BlocklyType.NUMBER) ) {
                     this.errorCount++;
@@ -513,7 +541,11 @@ public class ExprlyTypechecker<T> {
         for ( Expr<T> e : args ) {
             t = checkAST(e);
             if ( t.equals(BlocklyType.VOID) ) {
-                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + e.toString());
+                this.errorCount++;
+                addToInfo("UNDECLARED_VARIABLE");
+            } else if ( t.equals(BlocklyType.NOTHING) ) {
+                this.errorCount++;
+                addToInfo("UNNEXPECTED_METHOD");
             } else {
                 if ( !t.equals(BlocklyType.NUMBER) ) {
                     this.errorCount++;
@@ -543,7 +575,11 @@ public class ExprlyTypechecker<T> {
         for ( Expr<T> e : args ) {
             t = checkAST(e);
             if ( t.equals(BlocklyType.VOID) ) {
-                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + e.toString());
+                this.errorCount++;
+                addToInfo("UNDECLARED_VARIABLE");
+            } else if ( t.equals(BlocklyType.NOTHING) ) {
+                this.errorCount++;
+                addToInfo("UNNEXPECTED_METHOD");
             } else {
                 if ( !t.equals(BlocklyType.NUMBER) ) {
                     this.errorCount++;
@@ -573,7 +609,11 @@ public class ExprlyTypechecker<T> {
         for ( Expr<T> e : args ) {
             t = checkAST(e);
             if ( t.equals(BlocklyType.VOID) ) {
-                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + e.toString());
+                this.errorCount++;
+                addToInfo("UNDECLARED_VARIABLE");
+            } else if ( t.equals(BlocklyType.NOTHING) ) {
+                this.errorCount++;
+                addToInfo("UNNEXPECTED_METHOD");
             } else {
                 if ( !t.equals(BlocklyType.STRING) ) {
                     this.errorCount++;
@@ -601,7 +641,11 @@ public class ExprlyTypechecker<T> {
         }
         t = checkAST(args.get(0));
         if ( t.equals(BlocklyType.VOID) ) {
-            addToWarnings("WARNING_VARIABLE_TYPE in expr: " + args.get(0).toString());
+            this.errorCount++;
+            addToInfo("UNDECLARED_VARIABLE");
+        } else if ( t.equals(BlocklyType.NOTHING) ) {
+            this.errorCount++;
+            addToInfo("UNNEXPECTED_METHOD");
         } else {
             if ( !t.equals(BlocklyType.STRING) ) {
                 this.errorCount++;
@@ -657,7 +701,11 @@ public class ExprlyTypechecker<T> {
                 t0 = t;
             }
             if ( t.equals(BlocklyType.VOID) ) {
-                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + args.get(i).toString());
+                this.errorCount++;
+                addToInfo("UNDECLARED_VARIABLE");
+            } else if ( t.equals(BlocklyType.NOTHING) ) {
+                this.errorCount++;
+                addToInfo("UNNEXPECTED_METHOD");
             } else {
                 if ( i == 0 ) {
                     if ( !(t.equals(BlocklyType.ARRAY)
@@ -720,7 +768,11 @@ public class ExprlyTypechecker<T> {
                 t0 = t;
             }
             if ( t.equals(BlocklyType.VOID) ) {
-                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + args.get(i).toString());
+                this.errorCount++;
+                addToInfo("UNDECLARED_VARIABLE");
+            } else if ( t.equals(BlocklyType.NOTHING) ) {
+                this.errorCount++;
+                addToInfo("UNNEXPECTED_METHOD");
             } else {
                 if ( i == 0 ) {
                     if ( !(t.equals(BlocklyType.ARRAY)
@@ -781,8 +833,12 @@ public class ExprlyTypechecker<T> {
                 t0 = t;
             }
             if ( t.equals(BlocklyType.VOID) ) {
-                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + args.get(i).toString());
+                this.errorCount++;
+                addToInfo("UNDECLARED_VARIABLE");
 
+            } else if ( t.equals(BlocklyType.NOTHING) ) {
+                this.errorCount++;
+                addToInfo("UNNEXPECTED_METHOD");
             } else {
                 if ( i == 0 ) {
                     if ( !(t0.equals(BlocklyType.ARRAY)
@@ -825,7 +881,11 @@ public class ExprlyTypechecker<T> {
                 t1 = t;
             }
             if ( t.equals(BlocklyType.VOID) ) {
-                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + args.get(i).toString());
+                this.errorCount++;
+                addToInfo("UNDECLARED_VARIABLE");
+            } else if ( t.equals(BlocklyType.NOTHING) ) {
+                this.errorCount++;
+                addToInfo("UNNEXPECTED_METHOD");
             } else {
                 if ( i == 1 ) {
                     if ( !t1.equals(BlocklyType.NUMBER) ) {
@@ -860,7 +920,11 @@ public class ExprlyTypechecker<T> {
                 t0 = t;
             }
             if ( t.equals(BlocklyType.VOID) ) {
-                addToWarnings("WARNING_VARIABLE_TYPE in expr: " + args.get(i).toString());
+                this.errorCount++;
+                addToInfo("UNDECLARED_VARIABLE");
+            } else if ( t.equals(BlocklyType.NOTHING) ) {
+                this.errorCount++;
+                addToInfo("UNNEXPECTED_METHOD");
             } else {
                 if ( !(t0.equals(BlocklyType.ARRAY)
                     || t0.equals(BlocklyType.ARRAY_NUMBER)
@@ -972,4 +1036,28 @@ public class ExprlyTypechecker<T> {
         throw new UnsupportedOperationException("Expression " + ast.toString() + "cannot be checked");
     }
 
+    BlocklyType visitFunctionsA(Expr<T> funct, List<Expr<T>> args, int argSize, BlocklyType checkedType, BlocklyType expectedReturn) {
+        BlocklyType t;
+        if ( args.size() != argSize ) {
+            this.errorCount++;
+            this.info.add("INVALID_ARGUMENT_NUMBER");
+        }
+        // Check that is a number type
+        for ( Expr<T> e : args ) {
+            t = checkAST(e);
+            if ( t.equals(BlocklyType.VOID) ) {
+                this.errorCount++;
+                addToInfo("UNDECLARED_VARIABLE");
+            } else if ( t.equals(BlocklyType.NOTHING) ) {
+                this.errorCount++;
+                addToInfo("UNNEXPECTED_METHOD");
+            } else {
+                if ( !t.equals(checkedType) ) {
+                    this.errorCount++;
+                    addToInfo("INVALID_ARGUMENT_TYPE");
+                }
+            }
+        }
+        return expectedReturn;
+    }
 }

@@ -41,6 +41,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.expr.eval.resources.ExprlyTypechecker;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
@@ -648,12 +649,18 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
         if ( evalExpr.hasSyntaxError() ) {
             evalExpr.addInfo(NepoInfo.error("SYNTAX_ERROR"));
         } else {
-            ExprlyTypechecker<Void> checker = new ExprlyTypechecker<Void>(evalExpr.getExpr(), BlocklyType.get(evalExpr.getType()));
+            int i = 0;
+            ArrayList<VarDeclaration<Void>> vars = this.getVisitedVars();
+            for ( int k = 1; k < vars.size(); k++ ) {
+                if ( vars.get(k).getName().equals(vars.get(0).getName()) ) {
+                    i = k;
+                    break;
+                }
+            }
+            ExprlyTypechecker<Void> checker =
+                new ExprlyTypechecker<Void>(evalExpr.getExpr(), BlocklyType.get(evalExpr.getType()), vars.subList(i, vars.size()));
             checker.check();
             int numErrors = checker.getNumErrors();
-            if ( checker.getWarnings().size() != 0 ) {
-                evalExpr.addInfo(NepoInfo.warning("WARNING_VARIABLE_TYPE"));
-            }
             if ( numErrors == 0 ) {
                 return null;
             }
@@ -662,7 +669,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
             for ( String err : errors ) {
                 s += err + " ";
             }
-            evalExpr.addInfo(NepoInfo.error(s));
+            evalExpr.addInfo(NepoInfo.error(s.substring(0, s.length() - 1)));
         }
         return null;
     }
