@@ -184,10 +184,7 @@ public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
             return FunctionExpr.make(MathRandomIntFunct.make(args));
         }
         if ( f.equals("randFloat") ) {
-            if ( args.size() > 0 ) {
-                throw new UnsupportedOperationException("randFloat function takes 0 arguments");
-            }
-            return FunctionExpr.make(MathRandomFloatFunct.make());
+            return FunctionExpr.make(MathRandomFloatFunct.make(args.size() > 0));
         }
         if ( f.equals("sqrt") ) {
             f = "root";

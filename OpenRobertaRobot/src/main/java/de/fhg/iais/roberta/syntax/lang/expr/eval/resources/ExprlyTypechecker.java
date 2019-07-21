@@ -392,7 +392,7 @@ public class ExprlyTypechecker<T> {
      * @return Return Type of function
      */
     public BlocklyType visitMathNumPropFunct(MathNumPropFunct<T> mathNumPropFunct) {
-        return visitFunctionsA(mathNumPropFunct.getParam(), 1, BlocklyType.NUMBER, BlocklyType.BOOLEAN);
+        return functionHelper(mathNumPropFunct.getParam(), 1, BlocklyType.NUMBER, BlocklyType.BOOLEAN);
     }
 
     /**
@@ -434,6 +434,10 @@ public class ExprlyTypechecker<T> {
      * @return Return Type of function
      */
     public BlocklyType visitMathRandomFloatFunct(MathRandomFloatFunct<T> mathRandomFloatFunct) {
+        if ( mathRandomFloatFunct.hasArgs() ) {
+            this.errorCount++;
+            addToInfo("INVALID_ARGUMENT_NUMBER");
+        }
         return BlocklyType.NUMBER;
     }
 
@@ -444,7 +448,7 @@ public class ExprlyTypechecker<T> {
      * @return Return Type of function
      */
     public BlocklyType visitMathRandomIntFunct(MathRandomIntFunct<T> mathRandomIntFunct) {
-        return visitFunctionsA(mathRandomIntFunct.getParam(), 2, BlocklyType.NUMBER, BlocklyType.NUMBER);
+        return functionHelper(mathRandomIntFunct.getParam(), 2, BlocklyType.NUMBER, BlocklyType.NUMBER);
     }
 
     /**
@@ -456,10 +460,10 @@ public class ExprlyTypechecker<T> {
     public BlocklyType visitMathSingleFunct(MathSingleFunct<T> mathSingleFunct) {
         FunctionNames fname = mathSingleFunct.getFunctName();
         if ( fname.equals(FunctionNames.MAX) || fname.equals(FunctionNames.MIN) ) {
-            return visitFunctionsA(mathSingleFunct.getParam(), 2, BlocklyType.NUMBER, BlocklyType.NUMBER);
+            return functionHelper(mathSingleFunct.getParam(), 2, BlocklyType.NUMBER, BlocklyType.NUMBER);
 
         } else {
-            return visitFunctionsA(mathSingleFunct.getParam(), 1, BlocklyType.NUMBER, BlocklyType.NUMBER);
+            return functionHelper(mathSingleFunct.getParam(), 1, BlocklyType.NUMBER, BlocklyType.NUMBER);
         }
     }
 
@@ -470,7 +474,7 @@ public class ExprlyTypechecker<T> {
      * @return Return Type of function
      */
     public BlocklyType visitMathPowerFunct(MathPowerFunct<T> mathPowerFunct) {
-        return visitFunctionsA(mathPowerFunct.getParam(), 2, BlocklyType.NUMBER, BlocklyType.NUMBER);
+        return functionHelper(mathPowerFunct.getParam(), 2, BlocklyType.NUMBER, BlocklyType.NUMBER);
     }
 
     /**
@@ -480,7 +484,7 @@ public class ExprlyTypechecker<T> {
      * @return Return Type of function
      */
     public BlocklyType visitMathConstrainFunct(MathConstrainFunct<T> mathConstrainFunct) {
-        return visitFunctionsA(mathConstrainFunct.getParam(), 3, BlocklyType.NUMBER, BlocklyType.NUMBER);
+        return functionHelper(mathConstrainFunct.getParam(), 3, BlocklyType.NUMBER, BlocklyType.NUMBER);
     }
 
     /**
@@ -490,7 +494,7 @@ public class ExprlyTypechecker<T> {
      * @return Return Type of function
      */
     public BlocklyType visitTextJoinFunct(TextJoinFunct<T> textJoinFunct) {
-        return visitFunctionsA(textJoinFunct.getParam().get(), 2, BlocklyType.STRING, BlocklyType.STRING);
+        return functionHelper(textJoinFunct.getParam().get(), 2, BlocklyType.STRING, BlocklyType.STRING);
     }
 
     /**
@@ -500,7 +504,7 @@ public class ExprlyTypechecker<T> {
      * @return Return Type of function
      */
     public BlocklyType visitTextPrintFunct(TextPrintFunct<T> textPrintFunct) {
-        return visitFunctionsA(textPrintFunct.getParam(), 1, BlocklyType.STRING, BlocklyType.NOTHING);
+        return functionHelper(textPrintFunct.getParam(), 1, BlocklyType.STRING, BlocklyType.NOTHING);
     }
 
     /**
@@ -637,17 +641,11 @@ public class ExprlyTypechecker<T> {
         // Get parameters
         List<Expr<T>> args = listSetIndex.getParam();
         IIndexLocation mode = listSetIndex.getLocation();
+        int argNumber = indexArgumentNumber(mode) + 2;
         // Check the number of parameters
-        if ( mode.equals(IndexLocation.FROM_START) || mode.equals(IndexLocation.FROM_END) ) {
-            if ( args.size() != 3 ) {
-                this.errorCount++;
-                addToInfo("INVALID_ARGUMENT_NUMBER");
-            }
-        } else {
-            if ( args.size() != 2 ) {
-                this.errorCount++;
-                addToInfo("INVALID_ARGUMENT_NUMBER");
-            }
+        if ( args.size() != argNumber ) {
+            this.errorCount++;
+            addToInfo("INVALID_ARGUMENT_NUMBER");
         }
         for ( int i = 0; i < args.size(); i++ ) {
             t = checkAST(args.get(i));
@@ -764,42 +762,7 @@ public class ExprlyTypechecker<T> {
         } else if ( fname.equals(FunctionNames.LIST_IS_EMPTY) ) {
             return BlocklyType.BOOLEAN;
         }
-        throw new UnsupportedOperationException();
-    }
-
-    // Helping functions
-    BlocklyType visitFunctionsA(List<Expr<T>> args, int argSize, BlocklyType checkedType, BlocklyType expectedReturn) {
-        BlocklyType t;
-        if ( args.size() != argSize ) {
-            this.errorCount++;
-            this.info.add("INVALID_ARGUMENT_NUMBER");
-        }
-        // Check that is a number type
-        for ( Expr<T> e : args ) {
-            t = checkAST(e);
-            if ( t.equals(BlocklyType.VOID) ) {
-                this.errorCount++;
-                addToInfo("UNDECLARED_VARIABLE");
-            } else if ( t.equals(BlocklyType.NOTHING) ) {
-                this.errorCount++;
-                addToInfo("UNEXPECTED_METHOD");
-            } else {
-                if ( !t.equals(checkedType) ) {
-                    this.errorCount++;
-                    addToInfo("INVALID_ARGUMENT_TYPE");
-                }
-            }
-        }
-        return expectedReturn;
-    }
-
-    int indexArgumentNumber(IMode mode) {
-        if ( mode.equals(IndexLocation.FROM_END) || mode.equals(IndexLocation.FROM_START) ) {
-            return 1;
-        } else if ( mode.equals(IndexLocation.FIRST) || mode.equals(IndexLocation.LAST) ) {
-            return 0;
-        }
-        throw new IllegalArgumentException("Illegal Index Mode");
+        throw new UnsupportedOperationException("Invalid function name in LengthOsIsEmptyExpr");
     }
 
     /**
@@ -892,4 +855,55 @@ public class ExprlyTypechecker<T> {
         }
         throw new UnsupportedOperationException("Expression " + ast.toString() + "cannot be checked");
     }
+
+    // Helper functions
+    /**
+     * Function that typechecks the arguments of a function
+     *
+     * @param arguments of the function
+     * @param Number of expected arguments
+     * @param type of the arguments
+     * @param return type of the function
+     * @return return type of the function
+     */
+    BlocklyType functionHelper(List<Expr<T>> args, int argSize, BlocklyType checkedType, BlocklyType expectedReturn) {
+        BlocklyType t;
+        if ( args.size() != argSize ) {
+            this.errorCount++;
+            this.info.add("INVALID_ARGUMENT_NUMBER");
+        }
+        // Check that is a number type
+        for ( Expr<T> e : args ) {
+            t = checkAST(e);
+            if ( t.equals(BlocklyType.VOID) ) {
+                this.errorCount++;
+                addToInfo("UNDECLARED_VARIABLE");
+            } else if ( t.equals(BlocklyType.NOTHING) ) {
+                this.errorCount++;
+                addToInfo("UNEXPECTED_METHOD");
+            } else {
+                if ( !t.equals(checkedType) ) {
+                    this.errorCount++;
+                    addToInfo("INVALID_ARGUMENT_TYPE");
+                }
+            }
+        }
+        return expectedReturn;
+    }
+
+    /**
+     * Function to get number of expected parameters of a list function given a IMode
+     *
+     * @param index pode
+     * @return number of parameters the mode adds to the block
+     */
+    int indexArgumentNumber(IMode mode) {
+        if ( mode.equals(IndexLocation.FROM_END) || mode.equals(IndexLocation.FROM_START) ) {
+            return 1;
+        } else if ( mode.equals(IndexLocation.FIRST) || mode.equals(IndexLocation.LAST) ) {
+            return 0;
+        }
+        throw new IllegalArgumentException("Illegal Index Mode");
+    }
+
 }

@@ -34,11 +34,11 @@ public class EvalExpr<V> extends Expr<V> {
     private EvalExpr(String expr, String type, BlocklyBlockProperties properties, BlocklyComment comment) throws Exception {
         super(expr2AST(expr).getKind(), properties, comment);
         Expr<V> exprBlk = expr2AST(expr);
-        if ( exprBlk instanceof NullConst<?> ) {
-            this.syntaxError = true;
-        }
         this.expr = expr;
         this.type = type;
+        if ( exprBlk instanceof NullConst<?> && !this.expr.equals("null") ) {
+            this.syntaxError = true;
+        }
         if ( exprBlk instanceof ExprList<?> ) {
             exprBlk.setReadOnly();
             if ( this.type.equals("Array_Number") ) {
@@ -141,12 +141,8 @@ public class EvalExpr<V> extends Expr<V> {
         ExprlyAST<V> eval = new ExprlyAST<V>();
         ExpressionContext expression = parser.expression();
         if ( parser.getNumberOfSyntaxErrors() > 0 ) {
-            try {
-                Expr<V> blk = eval.visitExpression(expression);
-                return blk;
-            } catch ( Exception e ) {
-                return NullConst.make();
-            }
+            // If there are syntax errors then return null
+            return NullConst.make();
         } else {
             Expr<V> blk = eval.visitExpression(expression);
             return blk;

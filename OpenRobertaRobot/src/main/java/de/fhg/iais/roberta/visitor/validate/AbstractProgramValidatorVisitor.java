@@ -463,7 +463,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
 
     private void checkForZeroSpeed(Expr<Void> speed, Action<Void> action) {
         if ( speed.getKind().hasName("NUM_CONST") ) {
-            NumConst<Void> speedNumConst = (NumConst<Void>) speed;
+            NumConst<Void> speedNumConst = (NumConst<Void>) (speed instanceof EvalExpr<?> ? ((EvalExpr<Void>) speed).getExpr() : speed);
             if ( Integer.valueOf(speedNumConst.getValue()) == 0 ) {
                 action.addInfo(NepoInfo.warning("MOTOR_SPEED_0"));
                 this.warningCount++;
