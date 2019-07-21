@@ -26,6 +26,11 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
+/**
+ * This class represents blockly eval_expr block in the AST<br>
+ * The user must provide the string representing the expression,
+ * This class will wrap the wanted AST instance of the expression
+ */
 public class EvalExpr<V> extends Expr<V> {
     private final String expr, type;
     private final Expr<V> exprBlock;
@@ -52,7 +57,7 @@ public class EvalExpr<V> extends Expr<V> {
             } else if ( this.type.equals("Array_Connection") ) {
                 this.exprBlock = ListCreate.make(BlocklyType.CONNECTION, (ExprList<V>) exprBlk);
             } else {
-                throw new IllegalArgumentException("Invalid type for EvalExpr");
+                this.exprBlock = ListCreate.make(BlocklyType.ANY, (ExprList<V>) exprBlk);
             }
         } else {
             this.exprBlock = exprBlk;
@@ -60,15 +65,26 @@ public class EvalExpr<V> extends Expr<V> {
         this.setReadOnly();
     }
 
+    /**
+     * factory method: create an AST instance of {@link EvalExpr}.
+     *
+     * @param textual representation of the expression to evaluate
+     * @param expected type for this expression,
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
+     * @return read only object representing the binary expression
+     */
     public static <V> EvalExpr<V> make(String expr, String type, BlocklyBlockProperties properties, BlocklyComment comment) throws Exception {
         return new EvalExpr<V>(expr, type, properties, comment);
     }
 
-    @SuppressWarnings("unchecked")
     public static <V> EvalExpr<V> make(String expr, String type) throws Exception {
         return new EvalExpr<V>(expr, type, BlocklyBlockProperties.make("1", "1"), null);
     }
 
+    /**
+     * @return true if the expression string has a syntax error detected by the grammar visitor
+     */
     public boolean hasSyntaxError() {
         return this.syntaxError;
     }
@@ -98,18 +114,30 @@ public class EvalExpr<V> extends Expr<V> {
         return this.exprBlock.toString();
     }
 
+    /**
+     * @return AST instance of the expression
+     */
     public Expr<V> getValue() {
         return this.exprBlock;
     }
 
+    /**
+     * @return AST instance of the expression
+     */
     public Expr<V> getExpr() {
         return this.exprBlock;
     }
 
+    /**
+     * @return expected type
+     */
     public String getType() {
         return this.type;
     }
 
+    /**
+     * @return expression string
+     */
     public String getExprStr() {
         return this.expr;
     }
@@ -127,14 +155,29 @@ public class EvalExpr<V> extends Expr<V> {
     }
 
     /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     * @throws Throwable
+     */
+    @SuppressWarnings("unchecked")
+    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) throws Exception {
+        List<Field> fields = helper.extractFields(block, (short) 2);
+        String expr = helper.extractField(fields, "EXPRESSION");
+        String type = helper.extractField(fields, "TYPE");
+        return (Phrase<V>) EvalExpr.make(expr, type, helper.extractBlockProperties(block), helper.extractComment(block));
+
+    }
+
+    /**
      * Function to create ast
      *
      * @param <V>
      */
     @SuppressWarnings({
         "hiding",
-        "rawtypes",
-        "unchecked"
     })
     private static <V> Expr<V> expr2AST(String expr) throws Exception {
         ExprlyParser parser = mkParser(expr);
@@ -161,22 +204,4 @@ public class EvalExpr<V> extends Expr<V> {
         ExprlyParser parser = new ExprlyParser(tokens);
         return parser;
     }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     * @throws Throwable
-     */
-    @SuppressWarnings("unchecked")
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) throws Exception {
-        List<Field> fields = helper.extractFields(block, (short) 2);
-        String expr = helper.extractField(fields, "EXPRESSION");
-        String type = helper.extractField(fields, "TYPE");
-        return (Phrase<V>) EvalExpr.make(expr, type, helper.extractBlockProperties(block), helper.extractComment(block));
-
-    }
-
 }

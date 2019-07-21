@@ -5,8 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.fhg.iais.roberta.inter.mode.general.IIndexLocation;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
+import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
@@ -45,6 +46,8 @@ public class ExprlyUnParser<T> {
     private final static Map<MathConst.Const, String> cnames;
     private final static Map<Binary.Op, String> bnames;
     private final static Map<Unary.Op, String> unames;
+    private final static Map<IMode, String> imodes;
+    private final static Map<ListElementOperations, String> listOperations;
 
     /**
      * Class constructor, creates an instance of {@link ExprlyUnParser} for
@@ -365,13 +368,7 @@ public class ExprlyUnParser<T> {
 
     private String visitTextPrintFunct(TextPrintFunct<T> textPrintFunct) {
         List<Expr<T>> args = textPrintFunct.getParam();
-        return "cat(" + visitAST(args.get(0)) + ")";
-    }
-
-    private String visitGetSubFunct(GetSubFunct<T> getSubFunct) {
-        List<Expr<T>> args = getSubFunct.getParam();
-        List<IMode> mode = getSubFunct.getStrParam();
-        return null;
+        return "print(" + visitAST(args.get(0)) + ")";
     }
 
     private String visitListRepeat(ListRepeat<T> listRepeat) {
@@ -381,14 +378,20 @@ public class ExprlyUnParser<T> {
 
     private String visitListGetIndex(ListGetIndex<T> listGetIndex) {
         List<Expr<T>> args = listGetIndex.getParam();
-        IIndexLocation mode = listGetIndex.getLocation();
-        return null;
+        String s = listOperations.get(listGetIndex.getElementOperation()) + "Index" + imodes.get(listGetIndex.getLocation()) + "(";
+        for ( int k = 0; k < args.size(); k++ ) {
+            s += visitAST(args.get(k)) + (k == args.size() - 1 ? ")" : ",");
+        }
+        return s;
     }
 
     private String visitListSetIndex(ListSetIndex<T> listSetIndex) {
         List<Expr<T>> args = listSetIndex.getParam();
-        IIndexLocation mode = listSetIndex.getLocation();
-        return null;
+        String s = listOperations.get(listSetIndex.getElementOperation()) + "Index" + imodes.get(listSetIndex.getLocation()) + "(";
+        for ( int k = 0; k < args.size(); k++ ) {
+            s += visitAST(args.get(k)) + (k == args.size() - 1 ? ")" : ",");
+        }
+        return s;
     }
 
     private String visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<T> lengthOfIsEmptyFunct) {
@@ -400,6 +403,33 @@ public class ExprlyUnParser<T> {
             return "isEmpty(" + args.get(1) + ")";
         }
         return null;
+    }
+
+    private String visitGetSubFunct(GetSubFunct<T> getSubFunct) {
+        List<Expr<T>> args = getSubFunct.getParam();
+        List<IMode> mode = getSubFunct.getStrParam();
+        String s = "subList";
+        if ( !(mode.get(0).equals(IndexLocation.FROM_START) && mode.get(1).equals(IndexLocation.FROM_START)) ) {
+            if ( mode.get(0).equals(IndexLocation.FROM_START) ) {
+                s += "FromIndex";
+            } else if ( mode.get(0).equals(IndexLocation.FIRST) ) {
+                s += "FromFirst";
+            } else if ( mode.get(0).equals(IndexLocation.FROM_END) ) {
+                s += "FromEnd";
+            }
+
+            if ( mode.get(1).equals(IndexLocation.FROM_START) ) {
+                s += "ToIndex";
+            } else if ( mode.get(1).equals(IndexLocation.LAST) ) {
+                s += "ToLast";
+            } else if ( mode.get(1).equals(IndexLocation.FROM_END) ) {
+                s += "ToEnd";
+            }
+        }
+        for ( int k = 0; k < args.size(); k++ ) {
+            s += visitAST(args.get(k)) + (k == args.size() - 1 ? ")" : ",");
+        }
+        return s;
     }
 
     // Fill the HashMap of Function Names
@@ -470,5 +500,26 @@ public class ExprlyUnParser<T> {
         names.put(Unary.Op.NEG, "-");
         names.put(Unary.Op.NOT, "!");
         unames = Collections.unmodifiableMap(names);
+    }
+
+    // Fill the HashMap of Unary Operation Names
+    static {
+        HashMap<IMode, String> modes = new HashMap<IMode, String>();
+        modes.put(IndexLocation.FIRST, "First");
+        modes.put(IndexLocation.LAST, "Last");
+        modes.put(IndexLocation.FROM_START, "");
+        modes.put(IndexLocation.FROM_END, "FromEnd");
+        imodes = Collections.unmodifiableMap(modes);
+    }
+
+    // Fill the HashMap of Unary Operation Names
+    static {
+        HashMap<ListElementOperations, String> operations = new HashMap<ListElementOperations, String>();
+        operations.put(ListElementOperations.SET, "set");
+        operations.put(ListElementOperations.INSERT, "insert");
+        operations.put(ListElementOperations.GET, "get");
+        operations.put(ListElementOperations.REMOVE, "remove");
+        operations.put(ListElementOperations.GET_REMOVE, "getAndRemove");
+        listOperations = Collections.unmodifiableMap(operations);
     }
 }

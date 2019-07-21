@@ -62,7 +62,7 @@ public class ExprlyAstTest {
         c.check();
         Assert.assertTrue(0 == c.getNumErrors());
         Assert.assertEquals(t, mod.toString());
-        //Assert.assertEquals(mod.toString(), expr2AST(p.UnParse()).toString());
+        Assert.assertEquals(mod.toString(), expr2AST(p.UnParse()).toString());
     }
 
     /**
@@ -192,7 +192,7 @@ public class ExprlyAstTest {
         c.check();
         Assert.assertTrue(0 == c.getNumErrors());
         Assert.assertEquals(t, avg.toString());
-        //Assert.assertEquals(avg.toString(), expr2AST(p.UnParse()).toString());
+        Assert.assertEquals(avg.toString(), expr2AST(p.UnParse()).toString());
     }
 
     /**
@@ -205,12 +205,12 @@ public class ExprlyAstTest {
         ExprlyUnParser<Void> p = new ExprlyUnParser<Void>(rand);
         String t =
             "Binary [MOD, MathPowerFunct [POWER, [MathConst [E], FunctionExpr [MathRandomFloatFunct []]]], FunctionExpr [MathSingleFunct [EXP, [FunctionExpr [MathSingleFunct [ROUNDDOWN, [FunctionExpr [MathRandomIntFunct [[NumConst [1], NumConst [10]]]]]]]]]]]";
-        //String g = p.UnParse();
+        String g = p.UnParse();
         ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(rand, BlocklyType.NUMBER);
         c.check();
         Assert.assertTrue(0 == c.getNumErrors());
         Assert.assertEquals(t, rand.toString());
-        //Assert.assertEquals(rand.toString(), expr2AST(p.UnParse()).toString());
+        Assert.assertEquals(rand.toString(), expr2AST(p.UnParse()).toString());
     }
 
     /**

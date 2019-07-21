@@ -46,23 +46,17 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 
 public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
 
-    private final String varType;
-
-    public ExprlyAST() {
-        super();
-        this.varType = null;
-    }
-
-    public ExprlyAST(String varType) {
-        super();
-        this.varType = varType;
-    }
-
+    /**
+     * @return AST instance of a color
+     */
     @Override
     public ColorConst<V> visitCol(ExprlyParser.ColContext ctx) {
         return ColorConst.make(ctx.COLOR().getText());
     }
 
+    /**
+     * @return AST instance of a binary boolean operation
+     */
     @Override
     public Binary<V> visitBinaryB(@NotNull ExprlyParser.BinaryBContext ctx) throws UnsupportedOperationException {
         Expr<V> p = visit(ctx.expr(0));
@@ -95,6 +89,9 @@ public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
 
     }
 
+    /**
+     * @return AST instance of a binary number operation
+     */
     @Override
     public Expr<V> visitBinaryN(@NotNull ExprlyParser.BinaryNContext ctx) throws UnsupportedOperationException {
         Expr<V> n0 = visit(ctx.expr(0));
@@ -124,11 +121,17 @@ public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
 
     }
 
+    /**
+     * @return AST instance of a bool const
+     */
     @Override
     public BoolConst<V> visitBoolConstB(@NotNull ExprlyParser.BoolConstBContext ctx) {
         return BoolConst.make(ctx.BOOL().getText());
     }
 
+    /**
+     * @return AST instance of a string const
+     */
     @Override
     public StringConst<V> visitConstStr(@NotNull ExprlyParser.ConstStrContext ctx) {
         String s = "";
@@ -142,6 +145,9 @@ public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
         return StringConst.make(s);
     }
 
+    /**
+     * @return AST instance of a math const
+     */
     @Override
     public MathConst<V> visitMathConst(@NotNull ExprlyParser.MathConstContext ctx) {
         String c = ctx.CONST().getText();
@@ -157,11 +163,17 @@ public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
         return MathConst.make(c);
     }
 
+    /**
+     * @return AST instance of a num const
+     */
     @Override
     public NumConst<V> visitIntConst(@NotNull ExprlyParser.IntConstContext ctx) {
         return NumConst.make(ctx.INT().getText());
     }
 
+    /**
+     * @return AST instance of a function
+     */
     @Override
     public Expr<V> visitFunc(@NotNull ExprlyParser.FuncContext ctx) throws UnsupportedOperationException {
 
@@ -370,11 +382,17 @@ public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
         }
     }
 
+    /**
+     * @return AST instance of a float const
+     */
     @Override
     public NumConst<V> visitFloatConst(@NotNull ExprlyParser.FloatConstContext ctx) {
         return NumConst.make(ctx.FLOAT().getText());
     }
 
+    /**
+     * @return AST instance of a unary boolean operation
+     */
     @Override
     public Unary<V> visitUnaryB(@NotNull ExprlyParser.UnaryBContext ctx) throws UnsupportedOperationException {
         Expr<V> e = visit(ctx.expr());
@@ -384,6 +402,9 @@ public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
         throw new UnsupportedOperationException("Invalid unary operation");
     }
 
+    /**
+     * @return AST instance of a unary number operation
+     */
     @Override
     public Unary<V> visitUnaryN(@NotNull ExprlyParser.UnaryNContext ctx) throws UnsupportedOperationException {
         Expr<V> e = visit(ctx.expr());
@@ -396,14 +417,19 @@ public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
         throw new UnsupportedOperationException("Invalid unary operation");
     }
 
+    /**
+     * @return AST instance of a var
+     */
     @Override
     public Var<V> visitVarName(@NotNull ExprlyParser.VarNameContext ctx) {
-        if ( this.varType == null ) {
-            return Var.make("VOID", ctx.VAR().getText());
-        }
-        return Var.make(this.varType, ctx.VAR().getText());
+        // By default we use VOID for the types of the variables, the type can be
+        // checked later when compiling the program with the typechecker
+        return Var.make("VOID", ctx.VAR().getText());
     }
 
+    /**
+     * @return AST instance of a list expression
+     */
     @Override
     public ExprList<V> visitListExpr(@NotNull ExprlyParser.ListExprContext ctx) {
         ExprList<V> list = ExprList.make();
@@ -413,11 +439,17 @@ public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
         return list;
     }
 
+    /**
+     * @return AST instance of the expression within a set of parentheses
+     */
     @Override
     public Expr<V> visitParenthese(@NotNull ExprlyParser.ParentheseContext ctx) {
         return visit(ctx.expr());
     }
 
+    /**
+     * @return AST instance of a connection const
+     */
     @Override
     public ConnectConst<V> visitConn(@NotNull ExprlyParser.ConnContext ctx) {
         return ConnectConst.make(ctx.op0.getText(), ctx.op1.getText());
