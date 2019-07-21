@@ -1137,4 +1137,5 @@ Blockly.Msg.UNEXPECTED_RETURN_TYPE = 'Wrong type of return value from expression
 Blockly.Msg.INVALID_TYPE_FOR_LIST_ELEMENT = 'All elements on the list must have the same type.';
 Blockly.Msg.INVALID_ARGUMENT_NUMBER = 'Wrong number of arguents in function call.';
 Blockly.Msg.INVALID_ARGUMENT_TYPE = 'Wrong type of argument in function call.';
-Blockly.Msg.WARNING_VARIABLE_TYPE = 'Variable use might lead to unnexpected results, be sure that their type is correct.';
+Blockly.Msg.UNDECLARED_VARIABLE = 'Variable not declared';
+Blockly.Msg.UNEXPECTED_METHOD = 'You can\'t use void methods in that expression.';

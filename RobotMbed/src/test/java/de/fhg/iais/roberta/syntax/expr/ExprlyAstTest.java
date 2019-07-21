@@ -108,7 +108,7 @@ public class ExprlyAstTest {
         String t = "Binary [EQ, Binary [OR, Binary [AND, BoolConst [true], " + "Unary [NOT, BoolConst [false]]], Var [x]], BoolConst [true]]";
         ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(conj, BlocklyType.BOOLEAN);
         c.check();
-        Assert.assertTrue(0 == c.getNumErrors());
+        Assert.assertTrue(1 == c.getNumErrors());
         Assert.assertEquals(t, conj.toString());
         Assert.assertEquals(conj.toString(), expr2AST(p.UnParse()).toString());
     }

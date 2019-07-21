@@ -1538,5 +1538,7 @@
 	"INVALID_TYPE_FOR_LIST_ELEMENT" : "All elements on the list must have the same type.",
 	"INVALID_ARGUMENT_NUMBER" : "Wrong number of arguents in function call.",
 	"INVALID_ARGUMENT_TYPE" : "Wrong type of argument in function call.",
-	"WARNING_VARIABLE_TYPE" : "Variable use might lead to unnexpected results, be sure that their type is correct."
+	"UNDECLARED_VARIABLE" : "Variable not declared",
+	"UNEXPECTED_METHOD" : "You can\'t use void methods in that expression."
+	
 }

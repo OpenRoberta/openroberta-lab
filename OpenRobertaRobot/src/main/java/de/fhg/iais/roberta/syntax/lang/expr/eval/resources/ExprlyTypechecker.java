@@ -47,7 +47,6 @@ public class ExprlyTypechecker<T> {
     private int errorCount = 0;
     private BlocklyType resultType;
     private final BlocklyType expectedResultType;
-    //private final static Map<Binary.Op, String> bnames;
     private final List<VarDeclaration<T>> vars;
 
     /**
@@ -110,7 +109,13 @@ public class ExprlyTypechecker<T> {
         this.resultType = checkAST(this.e);
         if ( !this.resultType.equals(this.expectedResultType) ) {
             this.errorCount++;
-            addToInfo("UNEXPECTED_RETURN_TYPE");
+            if ( this.resultType.equals(BlocklyType.VOID) ) {
+                addToInfo("UNDECLARED_VARIABLE");
+            } else if ( this.resultType.equals(BlocklyType.NOTHING) ) {
+                addToInfo("UNEXPECTED_METHOD");
+            } else {
+                addToInfo("UNEXPECTED_RETURN_TYPE");
+            }
         }
     }
 
@@ -204,7 +209,7 @@ public class ExprlyTypechecker<T> {
             addToInfo("UNDECLARED_VARIABLE");
         } else if ( t.equals(BlocklyType.NOTHING) ) {
             this.errorCount++;
-            addToInfo("UNNEXPECTED_METHOD");
+            addToInfo("UNEXPECTED_METHOD");
         }
         // Check if the expression should should be boolean
         if ( unary.getOp().equals(Unary.Op.NOT) ) {
@@ -245,7 +250,7 @@ public class ExprlyTypechecker<T> {
             addToInfo("UNDECLARED_VARIABLE");
         } else if ( tl.equals(BlocklyType.NOTHING) || tr.equals(BlocklyType.NOTHING) ) {
             this.errorCount++;
-            addToInfo("UNNEXPECTED_METHOD");
+            addToInfo("UNEXPECTED_METHOD");
         }
 
         // Check if its a number operation
@@ -338,7 +343,7 @@ public class ExprlyTypechecker<T> {
                     addToInfo("UNDECLARED_VARIABLE");
                 } else if ( tList.get(k).equals(BlocklyType.NOTHING) ) {
                     this.errorCount++;
-                    addToInfo("UNNEXPECTED_METHOD");
+                    addToInfo("UNEXPECTED_METHOD");
                 } else {
                     // If the types are different it's considered an error
                     if ( !tList.get(k).equals(t) ) {
@@ -387,31 +392,7 @@ public class ExprlyTypechecker<T> {
      * @return Return Type of function
      */
     public BlocklyType visitMathNumPropFunct(MathNumPropFunct<T> mathNumPropFunct) {
-        List<Expr<T>> args = mathNumPropFunct.getParam();
-        BlocklyType t;
-        // All the numProp functions take only one number as argument
-        // Check that it's only one argument
-        if ( args.size() != 1 ) {
-            this.errorCount++;
-            this.info.add("INVALID_ARGUMENT_NUMBER");
-        }
-        // Check that is a number type
-        for ( Expr<T> e : args ) {
-            t = checkAST(e);
-            if ( t.equals(BlocklyType.VOID) ) {
-                this.errorCount++;
-                addToInfo("UNDECLARED_VARIABLE");
-            } else if ( t.equals(BlocklyType.NOTHING) ) {
-                this.errorCount++;
-                addToInfo("UNNEXPECTED_METHOD");
-            } else {
-                if ( !t.equals(BlocklyType.NUMBER) ) {
-                    this.errorCount++;
-                    addToInfo("INVALID_ARGUMENT_TYPE");
-                }
-            }
-        }
-        return BlocklyType.BOOLEAN;
+        return visitFunctionsA(mathNumPropFunct.getParam(), 1, BlocklyType.NUMBER, BlocklyType.BOOLEAN);
     }
 
     /**
@@ -437,7 +418,7 @@ public class ExprlyTypechecker<T> {
                 addToInfo("UNDECLARED_VARIABLE");
             } else if ( t.equals(BlocklyType.NOTHING) ) {
                 this.errorCount++;
-                addToInfo("UNNEXPECTED_METHOD");
+                addToInfo("UNEXPECTED_METHOD");
             } else {
                 if ( !t.equals(BlocklyType.ARRAY_NUMBER) && !checkAST(e).equals(BlocklyType.ARRAY) ) {
                     this.errorCount++;
@@ -463,32 +444,7 @@ public class ExprlyTypechecker<T> {
      * @return Return Type of function
      */
     public BlocklyType visitMathRandomIntFunct(MathRandomIntFunct<T> mathRandomIntFunct) {
-        BlocklyType t;
-        // Get arguments
-        List<Expr<T>> args = mathRandomIntFunct.getParam();
-        // Check that there are only 2 arguments
-        if ( args.size() != 2 ) {
-            this.errorCount++;
-            this.info.add("INVALID_ARGUMENT_NUMBER");
-        }
-
-        // Check that they're all number types
-        for ( Expr<T> e : args ) {
-            t = checkAST(e);
-            if ( t.equals(BlocklyType.VOID) ) {
-                this.errorCount++;
-                addToInfo("UNDECLARED_VARIABLE");
-            } else if ( t.equals(BlocklyType.NOTHING) ) {
-                this.errorCount++;
-                addToInfo("UNNEXPECTED_METHOD");
-            } else {
-                if ( !t.equals(BlocklyType.NUMBER) ) {
-                    this.errorCount++;
-                    addToInfo("INVALID_ARGUMENT_TYPE");
-                }
-            }
-        }
-        return BlocklyType.NUMBER;
+        return visitFunctionsA(mathRandomIntFunct.getParam(), 2, BlocklyType.NUMBER, BlocklyType.NUMBER);
     }
 
     /**
@@ -498,31 +454,13 @@ public class ExprlyTypechecker<T> {
      * @return Return Type of function
      */
     public BlocklyType visitMathSingleFunct(MathSingleFunct<T> mathSingleFunct) {
-        BlocklyType t;
-        // Get parameters
-        List<Expr<T>> args = mathSingleFunct.getParam();
-        // Check the number of parameters
-        if ( args.size() > 2 ) {
-            this.errorCount++;
-            addToInfo("INVALID_ARGUMENT_NUMBER");
+        FunctionNames fname = mathSingleFunct.getFunctName();
+        if ( fname.equals(FunctionNames.MAX) || fname.equals(FunctionNames.MIN) ) {
+            return visitFunctionsA(mathSingleFunct.getParam(), 2, BlocklyType.NUMBER, BlocklyType.NUMBER);
+
+        } else {
+            return visitFunctionsA(mathSingleFunct.getParam(), 1, BlocklyType.NUMBER, BlocklyType.NUMBER);
         }
-        // Check that they're all numbers
-        for ( Expr<T> e : args ) {
-            t = checkAST(e);
-            if ( t.equals(BlocklyType.VOID) ) {
-                this.errorCount++;
-                addToInfo("UNDECLARED_VARIABLE");
-            } else if ( t.equals(BlocklyType.NOTHING) ) {
-                this.errorCount++;
-                addToInfo("UNNEXPECTED_METHOD");
-            } else {
-                if ( !t.equals(BlocklyType.NUMBER) ) {
-                    this.errorCount++;
-                    addToInfo("INVALID_ARGUMENT_TYPE");
-                }
-            }
-        }
-        return BlocklyType.NUMBER;
     }
 
     /**
@@ -532,28 +470,7 @@ public class ExprlyTypechecker<T> {
      * @return Return Type of function
      */
     public BlocklyType visitMathPowerFunct(MathPowerFunct<T> mathPowerFunct) {
-        BlocklyType t;
-        List<Expr<T>> args = mathPowerFunct.getParam();
-        if ( args.size() != 2 ) {
-            this.errorCount++;
-            addToInfo("INVALID_ARGUMENT_NUMBER");
-        }
-        for ( Expr<T> e : args ) {
-            t = checkAST(e);
-            if ( t.equals(BlocklyType.VOID) ) {
-                this.errorCount++;
-                addToInfo("UNDECLARED_VARIABLE");
-            } else if ( t.equals(BlocklyType.NOTHING) ) {
-                this.errorCount++;
-                addToInfo("UNNEXPECTED_METHOD");
-            } else {
-                if ( !t.equals(BlocklyType.NUMBER) ) {
-                    this.errorCount++;
-                    addToInfo("INVALID_ARGUMENT_TYPE");
-                }
-            }
-        }
-        return BlocklyType.NUMBER;
+        return visitFunctionsA(mathPowerFunct.getParam(), 2, BlocklyType.NUMBER, BlocklyType.NUMBER);
     }
 
     /**
@@ -563,31 +480,7 @@ public class ExprlyTypechecker<T> {
      * @return Return Type of function
      */
     public BlocklyType visitMathConstrainFunct(MathConstrainFunct<T> mathConstrainFunct) {
-        BlocklyType t;
-        // Get parameters
-        List<Expr<T>> args = mathConstrainFunct.getParam();
-        // Check the number of parameters
-        if ( args.size() != 3 ) {
-            this.errorCount++;
-            addToInfo("INVALID_ARGUMENT_NUMBER");
-        }
-        // Check that they're all numbers
-        for ( Expr<T> e : args ) {
-            t = checkAST(e);
-            if ( t.equals(BlocklyType.VOID) ) {
-                this.errorCount++;
-                addToInfo("UNDECLARED_VARIABLE");
-            } else if ( t.equals(BlocklyType.NOTHING) ) {
-                this.errorCount++;
-                addToInfo("UNNEXPECTED_METHOD");
-            } else {
-                if ( !t.equals(BlocklyType.NUMBER) ) {
-                    this.errorCount++;
-                    addToInfo("INVALID_ARGUMENT_TYPE");
-                }
-            }
-        }
-        return BlocklyType.NUMBER;
+        return visitFunctionsA(mathConstrainFunct.getParam(), 3, BlocklyType.NUMBER, BlocklyType.NUMBER);
     }
 
     /**
@@ -597,31 +490,7 @@ public class ExprlyTypechecker<T> {
      * @return Return Type of function
      */
     public BlocklyType visitTextJoinFunct(TextJoinFunct<T> textJoinFunct) {
-        BlocklyType t;
-        // Get parameters
-        List<Expr<T>> args = textJoinFunct.getParam().get();
-        // Check the number of parameters
-        if ( args.size() != 2 ) {
-            this.errorCount++;
-            addToInfo("INVALID_ARGUMENT_NUMBER");
-        }
-        // Check that they're all numbers
-        for ( Expr<T> e : args ) {
-            t = checkAST(e);
-            if ( t.equals(BlocklyType.VOID) ) {
-                this.errorCount++;
-                addToInfo("UNDECLARED_VARIABLE");
-            } else if ( t.equals(BlocklyType.NOTHING) ) {
-                this.errorCount++;
-                addToInfo("UNNEXPECTED_METHOD");
-            } else {
-                if ( !t.equals(BlocklyType.STRING) ) {
-                    this.errorCount++;
-                    addToInfo("INVALID_ARGUMENT_TYPE");
-                }
-            }
-        }
-        return BlocklyType.STRING;
+        return visitFunctionsA(textJoinFunct.getParam().get(), 2, BlocklyType.STRING, BlocklyType.STRING);
     }
 
     /**
@@ -631,29 +500,7 @@ public class ExprlyTypechecker<T> {
      * @return Return Type of function
      */
     public BlocklyType visitTextPrintFunct(TextPrintFunct<T> textPrintFunct) {
-        BlocklyType t;
-        // Get parameters
-        List<Expr<T>> args = textPrintFunct.getParam();
-        // Check the number of parameters
-        if ( args.size() != 1 ) {
-            this.errorCount++;
-            addToInfo("INVALID_ARGUMENT_NUMBER");
-        }
-        t = checkAST(args.get(0));
-        if ( t.equals(BlocklyType.VOID) ) {
-            this.errorCount++;
-            addToInfo("UNDECLARED_VARIABLE");
-        } else if ( t.equals(BlocklyType.NOTHING) ) {
-            this.errorCount++;
-            addToInfo("UNNEXPECTED_METHOD");
-        } else {
-            if ( !t.equals(BlocklyType.STRING) ) {
-                this.errorCount++;
-                addToInfo("INVALID_ARGUMENT_TYPE");
-            }
-        }
-
-        return BlocklyType.NOTHING;
+        return visitFunctionsA(textPrintFunct.getParam(), 1, BlocklyType.STRING, BlocklyType.NOTHING);
     }
 
     /**
@@ -669,31 +516,12 @@ public class ExprlyTypechecker<T> {
         List<Expr<T>> args = getSubFunct.getParam();
         List<IMode> mode = getSubFunct.getStrParam();
         // Check the number of parameters
-        if ( mode.get(0).equals(IndexLocation.FROM_START) || mode.get(0).equals(IndexLocation.FROM_END) ) {
-            if ( mode.get(1).equals(IndexLocation.LAST) ) {
-                if ( args.size() != 2 ) {
-                    this.errorCount++;
-                    addToInfo("INVALID_ARGUMENT_NUMBER");
-                }
-            } else {
-                if ( args.size() != 3 ) {
-                    this.errorCount++;
-                    addToInfo("INVALID_ARGUMENT_NUMBER");
-                }
-            }
-        } else {
-            if ( mode.get(1).equals(IndexLocation.LAST) ) {
-                if ( args.size() != 1 ) {
-                    this.errorCount++;
-                    addToInfo("INVALID_ARGUMENT_NUMBER");
-                }
-            } else {
-                if ( args.size() != 2 ) {
-                    this.errorCount++;
-                    addToInfo("INVALID_ARGUMENT_NUMBER");
-                }
-            }
+        int argNumber = indexArgumentNumber(mode.get(0)) + indexArgumentNumber(mode.get(1)) + 1;
+        if ( args.size() != argNumber ) {
+            this.errorCount++;
+            addToInfo("INVALID_ARGUMENT_NUMBER");
         }
+
         // Check that they're all type correct
         for ( int i = 0; i < args.size(); i++ ) {
             t = checkAST(args.get(i));
@@ -705,7 +533,7 @@ public class ExprlyTypechecker<T> {
                 addToInfo("UNDECLARED_VARIABLE");
             } else if ( t.equals(BlocklyType.NOTHING) ) {
                 this.errorCount++;
-                addToInfo("UNNEXPECTED_METHOD");
+                addToInfo("UNEXPECTED_METHOD");
             } else {
                 if ( i == 0 ) {
                     if ( !(t.equals(BlocklyType.ARRAY)
@@ -749,17 +577,11 @@ public class ExprlyTypechecker<T> {
         // Get parameters
         List<Expr<T>> args = listGetIndex.getParam();
         IIndexLocation mode = listGetIndex.getLocation();
+        int argNumber = indexArgumentNumber(mode) + 1;
         // Check the number of parameters
-        if ( mode.equals(IndexLocation.FROM_START) || mode.equals(IndexLocation.FROM_END) ) {
-            if ( args.size() != 2 ) {
-                this.errorCount++;
-                addToInfo("INVALID_ARGUMENT_NUMBER");
-            }
-        } else {
-            if ( args.size() != 1 ) {
-                this.errorCount++;
-                addToInfo("INVALID_ARGUMENT_NUMBER");
-            }
+        if ( args.size() != argNumber ) {
+            this.errorCount++;
+            addToInfo("INVALID_ARGUMENT_NUMBER");
         }
         // Check that they're all type correct
         for ( int i = 0; i < args.size(); i++ ) {
@@ -772,7 +594,7 @@ public class ExprlyTypechecker<T> {
                 addToInfo("UNDECLARED_VARIABLE");
             } else if ( t.equals(BlocklyType.NOTHING) ) {
                 this.errorCount++;
-                addToInfo("UNNEXPECTED_METHOD");
+                addToInfo("UNEXPECTED_METHOD");
             } else {
                 if ( i == 0 ) {
                     if ( !(t.equals(BlocklyType.ARRAY)
@@ -838,7 +660,7 @@ public class ExprlyTypechecker<T> {
 
             } else if ( t.equals(BlocklyType.NOTHING) ) {
                 this.errorCount++;
-                addToInfo("UNNEXPECTED_METHOD");
+                addToInfo("UNEXPECTED_METHOD");
             } else {
                 if ( i == 0 ) {
                     if ( !(t0.equals(BlocklyType.ARRAY)
@@ -885,7 +707,7 @@ public class ExprlyTypechecker<T> {
                 addToInfo("UNDECLARED_VARIABLE");
             } else if ( t.equals(BlocklyType.NOTHING) ) {
                 this.errorCount++;
-                addToInfo("UNNEXPECTED_METHOD");
+                addToInfo("UNEXPECTED_METHOD");
             } else {
                 if ( i == 1 ) {
                     if ( !t1.equals(BlocklyType.NUMBER) ) {
@@ -924,7 +746,7 @@ public class ExprlyTypechecker<T> {
                 addToInfo("UNDECLARED_VARIABLE");
             } else if ( t.equals(BlocklyType.NOTHING) ) {
                 this.errorCount++;
-                addToInfo("UNNEXPECTED_METHOD");
+                addToInfo("UNEXPECTED_METHOD");
             } else {
                 if ( !(t0.equals(BlocklyType.ARRAY)
                     || t0.equals(BlocklyType.ARRAY_NUMBER)
@@ -943,6 +765,41 @@ public class ExprlyTypechecker<T> {
             return BlocklyType.BOOLEAN;
         }
         throw new UnsupportedOperationException();
+    }
+
+    // Helping functions
+    BlocklyType visitFunctionsA(List<Expr<T>> args, int argSize, BlocklyType checkedType, BlocklyType expectedReturn) {
+        BlocklyType t;
+        if ( args.size() != argSize ) {
+            this.errorCount++;
+            this.info.add("INVALID_ARGUMENT_NUMBER");
+        }
+        // Check that is a number type
+        for ( Expr<T> e : args ) {
+            t = checkAST(e);
+            if ( t.equals(BlocklyType.VOID) ) {
+                this.errorCount++;
+                addToInfo("UNDECLARED_VARIABLE");
+            } else if ( t.equals(BlocklyType.NOTHING) ) {
+                this.errorCount++;
+                addToInfo("UNEXPECTED_METHOD");
+            } else {
+                if ( !t.equals(checkedType) ) {
+                    this.errorCount++;
+                    addToInfo("INVALID_ARGUMENT_TYPE");
+                }
+            }
+        }
+        return expectedReturn;
+    }
+
+    int indexArgumentNumber(IMode mode) {
+        if ( mode.equals(IndexLocation.FROM_END) || mode.equals(IndexLocation.FROM_START) ) {
+            return 1;
+        } else if ( mode.equals(IndexLocation.FIRST) || mode.equals(IndexLocation.LAST) ) {
+            return 0;
+        }
+        throw new IllegalArgumentException("Illegal Index Mode");
     }
 
     /**
@@ -1034,30 +891,5 @@ public class ExprlyTypechecker<T> {
             return visitMathPowerFunct((MathPowerFunct<T>) ast);
         }
         throw new UnsupportedOperationException("Expression " + ast.toString() + "cannot be checked");
-    }
-
-    BlocklyType visitFunctionsA(Expr<T> funct, List<Expr<T>> args, int argSize, BlocklyType checkedType, BlocklyType expectedReturn) {
-        BlocklyType t;
-        if ( args.size() != argSize ) {
-            this.errorCount++;
-            this.info.add("INVALID_ARGUMENT_NUMBER");
-        }
-        // Check that is a number type
-        for ( Expr<T> e : args ) {
-            t = checkAST(e);
-            if ( t.equals(BlocklyType.VOID) ) {
-                this.errorCount++;
-                addToInfo("UNDECLARED_VARIABLE");
-            } else if ( t.equals(BlocklyType.NOTHING) ) {
-                this.errorCount++;
-                addToInfo("UNNEXPECTED_METHOD");
-            } else {
-                if ( !t.equals(checkedType) ) {
-                    this.errorCount++;
-                    addToInfo("INVALID_ARGUMENT_TYPE");
-                }
-            }
-        }
-        return expectedReturn;
     }
 }
