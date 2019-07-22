@@ -92,10 +92,10 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
 
     function compileFromSource(name, source) {
         PROGRAM.compileN(name, source, GUISTATE_C.getLanguage(), function(result) {
-        	var alertMsg = result.rc;
-        	if (result.parameters !== undefined) {
-        		alertMsg += "\nMessage is:\n" + result.parameters.MESSAGE;
-        	}
+            var alertMsg = result.rc;
+            if (result.parameters !== undefined) {
+                alertMsg += "\nMessage is:\n" + result.parameters.MESSAGE;
+            }
             alert(alertMsg);
         });
     }
