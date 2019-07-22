@@ -370,7 +370,7 @@ public class ExprlyAST<V> extends ExprlyBaseVisitor<Expr<V>> {
             if ( args.size() == 3 ) {
                 return RgbColor.make(args.get(0), args.get(1), args.get(2), NumConst.make(0));
             } else if ( args.size() == 4 ) {
-                return RgbColor.make(args.get(0), args.get(1), args.get(2), args.get(4));
+                return RgbColor.make(args.get(0), args.get(1), args.get(2), args.get(3));
             } else {
                 return NullConst.make();
             }

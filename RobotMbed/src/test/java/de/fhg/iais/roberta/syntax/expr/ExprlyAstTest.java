@@ -271,6 +271,7 @@ public class ExprlyAstTest {
     public void typeCheckMathOnListFunct() throws Exception {
         Expr<Void> l = expr2AST("sum(1, 2, 3, 4, 5)+avg([])-median([1, randFloat()])");
         ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(l, BlocklyType.NUMBER);
+        c.check();
         System.out.println("typeCheckMathOnListFunct Test:");
         List<String> errors = c.getErrors();
         for ( String s : errors ) {
@@ -287,7 +288,22 @@ public class ExprlyAstTest {
     public void typeCheckMathOnListFunct1() throws Exception {
         Expr<Void> l = expr2AST("sum(1, 2, 3, 4, 5)+avg([])-median([x, randFloat()])");
         ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(l, BlocklyType.NUMBER);
+        c.check();
         System.out.println("typeCheckMathOnListFunct1 Test:");
+        List<String> errors = c.getErrors();
+        for ( String s : errors ) {
+            System.out.println(s);
+        }
+        System.out.println("");
+
+    }
+
+    @Test
+    public void testRgb() throws Exception {
+        Expr<Void> l = expr2AST("getRGB(0,2,x,2)");
+        ExprlyTypechecker<Void> c = new ExprlyTypechecker<Void>(l, BlocklyType.COLOR);
+        c.check();
+        System.out.println("testRGB Test:");
         List<String> errors = c.getErrors();
         for ( String s : errors ) {
             System.out.println(s);
