@@ -126,7 +126,15 @@ public class ExprlyUnParser<T> {
      * @return Textual representation of the RGB Color
      */
     public String visitRgbColor(RgbColor<T> rgbColor) {
-        return "(" + visitAST(rgbColor.getR()) + "," + visitAST(rgbColor.getG()) + "," + visitAST(rgbColor.getB()) + "," + visitAST(rgbColor.getA()) + ")";
+        return "getRGB("
+            + visitAST(rgbColor.getR())
+            + ","
+            + visitAST(rgbColor.getG())
+            + ","
+            + visitAST(rgbColor.getB())
+            + ","
+            + visitAST(rgbColor.getA())
+            + ")";
     }
 
     /**
