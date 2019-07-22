@@ -665,11 +665,12 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
                 return null;
             }
             List<String> errors = checker.getErrors();
-            String s = "";
+            /*String s = "";
             for ( String err : errors ) {
                 s += err + " ";
             }
-            evalExpr.addInfo(NepoInfo.error(s.substring(0, s.length() - 1)));
+            evalExpr.addInfo(NepoInfo.error(s.substring(0, s.length() - 1)));*/
+            evalExpr.addInfo(NepoInfo.error(errors.get(0)));
         }
         return null;
     }

@@ -164,49 +164,24 @@ public class ExprlyTypechecker<T> {
      * @return Type of block
      */
     private BlocklyType visitRgbColor(RgbColor<T> rgbColor) {
-        BlocklyType r, g, b, a;
-        r = checkAST(rgbColor.getR());
-        g = checkAST(rgbColor.getG());
-        b = checkAST(rgbColor.getB());
-        a = checkAST(rgbColor.getA());
+        List<BlocklyType> c = new ArrayList<BlocklyType>(4);
+        c.add(checkAST(rgbColor.getR()));
+        c.add(checkAST(rgbColor.getG()));
+        c.add(checkAST(rgbColor.getB()));
+        c.add(checkAST(rgbColor.getA()));
 
-        if ( r.equals(BlocklyType.VOID) ) {
-            this.errorCount++;
-            addToInfo("UNDECLARED_VARIABLE");
-        } else {
-            if ( !r.equals(BlocklyType.NUMBER) ) {
+        for ( BlocklyType t : c ) {
+            if ( t.equals(BlocklyType.VOID) ) {
                 this.errorCount++;
-                addToInfo("INVALID_ARGUMENT_TYPE");
-            }
-        }
-
-        if ( g.equals(BlocklyType.VOID) ) {
-            this.errorCount++;
-            addToInfo("UNDECLARED_VARIABLE");
-        } else {
-            if ( !g.equals(BlocklyType.NUMBER) ) {
+                addToInfo("UNDECLARED_VARIABLE");
+            } else if ( t.equals(BlocklyType.NOTHING) ) {
                 this.errorCount++;
-                addToInfo("INVALID_ARGUMENT_TYPE");
-            }
-        }
-
-        if ( b.equals(BlocklyType.VOID) ) {
-            this.errorCount++;
-            addToInfo("UNDECLARED_VARIABLE");
-        } else {
-            if ( !b.equals(BlocklyType.NUMBER) ) {
-                this.errorCount++;
-                addToInfo("INVALID_ARGUMENT_TYPE");
-            }
-        }
-
-        if ( a.equals(BlocklyType.VOID) ) {
-            this.errorCount++;
-            addToInfo("UNDECLARED_VARIABLE");
-        } else {
-            if ( !a.equals(BlocklyType.NUMBER) ) {
-                this.errorCount++;
-                addToInfo("INVALID_ARGUMENT_TYPE");
+                addToInfo("UNEXPECTED_METHOD");
+            } else {
+                if ( !t.equals(BlocklyType.NUMBER) ) {
+                    this.errorCount++;
+                    addToInfo("INVALID_ARGUMENT_TYPE");
+                }
             }
         }
 
