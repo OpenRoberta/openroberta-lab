@@ -11,7 +11,6 @@ import java.io.File;
 import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore
 public class Uf2FileContainerTest {
 
     @Test
