@@ -17,14 +17,15 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
     }
 
     /**
-     * remember the init token. It is added to each request to identify THIS front end process. May be resetted to 'undefined'
+     * remember the init token. It is added to each request to identify THIS
+     * front end process. May be resetted to 'undefined'
      */
     function setInitToken(newInitToken) {
-    	if (initToken === undefined || newInitToken === undefined) {
-    		initToken = newInitToken;    		
-    	} else {
-    		window.close();
-    	}
+        if (initToken === undefined || newInitToken === undefined) {
+            initToken = newInitToken;
+        } else {
+            window.close();
+        }
     }
     exports.setInitToken = setInitToken;
 
@@ -32,13 +33,13 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
      * set a error fn. A error function must accept one parameter: the response.
      */
     function setErrorFn(newErrorFn) {
-    	errorFn = newErrorFn;
+        errorFn = newErrorFn;
     }
     exports.setErrorFn = setErrorFn;
-    
+
     /**
-     * URL-encode a JSON object, issue a GET and expect a JSON object as response.
-     * No init token!
+     * URL-encode a JSON object, issue a GET and expect a JSON object as
+     * response. No init token!
      */
     function get(url, data, successFn, message) {
         return $.ajax({
@@ -64,12 +65,17 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
             initToken : initToken
         };
         function successFnWrapper(response) {
-        	if (response !== undefined && response.message !== undefined && response.message.startsWith("ORA_INIT_FAIL_") ) {
-        		alert("SEVERE error. Multiple tabs? This tab is unusable NOW. Please CLOSE the window!");
-        		window.close();
-        	} else {
-        		successFn(response);
-        	}
+            if (response !== undefined && response.message !== undefined && response.message.startsWith("ORA_INIT_FAIL_")) {
+                var message;
+                if (navigator.language.indexOf("de") > -1) {
+                    message = "Dieser Browsertab ist nicht mehr gültig, z. B. weil du einen weiteren Bowsertab mit dem Open Roberta Lab geöffnet hast.\n\nDu kannst dein Programm zwar noch verändern oder exportieren, aber nicht mehr auf dein Gerät übertragen.\nBitte schließe diesen Browsertab und wechsle zu dem neuen!";
+                } else {
+                    message = "This browser tab is not valid anymore, e.g. because you have opened another browser tab with the Open Robert Lab.\n\nYou may edit or export your program, but it is impossible to send it to your device.\nBetter you close this browser tab and switch to the new one!";
+                }
+                alert(message);
+             } else {
+                successFn(response);
+            }
         }
         return $.ajax({
             url : urlPrefix + url,

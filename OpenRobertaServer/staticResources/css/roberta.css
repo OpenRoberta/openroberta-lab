@@ -899,6 +899,9 @@ div.rightMenuButton:hover,
 .modal-body {
     padding: 0 16px;
 }
+.modal-body.left-inner-addon {
+	word-break: break-word;
+}
 #modal-statustext-text {
     padding: 40px;
     text-align: center;
