@@ -60,6 +60,7 @@
 		<module>OpenRobertaServer</module>
 		<module>WedoInterpreter</module>
 	</modules>
+
 	<repositories>
 		<repository>
 			<id>ORA-releases</id>
@@ -73,6 +74,7 @@
 			</snapshots>
 		</repository>
 	</repositories>
+
 	<pluginRepositories>
 		<pluginRepository>
 			<id>NM-releases</id>
@@ -86,6 +88,7 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -100,17 +103,12 @@
 			</dependency>
 			<dependency>
 				<groupId>de.fhg.iais.openroberta</groupId>
-				<artifactId>RobotEV3</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>de.fhg.iais.openroberta</groupId>
-				<artifactId>RobotNXT</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>de.fhg.iais.openroberta</groupId>
 				<artifactId>RobotArdu</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.fhg.iais.openroberta</groupId>
+				<artifactId>RobotEV3</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -125,6 +123,16 @@
 			</dependency>
 			<dependency>
 				<groupId>de.fhg.iais.openroberta</groupId>
+				<artifactId>RobotNXT</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.fhg.iais.openroberta</groupId>
+				<artifactId>RaspberryPi</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.fhg.iais.openroberta</groupId>
 				<artifactId>RobotVorwerk</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -133,11 +141,19 @@
 				<artifactId>RobotWedo</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+      <dependency>
+        <groupId>de.fhg.iais.openroberta</groupId>
+        <artifactId>OpenRobertaRobot</artifactId>
+        <type>test-jar</type>
+        <scope>test</scope>
+				<version>${project.version}</version>
+      </dependency>
 			<dependency>
 				<groupId>de.fhg.iais.openroberta</groupId>
-				<artifactId>RaspberryPi</artifactId>
+				<artifactId>WedoInterpreter</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
@@ -306,6 +322,7 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>

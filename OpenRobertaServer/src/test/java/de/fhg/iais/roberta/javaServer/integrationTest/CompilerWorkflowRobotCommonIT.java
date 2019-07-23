@@ -152,7 +152,7 @@ public class CompilerWorkflowRobotCommonIT {
                             }
                         }
                     }
-                    boolean resultNext = compileAfterProgramGenerated(robotName, templateWithConfig, progName, prog);
+                    boolean resultNext = generateAndCompileProgram(robotName, templateWithConfig, progName, prog);
                     resultAcc = resultAcc && resultNext;
                 }
             }
@@ -195,19 +195,19 @@ public class CompilerWorkflowRobotCommonIT {
      */
     @Ignore
     @Test
-    public void testCompileSomeGeneratedPrograms() {
-        String progName = "functionWithWithoutParameter";
-        // Collection<String> robots = Arrays.asList("microbit", "nano", "calliope2017", "ev3lejosv1");
-        Collection<String> robots = robotsFromTestSpec.keySet();
+    public void testGenerateAndCompileSomeGeneratedPrograms() {
+        String progName = "controlFlowDecisons";
+        Collection<String> robots = Arrays.asList("wedo");
+        // Collection<String> robots = robotsFromTestSpec.keySet();
         for ( String robotName : robots ) {
             LOG.info("********** generate and compile program " + progName + " for robot " + robotName + " **********");
             String robotDir = robotsFromTestSpec.getJSONObject(robotName).getString("template");
             final String templateWithConfig = getTemplateWithConfigReplaced(robotDir, robotName);
-            compileAfterProgramGenerated(robotName, templateWithConfig, progName, progsFromTestSpec.getJSONObject(progName));
+            generateAndCompileProgram(robotName, templateWithConfig, progName, progsFromTestSpec.getJSONObject(progName));
         }
     }
 
-    private boolean compileAfterProgramGenerated(String robotName, String template, String progName, JSONObject prog) throws DbcException {
+    private boolean generateAndCompileProgram(String robotName, String template, String progName, JSONObject prog) throws DbcException {
         String reason = "?";
         boolean result = false;
         logStart(robotName, progName);

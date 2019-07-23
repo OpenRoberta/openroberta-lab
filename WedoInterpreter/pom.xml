@@ -1,71 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>de.fhg.iais.openroberta</groupId>
-		<artifactId>OpenRobertaParent</artifactId>
-		<version>3.4.2-SNAPSHOT</version>
-	</parent>
-	<artifactId>WedoInterpreter</artifactId>
-	<description>Javascript-based interpreter for We-Do</description>
-	<dependencies>
-		<dependency>
-			<groupId>de.fhg.iais.openroberta</groupId>
-			<artifactId>OpenRobertaServer</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>de.fhg.iais.openroberta</groupId>
-			<artifactId>OpenRobertaRobot</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>de.fhg.iais.openroberta</groupId>
-			<artifactId>RobotWeDo</artifactId>
-            <scope>compile</scope>
-            <version>3.4.2-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.inject</groupId>
-			<artifactId>guice</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-servlet</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-servlet</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-server</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-json</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey.contribs</groupId>
-			<artifactId>jersey-guice</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-c3p0</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-		</dependency>
-	</dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>de.fhg.iais.openroberta</groupId>
+        <artifactId>OpenRobertaParent</artifactId>
+        <version>3.4.2-SNAPSHOT</version>
+    </parent>
+    <artifactId>WedoInterpreter</artifactId>
+    <description>Javascript-based interpreter for We-Do</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>de.fhg.iais.openroberta</groupId>
+            <artifactId>OpenRobertaRobot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.fhg.iais.openroberta</groupId>
+            <artifactId>RobotWeDo</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+        </dependency>
+    </dependencies>
     <build>
         <resources>
-              <resource>
-                    <directory>src/main/resources</directory>
-                    <filtering>true</filtering>
-              </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
         </resources>
-      </build>
+    </build>
 </project>

@@ -7,7 +7,7 @@ import * as FS from 'fs';
 const showResult = false;
 const showOpLog = false;
 const showDebug = false;
-var baseDirectory: string = './WeDoCI/';
+var baseDirectory: string;
 var directory = false;
 
 const MARK = '**********';
@@ -117,9 +117,9 @@ function callbackOnTermination( fileName: string ) {
         }
         for ( var i = 0; i < expectedLines.length; i++ ) {
             if ( expectedLines[i] !== resultLines[i] ) {
-                p( 'difference found in line ' + i + '. First expected result, then result found:' );
-                p( expectedLines[i] );
-                p( resultLines[i] );
+                p( '*** difference found in line ' + i + '. First expected result, then result found: ***' );
+                p( '   ' + expectedLines[i] );
+                p( '   ' + resultLines[i] );
                 result = 'ERROR';
             }
         }
@@ -130,26 +130,15 @@ function callbackOnTermination( fileName: string ) {
 }
 
 function printResult() {
-    if ( directory ) {
-        // all programs have been run. Show the overall result
-        var summary = 'success';
-        p( '' );
-        for ( let f in allResults ) {
-            const result = allResults[f];
-            p( MARK + ' interpretation of ' + padEnd( f, 30 ) + ' : ' + padEnd( result, 11 ) + MARK );
-            if ( result !== 'ok' ) {
-                summary = 'ERROR';
-            }
+    var summary = 'success';
+    for ( let f in allResults ) {
+        const result = allResults[f];
+        p( MARK + ' interpretation of ' + padEnd( f, 30 ) + ' : ' + padEnd( result, 11 ) + MARK );
+        if ( result !== 'ok' && result !== 'NO-DATA' ) {
+            summary = 'ERROR';
         }
-        p( MARK + ' result of all interpretations: ' + summary + ' ' + MARK );
-    } else {
-        // one program has run. Show the result
-        for ( let f in allResults ) {
-            const result = allResults[f];
-            p( MARK + ' interpretation of ' + f + ' : ' + result + ' ' + MARK );
-        }
-
     }
+    p( MARK + ' result of interpretation: ' + summary + ' ' + MARK );
 }
 
 function padEnd( s: string, len: number ) {

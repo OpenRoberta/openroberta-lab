@@ -120,8 +120,8 @@ public final class WedoBrickValidatorVisitor<V> extends AbstractBrickValidatorVi
             ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.getConfigurationComponent(toneAction.getPort());
             if ( usedConfigurationBlock == null ) {
                 toneAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+                this.errorCount++;
             }
-            this.errorCount++;
         }
         return null;
     }

@@ -19,6 +19,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -27,6 +28,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.fhg.iais.roberta.blockly.generated.Export;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientAdmin;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientProgram;
@@ -41,6 +43,7 @@ import de.fhg.iais.roberta.util.RandomUrlPostfix;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
 /**
@@ -113,7 +116,7 @@ public class CompilerWorkflowRobotSpecificIT {
 
     @After
     public void tearDownAndPrintResults() {
-        LOG.info("XXXXXXXXXX results of NEPO and NATIVE compilations XXXXXXXXXX");
+        LOG.info("XXXXXXXXXX result of cross compiler test" + (results.size() == 1 ? "" : "s") + " XXXXXXXXXX");
         for ( String result : results ) {
             LOG.info(result);
         }
@@ -130,26 +133,40 @@ public class CompilerWorkflowRobotSpecificIT {
     }
 
     @Test
-    public void testNepo() throws Exception {
+    public void testNepoPrograms() throws Exception {
         boolean resultAcc = true;
-        LOG.info("XXXXXXXXXX START of the NEPO compilations XXXXXXXXXX");
+        LOG.info("XXXXXXXXXX START of the NEPO cross compiler tests XXXXXXXXXX");
         for ( final String robotName : robots.keySet() ) {
             final String robotDir = robots.getJSONObject(robotName).getString("dir");
             final String resourceDirectory = resourceBase + robotDir;
+            setRobotTo(robotName);
             Boolean resultNext = Util1.fileStreamOfResourceDirectory(resourceDirectory).//
                 filter(f -> f.endsWith(".xml")).map(f -> compileNepo(robotName, robotDir, f)).reduce(true, (a, b) -> a && b);
             resultAcc = resultAcc && resultNext;
         }
         if ( resultAcc ) {
-            LOG.info("XXXXXXXXXX all of the NEPO compilations succeeded XXXXXXXXXX");
+            LOG.info("XXXXXXXXXX all of the NEPO cross compiler tests succeeded XXXXXXXXXX");
         } else {
-            LOG.error("XXXXXXXXXX at least one of the NEPO compilations FAILED XXXXXXXXXX");
+            LOG.error("XXXXXXXXXX at least one of the NEPO cross compiler tests FAILED XXXXXXXXXX");
+            fail();
+        }
+    }
+
+    @Ignore
+    @Test
+    public void testSingleNepoProgram() throws Exception {
+        final String robotName = "wedo";
+        final String programFileName = "ci_motor-and-tone";
+        final String robotDir = robots.getJSONObject(robotName).getString("dir");
+        setRobotTo(robotName);
+        boolean result = compileNepo(robotName, robotDir, programFileName + ".xml");
+        if ( !result ) {
             fail();
         }
     }
 
     @Test
-    public void testNative() throws Exception {
+    public void testNativePrograms() throws Exception {
         boolean resultAcc = true;
         LOG.info("XXXXXXXXXX START of the NATIVE compilations XXXXXXXXXX");
         for ( final String robotName : robots.keySet() ) {
@@ -170,16 +187,36 @@ public class CompilerWorkflowRobotSpecificIT {
     private boolean compileNepo(String robotName, String robotDir, String resource) {
         httpSessionState.setToken(RandomUrlPostfix.generate(12, 12, 3, 3, 3));
         String expectResult = resource.startsWith("error") ? "error" : "ok";
-        String fullResource = resourceBase + robotDir + "/" + resource;
+        String fullResource = this.resourceBase + robotDir + "/" + resource;
         try {
             logStart(robotName, fullResource);
-            setRobotTo(robotName);
             boolean result = false;
+            org.codehaus.jettison.json.JSONObject entity = null;
             if ( CROSSCOMPILER_CALL ) {
-                org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileP','name':'prog','language':'de'}");
-                cmd.getJSONObject("data").put("program", Util1.readResourceContent(fullResource));
+                org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'runPBack','name':'prog','language':'de'}");
+
+                String xmlText = Util1.readResourceContent(fullResource);
+                String programText = null;
+                String configText = null;
+                Export jaxbImportExport = JaxbHelper.xml2Element(xmlText, Export.class);
+                programText = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
+                configText = JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet());
+                cmd.getJSONObject("data").put("programText", programText);
+                cmd.getJSONObject("data").put("configurationText", configText);
+
                 Response response = this.restProgram.command(httpSessionState, cmd);
-                result = checkEntityRc(response, expectResult, "PROGRAM_INVALID_STATEMETNS");
+                entity = checkEntityRc(response, expectResult, "ORA_PROGRAM_INVALID_STATEMETNS");
+                result = entity != null;
+                if ( result && robotName.equals("wedo") ) {
+                    String compiledCode = entity.optString("compiledCode", null);
+                    if ( compiledCode != null ) {
+                        final String programName = resource.substring(0, resource.length() - 4);
+                        result = new StackMachineJsonRunner().runOneProgram(programName, programText, compiledCode);
+                    } else {
+                        LOG.error("no compiled code found for program " + resource);
+                        result = false;
+                    }
+                }
             } else {
                 result = true;
             }
@@ -209,7 +246,7 @@ public class CompilerWorkflowRobotSpecificIT {
                 String fileContent = Util1.readResourceContent(fullResource);
                 cmd.getJSONObject("data").put("programText", fileContent);
                 Response response = this.restProgram.command(httpSessionState, cmd);
-                result = checkEntityRc(response, expectResult);
+                result = checkEntityRc(response, expectResult) != null;
             } else {
                 result = true;
             }
@@ -257,24 +294,24 @@ public class CompilerWorkflowRobotSpecificIT {
      * @param response the JSON object to check
      * @param rc the return code expected
      * @param acceptableErrorCodes the codes, that are acceptable, if the rc is equal "error". In this case the test passes.
-     * @return true, if result is as expected, false otherwise
+     * @return the entity attached to the response, if result is as expected, null otherwise
      */
-    private static boolean checkEntityRc(Response response, String rc, String... acceptableErrorCodes) {
+    private static org.codehaus.jettison.json.JSONObject checkEntityRc(Response response, String rc, String... acceptableErrorCodes) {
         de.fhg.iais.roberta.util.dbc.Assert.nonEmptyString(rc);
         org.codehaus.jettison.json.JSONObject entity = (org.codehaus.jettison.json.JSONObject) response.getEntity();
         String returnCode = entity.optString("rc", "");
         if ( rc.equals(returnCode) ) {
-            return true;
+            return entity;
         } else if ( rc.equals("error") ) {
             String errorCode = entity.optString("cause", "");
             for ( String acceptableErrorCode : acceptableErrorCodes ) {
                 if ( errorCode.equals(acceptableErrorCode) ) {
-                    return true;
+                    return entity;
                 }
             }
-            return false;
+            return null;
         } else {
-            return false;
+            return null;
         }
     }
 }

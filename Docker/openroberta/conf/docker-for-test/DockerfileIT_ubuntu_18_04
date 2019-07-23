@@ -1,10 +1,15 @@
 ARG BASE_VERSION
 FROM rbudde/openroberta_base:$BASE_VERSION
 
-ARG LAST_RUN_OF_BASE=2019-04-11-15:51:00
+ARG LAST_RUN_OF_BASE=2019-07-30-15:00:00
+WORKDIR /opt
+
+RUN apt-get update -yq \
+    && apt-get install curl gnupg -yq \
+    && curl -sL https://deb.nodesource.com/setup_8.x | bash \
+    && apt-get install nodejs -yq
 
 # shallow clone of the repo. Run mvn once to install most all the artifacts needed in /root/.m2 to speed up later builds
-WORKDIR /opt
 ARG BRANCH=develop
 
 RUN git clone --depth=1 -b $BRANCH https://github.com/OpenRoberta/openroberta-lab.git

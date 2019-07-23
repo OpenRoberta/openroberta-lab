@@ -178,7 +178,7 @@ public class ClientProgram {
                         if ( !httpSessionState.isUserLoggedIn()
                             && !request.getString("owner").equals("Roberta")
                             && !request.getString("owner").equals("Gallery") ) {
-                            ClientProgram.LOG.info("Unauthorized");
+                            ClientProgram.LOG.info("Unauthorized load request");
                             Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
                         } else {
                             final String programName = request.getString("name");

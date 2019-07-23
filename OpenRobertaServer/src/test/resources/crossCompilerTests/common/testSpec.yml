@@ -27,6 +27,8 @@ robots:
        template: calliope
     sensebox:
        template: sensebox
+    wedo:
+       template: wedo
 
 progs:
     variablesNuStBo:
@@ -69,6 +71,7 @@ progs:
     logicBooleanOpTernary:
        decl: logicBooleanOpTernary
        exclude:
+          wedo: "re-enable after simulation refactoring"
        remark: "all combinations for ternary operator"
     controlFlowDecisons:
        decl: controlFlowDecisons
@@ -100,12 +103,14 @@ progs:
        exclude:
           nxt: "no extendable lists"
           bob3: "too small"
+          wedo: "re-enable after simulation refactoring"
        remark: "test of mutable lists"
     mathAndLists:
        decl: mathAndLists
        exclude:
           nxt: "no extendable lists"
           bob3: ".text overflow. Test must be splitted"
+          wedo: "re-enable after simulation refactoring"
        remark: "list functions and math functions (sum of list items, ...) on lists"
     mathFunctions:
        decl: mathFunctions
@@ -122,5 +127,6 @@ progs:
        decl: mathLogic
        exclude:
           bob3: ".text overflow. Test must be splitted"
+          wedo: "re-enable after simulation refactoring"
        fragment: mathLogic
        remark: "trigonometric functions (min, sin, pi, ...)"

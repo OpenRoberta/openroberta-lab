@@ -1,26 +1,3 @@
-### overview
-
-This project should make testing of WeDo programs a lot easier. You can export any WeDo program (using the lab), generate interpreter code (using a Java Junit class)
-and run the interpreter code (using node). Requirements:
- 
-* an IDE (as eclipse)
-* node is installed
-    
-* this project is imported as maven project
-
-* a run-configuration for 'jsGenerated/main.js' as node application is created. The working directory in the run configuration is the project's base.
-
-### using this project
-
-1. use the lab to create a wedo program, export it as XML into the directory 'xmlTests', e.g. using the name 'y-assign'. The file 'y-assign.xml' is created.
-
-2. run the JUnit test class 'GenerateJsonFromSimIT' after adding 'y-assign' to the constant NAME_OF_TESTS (a run configuration is handy here).
-
-3. after refresh 'y-assign.json' appears. After formatting the operations can be inspected.
-
-4. in the run-configuration of 'jsGenerated/main.js' set 'y-assign' as parameter and run.
-   The operations are executed. Watch the console.
-
 ### typescript support for developing the WeDo interpreter (Eclipse)
 
 1. install the plugin 'TypeScript IDE' (in spite of its strange name it is a plugin). It includes an editor and ts compiler. Restart eclipse.

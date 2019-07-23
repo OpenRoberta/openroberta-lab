@@ -9,7 +9,6 @@ import com.google.common.collect.Lists;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.SC;
 
 public class VorwerkConfiguration extends Configuration {
@@ -25,8 +24,7 @@ public class VorwerkConfiguration extends Configuration {
         Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
         ConfigurationComponent motorB = new ConfigurationComponent(SC.LARGE, true, "right", "RIGHT", motorBproperties);
 
-        ConfigurationComponent leftUltrasonic =
-            new ConfigurationComponent(SC.ULTRASONIC, false, "left_ultrasonic", "LEFT_ULTRASONIC", Collections.emptyMap());
+        ConfigurationComponent leftUltrasonic = new ConfigurationComponent(SC.ULTRASONIC, false, "left_ultrasonic", "LEFT_ULTRASONIC", Collections.emptyMap());
         ConfigurationComponent centerUltrasonic =
             new ConfigurationComponent(SC.ULTRASONIC, false, "center_ultrasonic", "CENTER_ULTRASONIC", Collections.emptyMap());
         ConfigurationComponent rightUltrasonic =
