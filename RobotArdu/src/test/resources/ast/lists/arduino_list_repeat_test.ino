@@ -15,9 +15,9 @@ void setup()
 {
     Serial.begin(9600); 
     pinMode(_led_L, OUTPUT);
-    ___item = _createListRepeat(5,5);
+    ___item = _createListRepeat(5,(double)5);
     ___item2= _createListRepeat(5,true);
-    ___item3= _createListRepeat(5,"123");
+    ___item3= _createListRepeat(5,(String)"123");
     ___item4= _createListRepeat(5,RGB(0x33,0xcc,0x00));
 }
 

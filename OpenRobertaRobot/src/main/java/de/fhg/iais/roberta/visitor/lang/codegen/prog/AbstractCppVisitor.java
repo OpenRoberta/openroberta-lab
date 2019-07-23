@@ -175,10 +175,15 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
         this.sb.append("_createListRepeat(");
         listRepeat.getCounter().visit(this);
         this.sb.append(", ");
+        BlocklyType itemType = listRepeat.getElement().getVarType();
+        if (itemType.equals(BlocklyType.NUMBER) || itemType.equals(BlocklyType.STRING)) {
+            this.sb.append("(" + getLanguageVarTypeFromBlocklyType(itemType) + ") ");
+        }
         listRepeat.getElement().visit(this);
         this.sb.append(")");
         return null;
     }
+
 
     @Override
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
