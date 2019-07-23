@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.codegen;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ev3c4ev3.C4Ev3SourceCompiler;
-import de.fhg.iais.roberta.components.ev3c4ev3.RbfBuilder;
+import de.fhg.iais.roberta.components.ev3c4ev3.Uf2Builder;
 import de.fhg.iais.roberta.components.ev3c4ev3.Uf2FileContainer;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
@@ -16,26 +16,18 @@ import de.fhg.iais.roberta.visitor.codegen.Ev3C4ev3Visitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 public class Ev3C4ev3CompilerWorkflow extends AbstractCompilerWorkflow {
 
     private static final Logger LOG = LoggerFactory.getLogger(Ev3C4ev3CompilerWorkflow.class);
 
     public static final String GENERATED_SOURCE_CODE_EXTENSION = ".cpp";
-    private static final String GENERATED_BINARY_EXTENSION = ".elf";
-    private static final String GENERATED_RBF_EXTENSION = ".rbf";
-
-    private static final String EV3_PROGRAMS_FOLDER_PATH = "../prjs/BrkProg_SAVE/";
-
-    private static final String JUST_COPIED_FLAG_FILE_NAME = EV3_PROGRAMS_FOLDER_PATH + "NEPO-just-uploaded.txt";
-    private static final byte[] JUST_COPIED_FLAG_FILE_CONTENT = "NEPO".getBytes(StandardCharsets.UTF_8);
+    public static final String GENERATED_BINARY_EXTENSION = ".elf";
 
     private final String tempDir;
     private final C4Ev3SourceCompiler compiler;
-    private final RbfBuilder rbfBuilder;
+    private final Uf2Builder uf2Builder;
 
     private String uf2InBase64;
 
@@ -44,7 +36,7 @@ public class Ev3C4ev3CompilerWorkflow extends AbstractCompilerWorkflow {
         String compilerResourceDir = pluginProperties.getCompilerResourceDir();
         tempDir = pluginProperties.getTempDir();
         compiler = new C4Ev3SourceCompiler(compilerResourceDir);
-        rbfBuilder = new RbfBuilder(compilerResourceDir);
+        uf2Builder = new Uf2Builder(compilerResourceDir);
     }
 
     @Override
@@ -71,7 +63,7 @@ public class Ev3C4ev3CompilerWorkflow extends AbstractCompilerWorkflow {
         }
         storeGeneratedProgram(token, programName, GENERATED_SOURCE_CODE_EXTENSION);
         String sourceCodeFileName = getSourceCodeFileName(token, programName);
-        String binaryFileName = getBinaryFileName(token, programName);
+        String binaryFileName = getBinaryName(token, programName);
         boolean compilationSuccess = compiler.compile(sourceCodeFileName, binaryFileName);
         if ( !compilationSuccess ) {
             this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
@@ -90,43 +82,21 @@ public class Ev3C4ev3CompilerWorkflow extends AbstractCompilerWorkflow {
         return tempDir + token + "/" + programName + "/source/" + programName + GENERATED_SOURCE_CODE_EXTENSION;
     }
 
-    private String getBinaryFileName(String token, String programName) {
+    private String getBinaryName(String token, String programName) {
         return tempDir + token + "/" + programName + "/target/" + programName + GENERATED_BINARY_EXTENSION;
     }
 
     private boolean createUf2File(String programName, String binaryFileName) {
-        Uf2FileContainer uf2 = new Uf2FileContainer();
         try {
-            addBinaryToUf2(uf2, binaryFileName, programName);
+            Uf2FileContainer uf2 = uf2Builder.createUf2File(programName, binaryFileName);
+            this.uf2InBase64 = uf2.toBase64();
+            return true;
         } catch ( IOException e ) {
-            LOG.error("cannot read the binary file obtained as result of the compilation: {}", e);
+            LOG.error("cannot read the binary file obtained as result of the compilation", e);
             return false;
         }
-        addRbfToUf2(uf2, programName);
-        addJustUploadedFlagToUf2(uf2);
-        this.uf2InBase64 = uf2.toBase64();
-        return true;
     }
 
-    private void addBinaryToUf2(Uf2FileContainer uf2, String binaryFileName, String programName) throws IOException {
-        uf2.add(new File(binaryFileName), getBinaryFileNameInEv3Storage(programName));
-    }
-
-    private void addRbfToUf2(Uf2FileContainer uf2, String programName) {
-        uf2.add(rbfBuilder.build(getBinaryFileNameInEv3Storage(programName)), getRbfFileNameInEv3Storage(programName));
-    }
-
-    private void addJustUploadedFlagToUf2(Uf2FileContainer uf2) {
-        uf2.add(JUST_COPIED_FLAG_FILE_CONTENT, JUST_COPIED_FLAG_FILE_NAME);
-    }
-
-    private String getBinaryFileNameInEv3Storage(String programName) {
-        return EV3_PROGRAMS_FOLDER_PATH + programName + GENERATED_BINARY_EXTENSION;
-    }
-
-    private String getRbfFileNameInEv3Storage(String programName) {
-        return EV3_PROGRAMS_FOLDER_PATH + programName + GENERATED_RBF_EXTENSION;
-    }
 
     @Override
     public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {

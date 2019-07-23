@@ -61,11 +61,10 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     private static final String PREFIX_OUTPUT_PORT = "OUT_";
     private static final String PREFIX_IN_PORT = "IN_";
 
+    private final String programName;
     private final ILanguage language;
     private final boolean isSayTextUsed;
-
     private final Configuration brickConfiguration;
-
     private final Set<UsedActor> usedActors;
 
     /**
@@ -74,8 +73,9 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
      * @param programPhrases
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
-    private Ev3C4ev3Visitor(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation, ILanguage language) {
+    private Ev3C4ev3Visitor(String programName, Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation, ILanguage language) {
         super(programPhrases, indentation);
+        this.programName = programName;
         Ev3UsedHardwareCollectorVisitor checkVisitor = new Ev3UsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
         this.brickConfiguration = brickConfiguration;
         this.language = language;
@@ -107,7 +107,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         Assert.notNull(programName);
         Assert.notNull(brickConfiguration);
 
-        Ev3C4ev3Visitor astVisitor = new Ev3C4ev3Visitor(brickConfiguration, phrasesSet, 0, language);
+        Ev3C4ev3Visitor astVisitor = new Ev3C4ev3Visitor(programName, brickConfiguration, phrasesSet, 0, language);
         astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
     }
@@ -119,6 +119,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateConstants() {
+        this.sb.append("#define PROGRAM_NAME \"" + programName + "\"\n");
         this.sb.append("#define WHEEL_DIAMETER " + brickConfiguration.getWheelDiameterCM() + "\n");
         this.sb.append("#define TRACK_WIDTH " + brickConfiguration.getTrackWidthCM() + "\n");
         nlIndent();

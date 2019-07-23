@@ -11,6 +11,7 @@ public class Ast2C4ev3VisitorTest {
 
     private static final String CONSTANTS_AND_IMPORTS =
         "" //
+            + "#definePROGRAM_NAME\"Test\"\n"
             + "#define WHEEL_DIAMETER 5.6\n"
             + "#define TRACK_WIDTH 18.0\n"
             + "#include <ev3.h>\n"
@@ -20,6 +21,7 @@ public class Ast2C4ev3VisitorTest {
 
     private static final String CONSTANTS_AND_IMPORTS__WITH_SMALLER_TRACK_WIDTH =
         "" //
+            + "#definePROGRAM_NAME\"Test\"\n"
             + "#define WHEEL_DIAMETER 5.6\n"
             + "#define TRACK_WIDTH 17.0\n"
             + "#include <ev3.h>\n"
