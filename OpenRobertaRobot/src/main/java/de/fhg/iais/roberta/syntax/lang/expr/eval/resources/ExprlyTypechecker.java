@@ -107,6 +107,21 @@ public class ExprlyTypechecker<T> {
     public void check() {
         this.errorCount = 0;
         this.resultType = checkAST(this.e);
+
+        // Check if the expression is an empty list and it's valid
+        if ( this.resultType.equals(BlocklyType.ARRAY)
+            && (this.expectedResultType.equals(BlocklyType.ARRAY_NUMBER)
+                || this.expectedResultType.equals(BlocklyType.ARRAY_BOOLEAN)
+                || this.expectedResultType.equals(BlocklyType.ARRAY_STRING)
+                || this.expectedResultType.equals(BlocklyType.ARRAY_CONNECTION)) ) {
+            if ( this.e instanceof ListCreate<?> ) {
+                if ( ((ListCreate<T>) this.e).getValue().get().size() == 0 ) {
+                    return;
+                }
+            }
+        }
+
+        // Check for return type errors
         if ( !this.resultType.equals(this.expectedResultType) ) {
             this.errorCount++;
             if ( this.resultType.equals(BlocklyType.VOID) ) {
