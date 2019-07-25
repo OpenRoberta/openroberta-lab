@@ -98,10 +98,11 @@ public class ClientUser {
                     response.put("userName", name);
                     response.put("isAccountActivated", user.isActivated());
                     ClientUser.LOG.info("login: user {} (id {}) logged in", account, id);
-                    Statistics.info("UserLogin");
+                    Statistics.info("UserLogin", "success", true);
                     AliveData.rememberLogin();
+                } else {
+                    Statistics.info("UserLogin", "success", false);
                 }
-
             } else if ( cmd.equals("getUser") && httpSessionState.isUserLoggedIn() ) {
                 User user = up.getUser(httpSessionState.getUserId());
                 Util.addResultInfo(response, up);
@@ -122,8 +123,9 @@ public class ClientUser {
                 httpSessionState.setUserClearDataKeepTokenAndRobotId(HttpSessionState.NO_USER);
                 response.put("rc", "ok");
                 response.put("message", Key.USER_LOGOUT_SUCCESS.getKey());
+                // failing isnt logged in the statistics
                 ClientUser.LOG.info("logout of user " + userId);
-                Statistics.info("UserLogout");
+                Statistics.info("UserLogout", "success", true);
             } else if ( cmd.equals("createUser") ) {
                 String account = request.getString("accountName");
                 String password = request.getString("password");
@@ -138,6 +140,7 @@ public class ClientUser {
                     PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
                     sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang, isYoungerThen14);
                 }
+                Statistics.info("UserCreate", "success", up.succeeded());
                 Util.addResultInfo(response, up);
 
             } else if ( cmd.equals("updateUser") ) {
@@ -197,10 +200,10 @@ public class ClientUser {
                     LostPassword lostPassword = lostPasswordProcessor.createLostPassword(user.getId());
                     ClientUser.LOG.info("url postfix generated: " + lostPassword.getUrlPostfix());
                     String[] body =
-                        {
-                            user.getAccount(),
-                            lostPassword.getUrlPostfix()
-                        };
+                    {
+                        user.getAccount(),
+                        lostPassword.getUrlPostfix()
+                    };
                     try {
                         this.mailManagement.send(user.getEmail(), "reset", body, lang, false);
                         up.setStatus(ProcessorStatus.SUCCEEDED, Key.USER_PASSWORD_RECOVERY_SENT_MAIL_SUCCESS, responseParameters);
@@ -235,6 +238,7 @@ public class ClientUser {
                 String account = request.getString("accountName");
                 String password = request.getString("password");
                 up.deleteUser(account, password);
+                Statistics.info("UserDelete", "success", up.succeeded());
                 Util.addResultInfo(response, up);
 
             } else if ( cmd.equals("getStatusText") ) {
@@ -275,10 +279,10 @@ public class ClientUser {
     private void sendActivationMail(UserProcessor up, String urlPostfix, String account, String email, String lang, boolean isYoungerThen14) throws Exception {
         Map<String, String> responseParameters = new HashMap<>();
         String[] body =
-            {
-                account,
-                urlPostfix
-            };
+        {
+            account,
+            urlPostfix
+        };
         try {
             this.mailManagement.send(email, "activate", body, lang, isYoungerThen14);
             up.setStatus(ProcessorStatus.SUCCEEDED, Key.USER_ACTIVATION_SENT_MAIL_SUCCESS, responseParameters);

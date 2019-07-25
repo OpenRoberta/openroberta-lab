@@ -1,5 +1,9 @@
 package de.fhg.iais.roberta.util;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -13,6 +17,8 @@ public final class Statistics {
     private static final Logger STAT = LoggerFactory.getLogger("statistics");
     private static final Logger LOG = LoggerFactory.getLogger(Statistics.class);
 
+    private static final Set<Class<?>> SUPPORTED_OBJECT_CLASSES = new HashSet<>(Arrays.asList(Boolean.class, Integer.class, Float.class, Double.class, String.class));
+
     private Statistics() {
     }
 
@@ -24,7 +30,7 @@ public final class Statistics {
      * @param action the general action or category of the log
      * @param args variable number of key value pairs, these are put in a json array
      */
-    public static void trace(String action, String... args) {
+    public static void trace(String action, Object... args) {
         try {
             STAT.trace(toJsonString(action, args));
         } catch ( JSONException e ) {
@@ -40,7 +46,7 @@ public final class Statistics {
      * @param action the general action or category of the log
      * @param args variable number of key value pairs, these are put in a json array
      */
-    public static void debug(String action, String... args) {
+    public static void debug(String action, Object... args) {
         try {
             STAT.debug(toJsonString(action, args));
         } catch ( JSONException e ) {
@@ -56,7 +62,7 @@ public final class Statistics {
      * @param action the general action or category of the log
      * @param args variable number of key value pairs, these are put in a json array
      */
-    public static void info(String action, String... args) {
+    public static void info(String action, Object... args) {
         try {
             STAT.info(toJsonString(action, args));
         } catch ( JSONException e ) {
@@ -77,19 +83,19 @@ public final class Statistics {
     public static void infoUserAgent(String action, UserAgent userAgent, String countryCode, JSONObject request) {
         try {
             STAT
-                .info(
-                    toJsonString(                        
-                        action,
-                        "Browser",
-                        userAgent.getBrowser() + "/" + userAgent.getBrowserVersion(),
-                        "OS",
-                        userAgent.getOperatingSystem().getName(),
-                        "CountryCode",                       
-                        countryCode,
-                         "DeviceType",
-                        userAgent.getOperatingSystem().getDeviceType().getName(),
-                        "ScreenSize",
-                        request.getString("screenSize")));
+            .info(
+                toJsonString(
+                    action,
+                    "Browser",
+                    userAgent.getBrowser() + "/" + userAgent.getBrowserVersion(),
+                    "OS",
+                    userAgent.getOperatingSystem().getName(),
+                    "CountryCode",
+                    countryCode,
+                    "DeviceType",
+                    userAgent.getOperatingSystem().getDeviceType().getName(),
+                    "ScreenSize",
+                    request.getString("screenSize")));
         } catch ( Exception e ) {
             LOG.error("Logging statistics failed for: " + action);
         }
@@ -103,7 +109,7 @@ public final class Statistics {
      * @param action the general action or category of the log
      * @param args variable number of key value pairs, these are put in a json array
      */
-    public static void warn(String action, String... args) {
+    public static void warn(String action, Object... args) {
         try {
             STAT.warn(toJsonString(action, args));
         } catch ( JSONException e ) {
@@ -119,7 +125,7 @@ public final class Statistics {
      * @param action the general action or category of the log
      * @param args variable number of key value pairs, these are put in a json array
      */
-    public static void error(String action, String... args) {
+    public static void error(String action, Object... args) {
         try {
             STAT.error(toJsonString(action, args));
         } catch ( JSONException e ) {
@@ -127,7 +133,7 @@ public final class Statistics {
         }
     }
 
-    private static String toJsonString(String action, String... args) throws JSONException {
+    private static String toJsonString(String action, Object... args) throws JSONException {
         if ( args.length % 2 != 0 ) {
             throw new DbcException("Statistics logging arguments must come in pairs of two!");
         }
@@ -137,13 +143,17 @@ public final class Statistics {
         JSONArray jsonArrArgs = new JSONArray();
 
         for ( int i = 0; i < args.length; i += 2 ) {
-            jsonObjArgs.put(args[i], args[i + 1]);
+            if ( SUPPORTED_OBJECT_CLASSES.contains(args[i + 1].getClass()) ) {
+                jsonObjArgs.put((String) args[i], args[i + 1]);
+            } else {
+                throw new DbcException("Statistics logging only supports specific types");
+            }
         }
 
         jsonArrArgs.put(jsonObjArgs);
         jsonObjAction.put("action", action);
         jsonObjAction.put("args", jsonArrArgs);
-        
+
         return jsonObjAction.toString();
     }
 }

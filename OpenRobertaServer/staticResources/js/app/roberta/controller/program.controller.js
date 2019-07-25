@@ -314,6 +314,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
             result.lastChanged = '';
             GUISTATE_C.setProgram(result);
             initProgramEnvironment();
+            LOG.info('ProgramNew');
         }
         if (further || GUISTATE_C.isProgramSaved()) {
             loadNewProgram();
@@ -360,6 +361,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
         document.execCommand("copy");
         $temp.remove();
         var displayLink = '</br><textarea readonly style="width:100%;" type="text">' + link + '</textarea>';
+        LOG.info('ProgramLinkShare');
         MSG.displayMessage('POPUP_GET_LINK', 'POPUP', displayLink);
     }
     exports.linkProgram = linkProgram;
@@ -371,6 +373,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
         var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + Blockly.Xml.domToText(dom) + '</program><config>'
                 + GUISTATE_C.getConfigurationXML() + '</config></export>';
+        LOG.info('ProgramExport');
         UTIL.download(GUISTATE_C.getProgramName() + ".xml", xml);
         MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", GUISTATE_C.getProgramName());
     }

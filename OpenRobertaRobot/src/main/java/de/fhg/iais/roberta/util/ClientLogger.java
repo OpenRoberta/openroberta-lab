@@ -30,9 +30,22 @@ public class ClientLogger {
             int logLength = logs.length();
             if ( logLength > 0 ) {
                 for ( int i = 0; i < logLength; i++ ) {
-                    LOG.info("log entry: " + logs.getString(i));
-                    if ( logs.getString(i).contains("simImport clicked") ) {
-                        Statistics.info("SimulationBackgroundUploaded");
+                    String logLine = logs.getString(i);
+                    LOG.info("log entry: " + logLine);
+                    // currently no way to catch false case
+                    if ( logLine.contains("simImport clicked") ) {
+                        Statistics.info("SimulationBackgroundUploaded", "success", true);
+                    } else if ( logLine.contains("language switched to") ) {
+                        Statistics.info("LanguageChanged", "success", true, "newLanguage", logLine.substring(logLine.length() - 2));
+                    } else if ( logLine.contains("help clicked") ) {
+                        // this is the help on the top menu, not the one on the right side
+                        Statistics.info("HelpClicked", "success", true);
+                    } else if ( logLine.contains("ProgramExport") ) {
+                        Statistics.info("ProgramExport", "success", true);
+                    } else if ( logLine.contains("ProgramNew") ) {
+                        Statistics.info("ProgramNew", "success", true);
+                    } else if ( logLine.contains("ProgramLinkShare") ) {
+                        Statistics.info("ProgramLinkShare", "success", true);
                     }
                 }
             }
