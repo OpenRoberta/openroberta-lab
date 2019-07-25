@@ -46,6 +46,7 @@ import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.ServerProperties;
+import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -92,9 +93,11 @@ public class ServerStarter {
         final ServerStarter serverStarter = new ServerStarter(null, serverDefines);
         try {
             Server server = serverStarter.start(pluginDefines);
+            Statistics.info("ServerStart", "success", true);
             server.join();
             System.exit(0);
         } catch ( Exception e ) {
+            Statistics.info("ServerStart", "success", false);
             LOG.error("Exception during server startup. Server NOT started", e);
             System.exit(12);
         }
@@ -109,8 +112,8 @@ public class ServerStarter {
     public ServerStarter(String propertyPath, List<String> serverDefines) {
         Properties properties = Util1.loadAndMergeProperties(propertyPath, serverDefines);
         setupPropertyForDatabaseConnection(properties);
-        serverProperties = new ServerProperties(properties);
-        Util.setServerVersion(serverProperties.getStringProperty("openRobertaServer.version"));
+        this.serverProperties = new ServerProperties(properties);
+        Util.setServerVersion(this.serverProperties.getStringProperty("openRobertaServer.version"));
     }
 
     /**
@@ -120,9 +123,9 @@ public class ServerStarter {
      * @return the server
      */
     public Server start(List<String> pluginDefines) throws IOException {
-        String host = serverProperties.getStringProperty("server.ip");
-        int httpPort = serverProperties.getIntProperty("server.port", 0);
-        int httpsPort = serverProperties.getIntProperty("server.portHttps", 0);
+        String host = this.serverProperties.getStringProperty("server.ip");
+        int httpPort = this.serverProperties.getIntProperty("server.port", 0);
+        int httpsPort = this.serverProperties.getIntProperty("server.portHttps", 0);
 
         Server server = new Server();
         List<ServerConnector> connectors = new ArrayList<>();
@@ -135,11 +138,11 @@ public class ServerStarter {
         }
         if ( httpsPort > 0 ) {
             SslContextFactory sslContextFactory = new SslContextFactory(); //NOSONAR : no need to close. Active until program termination
-            String keyStoreUri = serverProperties.getStringProperty("server.keystore.uri");
+            String keyStoreUri = this.serverProperties.getStringProperty("server.keystore.uri");
             if ( keyStoreUri == null ) {
                 keyStoreUri = ServerStarter.class.getResource("/keystore.jks").toExternalForm();
             }
-            String password = serverProperties.getStringProperty("server.keystore.password");
+            String password = this.serverProperties.getStringProperty("server.keystore.password");
             sslContextFactory.setKeyStorePath(keyStoreUri);
             sslContextFactory.setKeyStorePassword(password);
             sslContextFactory.setKeyManagerPassword(password);
@@ -152,9 +155,10 @@ public class ServerStarter {
 
         // configure robot plugins
         RobotCommunicator robotCommunicator = new RobotCommunicator();
-        Map<String, IRobotFactory> robotPluginMap = configureRobotPlugins(robotCommunicator, serverProperties, pluginDefines);
+        Map<String, IRobotFactory> robotPluginMap = configureRobotPlugins(robotCommunicator, this.serverProperties, pluginDefines);
         IIpToCountry ipToCountry = configureIpToCountryDb();
-        RobertaGuiceServletConfig robertaGuiceServletConfig = new RobertaGuiceServletConfig(serverProperties, robotPluginMap, robotCommunicator, ipToCountry);
+        RobertaGuiceServletConfig robertaGuiceServletConfig =
+            new RobertaGuiceServletConfig(this.serverProperties, robotPluginMap, robotCommunicator, ipToCountry);
 
         // 1. REST API with /rest prefix
         ServletContextHandler restHttpHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
@@ -193,18 +197,18 @@ public class ServerStarter {
         ServletHolder staticResourceServlet = defaultHandler.addServlet(DefaultServlet.class, "/*");
         staticResourceServlet.setInitParameter("dirAllowed", "false");
         staticResourceServlet.setInitParameter("precompressed", "gzip=.gz");
-        String dirNameStaticResources = serverProperties.getStringProperty("server.staticresources.dir");
+        String dirNameStaticResources = this.serverProperties.getStringProperty("server.staticresources.dir");
         staticResourceServlet.setInitParameter("resourceBase", new File(dirNameStaticResources).toPath().toAbsolutePath().normalize().toUri().toASCIIString());
         staticResourceServlet.setInitParameter("cacheControl", "private, must-revalidate");
 
         HandlerList handlers = new HandlerList();
         handlers
-            .setHandlers(
-                new Handler[] {
-                    restHttpHandler,
-                    wsHandler,
-                    defaultHandler
-                });
+        .setHandlers(
+            new Handler[] {
+                restHttpHandler,
+                wsHandler,
+                defaultHandler
+            });
         server.setHandler(handlers);
 
         StringBuilder sb = new StringBuilder();
@@ -230,7 +234,7 @@ public class ServerStarter {
         Ev3SensorLoggingWS.setGuiceInjector(this.injector);
 
         checkRobotPluginsDB(robotPluginMap.values());
-        Runtime.getRuntime().addShutdownHook(new ShutdownHook("embedded".equals(serverProperties.getStringProperty("database.mode")), this.injector));
+        Runtime.getRuntime().addShutdownHook(new ShutdownHook("embedded".equals(this.serverProperties.getStringProperty("database.mode")), this.injector));
         LOG.info("Shutdown hook added. If the server is gracefully stopped in the future, a shutdown message is logged");
         logTheNumberOfStoredPrograms();
 
@@ -247,8 +251,8 @@ public class ServerStarter {
      * @return ipToCountry of type IIpToCountry
      */
     private IIpToCountry configureIpToCountryDb() {
-        Boolean isPublicServer = serverProperties.getBooleanProperty("server.public");
-        String pathIpToCountryDb = serverProperties.getStringProperty("server.iptocountry.dir");
+        Boolean isPublicServer = this.serverProperties.getBooleanProperty("server.public");
+        String pathIpToCountryDb = this.serverProperties.getStringProperty("server.iptocountry.dir");
 
         IIpToCountry ipToCountry;
         if ( pathIpToCountryDb != null ) {
@@ -354,7 +358,7 @@ public class ServerStarter {
                         " factory for robot plugin "
                             + robotName
                             + " could not be build. Plugin-jar not on the classpath? Invalid properties? Server does NOT start",
-                        e);
+                            e);
                 }
             }
         }

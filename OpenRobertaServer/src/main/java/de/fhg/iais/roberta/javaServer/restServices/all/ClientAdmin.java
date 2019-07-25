@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.RandomUrlPostfix;
 import de.fhg.iais.roberta.util.ServerProperties;
+import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
 
@@ -71,6 +72,7 @@ public class ClientAdmin {
                     addRobotUpdateInfo(response, null, null);
                     Util.addSuccessInfo(response, Key.TOKEN_SET_SUCCESS);
                     LOG.info("success: debug token is registered in the session");
+                    Statistics.info("ConnectRobot", "success", true);
                 } else {
                     Key tokenAgreement = this.brickCommunicator.aTokenAgreementWasSent(token, httpSessionState.getRobotName());
 
@@ -82,18 +84,22 @@ public class ClientAdmin {
                             addRobotUpdateInfo(response, robotMenuVersion, serverMenuVersion);
                             Util.addSuccessInfo(response, Key.TOKEN_SET_SUCCESS);
                             LOG.info("success: token " + token + " is registered in the session");
+                            Statistics.info("ConnectRobot", "success", true);
                             break;
                         case TOKEN_SET_ERROR_WRONG_ROBOTTYPE:
                             Util.addErrorInfo(response, Key.TOKEN_SET_ERROR_WRONG_ROBOTTYPE);
                             LOG.info("error: token " + token + " not registered in the session, wrong robot type");
+                            Statistics.info("ConnectRobot", "success", false);
                             break;
                         case TOKEN_SET_ERROR_NO_ROBOT_WAITING:
                             Util.addErrorInfo(response, Key.TOKEN_SET_ERROR_NO_ROBOT_WAITING);
                             LOG.info("error: token " + token + " not registered in the session");
+                            Statistics.info("ConnectRobot", "success", false);
                             break;
                         default:
                             LOG.error("invalid response for token agreement: " + tokenAgreement);
                             Util.addErrorInfo(response, Key.SERVER_ERROR);
+                            Statistics.info("ConnectRobot", "success", false);
                             break;
                     }
                 }
@@ -153,8 +159,10 @@ public class ClientAdmin {
                         response.put("signature", robotFactory.getSignature());
                         response.put("fileExtension", robotFactory.getFileExtension());
                         LOG.info("set robot to {}", robot);
+                        Statistics.info("ChangeRobot", "success", true);
                     } else {
                         LOG.info("set Robot: robot {} was already set", robot);
+                        Statistics.info("ChangeRobot", "success", false);
                     }
                 } else {
                     LOG.error("Invalid command: " + cmd + " setting robot name to " + robot);
