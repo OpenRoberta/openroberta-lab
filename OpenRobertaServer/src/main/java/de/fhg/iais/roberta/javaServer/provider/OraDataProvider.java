@@ -95,7 +95,7 @@ public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
                     addrAsIp = InetAddress.getByName(remoteAddr);
                     countryCode = ipToCountry.getCountryCode(addrAsIp);
                 } catch ( IOException e ) {
-                    LOG.error("Could not evaluate the actual ip as a country code. Likely a problem with the IpToCountry file.");
+                    LOG.info("Could not evaluate the actual ip as a country code. Likely a problem with the IpToCountry file.");
                 }
 
                 httpSessionState = HttpSessionState.init(this.robotPluginMap, this.serverProperties, sessionNumber);

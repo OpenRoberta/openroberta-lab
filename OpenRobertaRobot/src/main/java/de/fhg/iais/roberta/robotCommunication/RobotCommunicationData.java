@@ -140,14 +140,14 @@ public class RobotCommunicationData {
      */
     public synchronized void robotHasSentAPushRequest() {
         if ( this.state == State.WAIT_FOR_TOKENAPPROVAL_FROM_USER ) {
-            LOG.error(
+            LOG.info(
                 "Robot has sent a push request, but the server waits for a token approval by an user. The request ist ignored. "
                     + "Waiting started "
                     + this.timerStartedByLastRequest.elapsedSecFormatted()
                     + " ago. ");
         } else {
             if ( this.state != State.WAIT_FOR_PUSH_CMD_FROM_ROBOT && this.state != State.ROBOT_IS_BUSY ) {
-                LOG.error(
+                LOG.info(
                     "Robot has sent a push request not awaited for. Programming error: Logic or Time race? The request is ACCEPTED. State is "
                         + this.state
                         + ". The state setting request was scheduled "
@@ -196,7 +196,7 @@ public class RobotCommunicationData {
      */
     public synchronized boolean runButtonPressed(String programName) {
         if ( !isRobotWaitingForPushCommand() ) {
-            LOG.error("RUN button pressed, but robot is not waiting for that event. Bad luck!");
+            LOG.info("RUN button pressed, but robot is not waiting for that event. Bad luck!");
             return false;
         } else {
             LOG.info(
@@ -218,7 +218,7 @@ public class RobotCommunicationData {
      */
     public synchronized boolean firmwareUpdate() {
         if ( !isRobotWaitingForPushCommand() ) {
-            LOG.error("UPDATE button pressed, but the robot is not waiting. Bad luck!");
+            LOG.info("UPDATE button pressed, but the robot is not waiting. Bad luck!");
             return false;
         } else {
             LOG.debug("UPDATE button pressed. Wait state entered " + this.timerStartedByLastRequest.elapsedSecFormatted() + " ago");
@@ -320,7 +320,7 @@ public class RobotCommunicationData {
     }
 
     public String getRuntimeVersion() {
-        return runtimeversion;
+        return this.runtimeversion;
     }
 
     public JSONObject getSensorValues() {

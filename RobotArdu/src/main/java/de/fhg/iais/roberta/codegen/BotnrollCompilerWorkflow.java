@@ -49,9 +49,9 @@ public class BotnrollCompilerWorkflow extends AbstractCompilerWorkflow {
         if ( this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
             this.workflowResult = this.runBuild(token, programName, "generated.main");
             if ( this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
-                LOG.error("compile botnroll program {} successful", programName);
+                LOG.info("compile botnroll program {} successful", programName);
             } else {
-                LOG.info("compile botnroll program {} failed with {}", programName, this.workflowResult);
+                LOG.error("compile botnroll program {} failed with {}", programName, this.workflowResult);
             }
         }
     }
