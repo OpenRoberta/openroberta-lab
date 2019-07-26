@@ -1,0 +1,98 @@
+<block type="text_comment" id="CLp%K@{+xR(CqH[u2Nqg" intask="true">
+	<field name="TEXT">Variable Test START</field>
+</block>
+<block type="variables_set" id="2:yL/pUY4]!s/pn2x?|R"
+	intask="true">
+	<mutation datatype="Number"></mutation>
+	<field name="VAR">number</field>
+	<value name="VALUE">
+		<block type="math_arithmetic" id="!FEXP|nuVWc@M9S{J`=M"
+			intask="true">
+			<field name="OP">ADD</field>
+			<value name="A">
+				<block type="math_number" id="R`70)3BF@SsQ}pf#JAHj"
+					intask="true">
+					<field name="NUM">0</field>
+				</block>
+			</value>
+			<value name="B">
+				<block type="math_number" id="{_OkDM0VlwyZGx(][wR6"
+					intask="true">
+					<field name="NUM">5</field>
+				</block>
+			</value>
+		</block>
+	</value>
+</block>
+<block type="variables_set" id=".Sc9/z0!w!tsyK4|n/|P"
+	intask="true">
+	<mutation datatype="Number"></mutation>
+	<field name="VAR">number</field>
+	<value name="VALUE">
+		<block type="math_arithmetic" id="fX,s^}:bs,(0kwo+e](w"
+			intask="true">
+			<field name="OP">ADD</field>
+			<value name="A">
+				<block type="math_number" id="E{|Yfg*:Ds.[r9@%ds`I"
+					intask="true">
+					<field name="NUM">3</field>
+				</block>
+			</value>
+			<value name="B">
+				<block type="math_number" id=");C^kCSl*gA84giL1;(!"
+					intask="true">
+					<field name="NUM">0.999999999999</field>
+				</block>
+			</value>
+		</block>
+	</value>
+</block>
+<block type="variables_set" id="!l8n5ZbHsT}LBFqR[z8S"
+	intask="true">
+	<mutation datatype="String"></mutation>
+	<field name="VAR">string</field>
+	<value name="VALUE">
+		<block type="text" id="vh_~r4N`|j}Gu}5*f)E]" intask="true">
+			<field name="TEXT">abc</field>
+		</block>
+	</value>
+</block>
+<block type="variables_set" id="!5,-^Me:V*.[d_[U4S(~"
+	intask="true">
+	<mutation datatype="String"></mutation>
+	<field name="VAR">string</field>
+	<value name="VALUE">
+		<block type="text" id="9lVikezG@Z(I3)[Ae7l^" intask="true">
+			<field name="TEXT">123</field>
+		</block>
+	</value>
+</block>
+<block type="variables_set" id="9ZR=p,%xelvz15L_vddd"
+	intask="true">
+	<mutation datatype="String"></mutation>
+	<field name="VAR">string</field>
+	<value name="VALUE">
+		<block type="text" id="vcw:,L]pnjXyjr|zzA|R" intask="true">
+			<field name="TEXT">³½¹]</field>
+		</block>
+	</value>
+</block>
+<block type="variables_set" id="x7P.2WbD~,`y66hr~X{h"
+	intask="true">
+	<mutation datatype="Boolean"></mutation>
+	<field name="VAR">boolean2</field>
+	<value name="VALUE">
+		<block type="logic_negate" id="6`z~enMWJis}4Pb^y+PW"
+			intask="true">
+			<value name="BOOL">
+				<block type="logic_boolean" id="FvmUEpGOpww`0O_L9*/X"
+					intask="true">
+					<field name="BOOL">TRUE</field>
+				</block>
+			</value>
+		</block>
+	</value>
+</block>
+<block type="text_comment" id="tXc))a{i;nX:Gu^~VS+j" intask="true">
+	<field name="TEXT">Variable Test START END</field>
+</block>

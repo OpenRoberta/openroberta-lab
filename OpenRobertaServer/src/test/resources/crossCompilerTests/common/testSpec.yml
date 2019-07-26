@@ -29,6 +29,10 @@ robots:
        template: sensebox
 
 progs:
+    variablesNuStBo:
+       decl: variablesNuStBo
+       exclude:
+       remark: "variable assignment for number, string and boolean"
     stringConcat:
        decl: stringConcat
        exclude:
@@ -39,6 +43,10 @@ progs:
           bob3: "Comparison of string and char not possible"
           uno: "Comparison of string and char not possible"
        remark: "different combinations of string concatenation"
+    mathBasics:
+       decl: mathBasics
+       exclude:
+       remark: "basic math operations"   
     mathBrackets:
        decl: mathBrackets
        exclude:
@@ -48,6 +56,12 @@ progs:
        exclude:
           nxt: "Nested calls to the same function are not supported"
        remark: "different combinations for math power of"
+    basicFunctions:
+       fragment: basicFunctions
+       decl: basicFunctions
+       exclude:
+          bob3: "too small"         
+       remark: "basic function calls"   
     logicBooleanOp:
        decl: logicBooleanOp
        exclude:

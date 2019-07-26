@@ -1,0 +1,35 @@
+<block type="robGlobalVariables_declare" id="@;6h9Ai;BoR/oSCP:`.0"
+	intask="true" deletable="false" movable="false">
+	<mutation next="true" declaration_type="Number"></mutation>
+	<field name="VAR">number</field>
+	<field name="TYPE">Number</field>
+	<value name="VALUE">
+		<block type="math_number" id="W!j^Rc5sw{uz`7ST*suV"
+			intask="true">
+			<field name="NUM">0</field>
+		</block>
+	</value>
+</block>
+<block type="robGlobalVariables_declare" id="0=}/?qDwP6qk2sAt*n)e"
+	intask="true" deletable="false" movable="false">
+	<mutation next="true" declaration_type="Boolean"></mutation>
+	<field name="VAR">boolean2</field>
+	<field name="TYPE">Boolean</field>
+	<value name="VALUE">
+		<block type="logic_boolean" id="nB#lP?1?LPS^qQ~qMX1x"
+			intask="true">
+			<field name="BOOL">TRUE</field>
+		</block>
+	</value>
+</block>
+<block type="robGlobalVariables_declare" id=",1ErKvso`1=9n(vmW!~0"
+	intask="true" deletable="false" movable="false">
+	<mutation next="false" declaration_type="String"></mutation>
+	<field name="VAR">string</field>
+	<field name="TYPE">String</field>
+	<value name="VALUE">
+		<block type="text" id="W*:5okE#%siQ6Tfm@44`" intask="true">
+			<field name="TEXT"></field>
+		</block>
+	</value>
+</block>
