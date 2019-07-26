@@ -42,11 +42,11 @@ public class RobotCommunicator {
     public boolean addNewRegistration(RobotCommunicationData newRobotCommunicationData) {
         String token = newRobotCommunicationData.getToken();
         String newIdentificator = newRobotCommunicationData.getRobotIdentificator();
-        Assert.isTrue((token != null) && (newIdentificator != null));
+        Assert.isTrue(token != null && newIdentificator != null);
         RobotCommunicationData existingRobotCommunicationData = this.allStates.get(token);
         if ( existingRobotCommunicationData != null ) {
             String existingIdentificator = existingRobotCommunicationData.getRobotIdentificator();
-            if ( (existingIdentificator == null)
+            if ( existingIdentificator == null
                 || !existingIdentificator.equals(newIdentificator)
                 || existingIdentificator.equals("usb")
                 || existingIdentificator.equals("unknown") ) {
@@ -57,7 +57,7 @@ public class RobotCommunicator {
         for ( String storedToken : this.allStates.keySet() ) {
             RobotCommunicationData storedState = this.allStates.get(storedToken);
             if ( newIdentificator.equals(storedState.getRobotIdentificator()) && !newIdentificator.equals("usb") && !newIdentificator.equals("unknown") ) {
-                LOG.error("Token approval request for robot [" + newIdentificator + "], but an old request is pending. Old request aborted.");
+                LOG.info("Token approval request for robot [" + newIdentificator + "], but an old request is pending. Old request aborted.");
                 storedState.abortPush(); // notifyAll() executed
                 this.allStates.remove(storedToken);
             }
@@ -175,7 +175,7 @@ public class RobotCommunicator {
             } catch ( InterruptedException e ) { //NOSONAR : repeat the loop forever
             }
             for ( RobotCommunicationData state : this.allStates.values() ) {
-                if ( (state.getState() == State.ROBOT_WAITING_FOR_PUSH_FROM_SERVER) && (state.getElapsedMsecOfStartOfLastRequest() > PUSH_TIMEOUT_INTERVALL) ) {
+                if ( state.getState() == State.ROBOT_WAITING_FOR_PUSH_FROM_SERVER && state.getElapsedMsecOfStartOfLastRequest() > PUSH_TIMEOUT_INTERVALL ) {
                     state.terminatePushAndRequestNextPush();
                 }
             }
