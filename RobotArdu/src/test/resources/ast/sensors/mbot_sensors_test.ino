@@ -32,7 +32,7 @@ void loop()
 {
     ___item = _meUltraSensor3.distanceCm();
     ___item2 = (analogRead(PORT_7) < 512);
-    ___item2 = __meLineFollower2.readSensor1();
+    ___item2 = !__meLineFollower2.readSensor1();
     ___item = _meLight6.read() * ANALOG2PERCENT;
     ___item = _meLight2.read() * ANALOG2PERCENT;
     ___item = (int) (millis() - __time);
