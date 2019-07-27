@@ -172,9 +172,43 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateSensorInitialization() {
-        this.sb.append("setAllSensorMode(").append(getDefaultSensorModesString()).append(");");
+        this.sb.append("SetAllSensors(").append(getSensorsInitializationArguments()).append(");");
         nlIndent();
     }
+
+    private String getSensorsInitializationArguments() {
+        return ev3SensorPorts.stream()
+            .map(brickConfiguration::optConfigurationComponent)
+            .map(this::getSensorFromConfigurationComponent)
+            .collect(Collectors.joining(", "));
+    }
+
+    private String getSensorFromConfigurationComponent (ConfigurationComponent component) {
+        if (component == null) {
+            return "NULL";
+        }
+        switch ( component.getComponentType() ) {
+            case SC.TOUCH:
+                return "EV3Touch";
+            case SC.COLOR:
+                return "EV3Color";
+            case SC.GYRO:
+                return "EV3Gyro";
+            case SC.ULTRASONIC:
+                return "EV3Ultrasonic";
+            case SC.INFRARED:
+                return "EV3Ir";
+            case SC.SOUND:
+                return "NXTSound";
+            case SC.COMPASS:
+                return "HTCompass";
+            case SC.IRSEEKER:
+                return "HTIr";
+            default:
+                return "NULL";
+        }
+    }
+
 
     private void generateDebugInitialization (MainTask<Void> mainTask) {
         boolean isDebug = mainTask.getDebug().equals("TRUE");
@@ -190,6 +224,9 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         String ports = brickConfiguration.getActors().stream()
             .map(ConfigurationComponent::getUserDefinedPortName)
             .collect(Collectors.joining());
+        if (ports.length() == 0) {
+            return "0"; // TODO: Create unit test case
+        }
         return getMotorPortConstant(ports);
     }
 
@@ -204,17 +241,9 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
             .filter(s -> SC.GYRO.equals(s.getComponentType()))
             .map(ConfigurationComponent::getUserDefinedPortName)
             .forEach(port -> {
-                this.sb.append("ResetGyroSensor(" + getPrefixedInputPort(port) + ");");
+                generateResetGyroSensor(port);
                 nlIndent();
             });
-    }
-
-    private String getDefaultSensorModesString() {
-        return ev3SensorPorts.stream()
-            .map(brickConfiguration::optConfigurationComponent)
-            .map(configuration -> configuration == null ? null : "DEFAULT_MODE_" + configuration.getComponentType())
-            .map(componentType -> componentType == null ? "NO_SEN" : componentType)
-            .collect(Collectors.joining(", "));
     }
 
     @Override
@@ -335,7 +364,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
             case "#FFA500":
                 return "Orange";
             case "#FF00FF":
-                return "Magenta"; // TODO: is this defined?
+                return "Magenta";
             case "#DC143C":
                 return "Crismon";
             case "#585858":
@@ -1059,28 +1088,39 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("readSensor(").append(getPrefixedInputPort(touchSensor.getPort())).append(")");
+        this.sb.append("ReadEV3TouchSensor(").append(getPrefixedInputPort(touchSensor.getPort())).append(")");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        String mode = getUltrasonicSensorModeConstant(ultrasonicSensor.getMode());
-        generateReadSensorInMode(ultrasonicSensor.getPort(), mode);
+        String port = ultrasonicSensor.getPort();
+        if (ultrasonicSensor.getMode().equals(SC.DISTANCE)) {
+            generateRealUltrasonicDistance(port);
+        } else {
+            generateRealUltrasonicPresence(port);
+        }
         return null;
     }
 
-    private String getUltrasonicSensorModeConstant(String mode) {
-        if ( mode.equals(SC.DISTANCE) ) {
-            return "US_DIST_CM";
-        } else {
-            return "US_LISTEN";
-        }
+    private void generateRealUltrasonicDistance(String port) {
+        this.sb.append("ReadEV3UltrasonicSensorDistance(")
+            .append(getPrefixedInputPort(port))
+            .append(", CM)");
+    }
+
+
+    private void generateRealUltrasonicPresence(String port) {
+        this.sb.append("ReadEV3UltrasonicSensorListen(")
+            .append(getPrefixedInputPort(port))
+            .append(")");
     }
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        generateReadSensor(soundSensor.getPort());
+        this.sb.append("ReadNXTSoundSensor(")
+            .append(getPrefixedInputPort(soundSensor.getPort()))
+            .append(", DB)");
         return null;
     }
 
@@ -1088,28 +1128,31 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         String port = gyroSensor.getPort();
         String mode = gyroSensor.getMode();
-        if ( isGyroResetMode(mode) ) {
+        if ( mode.equals(SC.RESET) ) {
             generateResetGyroSensor(port);
         } else {
-            generateReadSensorInMode(port, getGyroSensorReadModeConstant(mode));
+            generateReadGyro(port, mode);
         }
         return null;
     }
 
-    private boolean isGyroResetMode(String mode) {
-        return mode.equals(SC.RESET);
+    private void generateResetGyroSensor(String port) {
+        this.sb.append("ResetEV3GyroSensor(" + getPrefixedInputPort(port) + ");");
     }
 
+    private void generateReadGyro (String port, String mode) {
+        this.sb.append("ReadEV3GyroSensor(")
+            .append(getPrefixedInputPort(port))
+            .append(", ")
+            .append(getGyroSensorReadModeConstant(mode))
+            .append(")");
+    }
     private String getGyroSensorReadModeConstant(String mode) {
         if ( mode.equals(SC.ANGLE) ) {
-            return "GYRO_ANG";
+            return "EV3GyroAngle";
         } else {
-            return "GYRO_RATE";
+            return "EV3GyroRate";
         }
-    }
-
-    private void generateResetGyroSensor(String port) {
-        this.sb.append("ResetGyroSensor(" + getPrefixedInputPort(port) + ");");
     }
 
     @Override
@@ -1127,31 +1170,36 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void visitColorSensorLightMode (ColorSensor<Void> colorSensor) {
-        generateReadSensorInMode(colorSensor.getPort(), getColorSensorLightModeConstant(colorSensor.getMode()));
+        this.sb.append("ReadEV3ColorSensorLight(")
+            .append(getPrefixedInputPort(colorSensor.getPort()))
+            .append(", ")
+            .append(getColorSensorLightModeConstant(colorSensor.getMode()))
+            .append(")");
     }
+
+    private String getColorSensorLightModeConstant(String mode) {
+        switch ( mode ) {
+            case SC.LIGHT:
+                return "ReflectedLight";
+            case SC.AMBIENTLIGHT:
+                return "AmbientLight";
+            default:
+                throw new DbcException("Unknown color sensor light mode");
+        }
+    }
+
 
     private void visitColorSensorColorMode (ColorSensor<Void> colorSensor) {
         String function = getReadColorSensorColorModeFunction(colorSensor.getMode());
         this.sb.append(function + "(" + getPrefixedInputPort(colorSensor.getPort()) + ")");
     }
 
-    private String getColorSensorLightModeConstant(String mode) {
-        switch ( mode ) {
-            case SC.LIGHT:
-                return "COL_REFLECT";
-            case SC.AMBIENTLIGHT:
-                return "COL_AMBIENT";
-            default:
-                throw new DbcException("Unknown color sensor light mode");
-        }
-    }
-
     private String getReadColorSensorColorModeFunction(String mode) {
         switch ( mode ) {
             case SC.RGB:
-                return "ReadColorSensorRGB";
+                return "NEPOReadEV3ColorSensorRGB";
             case SC.COLOUR:
-                return "ReadColorSensor";
+                return "ReadEV3ColorSensor";
             default:
                 throw new DbcException("Unknown color sensor color mode");
         }
@@ -1173,19 +1221,26 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
+    private void generateEV3IRDistance (String port) {
+        this.sb.append("ReadEV3IrSensorProximity(")
+            .append(getPrefixedInputPort(port))
+            .append(")");
+    }
+
+    private void generateEV3IRSeeker (String port) {
+        this.sb.append("_ReadIRSeekAllChannels("+ getPrefixedInputPort(port) + ")");
+    }
+
+
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        if (isCompassCalibrateMode(compassSensor)) {
+        if ( compassSensor.getMode().equals(SC.CALIBRATE)) {
             visitCalibrateCompass(compassSensor);
         } else {
             visitReadCompass(compassSensor);
         }
 
         return null;
-    }
-
-    private boolean isCompassCalibrateMode (CompassSensor<Void> compassSensor) {
-        return compassSensor.getMode().equals(SC.CALIBRATE);
     }
 
     private void visitCalibrateCompass (CompassSensor<Void> compassSensor) {
@@ -1199,40 +1254,37 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     private void visitReadCompass (CompassSensor<Void> compassSensor) {
         String mode = getCompassSensorReadModeConstant(compassSensor.getMode());
-        this.sb.append("ReadSensorInMode(" + getPrefixedInputPort(compassSensor.getPort()) + ", " + mode + ")");
+        this.sb.append("ReadHTCompassSensor(" + getPrefixedInputPort(compassSensor.getPort()) + ", " + mode + ")");
     }
 
     private String getCompassSensorReadModeConstant(String mode) {
         switch ( mode ) {
             case SC.COMPASS:
-                return "NXT_COMPASS_COMPASS";
+                return "HTCompassCompass";
             case SC.ANGLE:
-                return "NXT_COMPASS_ANGLE";
+                return "HTCompassAngle";
             default:
                 throw new DbcException("Unknown read compass mode");
         }
     }
 
-    private void generateEV3IRDistance (String port) {
-        generateReadSensorInMode(port, "IR_PROX");
-    }
-
-    private void generateEV3IRSeeker (String port) {
-        this.sb.append("_ReadIRSeekAllChannels("+ getPrefixedInputPort(port) + ")");
-    }
 
     @Override
     public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
-        generateReadSensorInMode(irSeekerSensor.getPort(), getIRSeekerSensorModeConstant(irSeekerSensor.getMode()));
+        this.sb.append("ReadHTIrSensor(")
+            .append(getPrefixedInputPort(irSeekerSensor.getPort()))
+            .append(", ")
+            .append(getIRSeekerSensorConstantMode(irSeekerSensor.getMode()))
+            .append(")");
         return null;
     }
 
-    private String getIRSeekerSensorModeConstant (String mode) {
+    private String getIRSeekerSensorConstantMode(String mode) {
         switch ( mode ) {
             case SC.MODULATED:
-                return "NXT_IR_SEEKER_AC";
+                return "Modulated";
             case SC.UNMODULATED:
-                return "NXT_IR_SEEKER_DC";
+                return "Unmodulated";
             default:
                 throw new DbcException("Unknown IR seeker sensor mode");
         }
@@ -1360,7 +1412,6 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
         String picture = showPictureAction.getPicture().toString();
         this.sb.append("LcdPicture(LCD_COLOR_BLACK, 0, 0, " + picture + ");");
-        // TODO: Implement
         return null;
     }
 
@@ -1455,7 +1506,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
         this.sb.append("Say(ToString(");
-        sayTextAction.getMsg().visit(this); // TODO: Handle cases where the expression is not a string
+        sayTextAction.getMsg().visit(this);
         this.sb.append("), ");
         this.generateSpeedAndPitchArgumentsOrDefault(sayTextAction);
         this.sb.append(");");

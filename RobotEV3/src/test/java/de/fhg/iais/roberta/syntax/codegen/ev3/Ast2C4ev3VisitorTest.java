@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.syntax.codegen.ev3;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -37,29 +38,29 @@ public class Ast2C4ev3VisitorTest {
     private static final String BEGIN_MAIN_DEFAULT =
         "" //
             + MAIN_INIT_EV3
-            + "    setAllSensorMode(DEFAULT_MODE_TOUCH, DEFAULT_MODE_GYRO, DEFAULT_MODE_COLOR, DEFAULT_MODE_ULTRASONIC);\n"
-            + "    ResetGyroSensor(IN_2);\n\n";
+            + "    SetAllSensors(EV3Touch, EV3Gyro, EV3Color, EV3Ultrasonic);\n"
+            + "    ResetEV3GyroSensor(IN_2);\n\n";
 
     private static final String BEGIN_MAIN__TOUCH_ULTRASONIC_COLOR =
         "" //
             + MAIN_INIT_EV3
-            + "    setAllSensorMode(DEFAULT_MODE_TOUCH, DEFAULT_MODE_ULTRASONIC, DEFAULT_MODE_COLOR, NO_SEN);\n\n";
+            + "    SetAllSensors(EV3Touch, EV3Ultrasonic, EV3Color, NULL);\n\n";
 
     private static final String BEGIN_MAIN__TOUCH_ULTRASONIC_COLOR_ULTRASONIC =
         "" //
             + MAIN_INIT_EV3
-            + "    setAllSensorMode(DEFAULT_MODE_TOUCH, DEFAULT_MODE_ULTRASONIC, DEFAULT_MODE_COLOR, DEFAULT_MODE_ULTRASONIC);\n\n";
+            + "    SetAllSensors(EV3Touch, EV3Ultrasonic, EV3Color, EV3Ultrasonic);\n\n";
 
     private static final String BEGIN_MAIN__TOUCH_GYRO_INFRARED_ULTRASONIC =
         "" //
             + MAIN_INIT_EV3
-            + "    setAllSensorMode(DEFAULT_MODE_TOUCH, DEFAULT_MODE_GYRO, DEFAULT_MODE_INFRARED, DEFAULT_MODE_ULTRASONIC);\n"
-            + "    ResetGyroSensor(IN_2);\n\n";
+            + "    SetAllSensors(EV3Touch, EV3Gyro, EV3Ir, EV3Ultrasonic);\n"
+            + "    ResetEV3GyroSensor(IN_2);\n\n";
 
-    private static final String BEGIN_MAIN__NO_SENSORS =
+    private static final String BEGIN_MAIN__NULLSORS =
         "" //
             + MAIN_INIT_EV3
-            + "    setAllSensorMode(NO_SEN, NO_SEN, NO_SEN, NO_SEN);\n\n";
+            + "    SetAllSensors(NULL, NULL, NULL, NULL);\n\n";
 
 
     private static final String END_MAIN =
@@ -104,9 +105,9 @@ public class Ast2C4ev3VisitorTest {
             "" //
                 + CONSTANTS_AND_IMPORTS__WITH_SMALLER_TRACK_WIDTH
                 + BEGIN_MAIN__TOUCH_ULTRASONIC_COLOR
-                + "if ( readSensor(IN_1) ) {\n"
+                + "if ( ReadEV3TouchSensor(IN_1) ) {\n"
                 + "    SetLedPattern(LED_GREEN);\n"
-                + "} else if ( Red == ReadColorSensor(IN_3) ) {\n"
+                + "} else if ( Red == ReadEV3ColorSensor(IN_3) ) {\n"
                 + "    while ( true ) {\n"
                 + "        LcdPicture(LCD_COLOR_BLACK, 0, 0, EYESOPEN);\n"
                 + "        OnFwdReg(OUT_B, Speed(30));\n"
@@ -128,12 +129,12 @@ public class Ast2C4ev3VisitorTest {
             "" //
                 + CONSTANTS_AND_IMPORTS__WITH_SMALLER_TRACK_WIDTH
                 + BEGIN_MAIN__TOUCH_ULTRASONIC_COLOR_ULTRASONIC
-                + "if ( readSensor(IN_1) ) {\n"
+                + "if ( ReadEV3TouchSensor(IN_1) ) {\n"
                 + "    SetLedPattern(LED_GREEN);\n"
                 + "} else {\n"
-                + "    if ( readSensor(IN_1) ) {\n"
+                + "    if ( ReadEV3TouchSensor(IN_1) ) {\n"
                 + "        SetLedPattern(LED_GREEN);\n"
-                + "    } else if ( 0 == ReadSensorInMode(IN_4, US_DIST_CM) ) {\n"
+                + "    } else if ( 0 == ReadEV3UltrasonicSensorDistance(IN_4, CM) ) {\n"
                 + "        LcdPicture(LCD_COLOR_BLACK, 0, 0, FLOWERS);\n"
                 + "    } else {\n"
                 + "        while ( !ButtonIsDown(BTNUP) ) {\n"
@@ -156,11 +157,11 @@ public class Ast2C4ev3VisitorTest {
                 + "    RotateMotorForAngle(OUT_B, Speed(30), 360 * 1);\n"
                 + "    OnFwdSyncEx(OUT_AB, Speed(50), -200, RESET_NONE);"
                 + "}\n"
-                + "if ( ((MotorRotationCount(OUT_A) / 360.0) + ReadSensorInMode(IN_3, IR_PROX)) == ReadSensorInMode(IN_4, US_DIST_CM) ) {\n"
+                + "if ( ((MotorRotationCount(OUT_A) / 360.0) + ReadEV3IrSensorProximity(IN_3)) == ReadEV3UltrasonicSensorDistance(IN_4, CM) ) {\n"
                 + "    SetLedPattern(LED_BLACK);\n"
                 + "} else {\n"
-                + "    ResetGyroSensor(IN_2);\n"
-                + "    while ( readSensor(IN_1) ) {\n"
+                + "    ResetEV3GyroSensor(IN_2);\n"
+                + "    while ( ReadEV3TouchSensor(IN_1) ) {\n"
                 + "        LcdPicture(LCD_COLOR_BLACK, 0, 0, OLDGLASSES);\n"
                 + "        LcdClean();\n"
                 + "    }\n"
@@ -421,10 +422,10 @@ public class Ast2C4ev3VisitorTest {
                 + "double ___light = 0;\n"
                 + "std::list<double> ___rgb = ((std::list<double>){0, 0, 0});\n"
                 + BEGIN_MAIN_DEFAULT
-                + "___color = ReadColorSensor(IN_3);\n"
-                + "___light = ReadSensorInMode(IN_3, COL_REFLECT);\n"
-                + "___light = ReadSensorInMode(IN_3, COL_AMBIENT);\n"
-                + "___rgb = ReadColorSensorRGB(IN_3);\n"
+                + "___color = ReadEV3ColorSensor(IN_3);\n"
+                + "___light = ReadEV3ColorSensorLight(IN_3, ReflectedLight);\n"
+                + "___light = ReadEV3ColorSensorLight(IN_3, AmbientLight);\n"
+                + "___rgb = NEPOReadEV3ColorSensorRGB(IN_3);\n"
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/code_generator/java/read_color_sensor_in_different_modes.xml", expectedCode);
     }
@@ -435,7 +436,7 @@ public class Ast2C4ev3VisitorTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS__WITH_SMALLER_TRACK_WIDTH
-                + BEGIN_MAIN__NO_SENSORS
+                + BEGIN_MAIN__NULLSORS
                 + "OnFwdReg(OUT_A, Speed(30));\n"
                 + "RotateMotorForAngle(OUT_A, Speed(30), 360 * 1);\n"
                 + "OnFwdReg(OUT_B, Speed(30));\n"
