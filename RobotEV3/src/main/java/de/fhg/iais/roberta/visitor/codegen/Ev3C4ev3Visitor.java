@@ -144,9 +144,9 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         this.sb.append("NEPOInitEV3();");
         nlIndent();
         generateSensorInitialization();
-        generateDebugInitialization(mainTask);
         generateTTSInitialization();
         generateGyroInitialization();
+        generateDebugInitialization(mainTask);
         nlIndent();
         return null;
     }
@@ -172,7 +172,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateSensorInitialization() {
-        this.sb.append("SetAllSensors(").append(getSensorsInitializationArguments()).append(");");
+        this.sb.append("NEPOSetAllSensors(").append(getSensorsInitializationArguments()).append(");");
         nlIndent();
     }
 
@@ -554,8 +554,8 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         this.sb.append("while ( true ) {");
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
-        nlIndent();
-        this.sb.append("Wait(15);");
+        //nlIndent();
+        //this.sb.append("Wait(15);");
         decrIndentation();
         nlIndent();
         this.sb.append("}");
@@ -1137,7 +1137,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateResetGyroSensor(String port) {
-        this.sb.append("ResetEV3GyroSensor(" + getPrefixedInputPort(port) + ");");
+        this.sb.append("NEPOResetEV3GyroSensor(" + getPrefixedInputPort(port) + ");");
     }
 
     private void generateReadGyro (String port, String mode) {

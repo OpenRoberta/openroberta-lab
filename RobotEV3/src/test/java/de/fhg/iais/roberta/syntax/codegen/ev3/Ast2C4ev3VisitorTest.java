@@ -38,29 +38,29 @@ public class Ast2C4ev3VisitorTest {
     private static final String BEGIN_MAIN_DEFAULT =
         "" //
             + MAIN_INIT_EV3
-            + "    SetAllSensors(EV3Touch, EV3Gyro, EV3Color, EV3Ultrasonic);\n"
-            + "    ResetEV3GyroSensor(IN_2);\n\n";
+            + "    NEPOSetAllSensors(EV3Touch, EV3Gyro, EV3Color, EV3Ultrasonic);\n"
+            + "    NEPOResetEV3GyroSensor(IN_2);\n\n";
 
     private static final String BEGIN_MAIN__TOUCH_ULTRASONIC_COLOR =
         "" //
             + MAIN_INIT_EV3
-            + "    SetAllSensors(EV3Touch, EV3Ultrasonic, EV3Color, NULL);\n\n";
+            + "    NEPOSetAllSensors(EV3Touch, EV3Ultrasonic, EV3Color, NULL);\n\n";
 
     private static final String BEGIN_MAIN__TOUCH_ULTRASONIC_COLOR_ULTRASONIC =
         "" //
             + MAIN_INIT_EV3
-            + "    SetAllSensors(EV3Touch, EV3Ultrasonic, EV3Color, EV3Ultrasonic);\n\n";
+            + "    NEPOSetAllSensors(EV3Touch, EV3Ultrasonic, EV3Color, EV3Ultrasonic);\n\n";
 
     private static final String BEGIN_MAIN__TOUCH_GYRO_INFRARED_ULTRASONIC =
         "" //
             + MAIN_INIT_EV3
-            + "    SetAllSensors(EV3Touch, EV3Gyro, EV3Ir, EV3Ultrasonic);\n"
-            + "    ResetEV3GyroSensor(IN_2);\n\n";
+            + "    NEPOSetAllSensors(EV3Touch, EV3Gyro, EV3Ir, EV3Ultrasonic);\n"
+            + "    NEPOResetEV3GyroSensor(IN_2);\n\n";
 
     private static final String BEGIN_MAIN__NULLSORS =
         "" //
             + MAIN_INIT_EV3
-            + "    SetAllSensors(NULL, NULL, NULL, NULL);\n\n";
+            + "    NEPOSetAllSensors(NULL, NULL, NULL, NULL);\n\n";
 
 
     private static final String END_MAIN =
@@ -160,7 +160,7 @@ public class Ast2C4ev3VisitorTest {
                 + "if ( ((MotorRotationCount(OUT_A) / 360.0) + ReadEV3IrSensorProximity(IN_3)) == ReadEV3UltrasonicSensorDistance(IN_4, CM) ) {\n"
                 + "    SetLedPattern(LED_BLACK);\n"
                 + "} else {\n"
-                + "    ResetEV3GyroSensor(IN_2);\n"
+                + "    NEPOResetEV3GyroSensor(IN_2);\n"
                 + "    while ( ReadEV3TouchSensor(IN_1) ) {\n"
                 + "        LcdPicture(LCD_COLOR_BLACK, 0, 0, OLDGLASSES);\n"
                 + "        LcdClean();\n"
