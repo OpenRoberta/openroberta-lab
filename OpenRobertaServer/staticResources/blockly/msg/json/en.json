@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-07-23 14:45:01.828916",
+		"lastupdated": "2019-07-29 14:34:44.642142",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -419,7 +419,7 @@
 	"ENCODER_GETSAMPLE_TOOLTIP": "Gets the current reading from the motor encoder.",
 	"GYRO_RESET_TOOLTIP": "Resets the gyro sensor.",
 	"GYRO_GETSAMPLE_TOOLTIP": "Gets the current reading from the gyro sensor.",
-	"SENSOR_GYRO_GETSAMPLE_TOOLTIP_WEDO": "Is the gyro sensor tilted in the indicated manner?",
+	"SENSOR_GYRO_TILTED_GETSAMPLE_TOOLTIP_WEDO": "Is the tilt sensors position the indicated manner?",
 	"FLAME_GETSAMPLE_TOOLTIP": "Gets the current reading from the flame sensor.",
 	"TIMER_RESET_TOOLTIP": "Resets the timer.",
 	"TIMER_GETSAMPLE_TOOLTIP": "Gets the current reading from the timer.",
@@ -430,6 +430,7 @@
 	"IRSEEKER_TOOLTIP": "Represents a HiTechnic NXT IRSeeker V2 sensor.",
 	"TOUCH_TOOLTIP": "Is the touch sensor pressed?",
 	"GYRO_TOOLTIP": "Represents a gyro sensor.",
+	"GYRO_TOOLTIP_WEDO": "Represents a tilt sensor.",
 	"FLAME_TOOLTIP": "Represents a flame sensor.",
 	"MOTOR_BIG_TOOLTIP": "Represents a big motor.",
 	"MOTOR_MIDDLE_TOOLTIP": "Represents a middle motor.",
@@ -532,6 +533,7 @@
 	"SENSOR_IRSEEKER": "HT infrared sensor",
 	"SENSOR_ENCODER": "encoder",
 	"SENSOR_GYRO": "gyroscope",
+	"SENSOR_GYRO_WEDO": "tilt sensor",
 	"SENSOR_FLAME": "flame sensor",
 	"SENSOR_BATTERY": "battery charge",
 	"SENSOR_KEY": "button",
@@ -1539,5 +1541,7 @@
 	"YTICK": "distance between Y ticks",
 	"ACTION_PLOT_TICKMARK": "at tickmark",
 	"INIT_FAIL_MULTIPLE_FRONTENDS_ONE_HTTPSESSION": "You are trying to connect to the openroberta-lab multiple times, e.g. by opening multiple tabs. This is not supported at the moment. Please close this view.",
-	"INIT_FAIL_HTTPSESSION_EXPECTED_BUT_NOT_FOUND": "The connection to the openroberta-lab was closed unexpectedly. This case is rare and may happen, if the openroberta-lab-server is restarted. Please start a new connection to the openroberta-lab, e.g. by closing and starting the browser or by hitting the »reload«-button."
+	"INIT_FAIL_HTTPSESSION_EXPECTED_BUT_NOT_FOUND": "The connection to the openroberta-lab was closed unexpectedly. This case is rare and may happen, if the openroberta-lab-server is restarted. Please start a new connection to the openroberta-lab, e.g. by closing and starting the browser or by hitting the »reload«-button.",
+	"PROGRAM_ERROR_EXPRBLOCK_TYPECHECK": "This expression is invalid. The type check failed.",
+	"PROGRAM_ERROR_EXPRBLOCK_PARSE": "This expression is syntactically incorrect."
 }
