@@ -58,10 +58,6 @@
     <block type="math_number"/>
     <block type="math_arithmetic"/>
   </category>
-  <category name="TOOLBOX_TEXT" svg="true">
-    <block type="text"/>
-    <block type="text_comment"/>
-  </category>
   <category name="TOOLBOX_COLOUR" svg="true">
     <block type="robColour_picker">
       <field name="COLOUR">#FF0000</field>
