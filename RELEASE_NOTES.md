@@ -1,5 +1,29 @@
 # Release notes
 
+## [3.5.0] - 2019-07-31
+
+### New features
+ - C4EV3: beta version of new robot plugin for EV3 robots
+ - ALL: compiler output is now shown to user
+ - SENSEBOX: added german translations for configuration blocks
+### General improvements
+ 
+### Bug fixes
+ - ALL: wait until captions no longer disappear
+ - ALL: my configurations are now single clickable anywhere, same behaviour as in my programs
+ - ALL: lab reconnects automatically after wifi network changes
+ - ALL: fixed invalid connections in nested ternary operators
+ - ALL: cookie disclaimer no longer increases window height
+ - ALL: updated wrong release link
+ - EV3: lists containing only one element are generated correctly
+ - EV3DEV: fixed connection problems
+ - NXT/EV3 SIMULATION: no more duplicated robot views after changing scene
+ - CALLIOPE: motors a + b no longer generate invalid code
+ - ARDUINO: colours can now be output to screens or serial
+ - MBOT: corrected flipped output for line sensor
+ - NAO: fixed isPrime
+ - WEDO: renamed gyroscope to tilt sensor
+
 ## [3.4.1] - 2019-06-27
 
 ### New features

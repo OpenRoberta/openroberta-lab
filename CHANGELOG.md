@@ -4,22 +4,59 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Fixed
- - issue #171: updated the link to github releases on the start pop-up
- 
+ - issue #1:    added correct isPrime implementations
 ### Added
  - issue #174:  Edison robot plugin
  - issue #174:  added typicon for edison
+ - issue #62:   Raspberry robot plugin
  
 ### Changed
 ### Removed
 ### Deprecated
 ### Security
 
+## [3.5.0] - 2019-07-31
+
+### Fixed
+ - issue #61:   hide robot view when changing scene
+ - issue #68:   wrong types cannot be connected to ternary operators anymore 
+ - issue #70:   double click changed to single click
+ - issue #76:   changed css to avoid overflow
+ - issue #78:   changed robot types in database
+ - issue #93:   replaced wrong message key to keep caption
+ - issue #97:   removed c_str() for colours
+ - issue #136:  fixed itself over time
+ - issue #163:  reconnect automatically
+ - issue #171:  updated the link to github releases on the start pop-up
+ - issue #183:  added semicolon
+ - issue #190:  fixed wrong comparison
+ - issue #207:  flipped boolean line sensor value
+ - issue #159:  tested server deployment for raspbian stretch and buster
+
+ 
+### Added
+ - issue #27:   added c4ev3 robot plugin
+ - issue #28:   added c4ev3 compiler workflow with custom header files in ors-rsc-cc
+ - issue #29:   added c4ev3 code generation
+ - issue #30:   added c4ev3 high technic sensors and bluetooth
+ - issue #31:   added c4ev3 text to speech
+ - issue #144:  compiler output is formatted into a new message type that is displayed to the user in a popup
+ - issue #177:  added german translation for sensebox configuration blocks
+ 
+### Changed
+ - issue #172:  relaxed filters to allow more python versions
+ - issue #209:  renamed WEDO gyro to tilt
+
+### Removed
+ - issue #210:  removed BOB3 beginner text category
+### Deprecated
+### Security
+
 ## [3.4.1] - 2019-06-27
 
 ### Fixed
- - issue N/A:   checking out a safe branch for deployment
- - issue N/A:   small corrections for docker dply and create-empty-db for admin.sh
+ - issue #N/A:   checking out a safe branch for deployment
+ - issue #N/A:   small corrections for docker dply and create-empty-db for admin.sh
  - issue #8:    add cast from MicroBitColor to ManagedString in NepoDefs.h not to break serial output on calliope
  - issue #37:   Tiltsensor does work now for WeDo
  - issue #45:   the bug found a resolution alike to createMathChange method; simulation can be opened now, if the "to (var) append text (string)" block is used
