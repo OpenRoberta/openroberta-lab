@@ -79,13 +79,13 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
             var _this = this;
             var s = this.s;
             var n = this.n;
-            var _loop_1 = function () {
-                s.opLog('actual ops: ');
-                var stmt = s.getOp();
-                if (stmt === undefined) {
-                    U.debug('PROGRAM TERMINATED. No ops remaining');
-                    return "break-topLevelLoop";
-                }
+            s.opLog('actual ops: ');
+            var stmt = s.getOp();
+            if (stmt === undefined) {
+                U.debug('PROGRAM TERMINATED. No ops remaining');
+                this.terminated = true;
+            }
+            else {
                 var opCode = stmt[C.OPCODE];
                 switch (opCode) {
                     case C.ASSIGN_STMT: {
@@ -106,7 +106,7 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                         break;
                     }
                     case C.EXPR:
-                        this_1.evalExpr(stmt);
+                        this.evalExpr(stmt);
                         break;
                     case C.FLOW_CONTROL: {
                         var conditional = stmt[C.CONDITIONAL];
@@ -159,8 +159,8 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                         var port_1 = stmt[C.PORT];
                         n.motorOnAction(name_2, port_1, duration, speed);
                         if (duration >= 0) {
-                            this_1.timeout(function () { n.motorStopAction(name_2, port_1); _this.evalOperation(); }, duration);
-                            return { value: void 0 };
+                            this.timeout(function () { n.motorStopAction(name_2, port_1); _this.evalOperation(); }, duration);
+                            return; // wait for handler being called
                         }
                         break;
                     }
@@ -169,7 +169,7 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                         break;
                     }
                     case C.REPEAT_STMT:
-                        this_1.evalRepeat(stmt);
+                        this.evalRepeat(stmt);
                         break;
                     case C.REPEAT_STMT_CONTINUATION:
                         if (stmt[C.MODE] === C.FOR || stmt[C.MODE] === C.TIMES) {
@@ -196,7 +196,8 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                         break;
                     case C.STOP:
                         U.debug("PROGRAM TERMINATED. stop op");
-                        return "break-topLevelLoop";
+                        this.terminated = true;
+                        break;
                     case C.TEXT_JOIN:
                         var second = s.pop();
                         var first = s.pop();
@@ -210,8 +211,8 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                         var duration = s.pop();
                         var frequency = s.pop();
                         n.toneAction(stmt[C.NAME], frequency, duration);
-                        this_1.timeout(function () { _this.evalOperation(); }, duration);
-                        return { value: void 0 };
+                        this.timeout(function () { _this.evalOperation(); }, duration);
+                        return; // wait for handler being called
                     }
                     case C.VAR_DECLARATION: {
                         var name_3 = stmt[C.NAME];
@@ -225,26 +226,21 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                     }
                     case C.WAIT_TIME_STMT: {
                         var time = s.pop();
-                        this_1.timeout(function () { _this.evalOperation(); }, time);
-                        return { value: void 0 };
+                        this.timeout(function () { _this.evalOperation(); }, time);
+                        return; // wait for handler being called
                     }
                     default:
                         U.dbcException("invalid stmt op: " + opCode);
                 }
-            };
-            var this_1 = this;
-            topLevelLoop: while (!this.terminated) {
-                var state_1 = _loop_1();
-                if (typeof state_1 === "object")
-                    return state_1.value;
-                switch (state_1) {
-                    case "break-topLevelLoop": break topLevelLoop;
-                }
             }
-            // termination either requested by the client or by executing 'stop' or after last statement
-            this.terminated = true;
-            n.close();
-            this.callbackOnTermination();
+            if (this.terminated) {
+                // termination either requested by the client or by executing 'stop' or after last statement
+                n.close();
+                this.callbackOnTermination();
+            }
+            else {
+                this.timeout(function () { _this.evalOperation(); }, 0);
+            }
         };
         /**
          *  called from @see evalOperation() to evaluate all kinds of expressions

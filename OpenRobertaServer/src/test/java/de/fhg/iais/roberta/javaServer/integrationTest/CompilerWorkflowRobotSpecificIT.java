@@ -105,7 +105,7 @@ public class CompilerWorkflowRobotSpecificIT {
         httpSessionState = HttpSessionState.initOnlyLegalForDebugging(pluginMap, serverProperties, 1);
 
         resourceBase = "/crossCompilerTests/robotSpecific/";
-        JSONObject testSpecification = Util1.loadYAML("classpath:" + resourceBase + "testSpec.yml");
+        JSONObject testSpecification = Util1.loadYAML("classpath:" + resourceBase + "testSpecOnlyWedo.yml");
         robots = testSpecification.getJSONObject("robots");
 
         this.restProgram = new ClientProgram(this.sessionFactoryWrapper, robotCommunicator, serverProperties);
@@ -132,6 +132,7 @@ public class CompilerWorkflowRobotSpecificIT {
         }
     }
 
+    @Ignore
     @Test
     public void testNepoPrograms() throws Exception {
         boolean resultAcc = true;
@@ -152,7 +153,6 @@ public class CompilerWorkflowRobotSpecificIT {
         }
     }
 
-    @Ignore
     @Test
     public void testSingleNepoProgram() throws Exception {
         final String robotName = "wedo";

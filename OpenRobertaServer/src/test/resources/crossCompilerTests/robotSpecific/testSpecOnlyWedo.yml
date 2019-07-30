@@ -1,0 +1,4 @@
+robots:
+    wedo:
+        dir: wedo
+        suffix: ".json"

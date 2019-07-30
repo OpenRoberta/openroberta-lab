@@ -89,13 +89,12 @@ export class Interpreter {
     private evalOperation() {
         const s = this.s;
         const n = this.n;
-        topLevelLoop: while ( !this.terminated ) {
-            s.opLog( 'actual ops: ' );
-            let stmt = s.getOp();
-            if ( stmt === undefined ) {
-                U.debug( 'PROGRAM TERMINATED. No ops remaining' );
-                break topLevelLoop;
-            }
+        s.opLog( 'actual ops: ' );
+        let stmt = s.getOp();
+        if ( stmt === undefined ) {
+            U.debug( 'PROGRAM TERMINATED. No ops remaining' );
+            this.terminated = true;
+        } else {
             const opCode = stmt[C.OPCODE];
             switch ( opCode ) {
                 case C.ASSIGN_STMT: {
@@ -204,7 +203,8 @@ export class Interpreter {
                     break;
                 case C.STOP:
                     U.debug( "PROGRAM TERMINATED. stop op" );
-                    break topLevelLoop;
+                    this.terminated = true;
+                    break;
                 case C.TEXT_JOIN:
                     const second = s.pop();
                     const first = s.pop();
@@ -240,10 +240,13 @@ export class Interpreter {
                     U.dbcException( "invalid stmt op: " + opCode );
             }
         }
-        // termination either requested by the client or by executing 'stop' or after last statement
-        this.terminated = true;
-        n.close();
-        this.callbackOnTermination();
+        if ( this.terminated ) {
+            // termination either requested by the client or by executing 'stop' or after last statement
+            n.close();
+            this.callbackOnTermination();
+        } else {
+            this.timeout(() => { this.evalOperation() }, 0 );
+        }
     }
 
     /**
