@@ -35,27 +35,25 @@ public class Ast2C4ev3VisitorTest {
             + "int main() {\n"
             + "    NEPOInitEV3();\n";
 
-    private static final String BEGIN_MAIN_DEFAULT =
+    private static final String BEGIN_MAIN__TOUCH_NULL_INFRARED_ULTRASONIC =
         "" //
-            + MAIN_INIT_EV3
-            + "    NEPOSetAllSensors(EV3Touch, EV3Gyro, EV3Color, EV3Ultrasonic);\n"
-            + "    NEPOResetEV3GyroSensor(IN_2);\n\n";
+        + MAIN_INIT_EV3
+        + "    NEPOSetAllSensors(EV3Touch, NULL, EV3Ir, EV3Ultrasonic);\n";
 
-    private static final String BEGIN_MAIN__TOUCH_ULTRASONIC_COLOR =
+    private static final String BEGIN_MAIN__TOUCH_NULL_NULL_ULTRASONIC =
         "" //
-            + MAIN_INIT_EV3
-            + "    NEPOSetAllSensors(EV3Touch, EV3Ultrasonic, EV3Color, NULL);\n\n";
+        + MAIN_INIT_EV3
+        + "    NEPOSetAllSensors(EV3Touch, NULL, NULL, EV3Ultrasonic);\n\n";
 
-    private static final String BEGIN_MAIN__TOUCH_ULTRASONIC_COLOR_ULTRASONIC =
+    private static final String BEGIN_MAIN__TOUCH_NULL_COLOR_NULL =
         "" //
-            + MAIN_INIT_EV3
-            + "    NEPOSetAllSensors(EV3Touch, EV3Ultrasonic, EV3Color, EV3Ultrasonic);\n\n";
+        + MAIN_INIT_EV3
+        + "    NEPOSetAllSensors(EV3Touch, NULL, EV3Color, NULL);\n\n";
 
-    private static final String BEGIN_MAIN__TOUCH_GYRO_INFRARED_ULTRASONIC =
+    private static final String BEGIN_MAIN__NULL_NULL_COLOR_NULL =
         "" //
-            + MAIN_INIT_EV3
-            + "    NEPOSetAllSensors(EV3Touch, EV3Gyro, EV3Ir, EV3Ultrasonic);\n"
-            + "    NEPOResetEV3GyroSensor(IN_2);\n\n";
+        + MAIN_INIT_EV3
+        + "    NEPOSetAllSensors(NULL, NULL, EV3Color, NULL);\n\n";
 
     private static final String BEGIN_MAIN__NULLSORS =
         "" //
@@ -80,7 +78,7 @@ public class Ast2C4ev3VisitorTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS
-                + BEGIN_MAIN_DEFAULT
+                + BEGIN_MAIN__NULLSORS
                 + "DrawString(ToString(\"Hallo\"), 0, 3);\n"
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/code_generator/java/java_code_generator.xml", expectedCode);
@@ -91,7 +89,7 @@ public class Ast2C4ev3VisitorTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS
-                + BEGIN_MAIN_DEFAULT
+                + BEGIN_MAIN__NULLSORS
                 + "for (float ___k0 = 0; ___k0 < 10; ___k0 += 1) {\n"
                 + "    DrawString(ToString(\"Hallo\"), 0, 3);\n"
                 + "}\n"
@@ -104,7 +102,7 @@ public class Ast2C4ev3VisitorTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS__WITH_SMALLER_TRACK_WIDTH
-                + BEGIN_MAIN__TOUCH_ULTRASONIC_COLOR
+                + BEGIN_MAIN__TOUCH_NULL_COLOR_NULL
                 + "if ( ReadEV3TouchSensor(IN_1) ) {\n"
                 + "    SetLedPattern(LED_GREEN);\n"
                 + "} else if ( Red == ReadEV3ColorSensor(IN_3) ) {\n"
@@ -128,7 +126,7 @@ public class Ast2C4ev3VisitorTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS__WITH_SMALLER_TRACK_WIDTH
-                + BEGIN_MAIN__TOUCH_ULTRASONIC_COLOR_ULTRASONIC
+                + BEGIN_MAIN__TOUCH_NULL_NULL_ULTRASONIC
                 + "if ( ReadEV3TouchSensor(IN_1) ) {\n"
                 + "    SetLedPattern(LED_GREEN);\n"
                 + "} else {\n"
@@ -151,7 +149,7 @@ public class Ast2C4ev3VisitorTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS__WITH_SMALLER_TRACK_WIDTH
-                + BEGIN_MAIN__TOUCH_GYRO_INFRARED_ULTRASONIC
+                + BEGIN_MAIN__TOUCH_NULL_INFRARED_ULTRASONIC
                 + "if ( 5 < MotorPower(OUT_B) ) {\n"
                 + "    OnFwdReg(OUT_B, Speed(30));\n"
                 + "    RotateMotorForAngle(OUT_B, Speed(30), 360 * 1);\n"
@@ -177,7 +175,7 @@ public class Ast2C4ev3VisitorTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS
-                + BEGIN_MAIN_DEFAULT
+                + BEGIN_MAIN__NULLSORS
                 + "OnFwdReg(OUT_B, Speed(0));\n"
                 + "RotateMotorForAngle(OUT_B, Speed(30), 360 * 0);\n"
                 + "OnFwdSyncEx(OUT_BC, Speed(0), -200, RESET_NONE);\n"
@@ -192,7 +190,7 @@ public class Ast2C4ev3VisitorTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS
-                + BEGIN_MAIN_DEFAULT
+                + BEGIN_MAIN__NULLSORS
                 + "DrawString(ToString(\"Hallo\"), 0, 0);\n"
                 + "NEPOPlayTone(300, 3000);"
                 + END_MAIN;
@@ -205,7 +203,7 @@ public class Ast2C4ev3VisitorTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS
-                + BEGIN_MAIN_DEFAULT
+                + BEGIN_MAIN__NULLSORS
                 + "OnFwdReg(OUT_B, Speed(30));\n"
                 + "RotateMotorForAngle(OUT_B, Speed(30), 360 * 1);\n"
                 + END_MAIN;
@@ -222,7 +220,7 @@ public class Ast2C4ev3VisitorTest {
                 + "double ___item = 10;\n"
                 + "std::string ___item2 = \"TTTT\";\n"
                 + "bool ___item3 = true;\n"
-                + BEGIN_MAIN_DEFAULT
+                + BEGIN_MAIN__NULLSORS
                 + "DrawString(ToString(___item), 0, 0);\n"
                 + "DrawString(ToString(___item2), 0, 0);\n"
                 + "DrawString(ToString(___item3), 0, 0);\n"
@@ -240,7 +238,7 @@ public class Ast2C4ev3VisitorTest {
             "" //
                 + CONSTANTS_AND_IMPORTS
                 + "double ___variablenName = 0;\n"
-                + BEGIN_MAIN_DEFAULT
+                + BEGIN_MAIN__NULLSORS
                 + "OnFwdSync(OUT_BC, Speed(50));\n"
                 + "LcdPicture(LCD_COLOR_BLACK,0,0,OLDGLASSES);\n"
                 + END_MAIN;
@@ -264,7 +262,7 @@ public class Ast2C4ev3VisitorTest {
                 + "Color ___item8 = None;\n"
                 + "BluetoothConnectionHandle ___item9 = NEPOWaitConnection();\n"
                 + "std::list<BluetoothConnectionHandle> ___item10 = ((std::list<BluetoothConnectionHandle>){NEPOWaitConnection()});\n"
-                + BEGIN_MAIN_DEFAULT
+                + BEGIN_MAIN__NULLSORS
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/task/task_mainTask.xml", expectedCode);
     }
@@ -277,7 +275,7 @@ public class Ast2C4ev3VisitorTest {
                 + "void macheEtwas(double ___x, double ___x2) {\n"
                 + "    LcdPicture(LCD_COLOR_BLACK, 0, 0, OLDGLASSES);\n"
                 + "}\n"
-                + BEGIN_MAIN_DEFAULT
+                + BEGIN_MAIN__NULLSORS
                 + "RotateMotorForAngle(OUT_B, Speed(30), 360 * 1);\n"
                 + "macheEtwas(10, 10);\n"
                 + END_MAIN;
@@ -293,7 +291,7 @@ public class Ast2C4ev3VisitorTest {
                 + "void test() {\n"
                 + "    SetLedPattern(LED_GREEN);\n"
                 + "}\n"
-                + BEGIN_MAIN_DEFAULT
+                + BEGIN_MAIN__NULLSORS
                 + "test();\n"
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/methods/method_void_2.xml", expectedCode);
@@ -309,7 +307,7 @@ public class Ast2C4ev3VisitorTest {
                 + "    if (___x) return;"
                 + "    SetLedPattern(LED_GREEN);\n"
                 + "}\n"
-                + BEGIN_MAIN_DEFAULT
+                + BEGIN_MAIN__NULLSORS
                 + "test(true);\n"
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/methods/method_if_return_1.xml", expectedCode);
@@ -329,7 +327,7 @@ public class Ast2C4ev3VisitorTest {
                 + "    if (___variablenName2) return;\n"
                 + "    SetLedPattern(LED_GREEN);\n"
                 + "}\n"
-                + BEGIN_MAIN_DEFAULT
+                + BEGIN_MAIN__NULLSORS
                 + "test1(0, 0);\n"
                 + "test2();"
                 + END_MAIN;
@@ -346,7 +344,7 @@ public class Ast2C4ev3VisitorTest {
                 + "    DrawString(ToString(___x2), ___x, 0);"
                 + "    return ___x;\n"
                 + "}\n"
-                + BEGIN_MAIN_DEFAULT
+                + BEGIN_MAIN__NULLSORS
                 + "DrawString(ToString(test(0, ___variablenName)), 0, 0);\n"
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/methods/method_return_1.xml", expectedCode);
@@ -362,7 +360,7 @@ public class Ast2C4ev3VisitorTest {
                 + "    DrawString(ToString(___variablenName), 0, 0);"
                 + "    return None;\n"
                 + "}\n"
-                + BEGIN_MAIN_DEFAULT
+                + BEGIN_MAIN__NULLSORS
                 + "DrawString(ToString(test()), 0, 0);\n"
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/methods/method_return_2.xml", expectedCode);
@@ -380,7 +378,7 @@ public class Ast2C4ev3VisitorTest {
                 + "    DrawString(ToString(___variablenName), 0, 0);"
                 + "    return None;\n"
                 + "}\n"
-                + BEGIN_MAIN_DEFAULT
+                + BEGIN_MAIN__NULLSORS
                 + "DrawString(ToString(test()), 0, 0);\n"
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/methods/method_if_return_2.xml", expectedCode);
@@ -393,7 +391,7 @@ public class Ast2C4ev3VisitorTest {
             "" //
                 + CONSTANTS_AND_IMPORTS
                 + "std::string ___message = \"exit\";\n"
-                + BEGIN_MAIN_DEFAULT
+                + BEGIN_MAIN__NULLSORS
                 + "if (___message == \"exit\") {\n"
                 + "    DrawString(ToString(\"done\"), 0, 0);\n"
                 + "}\n"
@@ -408,7 +406,7 @@ public class Ast2C4ev3VisitorTest {
                 + CONSTANTS_AND_IMPORTS
                 + "double ___item;\n"
                 + "std::string ___item2 = \"cc\";\n"
-                + BEGIN_MAIN_DEFAULT
+                + BEGIN_MAIN__NULLSORS
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/code_generator/java/java_code_generator11.xml", expectedCode);
     }
@@ -421,7 +419,7 @@ public class Ast2C4ev3VisitorTest {
                 + "Color ___color = White;\n"
                 + "double ___light = 0;\n"
                 + "std::list<double> ___rgb = ((std::list<double>){0, 0, 0});\n"
-                + BEGIN_MAIN_DEFAULT
+                + BEGIN_MAIN__NULL_NULL_COLOR_NULL
                 + "___color = ReadEV3ColorSensor(IN_3);\n"
                 + "___light = ReadEV3ColorSensorLight(IN_3, ReflectedLight);\n"
                 + "___light = ReadEV3ColorSensorLight(IN_3, AmbientLight);\n"

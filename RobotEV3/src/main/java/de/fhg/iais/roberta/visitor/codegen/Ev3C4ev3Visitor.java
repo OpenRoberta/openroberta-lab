@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
+import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.inter.mode.action.*;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
@@ -50,13 +51,17 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static de.fhg.iais.roberta.visitor.lang.codegen.C.GYRO;
+
 public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<Void> {
 
-    private static final List<String> ev3SensorPorts = Lists.newArrayList("1", "2", "3", "4");
+    private static final List<String> EV3_SENSOR_PORTS = Lists.newArrayList("1", "2", "3", "4");
 
     private static final String PREFIX_OUTPUT_PORT = "OUT_";
     private static final String PREFIX_IN_PORT = "IN_";
@@ -66,6 +71,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     private final boolean isSayTextUsed;
     private final Configuration brickConfiguration;
     private final Set<UsedActor> usedActors;
+    private final Set<UsedSensor> usedSensors;
 
     /**
      * initialize the EV3 c4ev3 code generator visitor.
@@ -80,6 +86,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         this.brickConfiguration = brickConfiguration;
         this.language = language;
         this.usedActors = checkVisitor.getUsedActors();
+        this.usedSensors = checkVisitor.getUsedSensors();
         this.loopsLabels = checkVisitor.getloopsLabelContainer();
         this.isSayTextUsed = checkVisitor.isSayTextUsed();
     }
@@ -177,10 +184,16 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private String getSensorsInitializationArguments() {
-        return ev3SensorPorts.stream()
-            .map(brickConfiguration::optConfigurationComponent)
-            .map(this::getSensorFromConfigurationComponent)
-            .collect(Collectors.joining(", "));
+        Map<String, ConfigurationComponent> usedSensorMap = new HashMap<>(4);
+        for ( UsedSensor usedSensor : this.usedSensors ) {
+            String port = usedSensor.getPort();
+            usedSensorMap.put(port, this.brickConfiguration.optConfigurationComponent(port));
+        }
+
+        return EV3_SENSOR_PORTS.stream()
+                               .map(usedSensorMap::get)
+                               .map(this::getSensorFromConfigurationComponent)
+                               .collect(Collectors.joining(", "));
     }
 
     private String getSensorFromConfigurationComponent (ConfigurationComponent component) {
@@ -237,13 +250,12 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateGyroInitialization () {
-        brickConfiguration.getSensors().stream()
-            .filter(s -> SC.GYRO.equals(s.getComponentType()))
-            .map(ConfigurationComponent::getUserDefinedPortName)
-            .forEach(port -> {
-                generateResetGyroSensor(port);
-                nlIndent();
-            });
+        for ( UsedSensor usedSensor : this.usedSensors ) {
+            if (usedSensor.getType().equals(SC.GYRO)) {
+                this.generateResetGyroSensor(usedSensor.getPort());
+                this.nlIndent();
+            }
+        }
     }
 
     @Override
