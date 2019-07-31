@@ -1,6 +1,6 @@
 define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.model', 'socket.controller', 'guiState.controller', 'webview.controller',
-        'interpreter.interpreter', 'interpreter.nativeWeDo', 'jquery' ], function(exports, UTIL, LOG, MSG, PROG_C, PROGRAM, SOCKET_C, GUISTATE_C, WEBVIEW_C,
-        WEDO_I, WEDO_N, $) {
+        'interpreter.interpreter', 'interpreter.nativeWeDo', 'interpreter.nativeWeDo', 'jquery' ], function(exports, UTIL, LOG, MSG, PROG_C, PROGRAM, SOCKET_C, GUISTATE_C, WEBVIEW_C,
+        WEDO_I, WEDO_N, WEDO_T, $) {
 
     var blocklyWorkspace;
     var interpreter;

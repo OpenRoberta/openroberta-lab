@@ -6,7 +6,7 @@ WORKDIR /opt
 
 RUN apt-get update -yq \
     && apt-get install curl gnupg -yq \
-    && curl -sL https://deb.nodesource.com/setup_8.x | bash \
+    && curl -sL https://deb.nodesource.com/setup_12.x | bash \
     && apt-get install nodejs -yq
 
 # shallow clone of the repo. Run mvn once to install most all the artifacts needed in /root/.m2 to speed up later builds

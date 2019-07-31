@@ -96,6 +96,7 @@ require.config({
         'interpreter.interpreter' : '../app/wedoInterpreter/interpreter.interpreter',
         'interpreter.nativeInterface' : '../app/wedoInterpreter/interpreter.nativeInterface',
         'interpreter.nativeWeDo' : '../app/wedoInterpreter/interpreter.nativeWeDo',
+        'interpreter.nativeTest' : '../app/wedoInterpreter/interpreter.nativeTest',
         'interpreter.state' : '../app/wedoInterpreter/interpreter.state',
         'interpreter.util' : '../app/wedoInterpreter/interpreter.util'
 

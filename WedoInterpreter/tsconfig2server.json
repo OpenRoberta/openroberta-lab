@@ -14,7 +14,6 @@
     },
     "exclude": [
         "**/node_modules",
-        "**/interpreter.nativeTest.ts",
         "**/interpreter.runStackMachineJson.ts"
     ],
     "compileOnSave": false,

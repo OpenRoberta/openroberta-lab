@@ -9,12 +9,16 @@ source ./decl.sh
 isDeclShValid
 
 case "${SERVER_NAME}" in
-    master) question 'do you really want to start a docker image with the MASTER server?'
-            question 'you know, that this would be a PROD deployment?' ;;
+    master) question 'do you really want to deploy master (that would be a PROD deployment)?'
+            case "$OPTIONAL_VERSION" in
+                "") IMAGE_VERSION="$BASE_VERSION" ;;
+                *)  IMAGE_VERSION="$OPTIONAL_VERSION"
+                    question "do you really want to deploy version $IMAGE_VERSION of the master image (this is unusual)?" ;;
+            esac ;;
      *)     : ;;
 esac
 
-IMAGE="rbudde/openroberta_${INAME}_${SERVER_NAME}:$BASE_VERSION"
+IMAGE="rbudde/openroberta_${INAME}_${SERVER_NAME}:$IMAGE_VERSION"
 CONTAINER="${INAME}-${SERVER_NAME}"
 RUN="\
 docker run -d --name=${CONTAINER} \
