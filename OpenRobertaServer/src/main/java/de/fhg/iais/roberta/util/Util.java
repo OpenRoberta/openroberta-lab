@@ -47,7 +47,8 @@ public class Util {
     }
 
     /**
-     * all REST services, excluded is only the /init request, have to call this method. It processes the init-token, which protects user and server against<br>
+     * all REST services, excluded is only the /init and the /ping request, have to call this method. It processes the init-token, which protects user and
+     * server against<br>
      * - multiple frontend sessions connected to one backend session (see class {@link ClientInit})<br>
      * - a frontend session not backed by a backend session (occurs when the server is restarted)<br>
      *
@@ -126,7 +127,6 @@ public class Util {
             response.put("serverTime", new Date());
             response.put("server.version", Util.serverVersion);
             if ( httpSessionState != null ) {
-                response.put("initToken", httpSessionState.getInitToken());
                 String token = httpSessionState.getToken();
                 if ( token != null ) {
                     if ( token.equals(ClientAdmin.NO_CONNECT) ) {
@@ -153,6 +153,9 @@ public class Util {
                             response.put("robot.state", infoAboutState);
                         }
                     }
+                }
+                if ( httpSessionState.isInitTokenInitialized() ) {
+                    response.put("initToken", httpSessionState.getInitToken());
                 }
             }
         } catch ( Exception e ) {

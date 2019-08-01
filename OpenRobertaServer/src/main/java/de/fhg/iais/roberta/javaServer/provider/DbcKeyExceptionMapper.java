@@ -23,9 +23,13 @@ public class DbcKeyExceptionMapper implements ExceptionMapper<DbcKeyException> {
 
     @Override
     public Response toResponse(DbcKeyException e) {
-        LOG.error("exception was caught at system border", e);
+        final String errorKey = e.getKey().getKey();
+        if ( errorKey.startsWith("ORA_INIT_FAIL") ) {
+            LOG.error("init exception was caught at system border: " + e.getMessage());
+        } else {
+            LOG.error("exception was caught at system border", e);
+        }
         try {
-            final String errorKey = e.getKey().getKey();
             final JSONObject response = new JSONObject();
             response.put("rc", "error");
             response.put("message", errorKey).put("cause", errorKey).put("parameters", e.getParameter());

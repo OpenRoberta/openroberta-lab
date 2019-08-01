@@ -26,7 +26,6 @@ echo '
 # Two merge commits are enforced to document the fact, that a hotfix is deployed.                                       #
 #                                                                                                                       #
 # After the hotfix script is run, check for sanity and then push develop and master to the remote IMMEDIATELY :-).      #
-# Running the script 'pushMasterAndDevelop.sh' will do that                                                             #
 # --------------------------------------------------------------------------------------------------------------------- #
 '
 # remember script directory, working directory and directory with (parent) pom.

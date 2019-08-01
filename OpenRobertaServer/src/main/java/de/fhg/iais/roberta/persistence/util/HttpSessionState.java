@@ -160,13 +160,13 @@ public class HttpSessionState implements Serializable {
         String errorMsgIfError;
         Key errorKey;
         if ( initToken == null ) {
-            errorMsgIfError = "frontend request has no initToken. This is a SEVERE error";
+            errorMsgIfError = "frontend request has no initToken";
             errorKey = Key.INIT_FAIL_HTTPSESSION_EXPECTED_BUT_NOT_FOUND;
         } else if ( !isInitTokenInitialized() ) {
-            errorMsgIfError = "initToken is not initialized in the session. This is a SEVERE error";
+            errorMsgIfError = "initToken is not initialized in the session";
             errorKey = Key.INIT_FAIL_MULTIPLE_FRONTENDS_ONE_HTTPSESSION;
         } else if ( !getInitToken().equals(initToken) ) {
-            errorMsgIfError = "initToken from frontend and from session are different. This is a SEVERE error";
+            errorMsgIfError = "initToken from frontend and from session are different";
             errorKey = Key.INIT_FAIL_MULTIPLE_FRONTENDS_ONE_HTTPSESSION;
         } else {
             errorMsgIfError = null;
