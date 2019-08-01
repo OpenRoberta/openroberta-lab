@@ -529,7 +529,7 @@ define(['simulation.simulation', 'robertaLogic.constants', 'simulation.robot'], 
             }
         }
         // update sayText
-        if (actions.language !== null && SpeechSynthesis) {
+        if (actions.language !== null && actions.language !== undefined && SpeechSynthesis) {
             this.sayText.language = actions.language;
         }
         if (actions.sayText && SpeechSynthesis) {
