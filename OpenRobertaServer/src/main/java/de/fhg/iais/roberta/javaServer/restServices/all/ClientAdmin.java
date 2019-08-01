@@ -189,8 +189,10 @@ public class ClientAdmin {
     private void addRobotUpdateInfo(JSONObject response, String robotMenuVersion, String serverMenuVersion) throws JSONException {
         if ( robotMenuVersion != null && serverMenuVersion != null ) {
             response.put("robot.update", Util.versionCompare(robotMenuVersion, serverMenuVersion));
+            response.put("robot.serverVersion", serverMenuVersion);
         } else {
             response.put("robot.update", 0);
+            response.put("robot.serverVersion", 0);
         }
     }
 
