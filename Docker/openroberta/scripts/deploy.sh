@@ -22,7 +22,6 @@ echo '
 # We want to avoid merge commits and keep a straight line of commits in master as long as possible.             #
 #                                                                                                               #
 # After the deploy script is run, check for sanity and then push develop and master IMMEDIATELY :-).            #
-# Running the script ./pushMasterAndDevelop.sh will do that                                                     #
 # ------------------------------------------------------------------------------------------------------------- #
 '
 # remember script directory, working directory and directory with (parent) pom.

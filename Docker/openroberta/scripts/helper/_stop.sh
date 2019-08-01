@@ -15,8 +15,11 @@ case "$DOCKERSTOP" in
     '') echo "found no container '${CONTAINER}' to stop. That is ok" ;;
     * ) echo "stopped container '$DOCKERSTOP'" ;;
 esac
-DOCKERRM=$(docker rm ${CONTAINER} 2>/dev/null)
-case "$DOCKERRM" in
-    '') echo "found no container '${CONTAINER}' to remove. That is ok" ;;
-    * ) echo "removed container '$DOCKERRM'" ;;
+case "${SERVER_NAME}" in
+    master) echo "the master container '${CONTAINER}' is not removed to allow error analysis" ;;
+     *)     DOCKERRM=$(docker rm ${CONTAINER} 2>/dev/null)
+            case "$DOCKERRM" in
+                '') echo "found no container '${CONTAINER}' to remove. That is ok" ;;
+                * ) echo "removed container '$DOCKERRM'" ;;
+            esac ;;
 esac

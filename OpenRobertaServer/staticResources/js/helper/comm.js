@@ -4,6 +4,7 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
      */
     var urlPrefix = '/rest';
     var initToken = undefined;
+    var frontendSessionValid = true;
 
     /**
      * the default error fn. Should be replaced by an own implementation. Not
@@ -58,6 +59,10 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
      * POST a JSON object as ENTITY and expect a JSON object as response.
      */
     function json(url, data, successFn, message) {
+        if (!frontendSessionValid) {
+            LOG.error('The frontend session is invalid. No REST call to the server allowed');
+            return;
+        }
         var log = LOG.reportToComm();
         var load = {
             log : log,
@@ -65,7 +70,8 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
             initToken : initToken
         };
         function successFnWrapper(response) {
-            if (response !== undefined && response.message !== undefined && response.message.startsWith("ORA_INIT_FAIL_")) {
+            if (response !== undefined && response.message !== undefined && response.message.indexOf("ORA_INIT_FAIL_") >= 0) {
+                frontendSessionValid = false;
                 var message;
                 if (navigator.language.indexOf("de") > -1) {
                     message = "Dieser Browsertab ist nicht mehr gültig, z. B. weil du einen weiteren Bowsertab mit dem Open Roberta Lab geöffnet hast.\n\nDu kannst dein Programm zwar noch verändern oder exportieren, aber nicht mehr auf dein Gerät übertragen.\nBitte schließe diesen Browsertab und wechsle zu dem neuen!";

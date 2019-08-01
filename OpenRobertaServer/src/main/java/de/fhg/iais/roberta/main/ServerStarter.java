@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
+
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Server;
@@ -164,7 +167,7 @@ public class ServerStarter {
         ServletContextHandler restHttpHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         restHttpHandler.setContextPath("/rest");
         restHttpHandler.setSessionHandler(new SessionHandler());
-
+        restHttpHandler.getSessionHandler().addEventListener(mkSessionListener(" for /rest REST endpoint"));
         restHttpHandler.addEventListener(robertaGuiceServletConfig);
         restHttpHandler.addFilter(GuiceFilter.class, "/*", null);
         restHttpHandler.addServlet(DefaultServlet.class, "/*");
@@ -174,10 +177,11 @@ public class ServerStarter {
         wsHandler.setContextPath("/ws");
         wsHandler.addServlet(WebSocketServiceServlet.class, "/*");
 
-        // 3. static resources and REST API without /rest prefix (deprecated, used by very old ev3 robots)
+        // 3. static resources
         ServletContextHandler defaultHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         defaultHandler.setContextPath("/*");
         defaultHandler.setSessionHandler(new SessionHandler());
+        // see /rest endpoint, this will cover this: restHttpHandler.getSessionHandler().addEventListener(mkSessionListener(" for / static resources, no REST endpoint"));
 
         // 3.1 REST API without prefix (deprecated, used by very old ev3 robots)
         defaultHandler.addEventListener(robertaGuiceServletConfig);
@@ -203,12 +207,12 @@ public class ServerStarter {
 
         HandlerList handlers = new HandlerList();
         handlers
-        .setHandlers(
-            new Handler[] {
-                restHttpHandler,
-                wsHandler,
-                defaultHandler
-            });
+            .setHandlers(
+                new Handler[] {
+                    restHttpHandler,
+                    wsHandler,
+                    defaultHandler
+                });
         server.setHandler(handlers);
 
         StringBuilder sb = new StringBuilder();
@@ -358,7 +362,7 @@ public class ServerStarter {
                         " factory for robot plugin "
                             + robotName
                             + " could not be build. Plugin-jar not on the classpath? Invalid properties? Server does NOT start",
-                            e);
+                        e);
                 }
             }
         }
@@ -442,6 +446,21 @@ public class ServerStarter {
             LOG.error("Server could not check robot names in the database (exit 20)", e);
             System.exit(20);
         }
+    }
+
+    private static final HttpSessionListener mkSessionListener(final String messageDetail) {
+        final HttpSessionListener listener = new HttpSessionListener() {
+            @Override
+            public void sessionCreated(HttpSessionEvent se) {
+                LOG.info("jetty session created " + messageDetail);
+            }
+
+            @Override
+            public void sessionDestroyed(HttpSessionEvent se) {
+                LOG.info("jetty destroyed " + messageDetail);
+            }
+        };
+        return listener;
     }
 
     private static String extractValue(String valueMaybeQuoted) {
