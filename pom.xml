@@ -41,7 +41,7 @@
 
 		<guice.version>4.2.0</guice.version>
 		<jersey.version>1.19.4</jersey.version>
-		<jetty.version>9.4.8.v20171121</jetty.version>
+		<jetty.version>9.4.15.v20190215</jetty.version>
 		<hibernate.version>4.3.11.Final</hibernate.version>
 
 		<log.level>INFO</log.level> <!-- possible settings: TRACE DEBUG INFO WARN ERROR OFF -->
