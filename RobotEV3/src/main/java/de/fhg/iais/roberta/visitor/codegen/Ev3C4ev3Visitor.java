@@ -1,19 +1,40 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.Lists;
+
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.inter.mode.action.*;
+import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
+import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
+import de.fhg.iais.roberta.inter.mode.action.ILanguage;
+import de.fhg.iais.roberta.inter.mode.action.ILightMode;
+import de.fhg.iais.roberta.inter.mode.action.IMotorMoveMode;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
-import de.fhg.iais.roberta.syntax.*;
-import de.fhg.iais.roberta.syntax.action.communication.*;
+import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.syntax.MotorDuration;
+import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
@@ -34,13 +55,42 @@ import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.lang.expr.*;
-import de.fhg.iais.roberta.syntax.lang.functions.*;
+import de.fhg.iais.roberta.syntax.lang.expr.Binary;
+import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
+import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
+import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
+import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
+import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
+import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
+import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.generic.*;
+import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -48,16 +98,6 @@ import de.fhg.iais.roberta.visitor.codegen.utilities.TTSLanguageMapper;
 import de.fhg.iais.roberta.visitor.collect.Ev3UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import static de.fhg.iais.roberta.visitor.lang.codegen.C.GYRO;
 
 public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<Void> {
 
@@ -79,7 +119,12 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
      * @param programPhrases
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
-    private Ev3C4ev3Visitor(String programName, Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation, ILanguage language) {
+    private Ev3C4ev3Visitor(
+        String programName,
+        Configuration brickConfiguration,
+        ArrayList<ArrayList<Phrase<Void>>> programPhrases,
+        int indentation,
+        ILanguage language) {
         super(programPhrases, indentation);
         this.programName = programName;
         Ev3UsedHardwareCollectorVisitor checkVisitor = new Ev3UsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
@@ -110,7 +155,11 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
      * @return
      */
     public static String generate(
-        String programName, Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, ILanguage language) {
+        String programName,
+        Configuration brickConfiguration,
+        ArrayList<ArrayList<Phrase<Void>>> phrasesSet,
+        boolean withWrapping,
+        ILanguage language) {
         Assert.notNull(programName);
         Assert.notNull(brickConfiguration);
 
@@ -126,9 +175,9 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateConstants() {
-        this.sb.append("#define PROGRAM_NAME \"" + programName + "\"\n");
-        this.sb.append("#define WHEEL_DIAMETER " + brickConfiguration.getWheelDiameterCM() + "\n");
-        this.sb.append("#define TRACK_WIDTH " + brickConfiguration.getTrackWidthCM() + "\n");
+        this.sb.append("#define PROGRAM_NAME \"" + this.programName + "\"\n");
+        this.sb.append("#define WHEEL_DIAMETER " + this.brickConfiguration.getWheelDiameterCM() + "\n");
+        this.sb.append("#define TRACK_WIDTH " + this.brickConfiguration.getTrackWidthCM() + "\n");
         nlIndent();
     }
 
@@ -190,14 +239,11 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
             usedSensorMap.put(port, this.brickConfiguration.optConfigurationComponent(port));
         }
 
-        return EV3_SENSOR_PORTS.stream()
-                               .map(usedSensorMap::get)
-                               .map(this::getSensorFromConfigurationComponent)
-                               .collect(Collectors.joining(", "));
+        return EV3_SENSOR_PORTS.stream().map(usedSensorMap::get).map(this::getSensorFromConfigurationComponent).collect(Collectors.joining(", "));
     }
 
-    private String getSensorFromConfigurationComponent (ConfigurationComponent component) {
-        if (component == null) {
+    private String getSensorFromConfigurationComponent(ConfigurationComponent component) {
+        if ( component == null ) {
             return "NULL";
         }
         switch ( component.getComponentType() ) {
@@ -222,10 +268,9 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         }
     }
 
-
-    private void generateDebugInitialization (MainTask<Void> mainTask) {
+    private void generateDebugInitialization(MainTask<Void> mainTask) {
         boolean isDebug = mainTask.getDebug().equals("TRUE");
-        if (isDebug) {
+        if ( isDebug ) {
             this.sb.append("startLoggingThread(");
             this.sb.append(getConnectedMotorPorts());
             this.sb.append(");");
@@ -233,25 +278,23 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         }
     }
 
-    private String getConnectedMotorPorts () {
-        String ports = brickConfiguration.getActors().stream()
-            .map(ConfigurationComponent::getUserDefinedPortName)
-            .collect(Collectors.joining());
-        if (ports.length() == 0) {
+    private String getConnectedMotorPorts() {
+        String ports = this.brickConfiguration.getActors().stream().map(ConfigurationComponent::getUserDefinedPortName).collect(Collectors.joining());
+        if ( ports.length() == 0 ) {
             return "0"; // TODO: Create unit test case
         }
         return getMotorPortConstant(ports);
     }
 
-    private void generateTTSInitialization () {
-        if (isSayTextUsed) {
-            this.sb.append("SetLanguage(\"" + TTSLanguageMapper.getLanguageString(language) + "\");");
+    private void generateTTSInitialization() {
+        if ( this.isSayTextUsed ) {
+            this.sb.append("SetLanguage(\"" + TTSLanguageMapper.getLanguageString(this.language) + "\");");
         }
     }
 
-    private void generateGyroInitialization () {
+    private void generateGyroInitialization() {
         for ( UsedSensor usedSensor : this.usedSensors ) {
-            if (usedSensor.getType().equals(SC.GYRO)) {
+            if ( usedSensor.getType().equals(SC.GYRO) ) {
                 this.generateResetGyroSensor(usedSensor.getPort());
                 this.nlIndent();
             }
@@ -270,7 +313,6 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         this.sb.append("}");
         nlIndent();
     }
-
 
     @Override
     protected String getLanguageVarTypeFromBlocklyType(BlocklyType type) {
@@ -319,8 +361,9 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         }
     }
 
-    @Override public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
-        if ( isSingleMathFunctAbs(mathSingleFunct.getFunctName())) {
+    @Override
+    public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
+        if ( isSingleMathFunctAbs(mathSingleFunct.getFunctName()) ) {
             this.generateSingleMathFunctAbs(mathSingleFunct);
             return null;
         }
@@ -331,7 +374,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return functionName.equals(FunctionNames.ABS);
     }
 
-    private void generateSingleMathFunctAbs (MathSingleFunct<Void> mathSingleFunct) {
+    private void generateSingleMathFunctAbs(MathSingleFunct<Void> mathSingleFunct) {
         this.sb.append("abs(");
         mathSingleFunct.getParam().get(0).visit(this);
         this.sb.append(")");
@@ -386,43 +429,43 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         }
     }
 
-//    @Override
-//    public Void visitBinary(Binary<Void> binary) {
-//        // TODO: Clean
-//        Binary.Op op = binary.getOp();
-//        if ( op == Binary.Op.ADD || op == Binary.Op.MINUS || op == Binary.Op.DIVIDE || op == Binary.Op.MULTIPLY ) {
-//            this.sb.append("(");
-//        }
-//        if (op == Binary.Op.MOD) {
-//            this.sb.append("fmod(");
-//        }
-//        generateSubExpr(this.sb, false, binary.getLeft(), binary);
-//        String sym = getBinaryOperatorSymbol(op);
-//        this.sb.append(" " + sym + " ");
-//        switch ( op ) {
-//            case TEXT_APPEND:
-//                if ( binary.getRight().getVarType().toString().contains("NUMBER") ) {
-//                    this.sb.append("ToString(");
-//                    generateSubExpr(this.sb, false, binary.getRight(), binary);
-//                    this.sb.append(")");
-//                } else {
-//                    generateSubExpr(this.sb, false, binary.getRight(), binary);
-//                }
-//                break;
-//            case DIVIDE:
-//                this.sb.append("((");
-//                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-//                this.sb.append(")*1.0)");
-//                break;
-//
-//            default:
-//                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-//        }
-//        if ( op == Binary.Op.ADD || op == Binary.Op.MINUS || op == Binary.Op.DIVIDE || op == Binary.Op.MULTIPLY || op == Binary.Op.MOD) {
-//            this.sb.append(")");
-//        }
-//        return null;
-//    }
+    //    @Override
+    //    public Void visitBinary(Binary<Void> binary) {
+    //        // TODO: Clean
+    //        Binary.Op op = binary.getOp();
+    //        if ( op == Binary.Op.ADD || op == Binary.Op.MINUS || op == Binary.Op.DIVIDE || op == Binary.Op.MULTIPLY ) {
+    //            this.sb.append("(");
+    //        }
+    //        if (op == Binary.Op.MOD) {
+    //            this.sb.append("fmod(");
+    //        }
+    //        generateSubExpr(this.sb, false, binary.getLeft(), binary);
+    //        String sym = getBinaryOperatorSymbol(op);
+    //        this.sb.append(" " + sym + " ");
+    //        switch ( op ) {
+    //            case TEXT_APPEND:
+    //                if ( binary.getRight().getVarType().toString().contains("NUMBER") ) {
+    //                    this.sb.append("ToString(");
+    //                    generateSubExpr(this.sb, false, binary.getRight(), binary);
+    //                    this.sb.append(")");
+    //                } else {
+    //                    generateSubExpr(this.sb, false, binary.getRight(), binary);
+    //                }
+    //                break;
+    //            case DIVIDE:
+    //                this.sb.append("((");
+    //                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+    //                this.sb.append(")*1.0)");
+    //                break;
+    //
+    //            default:
+    //                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+    //        }
+    //        if ( op == Binary.Op.ADD || op == Binary.Op.MINUS || op == Binary.Op.DIVIDE || op == Binary.Op.MULTIPLY || op == Binary.Op.MOD) {
+    //            this.sb.append(")");
+    //        }
+    //        return null;
+    //    }
 
     // copied from AbstractCommonArduinoCppVisitor
     @Override
@@ -478,7 +521,6 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
     // end copied from AbstractCommonArduinoCppVisitor
 
-
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
         Expr<Void> condition = repeatStmt.getExpr();
@@ -516,7 +558,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
-    private  void generateCodeFromStmtConditionFor(Expr<Void> expr) {
+    private void generateCodeFromStmtConditionFor(Expr<Void> expr) {
         final ExprList<Void> expressions = (ExprList<Void>) expr;
         Expr<Void> counterName = expressions.get().get(0);
         Expr<Void> counterInitialValue = expressions.get().get(1);
@@ -582,7 +624,6 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
-
     // copied from Arduino
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
@@ -634,7 +675,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
-    private String getListCreateCasting (BlocklyType type) {
+    private String getListCreateCasting(BlocklyType type) {
         switch ( type ) {
             case NUMBER:
                 return "(std::list<double>)";
@@ -693,7 +734,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
-        if (mathPropNeedFunctionCall(mathNumPropFunct.getFunctName())) {
+        if ( mathPropNeedFunctionCall(mathNumPropFunct.getFunctName()) ) {
             generateFunctionCallForMathProp(mathNumPropFunct);
         } else {
             generateInlineMathProp(mathNumPropFunct);
@@ -701,7 +742,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
-    private boolean mathPropNeedFunctionCall (FunctionNames functionName) {
+    private boolean mathPropNeedFunctionCall(FunctionNames functionName) {
         try {
             getMathPropFunctionName(functionName);
             return true;
@@ -716,8 +757,8 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         this.sb.append(")");
     }
 
-    private String getMathPropFunctionName (FunctionNames functionName) {
-        switch ( functionName) {
+    private String getMathPropFunctionName(FunctionNames functionName) {
+        switch ( functionName ) {
             case PRIME:
                 return "IsPrime";
             case WHOLE:
@@ -727,7 +768,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         }
     }
 
-    private void generateInlineMathProp (MathNumPropFunct<Void> mathNumPropFunct) {
+    private void generateInlineMathProp(MathNumPropFunct<Void> mathNumPropFunct) {
         Expr<Void> n = mathNumPropFunct.getParam().get(0);
         switch ( mathNumPropFunct.getFunctName() ) {
             case EVEN:
@@ -785,11 +826,11 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
         List<Expr<Void>> texts = textJoinFunct.getParam().get();
-        for (int i = 0; i < texts.size(); i++) {
+        for ( int i = 0; i < texts.size(); i++ ) {
             this.sb.append("ToString(");
             texts.get(i).visit(this);
             this.sb.append(")");
-            if (i < texts.size() - 1) {
+            if ( i < texts.size() - 1 ) {
                 this.sb.append(" + ");
             }
         }
@@ -802,7 +843,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         MotorDuration<Void> duration = motorOnAction.getParam().getDuration();
         Expr<Void> speedExpression = motorOnAction.getParam().getSpeed();
         if ( isActorOnPort(port) ) {
-            boolean isRegulated = brickConfiguration.isMotorRegulated(port);
+            boolean isRegulated = this.brickConfiguration.isMotorRegulated(port);
             if ( duration != null ) {
                 generateRotateMotorForDuration(port, speedExpression, motorOnAction.getDurationMode(), duration.getValue());
             } else {
@@ -827,7 +868,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         String functionName = isRegulated ? "OnFwdReg" : "OnFwdEx";
         this.sb.append(functionName + "(" + getPrefixedOutputPort(port) + ", ");
         visitSpeedExpression(speedExpression);
-        if(!isRegulated){
+        if ( !isRegulated ) {
             this.sb.append(", RESET_NONE");
         }
         this.sb.append(");");
@@ -1012,11 +1053,11 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private String getLeftDriveMotorPort() {
-        return getPrefixedOutputPort(brickConfiguration.getFirstMotor(SC.LEFT).getUserDefinedPortName());
+        return getPrefixedOutputPort(this.brickConfiguration.getFirstMotor(SC.LEFT).getUserDefinedPortName());
     }
 
     private String getRightDriveMotorPort() {
-        return getPrefixedOutputPort(brickConfiguration.getFirstMotor(SC.RIGHT).getUserDefinedPortName());
+        return getPrefixedOutputPort(this.brickConfiguration.getFirstMotor(SC.RIGHT).getUserDefinedPortName());
     }
 
     private boolean isReverseGivenBrickConfigurationAndAction(IDriveDirection direction) {
@@ -1107,7 +1148,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
         String port = ultrasonicSensor.getPort();
-        if (ultrasonicSensor.getMode().equals(SC.DISTANCE)) {
+        if ( ultrasonicSensor.getMode().equals(SC.DISTANCE) ) {
             generateRealUltrasonicDistance(port);
         } else {
             generateRealUltrasonicPresence(port);
@@ -1116,23 +1157,16 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateRealUltrasonicDistance(String port) {
-        this.sb.append("ReadEV3UltrasonicSensorDistance(")
-            .append(getPrefixedInputPort(port))
-            .append(", CM)");
+        this.sb.append("ReadEV3UltrasonicSensorDistance(").append(getPrefixedInputPort(port)).append(", CM)");
     }
 
-
     private void generateRealUltrasonicPresence(String port) {
-        this.sb.append("ReadEV3UltrasonicSensorListen(")
-            .append(getPrefixedInputPort(port))
-            .append(")");
+        this.sb.append("ReadEV3UltrasonicSensorListen(").append(getPrefixedInputPort(port)).append(")");
     }
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        this.sb.append("ReadNXTSoundSensor(")
-            .append(getPrefixedInputPort(soundSensor.getPort()))
-            .append(", DB)");
+        this.sb.append("ReadNXTSoundSensor(").append(getPrefixedInputPort(soundSensor.getPort())).append(", DB)");
         return null;
     }
 
@@ -1152,13 +1186,10 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         this.sb.append("NEPOResetEV3GyroSensor(" + getPrefixedInputPort(port) + ");");
     }
 
-    private void generateReadGyro (String port, String mode) {
-        this.sb.append("ReadEV3GyroSensor(")
-            .append(getPrefixedInputPort(port))
-            .append(", ")
-            .append(getGyroSensorReadModeConstant(mode))
-            .append(")");
+    private void generateReadGyro(String port, String mode) {
+        this.sb.append("ReadEV3GyroSensor(").append(getPrefixedInputPort(port)).append(", ").append(getGyroSensorReadModeConstant(mode)).append(")");
     }
+
     private String getGyroSensorReadModeConstant(String mode) {
         if ( mode.equals(SC.ANGLE) ) {
             return "EV3GyroAngle";
@@ -1169,7 +1200,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        if (isColorSensorInLightMode(colorSensor.getMode())) {
+        if ( isColorSensorInLightMode(colorSensor.getMode()) ) {
             visitColorSensorLightMode(colorSensor);
         } else {
             visitColorSensorColorMode(colorSensor);
@@ -1177,12 +1208,13 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
-    private boolean isColorSensorInLightMode (String mode) {
+    private boolean isColorSensorInLightMode(String mode) {
         return mode.equals(SC.LIGHT) || mode.equals(SC.AMBIENTLIGHT);
     }
 
-    private void visitColorSensorLightMode (ColorSensor<Void> colorSensor) {
-        this.sb.append("ReadEV3ColorSensorLight(")
+    private void visitColorSensorLightMode(ColorSensor<Void> colorSensor) {
+        this.sb
+            .append("ReadEV3ColorSensorLight(")
             .append(getPrefixedInputPort(colorSensor.getPort()))
             .append(", ")
             .append(getColorSensorLightModeConstant(colorSensor.getMode()))
@@ -1200,8 +1232,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         }
     }
 
-
-    private void visitColorSensorColorMode (ColorSensor<Void> colorSensor) {
+    private void visitColorSensorColorMode(ColorSensor<Void> colorSensor) {
         String function = getReadColorSensorColorModeFunction(colorSensor.getMode());
         this.sb.append(function + "(" + getPrefixedInputPort(colorSensor.getPort()) + ")");
     }
@@ -1233,20 +1264,17 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
-    private void generateEV3IRDistance (String port) {
-        this.sb.append("ReadEV3IrSensorProximity(")
-            .append(getPrefixedInputPort(port))
-            .append(")");
+    private void generateEV3IRDistance(String port) {
+        this.sb.append("ReadEV3IrSensorProximity(").append(getPrefixedInputPort(port)).append(")");
     }
 
-    private void generateEV3IRSeeker (String port) {
-        this.sb.append("_ReadIRSeekAllChannels("+ getPrefixedInputPort(port) + ")");
+    private void generateEV3IRSeeker(String port) {
+        this.sb.append("_ReadIRSeekAllChannels(" + getPrefixedInputPort(port) + ")");
     }
-
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        if ( compassSensor.getMode().equals(SC.CALIBRATE)) {
+        if ( compassSensor.getMode().equals(SC.CALIBRATE) ) {
             visitCalibrateCompass(compassSensor);
         } else {
             visitReadCompass(compassSensor);
@@ -1255,16 +1283,16 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
-    private void visitCalibrateCompass (CompassSensor<Void> compassSensor) {
+    private void visitCalibrateCompass(CompassSensor<Void> compassSensor) {
         String port = getPrefixedInputPort(compassSensor.getPort());
         nlIndent();
-        this.sb.append("StartHTCompassCalibration(" + port +");");
+        this.sb.append("StartHTCompassCalibration(" + port + ");");
         this.sb.append("Wait(40000);");
         this.sb.append("StopHTCompassCalibration(" + port + ");");
         nlIndent();
     }
 
-    private void visitReadCompass (CompassSensor<Void> compassSensor) {
+    private void visitReadCompass(CompassSensor<Void> compassSensor) {
         String mode = getCompassSensorReadModeConstant(compassSensor.getMode());
         this.sb.append("ReadHTCompassSensor(" + getPrefixedInputPort(compassSensor.getPort()) + ", " + mode + ")");
     }
@@ -1280,10 +1308,10 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         }
     }
 
-
     @Override
     public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
-        this.sb.append("ReadHTIrSensor(")
+        this.sb
+            .append("ReadHTIrSensor(")
             .append(getPrefixedInputPort(irSeekerSensor.getPort()))
             .append(", ")
             .append(getIRSeekerSensorConstantMode(irSeekerSensor.getMode()))
@@ -1316,7 +1344,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
-    private String getKeyConstant (String keyPort) {
+    private String getKeyConstant(String keyPort) {
         switch ( keyPort ) {
             case SC.ENTER:
                 return "BTNCENTER";
@@ -1362,7 +1390,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
-    private String getSoundConstantByFileName (String fileName) {
+    private String getSoundConstantByFileName(String fileName) {
         switch ( fileName ) {
             case "0":
                 return "SOUND_CLICK";
@@ -1400,13 +1428,13 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
-    private void generateSetVolume (VolumeAction<Void> volumeAction) {
+    private void generateSetVolume(VolumeAction<Void> volumeAction) {
         this.sb.append("SetVolume(");
         volumeAction.getVolume().visit(this);
         this.sb.append(");");
     }
 
-    private void generateGetVolume () {
+    private void generateGetVolume() {
         this.sb.append("GetVolume()");
     }
 
@@ -1528,7 +1556,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     private void generateSpeedAndPitchArgumentsOrDefault(SayTextAction<Void> sayTextAction) {
         Expr<Void> speed = sayTextAction.getSpeed();
         Expr<Void> pitch = sayTextAction.getPitch();
-        if (!isExprEmptyBlock(speed) && !isExprEmptyBlock(pitch)) {
+        if ( !isExprEmptyBlock(speed) && !isExprEmptyBlock(pitch) ) {
             generateSpeedAndPitchArguments(speed, pitch);
         } else {
             generateDefaultSpeedAndPitchArguments();
@@ -1540,13 +1568,13 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return expr.getKind().equals(emptyBlock);
     }
 
-    private void generateSpeedAndPitchArguments (Expr<Void> speed, Expr<Void> pitch) {
+    private void generateSpeedAndPitchArguments(Expr<Void> speed, Expr<Void> pitch) {
         speed.visit(this);
         this.sb.append(", ");
         pitch.visit(this);
     }
 
-    private void generateDefaultSpeedAndPitchArguments () {
+    private void generateDefaultSpeedAndPitchArguments() {
         this.sb.append("30, 50");
     }
 }

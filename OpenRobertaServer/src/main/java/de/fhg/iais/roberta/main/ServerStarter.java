@@ -255,13 +255,8 @@ public class ServerStarter {
      * @return ipToCountry of type IIpToCountry
      */
     private IIpToCountry configureIpToCountryDb() {
-<<<<<<< HEAD
         Boolean isPublicServer = this.serverProperties.getBooleanProperty("server.public");
         String pathIpToCountryDb = this.serverProperties.getStringProperty("server.iptocountry.dir");
-=======
-        Boolean isPublicServer = serverProperties.getBooleanProperty("server.public");
-        String pathIpToCountryDb = serverProperties.getStringProperty("server.iptocountry.dir");
->>>>>>> #74 V0.1 new sim
 
         IIpToCountry ipToCountry;
         if ( pathIpToCountryDb != null ) {
