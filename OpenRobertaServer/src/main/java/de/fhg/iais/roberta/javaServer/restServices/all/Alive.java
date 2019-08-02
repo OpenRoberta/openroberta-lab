@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.javaServer.restServices.all;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -17,18 +17,17 @@ import de.fhg.iais.roberta.util.AliveData;
 @Path("/alive")
 public class Alive {
     private static final Logger LOG = LoggerFactory.getLogger(Alive.class);
-    private static final int EVERY_REQUEST = 10; // after arrival of EVERY_PING many /alive requests, a log entry is written
-    private static final AtomicInteger aliveRequestCounterForLogging = new AtomicInteger(0);
+    private static final int EVERY_REQUEST = 100; // after arrival of EVERY_REQUEST many /alive requests, a log entry is written
+    private static final AtomicLong aliveRequestCounterForLogging = new AtomicLong(0);
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response tellTheState() throws Exception {
         JSONObject answer = AliveData.getAndUpdateAliveState();
-        int counter = aliveRequestCounterForLogging.incrementAndGet();
+        long counter = aliveRequestCounterForLogging.incrementAndGet();
         boolean logAlive = counter % EVERY_REQUEST == 0;
         if ( logAlive ) {
-            aliveRequestCounterForLogging.set(0);
-            LOG.info("server running since " + answer.getString("runningSince"));
+            LOG.info("the response to the the " + EVERY_REQUEST + ". /alive request is: " + answer.toString());
         }
         return Response.ok(answer).build();
     }

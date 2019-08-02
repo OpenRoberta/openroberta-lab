@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.util;
 
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.codehaus.jettison.json.JSONObject;
@@ -28,6 +29,7 @@ public class AliveData {
         answer.put("robotCallsTotal", actualrobotCallsTotal).put("robotCallsDelta", actualrobotCallsDelta);
         answer.put("loginsTotal", actualloginsTotal).put("loginsDelta", actualloginsDelta);
         answer.put("aliveCalls", actualaliveCallsDelta).put("runningSince", runningSince);
+        answer.put("serverDate", new Date().toString());
         return answer;
     }
 

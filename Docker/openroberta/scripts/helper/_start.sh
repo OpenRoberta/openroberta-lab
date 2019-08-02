@@ -15,7 +15,7 @@ case "${SERVER_NAME}" in
                 *)  IMAGE_VERSION="$OPTIONAL_VERSION"
                     question "do you really want to deploy version $IMAGE_VERSION of the master image (this is unusual)?" ;;
             esac ;;
-     *)     : ;;
+     *)     IMAGE_VERSION="$BASE_VERSION" ;;
 esac
 
 IMAGE="rbudde/openroberta_${INAME}_${SERVER_NAME}:$IMAGE_VERSION"
