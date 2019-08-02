@@ -79,325 +79,287 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
          */
         Interpreter.prototype.evalOperation = function (maxRunTime) {
             var s = this.s;
-<<<<<<< HEAD
-            var n = this.n;
-            s.opLog('actual ops: ');
-            var stmt = s.getOp();
-            if (stmt === undefined) {
-                U.debug('PROGRAM TERMINATED. No ops remaining');
-                this.terminated = true;
-            }
-            else {
-=======
             var n = this.r;
-            topLevelLoop: while (!this.terminated) {
-                if (maxRunTime < new Date().getTime())
-                    return 0;
+            while (maxRunTime >= new Date().getTime()) {
                 s.opLog('actual ops: ');
                 var stmt = s.getOp();
                 if (stmt === undefined) {
                     U.debug('PROGRAM TERMINATED. No ops remaining');
-                    break topLevelLoop;
+                    this.terminated = true;
                 }
->>>>>>> #74 V0.1 new sim
-                var opCode = stmt[C.OPCODE];
-                switch (opCode) {
-                    case C.ASSIGN_STMT: {
-                        var name_1 = stmt[C.NAME];
-                        s.setVar(name_1, s.pop());
-                        break;
-                    }
-                    case C.CLEAR_DISPLAY_ACTION: {
-                        n.clearDisplay();
-                        return 0;
-                    }
-                    case C.CREATE_DEBUG_ACTION: {
-                        U.debug('NYI');
-                        break;
-                    }
-                    case C.EXPR:
-                        this.evalExpr(stmt);
-                        break;
-                    case C.FLOW_CONTROL: {
-                        var conditional = stmt[C.CONDITIONAL];
-                        var activatedBy = stmt[C.BOOLEAN] === undefined ? true : stmt[C.BOOLEAN];
-                        var doIt = conditional ? (s.pop() === activatedBy) : true;
-                        if (doIt) {
-                            s.popOpsUntil(stmt[C.KIND]);
-                            if (stmt[C.BREAK]) {
-                                s.getOp();
+                else {
+                    var opCode = stmt[C.OPCODE];
+                    switch (opCode) {
+                        case C.ASSIGN_STMT: {
+                            var name_1 = stmt[C.NAME];
+                            s.setVar(name_1, s.pop());
+                            break;
+                        }
+                        case C.CLEAR_DISPLAY_ACTION: {
+                            n.clearDisplay();
+                            break;
+                        }
+                        case C.CREATE_DEBUG_ACTION: {
+                            U.debug('NYI');
+                            break;
+                        }
+                        case C.EXPR:
+                            this.evalExpr(stmt);
+                            break;
+                        case C.FLOW_CONTROL: {
+                            var conditional = stmt[C.CONDITIONAL];
+                            var activatedBy = stmt[C.BOOLEAN] === undefined ? true : stmt[C.BOOLEAN];
+                            var doIt = conditional ? (s.pop() === activatedBy) : true;
+                            if (doIt) {
+                                s.popOpsUntil(stmt[C.KIND]);
+                                if (stmt[C.BREAK]) {
+                                    s.getOp();
+                                }
                             }
+                            break;
                         }
-                        break;
-                    }
-                    case C.GET_SAMPLE: {
-                        n.getSample(s, stmt[C.NAME], stmt[C.GET_SAMPLE], stmt[C.PORT], stmt[C.MODE]);
-                        break;
-                    }
-                    case C.IF_STMT:
-                        s.pushOps(stmt[C.STMT_LIST]);
-                        break;
-                    case C.IF_TRUE_STMT:
-                        if (s.pop()) {
+                        case C.GET_SAMPLE: {
+                            n.getSample(s, stmt[C.NAME], stmt[C.GET_SAMPLE], stmt[C.PORT], stmt[C.MODE]);
+                            break;
+                        }
+                        case C.IF_STMT:
                             s.pushOps(stmt[C.STMT_LIST]);
-                        }
-                        break;
-                    case C.IF_RETURN:
-                        if (s.pop()) {
-                            s.pushOps(stmt[C.STMT_LIST]);
-                        }
-                        break;
-                    case C.LED_ON_ACTION: {
-                        var color = s.pop();
-                        n.ledOnAction(stmt[C.NAME], stmt[C.PORT], color);
-                        break;
-                    }
-                    case C.METHOD_CALL_VOID:
-                    case C.METHOD_CALL_RETURN: {
-                        for (var _i = 0, _a = stmt[C.NAMES]; _i < _a.length; _i++) {
-                            var parameterName = _a[_i];
-                            s.bindVar(parameterName, s.pop());
-                        }
-                        var body = s.getFunction(stmt[C.NAME])[C.STATEMENTS];
-                        s.pushOps(body);
-                        break;
-                    }
-                    case C.MOTOR_ON_ACTION: {
-                        var duration = s.pop();
-                        var speed = s.pop();
-                        var name_2 = stmt[C.NAME];
-<<<<<<< HEAD
-                        var port_1 = stmt[C.PORT];
-                        n.motorOnAction(name_2, port_1, duration, speed);
-                        if (duration >= 0) {
-                            this.timeout(function () { n.motorStopAction(name_2, port_1); _this.evalOperation(); }, duration);
-                            return; // wait for handler being called
-=======
-                        var port = stmt[C.PORT];
-                        var durationType = stmt[C.MOTOR_DURATION];
-                        if (durationType === C.DEGREE) {
-                            duration /= 360.0;
->>>>>>> #74 V0.1 new sim
-                        }
-                        var rotationPerSecond = C.MAX_ROTATION * Math.abs(speed) / 100.0;
-                        duration = duration / rotationPerSecond * 1000;
-                        n.motorOnAction(name_2, port, duration, speed);
-                        return duration;
-                    }
-                    case C.DRIVE_ACTION: {
-                        var distance = s.pop();
-                        var speed = s.pop();
-                        var name_3 = stmt[C.NAME];
-                        var direction = stmt[C.DRIVE_DIRECTION];
-                        return n.driveAction(name_3, direction, speed, distance);
-                    }
-                    case C.TURN_ACTION: {
-                        var angle = s.pop();
-                        var speed = s.pop();
-                        var name_4 = stmt[C.NAME];
-                        var direction = stmt[C.TURN_DIRECTION];
-                        return n.turnAction(name_4, direction, speed, angle);
-                    }
-                    case C.STOP_DRIVE:
-                        var name_5 = stmt[C.NAME];
-                        n.driveStop(name_5);
-                        return 0;
-                    case C.BOTH_MOTORS_ON_ACTION: {
-                        var duration = s.pop();
-                        var speedB = s.pop();
-                        var speedA = s.pop();
-                        var portA = stmt[C.PORT_A];
-                        var portB = stmt[C.PORT_B];
-                        n.motorOnAction(portA, portA, duration, speedA);
-                        n.motorOnAction(portB, portB, duration, speedB);
-                        return duration;
-                    }
-                    case C.MOTOR_STOP: {
-                        n.motorStopAction(stmt[C.NAME], stmt[C.PORT]);
-                        return 0;
-                    }
-                    case C.MOTOR_SET_POWER: {
-                        var speed = s.pop();
-                        var name_6 = stmt[C.NAME];
-                        var port = stmt[C.PORT];
-                        n.setMotorSpeed(name_6, port, speed);
-                        return 0;
-                    }
-                    case C.MOTOR_GET_POWER: {
-                        var port = stmt[C.PORT];
-                        n.getMotorSpeed(s, name_5, port);
-                        break;
-                    }
-                    case C.REPEAT_STMT:
-                        this.evalRepeat(stmt);
-                        break;
-                    case C.REPEAT_STMT_CONTINUATION:
-                        if (stmt[C.MODE] === C.FOR || stmt[C.MODE] === C.TIMES) {
-                            var runVariableName = stmt[C.NAME];
-                            var end = s.get1();
-                            var incr = s.get0();
-                            var value = s.getVar(runVariableName) + incr;
-                            if (+value >= +end) {
-                                s.popOpsUntil(C.REPEAT_STMT);
-                                s.getOp(); // the repeat has terminated
-                            }
-                            else {
-                                s.setVar(runVariableName, value);
+                            break;
+                        case C.IF_TRUE_STMT:
+                            if (s.pop()) {
                                 s.pushOps(stmt[C.STMT_LIST]);
                             }
+                            break;
+                        case C.IF_RETURN:
+                            if (s.pop()) {
+                                s.pushOps(stmt[C.STMT_LIST]);
+                            }
+                            break;
+                        case C.LED_ON_ACTION: {
+                            var color = s.pop();
+                            n.ledOnAction(stmt[C.NAME], stmt[C.PORT], color);
+                            break;
                         }
-                        break;
-                    case C.SHOW_TEXT_ACTION: {
-                        var text = s.pop();
-                        var name_7 = stmt[C.NAME];
-                        if (name_7 === "ev3") {
-                            var x = s.pop();
-                            var y = s.pop();
-                            n.showTextAction(text, x, y);
+                        case C.METHOD_CALL_VOID:
+                        case C.METHOD_CALL_RETURN: {
+                            for (var _i = 0, _a = stmt[C.NAMES]; _i < _a.length; _i++) {
+                                var parameterName = _a[_i];
+                                s.bindVar(parameterName, s.pop());
+                            }
+                            var body = s.getFunction(stmt[C.NAME])[C.STATEMENTS];
+                            s.pushOps(body);
+                            break;
+                        }
+                        case C.MOTOR_ON_ACTION: {
+                            var duration = s.pop();
+                            var speed = s.pop();
+                            var name_2 = stmt[C.NAME];
+                            var port = stmt[C.PORT];
+                            var durationType = stmt[C.MOTOR_DURATION];
+                            if (durationType === C.DEGREE) {
+                                duration /= 360.0;
+                            }
+                            var rotationPerSecond = C.MAX_ROTATION * Math.abs(speed) / 100.0;
+                            duration = duration / rotationPerSecond * 1000;
+                            n.motorOnAction(name_2, port, duration, speed);
+                            return duration;
+                        }
+                        case C.DRIVE_ACTION: {
+                            var distance = s.pop();
+                            var speed = s.pop();
+                            var name_3 = stmt[C.NAME];
+                            var direction = stmt[C.DRIVE_DIRECTION];
+                            var duration = n.driveAction(name_3, direction, speed, distance);
+                            return duration;
+                        }
+                        case C.TURN_ACTION: {
+                            var angle = s.pop();
+                            var speed = s.pop();
+                            var name_4 = stmt[C.NAME];
+                            var direction = stmt[C.TURN_DIRECTION];
+                            var duration = n.turnAction(name_4, direction, speed, angle);
+                            return duration;
+                        }
+                        case C.STOP_DRIVE:
+                            var name_5 = stmt[C.NAME];
+                            n.driveStop(name_5);
+                            return 0;
+                        case C.BOTH_MOTORS_ON_ACTION: {
+                            var duration = s.pop();
+                            var speedB = s.pop();
+                            var speedA = s.pop();
+                            var portA = stmt[C.PORT_A];
+                            var portB = stmt[C.PORT_B];
+                            n.motorOnAction(portA, portA, duration, speedA);
+                            n.motorOnAction(portB, portB, duration, speedB);
+                            return duration;
+                        }
+                        case C.MOTOR_STOP: {
+                            n.motorStopAction(stmt[C.NAME], stmt[C.PORT]);
                             return 0;
                         }
-                        return n.showTextAction(text, stmt[C.MODE]);
-                    }
-                    case C.SHOW_IMAGE_ACTION: {
-                        var image = void 0;
-                        if (stmt[C.NAME] == "ev3") {
-                            image = stmt[C.IMAGE];
+                        case C.MOTOR_SET_POWER: {
+                            var speed = s.pop();
+                            var name_6 = stmt[C.NAME];
+                            var port = stmt[C.PORT];
+                            n.setMotorSpeed(name_6, port, speed);
+                            return 0;
                         }
-                        else {
-                            image = s.pop();
+                        case C.MOTOR_GET_POWER: {
+                            var port = stmt[C.PORT];
+                            n.getMotorSpeed(s, name_5, port);
+                            break;
                         }
-                        return n.showImageAction(image, stmt[C.MODE]);
-                    }
-                    case C.DISPLAY_SET_BRIGHTNESS_ACTION: {
-                        var b = s.pop();
-                        return n.displaySetBrightnessAction(b);
-                    }
-                    case C.DISPLAY_SET_PIXEL_BRIGHTNESS_ACTION: {
-                        var b = s.pop();
-                        var y = s.pop();
-                        var x = s.pop();
-                        return n.displaySetPixelBrightnessAction(x, y, b);
-                    }
-                    case C.DISPLAY_GET_PIXEL_BRIGHTNESS_ACTION: {
-                        var y = s.pop();
-                        var x = s.pop();
-                        n.displayGetPixelBrightnessAction(s, x, y);
-                        break;
-                    }
-                    case C.LIGHT_ACTION:
-                        n.lightAction(stmt[C.MODE], stmt[C.COLOR]);
-                        return 0;
-                    case C.STATUS_LIGHT_ACTION:
-                        n.statusLightOffAction(stmt[C.NAME], stmt[C.PORT]);
-                        return 0;
-                    case C.STOP:
-                        U.debug("PROGRAM TERMINATED. stop op");
-<<<<<<< HEAD
-                        this.terminated = true;
-                        break;
-=======
-                        break topLevelLoop;
->>>>>>> #74 V0.1 new sim
-                    case C.TEXT_JOIN:
-                        var second = s.pop();
-                        var first = s.pop();
-                        s.push('' + first + second);
-                        break;
-                    case C.TIMER_SENSOR_RESET:
-                        n.timerReset(stmt[C.PORT]);
-                        break;
-                    case C.ENCODER_SENSOR_RESET:
-                        n.encoderReset(stmt[C.PORT]);
-                        return 0;
-                    case C.GYRO_SENSOR_RESET:
-                        n.gyroReset(stmt[C.PORT]);
-                        return 0;
-                    case C.TONE_ACTION: {
-                        var duration = s.pop();
-                        var frequency = s.pop();
-                        n.toneAction(stmt[C.NAME], frequency, duration);
-<<<<<<< HEAD
-                        this.timeout(function () { _this.evalOperation(); }, duration);
-                        return; // wait for handler being called
-=======
-                        return duration;
->>>>>>> #74 V0.1 new sim
-                    }
-                    case C.PLAY_FILE_ACTION:
-                        return n.playFileAction(stmt[C.FILE]);
-                    case C.SET_VOLUME_ACTION:
-                        n.setVolumeAction(s.pop());
-                        return 0;
-                    case C.GET_VOLUME:
-                        n.getVolumeAction(s);
-                        break;
-                    case C.SET_LANGUAGE_ACTION:
-                        n.setLanguage(stmt[C.LANGUAGE]);
-                        break;
-                    case C.VAR_DECLARATION: {
-                        var name_8 = stmt[C.NAME];
-                        s.bindVar(name_8, s.pop());
-                        break;
-                    }
-                    case C.WAIT_STMT: {
-                        U.debug('waitstmt started');
-                        s.pushOps(stmt[C.STMT_LIST]);
-                        break;
-                    }
-                    case C.WAIT_TIME_STMT: {
-                        var time = s.pop();
-<<<<<<< HEAD
-                        this.timeout(function () { _this.evalOperation(); }, time);
-                        return; // wait for handler being called
-=======
-                        return time; // wait for handler being called
-                    }
-                    case C.WRITE_PIN_ACTION: {
-                        var value = s.pop();
-                        var mode = stmt[C.MODE];
-                        var pin = stmt[C.PIN];
-                        n.writePinAction(pin, mode, value);
-                        return 0;
-                    }
-                    case C.LIST_OPERATION: {
-                        var op = stmt[C.OP];
-                        var loc = stmt[C.POSITION];
-                        var value = s.pop();
-                        var ix = 0;
-                        if (loc != C.LAST && loc != C.FIRST) {
-                            ix = s.pop();
+                        case C.REPEAT_STMT:
+                            this.evalRepeat(stmt);
+                            break;
+                        case C.REPEAT_STMT_CONTINUATION:
+                            if (stmt[C.MODE] === C.FOR || stmt[C.MODE] === C.TIMES) {
+                                var runVariableName = stmt[C.NAME];
+                                var end = s.get1();
+                                var incr = s.get0();
+                                var value = s.getVar(runVariableName) + incr;
+                                if (+value >= +end) {
+                                    s.popOpsUntil(C.REPEAT_STMT);
+                                    s.getOp(); // the repeat has terminated
+                                }
+                                else {
+                                    s.setVar(runVariableName, value);
+                                    s.pushOps(stmt[C.STMT_LIST]);
+                                }
+                            }
+                            break;
+                        case C.SHOW_TEXT_ACTION: {
+                            var text = s.pop();
+                            var name_7 = stmt[C.NAME];
+                            if (name_7 === "ev3") {
+                                var x = s.pop();
+                                var y = s.pop();
+                                n.showTextActionPosition(text, x, y);
+                                return 0;
+                            }
+                            return n.showTextAction(text, stmt[C.MODE]);
                         }
-                        var list = s.pop();
-                        ix = this.getIndex(list, loc, ix);
-                        if (op == C.SET) {
-                            list[ix] = value;
+                        case C.SHOW_IMAGE_ACTION: {
+                            var image = void 0;
+                            if (stmt[C.NAME] == "ev3") {
+                                image = stmt[C.IMAGE];
+                            }
+                            else {
+                                image = s.pop();
+                            }
+                            return n.showImageAction(image, stmt[C.MODE]);
                         }
-                        else if (op == C.INSERT) {
-                            list.splice(ix, 0, value);
+                        case C.DISPLAY_SET_BRIGHTNESS_ACTION: {
+                            var b = s.pop();
+                            return n.displaySetBrightnessAction(b);
                         }
-                        break;
->>>>>>> #74 V0.1 new sim
+                        case C.DISPLAY_SET_PIXEL_BRIGHTNESS_ACTION: {
+                            var b = s.pop();
+                            var y = s.pop();
+                            var x = s.pop();
+                            return n.displaySetPixelBrightnessAction(x, y, b);
+                        }
+                        case C.DISPLAY_GET_PIXEL_BRIGHTNESS_ACTION: {
+                            var y = s.pop();
+                            var x = s.pop();
+                            n.displayGetPixelBrightnessAction(s, x, y);
+                            break;
+                        }
+                        case C.LIGHT_ACTION:
+                            n.lightAction(stmt[C.MODE], stmt[C.COLOR]);
+                            return 0;
+                        case C.STATUS_LIGHT_ACTION:
+                            n.statusLightOffAction(stmt[C.NAME], stmt[C.PORT]);
+                            return 0;
+                        case C.STOP:
+                            U.debug("PROGRAM TERMINATED. stop op");
+                            this.terminated = true;
+                            break;
+                        case C.TEXT_JOIN:
+                            var second = s.pop();
+                            var first = s.pop();
+                            s.push('' + first + second);
+                            break;
+                        case C.TIMER_SENSOR_RESET:
+                            n.timerReset(stmt[C.PORT]);
+                            break;
+                        case C.ENCODER_SENSOR_RESET:
+                            n.encoderReset(stmt[C.PORT]);
+                            return 0;
+                        case C.GYRO_SENSOR_RESET:
+                            n.gyroReset(stmt[C.PORT]);
+                            return 0;
+                        case C.TONE_ACTION: {
+                            var duration = s.pop();
+                            var frequency = s.pop();
+                            n.toneAction(stmt[C.NAME], frequency, duration);
+                            return duration;
+                        }
+                        case C.PLAY_FILE_ACTION:
+                            return n.playFileAction(stmt[C.FILE]);
+                        case C.SET_VOLUME_ACTION:
+                            n.setVolumeAction(s.pop());
+                            return 0;
+                        case C.GET_VOLUME:
+                            n.getVolumeAction(s);
+                            break;
+                        case C.SET_LANGUAGE_ACTION:
+                            n.setLanguage(stmt[C.LANGUAGE]);
+                            break;
+                        case C.VAR_DECLARATION: {
+                            var name_8 = stmt[C.NAME];
+                            s.bindVar(name_8, s.pop());
+                            break;
+                        }
+                        case C.WAIT_STMT: {
+                            U.debug('waitstmt started');
+                            s.pushOps(stmt[C.STMT_LIST]);
+                            break;
+                        }
+                        case C.WAIT_TIME_STMT: {
+                            var time = s.pop();
+                            return time; // wait for handler being called
+                        }
+                        case C.WRITE_PIN_ACTION: {
+                            var value = s.pop();
+                            var mode = stmt[C.MODE];
+                            var pin = stmt[C.PIN];
+                            n.writePinAction(pin, mode, value);
+                            return 0;
+                        }
+                        case C.LIST_OPERATION: {
+                            var op = stmt[C.OP];
+                            var loc = stmt[C.POSITION];
+                            var value = s.pop();
+                            var ix = 0;
+                            if (loc != C.LAST && loc != C.FIRST) {
+                                ix = s.pop();
+                            }
+                            var list = s.pop();
+                            ix = this.getIndex(list, loc, ix);
+                            if (op == C.SET) {
+                                list[ix] = value;
+                            }
+                            else if (op == C.INSERT) {
+                                list.splice(ix, 0, value);
+                            }
+                            break;
+                        }
+                        default:
+                            U.dbcException("invalid stmt op: " + opCode);
                     }
-                    default:
-                        U.dbcException("invalid stmt op: " + opCode);
+                }
+                if (this.terminated) {
+                    // termination either requested by the client or by executing 'stop' or after last statement
+                    n.close();
+                    return 0;
+                }
+                else {
+                    return 0;
                 }
             }
-<<<<<<< HEAD
-            if (this.terminated) {
-                // termination either requested by the client or by executing 'stop' or after last statement
-                n.close();
-                this.callbackOnTermination();
-            }
-            else {
-                this.timeout(function () { _this.evalOperation(); }, 0);
-            }
-=======
-            // termination either requested by the client or by executing 'stop' or after last statement
-            this.terminated = true;
-            n.close();
-            this.callbackOnTermination();
             return 0;
->>>>>>> #74 V0.1 new sim
         };
         /**
          *  called from @see evalOperation() to evaluate all kinds of expressions
@@ -775,9 +737,7 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                         case C.MOD:
                             s.push(left % right);
                             break;
-                        case C.IMAGE_SHIFT_ACTION:
-                            s.push(this.shiftImage(left, right));
-                            break;
+                        //                    case C.IMAGE_SHIFT_ACTION: s.push( this.shiftImage( left, right ) ); break;
                         default:
                             U.dbcException("invalid binary expr supOp: " + subOp);
                     }
@@ -864,31 +824,6 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
             }
             return true;
         };
-        /**
-         * after the duration specified, call the callback function given. The duration is partitioned into 100 millisec intervals to allow termination of the running interpreter during
-         * a timeout. Be careful: the termination is NOT effected here, but by the callback function (this should be @see evalOperation() in ALMOST ALL cases)
-         *
-         * . @param callback called when the time has elapsed
-         *
-         * . @param durationInMilliSec time that should elapse before the callback is called
-         */
-        Interpreter.prototype.timeout = function (callback, durationInMilliSec) {
-            var _this = this;
-            if (this.terminated) {
-                callback();
-            }
-            else {
-                if (durationInMilliSec > 100) {
-                    // U.p( 'waiting for 100 msec from ' + durationInMilliSec + ' msec' );
-                    durationInMilliSec -= 100;
-                    setTimeout(function () { _this.timeout(callback, durationInMilliSec); }, 100);
-                }
-                else {
-                    // U.p( 'waiting for ' + durationInMilliSec + ' msec' );
-                    setTimeout(function () { callback(); }, durationInMilliSec);
-                }
-            }
-        };
         Interpreter.prototype.min = function (values) {
             return Math.min.apply(null, values);
         };
@@ -946,51 +881,6 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
             }
             return image;
         };
-        Interpreter.prototype.shiftImage = function (image, direction, n) {
-            n = Math.round(n);
-            var shift = {
-                down: function () {
-                    image.pop();
-                    image.unshift([0, 0, 0, 0, 0]);
-                },
-                up: function () {
-                    image.shift();
-                    image.push([0, 0, 0, 0, 0]);
-                },
-                right: function () {
-                    image.forEach(function (array) {
-                        array.pop();
-                        array.unshift(0);
-                    });
-                },
-                left: function () {
-                    image.forEach(function (array) {
-                        array.shift();
-                        array.push(0);
-                    });
-                }
-            };
-            if (n < 0) {
-                n *= -1;
-                if (direction === "up") {
-                    direction = "down";
-                }
-                else if (direction === "down") {
-                    direction = "up";
-                }
-                else if (direction === "left") {
-                    direction = "right";
-                }
-                else if (direction === "right") {
-                    direction = "left";
-                }
-            }
-            for (var i = 0; i < n; i++) {
-                shift[direction]();
-            }
-            return image;
-        };
-        ;
         return Interpreter;
     }());
     exports.Interpreter = Interpreter;

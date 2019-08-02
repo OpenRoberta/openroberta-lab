@@ -96,6 +96,7 @@ require.config({
         'interpreter.interpreter': '../app/wedoInterpreter/interpreter.interpreter',
         'interpreter.aRobotBehaviour': '../app/wedoInterpreter/interpreter.aRobotBehaviour',
         'interpreter.robotWeDoBehaviour': '../app/wedoInterpreter/interpreter.robotWeDoBehaviour',
+        'interpreter.robotWeDoBehaviourTest': '../app/wedoInterpreter/interpreter.robotWeDoBehaviourTest',
         'interpreter.robotMbedBehaviour': '../app/wedoInterpreter/interpreter.robotMbedBehaviour',
         'interpreter.state': '../app/wedoInterpreter/interpreter.state',
         'interpreter.util': '../app/wedoInterpreter/interpreter.util'

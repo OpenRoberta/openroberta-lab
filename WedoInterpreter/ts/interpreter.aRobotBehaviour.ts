@@ -45,7 +45,7 @@ export abstract class ARobotBehaviour {
     abstract turnAction( name: string, direction: string, speed: number, angle: number ): number;
     abstract writePinAction( pin: any, mode: string, value: number ): void;
     abstract showTextAction( text: any, mode: string ): number;
-    abstract showTextAction( text: any, x: number, y: number ): void;
+    abstract showTextActionPosition( text: any, x: number, y: number ): void;
     abstract showImageAction( image: any, mode: string ): number;
     abstract displaySetBrightnessAction( value: number ): number;
     abstract displaySetPixelBrightnessAction( x: number, y: number, brightness: number ): number;

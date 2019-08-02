@@ -23,7 +23,7 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
         RobotWeDoBehaviourTest.prototype.clearDisplay = function () {
             U.debug('clear display');
         };
-        RobotWeDoBehaviourTest.prototype.getSample = function (s, name, port, sensor, slot) {
+        RobotWeDoBehaviourTest.prototype.getSample = function (s, name, sensor, port, mode) {
             var robotText = 'robot: ' + name + ', port: ' + port;
             U.debug(robotText + ' getsample from ' + sensor);
             switch (sensor) {
@@ -40,7 +40,7 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
                     s.push(this.timerGet(port));
                     break;
                 default:
-                    throw 'invalid get sample for ' + name + ' - ' + port + ' - ' + sensor + ' - ' + slot;
+                    throw 'invalid get sample for ' + name + ' - ' + port + ' - ' + sensor + ' - ' + mode;
             }
         };
         RobotWeDoBehaviourTest.prototype.timerReset = function (port) {
@@ -98,6 +98,63 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
         };
         RobotWeDoBehaviourTest.prototype.close = function () {
             // CI implementation. No real robot. No motor off, etc.
+        };
+        RobotWeDoBehaviourTest.prototype.encoderReset = function (_port) {
+            throw new Error("Method not implemented.");
+        };
+        RobotWeDoBehaviourTest.prototype.gyroReset = function (_port) {
+            throw new Error("Method not implemented.");
+        };
+        RobotWeDoBehaviourTest.prototype.lightAction = function (_mode, _color) {
+            throw new Error("Method not implemented.");
+        };
+        RobotWeDoBehaviourTest.prototype.playFileAction = function (_file) {
+            throw new Error("Method not implemented.");
+        };
+        RobotWeDoBehaviourTest.prototype._setVolumeAction = function (_volume) {
+            throw new Error("Method not implemented.");
+        };
+        RobotWeDoBehaviourTest.prototype._getVolumeAction = function (_s) {
+            throw new Error("Method not implemented.");
+        };
+        RobotWeDoBehaviourTest.prototype.setLanguage = function (_language) {
+            throw new Error("Method not implemented.");
+        };
+        RobotWeDoBehaviourTest.prototype.sayTextAction = function (_text, _speed, _pitch) {
+            throw new Error("Method not implemented.");
+        };
+        RobotWeDoBehaviourTest.prototype.getMotorSpeed = function (_s, _name, _port) {
+            throw new Error("Method not implemented.");
+        };
+        RobotWeDoBehaviourTest.prototype.setMotorSpeed = function (_name, _port, _speed) {
+            throw new Error("Method not implemented.");
+        };
+        RobotWeDoBehaviourTest.prototype.driveStop = function (_name) {
+            throw new Error("Method not implemented.");
+        };
+        RobotWeDoBehaviourTest.prototype.driveAction = function (_name, _direction, _speed, _distance) {
+            throw new Error("Method not implemented.");
+        };
+        RobotWeDoBehaviourTest.prototype.curveAction = function (_name, _direction, _speedL, _speedR, _distance) {
+            throw new Error("Method not implemented.");
+        };
+        RobotWeDoBehaviourTest.prototype.turnAction = function (_name, _direction, _speed, _angle) {
+            throw new Error("Method not implemented.");
+        };
+        RobotWeDoBehaviourTest.prototype.showTextActionPosition = function (_text, _x, _y) {
+            throw new Error("Method not implemented.");
+        };
+        RobotWeDoBehaviourTest.prototype.displaySetPixelBrightnessAction = function (_x, _y, _brightness) {
+            throw new Error("Method not implemented.");
+        };
+        RobotWeDoBehaviourTest.prototype.displayGetPixelBrightnessAction = function (_s, _x, _y) {
+            throw new Error("Method not implemented.");
+        };
+        RobotWeDoBehaviourTest.prototype.setVolumeAction = function (_volume) {
+            throw new Error("Method not implemented.");
+        };
+        RobotWeDoBehaviourTest.prototype.getVolumeAction = function (_s) {
+            throw new Error("Method not implemented.");
         };
         return RobotWeDoBehaviourTest;
     }(interpreter_aRobotBehaviour_1.ARobotBehaviour));

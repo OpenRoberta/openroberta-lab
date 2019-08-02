@@ -5,6 +5,7 @@ import * as U from "interpreter.util";
 
 export class RobotMbedBehaviour extends ARobotBehaviour {
 
+
     constructor() {
         super();
         this.hardwareState.motors = {};
@@ -39,7 +40,6 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
             }
         }
         return sensor;
-
     }
 
     private rotation2Unit( value: number, unit: string ): number {
@@ -291,7 +291,7 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         return duration;
     }
 
-    public showTextAction( text: any, x: number, y: number ): void {
+    public showTextActionPosition( text: any, x: number, y: number ): void {
         const showText = "" + text;
         U.debug( '***** show "' + showText + '" *****' );
         this.hardwareState.actions.display = {};
@@ -358,6 +358,10 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         this.hardwareState.actions["pin" + pin] = {};
         this.hardwareState.actions["pin" + pin][mode] = {};
         this.hardwareState.actions["pin" + pin][mode] = value;
+    }
+    
+    public gyroReset(_port: number): void {
+        throw new Error("Method not implemented.");
     }
 
 

@@ -4,6 +4,7 @@ import * as C from "interpreter.constants";
 import * as U from "interpreter.util";
 
 export class RobotWeDoBehaviour extends ARobotBehaviour {
+
     /*
      * represents the state of connected wedo devices with the following
      * structure: {<name of the device> { 1 : { tiltsensor : "0.0" }, 2 : {
@@ -267,4 +268,80 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
             }
         }
     }
+
+    public encoderReset( _port: string ): void {
+        throw new Error( "Method not implemented." );
+    }
+
+    public gyroReset( _port: number ): void {
+        throw new Error( "Method not implemented." );
+    }
+
+    public lightAction( _mode: string, _color: string ): void {
+        throw new Error( "Method not implemented." );
+    }
+
+    public playFileAction( _file: string ): number {
+        throw new Error( "Method not implemented." );
+    }
+
+    public _setVolumeAction( _volume: number ): void {
+        throw new Error( "Method not implemented." );
+    }
+
+    public _getVolumeAction( _s: State ): void {
+        throw new Error( "Method not implemented." );
+    }
+
+    public setLanguage( _language: string ): void {
+        throw new Error( "Method not implemented." );
+    }
+
+    public sayTextAction( _text: string, _speed: number, _pitch: number ): number {
+        throw new Error( "Method not implemented." );
+    }
+
+    public getMotorSpeed( _s: State, _name: string, _port: any ): void {
+        throw new Error( "Method not implemented." );
+    }
+
+    public setMotorSpeed( _name: string, _port: any, _speed: number ): void {
+        throw new Error( "Method not implemented." );
+    }
+
+    public driveStop( _name: string ): void {
+        throw new Error( "Method not implemented." );
+    }
+
+    public driveAction( _name: string, _direction: string, _speed: number, _distance: number ): number {
+        throw new Error( "Method not implemented." );
+    }
+
+    public curveAction( _name: string, _direction: string, _speedL: number, _speedR: number, _distance: number ): number {
+        throw new Error( "Method not implemented." );
+    }
+
+    public turnAction( _name: string, _direction: string, _speed: number, _angle: number ): number {
+        throw new Error( "Method not implemented." );
+    }
+
+    public showTextActionPosition( _text: any, _x: number, _y: number ): void {
+        throw new Error( "Method not implemented." );
+    }
+
+    public displaySetPixelBrightnessAction( _x: number, _y: number, _brightness: number ): number {
+        throw new Error( "Method not implemented." );
+    }
+
+    public displayGetPixelBrightnessAction( _s: State, _x: number, _y: number ): void {
+        throw new Error( "Method not implemented." );
+    }
+    
+    public setVolumeAction( _volume: number ): void {
+        throw new Error( "Method not implemented." );
+    }
+    public getVolumeAction( _s: State ): void {
+        throw new Error( "Method not implemented." );
+    }
+
 }

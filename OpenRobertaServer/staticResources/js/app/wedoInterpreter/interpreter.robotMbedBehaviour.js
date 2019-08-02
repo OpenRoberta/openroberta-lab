@@ -189,8 +189,31 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             this.hardwareState.motors[C.MOTOR_RIGHT] = speed;
             var rotations = distance / (C.WHEEL_DIAMETER * Math.PI);
             var rotationPerSecond = C.MAX_ROTATION * Math.abs(speed) / 100.0;
-            distance = rotations / rotationPerSecond * 1000;
-            return distance;
+            var duration = rotations / rotationPerSecond * 1000;
+            return duration;
+        };
+        RobotMbedBehaviour.prototype.curveAction = function (name, direction, speedL, speedR, distance) {
+            var robotText = 'robot: ' + name + ', direction: ' + direction;
+            var durText = distance === 0 ? ' w.o. duration' : (' for ' + distance + ' msec');
+            U.debug(robotText + ' left motor speed ' + speedL + ' right motor speed ' + speedR + durText);
+            if (this.hardwareState.actions.motors == undefined) {
+                this.hardwareState.actions.motors = {};
+            }
+            if (direction != C.FOREWARD) {
+                speedL *= -1;
+                speedR *= -1;
+            }
+            this.hardwareState.actions.motors[C.MOTOR_LEFT] = speedL;
+            this.hardwareState.actions.motors[C.MOTOR_RIGHT] = speedR;
+            this.hardwareState.motors[C.MOTOR_LEFT] = speedL;
+            this.hardwareState.motors[C.MOTOR_RIGHT] = speedR;
+            if (speedL == speedR) {
+                var rotations = distance / (C.WHEEL_DIAMETER * Math.PI);
+                var rotationPerSecond = C.MAX_ROTATION * Math.abs(speedL) / 100.0;
+                var duration = rotations / rotationPerSecond * 1000;
+                return duration;
+            }
+            return 0;
         };
         RobotMbedBehaviour.prototype.turnAction = function (name, direction, speed, angle) {
             var robotText = 'robot: ' + name + ', direction: ' + direction;
@@ -250,7 +273,7 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             this.hardwareState.actions.display[mode.toLowerCase()] = showText;
             return duration;
         };
-        RobotMbedBehaviour.prototype.showTextAction = function (text, x, y) {
+        RobotMbedBehaviour.prototype.showTextActionPosition = function (text, x, y) {
             var showText = "" + text;
             U.debug('***** show "' + showText + '" *****');
             this.hardwareState.actions.display = {};
@@ -309,6 +332,9 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             this.hardwareState.actions["pin" + pin] = {};
             this.hardwareState.actions["pin" + pin][mode] = {};
             this.hardwareState.actions["pin" + pin][mode] = value;
+        };
+        RobotMbedBehaviour.prototype.gyroReset = function (_port) {
+            throw new Error("Method not implemented.");
         };
         RobotMbedBehaviour.prototype.getState = function () {
             return this.hardwareState;

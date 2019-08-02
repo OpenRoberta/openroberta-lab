@@ -18,7 +18,7 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
         U.debug( 'clear display' );
     }
 
-    public getSample( s: State, name: string, port: number, sensor: string, slot: string ) {
+    public getSample( s: State, name: string, sensor: string, port: number, mode: string ):void {
         var robotText = 'robot: ' + name + ', port: ' + port;
         U.debug( robotText + ' getsample from ' + sensor );
         switch ( sensor ) {
@@ -35,7 +35,7 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
                 s.push( this.timerGet( port ) );
                 break;
             default:
-                throw 'invalid get sample for ' + name + ' - ' + port + ' - ' + sensor + ' - ' + slot;
+                throw 'invalid get sample for ' + name + ' - ' + port + ' - ' + sensor + ' - ' + mode;
         }
     }
 
@@ -106,4 +106,80 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
     public close() {
         // CI implementation. No real robot. No motor off, etc.
     }
+
+    public encoderReset( _port: string ): void {
+        throw new Error( "Method not implemented." );
+    }
+
+    public gyroReset( _port: number ): void {
+        throw new Error( "Method not implemented." );
+    }
+
+    public lightAction( _mode: string, _color: string ): void {
+        throw new Error( "Method not implemented." );
+    }
+
+    public playFileAction( _file: string ): number {
+        throw new Error( "Method not implemented." );
+    }
+
+    public _setVolumeAction( _volume: number ): void {
+        throw new Error( "Method not implemented." );
+    }
+
+    public _getVolumeAction( _s: State ): void {
+        throw new Error( "Method not implemented." );
+    }
+
+    public setLanguage( _language: string ): void {
+        throw new Error( "Method not implemented." );
+    }
+
+    public sayTextAction( _text: string, _speed: number, _pitch: number ): number {
+        throw new Error( "Method not implemented." );
+    }
+
+    public getMotorSpeed( _s: State, _name: string, _port: any ): void {
+        throw new Error( "Method not implemented." );
+    }
+
+    public setMotorSpeed( _name: string, _port: any, _speed: number ): void {
+        throw new Error( "Method not implemented." );
+    }
+
+    public driveStop( _name: string ): void {
+        throw new Error( "Method not implemented." );
+    }
+
+    public driveAction( _name: string, _direction: string, _speed: number, _distance: number ): number {
+        throw new Error( "Method not implemented." );
+    }
+
+    public curveAction( _name: string, _direction: string, _speedL: number, _speedR: number, _distance: number ): number {
+        throw new Error( "Method not implemented." );
+    }
+
+    public turnAction( _name: string, _direction: string, _speed: number, _angle: number ): number {
+        throw new Error( "Method not implemented." );
+    }
+
+    public showTextActionPosition( _text: any, _x: number, _y: number ): void {
+        throw new Error( "Method not implemented." );
+    }
+
+    public displaySetPixelBrightnessAction( _x: number, _y: number, _brightness: number ): number {
+        throw new Error( "Method not implemented." );
+    }
+
+    public displayGetPixelBrightnessAction( _s: State, _x: number, _y: number ): void {
+        throw new Error( "Method not implemented." );
+    }
+
+    public setVolumeAction( _volume: number ): void {
+        throw new Error( "Method not implemented." );
+    }
+    public getVolumeAction( _s: State ): void {
+        throw new Error( "Method not implemented." );
+    }
+
 }
