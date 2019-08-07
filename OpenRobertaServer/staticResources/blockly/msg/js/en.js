@@ -279,6 +279,7 @@ Blockly.Msg.HINT_USER_NAME = "Enter your real name here if you like. This is jus
 Blockly.Msg.HINT_USER_PASSWORT = "12345 is no secure password. Rather think of a safe combination of numbers and letters that you will not forget.";
 Blockly.Msg.HINT_USER_PASSWORT_CONFIRM = "Got it? Better make sure!";
 Blockly.Msg.HUMIDITY_TOOLTIP = "Represents a humidity sensor.";
+Blockly.Msg.ICON_BLOCKING_TOOLTIP = "Blocking block! This blocks needs some time to be executed, so other's have to wait until it gives back the control to the caller function.";
 Blockly.Msg.ID = "ID";
 Blockly.Msg.IF_TOOLTIP = "Checks the condition in »if«. If the condition is true, executes the »do« action.";
 Blockly.Msg.IMAGE_GET_TOOLTIP = "Returns the chosen image.";

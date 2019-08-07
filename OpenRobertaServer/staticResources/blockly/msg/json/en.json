@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-07-29 14:34:44.642142",
+		"lastupdated": "2019-08-07 13:26:25.347784",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1543,5 +1543,6 @@
 	"INIT_FAIL_MULTIPLE_FRONTENDS_ONE_HTTPSESSION": "You are trying to connect to the openroberta-lab multiple times, e.g. by opening multiple tabs. This is not supported at the moment. Please close this view.",
 	"INIT_FAIL_HTTPSESSION_EXPECTED_BUT_NOT_FOUND": "The connection to the openroberta-lab was closed unexpectedly. This case is rare and may happen, if the openroberta-lab-server is restarted. Please start a new connection to the openroberta-lab, e.g. by closing and starting the browser or by hitting the »reload«-button.",
 	"PROGRAM_ERROR_EXPRBLOCK_TYPECHECK": "This expression is invalid. The type check failed.",
-	"PROGRAM_ERROR_EXPRBLOCK_PARSE": "This expression is syntactically incorrect."
+	"PROGRAM_ERROR_EXPRBLOCK_PARSE": "This expression is syntactically incorrect.",
+	"ICON_BLOCKING_TOOLTIP": "Blocking block! This blocks needs some time to be executed, so other's have to wait until it gives back the control to the caller function."
 }

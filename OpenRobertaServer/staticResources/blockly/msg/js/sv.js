@@ -279,6 +279,7 @@ Blockly.Msg.HINT_USER_NAME = "Om du vill, skriv ditt riktiga namn här. Det är 
 Blockly.Msg.HINT_USER_PASSWORT = "12345 är inget säkert lösenord. Tänk istället ut en kombination av bokstäver och siffror som du lätt kan komma ihåg.";
 Blockly.Msg.HINT_USER_PASSWORT_CONFIRM = "Stämmer det? Bäst att kontrollera!";
 Blockly.Msg.HUMIDITY_TOOLTIP = "Fuktsensor";
+Blockly.Msg.ICON_BLOCKING_TOOLTIP = "Blocking block! This blocks needs some time to be executed, so other's have to wait until it gives back the control to the caller function.";  // untranslated
 Blockly.Msg.ID = "ID";  // untranslated
 Blockly.Msg.IF_TOOLTIP = "Kontrollerar villkoret i »if«. Om vilkoret är sant, utförs  »do« åtgärden";
 Blockly.Msg.IMAGE_GET_TOOLTIP = "Returnerar vald bild.";

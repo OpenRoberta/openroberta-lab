@@ -279,6 +279,7 @@ Blockly.Msg.HINT_USER_NAME = "In diesem Feld kannst du deinen richtigen Namen ei
 Blockly.Msg.HINT_USER_PASSWORT = "12345 ist kein gutes Passwort ,-)! Such dir lieber eine sichere Kombination aus Zahlen und Buchstaben aus, die du gut behalten kannst! Es muss mindestens sechs Zeichen lang sein!";
 Blockly.Msg.HINT_USER_PASSWORT_CONFIRM = "Alles richtig geschrieben? Gib dein Passwort vorsichtshalber nochmal ein.";
 Blockly.Msg.HUMIDITY_TOOLTIP = "Block für den Luftfeuchtigkeitsensor.";
+Blockly.Msg.ICON_BLOCKING_TOOLTIP = "Blockierender Block! Dieser Block benötigt einige Zeit um ausgeführt zu werden. Andere Blöcke müssen warten, bis dieser Block die Kontrolle an die aufrufende Funktion zurückgibt.";
 Blockly.Msg.ID = "ID";
 Blockly.Msg.IF_TOOLTIP = "Prüft die Bedingung in wenn. Falls die Bedingung wahr ist, führt die dann-Aktion aus.";
 Blockly.Msg.IMAGE_GET_TOOLTIP = "Gibt das ausgewählte Bild zurück.";

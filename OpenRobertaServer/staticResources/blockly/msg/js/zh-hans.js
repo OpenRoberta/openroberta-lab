@@ -279,6 +279,7 @@ Blockly.Msg.HINT_USER_NAME = "如果你愿意, 在这里输入你的真实姓名
 Blockly.Msg.HINT_USER_PASSWORT = "12345没有密码安全性。宁可想一个你不会忘记的数字和字母的安全组合。";
 Blockly.Msg.HINT_USER_PASSWORT_CONFIRM = "明白了吗？最好确认过!";
 Blockly.Msg.HUMIDITY_TOOLTIP = "代表湿度传感器";
+Blockly.Msg.ICON_BLOCKING_TOOLTIP = "Blocking block! This blocks needs some time to be executed, so other's have to wait until it gives back the control to the caller function.";  // untranslated
 Blockly.Msg.ID = "ID";  // untranslated
 Blockly.Msg.IF_TOOLTIP = "检查»if«中的条件。如果条件为 true, 则执行»do«操作。";
 Blockly.Msg.IMAGE_GET_TOOLTIP = "返回所选图像。";
