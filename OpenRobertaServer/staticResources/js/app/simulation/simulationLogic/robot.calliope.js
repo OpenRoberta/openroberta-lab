@@ -1,4 +1,4 @@
-define( ['simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mbed', 'volume-meter'], function( SIM, CONSTANTS, Mbed, Volume ) {
+define( ['simulation.simulation',  'simulation.robot.mbed', 'volume-meter'], function( SIM, Mbed, Volume ) {
 
     /**
      * Creates a new Calliope device for a simulation.

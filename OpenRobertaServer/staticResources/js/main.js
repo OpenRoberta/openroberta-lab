@@ -60,8 +60,6 @@ require.config({
 
         'simulation.constants' : '../app/simulation/simulationLogic/constants',
         'simulation.math' : '../app/simulation/simulationLogic/math',
-        'simulation.program.builder' : '../app/simulation/robertaLogic/program.builder',
-        'simulation.program.eval' : '../app/simulation/robertaLogic/program.eval',
         'simulation.robot' : '../app/simulation/simulationLogic/robot',
         'simulation.robot.draw' : '../app/simulation/simulationLogic/robot.draw',
         'simulation.robot.mbed' : '../app/simulation/simulationLogic/robot.mbed',
@@ -83,14 +81,6 @@ require.config({
         'message' : '../helper/msg',
         'util' : '../helper/util',
         'wrap' : '../helper/wrap',
-
-        'robertaLogic.actors' : '../app/simulation/robertaLogic/actors',
-        'robertaLogic.constants' : '../app/simulation/robertaLogic/constants',
-        'robertaLogic.memory' : '../app/simulation/robertaLogic/memory',
-        'robertaLogic.motor' : '../app/simulation/robertaLogic/motor',
-        'robertaLogic.program' : '../app/simulation/robertaLogic/program',
-        'robertaLogic.timer' : '../app/simulation/robertaLogic/timer',
-        'robertaLogic.gyro' : '../app/simulation/robertaLogic/gyro',
 
         'interpreter.constants': '../app/wedoInterpreter/interpreter.constants',
         'interpreter.interpreter': '../app/wedoInterpreter/interpreter.interpreter',

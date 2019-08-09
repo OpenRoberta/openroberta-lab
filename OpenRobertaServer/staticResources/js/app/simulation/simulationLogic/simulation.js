@@ -7,9 +7,9 @@
  * @namespace SIM
  */
 
-define( ['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.math', 'program.controller', 'robertaLogic.constants',
-    'simulation.program.builder', 'util', 'program.controller', 'interpreter.interpreter', 'interpreter.robotMbedBehaviour', 'jquery'
-], function( exports, Scene, ProgramEval, SIMATH, ROBERTA_PROGRAM, CONST, BUILDER,
+define( ['exports', 'simulation.scene', 'simulation.math', 'program.controller', 'simulation.constants',
+    'util', 'program.controller', 'interpreter.interpreter', 'interpreter.robotMbedBehaviour', 'jquery'
+], function( exports, Scene, SIMATH, ROBERTA_PROGRAM, CONST,
     UTIL, PROGRAM_C, SIM_I, MBED_R, $ ) {
 
         var interpreter;
@@ -353,8 +353,8 @@ define( ['exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         var reset = false;
 
         /*
-         * The below Colors are picked from the toolkit and should be used to color
-         * the robots
+         * The below Colors are picked from the toolkit and should be used to
+         * color the robots
          */
         const colorsAdmissible = [
             [242, 148, 0],

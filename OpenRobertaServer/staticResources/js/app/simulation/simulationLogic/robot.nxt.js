@@ -1,4 +1,4 @@
-define(['simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 'volume-meter'], function (SIM, CONSTANTS, Robot, Volume) {
+define(['simulation.simulation', 'simulation.constants', 'simulation.robot', 'volume-meter'], function (SIM, CONSTANTS, Robot, Volume) {
 
     /**
      * Creates a new robot for a simulation.

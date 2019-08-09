@@ -4,7 +4,7 @@
  * @version 0.1
  */
 
-define([ 'exports', 'robertaLogic.constants' ], function(exports, CONSTANTS) {
+define([ 'exports', 'simulation.constants' ], function(exports, CONSTANTS) {
     /**
      * exports helper for calculations in ORsimulation
      * 

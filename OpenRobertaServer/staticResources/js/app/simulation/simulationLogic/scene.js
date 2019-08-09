@@ -2,7 +2,7 @@
  * @fileOverview Scene for a robot simulation
  * @author Beate Jost <beate.jost@iais.fraunhofer.de>
  */
-define( ['simulation.simulation', 'simulation.math', 'util', 'interpreter.constants', 'robertaLogic.constants', 'program.controller', 'jquery'], function( SIM, SIMATH, UTIL, IC, C, PROGRAM_C, $ ) {
+define( ['simulation.simulation', 'simulation.math', 'util', 'interpreter.constants', 'simulation.constants', 'program.controller', 'jquery'], function( SIM, SIMATH, UTIL, IC, C, PROGRAM_C, $ ) {
 
     /**
      * Creates a new Scene.
