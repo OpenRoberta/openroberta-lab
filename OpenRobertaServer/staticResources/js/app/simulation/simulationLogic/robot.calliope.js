@@ -175,68 +175,67 @@ define( ['simulation.simulation',  'simulation.robot.mbed', 'volume-meter'], fun
         var state = this.robotBehaviour.getState();
         var actions = state.actions;
         // update debug
-        if ( actions.led ) {
-            const color = this.robotBehaviour.getActionState( "led", "color", true );
-            if ( color ) {
-                this.led.color = color;
+        const led = this.robotBehaviour.getActionState( "led", true );
+        if ( led ) {
+            if ( led.color ) {
+                this.led.color = led.color;
             } else {
-                const mode = this.robotBehaviour.getActionState( "led", "mode", true );
+                const mode = led.mode
                 if ( mode != undefined && mode == 'off' )
                     this.led.color = 'grey';
             }
         }
         // update tone
-        if ( actions.volume && AudioContext ) {
-            this.webAudio.volume = actions.volume / 100.0;
+        const volume = this.robotBehaviour.getActionState( "volume", true );
+        if ( volume && AudioContext ) {
+            this.webAudio.volume = volume / 100.0;
         }
-        if ( actions.tone && AudioContext ) {
+        const tone = this.robotBehaviour.getActionState( "tone", true );
+        if ( tone && AudioContext ) {
             var ts = this.webAudio.context.currentTime;
-            const frequency = this.robotBehaviour.getActionState( "tone", "frequency", true );
-            const duration = this.robotBehaviour.getActionState( "tone", "duration", true );
-            if ( frequency != undefined ) {
-                this.webAudio.oscillator.frequency.setValueAtTime( frequency, ts );
+            if ( tone.frequency != undefined ) {
+                this.webAudio.oscillator.frequency.setValueAtTime( tone.frequency, ts );
                 this.webAudio.gainNode.gain.setValueAtTime( this.webAudio.volume, ts );
             }
-            if ( duration != undefined ) {
-                ts += duration / 1000.0;
+            if ( tone.duration != undefined ) {
+                ts += tone.duration / 1000.0;
                 this.webAudio.gainNode.gain.setValueAtTime( 0, ts );
             }
-            if ( actions.tone.file !== undefined ) {
-                this.tone.file[actions.tone.file]( this.webAudio );
+            if ( tone.file !== undefined ) {
+                this.tone.file[tone.file]( this.webAudio );
             }
         }
         // update motors
-        if ( actions.motors ) {
+        const motors = this.robotBehaviour.getActionState( "motors", true );
+        if ( motors ) {
             function f( speed, that ) {
                 that.theta += Math.PI * speed / 1000;
                 that.theta = that.theta % pi2;
                 that.timeout = setTimeout( f, 150, speed, that );
             }
-            var powerA = this.robotBehaviour.getActionState( "motors", "a", true );
-            var powerB = this.robotBehaviour.getActionState( "motors", "b", true );
-            if ( powerA != undefined ) {
-                this.motorA.power = powerA;
+            if ( motors.a != undefined ) {
+                this.motorA.power = motors.a;
                 clearTimeout( this.motorA.timeout );
-                var leftSpeed = powerA > 100 ? 100 : powerA;
+                var leftSpeed = motors.a > 100 ? 100 : motors.a;
                 if ( leftSpeed > 0 ) {
                     that = this.__proto__.motorA;
                     f( leftSpeed, that );
                 }
             }
-            if ( powerB != undefined ) {
-                this.motorB.power = powerB;
+            if ( motors.b != undefined ) {
+                this.motorB.power = motors.b;
                 clearTimeout( this.motorB.timeout );
-                var RightSpeed = powerB > 100 ? 100 : powerB;
+                var RightSpeed = motors.b > 100 ? 100 : motors.b;
                 if ( RightSpeed > 0 ) {
                     that = this.__proto__.motorB;
                     f( RightSpeed, that );
                 }
             }
         }
-        if ( actions.display ) {
-            if ( actions.display.brightness ) {
-                var b = this.robotBehaviour.getActionState( "display", "brightness", true );
-                this.display.brightness = Math.round( b * 255.0 / 9.0, 0 );
+        const display = this.robotBehaviour.getActionState( "display", true );
+        if ( display ) {
+            if ( display.brightness ) {
+                this.display.brightness = Math.round( display.brightness * 255.0 / 9.0, 0 );
             }
         }
     };

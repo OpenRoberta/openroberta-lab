@@ -230,7 +230,7 @@ define( ['simulation.simulation', 'interpreter.constants', 'util'], function( SI
                     }
                     f( animation, 0, that );
                 } else {
-                    this.display.leds = p;
+                    this.display.leds = display.picture;
                 }
             }
             if ( display.clear ) {
