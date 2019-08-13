@@ -31,8 +31,9 @@ import de.fhg.iais.roberta.util.ServerProperties;
 @Provider
 public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
     private static final Logger LOG = LoggerFactory.getLogger(OraDataProvider.class);
-    private static final String OPEN_ROBERTA_STATE = "openRobertaState";
     private static final AtomicLong SESSION_COUNTER = new AtomicLong();
+
+    public static final String OPEN_ROBERTA_STATE = "openRobertaState";
 
     public OraDataProvider() {
     }

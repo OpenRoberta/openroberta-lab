@@ -72,7 +72,7 @@ public class Administration {
             Administration adminWork = new Administration(args);
             adminWork.run();
         } catch ( Exception e ) {
-            LOG.error("exception in run method", 3);
+            LOG.error("exception in run method", e);
             exitCode = 12;
         }
         System.exit(exitCode);
