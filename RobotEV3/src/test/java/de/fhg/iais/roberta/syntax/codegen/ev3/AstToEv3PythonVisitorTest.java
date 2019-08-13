@@ -211,7 +211,6 @@ public class AstToEv3PythonVisitorTest {
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator3.xml");
     }
 
-    @Ignore
     @Test
     public void testCondition3() throws Exception {
         String a =
@@ -221,13 +220,13 @@ public class AstToEv3PythonVisitorTest {
                 + "    'OLDGLASSES': "
                 + IMG_OLDGLASSES
                 + ",\n}\n"
-                + make_globals(CFG_MOTORS, CFG_TOUCH_SENSOR)
+                + make_globals(CFG_MOTORS, CFG_TOUCH_SENSOR + CFG_COLOR_SENSOR + CFG_ULTRASONIC_SENSOR)
                 + "def run():\n"
                 + "    if 5 < hal.getRegulatedMotorSpeed('B'):\n"
                 + "        hal.turnOnRegulatedMotor('B', 30)\n"
                 + "        hal.rotateRegulatedMotor('B', 30, 'rotations', 1)\n"
                 + "        hal.rotateDirectionRegulated('A', 'B', False, 'right', 50)\n"
-                + "    if ( hal.getMotorTachoValue('A', 'rotation') + hal.getInfraredSensorDistance('4') ) == hal.getUltraSonicSensorDistance('4'):\n"
+                + "    if ( hal.getMotorTachoValue('A', 'rotation') + hal.getInfraredSensorDistance('3') ) == hal.getUltraSonicSensorDistance('4'):\n"
                 + "        hal.ledOff()\n"
                 + "    else:\n"
                 + "        hal.resetGyroSensor('2')\n"

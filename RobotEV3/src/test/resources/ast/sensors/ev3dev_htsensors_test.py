@@ -23,11 +23,11 @@ hal = Hal(_brickConfiguration)
 
 def run():
     while True:
-        if hal.getHiTecCompassSensorValue('2', ANGLE) < 30:
+        if hal.getHiTecCompassSensorValue('2', 'angle') < 30:
             break
         hal.waitFor(15)
     while True:
-        if hal.getHiTecCompassSensorValue('2', COMPASS) < 30:
+        if hal.getHiTecCompassSensorValue('2', 'compass') < 30:
             break
         hal.waitFor(15)
     while True:

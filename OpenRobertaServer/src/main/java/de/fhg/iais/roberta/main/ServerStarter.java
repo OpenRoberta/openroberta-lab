@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
@@ -39,10 +40,12 @@ import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.guice.RobertaGuiceServletConfig;
+import de.fhg.iais.roberta.javaServer.provider.OraDataProvider;
 import de.fhg.iais.roberta.javaServer.websocket.Ev3SensorLoggingWS;
 import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.dao.RobotDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
+import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
@@ -168,6 +171,7 @@ public class ServerStarter {
         restHttpHandler.setContextPath("/rest");
         restHttpHandler.setSessionHandler(new SessionHandler());
         restHttpHandler.getSessionHandler().addEventListener(mkSessionListener(" for /rest REST endpoint"));
+        restHttpHandler.getSessionHandler().setMaxInactiveInterval(60);
         restHttpHandler.addEventListener(robertaGuiceServletConfig);
         restHttpHandler.addFilter(GuiceFilter.class, "/*", null);
         restHttpHandler.addServlet(DefaultServlet.class, "/*");
@@ -457,7 +461,23 @@ public class ServerStarter {
 
             @Override
             public void sessionDestroyed(HttpSessionEvent se) {
-                LOG.info("jetty destroyed " + messageDetail);
+                String messageSuffix = "???";
+                if ( se == null ) {
+                    messageSuffix = "Http session event is null";
+                } else {
+                    HttpSession httpsession = se.getSession();
+                    if ( httpsession == null ) {
+                        messageSuffix = "Http session is null";
+                    } else {
+                        HttpSessionState httpSessionState = (HttpSessionState) httpsession.getAttribute(OraDataProvider.OPEN_ROBERTA_STATE);
+                        if ( httpSessionState == null ) {
+                            messageSuffix = "Http session state is null";
+                        } else {
+                            messageSuffix = "Session number " + httpSessionState.getSessionNumber();
+                        }
+                    }
+                }
+                LOG.info("jetty session destroyed " + messageDetail + ". " + messageSuffix);
             }
         };
         return listener;
