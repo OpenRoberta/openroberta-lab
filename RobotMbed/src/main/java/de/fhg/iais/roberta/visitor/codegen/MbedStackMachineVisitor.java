@@ -13,22 +13,7 @@ import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
-import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
-import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
-import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
-import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
-import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetBrightnessAction;
-import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
-import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
-import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
-import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
-import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
-import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
-import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
-import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
-import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
-import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
+import de.fhg.iais.roberta.syntax.action.mbed.*;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -43,20 +28,7 @@ import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
-import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.*;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.C;
@@ -230,27 +202,27 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     @Override
     public V visitGestureSensor(GestureSensor<V> gestureSensor) {
         String mode = gestureSensor.getMode();
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.GESTURE).put(C.PORT, mode.toLowerCase()).put(C.NAME, "calliope");
+        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.GESTURE).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
         return app(o);
     }
 
     @Override
     public V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor) {
         String mode = temperatureSensor.getMode();
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TEMPERATURE).put(C.PORT, mode.toLowerCase()).put(C.NAME, "calliope");
+        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TEMPERATURE).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
         return app(o);
     }
 
     @Override
     public V visitKeysSensor(KeysSensor<V> keysSensor) {
         String port = keysSensor.getPort();
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.PORT, port).put(C.NAME, "calliope");
+        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.MODE, port).put(C.NAME, "calliope");
         return app(o);
     }
 
     @Override
     public V visitLightSensor(LightSensor<V> lightSensor) {
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.LIGHT).put(C.PORT, C.AMBIENTLIGHT).put(C.NAME, "calliope");
+        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.LIGHT).put(C.MODE, C.AMBIENTLIGHT).put(C.NAME, "calliope");
         return app(o);
     }
 
@@ -271,20 +243,20 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         String port = sensorGetSample.getPort();
         String mode = sensorGetSample.getMode();
 
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.PIN + port).put(C.PORT, mode.toLowerCase()).put(C.NAME, "calliope");
+        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.PIN + port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
         return app(o);
     }
 
     @Override
     public V visitSoundSensor(SoundSensor<V> soundSensor) {
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.SOUND).put(C.PORT, C.VOLUME).put(C.NAME, "calliope");
+        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.SOUND).put(C.MODE, C.VOLUME).put(C.NAME, "calliope");
         return app(o);
     }
 
     @Override
     public V visitCompassSensor(CompassSensor<V> compassSensor) {
         String mode = compassSensor.getMode();
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COMPASS).put(C.PORT, mode.toLowerCase()).put(C.NAME, "calliope");
+        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COMPASS).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
         return app(o);
     }
 
@@ -300,7 +272,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         String port = pinValueSensor.getPort();
         String mode = pinValueSensor.getMode();
 
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.PIN + port).put(C.PORT, mode.toLowerCase()).put(C.NAME, "calliope");
+        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.PIN + port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
 
         return app(o);
     }
@@ -319,7 +291,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<V> displayGetBrightnessAction) {
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.DISPLAY).put(C.PORT, C.BRIGHTNESS).put(C.NAME, "calliope");
+        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.DISPLAY).put(C.MODE, C.BRIGHTNESS).put(C.NAME, "calliope");
         return app(o);
     }
 

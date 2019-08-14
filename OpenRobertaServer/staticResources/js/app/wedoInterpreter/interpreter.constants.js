@@ -254,7 +254,7 @@ define(["require", "exports"], function (require, exports) {
     exports.THEN_STMTS = "thenStmts";
     exports.TIME = "time";
     exports.TIMER = "timer";
-    exports.TIMES = "times";
+    exports.TIMES = "TIMES";
     exports.TIMER_SENSOR_RESET = "createResetTimer";
     exports.TONE_ACTION = "ToneAction";
     exports.TOUCH = "touch";
