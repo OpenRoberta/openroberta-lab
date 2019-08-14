@@ -63,7 +63,7 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         if ( mode != undefined ) {
             const v = sensor[mode];
             if ( v === undefined ) {
-                return "undefined";
+                return false;
             }
             else {
                 return v;

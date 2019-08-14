@@ -67,7 +67,7 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             if (mode != undefined) {
                 var v = sensor[mode];
                 if (v === undefined) {
-                    return "undefined";
+                    return false;
                 }
                 else {
                     return v;
