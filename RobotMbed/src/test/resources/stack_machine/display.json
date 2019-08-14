@@ -121,8 +121,8 @@
 		},
 		{
 			"GetSample": "display",
+			"mode": "brightness",
 			"opc": "GetSample",
-			"port": "brightness",
 			"name": "calliope"
 		},
 		{

@@ -2,8 +2,8 @@
 	"ops": [
 		{
 			"GetSample": "buttons",
+			"mode": "A",
 			"opc": "GetSample",
-			"port": "A",
 			"name": "calliope"
 		},
 		{
@@ -12,8 +12,8 @@
 		},
 		{
 			"GetSample": "buttons",
+			"mode": "B",
 			"opc": "GetSample",
-			"port": "B",
 			"name": "calliope"
 		},
 		{
@@ -22,8 +22,8 @@
 		},
 		{
 			"GetSample": "pin0",
+			"mode": "pressed",
 			"opc": "GetSample",
-			"port": "pressed",
 			"name": "calliope"
 		},
 		{
@@ -32,8 +32,8 @@
 		},
 		{
 			"GetSample": "pin1",
+			"mode": "pressed",
 			"opc": "GetSample",
-			"port": "pressed",
 			"name": "calliope"
 		},
 		{
@@ -42,8 +42,8 @@
 		},
 		{
 			"GetSample": "pin2",
+			"mode": "pressed",
 			"opc": "GetSample",
-			"port": "pressed",
 			"name": "calliope"
 		},
 		{
@@ -52,8 +52,8 @@
 		},
 		{
 			"GetSample": "pin3",
+			"mode": "pressed",
 			"opc": "GetSample",
-			"port": "pressed",
 			"name": "calliope"
 		},
 		{
@@ -62,8 +62,8 @@
 		},
 		{
 			"GetSample": "gesture",
+			"mode": "up",
 			"opc": "GetSample",
-			"port": "up",
 			"name": "calliope"
 		},
 		{
@@ -72,8 +72,8 @@
 		},
 		{
 			"GetSample": "gesture",
+			"mode": "down",
 			"opc": "GetSample",
-			"port": "down",
 			"name": "calliope"
 		},
 		{
@@ -82,8 +82,8 @@
 		},
 		{
 			"GetSample": "gesture",
+			"mode": "face_down",
 			"opc": "GetSample",
-			"port": "face_down",
 			"name": "calliope"
 		},
 		{
@@ -92,8 +92,8 @@
 		},
 		{
 			"GetSample": "gesture",
+			"mode": "face_up",
 			"opc": "GetSample",
-			"port": "face_up",
 			"name": "calliope"
 		},
 		{
@@ -102,8 +102,8 @@
 		},
 		{
 			"GetSample": "gesture",
+			"mode": "shake",
 			"opc": "GetSample",
-			"port": "shake",
 			"name": "calliope"
 		},
 		{
@@ -112,8 +112,8 @@
 		},
 		{
 			"GetSample": "gesture",
+			"mode": "freefall",
 			"opc": "GetSample",
-			"port": "freefall",
 			"name": "calliope"
 		},
 		{
@@ -122,8 +122,8 @@
 		},
 		{
 			"GetSample": "sound",
+			"mode": "volume",
 			"opc": "GetSample",
-			"port": "volume",
 			"name": "calliope"
 		},
 		{
@@ -132,8 +132,8 @@
 		},
 		{
 			"GetSample": "compass",
+			"mode": "angle",
 			"opc": "GetSample",
-			"port": "angle",
 			"name": "calliope"
 		},
 		{
@@ -157,8 +157,8 @@
 		},
 		{
 			"GetSample": "temperature",
+			"mode": "value",
 			"opc": "GetSample",
-			"port": "value",
 			"name": "calliope"
 		},
 		{
@@ -167,8 +167,8 @@
 		},
 		{
 			"GetSample": "light",
+			"mode": "ambientlight",
 			"opc": "GetSample",
-			"port": "ambientlight",
 			"name": "calliope"
 		},
 		{
@@ -177,8 +177,8 @@
 		},
 		{
 			"GetSample": "pin1",
+			"mode": "analog",
 			"opc": "GetSample",
-			"port": "analog",
 			"name": "calliope"
 		},
 		{
@@ -187,8 +187,8 @@
 		},
 		{
 			"GetSample": "pin0",
+			"mode": "digital",
 			"opc": "GetSample",
-			"port": "digital",
 			"name": "calliope"
 		},
 		{
