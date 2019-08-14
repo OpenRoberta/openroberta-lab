@@ -1,10 +1,11 @@
 #!/bin/bash
 
-echo "run.sh [-q] [-D]                                                          quiet (first parameter, if used) and debug mode (next parameter, if used)"
+echo "run.sh [-q] [-yes] [-D]                                                   be quiet, answer all questions with 'y', debug mode"
 echo "       help |                                                             this text"
 echo "       docker-info | network | logs | test-info                           container state, network and some log from running containers; info about deployed servers"
 echo "       gen <server> | start <server> | stop <server> | deploy <server>    gen builds image, start first tries to stop, deploy is gen&start"
 echo "       admin <server> <admin-cmd>                                         execute admin command on server, e.g. 'cleanup-temp-user-dirs'"
+echo "       auto-restart <server> <url> |                                      restart a container if <url>/rest/alive doesn't respond within 50 sec (url ~ https://dns:port)"
 echo "       auto-deploy |                                                      check for git changes for servers found in variable AUTODEPLOY"
 echo "       start-all | stop-all |                                             start/stop db server and server found in variable SERVERS"
 echo "       gen-dbc | start-dbc | stop-dbc | backup [<db>]                     generate db server, start and stop db server using variable DATABASES, backup a db"

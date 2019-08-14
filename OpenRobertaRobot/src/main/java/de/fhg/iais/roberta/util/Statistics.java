@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
@@ -17,15 +16,15 @@ public final class Statistics {
     private static final Logger STAT = LoggerFactory.getLogger("statistics");
     private static final Logger LOG = LoggerFactory.getLogger(Statistics.class);
 
-    private static final Set<Class<?>> SUPPORTED_OBJECT_CLASSES = new HashSet<>(Arrays.asList(Boolean.class, Integer.class, Float.class, Double.class, String.class));
+    private static final Set<Class<?>> SUPPORTED_OBJECT_CLASSES =
+        new HashSet<>(Arrays.asList(Boolean.class, Integer.class, Float.class, Double.class, String.class));
 
     private Statistics() {
     }
 
     /**
-     * Logs the action and its arguments to the statistics logger with the trace level.
-     * The arguments must come in key value pairs, otherwise the internal toJsonString method
-     * throws a DbcException.
+     * Logs the action and its arguments to the statistics logger with the trace level. The arguments must come in key value pairs, otherwise the internal
+     * toJsonString method throws a DbcException.
      *
      * @param action the general action or category of the log
      * @param args variable number of key value pairs, these are put in a json array
@@ -39,9 +38,8 @@ public final class Statistics {
     }
 
     /**
-     * Logs the action and its arguments to the statistics logger with the debug level.
-     * The arguments must come in key value pairs, otherwise the internal toJsonString method
-     * throws a DbcException.
+     * Logs the action and its arguments to the statistics logger with the debug level. The arguments must come in key value pairs, otherwise the internal
+     * toJsonString method throws a DbcException.
      *
      * @param action the general action or category of the log
      * @param args variable number of key value pairs, these are put in a json array
@@ -55,9 +53,8 @@ public final class Statistics {
     }
 
     /**
-     * Logs the action and its arguments to the statistics logger with the info level.
-     * The arguments must come in key value pairs, otherwise the internal toJsonString method
-     * throws a DbcException.
+     * Logs the action and its arguments to the statistics logger with the info level. The arguments must come in key value pairs, otherwise the internal
+     * toJsonString method throws a DbcException.
      *
      * @param action the general action or category of the log
      * @param args variable number of key value pairs, these are put in a json array
@@ -71,9 +68,8 @@ public final class Statistics {
     }
 
     /**
-     * Logs the action and its arguments to the statistics logger with the info level.
-     * The arguments must come in key value pairs, otherwise the internal toJsonString method
-     * throws a DbcException.
+     * Logs the action and its arguments to the statistics logger with the info level. The arguments must come in key value pairs, otherwise the internal
+     * toJsonString method throws a DbcException.
      *
      * @param action the general action or category of the log
      * @param string
@@ -83,28 +79,27 @@ public final class Statistics {
     public static void infoUserAgent(String action, UserAgent userAgent, String countryCode, JSONObject request) {
         try {
             STAT
-            .info(
-                toJsonString(
-                    action,
-                    "Browser",
-                    userAgent.getBrowser() + "/" + userAgent.getBrowserVersion(),
-                    "OS",
-                    userAgent.getOperatingSystem().getName(),
-                    "CountryCode",
-                    countryCode,
-                    "DeviceType",
-                    userAgent.getOperatingSystem().getDeviceType().getName(),
-                    "ScreenSize",
-                    request.getString("screenSize")));
+                .info(
+                    toJsonString(
+                        action,
+                        "Browser",
+                        userAgent.getBrowser() + "/" + userAgent.getBrowserVersion(),
+                        "OS",
+                        userAgent.getOperatingSystem().getName(),
+                        "CountryCode",
+                        countryCode,
+                        "DeviceType",
+                        userAgent.getOperatingSystem().getDeviceType().getName(),
+                        "ScreenSize",
+                        request.getString("screenSize")));
         } catch ( Exception e ) {
             LOG.error("Logging statistics failed for: " + action);
         }
     }
 
     /**
-     * Logs the action and its arguments to the statistics logger with the warn level.
-     * The arguments must come in key value pairs, otherwise the internal toJsonString method
-     * throws a DbcException.
+     * Logs the action and its arguments to the statistics logger with the warn level. The arguments must come in key value pairs, otherwise the internal
+     * toJsonString method throws a DbcException.
      *
      * @param action the general action or category of the log
      * @param args variable number of key value pairs, these are put in a json array
@@ -118,9 +113,8 @@ public final class Statistics {
     }
 
     /**
-     * Logs the action and its arguments to the statistics logger with the error level.
-     * The arguments must come in key value pairs, otherwise the internal toJsonString method
-     * throws a DbcException.
+     * Logs the action and its arguments to the statistics logger with the error level. The arguments must come in key value pairs, otherwise the internal
+     * toJsonString method throws a DbcException.
      *
      * @param action the general action or category of the log
      * @param args variable number of key value pairs, these are put in a json array
@@ -140,7 +134,6 @@ public final class Statistics {
 
         JSONObject jsonObjAction = new JSONObject();
         JSONObject jsonObjArgs = new JSONObject();
-        JSONArray jsonArrArgs = new JSONArray();
 
         for ( int i = 0; i < args.length; i += 2 ) {
             if ( SUPPORTED_OBJECT_CLASSES.contains(args[i + 1].getClass()) ) {
@@ -150,9 +143,8 @@ public final class Statistics {
             }
         }
 
-        jsonArrArgs.put(jsonObjArgs);
         jsonObjAction.put("action", action);
-        jsonObjAction.put("args", jsonArrArgs);
+        jsonObjAction.put("args", jsonObjArgs);
 
         return jsonObjAction.toString();
     }

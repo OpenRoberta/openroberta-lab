@@ -462,6 +462,7 @@ public class ServerStarter {
             @Override
             public void sessionDestroyed(HttpSessionEvent se) {
                 String messageSuffix = "???";
+                long sessionNumber = -1;
                 if ( se == null ) {
                     messageSuffix = "Http session event is null";
                 } else {
@@ -473,11 +474,13 @@ public class ServerStarter {
                         if ( httpSessionState == null ) {
                             messageSuffix = "Http session state is null";
                         } else {
-                            messageSuffix = "Session number " + httpSessionState.getSessionNumber();
+                            sessionNumber = httpSessionState.getSessionNumber();
+                            messageSuffix = "Session number " + sessionNumber;
                         }
                     }
                 }
                 LOG.info("jetty session destroyed " + messageDetail + ". " + messageSuffix);
+                Statistics.info("SessionDestroy", "sessionId", (int) sessionNumber, "success", true);
             }
         };
         return listener;

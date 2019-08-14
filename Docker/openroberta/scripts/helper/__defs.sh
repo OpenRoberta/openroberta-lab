@@ -2,9 +2,9 @@
 
 # ask a question. If the user answers "y", everything is fine. Otherwise exit 12
 function question {
-  if [ "$SYSTEMCALL" == 'true' ]
+  if [ "$YES" == 'true' ]
   then
-    echo "SYSTEMCALL. Automatic 'y' for question: $1"
+    echo "-yes was set. Automatic 'y' for question: $1"
   else
     echo -n "$1 (\"y\" if ok) "
     local ANSWER

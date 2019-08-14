@@ -23,7 +23,7 @@
     </root>
     
     <logger name="statistics" level="INFO" additivity="false">
-        <appender-ref ref="LOG" />
+        <appender-ref ref="STATISTICS" />
     </logger>
 
     <logger name="de.fhg.iais.roberta.brick.CompilerWorkflow" level="DEBUG" />
