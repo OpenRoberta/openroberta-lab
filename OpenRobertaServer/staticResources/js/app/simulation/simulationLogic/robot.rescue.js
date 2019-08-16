@@ -1,4 +1,4 @@
-define([ 'simulation.robot' ], function(Robot) {
+define([ 'simulation.robot.ev3' ], function(Ev3) {
 
     /**
      * Creates a new RescueRobot for the rescue scene.
@@ -7,7 +7,7 @@ define([ 'simulation.robot' ], function(Robot) {
      * @extends Robot
      */
     function RescueRobot() {
-        Robot.call(this, {
+        Ev3.call(this, {
             x : 400,
             y : 40,
             theta : 0,
@@ -18,7 +18,7 @@ define([ 'simulation.robot' ], function(Robot) {
         });
     }
 
-    RescueRobot.prototype = Object.create(Robot.prototype);
+    RescueRobot.prototype = Object.create(Ev3.prototype);
     RescueRobot.prototype.constructor = RescueRobot;
 
     return RescueRobot;

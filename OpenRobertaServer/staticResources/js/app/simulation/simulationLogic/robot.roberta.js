@@ -1,4 +1,4 @@
-define([ 'simulation.robot' ], function(Robot) {
+define([ 'simulation.robot.ev3' ], function(Ev3) {
 
     /**
      * Creates a new RobertaRobot for the Roberta scene.
@@ -7,7 +7,7 @@ define([ 'simulation.robot' ], function(Robot) {
      * @extends Robot
      */
     function RobertaRobot() {
-        Robot.call(this, {
+        Ev3.call(this, {
             x : 70,
             y : 90,
             theta : 0,
@@ -17,7 +17,7 @@ define([ 'simulation.robot' ], function(Robot) {
             transY : 0
         });
     }
-    RobertaRobot.prototype = Object.create(Robot.prototype);
+    RobertaRobot.prototype = Object.create(Ev3.prototype);
     RobertaRobot.prototype.constructor = RobertaRobot;
 
     return RobertaRobot;

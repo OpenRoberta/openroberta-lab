@@ -80,7 +80,7 @@ define([ 'exports', 'simulation.constants' ], function(exports, CONSTANTS) {
      * @returns {Array} four lines
      */
     exports.getLinesFromRect = function(rect) {
-        if(rect.isParallelToAxis){
+        if (rect.isParallelToAxis) {
             return [ {
                 x1 : rect.x,
                 x2 : rect.x,
@@ -103,7 +103,7 @@ define([ 'exports', 'simulation.constants' ], function(exports, CONSTANTS) {
                 y1 : rect.y + rect.h,
                 y2 : rect.y
             } ];
-        }else{
+        } else {
             return [ {
                 x1 : rect.backLeft.rx,
                 x2 : rect.frontLeft.rx,
@@ -152,7 +152,7 @@ define([ 'exports', 'simulation.constants' ], function(exports, CONSTANTS) {
      */
     function getDistance(p1, p2) {
         return exports.sqr(p1.x - p2.x) + exports.sqr(p1.y - p2.y);
-    };
+    }
     exports.getDistance = getDistance;
     /**
      * Get the shortest distance from a point to a line as a vector.
@@ -182,10 +182,10 @@ define([ 'exports', 'simulation.constants' ], function(exports, CONSTANTS) {
             x : p1.x + t * (p2.x - p1.x),
             y : p1.y + t * (p2.y - p1.y)
         });
-    };
+    }
     exports.getDistanceToLine = getDistanceToLine;
-    
-    exports.isPointInsideRectangle = function(p, rect){
+
+    exports.isPointInsideRectangle = function(p, rect) {
         var p1 = rect.p1;
         var p2 = rect.p2;
         var p3 = rect.p3;
@@ -196,9 +196,9 @@ define([ 'exports', 'simulation.constants' ], function(exports, CONSTANTS) {
         var t4 = getDistance(p, getDistanceToLine(p, p4, p1));
         var s1 = getDistance(p1, p2);
         var s2 = getDistance(p2, p3);
-        if(t1<=s2 && t3<=s2 && t2<=s1 && t4<=s1){
+        if (t1 <= s2 && t3 <= s2 && t2 <= s1 && t4 <= s1) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -236,7 +236,6 @@ define([ 'exports', 'simulation.constants' ], function(exports, CONSTANTS) {
         if (h < 0) {
             h += 360;
         }
-
         return [ h, s, v ];
     };
     /**

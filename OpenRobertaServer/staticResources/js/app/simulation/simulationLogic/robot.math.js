@@ -1,7 +1,7 @@
-define([ 'simulation.robot' ], function(Robot) {
+define([ 'simulation.robot.ev3' ], function(Ev3) {
 
     function MathRobot() {
-        Robot.call(this, {
+        Ev3.call(this, {
             x : 400,
             y : 250,
             theta : 0,
@@ -15,7 +15,7 @@ define([ 'simulation.robot' ], function(Robot) {
         this.drawWidth = 1;
     }
 
-    MathRobot.prototype = Object.create(Robot.prototype);
+    MathRobot.prototype = Object.create(Ev3.prototype);
     MathRobot.prototype.constructor = MathRobot;
 
     return MathRobot;

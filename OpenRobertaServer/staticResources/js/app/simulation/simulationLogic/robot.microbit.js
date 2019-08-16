@@ -10,126 +10,124 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
      */
     function Microbit(pose, robotBehaviour) {
         Mbed.call(this, pose, robotBehaviour);
+
+        var that = this;
+        this.endless = true;
+        this.button = {
+            xA : -178,
+            yA : 15,
+            rA : 15,
+            colorA : '#F29400',
+            xB : 178,
+            yB : 15,
+            rB : 15,
+            colorB : '#F29400',
+            xReset : 0,
+            yReset : 175,
+            rReset : 10,
+            colorReset : '#ffffff',
+        };
+        this.pin0 = {
+            x : -209.5,
+            y : -170,
+            wh : 40,
+            touched : false,
+            draw : function(canvas) {
+                if (this.touched) {
+                    canvas.fillStyle = 'green';
+                    canvas.beginPath();
+                    canvas.fillRect(this.x, this.y, this.wh, this.wh);
+                    canvas.fill();
+                    canvas.fillStyle = 'red';
+                    canvas.beginPath();
+                    canvas.arc(189.5, -112, 18, 0, Math.PI * 2);
+                    canvas.fill();
+                }
+                if (this.digitalIn !== undefined) {
+                    canvas.fillStyle = 'red';
+                    canvas.beginPath();
+                    canvas.save();
+                    canvas.scale(1, -1);
+                    canvas.save();
+                    canvas.translate(this.x + 4, -this.y - 10);
+                    canvas.rotate(Math.PI / 2);
+                    canvas.font = "bold 50px Roboto";
+                    canvas.fillText('< ', 0, 0);
+                    canvas.restore();
+                    canvas.font = "10px Courier";
+                    canvas.fillText('\u2293', this.x - 2, -this.y + 16);
+                    canvas.fillText(this.digitalIn, this.x + 35, -this.y + 16);
+                    canvas.restore();
+                } else if (this.analogIn !== undefined) {
+                    canvas.fillStyle = 'red';
+                    canvas.beginPath();
+                    canvas.save();
+                    canvas.scale(1, -1);
+                    canvas.save();
+                    canvas.translate(this.x + 4, -this.y - 10);
+                    canvas.rotate(Math.PI / 2);
+                    canvas.font = "bold 50px Roboto";
+                    canvas.fillText('< ', 0, 0);
+                    canvas.restore();
+                    canvas.font = "10px Courier";
+                    canvas.fillText('\u223F', this.x - 2, -this.y + 16);
+                    canvas.fillText(this.analogIn, this.x + 35, -this.y + 16);
+                    canvas.restore();
+                } else if (this.analogOut !== undefined) {
+                    canvas.fillStyle = "green";
+                    canvas.beginPath();
+                    canvas.save();
+                    canvas.scale(1, -1);
+                    canvas.save();
+                    canvas.translate(this.x + 4, -this.y - 10);
+                    canvas.rotate(Math.PI / 2);
+                    canvas.font = "bold 50px Roboto";
+                    canvas.fillText("> ", 0, 0);
+                    canvas.restore();
+                    canvas.font = "10px Courier";
+                    canvas.fillText('\u223F', this.x + 5, -this.y + 16);
+                    canvas.fillText(this.analogOut, this.x + 30, -this.y + 16);
+                    canvas.restore();
+                } else if (this.digitalOut !== undefined) {
+                    canvas.fillStyle = 'green';
+                    canvas.beginPath();
+                    canvas.save();
+                    canvas.scale(1, -1);
+                    canvas.save();
+                    canvas.translate(this.x + 4, -this.y - 10);
+                    canvas.rotate(Math.PI / 2);
+                    canvas.font = "bold 50px Roboto";
+                    canvas.fillText('> ', 0, 0);
+                    canvas.restore();
+                    canvas.font = "10px Courier";
+                    canvas.fillText('\u2293', this.x + 5, -this.y + 16);
+                    canvas.fillText(this.digitalOut, this.x + 30, -this.y + 16);
+                    canvas.restore();
+                }
+            }
+        };
+        this.pin1 = {
+            x : -120,
+            y : -170,
+            wh : 40,
+            touched : false,
+            draw : that.pin0.draw
+        };
+        this.pin2 = {
+            x : -20,
+            y : -170,
+            wh : 40,
+            touched : false,
+            draw : that.pin0.draw
+        };
+        this.time = 0;
+        this.timer = {
+            timer1 : false
+        };
     }
+
     Microbit.prototype = Object.create(Mbed.prototype);
     Microbit.prototype.constructor = Microbit;
-
-    Microbit.prototype.endless = true;
-
-    Microbit.prototype.button = {
-        xA : -178,
-        yA : 15,
-        rA : 15,
-        colorA : '#F29400',
-        xB : 178,
-        yB : 15,
-        rB : 15,
-        colorB : '#F29400',
-        xReset : 0,
-        yReset : 175,
-        rReset : 10,
-        colorReset : '#ffffff',
-    }
-
-    Mbed.prototype.pin0 = {
-        x : -209.5,
-        y : -170,
-        wh : 40,
-        touched : false,
-        draw : function(canvas) {
-            if (this.touched) {
-                canvas.fillStyle = 'green';
-                canvas.beginPath();
-                canvas.fillRect(this.x, this.y, this.wh, this.wh);
-                canvas.fill();
-                // show "circuit"
-                canvas.fillStyle = 'red';
-                canvas.beginPath();
-                canvas.arc(189.5, -112, 18, 0, Math.PI * 2);
-                canvas.fill();
-            }
-            if (this.digitalIn != undefined) {
-                canvas.fillStyle = 'red';
-                canvas.beginPath();
-                canvas.save();
-                canvas.scale(1, -1);
-                canvas.save();
-                canvas.translate(this.x + 4, -this.y - 10);
-                canvas.rotate(Math.PI / 2);
-                canvas.font = "bold 50px Roboto";
-                canvas.fillText('< ', 0, 0);
-                canvas.restore();
-                canvas.font = "10px Courier";
-                canvas.fillText('\u2293', this.x - 2, -this.y + 16);
-                canvas.fillText(this.digitalIn, this.x + 35, -this.y + 16);
-                canvas.restore();
-            } else if (this.analogIn != undefined) {
-                canvas.fillStyle = 'red';
-                canvas.beginPath();
-                canvas.save();
-                canvas.scale(1, -1);
-                canvas.save();
-                canvas.translate(this.x + 4, -this.y - 10);
-                canvas.rotate(Math.PI / 2);
-                canvas.font = "bold 50px Roboto";
-                canvas.fillText('< ', 0, 0);
-                canvas.restore();
-                canvas.font = "10px Courier";
-                canvas.fillText('\u223F', this.x - 2, -this.y + 16);
-                canvas.fillText(this.analogIn, this.x + 35, -this.y + 16);
-                canvas.restore();
-            } else if (this.analogOut != undefined) {
-                canvas.fillStyle = 'green';
-                canvas.beginPath();
-                canvas.save();
-                canvas.scale(1, -1);
-                canvas.save();
-                canvas.translate(this.x + 4, -this.y - 10);
-                canvas.rotate(Math.PI / 2);
-                canvas.font = "bold 50px Roboto";
-                canvas.fillText('> ', 0, 0);
-                canvas.restore();
-                canvas.font = "10px Courier";
-                canvas.fillText('\u223F', this.x + 5, -this.y + 16);
-                canvas.fillText(this.analogOut, this.x + 30, -this.y + 16);
-                canvas.restore();
-            } else if (this.digitalOut != undefined) {
-                canvas.fillStyle = 'green';
-                canvas.beginPath();
-                canvas.save();
-                canvas.scale(1, -1);
-                canvas.save();
-                canvas.translate(this.x + 4, -this.y - 10);
-                canvas.rotate(Math.PI / 2);
-                canvas.font = "bold 50px Roboto";
-                canvas.fillText('> ', 0, 0);
-                canvas.restore();
-                canvas.font = "10px Courier";
-                canvas.fillText('\u2293', this.x + 5, -this.y + 16);
-                canvas.fillText(this.digitalOut, this.x + 30, -this.y + 16);
-                canvas.restore();
-            }
-        }
-    };
-    Mbed.prototype.pin1 = {
-        x : -120,
-        y : -170,
-        wh : 40,
-        touched : false,
-        draw : Mbed.prototype.pin0.draw
-    };
-    Mbed.prototype.pin2 = {
-        x : -20,
-        y : -170,
-        wh : 40,
-        touched : false,
-        draw : Mbed.prototype.pin0.draw
-    };
-
-    Mbed.prototype.time = 0;
-    Mbed.prototype.timer = {
-        timer1 : false
-    }
 
     var isDownrobot = false;
     var isDownObstacle = false;
@@ -200,7 +198,7 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
         } else {
             $("#robotLayer").css('cursor', 'auto');
         }
-    }
+    };
 
     return Microbit;
 });
