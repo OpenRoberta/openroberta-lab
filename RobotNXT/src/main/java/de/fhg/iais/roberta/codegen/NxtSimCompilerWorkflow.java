@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.visitor.codegen.NxtSimVisitor;
+import de.fhg.iais.roberta.visitor.codegen.NxtStackMachineVisitor;
 
 public class NxtSimCompilerWorkflow extends AbstractCompilerWorkflow {
 
@@ -31,7 +31,7 @@ public class NxtSimCompilerWorkflow extends AbstractCompilerWorkflow {
             return;
         }
         try {
-            this.generatedSourceCode = NxtSimVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree());
+            this.generatedSourceCode = NxtStackMachineVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), language);
             LOG.info("nxt simulation javascript code generated");
         } catch ( Exception e ) {
             LOG.error("nxt simulation javascript code generation failed", e);
