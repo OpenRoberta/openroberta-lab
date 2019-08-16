@@ -1,0 +1,86 @@
+<block type="robGlobalVariables_declare" id="k,FIL~3cd3@r8OmIkZKL"
+	intask="true" deletable="false" movable="false">
+	<mutation next="true" declaration_type="Array_Number"></mutation>
+	<field name="VAR">initialEmptyNumbers</field>
+	<field name="TYPE">Array_Number</field>
+	<value name="VALUE">
+		<block type="robLists_create_with" id="nwhx`GM6+KD~bu.f-Z)."
+			intask="true">
+			<mutation items="0" list_type="Number"></mutation>
+			<field name="LIST_TYPE">Number</field>
+		</block>
+	</value>
+</block>
+<block type="robGlobalVariables_declare" id="70@Bg,}_cLmBAJDe2OJu"
+	intask="true" deletable="false" movable="false">
+	<mutation next="true" declaration_type="Array_Boolean"></mutation>
+	<field name="VAR">initialEmptyBoolean</field>
+	<field name="TYPE">Array_Boolean</field>
+	<value name="VALUE">
+		<block type="robLists_create_with" id="YmUeK:p%]wmpg!55Esn+"
+			intask="true">
+			<mutation items="0" list_type="Boolean"></mutation>
+			<field name="LIST_TYPE">Boolean</field>
+		</block>
+	</value>
+</block>
+<block type="robGlobalVariables_declare" id="b42YcB})X]t;X*?;Z,F|"
+	intask="true" deletable="false" movable="false">
+	<mutation next="true" declaration_type="Array_String"></mutation>
+	<field name="VAR">initialEmptyStrings</field>
+	<field name="TYPE">Array_String</field>
+	<value name="VALUE">
+		<block type="robLists_create_with" id="1GnyozdD^chnK0WL)aeC"
+			intask="true">
+			<mutation items="0" list_type="String"></mutation>
+			<field name="LIST_TYPE">String</field>
+		</block>
+	</value>
+</block>
+<block type="robGlobalVariables_declare" id="G;vY,h-n:T8N}xu?gZHo"
+	intask="true" deletable="false" movable="false">
+	<mutation next="true" declaration_type="Number"></mutation>
+	<field name="VAR">number</field>
+	<field name="TYPE">Number</field>
+	<value name="VALUE">
+		<block type="math_number" id="l~k*s4=u*C+W0m:*U,(Y"
+			intask="true">
+			<field name="NUM">3</field>
+		</block>
+	</value>
+</block>
+<block type="robGlobalVariables_declare" id="!I.+LY96_.;G+dmIx;dW"
+	intask="true" deletable="false" movable="false">
+	<mutation next="true" declaration_type="Boolean"></mutation>
+	<field name="VAR">bool</field>
+	<field name="TYPE">Boolean</field>
+	<value name="VALUE">
+		<block type="logic_boolean" id="6g(]h@I0zE9%+7,-3nzU"
+			intask="true">
+			<field name="BOOL">TRUE</field>
+		</block>
+	</value>
+</block>
+<block type="robGlobalVariables_declare" id="Fs5TpT-KKD1}mzto|z=="
+	intask="true" deletable="false" movable="false">
+	<mutation next="true" declaration_type="String"></mutation>
+	<field name="VAR">string</field>
+	<field name="TYPE">String</field>
+	<value name="VALUE">
+		<block type="text" id="nen#FIO;Jojj9,c@x[Z8" intask="true">
+			<field name="TEXT">c</field>
+		</block>
+	</value>
+</block>
+<block type="robGlobalVariables_declare" id="zumh?#6]72=t%l2(M*]Z"
+	intask="true" deletable="false" movable="false">
+	<mutation next="false" declaration_type="Number"></mutation>
+	<field name="VAR">item</field>
+	<field name="TYPE">Number</field>
+	<value name="VALUE">
+		<block type="math_number" id=",tEc}Gyk0_+bk^hj9#OT"
+			intask="true">
+			<field name="NUM">0</field>
+		</block>
+	</value>
+</block>

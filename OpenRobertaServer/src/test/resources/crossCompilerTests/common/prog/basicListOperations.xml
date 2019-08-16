@@ -1,0 +1,382 @@
+<block type="text_comment" id="7D#!g?fg:kt3S7s)5ToX" intask="true">
+	<field name="TEXT">Basis List Operations START</field>
+</block>
+<block type="robControls_if" id="5j)r!TAw;s~%%gt+|MhY"
+	intask="true">
+	<value name="IF0">
+		<block type="robLists_isEmpty" id="C9*u3Xo6IP,9LRESZ`*-"
+			intask="true">
+			<value name="VALUE">
+				<block type="variables_get" id=":Zez+X:gS9=AJJ]UKXyK"
+					intask="true">
+					<mutation datatype="Array_Number"></mutation>
+					<field name="VAR">initialEmptyNumbers</field>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="variables_set" id="Z:=R*D5qW!Si*OuH{H/|"
+			intask="true">
+			<mutation datatype="Array_Number"></mutation>
+			<field name="VAR">initialEmptyNumbers</field>
+			<value name="VALUE">
+				<block type="robLists_create_with" id="i/32XY%@TVhz:}cTe0ot"
+					intask="true">
+					<mutation items="2" list_type="Number"></mutation>
+					<field name="LIST_TYPE">Number</field>
+					<value name="ADD0">
+						<block type="math_number" id="v4@o;EtjKIJiD#6:LEab"
+							intask="true">
+							<field name="NUM">1</field>
+						</block>
+					</value>
+					<value name="ADD1">
+						<block type="math_number" id="Tw,A4Ml_kl)mUutF934A"
+							intask="true">
+							<field name="NUM">2</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="variables_set" id="a#=3E5E.RhoB{:Sw-*Fq"
+			intask="true">
+			<mutation datatype="Number"></mutation>
+			<field name="VAR">item</field>
+			<value name="VALUE">
+				<block type="robLists_length" id="Wj@gcCT!t4ex4dyw{XkN"
+					intask="true">
+					<value name="VALUE">
+						<block type="variables_get" id="hx*~^#n#!-5{/=2)8q?y"
+							intask="true">
+							<mutation datatype="Array_Number"></mutation>
+							<field name="VAR">initialEmptyNumbers</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="variables_set" id="wmp4@Nw4pWpl(vcNWo-?"
+			intask="true">
+			<mutation datatype="Number"></mutation>
+			<field name="VAR">item</field>
+			<value name="VALUE">
+				<block type="robLists_indexOf" id="NV,X-SEyRnLpp-}})QnM"
+					intask="true">
+					<field name="END">FIRST</field>
+					<value name="VALUE">
+						<block type="variables_get" id="p-Mfb!b|!jPlahfFf0qt"
+							intask="true">
+							<mutation datatype="Array_Number"></mutation>
+							<field name="VAR">initialEmptyNumbers</field>
+						</block>
+					</value>
+					<value name="FIND">
+						<block type="math_number" id="/OlcrVTS2bTHu+-O(mMI"
+							intask="true">
+							<field name="NUM">1</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="variables_set" id="2ed4dsG5rV{{7+A|3CML"
+			intask="true">
+			<mutation datatype="Number"></mutation>
+			<field name="VAR">item</field>
+			<value name="VALUE">
+				<block type="robLists_indexOf" id="d0#5@{kxqf|6YSx8rd)P"
+					intask="true">
+					<field name="END">FIRST</field>
+					<value name="VALUE">
+						<block type="variables_get" id="N%m/u0GBa2u{W2)3^(v7"
+							intask="true">
+							<mutation datatype="Array_Number"></mutation>
+							<field name="VAR">initialEmptyNumbers</field>
+						</block>
+					</value>
+					<value name="FIND">
+						<block type="math_number" id="*Jiy*65Jh9NHV?h6x!+B"
+							intask="true">
+							<field name="NUM">5</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robLists_setIndex" id="C5h*e!2gA%oLdXsoh00n"
+			intask="true">
+			<mutation at="false"></mutation>
+			<field name="MODE">SET</field>
+			<field name="WHERE">FIRST</field>
+			<value name="LIST">
+				<block type="variables_get" id="h/SPK6`,dyl0k~0bsf7N"
+					intask="true">
+					<mutation datatype="Array_Number"></mutation>
+					<field name="VAR">initialEmptyNumbers</field>
+				</block>
+			</value>
+			<value name="TO">
+				<block type="math_number" id="EKFT;?1[raj}4XI|oBw9"
+					intask="true">
+					<field name="NUM">2</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="robControls_if" id=",Xmkn|*Z1lkPlIV2WgMU"
+	intask="true">
+	<value name="IF0">
+		<block type="robLists_isEmpty" id="uDm/2lEGSQ6Q1[u=cx|H"
+			intask="true">
+			<value name="VALUE">
+				<block type="variables_get" id="/]0F6=1ocMXS7gfH0.E{"
+					intask="true">
+					<mutation datatype="Array_Boolean"></mutation>
+					<field name="VAR">initialEmptyBoolean</field>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="variables_set" id="^%6+]Al4(C]4_EHnrCa6"
+			intask="true">
+			<mutation datatype="Array_Boolean"></mutation>
+			<field name="VAR">initialEmptyBoolean</field>
+			<value name="VALUE">
+				<block type="robLists_create_with" id="H__Hna*RXO(l0SdY|(/?"
+					intask="true">
+					<mutation items="2" list_type="Boolean"></mutation>
+					<field name="LIST_TYPE">Boolean</field>
+					<value name="ADD0">
+						<block type="logic_boolean" id="tqJOT|N{^c0a|qx7YeZK"
+							intask="true">
+							<field name="BOOL">TRUE</field>
+						</block>
+					</value>
+					<value name="ADD1">
+						<block type="logic_boolean" id="+)98kc[[H1|bd%=C#Yez"
+							intask="true">
+							<field name="BOOL">FALSE</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="variables_set" id="(jJb9k;E|bs*!ZPm#+.u"
+			intask="true">
+			<mutation datatype="Number"></mutation>
+			<field name="VAR">item</field>
+			<value name="VALUE">
+				<block type="robLists_length" id="6[C/#y]QIyJbwG=J(2N7"
+					intask="true">
+					<value name="VALUE">
+						<block type="variables_get" id="9a24+q!w(.c2F_LoW5uL"
+							intask="true">
+							<mutation datatype="Array_Boolean"></mutation>
+							<field name="VAR">initialEmptyBoolean</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="variables_set" id="AS*Ivq+=eNG82T!kDFy7"
+			intask="true">
+			<mutation datatype="Number"></mutation>
+			<field name="VAR">item</field>
+			<value name="VALUE">
+				<block type="robLists_indexOf" id=":X-5ugpt{m;X`:v|IR!l"
+					intask="true">
+					<field name="END">FIRST</field>
+					<value name="VALUE">
+						<block type="variables_get" id="FKL(E||NdF-TCcbLH557"
+							intask="true">
+							<mutation datatype="Array_Boolean"></mutation>
+							<field name="VAR">initialEmptyBoolean</field>
+						</block>
+					</value>
+					<value name="FIND">
+						<block type="variables_get" id="/BDpTth#H:9{~G5L%^BX"
+							intask="true">
+							<mutation datatype="Boolean"></mutation>
+							<field name="VAR">bool</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="variables_set" id="]?TKf+I%.aOO*I!{Q^F="
+			intask="true">
+			<mutation datatype="Number"></mutation>
+			<field name="VAR">item</field>
+			<value name="VALUE">
+				<block type="robLists_indexOf" id=")buVYIKxov7Uy)pwpcjL"
+					intask="true">
+					<field name="END">FIRST</field>
+					<value name="VALUE">
+						<block type="variables_get" id="HRLB?kmw=~2AVi3ZP-/o"
+							intask="true">
+							<mutation datatype="Array_Boolean"></mutation>
+							<field name="VAR">initialEmptyBoolean</field>
+						</block>
+					</value>
+					<value name="FIND">
+						<block type="logic_null" id="Zq)aK`-pzb9sR_XYZmzF"
+							intask="true"></block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robLists_setIndex" id="m?zcv(G3?L5+=sG@sx=d"
+			intask="true">
+			<mutation at="false"></mutation>
+			<field name="MODE">INSERT</field>
+			<field name="WHERE">LAST</field>
+			<value name="LIST">
+				<block type="variables_get" id="*5^o6X^7x*qlL%YPhoOY"
+					intask="true">
+					<mutation datatype="Array_Boolean"></mutation>
+					<field name="VAR">initialEmptyBoolean</field>
+				</block>
+			</value>
+			<value name="TO">
+				<block type="logic_boolean" id="u|Lq|DD!PA(E?7h%fMsT"
+					intask="true">
+					<field name="BOOL">TRUE</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="robControls_if" id="4p1WV:MoMW*V9U[wiQpw"
+	intask="true">
+	<value name="IF0">
+		<block type="robLists_isEmpty" id="qhTAkkQV7_//22AFyiqJ"
+			intask="true">
+			<value name="VALUE">
+				<block type="variables_get" id="teLW@-In(_ZJ7T/hKaJq"
+					intask="true">
+					<mutation datatype="Array_String"></mutation>
+					<field name="VAR">initialEmptyStrings</field>
+				</block>
+			</value>
+		</block>
+	</value>
+	<statement name="DO0">
+		<block type="variables_set" id=")s/|9,`|Z!U=Q|E(Q!),"
+			intask="true">
+			<mutation datatype="Array_String"></mutation>
+			<field name="VAR">initialEmptyStrings</field>
+			<value name="VALUE">
+				<block type="robLists_create_with" id="f[em_1/~SV4pu)q*Pp=C"
+					intask="true">
+					<mutation items="2" list_type="String"></mutation>
+					<field name="LIST_TYPE">String</field>
+					<value name="ADD0">
+						<block type="text" id="%`dhn1_]%tk/k654jXO3" intask="true">
+							<field name="TEXT">a</field>
+						</block>
+					</value>
+					<value name="ADD1">
+						<block type="text" id="mk@C+nZE--Y+@L~?ezT?" intask="true">
+							<field name="TEXT">b</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="variables_set" id="XweoOj6.AEa}^f^X{S]P"
+			intask="true">
+			<mutation datatype="Number"></mutation>
+			<field name="VAR">item</field>
+			<value name="VALUE">
+				<block type="robLists_length" id="o_OADG*+K7dad},].d6#"
+					intask="true">
+					<value name="VALUE">
+						<block type="variables_get" id="kL}edsC.aq_0rJ7-Fr5?"
+							intask="true">
+							<mutation datatype="Array_String"></mutation>
+							<field name="VAR">initialEmptyStrings</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="variables_set" id="9(#HWR6X4Z1oF/yZ`Jyn"
+			intask="true">
+			<mutation datatype="Number"></mutation>
+			<field name="VAR">item</field>
+			<value name="VALUE">
+				<block type="robLists_indexOf" id="CT]AlcQjdXezL|kit%KA"
+					intask="true">
+					<field name="END">FIRST</field>
+					<value name="VALUE">
+						<block type="variables_get" id="gv8.-S_i^t!.Gc;R?U[K"
+							intask="true">
+							<mutation datatype="Array_String"></mutation>
+							<field name="VAR">initialEmptyStrings</field>
+						</block>
+					</value>
+					<value name="FIND">
+						<block type="text" id="~;CATa|c]H9Bq21rF[^O" intask="true">
+							<field name="TEXT">a</field>
+						</block>
+					</value>
+				</block>
+			</value>
+		</block>
+		<block type="robLists_setIndex" id="s3)!k|~,K}b?O@}%#4O@"
+			intask="true">
+			<mutation at="true"></mutation>
+			<field name="MODE">SET</field>
+			<field name="WHERE">FROM_END</field>
+			<value name="LIST">
+				<block type="variables_get" id="J|6]vIK8MRYx,s}Zm]j|"
+					intask="true">
+					<mutation datatype="Array_String"></mutation>
+					<field name="VAR">initialEmptyStrings</field>
+				</block>
+			</value>
+			<value name="AT">
+				<block type="math_number" id="M)nRV9gIY(_HH^UeE*0|"
+					intask="true">
+					<field name="NUM">2</field>
+				</block>
+			</value>
+			<value name="TO">
+				<block type="text" id="ny+rpChpsBAIq+(cae]y" intask="true">
+					<field name="TEXT">c</field>
+				</block>
+			</value>
+		</block>
+		<block type="robLists_setIndex" id="MUq)qF@S.`DK|}Px#jDZ"
+			intask="true">
+			<mutation at="true"></mutation>
+			<field name="MODE">INSERT</field>
+			<field name="WHERE">FROM_END</field>
+			<value name="LIST">
+				<block type="variables_get" id="0]E^)yd`2:+BV0cV{,I7"
+					intask="true">
+					<mutation datatype="Array_String"></mutation>
+					<field name="VAR">initialEmptyStrings</field>
+				</block>
+			</value>
+			<value name="AT">
+				<block type="math_number" id="}d0-nA.{q@xP=Y3kfDRN"
+					intask="true">
+					<field name="NUM">1</field>
+				</block>
+			</value>
+			<value name="TO">
+				<block type="text" id="F|R#Sl(alO*y|=J-[enu" intask="true">
+					<field name="TEXT">d</field>
+				</block>
+			</value>
+		</block>
+	</statement>
+</block>
+<block type="text_comment" id="q@5l{Ufiz^DSW:)_2y2W" intask="true">
+	<field name="TEXT">Basis List Operations END</field>
+</block>

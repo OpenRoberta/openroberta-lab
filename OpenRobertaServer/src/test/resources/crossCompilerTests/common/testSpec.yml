@@ -31,6 +31,17 @@ robots:
        template: wedo
 
 progs:
+    advancedListOperations:
+       decl: advancedListOperations
+       exclude:
+          ALL: "crashes all crosscompilers except sensebox"
+       remark: "advanced list operations"
+    basicListOperations:
+       decl: basicListOperations
+       exclude:
+          nxt: "no extendable lists"
+          bob3: "too small"
+       remark: "basic list operations"
     variablesNuStBo:
        decl: variablesNuStBo
        exclude:
