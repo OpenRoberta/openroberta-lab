@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+SCRIPTPATH="$(dirname "$(readlink -f "$0")")"
 UF2_FILE=$1
 
 function get_program_name {
@@ -58,7 +58,7 @@ function upload_program_files {
    			echo "(end of ev3duder output)"
 		    echo "Error while uploading file $i to the robot"
 		    exit $result
-		fi
+		  fi
 	done
 	echo "(end of ev3duder output)"
 }
@@ -71,7 +71,7 @@ function run_program_first_time {
    	if [[ $result -ne 0 ]]; then
 	    echo "Error while starting the program for the first time to complete installation"
 	    exit $result
-	fi
+	  fi
 }
 
 if [[ "$#" -ne 1 ]]
