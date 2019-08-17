@@ -12,6 +12,7 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot' ],
      */
     function Ev3(pose, num, robotBehaviour) {
         Robot.call(this, pose, robotBehaviour);
+        that = this;
 
         num = num || 0;
         this.id = num;
@@ -149,6 +150,11 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot' ],
             timer4 : false,
             timer5 : false
         };
+        var SpeechSynthesis = window.speechSynthesis;
+        if (!SpeechSynthesis) {
+            context = null;
+            console.log("Sorry, but the Speech Synthesis API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox");
+        }
         this.sayText = {
             language : "en-US",
             say : function(text, lang, speed, pitch) {
@@ -180,8 +186,12 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot' ],
                 }
                 utterThis.pitch = pitch;
                 utterThis.rate = speed;
+                utterThis.onend = function(event) {
+                    that.sayText.finished = true;
+                }
                 SpeechSynthesis.speak(utterThis);
-            }
+            },
+            finished : false
         };
         this.tone = {
             duration : 0,
@@ -235,11 +245,6 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot' ],
                 }
             }
         };
-        var SpeechSynthesis = window.speechSynthesis;
-        if (!SpeechSynthesis) {
-            context = null;
-            console.log("Sorry, but the Speech Synthesis API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox");
-        }
         this.svg = '<svg id="svg'
                 + this.id
                 + '" xmlns="http://www.w3.org/2000/svg" width="313" height="482" viewBox="0 0 313 482">'
@@ -512,7 +517,7 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot' ],
             this.sayText.language = language;
         }
         var sayText = this.robotBehaviour.getActionState("sayText", true);
-        if (sayText && SpeechSynthesis) {
+        if (sayText && window.speechSynthesis) {
             if (sayText.text) {
                 this.sayText.say(sayText.text, this.sayText.language, sayText.speed, sayText.pitch);
             }

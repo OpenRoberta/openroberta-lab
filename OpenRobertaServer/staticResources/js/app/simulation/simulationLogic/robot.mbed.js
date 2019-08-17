@@ -55,7 +55,8 @@ define([ 'simulation.simulation', 'interpreter.constants', 'util', 'simulation.r
                         }
                     }
                 }
-            }
+            },
+            finished : false
         };
 
         this.buttons = {
@@ -195,6 +196,8 @@ define([ 'simulation.simulation', 'interpreter.constants', 'util', 'simulation.r
                         that.display.leds = newArray;
                         textArray.shift();
                         that.display.timeout = setTimeout(f, 150, textArray, that);
+                    } else {
+                        that.display.finished = true;
                     }
                 }
                 f(textArray, that);
@@ -214,6 +217,8 @@ define([ 'simulation.simulation', 'interpreter.constants', 'util', 'simulation.r
                         that.display.leds = newArray;
                         textArray = textArray.slice(5);
                         that.display.timeout = setTimeout(f, 400, textArray, that);
+                    } else {
+                        that.display.finished = true;
                     }
                 }
                 f(textArray, that);
@@ -227,6 +232,8 @@ define([ 'simulation.simulation', 'interpreter.constants', 'util', 'simulation.r
                         if (animation && animation.length > index) {
                             that.display.leds = animation[index];
                             that.display.timeout = setTimeout(f, 150, animation, index + 1, that);
+                        } else {
+                            that.display.finished = true;
                         }
                     }
                     f(animation, 0, that);
