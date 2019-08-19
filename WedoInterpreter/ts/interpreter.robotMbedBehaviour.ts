@@ -272,6 +272,9 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
     public setMotorSpeed( name: string, port: any, speed: number ): void {
         const robotText = 'robot: ' + name + ', port: ' + port;
         U.debug( robotText + ' motor speed ' + speed );
+        if ( this.hardwareState.actions.motors == undefined ) {
+            this.hardwareState.actions.motors = {};
+        }
         this.hardwareState.actions.motors[port] = speed;
         this.hardwareState.motors[port] = speed;
     }

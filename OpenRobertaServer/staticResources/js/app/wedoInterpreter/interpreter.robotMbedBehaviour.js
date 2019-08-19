@@ -255,6 +255,9 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
         RobotMbedBehaviour.prototype.setMotorSpeed = function (name, port, speed) {
             var robotText = 'robot: ' + name + ', port: ' + port;
             U.debug(robotText + ' motor speed ' + speed);
+            if (this.hardwareState.actions.motors == undefined) {
+                this.hardwareState.actions.motors = {};
+            }
             this.hardwareState.actions.motors[port] = speed;
             this.hardwareState.motors[port] = speed;
         };
