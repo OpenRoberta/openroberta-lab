@@ -123,8 +123,6 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3
         this.webAudio.volume = 0.5;
     };
 
-    Nxt.prototype.sound = null;
-
     /**
      * Update all actions of the Nxt. The new pose is calculated with the
      * forward kinematics equations for a differential drive Nxt.
@@ -233,10 +231,10 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3
         var led = this.robotBehaviour.getActionState("led", true);
         if (led) {
             switch (led.mode) {
-            case "OFF":
+            case "off":
                 this.ledSensor.color = '';
                 break;
-            case "ON":
+            case "on":
                 this.ledSensor.color = led.color.toUpperCase();
                 break;
             }

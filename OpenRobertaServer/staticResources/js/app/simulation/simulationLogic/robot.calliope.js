@@ -11,7 +11,25 @@ define([ 'simulation.simulation', 'simulation.robot.mbed', 'volume-meter' ], fun
     function Calliope(pose, num, robotBehaviour) {
         Mbed.call(this, pose, num, robotBehaviour);
         var that = this;
-
+        this.led = {
+                color : 'grey',
+                x : 0,
+                y : -90,
+                r : 10,
+                draw : function(canvas) {
+                    if (this.color != 'grey') {
+                        canvas.arc(this.x, this.y, this.r - 5, 0, Math.PI * 2);
+                        canvas.fill();
+                        var rad = canvas.createRadialGradient(this.x, this.y, this.r - 5, this.x, this.y, this.r + 5);
+                        rad.addColorStop(0, 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ',1)');
+                        rad.addColorStop(1, 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ',0)');
+                        canvas.fillStyle = rad;
+                        canvas.beginPath();
+                        canvas.arc(this.x, this.y, this.r + 5, 0, Math.PI * 2);
+                        canvas.fill();
+                    }
+                }
+            };
         this.motorA = {
             // Copyright (C) Ken Fyrstenberg / Epistemex
             // MIT license (header required)
@@ -107,25 +125,6 @@ define([ 'simulation.simulation', 'simulation.robot.mbed', 'volume-meter' ], fun
             yReset : 140,
             rReset : 10,
             colorReset : '#ffffff',
-        };
-        this.led = {
-            color : 'grey',
-            x : 0,
-            y : -90,
-            r : 10,
-            draw : function(canvas) {
-                if (this.color != 'grey') {
-                    canvas.arc(this.x, this.y, this.r - 5, 0, Math.PI * 2);
-                    canvas.fill();
-                    var rad = canvas.createRadialGradient(this.x, this.y, this.r - 5, this.x, this.y, this.r + 5);
-                    rad.addColorStop(0, 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ',1)');
-                    rad.addColorStop(1, 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ',0)');
-                    canvas.fillStyle = rad;
-                    canvas.beginPath();
-                    canvas.arc(this.x, this.y, this.r + 5, 0, Math.PI * 2);
-                    canvas.fill();
-                }
-            }
         };
         this.pin0 = {
             x : -196.5,
@@ -331,12 +330,6 @@ define([ 'simulation.simulation', 'simulation.robot.mbed', 'volume-meter' ], fun
             if (motors.ab !== undefined) {
                 setMotor(motors.ab, this.motorA);
                 setMotor(motors.ab, this.motorB);
-            }
-        }
-        var display = this.robotBehaviour.getActionState("display", true);
-        if (display) {
-            if (display.brightness) {
-                this.display.brightness = Math.round(display.brightness * 255.0 / 9.0, 0);
             }
         }
     };

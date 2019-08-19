@@ -258,6 +258,9 @@ define([ 'simulation.simulation', 'interpreter.constants', 'util', 'simulation.r
                     }
                 }
             }
+            if (display.brightness) {
+                this.display.brightness = Math.round(display.brightness * 255.0 / 9.0, 0);
+            }
         }
         for (var i = 0; i < 4; i++) {
             var pin = this.robotBehaviour.getActionState('pin' + i, true);
