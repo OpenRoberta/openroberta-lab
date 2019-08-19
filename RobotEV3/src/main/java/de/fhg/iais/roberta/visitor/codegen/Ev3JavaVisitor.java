@@ -260,7 +260,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     }
     @Override
     public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
-        if ( !this.brickConfiguration.getRobotName().equals("ev3lejosV0") ) {
+        if ( !this.brickConfiguration.getRobotName().equals("ev3lejosv0") ) {
             this.sb.append("hal.setLanguage(\"");
             this.sb.append(TTSLanguageMapper.getLanguageString(setLanguageAction.getLanguage()));
             this.sb.append("\");");
@@ -270,7 +270,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        if ( !this.brickConfiguration.getRobotName().equals("ev3lejosV0") ) {
+        if ( !this.brickConfiguration.getRobotName().equals("ev3lejosv0") ) {
             this.sb.append("hal.sayText(");
             if ( !sayTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
                 this.sb.append("String.valueOf(");
@@ -666,7 +666,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
             //this.sb.append(INDENT).append(INDENT).append(INDENT).append("\nhal.startScreenLoggingThread();");
             this.isInDebugMode = true;
         }
-        if ( this.isSayTextUsed && !this.brickConfiguration.getRobotName().equals("ev3lejosV0") ) {
+        if ( this.isSayTextUsed && !this.brickConfiguration.getRobotName().equals("ev3lejosv0") ) {
             nlIndent();
             this.sb.append("hal.setLanguage(\"");
             this.sb.append(TTSLanguageMapper.getLanguageString(this.language));

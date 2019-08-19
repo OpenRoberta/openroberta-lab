@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.text.WordUtils;
-import org.w3c.dom.css.RGBColor;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;

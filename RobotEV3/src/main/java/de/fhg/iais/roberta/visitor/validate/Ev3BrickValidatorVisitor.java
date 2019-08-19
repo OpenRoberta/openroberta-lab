@@ -68,7 +68,7 @@ public final class Ev3BrickValidatorVisitor extends AbstractBrickValidatorVisito
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
         super.visitCompassSensor(compassSensor);
         if ( this.robotConfiguration.getRobotName().equals("ev3dev") && (compassSensor.getMode().equals(SC.CALIBRATE)) ) {
-            compassSensor.addInfo(NepoInfo.warning("BLOCK_NOT_EXECUTED"));
+            compassSensor.addInfo(NepoInfo.warning("BLOCK_NOT_SUPPORTED"));
         }
         return null;
     }
@@ -76,8 +76,8 @@ public final class Ev3BrickValidatorVisitor extends AbstractBrickValidatorVisito
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
         super.visitSayTextAction(sayTextAction);
-        if ( this.robotConfiguration.getRobotName().equals("ev3lejosV0") ) {
-            sayTextAction.addInfo(NepoInfo.warning("BLOCK_NOT_EXECUTED"));
+        if ( this.robotConfiguration.getRobotName().equals("ev3lejosv0") ) {
+            sayTextAction.addInfo(NepoInfo.warning("BLOCK_NOT_SUPPORTED"));
         }
         return null;
     }
