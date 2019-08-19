@@ -3,15 +3,6 @@
 SCRIPTPATH="$(dirname "$(readlink -f "$0")")"
 UF2_FILE=$1
 
-function get_program_name {
-	path=${UF2_FILE%/*} 
-	base=${UF2_FILE##*/}
-	program_name=${base%.*}
-	echo $program_name
-}
-
-PROGRAM_NAME=$(get_program_name)
-
 EV3DUDER="$SCRIPTPATH/ev3duder"
 UF2_TOOL="$SCRIPTPATH/files2uf2-0.1.1-SNAPSHOT.jar"
 TMP_FOLDER=/tmp/upload-c4ev3/prjs
@@ -44,34 +35,38 @@ function extract_uf2 {
 }
 
 function upload_program_files {
-	declare -a files=("$PROGRAM_NAME.elf"
-					  "$PROGRAM_NAME.rbf"
-					  "$PROGRAM_NAME.tmp"
-					  "NEPO-just-uploaded.txt")
-
 	echo "(ev3duder output follow)"
-	for i in "${files[@]}"
+	for file_path in "$TMP_FOLDER"/BrkProg_SAVE/*
 	do
-   		sudo "$EV3DUDER" up "$TMP_FOLDER/BrkProg_SAVE/$i" "../prjs/BrkProg_SAVE/$i"
+	    file_name=$(basename "$file_path")
+   		sudo "$EV3DUDER" up "$TMP_FOLDER/BrkProg_SAVE/$file_name" "../prjs/BrkProg_SAVE/$file_name"
    		result=$?
    		if [[ $result -ne 0 ]]; then
    			echo "(end of ev3duder output)"
-		    echo "Error while uploading file $i to the robot"
+		    echo "Error while uploading file $file_name to the robot"
 		    exit $result
 		  fi
 	done
 	echo "(end of ev3duder output)"
 }
 
+function get_elf_file_name_from_tmp_folder {
+  elf_files=("$TMP_FOLDER"/BrkProg_SAVE/*.elf)
+  elf_file_path=${elf_files[0]}
+  elf_file_name=$(basename "$elf_file_path")
+  echo "$elf_file_name"
+}
+
 function run_program_first_time {
 	echo "(ev3duder output follow)"
-	sudo "$EV3DUDER" exec "../prjs/BrkProg_SAVE/$PROGRAM_NAME.elf"
-   	echo "(end of ev3duder output)"
-   	result=$?
-   	if [[ $result -ne 0 ]]; then
-	    echo "Error while starting the program for the first time to complete installation"
-	    exit $result
-	  fi
+	elf_file_name=$(get_elf_file_name_from_tmp_folder)
+	sudo "$EV3DUDER" exec "../prjs/BrkProg_SAVE/$elf_file_name"
+  echo "(end of ev3duder output)"
+  result=$?
+  if [[ $result -ne 0 ]]; then
+	  echo "Error while starting the program for the first time to complete installation"
+	  exit $result
+	fi
 }
 
 if [[ "$#" -ne 1 ]]
