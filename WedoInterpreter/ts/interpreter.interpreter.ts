@@ -53,7 +53,7 @@ export class Interpreter {
     public terminate() {
         this.terminated = true;
     }
-    
+
     public getRobotBehaviour() {
         return this.r;
     }
@@ -289,11 +289,16 @@ export class Interpreter {
                         U.debug( "PROGRAM TERMINATED. stop op" );
                         this.terminated = true;
                         break;
-                    case C.TEXT_JOIN:
-                        const second = s.pop();
-                        const first = s.pop();
-                        s.push( '' + first + second );
+                    case C.TEXT_JOIN: {
+                        const n = stmt[C.NUMBER];
+                        var result = new Array( n );
+                        for ( let i = 0; i < n; i++ ) {
+                            const e = s.pop();
+                            result[n - i - 1] = e;
+                        }
+                        s.push( result.join("") );
                         break;
+                    }
                     case C.TIMER_SENSOR_RESET:
                         n.timerReset( stmt[C.PORT] );
                         break;
@@ -357,6 +362,13 @@ export class Interpreter {
                         } else if ( op == C.INSERT ) {
                             list.splice( ix, 0, value );
                         }
+                        break;
+                    }
+                    case C.TEXT_APPEND:
+                    case C.MATH_CHANGE: {
+                        const value = s.pop();
+                        const name = stmt[C.NAME];
+                        s.bindVar( name, s.pop() + value );
                         break;
                     }
                     default:

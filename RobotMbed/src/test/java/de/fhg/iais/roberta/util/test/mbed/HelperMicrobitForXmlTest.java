@@ -8,7 +8,6 @@ import de.fhg.iais.roberta.factory.MicrobitFactory;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.visitor.codegen.MbedSimVisitor;
 import de.fhg.iais.roberta.visitor.codegen.MicrobitPythonVisitor;
 
 /**
@@ -20,19 +19,6 @@ public class HelperMicrobitForXmlTest extends de.fhg.iais.roberta.util.test.Abst
         super(
             new MicrobitFactory(new PluginProperties("microbit", "", "", Util1.loadProperties("classpath:/microbit.properties"))),
             new MicrobitConfiguration.Builder().build());
-    }
-
-    /**
-     * Generate java script code as string from a given program .
-     *
-     * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
-     * @return the code as string
-     * @throws Exception
-     */
-    public String generateJavaScript(String pathToProgramXml) throws Exception {
-        Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = MbedSimVisitor.generate(getRobotConfiguration(), transformer.getTree());
-        return code;
     }
 
     /**

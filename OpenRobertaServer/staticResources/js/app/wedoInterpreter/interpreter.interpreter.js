@@ -279,11 +279,16 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                             U.debug("PROGRAM TERMINATED. stop op");
                             this.terminated = true;
                             break;
-                        case C.TEXT_JOIN:
-                            var second = s.pop();
-                            var first = s.pop();
-                            s.push('' + first + second);
+                        case C.TEXT_JOIN: {
+                            var n_1 = stmt[C.NUMBER];
+                            var result = new Array(n_1);
+                            for (var i = 0; i < n_1; i++) {
+                                var e = s.pop();
+                                result[n_1 - i - 1] = e;
+                            }
+                            s.push(result.join(""));
                             break;
+                        }
                         case C.TIMER_SENSOR_RESET:
                             n.timerReset(stmt[C.PORT]);
                             break;
@@ -347,6 +352,13 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                             else if (op == C.INSERT) {
                                 list.splice(ix, 0, value);
                             }
+                            break;
+                        }
+                        case C.TEXT_APPEND:
+                        case C.MATH_CHANGE: {
+                            var value = s.pop();
+                            var name_9 = stmt[C.NAME];
+                            s.bindVar(name_9, s.pop() + value);
                             break;
                         }
                         default:

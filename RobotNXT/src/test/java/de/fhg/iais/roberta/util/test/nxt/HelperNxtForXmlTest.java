@@ -9,13 +9,11 @@ import org.junit.Assert;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.factory.NxtFactory;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
 import de.fhg.iais.roberta.visitor.codegen.NxtNxcVisitor;
-import de.fhg.iais.roberta.visitor.codegen.NxtSimVisitor;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
@@ -43,19 +41,6 @@ public class HelperNxtForXmlTest extends AbstractHelperForXmlTest {
         final Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(11f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, motorC, ultrasonicSensor, ultrasonicSensor2));
         return builder.build();
-    }
-
-    /**
-     * Generate java script code as string from a given program .
-     *
-     * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
-     * @return the code as string
-     * @throws Exception
-     */
-    public String generateJavaScript(String pathToProgramXml) throws Exception {
-        Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = NxtSimVisitor.generate(getRobotConfiguration(), transformer.getTree());
-        return code;
     }
 
     /**

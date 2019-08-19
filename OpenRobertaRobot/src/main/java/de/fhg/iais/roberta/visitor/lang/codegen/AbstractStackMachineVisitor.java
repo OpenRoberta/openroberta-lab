@@ -19,65 +19,15 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.StartActivityTask;
-import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.Binary;
-import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
-import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
-import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
-import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
-import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
-import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
-import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
-import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.ShadowExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.StmtExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
-import de.fhg.iais.roberta.syntax.lang.expr.Unary;
-import de.fhg.iais.roberta.syntax.lang.expr.Var;
-import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
-import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
-import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
-import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
-import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
-import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.lang.expr.*;
+import de.fhg.iais.roberta.syntax.lang.functions.*;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
-import de.fhg.iais.roberta.syntax.lang.stmt.ActionStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.*;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt.Mode;
-import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon.Flow;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
-import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -229,10 +179,10 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         // FIXME: The math change should be removed from the binary expression since it is a statement
         switch ( binary.getOp() ) {
             case MATH_CHANGE:
-                o = mk(C.MATH_CHANGE);
+                o = mk(C.MATH_CHANGE).put(C.NAME, ((Var<V>) binary.getLeft()).getValue());
                 break;
             case TEXT_APPEND:
-                o = mk(C.TEXT_APPEND);
+                o = mk(C.TEXT_APPEND).put(C.NAME, ((Var<V>) binary.getLeft()).getValue());
                 break;
             default:
                 o = mk(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, binary.getOp());
@@ -586,7 +536,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         if ( mathNumPropFunct.getFunctName() == FunctionNames.DIVISIBLE_BY ) {
             mathNumPropFunct.getParam().get(1).visit(this);
         }
-        JSONObject o = mk(C.MATH_PROP_FUNCT).put(C.NAME, mathNumPropFunct.getFunctName());
+        JSONObject o = mk(C.EXPR).put(C.EXPR, C.MATH_PROP_FUNCT).put(C.OP, mathNumPropFunct.getFunctName());
         return app(o);
     }
 
@@ -621,7 +571,8 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     @Override
     public V visitTextJoinFunct(TextJoinFunct<V> textJoinFunct) {
         textJoinFunct.getParam().visit(this);
-        JSONObject o = mk(C.TEXT_JOIN);
+        int n = textJoinFunct.getParam().get().size();
+        JSONObject o = mk(C.TEXT_JOIN).put(C.NUMBER, n);
         return app(o);
     }
 

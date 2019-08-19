@@ -1,5 +1,11 @@
 package de.fhg.iais.roberta.util.test.ev3;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
+
+import org.junit.Assert;
+
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.factory.Ev3LejosV0Factory;
@@ -11,14 +17,6 @@ import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
 import de.fhg.iais.roberta.visitor.codegen.Ev3C4ev3Visitor;
 import de.fhg.iais.roberta.visitor.codegen.Ev3JavaVisitor;
 import de.fhg.iais.roberta.visitor.codegen.Ev3PythonVisitor;
-import de.fhg.iais.roberta.visitor.codegen.Ev3SimVisitor;
-import org.junit.Assert;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
-
-import static java.util.Collections.emptyMap;
 
 public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
 
@@ -63,8 +61,7 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
         ConfigurationComponent colourSensor = new ConfigurationComponent("COLOR", false, "S3", "3", colourSensorProperties);
 
         Map<String, String> ultrasonicSensorProperties = createMap();
-        ConfigurationComponent ultrasonicSensor =
-            new ConfigurationComponent("ULTRASONIC", false, "S4", "4", ultrasonicSensorProperties);
+        ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S4", "4", ultrasonicSensorProperties);
 
         final Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(18f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorB, motorC, touchSensor, gyroSensor, colourSensor, ultrasonicSensor));
@@ -73,7 +70,7 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
         return configuration;
     }
 
-    public static Configuration makeTouchUltrasonicColorConfiguration () {
+    public static Configuration makeTouchUltrasonicColorConfiguration() {
         Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
         ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", "A", motorAproperties);
 
@@ -92,7 +89,7 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
             .build();
     }
 
-    public static Configuration makeTouchUltrasonicColorUltrasonicConfiguration () {
+    public static Configuration makeTouchUltrasonicColorUltrasonicConfiguration() {
         Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
         ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", "A", motorAproperties);
 
@@ -111,7 +108,7 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
             .build();
     }
 
-    public static Configuration makeTouchGyroInfraredUltrasonic () {
+    public static Configuration makeTouchGyroInfraredUltrasonic() {
         Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
         ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", "A", motorAproperties);
 
@@ -123,13 +120,13 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
         ConfigurationComponent ultrasonicSensor4 = new ConfigurationComponent("ULTRASONIC", false, "S4", "4", Collections.emptyMap());
         final Configuration.Builder builder = new Configuration.Builder();
         return builder
-                .setTrackWidth(17f)
-                .setWheelDiameter(5.6f)
-                .addComponents(Arrays.asList(motorA, motorB, touchSensor, infrared, ultrasonicSensor4, gyro))
-                .build();
+            .setTrackWidth(17f)
+            .setWheelDiameter(5.6f)
+            .addComponents(Arrays.asList(motorA, motorB, touchSensor, infrared, ultrasonicSensor4, gyro))
+            .build();
     }
 
-    public static Configuration makeRotateRegulatedUnregulatedForwardBackwardMotors () {
+    public static Configuration makeRotateRegulatedUnregulatedForwardBackwardMotors() {
         Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
         ConfigurationComponent motorA = new ConfigurationComponent("LARGE", true, "A", "A", motorAproperties);
 
@@ -140,14 +137,10 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
         ConfigurationComponent motorC = new ConfigurationComponent("LARGE", true, "C", "C", motorCproperties);
 
         Map<String, String> motorDproperties = createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "ON", "MOTOR_DRIVE", "NONE");
-        ConfigurationComponent motorD = new ConfigurationComponent("LARGE", true, "D",  "D", motorDproperties);
+        ConfigurationComponent motorD = new ConfigurationComponent("LARGE", true, "D", "D", motorDproperties);
 
         final Configuration.Builder builder = new Configuration.Builder();
-        return builder
-            .setTrackWidth(17f)
-            .setWheelDiameter(5.6f)
-            .addComponents(Arrays.asList(motorA, motorB, motorC, motorD))
-            .build();
+        return builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, motorC, motorD)).build();
     }
 
     /**
@@ -199,20 +192,6 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
     public String generatePython(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
         Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
         String code = Ev3PythonVisitor.generate(brickConfiguration, transformer.getTree(), true, Language.ENGLISH);
-        // System.out.println(code); // only needed for EXTREME debugging
-        return code;
-    }
-
-    /**
-     * Generate java script code as string from a given program .
-     *
-     * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
-     * @return the code as string
-     * @throws Exception
-     */
-    public String generateJavaScript(String pathToProgramXml) throws Exception {
-        Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = Ev3SimVisitor.generate(getRobotConfiguration(), transformer.getTree(), Language.ENGLISH);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }

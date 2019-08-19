@@ -12,7 +12,6 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.codegen.CalliopeCppVisitor;
-import de.fhg.iais.roberta.visitor.codegen.MbedSimVisitor;
 import de.fhg.iais.roberta.visitor.codegen.MbedStackMachineVisitor;
 
 /**
@@ -48,19 +47,6 @@ public class HelperCalliopeForXmlTest extends de.fhg.iais.roberta.util.test.Abst
         final Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(11f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorM, keySensor, gyroSensor, infraredSensor, buzzer, led));
         return builder.build();
-    }
-
-    /**
-     * Generate java script code as string from a given program .
-     *
-     * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
-     * @return the code as string
-     * @throws Exception
-     */
-    public String generateJavaScript(String pathToProgramXml) throws Exception {
-        Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = MbedSimVisitor.generate(getRobotConfiguration(), transformer.getTree());
-        return code;
     }
 
     /**
