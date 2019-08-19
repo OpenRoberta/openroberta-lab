@@ -53,6 +53,10 @@ export class Interpreter {
     public terminate() {
         this.terminated = true;
     }
+    
+    public getRobotBehaviour() {
+        return this.r;
+    }
 
     /**
      * the central interpreter. It is a stack machine interpreting operations given as JSON objects. The operations are all IMMUTABLE. It

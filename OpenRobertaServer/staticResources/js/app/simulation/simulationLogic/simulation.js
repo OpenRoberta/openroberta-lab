@@ -11,8 +11,7 @@ define([ 'exports', 'simulation.scene', 'simulation.math', 'program.controller',
         'interpreter.interpreter', 'interpreter.robotMbedBehaviour', 'jquery' ], function(exports, Scene, SIMATH, ROBERTA_PROGRAM, CONST, UTIL, PROGRAM_C,
         SIM_I, MBED_R, $) {
 
-    var interpreter;
-    var robotBehaviour;
+    var interpreters;
     var scene;
     var userPrograms;
     var canvasOffset;
@@ -99,7 +98,7 @@ define([ 'exports', 'simulation.scene', 'simulation.math', 'program.controller',
         $("#simRobotModal").modal("hide");
         var moduleName = 'simulation.robot.' + simRobotType;
         require([ moduleName ], function(ROBOT) {
-            createRobots(ROBOT, numRobots, robotBehaviour);
+            createRobots(ROBOT, numRobots);
             for (var i = 0; i < robots.length; i++) {
                 robots[i].debug = debug;
             }
@@ -151,7 +150,7 @@ define([ 'exports', 'simulation.scene', 'simulation.math', 'program.controller',
     exports.setPause = setPause;
 
     var stepCounter;
-    var runRenderUntil = 0;
+    var runRenderUntil;
 
     function setStep() {
         stepCounter = -50;
@@ -258,6 +257,7 @@ define([ 'exports', 'simulation.scene', 'simulation.math', 'program.controller',
         reset = false;
         simRobotType = robotType;
         userPrograms = programs;
+        runRenderUntil = Array(programs.length).fill(0);
         robotIndex = 0;
         if (robotType.indexOf("calliope") >= 0) {
             currentBackground = 0;
@@ -279,16 +279,11 @@ define([ 'exports', 'simulation.scene', 'simulation.math', 'program.controller',
                 $('#simButtonsHead').show();
             }
         }
-
-        var programSrc = programs[0].javaScriptProgram;
-        var program = JSON.parse(programSrc);
-        var ops = program.ops;
-        var functionDeclaration = program.functionDeclaration;
-        //            if ( robotType.indexOf( "calliope" ) >= 0 ) {
-        robotBehaviour = new MBED_R.RobotMbedBehaviour();
-        interpreter = new SIM_I.Interpreter(program, robotBehaviour, callbackOnTermination);
-        //            }
-
+        interpreters = programs.map(function (x){
+            var src = JSON.parse(x.javaScriptProgram);
+            return new SIM_I.Interpreter(src,  new MBED_R.RobotMbedBehaviour(), callbackOnTermination);
+        });
+      
         isDownRobots = [];
         for (var i = 0; i < numRobots; i++) {
             isDownRobots.push(false);
@@ -300,7 +295,7 @@ define([ 'exports', 'simulation.scene', 'simulation.math', 'program.controller',
             $("#simRobotContent").empty();
 
             require([ 'simulation.robot.' + simRobotType ], function(reqRobot) {
-                createRobots(reqRobot, numRobots, robotBehaviour);
+                createRobots(reqRobot, numRobots);
                 for (var i = 0; i < numRobots; i++) {
                     robots[i].reset();
                     robots[i].resetPose();
@@ -321,7 +316,7 @@ define([ 'exports', 'simulation.scene', 'simulation.math', 'program.controller',
 
         } else {
             for (var i = 0; i < numRobots; i++) {
-                robots[i].replaceState(robotBehaviour);
+                robots[i].replaceState(interpreters[i].getRobotBehaviour());
                 if (robots[i].endless) {
                     robots[i].reset();
                 }
@@ -374,13 +369,13 @@ define([ 'exports', 'simulation.scene', 'simulation.math', 'program.controller',
         stepCounter += 1;
         for (var i = 0; i < numRobots; i++) {
             if (!robots[i].pause && !pause) {
-                if (!interpreter.isTerminated() && !reset) {
-                    if (runRenderUntil <= now) {
-                        var delayMs = interpreter.run(now + 10);
+                if (!interpreters[i].isTerminated() && !reset) {
+                    if (runRenderUntil[i] <= now) {
+                        var delayMs = interpreters[i].run(now + 10);
                         var nowNext = new Date().getTime()
-                        runRenderUntil = nowNext + delayMs;
+                        runRenderUntil[i] = nowNext + delayMs;
                     }
-                } else if (interpreter.isTerminated() && !robots[i].endless) {
+                } else if (interpreters[i].isTerminated() && !robots[i].endless) {
                     robots[i].pause = true;
                     robots[i].reset();
                 } else if (reset) {
@@ -897,15 +892,15 @@ define([ 'exports', 'simulation.scene', 'simulation.math', 'program.controller',
         return 'rgb(' + values.join(', ') + ')';
     }
 
-    function createRobots(reqRobot, numRobots, robotBehaviour) {
+    function createRobots(reqRobot, numRobots) {
         robots = [];
         if (numRobots >= 1) {
-            var tempRobot = createRobot(reqRobot, 0, 0, robotBehaviour);
+            var tempRobot = createRobot(reqRobot, 0, 0, interpreters[0].getRobotBehaviour());
             tempRobot.savedName = userPrograms[0].savedName;
             robots[0] = tempRobot;
             for (var i = 1; i < numRobots; i++) {
                 var yOffset = 60 * (Math.floor((i + 1) / 2)) * (Math.pow((-1), i));
-                tempRobot = createRobot(reqRobot, i, yOffset, robotBehaviour);
+                tempRobot = createRobot(reqRobot, i, yOffset, interpreters[i].getRobotBehaviour());
                 tempRobot.savedName = userPrograms[i].savedName;
                 var tempcolor = arrToRgb(colorsAdmissible[((i - 1) % (colorsAdmissible.length))]);
                 tempRobot.geom.color = tempcolor;

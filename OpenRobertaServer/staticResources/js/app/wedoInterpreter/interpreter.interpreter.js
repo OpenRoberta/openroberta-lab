@@ -41,6 +41,9 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
         Interpreter.prototype.terminate = function () {
             this.terminated = true;
         };
+        Interpreter.prototype.getRobotBehaviour = function () {
+            return this.r;
+        };
         /**
          * the central interpreter. It is a stack machine interpreting operations given as JSON objects. The operations are all IMMUTABLE. It
          * - uses the S (state) component to store the state of the interpretation.
