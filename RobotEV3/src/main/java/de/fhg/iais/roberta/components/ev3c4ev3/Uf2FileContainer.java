@@ -4,8 +4,6 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -22,11 +20,15 @@ public class Uf2FileContainer {
 
     private static final int UF2_BLOCK_SIZE = 512;
     /**
-     * TODO: Since we are now using c++ with static linking of libstdcc+, the generate binaries are bigger.
-     * check if the EV3 supports bigger payload sizes, to reduce the transfer time (which now takes around 8 seconds)
+     * The default payload length is 256, but the EV3 seems to support also other values.
+     * The bigger the payload, the lower the number of blocks => smaller UF2 file.
+     * The advantage of a smalled UF2 is a shorter upload time to the robot using USB (which is slow, ~10 sec for 1MB file).
+     * the payload max length is 476, but we have to put the file name a the end.
+     * A payload of 400 bytes seems reasonable to have a smaller file and still allowing long file names.
+     *
      */
-    private static final int UF2_BLOCK_PAYLOAD_SIZE = 256;
-    //private static final int UF2_BLOCK_PAYLOAD_SIZE = 400;
+    //private static final int UF2_BLOCK_PAYLOAD_SIZE = 256;
+    private static final int UF2_BLOCK_PAYLOAD_SIZE = 400;
 
     private static final int UF2_START_BLOCK_MAGIC_CONSTANT_1 = 0x0A324655;
     private static final int UF2_START_BLOCK_MAGIC_CONSTANT_2 = 0x9E5D5157;

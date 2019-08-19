@@ -636,7 +636,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         indexOfFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
         if ( indexOfFunct.getParam().get(1).getClass().equals(StringConst.class) ) {
-            this.sb.append("String(");
+            this.sb.append("ToString(");
             indexOfFunct.getParam().get(1).visit(this);
             this.sb.append(")");
         } else {
