@@ -83,7 +83,7 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
         Interpreter.prototype.evalOperation = function (maxRunTime) {
             var s = this.s;
             var n = this.r;
-            while (maxRunTime >= new Date().getTime()) {
+            while (maxRunTime >= new Date().getTime() && !n.getBlocking()) {
                 s.opLog('actual ops: ');
                 var stmt = s.getOp();
                 if (stmt === undefined) {
@@ -315,6 +315,12 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                         case C.SET_LANGUAGE_ACTION:
                             n.setLanguage(stmt[C.LANGUAGE]);
                             break;
+                        case C.SAY_TEXT_ACTION: {
+                            var pitch = s.pop();
+                            var speed = s.pop();
+                            var text = s.pop();
+                            return n.sayTextAction(text, speed, pitch);
+                        }
                         case C.VAR_DECLARATION: {
                             var name_8 = stmt[C.NAME];
                             s.bindVar(name_8, s.pop());

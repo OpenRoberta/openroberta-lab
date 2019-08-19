@@ -513,7 +513,7 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot' ],
         }
         // update sayText
         var language = this.robotBehaviour.getActionState("language", true);
-        if (language !== null && language !== undefined && SpeechSynthesis) {
+        if (language !== null && language !== undefined && window.speechSynthesis) {
             this.sayText.language = language;
         }
         var sayText = this.robotBehaviour.getActionState("sayText", true);

@@ -4,11 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.*;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -95,7 +91,6 @@ public class SayTextAction<V> extends Action<V> {
         Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.OUT, BlocklyType.STRING));
         Phrase<V> speed = helper.extractValue(values, new ExprParam(BlocklyConstants.VOICESPEED, BlocklyType.NUMBER_INT));
         Phrase<V> pitch = helper.extractValue(values, new ExprParam(BlocklyConstants.VOICEPITCH, BlocklyType.NUMBER_INT));
-
         return SayTextAction
             .make(
                 helper.convertPhraseToExpr(msg),

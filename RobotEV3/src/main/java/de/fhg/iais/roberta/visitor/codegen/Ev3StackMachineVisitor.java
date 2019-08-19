@@ -14,9 +14,7 @@ import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
-import de.fhg.iais.roberta.syntax.MotorDuration;
-import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.syntax.*;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
@@ -37,23 +35,10 @@ import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
-import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.*;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.C;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
@@ -155,8 +140,19 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     @Override
     public V visitSayTextAction(SayTextAction<V> sayTextAction) {
         sayTextAction.getMsg().visit(this);
-        sayTextAction.getSpeed().visit(this);
-        sayTextAction.getPitch().visit(this);
+        BlockType emptyBlock = BlockTypeContainer.getByName("EMPTY_EXPR");
+        if ( sayTextAction.getSpeed().getKind().equals(emptyBlock) ) {
+            NumConst<V> n = NumConst.make("30");
+            n.visit(this);
+        } else {
+            sayTextAction.getSpeed().visit(this);
+        }
+        if ( sayTextAction.getPitch().getKind().equals(emptyBlock) ) {
+            NumConst<V> n = NumConst.make("50");
+            n.visit(this);
+        } else {
+            sayTextAction.getPitch().visit(this);
+        }
         JSONObject o = mk(C.SAY_TEXT_ACTION);
 
         return app(o);

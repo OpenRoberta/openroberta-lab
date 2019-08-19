@@ -10,17 +10,17 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
  */
 public class ExprParam {
     private final String name;
-    private final BlocklyType defaultValue;
+    private final BlocklyType defaultValueType;
 
     /**
      * @param name of the <b>value</b> attribute of a parameter of expression in the Blockly XML
-     * @param defaultValue type if the expression is missing
+     * @param defaultValueType type if the expression is missing
      *        TODO: add XML example
      */
-    public ExprParam(String name, BlocklyType defaultValue) {
+    public ExprParam(String name, BlocklyType defaultValueType) {
         super();
         this.name = name;
-        this.defaultValue = defaultValue;
+        this.defaultValueType = defaultValueType;
     }
 
     /**
@@ -34,11 +34,11 @@ public class ExprParam {
      * @return type of the value the expression should have if it is missing.
      */
     public BlocklyType getDefaultValue() {
-        return this.defaultValue;
+        return this.defaultValueType;
     }
 
     @Override
     public String toString() {
-        return "ExprParametar [name=" + this.name + ", defaultValue=" + this.defaultValue + "]";
+        return "ExprParametar [name=" + this.name + ", defaultValue=" + this.defaultValueType + "]";
     }
 }

@@ -2,6 +2,7 @@ import { State } from "interpreter.state";
 
 export abstract class ARobotBehaviour {
     protected hardwareState;
+    private blocking
 
     constructor() {
         this.hardwareState = {};
@@ -9,6 +10,7 @@ export abstract class ARobotBehaviour {
         this.hardwareState.timers['start'] = Date.now();
         this.hardwareState.actions = {};
         this.hardwareState.sensors = {};
+        this.blocking = false;
     }
 
     public getActionState( actionType: string, resetState = false ): any {
@@ -17,6 +19,14 @@ export abstract class ARobotBehaviour {
             delete this.hardwareState.actions[actionType];
         }
         return v;
+    }
+    
+    public setBlocking(value: boolean) {
+        this.blocking = value;
+    }
+    
+    public getBlocking(): boolean {
+        return this.blocking;
     }
 
 

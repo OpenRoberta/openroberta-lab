@@ -164,7 +164,8 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         this.hardwareState.actions.sayText.text = text;
         this.hardwareState.actions.sayText.speed = speed;
         this.hardwareState.actions.sayText.pitch = pitch;
-        return
+        this.setBlocking(true);
+        return 0;
     }
 
     public motorOnAction( name: string, port: any, duration: number, speed: number ): number {
@@ -282,16 +283,10 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
     public showTextAction( text: any, mode: string ): number {
         const showText = "" + text;
         U.debug( '***** show "' + showText + '" *****' );
-        const textLen = showText.length;
-        let duration = 0;
-        if ( mode == C.TEXT ) {
-            duration = ( textLen + 1 ) * 7 * 150;
-        } else if ( mode == C.CHARACTER && textLen > 1 ) {
-            duration = textLen * 400;
-        }
         this.hardwareState.actions.display = {};
         this.hardwareState.actions.display[mode.toLowerCase()] = showText;
-        return duration;
+        this.setBlocking(true);
+        return 0;
     }
 
     public showTextActionPosition( text: any, x: number, y: number ): void {

@@ -97,7 +97,7 @@ export class Interpreter {
     private evalOperation( maxRunTime: number ) {
         const s = this.s;
         const n = this.r;
-        while ( maxRunTime >= new Date().getTime() ) {
+        while ( maxRunTime >= new Date().getTime() && !n.getBlocking() ) {
             s.opLog( 'actual ops: ' );
             let stmt = s.getOp();
             if ( stmt === undefined ) {
@@ -325,6 +325,12 @@ export class Interpreter {
                     case C.SET_LANGUAGE_ACTION:
                         n.setLanguage( stmt[C.LANGUAGE] );
                         break;
+                    case C.SAY_TEXT_ACTION: {
+                        const pitch = s.pop();                        
+                        const speed = s.pop();
+                        const text = s.pop();
+                        return n.sayTextAction(text, speed, pitch)
+                    }
                     case C.VAR_DECLARATION: {
                         const name = stmt[C.NAME];
                         s.bindVar( name, s.pop() );

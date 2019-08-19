@@ -155,7 +155,8 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             this.hardwareState.actions.sayText.text = text;
             this.hardwareState.actions.sayText.speed = speed;
             this.hardwareState.actions.sayText.pitch = pitch;
-            return;
+            this.setBlocking(true);
+            return 0;
         };
         RobotMbedBehaviour.prototype.motorOnAction = function (name, port, duration, speed) {
             var robotText = 'robot: ' + name + ', port: ' + port;
@@ -264,17 +265,10 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
         RobotMbedBehaviour.prototype.showTextAction = function (text, mode) {
             var showText = "" + text;
             U.debug('***** show "' + showText + '" *****');
-            var textLen = showText.length;
-            var duration = 0;
-            if (mode == C.TEXT) {
-                duration = (textLen + 1) * 7 * 150;
-            }
-            else if (mode == C.CHARACTER && textLen > 1) {
-                duration = textLen * 400;
-            }
             this.hardwareState.actions.display = {};
             this.hardwareState.actions.display[mode.toLowerCase()] = showText;
-            return duration;
+            this.setBlocking(true);
+            return 0;
         };
         RobotMbedBehaviour.prototype.showTextActionPosition = function (text, x, y) {
             var showText = "" + text;

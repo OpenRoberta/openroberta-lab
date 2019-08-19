@@ -747,11 +747,11 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'interpreter.consta
             }
             values.correctDrive = SIM.getBackground() == 7;
             if (this.robots[r].display && this.robots[r].display.finished) {
-                values.finished = true;
+                this.robots[r].robotBehaviour.setBlocking(false);
                 this.robots[r].display.finished = false;
             }
             if (this.robots[r].sayText && this.robots[r].sayText.finished) {
-                values.finished = true;
+                this.robots[r].robotBehaviour.setBlocking(false);
                 this.robots[r].sayText.finished = false;
             }
             values.frameTime = SIM.getDt();
