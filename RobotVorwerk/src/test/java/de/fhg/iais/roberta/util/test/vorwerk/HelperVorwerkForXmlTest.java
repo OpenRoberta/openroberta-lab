@@ -28,7 +28,14 @@ public class HelperVorwerkForXmlTest extends AbstractHelperForXmlTest {
      */
     private String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
         Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
-        String javaCode = VorwerkPythonVisitor.generate((VorwerkConfiguration) getRobotConfiguration(), transformer.getTree(), false, Language.ENGLISH);
+        String javaCode =
+            VorwerkPythonVisitor
+                .generate(
+                    (VorwerkConfiguration) getRobotConfiguration(),
+                    transformer.getTree(),
+                    false,
+                    Language.ENGLISH,
+                    getRobotFactory().getHelperMethodGenerator());
         return javaCode;
     }
 
@@ -53,7 +60,8 @@ public class HelperVorwerkForXmlTest extends AbstractHelperForXmlTest {
      */
     public String generatePython(String pathToProgramXml, VorwerkConfiguration brickConfiguration) throws Exception {
         Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = VorwerkPythonVisitor.generate(brickConfiguration, transformer.getTree(), true, Language.ENGLISH);
+        String code =
+            VorwerkPythonVisitor.generate(brickConfiguration, transformer.getTree(), true, Language.ENGLISH, getRobotFactory().getHelperMethodGenerator());
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }

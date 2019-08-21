@@ -20,7 +20,7 @@ public class HelperNaoForXmlTest extends de.fhg.iais.roberta.util.test.AbstractH
 
     public String generateCpp(String pathToProgramXml) throws Exception {
         Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
-        return NaoPythonVisitor.generate(transformer.getTree(), true);
+        return NaoPythonVisitor.generate(transformer.getTree(), true, getRobotFactory().getHelperMethodGenerator());
     }
 
     public void compareExistingAndGeneratedSource(String sourceCodeFilename, String xmlFilename) throws Exception {

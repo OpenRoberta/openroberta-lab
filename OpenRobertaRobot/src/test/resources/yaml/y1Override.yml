@@ -1,0 +1,10 @@
+include: "classpath:/yaml/y2.yml"
+k1: v1
+k2:
+  k6: v19
+  k3: v3
+  k4:
+    - v4
+    - v5
+
+k7: [ v20,v21 ]

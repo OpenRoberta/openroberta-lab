@@ -22,7 +22,6 @@ public class AstToEv3PythonVisitorTest {
             + "#!/usr/bin/python\n\n"
             + "from __future__ import absolute_import\n"
             + "from roberta.ev3 import Hal\n"
-            + "from roberta.BlocklyMethods import BlocklyMethods\n"
             + "from ev3dev import ev3 as ev3dev\n"
             + "import math\n\n"
             + "class BreakOutOfALoop(Exception): pass\n"
@@ -306,7 +305,7 @@ public class AstToEv3PythonVisitorTest {
                 + make_globals("", CFG_COLOR_SENSOR)
                 + "color = 'white'\n"
                 + "light = 0\n"
-                + "rgb = BlocklyMethods.createListWith(0, 0, 0)\n"
+                + "rgb = [0, 0, 0]\n"
                 + "def run():\n"
                 + "    global color, light, rgb\n"
                 + "    color = hal.getColorSensorColour('3')\n"
@@ -417,9 +416,9 @@ public class AstToEv3PythonVisitorTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "BlocklyMethods.textJoin(0, 0)\n"
-                + "BlocklyMethods.textJoin(0, \"16561\")\n"
-                + "BlocklyMethods.textJoin(0, BlocklyMethods.createListWith(\"16561\", \"16561\"))\n\n"
+                + "\"\".join(str(arg) for arg in [0, 0])\n"
+                + "\"\".join(str(arg) for arg in [0, \"16561\"])\n"
+                + "\"\".join(str(arg) for arg in [0, [\"16561\", \"16561\"]])\n\n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/functions/text_concat.xml");
@@ -450,7 +449,7 @@ public class AstToEv3PythonVisitorTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "\nvariablenName = BlocklyMethods.createListWith(\"a\", \"b\", \"c\")\n"
+                + "\nvariablenName = [\"a\", \"b\", \"c\"]\n"
                 + "def test():\n"
                 + "    global variablenName\n"
                 + "    if True: return 'red'\n"
@@ -471,7 +470,7 @@ public class AstToEv3PythonVisitorTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "\nvariablenName = BlocklyMethods.createListWith(\"a\", \"b\", \"c\")\n"
+                + "\nvariablenName = [\"a\", \"b\", \"c\"]\n"
                 + "def test(x, x2):\n"
                 + "    global variablenName\n"
                 + "    hal.drawText(str(x2), x, 0)\n"
@@ -491,7 +490,7 @@ public class AstToEv3PythonVisitorTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "\nvariablenName = BlocklyMethods.createListWith(\"a\", \"b\", \"c\")\n"
+                + "\nvariablenName = [\"a\", \"b\", \"c\"]\n"
                 + "def test():\n"
                 + "    global variablenName\n"
                 + "    hal.drawText(str(variablenName), 0, 0)\n"
@@ -663,7 +662,7 @@ public class AstToEv3PythonVisitorTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "\nvariablenName = BlocklyMethods.createListWith('none', 'red', 'blue')\n"
+                + "\nvariablenName = ['none', 'red', 'blue']\n"
                 + "def run():\n"
                 + "    global variablenName\n"
                 + "    for variablenName2 in variablenName:\n"

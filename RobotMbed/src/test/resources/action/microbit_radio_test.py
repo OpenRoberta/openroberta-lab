@@ -1,16 +1,13 @@
 import microbit
 import random
 import math
-
-_GOLDEN_RATIO = (1 + 5 ** 0.5) / 2
-
 import radio
 
-radio.on()
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
 timer1 = microbit.running_time()
+radio.on()
 
 item = 0
 item2 = True

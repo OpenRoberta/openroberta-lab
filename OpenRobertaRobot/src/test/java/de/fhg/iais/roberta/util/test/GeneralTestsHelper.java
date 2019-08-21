@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.util.Util1;
 public class GeneralTestsHelper {
     public static void loadBlocks(String uri) {
         JSONObject robotDescription = new JSONObject();
-        Util1.loadYAMLRecursive("", robotDescription, uri);
+        Util1.loadYAMLRecursive("", robotDescription, uri, false);
         BlocklyDropdownFactoryHelper.loadBlocks(robotDescription);
     }
 

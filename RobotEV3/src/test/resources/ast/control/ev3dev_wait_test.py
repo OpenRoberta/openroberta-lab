@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import
 from roberta.ev3 import Hal
-from roberta.BlocklyMethods import BlocklyMethods
 from ev3dev import ev3 as ev3dev
 import math
 

@@ -2,9 +2,6 @@ import microbit
 import random
 import math
 
-_GOLDEN_RATIO = (1 + 5 ** 0.5) / 2
-
-
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -17,8 +14,7 @@ def run():
     item = min(max(item, 1), 100)
     item2 = (item % 2) == 0
     item2 = (item % 2) == 1
-    # following function is not implemented yet
-    item2 = false # not implemented yet
+    item2 = _isPrime(item)
     item2 = (item % 1) == 0
     item2 = item > 0
     item2 = item < 0
@@ -31,6 +27,15 @@ def main():
         run()
     except Exception as e:
         raise
+
+def _isPrime(number):
+  if(number==0 or number==1):
+    return False
+  for i in range(2,int(math.floor(math.sqrt(number)))+1):
+    remainder = number % i
+    if remainder==0:
+      return False
+  return True
 
 if __name__ == "__main__":
     main()

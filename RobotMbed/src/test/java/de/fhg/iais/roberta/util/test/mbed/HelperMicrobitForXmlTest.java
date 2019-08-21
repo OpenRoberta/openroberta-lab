@@ -30,14 +30,14 @@ public class HelperMicrobitForXmlTest extends de.fhg.iais.roberta.util.test.Abst
      */
     public String generatePython(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
         Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = MicrobitPythonVisitor.generate(brickConfiguration, transformer.getTree(), true);
+        String code = MicrobitPythonVisitor.generate(brickConfiguration, transformer.getTree(), true, getRobotFactory().getHelperMethodGenerator());
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }
 
     public String generatePython(String pathToProgramXML) throws Exception {
         Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXML);
-        return MicrobitPythonVisitor.generate(transformer.getTree(), true);
+        return MicrobitPythonVisitor.generate(transformer.getTree(), true, getRobotFactory().getHelperMethodGenerator());
     }
 
     public void compareExistingAndGeneratedSource(String sourceCodeFilename, String xmlFilename) throws Exception {

@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import
 from roberta.ev3 import Hal
-from roberta.BlocklyMethods import BlocklyMethods
 from ev3dev import ev3 as ev3dev
 import math
 
@@ -19,32 +18,32 @@ _brickConfiguration = {
 }
 hal = Hal(_brickConfiguration)
 
-item = BlocklyMethods.createListWith(0, 0, 0)
-item2 = BlocklyMethods.createListWith(True, True, True)
-item3 = BlocklyMethods.createListWith("", "", "")
-item4 = BlocklyMethods.createListWith('white', 'white', 'white')
-item5 = BlocklyMethods.createListWith(None, None, None)
+item = [0, 0, 0]
+item2 = [True, True, True]
+item3 = ["", "", ""]
+item4 = ['white', 'white', 'white']
+item5 = [None, None, None]
 item6 = 0
 item7 = True
 def run():
     global item, item2, item7, item4, item3, item6, item5
-    item6 = BlocklyMethods.length( item)
-    item6 = BlocklyMethods.length( item2)
-    item6 = BlocklyMethods.length( item3)
-    item6 = BlocklyMethods.length( item4)
-    item6 = BlocklyMethods.length( item5)
-    item7 = BlocklyMethods.isEmpty( item)
-    item7 = BlocklyMethods.isEmpty( item2)
-    item7 = BlocklyMethods.isEmpty( item3)
-    item7 = BlocklyMethods.isEmpty( item4)
-    item7 = BlocklyMethods.isEmpty( item5)
-    item6 = BlocklyMethods.sumOnList(item)
-    item6 = BlocklyMethods.minOnList(item)
-    item6 = BlocklyMethods.maxOnList(item)
-    item6 = BlocklyMethods.averageOnList(item)
-    item6 = BlocklyMethods.medianOnList(item)
-    item6 = BlocklyMethods.standardDeviatioin(item)
-    item6 = BlocklyMethods.randOnList(item)
+    item6 = len(item)
+    item6 = len(item2)
+    item6 = len(item3)
+    item6 = len(item4)
+    item6 = len(item5)
+    item7 = not item
+    item7 = not item2
+    item7 = not item3
+    item7 = not item4
+    item7 = not item5
+    item6 = sum(item)
+    item6 = min(item)
+    item6 = max(item)
+    item6 = float(sum(item)) / len(item)
+    item6 = _median(item)
+    item6 = _standard_deviation(item)
+    item6 = item[0]
 
 def main():
     try:
@@ -56,6 +55,23 @@ def main():
         hal.drawText('Press any key', 0, 4)
         while not hal.isKeyPressed('any'): hal.waitFor(500)
         raise
+
+def _median(l):
+    l = sorted(l)
+    l_len = len(l)
+    if l_len < 1:
+        return None
+    if l_len % 2 == 0:
+        return ( l[int( (l_len-1) / 2)] + l[int( (l_len+1) / 2)] ) / 2.0
+    else:
+        return l[int( (l_len-1) / 2)]
+
+def _standard_deviation(l):
+    mean = float(sum(l)) / len(l)
+    sd = 0
+    for i in l:
+        sd += (i - mean)*(i - mean)
+    return math.sqrt(sd / len(l))
 
 if __name__ == "__main__":
     main()

@@ -9,7 +9,7 @@ public class PythonVisitorTest {
 
     @Test
     public void rgbColorVisit_returnsCorrectPythonCodeConvertingRgb2Hex() throws Exception {
-        String correct_code = "item=BlocklyMethods.rgb2hex(0, 100, 68)defrun():h.setAutonomousLife('ON')globalitem";
+        String correct_code = "item=int(\"{:02x}{:02x}{:02x}\".format(min(max(0,0),255),min(max(100,0),255),min(max(68,0),255),16))defrun():h.setAutonomousLife('ON')globalitem";
 
         this.h.assertCodeIsOk(correct_code, "/expr/create_rgb_variable.xml", false);
     }

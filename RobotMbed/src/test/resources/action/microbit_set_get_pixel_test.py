@@ -2,9 +2,6 @@ import microbit
 import random
 import math
 
-_GOLDEN_RATIO = (1 + 5 ** 0.5) / 2
-
-
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 

@@ -34,8 +34,8 @@ public class GenericHelperForXmlTest extends AbstractHelperForXmlTest {
 
         @Override
         public String getFileExtension() {
-            return null;
-        }
+            return "py";
+        } // TODO
 
         @Override
         public AbstractSimValidatorVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {

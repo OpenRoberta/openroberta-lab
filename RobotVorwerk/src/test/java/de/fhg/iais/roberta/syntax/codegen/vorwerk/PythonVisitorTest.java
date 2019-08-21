@@ -15,12 +15,11 @@ public class PythonVisitorTest {
             + "#!/usr/bin/python\n\n"
             + "from __future__ import absolute_import\n"
             + "from roberta import Hal\n"
-            + "from roberta import BlocklyMethods\n"
             + "import math\n\n"
             + "class BreakOutOfALoop(Exception): pass\n"
             + "class ContinueLoop(Exception): pass\n\n";
 
-    private static final String GLOBALS = "hal = Hal()\n";
+    private static final String GLOBALS = "hal = Hal()\n\n";
 
     private static final String MAIN_METHOD =
         "" //
@@ -31,6 +30,7 @@ public class PythonVisitorTest {
             + "        print('Fehler im Vorwerk')\n"
             + "        print(e.__class__.__name__)\n"
             + "        print(e)\n"
+            + "\n"
             + "if __name__ == \"__main__\":\n"
             + "    main()";
     private static VorwerkConfiguration brickConfiguration;

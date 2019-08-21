@@ -28,7 +28,14 @@ public class HelperRaspberryPiForXmlTest extends AbstractHelperForXmlTest {
      */
     private String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
         Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
-        String javaCode = RaspberryPiPythonVisitor.generate((RaspberryPiConfiguration) getRobotConfiguration(), transformer.getTree(), false, Language.ENGLISH);
+        String javaCode =
+            RaspberryPiPythonVisitor
+                .generate(
+                    (RaspberryPiConfiguration) getRobotConfiguration(),
+                    transformer.getTree(),
+                    false,
+                    Language.ENGLISH,
+                    getRobotFactory().getHelperMethodGenerator());
         return javaCode;
     }
 
@@ -53,7 +60,8 @@ public class HelperRaspberryPiForXmlTest extends AbstractHelperForXmlTest {
      */
     public String generatePython(String pathToProgramXml, RaspberryPiConfiguration brickConfiguration) throws Exception {
         Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = RaspberryPiPythonVisitor.generate(brickConfiguration, transformer.getTree(), true, Language.ENGLISH);
+        String code =
+            RaspberryPiPythonVisitor.generate(brickConfiguration, transformer.getTree(), true, Language.ENGLISH, getRobotFactory().getHelperMethodGenerator());
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }

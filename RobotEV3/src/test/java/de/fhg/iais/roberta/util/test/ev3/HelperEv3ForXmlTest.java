@@ -9,6 +9,7 @@ import org.junit.Assert;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.factory.Ev3LejosV0Factory;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.PluginProperties;
@@ -20,8 +21,13 @@ import de.fhg.iais.roberta.visitor.codegen.Ev3PythonVisitor;
 
 public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
 
-    public HelperEv3ForXmlTest() {
-        super(new Ev3LejosV0Factory(new PluginProperties("ev3lejosv1", "", "", Util1.loadProperties("classpath:/ev3lejosv1.properties"))), makeConfiguration());
+    public HelperEv3ForXmlTest(IRobotFactory... robotFactory) {
+        // TODO maybe do this more nicely, this allows dev tests to use the dev factory
+        super(
+            robotFactory.length == 0
+                ? new Ev3LejosV0Factory(new PluginProperties("ev3lejosv1", "", "", Util1.loadProperties("classpath:/ev3lejosv1" + ".properties")))
+                : robotFactory[0],
+            makeConfiguration());
     }
 
     public static Configuration makeConfiguration() {
@@ -191,7 +197,8 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
      */
     public String generatePython(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
         Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = Ev3PythonVisitor.generate(brickConfiguration, transformer.getTree(), true, Language.ENGLISH);
+        String code =
+            Ev3PythonVisitor.generate(brickConfiguration, transformer.getTree(), true, Language.ENGLISH, getRobotFactory().getHelperMethodGenerator());
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }

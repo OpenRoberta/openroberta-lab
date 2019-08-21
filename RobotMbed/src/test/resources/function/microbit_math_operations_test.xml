@@ -82,9 +82,6 @@
         </block>
         </value>
     </block>
-    <block type="text_comment" id="NL*b{polKA2G=,[1c[+C" intask="true">
-        <field name="TEXT">following function is not implemented yet</field>
-    </block>
     <block type="variables_set" id="Sqe[.!4W#IgGeP+@F|xr" intask="true">
         <mutation datatype="Boolean"/>
         <field name="VAR">item2</field>
