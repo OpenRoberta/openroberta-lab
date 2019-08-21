@@ -1170,4 +1170,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         }
     }
     exports.updateTutorialMenu = updateTutorialMenu;
+
+    function getLegalTextsMap() {
+        return GUISTATE.server.legalTexts;
+    }
+    exports.getLegalTextsMap = getLegalTextsMap;
 });

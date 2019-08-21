@@ -311,14 +311,21 @@ body.blocklyMinimalBody * {
 #legalDiv {
 	overflow-y: scroll;
 	background-color: #fff;
+	padding-top: 1.5rem;
 }
 
-#legalDiv > * {
+#legalDiv > *:not(#legalDivHeader) {
 	padding: 1rem;
+	-webkit-touch-callout: default;
+	-webkit-user-select: text;
+	-moz-user-select: text;
+	-ms-user-select: text;
+	user-select: text;
 }
 
 #legalDiv > #legalDivHeader {
 	text-align: center;
+	font-size: 1.25em;
 }
 
 #legalDiv > #legalDivHeader > a {

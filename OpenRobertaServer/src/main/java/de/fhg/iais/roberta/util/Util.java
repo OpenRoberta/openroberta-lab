@@ -215,7 +215,7 @@ public class Util {
      * @return
      */
     public static JSONObject getJSONObjectsFromDirectory(String path) {
-        List<File> files = getListOfFilesFromDirectory(path, "json");
+        List<File> files = Util.getListOfFilesFromDirectory(path, "json");
         JSONObject jsonObjRepresentingTheDirectory = new JSONObject();
         for ( File file : files ) {
             try {
@@ -223,6 +223,23 @@ public class Util {
                 jsonObjRepresentingTheDirectory.put(jsonObjInDirectory.getString("name").toLowerCase().replaceAll("\\s", ""), jsonObjInDirectory);
             } catch ( Exception e ) {
                 // no problem, we simply ignore files without valid json data or without the property "name"
+            }
+        }
+        return jsonObjRepresentingTheDirectory;
+    }
+
+    public static JSONObject getHTMLContentFromDirectory(String directoryPath) {
+
+        List<File> files = Util.getListOfFilesFromDirectory(directoryPath, "html");
+        JSONObject jsonObjRepresentingTheDirectory = new JSONObject();
+        for ( File file : files ) {
+            try {
+                String fileContent = Util1.readFileContent(file.getAbsolutePath());
+                if ( !fileContent.trim().isEmpty() ) {
+                    jsonObjRepresentingTheDirectory.put(file.getName(), fileContent);
+                }
+            } catch ( Exception e ) {
+                //There should not be a problem in storing a String as property, but yeah, in case it does lets ignore that file
             }
         }
         return jsonObjRepresentingTheDirectory;
@@ -302,12 +319,12 @@ public class Util {
         HtmlChangeListener<List<String>> htmlChangeListener = new HtmlChangeListener<List<String>>() {
             @Override
             public void discardedTag(List<String> arg0, String tagName) {
-                LOG.error("Discarding tag: " + tagName);
+                Util.LOG.error("Discarding tag: " + tagName);
             }
 
             @Override
             public void discardedAttributes(List<String> arg0, String arg1, String... attributes) {
-                LOG.error("Discarding attribute: " + arg1);
+                Util.LOG.error("Discarding attribute: " + arg1);
             }
         };
 
@@ -332,7 +349,7 @@ public class Util {
      * @return a list of files names or an empty list.
      */
     public static List<String> getListOfFileNamesFromDirectory(String path, String extensions) {
-        List<File> files = getListOfFilesFromDirectory(path, extensions);
+        List<File> files = Util.getListOfFilesFromDirectory(path, extensions);
         List<String> listOfFileNames = new ArrayList<>();
         for ( File file : files ) {
             listOfFileNames.add(file.getName());

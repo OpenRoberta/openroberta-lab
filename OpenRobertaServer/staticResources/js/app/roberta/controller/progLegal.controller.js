@@ -43,15 +43,15 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
         
         var imprintDocumentType = 'imprint_',
             $imprintStorage = $legalDiv.children('#legalDivImprint'),
-            $imprintLink = $legalHeader.children('[href="#legalDivImprint"]'),
+            $imprintLink = $legalHeader.children('[data-href="#legalDivImprint"]'),
 
             privacyPolicyDocumentType = 'privacy_policy_',
             $privacyPolicyStorage = $legalDiv.children('#legalDivPrivacyPolicy'),
-            $privacyPolicyLink = $legalHeader.children('[href="#legalDivPrivacyPolicy"]'),
+            $privacyPolicyLink = $legalHeader.children('[data-href="#legalDivPrivacyPolicy"]'),
             
             termsOfUseDocumentType = 'terms_of_use_',
             $termsOfUseStorage = $legalDiv.children('#legalDivTermsOfUse'),
-            $termsOfUseLink = $legalHeader.children('[href="#legalDivTermsOfUse"]');
+            $termsOfUseLink = $legalHeader.children('[data-href="#legalDivTermsOfUse"]');
 
         storages[imprintDocumentType] = $imprintStorage;
         storages[privacyPolicyDocumentType] = $privacyPolicyStorage;
@@ -76,52 +76,51 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
     exports.initView = initView;
 
     function initEvents() {
+        var setScrollEventForDocumentType = function(documentType) {
+                var $link = links[documentType],
+                    $storage = storages[documentType];
+            
+                if ($storage && $link) {
+                    $link.on('click touchend', function(evt) {
+                        evt.preventDefault();
+                        
+                        $legalDiv.animate({
+                            scrollTop: $storage.offset().top - 92
+                        }, 'slow');
+                    });
+                }
+            };
         $legalButton.off('click touchend');
         $legalButton.on('click touchend', function(event) {
             event.preventDefault();
             toggleLegal();
         });
+        
+        for (documentType in links) {
+            if (links.hasOwnProperty(documentType)) {
+                setScrollEventForDocumentType(documentType);
+            }
+        }
     }
     
     function loadLegalTexts() {
         var language = GUISTATE_C.getLanguage().toLowerCase(),
+            legalTextsMap = GUISTATE_C.getLegalTextsMap(),
             loadFile = function(documentType, language) {
-                var urlPath = '../legal/',
-                    url = urlPath + documentType + language + '.html',
-                    $storage = storages[documentType],
-                    $link = links[documentType];
+                var $storage = storages[documentType],
+                    $link = links[documentType],
+                    content = legalTextsMap[documentType + language + '.html'] 
+                                || legalTextsMap[documentType +  'en.html'] 
+                                || legalTextsMap[documentType + 'de.html'];
                 
                 if ($storage) {
                     $storage.children().remove();
-                    $link.show();
-                    $storage.load(url, function(response, status, xhr) {
-                        if (status === "error" || response.trim() === '') {
-                            if (language !== 'en') {
-                                var englishFallBackUrl = urlPath + documentType + 'en.html';
-                                $storage.load(englishFallBackUrl, function(englishFallBackResponse, englishFallBackStatus, englishFallBackXhr) {
-                                    if (englishFallBackStatus === "error" || englishFallBackResponse.trim() === '') {
-                                        if (language !== 'de') {
-                                            var germanFallBackUrl = urlPath + documentType + 'de.html';
-                                            $storage.load(germanFallBackUrl, function(germanFallBackResponse, germanFallBackStatus, germanFallBackXhr) {
-                                                if (germanFallBackStatus === "error" || germanFallBackResponse.trim() === '') {
-                                                    $link.hide();
-                                                }
-                                            });
-                                        } else {
-                                            $link.hide();
-                                        }
-                                    }
-                                });
-                            } else {
-                                var germanFallBackUrl = urlPath + documentType + 'de.html';
-                                $storage.load(germanFallBackUrl, function(germanFallBackResponse, germanFallBackStatus, germanFallBackXhr) {
-                                    if (germanFallBackStatus === "error" || germanFallBackResponse.trim() === '') {
-                                        $link.hide();
-                                    }
-                                });
-                            }
-                        }
-                    });
+                    if (content) {
+                        $storage.append($(content));
+                        $link.show();
+                    } else {
+                        $link.hide();
+                    }
                 }
             };
         
@@ -129,6 +128,12 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
             if (storages.hasOwnProperty(documentType)) {
                 loadFile(documentType, language);
             }
+        }
+        
+        if ($legalHeader.children().filter(function() {return $(this).css('display') !== 'none';}).length === 0) {
+            $legalButton.hide();
+        } else {
+            $legalButton.show();
         }
     }
     exports.loadLegalTexts = loadLegalTexts;
@@ -141,7 +146,8 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
         if ($blocklyWrapper.hasClass('rightActive')) {
             $blocklyWrapper.closeRightView();
         } else {
-            $blocklyWrapper.openRightView('legal', INITIAL_WIDTH, function() {});
+            $legalDiv.animate({scrollTop: 0}, 'fast');
+            $blocklyWrapper.openRightView('legal', INITIAL_WIDTH);
         }
     }
 });
