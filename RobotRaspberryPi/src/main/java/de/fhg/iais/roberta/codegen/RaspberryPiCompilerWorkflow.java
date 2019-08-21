@@ -23,9 +23,12 @@ public class RaspberryPiCompilerWorkflow extends AbstractCompilerWorkflow {
 
     private final RaspberryPiCommunicator communicator;
 
-    public RaspberryPiCompilerWorkflow(PluginProperties pluginProperties) {
+    private final HelperMethodGenerator helperMethodGenerator; // TODO pull up to abstract compiler workflow once implemented for all robots
+
+    public RaspberryPiCompilerWorkflow(PluginProperties pluginProperties, HelperMethodGenerator helperMethodGenerator) {
         super(pluginProperties);
         this.communicator = new RaspberryPiCommunicator(pluginProperties);
+        this.helperMethodGenerator = helperMethodGenerator;
     }
 
     @Override
@@ -36,7 +39,12 @@ public class RaspberryPiCompilerWorkflow extends AbstractCompilerWorkflow {
             try {
                 this.generatedSourceCode =
                     RaspberryPiPythonVisitor
-                        .generate((RaspberryPiConfiguration) data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true, language);
+                        .generate(
+                            (RaspberryPiConfiguration) data.getRobotConfiguration(),
+                            data.getProgramTransformer().getTree(),
+                            true,
+                            language,
+                            this.helperMethodGenerator);
                 LOG.info("RaspberryPi code generated");
                 this.workflowResult = Key.COMPILERWORKFLOW_SUCCESS;
             } catch ( Exception e ) {

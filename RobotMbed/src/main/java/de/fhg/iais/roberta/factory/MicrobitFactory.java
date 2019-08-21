@@ -25,7 +25,7 @@ public class MicrobitFactory extends AbstractMbedFactory {
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return new MicrobitCompilerWorkflow(this.pluginProperties);
+        return new MicrobitCompilerWorkflow(this.pluginProperties, this.helperMethodGenerator);
     }
 
     @Override

@@ -55,7 +55,7 @@ public class BlocklyDropdownFactory {
     public BlocklyDropdownFactory(PluginProperties pluginProperties) {
         String robotDescriptor = pluginProperties.getStringProperty("robot.descriptor");
         this.robotDescription = new JSONObject();
-        Util1.loadYAMLRecursive("", this.robotDescription, robotDescriptor);
+        Util1.loadYAMLRecursive("", this.robotDescription, robotDescriptor, false);
         BlocklyDropdownFactoryHelper.loadBlocks(this.robotDescription);
         this.waMap = BlocklyDropdownFactoryHelper.getWaitUntils(this.robotDescription);
         this.modes = BlocklyDropdownFactoryHelper.getModes(this.robotDescription);

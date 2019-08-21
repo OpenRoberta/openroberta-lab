@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.factory;
 
 import java.util.ArrayList;
 
+import de.fhg.iais.roberta.codegen.HelperMethodGenerator;
 import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -93,4 +94,10 @@ public interface IRobotFactory {
 
     Boolean hasWlanCredentials();
 
+    /**
+     * Returns the helper method generator for usage and definition of possibly needed helper methods.
+     *
+     * @return the helper method generator
+     */
+    HelperMethodGenerator getHelperMethodGenerator();
 }

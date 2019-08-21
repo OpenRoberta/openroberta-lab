@@ -37,11 +37,6 @@ public abstract class AbstractEV3Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public String getFileExtension() {
-        return "java";
-    }
-
-    @Override
     public AbstractSimValidatorVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
         return new Ev3SimValidatorVisitor(brickConfiguration);
     }

@@ -12,7 +12,7 @@ public class Ev3DevFactory extends AbstractEV3Factory {
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return new Ev3DevCompilerWorkflow(pluginProperties);
+        return new Ev3DevCompilerWorkflow(this.pluginProperties, this.helperMethodGenerator);
     }
 
     @Override

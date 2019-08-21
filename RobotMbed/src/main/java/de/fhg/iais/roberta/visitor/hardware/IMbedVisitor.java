@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.visitor.hardware;
 
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
@@ -27,12 +26,6 @@ import de.fhg.iais.roberta.syntax.expr.mbed.Image;
 import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
-import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
@@ -54,65 +47,63 @@ public interface IMbedVisitor<V>
      *
      * @param displayTextAction phrase to be visited
      */
-    V visitDisplayTextAction(DisplayTextAction<V> displayTextAction);
+    default V visitDisplayTextAction(DisplayTextAction<V> displayTextAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
     /**
      * visit a {@link PredefinedImage}.
      *
      * @param predefinedImage phrase to be visited
      */
-    V visitPredefinedImage(PredefinedImage<V> predefinedImage);
+    default V visitPredefinedImage(PredefinedImage<V> predefinedImage) {
+        throw new DbcException("Block is not implemented!");
+    }
 
     /**
      * visit a {@link DisplayImageAction}.
      *
      * @param displayImageAction phrase to be visited
      */
-    V visitDisplayImageAction(DisplayImageAction<V> displayImageAction);
+    default V visitDisplayImageAction(DisplayImageAction<V> displayImageAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
     /**
      * visit a {@link ImageShiftFunction}.
      *
      * @param imageShiftFunction phrase to be visited
      */
-    V visitImageShiftFunction(ImageShiftFunction<V> imageShiftFunction);
+    default V visitImageShiftFunction(ImageShiftFunction<V> imageShiftFunction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
     /**
-     * visit a {@link ImageShiftFunction}.
+     * visit a {@link ImageInvertFunction}.
      *
-     * @param imageShiftFunction phrase to be visited
+     * @param imageInvertFunction phrase to be visited
      */
-    V visitImageInvertFunction(ImageInvertFunction<V> imageInvertFunction);
+    default V visitImageInvertFunction(ImageInvertFunction<V> imageInvertFunction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
     /**
      * visit a {@link Image}.
      *
      * @param image phrase to be visited
      */
-    V visitImage(Image<V> image);
-
-    /**
-     * visit a {@link GestureSensor}.
-     *
-     * @param gestureSensor phrase to be visited
-     */
-    @Override
-    V visitGestureSensor(GestureSensor<V> gestureSensor);
-
-    /**
-     * visit a {@link TemperatureSensor}.
-     *
-     * @param temperatureSensor phrase to be visited
-     */
-    @Override
-    V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor);
+    default V visitImage(Image<V> image) {
+        throw new DbcException("Block is not implemented!");
+    }
 
     /**
      * visit a {@link LedOnAction}.
      *
      * @param ledOnAction phrase to be visited
      */
-    V visitLedOnAction(LedOnAction<V> ledOnAction);
+    default V visitLedOnAction(LedOnAction<V> ledOnAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
     /**
      * visit a {@link RadioSendAction}.
@@ -133,54 +124,49 @@ public interface IMbedVisitor<V>
     }
 
     /**
-     * visit a {@link RgbColor}.
-     *
-     * @param rgbColor phrase to be visited
-     */
-    V visitRgbColor(RgbColor<V> rgbColor);
-
-    /**
-     * visit a {@link PinGetValueSensor}.
-     *
-     * @param pinValueSensor phrase to be visited
-     */
-    @Override
-    V visitPinGetValueSensor(PinGetValueSensor<V> pinValueSensor);
-
-    /**
      * visit a {@link PinSetPullAction}.
      *
-     * @param pinSetPull phrase to be visited
+     * @param pinSetPullAction phrase to be visited
      */
-    V visitPinSetPullAction(PinSetPullAction<V> pinSetPullAction);
+    default V visitPinSetPullAction(PinSetPullAction<V> pinSetPullAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
     /**
      * visit a {@link DisplaySetBrightnessAction}.
      *
      * @param displaySetBrightnessAction phrase to be visited
      */
-    V visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<V> displaySetBrightnessAction);
+    default V visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<V> displaySetBrightnessAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
     /**
      * visit a {@link DisplayGetBrightnessAction}.
      *
      * @param displayGetBrightnessAction phrase to be visited
      */
-    V visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<V> displayGetBrightnessAction);
+    default V visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<V> displayGetBrightnessAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
     /**
      * visit a {@link DisplaySetPixelAction}.
      *
-     * @param DisplaySetPixelAction phrase to be visited
+     * @param displaySetPixelAction phrase to be visited
      */
-    V visitDisplaySetPixelAction(DisplaySetPixelAction<V> displaySetPixelAction);
+    default V visitDisplaySetPixelAction(DisplaySetPixelAction<V> displaySetPixelAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
     /**
      * visit a {@link DisplayGetPixelAction}.
      *
-     * @param DisplayGetPixelAction phrase to be visited
+     * @param displayGetPixelAction phrase to be visited
      */
-    V visitDisplayGetPixelAction(DisplayGetPixelAction<V> displayGetPixelAction);
+    default V visitDisplayGetPixelAction(DisplayGetPixelAction<V> displayGetPixelAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
     /**
      * visit a {@link RadioSetChannelAction}.
@@ -196,35 +182,23 @@ public interface IMbedVisitor<V>
      *
      * @param singleMotorOnAction phrase to be visited
      */
-    V visitSingleMotorOnAction(SingleMotorOnAction<V> singleMotorOnAction);
+    default V visitSingleMotorOnAction(SingleMotorOnAction<V> singleMotorOnAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
     /**
      * visit a {@link SingleMotorStopAction}.
      *
      * @param singleMotorStopAction phrase to be visited
      */
-    V visitSingleMotorStopAction(SingleMotorStopAction<V> singleMotorStopAction);
+    default V visitSingleMotorStopAction(SingleMotorStopAction<V> singleMotorStopAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
     /**
-     * visit a {@link AccelerometerSensor}.
+     * visit a {@link FourDigitDisplayShowAction}.
      *
-     * @param accelerometerSensor phrase to be visited
-     */
-    @Override
-    V visitAccelerometer(AccelerometerSensor<V> accelerometerSensor);
-
-    /**
-     * visit a {@link GyroSensor}.
-     *
-     * @param gyroSensor phrase to be visited
-     */
-    @Override
-    V visitGyroSensor(GyroSensor<V> gyroSensor);
-
-    /**
-     * visit a {@link visitFourDigitDisplayShowAction}.
-     *
-     * @param FourDigitDisplayShowAction phrase to be visited
+     * @param fourDigitDisplayShowAction phrase to be visited
      */
     default V visitFourDigitDisplayShowAction(FourDigitDisplayShowAction<V> fourDigitDisplayShowAction) {
         throw new DbcException("Block is not implemented!");
@@ -233,15 +207,56 @@ public interface IMbedVisitor<V>
     /**
      * visit a {@link FourDigitDisplayClearAction}.
      *
-     * @param FourDigitDisplayClearAction phrase to be visited
+     * @param fourDigitDisplayClearAction phrase to be visited
      */
     default V visitFourDigitDisplayClearAction(FourDigitDisplayClearAction<V> fourDigitDisplayClearAction) {
         throw new DbcException("Block is not implemented!");
     }
 
-    V visitBothMotorsOnAction(BothMotorsOnAction<V> bothMotorsOnAction);
+    /**
+     * visit a {@link BothMotorsOnAction}.
+     *
+     * @param bothMotorsOnAction phrase to be visited
+     */
+    default V visitBothMotorsOnAction(BothMotorsOnAction<V> bothMotorsOnAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
-    V visitBothMotorsStopAction(BothMotorsStopAction<V> bothMotorsStopAction);
+    /**
+     * visit a {@link BothMotorsStopAction}.
+     *
+     * @param bothMotorsStopAction phrase to be visited
+     */
+    default V visitBothMotorsStopAction(BothMotorsStopAction<V> bothMotorsStopAction) {
+        throw new DbcException("Block is not implemented!");
+    }
+
+    /**
+     * visit a {@link RadioRssiSensor}.
+     *
+     * @param radioRssiSensor phrase to be visited
+     */
+    default V visitRadioRssiSensor(RadioRssiSensor<V> radioRssiSensor) {
+        throw new DbcException("Block is not implemented!");
+    }
+
+    /**
+     * visit a {@link LedBarSetAction}.
+     *
+     * @param ledBarSetAction phrase to be visited
+     */
+    default V visitLedBarSetAction(LedBarSetAction<V> ledBarSetAction) {
+        throw new DbcException("Block is not implemented!");
+    }
+
+    /**
+     * visit a {@link SwitchLedMatrixAction}.
+     *
+     * @param switchLedMatrixAction phrase to be visited
+     */
+    default V visitSwitchLedMatrixAction(SwitchLedMatrixAction<V> switchLedMatrixAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
     @Override
     default V visitShowTextAction(ShowTextAction<V> showTextAction) {
@@ -255,21 +270,6 @@ public interface IMbedVisitor<V>
 
     @Override
     default V visitPlayFileAction(PlayFileAction<V> playFileAction) {
-        throw new DbcException("Not supported!");
-    }
-
-    @Override
-    V visitLightAction(LightAction<V> lightAction);
-
-    default V visitRadioRssiSensor(RadioRssiSensor<V> radioRssiSensor) {
-        throw new DbcException("Not supported!");
-    }
-
-    default V visitLedBarSetAction(LedBarSetAction<V> ledBarSetAction) {
-        throw new DbcException("Not supported!");
-    }
-
-    default V visitSwitchLedMatrixAction(SwitchLedMatrixAction<V> switchLedMatrixAction) {
         throw new DbcException("Not supported!");
     }
 }

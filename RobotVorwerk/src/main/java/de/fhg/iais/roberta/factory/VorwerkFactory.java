@@ -19,7 +19,7 @@ public class VorwerkFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return new VorwerkCompilerWorkflow(this.pluginProperties);
+        return new VorwerkCompilerWorkflow(this.pluginProperties, this.helperMethodGenerator);
     }
 
     @Override

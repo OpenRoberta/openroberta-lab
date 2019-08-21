@@ -20,8 +20,11 @@ public class MicrobitCompilerWorkflow extends AbstractCompilerWorkflow {
 
     private String compiledHex = "";
 
-    public MicrobitCompilerWorkflow(PluginProperties pluginProperties) {
+    private final HelperMethodGenerator helperMethodGenerator; // TODO pull up to abstract compiler workflow once implemented for all robots
+
+    public MicrobitCompilerWorkflow(PluginProperties pluginProperties, HelperMethodGenerator helperMethodGenerator) {
         super(pluginProperties);
+        this.helperMethodGenerator = helperMethodGenerator;
     }
 
     @Override
@@ -31,7 +34,8 @@ public class MicrobitCompilerWorkflow extends AbstractCompilerWorkflow {
             return;
         }
         try {
-            this.generatedSourceCode = MicrobitPythonVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true);
+            this.generatedSourceCode =
+                MicrobitPythonVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true, this.helperMethodGenerator);
             LOG.info("microbit python code generated");
         } catch ( Exception e ) {
             LOG.error("microbit python code generation failed", e);

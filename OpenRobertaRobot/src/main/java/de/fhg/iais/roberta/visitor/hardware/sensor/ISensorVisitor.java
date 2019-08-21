@@ -51,7 +51,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
     /**
      * visit a {@link LightSensor}.
      *
-     * @param colorSensor to be visited
+     * @param lightSensor to be visited
      */
     default V visitLightSensor(LightSensor<V> lightSensor) {
         throw new DbcException("LightSensor not implemented!");
@@ -60,7 +60,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
     /**
      * visit a {@link SoundSensor}.
      *
-     * @param colorSensor to be visited
+     * @param soundSensor to be visited
      */
     default V visitSoundSensor(SoundSensor<V> soundSensor) {
         throw new DbcException("SoundSensor not implemented!");
@@ -161,23 +161,23 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param pinTouchSensor to be visited
      */
-    default V visitPinTouchSensor(PinTouchSensor<V> sensorGetSample) {
+    default V visitPinTouchSensor(PinTouchSensor<V> pinTouchSensor) {
         throw new DbcException("PinTouchSensor not implemented!");
     }
 
     /**
      * visit a {@link GestureSensor}.
      *
-     * @param GestureSensor to be visited
+     * @param gestureSensor to be visited
      */
-    default V visitGestureSensor(GestureSensor<V> sensorGetSample) {
+    default V visitGestureSensor(GestureSensor<V> gestureSensor) {
         throw new DbcException("GestureSensor not implemented!");
     }
 
     /**
      * visit a {@link PinGetValueSensor}.
      *
-     * @param PinGetValueSensor to be visited
+     * @param pinGetValueSensor to be visited
      */
     default V visitPinGetValueSensor(PinGetValueSensor<V> pinGetValueSensor) {
         throw new DbcException("PinGetValueSensor not implemented!");
@@ -194,9 +194,9 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
     }
 
     /**
-     * visit a {@link InfraredSensor}.
+     * visit a {@link IRSeekerSensor}.
      *
-     * @param infraredSensor to be visited
+     * @param irSeekerSensor to be visited
      */
     default V visitIRSeekerSensor(IRSeekerSensor<V> irSeekerSensor) {
         throw new DbcException("IRSeekerSensor not implemented!");
@@ -205,7 +205,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
     /**
      * visit a {@link MoistureSensor}.
      *
-     * @param MoistureSensor to be visited
+     * @param moistureSensor to be visited
      */
     default V visitMoistureSensor(MoistureSensor<V> moistureSensor) {
         throw new DbcException("MoistureSensor not implemented!");
@@ -214,7 +214,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
     /**
      * visit a {@link HumiditySensor}.
      *
-     * @param HumiditySensor to be visited
+     * @param humiditySensor to be visited
      */
     default V visitHumiditySensor(HumiditySensor<V> humiditySensor) {
         throw new DbcException("HumiditySensor not implemented!");
@@ -223,7 +223,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
     /**
      * visit a {@link MotionSensor}.
      *
-     * @param MotionSensor to be visited
+     * @param motionSensor to be visited
      */
 
     default V visitMotionSensor(MotionSensor<V> motionSensor) {
@@ -233,7 +233,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
     /**
      * visit a {@link DropSensor}.
      *
-     * @param DropSensor to be visited
+     * @param dropSensor to be visited
      */
 
     default V visitDropSensor(DropSensor<V> dropSensor) {
@@ -243,7 +243,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
     /**
      * visit a {@link PulseSensor}.
      *
-     * @param PulseSensor to be visited
+     * @param pulseSensor to be visited
      */
 
     default V visitPulseSensor(PulseSensor<V> pulseSensor) {
@@ -253,7 +253,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
     /**
      * visit a {@link RfidSensor}.
      *
-     * @param RfidSensor to be visited
+     * @param rfidSensor to be visited
      */
 
     default V visitRfidSensor(RfidSensor<V> rfidSensor) {

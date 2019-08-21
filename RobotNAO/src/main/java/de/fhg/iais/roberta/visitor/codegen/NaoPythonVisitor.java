@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
+import de.fhg.iais.roberta.codegen.HelperMethodGenerator;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
@@ -13,7 +14,6 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nao.Camera;
-import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -51,24 +51,8 @@ import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
-import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
-import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
-import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
-import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
-import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
-import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
@@ -90,6 +74,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.collect.NaoUsedHardwareCollectorVisitor;
+import de.fhg.iais.roberta.visitor.collect.NaoUsedMethodCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
@@ -105,13 +90,19 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
 
     /**
      * initialize the Python code generator visitor.
-     *
+     * 
      * @param brickConfiguration hardware configuration of the brick
      * @param programPhrases to generate the code from
      * @param indentation to start with. Will be ince/decr depending on block structure
+     * @param helperMethodGenerator
      */
-    private NaoPythonVisitor(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation, ILanguage language) {
-        super(programPhrases, indentation);
+    private NaoPythonVisitor(
+        Configuration brickConfiguration,
+        ArrayList<ArrayList<Phrase<Void>>> programPhrases,
+        int indentation,
+        ILanguage language,
+        HelperMethodGenerator helperMethodGenerator) {
+        super(programPhrases, indentation, helperMethodGenerator, new NaoUsedMethodCollectorVisitor(programPhrases));
 
         NaoUsedHardwareCollectorVisitor checker = new NaoUsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
         this.usedSensors = checker.getUsedSensors();
@@ -129,58 +120,35 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, ILanguage language) {
+    public static String generate(
+        Configuration brickConfiguration,
+        ArrayList<ArrayList<Phrase<Void>>> phrasesSet,
+        boolean withWrapping,
+        ILanguage language,
+        HelperMethodGenerator helperMethodGenerator) {
         Assert.notNull(brickConfiguration);
 
-        NaoPythonVisitor astVisitor = new NaoPythonVisitor(brickConfiguration, phrasesSet, 0, language);
+        NaoPythonVisitor astVisitor = new NaoPythonVisitor(brickConfiguration, phrasesSet, 0, language, helperMethodGenerator);
         astVisitor.generateCode(withWrapping);
 
         return astVisitor.sb.toString();
     }
 
-    public static String generate(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        NaoPythonVisitor astVisitor = new NaoPythonVisitor(null, phrasesSet, 0, null);
+    public static String generate(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, HelperMethodGenerator helperMethodGenerator) {
+        NaoPythonVisitor astVisitor = new NaoPythonVisitor(null, phrasesSet, 0, null, helperMethodGenerator);
         astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
     }
 
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
-        this.sb.append("BlocklyMethods.rgb2hex(");
+        this.sb.append("int(\"{:02x}{:02x}{:02x}\".format(min(max(");
         rgbColor.getR().visit(this);
-        this.sb.append(", ");
+        this.sb.append(", 0), 255), min(max(");
         rgbColor.getG().visit(this);
-        this.sb.append(", ");
+        this.sb.append(", 0), 255), min(max(");
         rgbColor.getB().visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
-        switch ( emptyExpr.getDefVal() ) {
-            case ARRAY_STRING:
-                this.sb.append("BlocklyMethods.createListWith(\"\")");
-                break;
-            case STRING:
-                this.sb.append("\"\"");
-                break;
-            case BOOLEAN:
-                this.sb.append("True");
-                break;
-            case NUMBER_INT:
-                this.sb.append("0");
-                break;
-            case ARRAY:
-                break;
-            case NULL:
-                break;
-            case COLOR:
-                break;
-            default:
-                this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
-                break;
-        }
+        this.sb.append(", 0), 255), 16))");
         return null;
     }
 
@@ -208,7 +176,9 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         StmtList<Void> variables = mainTask.getVariables();
         variables.visit(this);
         generateUserDefinedMethods();
-        this.sb.append("\n\ndef run():");
+        nlIndent();
+        nlIndent();
+        this.sb.append("def run():");
         incrIndentation();
         if ( mainTask.getDebug().equals("TRUE") ) {
             nlIndent();
@@ -240,266 +210,6 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                 this.sb.append(vd.getName());
             }
         }
-        return null;
-    }
-
-    @Override
-    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
-        this.sb.append("print(");
-        textPrintFunct.getParam().get(0).visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
-        this.sb.append("BlocklyMethods.listsGetSubList( ");
-        getSubFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        IndexLocation where1 = (IndexLocation) getSubFunct.getStrParam().get(0);
-        this.sb.append(getEnumCode(where1));
-        if ( (where1 == IndexLocation.FROM_START) || (where1 == IndexLocation.FROM_END) ) {
-            this.sb.append(", ");
-            getSubFunct.getParam().get(1).visit(this);
-        }
-        this.sb.append(", ");
-        IndexLocation where2 = (IndexLocation) getSubFunct.getStrParam().get(1);
-        this.sb.append(getEnumCode(where2));
-        if ( (where2 == IndexLocation.FROM_START) || (where2 == IndexLocation.FROM_END) ) {
-            this.sb.append(", ");
-            if ( getSubFunct.getParam().size() == 3 ) {
-                getSubFunct.getParam().get(2).visit(this);
-            } else {
-                getSubFunct.getParam().get(1).visit(this);
-            }
-        }
-        this.sb.append(")");
-        return null;
-
-    }
-
-    @Override
-    public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        switch ( (IndexLocation) indexOfFunct.getLocation() ) {
-            case FIRST:
-                this.sb.append("BlocklyMethods.findFirst( ");
-                indexOfFunct.getParam().get(0).visit(this);
-                this.sb.append(", ");
-                indexOfFunct.getParam().get(1).visit(this);
-                this.sb.append(")");
-                break;
-            case LAST:
-                this.sb.append("BlocklyMethods.findLast( ");
-                indexOfFunct.getParam().get(0).visit(this);
-                this.sb.append(", ");
-                indexOfFunct.getParam().get(1).visit(this);
-                this.sb.append(")");
-                break;
-            default:
-                break;
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
-        switch ( lengthOfIsEmptyFunct.getFunctName() ) {
-            case LIST_LENGTH:
-                this.sb.append("BlocklyMethods.length( ");
-                lengthOfIsEmptyFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
-                break;
-
-            case LIST_IS_EMPTY:
-                this.sb.append("BlocklyMethods.isEmpty( ");
-                lengthOfIsEmptyFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
-                break;
-            default:
-                break;
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitEmptyList(EmptyList<Void> emptyList) {
-        this.sb.append("[]");
-        return null;
-    }
-
-    @Override
-    public Void visitListCreate(ListCreate<Void> listCreate) {
-        this.sb.append("BlocklyMethods.createListWith(");
-        listCreate.getValue().visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitListRepeat(ListRepeat<Void> listRepeat) {
-        this.sb.append("BlocklyMethods.createListWithItem(");
-        listRepeat.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        listRepeat.getParam().get(1).visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        this.sb.append("BlocklyMethods.listsGetIndex(");
-        listGetIndex.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        this.sb.append(getEnumCode(listGetIndex.getElementOperation()));
-        this.sb.append(", ");
-        this.sb.append(getEnumCode(listGetIndex.getLocation()));
-        if ( listGetIndex.getParam().size() == 2 ) {
-            this.sb.append(", ");
-            listGetIndex.getParam().get(1).visit(this);
-        }
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
-        this.sb.append("BlocklyMethods.listsSetIndex(");
-        listSetIndex.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        this.sb.append(getEnumCode(listSetIndex.getElementOperation()));
-        this.sb.append(", ");
-        listSetIndex.getParam().get(1).visit(this);
-        this.sb.append(", ");
-        this.sb.append(getEnumCode(listSetIndex.getLocation()));
-        if ( listSetIndex.getParam().size() == 3 ) {
-            this.sb.append(", ");
-            listSetIndex.getParam().get(2).visit(this);
-        }
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        this.sb.append("BlocklyMethods.clamp(");
-        mathConstrainFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        mathConstrainFunct.getParam().get(1).visit(this);
-        this.sb.append(", ");
-        mathConstrainFunct.getParam().get(2).visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
-        switch ( mathNumPropFunct.getFunctName() ) {
-            case EVEN:
-                this.sb.append("BlocklyMethods.isEven(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
-                break;
-            case ODD:
-                this.sb.append("BlocklyMethods.isOdd(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
-                break;
-            case PRIME:
-                this.sb.append("BlocklyMethods.isPrime(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
-                break;
-            case WHOLE:
-                this.sb.append("BlocklyMethods.isWhole(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
-                break;
-            case POSITIVE:
-                this.sb.append("BlocklyMethods.isPositive(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
-                break;
-            case NEGATIVE:
-                this.sb.append("BlocklyMethods.isNegative(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
-                break;
-            case DIVISIBLE_BY:
-                this.sb.append("BlocklyMethods.isDivisibleBy(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(", ");
-                mathNumPropFunct.getParam().get(1).visit(this);
-                this.sb.append(")");
-                break;
-            default:
-                break;
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        switch ( mathOnListFunct.getFunctName() ) {
-            case SUM:
-                this.sb.append("BlocklyMethods.sumOnList(");
-                mathOnListFunct.getParam().get(0).visit(this);
-                break;
-            case MIN:
-                this.sb.append("BlocklyMethods.minOnList(");
-                mathOnListFunct.getParam().get(0).visit(this);
-                break;
-            case MAX:
-                this.sb.append("BlocklyMethods.maxOnList(");
-                mathOnListFunct.getParam().get(0).visit(this);
-                break;
-            case AVERAGE:
-                this.sb.append("BlocklyMethods.averageOnList(");
-                mathOnListFunct.getParam().get(0).visit(this);
-                break;
-            case MEDIAN:
-                this.sb.append("BlocklyMethods.medianOnList(");
-                mathOnListFunct.getParam().get(0).visit(this);
-                break;
-            case STD_DEV:
-                this.sb.append("BlocklyMethods.standardDeviatioin(");
-                mathOnListFunct.getParam().get(0).visit(this);
-                break;
-            case RANDOM:
-                this.sb.append("BlocklyMethods.randOnList(");
-                mathOnListFunct.getParam().get(0).visit(this);
-                break;
-            case MODE:
-                this.sb.append("BlocklyMethods.modeOnList(");
-                mathOnListFunct.getParam().get(0).visit(this);
-                break;
-            default:
-                break;
-        }
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
-        this.sb.append("BlocklyMethods.randDouble()");
-        return null;
-    }
-
-    @Override
-    public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
-        this.sb.append("BlocklyMethods.randInt(");
-        mathRandomIntFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        mathRandomIntFunct.getParam().get(1).visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        this.sb.append("BlocklyMethods.textJoin(");
-        textJoinFunct.getParam().visit(this);
-        this.sb.append(")");
         return null;
     }
 
@@ -1123,7 +833,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyrometer) {
         this.sb.append("h.gyrometer(");
-        this.sb.append(getEnumCode((gyrometer.getPort())));
+        this.sb.append(getEnumCode(gyrometer.getPort()));
         this.sb.append(")");
         return null;
     }
@@ -1283,18 +993,26 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         if ( !withWrapping ) {
             return;
         }
-        this.sb.append("#!/usr/bin/python\n\n");
-        this.sb.append("import math\n");
-        this.sb.append("import time\n");
-        this.sb.append("from roberta import Hal\n");
-        this.sb.append("from roberta import BlocklyMethods\n");
-        this.sb.append("h = Hal()\n");
+        this.sb.append("#!/usr/bin/python");
+        nlIndent();
+        nlIndent();
+        this.sb.append("import math");
+        nlIndent();
+        this.sb.append("import time");
+        nlIndent();
+        this.sb.append("from roberta import Hal");
+        nlIndent();
+        this.sb.append("h = Hal()");
+        nlIndent();
         generateSensors();
 
         if ( !this.loopsLabels.isEmpty() ) {
             nlIndent();
-            this.sb.append("class BreakOutOfALoop(Exception): pass\n");
-            this.sb.append("class ContinueLoop(Exception): pass\n\n");
+            this.sb.append("class BreakOutOfALoop(Exception): pass");
+            nlIndent();
+            this.sb.append("class ContinueLoop(Exception): pass");
+            nlIndent();
+            nlIndent();
         }
     }
 
@@ -1303,20 +1021,34 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         if ( !withWrapping ) {
             return;
         }
-        this.sb.append("\n\n");
-        this.sb.append("def main():\n");
-        this.sb.append(this.INDENT).append("try:\n");
-        this.sb.append(this.INDENT).append(this.INDENT).append("run()\n");
-        this.sb.append(this.INDENT).append("except Exception as e:\n");
-        this.sb.append(this.INDENT).append(this.INDENT).append("h.say(\"Error!\" + str(e))\n");
-        this.sb.append(this.INDENT).append("finally:\n");
+        decrIndentation(); // everything is still indented from main program
+        nlIndent();
+        nlIndent();
+        this.sb.append("def main():");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("try:");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("run()");
+        decrIndentation();
+        nlIndent();
+        this.sb.append("except Exception as e:");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("h.say(\"Error!\" + str(e))");
+        decrIndentation();
+        nlIndent();
+        this.sb.append("finally:");
+        incrIndentation();
+        nlIndent();
         removeSensors();
+        this.sb.append("h.myBroker.shutdown()");
+        decrIndentation();
+        decrIndentation();
+        nlIndent();
 
-        this.sb.append(this.INDENT).append(this.INDENT).append("h.myBroker.shutdown()");
-
-        this.sb.append("\n\n");
-        this.sb.append("if __name__ == \"__main__\":\n");
-        this.sb.append(this.INDENT).append("main()");
+        super.generateProgramSuffix(withWrapping);
     }
 
     @Override
@@ -1338,22 +1070,30 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
 
     private void generateSensors() {
         for ( UsedSensor usedSensor : this.usedSensors ) {
-
             switch ( usedSensor.getType() ) {
                 case SC.ULTRASONIC:
-                    this.sb.append("h.sonar.subscribe(\"OpenRobertaApp\")\n");
+                    this.sb.append("h.sonar.subscribe(\"OpenRobertaApp\")");
+                    nlIndent();
                     break;
                 case SC.DETECT_MARK:
-                    this.sb.append("h.mark.subscribe(\"RobertaLab\", 500, 0.0)\n");
+                    this.sb.append("h.mark.subscribe(\"RobertaLab\", 500, 0.0)");
+                    nlIndent();
                     break;
                 case SC.NAO_FACE:
-                    this.sb.append("\nfrom roberta import FaceRecognitionModule\n");
-                    this.sb.append("faceRecognitionModule = FaceRecognitionModule(\"faceRecognitionModule\")\n");
+                    nlIndent();
+                    this.sb.append("from roberta import FaceRecognitionModule");
+                    nlIndent();
+                    this.sb.append("faceRecognitionModule = FaceRecognitionModule(\"faceRecognitionModule\")");
+                    nlIndent();
                     break;
                 case SC.NAO_SPEECH:
-                    this.sb.append("\nfrom roberta import SpeechRecognitionModule\n");
-                    this.sb.append("speechRecognitionModule = SpeechRecognitionModule(\"speechRecognitionModule\")\n");
-                    this.sb.append("speechRecognitionModule.pauseASR()\n");
+                    nlIndent();
+                    this.sb.append("from roberta import SpeechRecognitionModule");
+                    nlIndent();
+                    this.sb.append("speechRecognitionModule = SpeechRecognitionModule(\"speechRecognitionModule\")");
+                    nlIndent();
+                    this.sb.append("speechRecognitionModule.pauseASR()");
+                    nlIndent();
                     break;
                 case SC.COLOR:
                 case SC.INFRARED:
@@ -1380,16 +1120,20 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                 case BlocklyConstants.INFRARED:
                     break;
                 case BlocklyConstants.ULTRASONIC:
-                    this.sb.append(this.INDENT).append(this.INDENT).append("h.sonar.unsubscribe(\"OpenRobertaApp\")\n");
+                    this.sb.append("h.sonar.unsubscribe(\"OpenRobertaApp\")");
+                    nlIndent();
                     break;
                 case BlocklyConstants.DETECT_MARK:
-                    this.sb.append(this.INDENT).append(this.INDENT).append("h.mark.unsubscribe(\"RobertaLab\")\n");
+                    this.sb.append("h.mark.unsubscribe(\"RobertaLab\")");
+                    nlIndent();
                     break;
                 case BlocklyConstants.NAO_FACE:
-                    this.sb.append(this.INDENT).append(this.INDENT).append("faceRecognitionModule.unsubscribe()\n");
+                    this.sb.append("faceRecognitionModule.unsubscribe()");
+                    nlIndent();
                     break;
                 case BlocklyConstants.NAO_SPEECH:
-                    this.sb.append(this.INDENT).append(this.INDENT).append("speechRecognitionModule.unsubscribe()\n");
+                    this.sb.append("speechRecognitionModule.unsubscribe()");
+                    nlIndent();
                     break;
                 case BlocklyConstants.LIGHT:
                 case BlocklyConstants.COMPASS:

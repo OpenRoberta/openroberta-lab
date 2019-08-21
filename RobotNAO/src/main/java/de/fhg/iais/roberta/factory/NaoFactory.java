@@ -36,7 +36,7 @@ public class NaoFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return new NaoCompilerWorkflow(this.pluginProperties);
+        return new NaoCompilerWorkflow(this.pluginProperties, helperMethodGenerator);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class NaoFactory extends AbstractRobotFactory {
 
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        return NaoPythonVisitor.generate(brickConfiguration, phrasesSet, withWrapping, Language.GERMAN);
+        return NaoPythonVisitor.generate(brickConfiguration, phrasesSet, withWrapping, Language.GERMAN, this.helperMethodGenerator);
     }
 
 }

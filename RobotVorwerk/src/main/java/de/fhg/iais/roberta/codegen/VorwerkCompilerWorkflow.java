@@ -24,9 +24,12 @@ public class VorwerkCompilerWorkflow extends AbstractCompilerWorkflow {
 
     private final VorwerkCommunicator vorwerkCommunicator;
 
-    public VorwerkCompilerWorkflow(PluginProperties pluginProperties) {
+    private final HelperMethodGenerator helperMethodGenerator; // TODO pull up to abstract compiler workflow once implemented for all robots
+
+    public VorwerkCompilerWorkflow(PluginProperties pluginProperties, HelperMethodGenerator helperMethodGenerator) {
         super(pluginProperties);
         this.vorwerkCommunicator = new VorwerkCommunicator(pluginProperties.getCompilerResourceDir());
+        this.helperMethodGenerator = helperMethodGenerator;
     }
 
     @Override
@@ -39,7 +42,13 @@ public class VorwerkCompilerWorkflow extends AbstractCompilerWorkflow {
             VorwerkConfiguration configuration = (VorwerkConfiguration) data.getRobotConfiguration();
             this.vorwerkCommunicator.setCredentials(configuration.getIpAddress(), configuration.getUserName(), configuration.getPassword());
             this.generatedSourceCode =
-                VorwerkPythonVisitor.generate((VorwerkConfiguration) data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true, language);
+                VorwerkPythonVisitor
+                    .generate(
+                        (VorwerkConfiguration) data.getRobotConfiguration(),
+                        data.getProgramTransformer().getTree(),
+                        true,
+                        language,
+                        this.helperMethodGenerator);
             LOG.info("vorwerk code generated");
         } catch ( Exception e ) {
             LOG.error("vorwerk code generation failed", e);

@@ -19,7 +19,7 @@ public class RaspberryPiFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return new RaspberryPiCompilerWorkflow(this.pluginProperties);
+        return new RaspberryPiCompilerWorkflow(this.pluginProperties, this.helperMethodGenerator);
     }
 
     @Override

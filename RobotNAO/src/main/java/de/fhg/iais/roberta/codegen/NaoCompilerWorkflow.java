@@ -15,8 +15,11 @@ public class NaoCompilerWorkflow extends AbstractCompilerWorkflow {
 
     private static final Logger LOG = LoggerFactory.getLogger(NaoCompilerWorkflow.class);
 
-    public NaoCompilerWorkflow(PluginProperties pluginProperties) {
+    private final HelperMethodGenerator helperMethodGenerator; // TODO pull up to abstract compiler workflow once implemented for all robots
+
+    public NaoCompilerWorkflow(PluginProperties pluginProperties, HelperMethodGenerator helperMethodGenerator) {
         super(pluginProperties);
+        this.helperMethodGenerator = helperMethodGenerator;
     }
 
     @Override
@@ -50,7 +53,8 @@ public class NaoCompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     private String generateProgram(String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
-        String sourceCode = NaoPythonVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true, language);
+        String sourceCode =
+            NaoPythonVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true, language, this.helperMethodGenerator);
         LOG.info("generating {} code", toString().toLowerCase());
         return sourceCode;
     }

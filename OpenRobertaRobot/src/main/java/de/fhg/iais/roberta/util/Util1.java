@@ -74,9 +74,10 @@ public class Util1 {
      * @param prefixForDebug the path from the root of the YAML file include-hierarchy. For debugging of invalid YAML files.
      * @param accumulator the JSONObject into which the content of all YAML files should be merged
      * @param uri URI of the YAML file. Never null
+     * @param override whether the specific files should override content of the upstream files
      * @throws DbcException if an inconsistency is detected
      */
-    public static void loadYAMLRecursive(String prefixForDebug, JSONObject accumulator, String uri) {
+    public static void loadYAMLRecursive(String prefixForDebug, JSONObject accumulator, String uri, boolean override) {
         Assert.notNull(accumulator, "accumulating JSONObject must not be null");
         Assert.nonEmptyString(uri, "URI is null or empty at %s", prefixForDebug);
         InputStream in = getInputStream(false, uri);
@@ -84,16 +85,16 @@ public class Util1 {
             Map<?, ?> map = (Map<?, ?>) YAML.load(in);
             JSONObject toAdd = new JSONObject(map);
             Object includeObject = toAdd.remove("include");
-            Util1.mergeJsonIntoFirst(prefixForDebug, accumulator, toAdd);
+            Util1.mergeJsonIntoFirst(prefixForDebug, accumulator, toAdd, override);
             if ( includeObject != null ) {
                 if ( includeObject instanceof String ) {
                     String include = (String) includeObject;
-                    loadYAMLRecursive(prefixForDebug + " > " + uri, accumulator, include);
+                    loadYAMLRecursive(prefixForDebug + " > " + uri, accumulator, include, override);
                 } else if ( includeObject instanceof JSONArray ) {
                     JSONArray includes = (JSONArray) includeObject;
                     int length = includes.length();
                     for ( int i = 0; i < length; i++ ) {
-                        loadYAMLRecursive(prefixForDebug + " > " + uri, accumulator, includes.getString(i));
+                        loadYAMLRecursive(prefixForDebug + " > " + uri, accumulator, includes.getString(i), override);
                     }
                 }
             }
@@ -215,7 +216,7 @@ public class Util1 {
      */
     public static Properties loadProperties(boolean doLogging, String propertyURI) {
         Properties properties = new Properties();
-        propertyURI = (propertyURI == null || propertyURI.trim().equals("")) ? Util1.PROPERTY_DEFAULT_PATH : propertyURI;
+        propertyURI = propertyURI == null || propertyURI.trim().equals("") ? Util1.PROPERTY_DEFAULT_PATH : propertyURI;
         try {
             loadIncludes(properties, getInputStream(doLogging, propertyURI));
             properties.load(getInputStream(doLogging, propertyURI));
@@ -393,13 +394,15 @@ public class Util1 {
 
     /**
      * merge the properties of the JSONObject 'toAdd' RECURSIVELY to the JSONObject 'accumulator'. The keys of the leaves of the JSONObjects have to be
-     * disjunct, otherwise an 'DbcException' is thrown.
+     * disjunct when ignoreExisting is false, otherwise an 'DbcException' is thrown. If the ignoreExisting parameter is true the process wont fail and the
+     * older values are kept.
      *
      * @param prefixForDebug the path from the root of the JSONObjects to be merged. For debugging of invalid JSONObjects.
      * @param accumulator the JSONObject into which 'toAdd' should be merged
      * @param toAdd the JSONObject which has to be merged into 'accumulator'
+     * @param ignoreExisting whether the 'toAdd' objects that already exist in 'accumulator' should be ignored
      */
-    public static void mergeJsonIntoFirst(String prefixForDebug, JSONObject accumulator, JSONObject toAdd) {
+    public static void mergeJsonIntoFirst(String prefixForDebug, JSONObject accumulator, JSONObject toAdd, boolean ignoreExisting) {
         for ( String k2 : toAdd.keySet() ) {
             Object v1 = accumulator.opt(k2);
             Object v2 = toAdd.get(k2);
@@ -407,7 +410,9 @@ public class Util1 {
                 accumulator.put(k2, v2);
             } else {
                 if ( v1 instanceof JSONObject && v2 instanceof JSONObject ) {
-                    mergeJsonIntoFirst(prefixForDebug + "." + k2, (JSONObject) v1, (JSONObject) v2);
+                    mergeJsonIntoFirst(prefixForDebug + "." + k2, (JSONObject) v1, (JSONObject) v2, ignoreExisting);
+                } else if ( ignoreExisting ) {
+                    // ignore
                 } else {
                     throw new DbcException("could not merge JSON objects with prefix " + prefixForDebug + "." + k2);
                 }

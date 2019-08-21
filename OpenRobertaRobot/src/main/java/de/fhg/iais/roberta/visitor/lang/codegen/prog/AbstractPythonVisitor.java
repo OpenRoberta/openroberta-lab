@@ -1,5 +1,11 @@
 package de.fhg.iais.roberta.visitor.lang.codegen.prog;
 
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET_REMOVE;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.INSERT;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.REMOVE;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.SET;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -7,25 +13,41 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fhg.iais.roberta.codegen.AbstractCompilerWorkflow;
+import de.fhg.iais.roberta.codegen.HelperMethodGenerator;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
+import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
-
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
+import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
+import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
+import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
+import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
@@ -41,6 +63,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.collect.AbstractUsedMethodCollectorVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractLanguageVisitor;
 
 /**
@@ -48,19 +71,30 @@ import de.fhg.iais.roberta.visitor.lang.codegen.AbstractLanguageVisitor;
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
 public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractPythonVisitor.class);
+
     protected Set<String> usedGlobalVarInFunctions;
     protected boolean isProgramEmpty = false;
-    private static final ch.qos.logback.classic.Logger LOG = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(AbstractCompilerWorkflow.class);
+
+    protected final HelperMethodGenerator helperMethodGenerator; // TODO pull up to general robot
+    protected final AbstractUsedMethodCollectorVisitor languageCollectorVisitor; // TODO implement in new structure, not as member of other visitor
 
     /**
      * initialize the Python code generator visitor.
-     *
+     * 
      * @param programPhrases to generate the code from
      * @param indentation to start with. Will be ince/decr depending on block structure
+     * @param helperMethodGenerator TODO
      */
-    protected AbstractPythonVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
+    protected AbstractPythonVisitor(
+        ArrayList<ArrayList<Phrase<Void>>> programPhrases,
+        int indentation,
+        HelperMethodGenerator helperMethodGenerator,
+        AbstractUsedMethodCollectorVisitor collectorVisitor) {
         super(programPhrases, indentation);
-        LOG.setLevel(ch.qos.logback.classic.Level.TRACE);
+
+        this.helperMethodGenerator = helperMethodGenerator;
+        this.languageCollectorVisitor = collectorVisitor;
     }
 
     @Override
@@ -98,13 +132,13 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
                 this.sb.append("math.e");
                 break;
             case GOLDEN_RATIO:
-                this.sb.append("BlocklyMethods.GOLDEN_RATIO");
+                this.sb.append("(1 + 5 ** 0.5) / 2");
                 break;
             case SQRT2:
                 this.sb.append("math.sqrt(2)");
                 break;
             case SQRT1_2:
-                this.sb.append("math.sqrt(1.0/2.0)");
+                this.sb.append("math.sqrt(0.5)");
                 break;
             case INFINITY:
                 this.sb.append("float('inf')");
@@ -206,7 +240,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
                 appendTry();
                 break;
             default:
-                throw new DbcException("Invalide Repeat Statement!");
+                throw new DbcException("Invalid Repeat Statement!");
         }
         incrIndentation();
         appendPassIfEmptyBody(repeatStmt);
@@ -299,6 +333,326 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
         mathSingleFunct.getParam().get(0).visit(this);
         this.sb.append(")");
 
+        return null;
+    }
+
+    @Override
+    public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
+        this.sb.append("min(max(");
+        mathConstrainFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        mathConstrainFunct.getParam().get(1).visit(this);
+        this.sb.append("), ");
+        mathConstrainFunct.getParam().get(2).visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
+        switch ( mathNumPropFunct.getFunctName() ) {
+            case EVEN:
+                this.sb.append("(");
+                mathNumPropFunct.getParam().get(0).visit(this);
+                this.sb.append(" % 2) == 0");
+                break;
+            case ODD:
+                this.sb.append("(");
+                mathNumPropFunct.getParam().get(0).visit(this);
+                this.sb.append(" % 2) == 1");
+                break;
+            case PRIME:
+                String methodName = this.helperMethodGenerator.getHelperMethodName(FunctionNames.PRIME);
+                this.sb.append(methodName).append("(");
+                mathNumPropFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
+                break;
+            case WHOLE:
+                this.sb.append("(");
+                mathNumPropFunct.getParam().get(0).visit(this);
+                this.sb.append(" % 1) == 0");
+                break;
+            case POSITIVE:
+                mathNumPropFunct.getParam().get(0).visit(this);
+                this.sb.append(" > 0");
+                break;
+            case NEGATIVE:
+                mathNumPropFunct.getParam().get(0).visit(this);
+                this.sb.append(" < 0");
+                break;
+            case DIVISIBLE_BY:
+                mathNumPropFunct.getParam().get(0).visit(this);
+                this.sb.append(" % ");
+                mathNumPropFunct.getParam().get(1).visit(this);
+                break;
+            default:
+                break;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
+        this.sb.append("random.random()");
+        return null;
+    }
+
+    @Override
+    public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
+        this.sb.append("random.randint(");
+        mathRandomIntFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        mathRandomIntFunct.getParam().get(1).visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
+        switch ( mathOnListFunct.getFunctName() ) {
+            case SUM:
+                this.sb.append("sum(");
+                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
+                break;
+            case MIN:
+                this.sb.append("min(");
+                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
+                break;
+            case MAX:
+                this.sb.append("max(");
+                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
+                break;
+            case AVERAGE:
+                this.sb.append("float(sum(");
+                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append("))/len(");
+                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
+                break;
+            case MEDIAN:
+                this.sb.append(this.helperMethodGenerator.getHelperMethodName(FunctionNames.MEDIAN)).append("(");
+                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
+                break;
+            case STD_DEV:
+                this.sb.append(this.helperMethodGenerator.getHelperMethodName(FunctionNames.STD_DEV)).append("(");
+                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
+                break;
+            case RANDOM:
+                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append("[0]");
+                break;
+            case MODE:
+                // TODO
+                //                this.sb.append("BlocklyMethods.modeOnList(");
+                //                mathOnListFunct.getParam().get(0).visit(this);
+                break;
+            default:
+                break;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
+        this.sb.append("\"\".join(str(arg) for arg in [");
+        textJoinFunct.getParam().visit(this);
+        this.sb.append("])");
+        return null;
+    }
+
+    @Override
+    public Void visitListCreate(ListCreate<Void> listCreate) {
+        this.sb.append("[");
+        listCreate.getValue().visit(this);
+        this.sb.append("]");
+        return null;
+    }
+
+    @Override
+    public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
+        listGetIndex.getParam().get(0).visit(this);
+
+        if ( listGetIndex.getElementOperation() == GET ) {
+            this.sb.append("[");
+        } else if ( listGetIndex.getElementOperation() == REMOVE || listGetIndex.getElementOperation() == GET_REMOVE ) {
+            this.sb.append(".pop(");
+        }
+
+        switch ( (IndexLocation) listGetIndex.getLocation() ) {
+            case RANDOM: // backwards compatibility
+                // TODO?
+            case FIRST:
+                this.sb.append("0");
+                break;
+            case FROM_END:
+                this.sb.append("-1 -"); // TODO should be correct but how is it handled on other robots?
+                listGetIndex.getParam().get(1).visit(this);
+                break;
+            case FROM_START:
+                listGetIndex.getParam().get(1).visit(this);
+                break;
+            case LAST:
+                this.sb.append("-1");
+                break;
+            default:
+                break;
+        }
+        if ( listGetIndex.getElementOperation() == GET ) {
+            this.sb.append("]");
+        } else if ( listGetIndex.getElementOperation() == REMOVE || listGetIndex.getElementOperation() == GET_REMOVE ) {
+            this.sb.append(")");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
+        listSetIndex.getParam().get(0).visit(this);
+        if ( listSetIndex.getElementOperation() == SET ) {
+            this.sb.append("[");
+        } else if ( listSetIndex.getElementOperation() == INSERT ) {
+            this.sb.append(".insert(");
+        }
+        switch ( (IndexLocation) listSetIndex.getLocation() ) {
+            case RANDOM: // backwards compatibility
+                // TODO?
+            case FIRST:
+                this.sb.append("0");
+                break;
+            case FROM_END:
+                this.sb.append("-1 -");
+                listSetIndex.getParam().get(2).visit(this);
+                break;
+            case FROM_START:
+                listSetIndex.getParam().get(2).visit(this);
+                break;
+            case LAST:
+                this.sb.append("-1");
+                break;
+            default:
+                break;
+        }
+        if ( listSetIndex.getElementOperation() == SET ) {
+            this.sb.append("] = ");
+            listSetIndex.getParam().get(1).visit(this);
+        } else if ( listSetIndex.getElementOperation() == INSERT ) {
+            this.sb.append(", ");
+            listSetIndex.getParam().get(1).visit(this);
+            this.sb.append(")");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitListRepeat(ListRepeat<Void> listRepeat) {
+        this.sb.append("[");
+        listRepeat.getParam().get(0).visit(this);
+        this.sb.append("] * ");
+        listRepeat.getParam().get(1).visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
+        switch ( (IndexLocation) indexOfFunct.getLocation() ) {
+            case FIRST:
+                indexOfFunct.getParam().get(0).visit(this);
+                this.sb.append(".index(");
+                indexOfFunct.getParam().get(1).visit(this);
+                this.sb.append(")");
+                break;
+            case LAST:
+                this.sb.append("(len(");
+                indexOfFunct.getParam().get(0).visit(this);
+                this.sb.append(") - 1) - ");
+                indexOfFunct.getParam().get(0).visit(this);
+                this.sb.append("[::-1].index(");
+                indexOfFunct.getParam().get(1).visit(this);
+                this.sb.append(")");
+                break;
+            default:
+                break;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
+        if ( getSubFunct.getFunctName() == FunctionNames.GET_SUBLIST ) {
+            getSubFunct.getParam().get(0).visit(this);
+            this.sb.append("[");
+            switch ( (IndexLocation) getSubFunct.getStrParam().get(0) ) {
+                case FIRST:
+                    this.sb.append("0:");
+                    break;
+                case FROM_END:
+                    this.sb.append("-1 -");
+                    getSubFunct.getParam().get(1).visit(this);
+                    this.sb.append(":");
+                    break;
+                case FROM_START:
+                    getSubFunct.getParam().get(1).visit(this);
+                    this.sb.append(":");
+                    break;
+                default:
+                    break;
+            }
+            switch ( (IndexLocation) getSubFunct.getStrParam().get(1) ) {
+                case LAST:
+                    // append nothing
+                    break;
+                case FROM_END:
+                    this.sb.append("-1 -");
+                    try {
+                        getSubFunct.getParam().get(2).visit(this);
+                    } catch ( IndexOutOfBoundsException e ) { // means that our start index does not have a variable
+                        getSubFunct.getParam().get(1).visit(this);
+                    }
+                    break;
+                case FROM_START:
+                    try {
+                        getSubFunct.getParam().get(2).visit(this);
+                    } catch ( IndexOutOfBoundsException e ) { // means that our start index does not have a variable
+                        getSubFunct.getParam().get(1).visit(this);
+                    }
+                    break;
+                default:
+                    break;
+            }
+            this.sb.append("]");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
+        this.sb.append("print(");
+        textPrintFunct.getParam().get(0).visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
+        switch ( lengthOfIsEmptyFunct.getFunctName() ) {
+            case LIST_LENGTH:
+                this.sb.append("len( ");
+                lengthOfIsEmptyFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
+                break;
+
+            case LIST_IS_EMPTY:
+                this.sb.append("not ");
+                lengthOfIsEmptyFunct.getParam().get(0).visit(this);
+                break;
+            default:
+                break;
+        }
         return null;
     }
 
@@ -513,50 +867,52 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     }
 
     protected static Map<Binary.Op, String> binaryOpSymbols() {
-        return Collections.unmodifiableMap(
-            Stream
-                .of(
+        return Collections
+            .unmodifiableMap(
+                Stream
+                    .of(
 
-                    entry(Binary.Op.ADD, "+"),
-                    entry(Binary.Op.MINUS, "-"),
-                    entry(Binary.Op.MULTIPLY, "*"),
-                    entry(Binary.Op.DIVIDE, "/"),
-                    entry(Binary.Op.MOD, "%"),
-                    entry(Binary.Op.EQ, "=="),
-                    entry(Binary.Op.NEQ, "!="),
-                    entry(Binary.Op.LT, "<"),
-                    entry(Binary.Op.LTE, "<="),
-                    entry(Binary.Op.GT, ">"),
-                    entry(Binary.Op.GTE, ">="),
-                    entry(Binary.Op.AND, "and"),
-                    entry(Binary.Op.OR, "or"),
-                    entry(Binary.Op.MATH_CHANGE, "+="),
-                    entry(Binary.Op.TEXT_APPEND, "+="),
-                    entry(Binary.Op.IN, "in"),
-                    entry(Binary.Op.ASSIGNMENT, "="),
-                    entry(Binary.Op.ADD_ASSIGNMENT, "+="),
-                    entry(Binary.Op.MINUS_ASSIGNMENT, "-="),
-                    entry(Binary.Op.MULTIPLY_ASSIGNMENT, "*="),
-                    entry(Binary.Op.DIVIDE_ASSIGNMENT, "/="),
-                    entry(Binary.Op.MOD_ASSIGNMENT, "%=")
+                        entry(Binary.Op.ADD, "+"),
+                        entry(Binary.Op.MINUS, "-"),
+                        entry(Binary.Op.MULTIPLY, "*"),
+                        entry(Binary.Op.DIVIDE, "/"),
+                        entry(Binary.Op.MOD, "%"),
+                        entry(Binary.Op.EQ, "=="),
+                        entry(Binary.Op.NEQ, "!="),
+                        entry(Binary.Op.LT, "<"),
+                        entry(Binary.Op.LTE, "<="),
+                        entry(Binary.Op.GT, ">"),
+                        entry(Binary.Op.GTE, ">="),
+                        entry(Binary.Op.AND, "and"),
+                        entry(Binary.Op.OR, "or"),
+                        entry(Binary.Op.MATH_CHANGE, "+="),
+                        entry(Binary.Op.TEXT_APPEND, "+="),
+                        entry(Binary.Op.IN, "in"),
+                        entry(Binary.Op.ASSIGNMENT, "="),
+                        entry(Binary.Op.ADD_ASSIGNMENT, "+="),
+                        entry(Binary.Op.MINUS_ASSIGNMENT, "-="),
+                        entry(Binary.Op.MULTIPLY_ASSIGNMENT, "*="),
+                        entry(Binary.Op.DIVIDE_ASSIGNMENT, "/="),
+                        entry(Binary.Op.MOD_ASSIGNMENT, "%=")
 
-                )
-                .collect(entriesToMap()));
+                    )
+                    .collect(entriesToMap()));
     }
 
     protected static Map<Unary.Op, String> unaryOpSymbols() {
-        return Collections.unmodifiableMap(
-            Stream
-                .of(
+        return Collections
+            .unmodifiableMap(
+                Stream
+                    .of(
 
-                    entry(Unary.Op.PLUS, "+"),
-                    entry(Unary.Op.NEG, "-"),
-                    entry(Unary.Op.NOT, "not"),
-                    entry(Unary.Op.POSTFIX_INCREMENTS, "++"),
-                    entry(Unary.Op.PREFIX_INCREMENTS, "++")
+                        entry(Unary.Op.PLUS, "+"),
+                        entry(Unary.Op.NEG, "-"),
+                        entry(Unary.Op.NOT, "not"),
+                        entry(Unary.Op.POSTFIX_INCREMENTS, "++"),
+                        entry(Unary.Op.PREFIX_INCREMENTS, "++")
 
-                )
-                .collect(entriesToMap()));
+                    )
+                    .collect(entriesToMap()));
     }
 
     @Override
@@ -564,7 +920,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
         this.sb.append("# " + stmtTextComment.getTextComment());
         return null;
     }
-    
+
     @Override
     public Void visitAssertStmt(AssertStmt<Void> assertStmt) {
         this.sb.append("if not ");
@@ -573,19 +929,34 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
         incrIndentation();
         nlIndent();
         this.sb.append("print(\"Assertion failed: \", \"").append(assertStmt.getMsg()).append("\", ");
-        ((Binary<Void>)assertStmt.getAssert()).getLeft().visit(this);
-        this.sb.append(", \"").append(((Binary<Void>)assertStmt.getAssert()).getOp().toString()).append("\", ");
-        ((Binary<Void>)assertStmt.getAssert()).getRight().visit(this);
+        ((Binary<Void>) assertStmt.getAssert()).getLeft().visit(this);
+        this.sb.append(", \"").append(((Binary<Void>) assertStmt.getAssert()).getOp().toString()).append("\", ");
+        ((Binary<Void>) assertStmt.getAssert()).getRight().visit(this);
         this.sb.append(")");
         decrIndentation();
         return null;
     }
-    
+
     @Override
     public Void visitDebugAction(DebugAction<Void> debugAction) {
         this.sb.append("print(");
         debugAction.getValue().visit(this);
         this.sb.append(")");
         return null;
+    }
+
+    @Override
+    protected void generateProgramSuffix(boolean withWrapping) {
+        if ( !this.languageCollectorVisitor.getUsedFunctions().isEmpty() ) {
+            String helperMethodImpls = this.helperMethodGenerator.getHelperMethodDefinitions(this.languageCollectorVisitor.getUsedFunctions());
+            this.sb.append(helperMethodImpls);
+        }
+
+        nlIndent();
+        this.sb.append("if __name__ == \"__main__\":");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("main()");
+        decrIndentation();
     }
 }

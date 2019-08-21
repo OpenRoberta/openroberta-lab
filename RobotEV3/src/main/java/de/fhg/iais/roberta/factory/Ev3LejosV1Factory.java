@@ -6,4 +6,9 @@ public class Ev3LejosV1Factory extends AbstractEV3Factory {
     public Ev3LejosV1Factory(PluginProperties pluginProperties) {
         super(pluginProperties);
     }
+
+    @Override
+    public String getFileExtension() {
+        return "java";
+    }
 }

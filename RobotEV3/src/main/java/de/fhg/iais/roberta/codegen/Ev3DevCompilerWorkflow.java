@@ -17,8 +17,11 @@ import de.fhg.iais.roberta.visitor.codegen.Ev3PythonVisitor;
 public class Ev3DevCompilerWorkflow extends AbstractCompilerWorkflow {
     private static final Logger LOG = LoggerFactory.getLogger(Ev3DevCompilerWorkflow.class);
 
-    public Ev3DevCompilerWorkflow(PluginProperties pluginProperties) {
+    private final HelperMethodGenerator helperMethodGenerator; // TODO pull up to abstract compiler workflow once implemented for all robots
+
+    public Ev3DevCompilerWorkflow(PluginProperties pluginProperties, HelperMethodGenerator helperMethodGenerator) {
         super(pluginProperties);
+        this.helperMethodGenerator = helperMethodGenerator;
     }
 
     @Override
@@ -28,7 +31,8 @@ public class Ev3DevCompilerWorkflow extends AbstractCompilerWorkflow {
             return;
         }
         try {
-            this.generatedSourceCode = Ev3PythonVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true, language);
+            this.generatedSourceCode =
+                Ev3PythonVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true, language, this.helperMethodGenerator);
             LOG.info("ev3dev code generated");
         } catch ( Exception e ) {
             LOG.error("ev3dev code generation failed", e);

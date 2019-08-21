@@ -5,14 +5,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import de.fhg.iais.roberta.codegen.HelperMethodGenerator;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.syntax.*;
-import de.fhg.iais.roberta.syntax.action.communication.*;
+import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.syntax.MotorDuration;
+import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
@@ -35,16 +43,25 @@ import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
-import de.fhg.iais.roberta.syntax.lang.functions.*;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.generic.*;
+import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.codegen.utilities.TTSLanguageMapper;
+import de.fhg.iais.roberta.visitor.collect.Ev3UsedMethodCollectorVisitor;
 import de.fhg.iais.roberta.visitor.collect.Ev3UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
@@ -72,8 +89,13 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
      * @param programPhrases to generate the code from
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    private Ev3PythonVisitor(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation, ILanguage language) {
-        super(programPhrases, indentation);
+    private Ev3PythonVisitor(
+        Configuration brickConfiguration,
+        ArrayList<ArrayList<Phrase<Void>>> programPhrases,
+        int indentation,
+        ILanguage language,
+        HelperMethodGenerator helperMethodGenerator) {
+        super(programPhrases, indentation, helperMethodGenerator, new Ev3UsedMethodCollectorVisitor(programPhrases));
 
         Ev3UsedHardwareCollectorVisitor checkVisitor = new Ev3UsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
 
@@ -103,10 +125,11 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         Configuration brickConfiguration,
         ArrayList<ArrayList<Phrase<Void>>> programPhrases,
         boolean withWrapping,
-        ILanguage language) {
+        ILanguage language,
+        HelperMethodGenerator helperMethodGenerator) {
         Assert.notNull(brickConfiguration);
 
-        Ev3PythonVisitor astVisitor = new Ev3PythonVisitor(brickConfiguration, programPhrases, 0, language);
+        Ev3PythonVisitor astVisitor = new Ev3PythonVisitor(brickConfiguration, programPhrases, 0, language, helperMethodGenerator);
         astVisitor.generateCode(withWrapping);
 
         return astVisitor.sb.toString();
@@ -557,268 +580,15 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         StmtList<Void> variables = mainTask.getVariables();
         variables.visit(this);
         generateUserDefinedMethods();
-        this.sb.append("\n").append("def run():");
+        nlIndent();
+        this.sb.append("def run():");
         incrIndentation();
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
             nlIndent();
-            this.sb.append("global " + String.join(", ", this.usedGlobalVarInFunctions));
+            this.sb.append("global ").append(String.join(", ", this.usedGlobalVarInFunctions));
         } else {
             addPassIfProgramIsEmpty();
         }
-        return null;
-    }
-
-    @Override
-    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
-        this.sb.append("print(");
-        textPrintFunct.getParam().get(0).visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
-        this.sb.append("BlocklyMethods.listsGetSubList( ");
-        getSubFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        IndexLocation where1 = (IndexLocation) getSubFunct.getStrParam().get(0);
-        this.sb.append(getEnumCode(where1));
-        if ( (where1 == IndexLocation.FROM_START) || (where1 == IndexLocation.FROM_END) ) {
-            this.sb.append(", ");
-            getSubFunct.getParam().get(1).visit(this);
-        }
-        this.sb.append(", ");
-        IndexLocation where2 = (IndexLocation) getSubFunct.getStrParam().get(1);
-        this.sb.append(getEnumCode(where2));
-        if ( (where2 == IndexLocation.FROM_START) || (where2 == IndexLocation.FROM_END) ) {
-            this.sb.append(", ");
-            if ( getSubFunct.getParam().size() == 3 ) {
-                getSubFunct.getParam().get(2).visit(this);
-            } else {
-                getSubFunct.getParam().get(1).visit(this);
-            }
-        }
-        this.sb.append(")");
-        return null;
-
-    }
-
-    @Override
-    public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        switch ( (IndexLocation) indexOfFunct.getLocation() ) {
-            case FIRST:
-                this.sb.append("BlocklyMethods.findFirst( ");
-                indexOfFunct.getParam().get(0).visit(this);
-                this.sb.append(", ");
-                indexOfFunct.getParam().get(1).visit(this);
-                this.sb.append(")");
-                break;
-            case LAST:
-                this.sb.append("BlocklyMethods.findLast( ");
-                indexOfFunct.getParam().get(0).visit(this);
-                this.sb.append(", ");
-                indexOfFunct.getParam().get(1).visit(this);
-                this.sb.append(")");
-                break;
-            default:
-                break;
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
-        switch ( lengthOfIsEmptyFunct.getFunctName() ) {
-            case LIST_LENGTH:
-                this.sb.append("BlocklyMethods.length( ");
-                lengthOfIsEmptyFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
-                break;
-
-            case LIST_IS_EMPTY:
-                this.sb.append("BlocklyMethods.isEmpty( ");
-                lengthOfIsEmptyFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
-                break;
-            default:
-                break;
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitListCreate(ListCreate<Void> listCreate) {
-        this.sb.append("BlocklyMethods.createListWith(");
-        listCreate.getValue().visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitListRepeat(ListRepeat<Void> listRepeat) {
-        this.sb.append("BlocklyMethods.createListWithItem(");
-        listRepeat.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        listRepeat.getParam().get(1).visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        this.sb.append("BlocklyMethods.listsGetIndex(");
-        listGetIndex.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        this.sb.append(getEnumCode(listGetIndex.getElementOperation()));
-        this.sb.append(", ");
-        this.sb.append(getEnumCode(listGetIndex.getLocation()));
-        if ( listGetIndex.getParam().size() == 2 ) {
-            this.sb.append(", ");
-            listGetIndex.getParam().get(1).visit(this);
-        }
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
-        this.sb.append("BlocklyMethods.listsSetIndex(");
-        listSetIndex.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        this.sb.append(getEnumCode(listSetIndex.getElementOperation()));
-        this.sb.append(", ");
-        listSetIndex.getParam().get(1).visit(this);
-        this.sb.append(", ");
-        this.sb.append(getEnumCode(listSetIndex.getLocation()));
-        if ( listSetIndex.getParam().size() == 3 ) {
-            this.sb.append(", ");
-            listSetIndex.getParam().get(2).visit(this);
-        }
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        this.sb.append("BlocklyMethods.clamp(");
-        mathConstrainFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        mathConstrainFunct.getParam().get(1).visit(this);
-        this.sb.append(", ");
-        mathConstrainFunct.getParam().get(2).visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
-        switch ( mathNumPropFunct.getFunctName() ) {
-            case EVEN:
-                this.sb.append("BlocklyMethods.isEven(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
-                break;
-            case ODD:
-                this.sb.append("BlocklyMethods.isOdd(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
-                break;
-            case PRIME:
-                this.sb.append("BlocklyMethods.isPrime(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
-                break;
-            case WHOLE:
-                this.sb.append("BlocklyMethods.isWhole(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
-                break;
-            case POSITIVE:
-                this.sb.append("BlocklyMethods.isPositive(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
-                break;
-            case NEGATIVE:
-                this.sb.append("BlocklyMethods.isNegative(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
-                break;
-            case DIVISIBLE_BY:
-                this.sb.append("BlocklyMethods.isDivisibleBy(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(", ");
-                mathNumPropFunct.getParam().get(1).visit(this);
-                this.sb.append(")");
-                break;
-            default:
-                break;
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        switch ( mathOnListFunct.getFunctName() ) {
-            case SUM:
-                this.sb.append("BlocklyMethods.sumOnList(");
-                mathOnListFunct.getParam().get(0).visit(this);
-                break;
-            case MIN:
-                this.sb.append("BlocklyMethods.minOnList(");
-                mathOnListFunct.getParam().get(0).visit(this);
-                break;
-            case MAX:
-                this.sb.append("BlocklyMethods.maxOnList(");
-                mathOnListFunct.getParam().get(0).visit(this);
-                break;
-            case AVERAGE:
-                this.sb.append("BlocklyMethods.averageOnList(");
-                mathOnListFunct.getParam().get(0).visit(this);
-                break;
-            case MEDIAN:
-                this.sb.append("BlocklyMethods.medianOnList(");
-                mathOnListFunct.getParam().get(0).visit(this);
-                break;
-            case STD_DEV:
-                this.sb.append("BlocklyMethods.standardDeviatioin(");
-                mathOnListFunct.getParam().get(0).visit(this);
-                break;
-            case RANDOM:
-                this.sb.append("BlocklyMethods.randOnList(");
-                mathOnListFunct.getParam().get(0).visit(this);
-                break;
-            case MODE:
-                this.sb.append("BlocklyMethods.modeOnList(");
-                mathOnListFunct.getParam().get(0).visit(this);
-                break;
-            default:
-                break;
-        }
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
-        this.sb.append("BlocklyMethods.randDouble()");
-        return null;
-    }
-
-    @Override
-    public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
-        this.sb.append("BlocklyMethods.randInt(");
-        mathRandomIntFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        mathRandomIntFunct.getParam().get(1).visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        this.sb.append("BlocklyMethods.textJoin(");
-        textJoinFunct.getParam().visit(this);
-        this.sb.append(")");
         return null;
     }
 
@@ -882,22 +652,31 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
             return;
         }
         this.usedGlobalVarInFunctions.clear();
-        this.sb.append("#!/usr/bin/python\n\n");
-        this.sb.append("from __future__ import absolute_import\n");
-        this.sb.append("from roberta.ev3 import Hal\n");
-        this.sb.append("from roberta.BlocklyMethods import BlocklyMethods\n");
-        this.sb.append("from ev3dev import ev3 as ev3dev\n");
-        this.sb.append("import math\n\n");
-
-        this.sb.append("class BreakOutOfALoop(Exception): pass\n");
-        this.sb.append("class ContinueLoop(Exception): pass\n\n");
-
+        this.sb.append("#!/usr/bin/python");
+        nlIndent();
+        nlIndent();
+        this.sb.append("from __future__ import absolute_import");
+        nlIndent();
+        this.sb.append("from roberta.ev3 import Hal");
+        nlIndent();
+        this.sb.append("from ev3dev import ev3 as ev3dev");
+        nlIndent();
+        this.sb.append("import math");
+        nlIndent();
+        nlIndent();
+        this.sb.append("class BreakOutOfALoop(Exception): pass");
+        nlIndent();
+        this.sb.append("class ContinueLoop(Exception): pass");
+        nlIndent();
+        nlIndent();
         this.sb.append(generateUsedImages());
-        this.sb.append(generateRegenerateConfiguration()).append("\n");
+        this.sb.append(generateRegenerateConfiguration());
+        nlIndent();
         this.sb.append("hal = Hal(_brickConfiguration)");
 
         if ( this.isSayTextUsed ) {
-            this.sb.append("\nhal.setLanguage(\"");
+            nlIndent();
+            this.sb.append("hal.setLanguage(\"");
             this.sb.append(TTSLanguageMapper.getLanguageString(this.language));
             this.sb.append("\")");
         }
@@ -908,22 +687,38 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         if ( !withWrapping ) {
             return;
         }
-        this.sb.append("\n\n");
-        this.sb.append("def main():\n");
-        this.sb.append(this.INDENT).append("try:\n");
-        this.sb.append(this.INDENT).append(this.INDENT).append("run()\n");
-        this.sb.append(this.INDENT).append("except Exception as e:\n");
-        this.sb.append(this.INDENT).append(this.INDENT).append("hal.drawText('Fehler im EV3', 0, 0)\n");
-        this.sb.append(this.INDENT).append(this.INDENT).append("hal.drawText(e.__class__.__name__, 0, 1)\n");
+        decrIndentation(); // everything is still indented from main program
+        nlIndent();
+        nlIndent();
+        this.sb.append("def main():");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("try:");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("run()");
+        decrIndentation();
+        nlIndent();
+        this.sb.append("except Exception as e:");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("hal.drawText('Fehler im EV3', 0, 0)");
+        nlIndent();
+        this.sb.append("hal.drawText(e.__class__.__name__, 0, 1)");
+        nlIndent();
         // FIXME: we can only print about 30 chars
-        this.sb.append(this.INDENT).append(this.INDENT).append("hal.drawText(str(e), 0, 2)\n");
-        this.sb.append(this.INDENT).append(this.INDENT).append("hal.drawText('Press any key', 0, 4)\n");
-        this.sb.append(this.INDENT).append(this.INDENT).append("while not hal.isKeyPressed('any'): hal.waitFor(500)\n");
-        this.sb.append(this.INDENT).append(this.INDENT).append("raise\n");
+        this.sb.append("hal.drawText(str(e), 0, 2)");
+        nlIndent();
+        this.sb.append("hal.drawText('Press any key', 0, 4)");
+        nlIndent();
+        this.sb.append("while not hal.isKeyPressed('any'): hal.waitFor(500)");
+        nlIndent();
+        this.sb.append("raise");
+        decrIndentation();
+        decrIndentation();
+        nlIndent();
 
-        this.sb.append("\n");
-        this.sb.append("if __name__ == \"__main__\":\n");
-        this.sb.append(this.INDENT).append("main()");
+        super.generateProgramSuffix(withWrapping);
     }
 
     private String generateUsedImages() {
@@ -956,7 +751,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     private boolean isActorUsed(ConfigurationComponent actor, String port) {
         for ( UsedActor usedActor : this.usedActors ) {
             String usedActorComponentType = this.brickConfiguration.getConfigurationComponent(usedActor.getPort()).getComponentType();
-            if ( port.equals(usedActor.getPort()) && (actor.getComponentType().equals(usedActorComponentType)) ) {
+            if ( port.equals(usedActor.getPort()) && actor.getComponentType().equals(usedActorComponentType) ) {
                 return true;
             }
         }
@@ -967,7 +762,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         sb.append("    'actors': {\n");
         for ( ConfigurationComponent actor : this.brickConfiguration.getActors() ) {
             String port = actor.getUserDefinedPortName();
-            if ( (actor != null) && isActorUsed(actor, port) ) {
+            if ( actor != null && isActorUsed(actor, port) ) {
                 sb.append("        '").append(port.toString()).append("':");
                 sb.append(generateRegenerateActor(actor, port));
                 sb.append(",\n");
@@ -979,7 +774,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     private boolean isSensorUsed(ConfigurationComponent sensor, String port) {
         for ( UsedSensor usedSensor : this.usedSensors ) {
             String usedSctorComponentType = this.brickConfiguration.getConfigurationComponent(usedSensor.getPort()).getComponentType();
-            if ( port.equals(usedSensor.getPort()) && (sensor.getComponentType().equals(usedSctorComponentType)) ) {
+            if ( port.equals(usedSensor.getPort()) && sensor.getComponentType().equals(usedSctorComponentType) ) {
                 return true;
             }
         }
@@ -990,7 +785,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         sb.append("    'sensors': {\n");
         for ( ConfigurationComponent sensor : this.brickConfiguration.getSensors() ) {
             String port = sensor.getUserDefinedPortName();
-            if ( (sensor != null) && isSensorUsed(sensor, port) ) {
+            if ( sensor != null && isSensorUsed(sensor, port) ) {
                 sb.append("        '").append(port).append("':");
                 sb.append(generateRegenerateSensor(sensor, port));
                 sb.append(",\n");
