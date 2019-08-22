@@ -32,7 +32,6 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
         blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
         initView();
         initEvents();
-        LOG.info('init legal view');
     }
     exports.init = init;
 
@@ -146,6 +145,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
         if ($blocklyWrapper.hasClass('rightActive')) {
             $blocklyWrapper.closeRightView();
         } else {
+            LOG.info('legal view opened');
             $legalDiv.animate({scrollTop: 0}, 'fast');
             $blocklyWrapper.openRightView('legal', INITIAL_WIDTH);
         }
