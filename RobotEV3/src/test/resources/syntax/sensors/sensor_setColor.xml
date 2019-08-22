@@ -10,21 +10,21 @@
     <block type="robSensors_colour_getSample" id="75" >
     <mutation mode="LIGHT"></mutation>
       <field name="MODE">LIGHT</field>
-      <field name="SENSORPORT">1</field>
+      <field name="SENSORPORT">3</field>
     </block>
   </instance>
   <instance x="-11" y="187">
     <block type="robSensors_colour_getSample" id="75" >
       <mutation mode="RGB"></mutation>
       <field name="MODE">RGB</field>
-      <field name="SENSORPORT">2</field>
+      <field name="SENSORPORT">3</field>
     </block>
   </instance>
   <instance x="-11" y="224">
     <block type="robSensors_colour_getSample" id="75" >
       <mutation mode="AMBIENTLIGHT"></mutation>
       <field name="MODE">AMBIENTLIGHT</field>
-      <field name="SENSORPORT">4</field>
+      <field name="SENSORPORT">3</field>
     </block>
   </instance>
 </block_set>

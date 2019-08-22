@@ -66,6 +66,9 @@ import de.fhg.iais.roberta.visitor.collect.Ev3UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
+import static de.fhg.iais.roberta.visitor.codegen.utilities.ColorSensorUtils.isHiTecColorSensor;
+import static de.fhg.iais.roberta.visitor.codegen.utilities.ColorSensorUtils.isEV3ColorSensor;
+
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
@@ -443,23 +446,48 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
         String colorSensorPort = colorSensor.getPort();
-        switch ( colorSensor.getMode() ) {
-            case SC.AMBIENTLIGHT:
-                this.sb.append("hal.getColorSensorAmbient('" + colorSensorPort + "')");
-                break;
-            case SC.COLOUR:
-                this.sb.append("hal.getColorSensorColour('" + colorSensorPort + "')");
-                break;
-            case SC.LIGHT:
-                this.sb.append("hal.getColorSensorRed('" + colorSensorPort + "')");
-                break;
-            case SC.RGB:
-                this.sb.append("hal.getColorSensorRgb('" + colorSensorPort + "')");
-                break;
-            default:
-                throw new DbcException("Invalide mode for Color Sensor!");
+        String colorSensorType = this.brickConfiguration.getConfigurationComponent(colorSensor.getPort()).getComponentType();
+        String colorSensorMode = colorSensor.getMode();
+        String methodName;
+        if ( isHiTecColorSensor(colorSensorType) ) {
+            methodName = getHiTecColorSensorMethodName(colorSensorMode);
+        } else if ( isEV3ColorSensor(colorSensorType) ) {
+            methodName = getEV3ColorSensorMethodName(colorSensorMode);
+        } else {
+            throw new DbcException("Invalid color sensor type: " + colorSensorType);
         }
+        this.sb.append(methodName + "('" + colorSensorPort + "')");
         return null;
+    }
+
+    private String getEV3ColorSensorMethodName (String colorSensorMode) {
+        switch ( colorSensorMode ) {
+            case SC.AMBIENTLIGHT:
+                return "hal.getColorSensorAmbient";
+            case SC.COLOUR:
+                return "hal.getColorSensorColour";
+            case SC.LIGHT:
+                return "hal.getColorSensorRed";
+            case SC.RGB:
+                return "hal.getColorSensorRgb";
+            default:
+                throw new DbcException("Invalid mode for EV3 Color Sensor!");
+        }
+    }
+
+    private String getHiTecColorSensorMethodName (String colorSensorMode) {
+        switch ( colorSensorMode ) {
+            case SC.AMBIENTLIGHT:
+                return "hal.getHiTecColorSensorV2Ambient";
+            case SC.COLOUR:
+                return "hal.getHiTecColorSensorV2Colour";
+            case SC.LIGHT:
+                return "hal.getHiTecColorSensorV2Light";
+            case SC.RGB:
+                return "hal.getHiTecColorSensorV2Rgb";
+            default:
+                throw new DbcException("Invalid mode for HiTec Color Sensor V2!");
+        }
     }
 
     @Override
@@ -882,6 +910,9 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
                 break;
             case SC.IRSEEKER:
                 name = "IRSeekerSensor";
+                break;
+            case SC.HT_COLOR:
+                name = "HTColorSensorV2";
                 break;
             default:
                 throw new IllegalArgumentException("no mapping for " + sensor.getComponentType() + "to ev3dev-lang-python");

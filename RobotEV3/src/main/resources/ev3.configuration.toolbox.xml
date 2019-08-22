@@ -13,5 +13,6 @@
         <block type='robBrick_sound' />
         <block type='robBrick_compass' />
         <block type='robBrick_irseeker' />
+        <block type='robBrick_htcolour' />
     </category>
 </toolbox_set>

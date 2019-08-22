@@ -55,6 +55,11 @@ public class Ast2C4ev3VisitorTest {
         + MAIN_INIT_EV3
         + "    NEPOSetAllSensors(NULL, NULL, EV3Color, NULL);\n\n";
 
+    private static final String BEGIN_MAIN__NULL_NULL_HTCOLORV2_NULL =
+        "" //
+            + MAIN_INIT_EV3
+            + "    NEPOSetAllSensors(NULL, NULL, HTColorV2, NULL);\n\n";
+
     private static final String BEGIN_MAIN__NULLSORS =
         "" //
             + MAIN_INIT_EV3
@@ -429,6 +434,24 @@ public class Ast2C4ev3VisitorTest {
     }
 
     @Test
+    public void testReadHiTecColorSensorV2InDifferentModes () throws Exception {
+        Configuration configuration = HelperEv3ForXmlTest.makeHiTecColorSensorConfiguration();
+        String expectedCode =
+            "" //
+                + CONSTANTS_AND_IMPORTS__WITH_SMALLER_TRACK_WIDTH
+                + "Color ___color = White;\n"
+                + "double ___light = 0;\n"
+                + "std::list<double> ___rgb = ((std::list<double>){0, 0, 0});\n"
+                + BEGIN_MAIN__NULL_NULL_HTCOLORV2_NULL
+                + "___color = NEPOReadHTColorSensorV2(IN_3);\n"
+                + "___light = NEPOReadHTColorSensorV2Light(IN_3);\n"
+                + "___light = NEPOReadHTColorSensorV2AmbientLight(IN_3);\n"
+                + "___rgb = NEPOReadHTColorSensorV2RGB(IN_3);\n"
+                + END_MAIN;
+        checkCodeGeneratorForInput("/syntax/code_generator/java/read_hitec_color_sensor_v2_in_different_modes.xml", expectedCode, configuration);
+    }
+
+    @Test
     public void testRotateRegulatedUnregulatedForwardBackwardMotors () throws Exception {
         Configuration configuration = HelperEv3ForXmlTest.makeRotateRegulatedUnregulatedForwardBackwardMotors();
         String expectedCode =
@@ -446,7 +469,6 @@ public class Ast2C4ev3VisitorTest {
                 + END_MAIN;
         checkCodeGeneratorForInput("/syntax/code_generator/java/rotate_regulated_unregulated_forward_backward_motors.xml", expectedCode, configuration);
     }
-
 
     private void checkCodeGeneratorForInput(String fileName, String expectedSourceCode) throws Exception {
         checkCodeGeneratorForInput(fileName, expectedSourceCode, standardBrickConfiguration);

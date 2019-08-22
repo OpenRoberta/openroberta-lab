@@ -11,9 +11,9 @@ public class ColorSensorTest {
     public void setColor() throws Exception {
         String a =
             "\nhal.getColorSensorColour(SensorPort.S3)"
-                + "hal.getColorSensorRed(SensorPort.S1)"
-                + "hal.getColorSensorRgb(SensorPort.S2)"
-                + "hal.getColorSensorAmbient(SensorPort.S4)}";
+                + "hal.getColorSensorRed(SensorPort.S3)"
+                + "hal.getColorSensorRgb(SensorPort.S3)"
+                + "hal.getColorSensorAmbient(SensorPort.S3)}";
 
         this.h.assertCodeIsOk(a, "/syntax/sensors/sensor_setColor.xml");
     }

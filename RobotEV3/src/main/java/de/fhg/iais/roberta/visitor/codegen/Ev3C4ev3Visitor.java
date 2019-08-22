@@ -99,6 +99,9 @@ import de.fhg.iais.roberta.visitor.collect.Ev3UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
 
+import static de.fhg.iais.roberta.visitor.codegen.utilities.ColorSensorUtils.isHiTecColorSensor;
+import static de.fhg.iais.roberta.visitor.codegen.utilities.ColorSensorUtils.isEV3ColorSensor;
+
 public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<Void> {
 
     private static final List<String> EV3_SENSOR_PORTS = Lists.newArrayList("1", "2", "3", "4");
@@ -117,14 +120,10 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
      * initialize the EV3 c4ev3 code generator visitor.
      *
      * @param programPhrases
-     * @param indentation to start with. Will be incr/decr depending on block structure
+     * @param indentation    to start with. Will be incr/decr depending on block structure
      */
     private Ev3C4ev3Visitor(
-        String programName,
-        Configuration brickConfiguration,
-        ArrayList<ArrayList<Phrase<Void>>> programPhrases,
-        int indentation,
-        ILanguage language) {
+        String programName, Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation, ILanguage language) {
         super(programPhrases, indentation);
         this.programName = programName;
         Ev3UsedHardwareCollectorVisitor checkVisitor = new Ev3UsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
@@ -155,11 +154,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
      * @return
      */
     public static String generate(
-        String programName,
-        Configuration brickConfiguration,
-        ArrayList<ArrayList<Phrase<Void>>> phrasesSet,
-        boolean withWrapping,
-        ILanguage language) {
+        String programName, Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, ILanguage language) {
         Assert.notNull(programName);
         Assert.notNull(brickConfiguration);
 
@@ -263,6 +258,8 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
                 return "HTCompass";
             case SC.IRSEEKER:
                 return "HTIr";
+            case SC.HT_COLOR:
+                return "HTColorV2";
             default:
                 return "NULL";
         }
@@ -1200,51 +1197,52 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        if ( isColorSensorInLightMode(colorSensor.getMode()) ) {
-            visitColorSensorLightMode(colorSensor);
-        } else {
-            visitColorSensorColorMode(colorSensor);
+        String colorSensorType = this.brickConfiguration.getConfigurationComponent(colorSensor.getPort()).getComponentType();
+        String mode = colorSensor.getMode();
+        String port = getPrefixedInputPort(colorSensor.getPort());
+        if ( isHiTecColorSensor(colorSensorType) ) {
+            visitHiTecColorSensor(port, mode);
+        } else if ( isEV3ColorSensor(colorSensorType) ) {
+            visitEV3ColorSensor(port, mode);
         }
         return null;
     }
 
-    private boolean isColorSensorInLightMode(String mode) {
-        return mode.equals(SC.LIGHT) || mode.equals(SC.AMBIENTLIGHT);
-    }
-
-    private void visitColorSensorLightMode(ColorSensor<Void> colorSensor) {
-        this.sb
-            .append("ReadEV3ColorSensorLight(")
-            .append(getPrefixedInputPort(colorSensor.getPort()))
-            .append(", ")
-            .append(getColorSensorLightModeConstant(colorSensor.getMode()))
-            .append(")");
-    }
-
-    private String getColorSensorLightModeConstant(String mode) {
+    private void visitHiTecColorSensor(String port, String mode) {
+        String functionName;
         switch ( mode ) {
-            case SC.LIGHT:
-                return "ReflectedLight";
-            case SC.AMBIENTLIGHT:
-                return "AmbientLight";
-            default:
-                throw new DbcException("Unknown color sensor light mode");
-        }
-    }
-
-    private void visitColorSensorColorMode(ColorSensor<Void> colorSensor) {
-        String function = getReadColorSensorColorModeFunction(colorSensor.getMode());
-        this.sb.append(function + "(" + getPrefixedInputPort(colorSensor.getPort()) + ")");
-    }
-
-    private String getReadColorSensorColorModeFunction(String mode) {
-        switch ( mode ) {
-            case SC.RGB:
-                return "NEPOReadEV3ColorSensorRGB";
             case SC.COLOUR:
-                return "ReadEV3ColorSensor";
+                functionName = "NEPOReadHTColorSensorV2";
+                break;
+            case SC.LIGHT:
+                functionName = "NEPOReadHTColorSensorV2Light";
+                break;
+            case SC.AMBIENTLIGHT:
+                functionName = "NEPOReadHTColorSensorV2AmbientLight";
+                break;
+            case SC.RGB:
+                functionName = "NEPOReadHTColorSensorV2RGB";
+                break;
             default:
-                throw new DbcException("Unknown color sensor color mode");
+                throw new DbcException("Invalid mode for HT Color Sensor V2!");
+        }
+        this.sb.append(functionName + "(" + port + ")");
+    }
+
+    private void visitEV3ColorSensor(String port, String mode) {
+        switch ( mode ) {
+            case SC.COLOUR:
+                this.sb.append("ReadEV3ColorSensor(" + port + ")");
+                break;
+            case SC.LIGHT:
+                this.sb.append("ReadEV3ColorSensorLight(" + port + ", ReflectedLight)");
+                break;
+            case SC.AMBIENTLIGHT:
+                this.sb.append("ReadEV3ColorSensorLight(" + port + ", AmbientLight)");
+                break;
+            case SC.RGB:
+                this.sb.append("NEPOReadEV3ColorSensorRGB(" + port + ")");
+                break;
         }
     }
 
@@ -1310,8 +1308,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
-        this.sb
-            .append("ReadHTIrSensor(")
+        this.sb.append("ReadHTIrSensor(")
             .append(getPrefixedInputPort(irSeekerSensor.getPort()))
             .append(", ")
             .append(getIRSeekerSensorConstantMode(irSeekerSensor.getMode()))

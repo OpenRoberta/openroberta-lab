@@ -43,8 +43,12 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
         Map<String, String> motorDproperties = createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
         ConfigurationComponent motorD = new ConfigurationComponent("MEDIUM", true, "D", "D", motorDproperties);
 
+
+        Map<String, String> colourSensorProperties = createMap();
+        ConfigurationComponent colourSensor = new ConfigurationComponent("COLOR", false, "S3", "3", colourSensorProperties);
+
         final Configuration.Builder builder = new Configuration.Builder();
-        builder.setTrackWidth(18f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, motorC, motorD));
+        builder.setTrackWidth(18f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, motorC, motorD, colourSensor));
         Configuration configuration = builder.build();
         configuration.setRobotName("ev3lejosV1");
         return configuration;
@@ -87,12 +91,8 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
         ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S2", "2", Collections.emptyMap());
         ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", "3", Collections.emptyMap());
         //        ConfigurationComponent ultrasonicSensor4 = new ConfigurationComponent("ULTRASONIC", false, "S4", BlocklyConstants.NO_SLOT, "4", Collections.emptyMap());
-        final Configuration.Builder builder = new Configuration.Builder();
-        return builder
-            .setTrackWidth(17f)
-            .setWheelDiameter(5.6f)
-            .addComponents(Arrays.asList(motorA, motorB, touchSensor, ultrasonicSensor, colorSensor))
-            .build();
+
+        return build(motorA, motorB, touchSensor, ultrasonicSensor, colorSensor);
     }
 
     public static Configuration makeTouchUltrasonicColorUltrasonicConfiguration() {
@@ -106,12 +106,8 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
         ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S2", "2", Collections.emptyMap());
         ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", "3", Collections.emptyMap());
         ConfigurationComponent ultrasonicSensor4 = new ConfigurationComponent("ULTRASONIC", false, "S4", "4", Collections.emptyMap());
-        final Configuration.Builder builder = new Configuration.Builder();
-        return builder
-            .setTrackWidth(17f)
-            .setWheelDiameter(5.6f)
-            .addComponents(Arrays.asList(motorA, motorB, touchSensor, ultrasonicSensor, colorSensor, ultrasonicSensor4))
-            .build();
+
+        return build(motorA, motorB, touchSensor, ultrasonicSensor, colorSensor, ultrasonicSensor4);
     }
 
     public static Configuration makeTouchGyroInfraredUltrasonic() {
@@ -124,12 +120,8 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
         ConfigurationComponent gyro = new ConfigurationComponent("GYRO", false, "S2", "2", Collections.emptyMap());
         ConfigurationComponent infrared = new ConfigurationComponent("INFRARED", false, "S3", "3", Collections.emptyMap());
         ConfigurationComponent ultrasonicSensor4 = new ConfigurationComponent("ULTRASONIC", false, "S4", "4", Collections.emptyMap());
-        final Configuration.Builder builder = new Configuration.Builder();
-        return builder
-            .setTrackWidth(17f)
-            .setWheelDiameter(5.6f)
-            .addComponents(Arrays.asList(motorA, motorB, touchSensor, infrared, ultrasonicSensor4, gyro))
-            .build();
+
+        return build(motorA, motorB, touchSensor, infrared, ultrasonicSensor4, gyro);
     }
 
     public static Configuration makeRotateRegulatedUnregulatedForwardBackwardMotors() {
@@ -145,8 +137,22 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
         Map<String, String> motorDproperties = createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "ON", "MOTOR_DRIVE", "NONE");
         ConfigurationComponent motorD = new ConfigurationComponent("LARGE", true, "D", "D", motorDproperties);
 
+        return build(motorA, motorB, motorC, motorD);
+    }
+
+    public static Configuration makeHiTecColorSensorConfiguration() {
+        ConfigurationComponent htColor = new ConfigurationComponent("HT_COLOR", false, "S3", "3", Collections.emptyMap());
+        return build(htColor);
+    }
+
+
+    private static Configuration build(ConfigurationComponent... components) {
         final Configuration.Builder builder = new Configuration.Builder();
-        return builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, motorC, motorD)).build();
+        return builder
+            .setTrackWidth(17f)
+            .setWheelDiameter(5.6f)
+            .addComponents(Arrays.asList(components))
+            .build();
     }
 
     /**

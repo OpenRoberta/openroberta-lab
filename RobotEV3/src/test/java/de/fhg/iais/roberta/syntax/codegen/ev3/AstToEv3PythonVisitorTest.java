@@ -77,6 +77,10 @@ public class AstToEv3PythonVisitorTest {
         "" //
             + "        '3':Hal.makeColorSensor(ev3dev.INPUT_3),\n";
 
+    private static final String CFG_HT_COLOR_SENSOR_V2 =
+        "" //
+            + "        '3':Hal.makeHTColorSensorV2(ev3dev.INPUT_3),\n";
+
     private static final String CFG_ULTRASONIC_SENSOR =
         "" //
             + "        '4':Hal.makeUltrasonicSensor(ev3dev.INPUT_4),\n";
@@ -316,6 +320,28 @@ public class AstToEv3PythonVisitorTest {
 
         assertCodeIsOk(a, "/syntax/code_generator/java/read_color_sensor_in_different_modes.xml");
     }
+
+    @Test
+    public void testReadHiTecColorSensorV2InDifferentModes() throws Exception {
+        Configuration configuration = HelperEv3ForXmlTest.makeHiTecColorSensorConfiguration();
+        String a =
+            "" //
+                + IMPORTS
+                + make_globals("", CFG_HT_COLOR_SENSOR_V2)
+                + "color = 'white'\n"
+                + "light = 0\n"
+                + "rgb = [0, 0, 0]\n"
+                + "def run():\n"
+                + "    global color, light, rgb\n"
+                + "    color = hal.getHiTecColorSensorV2Colour('3')\n"
+                + "    light = hal.getHiTecColorSensorV2Light('3')\n"
+                + "    light = hal.getHiTecColorSensorV2Ambient('3')\n"
+                + "    rgb = hal.getHiTecColorSensorV2Rgb('3')\n\n"
+                + MAIN_METHOD;
+
+        assertCodeWithConfigIsOk(a, "/syntax/code_generator/java/read_hitec_color_sensor_v2_in_different_modes.xml", configuration);
+    }
+
 
     @Test
     public void testRotateRegulatedUnregulatedForwardBackwardMotors() throws Exception {
