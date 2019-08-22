@@ -36,6 +36,7 @@ require.config({
         'multSim.controller' : '../app/roberta/controller/multSim.controller',
         'progCode.controller' : '../app/roberta/controller/progCode.controller',
         'progDelete.controller' : '../app/roberta/controller/progDelete.controller',
+        'progLegal.controller' : '../app/roberta/controller/progLegal.controller',
         'progHelp.controller' : '../app/roberta/controller/progHelp.controller',
         'progInfo.controller' : '../app/roberta/controller/progInfo.controller',
         'progSim.controller' : '../app/roberta/controller/progSim.controller',
@@ -124,7 +125,7 @@ require.config({
 require([ 'require', 'wrap', 'log', 'jquery', 'jquery-cookie', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
         'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'cookieDisclaimer.controller', 'menu.controller', 'multSim.controller',
         'user.controller', 'robot.controller', 'program.controller', 'progSim.controller', 'progCode.controller', 'progDelete.controller',
-        'progHelp.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
+        'progHelp.controller', 'progLegal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
         'progTutorial.controller', 'tutorialList.controller', 'volume-meter', 'user.model', 'webview.controller' ], function(require) {
 
     $ = require('jquery', 'jquery-cookie');
@@ -146,6 +147,7 @@ require([ 'require', 'wrap', 'log', 'jquery', 'jquery-cookie', 'guiState.control
     tutorialListController = require('tutorialList.controller');
     programController = require('program.controller');
     progHelpController = require('progHelp.controller');
+    progLegalController = require('progLegal.controller');
     progInfoController = require('progInfo.controller');
     progCodeController = require('progCode.controller');
     progSimController = require('progSim.controller');
@@ -188,6 +190,7 @@ function init() {
         programController.init();
         configurationController.init();
         progHelpController.init();
+        progLegalController.init();
         progInfoController.init();
         progCodeController.init();
         progSimController.init();

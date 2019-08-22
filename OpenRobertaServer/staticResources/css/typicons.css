@@ -1,26 +1,32 @@
 @font-face {
   font-family: 'typicons';
-  src:  url('fonts/typicons.eot?h5lt5p');
-  src:  url('fonts/typicons.eot?h5lt5p#iefix') format('embedded-opentype'),
-    url('fonts/typicons.ttf?h5lt5p') format('truetype'),
-    url('fonts/typicons.woff?h5lt5p') format('woff'),
-    url('fonts/typicons.svg?h5lt5p#typicons') format('svg');
+  src:  url('fonts/typicons.eot?id5mcn');
+  src:  url('fonts/typicons.eot?id5mcn#iefix') format('embedded-opentype'),
+    url('fonts/typicons.ttf?id5mcn') format('truetype'),
+    url('fonts/typicons.woff?id5mcn') format('woff'),
+    url('fonts/typicons.svg?id5mcn#typicons') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 
 .typcn:before {
-    font-family: 'typicons';
-    speak: none;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'typicons' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+.typcn-section:before {
+  content: "\e900";
+}
 .typcn-menu_dots:before {
   content: "\e600";
 }
@@ -31,10 +37,13 @@
   content: "\e603";
 }
 .typcn-sensebox:before {
-  content: "\e900";
+  content: "\e901";
 }
 .typcn-wedo:before {
-  content: "\e901";
+  content: "\e902";
+}
+.typcn-edison:before {
+  content: "\e903";
 }
 .typcn-bob3:before {
   content: "\e905";

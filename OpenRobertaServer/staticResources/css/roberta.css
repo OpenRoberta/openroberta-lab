@@ -307,6 +307,31 @@ body.blocklyMinimalBody * {
 #infoToolbar {
     border: solid 10px #eee;
 }
+
+#legalDiv {
+	overflow-y: scroll;
+	background-color: #fff;
+	padding-top: 1.5rem;
+}
+
+#legalDiv > *:not(#legalDivHeader) {
+	padding: 1rem;
+	-webkit-touch-callout: default;
+	-webkit-user-select: text;
+	-moz-user-select: text;
+	-ms-user-select: text;
+	user-select: text;
+}
+
+#legalDiv > #legalDivHeader {
+	text-align: center;
+	font-size: 1.25em;
+}
+
+#legalDiv > #legalDivHeader > a {
+	padding: 0 1rem;
+}
+
 #helpDiv ul {
     list-style-type: none;
     display: table;

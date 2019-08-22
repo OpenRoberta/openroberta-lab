@@ -1,5 +1,5 @@
-define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.controller', 'webview.controller', 'socket.controller', 'jquery' ], function(exports,
-        UTIL, LOG, MSG, GUISTATE, HELP_C, WEBVIEW_C, SOCKET_C, $) {
+define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.controller','progLegal.controller', 'webview.controller', 'socket.controller', 'jquery' ], function(exports,
+        UTIL, LOG, MSG, GUISTATE, HELP_C, LEGAL_C, WEBVIEW_C, SOCKET_C, $) {
 
     /**
      * Init robot
@@ -651,6 +651,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         }
         GUISTATE.gui.language = language;
         HELP_C.initView();
+        LEGAL_C.loadLegalTexts();
         $('#infoContent').attr('data-placeholder', Blockly.Msg.INFO_DOCUMENTATION_HINT || 'Document your program here ...');
         $('.bootstrap-tagsinput input').attr('placeholder', Blockly.Msg.INFO_TAGS || 'Tags');
         updateTutorialMenu();
@@ -1169,4 +1170,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         }
     }
     exports.updateTutorialMenu = updateTutorialMenu;
+
+    function getLegalTextsMap() {
+        return GUISTATE.server.legalTexts;
+    }
+    exports.getLegalTextsMap = getLegalTextsMap;
 });

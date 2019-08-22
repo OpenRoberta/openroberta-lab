@@ -54,14 +54,15 @@ public class ClientInit {
         MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
         MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
         MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
-        new ClientLogger().log(LOG, fullRequest);
+        new ClientLogger().log(ClientInit.LOG, fullRequest);
         JSONObject response = new JSONObject();
         try {
             JSONObject request = fullRequest.getJSONObject("data");
-            LOG.info("INIT command. Trying to build a new HttpSessionState");
+            ClientInit.LOG.info("INIT command. Trying to build a new HttpSessionState");
             response.put("cmd", "init");
             if ( httpSessionState.isInitTokenInitialized() ) {
-                LOG.error("init-token was found during init: reload/re-use of old session? more than 1 tab? NOTE: the old init-token will be destroyed");
+                ClientInit.LOG
+                    .error("init-token was found during init: reload/re-use of old session? more than 1 tab? NOTE: the old init-token will be destroyed");
                 httpSessionState.reset();
             }
             httpSessionState.setInitToken();
@@ -100,6 +101,12 @@ public class ClientInit {
                     ? Util.getJSONObjectsFromDirectory(pathToTutorial) //
                     : new JSONObject();
             server.put("tutorial", tutorial);
+
+            String pathToLegalTexts = this.serverProperties.getStringProperty("server.admin.dir") + "/legalTexts";
+            JSONObject legalTextFiles = Util.getHTMLContentFromDirectory(pathToLegalTexts);
+
+            server.put("legalTexts", legalTextFiles);
+
             String pathToHelp = staticRecourcesDir + File.separator + "help";
             List<String> help = Util.getListOfFileNamesFromDirectory(pathToHelp, "html");
             server.put("help", help);
