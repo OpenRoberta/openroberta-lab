@@ -296,7 +296,7 @@ export class Interpreter {
                             const e = s.pop();
                             result[n - i - 1] = e;
                         }
-                        s.push( result.join("") );
+                        s.push( result.join( "" ) );
                         break;
                     }
                     case C.TIMER_SENSOR_RESET:
@@ -326,10 +326,10 @@ export class Interpreter {
                         n.setLanguage( stmt[C.LANGUAGE] );
                         break;
                     case C.SAY_TEXT_ACTION: {
-                        const pitch = s.pop();                        
+                        const pitch = s.pop();
                         const speed = s.pop();
                         const text = s.pop();
-                        return n.sayTextAction(text, speed, pitch)
+                        return n.sayTextAction( text, speed, pitch )
                     }
                     case C.VAR_DECLARATION: {
                         const name = stmt[C.NAME];
@@ -356,11 +356,11 @@ export class Interpreter {
                     case C.LIST_OPERATION: {
                         const op = stmt[C.OP];
                         const loc = stmt[C.POSITION];
-                        const value = s.pop();
                         let ix = 0;
                         if ( loc != C.LAST && loc != C.FIRST ) {
                             ix = s.pop();
                         }
+                        const value = s.pop();
                         let list = s.pop();
                         ix = this.getIndex( list, loc, ix )
                         if ( op == C.SET ) {
@@ -430,6 +430,13 @@ export class Interpreter {
             case C.IMAGE:
                 s.push( expr[C.VALUE] );
                 break;
+            case C.RGB_COLOR_CONST: {
+                const b = s.pop();
+                const g = s.pop();
+                const r = s.pop();
+                s.push( [r, g, b] );
+                break;
+            }
             case C.UNARY: {
                 const subOp = expr[C.OP];
                 switch ( subOp ) {
@@ -517,10 +524,10 @@ export class Interpreter {
                 const subOp = expr[C.OP];
                 const value = s.pop();
                 switch ( subOp ) {
-                    case 'EVEN': s.push( value % 2 === 0 ); break;
-                    case 'ODD': s.push( value % 2 !== 0 ); break;
+                    case 'EVEN': s.push( this.isWhole( value ) && value % 2 === 0 ); break;
+                    case 'ODD': s.push( this.isWhole( value ) && value % 2 !== 0 ); break;
                     case 'PRIME': s.push( this.isPrime( value ) ); break;
-                    case 'WHOLE': s.push( Number( value ) === value && value % 1 === 0 ); break;
+                    case 'WHOLE': s.push( this.isWhole( value ) ); break;
                     case 'POSITIVE': s.push( value >= 0 ); break;
                     case 'NEGATIVE': s.push( value < 0 ); break;
                     case 'DIVISIBLE_BY':
@@ -567,64 +574,23 @@ export class Interpreter {
                         }
                     }
                         break;
-                    case C.GET: {
-                        const position = expr[C.POSITION];
-                        let ix;
-                        let list;
-                        switch ( position ) {
-                            case C.FROM_START:
-                                ix = s.pop();
-                                list = s.pop();
-                                s.push( list[ix] );
-                                break;
-                            case C.FROM_END:
-                                ix = s.pop();
-                                list = s.pop();
-                                s.push( list.slice( -( ix + 1 ) )[0] );
-                                break;
-                            case C.FIRST:
-                                list = s.pop();
-                                s.push( list[0] );
-                                break;
-                            case C.LAST:
-                                list = s.pop();
-                                s.push( list.slice( -1 )[0] );
-                                break;
-                            default:
-                                throw "Invalid Position for List Manipulation";
-                        }
-
-                    }
-                        break;
-
+                    case C.GET:
+                    case C.REMOVE:
                     case C.GET_REMOVE: {
-                        const position = expr[C.POSITION];
-                        let ix;
-                        let list;
-                        switch ( position ) {
-                            case C.FROM_START:
-                                ix = s.pop();
-                                list = s.pop();
-                                s.push( list.splice( ix, 1 )[0] );
-                                break;
-                            case C.FROM_END:
-                                ix = s.pop();
-                                list = s.pop();
-                                ix = list.length - ix - 1;
-                                s.push( list.splice( ix, 1 )[0] );
-                                break;
-                            case C.FIRST:
-                                list = s.pop();
-                                s.push( list.shift() );
-                                break;
-                            case C.LAST:
-                                list = s.pop();
-                                s.push( list.pop() );
-                                break;
-                            default:
-                                throw "Invalid Position for List Manipulation";
+                        const loc = expr[C.POSITION];
+                        let ix = 0;
+                        if ( loc != C.LAST && loc != C.FIRST ) {
+                            ix = s.pop();
                         }
-
+                        let list = s.pop();
+                        ix = this.getIndex( list, loc, ix )
+                        let v = list[ix];
+                        if ( subOp == C.GET_REMOVE || subOp == C.GET ) {
+                            s.push( v );
+                        }
+                        if ( subOp == C.GET_REMOVE || subOp == C.REMOVE ) {
+                            list.splice( ix, 1 );
+                        }
                     }
                         break;
                     case C.LIST_GET_SUBLIST: {
@@ -744,6 +710,15 @@ export class Interpreter {
             if ( n % i === 0 ) { return false; }
         }
         return true;
+    }
+
+    /**
+     * return true if the value is whole number
+     * 
+     * . @param value to be checked
+     */
+    private isWhole( value: number ) {
+        return Number( value ) === value && value % 1 === 0
     }
 
 

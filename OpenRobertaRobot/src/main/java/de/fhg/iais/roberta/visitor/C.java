@@ -202,7 +202,7 @@ public class C {
     public static final String PORT_A = "portA";
     public static final String PORT_B = "portB";
     public static final String POSITION = "position";
-    public static final String POWER = "power";
+    public static final String POWER = "POWER";
     public static final String PRESENCE = "presence";
     public static final String RANDOM = "random";
     public static final String RANDOM_DOUBLE = "randDouble";

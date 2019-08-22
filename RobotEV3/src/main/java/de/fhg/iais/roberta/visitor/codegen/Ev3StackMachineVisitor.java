@@ -1,9 +1,7 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import de.fhg.iais.roberta.components.Configuration;
@@ -39,7 +37,9 @@ import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.*;
+import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.C;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
@@ -65,11 +65,37 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitColorConst(ColorConst<V> colorConst) {
-        int r = colorConst.getRedChannelInt();
-        int g = colorConst.getGreenChannelInt();
-        int b = colorConst.getBlueChannelInt();
-
-        JSONObject o = mk(C.EXPR).put(C.EXPR, "COLOR_CONST").put(C.VALUE, new JSONArray(Arrays.asList(r, g, b)));
+        String color = "";
+        switch ( colorConst.getHexValueAsString().toUpperCase() ) {
+            case "#000000":
+                color = "BLACK";
+                break;
+            case "#0057A6":
+                color = "BLUE";
+                break;
+            case "#00642E":
+                color = "GREEN";
+                break;
+            case "#F7D117":
+                color = "YELLOW";
+                break;
+            case "#B30006":
+                color = "RED";
+                break;
+            case "#FFFFFF":
+                color = "WHITE";
+                break;
+            case "#532115":
+                color = "BROWN";
+                break;
+            case "#585858":
+                color = "NONE";
+                break;
+            default:
+                colorConst.addInfo(NepoInfo.error("SIM_BLOCK_NOT_SUPPORTED"));
+                throw new DbcException("Invalid color constant: " + colorConst.getHexValueAsString());
+        }
+        JSONObject o = mk(C.EXPR).put(C.EXPR, C.COLOR_CONST).put(C.VALUE, color);
         return app(o);
     }
 

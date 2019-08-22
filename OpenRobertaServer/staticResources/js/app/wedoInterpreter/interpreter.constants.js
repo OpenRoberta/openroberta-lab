@@ -200,7 +200,7 @@ define(["require", "exports"], function (require, exports) {
     exports.PORT_A = "portA";
     exports.PORT_B = "portB";
     exports.POSITION = "position";
-    exports.POWER = "power";
+    exports.POWER = "POWER";
     exports.PRESENCE = "presence";
     exports.RANDOM = "random";
     exports.RANDOM_DOUBLE = "randDouble";

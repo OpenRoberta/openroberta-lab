@@ -345,11 +345,11 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                         case C.LIST_OPERATION: {
                             var op = stmt[C.OP];
                             var loc = stmt[C.POSITION];
-                            var value = s.pop();
                             var ix = 0;
                             if (loc != C.LAST && loc != C.FIRST) {
                                 ix = s.pop();
                             }
+                            var value = s.pop();
                             var list = s.pop();
                             ix = this.getIndex(list, loc, ix);
                             if (op == C.SET) {
@@ -419,6 +419,13 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                 case C.IMAGE:
                     s.push(expr[C.VALUE]);
                     break;
+                case C.RGB_COLOR_CONST: {
+                    var b = s.pop();
+                    var g = s.pop();
+                    var r = s.pop();
+                    s.push([r, g, b]);
+                    break;
+                }
                 case C.UNARY: {
                     var subOp = expr[C.OP];
                     switch (subOp) {
@@ -553,16 +560,16 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                     var value = s.pop();
                     switch (subOp) {
                         case 'EVEN':
-                            s.push(value % 2 === 0);
+                            s.push(this.isWhole(value) && value % 2 === 0);
                             break;
                         case 'ODD':
-                            s.push(value % 2 !== 0);
+                            s.push(this.isWhole(value) && value % 2 !== 0);
                             break;
                         case 'PRIME':
                             s.push(this.isPrime(value));
                             break;
                         case 'WHOLE':
-                            s.push(Number(value) === value && value % 1 === 0);
+                            s.push(this.isWhole(value));
                             break;
                         case 'POSITIVE':
                             s.push(value >= 0);
@@ -631,61 +638,22 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                             }
                             break;
                         case C.GET:
-                            {
-                                var position = expr[C.POSITION];
-                                var ix = void 0;
-                                var list = void 0;
-                                switch (position) {
-                                    case C.FROM_START:
-                                        ix = s.pop();
-                                        list = s.pop();
-                                        s.push(list[ix]);
-                                        break;
-                                    case C.FROM_END:
-                                        ix = s.pop();
-                                        list = s.pop();
-                                        s.push(list.slice(-(ix + 1))[0]);
-                                        break;
-                                    case C.FIRST:
-                                        list = s.pop();
-                                        s.push(list[0]);
-                                        break;
-                                    case C.LAST:
-                                        list = s.pop();
-                                        s.push(list.slice(-1)[0]);
-                                        break;
-                                    default:
-                                        throw "Invalid Position for List Manipulation";
-                                }
-                            }
-                            break;
+                        case C.REMOVE:
                         case C.GET_REMOVE:
                             {
-                                var position = expr[C.POSITION];
-                                var ix = void 0;
-                                var list = void 0;
-                                switch (position) {
-                                    case C.FROM_START:
-                                        ix = s.pop();
-                                        list = s.pop();
-                                        s.push(list.splice(ix, 1)[0]);
-                                        break;
-                                    case C.FROM_END:
-                                        ix = s.pop();
-                                        list = s.pop();
-                                        ix = list.length - ix - 1;
-                                        s.push(list.splice(ix, 1)[0]);
-                                        break;
-                                    case C.FIRST:
-                                        list = s.pop();
-                                        s.push(list.shift());
-                                        break;
-                                    case C.LAST:
-                                        list = s.pop();
-                                        s.push(list.pop());
-                                        break;
-                                    default:
-                                        throw "Invalid Position for List Manipulation";
+                                var loc = expr[C.POSITION];
+                                var ix = 0;
+                                if (loc != C.LAST && loc != C.FIRST) {
+                                    ix = s.pop();
+                                }
+                                var list = s.pop();
+                                ix = this.getIndex(list, loc, ix);
+                                var v = list[ix];
+                                if (subOp == C.GET_REMOVE || subOp == C.GET) {
+                                    s.push(v);
+                                }
+                                if (subOp == C.GET_REMOVE || subOp == C.REMOVE) {
+                                    list.splice(ix, 1);
                                 }
                             }
                             break;
@@ -844,6 +812,14 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                 }
             }
             return true;
+        };
+        /**
+         * return true if the value is whole number
+         *
+         * . @param value to be checked
+         */
+        Interpreter.prototype.isWhole = function (value) {
+            return Number(value) === value && value % 1 === 0;
         };
         Interpreter.prototype.min = function (values) {
             return Math.min.apply(null, values);

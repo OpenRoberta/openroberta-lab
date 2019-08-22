@@ -119,7 +119,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                 colorConst.addInfo(NepoInfo.error("SIM_BLOCK_NOT_SUPPORTED"));
                 throw new DbcException("Invalid color constant: " + colorConst.getHexIntAsString());
         }
-        JSONObject o = mk(C.EXPR).put(C.EXPR, "COLOR_CONST").put(C.VALUE, colorId);
+        JSONObject o = mk(C.EXPR).put(C.EXPR, C.COLOR_CONST).put(C.VALUE, colorId);
         return app(o);
     }
 
@@ -128,7 +128,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         rgbColor.getR().visit(this);
         rgbColor.getG().visit(this);
         rgbColor.getB().visit(this);
-        JSONObject o = mk(C.RGB_COLOR_CONST);
+        JSONObject o = mk(C.EXPR).put(C.EXPR, C.RGB_COLOR_CONST);
         return app(o);
     }
 

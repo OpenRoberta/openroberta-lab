@@ -243,7 +243,7 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3
         var display = this.robotBehaviour.getActionState("display", true);
         if (display) {
             if (display.text) {
-                $("#display").html($("#display").html() + '<text x=' + actions.display.x * 1.5 + ' y=' + (actions.display.y) * 12 + '>' + display.text
+                $("#display").html($("#display").html() + '<text x=' + display.x * 1.5 + ' y=' + (display.y) * 12 + '>' + display.text
                         + '</text>');
             }
             if (display.picture) {
