@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-08-20 14:30:55.224912",
+		"lastupdated": "2019-08-22 13:25:07.350983",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1183,6 +1183,7 @@
 	"MENU_RIGHT_INFO_TOOLTIP": "Open/close the program documentation view.",
 	"MENU_RIGHT_SIM_TOOLTIP": "Open/close the simulation view.",
 	"MENU_RIGHT_CODE_TOOLTIP": "Open/close the source code view.",
+	"MENU_RIGHT_LEGAL_TOOLTIP": "Open/close the legal information view.",
 	"MENU_START_SIM": "open/close simulation view",
 	"MENU_SHOW_CODE": "open/close source code view",
 	"DISPLAY_PIXEL_TITLE": "LED",

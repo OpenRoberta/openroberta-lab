@@ -629,6 +629,7 @@ Blockly.Msg.MENU_PROPERTIES = "properties";
 Blockly.Msg.MENU_RIGHT_CODE_TOOLTIP = "Open/close the source code view.";
 Blockly.Msg.MENU_RIGHT_HELP_TOOLTIP = "Open/close the help view.";
 Blockly.Msg.MENU_RIGHT_INFO_TOOLTIP = "Open/close the program documentation view.";
+Blockly.Msg.MENU_RIGHT_LEGAL_TOOLTIP = "Open/close the legal information view.";
 Blockly.Msg.MENU_RIGHT_SIM_TOOLTIP = "Open/close the simulation view.";
 Blockly.Msg.MENU_RIGHT_TUTORIAL_TOOLTIP = "open/close the tutorial's view";
 Blockly.Msg.MENU_ROBOT = "robot";

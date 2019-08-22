@@ -629,6 +629,7 @@ Blockly.Msg.MENU_PROPERTIES = "egenskaper";
 Blockly.Msg.MENU_RIGHT_CODE_TOOLTIP = "Öppna/stäng källkodsvyn";
 Blockly.Msg.MENU_RIGHT_HELP_TOOLTIP = "Öppna/stäng hjälpvyn";
 Blockly.Msg.MENU_RIGHT_INFO_TOOLTIP = "Öppna/stäng vyn för programdokumentation";
+Blockly.Msg.MENU_RIGHT_LEGAL_TOOLTIP = "Open/close the legal information view.";  // untranslated
 Blockly.Msg.MENU_RIGHT_SIM_TOOLTIP = "Öppna/stäng simuleringsvyn";
 Blockly.Msg.MENU_RIGHT_TUTORIAL_TOOLTIP = "öppna/stäng hjälpvyn";
 Blockly.Msg.MENU_ROBOT = "robot";

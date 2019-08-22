@@ -629,6 +629,7 @@ Blockly.Msg.MENU_PROPERTIES = "propietats";
 Blockly.Msg.MENU_RIGHT_CODE_TOOLTIP = "Open/close the source code view.";  // untranslated
 Blockly.Msg.MENU_RIGHT_HELP_TOOLTIP = "Obre/tanca l'ajuda";
 Blockly.Msg.MENU_RIGHT_INFO_TOOLTIP = "Obre/tanca la vista d'informació";
+Blockly.Msg.MENU_RIGHT_LEGAL_TOOLTIP = "Open/close the legal information view.";  // untranslated
 Blockly.Msg.MENU_RIGHT_SIM_TOOLTIP = "Open/close the simulation view.";  // untranslated
 Blockly.Msg.MENU_RIGHT_TUTORIAL_TOOLTIP = "open/close the tutorial's view";  // untranslated
 Blockly.Msg.MENU_ROBOT = "robot";

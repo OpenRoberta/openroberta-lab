@@ -629,6 +629,7 @@ Blockly.Msg.MENU_PROPERTIES = "propriétés";
 Blockly.Msg.MENU_RIGHT_CODE_TOOLTIP = "Ouvrir/fermer l'onglet code source.";
 Blockly.Msg.MENU_RIGHT_HELP_TOOLTIP = "aide";
 Blockly.Msg.MENU_RIGHT_INFO_TOOLTIP = "informations";
+Blockly.Msg.MENU_RIGHT_LEGAL_TOOLTIP = "Open/close the legal information view.";  // untranslated
 Blockly.Msg.MENU_RIGHT_SIM_TOOLTIP = "Ouvrir/fermer l'onglet simulation.";
 Blockly.Msg.MENU_RIGHT_TUTORIAL_TOOLTIP = "Ouvrir/fermer l'onglet tutoriel.";
 Blockly.Msg.MENU_ROBOT = "robot";

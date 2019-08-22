@@ -629,6 +629,7 @@ Blockly.Msg.MENU_PROPERTIES = "性能";
 Blockly.Msg.MENU_RIGHT_CODE_TOOLTIP = "打開/關閉原始程式碼視圖。";
 Blockly.Msg.MENU_RIGHT_HELP_TOOLTIP = "打開/關閉説明視圖";
 Blockly.Msg.MENU_RIGHT_INFO_TOOLTIP = "打開/關閉程式文檔視圖。";
+Blockly.Msg.MENU_RIGHT_LEGAL_TOOLTIP = "Open/close the legal information view.";  // untranslated
 Blockly.Msg.MENU_RIGHT_SIM_TOOLTIP = "打開/關閉模擬視圖。";
 Blockly.Msg.MENU_RIGHT_TUTORIAL_TOOLTIP = "打開/關閉教程的視圖";
 Blockly.Msg.MENU_ROBOT = "機器人";
