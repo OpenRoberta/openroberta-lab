@@ -308,11 +308,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             }
             $('#menuRunProg').parent().addClass('disabled');
             $('#menuConnect').parent().removeClass('disabled');
+            setPing(true);
             break;
         case GUISTATE.gui.connectionType.LOCAL:
         case GUISTATE.gui.connectionType.AUTO:
             SOCKET_C.listRobotStop();
-            //console.log('autoConnection');
             $('#head-navi-icon-robot').removeClass('error');
             $('#head-navi-icon-robot').removeClass('busy');
             $('#head-navi-icon-robot').addClass('wait');
@@ -321,25 +321,16 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             }
             $('#menuRunProg').parent().removeClass('disabled');
             $('#menuConnect').parent().addClass('disabled');
+            setPing(false);
             break;
         case GUISTATE.gui.connectionType.AGENTORTOKEN:
             SOCKET_C.listRobotStart();
             if (GUISTATE.gui.isAgent == true) {
                 updateMenuStatus();
-                //console.log('arduino based bobot was selected');
             } else {
                 $('#menuConnect').parent().removeClass('disabled');
             }
-            break;
-        case GUISTATE.gui.connectionType.AGENT:
-            //console.log("agent selected");
-            SOCKET_C.listRobotStart();
-            if (GUISTATE.gui.isAgent == true) {
-                updateMenuStatus();
-                //console.log('arduino based bobot was selected');
-            } else {
-                $('#menuConnect').parent().addClass('disabled');
-            }
+            setPing(true);
             break;
         case GUISTATE.gui.connectionType.WEBVIEW:
             SOCKET_C.listRobotStop();
@@ -357,9 +348,10 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             } else {
                 $('#robotConnect').addClass('disabled');
             }
+            setPing(false);
             break;
         default:
-            //console.log('unknown connection');
+            setPing(true);
             break;
         }
 

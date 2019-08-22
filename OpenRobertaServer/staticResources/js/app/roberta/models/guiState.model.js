@@ -33,7 +33,6 @@ define([ 'exports', 'message', 'comm' ], function(exports, MSG, COMM) {
         exports.gui.fileExtension = ''
         exports.gui.connectionType = {
             TOKEN : 'token',
-            AGENT : 'arduinoAgent',
             AUTO : 'autoConnection',
             AGENTORTOKEN : 'arduinoAgentOrToken',
             LOCAL : 'local',
