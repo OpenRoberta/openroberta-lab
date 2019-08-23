@@ -7,6 +7,7 @@ EV3DUDER="$SCRIPTPATH/ev3duder"
 UF2_TOOL="$SCRIPTPATH/files2uf2-0.1.1-SNAPSHOT.jar"
 TMP_FOLDER=/tmp/upload-c4ev3/prjs
 
+rm -rf $TMP_FOLDER
 mkdir -p $TMP_FOLDER
 result=$?
 if [[ $result -ne 0 ]]; then
@@ -21,8 +22,8 @@ function print_help {
 	echo "Permissions: this script will ask for your password (using sudo)"
 	echo "to access the USB device."
 	echo ""
-	echo "usage: upload.sh <program.uf2>"
-	echo "example: ./upload.sh NEPOprog.uf2"
+	echo "usage: upload-c4ev3 <program.uf2>"
+	echo "example: upload-c4ev3 NEPOprog.uf2"
 }
 
 function extract_uf2 {
