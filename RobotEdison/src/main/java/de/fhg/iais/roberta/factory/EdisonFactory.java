@@ -28,7 +28,7 @@ public class EdisonFactory extends AbstractRobotFactory {
      * @return the compiler workflow
      */
     @Override public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return new EdisonCompilerWorkflow(this.pluginProperties);
+        return new EdisonCompilerWorkflow(this.pluginProperties, this.helperMethodGenerator);
     }
 
     /**

@@ -29,13 +29,16 @@ public class EdisonCompilerWorkflow extends AbstractCompilerWorkflow {
     private static final Logger LOG = LoggerFactory.getLogger(EdisonCompilerWorkflow.class);
     private String compiledWav = null;
 
+    private final HelperMethodGenerator helperMethodGenerator; // TODO pull up to abstract compiler workflow once implemented for all robots
+
     /**
      * Constructor, calls super() constructor
      *
      * @param pluginProperties the Edison's plugins properties, from edison.properties
      */
-    public EdisonCompilerWorkflow(PluginProperties pluginProperties) {
+    public EdisonCompilerWorkflow(PluginProperties pluginProperties, HelperMethodGenerator helperMethodGenerator) {
         super(pluginProperties);
+        this.helperMethodGenerator = helperMethodGenerator;
     }
 
     /**
@@ -54,7 +57,7 @@ public class EdisonCompilerWorkflow extends AbstractCompilerWorkflow {
 
         try {
             this.generatedSourceCode =
-                EdisonPythonVisitor.generate(transformer.getRobotConfiguration(), transformer.getProgramTransformer().getTree(), true, language);
+                EdisonPythonVisitor.generate(transformer.getRobotConfiguration(), transformer.getProgramTransformer().getTree(), true, language, this.helperMethodGenerator);
 
             LOG.info("Edison code generated.");
 

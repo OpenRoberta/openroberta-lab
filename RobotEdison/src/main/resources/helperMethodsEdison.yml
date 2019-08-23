@@ -1,0 +1,129 @@
+include: "classpath:/helperMethodsCommon.yml"
+# method names are based on FunctionNames
+# languages are based on HelperMethodGenerator.Language
+PRIME:
+  PYTHON: |
+    this.sb.append("def isPrime(number):");
+                        incrIndentation();
+                        nlIndent();
+                        this.sb.append("if number <= 1: return False");
+                        nlIndent();
+                        this.sb.append("newNum = number - 2");
+                        nlIndent();
+                        this.sb.append("for x in range(newNum):");
+                        incrIndentation();
+                        nlIndent();
+                        this.sb.append("y = (x + 2)");
+                        nlIndent();
+                        this.sb.append("if (number % y) == 0: return False");
+                        decrIndentation();
+                        nlIndent();
+                        this.sb.append("return True");
+                        decrIndentation();
+                        nlIndent();
+MAX:
+  PYTHON: |
+    this.sb.append("def max(list):");
+                        incrIndentation();
+                        nlIndent();
+                        this.sb.append("max_of_list = list[0]");
+                        nlIndent();
+                        this.sb.append("listLength = len(list)");
+                        nlIndent();
+                        this.sb.append("for i in range(listLength):");
+                        incrIndentation();
+                        nlIndent();
+                        this.sb.append("if list[i] > max_of_list:");
+                        incrIndentation();
+                        nlIndent();
+                        this.sb.append("max_of_list = list[i]");
+                        decrIndentation();
+                        decrIndentation();
+                        nlIndent();
+                        this.sb.append("return max_of_list");
+                        decrIndentation();
+                        nlIndent();
+MIN:
+  PYTHON: |
+    this.sb.append("def min(list):");
+                        incrIndentation();
+                        nlIndent();
+                        this.sb.append("min_of_list = list[0]");
+                        nlIndent();
+                        this.sb.append("listLength = len(list)");
+                        nlIndent();
+                        this.sb.append("for i in range(listLength):");
+                        incrIndentation();
+                        nlIndent();
+                        this.sb.append("if list[i] < min_of_list:");
+                        incrIndentation();
+                        nlIndent();
+                        this.sb.append("min_of_list = list[i]");
+                        decrIndentation();
+                        decrIndentation();
+                        nlIndent();
+                        this.sb.append("return min_of_list");
+                        decrIndentation();
+                        nlIndent();
+SUM:
+  PYTHON: |
+    this.sb.append("def sum(list):");
+                        incrIndentation();
+                        nlIndent();
+                        this.sb.append("sum_of_list = 0");
+                        nlIndent();
+                        this.sb.append("listLength = len(list)");
+                        nlIndent();
+                        this.sb.append("for i in range(listLength): sum_of_list = (sum_of_list + list[i])");
+                        nlIndent();
+                        this.sb.append("return sum_of_list");
+                        decrIndentation();
+                        nlIndent();
+AVERAGE:
+  PYTHON: |
+    this.sb.append("def avg(list):");
+                        incrIndentation();
+                        nlIndent();
+
+                        this.sb.append("returnValue = sum(list) / len(list)");
+                        nlIndent();
+                        this.sb.append("return returnValue");
+                        decrIndentation();
+                        nlIndent();
+LISTS_REPEAT:
+  PYTHON: |
+    this.sb.append("def create_repeat(item, times):");
+                        incrIndentation();
+                        nlIndent();
+                        this.sb.append("list = Ed.List(times)");
+                        nlIndent();
+                        this.sb.append("listLength = len(list)");
+                        nlIndent();
+                        this.sb.append("for i in range(listLength): list[i] = item");
+                        nlIndent();
+                        this.sb.append("return list");
+                        decrIndentation();
+                        nlIndent();
+ROUND:
+  PYTHON: |
+    def round(num): return ((num+5)/10)*10
+ROUNDUP:
+  PYTHON: |
+    def round_up(num): return ((num/10)+1)*10
+ROUNDDOWN:
+  PYTHON: |
+    def round_down(num): return (num/10)
+POW10:
+  PYTHON: |
+    this.sb.append("def pow10(num):");
+                        incrIndentation(); nlIndent();
+                        this.sb.append("powered = 10");
+                        nlIndent();
+                        this.sb.append("newNum = num-1");
+                        nlIndent();
+                        this.sb.append("for _temp_x in range(newNum):");
+                        incrIndentation(); nlIndent();
+                        this.sb.append("powered = powered * 10");
+                        decrIndentation(); nlIndent();
+                        this.sb.append("return powered");
+                        decrIndentation(); nlIndent();

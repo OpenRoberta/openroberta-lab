@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast;
 
 import de.fhg.iais.roberta.util.test.edison.HelperEdisonForXmlTest;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class SensorTest {
@@ -23,7 +24,8 @@ public class SensorTest {
 
     @Test
     public void TestObstacleDetectorSensor() throws Exception {
-        String expected = insertIntoResult("[[Location [x=239, y=178], InfraredSensor [OBSTACLEDETECTOR, OBSTACLEAHEAD, EMPTY_SLOT]]]");
+        String expected = insertIntoResult("[[Location [x=305, y=50], MainTask [\n"
+            + "exprStmt VarDeclaration [BOOLEAN, Element, SensorExpr [InfraredSensor [FRONT, OBSTACLE, EMPTY_SLOT]], false, true]]]]");
         Assert.assertEquals(expected, this.h.generateTransformerString("/ast/sensor/obstacledetector.xml"));
     }
 

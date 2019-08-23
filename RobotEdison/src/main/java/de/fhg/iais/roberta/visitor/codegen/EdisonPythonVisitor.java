@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
+import de.fhg.iais.roberta.codegen.HelperMethodGenerator;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
@@ -30,6 +31,7 @@ import de.fhg.iais.roberta.syntax.sensors.edison.ResetSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.collect.EdisonUsedHardwareCollectorVisitor;
+import de.fhg.iais.roberta.visitor.collect.EdisonUsedMethodCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IEdisonVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
@@ -62,8 +64,9 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @param indentation    to start with. Will be incremented/decremented depending on block structure
      * @param language       the language
      */
-    public EdisonPythonVisitor(Configuration brickConfig, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation, ILanguage language) {
-        super(programPhrases, indentation);
+    public EdisonPythonVisitor(Configuration brickConfig, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation, ILanguage language,
+        HelperMethodGenerator helperMethodGenerator) {
+        super(programPhrases, indentation, helperMethodGenerator, new EdisonUsedMethodCollectorVisitor(programPhrases));
         this.brickConfig = brickConfig;
 
         EdisonUsedHardwareCollectorVisitor checker = new EdisonUsedHardwareCollectorVisitor(programPhrases, brickConfig);
@@ -371,10 +374,11 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @return the source code as a String
      */
     public static String generate(
-        Configuration brickCfg, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping, ILanguage language) {
+        Configuration brickCfg, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping, ILanguage language,
+        HelperMethodGenerator helperMethodGenerator) {
         Assert.notNull(brickCfg);
 
-        EdisonPythonVisitor visitor = new EdisonPythonVisitor(brickCfg, programPhrases, 0, language);
+        EdisonPythonVisitor visitor = new EdisonPythonVisitor(brickCfg, programPhrases, 0, language, helperMethodGenerator);
         visitor.generateCode(withWrapping);
 
         return visitor.sb.toString();

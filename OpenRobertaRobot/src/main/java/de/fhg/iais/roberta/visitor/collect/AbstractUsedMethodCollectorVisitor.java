@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
  */
 public abstract class AbstractUsedMethodCollectorVisitor implements ICollectorVisitor {
 
-    private final Set<FunctionNames> usedFunctions = new HashSet<>();
+    protected final Set<FunctionNames> usedFunctions = new HashSet<>();
 
     public AbstractUsedMethodCollectorVisitor(List<ArrayList<Phrase<Void>>> programPhrases) {
         collect(programPhrases);

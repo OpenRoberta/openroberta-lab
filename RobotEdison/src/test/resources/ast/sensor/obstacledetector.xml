@@ -1,10 +1,23 @@
 <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="2.0" description="" tags="">
-    <instance x="239" y="178">
-        <block type="robSensors_infrared_getSample" id="Oeu%E`F:FQcz!6=+GikM" intask="false">
-            <mutation mode="OBSTACLEAHEAD"></mutation>
-            <field name="MODE">OBSTACLEAHEAD</field>
-            <field name="SENSORPORT">OBSTACLEDETECTOR</field>
-            <field name="SLOT"></field>
+    <instance x="305" y="50">
+        <block type="robControls_start" id="|9wgHn~+[bAWc@ug4m-w" intask="true" deletable="false">
+            <mutation declare="true"></mutation>
+            <field name="DEBUG">TRUE</field>
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id="Z1Se%dA|wyOIvn,y[xdF" intask="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="Boolean"></mutation>
+                    <field name="VAR">Element</field>
+                    <field name="TYPE">Boolean</field>
+                    <value name="VALUE">
+                        <block type="robSensors_infrared_getSample" id="uR2#h{g!e9KUVgRym51g" intask="true">
+                            <mutation mode="OBSTACLE"></mutation>
+                            <field name="MODE">OBSTACLE</field>
+                            <field name="SENSORPORT">FRONT</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+            </statement>
         </block>
     </instance>
 </block_set>
