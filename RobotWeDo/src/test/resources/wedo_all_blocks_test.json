@@ -473,6 +473,12 @@
 							"kind": "IfStatement"
 						}
 					]
+				},
+				{
+					"opc": "flowControl",
+					"conditional": false,
+					"break": true,
+					"kind": "IfStatement"
 				}
 			]
 		},
@@ -838,7 +844,7 @@
 			"expr": "randDouble"
 		},
 		{
-		"NUMBER": 2,
+			"NUMBER": 2,
 			"opc": "createTextJoin"
 		},
 		{
@@ -1223,7 +1229,7 @@
 			"opc": "expr",
 			"expr": "Binary"
 		},
-	{
+		{
 			"op": "ODD",
 			"opc": "expr",
 			"expr": "MathPropFunct"
@@ -1247,7 +1253,7 @@
 			"opc": "expr",
 			"expr": "Binary"
 		},
-	{
+		{
 			"op": "PRIME",
 			"opc": "expr",
 			"expr": "MathPropFunct"
@@ -1271,7 +1277,7 @@
 			"opc": "expr",
 			"expr": "Binary"
 		},
-	{
+		{
 			"op": "WHOLE",
 			"opc": "expr",
 			"expr": "MathPropFunct"
@@ -1295,7 +1301,7 @@
 			"opc": "expr",
 			"expr": "Binary"
 		},
-	{
+		{
 			"op": "POSITIVE",
 			"opc": "expr",
 			"expr": "MathPropFunct"
@@ -1319,7 +1325,7 @@
 			"opc": "expr",
 			"expr": "Binary"
 		},
-	{
+		{
 			"op": "NEGATIVE",
 			"opc": "expr",
 			"expr": "MathPropFunct"

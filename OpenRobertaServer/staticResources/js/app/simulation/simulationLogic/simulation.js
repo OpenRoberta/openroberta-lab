@@ -371,7 +371,7 @@ define([ 'exports', 'simulation.scene', 'simulation.math', 'program.controller',
             if (!robots[i].pause && !pause) {
                 if (!interpreters[i].isTerminated() && !reset) {
                     if (runRenderUntil[i] <= now) {
-                        var delayMs = interpreters[i].run(now + 10);
+                        var delayMs = interpreters[i].run(now + 5);
                         var nowNext = new Date().getTime()
                         runRenderUntil[i] = nowNext + delayMs;
                     }

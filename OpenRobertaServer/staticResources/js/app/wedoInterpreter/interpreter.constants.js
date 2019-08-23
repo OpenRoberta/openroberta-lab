@@ -75,7 +75,7 @@ define(["require", "exports"], function (require, exports) {
     exports.FOR = "FOR";
     exports.FOREVER = "FOREVER";
     exports.FOREWARD = "FOREWARD";
-    exports.FOR_EACH = "forEach";
+    exports.FOR_EACH = "FOR_EACH";
     exports.FREEFALL = "freefall";
     exports.FREQUENCY = "frequency";
     exports.FROM_END = "from_end";

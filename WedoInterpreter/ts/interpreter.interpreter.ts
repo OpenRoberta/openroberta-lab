@@ -241,6 +241,22 @@ export class Interpreter {
                                 s.setVar( runVariableName, value );
                                 s.pushOps( stmt[C.STMT_LIST] );
                             }
+                        } else if (stmt[C.MODE] === C.FOR_EACH) {
+                            const runVariableName = stmt[C.EACH_COUNTER];
+                            const varName = stmt[C.NAME];
+                            const listName = stmt[C.LIST];
+                            const list = s.getVar(listName);
+                            const end = list.length;
+                            const incr = s.get0();
+                            const value = s.getVar( runVariableName ) + incr;
+                            if ( +value >= +end ) {
+                                s.popOpsUntil( C.REPEAT_STMT );
+                                s.getOp(); // the repeat has terminated
+                            } else {
+                                s.setVar( runVariableName, value );
+                                s.bindVar( varName, list[value] );
+                                s.pushOps( stmt[C.STMT_LIST] );
+                            }
                         }
                         break;
                     case C.SHOW_TEXT_ACTION: {
@@ -635,6 +651,7 @@ export class Interpreter {
                     case C.DIVIDE: s.push( 0 + left / right ); break;
                     case C.POWER: s.push( Math.pow( left, right ) ); break;
                     case C.MOD: s.push( left % right ); break;
+                    case C.IN: console.log("IN BINARY OPERATOR"); break;
                     //                    case C.IMAGE_SHIFT_ACTION: s.push( this.shiftImage( left, right ) ); break;
                     default:
                         U.dbcException( "invalid binary expr supOp: " + subOp );
@@ -677,6 +694,25 @@ export class Interpreter {
                 s.pushOps( contl ); s.getOp(); // pseudo execution. Init is already done. Continuation is for termination only.
                 s.pushOps( cont[C.STMT_LIST] );
                 break;
+                
+            case C.FOR_EACH:{
+                const runVariableName = stmt[C.EACH_COUNTER];
+                const varName = stmt[C.NAME];
+                const listName = stmt[C.LIST];
+                const start = s.get1();
+                const list = s.getVar(listName)
+                const end = list.length;
+                if ( +start >= +end ) {
+                    s.pop(); s.pop(); s.pop();
+                } else {
+                    s.bindVar( runVariableName, start );
+                    s.bindVar( varName, list[start] );
+                    s.pushOps( contl ); s.getOp(); // pseudo excution. Init is already done. Continuation is for termination only.
+                    s.pushOps( cont[C.STMT_LIST] );
+                    break;
+                }
+                break;
+            }
             case C.TIMES:
             case C.FOR: {
                 const runVariableName = stmt[C.NAME];

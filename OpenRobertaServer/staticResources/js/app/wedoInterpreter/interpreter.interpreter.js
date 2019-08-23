@@ -231,6 +231,24 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                                     s.pushOps(stmt[C.STMT_LIST]);
                                 }
                             }
+                            else if (stmt[C.MODE] === C.FOR_EACH) {
+                                var runVariableName = stmt[C.EACH_COUNTER];
+                                var varName = stmt[C.NAME];
+                                var listName = stmt[C.LIST];
+                                var list = s.getVar(listName);
+                                var end = list.length;
+                                var incr = s.get0();
+                                var value = s.getVar(runVariableName) + incr;
+                                if (+value >= +end) {
+                                    s.popOpsUntil(C.REPEAT_STMT);
+                                    s.getOp(); // the repeat has terminated
+                                }
+                                else {
+                                    s.setVar(runVariableName, value);
+                                    s.bindVar(varName, list[value]);
+                                    s.pushOps(stmt[C.STMT_LIST]);
+                                }
+                            }
                             break;
                         case C.SHOW_TEXT_ACTION: {
                             var text = s.pop();
@@ -726,6 +744,9 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                         case C.MOD:
                             s.push(left % right);
                             break;
+                        case C.IN:
+                            console.log("IN BINARY OPERATOR");
+                            break;
                         //                    case C.IMAGE_SHIFT_ACTION: s.push( this.shiftImage( left, right ) ); break;
                         default:
                             U.dbcException("invalid binary expr supOp: " + subOp);
@@ -768,6 +789,28 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                     s.getOp(); // pseudo execution. Init is already done. Continuation is for termination only.
                     s.pushOps(cont[C.STMT_LIST]);
                     break;
+                case C.FOR_EACH: {
+                    var runVariableName = stmt[C.EACH_COUNTER];
+                    var varName = stmt[C.NAME];
+                    var listName = stmt[C.LIST];
+                    var start = s.get1();
+                    var list = s.getVar(listName);
+                    var end = list.length;
+                    if (+start >= +end) {
+                        s.pop();
+                        s.pop();
+                        s.pop();
+                    }
+                    else {
+                        s.bindVar(runVariableName, start);
+                        s.bindVar(varName, list[start]);
+                        s.pushOps(contl);
+                        s.getOp(); // pseudo excution. Init is already done. Continuation is for termination only.
+                        s.pushOps(cont[C.STMT_LIST]);
+                        break;
+                    }
+                    break;
+                }
                 case C.TIMES:
                 case C.FOR: {
                     var runVariableName = stmt[C.NAME];

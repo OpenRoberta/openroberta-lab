@@ -19,65 +19,15 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.StartActivityTask;
-import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.Binary;
-import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
-import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
-import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
-import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
-import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
-import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
-import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
-import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.ShadowExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.StmtExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
-import de.fhg.iais.roberta.syntax.lang.expr.Unary;
-import de.fhg.iais.roberta.syntax.lang.expr.Var;
-import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
-import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
-import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
-import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
-import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
-import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.lang.expr.*;
+import de.fhg.iais.roberta.syntax.lang.functions.*;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
-import de.fhg.iais.roberta.syntax.lang.stmt.ActionStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.*;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt.Mode;
-import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon.Flow;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
-import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -378,13 +328,26 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         }
 
         // The "real" repeat cases
-        if ( (mode == Mode.FOREVER) || (mode == Mode.TIMES) || (mode == Mode.FOR) ) {
+        if ( (mode == Mode.FOREVER) || (mode == Mode.TIMES) || (mode == Mode.FOR) || (mode == Mode.FOR_EACH) ) {
             pushOpArray();
             repeatStmt.getList().visit(this);
             List<JSONObject> repeatBody = popOpArray();
             JSONObject cont = mk(C.REPEAT_STMT_CONTINUATION).put(C.MODE, mode).put(C.STMT_LIST, repeatBody);
             JSONObject repeat = mk(C.REPEAT_STMT).put(C.MODE, mode).put(C.STMT_LIST, Arrays.asList(cont));
             if ( mode == Mode.FOREVER ) {
+                return app(repeat);
+            } else if ( mode == Mode.FOR_EACH ) {
+                pushOpArray();
+                repeatStmt.getExpr().visit(this);
+                List<JSONObject> timesExprs = popOpArray();
+                JSONObject decl = timesExprs.remove(1);
+                JSONObject listName = timesExprs.remove(1);
+                timesExprs.set(1, mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 1));
+                this.opArray.addAll(timesExprs);
+                String varName = decl.getString(C.NAME);
+                String runVarName = varName + "_runningVariable";
+                cont.put(C.NAME, varName).put(C.EACH_COUNTER, runVarName).put(C.LIST, listName.getString(C.NAME));
+                repeat.put(C.NAME, varName).put(C.EACH_COUNTER, runVarName).put(C.LIST, listName.getString(C.NAME));
                 return app(repeat);
             } else {
                 pushOpArray();
@@ -415,6 +378,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
             cont.put(C.STMT_LIST, exprAndBody);
             return app(repeat);
         }
+
         throw new DbcException("invalid repeat mode: " + mode);
     }
 
