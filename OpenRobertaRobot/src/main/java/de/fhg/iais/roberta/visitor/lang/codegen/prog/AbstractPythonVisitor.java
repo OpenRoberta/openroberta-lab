@@ -381,9 +381,11 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
                 this.sb.append(" < 0");
                 break;
             case DIVISIBLE_BY:
+                this.sb.append("(");
                 mathNumPropFunct.getParam().get(0).visit(this);
                 this.sb.append(" % ");
                 mathNumPropFunct.getParam().get(1).visit(this);
+                this.sb.append(") == 0");
                 break;
             default:
                 break;

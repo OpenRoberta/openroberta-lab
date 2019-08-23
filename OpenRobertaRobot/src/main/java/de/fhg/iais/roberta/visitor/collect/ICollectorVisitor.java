@@ -3,6 +3,8 @@ package de.fhg.iais.roberta.visitor.collect;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.fhg.iais.roberta.syntax.MotionParam;
+import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
@@ -519,6 +521,12 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
         if ( durationValue != null ) { // TODO why is this necessary?
             motorOnAction.getDurationValue().visit(this);
         }
+        MotionParam<Void> param = motorOnAction.getParam();
+        MotorDuration<Void> duration = param.getDuration();
+        if (duration != null) { // TODO why is this necessary?
+            duration.getValue().visit(this);
+        }
+        param.getSpeed().visit(this);
         return null;
     }
 

@@ -5,6 +5,7 @@ import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.PluginProperties;
+import de.fhg.iais.roberta.visitor.collect.EdisonUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.EdisonBrickValidatorVisitor;
@@ -20,6 +21,8 @@ public class EdisonFactory extends AbstractRobotFactory {
      */
     public EdisonFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
+
+        this.helperMethodGenerator.addAdditionalEnum(EdisonUsedHardwareCollectorVisitor.Method.class);
     }
 
     /**

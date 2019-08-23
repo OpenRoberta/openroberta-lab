@@ -57,7 +57,7 @@ public class EdisonCompilerWorkflow extends AbstractCompilerWorkflow {
 
         try {
             this.generatedSourceCode =
-                EdisonPythonVisitor.generate(transformer.getRobotConfiguration(), transformer.getProgramTransformer().getTree(), true, language, this.helperMethodGenerator);
+                EdisonPythonVisitor.generate(transformer.getRobotConfiguration(), transformer.getProgramTransformer().getTree(), true, this.helperMethodGenerator);
 
             LOG.info("Edison code generated.");
 

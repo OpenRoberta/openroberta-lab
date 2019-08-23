@@ -18,7 +18,7 @@ def run():
     item2 = (item % 1) == 0
     item2 = item > 0
     item2 = item < 0
-    item2 = item % item
+    item2 = (item % item) == 0
     item = random.randint(1, 100)
     item = random.random()
 

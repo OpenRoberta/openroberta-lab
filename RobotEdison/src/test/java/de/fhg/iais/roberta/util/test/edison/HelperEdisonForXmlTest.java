@@ -80,7 +80,7 @@ public class HelperEdisonForXmlTest extends AbstractHelperForXmlTest {
      */
     private String generatePythonWithoutWrapping(String pathToProgramXml) throws Exception {
         Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = EdisonPythonVisitor.generate(this.getRobotConfiguration(), transformer.getTree(), false, Language.ENGLISH, this.getRobotFactory().getHelperMethodGenerator());
+        String code = EdisonPythonVisitor.generate(this.getRobotConfiguration(), transformer.getTree(), false, this.getRobotFactory().getHelperMethodGenerator());
         return code;
     }
 
@@ -94,7 +94,7 @@ public class HelperEdisonForXmlTest extends AbstractHelperForXmlTest {
      */
     public String generatePython(String pathToProgramXml) throws Exception {
         Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = EdisonPythonVisitor.generate(this.getRobotConfiguration(), transformer.getTree(), true, Language.ENGLISH, this.getRobotFactory().getHelperMethodGenerator());
+        String code = EdisonPythonVisitor.generate(this.getRobotConfiguration(), transformer.getTree(), true, this.getRobotFactory().getHelperMethodGenerator());
         return code;
     }
 

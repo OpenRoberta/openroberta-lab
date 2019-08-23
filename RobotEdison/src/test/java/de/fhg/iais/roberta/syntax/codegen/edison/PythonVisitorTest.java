@@ -61,27 +61,27 @@ public class PythonVisitorTest {
     @Test
     public void visitMathNumPropFunctTest() throws Exception {
         //even
-        String expectedResult = "item=True\n\nitem=((42%2)==0)";
+        String expectedResult = "item=True\n\nitem=(42%2)==0";
         h.assertCodeIsOk(expectedResult, "/syntax/math/num_prop_1.xml");
 
         //odd
-        expectedResult = "item=True\n\nitem=((42%2)!=0)";
+        expectedResult = "item=True\n\nitem=(42%2)==1";
         h.assertCodeIsOk(expectedResult, "/syntax/math/num_prop_2.xml");
 
         //prime
-        expectedResult = "item=True\n\nitem=isPrime(42)";
+        expectedResult = "item=True\n\nitem=_isPrime(42)";
         h.assertCodeIsOk(expectedResult, "/syntax/math/num_prop_3.xml");
 
         //positive
-        expectedResult = "item=True\n\nitem=(42>=0)";
+        expectedResult = "item=True\n\nitem=42>0";
         h.assertCodeIsOk(expectedResult, "/syntax/math/num_prop_4.xml");
 
         //negative
-        expectedResult = "item=True\n\nitem=(42<0)";
+        expectedResult = "item=True\n\nitem=42<0";
         h.assertCodeIsOk(expectedResult, "/syntax/math/num_prop_5.xml");
 
         //divisible by
-        expectedResult = "item=True\n\nitem=((42%13)==0)";
+        expectedResult = "item=True\n\nitem=(42%13)==0";
         h.assertCodeIsOk(expectedResult, "/syntax/math/num_prop_6.xml");
     }
 
@@ -93,7 +93,7 @@ public class PythonVisitorTest {
 
     @Test
     public void visitListRepeatTest() throws Exception {
-        String expectedResult = "item=create_repeat(7,3)";
+        String expectedResult = "item=_create_repeat(7,3)";
         h.assertCodeIsOk(expectedResult, "/syntax/lists/list_repeat.xml");
     }
 
@@ -137,17 +137,17 @@ public class PythonVisitorTest {
     @Test
     public void visitSensorWaitUntilTest() throws Exception {
         String expectedResult =
-              "whileTrue:if(Ed.ReadKeypad()==Ed.KEYPAD_TRIANGLE)==True:breakpass"
-                  + "whileTrue:if(Ed.ReadKeypad()==Ed.KEYPAD_ROUND)==True:breakpass"
-                  + "whileTrue:if(obstacle_detection(Ed.OBSTACLE_LEFT))==True:breakpass"
-                  + "whileTrue:if(obstacle_detection(Ed.OBSTACLE_RIGHT))==True:breakpass"
-                  + "whileTrue:if(obstacle_detection(Ed.OBSTACLE_AHEAD))==True:breakpass"
-                  + "whileTrue:if(ir_seek(1))<30:breakpass"
-                  + "whileTrue:if(Ed.ReadLeftLightLevel()/32767*100)<30:breakpass"
-                  + "whileTrue:if(Ed.ReadRightLightLevel()/32767*100)<30:breakpass"
-                  + "whileTrue:if(Ed.ReadLineTracker()/32767*100)<30:breakpass"
-                  + "whileTrue:if(Ed.LineState()==Ed.LINE_ON_BLACK)==True:breakpass"
-                  + "whileTrue:if(Ed.ReadClapSensor()==Ed.CLAP_DETECTED)==True:breakpass";
+              "whileTrue:ifEd.ReadKeypad()==Ed.KEYPAD_TRIANGLE==True:breakpass"
+                  + "whileTrue:ifEd.ReadKeypad()==Ed.KEYPAD_ROUND==True:breakpass"
+                  + "whileTrue:ifobstacle_detection(Ed.OBSTACLE_LEFT)==True:breakpass"
+                  + "whileTrue:ifobstacle_detection(Ed.OBSTACLE_RIGHT)==True:breakpass"
+                  + "whileTrue:ifobstacle_detection(Ed.OBSTACLE_AHEAD)==True:breakpass"
+                  + "whileTrue:ifir_seek(1)<30:breakpass"
+                  + "whileTrue:ifEd.ReadLeftLightLevel()/32767*100<30:breakpass"
+                  + "whileTrue:ifEd.ReadRightLightLevel()/32767*100<30:breakpass"
+                  + "whileTrue:ifEd.ReadLineTracker()/32767*100<30:breakpass"
+                  + "whileTrue:ifEd.ReadLineState()==Ed.LINE_ON_BLACK==True:breakpass"
+                  + "whileTrue:ifEd.ReadClapSensor()==Ed.CLAP_DETECTED==True:breakpass";
         h.assertCodeIsOk(expectedResult, "/syntax/sensor/wait.xml");
     }
 
@@ -216,7 +216,7 @@ public class PythonVisitorTest {
 
     @Test
     public void visitListGetIndexTest() throws Exception {
-        String expectedResult = "item=Ed.List(1,[-30])item2=0item2=item[0-1]";
+        String expectedResult = "item=Ed.List(1,[-30])item2=0item2=item[0]";
         h.assertCodeIsOk(expectedResult, "/syntax/lists/get_index.xml");
     }
 

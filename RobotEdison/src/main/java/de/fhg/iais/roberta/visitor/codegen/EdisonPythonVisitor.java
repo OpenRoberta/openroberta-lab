@@ -1,10 +1,9 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
+import java.util.ArrayList;
+
 import de.fhg.iais.roberta.codegen.HelperMethodGenerator;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.UsedActor;
-import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
@@ -20,13 +19,25 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.edison.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.edison.SendIRAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.lang.expr.*;
-import de.fhg.iais.roberta.syntax.lang.functions.*;
-import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
+import de.fhg.iais.roberta.syntax.lang.expr.Binary;
+import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
+import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
+import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
+import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
+import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
+import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.generic.*;
+import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensors.edison.ResetSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -35,8 +46,7 @@ import de.fhg.iais.roberta.visitor.collect.EdisonUsedMethodCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IEdisonVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
-import java.util.ArrayList;
-import java.util.Set;
+import static de.fhg.iais.roberta.syntax.lang.functions.FunctionNames.LISTS_REPEAT;
 
 /**
  * This class visits the Blockly blocks for the Edison robot and translates them into EdPy Python2 code (https://github.com/Bdanilko/EdPy)
@@ -46,12 +56,9 @@ import java.util.Set;
 public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdisonVisitor<Void> {
 
     protected final Configuration brickConfig;
-    protected final Set<UsedSensor> usedSensors;
-    protected final Set<UsedActor> usedActors;
-    protected final Set<EdisonUsedHardwareCollectorVisitor.Method> usedMethods;
-    protected ILanguage lang;
-    private String newLine = System.getProperty("line.separator");
     private int soundFileName = 0;
+
+    private final EdisonUsedHardwareCollectorVisitor usedHardwareCollector;
 
     /**
      * initialize the Python code generator visitor.
@@ -62,20 +69,15 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @param brickConfig    hardware configuration of the robot (fixed)
      * @param programPhrases to generate the code from
      * @param indentation    to start with. Will be incremented/decremented depending on block structure
-     * @param language       the language
      */
-    public EdisonPythonVisitor(Configuration brickConfig, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation, ILanguage language,
+    public EdisonPythonVisitor(Configuration brickConfig, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation,
         HelperMethodGenerator helperMethodGenerator) {
         super(programPhrases, indentation, helperMethodGenerator, new EdisonUsedMethodCollectorVisitor(programPhrases));
         this.brickConfig = brickConfig;
 
-        EdisonUsedHardwareCollectorVisitor checker = new EdisonUsedHardwareCollectorVisitor(programPhrases, brickConfig);
-        this.usedSensors = checker.getUsedSensors();
-        this.usedActors = checker.getUsedActors();
-        this.usedMethods = checker.getUsedMethods();
-        this.usedGlobalVarInFunctions = checker.getMarkedVariablesAsGlobal();
-        this.lang = language;
-        this.loopsLabels = checker.getloopsLabelContainer();
+        this.usedHardwareCollector = new EdisonUsedHardwareCollectorVisitor(programPhrases, brickConfig);
+        this.usedGlobalVarInFunctions = this.usedHardwareCollector.getMarkedVariablesAsGlobal();
+        this.loopsLabels = this.usedHardwareCollector.getloopsLabelContainer();
     }
 
     /**
@@ -92,8 +94,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         this.sb.append("Ed.EdisonVersion = Ed.V2"); nlIndent();
         this.sb.append("Ed.DistanceUnits = Ed.CM"); nlIndent();
         this.sb.append("Ed.Tempo = Ed.TEMPO_SLOW"); nlIndent();
-        this.sb.append("obstacleDetectionOn = False"); nlIndent(); //nur wenn benötigt
-        this.sb.append("Ed.LineTrackerLed(Ed.ON)"); nlIndent(); //nur wenn benötigt
+        this.sb.append("obstacleDetectionOn = False"); nlIndent(); //nur wenn benötigt TODO
+        this.sb.append("Ed.LineTrackerLed(Ed.ON)"); nlIndent(); //nur wenn benötigt TODO
         this.sb.append("Ed.ReadClapSensor()"); nlIndent(); //zur Sicherheit -- um den Sensor zurückzusetzen
         this.sb.append("Ed.ReadLineState()"); nlIndent();
         this.sb.append("Ed.TimeWait(250, Ed.TIME_MILLISECONDS)"); //möglicherweise überflüssig
@@ -110,256 +112,19 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         if (!withWrapping) {
             return;
         }
-
-        decrIndentation(); nlIndent(); //new line for helper methods
+        decrIndentation();  // everything is still indented from main program
+        nlIndent(); //new line for helper methods
         nlIndent();
         this.sb.append("def shorten(num): return ((num+5)/10)"); nlIndent(); //This method is used so often that it comes with every program
 
-        for ( EdisonUsedHardwareCollectorVisitor.Method m : this.usedMethods) {
-            this.sb.append(newLine);
+        if ( !this.usedHardwareCollector.getUsedMethods().isEmpty() ) {
+            String helperMethodImpls = this.helperMethodGenerator.getHelperMethodDefinitions(this.usedHardwareCollector.getUsedMethods());
+            this.sb.append(helperMethodImpls);
+        }
 
-            switch (m) {
-                case AVG:
-                    this.sb.append("def avg(list):");
-                    incrIndentation();
-                    nlIndent();
-
-                    this.sb.append("returnValue = sum(list) / len(list)");
-                    nlIndent();
-                    this.sb.append("return returnValue");
-                    decrIndentation();
-                    nlIndent();
-                    break;
-                case SUM:
-                    this.sb.append("def sum(list):");
-                    incrIndentation();
-                    nlIndent();
-                    this.sb.append("sum_of_list = 0");
-                    nlIndent();
-                    this.sb.append("listLength = len(list)");
-                    nlIndent();
-                    this.sb.append("for i in range(listLength): sum_of_list = (sum_of_list + list[i])");
-                    nlIndent();
-                    this.sb.append("return sum_of_list");
-                    decrIndentation();
-                    nlIndent();
-                    break;
-                case MIN:
-                    this.sb.append("def min(list):");
-                    incrIndentation();
-                    nlIndent();
-                    this.sb.append("min_of_list = list[0]");
-                    nlIndent();
-                    this.sb.append("listLength = len(list)");
-                    nlIndent();
-                    this.sb.append("for i in range(listLength):");
-                    incrIndentation();
-                    nlIndent();
-                    this.sb.append("if list[i] < min_of_list:");
-                    incrIndentation();
-                    nlIndent();
-                    this.sb.append("min_of_list = list[i]");
-                    decrIndentation();
-                    decrIndentation();
-                    nlIndent();
-                    this.sb.append("return min_of_list");
-                    decrIndentation();
-                    nlIndent();
-                    break;
-                case MAX:
-                    this.sb.append("def max(list):");
-                    incrIndentation();
-                    nlIndent();
-                    this.sb.append("max_of_list = list[0]");
-                    nlIndent();
-                    this.sb.append("listLength = len(list)");
-                    nlIndent();
-                    this.sb.append("for i in range(listLength):");
-                    incrIndentation();
-                    nlIndent();
-                    this.sb.append("if list[i] > max_of_list:");
-                    incrIndentation();
-                    nlIndent();
-                    this.sb.append("max_of_list = list[i]");
-                    decrIndentation();
-                    decrIndentation();
-                    nlIndent();
-                    this.sb.append("return max_of_list");
-                    decrIndentation();
-                    nlIndent();
-                    break;
-                case CREATE_REPEAT:
-                    this.sb.append("def create_repeat(item, times):");
-                    incrIndentation();
-                    nlIndent();
-                    this.sb.append("list = Ed.List(times)");
-                    nlIndent();
-                    this.sb.append("listLength = len(list)");
-                    nlIndent();
-                    this.sb.append("for i in range(listLength): list[i] = item");
-                    nlIndent();
-                    this.sb.append("return list");
-                    decrIndentation();
-                    nlIndent();
-                    break;
-                case PRIME:
-                    this.sb.append("def isPrime(number):");
-                    incrIndentation();
-                    nlIndent();
-                    this.sb.append("if number <= 1: return False");
-                    nlIndent();
-                    this.sb.append("newNum = number - 2");
-                    nlIndent();
-                    this.sb.append("for x in range(newNum):");
-                    incrIndentation();
-                    nlIndent();
-                    this.sb.append("y = (x + 2)");
-                    nlIndent();
-                    this.sb.append("if (number % y) == 0: return False");
-                    decrIndentation();
-                    nlIndent();
-                    this.sb.append("return True");
-                    decrIndentation();
-                    nlIndent();
-                    break;
-                case OBSTACLEDETECTION:
-                    this.sb.append("def obstacle_detection(mode):");
-                    incrIndentation(); nlIndent();
-                    this.sb.append("global obstacleDetectionOn");
-                    nlIndent();
-                    this.sb.append("if (obstacleDetectionOn == False):");
-                    incrIndentation(); nlIndent();
-                    this.sb.append("Ed.ObstacleDetectionBeam(Ed.ON)");
-                    nlIndent();
-                    this.sb.append("obstacleDetectionOn = True");
-                    decrIndentation(); nlIndent();
-                    this.sb.append("return Ed.ReadObstacleDetection() == mode");
-                    decrIndentation(); nlIndent();
-                    break;
-                case IRSEND:
-                    this.sb.append("def ir_send(payload):");
-                    incrIndentation(); nlIndent();
-                    this.sb.append("global obstacleDetectionOn");
-                    nlIndent();
-                    this.sb.append("if (obstacleDetectionOn == True):");
-                    incrIndentation(); nlIndent();
-                    this.sb.append("Ed.ObstacleDetectionBeam(Ed.OFF)");
-                    nlIndent();
-                    this.sb.append("obstacleDetectionOn = False");
-                    decrIndentation(); nlIndent();
-                    this.sb.append("Ed.SendIRData(payload)");
-                    decrIndentation(); nlIndent();
-                    break;
-                case IRSEEK:
-                    //mode: 0 = edison IR data; 1 = remote control data
-                    this.sb.append("def ir_seek(mode):");
-                    incrIndentation(); nlIndent();
-                    this.sb.append("global obstacleDetectionOn");
-                    nlIndent();
-                    this.sb.append("if (obstacleDetectionOn == True):");
-                    incrIndentation(); nlIndent();
-                    this.sb.append("Ed.ObstacleDetectionBeam(Ed.OFF)");
-                    nlIndent();
-                    this.sb.append("obstacleDetectionOn = False");
-                    decrIndentation(); nlIndent();
-                    this.sb.append("if (mode == 0): return Ed.ReadIRData()");
-                    nlIndent();
-                    this.sb.append("elif (mode == 1): return Ed.ReadRemote()");
-                    decrIndentation(); decrIndentation(); nlIndent();
-                    break;
-                case MOTORON:
-                    //motor: 0 = LMOTOR; 1 = RMOTOR
-                    //distance: Entweder integer oder Ed.DISTANCE_UNLIMITED
-                    this.sb.append("def motor_on(motor, power, distance):");
-                    incrIndentation(); nlIndent();
-                    this.sb.append("if (motor == 0):");
-                    incrIndentation(); nlIndent();
-                    this.sb.append("if (power < 0): Ed.DriveLeftMotor(Ed.BACKWARD, -shorten(power), distance)");
-                    nlIndent();
-                    this.sb.append("else: Ed.DriveLeftMotor(Ed.FORWARD, shorten(power), distance)");
-                    decrIndentation(); nlIndent();
-                    this.sb.append("if (motor == 1):");
-                    incrIndentation(); nlIndent();
-                    this.sb.append("if (power < 0): Ed.DriveRightMotor(Ed.BACKWARD, -shorten(power), distance)");
-                    nlIndent();
-                    this.sb.append("else: Ed.DriveRightMotor(Ed.FORWARD, shorten(power), distance)");
-                    decrIndentation(); decrIndentation(); nlIndent();
-                    break;
-                case ROUND:
-                    this.sb.append("def round(num): return ((num+5)/10)*10");
-                    nlIndent();
-                    break;
-                case ROUND_UP:
-                    this.sb.append("def round_up(num): return ((num/10)+1)*10");
-                    nlIndent();
-                    break;
-                case ROUND_DOWN:
-                    this.sb.append("def round_down(num): return (num/10)");
-                    nlIndent();
-                    break;
-                case ABSOLUTE:
-                    this.sb.append("def absolute(num):");
-                    incrIndentation(); nlIndent();
-                    this.sb.append("if (num<0): return -num");
-                    nlIndent();
-                    this.sb.append("else: return num");
-                    decrIndentation(); nlIndent();
-                    break;
-                case POW10:
-                    this.sb.append("def pow10(num):");
-                    incrIndentation(); nlIndent();
-                    this.sb.append("powered = 10");
-                    nlIndent();
-                    this.sb.append("newNum = num-1");
-                    nlIndent();
-                    this.sb.append("for _temp_x in range(newNum):");
-                    incrIndentation(); nlIndent();
-                    this.sb.append("powered = powered * 10");
-                    decrIndentation(); nlIndent();
-                    this.sb.append("return powered");
-                    decrIndentation(); nlIndent();
-                    break;
-                case CURVE:
-                    this.sb.append("def read_dist(leftspeed, rightspeed):");
-                    incrIndentation(); nlIndent();
-                    this.sb.append("if (leftspeed > rightspeed):");
-                    incrIndentation(); nlIndent();
-                    this.sb.append("return Ed.ReadDistance(Ed.MOTOR_LEFT)");
-                    decrIndentation(); nlIndent();
-                    this.sb.append("else:");
-                    incrIndentation(); nlIndent();
-                    this.sb.append("return Ed.ReadDistance(Ed.MOTOR_RIGHT)");
-                    decrIndentation(); decrIndentation(); nlIndent();
-                    break;
-                case DIFFDRIVE:
-                    this.sb.append("def diff_drive(direction, speed, distance):");
-                    incrIndentation(); nlIndent();
-                    this.sb.append("if speed < 0:");
-                    incrIndentation(); nlIndent();
-                    this.sb.append("speed = -speed");
-                    nlIndent();
-                    this.sb.append("if direction == Ed.FORWARD: Ed.Drive(Ed.BACKWARD, shorten(speed), distance)");
-                    nlIndent();
-                    this.sb.append("else: Ed.Drive(Ed.FORWARD, shorten(speed), distance)");
-                    decrIndentation(); nlIndent();
-                    this.sb.append("else: Ed.Drive(direction, shorten(speed), distance)");
-                    decrIndentation(); nlIndent();
-                case DIFFTURN:
-                    this.sb.append("def diff_turn(direction, speed, degree):");
-                    incrIndentation(); nlIndent();
-                    this.sb.append("if speed < 0:");
-                    incrIndentation(); nlIndent();
-                    this.sb.append("speed = -speed");
-                    nlIndent();
-                    this.sb.append("if direction == Ed.SPIN_RIGHT: Ed.Drive(Ed.SPIN_LEFT, shorten(speed), degree)");
-                    nlIndent();
-                    this.sb.append("else: Ed.Drive(Ed.SPIN_RIGHT, shorten(speed), degree)");
-                    decrIndentation(); nlIndent();
-                    this.sb.append("else: Ed.Drive(direction, shorten(speed), degree)");
-                    decrIndentation(); nlIndent();
-                default:
-                    break;
-            }
+        if ( !this.languageCollectorVisitor.getUsedFunctions().isEmpty() ) {
+            String helperMethodImpls = this.helperMethodGenerator.getHelperMethodDefinitions(this.languageCollectorVisitor.getUsedFunctions());
+            this.sb.append(helperMethodImpls);
         }
     }
 
@@ -370,186 +135,17 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @param brickCfg       the brick configuration
      * @param programPhrases the program to generate the code from
      * @param withWrapping   wrap the code with prefix/suffix
-     * @param language       the locale
      * @return the source code as a String
      */
     public static String generate(
-        Configuration brickCfg, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping, ILanguage language,
-        HelperMethodGenerator helperMethodGenerator) {
+        Configuration brickCfg, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping, HelperMethodGenerator helperMethodGenerator) {
         Assert.notNull(brickCfg);
 
-        EdisonPythonVisitor visitor = new EdisonPythonVisitor(brickCfg, programPhrases, 0, language, helperMethodGenerator);
+        EdisonPythonVisitor visitor = new EdisonPythonVisitor(brickCfg, programPhrases, 0, helperMethodGenerator);
         visitor.generateCode(withWrapping);
 
         return visitor.sb.toString();
     }
-
-
-
-
-    // --------------------- unsupported methods --------------------- \\
-
-
-
-
-    /**
-     * visit a {@link ConnectConst}.
-     * @param connectConst to be visited
-     */
-    @Override
-    public Void visitConnectConst(ConnectConst<Void> connectConst) {
-        //not needed I guess.. (idk what this does) NOP
-        return null;
-    }
-
-    /**
-     * Function to print() text
-     * visit a {@link TextPrintFunct}.
-     *
-     * @param textPrintFunct to be visited
-     */
-    @Override
-    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
-        //NOP not needed in Edison
-        throw new DbcException("Not supported!");
-    }
-
-    /**
-     * Function to get a sublist from a list
-     * visit a {@link GetSubFunct}.
-     *
-     * @param getSubFunct to be visited
-     */
-    @Override
-    public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
-        //NOP Not supported by Edison
-        throw new DbcException("Not supported!");
-    }
-
-    /**
-     * Function to constrain a number (number is between MIN and MAX)
-     * visit a {@link MathConstrainFunct}.
-     *
-     * @param mathConstrainFunct to be visited
-     */
-    @Override
-    public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        //NOP
-        throw new DbcException("Not supported!");
-    }
-
-    /**
-     * Function to get a random float between 0 and 1
-     * visit a {@link MathRandomFloatFunct}.
-     *
-     * @param mathRandomFloatFunct
-     */
-    @Override
-    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
-        //NOP not supported by Edison robot
-        throw new DbcException("Not supported!");
-    }
-
-    /**
-     * Function to get a random integer between MIN and MAX
-     * visit a {@link MathRandomIntFunct}.
-     *
-     * @param mathRandomIntFunct to be visited
-     */
-    @Override
-    public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
-        //NOP not supported by Edison robot
-        throw new DbcException("Not supported!");
-    }
-
-    /**
-     * Function to append text
-     * visit a {@link TextJoinFunct}.
-     *
-     * @param textJoinFunct to be visited
-     */
-    @Override
-    public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        //NOP
-        throw new DbcException("Not supported!");
-    }
-
-    /**
-     * Function to get the index of the first occurrence of an element in a list
-     *
-     * @param indexOfFunct to be visited
-     * @return
-     */
-    @Override
-    public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        //NOP
-        throw new DbcException("Not supported!");
-    }
-
-    /**
-     * Function to get a math constant.
-     * This block has been removed from the Edison toolbox and is only here for legacy reasons and compatibility with the common robot tests.
-     * visit a {@link MathConst}.
-     *
-     * @param mathConst to be visited
-     */
-    @Override
-    public Void visitMathConst(MathConst<Void> mathConst) {
-        //NOP
-        throw new DbcException("Not supported!");
-    }
-
-
-
-
-    // --------------------- supported methods --------------------- \\
-
-
-
-
-    /**
-     * Visits the repeat statement ("controls_repeat_ext")
-     *
-     * @param repeatStmt to be visited
-     * @return
-     */
-    @Override
-    public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
-        boolean isWaitStmt = repeatStmt.getMode() == RepeatStmt.Mode.WAIT;
-        switch ( repeatStmt.getMode() ) {
-            case UNTIL:
-            case WHILE:
-            case FOREVER:
-                generateCodeFromStmtCondition("while", repeatStmt.getExpr());
-                appendTry();
-                break;
-            case TIMES:
-            case FOR:
-                generateCodeFromStmtConditionFor("for", repeatStmt.getExpr());
-                appendTry();
-                break;
-            case WAIT:
-                generateCodeFromStmtCondition("if", repeatStmt.getExpr());
-                break;
-            case FOR_EACH:
-                generateCodeFromStmtCondition("for", repeatStmt.getExpr());
-                appendTry();
-                break;
-            default:
-                throw new DbcException("Invalid Repeat Statement!");
-        }
-        incrIndentation();
-        appendPassIfEmptyBody(repeatStmt);
-        repeatStmt.getList().visit(this);
-        if ( !isWaitStmt ) {
-            appendExceptionHandling();
-        } else {
-            appendBreakStmt(repeatStmt);
-        }
-        decrIndentation();
-        return null;
-    }
-
 
     /**
      * Visit the block "controls_repeat_ext"
@@ -565,26 +161,14 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * visit a {@link GetSampleSensor}
-     *
-     * @param sensorGetSample to be visited
-     */
-    @Override
-    public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
-        this.sb.append("(");
-        sensorGetSample.getSensor().visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    /**
      * Function to get readings from the obstacle detector.
      * visit a {@link InfraredSensor} for the block "robSensors_infrared_getSample"
      * @param infraredSensor to be visited
      */
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.sb.append("obstacle_detection(");
+        this.sb.append(this.helperMethodGenerator.getHelperMethodName(EdisonUsedHardwareCollectorVisitor.Method.OBSTACLEDETECTION));
+        this.sb.append("(");
 
         switch (infraredSensor.getPort()) {
             case "FRONT":
@@ -611,12 +195,13 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
+        this.sb.append(this.helperMethodGenerator.getHelperMethodName(EdisonUsedHardwareCollectorVisitor.Method.IRSEEK));
         switch (irSeekerSensor.getMode()) {
             case "RCCODE":
-                this.sb.append("ir_seek(1)");
+                this.sb.append("(1)");
                 break;
             case "EDISON_CODE":
-                this.sb.append("ir_seek(0)");
+                this.sb.append("(0)");
                 break;
         }
         return null;
@@ -643,7 +228,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
                 break;
             case "LINETRACKER":
                 if (lightSensor.getMode().equals("LINE")) {
-                    this.sb.append("Ed.LineState() == Ed.LINE_ON_BLACK");
+                    this.sb.append("Ed.ReadLineState() == Ed.LINE_ON_BLACK");
                 } else {
                     this.sb.append("Ed.ReadLineTracker() / 32767 * 100");
                 }
@@ -674,7 +259,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
-        this.sb.append("ir_send(");
+        this.sb.append(this.helperMethodGenerator.getHelperMethodName(EdisonUsedHardwareCollectorVisitor.Method.IRSEND));
+        this.sb.append("(");
         sendIRAction.getCode().visit(this);
         this.sb.append(")");
         return null;
@@ -688,7 +274,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
-        this.sb.append("ir_seek(0)");
+        this.sb.append(this.helperMethodGenerator.getHelperMethodName(EdisonUsedHardwareCollectorVisitor.Method.IRSEEK));
+        this.sb.append("(0)");
         return null;
     }
 
@@ -698,7 +285,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      *
      * @param driveAction to be visited
      */
-    @Override public Void visitDriveAction(DriveAction<Void> driveAction) {
+    @Override
+    public Void visitDriveAction(DriveAction<Void> driveAction) {
         String direction = "Ed.FORWARD";
         switch (driveAction.getDirection().toString()) {
             case "FOREWARD":
@@ -708,7 +296,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
                 break;
         }
 
-        this.sb.append("diff_drive(" + direction + ", ");
+        this.sb.append(this.helperMethodGenerator.getHelperMethodName(EdisonUsedHardwareCollectorVisitor.Method.DIFFDRIVE));
+        this.sb.append("(").append(direction).append(", ");
         driveAction.getParam().getSpeed().visit(this);
         this.sb.append(", ");
         if (driveAction.getParam().getDuration() != null) {
@@ -728,26 +317,20 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      *
      * @param mathOnListFunct to be visited
      */
-    @Override public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        switch (mathOnListFunct.getFunctName().getOpSymbol()) {
-            case "SUM":
+    @Override
+    public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
+        switch (mathOnListFunct.getFunctName()) {
+            case AVERAGE: // general implementation casts to float, which is not allowed on edison
                 this.sb.append("sum(");
-                break;
-            case "MIN":
-                this.sb.append("min(");
-                break;
-            case "MAX":
-                this.sb.append("max(");
-                break;
-            case "AVERAGE":
-                this.sb.append("avg(");
+                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append(") / len(");
+                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
                 break;
             default:
+                super.visitMathOnListFunct(mathOnListFunct);
                 break;
         }
-
-        mathOnListFunct.getParam().get(0).visit(this);
-        this.sb.append(")");
         return null;
     }
 
@@ -758,7 +341,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @param numConst
      * @return
      */
-    @Override public Void visitNumConst(NumConst<Void> numConst) {
+    @Override
+    public Void visitNumConst(NumConst<Void> numConst) {
         if ( isInteger(numConst.getValue()) ) {
             super.visitNumConst(numConst);
         } else {
@@ -774,60 +358,13 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @param mainTask the main task class to be visited
      * @return null
      */
-    @Override public Void visitMainTask(MainTask<Void> mainTask) {
+    @Override
+    public Void visitMainTask(MainTask<Void> mainTask) {
         StmtList<Void> variables = mainTask.getVariables();
         variables.visit(this); //fill usedGlobalVarInFunctions with values
 
         nlIndent();
         generateUserDefinedMethods(); //Functions created by the user will be defined before the main function
-
-
-        return null;
-    }
-
-    /**
-     * Function to check if a number is odd/even/positive/negative/...
-     * visit a {@link MathNumPropFunct} for the block "math_number_property"
-     *
-     * @param mathNumPropFunct to be visited
-     */
-    @Override public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
-        switch (mathNumPropFunct.getFunctName()) {
-            case EVEN:
-                this.sb.append("((");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(" % 2) == 0)");
-                break;
-            case ODD:
-                this.sb.append("((");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(" % 2) != 0)");
-                break;
-            case PRIME:
-                this.sb.append("isPrime(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
-                break;
-            case POSITIVE:
-                this.sb.append("(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(" >= 0)");
-                break;
-            case NEGATIVE:
-                this.sb.append("(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(" < 0)");
-                break;
-            case DIVISIBLE_BY:
-                this.sb.append("((");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(" % ");
-                mathNumPropFunct.getParam().get(1).visit(this);
-                this.sb.append(") == 0)");
-                break;
-            default:
-                break;
-        }
 
         return null;
     }
@@ -838,7 +375,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      *
      * @param listCreate to be visited
      */
-    @Override public Void visitListCreate(ListCreate<Void> listCreate) {
+    @Override
+    public Void visitListCreate(ListCreate<Void> listCreate) {
         int listSize = listCreate.getValue().get().size();
 
         this.sb.append("Ed.List(").append(listSize).append((", ["));
@@ -866,7 +404,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @param listRepeat to be visited
      */
     @Override public Void visitListRepeat(ListRepeat<Void> listRepeat) {
-        this.sb.append("create_repeat(");
+        this.sb.append(this.helperMethodGenerator.getHelperMethodName(LISTS_REPEAT));
+        this.sb.append("(");
         listRepeat.getParam().get(0).visit(this);
         this.sb.append(", ");
         listRepeat.getParam().get(1).visit(this);
@@ -881,7 +420,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      *
      * @param keysSensor to be visited
      */
-    @Override public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+    @Override
+    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
         switch (keysSensor.getPort()) {
             case "REC":
                 this.sb.append("Ed.ReadKeypad() == Ed.KEYPAD_ROUND");
@@ -904,17 +444,18 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      *
      * @param curveAction to visit
      */
-    @Override public Void visitCurveAction(CurveAction<Void> curveAction) {
+    @Override
+    public Void visitCurveAction(CurveAction<Void> curveAction) {
         String direction;
 
         //determine the direction
         switch (curveAction.getDirection().toString()) {
-            default:
-            case "FOREWARD":
-                direction = "Ed.FORWARD";
-                break;
             case "BACKWARD":
                 direction = "Ed.BACKWARD";
+                break;
+            case "FOREWARD":
+            default:
+                direction = "Ed.FORWARD";
                 break;
         }
 
@@ -946,7 +487,9 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
             curveAction.getParamRight().getDuration().getValue().visit(this);
             this.sb.append(")");
             nlIndent();
-            this.sb.append("while read_dist(");
+            this.sb.append("while ");
+            this.sb.append(this.helperMethodGenerator.getHelperMethodName(EdisonUsedHardwareCollectorVisitor.Method.CURVE));
+            this.sb.append("(");
             curveAction.getParamLeft().getSpeed().visit(this);
             this.sb.append(", ");
             curveAction.getParamRight().getSpeed().visit(this);
@@ -966,8 +509,10 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      *
      * @param turnAction to be visited
      */
-    @Override public Void visitTurnAction(TurnAction<Void> turnAction) {
-        this.sb.append("diff_turn(Ed.SPIN_" + turnAction.getDirection().toString() + ", ");
+    @Override
+    public Void visitTurnAction(TurnAction<Void> turnAction) {
+        this.sb.append(this.helperMethodGenerator.getHelperMethodName(EdisonUsedHardwareCollectorVisitor.Method.DIFFTURN));
+        this.sb.append("(Ed.SPIN_").append(turnAction.getDirection()).append(", ");
         turnAction.getParam().getSpeed().visit(this);
         this.sb.append(", ");
         if (turnAction.getParam().getDuration() != null) {
@@ -988,13 +533,14 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+        this.sb.append(this.helperMethodGenerator.getHelperMethodName(EdisonUsedHardwareCollectorVisitor.Method.MOTORON));
         switch (motorOnAction.getUserDefinedPort()) {
             case "LMOTOR":
-                this.sb.append("motor_on(0, ");
+                this.sb.append("(0, ");
                 motorOnAction.getParam().getSpeed().visit(this);
                 break;
             case "RMOTOR":
-                this.sb.append("motor_on(1, ");
+                this.sb.append("(1, ");
                 motorOnAction.getParam().getSpeed().visit(this);
                 break;
             default:
@@ -1035,6 +581,18 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         return null;
     }
 
+    @Override
+    public Void visitBinary(Binary<Void> binary) {
+        if ( binary.getOp() == Binary.Op.DIVIDE ) {  // general implementation casts to float, which is not allowed on edison
+            binary.getLeft().visit(this);
+            this.sb.append(" / ");
+            binary.getRight().visit(this);
+        } else {
+            super.visitBinary(binary);
+        }
+        return null;
+    }
+
     /**
      * Function to stop driving (stop both motors)
      * visit a {@link MotorDriveStopAction} for the block "robActions_motorDiff_stop"
@@ -1047,17 +605,14 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         return null;
     }
 
-    /**
-     * Function to find out the length of a list
-     * //NOP is empty not supported
-     * visit a {@link LengthOfIsEmptyFunct} for the block "robLists_length"
-     *
-     * @param lengthOfIsEmptyFunct to be visited
-     */
     @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
-        this.sb.append("len(");
-        lengthOfIsEmptyFunct.getParam().get(0).visit(this);this.sb.append(")");
+    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
+        this.sb.append(this.helperMethodGenerator.getHelperMethodName(mathPowerFunct.getFunctName()));
+        this.sb.append("(");
+        mathPowerFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        mathPowerFunct.getParam().get(1).visit(this);
+        this.sb.append(")");
         return null;
     }
 
@@ -1070,27 +625,34 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     @Override
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
         switch ( mathSingleFunct.getFunctName() ) {
-            case ABS:
-                this.sb.append("absolute(");
-                break;
             case POW10:
-                this.sb.append("pow10(");
+                this.sb.append(this.helperMethodGenerator.getHelperMethodName(FunctionNames.POWER));
+                this.sb.append("(10, ");
+                mathSingleFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
                 break;
             case ROUND:
-                this.sb.append("round(");
+                this.sb.append("((");
+                mathSingleFunct.getParam().get(0).visit(this);
+                this.sb.append("+5)/10)*10");
                 break;
             case ROUNDUP:
-                this.sb.append("round_up(");
+                this.sb.append("((");
+                mathSingleFunct.getParam().get(0).visit(this);
+                this.sb.append("/10)+1)*10");
                 break;
             case ROUNDDOWN:
-                this.sb.append("round_down(");
+                this.sb.append("(");
+                mathSingleFunct.getParam().get(0).visit(this);
+                this.sb.append("/10)");
                 break;
             default:
+                this.sb.append(this.helperMethodGenerator.getHelperMethodName(mathSingleFunct.getFunctName()));
+                this.sb.append("(");
+                mathSingleFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
                 break;
         }
-        mathSingleFunct.getParam().get(0).visit(this);
-        this.sb.append(")");
-
         return null;
     }
 
@@ -1122,37 +684,6 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         this.sb.append("Ed.TimeWait(");
         waitTimeStmt.getTime().visit(this);
         this.sb.append(", Ed.TIME_MILLISECONDS)");
-        return null;
-    }
-
-    /**
-     * Function to get the n-th element of a list
-     * visit a {@link ListGetIndex} for the block "robLists_getIndex"
-     *
-     * @param listGetIndex to be visited
-     */
-    @Override
-    public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        listGetIndex.getParam().get(0).visit(this); //Name of list
-        this.sb.append("[");
-        listGetIndex.getParam().get(1).visit(this); //index (from 0)
-        this.sb.append(" - 1]");
-        return null;
-    }
-
-    /**
-     * Function to set the n-th element of a List or insert the element at the n-th place (if supported)
-     * visit a {@link ListSetIndex} for the block "robLists_setIndex"
-     *
-     * @param listSetIndex to be visited
-     */
-    @Override
-    public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
-        listSetIndex.getParam().get(0).visit(this); //Name of list
-        this.sb.append("[");
-        listSetIndex.getParam().get(2).visit(this);
-        this.sb.append("] = ");
-        listSetIndex.getParam().get(1).visit(this);
         return null;
     }
 
@@ -1321,5 +852,10 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         }
 
         return null;
+    }
+
+    @Override
+    public Void visitConnectConst(ConnectConst<Void> connectConst) {
+        throw new DbcException("Not supported!");
     }
 }

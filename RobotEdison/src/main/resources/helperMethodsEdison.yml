@@ -1,129 +1,130 @@
 include: "classpath:/helperMethodsCommon.yml"
-# method names are based on FunctionNames
+# method names are based on FunctionNames and EdisonUsedHardwareCollectorVisitor.Method
 # languages are based on HelperMethodGenerator.Language
+
+# FunctionNames
+
 PRIME:
   PYTHON: |
-    this.sb.append("def isPrime(number):");
-                        incrIndentation();
-                        nlIndent();
-                        this.sb.append("if number <= 1: return False");
-                        nlIndent();
-                        this.sb.append("newNum = number - 2");
-                        nlIndent();
-                        this.sb.append("for x in range(newNum):");
-                        incrIndentation();
-                        nlIndent();
-                        this.sb.append("y = (x + 2)");
-                        nlIndent();
-                        this.sb.append("if (number % y) == 0: return False");
-                        decrIndentation();
-                        nlIndent();
-                        this.sb.append("return True");
-                        decrIndentation();
-                        nlIndent();
-MAX:
-  PYTHON: |
-    this.sb.append("def max(list):");
-                        incrIndentation();
-                        nlIndent();
-                        this.sb.append("max_of_list = list[0]");
-                        nlIndent();
-                        this.sb.append("listLength = len(list)");
-                        nlIndent();
-                        this.sb.append("for i in range(listLength):");
-                        incrIndentation();
-                        nlIndent();
-                        this.sb.append("if list[i] > max_of_list:");
-                        incrIndentation();
-                        nlIndent();
-                        this.sb.append("max_of_list = list[i]");
-                        decrIndentation();
-                        decrIndentation();
-                        nlIndent();
-                        this.sb.append("return max_of_list");
-                        decrIndentation();
-                        nlIndent();
+    def _isPrime(number):
+        if number <= 1: return False
+        newNum = number - 2
+        for x in range(newNum):
+            y = (x + 2)
+            if (number % y) == 0: return False
+        return True
 MIN:
   PYTHON: |
-    this.sb.append("def min(list):");
-                        incrIndentation();
-                        nlIndent();
-                        this.sb.append("min_of_list = list[0]");
-                        nlIndent();
-                        this.sb.append("listLength = len(list)");
-                        nlIndent();
-                        this.sb.append("for i in range(listLength):");
-                        incrIndentation();
-                        nlIndent();
-                        this.sb.append("if list[i] < min_of_list:");
-                        incrIndentation();
-                        nlIndent();
-                        this.sb.append("min_of_list = list[i]");
-                        decrIndentation();
-                        decrIndentation();
-                        nlIndent();
-                        this.sb.append("return min_of_list");
-                        decrIndentation();
-                        nlIndent();
+    def min(list):
+        min_of_list = list[0]
+        listLength = len(list)
+        for i in range(listLength):
+            if list[i] < min_of_list:
+                min_of_list = list[i]
+        return min_of_list
+MAX:
+  PYTHON: |
+    def max(list):
+        max_of_list = list[0]
+        listLength = len(list)
+        for i in range(listLength):
+            if list[i] > max_of_list:
+                max_of_list = list[i]
+        return max_of_list
 SUM:
   PYTHON: |
-    this.sb.append("def sum(list):");
-                        incrIndentation();
-                        nlIndent();
-                        this.sb.append("sum_of_list = 0");
-                        nlIndent();
-                        this.sb.append("listLength = len(list)");
-                        nlIndent();
-                        this.sb.append("for i in range(listLength): sum_of_list = (sum_of_list + list[i])");
-                        nlIndent();
-                        this.sb.append("return sum_of_list");
-                        decrIndentation();
-                        nlIndent();
-AVERAGE:
-  PYTHON: |
-    this.sb.append("def avg(list):");
-                        incrIndentation();
-                        nlIndent();
-
-                        this.sb.append("returnValue = sum(list) / len(list)");
-                        nlIndent();
-                        this.sb.append("return returnValue");
-                        decrIndentation();
-                        nlIndent();
+    def sum(list):
+        sum_of_list = 0
+        listLength = len(list)
+        for i in range(listLength): sum_of_list = (sum_of_list + list[i])
+        return sum_of_list
 LISTS_REPEAT:
   PYTHON: |
-    this.sb.append("def create_repeat(item, times):");
-                        incrIndentation();
-                        nlIndent();
-                        this.sb.append("list = Ed.List(times)");
-                        nlIndent();
-                        this.sb.append("listLength = len(list)");
-                        nlIndent();
-                        this.sb.append("for i in range(listLength): list[i] = item");
-                        nlIndent();
-                        this.sb.append("return list");
-                        decrIndentation();
-                        nlIndent();
-ROUND:
+    def _create_repeat(item, times):
+        list = Ed.List(times)
+        listLength = len(list)
+        for i in range(listLength): list[i] = item
+        return list
+ABS:
   PYTHON: |
-    def round(num): return ((num+5)/10)*10
-ROUNDUP:
+    def _abs(num):
+        if (num<0): return -num
+        else: return num
+# this is also used by POW10
+POWER:
   PYTHON: |
-    def round_up(num): return ((num/10)+1)*10
-ROUNDDOWN:
+    def _pow(base, exp):
+        result = 1
+        b = base
+        for _ in range(exp):
+            result *= b
+        return result
+
+# EdisonUsedHardwareCollectorVisitor.Method
+
+OBSTACLEDETECTION:
   PYTHON: |
-    def round_down(num): return (num/10)
-POW10:
+      def obstacle_detection(mode):
+          global obstacleDetectionOn
+          if (obstacleDetectionOn == False):
+              Ed.ObstacleDetectionBeam(Ed.ON)
+              obstacleDetectionOn = True
+          return Ed.ReadObstacleDetection() == mode
+
+IRSEND:
   PYTHON: |
-    this.sb.append("def pow10(num):");
-                        incrIndentation(); nlIndent();
-                        this.sb.append("powered = 10");
-                        nlIndent();
-                        this.sb.append("newNum = num-1");
-                        nlIndent();
-                        this.sb.append("for _temp_x in range(newNum):");
-                        incrIndentation(); nlIndent();
-                        this.sb.append("powered = powered * 10");
-                        decrIndentation(); nlIndent();
-                        this.sb.append("return powered");
-                        decrIndentation(); nlIndent();
+      def ir_send(payload):
+          global obstacleDetectionOn
+          if (obstacleDetectionOn == True):
+              Ed.ObstacleDetectionBeam(Ed.OFF)
+              obstacleDetectionOn = False
+          Ed.SendIRData(payload)
+
+# mode: 0 = edison IR data; 1 = remote control data
+IRSEEK:
+  PYTHON: |
+      def ir_seek(mode):
+          global obstacleDetectionOn
+          if (obstacleDetectionOn == True):
+              Ed.ObstacleDetectionBeam(Ed.OFF)
+              obstacleDetectionOn = False
+          if (mode == 0): return Ed.ReadIRData()
+          elif (mode == 1): return Ed.ReadRemote()
+
+# motor: 0 = LMOTOR; 1 = RMOTOR
+# distance: Entweder integer oder Ed.DISTANCE_UNLIMITED
+MOTORON:
+  PYTHON: |
+      def motor_on(motor, power, distance):
+          if (motor == 0):
+              if (power < 0): Ed.DriveLeftMotor(Ed.BACKWARD, -shorten(power), distance)
+              else: Ed.DriveLeftMotor(Ed.FORWARD, shorten(power), distance)
+          if (motor == 1):
+              if (power < 0): Ed.DriveRightMotor(Ed.BACKWARD, -shorten(power), distance)
+              else: Ed.DriveRightMotor(Ed.FORWARD, shorten(power), distance)
+
+CURVE:
+  PYTHON: |
+      def read_dist(leftspeed, rightspeed):
+          if (leftspeed > rightspeed):
+              return Ed.ReadDistance(Ed.MOTOR_LEFT)
+          else:
+              return Ed.ReadDistance(Ed.MOTOR_RIGHT)
+
+DIFFDRIVE:
+  PYTHON: |
+      def diff_drive(direction, speed, distance):
+          if speed < 0:
+              speed = -speed
+              if direction == Ed.FORWARD: Ed.Drive(Ed.BACKWARD, shorten(speed), distance)
+              else: Ed.Drive(Ed.FORWARD, shorten(speed), distance)
+          else: Ed.Drive(direction, shorten(speed), distance)
+
+DIFFTURN:
+  PYTHON: |
+      def diff_turn(direction, speed, degree):
+          if speed < 0:
+              speed = -speed
+              if direction == Ed.SPIN_RIGHT: Ed.Drive(Ed.SPIN_LEFT, shorten(speed), degree)
+              else: Ed.Drive(Ed.SPIN_RIGHT, shorten(speed), degree)
+          else: Ed.Drive(direction, shorten(speed), degree)

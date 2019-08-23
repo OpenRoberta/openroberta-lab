@@ -1,8 +1,10 @@
 package de.fhg.iais.roberta.codegen;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,6 +13,7 @@ import java.util.regex.Pattern;
 
 import org.json.JSONObject;
 
+import de.fhg.iais.roberta.syntax.lang.functions.Function;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -26,24 +29,54 @@ public class HelperMethodGenerator {
         PYTHON, C, JAVA, JSON
     }
 
-    private final Map<FunctionNames, String> helperMethods = new EnumMap<>(FunctionNames.class);
+    private final JSONObject jsonHelperMethods;
     private final Language language;
+
+    private final Collection<Class<? extends Enum<?>>> enums = new ArrayList<>();
+
+    private final Map<? super Enum, String> helperMethods = new HashMap<>();
 
     /**
      * Constructs a generator from the loaded JSON of the method definition YAML file.
+     * By default, it adds {@link FunctionNames} to the list of Enums which can be loaded from the YAML file.
      *
      * @param jsonHelperMethods the loaded JSON of the YAML file
      * @param baseProgLanguage the base programming language
      */
     public HelperMethodGenerator(JSONObject jsonHelperMethods, Language baseProgLanguage) {
+        this.jsonHelperMethods = jsonHelperMethods;
+        this.language = baseProgLanguage;
+
+        this.enums.add(FunctionNames.class);
+
+        loadFromJson(jsonHelperMethods, baseProgLanguage);
+    }
+
+    private void loadFromJson(JSONObject jsonHelperMethods, Language baseProgLanguage) {
         for ( String methodName : jsonHelperMethods.keySet() ) {
             JSONObject jsonHelperMethod = jsonHelperMethods.getJSONObject(methodName);
             String implementation = jsonHelperMethod.optString(baseProgLanguage.toString());
             if ( implementation != null ) {
-                this.helperMethods.put(FunctionNames.get(methodName), implementation);
+                for ( Class<? extends Enum> anEnum : this.enums ) {
+                    try {
+                        this.helperMethods.put(Enum.valueOf(anEnum, methodName), implementation);
+                    } catch ( IllegalArgumentException e) {
+                        // not all enum values need to have an implementation
+                    }
+                }
             }
         }
-        this.language = baseProgLanguage;
+    }
+
+    /**
+     * Adds an additional enum to the list of enums loaded from the YAML file.
+     * Reloads the contents from the YAML file.
+     *
+     * @param anEnum the additional enum to be loaded
+     */
+    public void addAdditionalEnum(Class<? extends Enum<?>> anEnum) {
+        this.enums.add(anEnum);
+        loadFromJson(this.jsonHelperMethods, this.language);
     }
 
     /**
@@ -52,7 +85,7 @@ public class HelperMethodGenerator {
      * @param method the wanted helper implementation
      * @return the function name to use in code generation
      */
-    public String getHelperMethodName(FunctionNames method) {
+    public String getHelperMethodName(Enum<?> method) {
         String implementation = this.helperMethods.get(method);
         return extractFunctionName(implementation);
     }
@@ -63,17 +96,17 @@ public class HelperMethodGenerator {
      * @param usedMethods a set of used methods that may need to be generated as a helper method
      * @return the helper method definitions
      */
-    public String getHelperMethodDefinitions(Set<FunctionNames> usedMethods) {
+    public String getHelperMethodDefinitions(Set<? extends Enum<?>> usedMethods) {
         StringBuilder sb = new StringBuilder();
 
         // guarantee order of methods
-        List<FunctionNames> sortedUsedMethods = new ArrayList<>(usedMethods);
+        List<? extends Enum> sortedUsedMethods = new ArrayList<>(usedMethods);
         Collections.sort(sortedUsedMethods);
 
         // append all method implementations
-        for ( FunctionNames usedFunction : sortedUsedMethods ) {
+        for ( Enum<?> usedFunction : sortedUsedMethods ) {
             String implementation = this.helperMethods.get(usedFunction);
-            if ( implementation != null ) { // TODO avoid this?
+            if ( implementation != null ) { // no implementation necessary for this method
                 sb.append('\n');
                 sb.append(implementation);
             }
