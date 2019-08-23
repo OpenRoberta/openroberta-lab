@@ -12,14 +12,15 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
          */
         function pingServer() {
             if (GUISTATE_C.doPing()) {
-                COMM.ping(function(result) {
-                    GUISTATE_C.setState(result);
-                });
+                setTimeout(function() {
+                    COMM.ping(function(result) {
+                        GUISTATE_C.setState(result);
+                    });
+                    pingServer();
+                }, GUISTATE_C.getPingTime());
             }
         }
-        var ping = setInterval(function() {
-            pingServer();
-        }, 3000);
+        pingServer();
         LOG.info('init menu view');
 
         var target = decodeURI(document.location.hash).split("&&");
@@ -680,7 +681,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 debug.initSvg();
                 debug.render();
                 debug.setInTask(false);
-                
+
                 return false;
             }
             if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '4')) {
@@ -703,7 +704,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_eval_expr');
                 expr.initSvg();
                 expr.render();
-                expr.setInTask(false);            
+                expr.setInTask(false);
                 return false;
             }
         });

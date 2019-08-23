@@ -1,6 +1,8 @@
-define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.controller','progLegal.controller', 'webview.controller', 'socket.controller', 'jquery' ], function(exports,
-        UTIL, LOG, MSG, GUISTATE, HELP_C, LEGAL_C, WEBVIEW_C, SOCKET_C, $) {
+define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.controller', 'progLegal.controller', 'webview.controller', 'socket.controller',
+        'jquery' ], function(exports, UTIL, LOG, MSG, GUISTATE, HELP_C, LEGAL_C, WEBVIEW_C, SOCKET_C, $) {
 
+    var LONG = 30000; // Ping time 30s
+    var SHORT = 3000; // Ping time 3s
     /**
      * Init robot
      */
@@ -308,7 +310,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             }
             $('#menuRunProg').parent().addClass('disabled');
             $('#menuConnect').parent().removeClass('disabled');
-            setPing(true);
+            setPingTime(SHORT);
             break;
         case GUISTATE.gui.connectionType.LOCAL:
         case GUISTATE.gui.connectionType.AUTO:
@@ -321,7 +323,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             }
             $('#menuRunProg').parent().removeClass('disabled');
             $('#menuConnect').parent().addClass('disabled');
-            setPing(false);
+            setPingTime(LONG);
             break;
         case GUISTATE.gui.connectionType.AGENTORTOKEN:
             SOCKET_C.listRobotStart();
@@ -330,7 +332,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             } else {
                 $('#menuConnect').parent().removeClass('disabled');
             }
-            setPing(true);
+            setPingTime(SHORT);
             break;
         case GUISTATE.gui.connectionType.WEBVIEW:
             SOCKET_C.listRobotStop();
@@ -348,10 +350,10 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             } else {
                 $('#robotConnect').addClass('disabled');
             }
-            setPing(false);
+            setPingTime(LONG);
             break;
         default:
-            setPing(true);
+            setPingTime(SHORT);
             break;
         }
 
@@ -379,8 +381,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
                 'robot' : robotGroup
             });
         }
-        
-        if(getRobotHasWlan(robot)) {
+
+        if (getRobotHasWlan(robot)) {
             GUISTATE.robot.hasWlan = true;
             $('#robotWlan').removeClass('hidden');
         } else {
@@ -506,7 +508,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         return false;
     }
     exports.getIsRobotBeta = getIsRobotBeta;
-    
+
     function getRobotHasWlan(robotName) {
         for ( var robot in getRobots()) {
             if (!getRobots().hasOwnProperty(robot)) {
@@ -1063,6 +1065,16 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         return GUISTATE.server.ping;
     }
     exports.doPing = doPing;
+
+    function setPingTime(time) {
+        GUISTATE.server.pingTime = time;
+    }
+    exports.setPingTime = setPingTime;
+
+    function getPingTime() {
+        return GUISTATE.server.pingTime;
+    }
+    exports.getPingTime = getPingTime;
 
     function setSocket(socket) {
         GUISTATE.robot.socket = socket;

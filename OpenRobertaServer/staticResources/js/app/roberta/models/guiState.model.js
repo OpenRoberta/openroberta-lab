@@ -8,6 +8,7 @@ define([ 'exports', 'message', 'comm' ], function(exports, MSG, COMM) {
 
         exports.server = {};
         exports.server.ping = true;
+        exports.server.pingTime = 3000;
 
         exports.gui = {};
         exports.gui.view = '';
