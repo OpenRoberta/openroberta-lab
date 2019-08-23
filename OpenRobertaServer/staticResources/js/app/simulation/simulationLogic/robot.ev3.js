@@ -484,8 +484,14 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot' ],
             if (text) {
                 $("#display" + this.id).html($("#display" + this.id).html() + '<text x=' + x * 10 + ' y=' + (y + 1) * 16 + '>' + text + '</text>');
             }
-            if (display.picture) {
-                $("#display" + this.id).html(this.display[display.picture]);
+            if ( display.picture ) {
+                if ( !!this.display[display.picture]) {
+                    $( "#display" + this.id ).html( this.display[display.picture] );
+                }
+                else {
+                    var image_html = "<image width=\"178\" height=\"128\" alt=\"eyes closed\" xlink:href=\""+ display.image_data + "\" />";
+                    $( "#display" + this.id ).html( image_html );
+                }
             }
             if (display.clear) {
                 $("#display" + this.id).html('');

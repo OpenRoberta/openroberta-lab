@@ -98,6 +98,7 @@ define(["require", "exports"], function (require, exports) {
     exports.IF_TRUE_STMT = "IfTrueStatement";
     exports.IMAGE = "image";
     exports.IMAGE_CONST = "image";
+    exports.IMAGE_DATA = "image_data";
     exports.IMAGE_INVERT_ACTION = "ImageInvertAction";
     exports.IMAGE_SHIFT_ACTION = "ImageShiftAction";
     exports.IN = "in";

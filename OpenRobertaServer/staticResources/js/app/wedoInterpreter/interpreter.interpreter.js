@@ -269,7 +269,7 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                             else {
                                 image = s.pop();
                             }
-                            return n.showImageAction(image, stmt[C.MODE]);
+                            return n.showImageAction(image, stmt[C.MODE], stmt[C.IMAGE_DATA]);
                         }
                         case C.DISPLAY_SET_BRIGHTNESS_ACTION: {
                             var b = s.pop();

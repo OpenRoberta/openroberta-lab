@@ -98,6 +98,7 @@ public class C {
     public static final String IF_TRUE_STMT = "IfTrueStatement";
     public static final String IMAGE = "image";
     public static final String IMAGE_CONST = "image";
+    public static final String IMAGE_DATA = "image_data";
     public static final String IMAGE_INVERT_ACTION = "ImageInvertAction";
     public static final String IMAGE_SHIFT_ACTION = "ImageShiftAction";
     public static final String IN = "in";

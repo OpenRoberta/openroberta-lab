@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.AbstractEV3Factory;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
+import de.fhg.iais.roberta.mode.action.ev3.ShowPicture;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -60,8 +61,8 @@ public class ShowPictureAction<V> extends Action<V> {
     /**
      * @return name of the picture that
      */
-    public IShowPicture getPicture() {
-        return this.pic;
+    public String getPicture() {
+        return this.pic.getValues()[0];
     }
 
     /**
@@ -80,7 +81,7 @@ public class ShowPictureAction<V> extends Action<V> {
 
     @Override
     public String toString() {
-        return "ShowPictureAction [" + this.pic + ", " + this.x + ", " + this.y + "]";
+        return "ShowPictureAction [" + getPicture() + ", " + this.x + ", " + this.y + "]";
     }
 
     @Override
@@ -104,7 +105,7 @@ public class ShowPictureAction<V> extends Action<V> {
         Phrase<V> y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y, BlocklyType.NUMBER_INT));
         return ShowPictureAction
             .make(
-                ((AbstractEV3Factory) helper.getRobotFactory()).getShowPicture(pic),
+                new ShowPicture(pic),
                 helper.convertPhraseToExpr(x),
                 helper.convertPhraseToExpr(y),
                 helper.extractBlockProperties(block),
@@ -115,7 +116,7 @@ public class ShowPictureAction<V> extends Action<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
-        String fieldValue = getPicture().toString();
+        String fieldValue = getPicture();
         Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.PICTURE, fieldValue);
         Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.X, getX());
         Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.Y, getY());

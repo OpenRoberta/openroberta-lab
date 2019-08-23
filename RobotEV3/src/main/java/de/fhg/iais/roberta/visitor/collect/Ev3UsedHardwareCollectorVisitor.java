@@ -60,7 +60,7 @@ public final class Ev3UsedHardwareCollectorVisitor extends AbstractUsedHardwareC
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        this.usedImages.add(showPictureAction.getPicture().toString());
+        this.usedImages.add(showPictureAction.getPicture());
         return null;
     }
 

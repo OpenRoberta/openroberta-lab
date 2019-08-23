@@ -737,6 +737,7 @@ configuration:
   GYRO: [robConf_gyro, robBrick_gyro]
   HT_COLOR: [robBrick_HiTechnic_colour, robBrick_htcolour]
   HUMIDITY: [robConf_humidity, robBrick_humidity]
+  IMAGE: [robBrick_ev3_image]
   INFRARED: [robConf_infrared, robBrick_infrared]
   IRSEEKER: [robBrick_irseeker]
   JOYSTICK: [arduSensors_joystick_getSample]

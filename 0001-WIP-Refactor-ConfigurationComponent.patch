@@ -1,0 +1,262 @@
+From 7ada19a4806e442441290fb487aa58b43b481017 Mon Sep 17 00:00:00 2001
+From: varunshankar <varunshankar55@gmail.com>
+Date: Sat, 8 Jun 2019 22:21:03 +0200
+Subject: [PATCH] WIP: Refactor ConfigurationComponent
+
+Create subclasses of ConfigurationComponent instead of using flags.
+See #46
+---
+ .../ConfigurationActorComponent.java          | 60 +++++++++++++++++++
+ .../ConfigurationAssetComponent.java          | 38 ++++++++++++
+ .../components/ConfigurationComponent.java    | 55 ++---------------
+ .../ConfigurationSensorComponent.java         | 38 ++++++++++++
+ 4 files changed, 141 insertions(+), 50 deletions(-)
+ create mode 100644 OpenRobertaRobot/src/main/java/de/fhg/iais/roberta/components/ConfigurationActorComponent.java
+ create mode 100644 OpenRobertaRobot/src/main/java/de/fhg/iais/roberta/components/ConfigurationAssetComponent.java
+ create mode 100644 OpenRobertaRobot/src/main/java/de/fhg/iais/roberta/components/ConfigurationSensorComponent.java
+
+diff --git a/OpenRobertaRobot/src/main/java/de/fhg/iais/roberta/components/ConfigurationActorComponent.java b/OpenRobertaRobot/src/main/java/de/fhg/iais/roberta/components/ConfigurationActorComponent.java
+new file mode 100644
+index 000000000..46918e10c
+--- /dev/null
++++ b/OpenRobertaRobot/src/main/java/de/fhg/iais/roberta/components/ConfigurationActorComponent.java
+@@ -0,0 +1,60 @@
++package de.fhg.iais.roberta.components;
++
++import java.util.Collections;
++import java.util.HashMap;
++import java.util.Map;
++
++import de.fhg.iais.roberta.syntax.SC;
++import de.fhg.iais.roberta.util.dbc.Assert;
++
++public final class ConfigurationActorComponent extends ConfigurationComponent{
++    private final boolean isActor;
++
++    public ConfigurationActorComponent(
++        String componentType,
++        boolean isActor,
++        String portName,
++        String userDefinedName,
++        Map<String, String> componentProperties) {
++    	super(componentType, portName, userDefinedName, componentProperties);
++        this.isActor = isActor;    
++        }
++
++    public boolean isActor() {
++        return this.isActor;
++    }
++
++    public boolean isRegulated() {
++        return getProperty(SC.MOTOR_REGULATION).equals(SC.TRUE);
++    }
++
++    public boolean isReverse() {
++        return getProperty(SC.MOTOR_REVERSE).equals(SC.ON);
++    }
++
++    public String getSide() {
++        switch ( getProperty(SC.MOTOR_DRIVE) ) {
++            case SC.LEFT:
++                return SC.LEFT;
++            case SC.RIGHT:
++                return SC.RIGHT;
++            default:
++                return SC.NONE;
++        }
++    }
++
++    @Override
++    public String toString() {
++        return "ConfigurationComponent ["
++            + "isActor="                                                                                                                                                                                                                                                                     
++            + this.isActor
++            + ", userDefinedName="
++            + this.userDefinedPortName
++            + ", portName="
++            + this.portName
++            + ", componentProperties="
++            + this.componentProperties
++            + "]";
++    }
++
++}
+diff --git a/OpenRobertaRobot/src/main/java/de/fhg/iais/roberta/components/ConfigurationAssetComponent.java b/OpenRobertaRobot/src/main/java/de/fhg/iais/roberta/components/ConfigurationAssetComponent.java
+new file mode 100644
+index 000000000..a8304a191
+--- /dev/null
++++ b/OpenRobertaRobot/src/main/java/de/fhg/iais/roberta/components/ConfigurationAssetComponent.java
+@@ -0,0 +1,38 @@
++package de.fhg.iais.roberta.components;
++
++import java.util.Map;
++
++public final class ConfigurationAssetComponent extends ConfigurationComponent{
++    private final boolean isAsset;
++
++    public ConfigurationAssetComponent(
++        String componentType,
++        boolean isAsset,
++        String portName,
++        String userDefinedName,
++        Map<String, String> componentProperties) {
++    	super(componentType, portName, userDefinedName, componentProperties);
++        this.isAsset = isAsset;
++    }
++
++
++    public boolean isAsset() {
++        return this.isAsset;
++    }
++
++    @Override
++    public String toString() {
++        return "ConfigurationComponent ["
++            + "isAsset="
++            + this.isAsset
++            + ", userDefinedName="
++            + this.userDefinedPortName
++            + ", portName="
++            + this.portName
++            + ", componentProperties="
++            + this.componentProperties
++            + "]";
++    }
++
++}
++
+diff --git a/OpenRobertaRobot/src/main/java/de/fhg/iais/roberta/components/ConfigurationComponent.java b/OpenRobertaRobot/src/main/java/de/fhg/iais/roberta/components/ConfigurationComponent.java
+index 398b53bac..b04c45263 100644
+--- a/OpenRobertaRobot/src/main/java/de/fhg/iais/roberta/components/ConfigurationComponent.java
++++ b/OpenRobertaRobot/src/main/java/de/fhg/iais/roberta/components/ConfigurationComponent.java
+@@ -4,25 +4,21 @@ import java.util.Collections;
+ import java.util.HashMap;
+ import java.util.Map;
+ 
+-import de.fhg.iais.roberta.syntax.SC;
+ import de.fhg.iais.roberta.util.dbc.Assert;
+ 
+-public final class ConfigurationComponent {
+-    private final String componentType;
++public class ConfigurationComponent {
++	protected String componentType;
+ 
+-    private final boolean isActor;
+-    private final String userDefinedPortName;
+-    private final String portName;
+-    private final Map<String, String> componentProperties;
++    protected String userDefinedPortName;
++    protected String portName;
++    protected Map<String, String> componentProperties;
+ 
+     public ConfigurationComponent(
+         String componentType,
+-        boolean isActor,
+         String portName,
+         String userDefinedName,
+         Map<String, String> componentProperties) {
+         this.componentType = componentType;
+-        this.isActor = isActor;
+         this.portName = portName;
+         this.userDefinedPortName = userDefinedName;
+         this.componentProperties = Collections.unmodifiableMap(new HashMap<>(componentProperties));
+@@ -32,33 +28,6 @@ public final class ConfigurationComponent {
+         return this.componentType;
+     }
+ 
+-    public boolean isActor() {
+-        return this.isActor;
+-    }
+-
+-    public boolean isSensor() {
+-        return !this.isActor;
+-    }
+-
+-    public boolean isRegulated() {
+-        return getProperty(SC.MOTOR_REGULATION).equals(SC.TRUE);
+-    }
+-
+-    public boolean isReverse() {
+-        return getProperty(SC.MOTOR_REVERSE).equals(SC.ON);
+-    }
+-
+-    public String getSide() {
+-        switch ( getProperty(SC.MOTOR_DRIVE) ) {
+-            case SC.LEFT:
+-                return SC.LEFT;
+-            case SC.RIGHT:
+-                return SC.RIGHT;
+-            default:
+-                return SC.NONE;
+-        }
+-    }
+-
+     public String getPortName() {
+         return this.portName;
+     }
+@@ -86,18 +55,4 @@ public final class ConfigurationComponent {
+         return propertyValue;
+     }
+ 
+-    @Override
+-    public String toString() {
+-        return "ConfigurationComponent ["
+-            + "isActor="
+-            + this.isActor
+-            + ", userDefinedName="
+-            + this.userDefinedPortName
+-            + ", portName="
+-            + this.portName
+-            + ", componentProperties="
+-            + this.componentProperties
+-            + "]";
+-    }
+-
+ }
+diff --git a/OpenRobertaRobot/src/main/java/de/fhg/iais/roberta/components/ConfigurationSensorComponent.java b/OpenRobertaRobot/src/main/java/de/fhg/iais/roberta/components/ConfigurationSensorComponent.java
+new file mode 100644
+index 000000000..c4588f57c
+--- /dev/null
++++ b/OpenRobertaRobot/src/main/java/de/fhg/iais/roberta/components/ConfigurationSensorComponent.java
+@@ -0,0 +1,38 @@
++package de.fhg.iais.roberta.components;
++
++import java.util.Map;
++
++public final class ConfigurationSensorComponent extends ConfigurationComponent{
++	
++    private final boolean isSensor;
++
++    public ConfigurationSensorComponent(
++        String componentType,
++        boolean isSensor,
++        String portName,
++        String userDefinedName,
++        Map<String, String> componentProperties) {
++    	super(componentType, portName, userDefinedName, componentProperties);
++        this.isSensor = isSensor;
++    }
++
++    public boolean isSensor() {
++        return this.isSensor;
++    }
++ 
++    @Override
++    public String toString() {
++        return "ConfigurationComponent ["
++            + "isSensor="
++            + this.isSensor
++            + ", userDefinedName="
++            + this.userDefinedPortName
++            + ", portName="
++            + this.portName
++            + ", componentProperties="
++            + this.componentProperties
++            + "]";
++    }
++
++}
++
+-- 
+2.17.1
+

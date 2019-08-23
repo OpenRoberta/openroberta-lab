@@ -15,4 +15,7 @@
         <block type='robBrick_irseeker' />
         <block type='robBrick_htcolour' />
     </category>
+    <category name='TOOLBOX_ASSET' svg='true'>
+    	<block type='robBrick_ev3_image'></block>
+    </category>
 </toolbox_set>

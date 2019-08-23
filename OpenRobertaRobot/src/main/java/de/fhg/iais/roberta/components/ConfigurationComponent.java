@@ -7,25 +7,40 @@ import java.util.Map;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
+
 public final class ConfigurationComponent {
     private final String componentType;
 
-    private final boolean isActor;
+    private final ConfigurationCategory componentCategory;
     private final String userDefinedPortName;
     private final String portName;
     private final Map<String, String> componentProperties;
 
+    public ConfigurationComponent(
+			String componentType,
+			ConfigurationCategory componentCategory,
+	        String portName,
+	        String userDefinedName,
+	        Map<String, String> componentProperties) {
+    	this.componentType = componentType;
+        this.componentCategory = componentCategory;
+        this.portName = portName;
+        this.userDefinedPortName = userDefinedName;
+        this.componentProperties = Collections.unmodifiableMap(new HashMap<>(componentProperties));
+    }
+    
     public ConfigurationComponent(
         String componentType,
         boolean isActor,
         String portName,
         String userDefinedName,
         Map<String, String> componentProperties) {
-        this.componentType = componentType;
-        this.isActor = isActor;
-        this.portName = portName;
-        this.userDefinedPortName = userDefinedName;
-        this.componentProperties = Collections.unmodifiableMap(new HashMap<>(componentProperties));
+    	this(
+    		componentType, 
+    		isActor ? ConfigurationCategory.ACTOR : ConfigurationCategory.SENSOR, 
+    		portName, 
+    		userDefinedName, 
+    		componentProperties);
     }
 
     public String getComponentType() {
@@ -33,13 +48,17 @@ public final class ConfigurationComponent {
     }
 
     public boolean isActor() {
-        return this.isActor;
+        return this.componentCategory == ConfigurationCategory.ACTOR;
+    }
+    
+    public boolean isAsset() {
+        return this.componentCategory == ConfigurationCategory.ASSET;
     }
 
     public boolean isSensor() {
-        return !this.isActor;
+        return this.componentCategory == ConfigurationCategory.SENSOR;
     }
-
+    
     public boolean isRegulated() {
         return getProperty(SC.MOTOR_REGULATION).equals(SC.TRUE);
     }
@@ -89,8 +108,8 @@ public final class ConfigurationComponent {
     @Override
     public String toString() {
         return "ConfigurationComponent ["
-            + "isActor="
-            + this.isActor
+            + "componentCategory="
+            + this.componentCategory
             + ", userDefinedName="
             + this.userDefinedPortName
             + ", portName="

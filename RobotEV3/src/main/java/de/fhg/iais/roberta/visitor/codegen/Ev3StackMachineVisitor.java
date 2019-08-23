@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONObject;
 
@@ -41,15 +43,19 @@ import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.C;
+import de.fhg.iais.roberta.visitor.codegen.utilities.Ev3VisitorHelper;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IEv3Visitor<V> {
-
+	protected Map<String, String> predefinedImage = new HashMap<>();
+	protected final Configuration brickConfiguration;
+	
     private Ev3StackMachineVisitor(Configuration configuration, ArrayList<ArrayList<Phrase<Void>>> phrases, ILanguage language) {
         super(configuration);
+        this.brickConfiguration = configuration;
         Assert.isTrue(!phrases.isEmpty());
-
+        this.predefinedImage = Ev3VisitorHelper.getPredefinedImages(this.brickConfiguration, false);
     }
 
     public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, ILanguage language) {
@@ -101,8 +107,11 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitShowPictureAction(ShowPictureAction<V> showPictureAction) {
-        String image = showPictureAction.getPicture().toString();
-        JSONObject o = mk(C.SHOW_IMAGE_ACTION).put(C.IMAGE, image).put(C.NAME, "ev3");
+        String image = showPictureAction.getPicture();
+        JSONObject o = mk(C.SHOW_IMAGE_ACTION)
+        		.put(C.IMAGE, image)
+        		.put(C.NAME, "ev3")
+        		.put(C.IMAGE_DATA, this.predefinedImage.get(image));
         return app(o);
     }
 

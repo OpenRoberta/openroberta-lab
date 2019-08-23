@@ -73,7 +73,7 @@ public class RobotModeFactoryTest {
     public void invalidBrickLedColor() {
         this.dropdownFactory.getBrickLedColor("Q");
     }
-
+    /*
     @Test
     public void getShowPictureFromString() {
         Assert.assertEquals(this.factory.getShowPicture("EYESCLOSED"), ShowPicture.EYESCLOSED);
@@ -87,7 +87,7 @@ public class RobotModeFactoryTest {
     @Test(expected = DbcException.class)
     public void invalidShowPicture() {
         this.factory.getShowPicture("Q");
-    }
+    }*/
 
     @Test
     public void getTurnDirectionFromString() {

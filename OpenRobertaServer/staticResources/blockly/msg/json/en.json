@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-08-23 12:22:49.457954",
+		"lastupdated": "2019-08-23 14:50:44.993359",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1183,7 +1183,6 @@
 	"MENU_RIGHT_INFO_TOOLTIP": "Open/close the program documentation view.",
 	"MENU_RIGHT_SIM_TOOLTIP": "Open/close the simulation view.",
 	"MENU_RIGHT_CODE_TOOLTIP": "Open/close the source code view.",
-	"MENU_RIGHT_LEGAL_TOOLTIP": "Open/close the legal information view.",
 	"MENU_START_SIM": "open/close simulation view",
 	"MENU_SHOW_CODE": "open/close source code view",
 	"DISPLAY_PIXEL_TITLE": "LED",
@@ -1552,5 +1551,12 @@
 	"INIT_FAIL_HTTPSESSION_EXPECTED_BUT_NOT_FOUND": "The connection to the openroberta-lab was closed unexpectedly. This case is rare and may happen, if the openroberta-lab-server is restarted. Please start a new connection to the openroberta-lab, e.g. by closing and starting the browser or by hitting the »reload«-button.",
 	"PROGRAM_ERROR_EXPRBLOCK_TYPECHECK": "This expression is invalid. The type check failed.",
 	"PROGRAM_ERROR_EXPRBLOCK_PARSE": "This expression is syntactically incorrect.",
-	"ICON_BLOCKING_TOOLTIP": "Blocking block! This blocks needs some time to be executed, so other's have to wait until it gives back the control to the caller function."
+	"ICON_BLOCKING_TOOLTIP": "Blocking block! This blocks needs some time to be executed, so other's have to wait until it gives back the control to the caller function.",
+	"ACTION_IMAGE": "Image",
+	"NAME": "Name",
+	"CONFIGURATION_NO_ASSET": "no asset",
+	"TOOLBOX_ASSET": "Asset",
+	"UPLOAD": "Upload",
+	"UPLOADER": "Uploader",
+	"EV3_IMAGE_BRICK_TOOLTIP": "Represents the Image uploader of EV3 brick."
 }

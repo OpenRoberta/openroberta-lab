@@ -9,8 +9,10 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Instance;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.ConfigurationCategory;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -81,9 +83,26 @@ public class Jaxb2ConfigurationAstHelper {
         for ( Value value : values ) {
             String portName = value.getName();
             String userDefinedName = portName.substring(1);
-            boolean isActor = !portName.startsWith(sensorsPrefix);
+            ConfigurationCategory componentCategory;
+            if(portName.contains("AST_"))
+            {	componentCategory = ConfigurationCategory.ASSET;
+            }
+            else
+            {	if(!portName.startsWith(sensorsPrefix))
+            	{	componentCategory = ConfigurationCategory.ACTOR;
+            	}
+            	else
+            	{	componentCategory = ConfigurationCategory.SENSOR;
+            		
+            	}
+            }
             String blocklyName = value.getBlock().getType();
-            List<Field> fields = extractFields(value.getBlock(), (short) 3);
+            Mutation temp = value.getBlock().getMutation();
+            int mutation = 1;
+            if(temp != null){	
+            	mutation = value.getBlock().getMutation().getItems().intValue(); 
+            }
+            List<Field> fields = extractFields(value.getBlock(), (short) 3 * mutation);
             Map<String, String> properties = new HashMap<>();
             for ( Field field : fields ) {
                 String fKey = field.getName();
@@ -93,7 +112,7 @@ public class Jaxb2ConfigurationAstHelper {
             ConfigurationComponent cc =
                 new ConfigurationComponent(
                     factory.getConfigurationComponentTypeByBlocklyName(blocklyName),
-                    isActor,
+                    componentCategory,
                     portName,
                     userDefinedName,
                     properties);

@@ -20,7 +20,7 @@ public class ShowPictureActionTest {
     public void getPicture() throws Exception {
         Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_ShowPicture.xml");
         ShowPictureAction<Void> spa = (ShowPictureAction<Void>) transformer.getTree().get(0).get(1);
-        Assert.assertEquals("EYESOPEN", spa.getPicture().toString());
+        Assert.assertEquals("EYESOPEN", spa.getPicture());
     }
 
     @Test

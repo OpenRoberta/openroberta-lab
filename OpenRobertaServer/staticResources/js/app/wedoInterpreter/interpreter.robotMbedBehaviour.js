@@ -278,7 +278,7 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             this.hardwareState.actions.display.x = x;
             this.hardwareState.actions.display.y = y;
         };
-        RobotMbedBehaviour.prototype.showImageAction = function (image, mode) {
+        RobotMbedBehaviour.prototype.showImageAction = function (image, mode, image_data) {
             var showImage = "" + image;
             U.debug('***** show "' + showImage + '" *****');
             var imageLen = image.length;
@@ -288,6 +288,7 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             }
             this.hardwareState.actions.display = {};
             this.hardwareState.actions.display.picture = image;
+            this.hardwareState.actions.display.image_data = image_data;
             if (mode) {
                 this.hardwareState.actions.display.mode = mode.toLowerCase();
             }

@@ -96,6 +96,7 @@ export const IF_STMT: string = "IfStatement";
 export const IF_TRUE_STMT: string = "IfTrueStatement";
 export const IMAGE: string = "image";
 export const IMAGE_CONST: string = "image";
+export const IMAGE_DATA: string = "image_data";
 export const IMAGE_INVERT_ACTION: string = "ImageInvertAction";
 export const IMAGE_SHIFT_ACTION: string = "ImageShiftAction";
 export const IN: string = "in";
