@@ -18,7 +18,7 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
         U.debug( 'clear display' );
     }
 
-    public getSample( s: State, name: string, sensor: string, port: number, mode: string ):void {
+    public getSample( s: State, name: string, sensor: string, port: number, mode: string ): void {
         var robotText = 'robot: ' + name + ', port: ' + port;
         U.debug( robotText + ' getsample from ' + sensor );
         switch ( sensor ) {
@@ -181,5 +181,17 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
     public getVolumeAction( _s: State ): void {
         throw new Error( "Method not implemented." );
     }
-
+    public debugAction( _value: any ): void {
+        this.showTextAction( "> " + _value );
+        U.info( _value + " debug" );
+    }
+    public assertAction( _msg: string, _left: any, _op: string, _right: any, _value: any ): number {
+        if ( _value ) {
+            return 0;
+        } else {
+            var assertText: String = "> Assertion failed: " + _msg + " " + _left + " " + _op + " " + _right;
+            this.showTextAction( assertText );
+            U.info( assertText + " assert" );
+        }
+    }
 }

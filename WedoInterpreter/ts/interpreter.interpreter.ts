@@ -393,6 +393,18 @@ export class Interpreter {
                         s.bindVar( name, s.pop() + value );
                         break;
                     }
+                    case C.DEBUG_ACTION: {
+                        const value = s.pop();
+                        n.debugAction( value );
+                        break;
+                    }
+                    case C.ASSERT_ACTION: {
+                        const right = s.pop();
+                        const left = s.pop();
+                        const value = s.pop();             
+                        n.assertAction( stmt[C.MSG], left, stmt[C.OP], right, value );
+                        break;      
+                    }
                     default:
                         U.dbcException( "invalid stmt op: " + opCode );
                 }

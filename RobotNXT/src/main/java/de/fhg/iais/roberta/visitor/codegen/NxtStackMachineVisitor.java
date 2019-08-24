@@ -388,16 +388,6 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    public V visitAssertStmt(AssertStmt<V> assertStmt) {
-        return null;
-    }
-
-    @Override
-    public V visitDebugAction(DebugAction<V> debugAction) {
-        return null;
-    }
-
-    @Override
     public V visitHumiditySensor(HumiditySensor<V> humiditySensor) {
         return null;
     }

@@ -356,17 +356,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitAssertStmt(AssertStmt<V> assertStmt) {
-        return null;
-    }
-
-    @Override
     public V visitSwitchLedMatrixAction(SwitchLedMatrixAction<V> switchLedMatrixAction) {
-        return null;
-    }
-
-    @Override
-    public V visitDebugAction(DebugAction<V> debugAction) {
         return null;
     }
 
@@ -409,5 +399,4 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     public V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor) {
         return null;
     }
-
 }

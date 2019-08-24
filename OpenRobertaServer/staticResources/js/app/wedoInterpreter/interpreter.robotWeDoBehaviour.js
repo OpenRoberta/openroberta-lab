@@ -312,6 +312,17 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
         RobotWeDoBehaviour.prototype.getVolumeAction = function (_s) {
             throw new Error("Method not implemented.");
         };
+        RobotWeDoBehaviour.prototype.debugAction = function (_value) {
+            this.showTextAction("> " + _value);
+        };
+        RobotWeDoBehaviour.prototype.assertAction = function (_msg, _left, _op, _right, _value) {
+            if (_value) {
+                return 0;
+            }
+            else {
+                this.showTextAction("> Assertion failed: " + _msg + " " + _left + " " + _op + " " + _right);
+            }
+        };
         return RobotWeDoBehaviour;
     }(interpreter_aRobotBehaviour_1.ARobotBehaviour));
     exports.RobotWeDoBehaviour = RobotWeDoBehaviour;

@@ -10,6 +10,7 @@ public class C {
     public static final String ANY = "ANY";
     public static final String ARG1 = "arg1";
     public static final String ARG2 = "arg2";
+    public static final String ASSERT_ACTION = "AssertAction";
     public static final String ASSIGN_METHOD_PARAMETER_STMT = "AssignMethodParameter";
     public static final String ASSIGN_STMT = "AssignStmt";
     public static final String AT1 = "at1";
@@ -39,6 +40,7 @@ public class C {
     public static final String CREATE_LIST = "createList";
     public static final String CREATE_LIST_WITH_ITEM = "createCreateListWithItem";
     public static final String CURVE_ACTION = "CurveAction";
+    public static final String DEBUG_ACTION = "DebugAction";
     public static final String DEGREE = "degree";
     public static final String DIGITAL = "digital";
     public static final String DIRECTION = "direction";
@@ -163,6 +165,7 @@ public class C {
     public static final String MOTOR_A = "a";
     public static final String MOTOR_AB = "ab";
     public static final String MOTOR_B = "b";
+    public static final String MSG = "msg";
     public static final String MULTIPLY = "MULTIPLY";
     public static final String N = "n";
     public static final String NAME = "name";

@@ -5,7 +5,6 @@ import * as U from "interpreter.util";
 
 export class RobotMbedBehaviour extends ARobotBehaviour {
 
-
     constructor() {
         super();
         this.hardwareState.motors = {};
@@ -164,7 +163,7 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         this.hardwareState.actions.sayText.text = text;
         this.hardwareState.actions.sayText.speed = speed;
         this.hardwareState.actions.sayText.pitch = pitch;
-        this.setBlocking(true);
+        this.setBlocking( true );
         return 0;
     }
 
@@ -226,7 +225,7 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
             let rotationPerSecond = C.MAX_ROTATION * Math.abs( speedL ) / 100.0;
             let duration = rotations / rotationPerSecond * 1000;
             return duration;
-        } 
+        }
         return 0;
     }
 
@@ -285,7 +284,7 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         U.debug( '***** show "' + showText + '" *****' );
         this.hardwareState.actions.display = {};
         this.hardwareState.actions.display[mode.toLowerCase()] = showText;
-        this.setBlocking(true);
+        this.setBlocking( true );
         return 0;
     }
 
@@ -357,14 +356,26 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         this.hardwareState.actions["pin" + pin][mode] = {};
         this.hardwareState.actions["pin" + pin][mode] = value;
     }
-    
-    public gyroReset(_port: number): void {
-        throw new Error("Method not implemented.");
+
+    public gyroReset( _port: number ): void {
+        throw new Error( "Method not implemented." );
     }
 
 
     public getState(): any {
         return this.hardwareState;
+    }
+
+    public debugAction( value: any ): number {
+        U.debug( '***** debug action "' + value + '" *****' );
+        console.log( value );
+        return 0;
+    }
+
+    public assertAction( _msg: string, _left: any, _op: string, _right: any, value: boolean ): number {
+        U.debug( '***** assert action "' + value + ' ' + _msg + ' ' + _left + ' ' + _op + ' ' + _right + '" *****' );
+        console.assert( value, _msg + " " + _left + " " + _op + " " + _right );
+        return 0;
     }
 
     public close() {

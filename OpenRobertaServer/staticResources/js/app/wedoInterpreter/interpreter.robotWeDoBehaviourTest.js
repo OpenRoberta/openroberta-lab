@@ -156,6 +156,20 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
         RobotWeDoBehaviourTest.prototype.getVolumeAction = function (_s) {
             throw new Error("Method not implemented.");
         };
+        RobotWeDoBehaviourTest.prototype.debugAction = function (_value) {
+            this.showTextAction("> " + _value);
+            U.info(_value + " debug");
+        };
+        RobotWeDoBehaviourTest.prototype.assertAction = function (_msg, _left, _op, _right, _value) {
+            if (_value) {
+                return 0;
+            }
+            else {
+                var assertText = "> Assertion failed: " + _msg + " " + _left + " " + _op + " " + _right;
+                this.showTextAction(assertText);
+                U.info(assertText + " assert");
+            }
+        };
         return RobotWeDoBehaviourTest;
     }(interpreter_aRobotBehaviour_1.ARobotBehaviour));
     exports.RobotWeDoBehaviourTest = RobotWeDoBehaviourTest;

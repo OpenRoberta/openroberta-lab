@@ -385,6 +385,18 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                             s.bindVar(name_9, s.pop() + value);
                             break;
                         }
+                        case C.DEBUG_ACTION: {
+                            var value = s.pop();
+                            n.debugAction(value);
+                            break;
+                        }
+                        case C.ASSERT_ACTION: {
+                            var right = s.pop();
+                            var left = s.pop();
+                            var value = s.pop();
+                            n.assertAction(stmt[C.MSG], left, stmt[C.OP], right, value);
+                            break;
+                        }
                         default:
                             U.dbcException("invalid stmt op: " + opCode);
                     }

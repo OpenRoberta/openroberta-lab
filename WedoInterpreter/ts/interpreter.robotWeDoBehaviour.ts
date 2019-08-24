@@ -336,12 +336,21 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
     public displayGetPixelBrightnessAction( _s: State, _x: number, _y: number ): void {
         throw new Error( "Method not implemented." );
     }
-    
+
     public setVolumeAction( _volume: number ): void {
         throw new Error( "Method not implemented." );
     }
     public getVolumeAction( _s: State ): void {
         throw new Error( "Method not implemented." );
     }
-
+    public debugAction( _value: any ): void {
+        this.showTextAction( "> " + _value );
+    }
+    public assertAction( _msg: string, _left: any, _op: string, _right: any, _value: any ): number {
+        if ( _value ) {
+            return 0;
+        } else {
+            this.showTextAction( "> Assertion failed: " + _msg + " " + _left + " " + _op + " " + _right );
+        }
+    }
 }

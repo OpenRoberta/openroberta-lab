@@ -10,6 +10,7 @@ define(["require", "exports"], function (require, exports) {
     exports.ANY = "ANY";
     exports.ARG1 = "arg1";
     exports.ARG2 = "arg2";
+    exports.ASSERT_ACTION = "AssertAction";
     exports.ASSIGN_METHOD_PARAMETER_STMT = "AssignMethodParameter";
     exports.ASSIGN_STMT = "AssignStmt";
     exports.AT1 = "at1";
@@ -39,6 +40,7 @@ define(["require", "exports"], function (require, exports) {
     exports.CREATE_LIST = "createList";
     exports.CREATE_LIST_WITH_ITEM = "createCreateListWithItem";
     exports.CURVE_ACTION = "CurveAction";
+    exports.DEBUG_ACTION = "DebugAction";
     exports.DEGREE = "degree";
     exports.DIGITAL = "digital";
     exports.DIRECTION = "direction";
@@ -161,6 +163,7 @@ define(["require", "exports"], function (require, exports) {
     exports.MOTOR_A = "a";
     exports.MOTOR_AB = "ab";
     exports.MOTOR_B = "b";
+    exports.MSG = "msg";
     exports.MULTIPLY = "MULTIPLY";
     exports.N = "n";
     exports.NAME = "name";

@@ -32,6 +32,7 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.C;
+import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor<V> {
@@ -705,6 +706,24 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         List<JSONObject> opArray = this.opArray;
         this.opArray = this.opArrayStack.remove(this.opArrayStack.size() - 1);
         return opArray;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public V visitAssertStmt(AssertStmt<V> assertStmt) {
+        assertStmt.getAssert().visit(this);
+        ((Binary<Void>) assertStmt.getAssert()).getLeft().visit((IVisitor<Void>) this);
+        ((Binary<Void>) assertStmt.getAssert()).getRight().visit((IVisitor<Void>) this);
+        String op = ((Binary<Void>) (assertStmt.getAssert())).getOp().toString();
+        JSONObject o = mk(C.ASSERT_ACTION).put(C.MSG, assertStmt.getMsg()).put(C.OP, op);
+        return app(o);
+    }
+
+    @Override
+    public V visitDebugAction(DebugAction<V> debugAction) {
+        debugAction.getValue().visit(this);
+        JSONObject o = mk(C.DEBUG_ACTION);
+        return app(o);
     }
 
     protected void generateProgramPrefix(boolean withWrapping) {
