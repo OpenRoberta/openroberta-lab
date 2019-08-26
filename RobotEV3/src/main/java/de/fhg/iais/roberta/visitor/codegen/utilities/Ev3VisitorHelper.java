@@ -16,12 +16,31 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 
 public class Ev3VisitorHelper {
-
+	
+	public static String byteToHex(byte b) {
+	      // Returns hex String representation of byte b
+	      char hexDigit[] = {
+	         '0', '1', '2', '3', '4', '5', '6', '7',
+	         '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
+	      };
+	      char[] value = { hexDigit[(b >> 4) & 0x0f], hexDigit[b & 0x0f] };
+	      return new String(value);
+	   }
+	
+	public static String getBytes(byte[] value) {
+		String byteHex = new String();
+	    for (int i = 0; i < value.length; i++) {
+	    	byteHex += "\\x" + byteToHex(value[i]);
+	    }
+	    return byteHex;
+	}
+	
 	// Base64 Basic Decoding
     private static String base64Decode(String value) {
         try {
             byte[] decodedValue = Base64.getDecoder().decode(value);
-            return new String(decodedValue, StandardCharsets.UTF_16.toString());        
+            new String(decodedValue, StandardCharsets.UTF_16.toString());
+            return getBytes(decodedValue);
         } catch(UnsupportedEncodingException ex) {
             throw new RuntimeException(ex);
         }
