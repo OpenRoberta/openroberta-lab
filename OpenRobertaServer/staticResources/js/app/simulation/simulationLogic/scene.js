@@ -717,7 +717,11 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'interpreter.consta
                     values.display.pixel = this.robots[r].display.leds;
                 } else {
                     values.display.brightness = Math.round((this.robots[r].display.brightness * 9.0) / 255.0, 0);
-                    values.display.pixel = this.robots[r].display.leds.map(x => x.map(y => y / IC.BRIGHTNESS_MULTIPLIER));
+                    values.display.pixel = this.robots[r].display.leds.map(function(x) { 
+                        return x.map(function(y) {
+                            return y / IC.BRIGHTNESS_MULTIPLIER
+                            });
+                        });
                 }
             }
             if (this.robots[r].temperature) {
