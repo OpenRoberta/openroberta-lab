@@ -1,12 +1,13 @@
 package de.fhg.iais.roberta.components;
 
-import com.google.common.collect.Lists;
-import de.fhg.iais.roberta.util.dbc.DbcException;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
+import com.google.common.collect.Lists;
+
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class EdisonConfiguration extends Configuration {
 
@@ -27,19 +28,21 @@ public class EdisonConfiguration extends Configuration {
         ConfigurationComponent playButton = new ConfigurationComponent("KEY", true, "PLAY", "PLAYKEY", Collections.emptyMap());
         ConfigurationComponent recordButton = new ConfigurationComponent("KEY", true, "REC", "RECKEY", Collections.emptyMap());
 
-        ArrayList<ConfigurationComponent> components = Lists.newArrayList(
-            leftMotor,
-            rightMotor,
-            leftLED,
-            rightLED,
-            irLED,
-            obstacleDetector,
-            lineTracker,
-            leftLight,
-            rightLight,
-            sound,
-            playButton,
-            recordButton);
+        ArrayList<ConfigurationComponent> components =
+            Lists
+                .newArrayList(
+                    leftMotor,
+                    rightMotor,
+                    leftLED,
+                    rightLED,
+                    irLED,
+                    obstacleDetector,
+                    lineTracker,
+                    leftLight,
+                    rightLight,
+                    sound,
+                    playButton,
+                    recordButton);
 
         config = new Configuration.Builder().addComponents(components).build();
     }

@@ -1,9 +1,16 @@
 package de.fhg.iais.roberta.syntax.sensors.edison;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.syntax.*;
+import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
@@ -11,12 +18,10 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IEdisonVisitor;
 
-import java.util.List;
-
 /**
  * This class represents the "edisonSensors_sensor_reset" block which is used to reset the sensors of the Edison robot.
- * This is needed bcause some sensors always listen for new data and write it. This calls the sensor read() method and just doesn't save the value into a variable.
- *
+ * This is needed bcause some sensors always listen for new data and write it. This calls the sensor read() method and just doesn't save the value into a
+ * variable.
  * This block should be used before every loop.
  *
  * @param <V>
@@ -26,13 +31,12 @@ public class ResetSensor<V> extends Sensor<V> {
     private final String sensor;
 
     /**
-     *
      * This constructor set the kind of the sensor object used in the AST (abstract syntax tree). All possible kinds can be found in {@link BlockType}.
      *
-     * @param kind       of the the sensor object used in AST,
-     * @param sensor     the sensor to reset
+     * @param kind of the the sensor object used in AST,
+     * @param sensor the sensor to reset
      * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment    of the user for the specific block
+     * @param comment of the user for the specific block
      */
     public ResetSensor(String sensor, BlocklyBlockProperties props, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("SENSOR_RESET"), props, comment);
@@ -49,11 +53,13 @@ public class ResetSensor<V> extends Sensor<V> {
      *
      * @param visitor
      */
-    @Override protected V accept(IVisitor<V> visitor) {
+    @Override
+    protected V accept(IVisitor<V> visitor) {
         return ((IEdisonVisitor<V>) visitor).visitSensorResetAction(this);
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "ResetSensor[" + this.sensor + "]";
     }
 
@@ -74,24 +80,25 @@ public class ResetSensor<V> extends Sensor<V> {
     /**
      * @return converts AST representation of block to JAXB representation of block
      */
-    @Override public Block astToBlock() {
+    @Override
+    public Block astToBlock() {
         Block jaxbDestination = new Block();
         Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
         Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.SENSOR, this.getSensor());
 
-        return  jaxbDestination;
+        return jaxbDestination;
     }
 
     /**
      * Getter for the sensor that will be resetted
      *
      * @return the sensor to be resetted as a String
-     *      values will be one of the following:
-     *          - 'OBSTACLEDETECTOR'
-     *          - 'KEYPAD'
-     *          - 'SOUND'
-     *          - 'RCCODE'
-     *          - 'IRCODE'
+     *         values will be one of the following:
+     *         - 'OBSTACLEDETECTOR'
+     *         - 'KEYPAD'
+     *         - 'SOUND'
+     *         - 'RCCODE'
+     *         - 'IRCODE'
      */
     public String getSensor() {
         return this.sensor;

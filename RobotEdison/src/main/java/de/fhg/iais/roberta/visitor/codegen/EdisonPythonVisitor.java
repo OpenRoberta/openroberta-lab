@@ -1,5 +1,14 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
+import static de.fhg.iais.roberta.syntax.lang.functions.FunctionNames.SUM;
+import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.CURVE;
+import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.DIFFDRIVE;
+import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.DIFFTURN;
+import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.IRSEEK;
+import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.IRSEND;
+import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.MOTORON;
+import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.OBSTACLEDETECTION;
+
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.codegen.HelperMethodGenerator;
@@ -26,13 +35,13 @@ import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
-import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
@@ -46,17 +55,12 @@ import de.fhg.iais.roberta.visitor.collect.EdisonUsedMethodCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IEdisonVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
-import static de.fhg.iais.roberta.syntax.lang.functions.FunctionNames.LISTS_REPEAT;
-
 /**
  * This class visits the Blockly blocks for the Edison robot and translates them into EdPy Python2 code (https://github.com/Bdanilko/EdPy)
  * Many methods are not supported (N O P) because the Edison robot does not allow the import of any Python module (f.e. math).
  * Also the edison robot only supports integers and has no suport for nested statements. (f.e. "if (a and b):" with a,b being booleans)
  */
 public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdisonVisitor<Void> {
-
-    protected final Configuration brickConfig;
-    private int soundFileName = 0;
 
     private final EdisonUsedHardwareCollectorVisitor usedHardwareCollector;
 
@@ -66,14 +70,16 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * The used sensors/actors are disregarded in the edison robot, since all sensors/actors are fixed.
      * The used methods are collected by the UsedHardwareCollector and then saved as a Set, so that they can be appended in the suffix
      *
-     * @param brickConfig    hardware configuration of the robot (fixed)
+     * @param brickConfig hardware configuration of the robot (fixed)
      * @param programPhrases to generate the code from
-     * @param indentation    to start with. Will be incremented/decremented depending on block structure
+     * @param indentation to start with. Will be incremented/decremented depending on block structure
      */
-    public EdisonPythonVisitor(Configuration brickConfig, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation,
+    public EdisonPythonVisitor(
+        Configuration brickConfig,
+        ArrayList<ArrayList<Phrase<Void>>> programPhrases,
+        int indentation,
         HelperMethodGenerator helperMethodGenerator) {
         super(programPhrases, indentation, helperMethodGenerator, new EdisonUsedMethodCollectorVisitor(programPhrases));
-        this.brickConfig = brickConfig;
 
         this.usedHardwareCollector = new EdisonUsedHardwareCollectorVisitor(programPhrases, brickConfig);
         this.usedGlobalVarInFunctions = this.usedHardwareCollector.getMarkedVariablesAsGlobal();
@@ -87,17 +93,26 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     protected void generateProgramPrefix(boolean withWrapping) {
-        if ( !withWrapping )
+        if ( !withWrapping ) {
             return;
+        }
 
-        this.sb.append("import Ed"); nlIndent();
-        this.sb.append("Ed.EdisonVersion = Ed.V2"); nlIndent();
-        this.sb.append("Ed.DistanceUnits = Ed.CM"); nlIndent();
-        this.sb.append("Ed.Tempo = Ed.TEMPO_SLOW"); nlIndent();
-        this.sb.append("obstacleDetectionOn = False"); nlIndent(); //nur wenn benötigt TODO
-        this.sb.append("Ed.LineTrackerLed(Ed.ON)"); nlIndent(); //nur wenn benötigt TODO
-        this.sb.append("Ed.ReadClapSensor()"); nlIndent(); //zur Sicherheit -- um den Sensor zurückzusetzen
-        this.sb.append("Ed.ReadLineState()"); nlIndent();
+        this.sb.append("import Ed");
+        nlIndent();
+        this.sb.append("Ed.EdisonVersion = Ed.V2");
+        nlIndent();
+        this.sb.append("Ed.DistanceUnits = Ed.CM");
+        nlIndent();
+        this.sb.append("Ed.Tempo = Ed.TEMPO_SLOW");
+        nlIndent();
+        this.sb.append("obstacleDetectionOn = False");
+        nlIndent();
+        this.sb.append("Ed.LineTrackerLed(Ed.ON)");
+        nlIndent();
+        this.sb.append("Ed.ReadClapSensor()");
+        nlIndent(); //zur Sicherheit -- um den Sensor zurückzusetzen
+        this.sb.append("Ed.ReadLineState()");
+        nlIndent();
         this.sb.append("Ed.TimeWait(250, Ed.TIME_MILLISECONDS)"); //möglicherweise überflüssig
     }
 
@@ -109,13 +124,12 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     protected void generateProgramSuffix(boolean withWrapping) {
-        if (!withWrapping) {
+        if ( !withWrapping ) {
             return;
         }
-        decrIndentation();  // everything is still indented from main program
+        decrIndentation(); // everything is still indented from main program
         nlIndent(); //new line for helper methods
         nlIndent();
-        this.sb.append("def shorten(num): return ((num+5)/10)"); nlIndent(); //This method is used so often that it comes with every program
 
         if ( !this.usedHardwareCollector.getUsedMethods().isEmpty() ) {
             String helperMethodImpls = this.helperMethodGenerator.getHelperMethodDefinitions(this.usedHardwareCollector.getUsedMethods());
@@ -132,13 +146,16 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * Generates source code from a brick configuration and a Blockly program.
      * This method is needed because {@link AbstractPythonVisitor#generateCode(boolean)} and {AbstractPythonVisitor#generateProgramMainBody()} are protected.
      *
-     * @param brickCfg       the brick configuration
+     * @param brickCfg the brick configuration
      * @param programPhrases the program to generate the code from
-     * @param withWrapping   wrap the code with prefix/suffix
+     * @param withWrapping wrap the code with prefix/suffix
      * @return the source code as a String
      */
     public static String generate(
-        Configuration brickCfg, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping, HelperMethodGenerator helperMethodGenerator) {
+        Configuration brickCfg,
+        ArrayList<ArrayList<Phrase<Void>>> programPhrases,
+        boolean withWrapping,
+        HelperMethodGenerator helperMethodGenerator) {
         Assert.notNull(brickCfg);
 
         EdisonPythonVisitor visitor = new EdisonPythonVisitor(brickCfg, programPhrases, 0, helperMethodGenerator);
@@ -163,14 +180,15 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     /**
      * Function to get readings from the obstacle detector.
      * visit a {@link InfraredSensor} for the block "robSensors_infrared_getSample"
+     * 
      * @param infraredSensor to be visited
      */
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.sb.append(this.helperMethodGenerator.getHelperMethodName(EdisonUsedHardwareCollectorVisitor.Method.OBSTACLEDETECTION));
+        this.sb.append(this.helperMethodGenerator.getHelperMethodName(OBSTACLEDETECTION));
         this.sb.append("(");
 
-        switch (infraredSensor.getPort()) {
+        switch ( infraredSensor.getPort() ) {
             case "FRONT":
                 this.sb.append("Ed.OBSTACLE_AHEAD");
                 break;
@@ -195,8 +213,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
-        this.sb.append(this.helperMethodGenerator.getHelperMethodName(EdisonUsedHardwareCollectorVisitor.Method.IRSEEK));
-        switch (irSeekerSensor.getMode()) {
+        this.sb.append(this.helperMethodGenerator.getHelperMethodName(IRSEEK));
+        switch ( irSeekerSensor.getMode() ) {
             case "RCCODE":
                 this.sb.append("(1)");
                 break;
@@ -212,14 +230,13 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * The light level reported from Edison is between 0 and 32767, but the return value is in percent.
      * That's why it is divided by 32767.
      * The line tracker can also report if the robot is on a line, but for this to work the robot has to be placed on a white surface when the program starts.
-     *
      * visit a {@link LightSensor} for the block "robSensors_light_getSample"
      *
      * @param lightSensor
      */
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        switch (lightSensor.getPort()) {
+        switch ( lightSensor.getPort() ) {
             case "LLIGHT":
                 this.sb.append("Ed.ReadLeftLightLevel() / 32767 * 100");
                 break;
@@ -227,7 +244,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
                 this.sb.append("Ed.ReadRightLightLevel() / 32767 * 100");
                 break;
             case "LINETRACKER":
-                if (lightSensor.getMode().equals("LINE")) {
+                if ( lightSensor.getMode().equals("LINE") ) {
                     this.sb.append("Ed.ReadLineState() == Ed.LINE_ON_BLACK");
                 } else {
                     this.sb.append("Ed.ReadLineTracker() / 32767 * 100");
@@ -259,7 +276,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
-        this.sb.append(this.helperMethodGenerator.getHelperMethodName(EdisonUsedHardwareCollectorVisitor.Method.IRSEND));
+        this.sb.append(this.helperMethodGenerator.getHelperMethodName(IRSEND));
         this.sb.append("(");
         sendIRAction.getCode().visit(this);
         this.sb.append(")");
@@ -269,12 +286,13 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     /**
      * Function to receive data via infrared
      * visit a {@link SendIRAction} for the block "edisonCommunication_ir_receiveBlock"
+     * 
      * @param receiveIRAction
      * @return
      */
     @Override
     public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
-        this.sb.append(this.helperMethodGenerator.getHelperMethodName(EdisonUsedHardwareCollectorVisitor.Method.IRSEEK));
+        this.sb.append(this.helperMethodGenerator.getHelperMethodName(IRSEEK));
         this.sb.append("(0)");
         return null;
     }
@@ -288,7 +306,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         String direction = "Ed.FORWARD";
-        switch (driveAction.getDirection().toString()) {
+        switch ( driveAction.getDirection().toString() ) {
             case "FOREWARD":
                 break;
             case "BACKWARD":
@@ -296,11 +314,11 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
                 break;
         }
 
-        this.sb.append(this.helperMethodGenerator.getHelperMethodName(EdisonUsedHardwareCollectorVisitor.Method.DIFFDRIVE));
+        this.sb.append(this.helperMethodGenerator.getHelperMethodName(DIFFDRIVE));
         this.sb.append("(").append(direction).append(", ");
         driveAction.getParam().getSpeed().visit(this);
         this.sb.append(", ");
-        if (driveAction.getParam().getDuration() != null) {
+        if ( driveAction.getParam().getDuration() != null ) {
             driveAction.getParam().getDuration().getValue().visit(this);
         } else {
             this.sb.append("Ed.DISTANCE_UNLIMITED");
@@ -319,9 +337,10 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        switch (mathOnListFunct.getFunctName()) {
+        switch ( mathOnListFunct.getFunctName() ) {
             case AVERAGE: // general implementation casts to float, which is not allowed on edison
-                this.sb.append("sum(");
+                this.sb.append(this.helperMethodGenerator.getHelperMethodName(SUM));
+                this.sb.append("(");
                 mathOnListFunct.getParam().get(0).visit(this);
                 this.sb.append(") / len(");
                 mathOnListFunct.getParam().get(0).visit(this);
@@ -380,35 +399,18 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         int listSize = listCreate.getValue().get().size();
 
         this.sb.append("Ed.List(").append(listSize).append((", ["));
-        if (listSize == 0) {
+        if ( listSize == 0 ) {
             this.sb.append("]");
         } else {
-            for (int i = 0; i < listSize; i++) {
+            for ( int i = 0; i < listSize; i++ ) {
                 listCreate.getValue().get().get(i).visit(this);
-                if (i < (listSize -1)) {
+                if ( i < (listSize - 1) ) {
                     this.sb.append((","));
                 } else {
                     this.sb.append("]");
                 }
             }
         }
-        this.sb.append(")");
-
-        return null;
-    }
-
-    /**
-     * Function to create a List with repeated item
-     * visit a {@link ListRepeat} for the block "robLists_repeat"
-     *
-     * @param listRepeat to be visited
-     */
-    @Override public Void visitListRepeat(ListRepeat<Void> listRepeat) {
-        this.sb.append(this.helperMethodGenerator.getHelperMethodName(LISTS_REPEAT));
-        this.sb.append("(");
-        listRepeat.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        listRepeat.getParam().get(1).visit(this);
         this.sb.append(")");
 
         return null;
@@ -422,7 +424,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
-        switch (keysSensor.getPort()) {
+        switch ( keysSensor.getPort() ) {
             case "REC":
                 this.sb.append("Ed.ReadKeypad() == Ed.KEYPAD_ROUND");
                 break;
@@ -436,10 +438,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * //TODO-MAX komplett neu
      * Function to drive a curve forward/backward.
      * This is still very buggy when used together with sensors (e.g. drive a curve until an obstacle is detected).
-     *
      * visit a {@link CurveAction} for the block "robActions_motorDiff_curve_for" and "robActions_motorDiff_curve"
      *
      * @param curveAction to visit
@@ -449,7 +449,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         String direction;
 
         //determine the direction
-        switch (curveAction.getDirection().toString()) {
+        switch ( curveAction.getDirection().toString() ) {
             case "BACKWARD":
                 direction = "Ed.BACKWARD";
                 break;
@@ -459,45 +459,17 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
                 break;
         }
 
-        //first, drive straight forward with the speed-% of the right motor
-        //Then, directly set both motors to the correct speed-%
-        this.sb.append("Ed.Drive(" + direction + ", shorten(");
-        curveAction.getParamRight().getSpeed().visit(this);
-        this.sb.append("), Ed.DISTANCE_UNLIMITED)");
-        nlIndent();
-        this.sb.append("Ed.DriveLeftMotor(" + direction + ", shorten(");
+        this.sb.append(this.helperMethodGenerator.getHelperMethodName(CURVE)).append("(").append(direction).append(", ");
         curveAction.getParamLeft().getSpeed().visit(this);
-        this.sb.append("), ");
-        this.sb.append("Ed.DISTANCE_UNLIMITED)");
-        nlIndent();
-        this.sb.append("Ed.DriveRightMotor(" + direction + ", shorten(");
+        this.sb.append(", ");
         curveAction.getParamRight().getSpeed().visit(this);
-        this.sb.append("), ");
-        this.sb.append("Ed.DISTANCE_UNLIMITED)");
-        nlIndent();
-
-        //If a duration in cm is wanted, set the distance for both motors
-        //and then periodically read the distance until one of them is 0
-        if (curveAction.getParamLeft().getDuration() != null) {
-            this.sb.append("Ed.SetDistance(Ed.MOTOR_LEFT, ");
+        this.sb.append(", ");
+        if ( curveAction.getParamLeft().getDuration() != null ) {
             curveAction.getParamLeft().getDuration().getValue().visit(this);
             this.sb.append(")");
-            nlIndent();
-            this.sb.append("Ed.SetDistance(Ed.MOTOR_RIGHT, ");
-            curveAction.getParamRight().getDuration().getValue().visit(this);
-            this.sb.append(")");
-            nlIndent();
-            this.sb.append("while ");
-            this.sb.append(this.helperMethodGenerator.getHelperMethodName(EdisonUsedHardwareCollectorVisitor.Method.CURVE));
-            this.sb.append("(");
-            curveAction.getParamLeft().getSpeed().visit(this);
-            this.sb.append(", ");
-            curveAction.getParamRight().getSpeed().visit(this);
-            this.sb.append(") > 0:");
-            incrIndentation(); nlIndent();
-            this.sb.append("pass");
-            decrIndentation(); nlIndent();
-            this.sb.append("Ed.ResetDistance()");
+
+        } else {
+            this.sb.append("Ed.DISTANCE_UNLIMITED)");
         }
 
         return null;
@@ -511,11 +483,11 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        this.sb.append(this.helperMethodGenerator.getHelperMethodName(EdisonUsedHardwareCollectorVisitor.Method.DIFFTURN));
+        this.sb.append(this.helperMethodGenerator.getHelperMethodName(DIFFTURN));
         this.sb.append("(Ed.SPIN_").append(turnAction.getDirection()).append(", ");
         turnAction.getParam().getSpeed().visit(this);
         this.sb.append(", ");
-        if (turnAction.getParam().getDuration() != null) {
+        if ( turnAction.getParam().getDuration() != null ) {
             turnAction.getParam().getDuration().getValue().visit(this);
         } else {
             this.sb.append("Ed.DISTANCE_UNLIMITED");
@@ -533,8 +505,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        this.sb.append(this.helperMethodGenerator.getHelperMethodName(EdisonUsedHardwareCollectorVisitor.Method.MOTORON));
-        switch (motorOnAction.getUserDefinedPort()) {
+        this.sb.append(this.helperMethodGenerator.getHelperMethodName(MOTORON));
+        switch ( motorOnAction.getUserDefinedPort() ) {
             case "LMOTOR":
                 this.sb.append("(0, ");
                 motorOnAction.getParam().getSpeed().visit(this);
@@ -548,7 +520,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         }
         this.sb.append(", ");
 
-        if (motorOnAction.getDurationValue() != null) {
+        if ( motorOnAction.getDurationValue() != null ) {
             motorOnAction.getDurationValue().visit(this);
             this.sb.append(")");
         } else {
@@ -566,7 +538,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        switch (motorStopAction.getUserDefinedPort()) {
+        switch ( motorStopAction.getUserDefinedPort() ) {
             case "B":
             case "LMOTOR":
                 this.sb.append("Ed.DriveLeftMotor(Ed.STOP, Ed.SPEED_1, 1)");
@@ -583,7 +555,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
 
     @Override
     public Void visitBinary(Binary<Void> binary) {
-        if ( binary.getOp() == Binary.Op.DIVIDE ) {  // general implementation casts to float, which is not allowed on edison
+        if ( binary.getOp() == Binary.Op.DIVIDE ) { // general implementation casts to float, which is not allowed on edison
             binary.getLeft().visit(this);
             this.sb.append(" / ");
             binary.getRight().visit(this);
@@ -695,7 +667,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        switch (lightAction.getPort()) {
+        switch ( lightAction.getPort() ) {
             case "RLED":
                 this.sb.append("Ed.RightLed(Ed.ON)");
                 break;
@@ -717,7 +689,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        switch (lightStatusAction.getPort()) {
+        switch ( lightStatusAction.getPort() ) {
             case "1":
             case "RLED":
                 this.sb.append("Ed.RightLed(Ed.OFF)");
@@ -747,7 +719,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         toneAction.getFrequency().visit(this);
         this.sb.append(", ");
         toneAction.getDuration().visit(this);
-        this.sb.append(")"); nlIndent();
+        this.sb.append(")");
+        nlIndent();
         this.sb.append("Ed.TimeWait(");
         toneAction.getDuration().visit(this);
         this.sb.append(", Ed.TIME_MILLISECONDS)");
@@ -772,7 +745,6 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * //TODO-MAX shorter sound files
      * Function to play a sound file/note file
      * visit a {@link PlayFileAction} for the block "robActions_play_file"
      *
@@ -780,17 +752,17 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        switch (playFileAction.getFileName().toLowerCase()) {
+        switch ( playFileAction.getFileName().toLowerCase() ) {
             case "0":
                 this.sb.append("___soundfile1 = Ed.TuneString(7,\"c8e8g8z\")"); //positiv
                 nlIndent();
                 this.sb.append("Ed.PlayTune(___soundfile1)");
                 break;
             case "1":
-//                this.sb.append("___soundfile2 = Ed.TuneString(35, \"c4d8e4d4f4e4d8c8d4a4g4f4e4d4e8c8g2z\")"); //dt. Nationalhymne
-//                nlIndent();
-//                this.sb.append("Ed.PlayTune(___soundfile2)");
-//                break;
+                //                this.sb.append("___soundfile2 = Ed.TuneString(35, \"c4d8e4d4f4e4d8c8d4a4g4f4e4d4e8c8g2z\")"); //dt. Nationalhymne
+                //                nlIndent();
+                //                this.sb.append("Ed.PlayTune(___soundfile2)");
+                //                break;
                 this.sb.append("___soundfile2 = Ed.TuneString(7,\"g8e8c8z\")"); //negativ
                 nlIndent();
                 this.sb.append("Ed.PlayTune(___soundfile2)");
@@ -818,7 +790,6 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         nlIndent();
         this.sb.append("pass");
         decrIndentation();
-        this.soundFileName++;
 
         return null;
     }
@@ -830,8 +801,9 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @param resetSensor
      * @return
      */
-    @Override public Void visitSensorResetAction(ResetSensor<Void> resetSensor) {
-        switch (resetSensor.getSensor()) {
+    @Override
+    public Void visitSensorResetAction(ResetSensor<Void> resetSensor) {
+        switch ( resetSensor.getSensor() ) {
             case "OBSTACLEDETECTOR":
                 this.sb.append("Ed.ReadObstacleDetection()");
                 break;
@@ -851,6 +823,20 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
                 break;
         }
 
+        return null;
+    }
+
+    /**
+     * visit a {@link GetSampleSensor}
+     * Needs to override parent method to add parenthesis.
+     *
+     * @param sensorGetSample to be visited
+     */
+    @Override
+    public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
+        this.sb.append("(");
+        sensorGetSample.getSensor().visit(this);
+        this.sb.append(")");
         return null;
     }
 

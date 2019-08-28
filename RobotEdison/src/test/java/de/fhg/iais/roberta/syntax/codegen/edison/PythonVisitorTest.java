@@ -5,7 +5,6 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-//TODO-MAx bring tests up to date
 public class PythonVisitorTest {
     private final HelperEdisonForXmlTest h = new HelperEdisonForXmlTest();
 
@@ -21,10 +20,10 @@ public class PythonVisitorTest {
      */
     @Test
     public void visitDriveActionTest() throws Exception {
-        String expectedResult = "diff_drive(Ed.FORWARD,33,22)";
+        String expectedResult = "_diffDrive(Ed.FORWARD,33,22)";
         h.assertCodeIsOk(expectedResult, "/syntax/actor/drive_1.xml");
 
-        expectedResult = "diff_drive(Ed.BACKWARD,33,22)";
+        expectedResult = "_diffDrive(Ed.BACKWARD,33,22)";
         h.assertCodeIsOk(expectedResult, "/syntax/actor/drive_2.xml");
     }
 
@@ -51,8 +50,7 @@ public class PythonVisitorTest {
                       + "Ed.TimeWait(250, Ed.TIME_MILLISECONDS)\n"
                       + "\n"
                       + "\n"
-                      + "\n"
-                      + "def shorten(num): return ((num+5)/10)\n";
+                      + "\n";
 
         String generatedResult = h.generatePython("/syntax/task/start.xml");
         Assert.assertEquals(expectedResult, generatedResult);
@@ -92,12 +90,6 @@ public class PythonVisitorTest {
     }
 
     @Test
-    public void visitListRepeatTest() throws Exception {
-        String expectedResult = "item=_create_repeat(7,3)";
-        h.assertCodeIsOk(expectedResult, "/syntax/lists/list_repeat.xml");
-    }
-
-    @Test
     public void visitKeysSensorTest() throws Exception {
         String expectedResult = "item=True\n\nitem=Ed.ReadKeypad()==Ed.KEYPAD_ROUND\nitem=Ed.ReadKeypad()==Ed.KEYPAD_TRIANGLE";
         h.assertCodeIsOk(expectedResult, "/syntax/sensor/keys.xml");
@@ -113,15 +105,15 @@ public class PythonVisitorTest {
     public void visitInfraredSensorTest() throws Exception {
         String expectedResult =
               "irvar=True"
-            + "irvar=obstacle_detection(Ed.OBSTACLE_LEFT)"
-            + "irvar=obstacle_detection(Ed.OBSTACLE_AHEAD)"
-            + "irvar=obstacle_detection(Ed.OBSTACLE_RIGHT)";
+            + "irvar=_obstacleDetection(Ed.OBSTACLE_LEFT)"
+            + "irvar=_obstacleDetection(Ed.OBSTACLE_AHEAD)"
+            + "irvar=_obstacleDetection(Ed.OBSTACLE_RIGHT)";
         h.assertCodeIsOk(expectedResult, "/syntax/sensor/infrared.xml");
     }
 
     @Test
     public void visitIRSeekerSensorTest() throws Exception {
-        String expectedResult = "item=0item=ir_seek(1)";
+        String expectedResult = "item=0item=_irSeek(1)";
         h.assertCodeIsOk(expectedResult, "/syntax/sensor/irseeker.xml");
     }
 
@@ -137,56 +129,47 @@ public class PythonVisitorTest {
     @Test
     public void visitSensorWaitUntilTest() throws Exception {
         String expectedResult =
-              "whileTrue:ifEd.ReadKeypad()==Ed.KEYPAD_TRIANGLE==True:breakpass"
-                  + "whileTrue:ifEd.ReadKeypad()==Ed.KEYPAD_ROUND==True:breakpass"
-                  + "whileTrue:ifobstacle_detection(Ed.OBSTACLE_LEFT)==True:breakpass"
-                  + "whileTrue:ifobstacle_detection(Ed.OBSTACLE_RIGHT)==True:breakpass"
-                  + "whileTrue:ifobstacle_detection(Ed.OBSTACLE_AHEAD)==True:breakpass"
-                  + "whileTrue:ifir_seek(1)<30:breakpass"
-                  + "whileTrue:ifEd.ReadLeftLightLevel()/32767*100<30:breakpass"
-                  + "whileTrue:ifEd.ReadRightLightLevel()/32767*100<30:breakpass"
-                  + "whileTrue:ifEd.ReadLineTracker()/32767*100<30:breakpass"
-                  + "whileTrue:ifEd.ReadLineState()==Ed.LINE_ON_BLACK==True:breakpass"
-                  + "whileTrue:ifEd.ReadClapSensor()==Ed.CLAP_DETECTED==True:breakpass";
+              "whileTrue:if(Ed.ReadKeypad()==Ed.KEYPAD_TRIANGLE)==True:breakpass"
+                  + "whileTrue:if(Ed.ReadKeypad()==Ed.KEYPAD_ROUND)==True:breakpass"
+                  + "whileTrue:if(_obstacleDetection(Ed.OBSTACLE_LEFT))==True:breakpass"
+                  + "whileTrue:if(_obstacleDetection(Ed.OBSTACLE_RIGHT))==True:breakpass"
+                  + "whileTrue:if(_obstacleDetection(Ed.OBSTACLE_AHEAD))==True:breakpass"
+                  + "whileTrue:if(_irSeek(1))<30:breakpass"
+                  + "whileTrue:if(Ed.ReadLeftLightLevel()/32767*100)<30:breakpass"
+                  + "whileTrue:if(Ed.ReadRightLightLevel()/32767*100)<30:breakpass"
+                  + "whileTrue:if(Ed.ReadLineTracker()/32767*100)<30:breakpass"
+                  + "whileTrue:if(Ed.ReadLineState()==Ed.LINE_ON_BLACK)==True:breakpass"
+                  + "whileTrue:if(Ed.ReadClapSensor()==Ed.CLAP_DETECTED)==True:breakpass";
         h.assertCodeIsOk(expectedResult, "/syntax/sensor/wait.xml");
     }
 
     @Test
     public void visitCurveActionTest() throws Exception {
-        String expectedResult = "Ed.Drive(Ed.BACKWARD,shorten(69),Ed.DISTANCE_UNLIMITED)"
-            + "Ed.DriveLeftMotor(Ed.BACKWARD,shorten(42),Ed.DISTANCE_UNLIMITED)"
-            + "Ed.DriveRightMotor(Ed.BACKWARD,shorten(69),Ed.DISTANCE_UNLIMITED)"
-            + "Ed.SetDistance(Ed.MOTOR_LEFT,17)"
-            + "Ed.SetDistance(Ed.MOTOR_RIGHT,17)"
-            + "whileread_dist(42,69)>0:"
-                + "pass"
-            + "Ed.ResetDistance()";
+        String expectedResult = "_diffCurve(Ed.BACKWARD,42,69,17)";
         h.assertCodeIsOk(expectedResult, "/syntax/actor/steer.xml");
     }
 
     @Test
     public void visitCurveActionUnlimitedTest() throws Exception {
-        String expectedResult = "Ed.Drive(Ed.FORWARD,shorten(30),Ed.DISTANCE_UNLIMITED)"
-            + "Ed.DriveLeftMotor(Ed.FORWARD,shorten(10),Ed.DISTANCE_UNLIMITED)"
-            + "Ed.DriveRightMotor(Ed.FORWARD,shorten(30),Ed.DISTANCE_UNLIMITED)";
+        String expectedResult = "_diffCurve(Ed.FORWARD,10,30,Ed.DISTANCE_UNLIMITED)";
         h.assertCodeIsOk(expectedResult, "/syntax/actor/steer_unlimited.xml");
     }
 
     @Test
     public void visitTurnActionTest() throws Exception {
-        String expectedResult = "diff_turn(Ed.SPIN_RIGHT,42,13)";
+        String expectedResult = "_diffTurn(Ed.SPIN_RIGHT,42,13)";
         h.assertCodeIsOk(expectedResult, "/syntax/actor/turn.xml");
     }
 
     @Test
     public void visitTurnActionUnlimitedTest() throws Exception {
-        String expectedResult = "diff_turn(Ed.SPIN_RIGHT,42,Ed.DISTANCE_UNLIMITED)";
+        String expectedResult = "_diffTurn(Ed.SPIN_RIGHT,42,Ed.DISTANCE_UNLIMITED)";
         h.assertCodeIsOk(expectedResult, "/syntax/actor/turn_unlimited.xml");
     }
 
     @Test
     public void visitMotorOnTest() throws Exception {
-        String expectedResult = "motor_on(0,23,Ed.DISTANCE_UNLIMITED)";
+        String expectedResult = "_motorOn(0,23,Ed.DISTANCE_UNLIMITED)";
         h.assertCodeIsOk(expectedResult, "/syntax/actor/motor_on.xml");
     }
 

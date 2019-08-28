@@ -106,10 +106,6 @@ define( ['exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             } else {
                 createDownloadLink(filename, result.compiledCode);
 
-                //Un-hide the div if it was hidden before
-                $( '#changedDownloadFolder' ).removeClass( 'hidden' );
-                $( '#OKButtonModalFooter' ).removeClass( 'hidden' );
-
                 var textH = $("#popupDownloadHeader").text();
                 $("#popupDownloadHeader").text(textH.replace("$", $.trim(GUISTATE_C.getRobotRealName())));
                 for (var i = 1; Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]; i++) {
@@ -172,17 +168,16 @@ define( ['exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             MSG.displayInformation( result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot() );
         } else {
             wavFileContent = UTIL.base64decode(result.compiledCode);
+            $( '#changedDownloadFolder' ).addClass( 'hidden' );
 
             //This detects IE11 (and IE11 only), see: https://developer.mozilla.org/en-US/docs/Web/API/Window/crypto
             if (window.msCrypto) {
                 //Internet Explorer (all ver.) does not support playing WAV files in the browser
                 //If the user uses IE11 the file will not be played, but downloaded instead
                 //See: https://caniuse.com/#feat=wav, https://www.w3schools.com/html/html5_audio.asp
-                $( '#changedDownloadFolder' ).addClass( 'hidden' );
                 createDownloadLink(GUISTATE_C.getProgramName() + '.wav', wavFileContent);
             } else {
                 //All non-IE browsers can play WAV files in the browser, see: https://www.w3schools.com/html/html5_audio.asp
-                $( '#changedDownloadFolder' ).addClass( 'hidden' );
                 $( '#OKButtonModalFooter' ).addClass( 'hidden' );
                 createPlayButton(GUISTATE_C.getProgramName(), wavFileContent);
             }
@@ -213,6 +208,10 @@ define( ['exports', 'util', 'log', 'message', 'program.controller', 'program.mod
                 $( '#download-instructions' ).empty();
                 GUISTATE_C.setConnectionState( "wait" );
                 MSG.displayInformation( result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot() );
+
+                //Un-hide the div if it was hidden before
+                $( '#changedDownloadFolder' ).removeClass( 'hidden' );
+                $( '#OKButtonModalFooter' ).removeClass( 'hidden' );
             } );
 
             $( '#save-client-compiled-program' ).modal( 'show' );

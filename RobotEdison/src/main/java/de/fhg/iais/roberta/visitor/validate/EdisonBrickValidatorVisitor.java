@@ -23,59 +23,73 @@ public class EdisonBrickValidatorVisitor extends AbstractBrickValidatorVisitor i
         super(brickConfiguration);
     }
 
-    @Override public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
+    @Override
+    public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
         return null;
     }
 
-    @Override public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
+    @Override
+    public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
         return null;
     }
 
-    @Override public Void visitDriveAction(DriveAction<Void> driveAction) {
+    @Override
+    public Void visitDriveAction(DriveAction<Void> driveAction) {
         return null;
     }
 
-    @Override public Void visitTurnAction(TurnAction<Void> turnAction) {
+    @Override
+    public Void visitTurnAction(TurnAction<Void> turnAction) {
         return null;
     }
 
-    @Override public Void visitCurveAction(CurveAction<Void> driveAction) {
+    @Override
+    public Void visitCurveAction(CurveAction<Void> driveAction) {
         return null;
     }
 
-    @Override public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+    @Override
+    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         return null;
     }
 
-    @Override public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
+    @Override
+    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         return null;
     }
 
-    @Override public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+    @Override
+    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         return null;
     }
 
-    @Override public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
+    @Override
+    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
         return null;
     }
 
-    @Override protected void checkSensorPort(ExternalSensor<Void> sensor) {
+    @Override
+    protected void checkSensorPort(ExternalSensor<Void> sensor) {
 
     }
 
-    @Override public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
+    @Override
+    public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
         return null;
     }
 
-    @Override public Void visitSensorResetAction(ResetSensor<Void> voidResetSensor) {
+    @Override
+    public Void visitSensorResetAction(ResetSensor<Void> voidResetSensor) {
         return null;
     }
 
-    @Override public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
+    @Override
+    public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
         return null;
     }
 
-    @Override public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+    @Override
+    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         return null;
     }
 }

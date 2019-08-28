@@ -2,53 +2,49 @@ include: "classpath:/helperMethodsCommon.yml"
 # method names are based on FunctionNames and EdisonUsedHardwareCollectorVisitor.Method
 # languages are based on HelperMethodGenerator.Language
 
-# FunctionNames
+## FunctionNames
 
 PRIME:
   PYTHON: |
-    def _isPrime(number):
-        if number <= 1: return False
-        newNum = number - 2
+    def _isPrime(num):
+        if num <= 1: return False
+        newNum = num - 2
         for x in range(newNum):
             y = (x + 2)
-            if (number % y) == 0: return False
+            if (num % y) == 0: return False
         return True
+
+# not prefixed with _ because many super methods generate the standard python sum/min/max which would have to be overridden
 MIN:
   PYTHON: |
     def min(list):
-        min_of_list = list[0]
+        listMin = list[0]
         listLength = len(list)
         for i in range(listLength):
-            if list[i] < min_of_list:
-                min_of_list = list[i]
-        return min_of_list
+            if list[i] < listMin:
+                listMin = list[i]
+        return listMin
 MAX:
   PYTHON: |
     def max(list):
-        max_of_list = list[0]
+        listMax = list[0]
         listLength = len(list)
         for i in range(listLength):
-            if list[i] > max_of_list:
-                max_of_list = list[i]
-        return max_of_list
+            if list[i] > listMax:
+                listMax = list[i]
+        return listMax
 SUM:
   PYTHON: |
     def sum(list):
-        sum_of_list = 0
+        listSum = 0
         listLength = len(list)
-        for i in range(listLength): sum_of_list = (sum_of_list + list[i])
-        return sum_of_list
-LISTS_REPEAT:
-  PYTHON: |
-    def _create_repeat(item, times):
-        list = Ed.List(times)
-        listLength = len(list)
-        for i in range(listLength): list[i] = item
-        return list
+        for i in range(listLength): listSum = (listSum + list[i])
+        return listSum
+
 ABS:
   PYTHON: |
     def _abs(num):
-        if (num<0): return -num
+        if (num < 0): return -num
         else: return num
 # this is also used by POW10
 POWER:
@@ -60,11 +56,11 @@ POWER:
             result *= b
         return result
 
-# EdisonUsedHardwareCollectorVisitor.Method
+## EdisonUsedHardwareCollectorVisitor.Method
 
 OBSTACLEDETECTION:
   PYTHON: |
-      def obstacle_detection(mode):
+      def _obstacleDetection(mode):
           global obstacleDetectionOn
           if (obstacleDetectionOn == False):
               Ed.ObstacleDetectionBeam(Ed.ON)
@@ -73,7 +69,7 @@ OBSTACLEDETECTION:
 
 IRSEND:
   PYTHON: |
-      def ir_send(payload):
+      def _irSend(payload):
           global obstacleDetectionOn
           if (obstacleDetectionOn == True):
               Ed.ObstacleDetectionBeam(Ed.OFF)
@@ -83,7 +79,7 @@ IRSEND:
 # mode: 0 = edison IR data; 1 = remote control data
 IRSEEK:
   PYTHON: |
-      def ir_seek(mode):
+      def _irSeek(mode):
           global obstacleDetectionOn
           if (obstacleDetectionOn == True):
               Ed.ObstacleDetectionBeam(Ed.OFF)
@@ -95,36 +91,52 @@ IRSEEK:
 # distance: Entweder integer oder Ed.DISTANCE_UNLIMITED
 MOTORON:
   PYTHON: |
-      def motor_on(motor, power, distance):
+      def _motorOn(motor, power, distance):
           if (motor == 0):
-              if (power < 0): Ed.DriveLeftMotor(Ed.BACKWARD, -shorten(power), distance)
-              else: Ed.DriveLeftMotor(Ed.FORWARD, shorten(power), distance)
+              if (power < 0): Ed.DriveLeftMotor(Ed.BACKWARD, -_shorten(power), distance)
+              else: Ed.DriveLeftMotor(Ed.FORWARD, _shorten(power), distance)
           if (motor == 1):
-              if (power < 0): Ed.DriveRightMotor(Ed.BACKWARD, -shorten(power), distance)
-              else: Ed.DriveRightMotor(Ed.FORWARD, shorten(power), distance)
+              if (power < 0): Ed.DriveRightMotor(Ed.BACKWARD, -_shorten(power), distance)
+              else: Ed.DriveRightMotor(Ed.FORWARD, _shorten(power), distance)
 
-CURVE:
+READDIST:
   PYTHON: |
-      def read_dist(leftspeed, rightspeed):
-          if (leftspeed > rightspeed):
+      def _readDist(leftSpeed, rightSpeed):
+          if (leftSpeed > rightSpeed):
               return Ed.ReadDistance(Ed.MOTOR_LEFT)
           else:
               return Ed.ReadDistance(Ed.MOTOR_RIGHT)
 
+CURVE:
+  PYTHON: |
+      def _diffCurve(direction, leftSpeed, rightSpeed, distance):
+          Ed.Drive(Ed.FORWARD, _shorten(30), Ed.DISTANCE_UNLIMITED)
+          Ed.DriveLeftMotor(Ed.FORWARD, _shorten(10), Ed.DISTANCE_UNLIMITED)
+          Ed.DriveRightMotor(Ed.FORWARD, _shorten(30), Ed.DISTANCE_UNLIMITED)
+          Ed.SetDistance(Ed.MOTOR_LEFT, 20)
+          Ed.SetDistance(Ed.MOTOR_RIGHT, 20)
+          while _readDist(10, 30) > 0:
+              pass
+          Ed.ResetDistance()
+
 DIFFDRIVE:
   PYTHON: |
-      def diff_drive(direction, speed, distance):
+      def _diffDrive(direction, speed, distance):
           if speed < 0:
               speed = -speed
-              if direction == Ed.FORWARD: Ed.Drive(Ed.BACKWARD, shorten(speed), distance)
-              else: Ed.Drive(Ed.FORWARD, shorten(speed), distance)
-          else: Ed.Drive(direction, shorten(speed), distance)
+              if direction == Ed.FORWARD: Ed.Drive(Ed.BACKWARD, _shorten(speed), distance)
+              else: Ed.Drive(Ed.FORWARD, _shorten(speed), distance)
+          else: Ed.Drive(direction, _shorten(speed), distance)
 
 DIFFTURN:
   PYTHON: |
-      def diff_turn(direction, speed, degree):
+      def _diffTurn(direction, speed, degree):
           if speed < 0:
               speed = -speed
-              if direction == Ed.SPIN_RIGHT: Ed.Drive(Ed.SPIN_LEFT, shorten(speed), degree)
-              else: Ed.Drive(Ed.SPIN_RIGHT, shorten(speed), degree)
-          else: Ed.Drive(direction, shorten(speed), degree)
+              if direction == Ed.SPIN_RIGHT: Ed.Drive(Ed.SPIN_LEFT, _shorten(speed), degree)
+              else: Ed.Drive(Ed.SPIN_RIGHT, _shorten(speed), degree)
+          else: Ed.Drive(direction, _shorten(speed), degree)
+    
+SHORTEN:
+  PYTHON: |
+      def _shorten(num): return ((num+5)/10)

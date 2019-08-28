@@ -193,13 +193,6 @@
         <block type="math_integer"></block>
       </value>
     </block>
-    <block type="robLists_repeat">
-      <value name="NUM">
-        <block type="math_integer">
-          <field name="NUM">5</field>
-        </block>
-      </value>
-    </block>
     <block type="robLists_length"></block>
     <block type="robLists_getIndex"></block>
     <block type="robLists_setIndex"></block>

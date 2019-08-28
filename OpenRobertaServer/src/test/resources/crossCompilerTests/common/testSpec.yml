@@ -43,11 +43,12 @@ progs:
        exclude:
           nxt: "no extendable lists"
           bob3: "too small"
+          edison: "Edisons lists are not extendable"
        remark: "basic list operations"
     variablesNuStBo:
        decl: variablesNuStBo
        exclude:
-          edison:
+          edison: ""
        remark: "variable assignment for number, string and boolean"
     stringConcat:
        decl: stringConcat
@@ -63,29 +64,30 @@ progs:
     mathBasics:
        decl: mathBasics
        exclude:
-          edison:
+          edison: ""
        remark: "basic math operations"
     mathBrackets:
        decl: mathBrackets
        exclude:
-          edison:
+          edison: ""
        remark: "different combinations for math brackets"
     mathPower:
        decl: mathPower
        exclude:
           nxt: "Nested calls to the same function are not supported"
+          edison: "Not all pow functions are supported"
        remark: "different combinations for math power of"
     basicFunctions:
        fragment: basicFunctions
        decl: basicFunctions
        exclude:
-          edison:
+          edison: ""
           bob3: "too small"
        remark: "basic function calls"
     logicBooleanOp:
        decl: logicBooleanOp
        exclude:
-          edison:
+          edison: ""
        remark: "all combinations for boolean operator"
     logicBooleanOpTernary:
        decl: logicBooleanOpTernary
@@ -96,30 +98,31 @@ progs:
     controlFlowDecisons:
        decl: controlFlowDecisons
        exclude:
-          edison:
+          edison: ""
        remark: "all combinations for IF-THEN-ELSE upto two levels"
     controlFlowLoops:
        decl: controlFlowLoops
        exclude:
-          edison:
+          edison: ""
           bob3: "too small"
        remark: "all combinations of loops"
     controlFlowNestedLoops:
        decl: controlFlowNestedLoops
        exclude:
           bob3: "too small"
-          edison:
+          edison: ""
        remark: "all combinations of nested loops"
     assign:
        decl: default
        exclude:
-          edison:
+          edison: ""
        remark: "simple assignment. For testing the test only"
     functionWithWithoutParameter:
        fragment: functionWithWithoutParameter
        decl: functionWithWithoutParameter
        exclude:
           ALL: "crashes all crosscompilers"
+          edison: ""
           bob3: "LedColor is used in the program. Doesn't work here"
        remark: "functions with various return types, with and without parameters"
     listOperations:
@@ -141,13 +144,13 @@ progs:
     mathFunctions:
        decl: mathFunctions
        exclude:
-          edison:
+          edison: "Most math functions are not supported"
           bob3: ".text overflow. Test must be splitted"
        remark: "some math functions (min, sin, pi, ...), similar to mathLogic. For testing the test only"
     mathLogic-1:
        decl: mathLogic
        exclude:
-          edison:
+          edison: "Most math functions are not supported"
           bob3: ".text overflow. Test must be splitted"
        fragment: mathLogic
        remark: "math functions (min, random, ...)"
