@@ -168,6 +168,7 @@ define( ['exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             MSG.displayInformation( result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot() );
         } else {
             wavFileContent = UTIL.base64decode(result.compiledCode);
+            var audio;
             $( '#changedDownloadFolder' ).addClass( 'hidden' );
 
             //This detects IE11 (and IE11 only), see: https://developer.mozilla.org/en-US/docs/Web/API/Window/crypto
@@ -179,7 +180,11 @@ define( ['exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             } else {
                 //All non-IE browsers can play WAV files in the browser, see: https://www.w3schools.com/html/html5_audio.asp
                 $( '#OKButtonModalFooter' ).addClass( 'hidden' );
-                createPlayButton(GUISTATE_C.getProgramName(), wavFileContent);
+                var contentAsBlob = new Blob( [wavFileContent], {
+                    type: 'audio/wav'
+                } );
+                audio = new Audio(window.URL.createObjectURL( contentAsBlob ));
+                createPlayButton( audio );
             }
 
             var textH = $("#popupDownloadHeader").text();
@@ -202,6 +207,10 @@ define( ['exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             } );
 
             $( '#save-client-compiled-program' ).one( 'hidden.bs.modal', function( e ) {
+                if ( !window.msCrypto ) {
+                    audio.pause();
+                    audio.load();
+                }
                 var textH = $( "#popupDownloadHeader" ).text();
                 $( "#popupDownloadHeader" ).text( textH.replace( $.trim( GUISTATE_C.getRobotRealName() ), "$" ) );
                 $( '#programLink' ).remove();
@@ -364,7 +373,7 @@ define( ['exports', 'util', 'log', 'message', 'program.controller', 'program.mod
 
 
     /**
-     * Creates a WAV file blob from the program content and creates a Play button so that the sound can be played inside the browser:
+     * Creates a Play button for an Audio object so that the sound can be played and paused/restarted inside the browser:
      *
      * <button type="button" class="btn btn-primary" style="font-size:36px">
      *     <span class="typcn typcn-media-play" style="color : black"></span>
@@ -374,22 +383,31 @@ define( ['exports', 'util', 'log', 'message', 'program.controller', 'program.mod
      * @param fileName the name of the program
      * @param content the content of the WAV file as a Base64 encoded String
      */
-    function createPlayButton(fileName, content) {
+    function createPlayButton( audio ) {
         $('#trA').removeClass('hidden');
 
         if ( 'Blob' in window ) {
-            //Create a new blob from the file content
-            var contentAsBlob = new Blob( [content], {
-                type: 'audio/wav'
-            } );
             //Create a bootstrap button
             var playButton = document.createElement( 'button' );
             playButton.setAttribute( 'type', 'button' );
             playButton.setAttribute( 'class', 'btn btn-primary' );
-            playButton.setAttribute( 'data-dismiss', 'modal' );
+
+            var playing = false;
             playButton.onclick = function () {
-                //Play the newly created blob with the WAV file content
-                new Audio(window.URL.createObjectURL( contentAsBlob )).play();
+                if (playing == false) {
+                    audio.play();
+                    playIcon.setAttribute( 'class', 'typcn typcn-media-stop' );
+                    playing = true;
+                    audio.addEventListener("ended", function() {
+                        $('#save-client-compiled-program').modal('hide');
+                    });
+                } else {
+                    playIcon.setAttribute( 'class', 'typcn typcn-media-play' );
+                    audio.pause();
+                    audio.load();
+                    playing = false;
+                }
+
             };
 
             //Create the play icon inside the button
