@@ -100,7 +100,7 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                         }
                         case C.CLEAR_DISPLAY_ACTION: {
                             n.clearDisplay();
-                            break;
+                            return 0;
                         }
                         case C.CREATE_DEBUG_ACTION: {
                             U.debug('NYI');
@@ -404,9 +404,6 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                 if (this.terminated) {
                     // termination either requested by the client or by executing 'stop' or after last statement
                     n.close();
-                    return 0;
-                }
-                else {
                     return 0;
                 }
             }

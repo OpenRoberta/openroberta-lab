@@ -316,10 +316,7 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             this.showTextAction("> " + _value);
         };
         RobotWeDoBehaviour.prototype.assertAction = function (_msg, _left, _op, _right, _value) {
-            if (_value) {
-                return 0;
-            }
-            else {
+            if (!_value) {
                 this.showTextAction("> Assertion failed: " + _msg + " " + _left + " " + _op + " " + _right);
             }
         };

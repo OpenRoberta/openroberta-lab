@@ -323,7 +323,6 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             U.debug('clear display');
             this.hardwareState.actions.display = {};
             this.hardwareState.actions.display.clear = true;
-            return 0;
         };
         RobotMbedBehaviour.prototype.writePinAction = function (pin, mode, value) {
             this.hardwareState.actions["pin" + pin] = {};
@@ -339,12 +338,10 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
         RobotMbedBehaviour.prototype.debugAction = function (value) {
             U.debug('***** debug action "' + value + '" *****');
             console.log(value);
-            return 0;
         };
         RobotMbedBehaviour.prototype.assertAction = function (_msg, _left, _op, _right, value) {
             U.debug('***** assert action "' + value + ' ' + _msg + ' ' + _left + ' ' + _op + ' ' + _right + '" *****');
             console.assert(value, _msg + " " + _left + " " + _op + " " + _right);
-            return 0;
         };
         RobotMbedBehaviour.prototype.close = function () {
         };

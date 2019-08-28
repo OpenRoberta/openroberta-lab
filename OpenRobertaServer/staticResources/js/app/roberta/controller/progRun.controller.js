@@ -264,16 +264,15 @@ define( ['exports', 'util', 'log', 'message', 'program.controller', 'program.mod
          *
          * . @param durationInMilliSec time that should elapse before the callback is called
          */
-        function timeout( callback, durationInMilliSec ) {
+        function timeout(callback, durationInMilliSec) {
             if ( durationInMilliSec > 100 ) {
                 // U.p( 'waiting for 100 msec from ' + durationInMilliSec + ' msec' );
                 durationInMilliSec -= 100;
-                setTimeout(() => { this.timeout( callback, durationInMilliSec ) }, 100 );
-            } else {
+                setTimeout(this.timeout, 100, callback, durationInMilliSec);
+             } else {
                 // U.p( 'waiting for ' + durationInMilliSec + ' msec' );
-                setTimeout(() => { callback() }, durationInMilliSec );
+                setTimeout(callback, durationInMilliSec);
             }
-
         }
 
         function runStepWedo( interpreter ) {

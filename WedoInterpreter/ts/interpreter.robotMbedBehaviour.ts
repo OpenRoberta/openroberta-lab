@@ -344,11 +344,10 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
     }
 
 
-    public clearDisplay(): number {
+    public clearDisplay(): void {
         U.debug( 'clear display' );
         this.hardwareState.actions.display = {};
         this.hardwareState.actions.display.clear = true;
-        return 0;
     }
 
     public writePinAction( pin: any, mode: string, value: number ): void {
@@ -366,16 +365,14 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         return this.hardwareState;
     }
 
-    public debugAction( value: any ): number {
+    public debugAction( value: any ): void {
         U.debug( '***** debug action "' + value + '" *****' );
         console.log( value );
-        return 0;
     }
 
-    public assertAction( _msg: string, _left: any, _op: string, _right: any, value: boolean ): number {
+    public assertAction( _msg: string, _left: any, _op: string, _right: any, value: boolean ): void {
         U.debug( '***** assert action "' + value + ' ' + _msg + ' ' + _left + ' ' + _op + ' ' + _right + '" *****' );
         console.assert( value, _msg + " " + _left + " " + _op + " " + _right );
-        return 0;
     }
 
     public close() {

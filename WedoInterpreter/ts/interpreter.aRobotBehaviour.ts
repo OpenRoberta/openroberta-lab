@@ -60,8 +60,8 @@ export abstract class ARobotBehaviour {
     abstract displaySetBrightnessAction( value: number ): number;
     abstract displaySetPixelBrightnessAction( x: number, y: number, brightness: number ): number;
     abstract displayGetPixelBrightnessAction( s: State, x: number, y: number ): void;
-    abstract debugAction( value: any ): number;
-    abstract assertAction( msg: string, left: any, op: string, right: any, value: boolean ): number;
+    abstract debugAction( value: any ): void;
+    abstract assertAction( msg: string, left: any, op: string, right: any, value: boolean ): void;
 
     abstract close(): void;
 }

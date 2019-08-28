@@ -113,7 +113,7 @@ export class Interpreter {
                     }
                     case C.CLEAR_DISPLAY_ACTION: {
                         n.clearDisplay();
-                        break;
+                        return 0;
                     }
                     case C.CREATE_DEBUG_ACTION: {
                         U.debug( 'NYI' );
@@ -413,9 +413,7 @@ export class Interpreter {
                 // termination either requested by the client or by executing 'stop' or after last statement
                 n.close();
                 return 0;
-            } else {
-                return 0;
-            }
+            } 
         }
         return 0;
     }

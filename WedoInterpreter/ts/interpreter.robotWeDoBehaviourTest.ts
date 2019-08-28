@@ -182,16 +182,11 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
         throw new Error( "Method not implemented." );
     }
     public debugAction( _value: any ): void {
-        this.showTextAction( "> " + _value );
-        U.info( _value + " debug" );
+        const robotText = "> " + _value;
+        U.info( ' debug action ' + robotText );
     }
-    public assertAction( _msg: string, _left: any, _op: string, _right: any, _value: any ): number {
-        if ( _value ) {
-            return 0;
-        } else {
-            var assertText: String = "> Assertion failed: " + _msg + " " + _left + " " + _op + " " + _right;
-            this.showTextAction( assertText );
-            U.info( assertText + " assert" );
-        }
+    public assertAction( _msg: string, _left: any, _op: string, _right: any, _value: any ): void {
+        const robotText = "> Assertion failed: " + _msg + " " + _left + " " + _op + " " + _right;
+        U.info( ' assert action ' + robotText );
     }
 }

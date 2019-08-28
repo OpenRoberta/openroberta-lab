@@ -157,18 +157,12 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             throw new Error("Method not implemented.");
         };
         RobotWeDoBehaviourTest.prototype.debugAction = function (_value) {
-            this.showTextAction("> " + _value);
-            U.info(_value + " debug");
+            var robotText = "> " + _value;
+            U.info(' debug action ' + robotText);
         };
         RobotWeDoBehaviourTest.prototype.assertAction = function (_msg, _left, _op, _right, _value) {
-            if (_value) {
-                return 0;
-            }
-            else {
-                var assertText = "> Assertion failed: " + _msg + " " + _left + " " + _op + " " + _right;
-                this.showTextAction(assertText);
-                U.info(assertText + " assert");
-            }
+            var robotText = "> Assertion failed: " + _msg + " " + _left + " " + _op + " " + _right;
+            U.info(' assert action ' + robotText);
         };
         return RobotWeDoBehaviourTest;
     }(interpreter_aRobotBehaviour_1.ARobotBehaviour));

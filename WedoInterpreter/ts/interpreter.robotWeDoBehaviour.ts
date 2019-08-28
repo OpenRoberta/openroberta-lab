@@ -346,10 +346,8 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
     public debugAction( _value: any ): void {
         this.showTextAction( "> " + _value );
     }
-    public assertAction( _msg: string, _left: any, _op: string, _right: any, _value: any ): number {
-        if ( _value ) {
-            return 0;
-        } else {
+    public assertAction( _msg: string, _left: any, _op: string, _right: any, _value: any ): void {
+        if ( !_value ) {
             this.showTextAction( "> Assertion failed: " + _msg + " " + _left + " " + _op + " " + _right );
         }
     }
