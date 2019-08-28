@@ -98,7 +98,7 @@ public class EdisonCompilerWorkflow extends AbstractCompilerWorkflow {
      * @throws Exception if the Builder fails for whatever reason
      */
     @Override
-    public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
+    public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) {
         return new EdisonConfiguration.Builder().build();
     }
 
@@ -129,39 +129,27 @@ public class EdisonCompilerWorkflow extends AbstractCompilerWorkflow {
         String targetFilePath = this.pluginProperties.getTempDir() + "/" + token + "/" + pyFile + "/target/";
 
         //build and start the Python process
-        ProcessBuilder processBuilder =
-            new ProcessBuilder(
-                "python2",
-                compilerDir + "EdPy.py",
-                compilerDir + "en_lang.json",
-                sourceFilePath + pyFile + ".py",
-                "-t",
-                targetFilePath + pyFile + ".wav");
+        String[] executableWithParameters = new String[] {
+            "python2",
+            compilerDir + "EdPy.py",
+            compilerDir + "en_lang.json",
+            sourceFilePath + pyFile + ".py",
+            "-t",
+            targetFilePath + pyFile + ".wav"
+        };
 
-        try {
-            processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
-            Process p = processBuilder.start();
-            int exitCode = p.waitFor();
-
-            //get the correct WAV file after the Python process finished successfully
-            System.err.println("python2: Exit code " + exitCode);
-
-            if ( exitCode != 0 ) {
+        boolean success = runCrossCompiler(executableWithParameters);
+        if ( success ) {
+            try {
+                byte[] wavBytes = FileUtils.readFileToByteArray(new File(targetFilePath + pyFile + ".wav"));
+                this.compiledWav = Base64.getEncoder().encodeToString(wavBytes);
+                return Key.COMPILERWORKFLOW_SUCCESS;
+            } catch ( IOException e ) {
+                LOG.error("Compilation successful, but reading WAV file failed (IOException)", e);
                 return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
             }
-
-            //cast the file to a String using the Base64 encoder
-            byte[] wavBytes = FileUtils.readFileToByteArray(new File(targetFilePath + pyFile + ".wav"));
-            this.compiledWav = Base64.getEncoder().encodeToString(wavBytes);
-
-        } catch ( IOException e ) { //if process cannot be started
-            LOG.error("Exception when preparing the build", e);
-            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
-        } catch ( InterruptedException e ) { //if process is interrupted
-            LOG.error("Build interrupted", e);
+        } else {
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         }
-
-        return Key.COMPILERWORKFLOW_SUCCESS;
     }
 }
