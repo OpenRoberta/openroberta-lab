@@ -253,7 +253,10 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         reset = false;
         simRobotType = robotType;
         userPrograms = programs;
-        runRenderUntil = Array(programs.length).fill(0);
+        runRenderUntil = [];
+        for (i = 0; i < programs.length; i++) {
+            runRenderUntil[i] = 0;
+        }
         robotIndex = 0;
         if (robotType.indexOf("calliope") >= 0) {
             currentBackground = 0;

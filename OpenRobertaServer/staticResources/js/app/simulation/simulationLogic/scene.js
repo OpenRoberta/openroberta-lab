@@ -708,7 +708,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'interpreter.consta
                 values.sound.volume = UTIL.round(this.robots[r].sound.volume * 100, 0);
             }
             if (this.robots[r].display) {
-                var robotName = this.robots[r].constructor.name;
+                var robotName = getFnName(this.robots[r].constructor);
                 values.light = {};
                 values.display = {};
                 values.light.ambientlight = this.robots[r].display.lightLevel;
