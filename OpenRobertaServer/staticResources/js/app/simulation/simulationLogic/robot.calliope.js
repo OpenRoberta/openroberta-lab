@@ -232,24 +232,28 @@ define([ 'simulation.simulation', 'simulation.robot.mbed', 'volume-meter' ], fun
         }
         navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-        // ask for an audio input  
-        navigator.mediaDevices.getUserMedia({
-            "audio" : {
-                "mandatory" : {
-                    "googEchoCancellation" : "false",
-                    "googAutoGainControl" : "false",
-                    "googNoiseSuppression" : "false",
-                    "googHighpassFilter" : "false"
+        try {
+            // ask for an audio input
+            navigator.mediaDevices.getUserMedia({
+                "audio" : {
+                    "mandatory" : {
+                        "googEchoCancellation" : "false",
+                        "googAutoGainControl" : "false",
+                        "googNoiseSuppression" : "false",
+                        "googHighpassFilter" : "false"
+                    },
+                    "optional" : []
                 },
-                "optional" : []
-            },
-        }).then(function(stream) {
-            var mediaStreamSource = that.webAudio.context.createMediaStreamSource(stream);
-            that.sound = Volume.createAudioMeter(that.webAudio.context);
-            mediaStreamSource.connect(that.sound);
-        }, function() {
+            }).then(function(stream) {
+                var mediaStreamSource = that.webAudio.context.createMediaStreamSource(stream);
+                that.sound = Volume.createAudioMeter(that.webAudio.context);
+                mediaStreamSource.connect(that.sound);
+            }, function() {
+                console.log("Sorry, but there is no microphone available on your system");
+            });
+        } catch ( e ) {
             console.log("Sorry, but there is no microphone available on your system");
-        });
+        }
     }
 
     Calliope.prototype = Object.create(Mbed.prototype);
