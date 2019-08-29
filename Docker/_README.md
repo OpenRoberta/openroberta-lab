@@ -22,7 +22,7 @@ in git and a version number in docker.
 
 ```bash
 BASE_DIR=/data/openroberta-lab
-BASE_VERSION=3
+BASE_VERSION=4
 CC_RESOURCES=/data/openroberta-lab/git/ora-cc-rsc
 cd $CC_RESOURCES
 
@@ -43,7 +43,7 @@ If called, it will checkout a branch and runs both the tests and the integration
 
 ```bash
 BASE_DIR=/data/openroberta-lab
-BASE_VERSION=3
+BASE_VERSION=4
 BRANCH=develop
 cd $BASE_DIR/conf/docker-for-test
 docker build --no-cache --build-arg BASE_VERSION=$BASE_VERSION --build-arg BRANCH=$BRANCH \
@@ -57,7 +57,7 @@ in case of success it returns 0, in case of errors/failures it returns 16. This 
 CI system (jenkins, travis, gitlab, bamboo, ...). To run it, execute:
 
 ```bash
-BASE_VERSION=3
+BASE_VERSION=4
 export BRANCH='develop'
 docker run rbudde/openroberta_it_ubuntu_18_04:$BASE_VERSION $BRANCH x.x.x # x.x.x is the db version and unused for tests
 ```
@@ -354,7 +354,7 @@ It has executed a git clone of the main git repository `openroberta-lab` and has
 
 ```bash
 BASE_DIR=/data/openroberta-lab
-BASE_VERSION=3
+BASE_VERSION=4
 cd $BASE_DIR/conf/docker-for-test
 docker build --build-arg BASE_VERSION=$BASE_VERSION \
        -t rbudde/openroberta_debug_ubuntu_18_04:$BASE_VERSION  -f DockerfileDebug_ubuntu_18_04 .
@@ -393,7 +393,7 @@ As the bash script `genLab.sh` is missing, this build will not succeed.
 
 ```bash
 BASE_DIR=/data/openroberta-lab
-BASE_VERSION=3
+BASE_VERSION=4
 cd $BASE_DIR/conf/docker-for-meta
 docker build -f DockerfileGen_ubuntu_18_04 -t rbudde/openroberta_gen:1 .
 docker push rbudde/openroberta_gen:1
