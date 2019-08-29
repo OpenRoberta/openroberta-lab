@@ -22,8 +22,8 @@
 
     <!-- these properties are only needed for the update process. The software would be better, if these properties would be obsolete  -->
     <properties>
-        <ev3runtime.v0.version>2.6.2</ev3runtime.v0.version>
-        <ev3runtime.v1.version>2.8.0</ev3runtime.v1.version>
+        <ev3runtime.v0.version>3.5.0</ev3runtime.v0.version>
+        <ev3runtime.v1.version>3.5.0</ev3runtime.v1.version>
         <ev3classes.v0.version>0.9.0</ev3classes.v0.version>
         <ev3classes.v1.version>0.9.1</ev3classes.v1.version>
         <dbusjava.v0.version>0.9.0</dbusjava.v0.version>
