@@ -1074,7 +1074,7 @@ Blockly.Msg.POPUP_DOWNLOAD_STEP_2_EDISON = "Klicke auf den Wiedergabe-Knopf um d
 Blockly.Msg.POPUP_DOWNLOAD_STEP_3 = "markiere den verbundenen »$« in der linken Spalte mit einem Klick,";
 Blockly.Msg.POPUP_DOWNLOAD_STEP_3_EDISON = "Warte bis Edison piepst und ziehe das Kabel ab.";
 Blockly.Msg.POPUP_DOWNLOAD_STEP_4 = "jetzt klicke auf »Speichern« in der rechten unteren Ecke.<br><span style='font-size: 14px;'>Falls dein Programm nicht automatisch startet, warte eine Weile und drücke dann den Reset Knopf.</span>";
-Blockly.Msg.POPUP_DOWNLOAD_STEP_4_EDISON = "Drücke die dreieckige »Start«-Taste um das Programm auf Edison zu starten";
+Blockly.Msg.POPUP_DOWNLOAD_STEP_4_EDISON = "Drücke die dreieckige »Start«-Taste um das Programm auf Edison zu starten<br><span style='font-size: 14px;'>Probleme beim Übertragen? Setze die Lautstärke auf Maximum und deaktivere alle Ton-Verbesserungen an deinem PC.</span>";
 Blockly.Msg.POPUP_DOWNLOAD_STEP_4_SENSEBOX = "jetzt klicke auf »Speichern« in der rechten unteren Ecke.";
 Blockly.Msg.POPUP_DO_UPDATE_FIRMWARE = "Aktualisieren";
 Blockly.Msg.POPUP_EMAIL = "E-Mail";

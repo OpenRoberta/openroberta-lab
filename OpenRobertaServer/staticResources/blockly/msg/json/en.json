@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-08-23 15:13:38.920577",
+		"lastupdated": "2019-08-29 13:43:09.115199",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1039,7 +1039,7 @@
 	"POPUP_DOWNLOAD_STEP_1_EDISON": "Connect your Edison via the EdComm cable and press the round button",
 	"POPUP_DOWNLOAD_STEP_2_EDISON": "click on »Play« to play your program to Edison and",
 	"POPUP_DOWNLOAD_STEP_3_EDISON": "wait until Edison beeps, then unplug.",
-	"POPUP_DOWNLOAD_STEP_4_EDISON": "Press the triangle button to start your program on your Edison",
+	"POPUP_DOWNLOAD_STEP_4_EDISON": "Press the triangle button to start your program on your Edison<br><span style='font-size: 14px;'>Having trouble? Turn up the volume and check that all sound enhancements are turned off</span>",
 	"NAO_TAI_CHI": "tai chi",
 	"NAO_WAVE": "wave",
 	"NAO_WIPE_FOREHEAD": "wipe forehead",

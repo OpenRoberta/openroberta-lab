@@ -1074,7 +1074,7 @@ Blockly.Msg.POPUP_DOWNLOAD_STEP_2_EDISON = "click on »Play« to play your progr
 Blockly.Msg.POPUP_DOWNLOAD_STEP_3 = "click on your connected »$« in the left column,";  // untranslated
 Blockly.Msg.POPUP_DOWNLOAD_STEP_3_EDISON = "wait until Edison beeps, then unplug.";  // untranslated
 Blockly.Msg.POPUP_DOWNLOAD_STEP_4 = "now click on the »Save« button on the bottom right.<br><span style='font-size: 14px;'>If your program doesn't start automatically press the reset button after a while.</span>";  // untranslated
-Blockly.Msg.POPUP_DOWNLOAD_STEP_4_EDISON = "Press the triangle button to start your program on your Edison";  // untranslated
+Blockly.Msg.POPUP_DOWNLOAD_STEP_4_EDISON = "Press the triangle button to start your program on your Edison<br><span style='font-size: 14px;'>Having trouble? Turn up the volume and check that all sound enhancements are turned off</span>";  // untranslated
 Blockly.Msg.POPUP_DOWNLOAD_STEP_4_SENSEBOX = "now click on the »Save« button on the bottom right.";  // untranslated
 Blockly.Msg.POPUP_DO_UPDATE_FIRMWARE = "Opdater nu";
 Blockly.Msg.POPUP_EMAIL = "E-Mail";
