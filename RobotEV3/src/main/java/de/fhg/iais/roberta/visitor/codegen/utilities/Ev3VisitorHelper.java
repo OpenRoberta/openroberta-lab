@@ -1,5 +1,9 @@
 package de.fhg.iais.roberta.visitor.codegen.utilities;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -11,6 +15,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import javax.imageio.ImageIO;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
@@ -34,14 +40,58 @@ public class Ev3VisitorHelper {
 	    }
 	    return byteHex;
 	}
-	
+  
+	public static void printPixelARGB(int pixel) {
+	    int alpha = (pixel >> 24) & 0xff;
+	    int red = (pixel >> 16) & 0xff;
+	    int green = (pixel >> 8) & 0xff;
+	    int blue = (pixel) & 0xff;
+	    if(red!=0 || blue!=0 ||green!=0)
+	    System.out.println("argb: " + alpha + ", " + red + ", " + green + ", " + blue);
+	}
+
 	// Base64 Basic Decoding
     private static String base64Decode(String value) {
         try {
             byte[] decodedValue = Base64.getDecoder().decode(value);
-            new String(decodedValue, StandardCharsets.UTF_16.toString());
-            return getBytes(decodedValue);
-        } catch(UnsupportedEncodingException ex) {
+            BufferedImage image = ImageIO.read(new ByteArrayInputStream(decodedValue));
+            //new String(decodedValue, StandardCharsets.UTF_16.toString());
+            //return getBytes(decodedValue);
+            int pixels = 0;
+            int i = 0;
+            byte[] imageBytes = new byte[2944];
+            for(int x=0; x<image.getHeight(); x++) {
+            	pixels = 0;
+            	for(int y=0; y<image.getWidth(); y++) {
+            		int clr = image.getRGB(y, x);
+                    int red = (clr & 0x00ff0000) >> 16;
+                    int green = (clr & 0x0000ff00) >> 8;
+                    int blue = clr & 0x000000ff;
+                    if(y%8 == 0 && y!=0) {
+                    	//System.out.println(x+" "+y+" "+i+" "+pixels);
+                    	imageBytes[i++] = (byte)pixels;
+                    	pixels = 0;
+                    }
+                    pixels = pixels << 1 | ((blue > 128)? 1: 0);
+                    if(red!=0||green!=0||blue!=0) {
+                    	System.out.print("*");
+                    }
+                    else
+                    	System.out.print(" ");
+            	}
+            	System.out.println("");
+            	pixels = pixels << 6;
+            	//System.out.println(x+" "+184+" "+i+" "+pixels);
+            	imageBytes[i++] = (byte)pixels;
+            }
+            StringBuilder sb = new StringBuilder();
+        	for (byte b : imageBytes) {
+            	sb.append(String.format("\\x%02X", b));
+        	}
+    		System.out.println(sb.toString());
+            System.out.println(image.getHeight()+" "+ image.getWidth()+" "+image.getColorModel());
+            return sb.toString();
+        } catch(IOException ex) {
             throw new RuntimeException(ex);
         }
     }

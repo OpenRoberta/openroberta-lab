@@ -1224,34 +1224,39 @@ limitations under the License.
         <button class="close no-button" type="button" aria-hidden="true">×</button>
         <button class="btn btn-primary ok-button" type="button">OK</button>
     </div>
-    <!-- basic modal -->
-    <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">Image Editor</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="col-sm-6 text-center"><canvas id="canvas"></canvas></div>
-                    <div class="col-sm-6 text-center">
-                        <label for="BrightnessSlider">Brightness (<span id="BrightnessValue">0</span>)</label>
-                        <br>
-                        <input id="BrightnessSlider" type="range" value="0" min="-100" max="100">
-                        <br>
-                        <label for="ContrastSlider">Contrast (<span id="ContrastValue">0</span>)</label>
-                        <br>
-                        <input type="range" id="ContrastSlider" value="0" min="-100" max="100">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button id="img_data_capt" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
+	<!-- basic modal -->
+	<div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel">Image Editor</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="col-sm-6 text-center"><canvas id="canvas"></canvas></div>
+					<div class="col-sm-6 text-center">
+						<div id="GreyScaleMode">
+							<label for="BrightnessSlider">Brightness (<span id="BrightnessValue">0</span>)  </label><br>
+							<input id="BrightnessSlider" type="range" value="0" min="-100" max="100"><br>
+							<label for="ContrastSlider">Contrast (<span id="ContrastValue">0</span>)</label><br>
+							<input type="range" id="ContrastSlider" value="0" min="-100" max="100"><br>
+						</div>
+						<div id="BinaryMode">
+							<br>
+							<label for="ThresholdSlider">Threshold (<span id="ThresholdValue">0</span>)</label><br>
+							<input type="range" id="ThresholdSlider" value="128" min="0" max="255"><br>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button id="img_data_capt" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 
 </body>
 </html>
