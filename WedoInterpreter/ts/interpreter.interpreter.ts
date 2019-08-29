@@ -52,6 +52,8 @@ export class Interpreter {
      */
     public terminate() {
         this.terminated = true;
+        this.callbackOnTermination();
+        this.r.close()
     }
 
     public getRobotBehaviour() {
@@ -173,9 +175,10 @@ export class Interpreter {
                         const durationType = stmt[C.MOTOR_DURATION];
                         if ( durationType === C.DEGREE ) {
                             duration /= 360.0
+                        } else if ( durationType === C.DEGREE || durationType === C.DISTANCE ) {
+                            let rotationPerSecond = C.MAX_ROTATION * Math.abs( speed ) / 100.0;
+                            duration = duration / rotationPerSecond * 1000;
                         }
-                        let rotationPerSecond = C.MAX_ROTATION * Math.abs( speed ) / 100.0;
-                        duration = duration / rotationPerSecond * 1000;
                         n.motorOnAction( name, port, duration, speed );
                         return duration;
                     }
@@ -241,11 +244,11 @@ export class Interpreter {
                                 s.setVar( runVariableName, value );
                                 s.pushOps( stmt[C.STMT_LIST] );
                             }
-                        } else if (stmt[C.MODE] === C.FOR_EACH) {
+                        } else if ( stmt[C.MODE] === C.FOR_EACH ) {
                             const runVariableName = stmt[C.EACH_COUNTER];
                             const varName = stmt[C.NAME];
                             const listName = stmt[C.LIST];
-                            const list = s.getVar(listName);
+                            const list = s.getVar( listName );
                             const end = list.length;
                             const incr = s.get0();
                             const value = s.getVar( runVariableName ) + incr;
@@ -401,9 +404,9 @@ export class Interpreter {
                     case C.ASSERT_ACTION: {
                         const right = s.pop();
                         const left = s.pop();
-                        const value = s.pop();             
+                        const value = s.pop();
                         n.assertAction( stmt[C.MSG], left, stmt[C.OP], right, value );
-                        break;      
+                        break;
                     }
                     default:
                         U.dbcException( "invalid stmt op: " + opCode );
@@ -412,8 +415,9 @@ export class Interpreter {
             if ( this.terminated ) {
                 // termination either requested by the client or by executing 'stop' or after last statement
                 n.close();
+                this.callbackOnTermination()
                 return 0;
-            } 
+            }
         }
         return 0;
     }
@@ -661,7 +665,7 @@ export class Interpreter {
                     case C.DIVIDE: s.push( 0 + left / right ); break;
                     case C.POWER: s.push( Math.pow( left, right ) ); break;
                     case C.MOD: s.push( left % right ); break;
-                    case C.IN: console.log("IN BINARY OPERATOR"); break;
+                    case C.IN: console.log( "IN BINARY OPERATOR" ); break;
                     //                    case C.IMAGE_SHIFT_ACTION: s.push( this.shiftImage( left, right ) ); break;
                     default:
                         U.dbcException( "invalid binary expr supOp: " + subOp );
@@ -704,13 +708,13 @@ export class Interpreter {
                 s.pushOps( contl ); s.getOp(); // pseudo execution. Init is already done. Continuation is for termination only.
                 s.pushOps( cont[C.STMT_LIST] );
                 break;
-                
-            case C.FOR_EACH:{
+
+            case C.FOR_EACH: {
                 const runVariableName = stmt[C.EACH_COUNTER];
                 const varName = stmt[C.NAME];
                 const listName = stmt[C.LIST];
                 const start = s.get1();
-                const list = s.getVar(listName)
+                const list = s.getVar( listName )
                 const end = list.length;
                 if ( +start >= +end ) {
                     s.pop(); s.pop(); s.pop();

@@ -351,6 +351,11 @@
 											"name": "W"
 										},
 										{
+											"opc": "motorStop",
+											"port": "1",
+											"name": "W"
+										},
+										{
 											"opc": "expr",
 											"expr": "NUM_CONST",
 											"value": "30"
@@ -446,6 +451,11 @@
 									"name": "W"
 								},
 								{
+									"opc": "motorStop",
+									"port": "1",
+									"name": "W"
+								},
+								{
 									"opc": "expr",
 									"expr": "COLOR_CONST",
 									"value": 9
@@ -521,6 +531,11 @@
 							"opc": "motorOnAction",
 							"port": "1",
 							"name": "W"
+						},
+						{
+							"opc": "motorStop",
+							"port": "1",
+							"name": "W"
 						}
 					]
 				}
@@ -558,6 +573,11 @@
 						},
 						{
 							"opc": "motorOnAction",
+							"port": "1",
+							"name": "W"
+						},
+						{
+							"opc": "motorStop",
 							"port": "1",
 							"name": "W"
 						},
@@ -1546,6 +1566,11 @@
 				},
 				{
 					"opc": "motorOnAction",
+					"port": "1",
+					"name": "W"
+				},
+				{
+					"opc": "motorStop",
 					"port": "1",
 					"name": "W"
 				},

@@ -40,6 +40,8 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
          */
         Interpreter.prototype.terminate = function () {
             this.terminated = true;
+            this.callbackOnTermination();
+            this.r.close();
         };
         Interpreter.prototype.getRobotBehaviour = function () {
             return this.r;
@@ -162,8 +164,10 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                             if (durationType === C.DEGREE) {
                                 duration /= 360.0;
                             }
-                            var rotationPerSecond = C.MAX_ROTATION * Math.abs(speed) / 100.0;
-                            duration = duration / rotationPerSecond * 1000;
+                            else if (durationType === C.DEGREE || durationType === C.DISTANCE) {
+                                var rotationPerSecond = C.MAX_ROTATION * Math.abs(speed) / 100.0;
+                                duration = duration / rotationPerSecond * 1000;
+                            }
                             n.motorOnAction(name_2, port, duration, speed);
                             return duration;
                         }
@@ -404,6 +408,7 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                 if (this.terminated) {
                     // termination either requested by the client or by executing 'stop' or after last statement
                     n.close();
+                    this.callbackOnTermination();
                     return 0;
                 }
             }

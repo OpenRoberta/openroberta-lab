@@ -226,7 +226,7 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'motor', 'brickid': brickid, 'action': 'stop', 'id': port };
             this.btInterfaceFct(cmd);
         };
-        RobotWeDoBehaviour.prototype.showTextAction = function (text) {
+        RobotWeDoBehaviour.prototype.showTextAction = function (text, _mode) {
             var showText = "" + text;
             U.debug('***** show "' + showText + '" *****');
             this.toDisplayFct({ "show": showText });
@@ -313,11 +313,11 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             throw new Error("Method not implemented.");
         };
         RobotWeDoBehaviour.prototype.debugAction = function (_value) {
-            this.showTextAction("> " + _value);
+            this.showTextAction("> " + _value, undefined);
         };
         RobotWeDoBehaviour.prototype.assertAction = function (_msg, _left, _op, _right, _value) {
             if (!_value) {
-                this.showTextAction("> Assertion failed: " + _msg + " " + _left + " " + _op + " " + _right);
+                this.showTextAction("> Assertion failed: " + _msg + " " + _left + " " + _op + " " + _right, undefined);
             }
         };
         return RobotWeDoBehaviour;

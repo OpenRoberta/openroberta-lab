@@ -18,11 +18,7 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.*;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.collect.WedoUsedHardwareCollectorVisitor;
@@ -84,14 +80,16 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
         String port = confMotorBlock.getProperty("CONNECTOR");
         if ( (brickName != null) && (port != null) ) {
             motorOnAction.getParam().getSpeed().visit(this);
+            JSONObject o = mk(C.MOTOR_ON_ACTION).put(C.NAME, brickName).put(C.PORT, port);
             if ( isDuration ) {
                 motorOnAction.getParam().getDuration().getValue().visit(this);
+                app(o);
+                return app(mk(C.MOTOR_STOP).put(C.NAME, brickName).put(C.PORT, port));
             } else {
                 JSONObject nullDuration = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, -1);
                 this.opArray.add(nullDuration);
+                return app(o);
             }
-            JSONObject o = mk(C.MOTOR_ON_ACTION).put(C.NAME, brickName).put(C.PORT, port);
-            return app(o);
         } else {
             throw new DbcException("No robot name or no port");
         }

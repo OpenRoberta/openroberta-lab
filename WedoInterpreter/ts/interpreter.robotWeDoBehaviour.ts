@@ -234,7 +234,7 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
         this.btInterfaceFct( cmd );
     }
 
-    public showTextAction( text: any ): number {
+    public showTextAction( text: any, _mode: string ): number {
         const showText = "" + text;
         U.debug( '***** show "' + showText + '" *****' );
         this.toDisplayFct( { "show": showText } );
@@ -344,11 +344,11 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
         throw new Error( "Method not implemented." );
     }
     public debugAction( _value: any ): void {
-        this.showTextAction( "> " + _value );
+        this.showTextAction( "> " + _value , undefined);
     }
     public assertAction( _msg: string, _left: any, _op: string, _right: any, _value: any ): void {
         if ( !_value ) {
-            this.showTextAction( "> Assertion failed: " + _msg + " " + _left + " " + _op + " " + _right );
+            this.showTextAction( "> Assertion failed: " + _msg + " " + _left + " " + _op + " " + _right , undefined);
         }
     }
 }

@@ -5,7 +5,7 @@ define( ['exports', 'guiState.controller', 'interpreter.interpreter', 'interpret
     var aLanguage;
     var webViewType;
     var interpreter;
-    var wedo = new WEDO_R.RobotWeDoBehaviour(jsToAppInterface, jsToDisplay);
+    wedo = new WEDO_R.RobotWeDoBehaviour(jsToAppInterface, jsToDisplay);
     
     /**
      * Init webview
@@ -20,7 +20,6 @@ define( ['exports', 'guiState.controller', 'interpreter.interpreter', 'interpret
             webViewType = "Android";
         } else if ( tryIOS( a ) ) {
             webViewType = "IOS";
-            console.log("IOS: " + wedo.update.toString())
         } else {
             // Obviously not in an Open Roberta webview
             ready.resolve( language );
