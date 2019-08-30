@@ -1,15 +1,5 @@
 package de.fhg.iais.roberta.visitor.collect;
 
-import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.CURVE;
-import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.DIFFDRIVE;
-import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.DIFFTURN;
-import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.IRSEEK;
-import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.IRSEND;
-import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.MOTORON;
-import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.OBSTACLEDETECTION;
-import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.READDIST;
-import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.SHORTEN;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -32,6 +22,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensors.edison.ResetSensor;
 import de.fhg.iais.roberta.visitor.hardware.IEdisonVisitor;
+
+import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.*;
 
 /**
  * This class visits all the sensors/actors of the Edison brick and collects information about them
@@ -100,8 +92,11 @@ public class EdisonUsedHardwareCollectorVisitor extends AbstractUsedHardwareColl
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        this.usedMethods.add(READDIST);
-        this.usedMethods.add(CURVE);
+        if ( curveAction.getParamLeft().getDuration() != null ) {
+            this.usedMethods.add(CURVE);
+        } else {
+            this.usedMethods.add(CURVEUNLIMITED);
+        }
         this.usedMethods.add(SHORTEN); //used inside helper method
         return null;
     }

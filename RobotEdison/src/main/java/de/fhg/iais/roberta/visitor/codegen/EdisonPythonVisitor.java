@@ -1,13 +1,7 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
 import static de.fhg.iais.roberta.syntax.lang.functions.FunctionNames.SUM;
-import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.CURVE;
-import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.DIFFDRIVE;
-import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.DIFFTURN;
-import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.IRSEEK;
-import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.IRSEND;
-import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.MOTORON;
-import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.OBSTACLEDETECTION;
+import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.*;
 
 import java.util.ArrayList;
 
@@ -228,7 +222,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     /**
      * Function to get the light level from a phototransistor/light sensor
      * The light level reported from Edison is between 0 and 32767, but the return value is in percent.
-     * That's why it is divided by 32767.
+     * That's why it is divided by 328.
      * The line tracker can also report if the robot is on a line, but for this to work the robot has to be placed on a white surface when the program starts.
      * visit a {@link LightSensor} for the block "robSensors_light_getSample"
      *
@@ -238,16 +232,16 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
         switch ( lightSensor.getPort() ) {
             case "LLIGHT":
-                this.sb.append("Ed.ReadLeftLightLevel() / 32767 * 100");
+                this.sb.append("Ed.ReadLeftLightLevel() / 328");
                 break;
             case "RLIGHT":
-                this.sb.append("Ed.ReadRightLightLevel() / 32767 * 100");
+                this.sb.append("Ed.ReadRightLightLevel() / 328");
                 break;
             case "LINETRACKER":
                 if ( lightSensor.getMode().equals("LINE") ) {
                     this.sb.append("Ed.ReadLineState() == Ed.LINE_ON_BLACK");
                 } else {
-                    this.sb.append("Ed.ReadLineTracker() / 32767 * 100");
+                    this.sb.append("Ed.ReadLineTracker() / 328");
                 }
                 break;
         }
@@ -458,19 +452,24 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
                 direction = "Ed.FORWARD";
                 break;
         }
-
-        this.sb.append(this.helperMethodGenerator.getHelperMethodName(CURVE)).append("(").append(direction).append(", ");
-        curveAction.getParamLeft().getSpeed().visit(this);
-        this.sb.append(", ");
-        curveAction.getParamRight().getSpeed().visit(this);
-        this.sb.append(", ");
-        if ( curveAction.getParamLeft().getDuration() != null ) {
+        if ( curveAction.getParamLeft().getDuration() == null ) {
+            this.sb.append(this.helperMethodGenerator.getHelperMethodName(CURVEUNLIMITED)).append("(").append(direction).append(", ");
+            curveAction.getParamLeft().getSpeed().visit(this);
+            this.sb.append(", ");
+            curveAction.getParamRight().getSpeed().visit(this);
+            this.sb.append(")");
+        } else {
+            this.sb.append(this.helperMethodGenerator.getHelperMethodName(CURVE)).append("(").append(direction).append(", ");
+            curveAction.getParamLeft().getSpeed().visit(this);
+            this.sb.append(", ");
+            curveAction.getParamRight().getSpeed().visit(this);
+            this.sb.append(", ");
             curveAction.getParamLeft().getDuration().getValue().visit(this);
             this.sb.append(")");
-
-        } else {
-            this.sb.append("Ed.DISTANCE_UNLIMITED)");
         }
+
+
+
 
         return null;
     }

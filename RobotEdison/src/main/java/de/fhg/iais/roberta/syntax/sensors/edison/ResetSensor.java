@@ -41,6 +41,7 @@ public class ResetSensor<V> extends Sensor<V> {
     public ResetSensor(String sensor, BlocklyBlockProperties props, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("SENSOR_RESET"), props, comment);
         Assert.nonEmptyString(sensor);
+        setReadOnly();
         this.sensor = sensor;
     }
 

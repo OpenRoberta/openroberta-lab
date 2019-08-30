@@ -110,14 +110,24 @@ READDIST:
 CURVE:
   PYTHON: |
       def _diffCurve(direction, leftSpeed, rightSpeed, distance):
-          Ed.Drive(Ed.FORWARD, _shorten(30), Ed.DISTANCE_UNLIMITED)
-          Ed.DriveLeftMotor(Ed.FORWARD, _shorten(10), Ed.DISTANCE_UNLIMITED)
-          Ed.DriveRightMotor(Ed.FORWARD, _shorten(30), Ed.DISTANCE_UNLIMITED)
-          Ed.SetDistance(Ed.MOTOR_LEFT, 20)
-          Ed.SetDistance(Ed.MOTOR_RIGHT, 20)
-          while _readDist(10, 30) > 0:
-              pass
-          Ed.ResetDistance()
+          if (leftSpeed > rightSpeed):
+              Ed.DriveLeftMotor(direction, _shorten(leftSpeed), Ed.DISTANCE_UNLIMITED)
+              Ed.DriveRightMotor(direction, _shorten(rightSpeed), distance)
+              Ed.Drive(Ed.STOP, 1, 1)
+          else:
+              Ed.DriveRightMotor(direction, _shorten(rightSpeed), Ed.DISTANCE_UNLIMITED)
+              Ed.DriveLeftMotor(direction, _shorten(leftSpeed), distance)
+              Ed.Drive(Ed.STOP, 1, 1)
+
+CURVEUNLIMITED:
+  PYTHON: |
+    def _diffCurveUnlimited(direction, leftSpeed, rightSpeed):
+        if (leftSpeed > rightSpeed):
+            Ed.DriveLeftMotor(direction, _shorten(leftSpeed), Ed.DISTANCE_UNLIMITED)
+            Ed.DriveRightMotor(direction, _shorten(rightSpeed), Ed.DISTANCE_UNLIMITED)
+        else:
+             Ed.DriveRightMotor(direction, _shorten(rightSpeed), Ed.DISTANCE_UNLIMITED)
+             Ed.DriveLeftMotor(direction, _shorten(leftSpeed), Ed.DISTANCE_UNLIMITED)
 
 DIFFDRIVE:
   PYTHON: |
