@@ -11,10 +11,10 @@
                             <field name="VAR">obstacle</field>
                             <field name="TYPE">Boolean</field>
                             <value name="VALUE">
-                                <block type="robSensors_infrared_getSample" id="@QlSsZh?%^[rvsc*RpAA" intask="true">
-                                    <mutation mode="OBSTACLELEFT"></mutation>
-                                    <field name="MODE">OBSTACLELEFT</field>
-                                    <field name="SENSORPORT">OBSTACLEDETECTOR</field>
+                                <block type="robSensors_infrared_getSample" id="TTSjN=MWt!;jJE]jK%|L" intask="true">
+                                    <mutation mode="OBSTACLE"></mutation>
+                                    <field name="MODE">OBSTACLE</field>
+                                    <field name="SENSORPORT">LEFT</field>
                                     <field name="SLOT"></field>
                                 </block>
                             </value>
@@ -78,6 +78,7 @@
                 </block>
                 <block type="robActions_motor_on_for" id="InU{]`aU?8D,CiTrd8~Z" intask="true">
                     <field name="MOTORPORT">LMOTOR</field>
+                    <field name="MOTORROTATION">ROTATIONS</field>
                     <value name="POWER">
                         <block type="math_integer" id="KI{!7%ff?ur#2k!wgudU" intask="true">
                             <field name="NUM">30</field>
@@ -262,26 +263,6 @@
                 </block>
                 <block type="text_comment" id="0)9X/%vvVIAqq3T%8C%a" intask="true">
                     <field name="TEXT">Lists</field>
-                </block>
-                <block type="variables_set" id="/q9#2*bXp9cCFuuPQ=Zx" intask="true">
-                    <mutation datatype="Array_Number"></mutation>
-                    <field name="VAR">testlist</field>
-                    <value name="VALUE">
-                        <block type="robLists_repeat" id="7p#~aoujl].GnT`Vyd]+" intask="true">
-                            <mutation list_type="Number"></mutation>
-                            <field name="LIST_TYPE">Number</field>
-                            <value name="ITEM">
-                                <block type="math_integer" id="8N/ZG}9*4~v5;n+X+rm*" intask="true">
-                                    <field name="NUM">7</field>
-                                </block>
-                            </value>
-                            <value name="NUM">
-                                <block type="math_integer" id=",=LC]^`O=LB-d;`N`Ia0" intask="true">
-                                    <field name="NUM">60</field>
-                                </block>
-                            </value>
-                        </block>
-                    </value>
                 </block>
                 <block type="variables_set" id="Q.UuYkXlIs8|y-h5D]XF" intask="true">
                     <mutation datatype="Number"></mutation>

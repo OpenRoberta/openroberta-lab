@@ -120,26 +120,16 @@ public class PythonVisitorTest {
     @Test
     public void visitLightSensorTest() throws Exception {
         String expectedResult = "item=0"
-            + "item=Ed.ReadLeftLightLevel()/32767*100"
-            + "item=Ed.ReadRightLightLevel()/32767*100"
-            + "item=Ed.ReadLineTracker()/32767*100";
+            + "item=Ed.ReadLeftLightLevel()/328"
+            + "item=Ed.ReadRightLightLevel()/328"
+            + "item=Ed.ReadLineTracker()/328";
         h.assertCodeIsOk(expectedResult, "/syntax/sensor/light.xml");
     }
 
     @Test
     public void visitSensorWaitUntilTest() throws Exception {
         String expectedResult =
-              "whileTrue:if(Ed.ReadKeypad()==Ed.KEYPAD_TRIANGLE)==True:breakpass"
-                  + "whileTrue:if(Ed.ReadKeypad()==Ed.KEYPAD_ROUND)==True:breakpass"
-                  + "whileTrue:if(_obstacleDetection(Ed.OBSTACLE_LEFT))==True:breakpass"
-                  + "whileTrue:if(_obstacleDetection(Ed.OBSTACLE_RIGHT))==True:breakpass"
-                  + "whileTrue:if(_obstacleDetection(Ed.OBSTACLE_AHEAD))==True:breakpass"
-                  + "whileTrue:if(_irSeek(1))<30:breakpass"
-                  + "whileTrue:if(Ed.ReadLeftLightLevel()/32767*100)<30:breakpass"
-                  + "whileTrue:if(Ed.ReadRightLightLevel()/32767*100)<30:breakpass"
-                  + "whileTrue:if(Ed.ReadLineTracker()/32767*100)<30:breakpass"
-                  + "whileTrue:if(Ed.ReadLineState()==Ed.LINE_ON_BLACK)==True:breakpass"
-                  + "whileTrue:if(Ed.ReadClapSensor()==Ed.CLAP_DETECTED)==True:breakpass";
+              "whileTrue:if(Ed.ReadKeypad()==Ed.KEYPAD_TRIANGLE)==True:breakpasswhileTrue:if(Ed.ReadKeypad()==Ed.KEYPAD_ROUND)==True:breakpasswhileTrue:if(_obstacleDetection(Ed.OBSTACLE_LEFT))==True:breakpasswhileTrue:if(_obstacleDetection(Ed.OBSTACLE_RIGHT))==True:breakpasswhileTrue:if(_obstacleDetection(Ed.OBSTACLE_AHEAD))==True:breakpasswhileTrue:if(_irSeek(1))<30:breakpasswhileTrue:if(Ed.ReadLeftLightLevel()/328)<30:breakpasswhileTrue:if(Ed.ReadRightLightLevel()/328)<30:breakpasswhileTrue:if(Ed.ReadLineTracker()/328)<30:breakpasswhileTrue:if(Ed.ReadLineState()==Ed.LINE_ON_BLACK)==True:breakpasswhileTrue:if(Ed.ReadClapSensor()==Ed.CLAP_DETECTED)==True:breakpass";
         h.assertCodeIsOk(expectedResult, "/syntax/sensor/wait.xml");
     }
 
@@ -151,7 +141,7 @@ public class PythonVisitorTest {
 
     @Test
     public void visitCurveActionUnlimitedTest() throws Exception {
-        String expectedResult = "_diffCurve(Ed.FORWARD,10,30,Ed.DISTANCE_UNLIMITED)";
+        String expectedResult = "_diffCurveUnlimited(Ed.FORWARD,10,30)";
         h.assertCodeIsOk(expectedResult, "/syntax/actor/steer_unlimited.xml");
     }
 

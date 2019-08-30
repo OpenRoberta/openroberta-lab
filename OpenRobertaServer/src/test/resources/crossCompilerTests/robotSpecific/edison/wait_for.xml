@@ -26,86 +26,6 @@
                         </block>
                     </value>
                 </block>
-                <block type="robControls_wait_for" id="Huk,c8mVfJsa{;CLyNCQ" intask="true">
-                    <value name="WAIT0">
-                        <block type="logic_compare" id=";]p*nTPnAA/?6][lvENG" intask="true">
-                            <field name="OP">EQ</field>
-                            <value name="A">
-                                <block type="robSensors_getSample" id="U303j-0Hr,LGyn~[rXh." intask="true">
-                                    <mutation input="INFRARED_OBSTACLELEFT"></mutation>
-                                    <field name="SENSORTYPE">INFRARED_OBSTACLELEFT</field>
-                                    <field name="SENSORPORT">OBSTACLEDETECTOR</field>
-                                    <field name="SLOT"></field>
-                                </block>
-                            </value>
-                            <value name="B">
-                                <block type="logic_boolean" id="bg5*v|cL)5[Hz4([g0MZ" intask="true">
-                                    <field name="BOOL">TRUE</field>
-                                </block>
-                            </value>
-                        </block>
-                    </value>
-                </block>
-                <block type="robControls_wait_for" id="@vbP/f.!};i~bdg^t;Z5" intask="true">
-                    <value name="WAIT0">
-                        <block type="logic_compare" id="*@RvZTt}RU;Gw8Y-0:Kq" intask="true">
-                            <field name="OP">EQ</field>
-                            <value name="A">
-                                <block type="robSensors_getSample" id=",#2HhIbW:y~bJk0k#@PR" intask="true">
-                                    <mutation input="INFRARED_OBSTACLEAHEAD"></mutation>
-                                    <field name="SENSORTYPE">INFRARED_OBSTACLEAHEAD</field>
-                                    <field name="SENSORPORT">OBSTACLEDETECTOR</field>
-                                    <field name="SLOT"></field>
-                                </block>
-                            </value>
-                            <value name="B">
-                                <block type="logic_boolean" id="wvSEKK~pJ!uU?KC2lsk:" intask="true">
-                                    <field name="BOOL">TRUE</field>
-                                </block>
-                            </value>
-                        </block>
-                    </value>
-                </block>
-                <block type="robControls_wait_for" id="3akYtSM`5s4|M[q3]JF~" intask="true">
-                    <value name="WAIT0">
-                        <block type="logic_compare" id="DXsVPcJ~klB4i;!M!JT_" intask="true">
-                            <field name="OP">EQ</field>
-                            <value name="A">
-                                <block type="robSensors_getSample" id="f`yvx=Pk)MgSeRf]qwPa" intask="true">
-                                    <mutation input="INFRARED_OBSTACLERIGHT"></mutation>
-                                    <field name="SENSORTYPE">INFRARED_OBSTACLERIGHT</field>
-                                    <field name="SENSORPORT">OBSTACLEDETECTOR</field>
-                                    <field name="SLOT"></field>
-                                </block>
-                            </value>
-                            <value name="B">
-                                <block type="logic_boolean" id="1b@[iGA+vldoWEd4~7iS" intask="true">
-                                    <field name="BOOL">TRUE</field>
-                                </block>
-                            </value>
-                        </block>
-                    </value>
-                </block>
-                <block type="robControls_wait_for" id="ND]r58efihNI6XCH!nW_" intask="true">
-                    <value name="WAIT0">
-                        <block type="logic_compare" id="J,g%57)18~*gmDk7F^Z;" intask="true">
-                            <field name="OP">EQ</field>
-                            <value name="A">
-                                <block type="robSensors_getSample" id="t]Bky4MH?!?3FA-,LgQH" intask="true">
-                                    <mutation input="INFRARED_OBSTACLENONE"></mutation>
-                                    <field name="SENSORTYPE">INFRARED_OBSTACLENONE</field>
-                                    <field name="SENSORPORT">OBSTACLEDETECTOR</field>
-                                    <field name="SLOT"></field>
-                                </block>
-                            </value>
-                            <value name="B">
-                                <block type="logic_boolean" id="*~YxgNv[4nJV^zll~.O^" intask="true">
-                                    <field name="BOOL">TRUE</field>
-                                </block>
-                            </value>
-                        </block>
-                    </value>
-                </block>
                 <block type="robControls_wait_for" id="iK?qM5WJdMYQ_T2*m.{I" intask="true">
                     <value name="WAIT0">
                         <block type="logic_compare" id="(uM++|e`ye;*Dp/}9!gy" intask="true">
@@ -206,13 +126,74 @@
                         </block>
                     </value>
                 </block>
+                <block type="robControls_wait_for" id="zL=U4;;V-4#43wN:QtAb" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id=";A`p6.ay0NDH3;;Yr4#D" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="robSensors_getSample" id="+_UFzgJHXDmJI4pb0x*8" intask="true">
+                                    <mutation input="INFRARED_OBSTACLE"></mutation>
+                                    <field name="SENSORTYPE">INFRARED_OBSTACLE</field>
+                                    <field name="SENSORPORT">LEFT</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_boolean" id="M@m/Rgom)tEpjgVFe)Xh" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_for" id=":T;*Sus7e0-}e9LPRBsS" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="3v8)#KfE)Dxrk/^.0BsW" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="robSensors_getSample" id="Pa|@LB(NJSQ~XZvydC%." intask="true">
+                                    <mutation input="INFRARED_OBSTACLE"></mutation>
+                                    <field name="SENSORTYPE">INFRARED_OBSTACLE</field>
+                                    <field name="SENSORPORT">RIGHT</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_boolean" id="lTn+@o@V@n{aJ3PwSr~B" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_for" id="Ud3Rv:+`!*wGEYHWz(B~" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="Jv#yZIgv]lc#PioY`jdl" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="robSensors_getSample" id="{slhSKWlJbo!gpgRvICt" intask="true">
+                                    <mutation input="INFRARED_OBSTACLE"></mutation>
+                                    <field name="SENSORTYPE">INFRARED_OBSTACLE</field>
+                                    <field name="SENSORPORT">FRONT</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_boolean" id="f,h!:1YS|zzdcx{3*YLx" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
             </instance>
         </block_set>
     </program>
     <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="2.0" description="" tags="">
+        <block_set robottype="edison" xmlversion="2.0" description="" tags=""
+                   xmlns="http://de.fhg.iais.roberta.blockly">
             <instance x="213" y="213">
-                <block type="robBrick_Edison-Brick" id="1" intask="true" deletable="false"></block>
+                <block type="robBrick_Edison-Brick" id="1" intask="true" deletable="false"/>
             </instance>
         </block_set>
     </config>
