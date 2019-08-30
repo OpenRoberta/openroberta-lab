@@ -29,27 +29,24 @@ public class RaspberryPiCommunicator {
      */
     public void uploadFile(String path, String programName) throws Exception {
         List<String> fileNames = new ArrayList<>();
-        fileNames.add("__init__.py");
-        fileNames.add("blockly_methods.py");
-        fileNames.add("hal.py");
+        fileNames.add("speech_recognizer_roberta.py");
+        fileNames.add("speech_syntheziser.sh");
 
         Session session = null;
         try {
             String user = this.pluginProperties.getStringProperty("raspi.username");
-            String ip = this.pluginProperties.getStringProperty("raspi." + programName + ".ip");
+            String ip = this.pluginProperties.getStringProperty("raspi.ip");
             String password = this.pluginProperties.getStringProperty("raspi.password");
             programName += ".py";
             session = createSession(user, ip, 22, password);
-            sshCommand(session, "rm " + programName);
-            sshCommand(session, "rm -r roberta");
-            sshCommand(session, "mkdir roberta");
+           // sshCommand(session, "rm " + programName);
             for ( String fname : fileNames ) {
-                copyLocalToRemote(session, this.pluginProperties.getCompilerResourceDir() + "roberta", "roberta", fname);
+               // sshCommand(session, "rm " + fname);
+                copyLocalToRemote(session, this.pluginProperties.getCompilerResourceDir() + "roberta", ".", fname);
             }
-            copyLocalToRemote(createSession(user, ip, 22, password), path, ".", programName);
-            sshCommand(session, "python " + programName);
-            sshCommand(session, "rm " + programName);
-            sshCommand(session, "rm -r roberta");
+            copyLocalToRemote(session, path, ".", programName);
+            sshCommand(session, "python3 " + programName);
+          //  sshCommand(session, "rm " + programName);
         } finally {
             try {
                 if ( session != null ) {
