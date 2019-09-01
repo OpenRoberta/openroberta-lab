@@ -9,9 +9,8 @@ public enum EdisonMethods {
     IRSEEK, //IR seeker
     MOTORON, //Motor on / motor on for... block
     SHORTEN, //shorten a number for Edisons drive() methods
-    CURVE, //for the limited steer block
-    CURVEUNLIMITED, //for the unlimited steer block
+    GETDIR, //reverse direction when negative speed is applied
+    DIFFCURVE, //for the steer block
     DIFFDRIVE, //for driving
     DIFFTURN, //for turning
-    READDIST //to read the distance for the curve block
 }

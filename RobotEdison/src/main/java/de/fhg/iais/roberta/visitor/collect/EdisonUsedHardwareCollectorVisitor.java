@@ -40,6 +40,7 @@ public class EdisonUsedHardwareCollectorVisitor extends AbstractUsedHardwareColl
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         this.usedMethods.add(MOTORON);
         this.usedMethods.add(SHORTEN); //used inside helper method
+        this.usedMethods.add(GETDIR);
         return super.visitMotorOnAction(motorOnAction);
     }
 
@@ -77,6 +78,7 @@ public class EdisonUsedHardwareCollectorVisitor extends AbstractUsedHardwareColl
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         this.usedMethods.add(DIFFDRIVE);
         this.usedMethods.add(SHORTEN); //used inside helper method
+        this.usedMethods.add(GETDIR);
         return null;
     }
 
@@ -92,12 +94,9 @@ public class EdisonUsedHardwareCollectorVisitor extends AbstractUsedHardwareColl
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        if ( curveAction.getParamLeft().getDuration() != null ) {
-            this.usedMethods.add(CURVE);
-        } else {
-            this.usedMethods.add(CURVEUNLIMITED);
-        }
+        this.usedMethods.add(DIFFCURVE);
         this.usedMethods.add(SHORTEN); //used inside helper method
+        this.usedMethods.add(GETDIR);
         return null;
     }
 
@@ -114,6 +113,7 @@ public class EdisonUsedHardwareCollectorVisitor extends AbstractUsedHardwareColl
     public Void visitTurnAction(TurnAction<Void> turnAction) {
         this.usedMethods.add(DIFFTURN);
         this.usedMethods.add(SHORTEN); //used inside helper method
+        this.usedMethods.add(GETDIR);
         return null;
     }
 

@@ -92,61 +92,89 @@ IRSEEK:
 MOTORON:
   PYTHON: |
       def _motorOn(motor, power, distance):
-          if (motor == 0):
-              if (power < 0): Ed.DriveLeftMotor(Ed.BACKWARD, -_shorten(power), distance)
-              else: Ed.DriveLeftMotor(Ed.FORWARD, _shorten(power), distance)
-          if (motor == 1):
-              if (power < 0): Ed.DriveRightMotor(Ed.BACKWARD, -_shorten(power), distance)
-              else: Ed.DriveRightMotor(Ed.FORWARD, _shorten(power), distance)
+          _dir = Ed.FORWARD
+          _reverse = False
+          if (power < 0):
+              _power = _shorten(-power)
+              _reverse = True
+          else: _power = _shorten(power)
+          if (motor == Ed.MOTOR_LEFT):
+              if (_power == 0): Ed.DriveLeftMotor(Ed.STOP, 0, 0)
+              else: Ed.DriveLeftMotor(_getDirection(_dir, _reverse), _power, distance)
+          if (motor == Ed.MOTOR_RIGHT):
+              if (_power == 0): Ed.DriveRightMotor(Ed.STOP, 0, 0)
+              else: Ed.DriveRightMotor(_getDirection(_dir, _reverse), _power, distance)
 
-READDIST:
-  PYTHON: |
-      def _readDist(leftSpeed, rightSpeed):
-          if (leftSpeed > rightSpeed):
-              return Ed.ReadDistance(Ed.MOTOR_LEFT)
-          else:
-              return Ed.ReadDistance(Ed.MOTOR_RIGHT)
-
-CURVE:
+DIFFCURVE:
   PYTHON: |
       def _diffCurve(direction, leftSpeed, rightSpeed, distance):
-          if (leftSpeed > rightSpeed):
-              Ed.DriveLeftMotor(direction, _shorten(leftSpeed), Ed.DISTANCE_UNLIMITED)
-              Ed.DriveRightMotor(direction, _shorten(rightSpeed), distance)
-              Ed.Drive(Ed.STOP, 1, 1)
+          if (leftSpeed < 0): 
+              _leftSpeed = _shorten(-leftSpeed)
+              _reverseLeft = True
+          else: 
+              _leftSpeed = _shorten(leftSpeed)
+              _reverseLeft = False
+          if (rightSpeed < 0): 
+              _rightSpeed = _shorten(-rightSpeed)
+              _reverseRight = True
+          else: 
+              _rightSpeed = _shorten(rightSpeed)
+              _reverseRight = False
+          if (_leftSpeed > _rightSpeed):
+              if (_rightSpeed == 0):
+                  Ed.DriveRightMotor(Ed.STOP, 0, 0)
+              else:
+                  Ed.DriveLeftMotor(_getDirection(direction, _reverseLeft), _leftSpeed, Ed.DISTANCE_UNLIMITED)
+                  Ed.DriveRightMotor(_getDirection(direction, _reverseRight), _rightSpeed, Ed.DISTANCE_UNLIMITED)
+              Ed.DriveLeftMotor(_getDirection(direction, _reverseLeft), _leftSpeed, distance)
+              if (distance != Ed.DISTANCE_UNLIMITED): Ed.Drive(Ed.STOP, 1, 1)
+          elif (_leftSpeed < _rightSpeed):
+              if (_leftSpeed == 0):
+                  Ed.DriveLeftMotor(Ed.STOP, 0, 0)
+              else:
+                  Ed.DriveRightMotor(_getDirection(direction, _reverseRight), _rightSpeed, Ed.DISTANCE_UNLIMITED)
+                  Ed.DriveLeftMotor(_getDirection(direction, _reverseLeft), _leftSpeed, Ed.DISTANCE_UNLIMITED)
+              Ed.DriveRightMotor(_getDirection(direction, _reverseRight), _rightSpeed, distance)
+              if (distance != Ed.DISTANCE_UNLIMITED): Ed.Drive(Ed.STOP, 1, 1)
           else:
-              Ed.DriveRightMotor(direction, _shorten(rightSpeed), Ed.DISTANCE_UNLIMITED)
-              Ed.DriveLeftMotor(direction, _shorten(leftSpeed), distance)
-              Ed.Drive(Ed.STOP, 1, 1)
-
-CURVEUNLIMITED:
-  PYTHON: |
-    def _diffCurveUnlimited(direction, leftSpeed, rightSpeed):
-        if (leftSpeed > rightSpeed):
-            Ed.DriveLeftMotor(direction, _shorten(leftSpeed), Ed.DISTANCE_UNLIMITED)
-            Ed.DriveRightMotor(direction, _shorten(rightSpeed), Ed.DISTANCE_UNLIMITED)
-        else:
-             Ed.DriveRightMotor(direction, _shorten(rightSpeed), Ed.DISTANCE_UNLIMITED)
-             Ed.DriveLeftMotor(direction, _shorten(leftSpeed), Ed.DISTANCE_UNLIMITED)
+              if (_leftSpeed == 0):
+                  Ed.Drive(Ed.STOP, 1, 1)
+              else:
+                  Ed.Drive(_getDirection(direction, _reverseLeft), _leftSpeed, distance)
 
 DIFFDRIVE:
   PYTHON: |
       def _diffDrive(direction, speed, distance):
+          _reverse = False
           if speed < 0:
-              speed = -speed
-              if direction == Ed.FORWARD: Ed.Drive(Ed.BACKWARD, _shorten(speed), distance)
-              else: Ed.Drive(Ed.FORWARD, _shorten(speed), distance)
-          else: Ed.Drive(direction, _shorten(speed), distance)
+              _reverse = True
+              _speed = _shorten(-speed)
+          else: _speed = _shorten(speed)
+          if (_speed == 0): Ed.Drive(Ed.STOP, 1, 1)
+          else: Ed.Drive(_getDirection(direction, _reverse), _speed, distance)
 
 DIFFTURN:
   PYTHON: |
       def _diffTurn(direction, speed, degree):
+          _reverse = False
           if speed < 0:
-              speed = -speed
-              if direction == Ed.SPIN_RIGHT: Ed.Drive(Ed.SPIN_LEFT, _shorten(speed), degree)
-              else: Ed.Drive(Ed.SPIN_RIGHT, _shorten(speed), degree)
-          else: Ed.Drive(direction, _shorten(speed), degree)
+              _reverse = True
+              _speed = _shorten(-speed)
+          else: _speed = _shorten(speed)
+          if (_speed == 0): Ed.Drive(Ed.STOP, 1, 1)
+          elif _reverse:
+              if direction == Ed.SPIN_RIGHT: Ed.Drive(Ed.SPIN_LEFT, _speed, degree)
+              else: Ed.Drive(Ed.SPIN_RIGHT, _speed, degree)
+          else: Ed.Drive(direction, _speed, degree)
     
 SHORTEN:
   PYTHON: |
       def _shorten(num): return ((num+5)/10)
+      
+GETDIR:
+  PYTHON: |
+      def _getDirection(dir, reverse):
+          if reverse:
+             if (dir == Ed.FORWARD): return Ed.BACKWARD
+             else: return Ed.FORWARD
+          else: return dir

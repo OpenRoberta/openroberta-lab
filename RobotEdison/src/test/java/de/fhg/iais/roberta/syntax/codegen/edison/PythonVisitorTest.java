@@ -120,16 +120,16 @@ public class PythonVisitorTest {
     @Test
     public void visitLightSensorTest() throws Exception {
         String expectedResult = "item=0"
-            + "item=Ed.ReadLeftLightLevel()/328"
-            + "item=Ed.ReadRightLightLevel()/328"
-            + "item=Ed.ReadLineTracker()/328";
+            + "item=Ed.ReadLeftLightLevel()/10"
+            + "item=Ed.ReadRightLightLevel()/10"
+            + "item=Ed.ReadLineTracker()/10";
         h.assertCodeIsOk(expectedResult, "/syntax/sensor/light.xml");
     }
 
     @Test
     public void visitSensorWaitUntilTest() throws Exception {
         String expectedResult =
-              "whileTrue:if(Ed.ReadKeypad()==Ed.KEYPAD_TRIANGLE)==True:breakpasswhileTrue:if(Ed.ReadKeypad()==Ed.KEYPAD_ROUND)==True:breakpasswhileTrue:if(_obstacleDetection(Ed.OBSTACLE_LEFT))==True:breakpasswhileTrue:if(_obstacleDetection(Ed.OBSTACLE_RIGHT))==True:breakpasswhileTrue:if(_obstacleDetection(Ed.OBSTACLE_AHEAD))==True:breakpasswhileTrue:if(_irSeek(1))<30:breakpasswhileTrue:if(Ed.ReadLeftLightLevel()/328)<30:breakpasswhileTrue:if(Ed.ReadRightLightLevel()/328)<30:breakpasswhileTrue:if(Ed.ReadLineTracker()/328)<30:breakpasswhileTrue:if(Ed.ReadLineState()==Ed.LINE_ON_BLACK)==True:breakpasswhileTrue:if(Ed.ReadClapSensor()==Ed.CLAP_DETECTED)==True:breakpass";
+              "whileTrue:if(Ed.ReadKeypad()==Ed.KEYPAD_TRIANGLE)==True:breakpasswhileTrue:if(Ed.ReadKeypad()==Ed.KEYPAD_ROUND)==True:breakpasswhileTrue:if(_obstacleDetection(Ed.OBSTACLE_LEFT))==True:breakpasswhileTrue:if(_obstacleDetection(Ed.OBSTACLE_RIGHT))==True:breakpasswhileTrue:if(_obstacleDetection(Ed.OBSTACLE_AHEAD))==True:breakpasswhileTrue:if(_irSeek(1))<30:breakpasswhileTrue:if(Ed.ReadLeftLightLevel()/10)<30:breakpasswhileTrue:if(Ed.ReadRightLightLevel()/10)<30:breakpasswhileTrue:if(Ed.ReadLineTracker()/10)<30:breakpasswhileTrue:if(Ed.ReadLineState()==Ed.LINE_ON_BLACK)==True:breakpasswhileTrue:if(Ed.ReadClapSensor()==Ed.CLAP_DETECTED)==True:breakpass";
         h.assertCodeIsOk(expectedResult, "/syntax/sensor/wait.xml");
     }
 
@@ -141,7 +141,7 @@ public class PythonVisitorTest {
 
     @Test
     public void visitCurveActionUnlimitedTest() throws Exception {
-        String expectedResult = "_diffCurveUnlimited(Ed.FORWARD,10,30)";
+        String expectedResult = "_diffCurve(Ed.FORWARD,10,30,Ed.DISTANCE_UNLIMITED)";
         h.assertCodeIsOk(expectedResult, "/syntax/actor/steer_unlimited.xml");
     }
 

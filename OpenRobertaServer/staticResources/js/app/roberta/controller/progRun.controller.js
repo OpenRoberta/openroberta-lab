@@ -24,7 +24,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             stopBrick();
             return false;
         });
-        if (GUISTATE_C.getConnection() != 'autoConnection') {
+        if (GUISTATE_C.getConnection() != 'autoConnection' && GUISTATE_C.getConnection() != 'jsPlay') {
             blocklyWorkspace.robControls.disable('runOnBrick');
         }
     }
