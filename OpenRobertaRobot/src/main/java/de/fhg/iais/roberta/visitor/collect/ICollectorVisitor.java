@@ -246,6 +246,7 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
     @Override
     default Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
         repeatStmt.getExpr().visit(this);
+        repeatStmt.getList().visit(this);
         return null;
     }
 
@@ -523,7 +524,7 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
         }
         MotionParam<Void> param = motorOnAction.getParam();
         MotorDuration<Void> duration = param.getDuration();
-        if (duration != null) { // TODO why is this necessary?
+        if ( duration != null ) { // TODO why is this necessary?
             duration.getValue().visit(this);
         }
         param.getSpeed().visit(this);
