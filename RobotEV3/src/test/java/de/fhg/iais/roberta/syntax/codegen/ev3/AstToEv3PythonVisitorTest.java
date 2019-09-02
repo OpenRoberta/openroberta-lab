@@ -23,7 +23,8 @@ public class AstToEv3PythonVisitorTest {
             + "from __future__ import absolute_import\n"
             + "from roberta.ev3 import Hal\n"
             + "from ev3dev import ev3 as ev3dev\n"
-            + "import math\n\n"
+            + "import math\n"
+            + "import os\n\n"
             + "class BreakOutOfALoop(Exception): pass\n"
             + "class ContinueLoop(Exception): pass\n\n";
 
@@ -341,7 +342,6 @@ public class AstToEv3PythonVisitorTest {
 
         assertCodeWithConfigIsOk(a, "/syntax/code_generator/java/read_hitec_color_sensor_v2_in_different_modes.xml", configuration);
     }
-
 
     @Test
     public void testRotateRegulatedUnregulatedForwardBackwardMotors() throws Exception {

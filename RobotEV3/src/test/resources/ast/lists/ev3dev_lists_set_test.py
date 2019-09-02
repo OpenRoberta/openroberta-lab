@@ -4,6 +4,7 @@ from __future__ import absolute_import
 from roberta.ev3 import Hal
 from ev3dev import ev3 as ev3dev
 import math
+import os
 
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass

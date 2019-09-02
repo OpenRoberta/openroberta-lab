@@ -2,6 +2,7 @@
 
 import math
 import time
+import random
 from roberta import Hal
 h = Hal()
 

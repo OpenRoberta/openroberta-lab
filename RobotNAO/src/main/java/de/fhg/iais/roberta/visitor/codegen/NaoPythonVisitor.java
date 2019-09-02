@@ -90,7 +90,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
 
     /**
      * initialize the Python code generator visitor.
-     * 
+     *
      * @param brickConfiguration hardware configuration of the brick
      * @param programPhrases to generate the code from
      * @param indentation to start with. Will be ince/decr depending on block structure
@@ -999,6 +999,8 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         this.sb.append("import math");
         nlIndent();
         this.sb.append("import time");
+        nlIndent();
+        this.sb.append("import random");
         nlIndent();
         this.sb.append("from roberta import Hal");
         nlIndent();

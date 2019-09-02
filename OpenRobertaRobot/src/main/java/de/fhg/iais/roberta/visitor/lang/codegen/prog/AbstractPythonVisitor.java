@@ -81,7 +81,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
 
     /**
      * initialize the Python code generator visitor.
-     * 
+     *
      * @param programPhrases to generate the code from
      * @param indentation to start with. Will be ince/decr depending on block structure
      * @param helperMethodGenerator TODO

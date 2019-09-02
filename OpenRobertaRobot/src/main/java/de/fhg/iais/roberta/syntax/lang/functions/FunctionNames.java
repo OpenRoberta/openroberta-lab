@@ -13,6 +13,7 @@ public enum FunctionNames {
     MIN( 80, Assoc.NONE ),
     LISTS_REPEAT( 1, Assoc.LEFT ),
     RANDOM( 1, Assoc.LEFT ),
+    RANDOM_DOUBLE( 1, Assoc.LEFT ),
     EVEN( 10, Assoc.LEFT ),
     ODD( 10, Assoc.LEFT ),
     PRIME( 10, Assoc.LEFT ),

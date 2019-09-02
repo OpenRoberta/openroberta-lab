@@ -4,6 +4,7 @@ from __future__ import absolute_import
 from roberta.ev3 import Hal
 from ev3dev import ev3 as ev3dev
 import math
+import os
 
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
@@ -55,6 +56,13 @@ def main():
         hal.drawText('Press any key', 0, 4)
         while not hal.isKeyPressed('any'): hal.waitFor(500)
         raise
+
+def _randInt(min_val, max_val):
+    val = int.from_bytes(os.urandom(4), byteorder='big')
+    if min_val < max_val:
+        return min_val + (val % ((max_val - min_val) + 1))
+    else:
+        return max_val + (val % ((min_val - max_val) + 1))
 
 def _median(l):
     l = sorted(l)

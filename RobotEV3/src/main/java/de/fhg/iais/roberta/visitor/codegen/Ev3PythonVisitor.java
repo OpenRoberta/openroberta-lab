@@ -1,5 +1,8 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
+import static de.fhg.iais.roberta.visitor.codegen.utilities.ColorSensorUtils.isEV3ColorSensor;
+import static de.fhg.iais.roberta.visitor.codegen.utilities.ColorSensorUtils.isHiTecColorSensor;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +46,9 @@ import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
+import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
@@ -61,13 +67,10 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.codegen.utilities.TTSLanguageMapper;
-import de.fhg.iais.roberta.visitor.collect.Ev3UsedMethodCollectorVisitor;
 import de.fhg.iais.roberta.visitor.collect.Ev3UsedHardwareCollectorVisitor;
+import de.fhg.iais.roberta.visitor.collect.Ev3UsedMethodCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
-
-import static de.fhg.iais.roberta.visitor.codegen.utilities.ColorSensorUtils.isHiTecColorSensor;
-import static de.fhg.iais.roberta.visitor.codegen.utilities.ColorSensorUtils.isEV3ColorSensor;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
@@ -460,7 +463,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         return null;
     }
 
-    private String getEV3ColorSensorMethodName (String colorSensorMode) {
+    private String getEV3ColorSensorMethodName(String colorSensorMode) {
         switch ( colorSensorMode ) {
             case SC.AMBIENTLIGHT:
                 return "hal.getColorSensorAmbient";
@@ -475,7 +478,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         }
     }
 
-    private String getHiTecColorSensorMethodName (String colorSensorMode) {
+    private String getHiTecColorSensorMethodName(String colorSensorMode) {
         switch ( colorSensorMode ) {
             case SC.AMBIENTLIGHT:
                 return "hal.getHiTecColorSensorV2Ambient";
@@ -675,6 +678,22 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
+    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
+        this.sb.append(this.helperMethodGenerator.getHelperMethodName(FunctionNames.RANDOM_DOUBLE)).append("()");
+        return null;
+    }
+
+    @Override
+    public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
+        this.sb.append(this.helperMethodGenerator.getHelperMethodName(FunctionNames.RANDOM)).append("(");
+        mathRandomIntFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        mathRandomIntFunct.getParam().get(1).visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
     protected void generateProgramPrefix(boolean withWrapping) {
         if ( !withWrapping ) {
             return;
@@ -690,6 +709,8 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         this.sb.append("from ev3dev import ev3 as ev3dev");
         nlIndent();
         this.sb.append("import math");
+        nlIndent();
+        this.sb.append("import os");
         nlIndent();
         nlIndent();
         this.sb.append("class BreakOutOfALoop(Exception): pass");
