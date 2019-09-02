@@ -205,6 +205,7 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         let duration = rotations / rotationPerSecond * 1000;
         return duration;
     }
+
     public curveAction( name: string, direction: string, speedL: number, speedR: number, distance: number ): number {
         const robotText = 'robot: ' + name + ', direction: ' + direction;
         const durText = distance === 0 ? ' w.o. duration' : ( ' for ' + distance + ' msec' );
@@ -220,13 +221,12 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         this.hardwareState.actions.motors[C.MOTOR_RIGHT] = speedR;
         this.hardwareState.motors[C.MOTOR_LEFT] = speedL;
         this.hardwareState.motors[C.MOTOR_RIGHT] = speedR;
-        if ( speedL == speedR ) {
-            let rotations = distance / ( C.WHEEL_DIAMETER * Math.PI );
-            let rotationPerSecond = C.MAX_ROTATION * Math.abs( speedL ) / 100.0;
-            let duration = rotations / rotationPerSecond * 1000;
-            return duration;
-        }
-        return 0;
+
+        let rotations = distance / ( C.WHEEL_DIAMETER * Math.PI );
+        let avgSpeed = 0.5 * ( Math.abs( speedL ) + Math.abs( speedR ) )
+        let rotationPerSecond = C.MAX_ROTATION * avgSpeed / 100.0;
+        let duration = rotations / rotationPerSecond * 1000;
+        return duration;
     }
 
     public turnAction( name: string, direction: string, speed: number, angle: number ): number {
@@ -342,7 +342,6 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         const sensor = this.hardwareState.sensors[C.DISPLAY][C.PIXEL];
         s.push( sensor[y][x] );
     }
-
 
     public clearDisplay(): void {
         U.debug( 'clear display' );

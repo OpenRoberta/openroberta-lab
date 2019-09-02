@@ -198,6 +198,15 @@ export class Interpreter {
                         const duration = n.turnAction( name, direction, speed, angle );
                         return duration;
                     }
+                    case C.CURVE_ACTION: {
+                        const distance = s.pop();
+                        const speedR = s.pop();
+                        const speedL = s.pop();
+                        const name = stmt[C.NAME];
+                        const direction = stmt[C.DRIVE_DIRECTION];
+                        const duration = n.curveAction( name, direction, speedL, speedR, distance );
+                        return duration;
+                    }
                     case C.STOP_DRIVE:
                         const name = stmt[C.NAME];
                         n.driveStop( name );

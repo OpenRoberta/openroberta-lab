@@ -298,14 +298,13 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
     }
 
     function runStepWedo() {
-        var waitTime = 0;
-        while (!interpreter.isTerminated() && !reset && waitTime < new Date().getTime()) {
+        while (!interpreter.isTerminated() && !reset) {
             var maxRunTime = new Date().getTime() + 100;
-            waitTime = interpreter.run(maxRunTime);
-            var now = new Date().getTime();
+            var waitTime = interpreter.run(maxRunTime);
+ 
             if (waitTime > 0) {
                 timeout(runStepWedo, waitTime);
-                waitTime += now;
+                return;
             }
         }
     }
