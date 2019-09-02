@@ -208,13 +208,11 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             this.hardwareState.actions.motors[C.MOTOR_RIGHT] = speedR;
             this.hardwareState.motors[C.MOTOR_LEFT] = speedL;
             this.hardwareState.motors[C.MOTOR_RIGHT] = speedR;
-            if (speedL == speedR) {
-                var rotations = distance / (C.WHEEL_DIAMETER * Math.PI);
-                var rotationPerSecond = C.MAX_ROTATION * Math.abs(speedL) / 100.0;
-                var duration = rotations / rotationPerSecond * 1000;
-                return duration;
-            }
-            return 0;
+            var rotations = distance / (C.WHEEL_DIAMETER * Math.PI);
+            var avgSpeed = 0.5 * (Math.abs(speedL) + Math.abs(speedR));
+            var rotationPerSecond = C.MAX_ROTATION * avgSpeed / 100.0;
+            var duration = rotations / rotationPerSecond * 1000;
+            return duration;
         };
         RobotMbedBehaviour.prototype.turnAction = function (name, direction, speed, angle) {
             var robotText = 'robot: ' + name + ', direction: ' + direction;

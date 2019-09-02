@@ -187,9 +187,18 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                             var duration = n.turnAction(name_4, direction, speed, angle);
                             return duration;
                         }
-                        case C.STOP_DRIVE:
+                        case C.CURVE_ACTION: {
+                            var distance = s.pop();
+                            var speedR = s.pop();
+                            var speedL = s.pop();
                             var name_5 = stmt[C.NAME];
-                            n.driveStop(name_5);
+                            var direction = stmt[C.DRIVE_DIRECTION];
+                            var duration = n.curveAction(name_5, direction, speedL, speedR, distance);
+                            return duration;
+                        }
+                        case C.STOP_DRIVE:
+                            var name_6 = stmt[C.NAME];
+                            n.driveStop(name_6);
                             return 0;
                         case C.BOTH_MOTORS_ON_ACTION: {
                             var duration = s.pop();
@@ -207,14 +216,14 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                         }
                         case C.MOTOR_SET_POWER: {
                             var speed = s.pop();
-                            var name_6 = stmt[C.NAME];
+                            var name_7 = stmt[C.NAME];
                             var port = stmt[C.PORT];
-                            n.setMotorSpeed(name_6, port, speed);
+                            n.setMotorSpeed(name_7, port, speed);
                             return 0;
                         }
                         case C.MOTOR_GET_POWER: {
                             var port = stmt[C.PORT];
-                            n.getMotorSpeed(s, name_5, port);
+                            n.getMotorSpeed(s, name_6, port);
                             break;
                         }
                         case C.REPEAT_STMT:
@@ -256,8 +265,8 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                             break;
                         case C.SHOW_TEXT_ACTION: {
                             var text = s.pop();
-                            var name_7 = stmt[C.NAME];
-                            if (name_7 === "ev3") {
+                            var name_8 = stmt[C.NAME];
+                            if (name_8 === "ev3") {
                                 var x = s.pop();
                                 var y = s.pop();
                                 n.showTextActionPosition(text, x, y);
@@ -344,8 +353,8 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                             return n.sayTextAction(text, speed, pitch);
                         }
                         case C.VAR_DECLARATION: {
-                            var name_8 = stmt[C.NAME];
-                            s.bindVar(name_8, s.pop());
+                            var name_9 = stmt[C.NAME];
+                            s.bindVar(name_9, s.pop());
                             break;
                         }
                         case C.WAIT_STMT: {
@@ -385,8 +394,8 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                         case C.TEXT_APPEND:
                         case C.MATH_CHANGE: {
                             var value = s.pop();
-                            var name_9 = stmt[C.NAME];
-                            s.bindVar(name_9, s.pop() + value);
+                            var name_10 = stmt[C.NAME];
+                            s.bindVar(name_10, s.pop() + value);
                             break;
                         }
                         case C.DEBUG_ACTION: {
