@@ -48,7 +48,9 @@ public class AliveData {
     public static void rememberRobotCall(long robotCommunicationDataSize) {
         robotCallsTotal.incrementAndGet();
         robotCallsDelta.incrementAndGet();
-        robotCommunicationStatesTotal.set(robotCommunicationDataSize);
+        if ( robotCommunicationDataSize > 0 ) {
+            robotCommunicationStatesTotal.set(robotCommunicationDataSize);
+        }
     }
 
     public static void rememberLogin() {
