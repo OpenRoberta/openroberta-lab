@@ -171,7 +171,7 @@ public class ServerStarter {
         restHttpHandler.setContextPath("/rest");
         restHttpHandler.setSessionHandler(new SessionHandler());
         restHttpHandler.getSessionHandler().addEventListener(mkSessionListener(" for /rest REST endpoint"));
-        restHttpHandler.getSessionHandler().setMaxInactiveInterval(60);
+        restHttpHandler.getSessionHandler().setMaxInactiveInterval(7200); // 2 hours, should be ok at least for schools :-)
         restHttpHandler.addEventListener(robertaGuiceServletConfig);
         restHttpHandler.addFilter(GuiceFilter.class, "/*", null);
         restHttpHandler.addServlet(DefaultServlet.class, "/*");

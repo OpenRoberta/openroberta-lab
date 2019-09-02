@@ -189,4 +189,8 @@ public class RobotCommunicator {
     public void setSubtype(String subtype) {
         this.subtype = subtype;
     }
+
+    public int getRobotCommunicationDataSize() {
+        return allStates.size();
+    }
 }

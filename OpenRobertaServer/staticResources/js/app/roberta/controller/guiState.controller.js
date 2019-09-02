@@ -1,8 +1,8 @@
 define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.controller', 'progLegal.controller', 'webview.controller', 'socket.controller',
         'jquery' ], function(exports, UTIL, LOG, MSG, GUISTATE, HELP_C, LEGAL_C, WEBVIEW_C, SOCKET_C, $) {
 
-    var LONG = 30000; // Ping time 30s
-    var SHORT = 3000; // Ping time 3s
+    var LONG = 300000; // Ping time 5min
+    var SHORT = 3000; // Ping time 3sec
     /**
      * Init robot
      */

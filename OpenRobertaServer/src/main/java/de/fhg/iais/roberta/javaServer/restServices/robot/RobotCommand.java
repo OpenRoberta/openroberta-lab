@@ -45,7 +45,7 @@ public class RobotCommand {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response handle(JSONObject requestEntity) throws JSONException, InterruptedException {
-        AliveData.rememberRobotCall();
+        AliveData.rememberRobotCall(this.brickCommunicator.getRobotCommunicationDataSize());
         String cmd = requestEntity.getString(CMD);
         String token = null;
         String firmwarename = null;

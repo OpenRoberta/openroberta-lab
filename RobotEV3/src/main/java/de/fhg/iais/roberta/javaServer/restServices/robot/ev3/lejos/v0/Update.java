@@ -39,7 +39,7 @@ public class Update {
     @Path("/runtime")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getRuntime() throws FileNotFoundException {
-        AliveData.rememberRobotCall();
+        AliveData.rememberRobotCall(0);
         LOG.info("/update/runtime called");
         File jar = new File(this.robotUpdateResourcesDir + "/EV3Runtime.jar");
         ResponseBuilder response = Response.ok(new FileInputStream(jar));
@@ -61,7 +61,7 @@ public class Update {
     public Response getShared() throws FileNotFoundException {
         // old versions of the menu will require the OpenRobertaShared.jar
         // since we do not have any more we pass the EV3Runtime twice
-        AliveData.rememberRobotCall();
+        AliveData.rememberRobotCall(0);
         LOG.info("/update/shared called");
         File jar = new File(this.robotUpdateResourcesDir + "/EV3Runtime.jar");
         ResponseBuilder response = Response.ok(new FileInputStream(jar));
@@ -75,7 +75,7 @@ public class Update {
     @Path("/jsonlib")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getJsonLib() throws FileNotFoundException {
-        AliveData.rememberRobotCall();
+        AliveData.rememberRobotCall(0);
         LOG.info("/update/jsonlib called");
         File jar = new File(this.robotUpdateResourcesDir + "/json.jar");
         ResponseBuilder response = Response.ok(new FileInputStream(jar));
@@ -88,7 +88,7 @@ public class Update {
     @Path("/websocketlib")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getWebSocketLib() throws FileNotFoundException {
-        AliveData.rememberRobotCall();
+        AliveData.rememberRobotCall(0);
         LOG.info("/update/websocketlib called");
         File jar = new File(this.robotUpdateResourcesDir + "/Java-WebSocket.jar");
         ResponseBuilder response = Response.ok(new FileInputStream(jar));
@@ -101,7 +101,7 @@ public class Update {
     @Path("/ev3menu")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getMenu() throws FileNotFoundException {
-        AliveData.rememberRobotCall();
+        AliveData.rememberRobotCall(0);
         LOG.info("/update/ev3menu called");
         File jar = new File(this.robotUpdateResourcesDir + "/EV3Menu.jar");
         ResponseBuilder response = Response.ok(new FileInputStream(jar));

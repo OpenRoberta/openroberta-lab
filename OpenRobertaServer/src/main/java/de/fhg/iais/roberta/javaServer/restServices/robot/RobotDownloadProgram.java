@@ -44,7 +44,7 @@ public class RobotDownloadProgram {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response handle(JSONObject requestEntity) throws JSONException {
-        AliveData.rememberRobotCall();
+        AliveData.rememberRobotCall(0);
         try {
             String token = requestEntity.getString("token");
             LOG.info("/download - request for token " + token);
