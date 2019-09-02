@@ -207,7 +207,7 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             var brickid = this.getBrickIdByName(name); // TODO: better style
             var robotText = 'robot: ' + name;
             U.debug(robotText + ' piezo: ' + ', frequency: ' + frequency + ', duration: ' + duration);
-            var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'piezo', 'brickid': brickid, 'frequency': frequency, 'duration': duration };
+            var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'piezo', 'brickid': brickid, 'frequency': Math.floor(frequency), 'duration': Math.floor(duration) };
             this.btInterfaceFct(cmd);
         };
         RobotWeDoBehaviour.prototype.motorOnAction = function (name, port, duration, speed) {

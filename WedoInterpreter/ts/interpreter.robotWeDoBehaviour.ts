@@ -212,7 +212,7 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
         var brickid = this.getBrickIdByName( name ); // TODO: better style
         const robotText = 'robot: ' + name;
         U.debug( robotText + ' piezo: ' + ', frequency: ' + frequency + ', duration: ' + duration );
-        const cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'piezo', 'brickid': brickid, 'frequency': frequency, 'duration': duration };
+        const cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'piezo', 'brickid': brickid, 'frequency': Math.floor( frequency ), 'duration': Math.floor( duration ) };
         this.btInterfaceFct( cmd );
     }
 
@@ -344,11 +344,11 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
         throw new Error( "Method not implemented." );
     }
     public debugAction( _value: any ): void {
-        this.showTextAction( "> " + _value , undefined);
+        this.showTextAction( "> " + _value, undefined );
     }
     public assertAction( _msg: string, _left: any, _op: string, _right: any, _value: any ): void {
         if ( !_value ) {
-            this.showTextAction( "> Assertion failed: " + _msg + " " + _left + " " + _op + " " + _right , undefined);
+            this.showTextAction( "> Assertion failed: " + _msg + " " + _left + " " + _op + " " + _right, undefined );
         }
     }
 }
