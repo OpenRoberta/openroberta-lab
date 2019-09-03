@@ -134,7 +134,7 @@ public class Util {
                     } else if ( brickCommunicator != null ) {
                         RobotCommunicationData state = brickCommunicator.getState(token);
                         if ( state != null ) {
-                            response.put("robot.wait", state.getRobotConnectionTime());
+                            response.put("robot.wait", state.getElapsedMsecOfStartApproval());
                             response.put("robot.battery", state.getBattery());
                             response.put("robot.name", state.getRobotName());
                             response.put("robot.version", state.getMenuVersion());

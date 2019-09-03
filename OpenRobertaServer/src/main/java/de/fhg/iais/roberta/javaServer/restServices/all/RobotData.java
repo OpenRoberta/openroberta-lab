@@ -27,6 +27,21 @@ public class RobotData {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public Response returnSummary() throws Exception {
-        return Response.ok("").build();
+        String summary = this.robotCommunicator.getSummaryOfRobotCommunicator();
+        LOG.info(summary);
+        return Response.ok(summary).build();
+    }
+
+    @Path("/detail")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response returnDetail() throws Exception {
+        String detail = this.robotCommunicator.getDetailsOfRobotConnections();
+        if ( detail.equals("") ) {
+            LOG.info("no robots connected");
+        } else {
+            LOG.info("details of the robots connected:\n" + detail);
+        }
+        return Response.ok("done and written to the log file").build();
     }
 }

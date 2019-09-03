@@ -94,23 +94,25 @@ public class RobotCommunicationData {
             LOG.info("Robot [" + this.robotIdentificator + "] token " + this.token + " approval terminated SUCCESSFULLY.");
             return true;
         } else if ( this.state == State.GARBAGE ) {
-            LOG.info(
-                "Robot ["
-                    + this.robotIdentificator
-                    + "] token "
-                    + this.token
-                    + " was disconnected. The request is aborted. Time elapsed: "
-                    + this.timerStartedByLastRequest.elapsedMsecFormatted());
+            LOG
+                .info(
+                    "Robot ["
+                        + this.robotIdentificator
+                        + "] token "
+                        + this.token
+                        + " was disconnected. The request is aborted. Time elapsed: "
+                        + this.timerStartedByLastRequest.elapsedMsecFormatted());
             return false;
         } else {
             this.state = State.GARBAGE;
-            LOG.info(
-                "Robot ["
-                    + this.robotIdentificator
-                    + "] token "
-                    + this.token
-                    + " approval FAILED. The robot is disconnected. Time elapsed: "
-                    + this.timerStartedByLastRequest.elapsedMsecFormatted());
+            LOG
+                .info(
+                    "Robot ["
+                        + this.robotIdentificator
+                        + "] token "
+                        + this.token
+                        + " approval FAILED. The robot is disconnected. Time elapsed: "
+                        + this.timerStartedByLastRequest.elapsedMsecFormatted());
             return false;
         }
     }
@@ -127,8 +129,11 @@ public class RobotCommunicationData {
             this.timerStartedByTokenApproval = Clock.start();
             notifyAll();
         } else {
-            LOG.info(
-                "user approval lost. Nobody is waiting. The approval request was scheduled " + this.timerStartedByLastRequest.elapsedSecFormatted() + " ago");
+            LOG
+                .info(
+                    "user approval lost. Nobody is waiting. The approval request was scheduled "
+                        + this.timerStartedByLastRequest.elapsedSecFormatted()
+                        + " ago");
         }
     }
 
@@ -140,19 +145,21 @@ public class RobotCommunicationData {
      */
     public synchronized void robotHasSentAPushRequest() {
         if ( this.state == State.WAIT_FOR_TOKENAPPROVAL_FROM_USER ) {
-            LOG.info(
-                "Robot has sent a push request, but the server waits for a token approval by an user. The request ist ignored. "
-                    + "Waiting started "
-                    + this.timerStartedByLastRequest.elapsedSecFormatted()
-                    + " ago. ");
-        } else {
-            if ( this.state != State.WAIT_FOR_PUSH_CMD_FROM_ROBOT && this.state != State.ROBOT_IS_BUSY ) {
-                LOG.info(
-                    "Robot has sent a push request not awaited for. Programming error: Logic or Time race? The request is ACCEPTED. State is "
-                        + this.state
-                        + ". The state setting request was scheduled "
+            LOG
+                .info(
+                    "Robot has sent a push request, but the server waits for a token approval by an user. The request ist ignored. "
+                        + "Waiting started "
                         + this.timerStartedByLastRequest.elapsedSecFormatted()
                         + " ago. ");
+        } else {
+            if ( this.state != State.WAIT_FOR_PUSH_CMD_FROM_ROBOT && this.state != State.ROBOT_IS_BUSY ) {
+                LOG
+                    .info(
+                        "Robot has sent a push request not awaited for. Programming error: Logic or Time race? The request is ACCEPTED. State is "
+                            + this.state
+                            + ". The state setting request was scheduled "
+                            + this.timerStartedByLastRequest.elapsedSecFormatted()
+                            + " ago. ");
             }
             this.state = State.ROBOT_WAITING_FOR_PUSH_FROM_SERVER;
             this.timerStartedByLastRequest = Clock.start();
@@ -199,8 +206,11 @@ public class RobotCommunicationData {
             LOG.info("RUN button pressed, but robot is not waiting for that event. Bad luck!");
             return false;
         } else {
-            LOG.info(
-                "RUN button pressed and robot is waiting for that event. Wait state entered " + this.timerStartedByLastRequest.elapsedSecFormatted() + " ago");
+            LOG
+                .info(
+                    "RUN button pressed and robot is waiting for that event. Wait state entered "
+                        + this.timerStartedByLastRequest.elapsedSecFormatted()
+                        + " ago");
             this.command = "download";
             this.programName = programName;
             this.timerStartedByLastRequest = Clock.start();
@@ -295,8 +305,13 @@ public class RobotCommunicationData {
         return this.timerStartedByLastRequest.elapsedMsec();
     }
 
-    public long getRobotConnectionTime() {
-        return this.timerStartedByTokenApproval.elapsedMsec();
+    public long getElapsedMsecOfStartApproval() {
+        if ( this.timerStartedByTokenApproval == null ) {
+            LOG.error("timing of token approval was NOT started, but asked for");
+            return -1;
+        } else {
+            return this.timerStartedByTokenApproval.elapsedMsec();
+        }
     }
 
     public String getMenuVersion() {

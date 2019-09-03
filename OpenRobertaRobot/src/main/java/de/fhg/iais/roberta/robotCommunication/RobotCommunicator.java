@@ -1,7 +1,12 @@
 package de.fhg.iais.roberta.robotCommunication;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -192,5 +197,69 @@ public class RobotCommunicator {
 
     public int getRobotCommunicationDataSize() {
         return allStates.size();
+    }
+
+    /**
+     * return an overview about the states of the robots connected to the lab<br>
+     * <b>This method must NEVER throw an exception</b>
+     */
+    public String getSummaryOfRobotCommunicator() {
+        try {
+            Map<State, Integer> rcdMap = new HashMap<>();
+            for ( State s : State.values() ) {
+                rcdMap.put(s, 0);
+            }
+            long robotLongestWaitingTime = 0;
+            for ( RobotCommunicationData rcd : allStates.values() ) {
+                final State state = rcd.getState();
+                robotLongestWaitingTime = Math.max(robotLongestWaitingTime, rcd.getElapsedMsecOfStartOfLastRequest());
+                int old = rcdMap.getOrDefault(state, 0);
+                rcdMap.put(state, old + 1);
+            }
+            StringBuilder sb = new StringBuilder();
+            sb.append("number of robots connected: ").append(allStates.size()).append("\nmax time a robot is waiting: ");
+            sb.append(robotLongestWaitingTime).append("\nstate distribution:\n");
+            for ( Entry<State, Integer> entry : rcdMap.entrySet() ) {
+                sb.append(String.format("%-40s : %d\n", entry.getKey(), entry.getValue()));
+            }
+            return sb.toString();
+        } catch ( Exception e ) {
+            String summary = "unexpected, dangerous exception";
+            LOG.error(summary, e);
+            return summary;
+        }
+    }
+
+    /**
+     * return details of the robots connections<br>
+     * <b>This method must NEVER throw an exception</b>
+     */
+    public String getDetailsOfRobotConnections() {
+        try {
+            List<String> connectionDetails = new ArrayList<>();
+            for ( RobotCommunicationData rcd : allStates.values() ) {
+                String token = sanitize(rcd.getToken());
+                long waitTime = sanitize(rcd.getElapsedMsecOfStartOfLastRequest());
+                long approvalTime = sanitize(rcd.getElapsedMsecOfStartApproval());
+                String ident = sanitize(rcd.getRobotIdentificator());
+                String robotName = sanitize(rcd.getRobotName());
+                String connectionDetail = String.format("tk:%-10s wt:%6d at:%6d mc:%-20s nm: %-40s", token, waitTime, approvalTime, ident, robotName);
+                connectionDetails.add(connectionDetail);
+            }
+            return connectionDetails.stream().collect(Collectors.joining("\n"));
+        } catch ( Exception e ) {
+            String error = "unexpected, dangerous exception";
+            LOG.error(error, e);
+            return error;
+        }
+
+    }
+
+    private long sanitize(long val) {
+        return val;
+    }
+
+    private String sanitize(String val) {
+        return val == null ? "???" : val;
     }
 }
