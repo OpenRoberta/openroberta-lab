@@ -45,10 +45,15 @@ public class AliveData {
         clientCallsDelta.incrementAndGet();
     }
 
+    /**
+     * remember that a robot-related REST-call was accepted. Optionally save the number of robots connected or waiting for token approval
+     * 
+     * @param robotCommunicationDataSize number of robots connected to the lab; -1 if its value is unknown for the REST call
+     */
     public static void rememberRobotCall(long robotCommunicationDataSize) {
         robotCallsTotal.incrementAndGet();
         robotCallsDelta.incrementAndGet();
-        if ( robotCommunicationDataSize > 0 ) {
+        if ( robotCommunicationDataSize >= 0 ) {
             robotCommunicationStatesTotal.set(robotCommunicationDataSize);
         }
     }
