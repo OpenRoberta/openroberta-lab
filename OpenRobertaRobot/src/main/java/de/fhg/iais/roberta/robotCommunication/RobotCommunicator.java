@@ -25,17 +25,11 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  */
 public class RobotCommunicator {
     private static final Logger LOG = LoggerFactory.getLogger(RobotCommunicator.class);
-    private static final long PUSH_TIMER_INTERVALL = 2000;
-    private static final long PUSH_TIMEOUT_INTERVALL = 10000;
 
     private final Map<String, RobotCommunicationData> allStates = new ConcurrentHashMap<>();
-
     private String subtype = ""; // The robot subtype, currently used for Arduino type differentiation
 
     public RobotCommunicator() {
-        Runnable pushTimerThread = () -> pushTimerRunner();
-        new Thread(null, pushTimerThread, "PushTimer").start();
-        LOG.info("timer thread created");
     }
 
     /**
@@ -55,27 +49,29 @@ public class RobotCommunicator {
                 || !existingIdentificator.equals(newIdentificator)
                 || existingIdentificator.equals("usb")
                 || existingIdentificator.equals("unknown") ) {
-                LOG.info("token already used. New token required");
+                LOG.info("ROBOT_RC: token already used. New token required");
                 return false;
             }
         }
         for ( String storedToken : this.allStates.keySet() ) {
             RobotCommunicationData storedState = this.allStates.get(storedToken);
             if ( newIdentificator.equals(storedState.getRobotIdentificator()) && !newIdentificator.equals("usb") && !newIdentificator.equals("unknown") ) {
-                LOG.info("Token approval request for robot [" + newIdentificator + "], but an old request is pending. Old request aborted.");
-                storedState.abortPush(); // notifyAll() executed
+                LOG.info("ROBOT_RC: token approval request for robot [" + newIdentificator + "], but an old request is pending. Start abort old request");
                 this.allStates.remove(storedToken);
+                storedState.abort(); // notifyAll() executed
+                LOG.info("ROBOT_RC: token approval request for robot [" + newIdentificator + "], but an old request is pending. End abort old request.");
             }
         }
         this.allStates.put(token, newRobotCommunicationData);
         return true;
     }
 
-    public boolean brickWantsTokenToBeApproved(RobotCommunicationData registration) {
-        if ( !addNewRegistration(registration) ) {
+    public boolean brickWantsTokenToBeApproved(RobotCommunicationData newRobotCommunicationData) {
+        if ( addNewRegistration(newRobotCommunicationData) ) {
+            return newRobotCommunicationData.robotTokenAgreementRequest(); // this will freeze the request until another thread issues a notifyAll()
+        } else {
             return false;
         }
-        return registration.robotTokenAgreementRequest(); // this will freeze the request until another issues a notifyAll()
     }
 
     /**
@@ -94,52 +90,32 @@ public class RobotCommunicator {
             state.robotHasSentAPushRequest();
             return state.getCommand();
         } else {
-            LOG.error("a push request from a robot arrived, but no matching state was found in the server - we provoke a server error");
+            LOG.error("ROBOT_RC: /pushcmd from a robot arrived, no matching state was found - we return a server error");
             return null;
         }
-    }
-
-    // TODO: when can this fail?
-    private boolean checkRobotMatchesClient(String robot, RobotCommunicationData state) {
-        //TODO: it is a hot fix for the release on 6.7.17, later we need to change the state robot name from ardu to botnroll
-        if ( robot.equals("botnroll") || robot.equals("arduino") ) {
-            robot = "ardu";
-        }
-
-        //TODO: this re-writes for old robots, that do not know, that there are V1 and V0 of lejos. 20.02.2019, Artem Vinokurov.
-        if ( robot.equals("ev3lejosv0") ) {
-            robot = "lejos";
-        }
-
-        LOG.info("client:" + robot + ", robot: " + state.getRobot() + ", firmware: " + state.getFirmwareName());
-
-        if ( state.getRobot().equals(robot) ) {
-            return true;
-        }
-        if ( state.getFirmwareName().equals(robot) ) {
-            return true;
-        }
-        // TODO: workarounds for sloppy protocol definition, check for which robots they trigger and fix
-        if ( (state.getRobot() + state.getFirmwareName()).equals(robot) ) {
-            LOG.warn("checking robot+firmware");
-            return true;
-        }
-        return false;
     }
 
     public Key aTokenAgreementWasSent(String token, String robot) {
         RobotCommunicationData state = this.allStates.get(token);
 
         if ( state == null ) {
-            LOG.info("token " + token + " is not waiting for. Typing error of the user?");
+            LOG.info("ROBOT_RC: token " + token + " is not waiting for. Typing error of the user?");
             return Key.TOKEN_SET_ERROR_NO_ROBOT_WAITING;
         } else if ( !checkRobotMatchesClient(robot, state) ) {
-            LOG.info("token " + token + " belongs to a robot of type " + state.getRobot() + "/" + state.getFirmwareName() + ", client is set to " + robot);
+            LOG
+                .info(
+                    "ROBOT_RC: token "
+                        + token
+                        + " belongs to a robot of type "
+                        + state.getRobot()
+                        + "/"
+                        + state.getFirmwareName()
+                        + ", but client is "
+                        + robot);
             return Key.TOKEN_SET_ERROR_WRONG_ROBOTTYPE;
         } else {
-            // todo: version check!
             state.userApprovedTheRobotToken();
-            LOG.info("token " + token + " is approved by a user.");
+            LOG.info("ROBOT_RC: token " + token + " is approved by a user.");
             return Key.TOKEN_SET_SUCCESS;
         }
     }
@@ -150,11 +126,12 @@ public class RobotCommunicator {
         } else {
             RobotCommunicationData state = this.allStates.get(token);
             if ( state == null ) {
-                LOG.info("token " + token + " is not waited for. Ok.");
+                LOG.info("ROBOT_RC: token " + token + " is not waited for. Ok.");
             } else {
-                state.abortPush(); // notifyAll() executed
+                LOG.info("ROBOT_RC: Robot [" + state.getRobotIdentificator() + "] with token " + token + " start disconnect");
                 this.allStates.remove(token);
-                LOG.info("Robot [" + state.getRobotIdentificator() + "] token " + token + " disconnected.");
+                state.abort(); // notifyAll() executed
+                LOG.info("ROBOT_RC: Robot [" + state.getRobotIdentificator() + "] with token " + token + " end disconnect");
             }
         }
     }
@@ -171,20 +148,6 @@ public class RobotCommunicator {
 
     public RobotCommunicationData getState(String token) {
         return this.allStates.get(token);
-    }
-
-    private void pushTimerRunner() {
-        while ( true ) {
-            try {
-                Thread.sleep(PUSH_TIMER_INTERVALL);
-            } catch ( InterruptedException e ) { //NOSONAR : repeat the loop forever
-            }
-            for ( RobotCommunicationData state : this.allStates.values() ) {
-                if ( state.getState() == State.ROBOT_WAITING_FOR_PUSH_FROM_SERVER && state.getElapsedMsecOfStartOfLastRequest() > PUSH_TIMEOUT_INTERVALL ) {
-                    state.terminatePushAndRequestNextPush();
-                }
-            }
-        }
     }
 
     public String getSubtype() {
@@ -243,7 +206,8 @@ public class RobotCommunicator {
                 long approvalTime = sanitize(rcd.getElapsedMsecOfStartApproval());
                 String ident = sanitize(rcd.getRobotIdentificator());
                 String robotName = sanitize(rcd.getRobotName());
-                String connectionDetail = String.format("tk:%-10s wt:%6d at:%6d mc:%-20s nm: %-40s", token, waitTime, approvalTime, ident, robotName);
+                String connectionDetail =
+                    String.format("tk:%-10s st:%-40s wt:%6d at:%6d mc:%-20s nm: %-40s", token, rcd.getState(), waitTime, approvalTime, ident, robotName);
                 connectionDetails.add(connectionDetail);
             }
             return connectionDetails.stream().collect(Collectors.joining("\n"));
@@ -253,6 +217,34 @@ public class RobotCommunicator {
             return error;
         }
 
+    }
+
+    // TODO: when can this fail?
+    private boolean checkRobotMatchesClient(String robot, RobotCommunicationData state) {
+        //TODO: it is a hot fix for the release on 6.7.17, later we need to change the state robot name from ardu to botnroll
+        if ( robot.equals("botnroll") || robot.equals("arduino") ) {
+            robot = "ardu";
+        }
+
+        //TODO: this re-writes for old robots, that do not know, that there are V1 and V0 of lejos. 20.02.2019, Artem Vinokurov.
+        if ( robot.equals("ev3lejosv0") ) {
+            robot = "lejos";
+        }
+
+        LOG.info("client:" + robot + ", robot: " + state.getRobot() + ", firmware: " + state.getFirmwareName());
+
+        if ( state.getRobot().equals(robot) ) {
+            return true;
+        }
+        if ( state.getFirmwareName().equals(robot) ) {
+            return true;
+        }
+        // TODO: workarounds for sloppy protocol definition, check for which robots they trigger and fix
+        if ( (state.getRobot() + state.getFirmwareName()).equals(robot) ) {
+            LOG.warn("checking robot+firmware");
+            return true;
+        }
+        return false;
     }
 
     private long sanitize(long val) {

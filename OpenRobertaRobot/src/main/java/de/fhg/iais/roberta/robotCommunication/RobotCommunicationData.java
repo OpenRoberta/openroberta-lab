@@ -20,8 +20,8 @@ import de.fhg.iais.roberta.util.Clock;
 public class RobotCommunicationData {
     private static final Logger LOG = LoggerFactory.getLogger(RobotCommunicationData.class);
     private static final int TIMEOUT_UNTIL_TOKEN_EXPIRES_WHEN_USER_DOESNT_APPROVE = 300000;
-    private static final int WAIT_FOR_A_ROBOT_PUSH_COMMAND = 1000;
     private static final int TIMEOUT_UNTIL_ASSUME_DISCONNECTED_IF_ROBOT_DOESNT_PUSH = 10000;
+    private static final int PUSH_TIMEOUT_INTERVALL = 10000;
 
     private final String token;
     private final String robot;
@@ -74,90 +74,93 @@ public class RobotCommunicationData {
     }
 
     /**
-     * method called from a thread, which is triggered by a robot request. This method blocks until the user has approved the robot token or a timeout occurs.
+     * BLOCKING a REQUEST from a ROBOT. Called from a thread, which is triggered by a ROBOT, that presents a token for approval and waits:<br>
+     * - for a timeout. Then token is not expected<br>
+     * - until the user approved the token or denied it
      *
      * @return true, if user approved the token; false otherwise
      */
     public synchronized boolean robotTokenAgreementRequest() {
-        LOG.info("Robot [" + this.robotIdentificator + "] token " + this.token + " starts waiting for the client to approve the token");
+        LOG.info("ROBOT_RCD: robot [" + this.robotIdentificator + "] sends token " + this.token + " and waits for the user to approve it");
         this.state = State.WAIT_FOR_TOKENAPPROVAL_FROM_USER;
         this.timerStartedByLastRequest = Clock.start();
-        while ( this.timerStartedByLastRequest.elapsedMsec() < TIMEOUT_UNTIL_TOKEN_EXPIRES_WHEN_USER_DOESNT_APPROVE
-            && this.state == State.WAIT_FOR_TOKENAPPROVAL_FROM_USER ) //
+        while ( this.state == State.WAIT_FOR_TOKENAPPROVAL_FROM_USER //
+            && this.timerStartedByLastRequest.elapsedMsec() < TIMEOUT_UNTIL_TOKEN_EXPIRES_WHEN_USER_DOESNT_APPROVE ) //
         {
             try {
                 wait(TIMEOUT_UNTIL_TOKEN_EXPIRES_WHEN_USER_DOESNT_APPROVE);
             } catch ( InterruptedException e ) { //NOSONAR : repeat the loop until timer elapses or another thread changed the state
+                LOG
+                    .info(
+                        "ROBOT_RCD: spurious interrupt in robotTokenAgreementRequest. Restarting the wait for "
+                            + TIMEOUT_UNTIL_TOKEN_EXPIRES_WHEN_USER_DOESNT_APPROVE
+                            + " msec");
             }
         }
         if ( this.state == State.WAIT_FOR_PUSH_CMD_FROM_ROBOT ) {
-            LOG.info("Robot [" + this.robotIdentificator + "] token " + this.token + " approval terminated SUCCESSFULLY.");
+            LOG.info("ROBOT_RCD: robot [" + this.robotIdentificator + "] has sent token " + this.token + ". User agreed on that. SUCCESS");
             return true;
-        } else if ( this.state == State.GARBAGE ) {
-            LOG
-                .info(
-                    "Robot ["
-                        + this.robotIdentificator
-                        + "] token "
-                        + this.token
-                        + " was disconnected. The request is aborted. Time elapsed: "
-                        + this.timerStartedByLastRequest.elapsedMsecFormatted());
+        } else if ( this.state == State.WAIT_FOR_TOKENAPPROVAL_FROM_USER ) {
+            LOG.info("ROBOT_RCD: robot [" + this.robotIdentificator + "] has sent token " + this.token + ". Timed out!");
+            abort();
             return false;
         } else {
-            this.state = State.GARBAGE;
             LOG
                 .info(
-                    "Robot ["
+                    "ROBOT_RCD: robot ["
                         + this.robotIdentificator
-                        + "] token "
+                        + "] has sent token "
                         + this.token
-                        + " approval FAILED. The robot is disconnected. Time elapsed: "
-                        + this.timerStartedByLastRequest.elapsedMsecFormatted());
+                        + " "
+                        + this.timerStartedByLastRequest.elapsedMsecFormatted()
+                        + " ago, but we force the robot to be disconnected, because state "
+                        + this.state
+                        + " is unexpected");
+            abort();
             return false;
         }
     }
 
     /**
-     * method called from a server thread. This method terminates immediately and wakes up the thread, which runs on behalf of a token approval request from the
-     * robot.
+     * NO WAITING: method called from a server thread. This method wakes up the thread serving the robot request for token approval
      */
     public synchronized void userApprovedTheRobotToken() {
         if ( this.state == State.WAIT_FOR_TOKENAPPROVAL_FROM_USER ) {
-            LOG.info("user approved the token. The approval request was scheduled " + this.timerStartedByLastRequest.elapsedSecFormatted() + " ago");
+            LOG.info("ROBOT_RCD: user approved the token. The approval request was scheduled " + this.timerStartedByLastRequest.elapsedSecFormatted() + " ago");
             this.state = State.WAIT_FOR_PUSH_CMD_FROM_ROBOT;
             this.timerStartedByLastRequest = Clock.start();
             this.timerStartedByTokenApproval = Clock.start();
             notifyAll();
         } else {
             LOG
-                .info(
-                    "user approval lost. Nobody is waiting. The approval request was scheduled "
+                .error(
+                    "ROBOT_RCD: user approval arrived, but is not expected. State is: "
+                        + this.state
+                        + ". Last request was scheduled "
                         + this.timerStartedByLastRequest.elapsedSecFormatted()
                         + " ago");
         }
     }
 
     /**
-     * method called from a thread, which is triggered by a ROBOT push command request. This method blocks until either the server issues a push command or a
-     * timer thread triggers a timeout.
-     *
-     * @return true, if user approved the token; false otherwise
+     * causes WAITING of a ROBOT. Called from a thread, which is triggered by a ROBOT /pushcmd command request. The thread waits:<br>
+     * - for a timeout. Then the robot should repeat the command<br>
+     * - for a RUN command from the user
      */
     public synchronized void robotHasSentAPushRequest() {
         if ( this.state == State.WAIT_FOR_TOKENAPPROVAL_FROM_USER ) {
             LOG
                 .info(
-                    "Robot has sent a push request, but the server waits for a token approval by an user. The request ist ignored. "
-                        + "Waiting started "
+                    "ROBOT_RCD: robot has sent a push request, but the server is waiting for a token approval from the user. The request is ignored. Waiting started "
                         + this.timerStartedByLastRequest.elapsedSecFormatted()
                         + " ago. ");
         } else {
             if ( this.state != State.WAIT_FOR_PUSH_CMD_FROM_ROBOT && this.state != State.ROBOT_IS_BUSY ) {
                 LOG
                     .info(
-                        "Robot has sent a push request not awaited for. Programming error: Logic or Time race? The request is ACCEPTED. State is "
+                        "ROBOT_RCD: robot has sent an unexpected push request. Programming error? The request is ACCEPTED. State is "
                             + this.state
-                            + ". The state setting request was scheduled "
+                            + ". The last request was scheduled "
                             + this.timerStartedByLastRequest.elapsedSecFormatted()
                             + " ago. ");
             }
@@ -165,44 +168,36 @@ public class RobotCommunicationData {
             this.timerStartedByLastRequest = Clock.start();
             while ( this.state == State.ROBOT_WAITING_FOR_PUSH_FROM_SERVER ) {
                 try {
-                    wait();
+                    wait(PUSH_TIMEOUT_INTERVALL);
+                    if ( this.state == State.ROBOT_WAITING_FOR_PUSH_FROM_SERVER ) {
+                        this.state = State.WAIT_FOR_PUSH_CMD_FROM_ROBOT;
+                        this.command = "repeat";
+                    }
+                    break;
                 } catch ( InterruptedException e ) { //NOSONAR : repeat the loop until another thread changed the state
+                    LOG.info("ROBOT_RCD: spurious interrupt in robotHasSentAPushRequest. Restarting the wait for " + PUSH_TIMEOUT_INTERVALL + " msec");
                 }
             }
         }
-        LOG.debug("ROBOT push request terminated.");
     }
 
     /**
-     * this object is outdated. This method is called to abort an eventually pending request from a robot should be aborted. The notifyAll is for that. This
-     * object will be removed from the map holding all valid robot-server connection. The state is set to GARBAGE to express that.
+     * NO WAITING: this object is outdated. This method is called to abort an eventually pending request from a robot. The notifyAll is for that. This object
+     * will be removed from the map holding all valid robot-server connection.
      */
-    public synchronized void abortPush() {
+    public synchronized void abort() {
         this.state = State.GARBAGE;
         notifyAll();
     }
 
     /**
-     * method called from a timer thread. This method terminates immediately and wakes up a waiting thread, which runs on behalf of a push command from the
-     * robot.
-     */
-    public synchronized void terminatePushAndRequestNextPush() {
-        if ( this.state == State.ROBOT_WAITING_FOR_PUSH_FROM_SERVER ) {
-            this.state = State.WAIT_FOR_PUSH_CMD_FROM_ROBOT;
-            this.command = "repeat";
-            this.timerStartedByLastRequest = Clock.start();
-            notifyAll();
-        }
-    }
-
-    /**
-     * method called from a server thread. This method terminates immediately (if the robot waits for a push command) or after 1 sec (if we expect a push
-     * command in the very near future. It wakes up the thread, which runs on behalf of a push command request from the robot.
+     * NO WAITING: method called from a server thread. This method terminates immediately (if the robot waits for a push command) or after 1 sec (if we expect a
+     * push command in the very near future. It wakes up the thread, which runs on behalf of a push command request from the robot.
      *
      * @return true, if the robot was waiting for a "run" command, false otherwise
      */
     public synchronized boolean runButtonPressed(String programName) {
-        if ( !isRobotWaitingForPushCommand() ) {
+        if ( !isRobotWaitingForPushCommandNowOrWithinTheNextSecond() ) {
             LOG.info("RUN button pressed, but robot is not waiting for that event. Bad luck!");
             return false;
         } else {
@@ -224,27 +219,32 @@ public class RobotCommunicationData {
      * method called from a server thread. This method terminates immediately (if the robot waits for a push command) or after 1 sec (if we expect a push
      * command in the very near future. It wakes up the thread, which runs on behalf of a push command request from the robot.
      *
-     * @return the state of the robot
+     * @return true, if the update is accepted; false otherwise
      */
     public synchronized boolean firmwareUpdate() {
-        if ( !isRobotWaitingForPushCommand() ) {
+        if ( !isRobotWaitingForPushCommandNowOrWithinTheNextSecond() ) {
             LOG.info("UPDATE button pressed, but the robot is not waiting. Bad luck!");
             return false;
         } else {
-            LOG.debug("UPDATE button pressed. Wait state entered " + this.timerStartedByLastRequest.elapsedSecFormatted() + " ago");
+            LOG.info("UPDATE button pressed. Wait state entered " + this.timerStartedByLastRequest.elapsedSecFormatted() + " ago");
             this.command = "update";
             this.timerStartedByLastRequest = Clock.start();
 
             // the robot is disconnected after firmware update
-            abortPush();
+            abort();
             return true;
         }
     }
 
-    private boolean isRobotWaitingForPushCommand() {
+    /**
+     * is the robot waiting for a push command? In the case, that WE expect the push within the next second, WE will wait a second and check again
+     *
+     * @return true, if the robot is waiting for a push command
+     */
+    private boolean isRobotWaitingForPushCommandNowOrWithinTheNextSecond() {
         if ( this.state == State.WAIT_FOR_PUSH_CMD_FROM_ROBOT ) {
             try {
-                Thread.sleep(WAIT_FOR_A_ROBOT_PUSH_COMMAND);
+                wait(TIMEOUT_UNTIL_ASSUME_DISCONNECTED_IF_ROBOT_DOESNT_PUSH);
             } catch ( InterruptedException e ) { //NOSONAR : expect, that the robot is waiting for a server push
             }
         }
@@ -307,7 +307,6 @@ public class RobotCommunicationData {
 
     public long getElapsedMsecOfStartApproval() {
         if ( this.timerStartedByTokenApproval == null ) {
-            LOG.error("timing of token approval was NOT started, but asked for");
             return -1;
         } else {
             return this.timerStartedByTokenApproval.elapsedMsec();

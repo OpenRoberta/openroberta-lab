@@ -70,8 +70,7 @@ public class RobotCommand {
         JSONObject response;
         switch ( cmd ) {
             case CMD_REGISTER:
-                LOG.info("Robot [" + macaddr + "] token " + token + " received for registration");
-                // LOG.info("Robot [" + macaddr + "] token " + token + " received for registration, user-agent: " + this.servletRequest.getHeader("User-Agent"));
+                LOG.info("ROBOT_PROTOCOL: robot [" + macaddr + "] send token " + token + " for user approval");
                 RobotCommunicationData state =
                     new RobotCommunicationData(token, robot, macaddr, brickname, batteryvoltage, menuversion, runtimeVersion, firmwarename, firmwareversion);
                 boolean result = this.brickCommunicator.brickWantsTokenToBeApproved(state);
@@ -81,17 +80,26 @@ public class RobotCommand {
                 int counter = pushRequestCounterForLogging.incrementAndGet();
                 boolean logPush = counter % EVERY_REQUEST == 0;
                 if ( logPush ) {
-                    pushRequestCounterForLogging.set(0);
                     LOG.info("/pushcmd - push request for token " + token + " [count:" + counter + "]");
                 }
                 String command = this.brickCommunicator.brickWaitsForAServerPush(token, batteryvoltage, nepoExitValue);
 
                 if ( command == null || this.brickCommunicator.getState(token) == null ) {
-                    LOG.error("No valid command issued by the server as response to a push command request for token " + token);
+                    LOG.error("ROBOT_PROTOCOL: robot was already disconnected, when a /pushcmd for token " + token + " terminated. We return a server error");
                     return Response.serverError().build();
                 } else {
                     if ( !command.equals(CMD_REPEAT) || logPush ) {
-                        LOG.info("the command " + command + " is pushed to the robot [count:" + counter + "]");
+                        LOG
+                            .info(
+                                "ROBOT_PROTOCOL: the command "
+                                    + command
+                                    + " is pushed to robot ["
+                                    + macaddr
+                                    + "] for token "
+                                    + token
+                                    + " [count: "
+                                    + counter
+                                    + "]");
                     }
                     response = new JSONObject().put(CMD, command);
                     response.put(SUBTYPE, this.brickCommunicator.getSubtype());
