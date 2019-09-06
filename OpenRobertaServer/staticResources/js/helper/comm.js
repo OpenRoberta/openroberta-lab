@@ -74,9 +74,9 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
                 frontendSessionValid = false;
                 var message;
                 if (navigator.language.indexOf("de") > -1) {
-                    message = "Dieser Browsertab ist nicht mehr gültig, z. B. weil du einen weiteren Bowsertab mit dem Open Roberta Lab geöffnet hast.\n\nDu kannst dein Programm zwar noch verändern oder exportieren, aber nicht mehr auf dein Gerät übertragen.\nBitte schließe diesen Browsertab und wechsle zu dem neuen!";
+                    message = "Dieser Browsertab ist nicht mehr gültig, z. B. \n- weil du einen weiteren Browsertab geöffnet hast\n- oder länger als 2 Stunden nicht mehr mit dem Browser gearbeitet hast\n- oder der Openroberta-Server neu gestartet wurde.\n\nDu kannst dein Programm zwar noch verändern oder exportieren, aber nicht mehr übersetzen oder auf dein Gerät übertragen. Bitte öffne einen neuen Browsertab oder wechsele zu dem neuen!";
                 } else {
-                    message = "This browser tab is not valid anymore, e.g. because you have opened another browser tab with the Open Robert Lab.\n\nYou may edit or export your program, but it is impossible to send it to your device.\nBetter you close this browser tab and switch to the new one!";
+                    message = "This browser tab is not valid anymore, e.g.\n- because you have opened another browser tab,\n- or you didn't use your browser for more than 2 hours,\n- or the openroberta server was restarted .\n\nYou may edit or export your program, but it is impossible to compile or send it to your device. Better open a new browser tab or switch to the new one!";
                 }
                 alert(message);
              } else {
