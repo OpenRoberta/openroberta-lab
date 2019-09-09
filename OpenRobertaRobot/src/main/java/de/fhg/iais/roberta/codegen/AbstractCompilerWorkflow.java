@@ -82,19 +82,19 @@ public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
             final BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
             StringJoiner sj = new StringJoiner(System.getProperty("line.separator"));
             reader.lines().iterator().forEachRemaining(sj::add);
-            crosscompilerResponse = sj.toString();
+            this.crosscompilerResponse = sj.toString();
             ecode = p.waitFor();
             p.destroy();
         } catch ( Exception e ) {
-            crosscompilerResponse = "exception when calling the cross compiler";
-            LOG.error(crosscompilerResponse, e);
+            this.crosscompilerResponse = "exception when calling the cross compiler";
+            LOG.error(this.crosscompilerResponse, e);
             ecode = -1;
         }
-        LOG.error("DEBUG INFO: " + crosscompilerResponse);
+        LOG.error("DEBUG INFO: " + this.crosscompilerResponse);
         if ( ecode == 0 ) {
             return true;
         } else {
-            LOG.error("compilation of program failed with message: \n" + crosscompilerResponse);
+            LOG.error("compilation of program failed with message: \n" + this.crosscompilerResponse);
             return false;
         }
     }
@@ -115,10 +115,10 @@ public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
             String compiledHex = IOUtils.toString(p.getInputStream(), "US-ASCII");
             p.waitFor();
             p.destroy();
-            crosscompilerResponse = "cross compilation successful";
+            this.crosscompilerResponse = "cross compilation successful";
             return compiledHex;
         } catch ( Exception e ) {
-            crosscompilerResponse = "cross compiler could not be called: " + e.getMessage();
+            this.crosscompilerResponse = "cross compiler could not be called: " + e.getMessage();
             LOG.error("exception when calling the cross compiler", e);
             return null;
         }
@@ -145,12 +145,24 @@ public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
         }
     }
 
-    protected final String getBase64Encoded(String path) {
+    protected final String getBase64EncodedHex(String path) {
         try {
             String compiledHex = FileUtils.readFileToString(new File(path), "UTF-8");
             final Base64.Encoder urec = Base64.getEncoder();
             compiledHex = urec.encodeToString(compiledHex.getBytes());
             return compiledHex;
+        } catch ( IOException e ) {
+            LOG.error("Exception when reading the compiled code from " + path, e);
+            return null;
+        }
+    }
+
+    protected final String getBase64EncodedBinary(String path) {
+        try {
+            byte[] compiledBin = FileUtils.readFileToByteArray(new File(path));
+            final Base64.Encoder urec = Base64.getEncoder();
+            String compiledString = urec.encodeToString(compiledBin);
+            return compiledString;
         } catch ( IOException e ) {
             LOG.error("Exception when reading the compiled code from " + path, e);
             return null;

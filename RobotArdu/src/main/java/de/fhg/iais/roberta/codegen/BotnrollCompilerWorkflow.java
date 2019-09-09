@@ -113,7 +113,7 @@ public class BotnrollCompilerWorkflow extends AbstractCompilerWorkflow {
             };
         boolean success = runCrossCompiler(executableWithParameters);
         if ( success ) {
-            this.compiledHex = getBase64Encoded(path + "/target/" + mainFile + ".ino.hex");
+            this.compiledHex = getBase64EncodedHex(path + "/target/" + mainFile + ".ino.hex");
             return this.compiledHex == null ? Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED : Key.COMPILERWORKFLOW_SUCCESS;
         } else {
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;

@@ -35,7 +35,7 @@ public class SenseboxCompilerWorkflow extends AbstractCompilerWorkflow {
             return;
         }
         try {
-            Configuration configuration = (data.getRobotConfiguration());
+            Configuration configuration = data.getRobotConfiguration();
             this.generatedSourceCode = SenseboxCppVisitor.generate(configuration, data.getProgramTransformer().getTree(), true);
             LOG.info("senseBox c++ code generated");
         } catch ( Exception e ) {
@@ -57,7 +57,7 @@ public class SenseboxCompilerWorkflow extends AbstractCompilerWorkflow {
             return;
         }
         try {
-            Configuration configuration = (data.getRobotConfiguration());
+            Configuration configuration = data.getRobotConfiguration();
             this.generatedSourceCode = SenseboxCppVisitor.generate(configuration, data.getProgramTransformer().getTree(), SSID, password, true);
             LOG.info("senseBox c++ code generated");
         } catch ( Exception e ) {
@@ -147,7 +147,7 @@ public class SenseboxCompilerWorkflow extends AbstractCompilerWorkflow {
             };
         boolean success = runCrossCompiler(executableWithParameters);
         if ( success ) {
-            this.binaryInBase64 = getBase64Encoded(path + "/target/" + mainFile + ".ino.bin");
+            this.binaryInBase64 = getBase64EncodedBinary(path + "/target/" + mainFile + ".ino.bin");
             return this.binaryInBase64 == null ? Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED : Key.COMPILERWORKFLOW_SUCCESS;
         } else {
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
