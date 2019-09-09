@@ -919,7 +919,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitStmtTextComment(StmtTextComment<Void> stmtTextComment) {
-        this.sb.append("# " + stmtTextComment.getTextComment());
+        this.sb.append("# " + stmtTextComment.getTextComment().replace("\n", " "));
         return null;
     }
 

@@ -33,6 +33,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
@@ -177,6 +178,12 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
     }
 
     @Override
+    public Void visitStmtTextComment(StmtTextComment<Void> stmtTextComment) {
+        this.sb.append("// " + stmtTextComment.getTextComment().replace("\n", " "));
+        return null;
+    }
+
+    @Override
     public Void visitUnary(Unary<Void> unary) {
         Unary.Op op = unary.getOp();
         String sym = getUnaryOperatorSymbol(op);
@@ -262,8 +269,7 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
         this.sb.append(")");
         return null;
     }
-   
-    
+
     protected void generateExprCode(Unary<Void> unary, StringBuilder sb) {
         if ( unary.getExpr().getPrecedence() < unary.getPrecedence() || unary.getOp() == Unary.Op.NEG ) {
             sb.append("(");

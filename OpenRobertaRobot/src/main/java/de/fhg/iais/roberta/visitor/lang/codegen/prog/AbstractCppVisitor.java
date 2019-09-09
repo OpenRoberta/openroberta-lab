@@ -44,7 +44,6 @@ import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.VisitorException;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -176,14 +175,13 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
         listRepeat.getCounter().visit(this);
         this.sb.append(", ");
         BlocklyType itemType = listRepeat.getElement().getVarType();
-        if (itemType.equals(BlocklyType.NUMBER) || itemType.equals(BlocklyType.STRING)) {
+        if ( itemType.equals(BlocklyType.NUMBER) || itemType.equals(BlocklyType.STRING) ) {
             this.sb.append("(" + getLanguageVarTypeFromBlocklyType(itemType) + ") ");
         }
         listRepeat.getElement().visit(this);
         this.sb.append(")");
         return null;
     }
-
 
     @Override
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
@@ -527,12 +525,6 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
-    public Void visitStmtTextComment(StmtTextComment<Void> stmtTextComment) {
-        this.sb.append("// " + stmtTextComment.getTextComment());
-        return null;
-    }
-
-    @Override
     public Void visitStringConst(StringConst<Void> stringConst) {
         this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.getValue().replaceAll("[<>\\$]", ""))).append("\"");
         return null;
@@ -639,7 +631,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
             incrIndentation();
             ifStmt.getThenList().get(i).visit(this);
             decrIndentation();
-            if ( (i + 1) < exprSize ) {
+            if ( i + 1 < exprSize ) {
                 nlIndent();
                 this.sb.append("}").append(whitespace());
             }
