@@ -84,20 +84,20 @@ define([ 'exports', 'message', 'comm' ], function(exports, MSG, COMM) {
         exports.robot.hasWlan = false;
 
         var getInitFromServer = function() {
-        	COMM.setInitToken(undefined);
+            COMM.setInitToken(undefined);
             return COMM.json("/init", {
                 "cmd" : "init",
                 "screenSize" : [ window.screen.availWidth, window.screen.availHeight ]
             }, function(result) {
                 if (result.rc === 'ok') {
-                	COMM.setInitToken(result.initToken);
+                    COMM.setInitToken(result.initToken);
                     $.extend(exports.server, result.server);
                     exports.server.version = result["server.version"];
                     exports.server.time = result.serverTime;
                     ready.resolve();
                 } else {
-                	console.log("ERROR: " + result.message)
-                	// MSG.displayInformation(result, "", result.message);
+                    console.log("ERROR: " + result.message)
+                    // MSG.displayInformation(result, "", result.message);
                 }
             }, 'init gui state model');
         }

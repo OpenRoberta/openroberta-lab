@@ -67,7 +67,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
         $('#iconDisplayRobotState').onWrap('click', function() {
             showRobotInfo();
         }, 'icon robot click');
-        
+
         $('#wlan-form').removeData('validator');
         $.validator.addMethod("wlanRegex", function(value, element) {
             return this.optional(element) || /^[a-zA-Z0-9$ *\(\)\{\}\[\]><~`\'\\\/|=+!?.,%#+&^@_\-]+$/gi.test(value);
@@ -102,13 +102,13 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
         $('#setWlanCredentials').onWrap('click', function(e) {
             e.preventDefault();
             $('#wlan-form').validate();
-                if ($('#wlan-form').valid()) {
+            if ($('#wlan-form').valid()) {
                 PROGRAM_C.SSID = document.getElementById("wlanSsid").value;
                 PROGRAM_C.password = document.getElementById("wlanPassword").value;
                 $("#menu-wlan").modal('hide');
             }
         }, 'wlan form submitted');
-        
+
         $('#doUpdateFirmware').onWrap('click', function() {
             $('#set-token').modal('hide');
             $('#confirmUpdateFirmware').modal('hide');
@@ -262,7 +262,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
         }
     }
     exports.showRobotInfo = showRobotInfo;
-    
+
     /**
      * Show WLAN credentials form to save them for further REST calls.
      */
@@ -276,13 +276,13 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
      */
     function handleFirmwareConflict(updateInfo, robotServerVersion) {
         if (updateInfo < 0) {
-            LOG.info("The firmware version '" + robotServerVersion + "' on the server is newer than the firmware version '"
-                    + GUISTATE_C.getRobotVersion() + "' on the robot");
+            LOG.info("The firmware version '" + robotServerVersion + "' on the server is newer than the firmware version '" + GUISTATE_C.getRobotVersion()
+                    + "' on the robot");
             $("#confirmUpdateFirmware").modal('show');
             return true;
         } else if (updateInfo > 0) {
-            LOG.info("The firmware version '" + robotServerVersion + "' on the server is older than the firmware version '"
-                    + GUISTATE_C.getRobotVersion() + "' on the robot");
+            LOG.info("The firmware version '" + robotServerVersion + "' on the server is older than the firmware version '" + GUISTATE_C.getRobotVersion()
+                    + "' on the robot");
             MSG.displayMessage("MESSAGE_FIRMWARE_ERROR", "POPUP", "");
             return true;
         }
@@ -309,7 +309,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
      * Switch robot
      */
     function switchRobot(robot, opt_continue, opt_callback) {
-        
+
         PROGRAM_C.SSID = null;
         PROGRAM_C.password = null;
         document.getElementById("wlanSsid").value = "";
@@ -378,4 +378,5 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
         }
     }
     exports.switchRobot = switchRobot;
+
 });

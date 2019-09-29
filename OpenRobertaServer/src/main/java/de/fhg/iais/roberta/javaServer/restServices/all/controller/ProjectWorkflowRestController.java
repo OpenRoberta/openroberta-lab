@@ -302,6 +302,42 @@ public class ProjectWorkflowRestController {
             return createErrorResponse(response, httpSessionState, this.brickCommunicator);
         }
     }
+    
+    @POST
+    @Path("/reset")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response reset(@OraData HttpSessionState httpSessionState, JSONObject request) {
+        UtilForREST.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = UtilForREST.extractDataPart(request);
+        JSONObject response = new JSONObject();
+        try {
+            Project project =
+                new Project.Builder()
+                    .setCompiledProgramPath(httpSessionState.getRobotFactory().getFirmwareDefaultProgramName())
+                    .setToken(httpSessionState.getToken())
+                    .setRobot(dataPart.optString("robot", httpSessionState.getRobotName()))
+                    .setFactory(httpSessionState.getRobotFactory())
+                    .setRobotCommunicator(this.brickCommunicator)
+                    .build();
+            ProjectService.executeWorkflow("reset", httpSessionState.getRobotFactory(), project);
+            response.put("cmd", "reset");
+            response.put("programName", project.getProgramName());
+            response.put("errorCounter", project.getErrorCounter());
+            response.put("parameters", project.getResultParams());
+            response.put("compiledCode", project.getCompiledHex());
+            response.put("message", project.getResult().getKey());
+            response.put("cause", project.getResult().getKey());
+            response.put("rc", project.hasSucceeded() ? "ok" : "error");
+            Statistics.info("ProgramReset", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", project.hasSucceeded());
+            UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
+            return Response.ok(response).build();
+        } catch ( Exception e ) {
+            LOG.info("program reset failed", e);
+            Statistics.info("ProgramReset", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", false);
+            return createErrorResponse(response, httpSessionState, this.brickCommunicator);
+        }
+    }
 
     private static Response createErrorResponse(JSONObject response, HttpSessionState httpSessionState, RobotCommunicator brickCommunicator) {
         try {

@@ -160,6 +160,7 @@ public class ClientAdmin {
                         response.put("sourceCodeFileExtension", robotFactory.getSourceCodeFileExtension());
                         response.put("binaryFileExtension", robotFactory.getBinaryFileExtension());
                         response.put("hasWlan", robotFactory.hasWlanCredentials());
+                        response.put("firmwareDefault", robotFactory.getFirmwareDefaultProgramName());           
                         LOG.info("set robot to {}", robot);
                         Statistics.info("ChangeRobot", "success", true);
                     } else {

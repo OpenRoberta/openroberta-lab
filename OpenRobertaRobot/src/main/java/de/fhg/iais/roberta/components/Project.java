@@ -42,6 +42,7 @@ public final class Project {
     private String token;
     private String robot;
     private String programName;
+    private String compiledProgramPath;
     private String SSID;
     private String password;
     private ILanguage language;
@@ -76,6 +77,10 @@ public final class Project {
 
     public String getProgramName() {
         return this.programName;
+    }
+
+    public String getCompiledProgramPath() {
+        return this.compiledProgramPath;
     }
 
     public String getSourceCodeFileExtension() {
@@ -242,6 +247,7 @@ public final class Project {
         private String configurationXml;
         private String programXml;
         private String programNativeSource;
+        private String compiledProgramPath;
 
         public Builder setToken(String token) {
             this.project.token = token;
@@ -250,6 +256,11 @@ public final class Project {
 
         public Builder setRobot(String robot) {
             this.project.robot = robot;
+            return this;
+        }
+
+        public Builder setCompiledProgramPath(String compiledProgramPath) {
+            this.compiledProgramPath = compiledProgramPath;
             return this;
         }
 
@@ -309,17 +320,21 @@ public final class Project {
         }
 
         public Project build() {
-            if ( this.programNativeSource == null ) { // Used to follow the default generation, compilation, run from blockly
+            if ( this.compiledProgramPath != null ) { // Used to flash the system with a precompiled program
+                this.project.compiledProgramPath = this.compiledProgramPath;
+                int index = this.compiledProgramPath.lastIndexOf('/');
+                this.project.programName = this.compiledProgramPath.substring(index + 1);
+            } else if ( this.programNativeSource != null ) { // Used to run native code directly
+                Assert.isNull(this.programXml, "Program XML should not be set when using native compile");
+                Assert.isNull(this.configurationXml, "Configuration XML should not be set when using native compile");
+                this.project.setSourceCode(this.programNativeSource);
+            } else { // STANDARD CASE - Used to follow the default generation, compilation, run from blockly            
                 if ( this.project.configuration == null ) {
                     transformConfiguration();
                 }
                 if ( this.project.program == null ) {
                     transformProgram();
                 }
-            } else { // Used to run native code directly
-                Assert.isNull(this.programXml, "Program XML should not be set when using native compile");
-                Assert.isNull(this.configurationXml, "Configuration XML should not be set when using native compile");
-                this.project.setSourceCode(this.programNativeSource);
             }
             return this.project;
         }
@@ -381,4 +396,5 @@ public final class Project {
             return block2OldConfiguration(startingBlock, this.project.robotFactory.getBlocklyDropdownFactory(), sensorsPrefix);
         }
     }
+
 }

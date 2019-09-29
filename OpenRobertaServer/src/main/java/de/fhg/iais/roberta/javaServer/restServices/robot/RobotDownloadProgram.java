@@ -85,7 +85,6 @@ public class RobotDownloadProgram {
                     break;
                 case "edison":
                     fileName = programName + ".wav";
-
                     break;
                 default:
                     LOG.error("unsupported firmware name " + state.getFirmwareName());

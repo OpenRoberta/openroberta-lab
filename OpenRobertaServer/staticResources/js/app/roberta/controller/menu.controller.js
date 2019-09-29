@@ -325,6 +325,8 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             case 'menuRunMulipleSim':
                 MULT_SIM.showListProg();
                 break;
+            case 'menuDefaultFirmware':
+                RUN_C.reset2DefaultFirmware();
             default:
                 break;
             }

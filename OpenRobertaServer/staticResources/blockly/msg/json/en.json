@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-08-29 13:43:09.115199",
+		"lastupdated": "2019-10-31 09:14:07.210878",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -379,7 +379,6 @@
 	"MOTOR_ON_FOR_TOOLTIP_MS": "Turns motor on and stops motor after execution after time has passed.",
 	"MOTOR_ON_FOR_TOOLTIP_RPM": "Turns motor on at speed in rpms (rotation per minute) and stops motor after execution of rotations/degrees.",
 	"MOTOR_ON_FOR_TOOLTIP_SERVO": "Turns motor on and stops motor after execution of rotations/degrees.",
-	"MOTOR_ON_FOR_TOOLTIP_MS": "Sets servo motor to certain position in degrees.",
 	"STEP_MOTOR_ON_TOOLTIP": "Turns motor on with a provided speed in rpm and stops motor after execution of provided number of rotations.",
 	"MOTOR_GETPOWER_TOOLTIP": "Gets current power of this motor.",
 	"MOTOR_SETPOWER_TOOLTIP": "Sets power of this motor.",
@@ -1392,7 +1391,6 @@
 	"ACTION_LCDI2C": "LCD 1602 I²C",
 	"ACTION_LED": "LED",
 	"ACTION_PLAY": "play",
-	"ACTION_RELAY": "relay",
 	"ACTION_RELAY": "relay SRD-05VDC-SL-C",
 	"ACTION_RGBLED": "RGB LED",
 	"ACTION_STEPMOTOR": "step motor",
@@ -1530,7 +1528,7 @@
 	"SSID": "SSID",
 	"BOX_ID": "Device ID",
 	"PASSWORD": "Password",
-	"CONNECTOR": "Connector",
+	"SOCKET": "socket",
 	"SEND_DATA_TO": "send data to",
 	"SEND_DATA_TO_OSM_TOOLTIP": "This block is used to send data from sensors to the openSenseMap. Please configure the IDs in the configuration prior to the usage of this block.",
 	"SENSOR_LIGHTVEML": "visible/UV light sensor",
@@ -1572,5 +1570,8 @@
 	"INIT_FAIL_HTTPSESSION_EXPECTED_BUT_NOT_FOUND": "The connection to the openroberta-lab was closed unexpectedly. This case is rare and may happen, if the openroberta-lab-server is restarted. Please start a new connection to the openroberta-lab, e.g. by closing and starting the browser or by hitting the »reload«-button.",
 	"PROGRAM_ERROR_EXPRBLOCK_TYPECHECK": "This expression is invalid. The type check failed.",
 	"PROGRAM_ERROR_EXPRBLOCK_PARSE": "This expression is syntactically incorrect.",
-	"ICON_BLOCKING_TOOLTIP": "Blocking block! This blocks needs some time to be executed, so other's have to wait until it gives back the control to the caller function."
+	"ICON_BLOCKING_TOOLTIP": "Blocking block! This blocks needs some time to be executed, so other's have to wait until it gives back the control to the caller function.",
+	"ORA_FIRMWARE_RESET_ERROR": "Loading the original program failed!",
+	"ORA_FIRMWARE_RESET_SUCCESS": "Your original program will run in a moment!",
+	"MENU_RESET_FIRMWARE": "reset to factory defaults"
 }

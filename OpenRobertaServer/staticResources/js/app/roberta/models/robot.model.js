@@ -46,4 +46,5 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     }
 
     exports.setRobot = setRobot;
+
 });

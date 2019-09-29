@@ -356,4 +356,11 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         }, successFn, "like program '" + programName + "': '" + like + "'");
     }
     exports.likeProgram = likeProgram;
+    
+    function resetProgram(successFn) {
+        COMM.json("/projectWorkflow/reset", {
+        }, successFn, "reset");
+    }
+
+    exports.resetProgram = resetProgram;
 });

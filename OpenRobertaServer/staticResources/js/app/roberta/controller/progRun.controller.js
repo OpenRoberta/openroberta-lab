@@ -46,27 +46,23 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
 
         var connectionType = GUISTATE_C.getConnectionTypeEnum();
         if (GUISTATE_C.getConnection() == connectionType.AUTO || GUISTATE_C.getConnection() == connectionType.LOCAL) {
-            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(
-                    result) {
+            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(result) {
                 runForAutoConnection(result);
                 PROG_C.reloadProgram(result);
             });
         } else if (GUISTATE_C.getConnection() == connectionType.AGENT || GUISTATE_C.getConnection() == connectionType.AGENTORTOKEN && GUISTATE_C.getIsAgent()) {
-            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(
-                    result) {
+            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(result) {
                 runForAgentConnection(result);
                 PROG_C.reloadProgram(result);
             });
         } else if (GUISTATE_C.getConnection() == connectionType.WEBVIEW) {
-            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(
-                    result) {
+            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(result) {
                 runForWebviewConnection(result);
                 PROG_C.reloadProgram(result);
             });
         } else if (GUISTATE_C.getConnection() == connectionType.JSPLAY) {
             //For all robots that play their program file in the browser
-            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(
-                    result) {
+            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(result) {
                 runForJSPlayConnection(result);
                 PROG_C.reloadProgram(result);
             });
@@ -82,7 +78,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
     function runForAutoConnection(result) {
         GUISTATE_C.setState(result);
         if (result.rc == "ok") {
-            var filename = GUISTATE_C.getProgramName() + "." + GUISTATE_C.getBinaryFileExtension();
+            var filename = (result.programName || GUISTATE_C.getProgramName()) + "." + GUISTATE_C.getBinaryFileExtension();
             if (GUISTATE_C.getBinaryFileExtension() === "ino.bin" || GUISTATE_C.getBinaryFileExtension() === "uf2") {
                 result.compiledCode = UTIL.base64decode(result.compiledCode);
             }
@@ -242,7 +238,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
 
     function runForToken(result) {
         GUISTATE_C.setState(result);
-        MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+        MSG.displayInformation(result, result.message, result.message, result.programName || GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
         if (result.rc == "ok") {
             if (Blockly.Msg['MENU_ROBOT_STOP_HINT_' + GUISTATE_C.getRobotGroup().toUpperCase()]) {
                 MSG.displayMessage('MENU_ROBOT_STOP_HINT_' + GUISTATE_C.getRobotGroup().toUpperCase(), 'TOAST');
@@ -437,4 +433,24 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             $('#downloadLink').append(programLinkDiv);
         }
     }
+
+    function reset2DefaultFirmware() {
+        if (GUISTATE_C.hasRobotDefaultFirmware()) {
+            var connectionType = GUISTATE_C.getConnectionTypeEnum();
+            if (GUISTATE_C.getConnection() == connectionType.AUTO || GUISTATE_C.getConnection() == connectionType.LOCAL) {
+                PROGRAM.resetProgram(function(result) {
+                    runForAutoConnection(result);
+                });
+            } else {
+                PROGRAM.resetProgram(function(result) {
+                    runForToken(result);
+                });
+            }
+        } else {
+            MSG.displayInformation({
+                rc : "error"
+            }, "", "should not happen!");
+        }
+    }
+    exports.reset2DefaultFirmware = reset2DefaultFirmware;
 });

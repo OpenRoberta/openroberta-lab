@@ -66,10 +66,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
     exports.init = init;
 
     function setInitialState() {
-        // Robot connected?
-        if (GUISTATE.robot.time < 0) {
-            $('#menuRunProg').parent().addClass('disabled');
-        }
         // User not logged in?
         $('.nav > li > ul > .login').addClass('disabled');
         $('#head-navi-icon-user').addClass('error');
@@ -193,19 +189,19 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
                 $('#head-navi-icon-robot').removeClass('busy');
                 $('#head-navi-icon-robot').addClass('wait');
                 GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
-                $('#menuRunProg').parent().removeClass('disabled');
+                $('.menuRunProg').removeClass('disabled');
             } else if (GUISTATE.robot.state === 'busy') {
                 $('#head-navi-icon-robot').removeClass('wait');
                 $('#head-navi-icon-robot').removeClass('error');
                 $('#head-navi-icon-robot').addClass('busy');
                 GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-                $('#menuRunProg').parent().addClass('disabled');
+                $('.menuRunProg').addClass('disabled');
             } else {
                 $('#head-navi-icon-robot').removeClass('busy');
                 $('#head-navi-icon-robot').removeClass('wait');
                 $('#head-navi-icon-robot').addClass('error');
                 GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-                $('#menuRunProg').parent().addClass('disabled');
+                $('.menuRunProg').addClass('disabled');
             }
             break;
         case GUISTATE.gui.connectionType.AUTO:
@@ -269,6 +265,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         GUISTATE.gui.sourceCodeFileExtension = result.sourceCodeFileExtension;
         GUISTATE.gui.binaryFileExtension = result.binaryFileExtension;
         GUISTATE.gui.hasWlan = result.hasWlan;
+        GUISTATE.gui.firmwareDefault = result.firmwareDefault;
         $('#blocklyDiv, #bricklyDiv').css('background', 'url(../../../../css/img/' + robotGroup + 'Background.jpg) repeat');
         $('#blocklyDiv, #bricklyDiv').css('background-size', '100%');
         $('#blocklyDiv, #bricklyDiv').css('background-position', 'initial');
@@ -312,7 +309,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             if (GUISTATE.gui.blocklyWorkspace) {
                 GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
             }
-            $('#menuRunProg').parent().addClass('disabled');
+            $('.menuRunProg').addClass('disabled');
             $('#menuConnect').parent().removeClass('disabled');
             setPingTime(SHORT);
             break;
@@ -326,7 +323,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             if (GUISTATE.gui.blocklyWorkspace) {
                 GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
             }
-            $('#menuRunProg').parent().removeClass('disabled');
+            $('.menuRunProg').removeClass('disabled');
             $('#menuConnect').parent().addClass('disabled');
             setPingTime(LONG);
             break;
@@ -347,7 +344,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             if (GUISTATE.gui.blocklyWorkspace) {
                 GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
             }
-            $('#menuRunProg').parent().addClass('disabled');
+            $('.menuRunProg').addClass('disabled');
             $('#menuConnect').parent().removeClass('disabled');
             // are we in an Open Roberta Webview
             if (inWebview()) {
@@ -365,6 +362,12 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         var groupSwitched = false;
         if (findGroup(robot) != getRobotGroup()) {
             groupSwitched = true;
+        }
+
+        if (GUISTATE.gui.firmwareDefault === undefined) {
+            $('#robotDefaultFirmware').addClass('hidden');
+        } else {
+            $('#robotDefaultFirmware').removeClass('hidden');
         }
 
         GUISTATE.gui.robot = robot;
@@ -427,14 +430,14 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             $('#head-navi-icon-robot').removeClass('wait');
             $('#head-navi-icon-robot').addClass('busy');
             GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-            $('#menuRunProg').parent().addClass('disabled');
+            $('.menuRunProg').addClass('disabled');
             break;
         case "error":
             $('#head-navi-icon-robot').removeClass('busy');
             $('#head-navi-icon-robot').removeClass('wait');
             $('#head-navi-icon-robot').addClass('error');
             GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-            $('#menuRunProg').parent().addClass('disabled');
+            $('.menuRunProg').addClass('disabled');
             break;
         case "wait":
             if (isRobotConnected()) {
@@ -442,7 +445,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
                 $('#head-navi-icon-robot').removeClass('error');
                 $('#head-navi-icon-robot').addClass('wait');
                 GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
-                $('#menuRunProg').parent().removeClass('disabled');
+                $('.menuRunProg').removeClass('disabled');
             } else {
                 setConnectionState('error');
             }
@@ -577,6 +580,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         return GUISTATE.robot.version;
     }
     exports.getRobotVersion = getRobotVersion;
+    
+    function hasRobotDefaultFirmware() {
+        return GUISTATE.gui.firmwareDefault;
+    }
+    exports.hasRobotDefaultFirmware = hasRobotDefaultFirmware;
 
     function setView(view) {
         $('#head-navi-tooltip-program').attr('data-toggle', 'dropdown');
@@ -587,7 +595,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         GUISTATE.gui.prevView = GUISTATE.gui.view;
         GUISTATE.gui.view = view;
         if (!isRobotConnected()) {
-            $('#menuRunProg').parent().addClass('disabled');
+            $('.menuRunProg').addClass('disabled');
             getBlocklyWorkspace().robControls.disable('runOnBrick');
         }
         if (view === 'tabConfiguration') {
@@ -1108,7 +1116,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
                 if (GUISTATE.gui.blocklyWorkspace) {
                     GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
                 }
-                $('#menuRunProg').parent().addClass('disabled');
+                $('.menuRunProg').addClass('disabled');
                 $('#menuConnect').parent().addClass('disabled');
                 setIsAgent(true);
             } else {
@@ -1123,7 +1131,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             if (GUISTATE.gui.blocklyWorkspace) {
                 GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
             }
-            $('#menuRunProg').parent().removeClass('disabled');
+            $('.menuRunProg').removeClass('disabled');
             $('#menuConnect').parent().addClass('disabled');
             break;
         default:
@@ -1138,7 +1146,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
                 if (GUISTATE.gui.blocklyWorkspace) {
                     GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
                 }
-                $('#menuRunProg').parent().addClass('disabled');
+                $('.menuRunProg').addClass('disabled');
                 //$('#menuConnect').parent().addClass('disabled');
             } else {
                 $('#head-navi-icon-robot').removeClass('error');
@@ -1147,7 +1155,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
                 if (GUISTATE.gui.blocklyWorkspace) {
                     GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
                 }
-                $('#menuRunProg').parent().removeClass('disabled')
+                $('.menuRunProg').removeClass('disabled')
             }
             break;
         }

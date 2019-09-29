@@ -86,8 +86,10 @@ limitations under the License.
                             class="head-navi-title hidden-sm hidden-md hidden-lg" lkey="Blockly.Msg.MENU_EDIT"></span>
                     </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#" id="menuRunProg" class="typcn typcn-media-play" lkey="Blockly.Msg.MENU_START_BRICK">run on brick</a></li>
+                            <li class="menuRunProg"><a href="#" id="menuRunProg" class="typcn typcn-media-play" lkey="Blockly.Msg.MENU_START_BRICK">run on brick</a></li>
                             <li><a href="#" id="menuRunSim" class="typcn typcn-simulation" lkey="Blockly.Msg.MENU_START_SIM">run in simulation</a></li>
+                            <li id="robotDefaultFirmware" class="hidden menuRunProg"><a href="#" id="menuDefaultFirmware" class="typcn typcn-arrow-sync"
+                                lkey="Blockly.Msg.MENU_RESET_FIRMWARE">reset to the factory defaults</a></li>
                             <li><a href="#" id="menuNewProg" class="typcn typcn-document-add" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
                             <li class="login"><a href="#" id="menuListProg" class="typcn typcn-th-list" lkey="Blockly.Msg.MENU_LIST_PROG">Liste ...</a></li>
                             <li class="login"><a href="#" id="menuRunMulipleSim" class="typcn typcn-open" lkey="Blockly.Msg.MENU_RUN_MULT_SIM">run
@@ -136,7 +138,8 @@ limitations under the License.
                         <ul id="navigation-robot" class="dropdown-menu">
                             <li id="robotConnect"><a href="#" id="menuConnect" class="typcn typcn-wi-fi" lkey="Blockly.Msg.MENU_CONNECT">verbinden ...</a></li>
                             <li><a href="#" id="menuRobotInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_ROBOT_STATE_INFO">Roboterinformationen</a></li>
-                            <li id="robotWlan" class="hidden"><a href="#" id="menuWlan" class="typcn typcn-wi-fi" lkey="Blockly.Msg.MENU_ROBOT_WLAN">WLAN Zugangsdaten ...</a></li>
+                            <li id="robotWlan" class="hidden"><a href="#" id="menuWlan" class="typcn typcn-wi-fi" lkey="Blockly.Msg.MENU_ROBOT_WLAN">WLAN
+                                    Zugangsdaten ...</a></li>
                             <li class="divider"></li>
                             <li class="robotType"><a href="#" class="typcn menu-robot"></a></li>
                             <li class="hidden anchor"></li>
@@ -290,11 +293,8 @@ limitations under the License.
                         rel="tooltip" data-original-title="" title="">
                         <span id="" class="tutorialButton typcn typcn-mortar-board"></span>
                     </div>
-                    <div href="#" id="legalButton" class="rightMenuButton legal" 
-                    	 lkey="Blockly.Msg.MENU_RIGHT_LEGAL_TOOLTIP" 
-                    	 rel="tooltip" 
-                    	 data-original-title=""
-                         title="">
+                    <div href="#" id="legalButton" class="rightMenuButton legal" lkey="Blockly.Msg.MENU_RIGHT_LEGAL_TOOLTIP" rel="tooltip"
+                        data-original-title="" title="">
                         <span id="" class="legalButton typcn typcn-section"></span>
                     </div>
                     <div href="#" id="helpButton" class="rightMenuButton help" lkey="Blockly.Msg.MENU_RIGHT_HELP_TOOLTIP" rel="tooltip" data-original-title=""
@@ -344,28 +344,17 @@ limitations under the License.
             </div>
             <div id="helpDiv" class="fromRight"></div>
             <div id="legalDiv" class="fromRight">
-            	<div id="legalDivHeader">
-            		<a href="#"
-            		   data-href="#legalDivImprint">
-            			<span class="DE">Impressum</span>
-            			<span class="EN">Imprint</span>
-            		</a>
-            		<a href="#"
-            		   data-href="#legalDivPrivacyPolicy">
-            			<span class="DE">Datenschutzerklärung</span>
-            			<span class="EN">Privacy Policy</span>
-            		</a>
-            		<a href="#"
-            		   data-href="#legalDivTermsOfUse">
-            			<span class="DE">Nutzungsbedingungen</span>
-            			<span class="EN">Terms of Use</span>
-            		</a>
-            	</div>
-            	<section id="legalDivImprint"></section>
-            	<hr/>
-            	<section id="legalDivPrivacyPolicy"></section>
-            	<hr/>
-            	<section id="legalDivTermsOfUse"></section>
+                <div id="legalDivHeader">
+                    <a href="#" data-href="#legalDivImprint"> <span class="DE">Impressum</span> <span class="EN">Imprint</span>
+                    </a> <a href="#" data-href="#legalDivPrivacyPolicy"> <span class="DE">Datenschutzerklärung</span> <span class="EN">Privacy Policy</span>
+                    </a> <a href="#" data-href="#legalDivTermsOfUse"> <span class="DE">Nutzungsbedingungen</span> <span class="EN">Terms of Use</span>
+                    </a>
+                </div>
+                <section id="legalDivImprint"></section>
+                <hr />
+                <section id="legalDivPrivacyPolicy"></section>
+                <hr />
+                <section id="legalDivTermsOfUse"></section>
             </div>
             <div id="infoDiv" class="fromRight">
                 <div id="infoToolbar" class="btn-toolbar editor" data-role="editor-toolbar" data-target="#infoContent">
@@ -485,7 +474,7 @@ limitations under the License.
     </div>
     <!--  ################## END TABS ################## -->
     <!-- ################## POPUPS ################## -->
-    
+
     <!-- Popup for WLAN credentials begin -->
     <div class="modal fade" id="menu-wlan" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel"
         aria-hidden="true">
@@ -501,8 +490,8 @@ limitations under the License.
                             <div class="form-group">
                                 <label for="wlanSsid" lkey="Blockly.Msg.POPUP_WLAN_SSID"></label>
                                 <div class="input-group">
-                                    <span class="input-group-addon typcn input-typcn typcn-user"></span> <input type="text" class="form-control"
-                                        id="wlanSsid" name="wlanSsid" autofocus />
+                                    <span class="input-group-addon typcn input-typcn typcn-user"></span> <input type="text" class="form-control" id="wlanSsid"
+                                        name="wlanSsid" autofocus />
                                 </div>
                             </div>
                             <div class="form-group">
@@ -514,7 +503,7 @@ limitations under the License.
                             </div>
                         </div>
                         <div class="modal-footer">
-                        	<label lkey="Blockly.Msg.POPUP_WLAN_SECURITY_INFORMATION"></label>
+                            <label lkey="Blockly.Msg.POPUP_WLAN_SECURITY_INFORMATION"></label>
                             <button type="submit" class="btn btn-primary" id="setWlanCredentials">OK</button>
                         </div>
                     </form>
@@ -523,7 +512,7 @@ limitations under the License.
         </div>
     </div>
     <!-- Popup for WLAN credentials end -->
-    
+
 
     <!-- Popup login -->
     <div class="modal fade" id="login-user" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel"
@@ -988,7 +977,7 @@ limitations under the License.
                         2.0.0 </span></a> <a href="https://www.roberta-home.de/impressum" target="_blank" class="DE modal-body" style="float: right;">Impressum</a> <a
                     href="https://www.roberta-home.de/impressum/?L=1" target="_blank" class="EN modal-body" style="float: right;">Publishing notes</a> </br> <a
                     href="https://www.roberta-home.de/index.php?id=137" target="_blank" class="modal-body DE" style="float: right;">Datenschutzerklärung</a> <a
-					href="https://www.roberta-home.de/index.php?id=137&L=1" target="_blank" class="modal-body EN" style="float: right;">privacy policy</a>
+                    href="https://www.roberta-home.de/index.php?id=137&L=1" target="_blank" class="modal-body EN" style="float: right;">privacy policy</a>
                 <div class="modal-header" style="text-align: center; font-size: 18px;">
                     <h4 lkey="Blockly.Msg.POPUP_STARTUP_START">Choose your system!</h4>
                 </div>
@@ -1161,18 +1150,18 @@ limitations under the License.
                     <h3 id="popupDownloadHeader" class="modal-title" lkey="Blockly.Msg.POPUP_DOWNLOAD">Download your program</h3>
                 </div>
                 <div class="modal-body">
-					<ul id="download-instructions">					
-					</ul>
+                    <ul id="download-instructions">
+                    </ul>
                     <div id='downloadLink'></div>
                     <div id='programHint' class='download-checkbox'>
                         <br>
                         <div id='changedDownloadFolder'>
-                        <input type='checkbox' name='checkbox' id='label-checkbox' value='value' /><label for='label-checkbox'
-                            lkey="Blockly.Msg.POPUP_DOWNLOAD_CHECK">Okay, I changed the download folder of my browser permanently. Don't show this popup
-                            again and download my programs directly.</label>
+                            <input type='checkbox' name='checkbox' id='label-checkbox' value='value' /><label for='label-checkbox'
+                                lkey="Blockly.Msg.POPUP_DOWNLOAD_CHECK">Okay, I changed the download folder of my browser permanently. Don't show this
+                                popup again and download my programs directly.</label>
                         </div>
                     </div>
-                    <div id='OKButtonModalFooter' class="modal-footer" >
+                    <div id='OKButtonModalFooter' class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal" autofocus>OK</button>
                     </div>
                 </div>

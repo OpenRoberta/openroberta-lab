@@ -77,6 +77,14 @@ public interface IRobotFactory {
     PluginProperties getPluginProperties();
 
     Boolean hasWlanCredentials();
+    
+    /**
+     * Returns the name of the factory default program. Used to get the compiled program from the
+     * crosscompiler resources.
+     * 
+     * @return the name of the factory default program
+     */
+    String getFirmwareDefaultProgramName();
 
     List<IWorker> getWorkerPipe(String workflow);
 

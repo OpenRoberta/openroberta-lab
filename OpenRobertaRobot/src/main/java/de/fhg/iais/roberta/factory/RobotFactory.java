@@ -192,6 +192,11 @@ public class RobotFactory implements IRobotFactory {
     public final Boolean hasWlanCredentials() {
         return this.pluginProperties.getStringProperty("robot.haswlan") != null;
     }
+    
+    @Override
+    public final String getFirmwareDefaultProgramName() {
+        return this.pluginProperties.getStringProperty("robot.factory.default");
+    }
 
     private void loadWorkers() {
         LOG.trace("Loading workers...");
