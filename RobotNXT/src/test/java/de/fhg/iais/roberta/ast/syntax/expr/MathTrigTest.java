@@ -16,7 +16,7 @@ public class MathTrigTest extends NxtAstTest {
 
     @Test
     public void Test1() throws Exception {
-        final String a = "if(0==MathSin(0)){OnFwdRegEx(OUT_BC,SpeedTest(MathAcos(0)),OUT_REGMODE_SYNC,RESET_NONE);}";
+        final String a = "if(0==MathSin(0)){OnFwdRegEx(OUT_BC,MIN(MAX(MathAcos(0), -100), 100),OUT_REGMODE_SYNC,RESET_NONE);}";
 
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/math/math_trig1.xml", brickConfigurationBC, false);
     }

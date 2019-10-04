@@ -29,27 +29,24 @@ public final class NxtUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(lightAction.getPort(), SC.HT_COLOR, "COLOR"));
-        return null;
+        return super.visitLightAction(lightAction);
     }
 
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        super.visitVolumeAction(volumeAction);
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.SOUND));
-        return null;
+        return super.visitVolumeAction(volumeAction);
     }
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        super.visitToneAction(toneAction);
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.SOUND));
-        return null;
+        return super.visitToneAction(toneAction);
     }
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-        super.visitPlayNoteAction(playNoteAction);
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.SOUND));
-        return null;
+        return super.visitPlayNoteAction(playNoteAction);
     }
 }

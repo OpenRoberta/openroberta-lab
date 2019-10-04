@@ -19,8 +19,6 @@ PRIME:
             if remainder == 0:
                 return False
         return True
-  C: |
-    TODO
 SUM:
   JAVA: |
     private float _sum(List<Float> list) {

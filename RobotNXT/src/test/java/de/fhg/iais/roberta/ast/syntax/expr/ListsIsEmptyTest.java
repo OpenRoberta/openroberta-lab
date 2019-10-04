@@ -9,7 +9,7 @@ public class ListsIsEmptyTest extends NxtAstTest {
 
     @Test
     public void Test() throws Exception {
-        final String a = "ArrIsEmpty({0,0,0})";
+        final String a = "ArrayLen({0,0,0}) == 0";
 
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/lists/lists_is_empty.xml", false);
     }

@@ -1,15 +1,17 @@
 package de.fhg.iais.roberta.visitor.lang.codegen.prog;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Stream;
 
 import org.apache.commons.text.StringEscapeUtils;
 
+import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import com.google.common.collect.ClassToInstanceMap;
-
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
@@ -662,6 +664,42 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
         }
         nlIndent();
         this.sb.append("}");
+    }
+
+    @Override
+    protected void generateProgramPrefix(boolean withWrapping) {
+        if (withWrapping) {
+            if (!this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty()) {
+                String helperMethodImpls =
+                    this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodDeclarations(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
+                Iterator<String> it = Arrays.stream(helperMethodImpls.split("\n")).iterator();
+                while ( it.hasNext() ) {
+                    this.sb.append(it.next());
+                    if ( it.hasNext() ) {
+                        nlIndent();
+                    }
+                }
+                nlIndent();
+            }
+        }
+    }
+
+    @Override
+    protected void generateProgramSuffix(boolean withWrapping) {
+        if ( withWrapping ) {
+            if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
+                String helperMethodImpls =
+                    this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
+                Iterator<String> it = Arrays.stream(helperMethodImpls.split("\n")).iterator();
+                while ( it.hasNext() ) {
+                    this.sb.append(it.next());
+                    if ( it.hasNext() ) {
+                        nlIndent();
+                    }
+                }
+                nlIndent();
+            }
+        }
     }
 
     protected void generateSignaturesOfUserDefinedMethods() {

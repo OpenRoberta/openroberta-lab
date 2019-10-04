@@ -9,7 +9,7 @@ public class MathConstrainTest extends NxtAstTest {
 
     @Test
     public void Test() throws Exception {
-        final String a = "Constrain(SensorUS(S4),1,100)";
+        final String a = "MIN(MAX(SensorUS(S4),1),100)";
 
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/math/math_constrain.xml", brickConfigurationUS2US4, false);

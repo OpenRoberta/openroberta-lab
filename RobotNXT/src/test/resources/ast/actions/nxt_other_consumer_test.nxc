@@ -1,14 +1,19 @@
 #define WHEELDIAMETER 5.6
 #define TRACKWIDTH 12.0
-#define MAXLINES 8 
-#include "NEPODefs.h" // contains NEPO declarations for the NXC NXT API resources 
- 
-
+#define MAXLINES 8
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
+#define E 2.718281828459045
+#define GOLDEN_RATIO 1.61803398875
+#define SQRT2 1.41421356237
+#define SQRT1_2 0.707106781187
+#define INFINITY 0x7f800000
+#include "NEPODefs.h" // contains NEPO declarations for the NXC NXT API resources
 
 task main() {
-    OnFwd(OUT_A, SpeedTest(30));
-    RotateMotor(OUT_A, SpeedTest(30), 360 * 1);
-    RotateMotor(OUT_A, SpeedTest(30), 1);
+    OnFwd(OUT_A, MIN(MAX(30, -100), 100));
+    RotateMotor(OUT_A, MIN(MAX(30, -100), 100), 360 * 1);
+    RotateMotor(OUT_A, MIN(MAX(30, -100), 100), 1);
     Float(OUT_A);
     Off(OUT_A);
 }

@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -10,11 +9,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.json.JSONObject;
 
+import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -49,6 +48,7 @@ public class HelperMethodGenerator {
         this.language = baseProgLanguage;
 
         this.enums.add(FunctionNames.class);
+        this.enums.add(ListElementOperations.class);
 
         loadFromJson(jsonHelperMethods, baseProgLanguage);
     }
@@ -89,6 +89,47 @@ public class HelperMethodGenerator {
     public String getHelperMethodName(Enum<?> method) {
         String implementation = this.helperMethods.get(method);
         return extractFunctionName(implementation);
+    }
+
+    /**
+     * Returns the helper method declarations for the set of used methods.
+     *
+     * @param usedMethods a set of used methods that may need to be generated as a helper method
+     * @return the helper method declarations
+     */
+    public String getHelperMethodDeclarations(Set<? extends Enum<?>> usedMethods) {
+        StringBuilder sb = new StringBuilder();
+
+        // guarantee order of methods for tests & consistency
+        List<? extends Enum<?>> usedMethodsList = new ArrayList<>(usedMethods);
+
+        // sort indices based on the string representation of the enums
+        int[] sortedIndices = IntStream.range(0, usedMethodsList.size())
+            .boxed().sorted(Comparator.comparing(i -> usedMethodsList.get(i).toString()))
+            .mapToInt(e -> e).toArray();
+
+        for ( int sortedIndex : sortedIndices ) {
+            String implementation = this.helperMethods.get(usedMethodsList.get(sortedIndex));
+
+            if ( implementation != null ) { // no implementation necessary for this method
+                sb.append('\n');
+                String declaration = implementation.split("\n")[0];
+                switch ( this.language ) { // format declaration as necessary for the language
+                    case C:
+                    case JAVA:
+                        declaration = declaration.replace("{", ""); // remove brace if it exists
+                        declaration = declaration.trim(); // remove trailing whitespace
+                        declaration = declaration + ";";
+                        break;
+                    case PYTHON:
+                    case JSON:
+                        break; // nothing needed here
+                }
+                sb.append(declaration);
+            }
+        }
+
+        return sb.toString();
     }
 
     /**

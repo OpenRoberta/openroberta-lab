@@ -20,6 +20,19 @@ public class NxtAstTest extends AstTest {
     protected static ConfigurationAst brickConfigurationAC;
     protected static ConfigurationAst brickConfigurationUS2US4;
 
+    protected static String DEFINES_INCLUDES =
+        "#defineWHEELDIAMETER5.6"
+            + "#defineTRACKWIDTH11.0"
+            + "#defineMAXLINES8"
+            + "#defineMIN(X,Y)(((X)<(Y))?(X):(Y))"
+            + "#defineMAX(X,Y)(((X)>(Y))?(X):(Y))"
+            + "#defineE2.718281828459045"
+            + "#defineGOLDEN_RATIO1.61803398875"
+            + "#defineSQRT21.41421356237"
+            + "#defineSQRT1_20.707106781187"
+            + "#defineINFINITY0x7f800000"
+            + "#include\"NEPODefs.h\"//containsNEPOdeclarationsfortheNXCNXTAPIresources";
+
     @BeforeClass
     public static void setup() {
         testFactory = new RobotFactory(new PluginProperties("nxt", "", "", Util.loadProperties("classpath:/nxt.properties")));
