@@ -129,6 +129,8 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
+        ConfigurationComponent actor = this.robotConfiguration.getConfigurationComponent(encoderSensor.getPort());
+        this.usedActors.add(new UsedActor(encoderSensor.getPort(), actor.getComponentType()));
         return null;
     }
 
