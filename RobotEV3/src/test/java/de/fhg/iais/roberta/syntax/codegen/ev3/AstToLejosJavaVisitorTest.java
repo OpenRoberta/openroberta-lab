@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.syntax.codegen.ev3;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.BeforeClass;
@@ -10,6 +11,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.Ev3LejosAstTest;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
 public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
@@ -39,35 +41,48 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
             + "import java.util.Collections;\n"
             + "import lejos.remote.nxt.NXTConnection;\n\n";
 
-    private static final String BRICK_CONFIGURATION =
-        "" //
-            + "    brickConfiguration = new EV3Configuration.Builder()\n"
-            + "    .setWheelDiameter(5.6)\n"
-            + "    .setTrackWidth(17.0)\n"
-            + "    .addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.NONE))\n"
-            + "    .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))\n"
-            + "    .addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH))\n"
-            + "    .addSensor(SensorPort.S2, new Sensor(SensorType.ULTRASONIC))\n"
-            + "    .addSensor(SensorPort.S3, new Sensor(SensorType.COLOR))\n"
-            + "    .build();\n\n";
+    /**
+     * Creates the code for the brick configuration.
+     * Specify the used components in a 6 element list. First 2 are used for Actors, last 4 for Sensors.
+     * If a component is left empty the line is not generated.
+     * @param usedComponents a 6 element list with component types, empty component types are ignored.
+     * @return the code of the brick configuration
+     */
+    private static String createBrickConfigurationCode(List<String> usedComponents) {
+        Assert.isTrue(usedComponents.size() == 6);
+        StringBuilder sb = new StringBuilder();
+        sb.append("    brickConfiguration = new EV3Configuration.Builder()\n");
+        sb.append("    .setWheelDiameter(5.6)\n");
+        sb.append("    .setTrackWidth(17.0)\n");
+        if (!usedComponents.get(0).isEmpty()) {
+            sb.append("    .addActor(ActorPort.A, new Actor(ActorType." + usedComponents.get(0) + ", true, " +
+                      "DriveDirection.FOREWARD, MotorSide.NONE))\n");
+        }
+        if (!usedComponents.get(1).isEmpty()) {
+            sb.append("    .addActor(ActorPort.B, new Actor(ActorType." + usedComponents.get(1) + ", true, " +
+                      "DriveDirection.FOREWARD, MotorSide.RIGHT))\n");
+        }
+        if (!usedComponents.get(2).isEmpty()) {
+            sb.append("    .addSensor(SensorPort.S1, new Sensor(SensorType." + usedComponents.get(2) +"))\n");
+        }
+        if (!usedComponents.get(3).isEmpty()) {
+            sb.append("    .addSensor(SensorPort.S2, new Sensor(SensorType." + usedComponents.get(3) +"))\n");
+        }
+        if (!usedComponents.get(4).isEmpty()) {
+            sb.append("    .addSensor(SensorPort.S3, new Sensor(SensorType." + usedComponents.get(4) +"))\n");
+        }
+        if (!usedComponents.get(5).isEmpty()) {
+            sb.append("    .addSensor(SensorPort.S4, new Sensor(SensorType." + usedComponents.get(5) + "))\n");
+        }
+        sb.append("    .build();\n\n");
+        return sb.toString();
+    }
 
     private static final String BRICK_CONFIGURATION_DECL = "private static Configuration brickConfiguration;\n";
 
     private static final String USED_SENSORS_DECL = "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();\n";
 
     private static final String HAL = "" + "    private Hal hal = new Hal(brickConfiguration, usedSensors);\n\n";
-
-    private static final String MAIN_METHOD =
-        ""
-            + "    public static void main(String[] args) {\n"
-            + "        try {\n"
-            + BRICK_CONFIGURATION
-            + "            new Test().run();\n"
-            + "        } catch ( Exception e ) {\n"
-            + "            Hal.displayExceptionWaitForKeyPress(e);\n"
-            + "        }\n"
-            + "    }\n\n";
-    private static final String SUFFIX = "";
 
     private static final String IMG_EYESOPEN =
         "" //
@@ -80,11 +95,11 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
             + "\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0080\\u003f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f0\\u007f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00ff\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fc\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u001f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u007f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00c0\\u00ff\\u00ff\\u00ff\\u00ff\\u001f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f8\\u00ff\\u00ff\\u00ff\\u00ff\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u00e0\\u00ff\\u00ff\\u00ff\\u00ff\\u003f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fc\\u00ff\\u00ff\\u00ff\\u00ff\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f8\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00ff\\u0007\\u00fc\\u00ff\\u00ff\\u000f\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fc\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0003\\u0000\\u0000\\u0000\\u0000\\u0080\\u00ff\\u0001\\u00f0\\u00ff\\u00ff\\u001f\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u003f\\u00f0\\u00ff\\u00ff\\u00ff\\u0007\\u0000\\u0000\\u0000\\u0000\\u00e0\\u00ff\\u0000\\u00f0\\u00ff\\u00ff\\u003f\\u0000\\u0000\\u0000\\u0000\\u0000\\u00ff\\u000f\\u00c0\\u00ff\\u00ff\\u00ff\\u000f\\u0000\\u0000\\u0000\\u0000\\u00f0\\u003f\\u0000\\u00e0\\u00ff\\u00ff\\u007f\\u0000\\u0000\\u0000\\u0000\\u0080\\u00ff\\u0003\\u00c0\\u00ff\\u00ff\\u00ff\\u001f\\u0000\\u0000\\u0000\\u0000\\u00f8\\u001f\\u0000\\u00e0\\u00ff\\u00ff\\u00ff\\u0000\\u0000\\u0000\\u0000\\u00c0\\u00ff\\u0000\\u0080\\u00ff\\u00ff\\u00ff\\u007f\\u0000\\u0000\\u0000\\u0000\\u00fc\\u000f\\u0000\\u00e0\\u00ff\\u00ff\\u00ff\\u0001\\u0000\\u0000\\u0000\\u00e0\\u007f\\u0000\\u0080\\u00ff\\u00ff\\u00ff\\u007f\\u0000\\u0000\\u0000\\u0000\\u00fe\\u0007\\u0000\\u00e0\\u00ff\\u00ff\\u00ff\\u0003\\u0000\\u0000\\u0000\\u00f0\\u003f\\u0000\\u0080\\u00ff\\u00ff\\u00ff\\u00ff\\u0000\\u0000\\u0000\\u0000\\u00ff\\u0003\\u0000\\u00f0\\u00ff\\u00ff\\u00ff\\u0007\\u0000\\u0000\\u0000\\u00f8\\u001f\\u0000\\u0080\\u00ff\\u00ff\\u00ff\\u00ff\\u0001\\u0000\\u0000\\u0080\\u00ff\\u0001\\u0000\\u00f0\\u00ff\\u00ff\\u00ff\\u000f\\u0000\\u0000\\u0000\\u00f8\\u000f\\u0000\\u00c0\\u00ff\\u00ff\\u00ff\\u00ff\\u0003\\u0000\\u0000\\u00c0\\u00ff\\u0000\\u0000\\u00fc\\u00ff\\u00ff\\u00ff\\u000f\\u0000\\u0000\\u0000\\u00fc\\u0007\\u0000\\u00c0\\u00ff\\u00ff\\u00ff\\u00ff\\u0003\\u0000\\u0000\\u00c0\\u00ff\\u0000\\u0080\\u00ff\\u00ff\\u00ff\\u00ff\\u001f\\u0000\\u0000\\u0000\\u00fe\\u0003\\u0000\\u00f0\\u00ff\\u00ff\\u00ff\\u00ff\\u0003\\u0000\\u0000\\u00c0\\u007f\\u0000\\u00c0\\u00ff\\u00ff\\u00ff\\u00ff\\u003f\\u0000\\u0000\\u0000\\u00fe\\u0001\\u0000\\u00fc\\u00ff\\u00ff\\u00ff\\u00ff\\u0007\\u0000\\u0000\\u00e0\\u003f\\u0000\\u00e0\\u00ff\\u00ff\\u00ff\\u00ff\\u003f\\u0000\\u0000\\u0000\\u00ff\\u0001\\u0000\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u000f\\u0000\\u0000\\u00f0\\u003f\\u0000\\u00f0\\u00ff\\u00ff\\u00ff\\u00ff\\u007f\\u0000\\u0000\\u0000\\u00ff\\u0000\\u0080\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u000f\\u0000\\u0000\\u00f0\\u001f\\u0000\\u00f8\\u00ff\\u00ff\\u00ff\\u00ff\\u007f\\u0000\\u0000\\u0080\\u00ff\\u0000\\u00c0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u001f\\u0000\\u0000\\u00f8\\u001f\\u0000\\u00fc\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0000\\u0000\\u0080\\u007f\\u0000\\u00e0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u001f\\u0000\\u0000\\u00f8\\u000f\\u0000\\u00fe\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0000\\u0000\\u00c0\\u007f\\u0000\\u00f0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u000f\\u0000\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0001\\u0000\\u00c0\\u003f\\u0000\\u00f8\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u001f\\u0000\\u0000\\u00fc\\u0007\\u0000\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0001\\u0000\\u00c0\\u003f\\u0000\\u00fc\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u003f\\u0000\\u0000\\u00fc\\u0007\\u0080\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0001\\u0000\\u00e0\\u001f\\u0000\\u00fe\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0007\\u00c0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0003\\u0000\\u00e0\\u001f\\u0000\\u00fe\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0003\\u00c0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0003\\u0000\\u00e0\\u001f\\u0000\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u007f\\u0000\\u0000\\u00fe\\u0003\\u00e0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0003\\u0000\\u00e0\\u001f\\u0000\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u007f\\u0080\\u0001\\u00fe\\u0003\\u00e0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0003\\u0000\\u00e0\\u001f\\u0080\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00f0\\u000f\\u00ff\\u0003\\u00e0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0003\\u0000\\u00f0\\u001f\\u0080\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00f8\\u001f\\u00ff\\u0003\\u00f0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0007\\u0000\\u00f0\\u003f\\u00c0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u003e\\u007c\\u00ff\\u0007\\u00f0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0007\\u0000\\u00f0\\u003f\\u00c0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u001f\\u00f8\\u00ff\\u0007\\u00f8\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0007\\u0000\\u00f0\\u00ff\\u00f0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u000f\\u00f0\\u00ff\\u001f\\u00fe\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0007\\u0000\\u00f0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00e3\\u00c7\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0007\\u0000\\u00f0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00fb\\u00df\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0007\\u0000\\u00f0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0007\\u0000\\u00f0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u001f\\u00f8\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0007\\u0000\\u00f0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0007\\u00e0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0007\\u0000\\u00f0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0003\\u00c0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0007\\u0000\\u00f0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0001\\u0080\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0007\\u0000\\u00f0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0001\\u0000\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0007\\u0000\\u00e0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0000\\u0000\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0003\\u0000\\u00e0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0000\\u0000\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0003\\u0000\\u00e0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0000\\u0000\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0003\\u0000\\u00e0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u007f\\u0000\\u0000\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0003\\u0000\\u00e0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u007f\\u0000\\u0000\\u00fe\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0003\\u0000\\u00c0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u007f\\u0000\\u0000\\u00fe\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0001\\u0000\\u00c0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u003f\\u0000\\u0000\\u00fe\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0001\\u0000\\u00c0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u003f\\u0000\\u0000\\u00fe\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0001\\u0000\\u0080\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u001f\\u0000\\u0000\\u00fc\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0000\\u0000\\u0080\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u001f\\u0000\\u0000\\u00fc\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0000\\u0000\\u0000\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u000f\\u0000\\u0000\\u00f8\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u007f\\u0000\\u0000\\u0000\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u000f\\u0000\\u0000\\u00f8\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u007f\\u0000\\u0000\\u0000\\u00fe\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0007\\u0000\\u0000\\u00f0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u003f\\u0000\\u0000\\u0000\\u00fe\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0007\\u0000\\u0000\\u00f0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u003f\\u0000\\u0000\\u0000\\u00fc\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0003\\u0000\\u0000\\u00e0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u001f\\u0000\\u0000\\u0000\\u00f8\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0001\\u0000\\u0000\\u00c0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u000f\\u0000\\u0000\\u0000\\u00f8\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0001\\u0000\\u0000\\u00c0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u000f\\u0000\\u0000\\u0000\\u00f0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0000\\u0000\\u0000\\u0080\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0007\\u0000\\u0000\\u0000\\u00e0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u007f\\u0000\\u0000\\u0000\\u0000\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0003\\u0000\\u0000\\u0000\\u00c0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u003f\\u0000\\u0000\\u0000\\u0000\\u00fe\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0001\\u0000\\u0000\\u0000\\u0080\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u001f\\u0000\\u0000\\u0000\\u0000\\u00fc\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0000\\u0000\\u0000\\u0000\\u0000\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u000f\\u0000\\u0000\\u0000\\u0000\\u00f8\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u007f\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0007\\u0000\\u0000\\u0000\\u0000\\u00f0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u003f\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fc\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0003\\u0000\\u0000\\u0000\\u0000\\u00e0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u001f\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f8\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0001\\u0000\\u0000\\u0000\\u0000\\u00c0\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u000f\\u0000\\u0000\\u0000\\u0000\\u0000\\u00e0\\u00ff\\u00ff\\u00ff\\u00ff\\u007f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00ff\\u00ff\\u00ff\\u00ff\\u00ff\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u00c0\\u00ff\\u00ff\\u00ff\\u00ff\\u003f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fe\\u00ff\\u00ff\\u00ff\\u00ff\\u0001\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00ff\\u00ff\\u00ff\\u00ff\\u000f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f8\\u00ff\\u00ff\\u00ff\\u007f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fc\\u00ff\\u00ff\\u00ff\\u0003\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00e0\\u00ff\\u00ff\\u00ff\\u001f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f0\\u00ff\\u00ff\\u00ff\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0080\\u00ff\\u00ff\\u00ff\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0080\\u00ff\\u00ff\\u001f\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00fc\\u00ff\\u00ff\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u00f0\\u00ff\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0080\\u00ff\\u0007\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000\\u0000";
     private static ConfigurationAst brickConfiguration;
 
-    private String customMainMethod(String code) {
+    private static String createMainMethod(List<String> usedComponents, String image) {
         StringBuilder sb = new StringBuilder();
         sb.append("    public static void main(String[] args) {\n");
         sb.append("        try {\n");
-        sb.append(code);
+        sb.append(createBrickConfigurationCode(usedComponents) + image);
         sb.append("            new Test().run();\n");
         sb.append("        } catch ( Exception e ) {\n");
         sb.append("            Hal.displayExceptionWaitForKeyPress(e);\n");
@@ -93,13 +108,8 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
         return sb.toString();
     }
 
-    private String customMainMethodWithImage(String image, String brickConfiguration) {
-        return customMainMethod(brickConfiguration + image);
-    }
-
     @BeforeClass
     public static void setupConfigurationForAllTests() {
-
         Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
         ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", "A", motorAproperties);
 
@@ -108,7 +118,6 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
         ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", Collections.emptyMap());
         ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S2", "2", Collections.emptyMap());
         ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", "3", Collections.emptyMap());
-        //        ConfigurationComponent ultrasonicSensor4 = new ConfigurationComponent("ULTRASONIC", false, "S4", BlocklyConstants.NO_SLOT, "4", Collections.emptyMap());
         final ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         brickConfiguration =
             builder
@@ -121,7 +130,6 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
 
     @Test
     public void test() throws Exception {
-
         String a =
             "" //
                 + IMPORTS
@@ -129,10 +137,9 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + USED_SENSORS_DECL
                 + HAL
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
                 + "    public void run() throwsException {\n"
                 + "        hal.drawText(\"Hallo\", 0, 3);\n"
-                + SUFFIX
                 + "    }\n"
                 + "}\n";
 
@@ -147,7 +154,6 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
 
     @Test
     public void test1() throws Exception {
-
         String a =
             "" //
                 + IMPORTS
@@ -155,12 +161,11 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + USED_SENSORS_DECL
                 + HAL
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
                 + "    public void run() throwsException {\n"
                 + "        for ( float k0 = 0; k0 < 10; k0+=1 ) {\n"
                 + "            hal.drawText(\"Hallo\", 0, 3);\n"
                 + "        }\n"
-                + SUFFIX
                 + "    }\n"
                 + "}\n";
 
@@ -175,20 +180,6 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
 
     @Test
     public void test2() throws Exception {
-        ConfigurationAst brickConfigurationNew = makeMediumLargeTouchUltrasonicColor();
-        brickConfigurationNew.setRobotName("lejosEv3V1");
-        final String BRICK_CONFIGURATION =
-            "" //
-                + "    brickConfiguration = new EV3Configuration.Builder()\n"
-                + "    .setWheelDiameter(5.6)\n"
-                + "    .setTrackWidth(17.0)\n"
-                + "    .addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.NONE))\n"
-                + "    .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))\n"
-                + "    .addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH))\n"
-                + "    .addSensor(SensorPort.S2, new Sensor(SensorType.ULTRASONIC))\n"
-                + "    .addSensor(SensorPort.S3, new Sensor(SensorType.COLOR))\n"
-                + "    .build();\n\n";
-
         String a =
             "" //
                 + IMPORTS
@@ -197,7 +188,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH), new UsedSensor(SensorPort.S3, SensorType.COLOR, ColorSensorMode.COLOUR)));\n"
                 + "private static Map<String, String> predefinedImages = new HashMap<String, String>();\n"
                 + HAL
-                + customMainMethodWithImage("predefinedImages.put(\"EYESOPEN\", \"" + IMG_EYESOPEN + "\");\n", BRICK_CONFIGURATION)
+                + createMainMethod(Arrays.asList("", "LARGE", "TOUCH", "", "COLOR", ""), "predefinedImages.put(\"EYESOPEN\", \"" + IMG_EYESOPEN + "\");\n")
                 + "    public void run() throwsException {\n"
                 + "        if ( hal.isPressed(SensorPort.S1) ) {\n"
                 + "            hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
@@ -212,7 +203,6 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "        for ( float i = 1; i < 10; i += 1 ) {\n\n"
                 + "           hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);"
                 + "        }\n"
-                + SUFFIX
                 + "    }\n"
                 + "}\n";
 
@@ -221,28 +211,12 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 testFactory,
                 a,
                 "/syntax/code_generator" + "/java" + "/java_code_generator2.xml",
-                brickConfigurationNew,
+                makeMediumLargeTouchUltrasonicColor(),
                 true);
     }
 
     @Test
     public void test3() throws Exception {
-        ConfigurationAst brickConfigurationNew = makeMediumLargeTouchUltrasonicColorUltrasonic();
-        brickConfigurationNew.setRobotName("lejosEv3V1");
-
-        final String BRICK_CONFIGURATION =
-            "" //
-                + "    brickConfiguration = new EV3Configuration.Builder()\n"
-                + "    .setWheelDiameter(5.6)\n"
-                + "    .setTrackWidth(17.0)\n"
-                + "    .addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.NONE))\n"
-                + "    .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))\n"
-                + "    .addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH))\n"
-                + "    .addSensor(SensorPort.S2, new Sensor(SensorType.ULTRASONIC))\n"
-                + "    .addSensor(SensorPort.S3, new Sensor(SensorType.COLOR))\n"
-                + "    .addSensor(SensorPort.S4, new Sensor(SensorType.ULTRASONIC))\n"
-                + "    .build();\n\n";
-
         String a =
             "" //
                 + IMPORTS
@@ -251,7 +225,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH), new UsedSensor(SensorPort.S4, SensorType.ULTRASONIC, UltrasonicSensorMode.DISTANCE)));\n"
                 + "private static Map<String, String> predefinedImages = new HashMap<String, String>();\n"
                 + HAL
-                + customMainMethodWithImage("predefinedImages.put(\"FLOWERS\", \"" + IMG_FLOWERS + "\");\n", BRICK_CONFIGURATION)
+                + createMainMethod(Arrays.asList("", "LARGE", "TOUCH", "", "", "ULTRASONIC"), "predefinedImages.put(\"FLOWERS\", \"" + IMG_FLOWERS + "\");\n")
                 + "    public void run() throwsException {\n"
                 + "        if ( hal.isPressed(SensorPort.S1) ) {\n"
                 + "            hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
@@ -266,7 +240,6 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "                }\n"
                 + "            }\n"
                 + "        }\n"
-                + SUFFIX
                 + "    }\n"
                 + "}\n";
 
@@ -275,15 +248,12 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 testFactory,
                 a,
                 "/syntax/code_generator/java/java_code_generator3.xml",
-                brickConfigurationNew,
+                makeMediumLargeTouchUltrasonicColorUltrasonic(),
                 true);
     }
 
     @Test
     public void test4() throws Exception {
-        ConfigurationAst brickConfigurationNew = makeMediumLargeTouchGyroInfraredUltrasonic();
-        brickConfigurationNew.setRobotName("lejosEv3V1");
-
         final String BRICK_CONFIGURATION =
             "" //
                 + "    brickConfiguration = new EV3Configuration.Builder()\n"
@@ -306,7 +276,8 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + ", new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));\n"
                 + "private static Map<String, String> predefinedImages = new HashMap<String, String>();\n"
                 + HAL
-                + customMainMethodWithImage("predefinedImages.put(\"OLDGLASSES\", \"" + IMG_OLDGLASSES + "\");\n", BRICK_CONFIGURATION)
+            // TODO reset Gyro on EV3 does not add gyro to the used sensors
+                + createMainMethod(Arrays.asList("MEDIUM", "LARGE", "TOUCH", "", "INFRARED", "ULTRASONIC"), "predefinedImages.put(\"OLDGLASSES\", \"" + IMG_OLDGLASSES + "\");\n")
                 + "    public void run() throwsException {\n"
                 + "        if ( 5 < hal.getRegulatedMotorSpeed(ActorPort.B) ) {\n\n\n"
                 + "            hal.turnOnRegulatedMotor(ActorPort.B,30);\n"
@@ -325,7 +296,6 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
 
                 + "            hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
                 + "        }\n"
-                + SUFFIX
                 + "    }\n"
                 + "}\n";
         UnitTestHelper
@@ -333,13 +303,12 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 testFactory,
                 a,
                 "/syntax/code_generator/java/java_code_generator4.xml",
-                brickConfigurationNew,
+                makeMediumLargeTouchGyroInfraredUltrasonic(),
                 true);
     }
 
     @Test
     public void test5() throws Exception {
-
         String a =
             "" //
                 + IMPORTS
@@ -347,7 +316,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + USED_SENSORS_DECL
                 + HAL
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "LARGE", "", "", "", ""), "")
                 + "    public void run() throwsException {\n"
 
                 + "        hal.turnOnRegulatedMotor(ActorPort.B,0);"
@@ -355,7 +324,6 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "        hal.rotateDirectionRegulated(TurnDirection.RIGHT,0);"
                 + "        hal.setVolume(50);"
                 + "        hal.playTone(0,0);"
-                + SUFFIX
                 + "    }\n"
                 + "}\n";
 
@@ -370,7 +338,6 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
 
     @Test
     public void test6() throws Exception {
-
         String a =
             "" //
                 + IMPORTS
@@ -378,12 +345,11 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + USED_SENSORS_DECL
                 + HAL
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
                 + "    public void run() throwsException {\n"
 
                 + "        hal.drawText(\"Hallo\", 0, 0);\n"
                 + "        hal.playTone(300, 3000);\n"
-                + SUFFIX
                 + "    }\n"
                 + "}\n";
 
@@ -405,12 +371,11 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + USED_SENSORS_DECL
                 + HAL
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "LARGE", "", "", "", ""), "")
                 + "    public void run() throwsException {\n"
 
                 + "        hal.turnOnRegulatedMotor(ActorPort.B,30);\n"
                 + "        hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);\n"
-                + SUFFIX
                 + "    }\n"
                 + "}\n";
 
@@ -425,7 +390,6 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
 
     @Test
     public void test8() throws Exception {
-
         String a =
             "" //
                 + IMPORTS
@@ -433,7 +397,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + USED_SENSORS_DECL
                 + HAL
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
                 + "        float item = 10;\n"
                 + "        String item2 = \"TTTT\";\n"
                 + "        boolean item3 = true;\n"
@@ -442,7 +406,6 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "        hal.drawText(String.valueOf(item2), 0, 0);\n"
                 + "        hal.drawText(String.valueOf(item3), 0, 0);\n"
                 + "        item3 = false;\n"
-                + SUFFIX
                 + "    }\n"
                 + "}\n";
 
@@ -457,7 +420,6 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
 
     @Test
     public void test19() throws Exception {
-
         String a =
             "" //
                 + IMPORTS
@@ -466,13 +428,13 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + USED_SENSORS_DECL
                 + "private static Map<String, String> predefinedImages = new HashMap<String, String>();\n"
                 + HAL
-                + customMainMethodWithImage("predefinedImages.put(\"OLDGLASSES\", \"" + IMG_OLDGLASSES + "\");\n", BRICK_CONFIGURATION)
+            // TODO test actually cannot work as only one motor "right" is connected in the configuration, a "left" motor is missing
+                + createMainMethod(Arrays.asList("", "LARGE", "", "", "", ""), "predefinedImages.put(\"OLDGLASSES\", \"" + IMG_OLDGLASSES + "\");\n")
                 + "        float variablenName = 0;\n"
                 + "    public void run() throwsException {\n"
 
                 + "hal.regulatedDrive(DriveDirection.FOREWARD,50);"
                 + "hal.drawPicture(predefinedImages.get(\"OLDGLASSES\"),0,0);"
-                + SUFFIX
                 + "    }\n"
                 + "}\n";
 
@@ -487,7 +449,6 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
 
     @Test
     public void test9() throws Exception {
-
         String a =
             "" //
                 + IMPORTS
@@ -495,7 +456,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + USED_SENSORS_DECL
                 + HAL
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
                 + "        floatitem=0;"
                 + "        Stringitem2=\"ss\";"
                 + "        booleanitem3=true;"
@@ -507,8 +468,6 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "        NXTConnectionitem9=hal.waitForConnection();"
                 + "        ArrayList<NXTConnection>item10=newArrayList<>(Arrays.<NXTConnection>asList(hal.waitForConnection()));"
                 + "    public void run() throwsException {\n"
-
-                + SUFFIX
                 + "    }\n"
                 + "}\n";
 
@@ -517,7 +476,6 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
 
     @Test
     public void test10() throws Exception {
-
         String a =
             "" //
                 + IMPORTS
@@ -529,7 +487,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "    private void macheEtwas(float x, float x2) {\n"
                 + "        hal.drawPicture(predefinedImages.get(\"OLDGLASSES\"), x, x2);\n"
                 + "    }"
-                + customMainMethodWithImage("predefinedImages.put(\"OLDGLASSES\", \"" + IMG_OLDGLASSES + "\");\n", BRICK_CONFIGURATION)
+                + createMainMethod(Arrays.asList("", "LARGE", "", "", "", ""), "predefinedImages.put(\"OLDGLASSES\", \"" + IMG_OLDGLASSES + "\");\n")
                 + "    public void run() throwsException {\n"
                 + "        hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);"
                 + "        macheEtwas(10, 10);"
@@ -542,7 +500,6 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
 
     @Test
     public void test11() throws Exception {
-
         String a =
             "" //
                 + IMPORTS
@@ -553,7 +510,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "    private void test() {\n"
                 + "        hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
                 + "    }"
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
                 + "    public void run() throwsException {\n"
                 + "        test();"
                 + "    }\n\n"
@@ -565,7 +522,6 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
 
     @Test
     public void test12() throws Exception {
-
         String a =
             "" //
                 + IMPORTS
@@ -577,7 +533,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "        if (x) return;"
                 + "        hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
                 + "    }"
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
                 + "    public void run() throwsException {\n"
                 + "        test(true);"
                 + "    }\n\n"
@@ -589,7 +545,6 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
 
     @Test
     public void test13() throws Exception {
-
         String a =
             "" //
                 + IMPORTS
@@ -604,7 +559,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "        if (variablenName2) return;"
                 + "        hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
                 + "    }"
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
                 + "    float variablenName=0;\n"
                 + "    boolean variablenName2=true;\n"
                 + "    public void run() throwsException {\n"
@@ -619,7 +574,6 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
 
     @Test
     public void test14() throws Exception {
-
         String a =
             "" //
                 + IMPORTS
@@ -631,7 +585,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "        hal.drawText(String.valueOf(x2), x, 0);\n"
                 + "        return x;\n"
                 + "    }"
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
                 + "    ArrayList<String> variablenName=newArrayList<>(Arrays.<String>asList(\"a\", \"b\", \"c\"));\n"
                 + "    public void run() throwsException {\n"
                 + "        hal.drawText(String.valueOf(test(0, variablenName)), 0, 0);"
@@ -644,7 +598,6 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
 
     @Test
     public void test15() throws Exception {
-
         String a =
             "" //
                 + IMPORTS
@@ -656,7 +609,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "        hal.drawText(String.valueOf(variablenName), 0, 0);\n"
                 + "        return PickColor.NONE;\n"
                 + "    }"
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
                 + "    ArrayList<String> variablenName=newArrayList<>(Arrays.<String>asList(\"a\", \"b\", \"c\"));\n"
                 + "    public void run() throwsException {\n"
                 + "        hal.drawText(String.valueOf(test()), 0, 0);"
@@ -669,7 +622,6 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
 
     @Test
     public void test16() throws Exception {
-
         String a =
             "" //
                 + IMPORTS
@@ -682,7 +634,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "        hal.drawText(String.valueOf(variablenName), 0, 0);\n"
                 + "        return PickColor.NONE;\n"
                 + "    }"
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
                 + "    ArrayList<String> variablenName=newArrayList<>(Arrays.<String>asList(\"a\", \"b\", \"c\"));\n"
                 + "    public void run() throwsException {\n"
                 + "        hal.drawText(String.valueOf(test()), 0, 0);"
@@ -703,7 +655,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + USED_SENSORS_DECL
                 + HAL
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
                 + "    String message=\"exit\";\n"
                 + "    public void run() throwsException {\n"
                 + "        if (message.equals(\"exit\")) {\n"
@@ -724,7 +676,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + USED_SENSORS_DECL
                 + HAL
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
                 + "    float item;\n"
                 + "    String item2=\"cc\";\n"
                 + "    public void run() throwsException {\n"
@@ -749,7 +701,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + USED_SENSORS_DECL
                 + HAL
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
                 + "ArrayList<PickColor>variablenName=newArrayList<>(Arrays.<PickColor>asList(PickColor.NONE,PickColor.RED,PickColor.BLUE));\n"
                 + "    public void run() throwsException {\n"
                 + "        for (PickColorvariablenName2 : variablenName) {\n"
@@ -770,7 +722,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + USED_SENSORS_DECL
                 + HAL
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
                 + "        hal.playTone(50, 500);"
                 + "    }\n"
                 + "}\n";
@@ -793,7 +745,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + USED_SENSORS_DECL
                 + HAL
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
                 + "    hal.playTone( (float) 261.626, (float) 2000);"
                 + "    }\n"
                 + "}\n";
@@ -816,7 +768,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
                 + HAL
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "TOUCH", "", "", ""), "")
                 + "public void run() throwsException {\n"
                 + "hal.startLogging();"
                 + "if ( 30 == 20 ) {"
@@ -844,7 +796,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
                 + HAL
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "TOUCH", "", "", ""), "")
                 + "public void run() throwsException {\n"
                 + "hal.startLogging();"
                 + "if(true){"
@@ -880,7 +832,8 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
                 + HAL
-                + MAIN_METHOD
+            // TODO test actually cannot work as only one motor "right" is connected in the configuration, a "left" motor is missing
+                + createMainMethod(Arrays.asList("", "LARGE", "TOUCH", "", "", ""), "")
                 + "ArrayList<Float>item2=newArrayList<>(Arrays.asList((float)0,(float)0,(float)0));"
                 + "public void run() throwsException {\n"
                 + "hal.startLogging();"
@@ -908,7 +861,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
                 + HAL
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "TOUCH", "", "", ""), "")
                 + "public void run() throwsException {\n"
                 + "hal.startLogging();"
                 + "if(true){"
@@ -950,7 +903,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
                 + HAL
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "TOUCH", "", "", ""), "")
                 + "public void run() throwsException {\n"
                 + "hal.startLogging();"
                 + "if(true){"
@@ -996,7 +949,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
                 + HAL
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "TOUCH", "", "", ""), "")
                 + "public void run() throwsException {\n"
                 + "hal.startLogging();"
                 + "if(true){"
@@ -1038,7 +991,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
                 + HAL
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "TOUCH", "", "", ""), "")
                 + "public void run() throwsException {\n"
                 + "hal.startLogging();"
                 + "if(true){"
@@ -1085,7 +1038,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
                 + HAL
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "TOUCH", "", "", ""), "")
                 + "public void run() throwsException {\n"
                 + "hal.startLogging();"
                 + "if(true){"
@@ -1141,7 +1094,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
                 + HAL
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "TOUCH", "", "", ""), "")
                 + "public void run() throwsException {\n"
                 + "hal.startLogging();"
                 + "if(true){"
@@ -1219,7 +1172,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S3, SensorType.COLOR, ColorSensorMode.COLOUR), new UsedSensor(SensorPort.S3, SensorType.COLOR, ColorSensorMode.RED), new UsedSensor(SensorPort.S3, SensorType.COLOR, ColorSensorMode.AMBIENTLIGHT), new UsedSensor(SensorPort.S3, SensorType.COLOR, ColorSensorMode.RGB)));"
                 + HAL
-                + MAIN_METHOD
+                + createMainMethod(Arrays.asList("", "", "", "", "COLOR", ""), "")
                 + "PickColor color = PickColor.WHITE;\n"
                 + "float light = 0;\n"
                 + "ArrayList<Float> rgb = new ArrayList<>(Arrays.asList((float) 0, (float) 0, (float) 0));"
@@ -1240,15 +1193,6 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
 
     @Test
     public void check_readHiTecColorSensorV2InDifferentModes() throws Exception {
-        ConfigurationAst brickConfigurationNew = makeHTColor();
-        brickConfigurationNew.setRobotName("lejosEv3V1");
-        final String BRICK_CONFIGURATION =
-            "" //
-                + "    brickConfiguration = new EV3Configuration.Builder()\n"
-                + "    .setWheelDiameter(5.6)\n"
-                + "    .setTrackWidth(17.0)\n"
-                + "    .addSensor(SensorPort.S3, new Sensor(SensorType.HT_COLOR))\n"
-                + "    .build();\n\n";
         String a =
             "" //
                 + IMPORTS
@@ -1256,7 +1200,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S3, SensorType.HT_COLOR, HiTecColorSensorV2Mode.COLOUR), new UsedSensor(SensorPort.S3, SensorType.HT_COLOR, HiTecColorSensorV2Mode.LIGHT), new UsedSensor(SensorPort.S3, SensorType.HT_COLOR, HiTecColorSensorV2Mode.AMBIENTLIGHT), new UsedSensor(SensorPort.S3, SensorType.HT_COLOR, HiTecColorSensorV2Mode.RGB)));"
                 + HAL
-                + customMainMethod(BRICK_CONFIGURATION)
+                + createMainMethod(Arrays.asList("", "", "", "", "HT_COLOR", ""), "")
                 + "PickColor color = PickColor.WHITE;\n"
                 + "float light = 0;\n"
                 + "ArrayList<Float> rgb = new ArrayList<>(Arrays.asList((float) 0, (float) 0, (float) 0));"
@@ -1271,7 +1215,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 testFactory,
                 a,
                 "/syntax/code_generator/java/read_hitec_color_sensor_v2_in_different_modes.xml",
-                brickConfigurationNew,
+                makeHTColor(),
                 true);
     }
 

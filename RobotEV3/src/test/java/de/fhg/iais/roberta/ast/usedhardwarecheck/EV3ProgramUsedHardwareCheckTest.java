@@ -18,7 +18,7 @@ public class EV3ProgramUsedHardwareCheckTest extends Ev3LejosAstTest {
         ArrayList<ArrayList<Phrase<Void>>> phrasesOfPhrases = UnitTestHelper.getAst(testFactory, pathToXml);
         UsedHardwareBean.Builder builder = new Builder();
         Ev3UsedHardwareCollectorVisitor checkVisitor =
-            new Ev3UsedHardwareCollectorVisitor(builder, phrasesOfPhrases, makeLargeLargeMediumTouchGyroColorUltrasonic());
+            new Ev3UsedHardwareCollectorVisitor(builder, makeLargeLargeMediumTouchGyroColorUltrasonic());
         for ( ArrayList<Phrase<Void>> phrases : phrasesOfPhrases ) {
             for ( Phrase<Void> phrase : phrases ) {
                 phrase.accept(checkVisitor);

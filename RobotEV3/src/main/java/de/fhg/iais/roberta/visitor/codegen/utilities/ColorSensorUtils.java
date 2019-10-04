@@ -4,7 +4,7 @@ import de.fhg.iais.roberta.syntax.SC;
 
 public class ColorSensorUtils {
     public static boolean isHiTecColorSensor(String colorSensorType) {
-        return colorSensorType.toLowerCase().contains(SC.HT_COLOR.toLowerCase());
+        return colorSensorType.equalsIgnoreCase(SC.HT_COLOR);
     }
 
     public static boolean isEV3ColorSensor(String colorSensorType) {

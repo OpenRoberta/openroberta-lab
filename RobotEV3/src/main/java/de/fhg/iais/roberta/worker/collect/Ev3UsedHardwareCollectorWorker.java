@@ -9,6 +9,6 @@ import de.fhg.iais.roberta.worker.AbstractUsedHardwareCollectorWorker;
 public final class Ev3UsedHardwareCollectorWorker extends AbstractUsedHardwareCollectorWorker {
     @Override
     protected AbstractCollectorVisitor getVisitor(Builder builder, Project project) {
-        return new Ev3UsedHardwareCollectorVisitor(builder, project.getProgramAst().getTree(), project.getConfigurationAst());
+        return new Ev3UsedHardwareCollectorVisitor(builder, project.getConfigurationAst());
     }
 }

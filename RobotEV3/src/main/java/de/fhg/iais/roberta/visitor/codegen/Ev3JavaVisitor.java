@@ -1041,21 +1041,37 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     private void appendSensors() {
         for ( ConfigurationComponent sensor : this.brickConfiguration.getSensors() ) {
-            this.sb.append(".addSensor(");
-            this.sb.append("SensorPort.S" + sensor.getUserDefinedPortName()).append(", ");
-            this.sb.append(generateRegenerateSensor(sensor));
-            this.sb.append(")");
-            nlIndent();
+            boolean isUsed = false;
+            for ( UsedSensor usedSensor : this.usedHardwareBean.getUsedSensors() ) {
+                if (sensor.getComponentType().contains(usedSensor.getType()) && usedSensor.getPort().equals(sensor.getUserDefinedPortName())) {
+                    isUsed = true;
+                }
+            }
+            if ( isUsed ) {
+                this.sb.append(".addSensor(");
+                this.sb.append("SensorPort.S" + sensor.getUserDefinedPortName()).append(", ");
+                this.sb.append(generateRegenerateSensor(sensor));
+                this.sb.append(")");
+                nlIndent();
+            }
         }
     }
 
     private void appendActors() {
         for ( ConfigurationComponent actor : this.brickConfiguration.getActors() ) {
-            this.sb.append(".addActor(");
-            this.sb.append("ActorPort." + actor.getUserDefinedPortName()).append(", ");
-            this.sb.append(generateRegenerateActor(actor));
-            this.sb.append(")");
-            nlIndent();
+            boolean isUsed = false;
+            for ( UsedActor usedActor : this.usedHardwareBean.getUsedActors() ) {
+                if (usedActor.getType().equals(actor.getComponentType()) && usedActor.getPort().equals(actor.getUserDefinedPortName())) {
+                    isUsed = true;
+                }
+            }
+            if ( isUsed ) {
+                this.sb.append(".addActor(");
+                this.sb.append("ActorPort." + actor.getUserDefinedPortName()).append(", ");
+                this.sb.append(generateRegenerateActor(actor));
+                this.sb.append(")");
+                nlIndent();
+            }
         }
     }
 
