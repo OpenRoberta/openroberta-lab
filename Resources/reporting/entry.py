@@ -17,22 +17,12 @@ import json
 class Entry:
     # reset in 'getReader from util.py'!
     serverRestartNumber = 0 # used to count the server restarts. This number is needed to de-duplicate the session-id
-    unique = {}             # for checking uniqqueness of a key
     
-    def __init__(self, entry): 
+    def __init__(self, entry):
+        normalize(entry)
         self.entry = entry
         self.original = entry
         self.assembled = None
-        if isinstance(self.entry,dict):
-            message = self.entry['message']
-            if message is not None:
-                action = message['action']
-                if action is not None:
-                    if action == 'ServerStart':
-                        Entry.serverRestartNumber += 1
-            sessionId = self.entry['sessionId']
-            if sessionId is not None:
-                self.entry['sessionId'] = str(Entry.serverRestartNumber) + '-' + sessionId
 
     def filter(self, lambdaFct):
         """
@@ -201,44 +191,20 @@ class Entry:
             self.entry = self.original
         return self
     
-    def uniqueKey(self, key):
+    def uniqueKey(self, key, keyStore):
         """
         FILTER: Block all entries whose key's value has been encountered earlier
-        MAY BE USED IN A CHAIN ONLY ONCE!
         
         :keep the entry if it is the first one; set to None otherwise
         """
         if self.entry is not None:
             val = self.entry[key]
-            alreadyUsed = Entry.unique.get(val, None)
-            if alreadyUsed is None:
-                Entry.unique[val] = True
-            else:
+            if keyStore.has(val):
                 self.entry = None
+            else:
+                keyStore.put(val, val)
         return self
     
-    def assemble(self, key):
-        """
-        COLLECT: save key-value pair in the list assembled
-        
-        :keep the entry as it is
-        """
-        if self.entry is not None:
-            val = self.entry[key]
-            if val is not None:
-                if self.assembled is None:
-                    self.assembled = list()
-                self.assembled.append((key,val))
-        return self
-
-    groupTimePrefix = {
-            'm': 7,
-            'd': 10,
-            'h': 13,
-            'm': 16,
-            's': 19
-        }
-
     '''
     def group(granularity, event, groupStore):
         prefix = Entry.groupTimePrefix.get(granularity, 10)
@@ -256,47 +222,37 @@ class Entry:
         return countStore
     '''
     
-    def groupCount(self, granularity, groupStore):
+    def groupStore(self, store):
         """
-        REDUCE: counts the number of entries grouped by a given granularity
+        REDUCE: counts the number of entries grouped by a given time granularity (min, h, d, m)
         
-        :param granularity of grouping: 'd' (day), 'h' (hour), 'm' (minute), 's' (second)
-        :param groupStore where to save the counts. This is a dict, whose keys are the used times (reduced to the given granularity)
+        :param groupStore where to save the counts. This is a Store object, that only counts values (given as 'keys')
         """
         if self.entry is not None:
-            prefix = Entry.groupTimePrefix.get(granularity, 10)
-            key = self.entry['time'][:prefix]
-            val = groupStore.get(key)
-            if val is None:
-                val = 1
-            else:
-                val = val + 1
-            groupStore[key] = val
+            time = self.entry['time']
+            store.group(time)
         return self
 
-    def keyCount(self, key, groupStore, pattern=None):
+    def keyStore(self, keyUsedForGrouping, store, pattern=None):
+        return self.keyValStore(keyUsedForGrouping, keyUsedForGrouping, store, pattern=pattern)
+        
+    def keyValStore(self, keyUsedForGrouping, keyWhoseValueIsStored, store, pattern=None):
         """
         REDUCE: counts the number of entries grouped by the value of a given key
         
         :param the key, whose value is used for grouping
-        :param groupStore where to save the counts.
+        :param store where to save the counts.
         """
-        if self.entry is None:
-            self.entry = None
-        else:
-            keyVal = self.entry[key]
+        if self.entry is not None:
+            key = self.entry[keyUsedForGrouping]
+            val = self.entry.get(keyWhoseValueIsStored, None)
             if pattern is not None:
-                matcher = re.search(pattern, keyVal)
+                matcher = re.search(pattern, key)
                 if matcher is not None:
                     match = matcher.group(1)
                     if match is not None:
-                        keyVal = match
-            countVal = groupStore.get(keyVal)
-            if countVal is None:
-                countVal = 1
-            else:
-                countVal = countVal + 1
-            groupStore[keyVal] = countVal
+                        key = match
+            store.put(key, val)
         return self
 
     def showEvent(self):
@@ -327,14 +283,72 @@ class Entry:
             print('{:25} {}'.format(self.entry['time'], str(self.entry)))
         return self
     
-    def showAssembled(self):
-        """
-        REDUCE: show all assembled key-value pairs
-        
-        :keep the entry as it is
-        """
-        if self.entry is not None and self.assembled is not None:
-            print('{:25} {}'.format(self.entry['time'], str(self.assembled)))
-            self.assembled = None
-        return self
+def normalize(entry):
+    if isinstance(entry,dict):
+        flattenMessage(entry)
+        simplifyArg(entry)
+        deduplicateSessionId(entry)
+        mapHeaderFields(entry)
 
+def flattenMessage(entry):
+    message = entry.get('message', None)
+    if message is None or not isinstance(entry,dict):
+        raise Exception('invalid entry: ' + str(entry))
+    del entry['message']
+    entry.update(message)
+
+def simplifyArg(entry):
+    args = entry.get('args', None)
+    if args is None:
+        raise Exception('invalid entry: ' + str(entry))
+    if isinstance(args,list):
+        if len(args) != 1:
+            raise Exception('invalid entry: ' + str(entry))
+        entry['args'] = args[0]
+
+def deduplicateSessionId(entry):
+    action = entry.get('action', None)
+    if action is not None:
+        if action == 'ServerStart':
+            Entry.serverRestartNumber += 1
+        sessionId = entry['sessionId']
+        if sessionId is not None:
+            entry['sessionId'] = str(Entry.serverRestartNumber) + '-' + sessionId
+
+def mapHeaderFields(entry):
+    args = entry.get('args', None)
+    if args is not None:
+        browser = args.get('Browser', None)
+        if browser is not None:
+            args['Browser'] = mapBrowser(browser)
+        os = args.get('OS', None)
+        if os is not None:
+            args['OS'] = mapOS(os)
+
+def mapBrowser(browser):
+    if bool(re.match('CHROME', browser, re.I)):
+        return 'chrome'
+    if bool(re.match('APPLE_WEB_KIT', browser, re.I)):
+        return 'appleWebKit'
+    if bool(re.match('FIREFOX', browser, re.I)):
+        return 'firefox'
+    if bool(re.match('SAFARI', browser, re.I)):
+        return 'safari'
+    if bool(re.match('EDGE', browser, re.I)):
+        return 'edge'
+    if bool(re.match('OPERA', browser, re.I)):
+        return 'opera'
+    if bool(re.match('OPERA_MOBILE', browser, re.I)):
+        return 'opera'
+    if bool(re.match('MOBILE_SAFARI', browser, re.I)):
+        return 'safari'
+    if bool(re.match('VIVALDI', browser, re.I)):
+        return 'vivaldi'
+    if bool(re.match('BOT', browser, re.I)):
+        return 'bot'
+    if bool(re.match('IE.*11', browser, re.I)):
+        return 'ie11'
+    return browser
+
+def mapOS(os):
+    return os

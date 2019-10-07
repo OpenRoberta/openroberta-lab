@@ -6,48 +6,51 @@ analyse the openroberta log and stat file as written by logback:
 
 import time
 from util import *
-from intervalstore import *
+from store import *
 from entry import *
 
 def groupLogEntries(fromTime, untilTime, grouper, fileName, matchKey, *matchStrings):
-    groupH = {}
+    groupH = Store()
     for line in getReader(fileName):
         fromLog(line).after(fromTime).before(untilTime).filterVal(matchKey, *matchStrings).groupCount(grouper, groupH)
     showGroup(groupH,fmt='{},{}')
     
 def groupStatActions(fromTime, untilTime, grouper, fileName, *actions):
-    groupH = {}
+    groupH = Store()
     for line in getReader(fileName):
         fromStat(line).after(fromTime).before(untilTime).mapKey('message').filterVal('action',*actions).groupCount(grouper, groupH)
     showGroup(groupH,fmt='{},{}')
     showBar(groupH,title=str(actions),file='D:/downloads/init.png')
 
 def groupInitData(fromTime, untilTime, fileName):
-    groupInits = {}
-    groupCountryCode = {}
-    groupBrowser = {}
-    groupOperatingSystem = {}
-    groupDeviceType = {}
+    sessionIdStore = Store()
+    groupInits = Store(groupBy='d')
+    groupCountryCode = Store()
+    groupBrowser = Store()
+    groupOperatingSystem = Store()
+    groupDeviceType = Store()
     for line in getReader(fileName):
-        fromStat(line).after(fromTime).before(untilTime).mapKey('message').filterVal('action','Initialization').reset()\
-        .uniqueKey('sessionId').mapKey('message').groupCount('d',groupInits)\
-        .mapKey('args').mapList(0,lazy=True)\
-        .keyCount('CountryCode', groupCountryCode).keyCount('Browser', groupBrowser, pattern='(.*)\/').keyCount('OS', groupOperatingSystem).keyCount('DeviceType', groupDeviceType)
-    showGroup(groupInits,fmt='{:12s} {:5d}',title='initialization calls per day')
-    showGroup(groupCountryCode,fmt='{:12s} {:5d}',title='country codes')
-    showGroup(groupBrowser,fmt='{:40s} {:5d}',title='browser types')
-    showGroup(groupOperatingSystem,fmt='{:40s} {:5d}',title='operating systems')
-    showGroup(groupDeviceType,fmt='{:40s} {:5d}',title='device types')
-    showBar(groupInits,title='Unique Sessions',file='D:/downloads/uniqueSessions.png')
+        fromStat(line).after(fromTime).before(untilTime).filterVal('action','Initialization').uniqueKey('sessionId', sessionIdStore)\
+        .groupStore(groupInits).mapKey('args')\
+        .keyStore('CountryCode', groupCountryCode).keyStore('Browser', groupBrowser).keyStore('OS', groupOperatingSystem).keyStore('DeviceType', groupDeviceType)
+    showStore(groupInits,fmt='{:12s} {:5d}',title='initialization calls per day')
+    showStore(groupCountryCode,fmt='{:12s} {:5d}',title='country codes')
+    showStore(groupBrowser,fmt='{:40s} {:5d}',title='browser types')
+    showStore(groupOperatingSystem,fmt='{:40s} {:5d}',title='operating systems')
+    showStore(groupDeviceType,fmt='{:40s} {:5d}',title='device types')
+    showBar(groupInits,title='Unique Sessions',file='D:/downloads/uniqueSessions.png', legend=(1.04,0))
     showPie(groupCountryCode,title='country codes',file='D:/downloads/countrycode.png')
     showPie(groupBrowser,title='browser types',file='D:/downloads/browserTypes.png')
     showPie(groupOperatingSystem,title='operating systems',file='D:/downloads/operatingSystems.png')
-    showPie(groupDeviceType,title='device types',file='D:/downloads/deviceTypes.png')
+    showPie(groupDeviceType,title='device types',file='D:/downloads/deviceTypesPie.png')
+    showBar(groupDeviceType,title='device types',file='D:/downloads/deviceTypesBar.png')
     
-def oneSession(fromTime, untilTime, fileName, *sessionNumbers):
+def sessionsActions(fromTime, untilTime, fileName, *sessionNumbers):
+    groupActions = Store(storeList=True)
     for line in getReader(fileName):
-        fromStat(line).after(fromTime).before(untilTime).filterVal('sessionId', *sessionNumbers, substring=False)\
-        .reset().mapKey('message').showEntry()
+        fromStat(line).after(fromTime).before(untilTime).filterVal('sessionId', *sessionNumbers)\
+        .keyValStore('sessionId', 'action', groupActions)
+    showStore(groupActions, fmt='{:15} {:6d} {}')
         
 def oneSessionActions(fromTime, untilTime, fileName, *sessionNumbers):
     for line in getReader(fileName):
@@ -55,22 +58,22 @@ def oneSessionActions(fromTime, untilTime, fileName, *sessionNumbers):
         .reset().assemble('robotName').mapKey('message').assemble('action').showAssembled()
 
 def openSessionsSinceLastRestart(fileName):
-    store = IntervalStore()
+    store = Store()
     for line in getReader(fileName):
         entry = fromLog(line).entry
         if entry is not None:
             event = entry['event']
             matcher = re.search('server started at ', event)
             if matcher is not None:
-                store = IntervalStore()
+                store = Store()
                 continue
             matcher = re.search('session #(.*) created', event)
             if matcher is not None:
-                store.activate(matcher.group(1), entry['time'])
+                store.put(matcher.group(1), entry['time'])
                 continue
             matcher = re.search('destroyed  for /rest REST endpoint. Session number (.*)', event)
             if matcher is not None:
-                store.deactivate(matcher.group(1))
+                store.close(matcher.group(1))
                 continue
     store.show("SINCE LAST RESTART")
     

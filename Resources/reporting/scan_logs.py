@@ -18,6 +18,7 @@ if __name__ == "__main__":
     start = time.time()
 
     #openSessionsSinceLastRestart(lfile)
+    #sessionsActions(fromTime, untilTime, sfile, '34-720', '34-721', '34-722')
     #oneSession(fromTime,untilTime,sfile,'72')
     #oneSessionActions(fromTime,untilTime,sfile,'72')
     #groupLogEntries(fromTime,untilTime,'h',lfile,'event','code generation started')

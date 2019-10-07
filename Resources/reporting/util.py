@@ -88,51 +88,61 @@ def fromApache(line):
 def fromNginx(line):
     return None
 
-def showGroup(group, fmt = '{:25} {}', title = None):
+def showStore(store, fmt = '{:25} {}', title = None):
     """
-    REDUCE: show the content of a group store
+    REDUCE: show the content of a store
     
-    :param group to be used
+    :param store to be used
     :param fmt to be used for printing, default '{:25} {}'. E.g. '{},{}'
     """
     if title is not None:
         print('\n' + str(title))
-    for key, val in group.items():
-        print(fmt.format(key, val))
+    if not store.storeList and not store.storeSet:
+        for key, val in store.data.items():
+            print(fmt.format(key, val.counter))
+    if store.storeList:
+        for key, val in store.data.items():
+            print(fmt.format(key, val.counter, val.storeList))
+    if store.storeSet:
+        for key, val in store.data.items():
+            print(fmt.format(key, val.counter, val.storeSet))
 
-def showPie(group, title='pie plot', file='D:/downloads/pie.png'):
+def showPie(store, title='pie plot', file='D:/downloads/pie.png'):
     """
-    REDUCE: show the content of a group store as a pie chart
+    REDUCE: show the content of a store as a pie chart
     
-    :param group to be used for plotting
+    :param store to be used for plotting
     :param title title to be used
     :param file for the plot output
     """
     plt.close()
-    keys = np.char.array(list(group.keys()))
-    values = np.array(list(group.values()))
-    percent = 100.*values/values.sum()
-    patches, texts = plt.pie(values, startangle=90, radius=1.2)
+    keys = np.char.array(list(store.data.keys()))
+    counters = np.array(list(map(lambda v: v.counter, store.data.values())))
+    percent = 100.*counters/counters.sum()
+    patches, texts = plt.pie(counters, startangle=90, radius=1.2)
     labels = ['{0} - {1:1.2f} %'.format(i,j) for i,j in zip(keys, percent)]
-    patches, labels, dummy =  zip(*sorted(zip(patches, labels, values), key=lambda x: x[2], reverse=True))
-    plt.legend(patches, labels, loc='lower center', bbox_to_anchor=(-0.1, 1.), fontsize=8)
+    patches, labels, dummy =  zip(*sorted(zip(patches, labels, counters), key=lambda x: x[2], reverse=True))
+    plt.legend(patches, labels, loc='best', bbox_to_anchor=(-0.1, 1.), fontsize=8)
     #plt.title(title)
     plt.savefig(file, bbox_inches='tight')
     
-def showBar(group, title='bar plot', file='D:/downloads/bar.png'):
+def showBar(store, title='bar plot', legend='best', file='D:/downloads/bar.png'):
     """
-    REDUCE: show the content of a group store as a bar chart
+    REDUCE: show the content of a store as a bar chart
     
-    :param group to be used for plotting
+    :param store to be used for plotting
     :param title title to be used
     :param file for the plot output
     """
     plt.close()
-    keys = list(group.keys())
-    values = list(group.values())
-    bar = plt.bar(keys, values)
+    keys = list(store.data.keys())
+    counters = list(map(lambda v: v.counter, store.data.values()))
+    bar = plt.bar(keys, counters, color='rgbkymc')
     plt.xticks(keys, rotation='vertical')
     plt.title(title)
+    if legend is not None:
+        labels = ['{0} - {1:6d}'.format(i,j) for i,j in zip(keys, counters)]
+        plt.legend(bar, labels, loc=legend)
     plt.savefig(file, bbox_inches='tight')
 
 """
