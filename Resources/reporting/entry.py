@@ -24,24 +24,26 @@ class Entry:
         self.original = entry
         self.assembled = None
 
-    def filter(self, lambdaFct):
+    def filter(self, lambdaFct, negate=False):
         """
         FILTER: retain entry if lambda returns True, discard otherwise
         
         :param lambdaFct to be called as lambdaFct(self.entry)
+        :param negate True: block entry if lambda is False; and vice versa
         :keep the entry, if lambda returns True; set None otherwise
         """
         if self.entry is not None:
-            if not lambdaFct(self.entry):
+            if lambdaFct(self.entry) == negate:
                 self.entry = None
         return self
     
-    def filterRegex(self, key, *regexes):
+    def filterRegex(self, key, *regexes, negate=False):
         """
         FILTER: decides whether a regex matches the value of a key of an entry 
         
         :param key to be used for filtering
         :param *regexes matches one of the regex the value of the key (the regex are OR-ed)?
+        :param negate True: block entry if regexes match; and vice versa
         :keep the entry, if one of the regex matched; set None otherwise
         """
         def filterLambda(entry): 
@@ -52,14 +54,16 @@ class Entry:
                     if not matcher is None:
                         return True
             return False
-        return self.filter(filterLambda)
+        return self.filter(filterLambda,negate=negate)
 
-    def filterVal(self, key, *vals, substring=True):
+    def filterVal(self, key, *vals, substring=True, negate=False):
         """
         FILTER: decides whether a string is a substring of the value of a key of an entry 
         
         :param key to be used for filtering
         :param *vals is one of these strings a substring of the key's value (the vals are OR-ed)?
+        :param substring True: block entry if one of the vals is a substring if the key's value; False: must be equel
+        :param negate True: block entry if one of the vals match, as described above; and vice versa
         :keep the entry, if one of the strings is a substring; set None otherwise
         """
         def filterLambda(entry):
@@ -69,7 +73,7 @@ class Entry:
                     if substring and val in keyVal or val == keyVal:
                         return True
             return False
-        return self.filter(filterLambda)
+        return self.filter(filterLambda,negate=negate)
 
     def map(self, lambdaFct):
         """

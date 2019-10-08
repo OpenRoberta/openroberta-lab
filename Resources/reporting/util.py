@@ -145,6 +145,22 @@ def showBar(store, title='bar plot', legend='best', file='D:/downloads/bar.png')
         plt.legend(bar, labels, loc=legend)
     plt.savefig(file, bbox_inches='tight')
 
+def invertStore(storeInput, storeOutput):
+    """
+    accept an input store with an internal list or set and take its values, generate the keys of the output store from them
+    and store the keys of the input store as the values of the output store
+    
+    :param storeInput to take key-val pairs from this store
+    :param storeOutput to store the values from the input store as val-key pairs
+    """
+    for key,item in storeInput.data.items():
+        if storeInput.storeSet:
+            for val in item.storeSet:
+                storeOutput.put(val,key)
+        if storeInput.storeList:
+            for val in item.storeList:
+                storeOutput.put(val,key)
+    
 """
 the following declarations allow a classificatio of action:
 - first the usable actions are declared and a class numer is associated

@@ -22,7 +22,7 @@ def groupStatActions(fromTime, untilTime, grouper, fileName, *actions):
     showGroup(groupH,fmt='{},{}')
     showBar(groupH,title=str(actions),file='D:/downloads/init.png')
 
-def groupInitData(fromTime, untilTime, fileName):
+def processInitData(fromTime, untilTime, fileName):
     sessionIdStore = Store()
     groupInits = Store(groupBy='d')
     groupCountryCode = Store()
@@ -44,6 +44,24 @@ def groupInitData(fromTime, untilTime, fileName):
     showPie(groupOperatingSystem,title='operating systems',file='D:/downloads/operatingSystems.png')
     showPie(groupDeviceType,title='device types',file='D:/downloads/deviceTypesPie.png')
     showBar(groupDeviceType,title='device types',file='D:/downloads/deviceTypesBar.png')
+    
+def processSessions(fromTime, untilTime, fileName):
+    grouper='m'
+    sessionIdStore = Store()
+    groupInits = Store(groupBy=grouper)
+    for line in getReader(fileName):
+        fromStat(line).after(fromTime).before(untilTime).filterVal('action','Initialization').uniqueKey('sessionId', sessionIdStore)\
+        .groupStore(groupInits)
+    showStore(groupInits,fmt='{:12s} {:5d}',title='session inits grouped by ' + grouper)
+
+def processRobotUsage(fromTime, untilTime, fileName):
+    sessionIdRobotSet = Store(storeSet=True)
+    for line in getReader(fileName):
+        fromStat(line).after(fromTime).before(untilTime).filterVal('action','ServerStart','Initialization','ChangeRobot',negate=True,substring=False)\
+        .keyValStore('sessionId','robotName', sessionIdRobotSet)
+    robotSessionIdSet = Store()
+    invertStore(sessionIdRobotSet,robotSessionIdSet)
+    showStore(robotSessionIdSet,fmt='{:40s} {:5d}',title='robotName used w.o. init+change')
     
 def sessionsActions(fromTime, untilTime, fileName, *sessionNumbers):
     groupActions = Store(storeList=True)
