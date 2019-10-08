@@ -63,14 +63,13 @@ function isFileValid {
     fi
 }
 
-
 function isDeclShValid { 
     isDefined DATE_SETUP
     isDefined PORT
     isDefined LOG_LEVEL DEBUG INFO WARN ERROR
     isDefined LOG_CONFIG_FILE
     isDefined GIT_REPO
-    isDefined GIT_UPTODATE true false
+    isDefined GIT_PULL_BEFORE_BUILD true false
     # COMMIT or BRANCH must be defined
     if [[ "$BRANCH" == '' && "$COMMIT" == '' ]]
     then
@@ -109,6 +108,19 @@ case $ALIVE_ACTIVE in
   *)     echo "variable ALIVE_ACTIVE is '$ALIVE_ACTIVE' and not either true or false. Exit 12"
          exit 12 ;;
 esac
+
+isDefined PYTHON
+WHICH_PYTHON=$(which $PYTHON)
+if [[ "$WHICH_PYTHON" == '' ]]
+then
+    echo "variable PYTHON does not point to a Python binary. Log file analysis will NOT work"
+    VERSION_PYTHON=$($PYTHON -V)
+    case "$VERSION_PYTHON" in
+        Python\ 3*) : ;;
+        Python\ 2*) echo "variable PYTHON seems to point to a Python2 binary. Log file analysis will NOT work" ;;
+        *) echo "could not get version information from Python installation. It's likely, that log file analysis will NOT work" ;;
+    esac
+fi
 
 for NAME in $SERVERS; do
     isServerNameValid "$NAME"

@@ -1,6 +1,12 @@
 #!/bin/bash
 
 isServerNameValid ${SERVER_NAME}
+SERVER_DIR_OF_ONE_SERVER=${SERVER_DIR}/${SERVER_NAME}
+isDirectoryValid $SERVER_DIR_OF_ONE_SERVER
+
+cd $SERVER_DIR_OF_ONE_SERVER
+source ./decl.sh
+isDeclShValid
 
 case "${SERVER_NAME}" in
     master) question 'do you really want to stop the running container with the MASTER server?'

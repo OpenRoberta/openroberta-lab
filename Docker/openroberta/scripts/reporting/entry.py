@@ -18,11 +18,12 @@ class Entry:
     # reset in 'getReader from util.py'!
     serverRestartNumber = 0 # used to count the server restarts. This number is needed to de-duplicate the session-id
     
-    def __init__(self, entry):
+    def __init__(self, entry, printer=None):
         normalize(entry)
         self.entry = entry
         self.original = entry
         self.assembled = None
+        self.printer = printer
 
     def filter(self, lambdaFct, negate=False):
         """
@@ -185,14 +186,26 @@ class Entry:
                 self.entry = None
         return self
 
-    def reset(self):
+    def reset(self, strong=True):
         """
         FILTER: resets the entry to the original event (usually a dict)
         
-        :keep the entry as it was before any mapping
+        :param strong if True, reset the entry even if it was blocked by a preceding filter; if False, reset only if not blocked before
+        :keep the entry as it was before any mapping depending on 'strong'
+        """
+        if strong or self.entry is not None:
+            self.entry = self.original
+        return self
+    
+    def exec(self, lambdaFct):
+        """
+        SIDE EFFECT: execute a parameterless lambda (e.g. to reset a store)
+        
+        :param lambdaFct to be called
+        :keep the entry as it is
         """
         if self.entry is not None:
-            self.entry = self.original
+            lambdaFct()
         return self
     
     def uniqueKey(self, key, keyStore):
@@ -259,12 +272,19 @@ class Entry:
             store.put(key, val)
         return self
 
+    def closeKey(self, key, store):
+        if self.entry is not None:
+            val = self.entry.get(key, None)
+            if val is not None:
+                store.close(str(val))
+        return self
+        
     def showEvent(self):
         """
         REDUCE: show the values keys 'time' and the original event of an entry 
         """
         if self.entry is not None:
-            print('{:25} {}'.format(self.entry['time'], self.entry['event']))
+            self.printer('{:25} {}'.format(self.entry['time'], self.entry['event']))
         return self
     
     def showKey(self, key):
@@ -274,7 +294,7 @@ class Entry:
         :param key whose value should be shown
         """
         if self.entry is not None:
-            print('{:25} {}'.format(self.entry['time'], self.entry[key]))
+            self.printer('{:25} {}'.format(self.entry['time'], self.entry[key]))
         return self
     
     def showEntry(self):
@@ -284,7 +304,7 @@ class Entry:
         :param entry to be used
         """
         if self.entry is not None:
-            print('{:25} {}'.format(self.entry['time'], str(self.entry)))
+            self.printer('{:25} {}'.format(self.entry['time'], str(self.entry)))
         return self
     
 def normalize(entry):
@@ -318,6 +338,8 @@ def deduplicateSessionId(entry):
         sessionId = entry['sessionId']
         if sessionId is not None:
             entry['sessionId'] = str(Entry.serverRestartNumber) + '-' + sessionId
+        if action == 'SessionDestroy':
+            entry['sessionId'] = str(Entry.serverRestartNumber) + '-' + str(entry['args']['sessionId'])
 
 def mapHeaderFields(entry):
     args = entry.get('args', None)

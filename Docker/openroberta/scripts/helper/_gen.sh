@@ -15,11 +15,6 @@ esac
 isDirectoryValid ${GIT_REPO}
 case "$BRANCH" in
     master) DEBUG=true
-            if [ "$GIT_UPTODATE" != 'true' ]
-            then
-               echo 'because we have manual updates before deploying master (piwick, ...), GIT_UPTODATE must be "true". Exit 12'
-               exit 12
-            fi
             question 'you deploy MASTER. Do you have modified the MASTER branch as usual before deployment?' ;;
      *)     : ;;
 esac
@@ -28,14 +23,14 @@ esac
 ( flock -w 1200 9 || (echo "$DATE: deployement of ${SERVER_NAME} was delayed for more than 20 minutes. Exit 12"; exit 12) 
     [ "$DEBUG" = 'true' ] && echo "$DATE: got the lock for file '${GIT_DIR}/lockfile'"
     cd ${GIT_REPO}
-    if [ "$GIT_UPTODATE" == 'true' ]
+    if [ "$GIT_PULL_BEFORE_BUILD" == 'false' ]
     then
-        echo 'git repo is already uptodate, nothing pulled, nothing checked out'
-        LAST_COMMIT="git working tree considered UPTODATE, is based on commit $(git rev-list HEAD...HEAD~1)"
+        echo 'git repo is already uptodate, nothing is pulled, nothing is checked out'
+        LAST_COMMIT="git working tree considered UPTODATE. Last commit is $(git rev-list HEAD...HEAD~1)"
     elif [ "$COMMIT" == '' ]
     then
         echo "checking out branch '$BRANCH'. Throw away the complete old state"
-        # this will remove files, that are VALUABLE, but not committed or untracked. This can happen, if GIT_UPTODATE=true
+        # this will remove files, that may be VALUABLE
         # get all from remote, remove working tree and index files, that are dirty
         git fetch --all
         git reset --hard

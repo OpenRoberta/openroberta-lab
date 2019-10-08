@@ -16,9 +16,9 @@ then
                 cd $SERVER_DIR_OF_ONE_SERVER
                 source ./decl.sh
                 isDeclShValid
-                if [ "$GIT_UPTODATE" == 'true' ]
+                if [ "$GIT_PULL_BEFORE_BUILD" == 'false' ]
                 then
-                    echo "$DATE: for server '${SERVER_NAME}' GIT_UPTODATE is true. This makes no sense. Exit 12"
+                    echo "$DATE: for server '${SERVER_NAME}' GIT_PULL_BEFORE_BUILD is false. This makes no sense with auto-deploy. Exit 12"
                     exit 12
                 fi
                 [ "$DEBUG" = 'true' ] && echo "$DATE: for server '${SERVER_NAME}' checking branch '$BRANCH'"

@@ -9,6 +9,7 @@ DEBUG=false
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 SCRIPT_MAIN="${BASE_DIR}/scripts"
 SCRIPT_HELPER="${SCRIPT_MAIN}/helper"
+SCRIPT_REPORTING="${SCRIPT_MAIN}/reporting"
 
 CMD=$1; shift
 while [  1 ]
@@ -115,6 +116,8 @@ case "$CMD" in
                   docker volume rm $(docker volume ls -q -f dangling=true)
                   echo '******************** remove unused containers, networks, images ********************'
                   docker system prune --force ;;
+    monthly-stat) SERVER_NAME=$1; shift; MONTH=$1; shift
+                  source ${SCRIPT_HELPER}/_monthlyStat.sh ;;
     alive)        case $ALIVE_ACTIVE in
                       true) : ;;
                       *)    echo "variable ALIVE_ACTIVE not true. Functionality not available. Exit 12"

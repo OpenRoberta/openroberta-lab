@@ -160,7 +160,7 @@ The name of the docker images and the name of the running containers are:
 
 Generating the images is done by using the data from `decl.sh` from the server directory. Generation will:
 
-* pull actual data into a Git repo and checkout the branch/commit as declared (you can suppress this step by setting `GIT_UPTODATE=true`)
+* pull actual data into a Git repo and checkout the branch/commit as declared (you can suppress this step by setting `GIT_PULL_BEFORE_BUILD to false`)
 * run `mvn clean install -DskipTests`
 * export the server into the export directory
 * create the docker image from that directory
@@ -279,12 +279,9 @@ After putting `openrobertalab` into `/etc/init.d`, the service is added with the
 chmod ugo+x /etc/init.d/openrobertalab
 
 systemctl enable openrobertalab
-systemctl start openrobertalab            # is the START really needed?
+systemctl start openrobertalab
 
-systemctl daemon-reload                   # is the RELOAD really needed? reload all config files and (re-)start all services
-systemctl list-unit-files | grep enabled  # see all enabled services
-systemctl list-unit-files | grep running  # see all running services 
-
+# systemctl daemon-reload                 # is the RELOAD really needed? reload all config files and (re-)start all services
 systemctl status openrobertalab           # to see logging
 journalctl -u openrobertalab.service      # to see more logging
 ```
@@ -293,28 +290,30 @@ journalctl -u openrobertalab.service      # to see more logging
 
 This feature is needed to protect against data loss if a server crashes. As the database contains user data, the safety requirements for the machine to
 which the backups are copied, must be at least the safety requirements for the machine, that runs the database server. Ssh keys are used, thus a setup
-on both servers is needed. The two servers affected are called "SRC_S" and "TGT_S".
+on both servers is needed. The two servers affected are called "SRC-SERVER" and "TARGET-SERVER".
 
-* On the TGT_S: `adduser dbBackup --force-badname`. The user's password has to be strong.
-* On the TGT_S: `cd <BASE_DIR_ON_TGT_S>/db/dbAdmin; mkdir -p dbBackupSave/<db-name>; chgrp dbBackup dbBackupSave dbBackupSave/<db-name>; chmod -R g+rwx dbBackup`.
-* On the TGT_S: `su dbBackup; ssh-keygen -t rsa -b 4096`.
-* On the SRC_S: `adduser dbBackup --force-badname`. The user's password has to be strong.
-* On the SRC_S: `cd <BASE_DIR_ON_SRC_S>/db/dbAdmin; chgrp -R dbBackup dbBackup; chmod -R g+rwx dbBackup`
-* On the TGT_S: `ssh-copy-id -i /home/dbBackup/.ssh/id_rsa.pub dbBackup@<SRC_S>; ssh dbBackup@<SRC_S> # test whether successful or not`.
+* On the TARGET-SERVER: check whether `ssh <anyExistingUser@TARGET-SERVER` succeeds.
+* On the TARGET-SERVER: `adduser dbBackup --force-badname`. The user's password has to be strong.
+* On the TARGET-SERVER: `cd <BASE_DIR_ON_TGT_S>/db/dbAdmin; mkdir -p dbBackupSave/<db-name>`
+                        `chgrp dbBackup dbBackupSave dbBackupSave/<db-name>; chmod -R g+rwx dbBackup`.
+* On the TARGET-SERVER: `su dbBackup; ssh-keygen -t rsa -b 4096`.
+* On the SRC-SERVER:    `adduser dbBackup --force-badname`. The user's password has to be strong.
+* On the SRC-SERVER:    `cd <BASE_DIR_ON_SRC_S>/db/dbAdmin; chgrp -R dbBackup dbBackup; chmod -R g+rwx dbBackup`
+* On the TARGET-SERVER: `ssh-copy-id -i /home/dbBackup/.ssh/id_rsa.pub dbBackup@<SRC-SERVER>; ssh dbBackup@<SRC-SERVER> # test for success`.
 
 How does it work?
 
-* On SRC_S (for instance every day at 2:00 AM started by a cronjob) a database backup is generated. See the description above, how to achieve that.
+* On SRC-SERVER (for instance every day at 2:00 AM started by a cronjob) a database backup is generated. See the description above, how to achieve that.
   The backup is readable by all members of group `dbBackup`, to which user `dbBackup` belongs.
-* On TGT_S (for instance every day at 3:00 AM started by a cronjob) the database backup is saved to protect us against data loss. This works, because
-  user `dbBackup` on TGT_S can use `scp` for user `dbBackup` on SRC_S and the ssh key installed above allows that. The rights on SRC_S are restricted
-  to the rights of user `dbBackup` on SRC_S. Essentially this is the access to the backup directory.
+* On TARGET-SERVER (for instance every day at 3:00 AM started by a cronjob) the database backup is saved to protect us against data loss. This works, because
+  user `dbBackup` on TARGET-SERVER can use `scp` for user `dbBackup` on SRC-SERVER and the ssh key installed above allows that. The rights on SRC-SERVER are restricted
+  to the rights of user `dbBackup` on SRC-SERVER. Essentially this is the access to the backup directory.
 `
-The cronjob on TGT_S could look like (note, that the script runs as user `dbBackup`, and, that cron expects the command in one line).
+The cronjob on TARGET-SERVER could look like (note, that the script runs as user `dbBackup`, and, that cron expects the command in one line).
 
 ```bash
 0 3 * * * /usr/bin/sudo -u dbBackup <SCRIPT_DIR_ON_TGT_S>/run.sh -q backup-save
-          dbBackup@<SRC_S>:<BASE_DIR_ON_SRC_S>/db/dbAdmin/dbBackup/<db-name> db/dbAdmin/dbBackupSave/<db-name>
+          dbBackup@<SRC-SERVER>:<BASE_DIR_ON_SRC_S>/db/dbAdmin/dbBackup/<db-name> db/dbAdmin/dbBackupSave/<db-name>
           >><BASE_DIR>/logs/cronlog.txt 2>&1
 ```
 
