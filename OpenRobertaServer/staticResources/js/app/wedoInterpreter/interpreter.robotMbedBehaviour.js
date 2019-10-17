@@ -328,7 +328,7 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             this.hardwareState.actions["pin" + pin][mode] = value;
         };
         RobotMbedBehaviour.prototype.gyroReset = function (_port) {
-            throw new Error("Method not implemented.");
+            this.hardwareState.sensors['gyro'].angle = 0;
         };
         RobotMbedBehaviour.prototype.getState = function () {
             return this.hardwareState;
