@@ -2,6 +2,7 @@ import { RobotWeDoBehaviourTest } from 'interpreter.robotWeDoBehaviourTest';
 import { Interpreter } from 'interpreter.interpreter';
 import * as U from 'interpreter.util';
 import * as FS from 'fs';
+import * as HTML from 'html-entities'
 
 // general settings: directory with test files, extent of debugging (opLog is VERY gossipy)
 const showResult = false;
@@ -10,6 +11,7 @@ const showDebug = false;
 var baseDirectory: string;
 var directory = false;
 
+const MAX_MSEC_TO_RUN = 100;
 const MARK = '**********';
 var allXmlFiles = [];
 var allResults: any = {};
@@ -55,7 +57,7 @@ function processDirectory() {
 
 /**
 * run the operations, that are stored in file '<fileName>.json'
-* Run 'npm install -g html-entities' before to install the module needed to extract the expected result from the program doc
+* Run 'npm install [-g] html-entities' before to install the module needed to extract the expected result from the program doc
 */
 function processOps( fileName: string ) {
     if ( fileName === null || fileName === undefined ) {
@@ -66,9 +68,12 @@ function processOps( fileName: string ) {
     try {
         const generatedCodeAsString = FS.readFileSync( baseDirectory + fileName + '.json', 'utf8' );
         const generatedCode = JSON.parse( generatedCodeAsString );
-        new Interpreter(generatedCode, new RobotWeDoBehaviourTest( showOpLog, showDebug ), function() { callbackOnTermination( fileName ); } ).run(0);
+        const interpreter = new Interpreter( generatedCode, new RobotWeDoBehaviourTest( showOpLog, showDebug ), function() { callbackOnTermination( fileName ); } );
+        while ( !interpreter.isTerminated() ) {
+            interpreter.run( new Date().getTime() + MAX_MSEC_TO_RUN );
+        }
     } catch ( e ) {
-        p( MARK + ' ' + fileName + '.json not readable. Compilation error? ' + MARK );
+        p( MARK + ' ' + fileName + '.json not readable? Compilation error? ' + MARK );
         allResults[fileName] = 'NOT_FOUND';
         processOps( allXmlFiles.pop() );
     }
@@ -100,7 +105,7 @@ function callbackOnTermination( fileName: string ) {
     if ( matchArray === null ) {
         result = "NO-DATA";
     } else {
-        const Entities = require( 'html-entities' ).AllHtmlEntities;
+        const Entities = HTML.AllHtmlEntities;
         const entities = new Entities();
         const expectedResult = entities.decode( matchArray[1] ).replace( /<.[a-z\/]*>/g, '\n' ).replace( /&nbsp;/g, ' ' );
         const expectedLinesRaw = expectedResult.trim().split( /[\r\n]+/ );
