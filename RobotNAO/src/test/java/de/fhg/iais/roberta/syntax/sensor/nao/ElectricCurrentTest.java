@@ -1,12 +1,11 @@
 package de.fhg.iais.roberta.syntax.sensor.nao;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.nao.HelperNaoForXmlTest;
+import de.fhg.iais.roberta.syntax.NaoAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class ElectricCurrentTest {
-    private final HelperNaoForXmlTest h = new HelperNaoForXmlTest();
+public class ElectricCurrentTest extends NaoAstTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfLearnFaceClass() throws Exception {
@@ -41,14 +40,13 @@ public class ElectricCurrentTest {
                 + "SayTextAction [SensorExpr [ElectricCurrentSensor [ANKLE, VALUE, RIGHT_ROLL]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]"
                 + "]]]";
 
-        String result = this.h.generateTransformerString("/sensor/electriccurrent.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/electriccurrent.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
 
-        this.h.assertTransformationIsOk("/sensor/electriccurrent.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/sensor/electriccurrent.xml");
     }
 }

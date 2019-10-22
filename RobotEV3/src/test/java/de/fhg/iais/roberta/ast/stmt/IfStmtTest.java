@@ -3,11 +3,11 @@ package de.fhg.iais.roberta.ast.stmt;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.ast.AstTest;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class IfStmtTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
+public class IfStmtTest extends AstTest {
 
     @Test
     public void ifStmt() throws Exception {
@@ -18,7 +18,7 @@ public class IfStmtTest {
                 + "exprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]\n"
                 + "]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/if_stmt.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/control/if_stmt.xml");
     }
 
     @Test
@@ -32,12 +32,13 @@ public class IfStmtTest {
                 + "SensorStmt EncoderSensor [A, RESET, NO_SLOT]\n"
                 + "]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/if_stmt1.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/control/if_stmt1.xml");
     }
 
     @Test
     public void getExpr() throws Exception {
-        IfStmt<Void> ifStmt = (IfStmt<Void>) this.h.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(0).get(1);
+
+        IfStmt<Void> ifStmt = (IfStmt<Void>) UnitTestHelper.getAst(testFactory, "/ast/control/if_stmt1.xml").get(0).get(1);
 
         String a = "[Binary [EQ, EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]";
         Assert.assertEquals(a, ifStmt.getExpr().toString());
@@ -45,7 +46,7 @@ public class IfStmtTest {
 
     @Test
     public void getThen() throws Exception {
-        IfStmt<Void> ifStmt = (IfStmt<Void>) this.h.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(0).get(1);
+        IfStmt<Void> ifStmt = (IfStmt<Void>) UnitTestHelper.getAst(testFactory, "/ast/control/if_stmt1.xml").get(0).get(1);
 
         String a = "[\nexprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]]";
         Assert.assertEquals(a, ifStmt.getThenList().toString());
@@ -53,7 +54,7 @@ public class IfStmtTest {
 
     @Test
     public void getElse() throws Exception {
-        IfStmt<Void> ifStmt = (IfStmt<Void>) this.h.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(0).get(1);
+        IfStmt<Void> ifStmt = (IfStmt<Void>) UnitTestHelper.getAst(testFactory, "/ast/control/if_stmt1.xml").get(0).get(1);
 
         String a = "\nSensorStmt EncoderSensor [A, RESET, NO_SLOT]";
         Assert.assertEquals(a, ifStmt.getElseList().toString());
@@ -70,7 +71,7 @@ public class IfStmtTest {
                 + ",then\n"
                 + "SensorStmt EncoderSensor [A, RESET, NO_SLOT]\n"
                 + "]]]";
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/if_stmt2.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/control/if_stmt2.xml");
     }
 
     @Test
@@ -87,7 +88,7 @@ public class IfStmtTest {
                 + "SensorStmt EncoderSensor [A, RESET, NO_SLOT]\n"
                 + "]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/if_stmt3.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/control/if_stmt3.xml");
     }
 
     @Test
@@ -104,7 +105,7 @@ public class IfStmtTest {
                 + "SensorStmt EncoderSensor [A, RESET, NO_SLOT]\n"
                 + "]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/if_stmt4.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/control/if_stmt4.xml");
     }
 
     @Test
@@ -119,7 +120,7 @@ public class IfStmtTest {
                 + "SensorStmt EncoderSensor [A, RESET, NO_SLOT]\n"
                 + "]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/if_stmt5.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/control/if_stmt5.xml");
     }
 
     @Test
@@ -133,7 +134,7 @@ public class IfStmtTest {
                 + "SensorStmt EncoderSensor [A, RESET, NO_SLOT]\n"
                 + "]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/if_stmt6.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/control/if_stmt6.xml");
     }
 
     @Test
@@ -146,83 +147,83 @@ public class IfStmtTest {
                 + "AktionStmt [MotorOnAction [B, MotionParam [speed=NumConst [30], duration=MotorDuration [type=ROTATIONS, value=NumConst [1]]]]]\n"
                 + "]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/if_stmt7.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/control/if_stmt7.xml");
     }
 
     @Test
     public void ifStmt8() throws Exception {
         String a = "BlockAST [project=[[Location [x=-93, y=1], \nif EmptyExpr [defVal=BOOLEAN]\n,then\n]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/if_stmt8.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/control/if_stmt8.xml");
     }
 
     @Test
     public void ifStmt9() throws Exception {
 
         String a = "BlockAST [project=[[Location [x=-93, y=90], \nif EmptyExpr [defVal=BOOLEAN]\n,then\n]]]";
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/if_stmt9.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/control/if_stmt9.xml");
     }
 
     @Test
     public void ifStmt10() throws Exception {
         String a = "BlockAST [project=[[Location [x=-93, y=179], \nif EmptyExpr [defVal=BOOLEAN]\n,then\n]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/if_stmt10.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/control/if_stmt10.xml");
     }
 
     @Test
     public void reverseTransformation() throws Exception {
-        this.h.assertTransformationIsOk("/ast/control/if_stmt.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/control/if_stmt.xml");
     }
 
     @Test
     public void reverseTransformation1() throws Exception {
-        this.h.assertTransformationIsOk("/ast/control/if_stmt1.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/control/if_stmt1.xml");
     }
 
     @Test
     public void reverseTransformation2() throws Exception {
-        this.h.assertTransformationIsOk("/ast/control/if_stmt2.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/control/if_stmt2.xml");
     }
 
     @Test
     public void reverseTransformation3() throws Exception {
-        this.h.assertTransformationIsOk("/ast/control/if_stmt3.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/control/if_stmt3.xml");
     }
 
     @Test
     public void reverseTransformation4() throws Exception {
-        this.h.assertTransformationIsOk("/ast/control/if_stmt4.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/control/if_stmt4.xml");
     }
 
     @Test
     public void reverseTransformation5() throws Exception {
-        this.h.assertTransformationIsOk("/ast/control/if_stmt5.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/control/if_stmt5.xml");
     }
 
     @Test
     public void reverseTransformation6() throws Exception {
-        this.h.assertTransformationIsOk("/ast/control/if_stmt6.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/control/if_stmt6.xml");
     }
 
     @Test
     public void reverseTransformation7() throws Exception {
-        this.h.assertTransformationIsOk("/ast/control/if_stmt7.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/control/if_stmt7.xml");
     }
 
     @Test
     public void reverseTransformation8() throws Exception {
-        this.h.assertTransformationIsOk("/ast/control/if_stmt8.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/control/if_stmt8.xml");
     }
 
     @Test
     public void reverseTransformation9() throws Exception {
-        this.h.assertTransformationIsOk("/ast/control/if_stmt9.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/control/if_stmt9.xml");
     }
 
     @Test
     public void reverseTransformation10() throws Exception {
-        this.h.assertTransformationIsOk("/ast/control/if_stmt10.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/control/if_stmt10.xml");
     }
 
 }

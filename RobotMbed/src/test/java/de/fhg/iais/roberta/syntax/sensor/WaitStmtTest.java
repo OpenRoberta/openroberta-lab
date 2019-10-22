@@ -1,13 +1,12 @@
 package de.fhg.iais.roberta.syntax.sensor;
 
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
+import de.fhg.iais.roberta.ast.AstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class WaitStmtTest {
-    private final HelperCalliopeForXmlTest h = new HelperCalliopeForXmlTest();
+public class WaitStmtTest extends AstTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfGetSampleSensorClass() throws Exception {
@@ -18,15 +17,14 @@ public class WaitStmtTest {
                 + "(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [GyroSensor [X, ANGLE, EMPTY_SLOT]]], NumConst [90]]]\n"
                 + ")], DisplayTextAction [TEXT, StringConst [Hallo]]]]]";
 
-        String result = this.h.generateTransformerString("/sensor/wait_stmt_two_cases.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/wait_stmt_two_cases.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     // TODO: add generation of empty slot in xml
     @Ignore
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        this.h.assertTransformationIsOk("/sensor/wait_stmt_two_cases.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/sensor/wait_stmt_two_cases.xml");
     }
 
 }

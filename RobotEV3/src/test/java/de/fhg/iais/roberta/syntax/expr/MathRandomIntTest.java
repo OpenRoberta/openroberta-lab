@@ -2,15 +2,15 @@ package de.fhg.iais.roberta.syntax.expr;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.Ev3LejosAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class MathRandomIntTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
+public class MathRandomIntTest extends Ev3LejosAstTest {
 
     @Test
     public void Test() throws Exception {
-        String a = "BlocklyMethods.randInt(1,100)}";
+        String a = "Math.round(Math.random()*(100-1))+1}";
 
-        this.h.assertCodeIsOk(a, "/syntax/math/math_random_int.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/math/math_random_int.xml", false);
     }
 }

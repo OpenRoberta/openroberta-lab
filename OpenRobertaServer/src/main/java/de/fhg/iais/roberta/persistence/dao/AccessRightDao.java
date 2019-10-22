@@ -125,8 +125,9 @@ public class AccessRightDao extends AbstractDao<AccessRight> {
         Assert.isTrue(userId > 0);
 
         Query hql =
-            this.session.createQuery(
-                "from AccessRight where user.id=:userId and program.name=:programName and program.owner.id=:ownerId and program.author.account=:authorName");
+            this.session
+                .createQuery(
+                    "from AccessRight where user.id=:userId and program.name=:programName and program.owner.id=:ownerId and program.author.account=:authorName");
 
         hql.setInteger("userId", userId);
         hql.setString("programName", programName);

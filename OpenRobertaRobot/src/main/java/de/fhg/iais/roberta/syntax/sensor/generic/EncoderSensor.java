@@ -45,7 +45,7 @@ public class EncoderSensor<V> extends ExternalSensor<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((ISensorVisitor<V>) visitor).visitEncoderSensor(this);
     }
 

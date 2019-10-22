@@ -1,12 +1,11 @@
 package de.fhg.iais.roberta.syntax.action.nao;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.nao.HelperNaoForXmlTest;
+import de.fhg.iais.roberta.syntax.NaoAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class SetLedsTest {
-    private final HelperNaoForXmlTest h = new HelperNaoForXmlTest();
+public class SetLedsTest extends NaoAstTest {
 
     @Test
     public void testLedsOnColor() throws Exception {
@@ -16,8 +15,7 @@ public class SetLedsTest {
                 + "SetLeds [LEFTFOOT, ColorConst [#336666], ], SetLeds [RIGHTFOOT, ColorConst [#ccccff], ], "
                 + "SetLeds [ALL, ColorConst [#663366], ]]]]";
 
-        String result = this.h.generateTransformerString("/action/ledsOnColor.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/action/ledsOnColor.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 }

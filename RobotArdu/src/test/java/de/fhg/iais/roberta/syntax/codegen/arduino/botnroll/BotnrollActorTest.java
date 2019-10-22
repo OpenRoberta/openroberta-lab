@@ -2,23 +2,27 @@ package de.fhg.iais.roberta.syntax.codegen.arduino.botnroll;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class BotnrollActorTest {
-    HelperBotNrollForXmlTest botnrollHelper = new HelperBotNrollForXmlTest();
-
-    Configuration configuration = HelperBotNrollForXmlTest.makeConfiguration();
+public class BotnrollActorTest extends BotnrollAstTest {
 
     @Test
     public void botnrollLcdTest() throws Exception {
-        this.botnrollHelper
-            .compareExistingAndGeneratedSource("/ast/actions/botnroll_indication_test.ino", "/ast/actions/botnroll_indication_test.xml", this.configuration);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXml(
+                testFactory,
+                "/ast/actions/botnroll_indication_test.ino",
+                "/ast/actions/botnroll_indication_test.xml",
+                makeConfiguration());
     }
 
     @Test
     public void botnrollMovementTest() throws Exception {
-        this.botnrollHelper
-            .compareExistingAndGeneratedSource("/ast/actions/botnroll_movement_test.ino", "/ast/actions/botnroll_movement_test.xml", this.configuration);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXml(
+                testFactory,
+                "/ast/actions/botnroll_movement_test.ino",
+                "/ast/actions/botnroll_movement_test.xml",
+                makeConfiguration());
     }
 }

@@ -2,15 +2,15 @@ package de.fhg.iais.roberta.syntax.actors;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.Ev3LejosAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class PlayFileActionTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
+public class PlayFileActionTest extends Ev3LejosAstTest {
 
     @Test
     public void playFile() throws Exception {
         String a = "\nhal.playFile(1);}";
 
-        this.h.assertCodeIsOk(a, "/syntax/actions/action_PlayFile.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/actions/action_PlayFile.xml", false);
     }
 }

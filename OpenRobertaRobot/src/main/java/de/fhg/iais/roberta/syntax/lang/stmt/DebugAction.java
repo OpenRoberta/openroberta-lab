@@ -65,7 +65,7 @@ public class DebugAction<V> extends Stmt<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((ILanguageVisitor<V>) visitor).visitDebugAction(this);
     }
 

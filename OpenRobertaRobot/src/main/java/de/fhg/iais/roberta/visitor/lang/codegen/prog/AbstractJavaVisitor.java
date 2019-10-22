@@ -1,12 +1,18 @@
 package de.fhg.iais.roberta.visitor.lang.codegen.prog;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
 
 import org.apache.commons.text.StringEscapeUtils;
 
+import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
@@ -25,8 +31,16 @@ import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
+import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
@@ -56,13 +70,15 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     /**
      * initialize the Java code generator visitor.
      *
+     * @param programPhrases to generate the code from
      * @param programName name of the program
-     * @param brickConfiguration hardware configuration of the brick
-     * @param usedSensors in the current program
-     * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    protected AbstractJavaVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, String programName, int indentation) {
-        super(programPhrases, indentation);
+    protected AbstractJavaVisitor(
+        UsedHardwareBean usedHardwareBean,
+        CodeGeneratorSetupBean codeGeneratorSetupBean,
+        ArrayList<ArrayList<Phrase<Void>>> programPhrases,
+        String programName) {
+        super(usedHardwareBean, codeGeneratorSetupBean, programPhrases);
         this.programName = programName;
     }
 
@@ -89,19 +105,19 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     public Void visitMathConst(MathConst<Void> mathConst) {
         switch ( mathConst.getMathConst() ) {
             case PI:
-                this.sb.append("BlocklyMethods.PI");
+                this.sb.append("(float) Math.PI");
                 break;
             case E:
-                this.sb.append("BlocklyMethods.E");
+                this.sb.append("Math.E");
                 break;
             case GOLDEN_RATIO:
-                this.sb.append("BlocklyMethods.GOLDEN_RATIO");
+                this.sb.append("((1.0 + Math.sqrt(5.0)) / 2.0)");
                 break;
             case SQRT2:
-                this.sb.append("BlocklyMethods.sqrt(2)");
+                this.sb.append("(float) Math.sqrt(2)");
                 break;
             case SQRT1_2:
-                this.sb.append("BlocklyMethods.sqrt((float) 1.0/ (float) 2.0)");
+                this.sb.append("(float) Math.sqrt(0.5)");
                 break;
             case INFINITY:
                 this.sb.append("Float.POSITIVE_INFINITY");
@@ -210,7 +226,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
                 break;
         }
         incrIndentation();
-        repeatStmt.getList().visit(this);
+        repeatStmt.getList().accept(this);
         if ( !isWaitStmt ) {
             this.currenLoop.removeLast();
         } else {
@@ -236,8 +252,8 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
-        if ( this.loopsLabels.get(this.currenLoop.getLast()) != null ) {
-            if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+        if ( usedHardwareBean.getLoopsLabelContainer().get(this.currenLoop.getLast()) != null ) {
+            if ( usedHardwareBean.getLoopsLabelContainer().get(this.currenLoop.getLast()) ) {
                 this.sb.append("if (true) " + stmtFlowCon.getFlow().toString().toLowerCase() + " loop" + this.currenLoop.getLast() + ";");
                 return null;
             }
@@ -249,7 +265,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
         this.sb.append("System.out.println(");
-        textPrintFunct.getParam().get(0).visit(this);
+        textPrintFunct.getParam().get(0).accept(this);
         this.sb.append(")");
         return null;
     }
@@ -268,106 +284,209 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
         this.sb.append("new ArrayList<>(Collections.nCopies(");
-        listRepeat.getParam().get(1).visit(this);
+        listRepeat.getParam().get(1).accept(this);
         this.sb.append(", ");
         if ( listRepeat.getParam().get(0).getVarType() == BlocklyType.NUMBER ) {
             this.sb.append(" (float) ");
         }
-        listRepeat.getParam().get(0).visit(this);
+        listRepeat.getParam().get(0).accept(this);
         this.sb.append("))");
         return null;
     }
 
     @Override
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
-        this.sb.append("BlocklyMethods.");
         switch ( mathSingleFunct.getFunctName() ) {
             case ROOT:
-                this.sb.append("sqrt(");
-                break;
-            case ABS:
-                this.sb.append("abs(");
+                this.sb.append("(float) Math.sqrt(");
                 break;
             case LN:
-                this.sb.append("log(");
-                break;
-            case LOG10:
-                this.sb.append("log10(");
-                break;
-            case EXP:
-                this.sb.append("exp(");
+                this.sb.append("(float) Math.log(");
                 break;
             case POW10:
-                this.sb.append("pow(10, ");
-                break;
-            case SIN:
-                this.sb.append("sin(");
-                break;
-            case COS:
-                this.sb.append("cos(");
-                break;
-            case TAN:
-                this.sb.append("tan(");
-                break;
-            case ASIN:
-                this.sb.append("asin(");
-                break;
-            case ATAN:
-                this.sb.append("atan(");
-                break;
-            case ACOS:
-                this.sb.append("acos(");
-                break;
-            case ROUND:
-                this.sb.append("round(");
+                this.sb.append("(float) Math.pow(10, ");
                 break;
             case ROUNDUP:
-                this.sb.append("ceil(");
+                this.sb.append("(float) Math.ceil(");
                 break;
             case ROUNDDOWN:
-                this.sb.append("floor(");
+                this.sb.append("(float) Math.floor(");
                 break;
             default:
+                this.sb.append("(float) Math.");
+                this.sb.append(mathSingleFunct.getFunctName().name().toLowerCase(Locale.ENGLISH)).append("(");
                 break;
         }
-        mathSingleFunct.getParam().get(0).visit(this);
+        mathSingleFunct.getParam().get(0).accept(this);
         this.sb.append(")");
 
         return null;
     }
 
     @Override
+    public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
+        this.sb.append("Math.min(Math.max(");
+        mathConstrainFunct.getParam().get(0).accept(this);
+        this.sb.append(", ");
+        mathConstrainFunct.getParam().get(1).accept(this);
+        this.sb.append("), ");
+        mathConstrainFunct.getParam().get(2).accept(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
+        switch ( mathNumPropFunct.getFunctName() ) {
+            case EVEN:
+                this.sb.append("(");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(" % 2 == 0)");
+                break;
+            case ODD:
+                this.sb.append("(");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(" % 2 == 1)");
+                break;
+            case PRIME:
+                String methodName = this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodName(FunctionNames.PRIME);
+                this.sb.append(methodName).append("( (int) ");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(")");
+                break;
+            case WHOLE:
+                this.sb.append("(");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(" % 1 == 0)");
+                break;
+            case POSITIVE:
+                this.sb.append("(");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(" > 0)");
+                break;
+            case NEGATIVE:
+                this.sb.append("(");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(" < 0)");
+                break;
+            case DIVISIBLE_BY:
+                this.sb.append("(");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(" % ");
+                mathNumPropFunct.getParam().get(1).accept(this);
+                this.sb.append(" == 0)");
+                break;
+            default:
+                break;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
+        switch ( mathOnListFunct.getFunctName() ) {
+            case MIN:
+                this.sb.append("Collections.min(");
+                mathOnListFunct.getParam().get(0).accept(this);
+                break;
+            case MAX:
+                this.sb.append("Collections.max(");
+                mathOnListFunct.getParam().get(0).accept(this);
+                break;
+            case RANDOM:
+                mathOnListFunct.getParam().get(0).accept(this);
+                this.sb.append(".get(0)"); // TODO remove? implement?
+                break;
+            default:
+                this.sb.append(this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodName(mathOnListFunct.getFunctName())).append("(");
+                mathOnListFunct.getParam().get(0).accept(this);
+                break;
+        }
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
+        this.sb.append("Math.random()");
+        return null;
+    }
+
+    @Override
+    public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
+        this.sb.append("Math.round(Math.random() * (");
+        mathRandomIntFunct.getParam().get(1).accept(this);
+        this.sb.append(" - ");
+        mathRandomIntFunct.getParam().get(0).accept(this);
+        this.sb.append(")) + ");
+        mathRandomIntFunct.getParam().get(0).accept(this);
+        return null;
+    }
+
+    @Override
+    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
+        this.sb.append("Math.pow(");
+        super.visitMathPowerFunct(mathPowerFunct);
+        return null;
+    }
+
+    @Override
+    public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
+        List<Expr<Void>> exprs = textJoinFunct.getParam().get();
+        Iterator<Expr<Void>> iterator = exprs.iterator();
+        while ( iterator.hasNext() ) {
+            this.sb.append("String.valueOf(");
+            Expr<Void> expr = iterator.next();
+            expr.accept(this);
+            this.sb.append(")");
+            if ( iterator.hasNext() ) {
+                this.sb.append(" + ");
+            }
+        }
+        return null;
+    }
+
+    @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        this.sb.append("\n").append(this.INDENT).append("private void ");
-        this.sb.append(methodVoid.getMethodName() + "(");
-        methodVoid.getParameters().visit(this);
+        nlIndent();
+        this.sb.append("private void ");
+        this.sb.append(methodVoid.getMethodName()).append("(");
+        methodVoid.getParameters().accept(this);
         this.sb.append(") {");
-        methodVoid.getBody().visit(this);
-        this.sb.append("\n").append(this.INDENT).append("}");
+        incrIndentation();
+        methodVoid.getBody().accept(this);
+        decrIndentation();
+        nlIndent();
+        this.sb.append("}");
         return null;
     }
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        this.sb.append("\n").append(this.INDENT).append("private " + getLanguageVarTypeFromBlocklyType(methodReturn.getReturnType()));
-        this.sb.append(" " + methodReturn.getMethodName() + "(");
-        methodReturn.getParameters().visit(this);
+        nlIndent();
+        this.sb.append("private ").append(getLanguageVarTypeFromBlocklyType(methodReturn.getReturnType()));
+        this.sb.append(" ").append(methodReturn.getMethodName()).append("(");
+        methodReturn.getParameters().accept(this);
         this.sb.append(") {");
-        methodReturn.getBody().visit(this);
+        incrIndentation();
+        methodReturn.getBody().accept(this);
         nlIndent();
         this.sb.append("return ");
-        methodReturn.getReturnValue().visit(this);
-        this.sb.append(";\n").append(this.INDENT).append("}");
+        methodReturn.getReturnValue().accept(this);
+        this.sb.append(";");
+        decrIndentation();
+        nlIndent();
+        this.sb.append("}");
         return null;
     }
 
     @Override
     public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
         this.sb.append("if (");
-        methodIfReturn.getCondition().visit(this);
+        methodIfReturn.getCondition().accept(this);
         this.sb.append(") ");
         this.sb.append("return ");
-        methodIfReturn.getReturnValue().visit(this);
+        methodIfReturn.getReturnValue().accept(this);
         return null;
     }
 
@@ -398,14 +517,14 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitAssertStmt(AssertStmt<Void> assertStmt) {
         this.sb.append("if (!(");
-        assertStmt.getAssert().visit(this);
+        assertStmt.getAssert().accept(this);
         this.sb.append(")) {");
         incrIndentation();
         nlIndent();
         this.sb.append("System.out.println(\"Assertion failed: \" + \"").append(assertStmt.getMsg()).append("\" + ");
-        ((Binary<Void>) assertStmt.getAssert()).getLeft().visit(this);
+        ((Binary<Void>) assertStmt.getAssert()).getLeft().accept(this);
         this.sb.append(" + \"").append(((Binary<Void>) assertStmt.getAssert()).getOp().toString()).append("\" + ");
-        ((Binary<Void>) assertStmt.getAssert()).getRight().visit(this);
+        ((Binary<Void>) assertStmt.getAssert()).getRight().accept(this);
         this.sb.append(");");
         decrIndentation();
         nlIndent();
@@ -416,7 +535,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitDebugAction(DebugAction<Void> debugAction) {
         this.sb.append("System.out.println(");
-        debugAction.getValue().visit(this);
+        debugAction.getValue().accept(this);
         this.sb.append(");");
         return null;
     }
@@ -491,11 +610,11 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     protected void generateCodeFromTernary(IfStmt<Void> ifStmt) {
         this.sb.append("(" + whitespace());
-        ifStmt.getExpr().get(0).visit(this);
+        ifStmt.getExpr().get(0).accept(this);
         this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace());
-        ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
+        ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().accept(this);
         this.sb.append(whitespace() + ":" + whitespace());
-        ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
+        ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().accept(this);
     }
 
     @Override
@@ -506,7 +625,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
             generateCodeFromStmtCondition(conditionStmt, ifStmt.getExpr().get(i));
             conditionStmt = "else" + whitespace() + "if";
             incrIndentation();
-            ifStmt.getThenList().get(i).visit(this);
+            ifStmt.getThenList().get(i).accept(this);
             decrIndentation();
             if ( i + 1 < exprSize ) {
                 nlIndent();
@@ -521,7 +640,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
             nlIndent();
             this.sb.append("}").append(whitespace()).append("else").append(whitespace() + "{");
             incrIndentation();
-            ifStmt.getElseList().visit(this);
+            ifStmt.getElseList().accept(this);
             decrIndentation();
         }
         nlIndent();
@@ -530,18 +649,18 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
 
     private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
         this.sb.append(stmtType + whitespace() + "(" + whitespace());
-        expr.visit(this);
+        expr.accept(this);
         this.sb.append(whitespace() + ")" + whitespace() + "{");
     }
 
     private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
         this.sb.append(stmtType + whitespace() + "(" + whitespace() + "float" + whitespace());
         ExprList<Void> expressions = (ExprList<Void>) expr;
-        expressions.get().get(0).visit(this);
+        expressions.get().get(0).accept(this);
         this.sb.append(whitespace() + "=" + whitespace());
-        expressions.get().get(1).visit(this);
+        expressions.get().get(1).accept(this);
         this.sb.append(";" + whitespace());
-        expressions.get().get(0).visit(this);
+        expressions.get().get(0).accept(this);
         int posOpenBracket = expressions.get().toString().lastIndexOf("[");
         int posClosedBracket = expressions.get().toString().lastIndexOf("]");
         int counterPos = expressions.get().toString().lastIndexOf("-");
@@ -550,11 +669,11 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         } else {
             this.sb.append("<" + whitespace());
         }
-        expressions.get().get(2).visit(this);
+        expressions.get().get(2).accept(this);
         this.sb.append(";" + whitespace());
-        expressions.get().get(0).visit(this);
+        expressions.get().get(0).accept(this);
         this.sb.append("+=" + whitespace());
-        expressions.get().get(3).visit(this);
+        expressions.get().get(3).accept(this);
         this.sb.append(whitespace() + ")" + whitespace() + "{");
     }
 
@@ -587,10 +706,32 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
 
     private void addLabelToLoop() {
         increaseLoopCounter();
-        if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+        if ( usedHardwareBean.getLoopsLabelContainer().get(this.currenLoop.getLast()) ) {
             this.sb.append("loop" + this.currenLoop.getLast() + ":");
             nlIndent();
         }
+    }
+
+    @Override
+    protected void generateProgramSuffix(boolean withWrapping) {
+        if ( withWrapping ) {
+            if ( !this.codeGeneratorSetupBean.getUsedFunctions().isEmpty() ) {
+                incrIndentation();
+                String helperMethodImpls =
+                    this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodDefinitions(this.codeGeneratorSetupBean.getUsedFunctions());
+                Iterator<String> it = Arrays.stream(helperMethodImpls.split("\n")).iterator();
+                while ( it.hasNext() ) {
+                    this.sb.append(it.next());
+                    if ( it.hasNext() ) {
+                        nlIndent();
+                    }
+                }
+                decrIndentation();
+                nlIndent();
+            }
+        }
+
+        this.sb.append("}");
     }
 
     @Override

@@ -39,7 +39,7 @@ public class MotorDriveStopAction<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((IDifferentialMotorVisitor<V>) visitor).visitMotorDriveStopAction(this);
     }
 

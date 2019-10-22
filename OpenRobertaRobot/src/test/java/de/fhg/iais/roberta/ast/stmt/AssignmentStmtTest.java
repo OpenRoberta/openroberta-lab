@@ -20,11 +20,9 @@ public class AssignmentStmtTest {
 
     @Test
     public void make() throws Exception {
-        Var<Void> var =
-            Var.make(BlocklyType.NUMBER, "item", BlocklyBlockProperties.make("1", "1"), null);
+        Var<Void> var = Var.make(BlocklyType.NUMBER, "item", BlocklyBlockProperties.make("1", "1"), null);
         NumConst<Void> numConst = NumConst.make("0", BlocklyBlockProperties.make("1", "1"), null);
-        AssignStmt<Void> assignStmt =
-            AssignStmt.make(var, numConst, BlocklyBlockProperties.make("1", "1"), null);
+        AssignStmt<Void> assignStmt = AssignStmt.make(var, numConst, BlocklyBlockProperties.make("1", "1"), null);
 
         String a = "\nVar [item] := NumConst [0]\n";
         Assert.assertEquals(a, assignStmt.toString());
@@ -32,11 +30,9 @@ public class AssignmentStmtTest {
 
     @Test
     public void getName() throws Exception {
-        Var<Void> var =
-            Var.make(BlocklyType.NUMBER, "item", BlocklyBlockProperties.make("1", "1"), null);
+        Var<Void> var = Var.make(BlocklyType.NUMBER, "item", BlocklyBlockProperties.make("1", "1"), null);
         NumConst<Void> numConst = NumConst.make("0", BlocklyBlockProperties.make("1", "1"), null);
-        AssignStmt<Void> assignStmt =
-            AssignStmt.make(var, numConst, BlocklyBlockProperties.make("1", "1"), null);
+        AssignStmt<Void> assignStmt = AssignStmt.make(var, numConst, BlocklyBlockProperties.make("1", "1"), null);
 
         Assert.assertEquals("Var [item]", assignStmt.getName().toString());
     }

@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
@@ -23,6 +22,7 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -105,16 +105,16 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo.Severity;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IAllActorsVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
  * A helper class for unit tests to validate that all ASTs built from blockly XML are using compatible types.
- *
- * <p>This helper can be used in tests to validate the constraints on blockly toolboxes (generic ones and robot specific
- * ones).</p>
+ * <p>
+ * This helper can be used in tests to validate the constraints on blockly toolboxes (generic ones and robot specific
+ * ones).
+ * </p>
  */
 public class TypecheckVisitor implements ILanguageVisitor<BlocklyType>, ISensorVisitor<BlocklyType>, IAllActorsVisitor<BlocklyType> {
     private final int ERROR_LIMIT_FOR_TYPECHECK = 10;
@@ -145,7 +145,7 @@ public class TypecheckVisitor implements ILanguageVisitor<BlocklyType>, ISensorV
         Assert.notNull(phrase);
 
         TypecheckVisitor astVisitor = new TypecheckVisitor(phrase);
-        astVisitor.resultType = phrase.visit(astVisitor);
+        astVisitor.resultType = phrase.accept(astVisitor);
         return astVisitor;
     }
 
@@ -242,8 +242,8 @@ public class TypecheckVisitor implements ILanguageVisitor<BlocklyType>, ISensorV
 
     @Override
     public BlocklyType visitBinary(Binary<BlocklyType> binary) {
-        BlocklyType left = binary.getLeft().visit(this);
-        BlocklyType right = binary.getRight().visit(this);
+        BlocklyType left = binary.getLeft().accept(this);
+        BlocklyType right = binary.getRight().accept(this);
         //        Sig signature = TypeTransformations.getBinarySignature(binary.getOp().getOpSymbol());
         Sig signature = binary.getOp().getSignature();
         return signature.typeCheck(binary, Arrays.asList(left, right));
@@ -465,7 +465,7 @@ public class TypecheckVisitor implements ILanguageVisitor<BlocklyType>, ISensorV
     private List<BlocklyType> typecheckList(List<Expr<BlocklyType>> params) {
         List<BlocklyType> paramTypes = new ArrayList<>(params.size());
         for ( Expr<BlocklyType> param : params ) {
-            paramTypes.add(param.visit(this));
+            paramTypes.add(param.accept(this));
         }
         return paramTypes;
     }

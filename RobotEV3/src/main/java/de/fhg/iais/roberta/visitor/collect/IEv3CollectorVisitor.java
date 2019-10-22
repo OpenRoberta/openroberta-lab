@@ -28,8 +28,8 @@ public interface IEv3CollectorVisitor extends ICollectorVisitor, IEv3Visitor<Voi
 
     @Override
     default Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        showPictureAction.getX().visit(this);
-        showPictureAction.getY().visit(this);
+        showPictureAction.getX().accept(this);
+        showPictureAction.getY().accept(this);
         return null;
     }
 

@@ -1,12 +1,11 @@
 package de.fhg.iais.roberta.ast.sensor;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
+import de.fhg.iais.roberta.ast.AstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class SensorTest {
-    private final HelperBotNrollForXmlTest h = new HelperBotNrollForXmlTest();
+public class SensorTest extends AstTest {
 
     @Test
     public void sensorReset() throws Exception {
@@ -19,7 +18,7 @@ public class SensorTest {
                 + "SensorStmt TimerSensor [1, RESET, NO_SLOT]\n"
                 + "]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_reset.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/sensors/sensor_reset.xml");
     }
 
     @Test
@@ -36,7 +35,7 @@ public class SensorTest {
                 + "Var [item] := SensorExpr [TimerSensor [1, DEFAULT, NO_SLOT]]\n\n"
                 + "]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_getSample.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/sensors/sensor_getSample.xml");
     }
 
 }

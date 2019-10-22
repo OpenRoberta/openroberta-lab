@@ -1,12 +1,11 @@
 package de.fhg.iais.roberta.syntax.sensor.vorwerk;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.vorwerk.HelperVorwerkForXmlTest;
+import de.fhg.iais.roberta.ast.AstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class DropOffTest {
-    private final HelperVorwerkForXmlTest h = new HelperVorwerkForXmlTest();
+public class DropOffTest extends AstTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfAnimationClass() throws Exception {
@@ -18,13 +17,12 @@ public class DropOffTest {
                 + "Var [item] := SensorExpr [DropOffSensor [RIGHT_DROPOFF, DISTANCE, EMPTY_SLOT]]\n"
                 + "]]]";
 
-        String result = this.h.generateTransformerString("/sensors/drop_off.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensors/drop_off.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        this.h.assertTransformationIsOk("/sensors/drop_off.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/sensors/drop_off.xml");
     }
 }

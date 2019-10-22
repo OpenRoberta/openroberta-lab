@@ -9,8 +9,8 @@ import com.google.common.collect.Lists;
 
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public class CalliopeConfiguration extends Configuration {
-    private static final Configuration configuration;
+public class CalliopeConfiguration extends ConfigurationAst {
+    private static final ConfigurationAst configuration;
     static {
         ConfigurationComponent pin0 = new ConfigurationComponent("pin0", false, "P12", "0", Collections.emptyMap());
         ConfigurationComponent pin1 = new ConfigurationComponent("pin1", false, "P0", "1", Collections.emptyMap());
@@ -41,43 +41,44 @@ public class CalliopeConfiguration extends Configuration {
         ConfigurationComponent AB = new ConfigurationComponent("AB", false, "AB", "AB", Collections.emptyMap());
 
         ArrayList<ConfigurationComponent> components =
-            Lists.newArrayList(
-                pin0,
-                pin1,
-                pin2,
-                C16,
-                C04,
-                C05,
-                C12,
-                C11,
-                C17,
-                C10,
-                C06,
-                C07,
-                C08,
-                C09,
-                pin3,
-                C19,
-                C18,
-                pin4,
-                pin5,
-                X,
-                Y,
-                Z,
-                STRENGTH,
-                NO_PORT,
-                A,
-                B,
-                AB);
-        configuration = new Configuration.Builder().addComponents(components).build();
+            Lists
+                .newArrayList(
+                    pin0,
+                    pin1,
+                    pin2,
+                    C16,
+                    C04,
+                    C05,
+                    C12,
+                    C11,
+                    C17,
+                    C10,
+                    C06,
+                    C07,
+                    C08,
+                    C09,
+                    pin3,
+                    C19,
+                    C18,
+                    pin4,
+                    pin5,
+                    X,
+                    Y,
+                    Z,
+                    STRENGTH,
+                    NO_PORT,
+                    A,
+                    B,
+                    AB);
+        configuration = new ConfigurationAst.Builder().addComponents(components).build();
     }
 
-    public CalliopeConfiguration(Collection<ConfigurationComponent> configurationComponents, float wheelDiameterCM, float trackWidthCM) {
+    private CalliopeConfiguration(Collection<ConfigurationComponent> configurationComponents, float wheelDiameterCM, float trackWidthCM) {
         super(configurationComponents, wheelDiameterCM, trackWidthCM);
 
     }
 
-    public static class Builder extends Configuration.Builder {
+    public static class Builder extends ConfigurationAst.Builder {
 
         @Override
         public Builder addComponents(List<ConfigurationComponent> components) {
@@ -95,7 +96,7 @@ public class CalliopeConfiguration extends Configuration {
         }
 
         @Override
-        public Configuration build() {
+        public ConfigurationAst build() {
             return configuration;
         }
     }

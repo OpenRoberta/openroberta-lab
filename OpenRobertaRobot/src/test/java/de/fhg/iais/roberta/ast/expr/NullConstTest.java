@@ -3,14 +3,13 @@ package de.fhg.iais.roberta.ast.expr;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.ast.AstTest;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
-import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
-import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class NullConstTest {
-    AbstractHelperForXmlTest h = new GenericHelperForXmlTest();
+public class NullConstTest extends AstTest {
 
     @Test
     public void make() throws Exception {
@@ -39,17 +38,17 @@ public class NullConstTest {
 
     @Test
     public void reverseTransformatin() throws Exception {
-        this.h.assertTransformationIsOk("/ast/logic/logic_null.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/logic/logic_null.xml");
     }
 
     @Test
     public void reverseTransformatin1() throws Exception {
-        this.h.assertTransformationIsOk("/ast/logic/logic_null1.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/logic/logic_null1.xml");
     }
 
     @Test
     public void reverseTransformatin2() throws Exception {
-        this.h.assertTransformationIsOk("/ast/logic/logic_null2.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/logic/logic_null2.xml");
     }
 
 }

@@ -6,11 +6,8 @@ import org.junit.Test;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
-import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
-import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
 
 public class ExprStmtTest {
-    AbstractHelperForXmlTest h = new GenericHelperForXmlTest();
 
     @Test
     public void make() throws Exception {

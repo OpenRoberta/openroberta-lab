@@ -8,7 +8,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.text.CharacterIterator;
@@ -23,6 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -417,6 +420,33 @@ public class Util1 {
                     throw new DbcException("could not merge JSON objects with prefix " + prefixForDebug + "." + k2);
                 }
             }
+        }
+    }
+
+    /**
+     * Save generated program to the temp filesystem
+     *
+     * @param generatedSourceCode
+     * @param token
+     * @param programName
+     * @param ext
+     */
+    public static final void storeGeneratedProgram(String generatedSourceCode, String token, String programName, String ext) {
+        try {
+            String tempDir = "/tmp/";
+            File sourceFile = new File(tempDir + token + "/" + programName + "/source/" + programName + ext);
+            Path path = Paths.get(tempDir + token + "/" + programName + "/target/");
+            try {
+                Files.createDirectories(path);
+                FileUtils.writeStringToFile(sourceFile, generatedSourceCode, StandardCharsets.UTF_8.displayName());
+            } catch ( IOException e ) {
+                String msg = "could not write source code to file system";
+                LOG.error(msg, e);
+                throw new DbcException(msg, e);
+            }
+            LOG.info("stored under: " + sourceFile.getPath());
+        } catch ( Exception e ) {
+            LOG.error("Storing the generated program " + programName + " into directory " + token + " failed", e);
         }
     }
 }

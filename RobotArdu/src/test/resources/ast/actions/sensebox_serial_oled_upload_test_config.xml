@@ -20,8 +20,6 @@
     <instance x="192" y="105">
     <block type="robConf_wireless" id="cNgFi!HIbm=rI:]]j3Hc" intask="true">
         <field name="NAME">W</field>
-        <field name="SSID">mySSID</field>
-        <field name="PASSWORD">myPassw0rd</field>
         <field name="Connector">XBEE1</field>
     </block>
     </instance>

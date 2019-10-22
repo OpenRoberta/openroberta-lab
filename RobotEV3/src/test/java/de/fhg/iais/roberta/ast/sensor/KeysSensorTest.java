@@ -1,33 +1,35 @@
 package de.fhg.iais.roberta.ast.sensor;
 
+import java.util.ArrayList;
+
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.ast.AstTest;
+import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
-import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class KeysSensorTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
+public class KeysSensorTest extends AstTest {
 
     @Test
     public void jaxb2astTest() throws Exception {
         String a = "BlockAST [project=[[Location [x=-19, y=1], KeysSensor [ENTER, PRESSED, NO_SLOT]]]]";
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_brick1.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/sensors/sensor_brick1.xml");
     }
 
     @Test
     public void getKey() throws Exception {
-        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_brick1.xml");
-        KeysSensor<Void> bs = (KeysSensor<Void>) transformer.getTree().get(0).get(1);
+        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/sensors/sensor_brick1.xml");
+        KeysSensor<Void> bs = (KeysSensor<Void>) forest.get(0).get(1);
         Assert.assertEquals("ENTER", bs.getPort());
     }
 
     @Test
     public void getMode() throws Exception {
-        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_brick1.xml");
-        KeysSensor<Void> bs = (KeysSensor<Void>) transformer.getTree().get(0).get(1);
+        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/sensors/sensor_brick1.xml");
+        KeysSensor<Void> bs = (KeysSensor<Void>) forest.get(0).get(1);
         Assert.assertEquals(SC.PRESSED, bs.getMode());
     }
 
@@ -40,16 +42,16 @@ public class KeysSensorTest {
                 + "Var [item] := SensorExpr [KeysSensor [ENTER, PRESSED, NO_SLOT]]\n\n"
                 + "]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_brick.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/sensors/sensor_brick.xml");
     }
 
     @Test
     public void reverseTransformation() throws Exception {
-        this.h.assertTransformationIsOk("/ast/sensors/sensor_brick1.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/sensors/sensor_brick1.xml");
     }
 
     @Test
     public void reverseTransformation1() throws Exception {
-        this.h.assertTransformationIsOk("/ast/sensors/sensor_brick.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/sensors/sensor_brick.xml");
     }
 }

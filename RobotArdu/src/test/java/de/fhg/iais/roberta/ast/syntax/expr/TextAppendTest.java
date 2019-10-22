@@ -2,15 +2,15 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import org.junit.Ignore;
 
-import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
+import de.fhg.iais.roberta.ast.AstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class TextAppendTest {
-    private final HelperBotNrollForXmlTest h = new HelperBotNrollForXmlTest();
+public class TextAppendTest extends AstTest {
 
     @Ignore
     public void Test() throws Exception {
         final String a = "item+String(SENSOR_1)item+String(0)item+String(\"aaa\")";
 
-        this.h.assertCodeIsOk(a, "/syntax/text/text_append.xml", false);
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/text/text_append.xml", false);
     }
 }

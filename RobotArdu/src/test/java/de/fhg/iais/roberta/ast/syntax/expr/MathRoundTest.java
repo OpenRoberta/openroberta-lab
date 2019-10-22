@@ -2,15 +2,16 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
+import de.fhg.iais.roberta.syntax.codegen.arduino.arduino.ArduinoAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
+import de.fhg.iais.roberta.worker.codegen.ArduinoCxxGeneratorWorker;
 
-public class MathRoundTest {
-    private final HelperBotNrollForXmlTest h = new HelperBotNrollForXmlTest();
+public class MathRoundTest extends ArduinoAstTest {
 
     @Test
     public void Test() throws Exception {
         final String a = "round(0)ceil(0)floor(0)";
 
-        this.h.assertCodeIsOk(a, "/syntax/math/math_round.xml", false);
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/math/math_round.xml", new ArduinoCxxGeneratorWorker());
     }
 }

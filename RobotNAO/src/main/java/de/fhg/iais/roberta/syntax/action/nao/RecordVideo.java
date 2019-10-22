@@ -15,9 +15,9 @@ import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -87,7 +87,7 @@ public final class RecordVideo<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((INaoVisitor<V>) visitor).visitRecordVideo(this);
     }
 
@@ -107,13 +107,14 @@ public final class RecordVideo<V> extends Action<V> {
         Phrase<V> duration = helper.extractValue(values, new ExprParam(BlocklyConstants.DURATION, BlocklyType.NUMBER_INT));
         Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.FILENAME, BlocklyType.NUMBER_INT));
 
-        return RecordVideo.make(
-            Resolution.get(resolution),
-            Camera.get(camera),
-            helper.convertPhraseToExpr(duration),
-            helper.convertPhraseToExpr(msg),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return RecordVideo
+            .make(
+                Resolution.get(resolution),
+                Camera.get(camera),
+                helper.convertPhraseToExpr(duration),
+                helper.convertPhraseToExpr(msg),
+                helper.extractBlockProperties(block),
+                helper.extractComment(block));
     }
 
     @Override

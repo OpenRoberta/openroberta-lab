@@ -1,36 +1,38 @@
 package de.fhg.iais.roberta.ast.action;
 
+import java.util.ArrayList;
+
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.ast.AstTest;
+import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
-import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
-import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class MotorGetPowerActionTest {
-    private final HelperBotNrollForXmlTest h = new HelperBotNrollForXmlTest();
+public class MotorGetPowerActionTest extends AstTest {
 
     @Test
     public void make() throws Exception {
         String a = "BlockAST [project=[[Location [x=-78, y=63], MotorGetPower [port=B]]]]";
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/actions/action_MotorGetPower.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/actions/action_MotorGetPower.xml");
     }
 
     @Test
     public void getPort() throws Exception {
-        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_MotorGetPower.xml");
-        MotorGetPowerAction<Void> mgp = (MotorGetPowerAction<Void>) transformer.getTree().get(0).get(1);
+        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_MotorGetPower.xml");
+        MotorGetPowerAction<Void> mgp = (MotorGetPowerAction<Void>) forest.get(0).get(1);
         Assert.assertEquals("B", mgp.getUserDefinedPort());
     }
 
     @Test
     public void reverseTransformatin() throws Exception {
-        this.h.assertTransformationIsOk("/ast/actions/action_MotorGetPower.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/actions/action_MotorGetPower.xml");
     }
 
     @Test
     public void reverseTransformatin1() throws Exception {
-        this.h.assertTransformationIsOk("/ast/actions/action_MotorGetPower1.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/actions/action_MotorGetPower1.xml");
     }
 
 }

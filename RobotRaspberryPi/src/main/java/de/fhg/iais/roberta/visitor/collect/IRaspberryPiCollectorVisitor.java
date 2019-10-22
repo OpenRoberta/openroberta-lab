@@ -21,22 +21,22 @@ public interface IRaspberryPiCollectorVisitor extends ICollectorVisitor, IRaspbe
 
     @Override
     default Void visitLedSetAction(LedSetAction<Void> ledSetAction) {
-        ledSetAction.getBrightness().visit(this);
+        ledSetAction.getBrightness().accept(this);
         return null;
     }
 
     @Override
     default Void visitLedBlinkAction(LedBlinkAction<Void> ledBlinkAction) {
-        ledBlinkAction.getDuration().visit(this);
-        ledBlinkAction.getFrequency().visit(this);
+        ledBlinkAction.getDuration().accept(this);
+        ledBlinkAction.getFrequency().accept(this);
         return null;
     }
 
     @Override
     default Void visitLedDimAction(LedDimAction<Void> ledDimAction) {
-        ledDimAction.getDuration().visit(this);
-        ledDimAction.getFrom().visit(this);
-        ledDimAction.getTo().visit(this);
+        ledDimAction.getDuration().accept(this);
+        ledDimAction.getFrom().accept(this);
+        ledDimAction.getTo().accept(this);
         return null;
     }
 

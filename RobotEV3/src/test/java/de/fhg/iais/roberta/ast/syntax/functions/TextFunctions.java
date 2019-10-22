@@ -12,12 +12,10 @@ import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
 
 public class TextFunctions {
     @Test
     public void getPresedence() {
-        new HelperEv3ForXmlTest(); // needed; global variable set :-<
         ArrayList<Expr<Void>> param = new ArrayList<>();
         StringConst<Void> stringConst = StringConst.make("AS", BlocklyBlockProperties.make("1", "1"), null);
         param.add(stringConst);

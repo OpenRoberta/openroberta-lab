@@ -2,17 +2,17 @@ package de.fhg.iais.roberta.syntax.expr;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.Ev3LejosAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class ExprTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
+public class ExprTest extends Ev3LejosAstTest {
 
     @Test
     public void test1() throws Exception {
         String a =
             "\n8 + (-3 + 5)\n" + "88 - ( 8 + (-3 + 5) )\n" + "(88 - ( 8 + (-3 + 5) )) - ( 88 - ( 8 + (-3 + 5) ) )\n" + "2 * ( 2 - 2 )\n" + "2 - (2 * 2)}";
 
-        this.h.assertCodeIsOk(a, "/syntax/expr/expr1.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/expr/expr1.xml", false);
     }
 
     @Test
@@ -23,6 +23,6 @@ public class ExprTest {
                 + "(88 - ( 8 + (-3 + 5) )) - (2 * 2)\n"
                 + "((88 - ( 8 + (-3 + 5) )) - (2 * 2)) / ((float) (( 88 - ( 8 + (-3 + 5) )) - (2 * 2) ))}";
 
-        this.h.assertCodeIsOk(a, "/syntax/expr/expr2.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/expr/expr2.xml", false);
     }
 }

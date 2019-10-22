@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.visitor.validate;
 
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
@@ -33,8 +34,8 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
     private final String SSID;
     private final String password;
 
-    public SenseboxBrickValidatorVisitor(Configuration brickConfiguration, String SSID, String password) {
-        super(brickConfiguration);
+    public SenseboxBrickValidatorVisitor(UsedHardwareBean.Builder builder, ConfigurationAst brickConfiguration, String SSID, String password) {
+        super(builder, brickConfiguration);
         this.SSID = SSID;
         this.password = password;
     }
@@ -87,7 +88,7 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
                 sendDataAction.addInfo(NepoInfo.error("ACTION_ERROR_EMPTY_INPUT"));
                 return null;
             }
-            value.getSecond().visit(this);
+            value.getSecond().accept(this);
         }
         return null;
     }

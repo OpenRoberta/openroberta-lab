@@ -1,12 +1,12 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
+import de.fhg.iais.roberta.syntax.codegen.arduino.arduino.ArduinoAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
+import de.fhg.iais.roberta.worker.codegen.ArduinoCxxGeneratorWorker;
 
-public class LogicExprTest {
-    private final HelperBotNrollForXmlTest h = new HelperBotNrollForXmlTest();
+public class LogicExprTest extends ArduinoAstTest {
 
     @Test
     public void test1() throws Exception {
@@ -21,28 +21,20 @@ public class LogicExprTest {
                 + "((5 + 7)==(5 + 7) )>= (((5 + 7)== (5 + 7)) && ((5 + 7) <= (5 + 7)))\n"
                 + "!((5 + 7)==(5 + 7) )== true";
 
-        this.h.assertCodeIsOk(a, "/syntax/expr/logic_expr.xml", false);
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/expr/logic_expr.xml", new ArduinoCxxGeneratorWorker());
     }
 
     @Test
     public void logicNegate() throws Exception {
         final String a = "\n!((0!= 0)&&false)";
 
-        this.h.assertCodeIsOk(a, "/syntax/expr/logic_negate.xml", false);
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/expr/logic_negate.xml", new ArduinoCxxGeneratorWorker());
     }
 
     @Test
     public void logicNull() throws Exception {
         final String a = "\nNULL";
 
-        this.h.assertCodeIsOk(a, "/syntax/expr/logic_null.xml", false);
-    }
-
-    // The ternary was removed
-    @Ignore
-    public void logicTernary() throws Exception {
-        final String a = "\n( 0 == 0 ) ? false : true";
-
-        this.h.assertCodeIsOk(a, "/syntax/expr/logic_ternary.xml", false);
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/expr/logic_null.xml", new ArduinoCxxGeneratorWorker());
     }
 }

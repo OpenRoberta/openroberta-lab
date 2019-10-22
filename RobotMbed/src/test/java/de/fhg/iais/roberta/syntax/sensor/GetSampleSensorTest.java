@@ -1,13 +1,12 @@
 package de.fhg.iais.roberta.syntax.sensor;
 
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
+import de.fhg.iais.roberta.ast.AstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class GetSampleSensorTest {
-    private final HelperCalliopeForXmlTest h = new HelperCalliopeForXmlTest();
+public class GetSampleSensorTest extends AstTest {
 
     @Ignore("Test is ignored until next commit")
     @Test
@@ -39,15 +38,14 @@ public class GetSampleSensorTest {
                 + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [LightSensor [NO_PORT, DEFAULT, EMPTY_SLOT]]], NumConst [50]]]\n"
                 + ")]]]]";
 
-        String result = this.h.generateTransformerString("/sensor/get_sample_sensor.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/get_sample_sensor.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Ignore("Test is ignored until next commit")
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        this.h.assertTransformationIsOk("/sensor/get_sample_sensor.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/sensor/get_sample_sensor.xml");
     }
 
 }

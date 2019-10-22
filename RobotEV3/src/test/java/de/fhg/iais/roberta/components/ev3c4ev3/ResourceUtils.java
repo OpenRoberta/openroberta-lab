@@ -1,10 +1,10 @@
 package de.fhg.iais.roberta.components.ev3c4ev3;
 
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+
+import org.apache.commons.io.FileUtils;
 
 public class ResourceUtils {
     public static File getFileFromResources(String fileName) throws Exception {

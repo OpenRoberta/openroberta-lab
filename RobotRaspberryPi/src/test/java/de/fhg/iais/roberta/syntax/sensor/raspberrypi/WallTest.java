@@ -1,14 +1,13 @@
 package de.fhg.iais.roberta.syntax.sensor.raspberrypi;
 
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.raspberrypi.HelperRaspberryPiForXmlTest;
+import de.fhg.iais.roberta.syntax.codegen.raspberrypi.RaspberryPiAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
 @Ignore
-public class WallTest {
-    private final HelperRaspberryPiForXmlTest h = new HelperRaspberryPiForXmlTest();
+public class WallTest extends RaspberryPiAstTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfAnimationClass() throws Exception {
@@ -19,13 +18,11 @@ public class WallTest {
                 + "Var [item] := SensorExpr [WallSensor [NO_PORT, DISTANCE, EMPTY_SLOT]]\n"
                 + "]]]";
 
-        String result = this.h.generateTransformerString("/sensors/wall.xml");
-
-        Assert.assertEquals(expectedResult, result);
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensors/wall.xml");
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        this.h.assertTransformationIsOk("/sensors/wall.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/sensors/wall.xml");
     }
 }

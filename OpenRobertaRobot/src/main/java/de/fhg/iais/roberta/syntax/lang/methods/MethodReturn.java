@@ -17,9 +17,9 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -103,7 +103,7 @@ public class MethodReturn<V> extends Method<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((ILanguageVisitor<V>) visitor).visitMethodReturn(this);
     }
 
@@ -126,14 +126,15 @@ public class MethodReturn<V> extends Method<V> {
         StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.STACK);
         Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.RETURN, BlocklyType.NULL));
 
-        return MethodReturn.make(
-            name,
-            exprList,
-            statement,
-            BlocklyType.get(helper.extractField(fields, BlocklyConstants.TYPE)),
-            helper.convertPhraseToExpr(expr),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return MethodReturn
+            .make(
+                name,
+                exprList,
+                statement,
+                BlocklyType.get(helper.extractField(fields, BlocklyConstants.TYPE)),
+                helper.convertPhraseToExpr(expr),
+                helper.extractBlockProperties(block),
+                helper.extractComment(block));
     }
 
     @Override

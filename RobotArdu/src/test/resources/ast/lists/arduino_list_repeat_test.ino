@@ -2,6 +2,8 @@
 
 #include <math.h>
 #include <RobertaFunctions.h>   // Open Roberta library
+#include<ArduinoSTL.h>
+#include<list>
 #include <NEPODefs.h>
 
 RobertaFunctions rob;

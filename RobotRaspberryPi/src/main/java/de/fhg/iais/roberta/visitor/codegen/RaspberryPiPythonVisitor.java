@@ -2,8 +2,9 @@ package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.codegen.HelperMethodGenerator;
-import de.fhg.iais.roberta.components.raspberrypi.RaspberryPiConfiguration;
+import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
@@ -21,11 +22,8 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.collect.RaspberryPiUsedHardwareCollectorVisitor;
-import de.fhg.iais.roberta.visitor.collect.RaspberryPiUsedMethodCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IRaspberryPiVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
@@ -34,50 +32,22 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
 public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implements IRaspberryPiVisitor<Void> {
-    protected final RaspberryPiConfiguration brickConfiguration;
+    protected final ConfigurationAst brickConfiguration;
 
     /**
      * initialize the Python code generator visitor.
      *
      * @param brickConfiguration hardware configuration of the brick
      * @param programPhrases to generate the code from
-     * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    private RaspberryPiPythonVisitor(
-        RaspberryPiConfiguration brickConfiguration,
+    public RaspberryPiPythonVisitor(
+        UsedHardwareBean usedHardwareBean,
+        CodeGeneratorSetupBean codeGeneratorSetupBean,
+        ConfigurationAst brickConfiguration,
         ArrayList<ArrayList<Phrase<Void>>> programPhrases,
-        int indentation,
-        ILanguage language,
-        HelperMethodGenerator helperMethodGenerator) {
-        super(programPhrases, indentation, helperMethodGenerator, new RaspberryPiUsedMethodCollectorVisitor(programPhrases));
-
-        RaspberryPiUsedHardwareCollectorVisitor checkVisitor = new RaspberryPiUsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
-
+        ILanguage language) {
+        super(usedHardwareBean, codeGeneratorSetupBean, programPhrases);
         this.brickConfiguration = brickConfiguration;
-
-        this.usedGlobalVarInFunctions = checkVisitor.getMarkedVariablesAsGlobal();
-        this.isProgramEmpty = checkVisitor.isProgramEmpty();
-        this.loopsLabels = checkVisitor.getloopsLabelContainer();
-    }
-
-    /**
-     * factory method to generate Python code from an AST.<br>
-     *
-     * @param brickConfiguration hardware configuration of the brick
-     * @param programPhrases to generate the code from
-     */
-    public static String generate(
-        RaspberryPiConfiguration brickConfiguration,
-        ArrayList<ArrayList<Phrase<Void>>> programPhrases,
-        boolean withWrapping,
-        ILanguage language,
-        HelperMethodGenerator helperMethodGenerator) {
-        Assert.notNull(brickConfiguration);
-
-        RaspberryPiPythonVisitor astVisitor = new RaspberryPiPythonVisitor(brickConfiguration, programPhrases, 0, language, helperMethodGenerator);
-        astVisitor.generateCode(withWrapping);
-
-        return astVisitor.sb.toString();
     }
 
     @Override
@@ -100,7 +70,7 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
         this.sb.append("hal.wait(");
-        waitTimeStmt.getTime().visit(this);
+        waitTimeStmt.getTime().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -130,7 +100,7 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         StmtList<Void> variables = mainTask.getVariables();
-        variables.visit(this);
+        variables.accept(this);
         generateUserDefinedMethods();
         nlIndent();
         this.sb.append("def run():");
@@ -217,7 +187,7 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         this.sb.append("hal.set_color(").append(lightAction.getPort()).append(", ");
-        lightAction.getRgbLedColor().visit(this);
+        lightAction.getRgbLedColor().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -231,7 +201,7 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
     @Override
     public Void visitLedSetAction(LedSetAction<Void> ledSetAction) {
         this.sb.append("hal.set_brightness(").append(ledSetAction.getPort()).append(", ");
-        ledSetAction.getBrightness().visit(this);
+        ledSetAction.getBrightness().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -239,9 +209,9 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
     @Override
     public Void visitLedBlinkAction(LedBlinkAction<Void> ledBlinkAction) {
         this.sb.append("hal.blink(").append(ledBlinkAction.getPort()).append(", ");
-        ledBlinkAction.getFrequency().visit(this);
+        ledBlinkAction.getFrequency().accept(this);
         this.sb.append(", ");
-        ledBlinkAction.getDuration().visit(this);
+        ledBlinkAction.getDuration().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -249,11 +219,11 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
     @Override
     public Void visitLedDimAction(LedDimAction<Void> ledDimAction) {
         this.sb.append("hal.dim(").append(ledDimAction.getPort()).append(", ");
-        ledDimAction.getFrom().visit(this);
+        ledDimAction.getFrom().accept(this);
         this.sb.append(", ");
-        ledDimAction.getTo().visit(this);
+        ledDimAction.getTo().accept(this);
         this.sb.append(", ");
-        ledDimAction.getDuration().visit(this);
+        ledDimAction.getDuration().accept(this);
         this.sb.append(")");
         return null;
     }

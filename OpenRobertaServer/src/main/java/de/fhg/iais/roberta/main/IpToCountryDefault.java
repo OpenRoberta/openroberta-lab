@@ -4,9 +4,9 @@ import java.net.InetAddress;
 
 public class IpToCountryDefault implements IIpToCountry {
 
-	@Override
-	public String getCountryCode(InetAddress address) {
-		return "ZZ";
-	}
+    @Override
+    public String getCountryCode(InetAddress address) {
+        return "ZZ";
+    }
 
 }

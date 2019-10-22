@@ -1,17 +1,13 @@
 package de.fhg.iais.roberta.visitor.collect;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 
 /**
@@ -19,57 +15,55 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
  */
 public abstract class AbstractUsedMethodCollectorVisitor implements ICollectorVisitor {
 
-    protected final Set<FunctionNames> usedFunctions = new HashSet<>();
+    protected CodeGeneratorSetupBean.Builder builder;
 
-    public AbstractUsedMethodCollectorVisitor(List<ArrayList<Phrase<Void>>> programPhrases) {
-        collect(programPhrases);
-    }
-
-    /**
-     * Returns the used methods.
-     *
-     * @return the set of used methods
-     */
-    public Set<FunctionNames> getUsedFunctions() {
-        return Collections.unmodifiableSet(this.usedFunctions);
+    public AbstractUsedMethodCollectorVisitor(CodeGeneratorSetupBean.Builder builder) {
+        this.builder = builder;
     }
 
     @Override
     public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
-        ICollectorVisitor.super.visitMathNumPropFunct(mathNumPropFunct);
-        this.usedFunctions.add(mathNumPropFunct.getFunctName());
-        return null;
+        this.builder.addUsedFunction(mathNumPropFunct.getFunctName());
+        return ICollectorVisitor.super.visitMathNumPropFunct(mathNumPropFunct);
     }
 
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        ICollectorVisitor.super.visitMathOnListFunct(mathOnListFunct);
-        this.usedFunctions.add(mathOnListFunct.getFunctName());
-        return null;
+        this.builder.addUsedFunction(mathOnListFunct.getFunctName());
+        return ICollectorVisitor.super.visitMathOnListFunct(mathOnListFunct);
     }
 
     @Override
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
-        ICollectorVisitor.super.visitMathSingleFunct(mathSingleFunct);
-        if (mathSingleFunct.getFunctName() == FunctionNames.POW10) {
-            this.usedFunctions.add(FunctionNames.POWER); // combine pow10 and power into one
+        if ( mathSingleFunct.getFunctName() == FunctionNames.POW10 ) {
+            this.builder.addUsedFunction(FunctionNames.POWER); // combine pow10 and power into one
         } else {
-            this.usedFunctions.add(mathSingleFunct.getFunctName());
+            this.builder.addUsedFunction(mathSingleFunct.getFunctName());
         }
-        return null;
+        return ICollectorVisitor.super.visitMathSingleFunct(mathSingleFunct);
     }
 
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
-        ICollectorVisitor.super.visitListRepeat(listRepeat);
-        this.usedFunctions.add(FunctionNames.LISTS_REPEAT);
-        return null;
+        this.builder.addUsedFunction(FunctionNames.LISTS_REPEAT);
+        return ICollectorVisitor.super.visitListRepeat(listRepeat);
     }
 
     @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        ICollectorVisitor.super.visitMathPowerFunct(mathPowerFunct);
-        this.usedFunctions.add(FunctionNames.POWER);
-        return null;
+        this.builder.addUsedFunction(FunctionNames.POWER);
+        return ICollectorVisitor.super.visitMathPowerFunct(mathPowerFunct);
+    }
+
+    @Override
+    public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
+        this.builder.addUsedFunction(FunctionNames.RANDOM);
+        return ICollectorVisitor.super.visitMathRandomIntFunct(mathRandomIntFunct);
+    }
+
+    @Override
+    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
+        this.builder.addUsedFunction(FunctionNames.RANDOM_DOUBLE);
+        return ICollectorVisitor.super.visitMathRandomFloatFunct(mathRandomFloatFunct);
     }
 }

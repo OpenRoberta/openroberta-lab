@@ -1,12 +1,11 @@
 package de.fhg.iais.roberta.syntax.sensor.nao;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.nao.HelperNaoForXmlTest;
+import de.fhg.iais.roberta.syntax.NaoAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class FsrTest {
-    private final HelperNaoForXmlTest h = new HelperNaoForXmlTest();
+public class FsrTest extends NaoAstTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfAnimationClass() throws Exception {
@@ -17,13 +16,12 @@ public class FsrTest {
                 + "SayTextAction [SensorExpr [FsrSensor [RIGHT, VALUE, EMPTY_SLOT]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]"
                 + "]]]";
 
-        String result = this.h.generateTransformerString("/sensor/fsr.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/fsr.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        this.h.assertTransformationIsOk("/sensor/fsr.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/sensor/fsr.xml");
     }
 }

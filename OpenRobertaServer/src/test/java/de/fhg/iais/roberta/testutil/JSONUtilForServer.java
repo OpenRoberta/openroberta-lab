@@ -10,10 +10,8 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fhg.iais.roberta.javaServer.restServices.all.ClientAdmin;
-import de.fhg.iais.roberta.javaServer.restServices.all.ClientProgram;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
 import de.fhg.iais.roberta.javaServer.restServices.robot.RobotCommand;
-import de.fhg.iais.roberta.javaServer.restServices.robot.RobotDownloadProgram;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
@@ -210,29 +208,30 @@ public class JSONUtilForServer {
         new SenderReceiverJUnit().run(theBrick, theUser);
     }
 
-    public static void downloadJar(
-        final RobotDownloadProgram downloadJar,
-        final ClientProgram restProgram,
-        final HttpSessionState sessionState,
-        final String token,
-        final String programName)
-        throws Exception //
-    {
-        ThreadedFunction theBrick = new ThreadedFunction() {
-            @Override
-            public boolean apply() throws Exception {
-                Response response = downloadJar.handle(JSONUtilForServer.mk("{'token':'" + token + "'}")); // potentially an infinite wait
-                return response.getStatus() == 200;
-            }
-        };
-        ThreadedFunction theUser = new ThreadedFunction() {
-            @Override
-            public boolean apply() throws Exception {
-                Response response = restProgram.command(sessionState, JSONUtilForServer.mkD("{'cmd':'runP';'name':'" + programName + "'}"));
-                JSONObject entity = (JSONObject) response.getEntity();
-                return entity.getString("rc").equals("ok") && entity.getString("data").equals("Brick is waiting");
-            }
-        };
-        new SenderReceiverJUnit().run(theBrick, theUser);
-    }
+    // TODO should this be used?
+    //    public static void downloadJar(
+    //        final RobotDownloadProgram downloadJar,
+    //        final ClientProgram restProgram,
+    //        final HttpSessionState sessionState,
+    //        final String token,
+    //        final String programName)
+    //        throws Exception //
+    //    {
+    //        ThreadedFunction theBrick = new ThreadedFunction() {
+    //            @Override
+    //            public boolean apply() throws Exception {
+    //                Response response = downloadJar.handle(JSONUtilForServer.mk("{'token':'" + token + "'}")); // potentially an infinite wait
+    //                return response.getStatus() == 200;
+    //            }
+    //        };
+    //        ThreadedFunction theUser = new ThreadedFunction() {
+    //            @Override
+    //            public boolean apply() throws Exception {
+    //                Response response = restProgram.command(sessionState, JSONUtilForServer.mkD("{'cmd':'runP';'name':'" + programName + "'}"));
+    //                JSONObject entity = (JSONObject) response.getEntity();
+    //                return entity.getString("rc").equals("ok") && entity.getString("data").equals("Brick is waiting");
+    //            }
+    //        };
+    //        new SenderReceiverJUnit().run(theBrick, theUser);
+    //    }
 }

@@ -2,8 +2,9 @@ package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.codegen.HelperMethodGenerator;
-import de.fhg.iais.roberta.components.vorwerk.VorwerkConfiguration;
+import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
@@ -31,11 +32,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.vorwerk.DropOffSensor;
 import de.fhg.iais.roberta.syntax.sensor.vorwerk.WallSensor;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.collect.VorwerkUsedHardwareCollectorVisitor;
-import de.fhg.iais.roberta.visitor.collect.VorwerkUsedMethodCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IVorwerkVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
@@ -44,50 +42,23 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
 public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements IVorwerkVisitor<Void> {
-    protected final VorwerkConfiguration brickConfiguration;
+    protected final ConfigurationAst brickConfiguration;
 
     /**
      * initialize the Python code generator visitor.
      *
      * @param brickConfiguration hardware configuration of the brick
      * @param programPhrases to generate the code from
-     * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    private VorwerkPythonVisitor(
-        VorwerkConfiguration brickConfiguration,
+    public VorwerkPythonVisitor(
+        UsedHardwareBean usedHardwareBean,
+        CodeGeneratorSetupBean codeGeneratorSetupBean,
+        ConfigurationAst brickConfiguration,
         ArrayList<ArrayList<Phrase<Void>>> programPhrases,
-        int indentation,
-        ILanguage language,
-        HelperMethodGenerator helperMethodGenerator) {
-        super(programPhrases, indentation, helperMethodGenerator, new VorwerkUsedMethodCollectorVisitor(programPhrases));
-
-        VorwerkUsedHardwareCollectorVisitor checkVisitor = new VorwerkUsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
+        ILanguage language) {
+        super(usedHardwareBean, codeGeneratorSetupBean, programPhrases);
 
         this.brickConfiguration = brickConfiguration;
-
-        this.usedGlobalVarInFunctions = checkVisitor.getMarkedVariablesAsGlobal();
-        this.isProgramEmpty = checkVisitor.isProgramEmpty();
-        this.loopsLabels = checkVisitor.getloopsLabelContainer();
-    }
-
-    /**
-     * factory method to generate Python code from an AST.<br>
-     *
-     * @param brickConfiguration hardware configuration of the brick
-     * @param programPhrases to generate the code from
-     */
-    public static String generate(
-        VorwerkConfiguration brickConfiguration,
-        ArrayList<ArrayList<Phrase<Void>>> programPhrases,
-        boolean withWrapping,
-        ILanguage language,
-        HelperMethodGenerator helperMethodGenerator) {
-        Assert.notNull(brickConfiguration);
-
-        VorwerkPythonVisitor astVisitor = new VorwerkPythonVisitor(brickConfiguration, programPhrases, 0, language, helperMethodGenerator);
-        astVisitor.generateCode(withWrapping);
-
-        return astVisitor.sb.toString();
     }
 
     @Override
@@ -104,7 +75,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
         this.sb.append("hal.wait(");
-        waitTimeStmt.getTime().visit(this);
+        waitTimeStmt.getTime().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -120,9 +91,9 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
         String userDefinedPort = motorOnAction.getUserDefinedPort();
         String port = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getPortName();
         this.sb.append("hal." + port + "_motor_on(");
-        motorOnAction.getParam().getSpeed().visit(this);
+        motorOnAction.getParam().getSpeed().accept(this);
         this.sb.append(", ");
-        motorOnAction.getDurationValue().visit(this);
+        motorOnAction.getDurationValue().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -138,7 +109,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
     @Override
     public Void visitBrushOn(BrushOn<Void> brushOn) {
         this.sb.append("hal.brush_on(");
-        brushOn.getSpeed().visit(this);
+        brushOn.getSpeed().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -158,7 +129,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
     @Override
     public Void visitVacuumOn(VacuumOn<Void> vacuumOn) {
         this.sb.append("hal.vacuum_on(");
-        vacuumOn.getSpeed().visit(this);
+        vacuumOn.getSpeed().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -172,12 +143,12 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         this.sb.append("hal.drive_distance(" + quote(driveAction.getDirection().toString()) + ", ");
-        driveAction.getParam().getSpeed().visit(this);
+        driveAction.getParam().getSpeed().accept(this);
         this.sb.append(", ");
         if ( driveAction.getParam().getDuration() == null ) {
             this.sb.append("100");
         } else {
-            driveAction.getParam().getDuration().getValue().visit(this);
+            driveAction.getParam().getDuration().getValue().accept(this);
         }
         this.sb.append(")");
         return null;
@@ -265,7 +236,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         StmtList<Void> variables = mainTask.getVariables();
-        variables.visit(this);
+        variables.accept(this);
         generateUserDefinedMethods();
         nlIndent();
         this.sb.append("def run():");

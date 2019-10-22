@@ -1,12 +1,12 @@
 package de.fhg.iais.roberta.syntax.check;
 
-import java.util.ArrayList;
-
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.ast.AstTest;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
@@ -20,17 +20,29 @@ import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
-import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
-import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
+import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
+import de.fhg.iais.roberta.worker.AbstractValidatorWorker;
 
-public class CheckVisitorTest {
-    AbstractHelperForXmlTest h = new GenericHelperForXmlTest();
+public class CheckVisitorTest extends AstTest {
+
+    private class TestProgramCheckWorker extends AbstractValidatorWorker {
+        @Override
+        protected AbstractProgramValidatorVisitor getVisitor(UsedHardwareBean.Builder builder, Project project) {
+            return new TestProgramCheckVisitor(builder, project.getConfigurationAst());
+        }
+
+        @Override
+        protected String getBeanName() {
+            return "ProgramValidator";
+        }
+    }
 
     class TestProgramCheckVisitor extends AbstractProgramValidatorVisitor {
 
-        public TestProgramCheckVisitor(Configuration brickConfiguration) {
-            super(brickConfiguration);
+        public TestProgramCheckVisitor(UsedHardwareBean.Builder builder, ConfigurationAst brickConfiguration) {
+            super(builder, brickConfiguration);
         }
 
         @Override
@@ -102,12 +114,13 @@ public class CheckVisitorTest {
 
     @Test
     public void check_noLoops_returnsEmptyMap() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/visitors/invalide_use_of_variable.xml");
+        Project.Builder builder = UnitTestHelper.setupWithProgramXML(testFactory, Util1.readResourceContent("/visitors/invalide_use_of_variable.xml"));
+        Project project = builder.build();
 
-        TestProgramCheckVisitor checkVisitor = new TestProgramCheckVisitor(null);
-        checkVisitor.check(phrases);
+        TestProgramCheckWorker worker = new TestProgramCheckWorker();
+        worker.execute(project);
 
-        Assert.assertEquals(1, checkVisitor.getErrorCount());
+        Assert.assertEquals(1, project.getErrorCounter());
     }
 
 }

@@ -1,9 +1,8 @@
 package de.fhg.iais.roberta.visitor.collect;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
@@ -14,7 +13,6 @@ import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RecallAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction;
-import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
@@ -27,23 +25,16 @@ import de.fhg.iais.roberta.visitor.hardware.IBob3Visitor;
  */
 public final class Bob3UsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements IBob3Visitor<Void> {
 
-    protected final Set<UsedSensor> usedSensors = new LinkedHashSet<>();
-
-    public Bob3UsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        super(null);
-        check(phrasesSet);
-    }
-
-    public Set<UsedSensor> getTimer() {
-        return this.usedSensors;
+    public Bob3UsedHardwareCollectorVisitor(UsedHardwareBean.Builder builder, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+        super(builder, null);
     }
 
     @Override
     public Void visitBob3GetSampleSensor(GetSampleSensor<Void> sampleSensor) {
         if ( sampleSensor.getSensorTypeAndMode().equals("TIME") ) {
-            this.usedSensors.add(new UsedSensor(null, SC.TIMER, null));
+            this.builder.addUsedSensor(new UsedSensor(null, SC.TIMER, null));
         } else {
-            this.usedSensors.add(new UsedSensor(null, SC.NONE, null));
+            this.builder.addUsedSensor(new UsedSensor(null, SC.NONE, null));
         }
         return null;
     }
@@ -90,19 +81,6 @@ public final class Bob3UsedHardwareCollectorVisitor extends AbstractUsedHardware
 
     @Override
     public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
-        return null;
-    }
-
-    //TODO Put this in the abstract collector AbstractCollectorVisitor.java if it does not affect other robots
-    // 29.01.2019 - Artem Vinokurov
-    @Override
-    public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        if ( var.isGlobal() ) {
-            this.visitedVars.add(var);
-        }
-        var.getValue().visit(this);
-        this.globalVariables.add(var.getName());
-        this.declaredVariables.add(var.getName());
         return null;
     }
 }

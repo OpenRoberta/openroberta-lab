@@ -14,12 +14,12 @@ public class ClientLogger {
 
     public void log(Logger forRequest, JSONObject request) {
         try {
-            if ( forRequest.isDebugEnabled() ) {
+            if ( forRequest.isTraceEnabled() ) {
                 if ( SHORT_LOG ) {
                     String requestString = request.toString();
-                    forRequest.debug("first 120 char of request: " + requestString.substring(0, Math.min(120, requestString.length())));
+                    forRequest.trace("first 120 char of request: " + requestString.substring(0, Math.min(120, requestString.length())));
                 } else {
-                    forRequest.debug("request: " + request);
+                    forRequest.trace("request: " + request);
                 }
             }
         } catch ( Exception e ) {

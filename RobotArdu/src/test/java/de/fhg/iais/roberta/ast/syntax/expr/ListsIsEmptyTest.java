@@ -2,15 +2,16 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
+import de.fhg.iais.roberta.syntax.codegen.arduino.arduino.ArduinoAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
+import de.fhg.iais.roberta.worker.codegen.ArduinoCxxGeneratorWorker;
 
-public class ListsIsEmptyTest {
-    private final HelperBotNrollForXmlTest h = new HelperBotNrollForXmlTest();
+public class ListsIsEmptyTest extends ArduinoAstTest {
 
     @Test
     public void Test() throws Exception {
         final String a = "NULL";
 
-        this.h.assertCodeIsOk(a, "/syntax/lists/lists_is_empty.xml", false);
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/lists/lists_is_empty.xml", new ArduinoCxxGeneratorWorker());
     }
 }

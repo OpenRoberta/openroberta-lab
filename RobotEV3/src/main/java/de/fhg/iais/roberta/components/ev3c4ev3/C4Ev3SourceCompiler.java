@@ -1,12 +1,12 @@
 package de.fhg.iais.roberta.components.ev3c4ev3;
 
-import de.fhg.iais.roberta.util.dbc.DbcException;
+import java.io.IOException;
+
 import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.util.Arrays;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class C4Ev3SourceCompiler {
 
@@ -57,11 +57,16 @@ public class C4Ev3SourceCompiler {
         return new String[] {
             compilerExecutableFileName,
             sourceCodeFileName,
-            "-o", binaryOutputFile,
-            "-I", compilerResourcesDir + "c4ev3/include/NEPO",
-            "-I", compilerResourcesDir + "c4ev3/include/c4ev3",
-            "-L", compilerResourcesDir + "c4ev3/" + staticLibraryFolderName,
-            "-l", "ev3api",
+            "-o",
+            binaryOutputFile,
+            "-I",
+            compilerResourcesDir + "c4ev3/include/NEPO",
+            "-I",
+            compilerResourcesDir + "c4ev3/include/c4ev3",
+            "-L",
+            compilerResourcesDir + "c4ev3/" + staticLibraryFolderName,
+            "-l",
+            "ev3api",
             "-static-libstdc++",
             "-std=c++11",
             "-pthread",
@@ -99,4 +104,3 @@ public class C4Ev3SourceCompiler {
         return processBuilder;
     }
 }
-

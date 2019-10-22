@@ -1,17 +1,18 @@
 package de.fhg.iais.roberta.components.ev3c4ev3;
 
-import de.fhg.iais.roberta.util.dbc.DbcException;
+import static de.fhg.iais.roberta.components.ev3c4ev3.ByteUtils.setWord;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
-import static de.fhg.iais.roberta.components.ev3c4ev3.ByteUtils.setWord;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
  * Builder to create rbf files, used by the EV3 to show a program in the menu.
@@ -59,6 +60,7 @@ public class RbfBuilder {
 
     /**
      * Return a new array that contains the same bytes of the rbfToPatch parameter except the 4 bytes of the size and the placeholder
+     * 
      * @param rbfToPatch
      * @param executableFileName
      * @return
@@ -112,7 +114,6 @@ public class RbfBuilder {
     }
 
     /**
-     *
      * @param rbf
      * @param postfix
      * @param prefix used to compute the offset

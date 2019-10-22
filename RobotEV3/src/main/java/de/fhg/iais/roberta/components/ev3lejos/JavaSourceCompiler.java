@@ -70,20 +70,20 @@ public class JavaSourceCompiler {
         for ( Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics() ) {
             sj.add(diagnostic.getMessage(Locale.ENGLISH));
         }
-        compilerResponse = sj.toString();
+        this.compilerResponse = sj.toString();
     }
 
     public void compileAndPackage(String pathToCrosscompilerBaseDir, String token) {
         compile();
         File jarFile;
-        if ( success ) {
+        if ( this.success ) {
             ByteArrayOutputStream jarArchive = createJarArchive();
-            jarFile = new File(pathToCrosscompilerBaseDir + "/" + token + "/target/" + this.programName + ".jar");
+            jarFile = new File(pathToCrosscompilerBaseDir + "/" + token + "/" + this.programName + "/target/" + this.programName + ".jar");
             try {
                 FileUtils.writeByteArrayToFile(jarFile, jarArchive.toByteArray());
             } catch ( IOException e ) {
                 LOG.error("Exception when creating a jar", e);
-                success = false;
+                this.success = false;
             }
         }
     }

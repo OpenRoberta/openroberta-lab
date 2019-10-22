@@ -1,12 +1,11 @@
 package de.fhg.iais.roberta.syntax.sensor.nao;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.nao.HelperNaoForXmlTest;
+import de.fhg.iais.roberta.syntax.NaoAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class GetSampleSensorTest {
-    private final HelperNaoForXmlTest h = new HelperNaoForXmlTest();
+public class GetSampleSensorTest extends NaoAstTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfNaoGetSampleAccelerometer() throws Exception {
@@ -21,14 +20,13 @@ public class GetSampleSensorTest {
                 + "(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [AccelerometerSensor [Z, DEFAULT, EMPTY_SLOT]]], NumConst [512]]]\n"
                 + ")]]]]";
 
-        String result = this.h.generateTransformerString("/sensor/waitUntilAccelerometer.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/waitUntilAccelerometer.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXMLNaoGetSampleAccelerometer() throws Exception {
-        this.h.assertTransformationIsOk("/sensor/waitUntilAccelerometer.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/sensor/waitUntilAccelerometer.xml");
     }
 
     @Test
@@ -90,15 +88,14 @@ public class GetSampleSensorTest {
                 + "(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [ElectricCurrentSensor [ANKLE, VALUE, RIGHT_ROLL]]], NumConst [30]]]\n"
                 + ")]]]]";
 
-        String result = this.h.generateTransformerString("/sensor/waitUntilElectricCurrent.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/waitUntilElectricCurrent.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXMLNaoGetSampleElectricCurrent() throws Exception {
 
-        this.h.assertTransformationIsOk("/sensor/waitUntilElectricCurrent.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/sensor/waitUntilElectricCurrent.xml");
     }
 
     @Test
@@ -122,15 +119,14 @@ public class GetSampleSensorTest {
                 + "(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [TouchSensor [BUMPER, PRESSED, RIGHT]]], BoolConst [true]]]\n"
                 + ")]]]]";
 
-        String result = this.h.generateTransformerString("/sensor/waitUntilTouch.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/waitUntilTouch.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXMLNaoGetSampleTouchHandHeadBumper() throws Exception {
 
-        this.h.assertTransformationIsOk("/sensor/waitUntilTouch.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/sensor/waitUntilTouch.xml");
     }
 
     @Test
@@ -142,14 +138,13 @@ public class GetSampleSensorTest {
                 + "(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [DetectFaceSensor [NO_PORT, NAMEONE, EMPTY_SLOT]]], StringConst [Roberta]]]\n"
                 + ")]]]]";
 
-        String result = this.h.generateTransformerString("/sensor/waitUntilDetectFace.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/waitUntilDetectFace.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXMLNaoGetSampleTouchFaceDetect() throws Exception {
-        this.h.assertTransformationIsOk("/sensor/waitUntilDetectFace.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/sensor/waitUntilDetectFace.xml");
     }
 
     @Test
@@ -161,14 +156,13 @@ public class GetSampleSensorTest {
                 + "(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [DetectMarkSensor [NO_PORT, IDONE, EMPTY_SLOT]]], NumConst [84]]]\n"
                 + ")]]]]";
 
-        String result = this.h.generateTransformerString("/sensor/waitUntilDetectMarks.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/waitUntilDetectMarks.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXMLNaoGetSampleDetectMarks() throws Exception {
-        this.h.assertTransformationIsOk("/sensor/waitUntilDetectMarks.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/sensor/waitUntilDetectMarks.xml");
     }
 
     @Test
@@ -180,14 +174,13 @@ public class GetSampleSensorTest {
                 + "(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [UltrasonicSensor [NO_PORT, DISTANCE, EMPTY_SLOT]]], NumConst [30]]]\n"
                 + ")]]]]";
 
-        String result = this.h.generateTransformerString("/sensor/waitUntilSonar.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/waitUntilSonar.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXMLNaoGetSampleSonar() throws Exception {
-        this.h.assertTransformationIsOk("/sensor/waitUntilSonar.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/sensor/waitUntilSonar.xml");
     }
 
     @Test
@@ -202,14 +195,13 @@ public class GetSampleSensorTest {
                 + ")]"
                 + "]]]";
 
-        String result = this.h.generateTransformerString("/sensor/waitUntilGyro.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/waitUntilGyro.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXMLNaoGetSampleGyro() throws Exception {
-        this.h.assertTransformationIsOk("/sensor/waitUntilGyro.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/sensor/waitUntilGyro.xml");
     }
 
     @Test
@@ -223,13 +215,12 @@ public class GetSampleSensorTest {
                 + "(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [FsrSensor [RIGHT, VALUE, EMPTY_SLOT]]], NumConst [10]]]\n"
                 + ")]]]]";
 
-        String result = this.h.generateTransformerString("/sensor/waitUntilFSR.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/waitUntilFSR.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXMLNaoGetSampleFSR() throws Exception {
-        this.h.assertTransformationIsOk("/sensor/waitUntilFSR.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/sensor/waitUntilFSR.xml");
     }
 }

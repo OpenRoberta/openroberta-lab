@@ -2,7 +2,8 @@ package de.fhg.iais.roberta.visitor.collect;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
@@ -18,45 +19,34 @@ import de.fhg.iais.roberta.visitor.IVisitor;
  */
 public final class NxtUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor {
 
-    private boolean isVolumeVariableNeeded = false;
-
-    public NxtUsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, Configuration configuration) {
-        super(configuration);
-        check(phrasesSet);
-    }
-
-    /*public String getTmpArrVar() {
-        return this.tmpArrVar;
-    }*/
-
-    public boolean isVolumeVariableNeeded() {
-        return this.isVolumeVariableNeeded;
+    public NxtUsedHardwareCollectorVisitor(UsedHardwareBean.Builder builder, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, ConfigurationAst configuration) {
+        super(builder, configuration);
     }
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        this.usedSensors.add(new UsedSensor(lightAction.getPort(), SC.HT_COLOR, "COLOR"));
+        this.builder.addUsedSensor(new UsedSensor(lightAction.getPort(), SC.HT_COLOR, "COLOR"));
         return null;
     }
 
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         super.visitVolumeAction(volumeAction);
-        this.isVolumeVariableNeeded = true;
+        this.builder.setVolumeVariableNeeded(true);
         return null;
     }
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         super.visitToneAction(toneAction);
-        this.isVolumeVariableNeeded = true;
+        this.builder.setVolumeVariableNeeded(true);
         return null;
     }
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         super.visitPlayNoteAction(playNoteAction);
-        this.isVolumeVariableNeeded = true;
+        this.builder.setVolumeVariableNeeded(true);
         return null;
     }
     /*TODO: rewrite it in a nicer way, check why it is not detecting inserted arrays, fix sensors

@@ -73,7 +73,7 @@ public class ListCreate<V> extends Expr<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((ILanguageVisitor<V>) visitor).visitListCreate(this);
     }
 
@@ -97,11 +97,12 @@ public class ListCreate<V> extends Expr<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 1);
         String filename = helper.extractField(fields, BlocklyConstants.LIST_TYPE);
-        return ListCreate.make(
-            BlocklyType.get(filename),
-            helper.blockToExprList(block, BlocklyType.ARRAY),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return ListCreate
+            .make(
+                BlocklyType.get(filename),
+                helper.blockToExprList(block, BlocklyType.ARRAY),
+                helper.extractBlockProperties(block),
+                helper.extractComment(block));
     }
 
     @Override

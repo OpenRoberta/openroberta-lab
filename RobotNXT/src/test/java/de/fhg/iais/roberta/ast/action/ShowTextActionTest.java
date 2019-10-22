@@ -1,39 +1,41 @@
 package de.fhg.iais.roberta.ast.action;
 
+import java.util.ArrayList;
+
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.NxtAstTest;
+import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
-import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class ShowTextActionTest {
-    private final HelperNxtForXmlTest h = new HelperNxtForXmlTest();
+public class ShowTextActionTest extends NxtAstTest {
 
     @Test
     public void make() throws Exception {
         String a = "BlockAST [project=[[Location [x=-76, y=1], ShowTextAction [StringConst [Hallo], NumConst [0], NumConst [0]]]]]";
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/actions/action_ShowText.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/actions/action_ShowText.xml");
     }
 
     @Test
     public void getMsg() throws Exception {
-        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_ShowText.xml");
-        ShowTextAction<Void> spa = (ShowTextAction<Void>) transformer.getTree().get(0).get(1);
+        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_ShowText.xml");
+        ShowTextAction<Void> spa = (ShowTextAction<Void>) forest.get(0).get(1);
         Assert.assertEquals("StringConst [Hallo]", spa.getMsg().toString());
     }
 
     @Test
     public void getX() throws Exception {
-        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_ShowText.xml");
-        ShowTextAction<Void> spa = (ShowTextAction<Void>) transformer.getTree().get(0).get(1);
+        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_ShowText.xml");
+        ShowTextAction<Void> spa = (ShowTextAction<Void>) forest.get(0).get(1);
         Assert.assertEquals("NumConst [0]", spa.getX().toString());
     }
 
     @Test
     public void getY() throws Exception {
-        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_ShowText.xml");
-        ShowTextAction<Void> spa = (ShowTextAction<Void>) transformer.getTree().get(0).get(1);
+        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_ShowText.xml");
+        ShowTextAction<Void> spa = (ShowTextAction<Void>) forest.get(0).get(1);
         Assert.assertEquals("NumConst [0]", spa.getY().toString());
     }
 
@@ -41,21 +43,21 @@ public class ShowTextActionTest {
     public void missing() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=-7, y=1], ShowTextAction [EmptyExpr [defVal=STRING], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]], ShowTextAction [StringConst [Hallo], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]], ShowTextAction [StringConst [Hallo], EmptyExpr [defVal=NUMBER_INT], NumConst [0]], ShowTextAction [StringConst [Hallo], NumConst [0], EmptyExpr [defVal=NUMBER_INT]]]]]";
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/actions/action_ShowTextMissing.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/actions/action_ShowTextMissing.xml");
     }
 
     @Test
     public void reverseTransformatin() throws Exception {
-        this.h.assertTransformationIsOk("/ast/actions/action_ShowText.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/actions/action_ShowText.xml");
     }
 
     @Test
     public void reverseTransformatin1() throws Exception {
-        this.h.assertTransformationIsOk("/ast/actions/action_ShowText1.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/actions/action_ShowText1.xml");
     }
 
     @Test
     public void reverseTransformatinMissing() throws Exception {
-        this.h.assertTransformationIsOk("/ast/actions/action_ShowTextMissing.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/actions/action_ShowTextMissing.xml");
     }
 }

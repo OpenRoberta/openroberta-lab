@@ -65,35 +65,35 @@ public interface INaoCollectorVisitor extends ICollectorVisitor, INaoVisitor<Voi
 
     @Override
     default Void visitMoveJoint(MoveJoint<Void> moveJoint) {
-        moveJoint.getDegrees().visit(this);
+        moveJoint.getDegrees().accept(this);
         return null;
     }
 
     @Override
     default Void visitWalkDistance(WalkDistance<Void> walkDistance) {
-        walkDistance.getDistanceToWalk().visit(this);
+        walkDistance.getDistanceToWalk().accept(this);
         return null;
     }
 
     @Override
     default Void visitTurnDegrees(TurnDegrees<Void> turnDegrees) {
-        turnDegrees.getDegreesToTurn().visit(this);
+        turnDegrees.getDegreesToTurn().accept(this);
         return null;
     }
 
     @Override
     default Void visitWalkTo(WalkTo<Void> walkTo) {
-        walkTo.getWalkToTheta().visit(this);
-        walkTo.getWalkToX().visit(this);
-        walkTo.getWalkToY().visit(this);
+        walkTo.getWalkToTheta().accept(this);
+        walkTo.getWalkToX().accept(this);
+        walkTo.getWalkToY().accept(this);
         return null;
     }
 
     @Override
     default Void visitWalkAsync(WalkAsync<Void> walkAsync) {
-        walkAsync.getXSpeed().visit(this);
-        walkAsync.getYSpeed().visit(this);
-        walkAsync.getZSpeed().visit(this);
+        walkAsync.getXSpeed().accept(this);
+        walkAsync.getYSpeed().accept(this);
+        walkAsync.getZSpeed().accept(this);
         return null;
     }
 
@@ -109,16 +109,16 @@ public interface INaoCollectorVisitor extends ICollectorVisitor, INaoVisitor<Voi
 
     @Override
     default Void visitPointLookAt(PointLookAt<Void> pointLookAt) {
-        pointLookAt.getpointX().visit(this);
-        pointLookAt.getpointY().visit(this);
-        pointLookAt.getpointZ().visit(this);
-        pointLookAt.getSpeed().visit(this);
+        pointLookAt.getpointX().accept(this);
+        pointLookAt.getpointY().accept(this);
+        pointLookAt.getpointZ().accept(this);
+        pointLookAt.getSpeed().accept(this);
         return null;
     }
 
     @Override
     default Void visitSetVolume(SetVolume<Void> setVolume) {
-        setVolume.getVolume().visit(this);
+        setVolume.getVolume().accept(this);
         return null;
     }
 
@@ -134,13 +134,13 @@ public interface INaoCollectorVisitor extends ICollectorVisitor, INaoVisitor<Voi
 
     @Override
     default Void visitPlayFile(PlayFile<Void> playFile) {
-        playFile.getMsg().visit(this);
+        playFile.getMsg().accept(this);
         return null;
     }
 
     @Override
     default Void visitSetLeds(SetLeds<Void> setLeds) {
-        setLeds.getColor().visit(this);
+        setLeds.getColor().accept(this);
         return null;
     }
 
@@ -156,13 +156,13 @@ public interface INaoCollectorVisitor extends ICollectorVisitor, INaoVisitor<Voi
 
     @Override
     default Void visitRandomEyesDuration(RandomEyesDuration<Void> randomEyesDuration) {
-        randomEyesDuration.getDuration().visit(this);
+        randomEyesDuration.getDuration().accept(this);
         return null;
     }
 
     @Override
     default Void visitRastaDuration(RastaDuration<Void> rastaDuration) {
-        rastaDuration.getDuration().visit(this);
+        rastaDuration.getDuration().accept(this);
         return null;
     }
 
@@ -178,26 +178,26 @@ public interface INaoCollectorVisitor extends ICollectorVisitor, INaoVisitor<Voi
 
     @Override
     default Void visitTakePicture(TakePicture<Void> takePicture) {
-        takePicture.getPictureName().visit(this);
+        takePicture.getPictureName().accept(this);
         return null;
     }
 
     @Override
     default Void visitRecordVideo(RecordVideo<Void> recordVideo) {
-        recordVideo.getDuration().visit(this);
-        recordVideo.getVideoName().visit(this);
+        recordVideo.getDuration().accept(this);
+        recordVideo.getVideoName().accept(this);
         return null;
     }
 
     @Override
     default Void visitLearnFace(LearnFace<Void> learnFace) {
-        learnFace.getFaceName().visit(this);
+        learnFace.getFaceName().accept(this);
         return null;
     }
 
     @Override
     default Void visitForgetFace(ForgetFace<Void> forgetFace) {
-        forgetFace.getFaceName().visit(this);
+        forgetFace.getFaceName().accept(this);
         return null;
     }
 
@@ -213,7 +213,7 @@ public interface INaoCollectorVisitor extends ICollectorVisitor, INaoVisitor<Voi
 
     @Override
     default Void visitSetIntensity(SetIntensity<Void> setIntensity) {
-        setIntensity.getIntensity().visit(this);
+        setIntensity.getIntensity().accept(this);
         return null;
     }
 
@@ -224,19 +224,19 @@ public interface INaoCollectorVisitor extends ICollectorVisitor, INaoVisitor<Voi
 
     @Override
     default Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
-        recognizeWord.getVocabulary().visit(this);
+        recognizeWord.getVocabulary().accept(this);
         return null;
     }
 
     @Override
     default Void visitNaoMarkInformation(NaoMarkInformation<Void> naoMarkInformation) {
-        naoMarkInformation.getNaoMarkId().visit(this);
+        naoMarkInformation.getNaoMarkId().accept(this);
         return null;
     }
 
     @Override
     default Void visitDetecedFaceInformation(DetectedFaceInformation<Void> detectedFaceInformation) {
-        detectedFaceInformation.getFaceName().visit(this);
+        detectedFaceInformation.getFaceName().accept(this);
         return null;
     }
 

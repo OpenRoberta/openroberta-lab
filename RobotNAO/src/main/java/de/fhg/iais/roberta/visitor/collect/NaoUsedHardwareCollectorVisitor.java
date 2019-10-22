@@ -2,7 +2,8 @@ package de.fhg.iais.roberta.visitor.collect;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
@@ -53,9 +54,8 @@ import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
  */
 public final class NaoUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements INaoVisitor<Void> {
 
-    public NaoUsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, Configuration configuration) {
-        super(configuration);
-        check(phrasesSet);
+    public NaoUsedHardwareCollectorVisitor(UsedHardwareBean.Builder builder, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, ConfigurationAst configuration) {
+        super(builder, configuration);
     }
 
     @Override
@@ -80,27 +80,27 @@ public final class NaoUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
 
     @Override
     public Void visitMoveJoint(MoveJoint<Void> moveJoint) {
-        moveJoint.getDegrees().visit(this);
+        moveJoint.getDegrees().accept(this);
         return null;
     }
 
     @Override
     public Void visitWalkDistance(WalkDistance<Void> walkDistance) {
-        walkDistance.getDistanceToWalk().visit(this);
+        walkDistance.getDistanceToWalk().accept(this);
         return null;
     }
 
     @Override
     public Void visitTurnDegrees(TurnDegrees<Void> turnDegrees) {
-        turnDegrees.getDegreesToTurn().visit(this);
+        turnDegrees.getDegreesToTurn().accept(this);
         return null;
     }
 
     @Override
     public Void visitWalkTo(WalkTo<Void> walkTo) {
-        walkTo.getWalkToTheta().visit(this);
-        walkTo.getWalkToX().visit(this);
-        walkTo.getWalkToY().visit(this);
+        walkTo.getWalkToTheta().accept(this);
+        walkTo.getWalkToX().accept(this);
+        walkTo.getWalkToY().accept(this);
         return null;
     }
 
@@ -116,16 +116,16 @@ public final class NaoUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
 
     @Override
     public Void visitPointLookAt(PointLookAt<Void> pointLookAt) {
-        pointLookAt.getpointX().visit(this);
-        pointLookAt.getpointY().visit(this);
-        pointLookAt.getpointZ().visit(this);
-        pointLookAt.getSpeed().visit(this);
+        pointLookAt.getpointX().accept(this);
+        pointLookAt.getpointY().accept(this);
+        pointLookAt.getpointZ().accept(this);
+        pointLookAt.getSpeed().accept(this);
         return null;
     }
 
     @Override
     public Void visitSetVolume(SetVolume<Void> setVolume) {
-        setVolume.getVolume().visit(this);
+        setVolume.getVolume().accept(this);
         return null;
     }
 
@@ -146,21 +146,21 @@ public final class NaoUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
 
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        sayTextAction.getMsg().visit(this);
-        sayTextAction.getPitch().visit(this);
-        sayTextAction.getPitch().visit(this);
+        sayTextAction.getMsg().accept(this);
+        sayTextAction.getPitch().accept(this);
+        sayTextAction.getPitch().accept(this);
         return null;
     }
 
     @Override
     public Void visitPlayFile(PlayFile<Void> playFile) {
-        playFile.getMsg().visit(this);
+        playFile.getMsg().accept(this);
         return null;
     }
 
     @Override
     public Void visitSetLeds(SetLeds<Void> setLeds) {
-        setLeds.getColor().visit(this);
+        setLeds.getColor().accept(this);
         return null;
     }
 
@@ -176,13 +176,13 @@ public final class NaoUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
 
     @Override
     public Void visitRandomEyesDuration(RandomEyesDuration<Void> randomEyesDuration) {
-        randomEyesDuration.getDuration().visit(this);
+        randomEyesDuration.getDuration().accept(this);
         return null;
     }
 
     @Override
     public Void visitRastaDuration(RastaDuration<Void> rastaDuration) {
-        rastaDuration.getDuration().visit(this);
+        rastaDuration.getDuration().accept(this);
         return null;
     }
 
@@ -193,46 +193,46 @@ public final class NaoUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
 
     @Override
     public Void visitNaoMark(DetectMarkSensor<Void> naoMark) {
-        this.usedSensors.add(new UsedSensor(null, SC.DETECT_MARK, null));
+        this.builder.addUsedSensor(new UsedSensor(null, SC.DETECT_MARK, null));
         return null;
     }
 
     @Override
     public Void visitTakePicture(TakePicture<Void> takePicture) {
-        takePicture.getPictureName().visit(this);
+        takePicture.getPictureName().accept(this);
         return null;
     }
 
     @Override
     public Void visitRecordVideo(RecordVideo<Void> recordVideo) {
-        recordVideo.getDuration().visit(this);
-        recordVideo.getVideoName().visit(this);
+        recordVideo.getDuration().accept(this);
+        recordVideo.getVideoName().accept(this);
         return null;
     }
 
     @Override
     public Void visitLearnFace(LearnFace<Void> learnFace) {
-        learnFace.getFaceName().visit(this);
-        this.usedSensors.add(new UsedSensor(null, SC.NAO_FACE, null));
+        learnFace.getFaceName().accept(this);
+        this.builder.addUsedSensor(new UsedSensor(null, SC.NAO_FACE, null));
         return null;
     }
 
     @Override
     public Void visitForgetFace(ForgetFace<Void> forgetFace) {
-        forgetFace.getFaceName().visit(this);
-        this.usedSensors.add(new UsedSensor(null, SC.NAO_FACE, null));
+        forgetFace.getFaceName().accept(this);
+        this.builder.addUsedSensor(new UsedSensor(null, SC.NAO_FACE, null));
         return null;
     }
 
     @Override
     public Void visitDetectFace(DetectFaceSensor<Void> detectFace) {
-        this.usedSensors.add(new UsedSensor(null, SC.NAO_FACE, null));
+        this.builder.addUsedSensor(new UsedSensor(null, SC.NAO_FACE, null));
         return null;
     }
 
     @Override
     public Void visitGetSampleSensor(GetSampleSensor<Void> getSampleSensor) {
-        getSampleSensor.getSensor().visit(this);
+        getSampleSensor.getSensor().accept(this);
         return null;
     }
 
@@ -243,7 +243,7 @@ public final class NaoUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
 
     @Override
     public Void visitSetIntensity(SetIntensity<Void> setIntensity) {
-        setIntensity.getIntensity().visit(this);
+        setIntensity.getIntensity().accept(this);
         return null;
     }
 
@@ -254,9 +254,9 @@ public final class NaoUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
 
     @Override
     public Void visitWalkAsync(WalkAsync<Void> walkAsync) {
-        walkAsync.getXSpeed().visit(this);
-        walkAsync.getYSpeed().visit(this);
-        walkAsync.getZSpeed().visit(this);
+        walkAsync.getXSpeed().accept(this);
+        walkAsync.getYSpeed().accept(this);
+        walkAsync.getZSpeed().accept(this);
         return null;
     }
 
@@ -267,22 +267,22 @@ public final class NaoUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
 
     @Override
     public Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
-        recognizeWord.getVocabulary().visit(this);
-        this.usedSensors.add(new UsedSensor(null, SC.NAO_SPEECH, null));
+        recognizeWord.getVocabulary().accept(this);
+        this.builder.addUsedSensor(new UsedSensor(null, SC.NAO_SPEECH, null));
         return null;
     }
 
     @Override
     public Void visitNaoMarkInformation(NaoMarkInformation<Void> naoMarkInformation) {
-        naoMarkInformation.getNaoMarkId().visit(this);
-        this.usedSensors.add(new UsedSensor(null, SC.DETECT_MARK, null));
+        naoMarkInformation.getNaoMarkId().accept(this);
+        this.builder.addUsedSensor(new UsedSensor(null, SC.DETECT_MARK, null));
         return null;
     }
 
     @Override
     public Void visitDetecedFaceInformation(DetectedFaceInformation<Void> detectedFaceInformation) {
-        detectedFaceInformation.getFaceName().visit(this);
-        this.usedSensors.add(new UsedSensor(null, SC.NAO_FACE, null));
+        detectedFaceInformation.getFaceName().accept(this);
+        this.builder.addUsedSensor(new UsedSensor(null, SC.NAO_FACE, null));
         return null;
     }
 }

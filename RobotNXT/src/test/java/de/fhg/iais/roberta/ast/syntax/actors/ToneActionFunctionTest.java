@@ -2,10 +2,10 @@ package de.fhg.iais.roberta.ast.syntax.actors;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
+import de.fhg.iais.roberta.NxtAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class ToneActionFunctionTest {
-    private final HelperNxtForXmlTest h = new HelperNxtForXmlTest();
+public class ToneActionFunctionTest extends NxtAstTest {
 
     @Test
     public void playTone() throws Exception {
@@ -22,6 +22,7 @@ public class ToneActionFunctionTest {
                 + "PlayToneEx(300, 100, volume, false);\n"
                 + "Wait(100);}";
 
-        this.h.assertWrappedCodeIsOk(a, "/ast/actions/action_PlaySoundFunc.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/ast/actions/action_PlaySoundFunc.xml", brickConfiguration, true);
     }
 }

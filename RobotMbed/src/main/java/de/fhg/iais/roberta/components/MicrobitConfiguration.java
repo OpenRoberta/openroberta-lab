@@ -9,8 +9,8 @@ import com.google.common.collect.Lists;
 
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public class MicrobitConfiguration extends Configuration {
-    private static final Configuration configuration;
+public class MicrobitConfiguration extends ConfigurationAst {
+    private static final ConfigurationAst configuration;
     static {
         ConfigurationComponent pin0 = new ConfigurationComponent("pin0", false, "0", "0", Collections.emptyMap());
         ConfigurationComponent pin1 = new ConfigurationComponent("pin1", false, "1", "1", Collections.emptyMap());
@@ -25,15 +25,14 @@ public class MicrobitConfiguration extends Configuration {
         ConfigurationComponent NO_PORT = new ConfigurationComponent("NO_PORT", false, "NO_PORT", "NO_PORT", Collections.emptyMap());
 
         ArrayList<ConfigurationComponent> components = Lists.newArrayList(pin0, pin1, pin2, pin3, X, Y, Z, STRENGTH, NO_PORT);
-        configuration = new Configuration.Builder().addComponents(components).build();
+        configuration = new ConfigurationAst.Builder().addComponents(components).build();
     }
 
-    public MicrobitConfiguration(Collection<ConfigurationComponent> configurationComponents, float wheelDiameterCM, float trackWidthCM) {
+    private MicrobitConfiguration(Collection<ConfigurationComponent> configurationComponents, float wheelDiameterCM, float trackWidthCM) {
         super(configurationComponents, wheelDiameterCM, trackWidthCM);
-
     }
 
-    public static class Builder extends Configuration.Builder {
+    public static class Builder extends ConfigurationAst.Builder {
 
         @Override
         public Builder addComponents(List<ConfigurationComponent> components) {
@@ -51,7 +50,7 @@ public class MicrobitConfiguration extends Configuration {
         }
 
         @Override
-        public Configuration build() {
+        public ConfigurationAst build() {
             return configuration;
         }
     }

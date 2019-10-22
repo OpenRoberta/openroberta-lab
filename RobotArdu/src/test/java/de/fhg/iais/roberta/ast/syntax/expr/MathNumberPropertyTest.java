@@ -2,23 +2,24 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
+import de.fhg.iais.roberta.syntax.codegen.arduino.arduino.ArduinoAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
+import de.fhg.iais.roberta.worker.codegen.ArduinoCxxGeneratorWorker;
 
-public class MathNumberPropertyTest {
-    private final HelperBotNrollForXmlTest h = new HelperBotNrollForXmlTest();
+public class MathNumberPropertyTest extends ArduinoAstTest {
 
     @Test
     public void Test() throws Exception {
         final String a = "(fmod(0,2)==0)(fmod(0,2)!=0)isPrimeD(0)isWholeD(0)(0>0)(0<0)(fmod(0,0)==0)";
 
-        this.h.assertCodeIsOk(a, "/syntax/math/math_number_property.xml", false);
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/math/math_number_property.xml", new ArduinoCxxGeneratorWorker());
     }
 
     @Test
     public void Test1() throws Exception {
         final String a = "___item=(fmod(0,2)==0);";
 
-        this.h.assertCodeIsOk(a, "/syntax/math/math_number_property1.xml", false);
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/math/math_number_property1.xml", new ArduinoCxxGeneratorWorker());
     }
 
 }

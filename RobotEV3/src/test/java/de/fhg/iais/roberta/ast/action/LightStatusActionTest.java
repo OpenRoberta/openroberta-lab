@@ -1,27 +1,29 @@
 package de.fhg.iais.roberta.ast.action;
 
+import java.util.ArrayList;
+
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.ast.AstTest;
+import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction.Status;
-import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class LightStatusActionTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
+public class LightStatusActionTest extends AstTest {
 
     @Test
     public void make() throws Exception {
         String a = "BlockAST [project=[[Location [x=-8, y=105], LightStatusAction [OFF]]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/actions/action_BrickLightStatus.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/actions/action_BrickLightStatus.xml");
     }
 
     @Test
     public void getStatus() throws Exception {
-        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_BrickLightStatus.xml");
-        LightStatusAction<Void> lsa = (LightStatusAction<Void>) transformer.getTree().get(0).get(1);
+        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_BrickLightStatus.xml");
+        LightStatusAction<Void> lsa = (LightStatusAction<Void>) forest.get(0).get(1);
         Assert.assertEquals(LightStatusAction.Status.OFF, lsa.getStatus());
     }
 
@@ -40,17 +42,17 @@ public class LightStatusActionTest {
     public void brickLightStatus1() throws Exception {
         String a = "BlockAST [project=[[Location [x=-8, y=105], LightStatusAction [RESET]]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/actions/action_BrickLightStatus1.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/actions/action_BrickLightStatus1.xml");
     }
 
     @Test
     public void reverseTransformatin() throws Exception {
-        this.h.assertTransformationIsOk("/ast/actions/action_BrickLightStatus.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/actions/action_BrickLightStatus.xml");
     }
 
     @Test
     public void reverseTransformatin1() throws Exception {
-        this.h.assertTransformationIsOk("/ast/actions/action_BrickLightStatus1.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/actions/action_BrickLightStatus1.xml");
     }
 
 }

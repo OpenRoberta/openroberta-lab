@@ -1,12 +1,11 @@
 package de.fhg.iais.roberta.syntax.action;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
+import de.fhg.iais.roberta.syntax.CalliopeAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class LedOnActionTest {
-    private final HelperCalliopeForXmlTest h = new HelperCalliopeForXmlTest();
+public class LedOnActionTest extends CalliopeAstTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfLedOnActionClass() throws Exception {
@@ -17,27 +16,25 @@ public class LedOnActionTest {
                 + "LedOnAction [ 0, ColorConst [#009900] ], "
                 + "LedOnAction [ 0, ColorConst [#9999ff] ]]]]";
 
-        String result = this.h.generateTransformerString("/action/led_on_three_colors.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/action/led_on_three_colors.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void make_MissingColor_InstanceOfLedOnActionClassWithMissingLedClor() throws Exception {
         String expectedResult = "BlockAST [project=[[Location [x=163, y=62], MainTask [], LedOnAction [ 0, EmptyExpr [defVal=COLOR] ]]]]";
 
-        String result = this.h.generateTransformerString("/action/led_on_missing_color.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/action/led_on_missing_color.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        this.h.assertTransformationIsOk("/action/led_on_three_colors.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/action/led_on_three_colors.xml");
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXMLWithMissingMessage_ReturnsSameXML() throws Exception {
-        this.h.assertTransformationIsOk("/action/led_on_missing_color.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/action/led_on_missing_color.xml");
     }
 }

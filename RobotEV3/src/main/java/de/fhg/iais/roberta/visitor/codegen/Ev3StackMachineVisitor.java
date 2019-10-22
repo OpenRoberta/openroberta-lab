@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
@@ -12,7 +12,11 @@ import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
-import de.fhg.iais.roberta.syntax.*;
+import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.syntax.MotorDuration;
+import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
@@ -34,9 +38,21 @@ import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
-import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
-import de.fhg.iais.roberta.syntax.sensor.generic.*;
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -46,21 +62,10 @@ import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IEv3Visitor<V> {
 
-    private Ev3StackMachineVisitor(Configuration configuration, ArrayList<ArrayList<Phrase<Void>>> phrases, ILanguage language) {
+    public Ev3StackMachineVisitor(ConfigurationAst configuration, ArrayList<ArrayList<Phrase<Void>>> phrases, ILanguage language) {
         super(configuration);
         Assert.isTrue(!phrases.isEmpty());
 
-    }
-
-    public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, ILanguage language) {
-        Assert.isTrue(!phrasesSet.isEmpty());
-        Assert.notNull(brickConfiguration);
-
-        Ev3StackMachineVisitor<Void> astVisitor = new Ev3StackMachineVisitor<>(brickConfiguration, phrasesSet, language);
-        astVisitor.generateCodeFromPhrases(phrasesSet);
-        JSONObject generatedCode = new JSONObject();
-        generatedCode.put(C.OPS, astVisitor.opArray).put(C.FUNCTION_DECLARATION, astVisitor.fctDecls);
-        return generatedCode.toString(2);
     }
 
     @Override
@@ -121,8 +126,8 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitToneAction(ToneAction<V> toneAction) {
-        toneAction.getFrequency().visit(this);
-        toneAction.getDuration().visit(this);
+        toneAction.getFrequency().accept(this);
+        toneAction.getDuration().accept(this);
         JSONObject o = mk(C.TONE_ACTION);
         return app(o);
     }
@@ -150,7 +155,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         if ( volumeAction.getMode() == VolumeAction.Mode.GET ) {
             o = mk(C.GET_VOLUME);
         } else {
-            volumeAction.getVolume().visit(this);
+            volumeAction.getVolume().accept(this);
             o = mk(C.SET_VOLUME_ACTION);
         }
         return app(o);
@@ -165,19 +170,19 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitSayTextAction(SayTextAction<V> sayTextAction) {
-        sayTextAction.getMsg().visit(this);
+        sayTextAction.getMsg().accept(this);
         BlockType emptyBlock = BlockTypeContainer.getByName("EMPTY_EXPR");
         if ( sayTextAction.getSpeed().getKind().equals(emptyBlock) ) {
             NumConst<V> n = NumConst.make("30");
-            n.visit(this);
+            n.accept(this);
         } else {
-            sayTextAction.getSpeed().visit(this);
+            sayTextAction.getSpeed().accept(this);
         }
         if ( sayTextAction.getPitch().getKind().equals(emptyBlock) ) {
             NumConst<V> n = NumConst.make("50");
-            n.visit(this);
+            n.accept(this);
         } else {
-            sayTextAction.getPitch().visit(this);
+            sayTextAction.getPitch().accept(this);
         }
         JSONObject o = mk(C.SAY_TEXT_ACTION);
 
@@ -193,7 +198,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitDriveAction(DriveAction<V> driveAction) {
-        driveAction.getParam().getSpeed().visit(this);
+        driveAction.getParam().getSpeed().accept(this);
         MotorDuration<V> duration = driveAction.getParam().getDuration();
         appendDuration(duration);
         ConfigurationComponent leftMotor = this.configuration.getFirstMotor(SC.LEFT);
@@ -213,7 +218,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitTurnAction(TurnAction<V> turnAction) {
-        turnAction.getParam().getSpeed().visit(this);
+        turnAction.getParam().getSpeed().accept(this);
         MotorDuration<V> duration = turnAction.getParam().getDuration();
         appendDuration(duration);
         ConfigurationComponent leftMotor = this.configuration.getFirstMotor(SC.LEFT);
@@ -234,8 +239,8 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitCurveAction(CurveAction<V> curveAction) {
-        curveAction.getParamLeft().getSpeed().visit(this);
-        curveAction.getParamRight().getSpeed().visit(this);
+        curveAction.getParamLeft().getSpeed().accept(this);
+        curveAction.getParamRight().getSpeed().accept(this);
         MotorDuration<V> duration = curveAction.getParamLeft().getDuration();
         appendDuration(duration);
         ConfigurationComponent leftMotor = this.configuration.getFirstMotor(SC.LEFT);
@@ -262,12 +267,12 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     @Override
     public V visitMotorOnAction(MotorOnAction<V> motorOnAction) {
         boolean isDuration = motorOnAction.getParam().getDuration() != null;
-        motorOnAction.getParam().getSpeed().visit(this);
+        motorOnAction.getParam().getSpeed().accept(this);
         String port = motorOnAction.getUserDefinedPort();
         JSONObject o = mk(C.MOTOR_ON_ACTION).put(C.PORT, port.toLowerCase()).put(C.NAME, port.toLowerCase());
         if ( isDuration ) {
             String durationType = motorOnAction.getParam().getDuration().getType().toString().toLowerCase();
-            motorOnAction.getParam().getDuration().getValue().visit(this);
+            motorOnAction.getParam().getDuration().getValue().accept(this);
             o.put(C.MOTOR_DURATION, durationType);
             app(o);
             return app(mk(C.MOTOR_STOP).put(C.PORT, port.toLowerCase()));
@@ -280,7 +285,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     @Override
     public V visitMotorSetPowerAction(MotorSetPowerAction<V> motorSetPowerAction) {
         String port = motorSetPowerAction.getUserDefinedPort();
-        motorSetPowerAction.getPower().visit(this);
+        motorSetPowerAction.getPower().accept(this);
         JSONObject o = mk(C.MOTOR_SET_POWER).put(C.PORT, port.toLowerCase());
         return app(o);
     }
@@ -294,9 +299,9 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitShowTextAction(ShowTextAction<V> showTextAction) {
-        showTextAction.getY().visit(this);
-        showTextAction.getX().visit(this);
-        showTextAction.getMsg().visit(this);
+        showTextAction.getY().accept(this);
+        showTextAction.getX().accept(this);
+        showTextAction.getMsg().accept(this);
         JSONObject o = mk(C.SHOW_TEXT_ACTION).put(C.NAME, "ev3");
         return app(o);
     }
@@ -456,7 +461,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     @Override
     protected void appendDuration(MotorDuration<V> duration) {
         if ( duration != null ) {
-            duration.getValue().visit(this);
+            duration.getValue().accept(this);
         } else {
             app(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
         }

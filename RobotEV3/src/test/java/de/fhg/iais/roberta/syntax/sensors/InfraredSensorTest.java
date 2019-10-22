@@ -2,15 +2,16 @@ package de.fhg.iais.roberta.syntax.sensors;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.Ev3LejosAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
+import de.fhg.iais.roberta.worker.codegen.Ev3JavaGeneratorWorker;
 
-public class InfraredSensorTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
+public class InfraredSensorTest extends Ev3LejosAstTest {
 
     @Test
     public void setInfrared() throws Exception {
         String a = "\nhal.getInfraredSensorDistance(SensorPort.S4)" + "hal.getInfraredSensorSeek(SensorPort.S3)}";
 
-        this.h.assertCodeIsOk(a, "/syntax/sensors/sensor_setInfrared.xml");
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/sensors/sensor_setInfrared.xml", new Ev3JavaGeneratorWorker());
     }
 }

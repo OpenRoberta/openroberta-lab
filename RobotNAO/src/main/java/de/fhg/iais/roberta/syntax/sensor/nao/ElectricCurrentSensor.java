@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.syntax.sensor.nao;
 
+import org.checkerframework.checker.units.qual.degrees;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -37,7 +39,7 @@ public final class ElectricCurrentSensor<V> extends ExternalSensor<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((INaoVisitor<V>) visitor).visitElectricCurrent(this);
     }
 

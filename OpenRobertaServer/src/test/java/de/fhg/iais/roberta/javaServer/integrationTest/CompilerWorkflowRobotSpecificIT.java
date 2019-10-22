@@ -30,8 +30,8 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.Export;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.javaServer.restServices.all.ClientAdmin;
-import de.fhg.iais.roberta.javaServer.restServices.all.ClientProgram;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.ProjectWorkflowRestController;
 import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
@@ -84,7 +84,7 @@ public class CompilerWorkflowRobotSpecificIT {
     @Mock
     private SessionFactoryWrapper sessionFactoryWrapper;
 
-    private ClientProgram restProgram;
+    private ProjectWorkflowRestController restWorkflow;
     private ClientAdmin restAdmin;
 
     @BeforeClass
@@ -108,7 +108,7 @@ public class CompilerWorkflowRobotSpecificIT {
         JSONObject testSpecification = Util1.loadYAML("classpath:" + resourceBase + "testSpec.yml");
         robots = testSpecification.getJSONObject("robots");
 
-        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, robotCommunicator, serverProperties);
+        this.restWorkflow = new ProjectWorkflowRestController(this.robotCommunicator);
         this.restAdmin = new ClientAdmin(robotCommunicator, serverProperties);
         when(this.sessionFactoryWrapper.getSession()).thenReturn(this.dbSession);
         doNothing().when(this.dbSession).commit();
@@ -193,7 +193,7 @@ public class CompilerWorkflowRobotSpecificIT {
             boolean result = false;
             org.codehaus.jettison.json.JSONObject entity = null;
             if ( CROSSCOMPILER_CALL ) {
-                org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'runPBack','name':'prog','language':'de'}");
+                org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'runPBack','programName':'prog','language':'de'}");
 
                 String xmlText = Util1.readResourceContent(fullResource);
                 String programText = null;
@@ -201,10 +201,10 @@ public class CompilerWorkflowRobotSpecificIT {
                 Export jaxbImportExport = JaxbHelper.xml2Element(xmlText, Export.class);
                 programText = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
                 configText = JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet());
-                cmd.getJSONObject("data").put("programText", programText);
-                cmd.getJSONObject("data").put("configurationText", configText);
+                cmd.getJSONObject("data").put("programBlockSet", programText);
+                cmd.getJSONObject("data").put("configurationBlockSet", configText);
 
-                Response response = this.restProgram.command(httpSessionState, cmd);
+                Response response = this.restWorkflow.compileProgram(this.httpSessionState, cmd);
                 entity = checkEntityRc(response, expectResult, "ORA_PROGRAM_INVALID_STATEMETNS");
                 result = entity != null;
                 if ( result && robotName.equals("wedo") ) {
@@ -245,7 +245,7 @@ public class CompilerWorkflowRobotSpecificIT {
                 org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileN','name':'" + resource + "','language':'de'}");
                 String fileContent = Util1.readResourceContent(fullResource);
                 cmd.getJSONObject("data").put("programText", fileContent);
-                Response response = this.restProgram.command(httpSessionState, cmd);
+                Response response = this.restWorkflow.runNative(this.httpSessionState, cmd);
                 result = checkEntityRc(response, expectResult) != null;
             } else {
                 result = true;

@@ -1,14 +1,10 @@
 package de.fhg.iais.roberta.codegen;
 
-import java.util.List;
-import java.util.Map;
-
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.visitor.IVisitor;
 
 public interface ICompilerWorkflow {
 
@@ -23,7 +19,7 @@ public interface ICompilerWorkflow {
      * @param language locale to be used for messages
      * @return the generated source code; null in case of an error
      */
-    void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language);
+    void generateSourceCode(String token, String programName, Project transformer, ILanguage language);
 
     /**
      * - take the program, configuration, SSID and password for WLAN (require, that these are without errors)<br>
@@ -39,14 +35,8 @@ public interface ICompilerWorkflow {
      * @return the generated source code; null in case of an error
      */
 
-    default void generateSourceCode(
-        String token,
-        String programName,
-        BlocklyProgramAndConfigTransformer transformer,
-        String SSID,
-        String password,
-        ILanguage language) {
-        return;
+    default void generateSourceCode(String token, String programName, Project transformer, String SSID, String password, ILanguage language) {
+        generateSourceCode(token, programName, transformer, language);
     }
 
     /**
@@ -82,7 +72,7 @@ public interface ICompilerWorkflow {
      * @param language the locale to be used for messages
      * @return a message key in case of an error; null otherwise
      */
-    void generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language);
+    void generateSourceAndCompile(String token, String programName, Project transformer, ILanguage language);
 
     /**
      * return the robot configuration for a given XML configuration text.
@@ -90,7 +80,7 @@ public interface ICompilerWorkflow {
      * @param blocklyXml the configuration XML as String
      * @return robot configuration
      */
-    Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception;
+    ConfigurationAst generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception;
 
     /**
      * return the compilation result. This is needed for some robots (e.g. arduino). Some implementations return null.
@@ -120,20 +110,4 @@ public interface ICompilerWorkflow {
      * get the response string from the crosscompiler. May be null if the compilation succeeded.
      */
     String getCrosscompilerResponse();
-
-    /**
-     * returns a list of visitors for program and configuration validation loaded by names given in property files
-     */
-
-    default void loadValidatorVisitors(Configuration configuration) {
-    }
-
-    default List<IVisitor<Void>> getValidatorVisitors() {
-        return null;
-    }
-
-    default Map<String, String> getValidationResults() {
-        return null;
-    }
-
 }

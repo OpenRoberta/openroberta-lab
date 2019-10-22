@@ -2,14 +2,19 @@ package de.fhg.iais.roberta.visitor.validate;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.MoveAction;
-import de.fhg.iais.roberta.syntax.action.communication.*;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
@@ -29,17 +34,40 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
-import de.fhg.iais.roberta.syntax.lang.expr.*;
-import de.fhg.iais.roberta.syntax.lang.functions.*;
+import de.fhg.iais.roberta.syntax.lang.expr.Binary;
+import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
+import de.fhg.iais.roberta.syntax.lang.expr.Unary;
+import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
+import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.*;
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.hardware.actor.IAllActorsVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
@@ -48,29 +76,11 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     protected ArrayList<ArrayList<Phrase<Void>>> checkedProgram;
     protected int errorCount = 0;
     protected int warningCount = 0;
-    protected Configuration robotConfiguration;
+    protected ConfigurationAst robotConfiguration;
 
-    public AbstractProgramValidatorVisitor(Configuration robotConfiguration) {
+    public AbstractProgramValidatorVisitor(UsedHardwareBean.Builder builder, ConfigurationAst robotConfiguration) {
+        super(builder);
         this.robotConfiguration = robotConfiguration;
-    }
-
-    @Override
-    public void check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        Assert.isTrue(!phrasesSet.isEmpty());
-        collectGlobalVariables(phrasesSet);
-        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-            for ( Phrase<Void> phrase : phrases ) {
-                phrase.visit(this);
-            }
-        }
-        this.checkedProgram = phrasesSet;
-    }
-
-    /**
-     * @return the checkedProgram
-     */
-    public ArrayList<ArrayList<Phrase<Void>>> getCheckedProgram() {
-        return this.checkedProgram;
     }
 
     /**
@@ -92,7 +102,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     @Override
     public Void visitVar(Var<Void> var) {
         String name = var.getValue();
-        if ( !this.declaredVariables.contains(name) ) {
+        if ( !this.builder.containsDeclaredVariable(name) ) {
             var.addInfo(NepoInfo.error("VARIABLE_USED_BEFORE_DECLARATION"));
             this.errorCount++;
         }
@@ -103,7 +113,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         checkDiffDrive(driveAction);
         Expr<Void> speed = driveAction.getParam().getSpeed();
-        speed.visit(this);
+        speed.accept(this);
         MotorDuration<Void> duration = driveAction.getParam().getDuration();
         if ( duration != null ) {
             checkForZeroSpeed(speed, driveAction);
@@ -116,7 +126,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     public Void visitTurnAction(TurnAction<Void> turnAction) {
         checkDiffDrive(turnAction);
         Expr<Void> speed = turnAction.getParam().getSpeed();
-        speed.visit(this);
+        speed.accept(this);
         MotorDuration<Void> duration = turnAction.getParam().getDuration();
         if ( duration != null ) {
             checkForZeroSpeed(speed, turnAction);
@@ -133,7 +143,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        motorOnAction.getParam().getSpeed().visit(this);
+        motorOnAction.getParam().getSpeed().accept(this);
         checkMotorPort(motorOnAction);
         MotorDuration<Void> duration = motorOnAction.getParam().getDuration();
         if ( duration != null ) {
@@ -146,7 +156,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         checkMotorPort(motorSetPowerAction);
-        motorSetPowerAction.getPower().visit(this);
+        motorSetPowerAction.getPower().accept(this);
         return null;
     }
 
@@ -181,8 +191,8 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     public Void visitCurveAction(CurveAction<Void> driveAction) {
         visitMotorDuration(driveAction.getParamLeft().getDuration());
         visitMotorDuration(driveAction.getParamRight().getDuration());
-        driveAction.getParamLeft().getSpeed().visit(this);
-        driveAction.getParamRight().getSpeed().visit(this);
+        driveAction.getParamLeft().getSpeed().accept(this);
+        driveAction.getParamRight().getSpeed().accept(this);
         checkDiffDrive(driveAction);
         checkForZeroSpeedInCurve(driveAction.getParamLeft().getSpeed(), driveAction.getParamRight().getSpeed(), driveAction);
 
@@ -260,8 +270,8 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        toneAction.getDuration().visit(this);
-        toneAction.getFrequency().visit(this);
+        toneAction.getDuration().accept(this);
+        toneAction.getFrequency().accept(this);
         return null;
     }
 
@@ -272,7 +282,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
 
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        volumeAction.getVolume().visit(this);
+        volumeAction.getVolume().accept(this);
         return null;
     }
 
@@ -283,9 +293,9 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
 
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        sayTextAction.getMsg().visit(this);
-        sayTextAction.getSpeed().visit(this);
-        sayTextAction.getPitch().visit(this);
+        sayTextAction.getMsg().accept(this);
+        sayTextAction.getSpeed().accept(this);
+        sayTextAction.getPitch().accept(this);
         return null;
     }
 
@@ -311,9 +321,9 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        showTextAction.getMsg().visit(this);
-        showTextAction.getX().visit(this);
-        showTextAction.getY().visit(this);
+        showTextAction.getMsg().accept(this);
+        showTextAction.getX().accept(this);
+        showTextAction.getY().accept(this);
         return null;
     }
 
@@ -323,13 +333,13 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
             bluetoothReceiveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
             this.errorCount++;
         }
-        bluetoothReceiveAction.getConnection().visit(this);
+        bluetoothReceiveAction.getConnection().accept(this);
         return null;
     }
 
     @Override
     public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
-        bluetoothConnectAction.getAddress().visit(this);
+        bluetoothConnectAction.getAddress().accept(this);
         return null;
     }
 
@@ -339,8 +349,8 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
             bluetoothSendAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
             this.errorCount++;
         }
-        bluetoothSendAction.getConnection().visit(this);
-        bluetoothSendAction.getMsg().visit(this);
+        bluetoothSendAction.getConnection().accept(this);
+        bluetoothSendAction.getMsg().accept(this);
         return null;
     }
 
@@ -351,13 +361,13 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
 
     @Override
     public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
-        bluetoothCheckConnectAction.getConnection().visit(this);
+        bluetoothCheckConnectAction.getConnection().accept(this);
         return null;
     }
 
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
-        serialWriteAction.getValue().visit(this);
+        serialWriteAction.getValue().accept(this);
         return null;
     }
 
@@ -454,7 +464,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
 
     private void visitMotorDuration(MotorDuration<Void> duration) {
         if ( duration != null ) {
-            duration.getValue().visit(this);
+            duration.getValue().accept(this);
         }
     }
 

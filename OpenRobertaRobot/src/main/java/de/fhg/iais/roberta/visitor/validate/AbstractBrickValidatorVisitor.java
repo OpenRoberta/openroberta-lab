@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.visitor.validate;
 
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction.Mode;
@@ -9,8 +10,8 @@ import de.fhg.iais.roberta.typecheck.NepoInfo;
 
 public abstract class AbstractBrickValidatorVisitor extends AbstractProgramValidatorVisitor {
 
-    public AbstractBrickValidatorVisitor(Configuration brickConfiguration) {
-        super(brickConfiguration);
+    public AbstractBrickValidatorVisitor(UsedHardwareBean.Builder builder, ConfigurationAst brickConfiguration) {
+        super(builder, brickConfiguration);
     }
 
     @Override
@@ -85,7 +86,7 @@ public abstract class AbstractBrickValidatorVisitor extends AbstractProgramValid
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         if ( volumeAction.getMode() == Mode.SET ) {
-            volumeAction.getVolume().visit(this);
+            volumeAction.getVolume().accept(this);
         }
         return null;
     }

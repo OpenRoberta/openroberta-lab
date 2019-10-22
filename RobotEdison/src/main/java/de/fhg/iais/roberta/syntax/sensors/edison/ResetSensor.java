@@ -55,7 +55,7 @@ public class ResetSensor<V> extends Sensor<V> {
      * @param visitor
      */
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((IEdisonVisitor<V>) visitor).visitSensorResetAction(this);
     }
 

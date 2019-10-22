@@ -2,16 +2,19 @@ package de.fhg.iais.roberta.syntax.expr;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.Ev3LejosAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
+import de.fhg.iais.roberta.worker.codegen.Ev3JavaGeneratorWorker;
 
-public class TextJoinTextTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
+public class TextJoinTextTest extends Ev3LejosAstTest {
 
     @Test
     public void Test() throws Exception {
-        String a = "BlocklyMethods.textJoin(0, 0, \"a\", \"b\", true, hal.isPressed(SensorPort.S1))}";
+        String a =
+            "String.valueOf(0)+String.valueOf(0)+String.valueOf(\"a\")+String.valueOf"
+                + "(\"b\") + String.valueOf(true)+String.valueOf(hal.isPressed(SensorPort.S1))}";
 
-        this.h.assertCodeIsOk(a, "/syntax/text/text_join.xml");
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/text/text_join.xml", new Ev3JavaGeneratorWorker());
     }
 
 }

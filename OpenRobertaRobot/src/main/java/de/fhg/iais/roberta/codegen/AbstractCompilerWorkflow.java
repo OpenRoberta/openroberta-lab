@@ -17,9 +17,10 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -29,7 +30,7 @@ public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
 
     protected final PluginProperties pluginProperties;
 
-    protected Key workflowResult = Key.COMPILERWORKFLOW_SUCCESS;
+    protected Key workflowResult;// = Key.COMPILERWORKFLOW_SUCCESS;
     protected String crosscompilerResponse = "";
     protected String generatedSourceCode = null;
 
@@ -38,7 +39,7 @@ public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
     }
 
     @Override
-    public void generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language) {
+    public void generateSourceAndCompile(String token, String programName, Project transformer, ILanguage language) {
         generateSourceCode(token, programName, transformer, language);
         if ( this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
             compileSourceCode(token, programName, language, null);
@@ -71,8 +72,9 @@ public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
      * @param executableWithParameters
      * @return true, when the crosscompiler succeeds; false, otherwise
      */
-    protected final boolean runCrossCompiler(String[] executableWithParameters) {
+    public static Pair<Boolean, String> runCrossCompiler(String[] executableWithParameters) {
         int ecode = -1;
+        String crosscompilerResponse;
         try {
             ProcessBuilder procBuilder = new ProcessBuilder(executableWithParameters);
             procBuilder.redirectErrorStream(true);
@@ -82,21 +84,19 @@ public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
             final BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
             StringJoiner sj = new StringJoiner(System.getProperty("line.separator"));
             reader.lines().iterator().forEachRemaining(sj::add);
-            this.crosscompilerResponse = sj.toString();
+            crosscompilerResponse = sj.toString();
             ecode = p.waitFor();
             p.destroy();
         } catch ( Exception e ) {
-            this.crosscompilerResponse = "exception when calling the cross compiler";
-            LOG.error(this.crosscompilerResponse, e);
+            crosscompilerResponse = "exception when calling the cross compiler";
+            LOG.error(crosscompilerResponse, e);
             ecode = -1;
         }
-        LOG.error("DEBUG INFO: " + this.crosscompilerResponse);
-        if ( ecode == 0 ) {
-            return true;
-        } else {
-            LOG.error("compilation of program failed with message: \n" + this.crosscompilerResponse);
-            return false;
+        LOG.debug("DEBUG INFO: " + crosscompilerResponse);
+        if ( ecode != 0 ) {
+            LOG.info("compilation of program failed with message: \n" + crosscompilerResponse);
         }
+        return Pair.of(ecode == 0, crosscompilerResponse);
     }
 
     /**
@@ -145,7 +145,7 @@ public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
         }
     }
 
-    protected final String getBase64EncodedHex(String path) {
+    public static final String getBase64EncodedHex(String path) {
         try {
             String compiledHex = FileUtils.readFileToString(new File(path), "UTF-8");
             final Base64.Encoder urec = Base64.getEncoder();
@@ -157,7 +157,7 @@ public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
         }
     }
 
-    protected final String getBase64EncodedBinary(String path) {
+    public static String getBase64EncodedBinary(String path) {
         try {
             byte[] compiledBin = FileUtils.readFileToByteArray(new File(path));
             final Base64.Encoder urec = Base64.getEncoder();

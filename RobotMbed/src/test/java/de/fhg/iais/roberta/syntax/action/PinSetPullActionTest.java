@@ -1,12 +1,11 @@
 package de.fhg.iais.roberta.syntax.action;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
+import de.fhg.iais.roberta.syntax.CalliopeAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class PinSetPullActionTest {
-    private final HelperCalliopeForXmlTest h = new HelperCalliopeForXmlTest();
+public class PinSetPullActionTest extends CalliopeAstTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfPinValueSensorClass() throws Exception {
@@ -17,14 +16,13 @@ public class PinSetPullActionTest {
                 + "PinSetPullAction [DOWN, 1], "
                 + "PinSetPullAction [NONE, 2]]]]";
 
-        String result = this.h.generateTransformerString("/action/pin_set_pull.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/action/pin_set_pull.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        this.h.assertTransformationIsOk("/action/pin_set_pull.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/action/pin_set_pull.xml");
     }
 
 }

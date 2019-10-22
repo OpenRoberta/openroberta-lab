@@ -1,13 +1,12 @@
 package de.fhg.iais.roberta.syntax.functions;
 
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
+import de.fhg.iais.roberta.syntax.CalliopeAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class ImageShiftFunctionTest {
-    private final HelperCalliopeForXmlTest h = new HelperCalliopeForXmlTest();
+public class ImageShiftFunctionTest extends CalliopeAstTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfImageShiftFunctionClass() throws Exception {
@@ -17,9 +16,8 @@ public class ImageShiftFunctionTest {
                 + "DisplayImageAction [IMAGE, FunctionExpr [ImageShiftFunction [PredefinedImage [SILLY], NumConst [2], DOWN]]"
                 + "]]]]";
 
-        String result = this.h.generateTransformerString("/function/image_shift_up_down.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/function/image_shift_up_down.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
@@ -29,18 +27,17 @@ public class ImageShiftFunctionTest {
                 + "DisplayImageAction [IMAGE, FunctionExpr [ImageShiftFunction [EmptyExpr [defVal=PREDEFINED_IMAGE], EmptyExpr [defVal=NUMBER_INT], UP]]]"
                 + "]]]";
 
-        String result = this.h.generateTransformerString("/function/image_shift_missing_image_and_position.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/function/image_shift_missing_image_and_position.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        this.h.assertTransformationIsOk("/function/image_shift_up_down.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/function/image_shift_up_down.xml");
     }
 
     @Ignore
     public void astToBlock_XMLtoJAXBtoASTtoXMLWithMissingImagePosition_ReturnsSameXML() throws Exception {
-        this.h.assertTransformationIsOk("/function/image_shift_missing_image_and_position.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/function/image_shift_missing_image_and_position.xml");
     }
 }

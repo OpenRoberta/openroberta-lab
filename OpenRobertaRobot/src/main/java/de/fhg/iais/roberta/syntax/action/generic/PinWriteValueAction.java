@@ -90,7 +90,7 @@ public class PinWriteValueAction<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((IPinVisitor<V>) visitor).visitPinWriteValueAction(this);
     }
 

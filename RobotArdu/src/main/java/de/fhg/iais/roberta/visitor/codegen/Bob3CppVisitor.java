@@ -1,10 +1,10 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
-import java.util.Set;
 
-import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.UsedSensor;
+import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
@@ -28,7 +28,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.collect.Bob3UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IBob3Visitor;
 
 /**
@@ -36,37 +35,14 @@ import de.fhg.iais.roberta.visitor.hardware.IBob3Visitor;
  * <b>This representation is correct C code for Arduino.</b> <br>
  */
 public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implements IBob3Visitor<Void> {
-    private final boolean isTimerSensorUsed;
-    private boolean isListUsed;
-    private final Set<UsedSensor> usedTimer;
 
     /**
      * Initialize the C++ code generator visitor.
      *
-     * @param brickConfiguration hardware configuration of the brick
-     * @param programPhrases to generate the code from
-     * @param indentation to start with. Will be incr/decr depending on block structure
+     * @param phrases to generate the code from
      */
-    private Bob3CppVisitor(ArrayList<ArrayList<Phrase<Void>>> phrases, int indentation) {
-        super(new Configuration.Builder().build(), phrases, indentation);
-        Bob3UsedHardwareCollectorVisitor codePreprocessVisitor = new Bob3UsedHardwareCollectorVisitor(phrases);
-        this.usedVars = codePreprocessVisitor.getVisitedVars();
-        this.isTimerSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
-        this.usedTimer = codePreprocessVisitor.getTimer();
-        this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
-    }
-
-    /**
-     * factory method to generate C++ code from an AST.<br>
-     *
-     * @param brickConfiguration hardware configuration of the brick
-     * @param programPhrases to generate the code from
-     * @param withWrapping if false the generated code will be without the surrounding configuration code
-     */
-    public static String generate(ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
-        Bob3CppVisitor astVisitor = new Bob3CppVisitor(programPhrases, withWrapping ? 1 : 0);
-        astVisitor.generateCode(withWrapping);
-        return astVisitor.sb.toString();
+    public Bob3CppVisitor(UsedHardwareBean usedHardwareBean, CodeGeneratorSetupBean codeGeneratorSetupBean, ArrayList<ArrayList<Phrase<Void>>> phrases) {
+        super(usedHardwareBean, codeGeneratorSetupBean, new ConfigurationAst.Builder().build(), phrases);
     }
 
     @Override
@@ -126,9 +102,9 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         decrIndentation();
-        mainTask.getVariables().visit(this);
+        mainTask.getVariables().accept(this);
         nlIndent();
-        if ( this.isTimerSensorUsed || this.usedTimer.toString().contains("TIMER") ) {
+        if ( this.usedHardwareBean.isTimerSensorUsed() ) {
             this.sb.append("unsigned long __time = millis();");
             nlIndent();
         }
@@ -152,12 +128,13 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
         if ( !withWrapping ) {
             return;
         }
-        for ( VarDeclaration<Void> var : this.usedVars ) {
+        boolean isListUsed = false;
+        for ( VarDeclaration<Void> var : this.usedHardwareBean.getVisitedVars() ) {
             if ( var.getVarType().toString().contains("ARRAY") ) {
-                this.isListUsed = true;
+                isListUsed = true;
             }
         }
-        if ( this.isListUsed ) {
+        if ( isListUsed ) {
             this.sb.append("#include <ArduinoSTL.h>\n");
             this.sb.append("#include <list>\n");
         }
@@ -194,7 +171,7 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
         } else {
             this.sb.append("EYE_1, ");
         }
-        ledOnAction.getLedColor().visit(this);
+        ledOnAction.getLedColor().accept(this);
         this.sb.append(");");
         return null;
     }
@@ -227,7 +204,7 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
     @Override
     public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
         this.sb.append("rob.transmitIRCode(");
-        sendIRAction.getCode().visit(this);
+        sendIRAction.getCode().accept(this);
         this.sb.append(");");
         return null;
     }
@@ -240,14 +217,14 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitBob3GetSampleSensor(GetSampleSensor<Void> getSampleSensor) {
-        getSampleSensor.getSensor().visit(this);
+        getSampleSensor.getSensor().accept(this);
         return null;
     }
 
     @Override
     public Void visitRememberAction(RememberAction<Void> rememberAction) {
         this.sb.append("remember((int)(");
-        rememberAction.getCode().visit(this);
+        rememberAction.getCode().accept(this);
         this.sb.append("));");
         return null;
     }
@@ -284,11 +261,11 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
         this.sb.append("_CLAMP(");
-        mathConstrainFunct.getParam().get(0).visit(this);
+        mathConstrainFunct.getParam().get(0).accept(this);
         this.sb.append(", ");
-        mathConstrainFunct.getParam().get(1).visit(this);
+        mathConstrainFunct.getParam().get(1).accept(this);
         this.sb.append(", ");
-        mathConstrainFunct.getParam().get(2).visit(this);
+        mathConstrainFunct.getParam().get(2).accept(this);
         this.sb.append(")");
         return null;
     }

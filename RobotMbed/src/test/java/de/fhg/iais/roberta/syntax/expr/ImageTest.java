@@ -1,12 +1,11 @@
 package de.fhg.iais.roberta.syntax.expr;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
+import de.fhg.iais.roberta.syntax.CalliopeAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class ImageTest {
-    private final HelperCalliopeForXmlTest h = new HelperCalliopeForXmlTest();
+public class ImageTest extends CalliopeAstTest {
 
     @Test
     public void make_ByDefault_ReturnInstancesOfImageClass() throws Exception {
@@ -19,14 +18,13 @@ public class ImageTest {
                 + "[  ,   ,   , #,   ]\n"
                 + "[  , 2,   ,   ,   ]"
                 + "]]]]]";
-        String result = this.h.generateTransformerString("/expr/image_create.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/expr/image_create.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        this.h.assertTransformationIsOk("/expr/image_create.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/expr/image_create.xml");
     }
 
 }

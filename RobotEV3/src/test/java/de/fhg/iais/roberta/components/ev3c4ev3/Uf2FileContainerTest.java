@@ -8,7 +8,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class Uf2FileContainerTest {

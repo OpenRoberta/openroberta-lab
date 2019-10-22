@@ -37,7 +37,7 @@ public interface IEdisonCollectorVisitor extends ICollectorVisitor, IEdisonVisit
 
     @Override
     default Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
-        sendIRAction.getCode().visit(this);
+        sendIRAction.getCode().accept(this);
         return null;
     }
 

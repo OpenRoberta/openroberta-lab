@@ -1,4 +1,4 @@
-include: "classpath:/helperMethodsCommon.yml"
+include: "classpath:/common.methods.yml"
 
 RANDOM:
   PYTHON: |

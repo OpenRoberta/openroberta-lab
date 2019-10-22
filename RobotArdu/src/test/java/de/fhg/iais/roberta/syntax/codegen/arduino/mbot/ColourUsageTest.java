@@ -2,10 +2,10 @@ package de.fhg.iais.roberta.syntax.codegen.arduino.mbot;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ardu.HelperMBotForXmlTest;
+import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class ColourUsageTest {
-    private final HelperMBotForXmlTest h = new HelperMBotForXmlTest();
+public class ColourUsageTest extends MbotAstTest {
 
     @Test
     public void colourUsageTest() throws Exception {
@@ -51,7 +51,13 @@ public class ColourUsageTest {
             .append("_meRgbLed.setColor(1, 0, 0, 0);")
             .append("_meRgbLed.show();")
             .append("}");
-        this.h.assertCodeIsOk(correctCode.toString(), "/ast/colour/mbot_colours.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                correctCode.toString(),
+                "/ast/colour/mbot_colours.xml",
+                new ConfigurationAst.Builder().build(),
+                true);
     }
 
 }

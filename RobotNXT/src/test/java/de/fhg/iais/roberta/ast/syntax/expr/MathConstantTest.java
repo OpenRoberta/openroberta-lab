@@ -2,10 +2,10 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
+import de.fhg.iais.roberta.NxtAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class MathConstantTest {
-    private final HelperNxtForXmlTest h = new HelperNxtForXmlTest();
+public class MathConstantTest extends NxtAstTest {
 
     @Test
     public void Test() throws Exception {
@@ -13,7 +13,7 @@ public class MathConstantTest {
         String a = "PIEGOLDEN_RATIOSQRT2SQRT1_2INFINITY";
         //"Float.POSITIVE_INFINITY";
 
-        this.h.assertCodeIsOk(a, "/syntax/math/math_constant.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/math/math_constant.xml", false);
     }
 
     //ignore
@@ -21,7 +21,7 @@ public class MathConstantTest {
 
         final String a = "RotateMotor(B,PI,360.0*((1.0+sqrt(5.0))/2.0)))";
 
-        this.h.assertCodeIsOk(a, "/syntax/math/math_constant1.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/math/math_constant1.xml", false);
     }
 
 }

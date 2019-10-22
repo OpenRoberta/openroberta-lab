@@ -1,0 +1,25 @@
+{
+  "ops": [
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "30"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "1000"
+    },
+    {
+      "opc": "motorOnAction",
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "motorStop",
+      "port": "1",
+      "name": "W"
+    }
+  ],
+  "functionDeclaration": {}
+}

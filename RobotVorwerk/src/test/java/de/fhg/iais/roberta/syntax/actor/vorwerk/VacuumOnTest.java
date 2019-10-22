@@ -1,24 +1,22 @@
 package de.fhg.iais.roberta.syntax.actor.vorwerk;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.vorwerk.HelperVorwerkForXmlTest;
+import de.fhg.iais.roberta.syntax.VorwerkAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class VacuumOnTest {
-    private final HelperVorwerkForXmlTest h = new HelperVorwerkForXmlTest();
+public class VacuumOnTest extends VorwerkAstTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfAnimationClass() throws Exception {
         String expectedResult = "BlockAST [project=[[Location [x=384, y=50], " + "MainTask [], VacuumOn [NumConst [60]]]]]";
 
-        String result = this.h.generateTransformerString("/actors/vacuum_on.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/actors/vacuum_on.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        this.h.assertTransformationIsOk("/actors/vacuum_on.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/actors/vacuum_on.xml");
     }
 }

@@ -2,16 +2,16 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
+import de.fhg.iais.roberta.NxtAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class ListsEmptyListTest {
-    private final HelperNxtForXmlTest h = new HelperNxtForXmlTest();
+public class ListsEmptyListTest extends NxtAstTest {
 
     @Test
     public void Test() throws Exception {
         String a = "";
 
-        this.h.assertCodeIsOk(a, "/syntax/lists/lists_empty_list.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/lists/lists_empty_list.xml", false);
     }
 
 }

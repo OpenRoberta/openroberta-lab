@@ -37,7 +37,7 @@ public final class WallSensor<V> extends ExternalSensor<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((IVorwerkVisitor<V>) visitor).visitWallSensor(this);
     }
 

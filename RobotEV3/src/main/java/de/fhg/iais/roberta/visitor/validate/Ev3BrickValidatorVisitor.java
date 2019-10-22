@@ -2,7 +2,8 @@ package de.fhg.iais.roberta.visitor.validate;
 
 import java.util.List;
 
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
@@ -18,8 +19,8 @@ import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 
 public final class Ev3BrickValidatorVisitor extends AbstractBrickValidatorVisitor implements IEv3Visitor<Void> {
 
-    public Ev3BrickValidatorVisitor(Configuration brickConfiguration) {
-        super(brickConfiguration);
+    public Ev3BrickValidatorVisitor(UsedHardwareBean.Builder builder, ConfigurationAst brickConfiguration) {
+        super(builder, brickConfiguration);
     }
 
     @Override
@@ -84,8 +85,8 @@ public final class Ev3BrickValidatorVisitor extends AbstractBrickValidatorVisito
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        showPictureAction.getX().visit(this);
-        showPictureAction.getY().visit(this);
+        showPictureAction.getX().accept(this);
+        showPictureAction.getY().accept(this);
         return null;
     }
 }

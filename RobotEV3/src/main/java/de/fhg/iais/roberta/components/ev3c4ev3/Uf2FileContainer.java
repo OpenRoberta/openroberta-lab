@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.components.ev3c4ev3;
 
-import org.apache.commons.io.FileUtils;
+import static de.fhg.iais.roberta.components.ev3c4ev3.ByteUtils.setBytes;
+import static de.fhg.iais.roberta.components.ev3c4ev3.ByteUtils.setWord;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,8 +10,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
-import static de.fhg.iais.roberta.components.ev3c4ev3.ByteUtils.setBytes;
-import static de.fhg.iais.roberta.components.ev3c4ev3.ByteUtils.setWord;
+import org.apache.commons.io.FileUtils;
 
 /**
  * Represent a UF2 file in 'file container' mode.
@@ -25,7 +25,6 @@ public class Uf2FileContainer {
      * The advantage of a smalled UF2 is a shorter upload time to the robot using USB (which is slow, ~10 sec for 1MB file).
      * the payload max length is 476, but we have to put the file name a the end.
      * A payload of 400 bytes seems reasonable to have a smaller file and still allowing long file names.
-     *
      */
     //private static final int UF2_BLOCK_PAYLOAD_SIZE = 256;
     private static final int UF2_BLOCK_PAYLOAD_SIZE = 400;

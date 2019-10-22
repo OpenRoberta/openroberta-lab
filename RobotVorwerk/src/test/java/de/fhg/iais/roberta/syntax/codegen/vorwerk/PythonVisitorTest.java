@@ -1,14 +1,13 @@
 package de.fhg.iais.roberta.syntax.codegen.vorwerk;
 
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.components.vorwerk.VorwerkConfiguration;
-import de.fhg.iais.roberta.util.test.vorwerk.HelperVorwerkForXmlTest;
+import de.fhg.iais.roberta.syntax.VorwerkAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class PythonVisitorTest {
-    private final HelperVorwerkForXmlTest h = new HelperVorwerkForXmlTest();
+public class PythonVisitorTest extends VorwerkAstTest {
 
     private static final String IMPORTS =
         "" //
@@ -57,7 +56,8 @@ public class PythonVisitorTest {
                 + "\n"
                 + MAIN_METHOD;
 
-        assertCodeIsOk(expectedResult, "/sensors/touch.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensors/touch.xml", brickConfiguration, true);
+        ;
     }
 
     @Test
@@ -81,7 +81,9 @@ public class PythonVisitorTest {
                 + "\n"
                 + MAIN_METHOD;
 
-        assertCodeIsOk(expectedResult, "/sensors/ultrasonic.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensors/ultrasonic.xml", brickConfiguration, true);
+        ;
     }
 
     @Test
@@ -99,7 +101,9 @@ public class PythonVisitorTest {
                 + "\n"
                 + MAIN_METHOD;
 
-        assertCodeIsOk(expectedResult, "/sensors/accelerometer.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensors/accelerometer.xml", brickConfiguration, true);
+        ;
     }
 
     @Test
@@ -116,7 +120,9 @@ public class PythonVisitorTest {
                 + "\n"
                 + MAIN_METHOD;
 
-        assertCodeIsOk(expectedResult, "/sensors/drop_off.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensors/drop_off.xml", brickConfiguration, true);
+        ;
     }
 
     @Test
@@ -132,7 +138,8 @@ public class PythonVisitorTest {
                 + "\n"
                 + MAIN_METHOD;
 
-        assertCodeIsOk(expectedResult, "/sensors/wall.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensors/wall.xml", brickConfiguration, true);
+        ;
     }
 
     @Test
@@ -147,7 +154,8 @@ public class PythonVisitorTest {
                 + "\n"
                 + MAIN_METHOD;
 
-        assertCodeIsOk(expectedResult, "/actors/drive.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/actors/drive.xml", brickConfiguration, true);
+        ;
     }
 
     @Test
@@ -161,7 +169,8 @@ public class PythonVisitorTest {
                 + "\n"
                 + MAIN_METHOD;
 
-        assertCodeIsOk(expectedResult, "/actors/stop.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/actors/stop.xml", brickConfiguration, true);
+        ;
     }
 
     @Test
@@ -178,7 +187,9 @@ public class PythonVisitorTest {
                 + "\n"
                 + MAIN_METHOD;
 
-        assertCodeIsOk(expectedResult, "/actors/play_sound.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/actors/play_sound.xml", brickConfiguration, true);
+        ;
     }
 
     @Test
@@ -192,7 +203,9 @@ public class PythonVisitorTest {
                 + "\n"
                 + MAIN_METHOD;
 
-        assertCodeIsOk(expectedResult, "/actors/brush_on.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/actors/brush_on.xml", brickConfiguration, true);
+        ;
     }
 
     @Test
@@ -206,7 +219,9 @@ public class PythonVisitorTest {
                 + "\n"
                 + MAIN_METHOD;
 
-        assertCodeIsOk(expectedResult, "/actors/brush_off.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/actors/brush_off.xml", brickConfiguration, true);
+        ;
     }
 
     @Test
@@ -220,7 +235,9 @@ public class PythonVisitorTest {
                 + "\n"
                 + MAIN_METHOD;
 
-        assertCodeIsOk(expectedResult, "/actors/vacuum_on.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/actors/vacuum_on.xml", brickConfiguration, true);
+        ;
     }
 
     @Test
@@ -234,7 +251,9 @@ public class PythonVisitorTest {
                 + "\n"
                 + MAIN_METHOD;
 
-        assertCodeIsOk(expectedResult, "/actors/vacuum_off.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/actors/vacuum_off.xml", brickConfiguration, true);
+        ;
     }
 
     @Test
@@ -249,7 +268,8 @@ public class PythonVisitorTest {
                 + "\n"
                 + MAIN_METHOD;
 
-        assertCodeIsOk(expectedResult, "/actors/motor_on.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/actors/motor_on.xml", brickConfiguration, true);
     }
 
     @Test
@@ -264,12 +284,8 @@ public class PythonVisitorTest {
                 + "\n"
                 + MAIN_METHOD;
 
-        assertCodeIsOk(expectedResult, "/actors/motor_stop.xml");
-    }
-
-    private void assertCodeIsOk(String a, String fileName) throws Exception {
-        String b = this.h.generatePython(fileName, brickConfiguration);
-        Assert.assertEquals(a, b);
-        //Assert.assertEquals(a.replaceAll("\\s+", ""), b.replaceAll("\\s+", ""));
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/actors/motor_stop.xml", brickConfiguration, true);
+        ;
     }
 }

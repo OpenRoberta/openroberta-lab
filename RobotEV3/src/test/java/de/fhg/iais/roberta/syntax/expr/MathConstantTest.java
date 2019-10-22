@@ -2,23 +2,23 @@ package de.fhg.iais.roberta.syntax.expr;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.Ev3LejosAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class MathConstantTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
+public class MathConstantTest extends Ev3LejosAstTest {
 
     @Test
     public void Test() throws Exception {
-        String a = "BlocklyMethods.PIBlocklyMethods.EBlocklyMethods.GOLDEN_RATIOBlocklyMethods.sqrt(2)BlocklyMethods.sqrt((float)1.0/(float)2.0)Float.POSITIVE_INFINITY}";
+        String a = "Math.PIMath.E((1.0+Math.sqrt(5.0))/2.0)Math.sqrt(2)" + "Math.sqrt(0.5)Float.POSITIVE_INFINITY}";
 
-        this.h.assertCodeIsOk(a, "/syntax/math/math_constant.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/math/math_constant.xml", false);
     }
 
     @Test
     public void Test1() throws Exception {
-        String a = "hal.rotateRegulatedMotor(ActorPort.B,BlocklyMethods.PI,MotorMoveMode.ROTATIONS,BlocklyMethods.GOLDEN_RATIO);}";
+        String a = "hal.rotateRegulatedMotor(ActorPort.B,Math.PI,MotorMoveMode.ROTATIONS,((1.0+Math.sqrt(5.0))/2.0));}";
 
-        this.h.assertCodeIsOk(a, "/syntax/math/math_constant1.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/math/math_constant1.xml", makeStandard(), false);
     }
 
 }

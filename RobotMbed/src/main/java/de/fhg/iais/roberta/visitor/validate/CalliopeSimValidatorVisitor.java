@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.visitor.validate;
 
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
@@ -46,13 +47,13 @@ import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 
 public final class CalliopeSimValidatorVisitor extends AbstractSimValidatorVisitor implements IMbedVisitor<Void> {
 
-    public CalliopeSimValidatorVisitor(Configuration brickConfiguration) {
-        super(brickConfiguration);
+    public CalliopeSimValidatorVisitor(UsedHardwareBean.Builder builder, ConfigurationAst brickConfiguration) {
+        super(builder, brickConfiguration);
     }
 
     @Override
     public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
-        displayTextAction.getMsg().visit(this);
+        displayTextAction.getMsg().accept(this);
         return null;
     }
 
@@ -63,20 +64,20 @@ public final class CalliopeSimValidatorVisitor extends AbstractSimValidatorVisit
 
     @Override
     public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
-        displayImageAction.getValuesToDisplay().visit(this);
+        displayImageAction.getValuesToDisplay().accept(this);
         return null;
     }
 
     @Override
     public Void visitImageShiftFunction(ImageShiftFunction<Void> imageShiftFunction) {
-        imageShiftFunction.getImage().visit(this);
-        imageShiftFunction.getPositions().visit(this);
+        imageShiftFunction.getImage().accept(this);
+        imageShiftFunction.getPositions().accept(this);
         return null;
     }
 
     @Override
     public Void visitImageInvertFunction(ImageInvertFunction<Void> imageInvertFunction) {
-        imageInvertFunction.getImage().visit(this);
+        imageInvertFunction.getImage().accept(this);
         return null;
     }
 
@@ -102,13 +103,13 @@ public final class CalliopeSimValidatorVisitor extends AbstractSimValidatorVisit
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        ledOnAction.getLedColor().visit(this);
+        ledOnAction.getLedColor().accept(this);
         return null;
     }
 
     @Override
     public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
-        radioSendAction.getMsg().visit(this);
+        radioSendAction.getMsg().accept(this);
         radioSendAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
@@ -121,10 +122,10 @@ public final class CalliopeSimValidatorVisitor extends AbstractSimValidatorVisit
 
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
-        rgbColor.getR().visit(this);
-        rgbColor.getG().visit(this);
-        rgbColor.getB().visit(this);
-        rgbColor.getA().visit(this);
+        rgbColor.getR().accept(this);
+        rgbColor.getG().accept(this);
+        rgbColor.getB().accept(this);
+        rgbColor.getA().accept(this);
         return null;
     }
 
@@ -143,13 +144,13 @@ public final class CalliopeSimValidatorVisitor extends AbstractSimValidatorVisit
 
     @Override
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
-        pinWriteValueAction.getValue().visit(this);
+        pinWriteValueAction.getValue().accept(this);
         return null;
     }
 
     @Override
     public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Void> displaySetBrightnessAction) {
-        displaySetBrightnessAction.getBrightness().visit(this);
+        displaySetBrightnessAction.getBrightness().accept(this);
         return null;
     }
 
@@ -160,29 +161,29 @@ public final class CalliopeSimValidatorVisitor extends AbstractSimValidatorVisit
 
     @Override
     public Void visitDisplaySetPixelAction(DisplaySetPixelAction<Void> displaySetPixelAction) {
-        displaySetPixelAction.getBrightness().visit(this);
-        displaySetPixelAction.getX().visit(this);
-        displaySetPixelAction.getY().visit(this);
+        displaySetPixelAction.getBrightness().accept(this);
+        displaySetPixelAction.getX().accept(this);
+        displaySetPixelAction.getY().accept(this);
         return null;
     }
 
     @Override
     public Void visitDisplayGetPixelAction(DisplayGetPixelAction<Void> displayGetPixelAction) {
-        displayGetPixelAction.getX().visit(this);
-        displayGetPixelAction.getY().visit(this);
+        displayGetPixelAction.getX().accept(this);
+        displayGetPixelAction.getY().accept(this);
         return null;
     }
 
     @Override
     public Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
-        radioSetChannelAction.getChannel().visit(this);
+        radioSetChannelAction.getChannel().accept(this);
         radioSetChannelAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 
     @Override
     public Void visitSingleMotorOnAction(SingleMotorOnAction<Void> singleMotorOnAction) {
-        singleMotorOnAction.getSpeed().visit(this);
+        singleMotorOnAction.getSpeed().accept(this);
         singleMotorOnAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
@@ -228,7 +229,7 @@ public final class CalliopeSimValidatorVisitor extends AbstractSimValidatorVisit
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        motorOnAction.getParam().getSpeed().visit(this);
+        motorOnAction.getParam().getSpeed().accept(this);
         return null;
     }
 
@@ -263,8 +264,8 @@ public final class CalliopeSimValidatorVisitor extends AbstractSimValidatorVisit
 
     @Override
     public Void visitBothMotorsOnAction(BothMotorsOnAction<Void> bothMotorsOnAction) {
-        bothMotorsOnAction.getSpeedA().visit(this);
-        bothMotorsOnAction.getSpeedB().visit(this);
+        bothMotorsOnAction.getSpeedA().accept(this);
+        bothMotorsOnAction.getSpeedB().accept(this);
         return null;
     }
 

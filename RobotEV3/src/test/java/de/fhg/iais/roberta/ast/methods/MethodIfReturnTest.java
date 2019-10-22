@@ -1,19 +1,18 @@
 package de.fhg.iais.roberta.ast.methods;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.ast.AstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class MethodIfReturnTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
+public class MethodIfReturnTest extends AstTest {
 
     @Test
     public void methodIfReturn1() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=1, y=85], MethodReturn [test, VarDeclaration [NUMBER, x, EmptyExpr [defVal=NUMBER], false, false], "
                 + "MethodStmt [MethodIfReturn [SensorExpr [TouchSensor [1, DEFAULT, NO_SLOT]], BOOLEAN, BoolConst [false]]], BOOLEAN, EmptyExpr [defVal=NULL]]]]]";
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/methods/method_if_return_1.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/methods/method_if_return_1.xml");
 
     }
 
@@ -25,17 +24,17 @@ public class MethodIfReturnTest {
                 + " VarDeclaration [NUMBER, x2, EmptyExpr [defVal=NUMBER], true, false],"
                 + " VarDeclaration [NUMBER, x3, EmptyExpr [defVal=NUMBER], false, false], "
                 + "\nAktionStmt [LightAction [NO_PORT, ON, GREEN, EmptyExpr [defVal=COLOR]]]MethodStmt [MethodIfReturn [Binary [EQ, NumConst [0], NumConst [0]], NUMBER, Var [x2]]], NUMBER, Var [x3]]]]]";
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/methods/method_if_return_2.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/methods/method_if_return_2.xml");
     }
 
     @Test
     public void reverseTransformation1() throws Exception {
-        this.h.assertTransformationIsOk("/ast/methods/method_if_return_1.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/methods/method_if_return_1.xml");
     }
 
     @Test
     public void reverseTransformation2() throws Exception {
-        this.h.assertTransformationIsOk("/ast/methods/method_if_return_2.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/methods/method_if_return_2.xml");
     }
 
 }

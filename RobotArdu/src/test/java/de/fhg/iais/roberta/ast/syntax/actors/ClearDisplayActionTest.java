@@ -3,16 +3,15 @@ package de.fhg.iais.roberta.ast.syntax.actors;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
+import de.fhg.iais.roberta.ast.AstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
 @Ignore
-public class ClearDisplayActionTest {
-    private final HelperBotNrollForXmlTest h = new HelperBotNrollForXmlTest();
+public class ClearDisplayActionTest extends AstTest {
 
     @Test
     public void clearDisplay() throws Exception {
         String a = "publicvoidrun(){clearscreen();}";
-
-        this.h.assertCodeIsOk(a, "/ast/actions/action_ClearDisplay.xml", false);
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/ast/actions/action_ClearDisplay.xml", false);
     }
 }

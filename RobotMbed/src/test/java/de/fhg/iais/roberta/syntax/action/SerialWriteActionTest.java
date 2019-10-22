@@ -2,13 +2,13 @@ package de.fhg.iais.roberta.syntax.action;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
+import de.fhg.iais.roberta.syntax.CalliopeAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class SerialWriteActionTest {
-    private final HelperCalliopeForXmlTest h = new HelperCalliopeForXmlTest();
+public class SerialWriteActionTest extends CalliopeAstTest {
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        this.h.assertTransformationIsOk("/action/write_serial_text.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/action/write_serial_text.xml");
     }
 }

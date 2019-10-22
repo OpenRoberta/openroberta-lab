@@ -2,15 +2,16 @@ package de.fhg.iais.roberta.syntax.sensors;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.Ev3LejosAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
+import de.fhg.iais.roberta.worker.codegen.Ev3JavaGeneratorWorker;
 
-public class TouchSensorTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
+public class TouchSensorTest extends Ev3LejosAstTest {
 
     @Test
     public void isPressed() throws Exception {
         String a = "\nhal.isPressed(SensorPort.S1)}";
 
-        this.h.assertCodeIsOk(a, "/syntax/sensors/sensor_Touch.xml");
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/sensors/sensor_Touch.xml", new Ev3JavaGeneratorWorker());
     }
 }

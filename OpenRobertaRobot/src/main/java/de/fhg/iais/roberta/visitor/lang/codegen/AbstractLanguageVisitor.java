@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.text.StringEscapeUtils;
 
+import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -40,34 +42,43 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> {
     //TODO find more simple way of handling the loops
-    protected final String INDENT = "    ";
-    protected int loopCounter = 0;
+    private static final String INDENT = "    ";
+    private int loopCounter = 0;
     protected LinkedList<Integer> currenLoop = new LinkedList<>();
-    protected Map<Integer, Boolean> loopsLabels;
 
-    protected final StringBuilder sb = new StringBuilder();
+    protected StringBuilder sb = new StringBuilder();
     protected final List<Phrase<Void>> programPhrases;
 
-    private int indentation;
-    private final StringBuilder indent = new StringBuilder();
+    private int indentation = 0;
+    private StringBuilder indent = new StringBuilder();
+
+    protected UsedHardwareBean usedHardwareBean;
+    protected CodeGeneratorSetupBean codeGeneratorSetupBean;
 
     /**
      * initialize the common language code generator visitor.
-     *
-     * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    public AbstractLanguageVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
+    public AbstractLanguageVisitor(
+        UsedHardwareBean usedHardwareBean,
+        CodeGeneratorSetupBean codeGeneratorSetupBean,
+        ArrayList<ArrayList<Phrase<Void>>> programPhrases) {
         Assert.isTrue(!programPhrases.isEmpty());
-        this.indentation = indentation;
-        for ( int i = 0; i < indentation; i++ ) {
-            this.indent.append(this.INDENT);
-        }
+        this.usedHardwareBean = usedHardwareBean;
+        this.codeGeneratorSetupBean = codeGeneratorSetupBean;
         this.programPhrases =
             programPhrases
                 .stream()
                 .flatMap(e -> e.subList(1, e.size()).stream())
                 .filter(p -> p.getProperty().isInTask() == null ? true : p.getProperty().isInTask() && !p.getProperty().isDisabled()) //TODO check if we can avoid null value for inTask
                 .collect(Collectors.toList());
+    }
+
+    public void setStringBuilders(StringBuilder sourceCode, StringBuilder indentation) {
+        this.sb = sourceCode;
+        this.indent = indentation;
+        for ( int i = 0; i < this.indentation; i++ ) {
+            this.indent.append(AbstractLanguageVisitor.INDENT);
+        }
     }
 
     /**
@@ -88,7 +99,7 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
         return this.sb;
     }
 
-    protected void generateCode(boolean withWrapping) {
+    public void generateCode(boolean withWrapping) {
         generateProgramPrefix(withWrapping);
         generateProgramMainBody();
         generateProgramSuffix(withWrapping);
@@ -100,20 +111,18 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
             .filter(phrase -> phrase.getKind().getCategory() != Category.METHOD || phrase.getKind().hasName("METHOD_CALL"))
             .forEach(p -> {
                 nlIndent();
-                p.visit(this);
+                p.accept(this);
             });
     }
 
     protected void generateUserDefinedMethods() {
-        incrIndentation();
         this.programPhrases
             .stream()
             .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
             .forEach(e -> {
-                e.visit(this);
-                this.sb.append("\n");
+                e.accept(this);
+                nlIndent();
             });
-        decrIndentation();
     }
 
     @Override
@@ -141,13 +150,13 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
 
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
-        rgbColor.getR().visit(this);
+        rgbColor.getR().accept(this);
         this.sb.append(", ");
-        rgbColor.getG().visit(this);
+        rgbColor.getG().accept(this);
         this.sb.append(", ");
-        rgbColor.getB().visit(this);
+        rgbColor.getB().accept(this);
         this.sb.append(", ");
-        rgbColor.getA().visit(this);
+        rgbColor.getA().accept(this);
         return null;
     }
 
@@ -166,12 +175,12 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
             if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
                 ExprList<Void> list = (ExprList<Void>) var.getValue();
                 if ( list.get().size() == 2 ) {
-                    list.get().get(1).visit(this);
+                    list.get().get(1).accept(this);
                 } else {
-                    list.get().get(0).visit(this);
+                    list.get().get(0).accept(this);
                 }
             } else {
-                var.getValue().visit(this);
+                var.getValue().accept(this);
             }
         }
         return null;
@@ -207,7 +216,7 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
                 } else {
                     this.sb.append(", ");
                 }
-                expr.visit(this);
+                expr.accept(this);
             }
         }
         return null;
@@ -215,15 +224,15 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
 
     @Override
     public Void visitActionStmt(ActionStmt<Void> actionStmt) {
-        actionStmt.getAction().visit(this);
+        actionStmt.getAction().accept(this);
         return null;
     }
 
     @Override
     public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
-        assignStmt.getName().visit(this);
+        assignStmt.getName().accept(this);
         this.sb.append(" = ");
-        assignStmt.getExpr().visit(this);
+        assignStmt.getExpr().accept(this);
         return null;
     }
 
@@ -242,7 +251,7 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
     public Void visitStmtList(StmtList<Void> stmtList) {
         stmtList.get().stream().forEach(stmt -> {
             nlIndent();
-            stmt.visit(this);
+            stmt.accept(this);
         });
         return null;
     }
@@ -250,22 +259,22 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
     @Override
     public Void visitMethodCall(MethodCall<Void> methodCall) {
         this.sb.append(methodCall.getMethodName() + "(");
-        methodCall.getParametersValues().visit(this);
+        methodCall.getParametersValues().accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
-        methodStmt.getMethod().visit(this);
+        methodStmt.getMethod().accept(this);
         return null;
     }
 
     @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        mathPowerFunct.getParam().get(0).visit(this);
+        mathPowerFunct.getParam().get(0).accept(this);
         this.sb.append(", ");
-        mathPowerFunct.getParam().get(1).visit(this);
+        mathPowerFunct.getParam().get(1).accept(this);
         this.sb.append(")");
         return null;
     }
@@ -273,21 +282,21 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
     protected void generateExprCode(Unary<Void> unary, StringBuilder sb) {
         if ( unary.getExpr().getPrecedence() < unary.getPrecedence() || unary.getOp() == Unary.Op.NEG ) {
             sb.append("(");
-            unary.getExpr().visit(this);
+            unary.getExpr().accept(this);
             sb.append(")");
         } else {
-            unary.getExpr().visit(this);
+            unary.getExpr().accept(this);
         }
     }
 
     protected void incrIndentation() {
         this.indentation += 1;
-        this.indent.append(this.INDENT);
+        this.indent.append(AbstractLanguageVisitor.INDENT);
     }
 
     protected void decrIndentation() {
         this.indentation -= 1;
-        this.indent.delete(0, this.INDENT.length());
+        this.indent.delete(0, AbstractLanguageVisitor.INDENT.length());
     }
 
     protected void indent() {
@@ -295,7 +304,7 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
             return;
         } else {
             for ( int i = 0; i < this.indentation; i++ ) {
-                this.sb.append(this.INDENT);
+                this.sb.append(AbstractLanguageVisitor.INDENT);
             }
         }
     }
@@ -341,10 +350,10 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
     protected void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr<Void> expr, Binary<Void> binary) {
         if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption && !expr.getKind().hasName("BINARY") ) {
             // parentheses are omitted
-            expr.visit(this);
+            expr.accept(this);
         } else {
             sb.append("(" + whitespace());
-            expr.visit(this);
+            expr.accept(this);
             sb.append(whitespace() + ")");
         }
     }

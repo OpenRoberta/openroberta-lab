@@ -1,16 +1,6 @@
 package de.fhg.iais.roberta.factory;
 
-import java.util.ArrayList;
-
-import de.fhg.iais.roberta.codegen.EdisonCompilerWorkflow;
-import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
-import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.PluginProperties;
-import de.fhg.iais.roberta.visitor.collect.EdisonMethods;
-import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
-import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
-import de.fhg.iais.roberta.visitor.validate.EdisonBrickValidatorVisitor;
 
 public class EdisonFactory extends AbstractRobotFactory {
 
@@ -21,28 +11,6 @@ public class EdisonFactory extends AbstractRobotFactory {
      */
     public EdisonFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
-
-        this.helperMethodGenerator.addAdditionalEnum(EdisonMethods.class);
-    }
-
-    /**
-     * This robots compilation workflow for the properties
-     *
-     * @return the compiler workflow
-     */
-    @Override
-    public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return new EdisonCompilerWorkflow(this.pluginProperties, this.helperMethodGenerator);
-    }
-
-    /**
-     * If an online simulation is available, return the compilation workflow for for the simulation
-     *
-     * @return null, currently
-     */
-    @Override
-    public ICompilerWorkflow getSimCompilerWorkflow() {
-        return null; //online simulation not available
     }
 
     /**
@@ -53,40 +21,5 @@ public class EdisonFactory extends AbstractRobotFactory {
     @Override
     public String getFileExtension() {
         return "py";
-    }
-
-    /**
-     * If a simulation is available, return the code validator for the blockly program
-     *
-     * @param brickConfiguration the robot configuration
-     * @return null, currently
-     */
-    @Override
-    public AbstractSimValidatorVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
-        return null;
-    }
-
-    /**
-     * Return the validator for the Blockly program according to the robot configuration
-     *
-     * @param brickConfiguration the robot configuration
-     * @return the visitor
-     */
-    @Override
-    public AbstractProgramValidatorVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
-        return new EdisonBrickValidatorVisitor(brickConfiguration);
-    }
-
-    /**
-     * Unfortunately, I do not know (yet) what is method is exactly used for.
-     *
-     * @param brickConfiguration
-     * @param phrasesSet
-     * @param withWrapping
-     * @return null, just like every other robot
-     */
-    @Override
-    public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        return null;
     }
 }

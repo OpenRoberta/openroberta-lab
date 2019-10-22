@@ -5,32 +5,34 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.Ev3LejosAstTest;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class Ev3LejosActorTest {
-    private final HelperEv3ForXmlTest ev3lejosHelper = new HelperEv3ForXmlTest();
-    Configuration configuration = makeConfigurationWithMediumAndOther();
+public class Ev3LejosActorTest extends Ev3LejosAstTest {
 
-    public static Configuration makeConfigurationWithMediumAndOther() {
-        Map<String, String> motorAproperties = HelperEv3ForXmlTest.createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
+    ConfigurationAst configuration = makeConfigurationWithMediumAndOther();
+
+    public static ConfigurationAst makeConfigurationWithMediumAndOther() {
+        Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
         ConfigurationComponent motorA = new ConfigurationComponent("OTHER", true, "A", "A", motorAproperties);
 
-        Map<String, String> motorBproperties = HelperEv3ForXmlTest.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
+        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
         ConfigurationComponent motorB = new ConfigurationComponent("MEDIUM", true, "B", "B", motorBproperties);
 
-        final Configuration.Builder builder = new Configuration.Builder();
+        final ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(18f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB));
-        Configuration configuration = builder.build();
+        ConfigurationAst configuration = builder.build();
         configuration.setRobotName("ev3lejosV1");
         return configuration;
     }
 
     @Test
     public void mediumAndOtherConsumerTest() throws Exception {
-        this.ev3lejosHelper
-            .compareExistingAndGeneratedJavaSource(
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXml(
+                testFactory,
                 "/ast/actions/ev3_actors_medium_other_test.java",
                 "/ast/actions/ev3_actors_medium_other_test.xml",
                 this.configuration);

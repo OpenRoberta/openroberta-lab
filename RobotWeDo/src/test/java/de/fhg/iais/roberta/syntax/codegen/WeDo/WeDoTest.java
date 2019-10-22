@@ -1,19 +1,35 @@
 package de.fhg.iais.roberta.syntax.codegen.WeDo;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.wedo.HelperWedoForXml;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.WeDoFactory;
+import de.fhg.iais.roberta.util.PluginProperties;
+import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
 public class WeDoTest {
-    HelperWedoForXml helperWeDo = new HelperWedoForXml();
+
+    private static IRobotFactory testFactory;
+
+    @BeforeClass
+    public static void setup() {
+        testFactory = new WeDoFactory(new PluginProperties("wedo", "", "", Util1.loadProperties("classpath:/wedo.properties")));
+    }
 
     @Test
     public void weDoEverythingTest() throws Exception {
-        this.helperWeDo.compareExistingAndGeneratedVmSource("/wedo_everything_test.json", "/wedo_everything_test.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithExportXml(testFactory, "/everything_test.json", "/everything_test.xml");
     }
 
     @Test
     public void weDoAllBlocksTest() throws Exception {
-        this.helperWeDo.compareExistingAndGeneratedVmSource("/wedo_all_blocks_test.json", "/wedo_all_blocks_test.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithExportXml(testFactory, "/all_blocks_test.json", "/all_blocks_test.xml");
+    }
+
+    @Test
+    public void motorTest() throws Exception {
+        UnitTestHelper.checkGeneratedSourceEqualityWithExportXml(testFactory, "/motor_test.json", "/motor_test.xml");
     }
 }

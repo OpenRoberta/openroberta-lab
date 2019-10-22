@@ -2,10 +2,10 @@ package de.fhg.iais.roberta.syntax.expr;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.Ev3LejosAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class LogicExprTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
+public class LogicExprTest extends Ev3LejosAstTest {
 
     @Test
     public void test1() throws Exception {
@@ -19,27 +19,27 @@ public class LogicExprTest {
                 + "( (5 + 7) == (5 + 7) ) >= (( 8 + 4 ) / ((float) ( 9 + 3 )))\n"
                 + "( (5 + 7) == (5 + 7) ) >= ( ((5 + 7) == (5 + 7)) && ((5 + 7) <= (5 + 7) ))\n"
                 + "!((5 + 7) == (5 + 7)) == true}";
-        this.h.assertCodeIsOk(a, "/syntax/expr/logic_expr.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/expr/logic_expr.xml", false);
     }
 
     @Test
     public void logicNegate() throws Exception {
         String a = "\n!((0 != 0) && false)}";
 
-        this.h.assertCodeIsOk(a, "/syntax/expr/logic_negate.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/expr/logic_negate.xml", false);
     }
 
     @Test
     public void logicNull() throws Exception {
         String a = "\nnull}";
 
-        this.h.assertCodeIsOk(a, "/syntax/expr/logic_null.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/expr/logic_null.xml", false);
     }
 
     @Test
     public void logicTernary() throws Exception {
         String a = "\n( 0 == 0 ) ? false : true}";
 
-        this.h.assertCodeIsOk(a, "/syntax/expr/logic_ternary.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/expr/logic_ternary.xml", false);
     }
 }

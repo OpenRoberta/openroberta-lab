@@ -2,16 +2,16 @@ package de.fhg.iais.roberta.syntax.expr;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.Ev3LejosAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class ListsCreateWithItemTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
+public class ListsCreateWithItemTest extends Ev3LejosAstTest {
 
     @Test
     public void Test() throws Exception {
         String a = "newArrayList<>(Collections.nCopies(5, (float) 1))}";
 
-        this.h.assertCodeIsOk(a, "/syntax/lists/lists_create_with_item.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/lists/lists_create_with_item.xml", false);
     }
 
 }

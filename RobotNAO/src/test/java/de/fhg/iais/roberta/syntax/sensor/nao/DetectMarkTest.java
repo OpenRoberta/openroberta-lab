@@ -1,12 +1,11 @@
 package de.fhg.iais.roberta.syntax.sensor.nao;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.nao.HelperNaoForXmlTest;
+import de.fhg.iais.roberta.syntax.NaoAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class DetectMarkTest {
-    private final HelperNaoForXmlTest h = new HelperNaoForXmlTest();
+public class DetectMarkTest extends NaoAstTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfNaoMarkClass() throws Exception {
@@ -17,14 +16,13 @@ public class DetectMarkTest {
                 + "SayTextAction [SensorExpr [DetectMarkSensor [NO_PORT, IDALL, EMPTY_SLOT]], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]"
                 + "]]]";
 
-        String result = this.h.generateTransformerString("/sensor/detectmark.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/detectmark.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
 
-        this.h.assertTransformationIsOk("/sensor/detectmark.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/sensor/detectmark.xml");
     }
 }

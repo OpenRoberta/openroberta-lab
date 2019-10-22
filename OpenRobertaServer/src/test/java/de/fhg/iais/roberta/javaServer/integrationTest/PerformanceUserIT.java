@@ -27,9 +27,9 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.javaServer.restServices.all.ClientAdmin;
-import de.fhg.iais.roberta.javaServer.restServices.all.ClientProgram;
-import de.fhg.iais.roberta.javaServer.restServices.all.ClientUser;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientUser;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.ProjectRestController;
 import de.fhg.iais.roberta.javaServer.restServices.robot.RobotCommand;
 import de.fhg.iais.roberta.javaServer.restServices.robot.RobotDownloadProgram;
 import de.fhg.iais.roberta.main.ServerStarter;
@@ -68,7 +68,7 @@ public class PerformanceUserIT {
     private String connectionUrl;
 
     private ClientUser restUser;
-    private ClientProgram restProgram;
+    private ProjectRestController restProject;
     private ClientAdmin restBlocks;
     private RobotDownloadProgram downloadJar;
     private RobotCommand brickCommand;
@@ -89,7 +89,7 @@ public class PerformanceUserIT {
         this.robotCommunicator = new RobotCommunicator();
 
         this.restUser = new ClientUser(this.robotCommunicator, serverProperties, null);
-        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.robotCommunicator, serverProperties);
+        this.restProject = new ProjectRestController(this.sessionFactoryWrapper, this.serverProperties);
         this.restBlocks = new ClientAdmin(this.robotCommunicator, serverProperties);
         this.downloadJar = new RobotDownloadProgram(this.robotCommunicator, serverProperties);
         this.brickCommand = new RobotCommand(this.robotCommunicator);
@@ -179,9 +179,9 @@ public class PerformanceUserIT {
         JSONUtilForServer.assertEntityRc(response, "ok", Key.USER_GET_ONE_SUCCESS);
         Assert.assertTrue(s.isUserLoggedIn());
         int sId = s.getUserId();
-        response = this.restProgram.command(s, JSONUtilForServer.mkD("{'cmd':'saveAsP';'programName':'p1';'programText':'<program>...</program>'}"));
+        response = this.restProject.updateProject(s, JSONUtilForServer.mkD("{'cmd':'saveAsP';'programName':'p1';'programText':'<program>...</program>'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);
-        response = this.restProgram.command(s, JSONUtilForServer.mkD("{'cmd':'saveAsP';'programName':'p2';'programText':'<program>...</program>'}"));
+        response = this.restProject.updateProject(s, JSONUtilForServer.mkD("{'cmd':'saveAsP';'programName':'p2';'programText':'<program>...</program>'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);
         Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + sId));
 
@@ -190,10 +190,10 @@ public class PerformanceUserIT {
         Timestamp lastChanged = this.memoryDbSetup.getOne("select LAST_CHANGED from PROGRAM where OWNER_ID = " + sId + " and name = 'p2'");
         JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"saveP\";\"programName\":\"p2\"}}");
         fullRequest.getJSONObject("data").put("programText", this.theProgramOfAllUserLol).put("timestamp", lastChanged.getTime());
-        response = this.restProgram.command(s, fullRequest);
+        response = this.restProject.updateProject(s, fullRequest);
         JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);
         Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + sId));
-        response = this.restProgram.command(s, JSONUtilForServer.mkD("{'cmd':'loadPN'}"));
+        response = this.restProject.importProgram(s, JSONUtilForServer.mkD("{'cmd':'loadPN'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_GET_ALL_SUCCESS);
         JSONArray programListing = ((JSONObject) response.getEntity()).getJSONArray("programNames");
         JSONArray programNames = new JSONArray();

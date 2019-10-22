@@ -2,22 +2,23 @@ package de.fhg.iais.roberta.syntax.actors;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.Ev3LejosAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
+import de.fhg.iais.roberta.worker.codegen.Ev3JavaGeneratorWorker;
 
-public class TurnActionTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
+public class TurnActionTest extends Ev3LejosAstTest {
 
     @Test
     public void turn() throws Exception {
         String a = "\nhal.rotateDirectionRegulated(TurnDirection.RIGHT, 50);}";
 
-        this.h.assertCodeIsOk(a, "/syntax/actions/action_MotorDiffTurn.xml");
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/actions/action_MotorDiffTurn.xml", new Ev3JavaGeneratorWorker());
     }
 
     @Test
     public void turnFor() throws Exception {
         String a = "\nhal.rotateDirectionAngle(TurnDirection.RIGHT, 50, 20);}";
 
-        this.h.assertCodeIsOk(a, "/syntax/actions/action_MotorDiffTurnFor.xml");
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/actions/action_MotorDiffTurnFor.xml", new Ev3JavaGeneratorWorker());
     }
 }

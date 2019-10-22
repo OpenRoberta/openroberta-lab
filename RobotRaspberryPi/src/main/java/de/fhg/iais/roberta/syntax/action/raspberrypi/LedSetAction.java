@@ -74,7 +74,7 @@ public class LedSetAction<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((IRaspberryPiVisitor<V>) visitor).visitLedSetAction(this);
     }
 

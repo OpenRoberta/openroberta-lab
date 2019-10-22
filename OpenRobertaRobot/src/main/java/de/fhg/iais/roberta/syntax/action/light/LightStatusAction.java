@@ -67,7 +67,7 @@ public class LightStatusAction<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((ILightVisitor<V>) visitor).visitLightStatusAction(this);
     }
 

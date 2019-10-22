@@ -1,12 +1,11 @@
 package de.fhg.iais.roberta.syntax.actor.vorwerk;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.vorwerk.HelperVorwerkForXmlTest;
+import de.fhg.iais.roberta.syntax.VorwerkAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class MotorOnTest {
-    private final HelperVorwerkForXmlTest h = new HelperVorwerkForXmlTest();
+public class MotorOnTest extends VorwerkAstTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfAnimationClass() throws Exception {
@@ -15,13 +14,12 @@ public class MotorOnTest {
                 + "MainTask [], MotorOnAction [LEFT, MotionParam [speed=NumConst [30], duration=MotorDuration [type=DISTANCE, value=NumConst [20]]]], "
                 + "MotorOnAction [RIGHT, MotionParam [speed=NumConst [30], duration=MotorDuration [type=DISTANCE, value=NumConst [20]]]]]]]";
 
-        String result = this.h.generateTransformerString("/actors/motor_on.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/actors/motor_on.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        this.h.assertTransformationIsOk("/actors/motor_on.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/actors/motor_on.xml");
     }
 }

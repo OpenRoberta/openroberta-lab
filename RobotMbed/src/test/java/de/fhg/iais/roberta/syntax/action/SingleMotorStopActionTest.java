@@ -1,12 +1,11 @@
 package de.fhg.iais.roberta.syntax.action;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
+import de.fhg.iais.roberta.syntax.CalliopeAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class SingleMotorStopActionTest {
-    private final HelperCalliopeForXmlTest h = new HelperCalliopeForXmlTest();
+public class SingleMotorStopActionTest extends CalliopeAstTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfSingleMotorStopActionClass() throws Exception {
@@ -17,14 +16,13 @@ public class SingleMotorStopActionTest {
                 + "SingleMotorStopAction [NONFLOAT], "
                 + "SingleMotorStopAction [SLEEP]]]]";
 
-        String result = this.h.generateTransformerString("/action/single_motor_stop.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/action/single_motor_stop.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        this.h.assertTransformationIsOk("/action/single_motor_stop.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/action/single_motor_stop.xml");
     }
 
 }

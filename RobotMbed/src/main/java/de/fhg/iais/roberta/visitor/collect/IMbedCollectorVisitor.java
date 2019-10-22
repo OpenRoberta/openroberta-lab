@@ -39,7 +39,7 @@ public interface IMbedCollectorVisitor extends ICollectorVisitor, IMbedVisitor<V
 
     @Override
     default Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
-        displayTextAction.getMsg().visit(this);
+        displayTextAction.getMsg().accept(this);
         return null;
     }
 
@@ -50,20 +50,20 @@ public interface IMbedCollectorVisitor extends ICollectorVisitor, IMbedVisitor<V
 
     @Override
     default Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
-        displayImageAction.getValuesToDisplay().visit(this);
+        displayImageAction.getValuesToDisplay().accept(this);
         return null;
     }
 
     @Override
     default Void visitImageShiftFunction(ImageShiftFunction<Void> imageShiftFunction) {
-        imageShiftFunction.getImage().visit(this);
-        imageShiftFunction.getPositions().visit(this);
+        imageShiftFunction.getImage().accept(this);
+        imageShiftFunction.getPositions().accept(this);
         return null;
     }
 
     @Override
     default Void visitImageInvertFunction(ImageInvertFunction<Void> imageInvertFunction) {
-        imageInvertFunction.getImage().visit(this);
+        imageInvertFunction.getImage().accept(this);
         return null;
     }
 
@@ -74,13 +74,13 @@ public interface IMbedCollectorVisitor extends ICollectorVisitor, IMbedVisitor<V
 
     @Override
     default Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        ledOnAction.getLedColor().visit(this);
+        ledOnAction.getLedColor().accept(this);
         return null;
     }
 
     @Override
     default Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
-        radioSendAction.getMsg().visit(this);
+        radioSendAction.getMsg().accept(this);
         return null;
     }
 
@@ -96,7 +96,7 @@ public interface IMbedCollectorVisitor extends ICollectorVisitor, IMbedVisitor<V
 
     @Override
     default Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Void> displaySetBrightnessAction) {
-        displaySetBrightnessAction.getBrightness().visit(this);
+        displaySetBrightnessAction.getBrightness().accept(this);
         return null;
     }
 
@@ -107,28 +107,28 @@ public interface IMbedCollectorVisitor extends ICollectorVisitor, IMbedVisitor<V
 
     @Override
     default Void visitDisplaySetPixelAction(DisplaySetPixelAction<Void> displaySetPixelAction) {
-        displaySetPixelAction.getBrightness().visit(this);
-        displaySetPixelAction.getX().visit(this);
-        displaySetPixelAction.getY().visit(this);
+        displaySetPixelAction.getBrightness().accept(this);
+        displaySetPixelAction.getX().accept(this);
+        displaySetPixelAction.getY().accept(this);
         return null;
     }
 
     @Override
     default Void visitDisplayGetPixelAction(DisplayGetPixelAction<Void> displayGetPixelAction) {
-        displayGetPixelAction.getX().visit(this);
-        displayGetPixelAction.getY().visit(this);
+        displayGetPixelAction.getX().accept(this);
+        displayGetPixelAction.getY().accept(this);
         return null;
     }
 
     @Override
     default Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
-        radioSetChannelAction.getChannel().visit(this);
+        radioSetChannelAction.getChannel().accept(this);
         return null;
     }
 
     @Override
     default Void visitSingleMotorOnAction(SingleMotorOnAction<Void> singleMotorOnAction) {
-        singleMotorOnAction.getSpeed().visit(this);
+        singleMotorOnAction.getSpeed().accept(this);
         return null;
     }
 
@@ -139,9 +139,9 @@ public interface IMbedCollectorVisitor extends ICollectorVisitor, IMbedVisitor<V
 
     @Override
     default Void visitFourDigitDisplayShowAction(FourDigitDisplayShowAction<Void> fourDigitDisplayShowAction) {
-        fourDigitDisplayShowAction.getColon().visit(this);
-        fourDigitDisplayShowAction.getPosition().visit(this);
-        fourDigitDisplayShowAction.getValue().visit(this);
+        fourDigitDisplayShowAction.getColon().accept(this);
+        fourDigitDisplayShowAction.getPosition().accept(this);
+        fourDigitDisplayShowAction.getValue().accept(this);
         return null;
     }
 
@@ -152,8 +152,8 @@ public interface IMbedCollectorVisitor extends ICollectorVisitor, IMbedVisitor<V
 
     @Override
     default Void visitBothMotorsOnAction(BothMotorsOnAction<Void> bothMotorsOnAction) {
-        bothMotorsOnAction.getSpeedA().visit(this);
-        bothMotorsOnAction.getSpeedB().visit(this);
+        bothMotorsOnAction.getSpeedA().accept(this);
+        bothMotorsOnAction.getSpeedB().accept(this);
         return null;
     }
 
@@ -169,8 +169,8 @@ public interface IMbedCollectorVisitor extends ICollectorVisitor, IMbedVisitor<V
 
     @Override
     default Void visitLedBarSetAction(LedBarSetAction<Void> ledBarSetAction) {
-        ledBarSetAction.getBrightness().visit(this);
-        ledBarSetAction.getX().visit(this);
+        ledBarSetAction.getBrightness().accept(this);
+        ledBarSetAction.getX().accept(this);
         return null;
     }
 
@@ -181,7 +181,7 @@ public interface IMbedCollectorVisitor extends ICollectorVisitor, IMbedVisitor<V
 
     @Override
     default Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
-        pinWriteValueAction.getValue().visit(this);
+        pinWriteValueAction.getValue().accept(this);
         return null;
     }
 

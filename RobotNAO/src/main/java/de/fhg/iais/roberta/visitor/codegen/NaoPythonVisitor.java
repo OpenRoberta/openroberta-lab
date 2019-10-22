@@ -2,12 +2,12 @@ package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
-import de.fhg.iais.roberta.codegen.HelperMethodGenerator;
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
@@ -70,11 +70,8 @@ import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrentSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.collect.NaoUsedHardwareCollectorVisitor;
-import de.fhg.iais.roberta.visitor.collect.NaoUsedMethodCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
@@ -84,8 +81,6 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
  */
 public final class NaoPythonVisitor extends AbstractPythonVisitor implements INaoVisitor<Void> {
 
-    protected Set<UsedSensor> usedSensors;
-
     protected ILanguage language;
 
     /**
@@ -93,61 +88,26 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
      *
      * @param brickConfiguration hardware configuration of the brick
      * @param programPhrases to generate the code from
-     * @param indentation to start with. Will be ince/decr depending on block structure
-     * @param helperMethodGenerator
      */
-    private NaoPythonVisitor(
-        Configuration brickConfiguration,
+    public NaoPythonVisitor(
+        UsedHardwareBean usedHardwareBean,
+        CodeGeneratorSetupBean codeGeneratorSetupBean,
+        ConfigurationAst brickConfiguration,
         ArrayList<ArrayList<Phrase<Void>>> programPhrases,
-        int indentation,
-        ILanguage language,
-        HelperMethodGenerator helperMethodGenerator) {
-        super(programPhrases, indentation, helperMethodGenerator, new NaoUsedMethodCollectorVisitor(programPhrases));
-
-        NaoUsedHardwareCollectorVisitor checker = new NaoUsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
-        this.usedSensors = checker.getUsedSensors();
-        this.usedGlobalVarInFunctions = checker.getMarkedVariablesAsGlobal();
-        this.isProgramEmpty = checker.isProgramEmpty();
-        this.loopsLabels = checker.getloopsLabelContainer();
+        ILanguage language) {
+        super(usedHardwareBean, codeGeneratorSetupBean, programPhrases);
 
         this.language = language;
-    }
-
-    /**
-     * factory method to generate Python code from an AST.<br>
-     *
-     * @param programName name of the program
-     * @param brickConfiguration hardware configuration of the brick
-     * @param phrases to generate the code from
-     */
-    public static String generate(
-        Configuration brickConfiguration,
-        ArrayList<ArrayList<Phrase<Void>>> phrasesSet,
-        boolean withWrapping,
-        ILanguage language,
-        HelperMethodGenerator helperMethodGenerator) {
-        Assert.notNull(brickConfiguration);
-
-        NaoPythonVisitor astVisitor = new NaoPythonVisitor(brickConfiguration, phrasesSet, 0, language, helperMethodGenerator);
-        astVisitor.generateCode(withWrapping);
-
-        return astVisitor.sb.toString();
-    }
-
-    public static String generate(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, HelperMethodGenerator helperMethodGenerator) {
-        NaoPythonVisitor astVisitor = new NaoPythonVisitor(null, phrasesSet, 0, null, helperMethodGenerator);
-        astVisitor.generateCode(withWrapping);
-        return astVisitor.sb.toString();
     }
 
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
         this.sb.append("int(\"{:02x}{:02x}{:02x}\".format(min(max(");
-        rgbColor.getR().visit(this);
+        rgbColor.getR().accept(this);
         this.sb.append(", 0), 255), min(max(");
-        rgbColor.getG().visit(this);
+        rgbColor.getG().accept(this);
         this.sb.append(", 0), 255), min(max(");
-        rgbColor.getB().visit(this);
+        rgbColor.getB().accept(this);
         this.sb.append(", 0), 255), 16))");
         return null;
     }
@@ -166,7 +126,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
         this.sb.append("h.wait(");
-        waitTimeStmt.getTime().visit(this);
+        waitTimeStmt.getTime().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -174,7 +134,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         StmtList<Void> variables = mainTask.getVariables();
-        variables.visit(this);
+        variables.accept(this);
         generateUserDefinedMethods();
         nlIndent();
         nlIndent();
@@ -426,7 +386,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                 break;
         }
         this.sb.append(", ");
-        moveJoint.getDegrees().visit(this);
+        moveJoint.getDegrees().accept(this);
         this.sb.append(", ");
         switch ( moveJoint.getRelativeAbsolute() ) {
             case ABSOLUTE:
@@ -445,7 +405,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         if ( walkDistance.getWalkDirection() == DriveDirection.BACKWARD ) {
             this.sb.append("-");
         }
-        walkDistance.getDistanceToWalk().visit(this);
+        walkDistance.getDistanceToWalk().accept(this);
         this.sb.append(", 0, 0)");
         return null;
     }
@@ -456,7 +416,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         if ( turnDegrees.getTurnDirection() == TurnDirection.RIGHT ) {
             this.sb.append("-");
         }
-        turnDegrees.getDegreesToTurn().visit(this);
+        turnDegrees.getDegreesToTurn().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -464,11 +424,11 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitWalkTo(WalkTo<Void> walkTo) {
         this.sb.append("h.walk(");
-        walkTo.getWalkToX().visit(this);
+        walkTo.getWalkToX().accept(this);
         this.sb.append(",");
-        walkTo.getWalkToY().visit(this);
+        walkTo.getWalkToY().accept(this);
         this.sb.append(",");
-        walkTo.getWalkToTheta().visit(this);
+        walkTo.getWalkToTheta().accept(this);
         this.sb.append(")");
 
         return null;
@@ -505,13 +465,13 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         this.sb.append("h.pointLookAt(" + getEnumCode(pointLookAt.getPointLook()));
         this.sb.append(", " + pointLookAt.getFrame().getValues()[0] + ", ");
 
-        pointLookAt.getpointX().visit(this);
+        pointLookAt.getpointX().accept(this);
         this.sb.append(", ");
-        pointLookAt.getpointY().visit(this);
+        pointLookAt.getpointY().accept(this);
         this.sb.append(", ");
-        pointLookAt.getpointZ().visit(this);
+        pointLookAt.getpointZ().accept(this);
         this.sb.append(", ");
-        pointLookAt.getSpeed().visit(this);
+        pointLookAt.getSpeed().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -519,7 +479,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitSetVolume(SetVolume<Void> setVolume) {
         this.sb.append("h.setVolume(");
-        setVolume.getVolume().visit(this);
+        setVolume.getVolume().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -598,17 +558,17 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         this.sb.append("h.say(");
         if ( !sayTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
             this.sb.append("str(");
-            sayTextAction.getMsg().visit(this);
+            sayTextAction.getMsg().accept(this);
             this.sb.append(")");
         } else {
-            sayTextAction.getMsg().visit(this);
+            sayTextAction.getMsg().accept(this);
         }
         BlockType emptyBlock = BlockTypeContainer.getByName("EMPTY_EXPR");
         if ( !(sayTextAction.getSpeed().getKind().equals(emptyBlock) && sayTextAction.getPitch().getKind().equals(emptyBlock)) ) {
             this.sb.append(",");
-            sayTextAction.getSpeed().visit(this);
+            sayTextAction.getSpeed().accept(this);
             this.sb.append(",");
-            sayTextAction.getPitch().visit(this);
+            sayTextAction.getPitch().accept(this);
         }
         this.sb.append(")");
         return null;
@@ -617,7 +577,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitPlayFile(PlayFile<Void> playFile) {
         this.sb.append("h.playFile(");
-        playFile.getMsg().visit(this);
+        playFile.getMsg().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -660,7 +620,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                 this.sb.append("\"RightFootLeds\", ");
                 break;
         }
-        setLeds.getColor().visit(this);
+        setLeds.getColor().accept(this);
         this.sb.append(", 0.1)");
         return null;
     }
@@ -703,7 +663,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                 this.sb.append("\"RightFootLeds\", ");
                 break;
         }
-        setIntensity.getIntensity().visit(this);
+        setIntensity.getIntensity().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -801,7 +761,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitRandomEyesDuration(RandomEyesDuration<Void> randomEyesDuration) {
         this.sb.append("h.randomEyes(");
-        randomEyesDuration.getDuration().visit(this);
+        randomEyesDuration.getDuration().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -809,7 +769,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitRastaDuration(RastaDuration<Void> rastaDuration) {
         this.sb.append("h.rasta(");
-        rastaDuration.getDuration().visit(this);
+        rastaDuration.getDuration().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -872,7 +832,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         } else if ( takePicture.getCamera() == Camera.BOTTOM ) {
             this.sb.append("\"Bottom\", ");
         }
-        takePicture.getPictureName().visit(this);
+        takePicture.getPictureName().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -899,9 +859,9 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                 this.sb.append("\"Bottom\", ");
                 break;
         }
-        recordVideo.getDuration().visit(this);
+        recordVideo.getDuration().accept(this);
         this.sb.append(", ");
-        recordVideo.getVideoName().visit(this);
+        recordVideo.getVideoName().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -909,7 +869,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitLearnFace(LearnFace<Void> learnFace) {
         this.sb.append("faceRecognitionModule.learnFace(");
-        learnFace.getFaceName().visit(this);
+        learnFace.getFaceName().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -917,7 +877,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitForgetFace(ForgetFace<Void> forgetFace) {
         this.sb.append("faceRecognitionModule.forgetFace(");
-        forgetFace.getFaceName().visit(this);
+        forgetFace.getFaceName().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -934,7 +894,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
 
     @Override
     public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
-        return sensorGetSample.getSensor().visit(this);
+        return sensorGetSample.getSensor().accept(this);
     }
 
     @Override
@@ -1008,7 +968,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         nlIndent();
         generateSensors();
 
-        if ( !this.loopsLabels.isEmpty() ) {
+        if ( !usedHardwareBean.getLoopsLabelContainer().isEmpty() ) {
             nlIndent();
             this.sb.append("class BreakOutOfALoop(Exception): pass");
             nlIndent();
@@ -1061,17 +1021,17 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitWalkAsync(WalkAsync<Void> walkAsync) {
         this.sb.append("h.walkAsync(");
-        walkAsync.getXSpeed().visit(this);
+        walkAsync.getXSpeed().accept(this);
         this.sb.append(", ");
-        walkAsync.getYSpeed().visit(this);
+        walkAsync.getYSpeed().accept(this);
         this.sb.append(", ");
-        walkAsync.getZSpeed().visit(this);
+        walkAsync.getZSpeed().accept(this);
         this.sb.append(")");
         return null;
     }
 
     private void generateSensors() {
-        for ( UsedSensor usedSensor : this.usedSensors ) {
+        for ( UsedSensor usedSensor : this.usedHardwareBean.getUsedSensors() ) {
             switch ( usedSensor.getType() ) {
                 case SC.ULTRASONIC:
                     this.sb.append("h.sonar.subscribe(\"OpenRobertaApp\")");
@@ -1114,7 +1074,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     private void removeSensors() {
-        for ( UsedSensor usedSensor : this.usedSensors ) {
+        for ( UsedSensor usedSensor : this.usedHardwareBean.getUsedSensors() ) {
             String sensorType = usedSensor.getType();
             switch ( sensorType ) {
                 case BlocklyConstants.COLOR:
@@ -1153,7 +1113,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
         this.sb.append("speechRecognitionModule.recognizeWordFromDictionary(");
-        recognizeWord.getVocabulary().visit(this);
+        recognizeWord.getVocabulary().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -1161,7 +1121,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitNaoMarkInformation(NaoMarkInformation<Void> naoMarkInformation) {
         this.sb.append("h.getNaoMarkInformation(");
-        naoMarkInformation.getNaoMarkId().visit(this);
+        naoMarkInformation.getNaoMarkId().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -1169,7 +1129,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitDetecedFaceInformation(DetectedFaceInformation<Void> detectedFaceInformation) {
         this.sb.append("faceRecognitionModule.getFaceInformation(");
-        detectedFaceInformation.getFaceName().visit(this);
+        detectedFaceInformation.getFaceName().accept(this);
         this.sb.append(")");
         return null;
     }

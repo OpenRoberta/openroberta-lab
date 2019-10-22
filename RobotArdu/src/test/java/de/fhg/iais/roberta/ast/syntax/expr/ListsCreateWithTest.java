@@ -2,43 +2,44 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
+import de.fhg.iais.roberta.syntax.codegen.arduino.arduino.ArduinoAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
+import de.fhg.iais.roberta.worker.codegen.ArduinoCxxGeneratorWorker;
 
-public class ListsCreateWithTest {
-    private final HelperBotNrollForXmlTest h = new HelperBotNrollForXmlTest();
+public class ListsCreateWithTest extends ArduinoAstTest {
 
     @Test
     public void Test() throws Exception {
         String a = "{1.0,3.1,2}";
 
-        this.h.assertCodeIsOk(a, "/syntax/lists/lists_create_with.xml", false);
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/lists/lists_create_with.xml", new ArduinoCxxGeneratorWorker());
     }
 
     @Test
     public void Test1() throws Exception {
         String a = "{\"a\",\"b\",\"c\"}";
 
-        this.h.assertCodeIsOk(a, "/syntax/lists/lists_create_with1.xml", false);
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/lists/lists_create_with1.xml", new ArduinoCxxGeneratorWorker());
     }
 
     @Test
     public void Test2() throws Exception {
         String a = "{true,true,false}";
 
-        this.h.assertCodeIsOk(a, "/syntax/lists/lists_create_with2.xml", false);
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/lists/lists_create_with2.xml", new ArduinoCxxGeneratorWorker());
     }
 
     @Test
     public void Test3() throws Exception {
         String a = "{true,true,true}";
 
-        this.h.assertCodeIsOk(a, "/syntax/lists/lists_create_with3.xml", false);
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/lists/lists_create_with3.xml", new ArduinoCxxGeneratorWorker());
     }
 
     @Test
     public void Test4() throws Exception {
         String a = "{RGB(0x58,0x58,0x58),RGB(0xB3,0x00,0x06),RGB(0x53,0x21,0x15)}";
 
-        this.h.assertCodeIsOk(a, "/syntax/lists/lists_create_with4.xml", false);
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/lists/lists_create_with4.xml", new ArduinoCxxGeneratorWorker());
     }
 }

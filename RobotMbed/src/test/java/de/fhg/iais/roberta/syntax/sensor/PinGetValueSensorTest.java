@@ -1,12 +1,11 @@
 package de.fhg.iais.roberta.syntax.sensor;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
+import de.fhg.iais.roberta.ast.AstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class PinGetValueSensorTest {
-    private final HelperCalliopeForXmlTest h = new HelperCalliopeForXmlTest();
+public class PinGetValueSensorTest extends AstTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfPinValueSensorClass() throws Exception {
@@ -15,14 +14,13 @@ public class PinGetValueSensorTest {
                 + "MainTask [], "
                 + "DisplayTextAction [TEXT, SensorExpr [PinGetValueSensor [1, ANALOG, NO_SLOT]]], DisplayTextAction [TEXT, SensorExpr [PinGetValueSensor [0, DIGITAL, NO_SLOT]]]]]]";
 
-        String result = this.h.generateTransformerString("/sensor/read_value_from_pin.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/read_value_from_pin.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        this.h.assertTransformationIsOk("/sensor/read_value_from_pin.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/sensor/read_value_from_pin.xml");
     }
 
 }

@@ -57,7 +57,7 @@ public final class SetLanguageAction<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((ISpeechVisitor<V>) visitor).visitSetLanguageAction(this);
     }
 

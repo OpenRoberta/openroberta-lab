@@ -1,12 +1,15 @@
 package de.fhg.iais.roberta.syntax.stmt;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.Ev3LejosAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class WhileUntilStmtTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
+public class WhileUntilStmtTest extends Ev3LejosAstTest {
 
+    // TODO Invalid test
+    @Ignore
     @Test
     public void whileUntilStmt() throws Exception {
         String a =
@@ -25,7 +28,7 @@ public class WhileUntilStmtTest {
                 + "    }\n"
                 + "}}";
 
-        this.h.assertCodeIsOk(a, "/syntax/stmt/whileUntil_stmt.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/stmt/whileUntil_stmt.xml", false);
     }
 
     @Test
@@ -40,11 +43,11 @@ public class WhileUntilStmtTest {
                 + "    System.out.println(\"\");\n"
                 + "}}}";
 
-        this.h.assertCodeIsOk(a, "/syntax/control/repeat_stmt_loopForever.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/control/repeat_stmt_loopForever.xml", false);
     }
 
     @Test
     public void reverseTransformationWhileUntil() throws Exception {
-        this.h.assertTransformationIsOk("/syntax/stmt/whileUntil_stmt.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/syntax/stmt/whileUntil_stmt.xml");
     }
 }

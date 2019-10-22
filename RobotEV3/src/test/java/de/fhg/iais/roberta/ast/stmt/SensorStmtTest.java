@@ -8,12 +8,10 @@ import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
 
 public class SensorStmtTest {
     @Test
     public void make() throws Exception {
-        new HelperEv3ForXmlTest(); // needed; global variable set :-<
         TouchSensor<Void> touchSensor =
             TouchSensor.make(new SensorMetaDataBean("1", SC.TOUCH, "EMPTY_SLOT", false), BlocklyBlockProperties.make("1", "1"), null);
         SensorStmt<Void> sensorStmt = SensorStmt.make(touchSensor);

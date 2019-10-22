@@ -2,7 +2,8 @@ package de.fhg.iais.roberta.visitor.collect;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.vorwerk.BrushOff;
 import de.fhg.iais.roberta.syntax.action.vorwerk.BrushOn;
@@ -20,9 +21,11 @@ import de.fhg.iais.roberta.visitor.hardware.IVorwerkVisitor;
  */
 public final class VorwerkUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements IVorwerkVisitor<Void> {
 
-    public VorwerkUsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, Configuration brickConfiguration) {
-        super(brickConfiguration);
-        check(phrasesSet);
+    public VorwerkUsedHardwareCollectorVisitor(
+        UsedHardwareBean.Builder builder,
+        ArrayList<ArrayList<Phrase<Void>>> phrasesSet,
+        ConfigurationAst brickConfiguration) {
+        super(builder, brickConfiguration);
     }
 
     @Override

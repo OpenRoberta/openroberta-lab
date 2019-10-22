@@ -2,37 +2,38 @@ package de.fhg.iais.roberta.syntax.codegen.nao;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.nao.HelperNaoForXmlTest;
+import de.fhg.iais.roberta.syntax.NaoAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class PythonVisitorTest {
-    private final HelperNaoForXmlTest h = new HelperNaoForXmlTest();
+public class PythonVisitorTest extends NaoAstTest {
 
     @Test
     public void rgbColorVisit_returnsCorrectPythonCodeConvertingRgb2Hex() throws Exception {
-        String correct_code = "item=int(\"{:02x}{:02x}{:02x}\".format(min(max(0,0),255),min(max(100,0),255),min(max(68,0),255),16))defrun():h.setAutonomousLife('ON')globalitem";
+        String correct_code =
+            "item=int(\"{:02x}{:02x}{:02x}\".format(min(max(0,0),255),min(max(100,0),255),min(max(68,0),255),16))defrun():h.setAutonomousLife('ON')globalitem";
 
-        this.h.assertCodeIsOk(correct_code, "/expr/create_rgb_variable.xml", false);
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, correct_code, "/expr/create_rgb_variable.xml", false);
     }
 
     @Test
     public void rgbAccelerometerVisit_returnsCorrectPythonCodeGettingValueFromAccelerometerSensor() throws Exception {
         String correct_code = "defrun():h.setAutonomousLife('ON')h.walk(h.accelerometer('x'), 0, 0)";
 
-        this.h.assertCodeIsOk(correct_code, "/sensor/accelerometer.xml", false);
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, correct_code, "/sensor/accelerometer.xml", false);
     }
 
     @Test
     public void rgbGyroSensorVisit_returnsCorrectPythonCodeGettingValueFromXaxis() throws Exception {
         String correct_code = "defrun():h.setAutonomousLife('ON')h.walk(h.gyrometer('x'), 0, 0)";
 
-        this.h.assertCodeIsOk(correct_code, "/sensor/gyrometer.xml", false);
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, correct_code, "/sensor/gyrometer.xml", false);
     }
 
     @Test
     public void rgbUltrasonicSensorVisit_returnsCorrectPythonCodeGettingDistance() throws Exception {
         String correct_code = "defrun():h.setAutonomousLife('ON')h.walk(h.ultrasonic(), 0, 0)";
 
-        this.h.assertCodeIsOk(correct_code, "/sensor/ultrasonic.xml", false);
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, correct_code, "/sensor/ultrasonic.xml", false);
     }
 
     @Test
@@ -48,7 +49,7 @@ public class PythonVisitorTest {
                 + "    h.say(str(h.touchsensors('bumper', 'left')))\n"
                 + "    h.say(str(h.touchsensors('bumper', 'right')))";
 
-        this.h.assertCodeIsOk(correct_code, "/sensor/touch.xml", false);
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, correct_code, "/sensor/touch.xml", false);
     }
 
     @Test
@@ -59,7 +60,7 @@ public class PythonVisitorTest {
                 + "    h.say(str(h.fsr('left')))\n"
                 + "    h.say(str(h.fsr('right')))";
 
-        this.h.assertCodeIsOk(correct_code, "/sensor/fsr.xml", false);
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, correct_code, "/sensor/fsr.xml", false);
     }
 
     @Test
@@ -70,7 +71,7 @@ public class PythonVisitorTest {
                 + "    h.say(str(faceRecognitionModule.detectFace()))\n"
                 + "    h.say(str(faceRecognitionModule.detectFaces()))";
 
-        this.h.assertCodeIsOk(correct_code, "/sensor/facedetection.xml", false);
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, correct_code, "/sensor/facedetection.xml", false);
     }
 
     @Test
@@ -80,7 +81,7 @@ public class PythonVisitorTest {
                 + "    h.setAutonomousLife('OFF')"
                 + "    h.say(str(faceRecognitionModule.getFaceInformation(\"Roberta\")))";
 
-        this.h.assertCodeIsOk(correct_code, "/sensor/faceinformation.xml", false);
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, correct_code, "/sensor/faceinformation.xml", false);
     }
 
     @Test
@@ -90,7 +91,7 @@ public class PythonVisitorTest {
                 + "    h.setAutonomousLife('OFF')"
                 + "    h.say(str(h.getNaoMarkInformation(84)))";
 
-        this.h.assertCodeIsOk(correct_code, "/sensor/markinformation.xml", false);
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, correct_code, "/sensor/markinformation.xml", false);
     }
 
     @Test
@@ -101,7 +102,7 @@ public class PythonVisitorTest {
                 + "    h.say(str(h.getDetectedMark()))\n"
                 + "    h.say(str(h.getDetectedMarks()))";
 
-        this.h.assertCodeIsOk(correct_code, "/sensor/detectmark.xml", false);
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, correct_code, "/sensor/detectmark.xml", false);
     }
 
     @Test
@@ -136,6 +137,6 @@ public class PythonVisitorTest {
                 + "    h.say(str(h.getElectricCurrent('RAnklePitch')))\n"
                 + "    h.say(str(h.getElectricCurrent('RAnkleRoll')))";
 
-        this.h.assertCodeIsOk(correct_code, "/sensor/electriccurrent.xml", false);
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, correct_code, "/sensor/electriccurrent.xml", false);
     }
 }

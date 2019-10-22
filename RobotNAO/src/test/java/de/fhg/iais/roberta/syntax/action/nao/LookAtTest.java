@@ -1,12 +1,11 @@
 package de.fhg.iais.roberta.syntax.action.nao;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.nao.HelperNaoForXmlTest;
+import de.fhg.iais.roberta.syntax.NaoAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class LookAtTest {
-    private final HelperNaoForXmlTest h = new HelperNaoForXmlTest();
+public class LookAtTest extends NaoAstTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfPointLookAtRobotClass() throws Exception {
@@ -15,9 +14,8 @@ public class LookAtTest {
                 + "MainTask [], "
                 + "PointLookAt [ROBOT, LOOK, NumConst [0], NumConst [0], NumConst [0], NumConst [0]]]]]";
 
-        String result = this.h.generateTransformerString("/action/lookAt_robot.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/action/lookAt_robot.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
@@ -27,9 +25,8 @@ public class LookAtTest {
                 + "MainTask [], "
                 + "PointLookAt [WORLD, LOOK, NumConst [0], NumConst [0], NumConst [0], NumConst [0]]]]]";
 
-        String result = this.h.generateTransformerString("/action/lookAt_world.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/action/lookAt_world.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
@@ -39,15 +36,14 @@ public class LookAtTest {
                 + "MainTask [], "
                 + "PointLookAt [TORSO, LOOK, NumConst [0], NumConst [0], NumConst [0], NumConst [0]]]]]";
 
-        String result = this.h.generateTransformerString("/action/lookAt_torso.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/action/lookAt_torso.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     /*
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
     
-        this.h.assertTransformationIsOk("/action/lookAt_robot.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/action/lookAt_robot.xml");
     }*/
 }

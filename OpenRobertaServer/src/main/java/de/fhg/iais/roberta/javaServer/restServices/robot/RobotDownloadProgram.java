@@ -60,7 +60,7 @@ public class RobotDownloadProgram {
                 case "ev3lejosv1":
                 case "lejos":
                     fileName = programName + ".jar";
-                    filePath = this.pathToCrosscompilerBaseDir + token + "/target";
+                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
                 case "Nao":
                     fileName = programName + ".py";

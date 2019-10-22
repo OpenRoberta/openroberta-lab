@@ -1,0 +1,85 @@
+# method names are based on FunctionNames
+# languages are based on HelperMethodGenerator.Language
+PRIME:
+  JAVA: |
+    private boolean _isPrime(int n) {
+        if (n == 2) return true;
+        if (n % 2 == 0 || n == 1) return false;
+        for (int i = 2; i * i <= n; i += 2) {
+            if (n % i == 0) return false;
+        }
+        return true;
+    }
+  PYTHON: |
+    def _isPrime(number):
+        if(number == 0 or number == 1):
+            return False
+        for i in range(2, int(math.floor(math.sqrt(number))) + 1):
+            remainder = number % i
+            if remainder == 0:
+                return False
+        return True
+  C: |
+    TODO
+SUM:
+  JAVA: |
+    private float _sum(List<Float> list) {
+        float sum = 0.0f;
+        for ( Float f : list ) {
+            sum += f;
+        }
+        return sum;
+    }
+AVERAGE:
+  JAVA: |
+    private float _average(List<Float> list) {
+        float sum = 0.0f; // TODO reuse _sum?
+        for ( Float f : list ) {
+            sum += f;
+        }
+        return sum / list.size();
+    }
+MEDIAN:
+  JAVA: |
+    private float _median(List<Float> list) {
+        List<Float> sortedList = new ArrayList<>(list);
+        Collections.sort(sortedList);
+        int listLen = sortedList.size();
+        if (list.isEmpty()) throw new IllegalArgumentException("List cannot be empty!"); // TODO remove?
+        if (listLen % 2 == 0) {
+            return (sortedList.get((listLen - 1) / 2) + sortedList.get((listLen + 1) / 2)) / 2.0f;
+        } else {
+            return sortedList.get((listLen - 1) / 2);
+        }
+    }
+  PYTHON: |
+    def _median(l):
+        l = sorted(l)
+        l_len = len(l)
+        if l_len < 1:
+            return None
+        if l_len % 2 == 0:
+            return (l[int((l_len - 1) / 2)] + l[int((l_len + 1) / 2)] ) / 2.0
+        else:
+            return l[int((l_len - 1) / 2)]
+STD_DEV:
+  JAVA: |
+    private float _standardDeviation(List<Float> list) {
+        float sum = 0.0f; // TODO reuse _average?
+        for ( Float f : list ) {
+            sum += f;
+        }
+        float mean = sum / list.size();
+        float standardDev = 0;
+        for ( Float f : list ) {
+            standardDev += (f - mean) * (f + mean);
+        }
+        return (float) Math.sqrt(standardDev / list.size());
+    }
+  PYTHON: |
+    def _standard_deviation(l):
+        mean = float(sum(l)) / len(l)
+        sd = 0
+        for i in l:
+            sd += (i - mean)*(i - mean)
+        return math.sqrt(sd / len(l))

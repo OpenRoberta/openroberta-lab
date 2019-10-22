@@ -3,15 +3,13 @@ package de.fhg.iais.roberta.ast.stmt;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.ast.AstTest;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt.Mode;
-import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
-import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class RepeatStmtTest {
-    AbstractHelperForXmlTest h = new GenericHelperForXmlTest();
+public class RepeatStmtTest extends AstTest {
 
     @Test
     public void repeatStmt() throws Exception {
@@ -24,33 +22,24 @@ public class RepeatStmtTest {
                 + ")\n"
                 + ")]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/repeat_stmt.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/control/repeat_stmt.xml");
     }
 
     @Test
     public void getMode() throws Exception {
-        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/control/repeat_stmt.xml");
-
-        RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(0).get(1);
-
+        RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) UnitTestHelper.getAstOfFirstBlock(testFactory, "/ast/control/repeat_stmt.xml");
         Assert.assertEquals(Mode.TIMES, repeatStmt.getMode());
     }
 
     @Test
     public void getExpr() throws Exception {
-        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/control/repeat_stmt.xml");
-
-        RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(0).get(1);
-
+        RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) UnitTestHelper.getAstOfFirstBlock(testFactory, "/ast/control/repeat_stmt.xml");
         Assert.assertEquals("Var [k0], NumConst [0], NumConst [10], NumConst [1]", repeatStmt.getExpr().toString());
     }
 
     @Test
     public void getList() throws Exception {
-        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/control/repeat_stmt.xml");
-
-        RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(0).get(1);
-
+        RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) UnitTestHelper.getAstOfFirstBlock(testFactory, "/ast/control/repeat_stmt.xml");
         String a =
             "\nexprStmt Binary [TEXT_APPEND, Var [item3], StringConst [Proba]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item3], StringConst [Proba1]]\n"
@@ -64,7 +53,7 @@ public class RepeatStmtTest {
     public void repeatStmt1() throws Exception {
         String a = "BlockAST [project=[[Location [x=-93, y=1], \n" + "(repeat [TIMES, Var [k0], NumConst [0], NumConst [10], NumConst [1]]\n)]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/repeat_stmt1.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/control/repeat_stmt1.xml");
     }
 
     @Test
@@ -75,7 +64,7 @@ public class RepeatStmtTest {
                 + "AktionStmt [DriveAction [FOREWARD, MotionParam [speed=NumConst [50], duration=null]]]\n"
                 + ")]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/repeat_stmt2.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/control/repeat_stmt2.xml");
     }
 
     @Test
@@ -87,7 +76,7 @@ public class RepeatStmtTest {
                 + "exprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]\n"
                 + ")]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/repeat_stmt_whileUntil.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/control/repeat_stmt_whileUntil.xml");
     }
 
     @Test
@@ -100,14 +89,14 @@ public class RepeatStmtTest {
                 + "StmtFlowCon [BREAK]\n"
                 + ")]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/repeat_stmt_whileUntil1.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/control/repeat_stmt_whileUntil1.xml");
     }
 
     @Test
     public void repeatStmtWhileUntil2() throws Exception {
         String a = "BlockAST [project=[[Location [x=-93, y=101], \n" + "(repeat [WHILE, EmptyExpr [defVal=BOOLEAN]]\n)]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/repeat_stmt_whileUntil2.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/control/repeat_stmt_whileUntil2.xml");
     }
 
     @Test
@@ -118,14 +107,14 @@ public class RepeatStmtTest {
                 + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [kllk]]\n"
                 + ")]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/repeat_stmt_for.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/control/repeat_stmt_for.xml");
     }
 
     @Test
     public void repeatStmtFor1() throws Exception {
         String a = "BlockAST [project=[[Location [x=-93, y=190], \n" + "(repeat [FOR, Var [i], NumConst [1], NumConst [10], NumConst [1]]\n)]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/repeat_stmt_for1.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/control/repeat_stmt_for1.xml");
     }
 
     @Test
@@ -136,7 +125,7 @@ public class RepeatStmtTest {
                 + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [gg]]\n"
                 + ")]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/repeat_stmt_for_each.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/control/repeat_stmt_for_each.xml");
     }
 
     @Test
@@ -145,7 +134,7 @@ public class RepeatStmtTest {
             "BlockAST [project=[[Location [x=-93, y=290], \n"
                 + "(repeat [FOR_EACH, Binary [IN, VarDeclaration [NUMBER, i, EmptyExpr [defVal=NUMBER], false, false], EmptyExpr [defVal=ARRAY]]]\n)]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/control/repeat_stmt_for_each1.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/control/repeat_stmt_for_each1.xml");
     }
 
     @Test
@@ -153,7 +142,7 @@ public class RepeatStmtTest {
         String a =
             "BlockAST[project=[[Location[x=1,y=379],(repeat[FOREVER,BoolConst[true]]FunctionStmt[TextPrintFunct[[ColorConst[#00642E]]]]),(repeat[FOREVER,BoolConst[true]]FunctionStmt[TextPrintFunct[[EmptyExpr[defVal=STRING]]]])]]]";
 
-        Assert.assertEquals(a.replaceAll("\\s+", ""), this.h.generateTransformerString("/ast/control/repeat_stmt_loopForever.xml").replaceAll("\\s+", ""));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/control/repeat_stmt_loopForever.xml");
     }
 
     @Test(expected = DbcException.class)
@@ -173,57 +162,57 @@ public class RepeatStmtTest {
 
     @Test
     public void reverseTransformation() throws Exception {
-        this.h.assertTransformationIsOk("/ast/control/repeat_stmt.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/control/repeat_stmt.xml");
     }
 
     @Test
     public void reverseTransformation1() throws Exception {
-        this.h.assertTransformationIsOk("/ast/control/repeat_stmt1.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/control/repeat_stmt1.xml");
     }
 
     @Test
     public void reverseTransformation2() throws Exception {
-        this.h.assertTransformationIsOk("/ast/control/repeat_stmt2.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/control/repeat_stmt2.xml");
     }
 
     @Test
     public void reverseTransformationWhileUntil() throws Exception {
-        this.h.assertTransformationIsOk("/ast/control/repeat_stmt_whileUntil.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/control/repeat_stmt_whileUntil.xml");
     }
 
     @Test
     public void reverseTransformationWhileUntil1() throws Exception {
-        this.h.assertTransformationIsOk("/ast/control/repeat_stmt_whileUntil1.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/control/repeat_stmt_whileUntil1.xml");
     }
 
     @Test
     public void reverseTransformationWhileUntil2() throws Exception {
-        this.h.assertTransformationIsOk("/ast/control/repeat_stmt_whileUntil2.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/control/repeat_stmt_whileUntil2.xml");
     }
 
     @Test
     public void reverseTransformationFor() throws Exception {
-        this.h.assertTransformationIsOk("/ast/control/repeat_stmt_for.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/control/repeat_stmt_for.xml");
     }
 
     @Test
     public void reverseTransformationFor1() throws Exception {
-        this.h.assertTransformationIsOk("/ast/control/repeat_stmt_for1.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/control/repeat_stmt_for1.xml");
     }
 
     @Test
     public void reverseTransformationForEach() throws Exception {
-        this.h.assertTransformationIsOk("/ast/control/repeat_stmt_for_each.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/control/repeat_stmt_for_each.xml");
     }
 
     @Test
     public void reverseTransformationForEach1() throws Exception {
-        this.h.assertTransformationIsOk("/ast/control/repeat_stmt_for_each1.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/control/repeat_stmt_for_each1.xml");
     }
 
     @Test
     public void reverseTransformationForLoopForever() throws Exception {
-        this.h.assertTransformationIsOk("/ast/control/repeat_stmt_loopForever.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/control/repeat_stmt_loopForever.xml");
     }
 
 }

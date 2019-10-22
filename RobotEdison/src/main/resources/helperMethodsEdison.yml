@@ -1,4 +1,4 @@
-include: "classpath:/helperMethodsCommon.yml"
+include: "classpath:/common.methods.yml"
 # method names are based on FunctionNames and EdisonUsedHardwareCollectorVisitor.Method
 # languages are based on HelperMethodGenerator.Language
 

@@ -1,13 +1,8 @@
 package de.fhg.iais.roberta.visitor.validate;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
@@ -41,7 +36,6 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
-import de.fhg.iais.roberta.syntax.lang.methods.Method;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
@@ -57,75 +51,18 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void> {
 
-    protected final List<String> globalVariables = new ArrayList<>();
-    protected final List<String> declaredVariables = new ArrayList<>();
-    protected ArrayList<VarDeclaration<Void>> visitedVars = new ArrayList<>();
-    private final List<Method<Void>> userDefinedMethods = new ArrayList<>();
-    private final Set<String> markedVariablesAsGlobal = new HashSet<>();
-
-    private boolean isProgramEmpty = false;
-    private boolean isListsUsed = false;
-
-    private int loopCounter = 0;
-    private int currenLoop = 0;
-    private final HashMap<Integer, Boolean> loopsLabelContainer = new HashMap<>();
+    protected final UsedHardwareBean.Builder builder;
     private final HashMap<Integer, Integer> waitsInLoops = new HashMap<>();
+    private int loopCounter = 0;
+    private int currentLoop = 0;
 
-    /**
-     * Returns map of loop number and boolean value that indicates if the loop is labeled in Blockly program.
-     *
-     * @return map of loops and boolean value
-     */
-    public Map<Integer, Boolean> getloopsLabelContainer() {
-        return this.loopsLabelContainer;
-    }
-
-    public Set<String> getMarkedVariablesAsGlobal() {
-        return this.markedVariablesAsGlobal;
-    }
-
-    public List<Method<Void>> getUserDefinedMethods() {
-        return this.userDefinedMethods;
-    }
-
-    public boolean isProgramEmpty() {
-        return this.isProgramEmpty;
-    }
-
-    protected void check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        Assert.isTrue(!phrasesSet.isEmpty());
-        collectGlobalVariables(phrasesSet);
-        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-            for ( Phrase<Void> phrase : phrases ) {
-                if ( isMainBlock(phrase) ) {
-                    this.isProgramEmpty = phrases.size() == 2;
-                } else {
-                    phrase.visit(this);
-                }
-            }
-        }
-    }
-
-    protected void collectGlobalVariables(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-            Phrase<Void> phrase = phrases.get(1);
-            visitIfMain(phrase);
-        }
-    }
-
-    private void visitIfMain(Phrase<Void> phrase) {
-        if ( isMainBlock(phrase) ) {
-            phrase.visit(this);
-        }
-    }
-
-    protected boolean isMainBlock(Phrase<Void> phrase) {
-        return phrase.getKind().getName().equals("MAIN_TASK");
+    protected AbstractCollectorVisitor(UsedHardwareBean.Builder builder) {
+        this.builder = builder;
     }
 
     @Override
@@ -165,10 +102,10 @@ public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void>
 
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
-        rgbColor.getR().visit(this);
-        rgbColor.getG().visit(this);
-        rgbColor.getB().visit(this);
-        rgbColor.getA().visit(this);
+        rgbColor.getR().accept(this);
+        rgbColor.getG().accept(this);
+        rgbColor.getB().accept(this);
+        rgbColor.getA().accept(this);
         return null;
     }
 
@@ -179,40 +116,46 @@ public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void>
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        if ( !var.toString().contains("false, false") ) {
-            this.visitedVars.add(var);
+        if ( var.isGlobal() ) {
+            this.builder.addVisitedVariable(var);
         }
-        var.getValue().visit(this);
-        this.globalVariables.add(var.getName());
-        this.declaredVariables.add(var.getName());
+        if ( var.getVarType().equals(BlocklyType.ARRAY)
+            || var.getVarType().equals(BlocklyType.ARRAY_BOOLEAN)
+            || var.getVarType().equals(BlocklyType.ARRAY_NUMBER)
+            || var.getVarType().equals(BlocklyType.ARRAY_COLOUR)
+            || var.getVarType().equals(BlocklyType.ARRAY_CONNECTION)
+            || var.getVarType().equals(BlocklyType.ARRAY_IMAGE)
+            || var.getVarType().equals(BlocklyType.ARRAY_STRING) ) {
+            this.builder.setListsUsed(true);
+        }
+        var.getValue().accept(this);
+        this.builder.addGlobalVariable(var.getName());
+        this.builder.addDeclaredVariable(var.getName());
         return null;
-    }
-
-    public ArrayList<VarDeclaration<Void>> getVisitedVars() {
-        return this.visitedVars;
     }
 
     @Override
     public Void visitUnary(Unary<Void> unary) {
-        unary.getExpr().visit(this);
+        unary.getExpr().accept(this);
         return null;
     }
 
     @Override
     public Void visitBinary(Binary<Void> binary) {
-        binary.getLeft().visit(this);
-        binary.getRight().visit(this);
+        binary.getLeft().accept(this);
+        binary.getRight().accept(this);
         return null;
     }
 
     @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        mathPowerFunct.getParam().stream().forEach(expr -> expr.visit(this));
+        mathPowerFunct.getParam().stream().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     public Void visitEmptyList(EmptyList<Void> emptyList) {
+        this.builder.setListsUsed(true);
         return null;
     }
 
@@ -222,18 +165,17 @@ public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void>
     }
 
     @Override
-    public Void visitExprList(ExprList<Void> exprList) {
-        this.setListsUsed(true);
-        exprList.get().stream().forEach(expr -> expr.visit(this));
+    public final Void visitExprList(ExprList<Void> exprList) {
+        exprList.get().stream().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
-    public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
-        assignStmt.getExpr().visit(this);
+    public final Void visitAssignStmt(AssignStmt<Void> assignStmt) {
+        assignStmt.getExpr().accept(this);
         String variableName = assignStmt.getName().getValue();
-        if ( this.globalVariables.contains(variableName) ) {
-            this.markedVariablesAsGlobal.add(variableName);
+        if ( this.builder.containsGlobalVariable(variableName) ) {
+            this.builder.addMarkedVariableAsGlobal(variableName);
         }
         return null;
     }
@@ -241,10 +183,10 @@ public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void>
     @Override
     public Void visitIfStmt(IfStmt<Void> ifStmt) {
         for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
-            ifStmt.getExpr().get(i).visit(this);
-            ifStmt.getThenList().get(i).visit(this);
+            ifStmt.getExpr().get(i).accept(this);
+            ifStmt.getThenList().get(i).accept(this);
         }
-        ifStmt.getElseList().visit(this);
+        ifStmt.getElseList().accept(this);
         return null;
     }
 
@@ -253,62 +195,62 @@ public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void>
         if ( repeatStmt.getExpr().getKind().hasName("EXPR_LIST") ) {
             ExprList<Void> exprList = (ExprList<Void>) repeatStmt.getExpr();
             String varName = ((Var<Void>) exprList.get().get(0)).getValue();
-            this.declaredVariables.add(varName);
-            exprList.visit(this);
+            this.builder.addDeclaredVariable(varName);
+            exprList.accept(this);
         } else {
-            repeatStmt.getExpr().visit(this);
+            repeatStmt.getExpr().accept(this);
         }
 
         if ( repeatStmt.getMode() != RepeatStmt.Mode.WAIT ) {
             increaseLoopCounter();
-            repeatStmt.getList().visit(this);
-            this.currenLoop--;
+            repeatStmt.getList().accept(this);
+            this.currentLoop--;
         } else {
-            repeatStmt.getList().visit(this);
+            repeatStmt.getList().accept(this);
         }
         return null;
     }
 
     @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
-        boolean isInWaitStmt = this.waitsInLoops.get(this.currenLoop) != 0;
-        this.loopsLabelContainer.put(this.currenLoop, isInWaitStmt);
+        boolean isInWaitStmt = this.waitsInLoops.get(this.currentLoop) != 0;
+        this.builder.putLoopLabel(this.currentLoop, isInWaitStmt);
         return null;
     }
 
     @Override
     public Void visitStmtList(StmtList<Void> stmtList) {
-        stmtList.get().stream().forEach(expr -> expr.visit(this));
+        stmtList.get().stream().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        mainTask.getVariables().visit(this);
+        mainTask.getVariables().accept(this);
         return null;
     }
 
     @Override
     public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
         if ( this.waitsInLoops.get(this.loopCounter) != null ) {
-            increseWaitStmsInLoop();
-            waitStmt.getStatements().visit(this);
+            increaseWaitStmsInLoop();
+            waitStmt.getStatements().accept(this);
             decreaseWaitStmtInLoop();
         } else {
-            waitStmt.getStatements().visit(this);
+            waitStmt.getStatements().accept(this);
         }
         return null;
     }
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
-        waitTimeStmt.getTime().visit(this);
+        waitTimeStmt.getTime().accept(this);
         return null;
     }
 
     @Override
     public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
-        textPrintFunct.getParam().stream().forEach(expr -> expr.visit(this));
+        textPrintFunct.getParam().stream().forEach(expr -> expr.accept(this));
         return null;
     }
 
@@ -319,63 +261,63 @@ public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void>
 
     @Override
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
-        getSubFunct.getParam().stream().forEach(expr -> expr.visit(this));
+        getSubFunct.getParam().stream().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
         for ( Expr<Void> expr : indexOfFunct.getParam() ) {
-            expr.visit(this);
+            expr.accept(this);
         }
         return null;
     }
 
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
-        lengthOfIsEmptyFunct.getParam().stream().forEach(expr -> expr.visit(this));
+        lengthOfIsEmptyFunct.getParam().stream().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     public Void visitListCreate(ListCreate<Void> listCreate) {
-        listCreate.getValue().visit(this);
+        listCreate.getValue().accept(this);
         return null;
     }
 
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        listGetIndex.getParam().stream().forEach(expr -> expr.visit(this));
+        listGetIndex.getParam().stream().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
-        listRepeat.getParam().stream().forEach(expr -> expr.visit(this));
+        listRepeat.getParam().stream().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
-        listSetIndex.getParam().stream().forEach(expr -> expr.visit(this));
+        listSetIndex.getParam().stream().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        mathConstrainFunct.getParam().stream().forEach(expr -> expr.visit(this));
+        mathConstrainFunct.getParam().stream().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
-        mathNumPropFunct.getParam().stream().forEach(expr -> expr.visit(this));
+        mathNumPropFunct.getParam().stream().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        mathOnListFunct.getParam().stream().forEach(expr -> expr.visit(this));
+        mathOnListFunct.getParam().stream().forEach(expr -> expr.accept(this));
         return null;
     }
 
@@ -386,74 +328,74 @@ public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void>
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
-        mathRandomIntFunct.getParam().stream().forEach(expr -> expr.visit(this));
+        mathRandomIntFunct.getParam().stream().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
-        mathSingleFunct.getParam().stream().forEach(expr -> expr.visit(this));
+        mathSingleFunct.getParam().stream().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        textJoinFunct.getParam().visit(this);
+        textJoinFunct.getParam().accept(this);
         return null;
     }
 
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        this.userDefinedMethods.add(methodVoid);
-        methodVoid.getParameters().visit(this);
-        methodVoid.getBody().visit(this);
+        this.builder.addUserDefinedMethod(methodVoid);
+        methodVoid.getParameters().accept(this);
+        methodVoid.getBody().accept(this);
         return null;
     }
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        this.userDefinedMethods.add(methodReturn);
-        methodReturn.getParameters().visit(this);
-        methodReturn.getBody().visit(this);
-        methodReturn.getReturnValue().visit(this);
+        this.builder.addUserDefinedMethod(methodReturn);
+        methodReturn.getParameters().accept(this);
+        methodReturn.getBody().accept(this);
+        methodReturn.getReturnValue().accept(this);
         return null;
     }
 
     @Override
     public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
-        methodIfReturn.getCondition().visit(this);
-        methodIfReturn.getReturnValue().visit(this);
+        methodIfReturn.getCondition().accept(this);
+        methodIfReturn.getReturnValue().accept(this);
         return null;
     }
 
     @Override
     public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
-        methodStmt.getMethod().visit(this);
+        methodStmt.getMethod().accept(this);
         return null;
     }
 
     @Override
     public Void visitMethodCall(MethodCall<Void> methodCall) {
-        methodCall.getParametersValues().visit(this);
+        methodCall.getParametersValues().accept(this);
         return null;
     }
 
     @Override
     public Void visitAssertStmt(AssertStmt<Void> assertStmt) {
-        assertStmt.getAssert().visit(this);
+        assertStmt.getAssert().accept(this);
         return null;
     }
 
     @Override
     public Void visitDebugAction(DebugAction<Void> debugAction) {
-        debugAction.getValue().visit(this);
+        debugAction.getValue().accept(this);
         return null;
     }
 
     private void increaseLoopCounter() {
         this.loopCounter++;
-        this.currenLoop = this.loopCounter;
-        this.loopsLabelContainer.put(this.loopCounter, false);
+        this.currentLoop = this.loopCounter;
+        this.builder.putLoopLabel(this.loopCounter, false);
         this.waitsInLoops.put(this.loopCounter, 0);
     }
 
@@ -463,24 +405,9 @@ public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void>
         this.waitsInLoops.put(this.loopCounter, --count);
     }
 
-    private void increseWaitStmsInLoop() {
+    private void increaseWaitStmsInLoop() {
         int count;
         count = this.waitsInLoops.get(this.loopCounter);
         this.waitsInLoops.put(this.loopCounter, ++count);
     }
-
-    /**
-     * @return the isListsUsed
-     */
-    public boolean isListsUsed() {
-        return isListsUsed;
-    }
-
-    /**
-     * @param isListsUsed the isListsUsed to set
-     */
-    public void setListsUsed(boolean isListsUsed) {
-        this.isListsUsed = isListsUsed;
-    }
-
 }

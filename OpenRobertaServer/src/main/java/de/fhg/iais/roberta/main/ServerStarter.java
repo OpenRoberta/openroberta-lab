@@ -201,6 +201,8 @@ public class ServerStarter {
         defaultHandler.addFilter(GuiceFilter.class, "/download/*", null);
         defaultHandler.addFilter(GuiceFilter.class, "/update/*", null);
 
+        defaultHandler.addFilter(GuiceFilter.class, "/project/*", null);
+
         // 3.2 static resources
         ServletHolder staticResourceServlet = defaultHandler.addServlet(DefaultServlet.class, "/*");
         staticResourceServlet.setInitParameter("dirAllowed", "false");
@@ -360,12 +362,14 @@ public class ServerStarter {
                     @SuppressWarnings("unchecked")
                     Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass(pluginFactory);
                     Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(PluginProperties.class);
-                    robotPlugins.put(robotName, factoryConstructor.newInstance(pluginProperties));
+                    IRobotFactory factory = factoryConstructor.newInstance(pluginProperties);
+                    robotPlugins.put(robotName, factory);
+
                 } catch ( Exception e ) {
                     throw new DbcException(
                         " factory for robot plugin "
                             + robotName
-                            + " could not be build. Plugin-jar not on the classpath? Invalid properties? Server does NOT start",
+                            + " could not be build. Plugin-jar not on the classpath? Invalid properties? Problems with validators? Server does NOT start",
                         e);
                 }
             }

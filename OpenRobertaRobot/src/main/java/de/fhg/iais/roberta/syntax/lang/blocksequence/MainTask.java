@@ -68,7 +68,7 @@ public class MainTask<V> extends Task<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((ILanguageVisitor<V>) visitor).visitMainTask(this);
     }
 

@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 import com.google.common.collect.Lists;
 
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
@@ -19,15 +19,67 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.StartActivityTask;
-import de.fhg.iais.roberta.syntax.lang.expr.*;
-import de.fhg.iais.roberta.syntax.lang.functions.*;
+import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.Binary;
+import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
+import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
+import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
+import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
+import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
+import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
+import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
+import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
+import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.ShadowExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.StmtExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
+import de.fhg.iais.roberta.syntax.lang.expr.Unary;
+import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
+import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
+import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
+import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
-import de.fhg.iais.roberta.syntax.lang.stmt.*;
+import de.fhg.iais.roberta.syntax.lang.stmt.ActionStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
+import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt.Mode;
+import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon.Flow;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
+import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -41,12 +93,12 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     protected int stmtsNumber = 0;
     protected int methodsNumber = 0;
 
-    protected JSONObject fctDecls = new JSONObject();
+    private JSONObject fctDecls = new JSONObject();
     protected List<JSONObject> opArray = new ArrayList<>();
     protected final List<List<JSONObject>> opArrayStack = new ArrayList<>();
-    protected final Configuration configuration;
+    protected final ConfigurationAst configuration;
 
-    protected AbstractStackMachineVisitor(Configuration configuration) {
+    protected AbstractStackMachineVisitor(ConfigurationAst configuration) {
         this.configuration = configuration;
     }
 
@@ -126,9 +178,9 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitRgbColor(RgbColor<V> rgbColor) {
-        rgbColor.getR().visit(this);
-        rgbColor.getG().visit(this);
-        rgbColor.getB().visit(this);
+        rgbColor.getR().accept(this);
+        rgbColor.getG().accept(this);
+        rgbColor.getB().accept(this);
         JSONObject o = mk(C.EXPR).put(C.EXPR, C.RGB_COLOR_CONST);
         return app(o);
     }
@@ -136,9 +188,9 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     @Override
     public V visitShadowExpr(ShadowExpr<V> shadowExpr) {
         if ( shadowExpr.getBlock() != null ) {
-            shadowExpr.getBlock().visit(this);
+            shadowExpr.getBlock().accept(this);
         } else {
-            shadowExpr.getShadow().visit(this);
+            shadowExpr.getShadow().accept(this);
         }
         return null;
     }
@@ -154,12 +206,12 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
             ExprList<V> list = (ExprList<V>) var.getValue();
             if ( list.get().size() == 2 ) {
-                list.get().get(1).visit(this);
+                list.get().get(1).accept(this);
             } else {
-                list.get().get(0).visit(this);
+                list.get().get(0).accept(this);
             }
         } else {
-            var.getValue().visit(this);
+            var.getValue().accept(this);
         }
         JSONObject o = mk(C.VAR_DECLARATION).put(C.TYPE, var.getTypeVar()).put(C.NAME, var.getName());
         return app(o);
@@ -167,15 +219,15 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitUnary(Unary<V> unary) {
-        unary.getExpr().visit(this);
+        unary.getExpr().accept(this);
         JSONObject o = mk(C.EXPR).put(C.EXPR, C.UNARY).put(C.OP, unary.getOp());
         return app(o);
     }
 
     @Override
     public V visitBinary(Binary<V> binary) {
-        binary.getLeft().visit(this);
-        binary.getRight().visit(this);
+        binary.getLeft().accept(this);
+        binary.getRight().accept(this);
         JSONObject o;
         // FIXME: The math change should be removed from the binary expression since it is a statement
         switch ( binary.getOp() ) {
@@ -194,27 +246,27 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitMathPowerFunct(MathPowerFunct<V> mathPowerFunct) {
-        mathPowerFunct.getParam().get(0).visit(this);
-        mathPowerFunct.getParam().get(1).visit(this);
+        mathPowerFunct.getParam().get(0).accept(this);
+        mathPowerFunct.getParam().get(1).accept(this);
         JSONObject o = mk(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, mathPowerFunct.getFunctName());
         return app(o);
     }
 
     @Override
     public V visitActionExpr(ActionExpr<V> actionExpr) {
-        actionExpr.getAction().visit(this);
+        actionExpr.getAction().accept(this);
         return null;
     }
 
     @Override
     public V visitSensorExpr(SensorExpr<V> sensorExpr) {
-        sensorExpr.getSens().visit(this);
+        sensorExpr.getSens().accept(this);
         return null;
     }
 
     @Override
     public V visitMethodExpr(MethodExpr<V> methodExpr) {
-        methodExpr.getMethod().visit(this);
+        methodExpr.getMethod().accept(this);
         return null;
     }
 
@@ -253,7 +305,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     public V visitExprList(ExprList<V> exprList) {
         for ( Expr<V> expr : exprList.get() ) {
             if ( !expr.getKind().hasName("EMPTY_EXPR") ) {
-                expr.visit(this);
+                expr.accept(this);
             }
         }
         return null;
@@ -261,26 +313,26 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitStmtExpr(StmtExpr<V> stmtExpr) {
-        stmtExpr.getStmt().visit(this);
+        stmtExpr.getStmt().accept(this);
         return null;
     }
 
     @Override
     public V visitActionStmt(ActionStmt<V> actionStmt) {
-        actionStmt.getAction().visit(this);
+        actionStmt.getAction().accept(this);
         return null;
     }
 
     @Override
     public V visitAssignStmt(AssignStmt<V> assignStmt) {
-        assignStmt.getExpr().visit(this);
+        assignStmt.getExpr().accept(this);
         JSONObject o = mk(C.ASSIGN_STMT).put(C.NAME, assignStmt.getName().getValue());
         return app(o);
     }
 
     @Override
     public V visitExprStmt(ExprStmt<V> exprStmt) {
-        exprStmt.getExpr().visit(this);
+        exprStmt.getExpr().accept(this);
         return null;
     }
 
@@ -294,18 +346,18 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
             JSONObject stmtListEnd = mk(C.FLOW_CONTROL).put(C.KIND, C.IF_STMT).put(C.CONDITIONAL, false).put(C.BREAK, true);
             // TODO: better a list of pairs. pair of lists needs this kind of for
             for ( int i = 0; i < numberOfThens; i++ ) {
-                ifStmt.getExpr().get(i).visit(this);
+                ifStmt.getExpr().get(i).accept(this);
                 pushOpArray();
-                ifStmt.getThenList().get(i).visit(this);
-                this.opArray.add(stmtListEnd);
+                ifStmt.getThenList().get(i).accept(this);
+                this.getOpArray().add(stmtListEnd);
                 List<JSONObject> thenStmts = popOpArray();
                 JSONObject ifTrue = mk(C.IF_TRUE_STMT).put(C.STMT_LIST, thenStmts);
-                this.opArray.add(ifTrue);
+                this.getOpArray().add(ifTrue);
             }
             if ( !ifStmt.getElseList().get().isEmpty() ) {
-                ifStmt.getElseList().visit(this);
+                ifStmt.getElseList().accept(this);
             }
-            this.opArray.add(stmtListEnd);
+            this.getOpArray().add(stmtListEnd);
             List<JSONObject> ifThenElseOps = popOpArray();
             JSONObject o = mk(C.IF_STMT).put(C.STMT_LIST, ifThenElseOps);
             return app(o);
@@ -318,20 +370,20 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
         // the very special case of a wait stmt. The AST is not perfectly designed for this case
         if ( mode == Mode.WAIT ) {
-            repeatStmt.getExpr().visit(this);
+            repeatStmt.getExpr().accept(this);
             pushOpArray();
-            repeatStmt.getList().visit(this);
+            repeatStmt.getList().accept(this);
             JSONObject stmtListEnd = mk(C.FLOW_CONTROL).put(C.KIND, C.WAIT_STMT).put(C.CONDITIONAL, false).put(C.BREAK, true);
-            this.opArray.add(stmtListEnd);
+            this.getOpArray().add(stmtListEnd);
             List<JSONObject> waitBody = popOpArray();
             JSONObject o = mk(C.IF_TRUE_STMT).put(C.STMT_LIST, waitBody);
             return app(o);
         }
 
         // The "real" repeat cases
-        if ( (mode == Mode.FOREVER) || (mode == Mode.TIMES) || (mode == Mode.FOR) || (mode == Mode.FOR_EACH) ) {
+        if ( mode == Mode.FOREVER || mode == Mode.TIMES || mode == Mode.FOR || mode == Mode.FOR_EACH ) {
             pushOpArray();
-            repeatStmt.getList().visit(this);
+            repeatStmt.getList().accept(this);
             List<JSONObject> repeatBody = popOpArray();
             JSONObject cont = mk(C.REPEAT_STMT_CONTINUATION).put(C.MODE, mode).put(C.STMT_LIST, repeatBody);
             JSONObject repeat = mk(C.REPEAT_STMT).put(C.MODE, mode).put(C.STMT_LIST, Arrays.asList(cont));
@@ -339,12 +391,12 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                 return app(repeat);
             } else if ( mode == Mode.FOR_EACH ) {
                 pushOpArray();
-                repeatStmt.getExpr().visit(this);
+                repeatStmt.getExpr().accept(this);
                 List<JSONObject> timesExprs = popOpArray();
                 JSONObject decl = timesExprs.remove(1);
                 JSONObject listName = timesExprs.remove(1);
                 timesExprs.set(1, mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 1));
-                this.opArray.addAll(timesExprs);
+                this.getOpArray().addAll(timesExprs);
                 String varName = decl.getString(C.NAME);
                 String runVarName = varName + "_runningVariable";
                 cont.put(C.NAME, varName).put(C.EACH_COUNTER, runVarName).put(C.LIST, listName.getString(C.NAME));
@@ -352,10 +404,10 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                 return app(repeat);
             } else {
                 pushOpArray();
-                repeatStmt.getExpr().visit(this); // expected: expr list length 4: var, start, end, incr
+                repeatStmt.getExpr().accept(this); // expected: expr list length 4: var, start, end, incr
                 List<JSONObject> timesExprs = popOpArray();
                 JSONObject decl = timesExprs.remove(0);
-                this.opArray.addAll(timesExprs);
+                this.getOpArray().addAll(timesExprs);
                 String runVarName = decl.getString(C.NAME);
                 cont.put(C.NAME, runVarName);
                 repeat.put(C.NAME, runVarName);
@@ -363,12 +415,12 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
             }
         }
 
-        if ( (mode == Mode.WHILE) || (mode == Mode.UNTIL) ) {
+        if ( mode == Mode.WHILE || mode == Mode.UNTIL ) {
             pushOpArray();
-            repeatStmt.getExpr().visit(this);
+            repeatStmt.getExpr().accept(this);
             List<JSONObject> expr = popOpArray();
             pushOpArray();
-            repeatStmt.getList().visit(this);
+            repeatStmt.getList().accept(this);
             List<JSONObject> body = popOpArray();
             JSONObject cont = mk(C.REPEAT_STMT_CONTINUATION).put(C.MODE, mode);
             JSONObject repeat = mk(C.REPEAT_STMT).put(C.MODE, mode).put(C.STMT_LIST, Arrays.asList(cont));
@@ -385,7 +437,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitSensorStmt(SensorStmt<V> sensorStmt) {
-        sensorStmt.getSensor().visit(this);
+        sensorStmt.getSensor().accept(this);
         return null;
     }
 
@@ -400,14 +452,14 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     @Override
     public V visitStmtList(StmtList<V> stmtList) {
         for ( Stmt<V> stmt : stmtList.get() ) {
-            stmt.visit(this);
+            stmt.accept(this);
         }
         return null;
     }
 
     @Override
     public V visitMainTask(MainTask<V> mainTask) {
-        mainTask.getVariables().visit(this);
+        mainTask.getVariables().accept(this);
         if ( mainTask.getDebug().equals("TRUE") ) {
             JSONObject o = mk(C.CREATE_DEBUG_ACTION);
             return app(o);
@@ -430,10 +482,10 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         pushOpArray();
         List<Stmt<V>> repeatStmts = waitStmt.getStatements().get();
         for ( Stmt<V> repeatStmt : repeatStmts ) {
-            repeatStmt.visit(this);
+            repeatStmt.accept(this);
         }
-        this.opArray.add(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 1));
-        this.opArray.add(mk(C.WAIT_TIME_STMT));
+        this.getOpArray().add(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 1));
+        this.getOpArray().add(mk(C.WAIT_TIME_STMT));
         List<JSONObject> waitBlocks = popOpArray();
         JSONObject o = mk(C.WAIT_STMT).put(C.STMT_LIST, waitBlocks);
         return app(o);
@@ -441,7 +493,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitWaitTimeStmt(WaitTimeStmt<V> waitTimeStmt) {
-        waitTimeStmt.getTime().visit(this);
+        waitTimeStmt.getTime().accept(this);
         JSONObject o = mk(C.WAIT_TIME_STMT);
         return app(o);
     }
@@ -463,19 +515,19 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitFunctionStmt(FunctionStmt<V> functionStmt) {
-        functionStmt.getFunction().visit(this);
+        functionStmt.getFunction().accept(this);
         return null;
     }
 
     @Override
     public V visitFunctionExpr(FunctionExpr<V> functionExpr) {
-        functionExpr.getFunction().visit(this);
+        functionExpr.getFunction().accept(this);
         return null;
     }
 
     @Override
     public V visitGetSubFunct(GetSubFunct<V> getSubFunct) {
-        getSubFunct.getParam().forEach(x -> x.visit(this));
+        getSubFunct.getParam().forEach(x -> x.accept(this));
 
         JSONObject o =
             mk(C.EXPR)
@@ -488,7 +540,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitIndexOfFunct(IndexOfFunct<V> indexOfFunct) {
-        indexOfFunct.getParam().forEach(x -> x.visit(this));
+        indexOfFunct.getParam().forEach(x -> x.accept(this));
         JSONObject o =
             mk(C.EXPR).put(C.EXPR, C.LIST_OPERATION).put(C.OP, C.LIST_FIND_ITEM).put(C.POSITION, indexOfFunct.getLocation().toString().toLowerCase());
         return app(o);
@@ -496,14 +548,14 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<V> lengthOfIsEmptyFunct) {
-        lengthOfIsEmptyFunct.getParam().get(0).visit(this);
+        lengthOfIsEmptyFunct.getParam().get(0).accept(this);
         JSONObject o = mk(C.EXPR).put(C.EXPR, C.LIST_OPERATION).put(C.OP, lengthOfIsEmptyFunct.getFunctName().toString().toLowerCase());
         return app(o);
     }
 
     @Override
     public V visitListCreate(ListCreate<V> listCreate) {
-        listCreate.getValue().visit(this);
+        listCreate.getValue().accept(this);
         int n = listCreate.getValue().get().size();
 
         JSONObject o = mk(C.EXPR).put(C.EXPR, C.CREATE_LIST).put(C.NUMBER, n);
@@ -512,7 +564,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitListSetIndex(ListSetIndex<V> listSetIndex) {
-        listSetIndex.getParam().forEach(x -> x.visit(this));
+        listSetIndex.getParam().forEach(x -> x.accept(this));
         JSONObject o =
             mk(C.LIST_OPERATION)
                 .put(C.OP, listSetIndex.getElementOperation().toString().toLowerCase())
@@ -522,7 +574,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitListGetIndex(ListGetIndex<V> listGetIndex) {
-        listGetIndex.getParam().forEach(x -> x.visit(this));
+        listGetIndex.getParam().forEach(x -> x.accept(this));
         JSONObject o =
             mk(C.EXPR)
                 .put(C.EXPR, C.LIST_OPERATION)
@@ -538,18 +590,18 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitMathConstrainFunct(MathConstrainFunct<V> mathConstrainFunct) {
-        mathConstrainFunct.getParam().get(0).visit(this);
-        mathConstrainFunct.getParam().get(1).visit(this);
-        mathConstrainFunct.getParam().get(2).visit(this);
+        mathConstrainFunct.getParam().get(0).accept(this);
+        mathConstrainFunct.getParam().get(1).accept(this);
+        mathConstrainFunct.getParam().get(2).accept(this);
         JSONObject o = mk(C.EXPR).put(C.EXPR, C.MATH_CONSTRAIN_FUNCTION);
         return app(o);
     }
 
     @Override
     public V visitMathNumPropFunct(MathNumPropFunct<V> mathNumPropFunct) {
-        mathNumPropFunct.getParam().get(0).visit(this);
+        mathNumPropFunct.getParam().get(0).accept(this);
         if ( mathNumPropFunct.getFunctName() == FunctionNames.DIVISIBLE_BY ) {
-            mathNumPropFunct.getParam().get(1).visit(this);
+            mathNumPropFunct.getParam().get(1).accept(this);
         }
         JSONObject o = mk(C.EXPR).put(C.EXPR, C.MATH_PROP_FUNCT).put(C.OP, mathNumPropFunct.getFunctName());
         return app(o);
@@ -557,7 +609,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitMathOnListFunct(MathOnListFunct<V> mathOnListFunct) {
-        mathOnListFunct.getParam().forEach(x -> x.visit(this));
+        mathOnListFunct.getParam().forEach(x -> x.accept(this));
         JSONObject o = mk(C.EXPR).put(C.EXPR, C.MATH_ON_LIST).put(C.OP, mathOnListFunct.getFunctName().toString().toLowerCase());
         return app(o);
     }
@@ -570,22 +622,22 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitMathRandomIntFunct(MathRandomIntFunct<V> mathRandomIntFunct) {
-        mathRandomIntFunct.getParam().get(0).visit(this);
-        mathRandomIntFunct.getParam().get(1).visit(this);
+        mathRandomIntFunct.getParam().get(0).accept(this);
+        mathRandomIntFunct.getParam().get(1).accept(this);
         JSONObject o = mk(C.EXPR).put(C.EXPR, C.RANDOM_INT);
         return app(o);
     }
 
     @Override
     public V visitMathSingleFunct(MathSingleFunct<V> mathSingleFunct) {
-        mathSingleFunct.getParam().get(0).visit(this);
+        mathSingleFunct.getParam().get(0).accept(this);
         JSONObject o = mk(C.EXPR).put(C.EXPR, C.SINGLE_FUNCTION).put(C.OP, mathSingleFunct.getFunctName());
         return app(o);
     }
 
     @Override
     public V visitTextJoinFunct(TextJoinFunct<V> textJoinFunct) {
-        textJoinFunct.getParam().visit(this);
+        textJoinFunct.getParam().accept(this);
         int n = textJoinFunct.getParam().get().size();
         JSONObject o = mk(C.TEXT_JOIN).put(C.NUMBER, n);
         return app(o);
@@ -594,41 +646,41 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     @Override
     public V visitMethodVoid(MethodVoid<V> methodVoid) {
         pushOpArray();
-        methodVoid.getParameters().visit(this);
+        methodVoid.getParameters().accept(this);
         popOpArray();
         pushOpArray();
-        methodVoid.getBody().visit(this);
+        methodVoid.getBody().accept(this);
         JSONObject terminateMethodCall = mk(C.FLOW_CONTROL).put(C.KIND, C.METHOD_CALL_VOID).put(C.CONDITIONAL, false).put(C.BREAK, true);
-        this.opArray.add(terminateMethodCall);
+        this.getOpArray().add(terminateMethodCall);
         List<JSONObject> methodBody = popOpArray();
         JSONObject o = mk(C.METHOD_VOID).put(C.NAME, methodVoid.getMethodName()).put(C.STATEMENTS, methodBody);
-        this.fctDecls.put(methodVoid.getMethodName(), o);
+        this.getFctDecls().put(methodVoid.getMethodName(), o);
         return null;
     }
 
     @Override
     public V visitMethodReturn(MethodReturn<V> methodReturn) {
         pushOpArray();
-        methodReturn.getParameters().visit(this);
+        methodReturn.getParameters().accept(this);
         popOpArray();
         pushOpArray();
-        methodReturn.getBody().visit(this);
-        methodReturn.getReturnValue().visit(this);
+        methodReturn.getBody().accept(this);
+        methodReturn.getReturnValue().accept(this);
         JSONObject terminateMethodCall = mk(C.FLOW_CONTROL).put(C.KIND, C.METHOD_CALL_RETURN).put(C.CONDITIONAL, false).put(C.BREAK, true);
-        this.opArray.add(terminateMethodCall);
+        this.getOpArray().add(terminateMethodCall);
         List<JSONObject> methodBody = popOpArray();
         JSONObject o = mk(C.METHOD_RETURN).put(C.TYPE, methodReturn.getReturnType()).put(C.NAME, methodReturn.getMethodName()).put(C.STATEMENTS, methodBody);
-        this.fctDecls.put(methodReturn.getMethodName(), o);
+        this.getFctDecls().put(methodReturn.getMethodName(), o);
         return null;
     }
 
     @Override
     public V visitMethodIfReturn(MethodIfReturn<V> methodIfReturn) {
-        methodIfReturn.getCondition().visit(this);
+        methodIfReturn.getCondition().accept(this);
         pushOpArray();
-        methodIfReturn.getReturnValue().visit(this);
+        methodIfReturn.getReturnValue().accept(this);
         JSONObject terminateMethodCall = mk(C.FLOW_CONTROL).put(C.KIND, C.METHOD_CALL_RETURN).put(C.CONDITIONAL, false).put(C.BREAK, true);
-        this.opArray.add(terminateMethodCall);
+        this.getOpArray().add(terminateMethodCall);
         List<JSONObject> returnValueExpr = popOpArray();
         JSONObject o = mk(C.IF_RETURN).put(C.STMT_LIST, returnValueExpr);
         return app(o);
@@ -636,7 +688,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitMethodStmt(MethodStmt<V> methodStmt) {
-        methodStmt.getMethod().visit(this);
+        methodStmt.getMethod().accept(this);
         return null;
     }
 
@@ -644,12 +696,12 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     public V visitMethodCall(MethodCall<V> methodCall) {
         List<Expr<V>> parametersNames = methodCall.getParameters().get();
         pushOpArray();
-        parametersNames.stream().forEach(n -> n.visit(this));
-        List<String> names = this.opArray.stream().map(d -> d.getString(C.NAME)).collect(Collectors.toList());
+        parametersNames.stream().forEach(n -> n.accept(this));
+        List<String> names = this.getOpArray().stream().map(d -> d.getString(C.NAME)).collect(Collectors.toList());
         names = Lists.reverse(names);
         popOpArray();
         List<Expr<V>> parametersValues = methodCall.getParametersValues().get();
-        parametersValues.stream().forEach(v -> v.visit(this));
+        parametersValues.stream().forEach(v -> v.accept(this));
         // TODO: better AST needed. Push and pop used only to get the parameter names
         String methodKind = methodCall.getReturnType() == BlocklyType.VOID ? C.METHOD_CALL_VOID : C.METHOD_CALL_RETURN;
         JSONObject call = mk(methodKind).put(C.NAME, methodCall.getMethodName()).put(C.NAMES, names);
@@ -668,7 +720,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     protected void appendDuration(MotorDuration<V> duration) {
         if ( duration != null ) {
-            duration.getValue().visit(this);
+            duration.getValue().accept(this);
         }
     }
 
@@ -680,10 +732,10 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         return isReverse ? TurnDirection.RIGHT : TurnDirection.LEFT;
     }
 
-    protected void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<V>>> phrasesSet) {
+    public void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<V>>> phrasesSet) {
         for ( ArrayList<Phrase<V>> phrases : phrasesSet ) {
             for ( Phrase<V> phrase : phrases ) {
-                phrase.visit(this);
+                phrase.accept(this);
             }
         }
     }
@@ -693,35 +745,35 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     }
 
     protected V app(JSONObject o) {
-        this.opArray.add(o);
+        this.getOpArray().add(o);
         return null;
     }
 
     protected void pushOpArray() {
-        this.opArrayStack.add(this.opArray);
-        this.opArray = new ArrayList<>();
+        this.opArrayStack.add(this.getOpArray());
+        this.setOpArray(new ArrayList<>());
     }
 
     protected List<JSONObject> popOpArray() {
-        List<JSONObject> opArray = this.opArray;
-        this.opArray = this.opArrayStack.remove(this.opArrayStack.size() - 1);
+        List<JSONObject> opArray = this.getOpArray();
+        this.setOpArray(this.opArrayStack.remove(this.opArrayStack.size() - 1));
         return opArray;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public V visitAssertStmt(AssertStmt<V> assertStmt) {
-        assertStmt.getAssert().visit(this);
-        ((Binary<Void>) assertStmt.getAssert()).getLeft().visit((IVisitor<Void>) this);
-        ((Binary<Void>) assertStmt.getAssert()).getRight().visit((IVisitor<Void>) this);
-        String op = ((Binary<Void>) (assertStmt.getAssert())).getOp().toString();
+        assertStmt.getAssert().accept(this);
+        ((Binary<Void>) assertStmt.getAssert()).getLeft().accept((IVisitor<Void>) this);
+        ((Binary<Void>) assertStmt.getAssert()).getRight().accept((IVisitor<Void>) this);
+        String op = ((Binary<Void>) assertStmt.getAssert()).getOp().toString();
         JSONObject o = mk(C.ASSERT_ACTION).put(C.MSG, assertStmt.getMsg()).put(C.OP, op);
         return app(o);
     }
 
     @Override
     public V visitDebugAction(DebugAction<V> debugAction) {
-        debugAction.getValue().visit(this);
+        debugAction.getValue().accept(this);
         JSONObject o = mk(C.DEBUG_ACTION);
         return app(o);
     }
@@ -729,5 +781,21 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     protected void generateProgramPrefix(boolean withWrapping) {
         // TODO Auto-generated method stub
 
+    }
+
+    public List<JSONObject> getOpArray() {
+        return this.opArray;
+    }
+
+    public void setOpArray(List<JSONObject> opArray) {
+        this.opArray = opArray;
+    }
+
+    public JSONObject getFctDecls() {
+        return this.fctDecls;
+    }
+
+    public void setFctDecls(JSONObject fctDecls) {
+        this.fctDecls = fctDecls;
     }
 }

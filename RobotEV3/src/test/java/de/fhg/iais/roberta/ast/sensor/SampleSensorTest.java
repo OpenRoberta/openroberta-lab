@@ -1,12 +1,11 @@
 package de.fhg.iais.roberta.ast.sensor;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.ast.AstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class SampleSensorTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
+public class SampleSensorTest extends AstTest {
 
     @Test
     public void sensorGetSample1() throws Exception {
@@ -25,6 +24,6 @@ public class SampleSensorTest {
                 + "[Location [x=236, y=439], GetSampleSensor [GyroSensor [2, RATE, EMPTY_SLOT]]], "
                 + "[Location [x=256, y=479], GetSampleSensor [TimerSensor [1, VALUE, EMPTY_SLOT]]]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_getSampleSensor.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/sensors/sensor_getSampleSensor.xml");
     }
 }

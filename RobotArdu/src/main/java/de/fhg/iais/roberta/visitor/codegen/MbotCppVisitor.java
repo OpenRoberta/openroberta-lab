@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
+import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Category;
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
@@ -55,10 +57,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.FlameSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.Joystick;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.collect.MbotUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 
 /**
@@ -66,38 +66,19 @@ import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
  * representation is correct C code for Arduino.</b> <br>
  */
 public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implements IMbotVisitor<Void> {
-    private final boolean isTimerSensorUsed;
 
     /**
      * Initialize the C++ code generator visitor.
      *
      * @param brickConfiguration hardware configuration of the brick
-     * @param programPhrases to generate the code from
-     * @param indentation to start with. Will be incr/decr depending on block structure
+     * @param phrases to generate the code from
      */
-    private MbotCppVisitor(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases, int indentation) {
-        super(brickConfiguration, phrases, indentation);
-        final MbotUsedHardwareCollectorVisitor codePreprocessVisitor = new MbotUsedHardwareCollectorVisitor(phrases, brickConfiguration);
-        this.usedSensors = codePreprocessVisitor.getUsedSensors();
-        this.usedActors = codePreprocessVisitor.getUsedActors();
-        this.isTimerSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
-        this.usedVars = codePreprocessVisitor.getVisitedVars();
-        this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
-    }
-
-    /**
-     * factory method to generate C++ code from an AST.<br>
-     *
-     * @param brickConfiguration hardware configuration of the brick
-     * @param programPhrases to generate the code from
-     * @param withWrapping if false the generated code will be without the surrounding configuration code
-     */
-    public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
-        Assert.notNull(brickConfiguration);
-
-        final MbotCppVisitor astVisitor = new MbotCppVisitor(brickConfiguration, programPhrases, withWrapping ? 1 : 0);
-        astVisitor.generateCode(withWrapping);
-        return astVisitor.sb.toString();
+    public MbotCppVisitor(
+        UsedHardwareBean usedHardwareBean,
+        CodeGeneratorSetupBean codeGeneratorSetupBean,
+        ConfigurationAst brickConfiguration,
+        ArrayList<ArrayList<Phrase<Void>>> phrases) {
+        super(usedHardwareBean, codeGeneratorSetupBean, brickConfiguration, phrases);
     }
 
     @Override
@@ -154,7 +135,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
         Channels.put("blue", ((RgbColor<Void>) lightAction.getRgbLedColor()).getB());
         Channels.forEach((k, v) -> {
             this.sb.append(", ");
-            v.visit(this);
+            v.accept(this);
         });
         this.sb.append(");");
         nlIndent();
@@ -181,9 +162,9 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     public Void visitToneAction(ToneAction<Void> toneAction) {
         //8 - sound port
         this.sb.append("_meBuzzer.tone(8, ");
-        toneAction.getFrequency().visit(this);
+        toneAction.getFrequency().accept(this);
         this.sb.append(", ");
-        toneAction.getDuration().visit(this);
+        toneAction.getDuration().accept(this);
         this.sb.append(");");
         nlIndent();
         this.sb.append("delay(20); ");
@@ -211,12 +192,12 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
             this.sb.append("-1*");
         }
         this.sb.append("(");
-        motorOnAction.getParam().getSpeed().visit(this);
+        motorOnAction.getParam().getSpeed().accept(this);
         this.sb.append(")*255/100);");
         if ( duration != null ) {
             nlIndent();
             this.sb.append("delay(");
-            motorOnAction.getDurationValue().visit(this);
+            motorOnAction.getDurationValue().accept(this);
             this.sb.append(");");
             nlIndent();
             this.sb.append("_meDCmotor").append(motorOnAction.getUserDefinedPort()).append(".stop();");
@@ -244,12 +225,12 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         final MotorDuration<Void> duration = driveAction.getParam().getDuration();
         this.sb.append("_meDrive.drive(");
-        driveAction.getParam().getSpeed().visit(this);
+        driveAction.getParam().getSpeed().accept(this);
         this.sb.append(", ");
         this.sb.append(driveAction.getDirection() == DriveDirection.FOREWARD ? 1 : 0);
         if ( duration != null ) {
             this.sb.append(", ");
-            duration.getValue().visit(this);
+            duration.getValue().accept(this);
         }
         this.sb.append(");");
         return null;
@@ -259,13 +240,13 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     public Void visitCurveAction(CurveAction<Void> curveAction) {
         final MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
         this.sb.append("_meDrive.steer(");
-        curveAction.getParamLeft().getSpeed().visit(this);
+        curveAction.getParamLeft().getSpeed().accept(this);
         this.sb.append(", ");
-        curveAction.getParamRight().getSpeed().visit(this);
+        curveAction.getParamRight().getSpeed().accept(this);
         this.sb.append(", ").append(curveAction.getDirection() == DriveDirection.FOREWARD ? 1 : 0);
         if ( duration != null ) {
             this.sb.append(", ");
-            duration.getValue().visit(this);
+            duration.getValue().accept(this);
         }
         this.sb.append(");");
         return null;
@@ -275,11 +256,11 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     public Void visitTurnAction(TurnAction<Void> turnAction) {
         final MotorDuration<Void> duration = turnAction.getParam().getDuration();
         this.sb.append("_meDrive.turn(");
-        turnAction.getParam().getSpeed().visit(this);
+        turnAction.getParam().getSpeed().accept(this);
         this.sb.append(", ").append(turnAction.getDirection() == TurnDirection.LEFT ? 1 : 0);
         if ( duration != null ) {
             this.sb.append(", ");
-            duration.getValue().visit(this);
+            duration.getValue().accept(this);
         }
         this.sb.append(");");
         return null;
@@ -287,7 +268,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        for ( final UsedActor actor : this.usedActors ) {
+        for ( final UsedActor actor : this.usedHardwareBean.getUsedActors() ) {
             if ( actor.getType().equals(SC.DIFFERENTIAL_DRIVE) ) {
                 this.sb.append("_meDrive.stop();");
                 break;
@@ -386,22 +367,22 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        mainTask.getVariables().visit(this);
+        mainTask.getVariables().accept(this);
         if ( !mainTask.getVariables().toString().equals("") ) {
             nlIndent();
         }
         nlIndent();
         //generateConfigurationVariables();
-        if ( this.isTimerSensorUsed ) {
+        if ( this.usedHardwareBean.isTimerSensorUsed() ) {
             this.sb.append("unsigned long __time = millis();");
             nlIndent();
         }
         long numberConf =
             this.programPhrases
                 .stream()
-                .filter(phrase -> (phrase.getKind().getCategory() == Category.METHOD) && !phrase.getKind().hasName("METHOD_CALL"))
+                .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
                 .count();
-        if ( (this.configuration.getConfigurationComponents().isEmpty() || this.isTimerSensorUsed) && (numberConf == 0) ) {
+        if ( (this.configuration.getConfigurationComponents().isEmpty() || this.usedHardwareBean.isTimerSensorUsed()) && numberConf == 0 ) {
             nlIndent();
         }
         generateUserDefinedMethods();
@@ -496,7 +477,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     private void generateSensors() {
         LinkedHashSet<Integer> usedInfraredPort = new LinkedHashSet<>();
-        for ( final UsedSensor usedSensor : this.usedSensors ) {
+        for ( final UsedSensor usedSensor : this.usedHardwareBean.getUsedSensors() ) {
             switch ( usedSensor.getType() ) {
                 case SC.BUTTON:
                     nlIndent();
@@ -564,7 +545,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     private void generateActors() {
-        for ( final UsedActor usedActor : this.usedActors ) {
+        for ( final UsedActor usedActor : this.usedHardwareBean.getUsedActors() ) {
             switch ( usedActor.getType() ) {
                 case SC.LED_ON_BOARD:
                     nlIndent();
@@ -619,7 +600,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
         this.sb.append("Serial.println(");
-        serialWriteAction.getValue().visit(this);
+        serialWriteAction.getValue().accept(this);
         this.sb.append(");");
         return null;
     }
@@ -627,7 +608,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     @Override
     public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
         this.sb.append("_meIr.sendString(");
-        sendIRAction.getMessage().visit(this);
+        sendIRAction.getMessage().accept(this);
         this.sb.append(");");
         return null;
     }

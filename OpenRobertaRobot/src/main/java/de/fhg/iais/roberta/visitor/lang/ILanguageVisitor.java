@@ -380,17 +380,17 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     V visitMethodCall(MethodCall<V> methodCall);
 
     default V visitSensorExpr(SensorExpr<V> sensorExpr) {
-        sensorExpr.getSens().visit(this);
+        sensorExpr.getSens().accept(this);
         return null;
     }
 
     default V visitMethodExpr(MethodExpr<V> methodExpr) {
-        methodExpr.getMethod().visit(this);
+        methodExpr.getMethod().accept(this);
         return null;
     }
 
     default V visitActionStmt(ActionStmt<V> actionStmt) {
-        actionStmt.getAction().visit(this);
+        actionStmt.getAction().accept(this);
         return null;
     }
 
@@ -400,31 +400,31 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
      * @param actionExpr to be visited
      */
     default V visitActionExpr(ActionExpr<V> actionExpr) {
-        actionExpr.getAction().visit(this);
+        actionExpr.getAction().accept(this);
         return null;
     }
 
     default V visitExprStmt(ExprStmt<V> exprStmt) {
-        exprStmt.getExpr().visit(this);
+        exprStmt.getExpr().accept(this);
         return null;
     }
 
     default V visitStmtExpr(StmtExpr<V> stmtExpr) {
-        stmtExpr.getStmt().visit(this);
+        stmtExpr.getStmt().accept(this);
         return null;
     }
 
     default V visitShadowExpr(ShadowExpr<V> shadowExpr) {
         if ( shadowExpr.getBlock() != null ) {
-            shadowExpr.getBlock().visit(this);
+            shadowExpr.getBlock().accept(this);
         } else {
-            shadowExpr.getShadow().visit(this);
+            shadowExpr.getShadow().accept(this);
         }
         return null;
     }
 
     default V visitSensorStmt(SensorStmt<V> sensorStmt) {
-        sensorStmt.getSensor().visit(this);
+        sensorStmt.getSensor().accept(this);
         return null;
     }
 
@@ -446,12 +446,12 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     }
 
     default V visitFunctionStmt(FunctionStmt<V> functionStmt) {
-        functionStmt.getFunction().visit(this);
+        functionStmt.getFunction().accept(this);
         return null;
     }
 
     default V visitFunctionExpr(FunctionExpr<V> functionExpr) {
-        functionExpr.getFunction().visit(this);
+        functionExpr.getFunction().accept(this);
         return null;
     }
 

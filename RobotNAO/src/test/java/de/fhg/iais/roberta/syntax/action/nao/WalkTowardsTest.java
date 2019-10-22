@@ -1,12 +1,11 @@
 package de.fhg.iais.roberta.syntax.action.nao;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.nao.HelperNaoForXmlTest;
+import de.fhg.iais.roberta.syntax.NaoAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class WalkTowardsTest {
-    private final HelperNaoForXmlTest h = new HelperNaoForXmlTest();
+public class WalkTowardsTest extends NaoAstTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfWalkToClass() throws Exception {
@@ -15,14 +14,13 @@ public class WalkTowardsTest {
                 + "MainTask [], "
                 + "WalkTo [EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]]]";
 
-        String result = this.h.generateTransformerString("/action/walk_to_missing_coordinates.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/action/walk_to_missing_coordinates.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
 
-        this.h.assertTransformationIsOk("/action/walk_to_missing_coordinates.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/action/walk_to_missing_coordinates.xml");
     }
 }

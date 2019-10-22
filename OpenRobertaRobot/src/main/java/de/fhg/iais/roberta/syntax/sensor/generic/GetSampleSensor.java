@@ -105,7 +105,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((ISensorVisitor<V>) visitor).visitGetSampleSensor(this);
     }
 

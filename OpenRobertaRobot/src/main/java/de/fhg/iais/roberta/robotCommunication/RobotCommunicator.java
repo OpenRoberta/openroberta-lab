@@ -136,7 +136,7 @@ public class RobotCommunicator {
         }
     }
 
-    public boolean theRunButtonWasPressed(String token, String programName) {
+    private boolean theRunButtonWasPressed(String token, String programName) {
         RobotCommunicationData state = getState(token);
         return state.runButtonPressed(programName);
     }
@@ -152,10 +152,6 @@ public class RobotCommunicator {
 
     public String getSubtype() {
         return this.subtype;
-    }
-
-    public void setSubtype(String subtype) {
-        this.subtype = subtype;
     }
 
     public int getRobotCommunicationDataSize() {
@@ -253,5 +249,18 @@ public class RobotCommunicator {
 
     private String sanitize(String val) {
         return val == null ? "???" : val;
+    }
+
+    public Key run(String token, String robotName, String programName) {
+        if ( this.getState(token) != null ) {
+            this.subtype = robotName;
+            boolean wasRobotWaiting = this.theRunButtonWasPressed(token, programName);
+            if ( wasRobotWaiting ) {
+                return Key.ROBOT_PUSH_RUN;
+            } else {
+                return Key.ROBOT_NOT_WAITING;
+            }
+        }
+        return Key.ROBOT_NOT_CONNECTED;
     }
 }

@@ -1,20 +1,20 @@
 package de.fhg.iais.roberta.ast.syntax.actors;
 
-import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
+import de.fhg.iais.roberta.NxtAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class DriveActionTest {
-    private final HelperNxtForXmlTest h = new HelperNxtForXmlTest();
+public class DriveActionTest extends NxtAstTest {
 
     //
     public void drive() throws Exception {
         final String a = "OnFwdReg(OUT_BC,50,OUT_REGMODE_SYNC)";
 
-        this.h.assertCodeIsOk(a, "/ast/actions/action_MotorDiffOn.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/ast/actions/action_MotorDiffOn.xml", false);
     }
 
     //
     public void driveFor() throws Exception {
         final String a = "\nRotateMotorEx(OUT_BC,50,Infinity*20,0,true,true)";
-        this.h.assertCodeIsOk(a, "/ast/actions/action_MotorDiffOnFor.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/ast/actions/action_MotorDiffOnFor.xml", false);
     }
 }

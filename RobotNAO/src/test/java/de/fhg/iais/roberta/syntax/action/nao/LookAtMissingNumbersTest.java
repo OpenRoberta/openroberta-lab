@@ -1,12 +1,11 @@
 package de.fhg.iais.roberta.syntax.action.nao;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.nao.HelperNaoForXmlTest;
+import de.fhg.iais.roberta.syntax.NaoAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class LookAtMissingNumbersTest {
-    private final HelperNaoForXmlTest h = new HelperNaoForXmlTest();
+public class LookAtMissingNumbersTest extends NaoAstTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfPointLookAtRobotClass() throws Exception {
@@ -15,9 +14,8 @@ public class LookAtMissingNumbersTest {
                 + "MainTask [], "
                 + "PointLookAt [ROBOT, LOOK, EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]]]";
 
-        String result = this.h.generateTransformerString("/action/lookAt_robot_missingNumbers.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/action/lookAt_robot_missingNumbers.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
@@ -27,9 +25,8 @@ public class LookAtMissingNumbersTest {
                 + "MainTask [], "
                 + "PointLookAt [WORLD, LOOK, EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]]]";
 
-        String result = this.h.generateTransformerString("/action/lookAt_world_missingNumbers.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/action/lookAt_world_missingNumbers.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
@@ -39,15 +36,14 @@ public class LookAtMissingNumbersTest {
                 + "MainTask [], "
                 + "PointLookAt [TORSO, LOOK, EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]]]";
 
-        String result = this.h.generateTransformerString("/action/lookAt_torso_missingNumbers.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/action/lookAt_torso_missingNumbers.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     /*
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
     
-        this.h.assertTransformationIsOk("/action/pointAt_robot.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/action/pointAt_robot.xml");
     }*/
 }

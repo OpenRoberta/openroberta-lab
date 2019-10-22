@@ -1,11 +1,11 @@
 package de.fhg.iais.roberta.components.ev3c4ev3;
 
-import org.junit.Test;
+import static de.fhg.iais.roberta.components.ev3c4ev3.ResourceUtils.getFileFromResourcesAsByteArray;
+import static org.junit.Assert.assertArrayEquals;
 
 import java.nio.charset.StandardCharsets;
 
-import static de.fhg.iais.roberta.components.ev3c4ev3.ResourceUtils.getFileFromResourcesAsByteArray;
-import static org.junit.Assert.assertArrayEquals;
+import org.junit.Test;
 
 public class RbfBuilderTest {
 

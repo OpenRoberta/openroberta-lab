@@ -129,7 +129,7 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
         Assert.isTrue(!phrasesSet.isEmpty());
         for ( List<Phrase<Void>> phrases : phrasesSet ) {
             for ( Phrase<Void> phrase : phrases ) {
-                phrase.visit(this);
+                phrase.accept(this);
             }
         }
     }
@@ -173,10 +173,10 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
 
     @Override
     default Void visitRgbColor(RgbColor<Void> rgbColor) {
-        rgbColor.getR().visit(this);
-        rgbColor.getG().visit(this);
-        rgbColor.getB().visit(this);
-        rgbColor.getA().visit(this);
+        rgbColor.getR().accept(this);
+        rgbColor.getG().accept(this);
+        rgbColor.getB().accept(this);
+        rgbColor.getA().accept(this);
         return null;
     }
 
@@ -187,26 +187,26 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
 
     @Override
     default Void visitVarDeclaration(VarDeclaration<Void> var) {
-        var.getValue().visit(this);
+        var.getValue().accept(this);
         return null;
     }
 
     @Override
     default Void visitUnary(Unary<Void> unary) {
-        unary.getExpr().visit(this);
+        unary.getExpr().accept(this);
         return null;
     }
 
     @Override
     default Void visitBinary(Binary<Void> binary) {
-        binary.getLeft().visit(this);
-        binary.getRight().visit(this);
+        binary.getLeft().accept(this);
+        binary.getRight().accept(this);
         return null;
     }
 
     @Override
     default Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        mathPowerFunct.getParam().forEach(expr -> expr.visit(this));
+        mathPowerFunct.getParam().forEach(expr -> expr.accept(this));
         return null;
     }
 
@@ -222,21 +222,21 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
 
     @Override
     default Void visitExprList(ExprList<Void> exprList) {
-        exprList.get().forEach(expr -> expr.visit(this));
+        exprList.get().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     default Void visitAssignStmt(AssignStmt<Void> assignStmt) {
-        assignStmt.getExpr().visit(this);
+        assignStmt.getExpr().accept(this);
         return null;
     }
 
     @Override
     default Void visitIfStmt(IfStmt<Void> ifStmt) {
-        ifStmt.getExpr().forEach(expr -> expr.visit(this));
-        ifStmt.getThenList().forEach(expr -> expr.visit(this));
-        ifStmt.getElseList().visit(this);
+        ifStmt.getExpr().forEach(expr -> expr.accept(this));
+        ifStmt.getThenList().forEach(expr -> expr.accept(this));
+        ifStmt.getElseList().accept(this);
 
         // TODO is this needed?
         //ifStmt.getElseList().get().forEach(expr -> expr.visit(this));
@@ -245,8 +245,8 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
 
     @Override
     default Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
-        repeatStmt.getExpr().visit(this);
-        repeatStmt.getList().visit(this);
+        repeatStmt.getExpr().accept(this);
+        repeatStmt.getList().accept(this);
         return null;
     }
 
@@ -257,31 +257,31 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
 
     @Override
     default Void visitStmtList(StmtList<Void> stmtList) {
-        stmtList.get().forEach(expr -> expr.visit(this));
+        stmtList.get().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     default Void visitMainTask(MainTask<Void> mainTask) {
-        mainTask.getVariables().visit(this);
+        mainTask.getVariables().accept(this);
         return null;
     }
 
     @Override
     default Void visitWaitStmt(WaitStmt<Void> waitStmt) {
-        waitStmt.getStatements().visit(this);
+        waitStmt.getStatements().accept(this);
         return null;
     }
 
     @Override
     default Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
-        waitTimeStmt.getTime().visit(this);
+        waitTimeStmt.getTime().accept(this);
         return null;
     }
 
     @Override
     default Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
-        textPrintFunct.getParam().forEach(expr -> expr.visit(this));
+        textPrintFunct.getParam().forEach(expr -> expr.accept(this));
         return null;
     }
 
@@ -292,61 +292,61 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
 
     @Override
     default Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
-        getSubFunct.getParam().forEach(expr -> expr.visit(this));
+        getSubFunct.getParam().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     default Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        indexOfFunct.getParam().forEach(expr -> expr.visit(this));
+        indexOfFunct.getParam().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     default Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
-        lengthOfIsEmptyFunct.getParam().forEach(expr -> expr.visit(this));
+        lengthOfIsEmptyFunct.getParam().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     default Void visitListCreate(ListCreate<Void> listCreate) {
-        listCreate.getValue().visit(this);
+        listCreate.getValue().accept(this);
         return null;
     }
 
     @Override
     default Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        listGetIndex.getParam().forEach(expr -> expr.visit(this));
+        listGetIndex.getParam().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     default Void visitListRepeat(ListRepeat<Void> listRepeat) {
-        listRepeat.getParam().forEach(expr -> expr.visit(this));
+        listRepeat.getParam().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     default Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
-        listSetIndex.getParam().forEach(expr -> expr.visit(this));
+        listSetIndex.getParam().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     default Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        mathConstrainFunct.getParam().forEach(expr -> expr.visit(this));
+        mathConstrainFunct.getParam().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     default Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
-        mathNumPropFunct.getParam().forEach(expr -> expr.visit(this));
+        mathNumPropFunct.getParam().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     default Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        mathOnListFunct.getParam().forEach(expr -> expr.visit(this));
+        mathOnListFunct.getParam().forEach(expr -> expr.accept(this));
         return null;
     }
 
@@ -357,77 +357,77 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
 
     @Override
     default Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
-        mathRandomIntFunct.getParam().forEach(expr -> expr.visit(this));
+        mathRandomIntFunct.getParam().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     default Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
-        mathSingleFunct.getParam().forEach(expr -> expr.visit(this));
+        mathSingleFunct.getParam().forEach(expr -> expr.accept(this));
         return null;
     }
 
     @Override
     default Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        textJoinFunct.getParam().visit(this);
+        textJoinFunct.getParam().accept(this);
         return null;
     }
 
     @Override
     default Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        methodVoid.getParameters().visit(this);
-        methodVoid.getBody().visit(this);
+        methodVoid.getParameters().accept(this);
+        methodVoid.getBody().accept(this);
         return null;
     }
 
     @Override
     default Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        methodReturn.getParameters().visit(this);
-        methodReturn.getBody().visit(this);
-        methodReturn.getReturnValue().visit(this);
+        methodReturn.getParameters().accept(this);
+        methodReturn.getBody().accept(this);
+        methodReturn.getReturnValue().accept(this);
         return null;
     }
 
     @Override
     default Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
-        methodIfReturn.getCondition().visit(this);
-        methodIfReturn.getReturnValue().visit(this);
+        methodIfReturn.getCondition().accept(this);
+        methodIfReturn.getReturnValue().accept(this);
         return null;
     }
 
     @Override
     default Void visitMethodStmt(MethodStmt<Void> methodStmt) {
-        methodStmt.getMethod().visit(this);
+        methodStmt.getMethod().accept(this);
         return null;
     }
 
     @Override
     default Void visitMethodCall(MethodCall<Void> methodCall) {
-        methodCall.getParametersValues().visit(this);
+        methodCall.getParametersValues().accept(this);
         return null;
     }
 
     @Override
     default Void visitActivityTask(ActivityTask<Void> activityTask) {
-        activityTask.getActivityName().visit(this);
+        activityTask.getActivityName().accept(this);
         return null;
     }
 
     @Override
     default Void visitStartActivityTask(StartActivityTask<Void> startActivityTask) {
-        startActivityTask.getActivityName().visit(this);
+        startActivityTask.getActivityName().accept(this);
         return null;
     }
 
     @Override
     default Void visitAssertStmt(AssertStmt<Void> assertStmt) {
-        assertStmt.getAssert().visit(this);
+        assertStmt.getAssert().accept(this);
         return null;
     }
 
     @Override
     default Void visitDebugAction(DebugAction<Void> debugAction) {
-        debugAction.getValue().visit(this);
+        debugAction.getValue().accept(this);
         return null;
     }
 
@@ -435,20 +435,20 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
 
     @Override
     default Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReceiveAction) {
-        bluetoothReceiveAction.getConnection().visit(this);
+        bluetoothReceiveAction.getConnection().accept(this);
         return null;
     }
 
     @Override
     default Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
-        bluetoothConnectAction.getAddress().visit(this);
+        bluetoothConnectAction.getAddress().accept(this);
         return null;
     }
 
     @Override
     default Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
-        bluetoothSendAction.getMsg().visit(this);
-        bluetoothSendAction.getConnection().visit(this);
+        bluetoothSendAction.getMsg().accept(this);
+        bluetoothSendAction.getConnection().accept(this);
         return null;
     }
 
@@ -459,26 +459,26 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
 
     @Override
     default Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
-        bluetoothCheckConnectAction.getConnection().visit(this);
+        bluetoothCheckConnectAction.getConnection().accept(this);
         return null;
     }
 
     @Override
     default Void visitDriveAction(DriveAction<Void> driveAction) {
-        driveAction.getParam().getSpeed().visit(this);
+        driveAction.getParam().getSpeed().accept(this);
         return null;
     }
 
     @Override
     default Void visitCurveAction(CurveAction<Void> curveAction) {
-        curveAction.getParamLeft().getSpeed().visit(this);
-        curveAction.getParamRight().getSpeed().visit(this);
+        curveAction.getParamLeft().getSpeed().accept(this);
+        curveAction.getParamRight().getSpeed().accept(this);
         return null;
     }
 
     @Override
     default Void visitTurnAction(TurnAction<Void> turnAction) {
-        turnAction.getParam().getSpeed().visit(this);
+        turnAction.getParam().getSpeed().accept(this);
         return null;
     }
 
@@ -494,15 +494,15 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
 
     @Override
     default Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        showTextAction.getMsg().visit(this);
-        showTextAction.getX().visit(this);
-        showTextAction.getY().visit(this);
+        showTextAction.getMsg().accept(this);
+        showTextAction.getX().accept(this);
+        showTextAction.getY().accept(this);
         return null;
     }
 
     @Override
     default Void visitLightAction(LightAction<Void> lightAction) {
-        lightAction.getRgbLedColor().visit(this);
+        lightAction.getRgbLedColor().accept(this);
         return null;
     }
 
@@ -520,20 +520,20 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
     default Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         Expr<Void> durationValue = motorOnAction.getDurationValue();
         if ( durationValue != null ) { // TODO why is this necessary?
-            motorOnAction.getDurationValue().visit(this);
+            motorOnAction.getDurationValue().accept(this);
         }
         MotionParam<Void> param = motorOnAction.getParam();
         MotorDuration<Void> duration = param.getDuration();
         if ( duration != null ) { // TODO why is this necessary?
-            duration.getValue().visit(this);
+            duration.getValue().accept(this);
         }
-        param.getSpeed().visit(this);
+        param.getSpeed().accept(this);
         return null;
     }
 
     @Override
     default Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        motorSetPowerAction.getPower().visit(this);
+        motorSetPowerAction.getPower().accept(this);
         return null;
     }
 
@@ -544,14 +544,14 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
 
     @Override
     default Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
-        serialWriteAction.getValue().visit(this);
+        serialWriteAction.getValue().accept(this);
         return null;
     }
 
     @Override
     default Void visitToneAction(ToneAction<Void> toneAction) {
-        toneAction.getFrequency().visit(this);
-        toneAction.getDuration().visit(this);
+        toneAction.getFrequency().accept(this);
+        toneAction.getDuration().accept(this);
         return null;
     }
 
@@ -562,7 +562,7 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
 
     @Override
     default Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        volumeAction.getVolume().visit(this);
+        volumeAction.getVolume().accept(this);
         return null;
     }
 
@@ -578,9 +578,9 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
 
     @Override
     default Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        sayTextAction.getMsg().visit(this);
-        sayTextAction.getPitch().visit(this);
-        sayTextAction.getSpeed().visit(this);
+        sayTextAction.getMsg().accept(this);
+        sayTextAction.getPitch().accept(this);
+        sayTextAction.getSpeed().accept(this);
         return null;
     }
 

@@ -45,7 +45,7 @@ public class CodePadSensor<V> extends Sensor<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((IBob3Visitor<V>) visitor).visitBob3CodePadSensor(this);
     }
 

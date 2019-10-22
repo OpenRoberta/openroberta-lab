@@ -2,10 +2,11 @@ package de.fhg.iais.roberta.syntax.sensors;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.Ev3LejosAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
+import de.fhg.iais.roberta.worker.codegen.Ev3JavaGeneratorWorker;
 
-public class IRSeekerSensorTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
+public class IRSeekerSensorTest extends Ev3LejosAstTest {
 
     @Test
     public void getIRSeeker() throws Exception {
@@ -13,6 +14,6 @@ public class IRSeekerSensorTest {
             "hal.drawText(String.valueOf(hal.getHiTecIRSeekerModulated(SensorPort.S1)), 0, 0);"
                 + "hal.drawText(String.valueOf(hal.getHiTecIRSeekerUnmodulated(SensorPort.S1)), 0, 0);}";
 
-        this.h.assertCodeIsOk(a, "/syntax/sensors/sensor_getIRSeeker.xml");
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/sensors/sensor_getIRSeeker.xml", new Ev3JavaGeneratorWorker());
     }
 }

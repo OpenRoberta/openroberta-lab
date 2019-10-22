@@ -55,7 +55,7 @@ public class FunctionExpr<V> extends Expr<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((ILanguageVisitor<V>) visitor).visitFunctionExpr(this);
     }
 

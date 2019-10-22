@@ -1,15 +1,17 @@
 package de.fhg.iais.roberta.ast.sensor;
 
+import java.util.ArrayList;
+
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.ast.AstTest;
+import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
-import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
-import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class ColorSensorTest {
-    private final HelperBotNrollForXmlTest h = new HelperBotNrollForXmlTest();
+public class ColorSensorTest extends AstTest {
 
     @Test
     public void sensorSetColor() throws Exception {
@@ -18,25 +20,25 @@ public class ColorSensorTest {
                 + "[Location [x=-13, y=147], ColorSensor [1, LIGHT, NO_SLOT]], "
                 + "[Location [x=-11, y=187], ColorSensor [2, RGB, NO_SLOT]]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_setColor.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/sensors/sensor_setColor.xml");
     }
 
     @Test
     public void getMode() throws Exception {
-        final Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setColor.xml");
+        final ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/sensors/sensor_setColor.xml");
 
-        final ColorSensor<Void> cs = (ColorSensor<Void>) transformer.getTree().get(0).get(1);
+        final ColorSensor<Void> cs = (ColorSensor<Void>) forest.get(0).get(1);
 
         Assert.assertEquals(SC.COLOUR, cs.getMode());
     }
 
     @Test
     public void getPort() throws Exception {
-        final Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setColor.xml");
+        final ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/sensors/sensor_setColor.xml");
 
-        final ColorSensor<Void> cs = (ColorSensor<Void>) transformer.getTree().get(0).get(1);
-        final ColorSensor<Void> cs1 = (ColorSensor<Void>) transformer.getTree().get(1).get(1);
-        final ColorSensor<Void> cs2 = (ColorSensor<Void>) transformer.getTree().get(2).get(1);
+        final ColorSensor<Void> cs = (ColorSensor<Void>) forest.get(0).get(1);
+        final ColorSensor<Void> cs1 = (ColorSensor<Void>) forest.get(1).get(1);
+        final ColorSensor<Void> cs2 = (ColorSensor<Void>) forest.get(2).get(1);
 
         Assert.assertEquals("3", cs.getPort());
         Assert.assertEquals("1", cs1.getPort());
@@ -45,6 +47,6 @@ public class ColorSensorTest {
 
     @Test
     public void reverseTransformation() throws Exception {
-        this.h.assertTransformationIsOk("/ast/sensors/sensor_setColor.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/sensors/sensor_setColor.xml");
     }
 }

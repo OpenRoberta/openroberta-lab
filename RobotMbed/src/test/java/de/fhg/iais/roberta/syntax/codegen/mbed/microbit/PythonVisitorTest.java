@@ -1,15 +1,12 @@
 package de.fhg.iais.roberta.syntax.codegen.mbed.microbit;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.MicrobitConfiguration;
-import de.fhg.iais.roberta.util.test.mbed.HelperMicrobitForXmlTest;
+import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.syntax.MicrobitAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class PythonVisitorTest {
-    private final HelperMicrobitForXmlTest h = new HelperMicrobitForXmlTest();
+public class PythonVisitorTest extends MicrobitAstTest {
 
     private static final String IMPORTS =
         "" //
@@ -20,13 +17,13 @@ public class PythonVisitorTest {
             + "class ContinueLoop(Exception): pass\n\n"
             + "timer1 = microbit.running_time()\n";
 
-    private static Configuration brickConfiguration;
+    private static ConfigurationAst brickConfiguration;
 
-    @BeforeClass
-    public static void setupConfigurationForAllTests() {
-        MicrobitConfiguration.Builder configuration = new MicrobitConfiguration.Builder();
-        brickConfiguration = configuration.build();
-    }
+    //    @BeforeClass
+    //    public static void setupConfigurationForAllTests() {
+    //        MicrobitConfiguration.Builder configuration = new MicrobitConfiguration.Builder();
+    //        brickConfiguration = configuration.build();
+    //    }
 
     @Test
     public void visitMainTask_ByDefault_ReturnsEmptyMicroPythonScript() throws Exception {
@@ -52,7 +49,7 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(expectedResult, "/task/main_task_no_variables_empty.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/task/main_task_no_variables_empty.xml", true);
     }
 
     @Test
@@ -74,7 +71,7 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(expectedResult, "/action/display_text_show_hello.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/action/display_text_show_hello.xml", true);
     }
 
     @Test
@@ -97,7 +94,12 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(expectedResult, "/expr/image_get_image_defined_as_global_variables.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                expectedResult,
+                "/expr/image_get_image_defined_as_global_variables.xml",
+                true);
     }
 
     @Test
@@ -120,7 +122,12 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(expectedResult, "/action/display_image_show_imag_and_animation.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                expectedResult,
+                "/action/display_image_show_imag_and_animation.xml",
+                true);
     }
 
     @Test
@@ -142,7 +149,8 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(expectedResult, "/action/display_image_missing_image_name.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/action/display_image_missing_image_name.xml", true);
     }
 
     @Test
@@ -164,7 +172,7 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(expectedResult, "/action/display_clear.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/action/display_clear.xml", true);
     }
 
     @Test
@@ -187,7 +195,7 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(expectedResult, "/function/image_shift_up_down.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/function/image_shift_up_down.xml", true);
     }
 
     @Test
@@ -208,7 +216,8 @@ public class PythonVisitorTest {
                 + "\n"
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
-        assertCodeIsOk(expectedResult, "/action/write_value_to_pin_microbit.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/action/write_value_to_pin_microbit.xml", true);
     }
 
     @Test
@@ -230,7 +239,12 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(expectedResult, "/function/image_shift_missing_image_and_position.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                expectedResult,
+                "/function/image_shift_missing_image_and_position.xml",
+                true);
     }
 
     @Test
@@ -252,7 +266,7 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(expectedResult, "/function/image_invert_heart_image.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/function/image_invert_heart_image.xml", true);
     }
 
     @Test
@@ -274,7 +288,8 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(expectedResult, "/function/image_invert_missing_image.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/function/image_invert_missing_image.xml", true);
     }
 
     @Test
@@ -296,7 +311,7 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(expectedResult, "/sensor/check_if_key_A_is_pressed.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensor/check_if_key_A_is_pressed.xml", true);
     }
 
     @Test
@@ -318,7 +333,8 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(expectedResult, "/sensor/get_compass_orientation_value.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensor/get_compass_orientation_value.xml", true);
     }
 
     @Test
@@ -340,7 +356,7 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(expectedResult, "/expr/image_create.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/expr/image_create.xml", true);
     }
 
     @Test
@@ -363,7 +379,7 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(expectedResult, "/sensor/check_gesture.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensor/check_gesture.xml", true);
     }
 
     @Test
@@ -385,7 +401,7 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(expectedResult, "/sensor/get_temperature.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensor/get_temperature.xml", true);
     }
 
     @Test
@@ -408,7 +424,7 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(expectedResult, "/sensor/pin_is_touched.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensor/pin_is_touched.xml", true);
     }
 
     @Test
@@ -431,7 +447,7 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(expectedResult, "/sensor/read_value_from_pin.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensor/read_value_from_pin.xml", true);
     }
 
     @Test
@@ -456,7 +472,7 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(expectedResult, "/sensor/acceleration_sensor.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensor/acceleration_sensor.xml", true);
     }
 
     @Test
@@ -481,7 +497,7 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(a, "/stmts/microbit/no_loops.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/stmts/microbit/no_loops.xml", true);
     }
 
     @Test
@@ -509,7 +525,7 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(a, "/stmts/microbit/nested_loops.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/stmts/microbit/nested_loops.xml", true);
     }
 
     @Test
@@ -543,7 +559,8 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(a, "/stmts/microbit/loop_with_break_and_continue_inside_wait.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/stmts/microbit/loop_with_break_and_continue_inside_wait.xml", true);
     }
 
     @Test
@@ -580,7 +597,12 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(a, "/stmts/microbit/two_loop_with_break_and_continue_one_inside_wait_another_not.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                a,
+                "/stmts/microbit/two_loop_with_break_and_continue_one_inside_wait_another_not.xml",
+                true);
     }
 
     @Test
@@ -617,7 +639,12 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(a, "/stmts/microbit/two_nested_loops_first_with_break_in_wait_second_not.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                a,
+                "/stmts/microbit/two_nested_loops_first_with_break_in_wait_second_not.xml",
+                true);
     }
 
     @Test
@@ -657,7 +684,8 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(a, "/stmts/microbit/loop_with_nested_two_loops_inside_wait.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/stmts/microbit/loop_with_nested_two_loops_inside_wait.xml", true);
     }
 
     @Test
@@ -706,7 +734,12 @@ public class PythonVisitorTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        assertCodeIsOk(a, "/stmts/microbit/loop_with_nested_two_loops_inside_wait_second_contain_wait.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                a,
+                "/stmts/microbit/loop_with_nested_two_loops_inside_wait_second_contain_wait.xml",
+                true);
     }
 
     @Test
@@ -771,11 +804,11 @@ public class PythonVisitorTest {
                 + "\n"
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
-        assertCodeIsOk(a, "/stmts/microbit/three_loops_with_nested_two_loops_inside_wait_second_contain_wait.xml");
-    }
-
-    private void assertCodeIsOk(String a, String fileName) throws Exception {
-        String b = this.h.generatePython(fileName, brickConfiguration);
-        Assert.assertEquals(a, b);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                a,
+                "/stmts/microbit/three_loops_with_nested_two_loops_inside_wait_second_contain_wait.xml",
+                true);
     }
 }

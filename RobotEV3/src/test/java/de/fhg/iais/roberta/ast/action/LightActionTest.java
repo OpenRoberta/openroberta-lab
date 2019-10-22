@@ -1,18 +1,17 @@
 package de.fhg.iais.roberta.ast.action;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.ast.AstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class LightActionTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
+public class LightActionTest extends AstTest {
 
     @Test
     public void make() throws Exception {
         String a = "BlockAST [project=[[Location [x=-9, y=1], LightAction [NO_PORT, ON, GREEN, EmptyExpr [defVal=COLOR]]]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/actions/action_BrickLight.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/actions/action_BrickLight.xml");
     }
 
     //    @Test
@@ -33,26 +32,26 @@ public class LightActionTest {
     public void lightAction() throws Exception {
         String a = "BlockAST [project=[[Location [x=46, y=109], LightAction [NO_PORT, DOUBLE_FLASH, GREEN, EmptyExpr [defVal=COLOR]]]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/actions/action_BrickLight3.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/actions/action_BrickLight3.xml");
     }
 
     @Test
     public void reverseTransformatin() throws Exception {
-        this.h.assertTransformationIsOk("/ast/actions/action_BrickLight.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/actions/action_BrickLight.xml");
     }
 
     @Test
     public void reverseTransformatin1() throws Exception {
-        this.h.assertTransformationIsOk("/ast/actions/action_BrickLight1.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/actions/action_BrickLight1.xml");
     }
 
     @Test
     public void reverseTransformatin2() throws Exception {
-        this.h.assertTransformationIsOk("/ast/actions/action_BrickLight2.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/actions/action_BrickLight2.xml");
     }
 
     @Test
     public void reverseTransformatin3() throws Exception {
-        this.h.assertTransformationIsOk("/ast/actions/action_BrickLight3.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/actions/action_BrickLight3.xml");
     }
 }

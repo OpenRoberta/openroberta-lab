@@ -1,14 +1,14 @@
 package de.fhg.iais.roberta.ast.syntax.stmt;
 
-import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
+import de.fhg.iais.roberta.NxtAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class ForCountStmtTest {
-    private final HelperNxtForXmlTest h = new HelperNxtForXmlTest();
+public class ForCountStmtTest extends NxtAstTest {
 
     //
     public void forCountStmt() throws Exception {
         String a = "\nfor ( float i = 1; i < 10; i += 15 ) {\n" + "}\n" + "for ( float i = 1; i < 10; i += 15 ) {\n" + "    ;\n" + "}";
 
-        this.h.assertCodeIsOk(a, "/syntax/stmt/forCount_stmt.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/stmt/forCount_stmt.xml", false);
     }
 }

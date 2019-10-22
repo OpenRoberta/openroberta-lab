@@ -2,16 +2,16 @@ package de.fhg.iais.roberta.syntax.actors;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.Ev3LejosAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class ShowTextActionTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
+public class ShowTextActionTest extends Ev3LejosAstTest {
 
     @Test
     public void clearDisplay() throws Exception {
         String a = "\nhal.drawText(\"Hallo\", 0, 0);}";
 
-        this.h.assertCodeIsOk(a, "/syntax/actions/action_ShowText.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/actions/action_ShowText.xml", false);
 
     }
 }

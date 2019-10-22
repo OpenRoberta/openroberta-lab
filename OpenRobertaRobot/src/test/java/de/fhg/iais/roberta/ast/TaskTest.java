@@ -1,13 +1,10 @@
 package de.fhg.iais.roberta.ast;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
-import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class TaskTest {
-    AbstractHelperForXmlTest h = new GenericHelperForXmlTest();
+public class TaskTest extends AstTest {
 
     @Test
     public void mainTask() throws Exception {
@@ -22,47 +19,47 @@ public class TaskTest {
                 + "exprStmt VarDeclaration [ARRAY_COLOUR, item7, ListCreate [COLOR, ColorConst [#B30006], ColorConst [#000000], ColorConst [#585858]], true, true]\n"
                 + "exprStmt VarDeclaration [COLOR, item8, ColorConst [#585858], false, true]]]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/task/task_mainTask.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/task/task_mainTask.xml");
     }
 
     @Test
     public void mainTask1() throws Exception {
         String a = "BlockAST [project=[[Location [x=10, y=83], MainTask []]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/task/task_mainTask1.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/task/task_mainTask1.xml");
     }
 
     @Test
     public void activityTask() throws Exception {
         String a = "BlockAST [project=[[Location [x=66, y=175], ActivityTask [activityName=Var [zwei]]]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/task/task_activityTask.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/task/task_activityTask.xml");
     }
 
     @Test
     public void startActivityTask() throws Exception {
         String a = "BlockAST [project=[[Location [x=1, y=66], StartActivityTask [activityName=Var [zwei]]]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/task/task_startActivityTask.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/task/task_startActivityTask.xml");
     }
 
     @Test
     public void reverseTransformatinMainTask() throws Exception {
-        this.h.assertTransformationIsOk("/ast/task/task_mainTask.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/task/task_mainTask.xml");
     }
 
     @Test
     public void reverseTransformatinMainTask1() throws Exception {
-        this.h.assertTransformationIsOk("/ast/task/task_mainTask1.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/task/task_mainTask1.xml");
     }
 
     @Test
     public void reverseTransformatinActivityTask() throws Exception {
-        this.h.assertTransformationIsOk("/ast/task/task_activityTask.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/task/task_activityTask.xml");
     }
 
     @Test
     public void reverseTransformatinStartActivityTask() throws Exception {
-        this.h.assertTransformationIsOk("/ast/task/task_startActivityTask.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/task/task_startActivityTask.xml");
     }
 }

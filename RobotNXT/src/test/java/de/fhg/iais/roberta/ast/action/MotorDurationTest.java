@@ -3,16 +3,15 @@ package de.fhg.iais.roberta.ast.action;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.NxtAstTest;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
-import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
 
-public class MotorDurationTest {
+public class MotorDurationTest extends NxtAstTest {
     @Test
     public void clearDisplay() throws Exception {
-        new HelperNxtForXmlTest(); // needed; global variable set :-<
         NumConst<Void> numConst = NumConst.make("0", BlocklyBlockProperties.make("1", "1"), null);
         MotorDuration<Void> motorDuration = new MotorDuration<>(MotorMoveMode.DEGREE, numConst);
         String a = "MotorDuration [type=DEGREE, value=NumConst [0]]";

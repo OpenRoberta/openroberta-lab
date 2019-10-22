@@ -5,29 +5,31 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.util.test.ardu.HelperArduinoForXmlTest;
-import de.fhg.iais.roberta.util.test.ardu.HelperMBotForXmlTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class MbotSensorTest {
-    HelperMBotForXmlTest mbotHelper = new HelperMBotForXmlTest();
+public class MbotSensorTest extends MbotAstTest {
 
-    private final Configuration standardMbotConfiguration = makeMbotStandardConfiguration();
+    private final ConfigurationAst standardMbotConfiguration = makeMbotStandardConfiguration();
 
-    private Configuration makeMbotStandardConfiguration() {
-        Map<String, String> motorRightConfig = HelperArduinoForXmlTest.createMap("MOTOR_DRIVE", "RIGHT");
+    private ConfigurationAst makeMbotStandardConfiguration() {
+        Map<String, String> motorRightConfig = createMap("MOTOR_DRIVE", "RIGHT");
         ConfigurationComponent motorRight = new ConfigurationComponent("GEARED_MOTOR", true, "M2", "2", motorRightConfig);
-        Map<String, String> motorLeftConfig = HelperArduinoForXmlTest.createMap("MOTOR_DRIVE", "LEFT");
+        Map<String, String> motorLeftConfig = createMap("MOTOR_DRIVE", "LEFT");
         ConfigurationComponent motorleft = new ConfigurationComponent("GEARED_MOTOR", true, "M1", "1", motorLeftConfig);
-        Configuration.Builder builder = new Configuration.Builder();
+        ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorleft, motorRight));
         return builder.build();
     }
 
     @Test
     public void mbotSensorsTest() throws Exception {
-        this.mbotHelper
-            .compareExistingAndGeneratedSource("/ast/sensors/mbot_sensors_test.ino", "/ast/sensors/mbot_sensors_test.xml", this.standardMbotConfiguration);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXml(
+                testFactory,
+                "/ast/sensors/mbot_sensors_test.ino",
+                "/ast/sensors/mbot_sensors_test.xml",
+                this.standardMbotConfiguration);
     }
 }

@@ -33,7 +33,7 @@ public interface IVorwerkCollectorVisitor extends ICollectorVisitor, IVorwerkVis
 
     @Override
     default Void visitBrushOn(BrushOn<Void> brushOn) {
-        brushOn.getSpeed().visit(this);
+        brushOn.getSpeed().accept(this);
         return null;
     }
 
@@ -49,7 +49,7 @@ public interface IVorwerkCollectorVisitor extends ICollectorVisitor, IVorwerkVis
 
     @Override
     default Void visitVacuumOn(VacuumOn<Void> vacuumOn) {
-        vacuumOn.getSpeed().visit(this);
+        vacuumOn.getSpeed().accept(this);
         return null;
     }
 

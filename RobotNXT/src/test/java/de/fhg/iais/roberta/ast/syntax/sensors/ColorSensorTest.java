@@ -1,12 +1,11 @@
 package de.fhg.iais.roberta.ast.syntax.sensors;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
+import de.fhg.iais.roberta.NxtAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class ColorSensorTest {
-    private final HelperNxtForXmlTest h = new HelperNxtForXmlTest();
+public class ColorSensorTest extends NxtAstTest {
 
     @Test
     public void setColor() throws Exception {
@@ -17,6 +16,6 @@ public class ColorSensorTest {
             "BlockAST [project=[[Location [x=-15, y=107], ColorSensor [3, COLOUR, NO_SLOT]], [Location [x=-13, y=147], ColorSensor [1, LIGHT, NO_SLOT]],"
                 + " [Location [x=-11, y=224], ColorSensor [4, AMBIENTLIGHT, NO_SLOT]]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_setColor.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/sensors/sensor_setColor.xml");
     }
 }

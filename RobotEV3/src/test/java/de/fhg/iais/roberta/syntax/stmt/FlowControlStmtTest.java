@@ -2,10 +2,10 @@ package de.fhg.iais.roberta.syntax.stmt;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.Ev3LejosAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class FlowControlStmtTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
+public class FlowControlStmtTest extends Ev3LejosAstTest {
 
     @Test
     public void flowControlStmt() throws Exception {
@@ -21,6 +21,6 @@ public class FlowControlStmtTest {
                 + "    break;\n"
                 + "}}";
 
-        this.h.assertCodeIsOk(a, "/syntax/stmt/flowControl_stmt.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/stmt/flowControl_stmt.xml", false);
     }
 }

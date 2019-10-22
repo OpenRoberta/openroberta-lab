@@ -18,12 +18,12 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function saveAsProgramToServer(programName, xmlProgramText, configName, xmlConfigText, timestamp, successFn) {
-        COMM.json("/program", {
-            "cmd" : "saveAsP",
+        COMM.json("/project/save", {
             "programName" : programName,
             "programText" : xmlProgramText,
             "configName" : configName,
             "configText" : xmlConfigText,
+            "shared" : false,
             "timestamp" : timestamp
         }, successFn, "save program to server with new name '" + programName + "'");
     }
@@ -45,8 +45,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function saveProgramToServer(programName, xmlProgramText, configName, xmlConfigText, programShared, timestamp, successFn) {
-        COMM.json("/program", {
-            "cmd" : "saveP",
+        COMM.json("/project/save", {
             "programName" : programName,
             "programText" : xmlProgramText,
             "configName" : configName,
@@ -67,10 +66,9 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - that represents the program
      */
     function loadProgramFromXML(programName, xmlText, successFn) {
-        COMM.json("/program", {
-            "cmd" : "importXML",
-            "name" : programName,
-            "program" : xmlText
+        COMM.json("/project/import", {
+            "programName" : programName,
+            "programBlockSet" : xmlText
         }, successFn, "open program '" + programName + "' from XML");
     }
 
@@ -88,7 +86,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function shareProgram(programName, shareWith, right, successFn) {
-        COMM.json("/program", {
+        COMM.json("/project/share", {
             "cmd" : "shareP",
             "programName" : programName,
             "userToShare" : shareWith,
@@ -99,7 +97,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     exports.shareProgram = shareProgram;
 
     function shareProgramWithGallery(programName, successFn) {
-        COMM.json("/program", {
+        COMM.json("/project/share/create", {
             "cmd" : "shareWithGallery",
             "programName" : programName,
         }, successFn, "share program '" + programName + "' with Gallery");
@@ -115,7 +113,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - owner of the program
      */
     function deleteShare(programName, owner, author, successFn) {
-        COMM.json("/program", {
+        COMM.json("/project/share/delete", {
             "cmd" : "shareDelete",
             "programName" : programName,
             "owner" : owner,
@@ -135,8 +133,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function deleteProgramFromListing(programName, author, successFn) {
-        COMM.json("/program", {
-            "cmd" : "deleteP",
+        COMM.json("/project/delete", {
             "name" : programName,
             "author" : author,
         }, function(result) {
@@ -156,8 +153,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function loadProgramFromListing(programName, ownerName, authorName, successFn) {
-        COMM.json("/program", {
-            "cmd" : "loadP",
+        COMM.json("/project/listing", {
             "name" : programName,
             "owner" : ownerName,
             "authorName" : authorName
@@ -176,8 +172,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function loadProgramEntity(programName, authorName, ownerName, successFn) {
-        COMM.json("/program", {
-            "cmd" : "loadProgramEntity",
+        COMM.json("/project/entity", {
             "name" : programName,
             "owner" : ownerName,
             "author" : authorName
@@ -190,8 +185,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * Refresh program list
      */
     function refreshList(successFn) {
-        COMM.json("/program", {
-            "cmd" : "loadPN"
+        COMM.json("/project/listing/names", {
         }, successFn, "refresh program list");
     }
 
@@ -214,12 +208,11 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - WLAN password for WiFi enabled robots
      */
     function showSourceProgram(programName, configName, xmlTextProgram, xmlTextConfig, SSID, password, language, successFn) {
-        COMM.json("/program", {
-            "cmd" : "showSourceP",
-            "name" : programName,
-            "configuration" : configName,
-            "programText" : xmlTextProgram,
-            "configurationText" : xmlTextConfig,
+        COMM.json("/projectWorkflow/source", {
+            "programName" : programName,
+            "configurationName" : configName,
+            "programBlockSet" : xmlTextProgram,
+            "configurationBlockSet" : xmlTextConfig,
             "SSID" : SSID,
             "password" : password,
             "language" : language
@@ -245,12 +238,11 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - WLAN password for WiFi enabled robots
      */
     function runOnBrick(programName, configName, xmlTextProgram, xmlTextConfig, SSID, password, language, successFn) {
-        COMM.json("/program", {
-            "cmd" : "runP",
-            "name" : programName,
-            "configuration" : configName,
-            "programText" : xmlTextProgram,
-            "configurationText" : xmlTextConfig,
+        COMM.json("/projectWorkflow/run", {
+            "programName" : programName,
+            "configurationName" : configName,
+            "programBlockSet" : xmlTextProgram,
+            "configurationBlockSet" : xmlTextConfig,
             "SSID" : SSID,
             "password" : password,
             "language" : language
@@ -260,12 +252,11 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     exports.runOnBrick = runOnBrick;
 
     function runOnBrickBack(programName, configName, xmlTextProgram, xmlTextConfig, SSID, password, language, successFn) {
-        COMM.json("/program", {
-            "cmd" : "runPBack",
-            "name" : programName,
-            "configuration" : configName,
-            "programText" : xmlTextProgram,
-            "configurationText" : xmlTextConfig,
+        COMM.json("/projectWorkflow/run", {
+            "programName" : programName,
+            "configurationName" : configName,
+            "programBlockSet" : xmlTextProgram,
+            "configurationBlockSet" : xmlTextConfig,
             "SSID" : SSID,
             "password" : password,
             "language" : language
@@ -287,12 +278,11 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - XML representation of the robot configuration
      */
     function runInSim(programName, configName, xmlTextProgram, xmlTextConfig, language, successFn) {
-        COMM.json("/program", {
-            "cmd" : "runPsim",
-            "name" : programName,
-            "configuration" : configName,
-            "programText" : xmlTextProgram,
-            "configurationText" : xmlTextConfig,
+        COMM.json("/projectWorkflow/source/simulation", {
+            "programName" : programName,
+            "configurationName" : configName,
+            "programBlockSet" : xmlTextProgram,
+            "configurationBlockSet" : xmlTextConfig,
             "language" : language
         }, successFn, "run program '" + programName + "' with configuration '" + configName + "'");
     }
@@ -309,9 +299,8 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function compileN(programName, programText, language, successFn) {
-        COMM.json("/program", {
-            "cmd" : "compileN",
-            "name" : programName,
+        COMM.json("/projectWorkflow/runNative", {
+            "programName" : programName,
             "programText" : programText,
             "language" : language
         }, successFn, "compile program '" + programName + "'");
@@ -329,7 +318,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function compileP(programName, programText, language, successFn) {
-        COMM.json("/program", {
+        COMM.json("/projectWorkflow/compileProgram", {
             "cmd" : "compileP",
             "name" : programName,
             "program" : programText,
@@ -371,8 +360,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function likeProgram(like, programName, authorName, robotName, successFn) {
-        COMM.json("/program", {
-            "cmd" : "likeP",
+        COMM.json("/project/like", {
             "programName" : programName,
             "robotName" : robotName,
             "authorName" : authorName,

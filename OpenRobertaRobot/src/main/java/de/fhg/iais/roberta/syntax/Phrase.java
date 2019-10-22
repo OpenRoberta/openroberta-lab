@@ -104,18 +104,18 @@ abstract public class Phrase<V> {
      *
      * @param visitor to be used
      */
-    public final V visit(IVisitor<V> visitor) {
+    public final V accept(IVisitor<V> visitor) {
         // LOG.info("{}", this);
         if ( getProperty().isDisabled() || (getProperty().isInTask() != null && getProperty().isInTask() == false) ) {
             return null;
         }
-        return this.accept(visitor);
+        return this.acceptImpl(visitor);
     }
 
     /**
      * accept an visitor
      */
-    protected abstract V accept(IVisitor<V> visitor);
+    protected abstract V acceptImpl(IVisitor<V> visitor);
 
     /**
      * @return converts AST representation of block to JAXB representation of block

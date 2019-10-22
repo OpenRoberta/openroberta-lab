@@ -1,13 +1,12 @@
 package de.fhg.iais.roberta.syntax.expr;
 
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
+import de.fhg.iais.roberta.syntax.CalliopeAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class PredefinedImageTest {
-    private final HelperCalliopeForXmlTest h = new HelperCalliopeForXmlTest();
+public class PredefinedImageTest extends CalliopeAstTest {
 
     @Test
     public void make_ByDefault_ReturnTwoInstancesOfPredefinedImageClass() throws Exception {
@@ -16,14 +15,13 @@ public class PredefinedImageTest {
                 + "exprStmt VarDeclaration [IMAGE, Element, PredefinedImage [HEART], true, true]\n"
                 + "exprStmt VarDeclaration [IMAGE, Element2, PredefinedImage [FABULOUS], false, true]]]]]";
 
-        String result = this.h.generateTransformerString("/expr/image_get_image_defined_as_global_variables.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/expr/image_get_image_defined_as_global_variables.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Ignore
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        this.h.assertTransformationIsOk("/expr/image_get_image_defined_as_global_variables.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/expr/image_get_image_defined_as_global_variables.xml");
     }
 
 }

@@ -56,7 +56,7 @@ public final class SideBrush<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((IVorwerkVisitor<V>) visitor).visitSideBrush(this);
     }
 

@@ -4,13 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import static de.fhg.iais.roberta.codegen.Ev3C4ev3CompilerWorkflow.GENERATED_BINARY_EXTENSION;
-
 /**
  * Creates a UF2FileContainer contining all the needed files to install and run a NEPO program.
  * When the program starts the first time (when it is copied to the robot) the C program will move the program from the BrkProg_SAVE folder
  * to a folder with the same name as the program. This is done to allow the user to delete the program, which otherwise is not possible.
- *
  * The files included in the built UF2 are:
  * - binary file (compiled C program)
  * - RBF to launch the program the first time
@@ -59,20 +56,20 @@ public class Uf2Builder {
     }
 
     private String getBinaryNameInEv3(String programName) {
-        return EV3_FIRST_TIME_FOLDER_PATH + "/" + programName + GENERATED_BINARY_EXTENSION;
+        return EV3_FIRST_TIME_FOLDER_PATH + "/" + programName + ".elf";
     }
 
     private String getMovedBinaryNameInEv3(String programName) {
-        return EV3_PROJECTS_FOLDER_PATH + "/" + programName + "/" + programName + GENERATED_BINARY_EXTENSION;
+        return EV3_PROJECTS_FOLDER_PATH + "/" + programName + "/" + programName + ".elf";
     }
 
     private String getRbfFirstTimeLauncherNameInEv3(String programName) {
-        return EV3_FIRST_TIME_FOLDER_PATH + "/"+ programName + ".rbf";
+        return EV3_FIRST_TIME_FOLDER_PATH + "/" + programName + ".rbf";
     }
 
     private String getRbfNameInEv3(String programName) {
         // we use the .tmp extension to prevent the EV3 to execute it automatically
-        return EV3_FIRST_TIME_FOLDER_PATH + "/"+ programName + ".tmp";
+        return EV3_FIRST_TIME_FOLDER_PATH + "/" + programName + ".tmp";
     }
 
 }

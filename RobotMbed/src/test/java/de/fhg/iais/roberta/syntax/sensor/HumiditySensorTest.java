@@ -1,11 +1,11 @@
 package de.fhg.iais.roberta.syntax.sensor;
 
-import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
-import org.junit.Assert;
 import org.junit.Test;
 
-public class HumiditySensorTest {
-    private final HelperCalliopeForXmlTest h = new HelperCalliopeForXmlTest();
+import de.fhg.iais.roberta.ast.AstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
+
+public class HumiditySensorTest extends AstTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfTemperatureSensorClass() throws Exception {
@@ -15,13 +15,12 @@ public class HumiditySensorTest {
                 + "DisplayTextAction [TEXT, SensorExpr [HumiditySensor [5, HUMIDITY, EMPTY_SLOT]]], "
                 + "DisplayTextAction [TEXT, SensorExpr [HumiditySensor [5, TEMPERATURE, EMPTY_SLOT]]]]]]";
 
-        String result = this.h.generateTransformerString("/sensor/humidity_sensor.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/humidity_sensor.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        this.h.assertTransformationIsOk("/sensor/humidity_sensor.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/sensor/humidity_sensor.xml");
     }
 }

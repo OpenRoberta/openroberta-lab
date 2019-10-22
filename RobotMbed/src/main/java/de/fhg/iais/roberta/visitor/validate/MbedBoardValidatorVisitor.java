@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.visitor.validate;
 
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayImageMode;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
@@ -40,13 +41,13 @@ import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 
 public final class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisitor implements IMbedVisitor<Void> {
 
-    public MbedBoardValidatorVisitor(Configuration brickConfiguration) {
-        super(brickConfiguration);
+    public MbedBoardValidatorVisitor(UsedHardwareBean.Builder builder, ConfigurationAst brickConfiguration) {
+        super(builder, brickConfiguration);
     }
 
     @Override
     public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
-        displayTextAction.getMsg().visit(this);
+        displayTextAction.getMsg().accept(this);
         return null;
     }
 
@@ -57,7 +58,7 @@ public final class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisit
 
     @Override
     public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
-        displayImageAction.getValuesToDisplay().visit(this);
+        displayImageAction.getValuesToDisplay().accept(this);
         if ( (displayImageAction.getDisplayImageMode() == DisplayImageMode.ANIMATION) && (displayImageAction.getValuesToDisplay() instanceof EmptyExpr) ) {
             displayImageAction.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
             this.errorCount++;
@@ -67,14 +68,14 @@ public final class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisit
 
     @Override
     public Void visitImageShiftFunction(ImageShiftFunction<Void> imageShiftFunction) {
-        imageShiftFunction.getImage().visit(this);
-        imageShiftFunction.getPositions().visit(this);
+        imageShiftFunction.getImage().accept(this);
+        imageShiftFunction.getPositions().accept(this);
         return null;
     }
 
     @Override
     public Void visitImageInvertFunction(ImageInvertFunction<Void> imageInvertFunction) {
-        imageInvertFunction.getImage().visit(this);
+        imageInvertFunction.getImage().accept(this);
         return null;
     }
 
@@ -100,13 +101,13 @@ public final class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisit
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        ledOnAction.getLedColor().visit(this);
+        ledOnAction.getLedColor().accept(this);
         return null;
     }
 
     @Override
     public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
-        radioSendAction.getMsg().visit(this);
+        radioSendAction.getMsg().accept(this);
         return null;
     }
 
@@ -117,10 +118,10 @@ public final class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisit
 
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
-        rgbColor.getR().visit(this);
-        rgbColor.getG().visit(this);
-        rgbColor.getB().visit(this);
-        rgbColor.getA().visit(this);
+        rgbColor.getR().accept(this);
+        rgbColor.getG().accept(this);
+        rgbColor.getB().accept(this);
+        rgbColor.getA().accept(this);
         return null;
     }
 
@@ -131,13 +132,13 @@ public final class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisit
 
     @Override
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
-        pinWriteValueAction.getValue().visit(this);
+        pinWriteValueAction.getValue().accept(this);
         return null;
     }
 
     @Override
     public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Void> displaySetBrightnessAction) {
-        displaySetBrightnessAction.getBrightness().visit(this);
+        displaySetBrightnessAction.getBrightness().accept(this);
         return null;
     }
 
@@ -148,28 +149,28 @@ public final class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisit
 
     @Override
     public Void visitDisplaySetPixelAction(DisplaySetPixelAction<Void> displaySetPixelAction) {
-        displaySetPixelAction.getBrightness().visit(this);
-        displaySetPixelAction.getX().visit(this);
-        displaySetPixelAction.getY().visit(this);
+        displaySetPixelAction.getBrightness().accept(this);
+        displaySetPixelAction.getX().accept(this);
+        displaySetPixelAction.getY().accept(this);
         return null;
     }
 
     @Override
     public Void visitDisplayGetPixelAction(DisplayGetPixelAction<Void> displayGetPixelAction) {
-        displayGetPixelAction.getX().visit(this);
-        displayGetPixelAction.getY().visit(this);
+        displayGetPixelAction.getX().accept(this);
+        displayGetPixelAction.getY().accept(this);
         return null;
     }
 
     @Override
     public Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
-        radioSetChannelAction.getChannel().visit(this);
+        radioSetChannelAction.getChannel().accept(this);
         return null;
     }
 
     @Override
     public Void visitSingleMotorOnAction(SingleMotorOnAction<Void> singleMotorOnAction) {
-        singleMotorOnAction.getSpeed().visit(this);
+        singleMotorOnAction.getSpeed().accept(this);
         return null;
     }
 
@@ -190,9 +191,9 @@ public final class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisit
 
     @Override
     public Void visitFourDigitDisplayShowAction(FourDigitDisplayShowAction<Void> fourDigitDisplayShowAction) {
-        fourDigitDisplayShowAction.getValue().visit(this);
-        fourDigitDisplayShowAction.getPosition().visit(this);
-        fourDigitDisplayShowAction.getColon().visit(this);
+        fourDigitDisplayShowAction.getValue().accept(this);
+        fourDigitDisplayShowAction.getPosition().accept(this);
+        fourDigitDisplayShowAction.getColon().accept(this);
         return null;
     }
 
@@ -203,8 +204,8 @@ public final class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisit
 
     @Override
     public Void visitLedBarSetAction(LedBarSetAction<Void> ledBarSetAction) {
-        ledBarSetAction.getX().visit(this);
-        ledBarSetAction.getBrightness().visit(this);
+        ledBarSetAction.getX().accept(this);
+        ledBarSetAction.getBrightness().accept(this);
         return null;
     }
 

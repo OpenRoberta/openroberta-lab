@@ -2,22 +2,22 @@ package de.fhg.iais.roberta.syntax.actors;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.Ev3LejosAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class VolumeActionTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
+public class VolumeActionTest extends Ev3LejosAstTest {
 
     @Test
     public void setVolume() throws Exception {
         String a = "\nhal.setVolume(50);}";
 
-        this.h.assertCodeIsOk(a, "/syntax/actions/action_SetVolume.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/actions/action_SetVolume.xml", false);
     }
 
     @Test
     public void getVolume() throws Exception {
         String a = "\nhal.getVolume()}";
 
-        this.h.assertCodeIsOk(a, "/syntax/actions/action_GetVolume.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/actions/action_GetVolume.xml", false);
     }
 }

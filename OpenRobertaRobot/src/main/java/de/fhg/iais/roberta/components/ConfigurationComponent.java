@@ -4,10 +4,18 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.IVisitor;
 
-public final class ConfigurationComponent {
+public final class ConfigurationComponent extends Phrase<Void> {
     private final String componentType;
 
     private final boolean isActor;
@@ -15,12 +23,11 @@ public final class ConfigurationComponent {
     private final String portName;
     private final Map<String, String> componentProperties;
 
-    public ConfigurationComponent(
-        String componentType,
-        boolean isActor,
-        String portName,
-        String userDefinedName,
-        Map<String, String> componentProperties) {
+    public ConfigurationComponent(String componentType, boolean isActor, String portName, String userDefinedName, Map<String, String> componentProperties) {
+        super(
+            new BlockType(userDefinedName, Category.CONFIGURATION_BLOCK, ConfigurationComponent.class),
+            BlocklyBlockProperties.make(componentType, "this-will-be-regenerated-anyway"),
+            BlocklyComment.make("empty-comment", false, "10", "10"));
         this.componentType = componentType;
         this.isActor = isActor;
         this.portName = portName;
@@ -98,6 +105,23 @@ public final class ConfigurationComponent {
             + ", componentProperties="
             + this.componentProperties
             + "]";
+    }
+
+    @Override
+    protected Void acceptImpl(IVisitor<Void> visitor) {
+        // WE ACCEPT NOTHING!
+        throw new DbcException("ConfigurationComponent should not be visited on it's own, instead the whole Configuration should be visited");
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block destination = new Block();
+        Ast2JaxbHelper.setBasicProperties(this, destination);
+        Ast2JaxbHelper.addField(destination, "NAME", this.userDefinedPortName);
+        this.componentProperties.forEach((k, v) -> {
+            Ast2JaxbHelper.addField(destination, k, v);
+        });
+        return destination;
     }
 
 }

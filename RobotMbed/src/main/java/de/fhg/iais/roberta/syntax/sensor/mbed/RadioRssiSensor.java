@@ -42,7 +42,7 @@ public class RadioRssiSensor<V> extends Sensor<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((IMbedVisitor<V>) visitor).visitRadioRssiSensor(this);
     }
 

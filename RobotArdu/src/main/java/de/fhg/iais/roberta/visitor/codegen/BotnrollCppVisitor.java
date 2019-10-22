@@ -2,7 +2,9 @@ package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
@@ -32,10 +34,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.collect.BotnrollUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IBotnrollVisitor;
 
 /**
@@ -44,37 +44,18 @@ import de.fhg.iais.roberta.visitor.hardware.IBotnrollVisitor;
  */
 public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor implements IBotnrollVisitor<Void> {
 
-    private final boolean isTimerSensorUsed;
-
     /**
      * Initialize the C++ code generator visitor.
      *
      * @param brickConfiguration hardware configuration of the brick
-     * @param programPhrases to generate the code from
-     * @param indentation to start with. Will be incr/decr depending on block structure
+     * @param phrases to generate the code from
      */
-    private BotnrollCppVisitor(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases, int indentation) {
-        super(brickConfiguration, phrases, indentation);
-        BotnrollUsedHardwareCollectorVisitor codePreprocessVisitor = new BotnrollUsedHardwareCollectorVisitor(phrases, brickConfiguration);
-        this.usedVars = codePreprocessVisitor.getVisitedVars();
-        this.usedSensors = codePreprocessVisitor.getUsedSensors();
-        this.usedActors = codePreprocessVisitor.getUsedActors();
-        this.isTimerSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
-        this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
-    }
-
-    /**
-     * factory method to generate C++ code from an AST.<br>
-     *
-     * @param brickConfiguration hardware configuration of the brick
-     * @param programPhrases to generate the code from
-     * @param withWrapping if false the generated code will be without the surrounding configuration code
-     */
-    public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
-        Assert.notNull(brickConfiguration);
-        BotnrollCppVisitor astVisitor = new BotnrollCppVisitor(brickConfiguration, programPhrases, withWrapping ? 1 : 0);
-        astVisitor.generateCode(withWrapping);
-        return astVisitor.sb.toString();
+    public BotnrollCppVisitor(
+        UsedHardwareBean usedHardwareBean,
+        CodeGeneratorSetupBean codeGeneratorSetupBean,
+        ConfigurationAst brickConfiguration,
+        ArrayList<ArrayList<Phrase<Void>>> phrases) {
+        super(usedHardwareBean, codeGeneratorSetupBean, brickConfiguration, phrases);
     }
 
     @Override
@@ -93,24 +74,24 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
 
         this.sb.append("one.lcd");
         if ( showTextAction.getY().toString().equals("NumConst [1]") || showTextAction.getY().toString().equals("NumConst [2]") ) {
-            showTextAction.getY().visit(this);
+            showTextAction.getY().accept(this);
         } else {
             this.sb.append("1");
         }
 
         this.sb.append("(");
 
-        if ( (isVar && (varType.equals("STRING")))
-            || ((mode != null) && !mode.toString().equals("RED") && !mode.toString().equals("RGB") && !mode.toString().equals("COLOUR")) ) {
+        if ( isVar && varType.equals("STRING")
+            || mode != null && !mode.toString().equals("RED") && !mode.toString().equals("RGB") && !mode.toString().equals("COLOUR") ) {
             toChar = ".c_str()";
         }
 
         if ( varType.equals("BOOLEAN") ) {
             this.sb.append("bnr.boolToString(");
-            showTextAction.getMsg().visit(this);
+            showTextAction.getMsg().accept(this);
             this.sb.append(")");
         } else {
-            showTextAction.getMsg().visit(this);
+            showTextAction.getMsg().accept(this);
         }
 
         this.sb.append(toChar + ");");
@@ -134,9 +115,9 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
     public Void visitToneAction(ToneAction<Void> toneAction) {
         //9 - sound port
         this.sb.append("tone(9, ");
-        toneAction.getFrequency().visit(this);
+        toneAction.getFrequency().accept(this);
         this.sb.append(", ");
-        toneAction.getDuration().visit(this);
+        toneAction.getDuration().accept(this);
         this.sb.append(");");
         return null;
     }
@@ -160,7 +141,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
         String methodName;
         String port = null;
         final boolean isDuration = motorOnAction.getParam().getDuration() != null;
-        final boolean isServo = (motorOnAction.getUserDefinedPort().equals("A")) || (motorOnAction.getUserDefinedPort().toString().equals("D"));
+        final boolean isServo = motorOnAction.getUserDefinedPort().equals("A") || motorOnAction.getUserDefinedPort().toString().equals("D");
         if ( isServo ) {
             methodName = motorOnAction.getUserDefinedPort().equals("A") ? "one.servo1(" : "one.servo2(";
         } else {
@@ -174,10 +155,10 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
         if ( reverse ) {
             this.sb.append("-");
         }
-        motorOnAction.getParam().getSpeed().visit(this);
+        motorOnAction.getParam().getSpeed().accept(this);
         if ( isDuration ) {
             this.sb.append(", ");
-            motorOnAction.getParam().getDuration().getValue().visit(this);
+            motorOnAction.getParam().getDuration().getValue().accept(this);
         }
         this.sb.append(");");
         return null;
@@ -218,17 +199,17 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
         }
         methodName = methodName + "(";
         this.sb.append(methodName);
-        if ( (!reverse && localReverse) || (reverse && !localReverse) ) {
+        if ( !reverse && localReverse || reverse && !localReverse ) {
             sign = "-";
         }
         this.sb.append(sign);
-        driveAction.getParam().getSpeed().visit(this);
+        driveAction.getParam().getSpeed().accept(this);
         this.sb.append(", ");
         this.sb.append(sign);
-        driveAction.getParam().getSpeed().visit(this);
+        driveAction.getParam().getSpeed().accept(this);
         if ( isDuration ) {
             this.sb.append(", ");
-            driveAction.getParam().getDuration().getValue().visit(this);
+            driveAction.getParam().getDuration().getValue().accept(this);
         }
         this.sb.append(");");
         return null;
@@ -255,17 +236,17 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
         }
         methodName = methodName + "(";
         this.sb.append(methodName);
-        if ( (!reverse && localReverse) || (reverse && !localReverse) ) {
+        if ( !reverse && localReverse || reverse && !localReverse ) {
             sign = "-";
         }
         this.sb.append(sign);
-        curveAction.getParamLeft().getSpeed().visit(this);
+        curveAction.getParamLeft().getSpeed().accept(this);
         this.sb.append(", ");
         this.sb.append(sign);
-        curveAction.getParamRight().getSpeed().visit(this);
+        curveAction.getParamRight().getSpeed().accept(this);
         if ( isDuration ) {
             this.sb.append(", ");
-            curveAction.getParamLeft().getDuration().getValue().visit(this);
+            curveAction.getParamLeft().getDuration().getValue().accept(this);
         }
         this.sb.append(");");
         return null;
@@ -304,13 +285,13 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
         methodName = methodName + "(";
         this.sb.append(methodName);
         this.sb.append(leftMotorSign);
-        turnAction.getParam().getSpeed().visit(this);
+        turnAction.getParam().getSpeed().accept(this);
         this.sb.append(", ");
         this.sb.append(rightMotorSign);
-        turnAction.getParam().getSpeed().visit(this);
+        turnAction.getParam().getSpeed().accept(this);
         if ( isDuration ) {
             this.sb.append(", ");
-            turnAction.getParam().getDuration().getValue().visit(this);
+            turnAction.getParam().getDuration().getValue().accept(this);
         }
         this.sb.append(");");
 
@@ -432,9 +413,9 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         decrIndentation();
-        mainTask.getVariables().visit(this);
+        mainTask.getVariables().accept(this);
         nlIndent();
-        if ( this.isTimerSensorUsed ) {
+        if ( this.usedHardwareBean.isTimerSensorUsed() ) {
             nlIndent();
             this.sb.append("unsigned long __time = millis();");
         }
@@ -512,7 +493,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
     }
 
     private void generateSensors() {
-        for ( UsedSensor usedSensor : this.usedSensors ) {
+        for ( UsedSensor usedSensor : this.usedHardwareBean.getUsedSensors() ) {
             switch ( usedSensor.getType() ) {
                 case SC.COLOR:
                     nlIndent();

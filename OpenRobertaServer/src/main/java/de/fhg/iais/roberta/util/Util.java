@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,8 +22,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
-import de.fhg.iais.roberta.javaServer.restServices.all.ClientAdmin;
-import de.fhg.iais.roberta.javaServer.restServices.all.ClientInit;
+import de.fhg.iais.roberta.components.Project;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientInit;
 import de.fhg.iais.roberta.persistence.AbstractProcessor;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData;
@@ -65,6 +68,15 @@ public class Util {
         new ClientLogger().log(loggerForRequest, fullRequest);
         String initToken = fullRequest.optString("initToken");
         httpSessionState.validateInitToken(initToken);
+    }
+
+    public static void addResultInfo(JSONObject response, Key key, boolean success, Map<String, String> params) throws JSONException {
+        String responseCode = success ? "ok" : "error";
+        response.put("rc", responseCode);
+        response.put("message", key.getKey());
+        response.put("cause", key.getKey());
+        // TODO check params with respect to key
+        response.put("parameters", params);
     }
 
     public static void addResultInfo(JSONObject response, AbstractProcessor processor) throws JSONException {
@@ -355,5 +367,18 @@ public class Util {
             listOfFileNames.add(file.getName());
         }
         return listOfFileNames;
+    }
+
+    public static Project.Builder setupWithExportXML(IRobotFactory factory, String exportXmlAsString) {
+        String[] parts = exportXmlAsString.split("\\s*</program>\\s*<config>\\s*");
+        String[] programParts = parts[0].split("<program>");
+        String program = programParts[1];
+        String[] configurationParts = parts[1].split("</config>");
+        String configuration = configurationParts[0];
+        return setupWithConfigurationAndProgramXML(factory, program, configuration);
+    }
+
+    public static Project.Builder setupWithConfigurationAndProgramXML(IRobotFactory factory, String programXmlAsString, String configurationXmlAsString) {
+        return new Project.Builder().setConfigurationXml(configurationXmlAsString).setProgramXml(programXmlAsString).setFactory(factory);
     }
 }

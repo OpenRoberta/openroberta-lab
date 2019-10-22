@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
@@ -22,6 +21,7 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
@@ -129,7 +129,7 @@ public class InfoCollector<T> implements ILanguageVisitor<T>, ISensorVisitor<T>,
     public static <T> List<NepoInfo> collectInfos(Phrase<T> phrase) //
     {
         InfoCollector<T> astVisitor = new InfoCollector<>();
-        phrase.visit(astVisitor);
+        phrase.accept(astVisitor);
         return astVisitor.infos;
     }
 

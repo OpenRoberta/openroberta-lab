@@ -52,7 +52,7 @@ public final class LedOff<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((INaoVisitor<V>) visitor).visitLedOff(this);
     }
 

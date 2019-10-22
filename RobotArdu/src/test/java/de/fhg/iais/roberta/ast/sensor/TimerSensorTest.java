@@ -1,30 +1,32 @@
 package de.fhg.iais.roberta.ast.sensor;
 
+import java.util.ArrayList;
+
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.ast.AstTest;
+import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
-import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
-import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class TimerSensorTest {
-    private final HelperBotNrollForXmlTest h = new HelperBotNrollForXmlTest();
+public class TimerSensorTest extends AstTest {
 
     @Test
     public void getMode() throws Exception {
-        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_resetTimer.xml");
+        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/sensors/sensor_resetTimer.xml");
 
-        TimerSensor<Void> cs = (TimerSensor<Void>) transformer.getTree().get(0).get(1);
+        TimerSensor<Void> cs = (TimerSensor<Void>) forest.get(0).get(1);
 
         Assert.assertEquals(SC.RESET, cs.getMode());
     }
 
     @Test
     public void getTimer() throws Exception {
-        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_resetTimer.xml");
+        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/sensors/sensor_resetTimer.xml");
 
-        TimerSensor<Void> cs = (TimerSensor<Void>) transformer.getTree().get(0).get(1);
+        TimerSensor<Void> cs = (TimerSensor<Void>) forest.get(0).get(1);
 
         Assert.assertEquals("1", cs.getPort());
     }
@@ -33,23 +35,23 @@ public class TimerSensorTest {
     public void sensorResetTimer() throws Exception {
         String a = "BlockAST [project=[[Location [x=-96, y=73], TimerSensor [1, RESET, NO_SLOT]]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_resetTimer.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/sensors/sensor_resetTimer.xml");
     }
 
     @Test
     public void sensorGetSampleTimer() throws Exception {
         String a = "BlockAST [project=[[Location [x=1, y=1], TimerSensor [1, DEFAULT, NO_SLOT]]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_getSampleTimer.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/sensors/sensor_getSampleTimer.xml");
     }
 
     @Test
     public void reverseTransformation() throws Exception {
-        this.h.assertTransformationIsOk("/ast/sensors/sensor_resetTimer.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/sensors/sensor_resetTimer.xml");
     }
 
     @Test
     public void reverseTransformation1() throws Exception {
-        this.h.assertTransformationIsOk("/ast/sensors/sensor_getSampleTimer.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/sensors/sensor_getSampleTimer.xml");
     }
 }

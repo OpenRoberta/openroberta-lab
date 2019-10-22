@@ -13,9 +13,9 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
@@ -51,7 +51,7 @@ public class RadioSendAction<V> extends Action<V> {
     public String getPower() {
         return this.power;
     }
-    
+
     public BlocklyType getType() {
         return this.type;
     }
@@ -62,7 +62,7 @@ public class RadioSendAction<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((IMbedVisitor<V>) visitor).visitRadioSendAction(this);
     }
 
@@ -79,10 +79,11 @@ public class RadioSendAction<V> extends Action<V> {
         Phrase<V> message = helper.extractValue(values, new ExprParam(BlocklyConstants.MESSAGE, BlocklyType.STRING));
         String power = helper.extractField(fields, BlocklyConstants.POWER);
         String type = helper.extractField(fields, BlocklyConstants.TYPE);
-        
-        return RadioSendAction.make(helper.convertPhraseToExpr(message), BlocklyType.get(type), power, helper.extractBlockProperties(block), helper.extractComment(block));
+
+        return RadioSendAction
+            .make(helper.convertPhraseToExpr(message), BlocklyType.get(type), power, helper.extractBlockProperties(block), helper.extractComment(block));
     }
-    
+
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();

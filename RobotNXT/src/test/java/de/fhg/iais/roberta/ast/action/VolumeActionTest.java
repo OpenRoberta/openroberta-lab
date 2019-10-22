@@ -1,32 +1,34 @@
 package de.fhg.iais.roberta.ast.action;
 
+import java.util.ArrayList;
+
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.NxtAstTest;
+import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
-import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class VolumeActionTest {
-    private final HelperNxtForXmlTest h = new HelperNxtForXmlTest();
+public class VolumeActionTest extends NxtAstTest {
 
     @Test
     public void make() throws Exception {
         String a = "BlockAST [project=[[Location [x=-2, y=135], VolumeAction [SET, NumConst [50]]]]]";
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/actions/action_SetVolume.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/actions/action_SetVolume.xml");
     }
 
     @Test
     public void getVolume() throws Exception {
-        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_SetVolume.xml");
-        VolumeAction<Void> va = (VolumeAction<Void>) transformer.getTree().get(0).get(1);
+        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_SetVolume.xml");
+        VolumeAction<Void> va = (VolumeAction<Void>) forest.get(0).get(1);
         Assert.assertEquals("NumConst [50]", va.getVolume().toString());
     }
 
     @Test
     public void getMode() throws Exception {
-        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_SetVolume.xml");
-        VolumeAction<Void> va = (VolumeAction<Void>) transformer.getTree().get(0).get(1);
+        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_SetVolume.xml");
+        VolumeAction<Void> va = (VolumeAction<Void>) forest.get(0).get(1);
         Assert.assertEquals(VolumeAction.Mode.SET, va.getMode());
     }
 
@@ -39,11 +41,11 @@ public class VolumeActionTest {
     @Test
     public void getVolumeAction() throws Exception {
         String a = "BlockAST [project=[[Location [x=-2, y=189], VolumeAction [GET, NullConst [null]]]]]";
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/actions/action_GetVolume.xml"));
+        UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/actions/action_GetVolume.xml");
     }
 
     @Test
     public void reverseTransformatin() throws Exception {
-        this.h.assertTransformationIsOk("/ast/actions/action_SetVolume.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/actions/action_SetVolume.xml");
     }
 }

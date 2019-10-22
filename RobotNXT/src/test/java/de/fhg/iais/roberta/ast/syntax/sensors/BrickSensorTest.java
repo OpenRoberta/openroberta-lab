@@ -2,15 +2,15 @@ package de.fhg.iais.roberta.ast.syntax.sensors;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
+import de.fhg.iais.roberta.NxtAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class BrickSensorTest {
-    private final HelperNxtForXmlTest h = new HelperNxtForXmlTest();
+public class BrickSensorTest extends NxtAstTest {
 
     @Test
     public void isPressed() throws Exception {
         String a = "\nButtonPressed(BTNCENTER,false)";
 
-        this.h.assertCodeIsOk(a, "/ast/sensors/sensor_brick1.xml");
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/ast/sensors/sensor_brick1.xml", false);
     }
 }

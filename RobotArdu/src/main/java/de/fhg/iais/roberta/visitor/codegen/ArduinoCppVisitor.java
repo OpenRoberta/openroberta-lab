@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
+import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Category;
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
@@ -41,7 +43,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.collect.ArduinoUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
 /**
@@ -49,49 +50,31 @@ import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
  * <b>This representation is correct C code for Arduino.</b> <br>
  */
 public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implements IArduinoVisitor<Void> {
-    private final boolean isTimerSensorUsed;
-    private final boolean isListsUsed;
 
     /**
      * Initialize the C++ code generator visitor.
      *
-     * @param programPhrases to generate the code from
-     * @param indentation to start with. Will be incr/decr depending on block structure
+     * @param phrases to generate the code from
      */
-    private ArduinoCppVisitor(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases, int indentation) {
-        super(brickConfiguration, phrases, indentation);
-        ArduinoUsedHardwareCollectorVisitor codePreprocessVisitor = new ArduinoUsedHardwareCollectorVisitor(phrases, brickConfiguration);
-        this.usedSensors = codePreprocessVisitor.getUsedSensors();
-        this.usedVars = codePreprocessVisitor.getVisitedVars();
-        //TODO: fix how the timer is detected for all robots
-        this.isTimerSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
-        this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
-        this.isListsUsed = codePreprocessVisitor.isListsUsed();
-    }
+    public ArduinoCppVisitor(
+        UsedHardwareBean usedHardwareBean,
+        CodeGeneratorSetupBean codeGeneratorSetupBean,
+        ConfigurationAst brickConfiguration,
+        ArrayList<ArrayList<Phrase<Void>>> phrases) {
+        super(usedHardwareBean, codeGeneratorSetupBean, brickConfiguration, phrases);
 
-    /**
-     * factory method to generate C++ code from an AST.<br>
-     *
-     * @param brickConfiguration
-     * @param programPhrases to generate the code from
-     * @param withWrapping if false the generated code will be without the surrounding configuration code
-     */
-    public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
-        ArduinoCppVisitor astVisitor = new ArduinoCppVisitor(brickConfiguration, programPhrases, withWrapping ? 1 : 0);
-        astVisitor.generateCode(withWrapping);
-        return astVisitor.sb.toString();
     }
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         this.sb.append("_lcd_" + showTextAction.getPort() + ".setCursor(");
-        showTextAction.getX().visit(this);
+        showTextAction.getX().accept(this);
         this.sb.append(",");
-        showTextAction.getY().visit(this);
+        showTextAction.getY().accept(this);
         this.sb.append(");");
         nlIndent();
         this.sb.append("_lcd_" + showTextAction.getPort() + ".print(");
-        showTextAction.getMsg().visit(this);
+        showTextAction.getMsg().accept(this);
         this.sb.append(");");
         return null;
     }
@@ -151,7 +134,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
             Channels.put("blue", ((RgbColor<Void>) lightAction.getRgbLedColor()).getB());
             Channels.forEach((k, v) -> {
                 this.sb.append("analogWrite(_led_" + k + "_" + lightAction.getPort() + ", ");
-                v.visit(this);
+                v.accept(this);
                 this.sb.append(");");
                 nlIndent();
             });
@@ -178,9 +161,9 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     public Void visitToneAction(ToneAction<Void> toneAction) {
         //9 - sound port
         this.sb.append("tone(_spiele_" + toneAction.getPort() + ",");
-        toneAction.getFrequency().visit(this);
+        toneAction.getFrequency().accept(this);
         this.sb.append(", ");
-        toneAction.getDuration().visit(this);
+        toneAction.getDuration().accept(this);
         this.sb.append(");");
         return null;
     }
@@ -190,11 +173,11 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         boolean step = motorOnAction.getParam().getDuration() != null;
         if ( step ) {//step motor
             this.sb.append("Motor_" + motorOnAction.getUserDefinedPort() + ".setSpeed(");
-            motorOnAction.getParam().getSpeed().visit(this);
+            motorOnAction.getParam().getSpeed().accept(this);
             this.sb.append(");");
             nlIndent();
             this.sb.append("Motor_" + motorOnAction.getUserDefinedPort() + ".step(_SPU_" + motorOnAction.getUserDefinedPort() + "*(");
-            motorOnAction.getDurationValue().visit(this);
+            motorOnAction.getDurationValue().accept(this);
             this.sb.append(")");
             if ( motorOnAction.getDurationMode().equals(MotorMoveMode.DEGREE) ) {
                 this.sb.append("/360");
@@ -202,7 +185,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
             this.sb.append(");");
         } else {//servo motor
             this.sb.append("_servo_" + motorOnAction.getUserDefinedPort() + ".write(");
-            motorOnAction.getParam().getSpeed().visit(this);
+            motorOnAction.getParam().getSpeed().accept(this);
             this.sb.append(");");
         }
         return null;
@@ -421,26 +404,26 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
 
-        mainTask.getVariables().visit(this);
+        mainTask.getVariables().accept(this);
         nlIndent();
         generateConfigurationVariables();
-        if ( this.isTimerSensorUsed ) {
+        if ( this.usedHardwareBean.isTimerSensorUsed() ) {
             this.sb.append("unsigned long __time = millis();");
             nlIndent();
         }
         long numberConf =
             this.programPhrases
                 .stream()
-                .filter(phrase -> (phrase.getKind().getCategory() == Category.METHOD) && !phrase.getKind().hasName("METHOD_CALL"))
+                .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
                 .count();
-        if ( (this.configuration.getConfigurationComponents().isEmpty() || this.isTimerSensorUsed) && (numberConf == 0) ) {
+        if ( (this.configuration.getConfigurationComponents().isEmpty() || this.usedHardwareBean.isTimerSensorUsed()) && numberConf == 0 ) {
             nlIndent();
         }
         generateUserDefinedMethods();
         if ( numberConf != 0 ) {
             nlIndent();
         }
-        for ( UsedSensor usedSensor : this.usedSensors ) {
+        for ( UsedSensor usedSensor : this.usedHardwareBean.getUsedSensors() ) {
             if ( usedSensor.getType().equals(SC.INFRARED) ) {
                 measureIRValue(usedSensor);
                 nlIndent();
@@ -544,7 +527,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         }
         this.sb.append("#include <RobertaFunctions.h>   // Open Roberta library");
         nlIndent();
-        if ( this.isListsUsed ) {
+        if ( this.usedHardwareBean.isListsUsed() ) {
             this.sb.append("#include <ArduinoSTL.h>");
             nlIndent();
             this.sb.append("#include <list>");
@@ -803,12 +786,12 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         switch ( pinWriteValueAction.getMode() ) {
             case SC.ANALOG:
                 this.sb.append("analogWrite(_output_").append(pinWriteValueAction.getPort()).append(", ");
-                pinWriteValueAction.getValue().visit(this);
+                pinWriteValueAction.getValue().accept(this);
                 this.sb.append(");");
                 break;
             case SC.DIGITAL:
                 this.sb.append("digitalWrite(_output_").append(pinWriteValueAction.getPort()).append(", ");
-                pinWriteValueAction.getValue().visit(this);
+                pinWriteValueAction.getValue().accept(this);
                 this.sb.append(");");
                 break;
             default:

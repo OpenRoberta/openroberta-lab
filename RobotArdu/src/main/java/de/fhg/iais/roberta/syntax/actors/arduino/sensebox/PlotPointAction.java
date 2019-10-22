@@ -62,7 +62,7 @@ public class PlotPointAction<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((IArduinoVisitor<V>) visitor).visitPlotPointAction(this);
     }
 

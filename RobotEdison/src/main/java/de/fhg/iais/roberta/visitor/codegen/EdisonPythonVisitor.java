@@ -1,12 +1,13 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
 import static de.fhg.iais.roberta.syntax.lang.functions.FunctionNames.SUM;
-import static de.fhg.iais.roberta.visitor.collect.EdisonMethods.*;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.codegen.HelperMethodGenerator;
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean.EdisonMethods;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
@@ -42,10 +43,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensors.edison.ResetSensor;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.visitor.collect.EdisonUsedHardwareCollectorVisitor;
-import de.fhg.iais.roberta.visitor.collect.EdisonUsedMethodCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IEdisonVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
@@ -56,8 +54,6 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
  */
 public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdisonVisitor<Void> {
 
-    private final EdisonUsedHardwareCollectorVisitor usedHardwareCollector;
-
     /**
      * initialize the Python code generator visitor.
      * The UsedHardwareCollector will provide the Python code generator with the used methods, used sensors/actors and used variables.
@@ -66,18 +62,13 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      *
      * @param brickConfig hardware configuration of the robot (fixed)
      * @param programPhrases to generate the code from
-     * @param indentation to start with. Will be incremented/decremented depending on block structure
      */
     public EdisonPythonVisitor(
-        Configuration brickConfig,
-        ArrayList<ArrayList<Phrase<Void>>> programPhrases,
-        int indentation,
-        HelperMethodGenerator helperMethodGenerator) {
-        super(programPhrases, indentation, helperMethodGenerator, new EdisonUsedMethodCollectorVisitor(programPhrases));
-
-        this.usedHardwareCollector = new EdisonUsedHardwareCollectorVisitor(programPhrases, brickConfig);
-        this.usedGlobalVarInFunctions = this.usedHardwareCollector.getMarkedVariablesAsGlobal();
-        this.loopsLabels = this.usedHardwareCollector.getloopsLabelContainer();
+        UsedHardwareBean usedHardwareBean,
+        CodeGeneratorSetupBean codeGeneratorSetupBean,
+        ConfigurationAst brickConfig,
+        ArrayList<ArrayList<Phrase<Void>>> programPhrases) {
+        super(usedHardwareBean, codeGeneratorSetupBean, programPhrases);
     }
 
     /**
@@ -125,37 +116,17 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         nlIndent(); //new line for helper methods
         nlIndent();
 
-        if ( !this.usedHardwareCollector.getUsedMethods().isEmpty() ) {
-            String helperMethodImpls = this.helperMethodGenerator.getHelperMethodDefinitions(this.usedHardwareCollector.getUsedMethods());
+        if ( !this.usedHardwareBean.getUsedMethods().isEmpty() ) {
+            String helperMethodImpls =
+                this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodDefinitions(this.usedHardwareBean.getUsedMethods());
             this.sb.append(helperMethodImpls);
         }
 
-        if ( !this.languageCollectorVisitor.getUsedFunctions().isEmpty() ) {
-            String helperMethodImpls = this.helperMethodGenerator.getHelperMethodDefinitions(this.languageCollectorVisitor.getUsedFunctions());
+        if ( !this.codeGeneratorSetupBean.getUsedFunctions().isEmpty() ) {
+            String helperMethodImpls =
+                this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodDefinitions(this.codeGeneratorSetupBean.getUsedFunctions());
             this.sb.append(helperMethodImpls);
         }
-    }
-
-    /**
-     * Generates source code from a brick configuration and a Blockly program.
-     * This method is needed because {@link AbstractPythonVisitor#generateCode(boolean)} and {AbstractPythonVisitor#generateProgramMainBody()} are protected.
-     *
-     * @param brickCfg the brick configuration
-     * @param programPhrases the program to generate the code from
-     * @param withWrapping wrap the code with prefix/suffix
-     * @return the source code as a String
-     */
-    public static String generate(
-        Configuration brickCfg,
-        ArrayList<ArrayList<Phrase<Void>>> programPhrases,
-        boolean withWrapping,
-        HelperMethodGenerator helperMethodGenerator) {
-        Assert.notNull(brickCfg);
-
-        EdisonPythonVisitor visitor = new EdisonPythonVisitor(brickCfg, programPhrases, 0, helperMethodGenerator);
-        visitor.generateCode(withWrapping);
-
-        return visitor.sb.toString();
     }
 
     /**
@@ -165,21 +136,21 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     protected void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
         this.sb.append(stmtType).append(whitespace());
         ExprList<Void> expressions = (ExprList<Void>) expr;
-        expressions.get().get(0).visit(this);
+        expressions.get().get(0).accept(this);
         this.sb.append(whitespace() + "in range(");
-        expressions.get().get(2).visit(this);
+        expressions.get().get(2).accept(this);
         this.sb.append("):");
     }
 
     /**
      * Function to get readings from the obstacle detector.
      * visit a {@link InfraredSensor} for the block "robSensors_infrared_getSample"
-     * 
+     *
      * @param infraredSensor to be visited
      */
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.sb.append(this.helperMethodGenerator.getHelperMethodName(OBSTACLEDETECTION));
+        this.sb.append(this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodName(EdisonMethods.OBSTACLEDETECTION));
         this.sb.append("(");
 
         switch ( infraredSensor.getPort() ) {
@@ -207,7 +178,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
-        this.sb.append(this.helperMethodGenerator.getHelperMethodName(IRSEEK));
+        this.sb.append(this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodName(EdisonMethods.IRSEEK));
         switch ( irSeekerSensor.getMode() ) {
             case "RCCODE":
                 this.sb.append("(1)");
@@ -269,9 +240,9 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
-        this.sb.append(this.helperMethodGenerator.getHelperMethodName(IRSEND));
+        this.sb.append(this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodName(EdisonMethods.IRSEND));
         this.sb.append("(");
-        sendIRAction.getCode().visit(this);
+        sendIRAction.getCode().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -279,13 +250,13 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     /**
      * Function to receive data via infrared
      * visit a {@link SendIRAction} for the block "edisonCommunication_ir_receiveBlock"
-     * 
+     *
      * @param receiveIRAction
      * @return
      */
     @Override
     public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
-        this.sb.append(this.helperMethodGenerator.getHelperMethodName(IRSEEK));
+        this.sb.append(this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodName(EdisonMethods.IRSEEK));
         this.sb.append("(0)");
         return null;
     }
@@ -307,12 +278,12 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
                 break;
         }
 
-        this.sb.append(this.helperMethodGenerator.getHelperMethodName(DIFFDRIVE));
+        this.sb.append(this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodName(EdisonMethods.DIFFDRIVE));
         this.sb.append("(").append(direction).append(", ");
-        driveAction.getParam().getSpeed().visit(this);
+        driveAction.getParam().getSpeed().accept(this);
         this.sb.append(", ");
         if ( driveAction.getParam().getDuration() != null ) {
-            driveAction.getParam().getDuration().getValue().visit(this);
+            driveAction.getParam().getDuration().getValue().accept(this);
         } else {
             this.sb.append("Ed.DISTANCE_UNLIMITED");
         }
@@ -332,11 +303,11 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
         switch ( mathOnListFunct.getFunctName() ) {
             case AVERAGE: // general implementation casts to float, which is not allowed on edison
-                this.sb.append(this.helperMethodGenerator.getHelperMethodName(SUM));
+                this.sb.append(this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodName(SUM));
                 this.sb.append("(");
-                mathOnListFunct.getParam().get(0).visit(this);
+                mathOnListFunct.getParam().get(0).accept(this);
                 this.sb.append(") / len(");
-                mathOnListFunct.getParam().get(0).visit(this);
+                mathOnListFunct.getParam().get(0).accept(this);
                 this.sb.append(")");
                 break;
             default:
@@ -373,7 +344,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         StmtList<Void> variables = mainTask.getVariables();
-        variables.visit(this); //fill usedGlobalVarInFunctions with values
+        variables.accept(this); //fill usedGlobalVarInFunctions with values
 
         nlIndent();
         generateUserDefinedMethods(); //Functions created by the user will be defined before the main function
@@ -391,14 +362,14 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     public Void visitListCreate(ListCreate<Void> listCreate) {
         int listSize = listCreate.getValue().get().size();
 
-        this.sb.append("Ed.List(").append(listSize).append((", ["));
+        this.sb.append("Ed.List(").append(listSize).append(", [");
         if ( listSize == 0 ) {
             this.sb.append("]");
         } else {
             for ( int i = 0; i < listSize; i++ ) {
-                listCreate.getValue().get().get(i).visit(this);
-                if ( i < (listSize - 1) ) {
-                    this.sb.append((","));
+                listCreate.getValue().get().get(i).accept(this);
+                if ( i < listSize - 1 ) {
+                    this.sb.append(",");
                 } else {
                     this.sb.append("]");
                 }
@@ -451,15 +422,19 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
                 direction = "Ed.FORWARD";
                 break;
         }
-        this.sb.append(this.helperMethodGenerator.getHelperMethodName(DIFFCURVE)).append("(").append(direction).append(", ");
-        curveAction.getParamLeft().getSpeed().visit(this);
+        this.sb
+            .append(this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodName(EdisonMethods.DIFFCURVE))
+            .append("(")
+            .append(direction)
+            .append(", ");
+        curveAction.getParamLeft().getSpeed().accept(this);
         this.sb.append(", ");
-        curveAction.getParamRight().getSpeed().visit(this);
+        curveAction.getParamRight().getSpeed().accept(this);
         if ( curveAction.getParamLeft().getDuration() == null ) {
             this.sb.append(", Ed.DISTANCE_UNLIMITED");
         } else {
             this.sb.append(", ");
-            curveAction.getParamLeft().getDuration().getValue().visit(this);
+            curveAction.getParamLeft().getDuration().getValue().accept(this);
         }
         this.sb.append(")");
         return null;
@@ -473,12 +448,12 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        this.sb.append(this.helperMethodGenerator.getHelperMethodName(DIFFTURN));
+        this.sb.append(this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodName(EdisonMethods.DIFFTURN));
         this.sb.append("(Ed.SPIN_").append(turnAction.getDirection()).append(", ");
-        turnAction.getParam().getSpeed().visit(this);
+        turnAction.getParam().getSpeed().accept(this);
         this.sb.append(", ");
         if ( turnAction.getParam().getDuration() != null ) {
-            turnAction.getParam().getDuration().getValue().visit(this);
+            turnAction.getParam().getDuration().getValue().accept(this);
         } else {
             this.sb.append("Ed.DISTANCE_UNLIMITED");
         }
@@ -495,15 +470,15 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        this.sb.append(this.helperMethodGenerator.getHelperMethodName(MOTORON));
+        this.sb.append(this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodName(EdisonMethods.MOTORON));
         switch ( motorOnAction.getUserDefinedPort() ) {
             case "LMOTOR":
                 this.sb.append("(0, ");
-                motorOnAction.getParam().getSpeed().visit(this);
+                motorOnAction.getParam().getSpeed().accept(this);
                 break;
             case "RMOTOR":
                 this.sb.append("(1, ");
-                motorOnAction.getParam().getSpeed().visit(this);
+                motorOnAction.getParam().getSpeed().accept(this);
                 break;
             default:
                 break;
@@ -511,7 +486,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         this.sb.append(", ");
 
         if ( motorOnAction.getDurationValue() != null ) {
-            motorOnAction.getDurationValue().visit(this);
+            motorOnAction.getDurationValue().accept(this);
             this.sb.append(")");
         } else {
             this.sb.append("Ed.DISTANCE_UNLIMITED)");
@@ -546,9 +521,9 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     @Override
     public Void visitBinary(Binary<Void> binary) {
         if ( binary.getOp() == Binary.Op.DIVIDE ) { // general implementation casts to float, which is not allowed on edison
-            binary.getLeft().visit(this);
+            binary.getLeft().accept(this);
             this.sb.append(" / ");
-            binary.getRight().visit(this);
+            binary.getRight().accept(this);
         } else {
             super.visitBinary(binary);
         }
@@ -569,11 +544,11 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
 
     @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        this.sb.append(this.helperMethodGenerator.getHelperMethodName(mathPowerFunct.getFunctName()));
+        this.sb.append(this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodName(mathPowerFunct.getFunctName()));
         this.sb.append("(");
-        mathPowerFunct.getParam().get(0).visit(this);
+        mathPowerFunct.getParam().get(0).accept(this);
         this.sb.append(", ");
-        mathPowerFunct.getParam().get(1).visit(this);
+        mathPowerFunct.getParam().get(1).accept(this);
         this.sb.append(")");
         return null;
     }
@@ -588,30 +563,30 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
         switch ( mathSingleFunct.getFunctName() ) {
             case POW10:
-                this.sb.append(this.helperMethodGenerator.getHelperMethodName(FunctionNames.POWER));
+                this.sb.append(this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodName(FunctionNames.POWER));
                 this.sb.append("(10, ");
-                mathSingleFunct.getParam().get(0).visit(this);
+                mathSingleFunct.getParam().get(0).accept(this);
                 this.sb.append(")");
                 break;
             case ROUND:
                 this.sb.append("((");
-                mathSingleFunct.getParam().get(0).visit(this);
+                mathSingleFunct.getParam().get(0).accept(this);
                 this.sb.append("+5)/10)*10");
                 break;
             case ROUNDUP:
                 this.sb.append("((");
-                mathSingleFunct.getParam().get(0).visit(this);
+                mathSingleFunct.getParam().get(0).accept(this);
                 this.sb.append("/10)+1)*10");
                 break;
             case ROUNDDOWN:
                 this.sb.append("(");
-                mathSingleFunct.getParam().get(0).visit(this);
+                mathSingleFunct.getParam().get(0).accept(this);
                 this.sb.append("/10)");
                 break;
             default:
-                this.sb.append(this.helperMethodGenerator.getHelperMethodName(mathSingleFunct.getFunctName()));
+                this.sb.append(this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodName(mathSingleFunct.getFunctName()));
                 this.sb.append("(");
-                mathSingleFunct.getParam().get(0).visit(this);
+                mathSingleFunct.getParam().get(0).accept(this);
                 this.sb.append(")");
                 break;
         }
@@ -644,7 +619,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
         this.sb.append("Ed.TimeWait(");
-        waitTimeStmt.getTime().visit(this);
+        waitTimeStmt.getTime().accept(this);
         this.sb.append(", Ed.TIME_MILLISECONDS)");
         return null;
     }
@@ -706,13 +681,13 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         this.sb.append("Ed.PlayTone(8000000/");
-        toneAction.getFrequency().visit(this);
+        toneAction.getFrequency().accept(this);
         this.sb.append(", ");
-        toneAction.getDuration().visit(this);
+        toneAction.getDuration().accept(this);
         this.sb.append(")");
         nlIndent();
         this.sb.append("Ed.TimeWait(");
-        toneAction.getDuration().visit(this);
+        toneAction.getDuration().accept(this);
         this.sb.append(", Ed.TIME_MILLISECONDS)");
         return null;
     }
@@ -825,7 +800,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     @Override
     public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
         this.sb.append("(");
-        sensorGetSample.getSensor().visit(this);
+        sensorGetSample.getSensor().accept(this);
         this.sb.append(")");
         return null;
     }

@@ -6,36 +6,36 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.NxtAstTest;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class NxtActorTest {
-    private final HelperNxtForXmlTest nxtHelper = new HelperNxtForXmlTest();
+public class NxtActorTest extends NxtAstTest {
 
-    private static Configuration makeOtherConsumerConfiguration() {
-        Map<String, String> otherPowerConsumerproperties =
-            HelperNxtForXmlTest.createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
+    private static ConfigurationAst makeOtherConsumerConfiguration() {
+        Map<String, String> otherPowerConsumerproperties = createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
         ConfigurationComponent otherPowerConsumer = new ConfigurationComponent("LARGE", true, "A", "A", otherPowerConsumerproperties);
 
-        final Configuration.Builder builder = new Configuration.Builder();
+        final ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(12f).setWheelDiameter(5.6f).addComponents(Arrays.asList(otherPowerConsumer));
         return builder.build();
     }
 
-    public static Configuration makeDisplayConfiguration() {
+    public static ConfigurationAst makeDisplayConfiguration() {
         ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", Collections.emptyMap());
         ConfigurationComponent soundSensor = new ConfigurationComponent("SOUND", false, "S2", "2", Collections.emptyMap());
         ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", "3", Collections.emptyMap());
-        final Configuration.Builder builder = new Configuration.Builder();
+        final ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(12f).setWheelDiameter(5.6f).addComponents(Arrays.asList(touchSensor, soundSensor, colorSensor));
         return builder.build();
     }
 
     @Test
     public void nxtOtherPowerConsumerTest() throws Exception {
-        this.nxtHelper
-            .compareExistingAndGeneratedNxcSource(
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXml(
+                testFactory,
                 "/ast/actions/nxt_other_consumer_test.nxc",
                 "/ast/actions/nxt_other_consumer_test.xml",
                 makeOtherConsumerConfiguration());
@@ -43,8 +43,9 @@ public class NxtActorTest {
 
     @Test
     public void nxtDisplayTest() throws Exception {
-        this.nxtHelper
-            .compareExistingAndGeneratedNxcSource(
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXml(
+                testFactory,
                 "/ast/actions/nxt_display_all_datatypes_test.nxc",
                 "/ast/actions/nxt_display_all_datatypes_test.xml",
                 makeDisplayConfiguration());

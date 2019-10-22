@@ -41,9 +41,6 @@ robots:
     sensebox:
         dir: sensebox
         suffix: ".ino"
-    wedo:
-        dir: wedo
-        suffix: ".json"
     edison:
         dir: edison
         suffix: ".wav"

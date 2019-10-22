@@ -2,15 +2,16 @@ package de.fhg.iais.roberta.syntax.actors;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.Ev3LejosAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
+import de.fhg.iais.roberta.worker.codegen.Ev3JavaGeneratorWorker;
 
-public class MotorDriveStopActionTest {
-    private final HelperEv3ForXmlTest h = new HelperEv3ForXmlTest();
+public class MotorDriveStopActionTest extends Ev3LejosAstTest {
 
     @Test
     public void stop() throws Exception {
         String a = "\nhal.stopRegulatedDrive();}";
 
-        this.h.assertCodeIsOk(a, "/syntax/actions/action_Stop.xml");
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/actions/action_Stop.xml", new Ev3JavaGeneratorWorker());
     }
 }

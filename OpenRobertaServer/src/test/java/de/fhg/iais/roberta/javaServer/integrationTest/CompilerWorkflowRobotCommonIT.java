@@ -30,8 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.javaServer.restServices.all.ClientAdmin;
-import de.fhg.iais.roberta.javaServer.restServices.all.ClientProgram;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.ProjectWorkflowRestController;
 import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
@@ -82,7 +82,7 @@ public class CompilerWorkflowRobotCommonIT {
     @Mock
     private SessionFactoryWrapper sessionFactoryWrapper;
 
-    private ClientProgram restProgram;
+    private ProjectWorkflowRestController restWorkflow;
     private ClientAdmin restAdmin;
 
     @BeforeClass
@@ -118,7 +118,7 @@ public class CompilerWorkflowRobotCommonIT {
         }
         LOG.info(sb.toString());
 
-        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, robotCommunicator, serverProperties);
+        this.restWorkflow = new ProjectWorkflowRestController(this.robotCommunicator);
         this.restAdmin = new ClientAdmin(robotCommunicator, serverProperties);
         when(this.sessionFactoryWrapper.getSession()).thenReturn(this.dbSession);
         doNothing().when(this.dbSession).commit();
@@ -217,9 +217,9 @@ public class CompilerWorkflowRobotCommonIT {
             template = generateFinalProgram(template, progName, prog);
             if ( CROSSCOMPILER_CALL ) {
                 setRobotTo(robotName);
-                org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileP','name':'prog','language':'de'}");
-                cmd.getJSONObject("data").put("program", template);
-                Response response = this.restProgram.command(httpSessionState, cmd);
+                org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileP','programName':'prog','language':'de'}");
+                cmd.getJSONObject("data").put("programBlockSet", template);
+                Response response = this.restWorkflow.compileProgram(this.httpSessionState, cmd);
                 result = checkEntityRc(response, "ok", "PROGRAM_INVALID_STATEMETNS");
                 reason = "response-info";
             } else {
@@ -227,7 +227,7 @@ public class CompilerWorkflowRobotCommonIT {
                 reason = "crosscomiler not called";
             }
         } catch ( Exception e ) {
-            LOG.error("ClientProgram failed", e);
+            LOG.error("ProjectWorkflowRestController failed", e);
             result = false;
             reason = "exception (" + e.getMessage() + ")";
         }

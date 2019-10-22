@@ -3,11 +3,10 @@ package de.fhg.iais.roberta.syntax.codegen.arduino.mbot;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ardu.HelperMBotForXmlTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
 @Ignore // TODO: reactivate this test REFACTORING
-public class CppVisitorTest {
-    private final HelperMBotForXmlTest h = new HelperMBotForXmlTest();
+public class CppVisitorTest extends MbotAstTest {
 
     private static final String MAIN_METHOD1 =
         ""
@@ -33,7 +32,7 @@ public class CppVisitorTest {
                 + "}"
                 + " voidloop(){motor1.run((60)*255/100);}";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/motor1m1.xml", true);
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/code_generator/java/makeblock/motor1m1.xml", false);
     }
 
     @Test
@@ -51,7 +50,12 @@ public class CppVisitorTest {
                 + "        motor1.run((ultraSensor4.distanceCm())*255/100);\n"
                 + "}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_ultrasonic_sensor.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                a,
+                "/syntax/code_generator/java/makeblock/get_ultrasonic_sensor.xml",
+                false);
     }
 
     @Test
@@ -70,7 +74,8 @@ public class CppVisitorTest {
                 + "motor1.run((60)*255/100);}"
                 + "}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_light_sensor2.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/code_generator/java/makeblock/get_light_sensor2.xml", false);
     }
 
     @Test
@@ -88,7 +93,8 @@ public class CppVisitorTest {
                 + "        delay(500);}\n"
                 + "}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_touch_sensor.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/code_generator/java/makeblock/get_touch_sensor.xml", false);
     }
 
     @Test
@@ -107,7 +113,8 @@ public class CppVisitorTest {
                 + "        motor1.run((60)*255/100);}\n"
                 + "}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_motion_sensor.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/code_generator/java/makeblock/get_motion_sensor.xml", false);
     }
 
     @Test
@@ -126,7 +133,12 @@ public class CppVisitorTest {
                 + "        motor1.run((30)*255/100);}\n"
                 + "}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_joystick_sample.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                a,
+                "/syntax/code_generator/java/makeblock/get_joystick_sample.xml",
+                false);
     }
 
     @Test
@@ -147,7 +159,12 @@ public class CppVisitorTest {
                 + "        motor1.run((60)*255/100);}\n"
                 + "}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_gyroscope_sensor.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                a,
+                "/syntax/code_generator/java/makeblock/get_gyroscope_sensor.xml",
+                false);
     }
 
     @Test
@@ -167,7 +184,12 @@ public class CppVisitorTest {
                 + "if (myGyro1.getAngleX() > 10 ) {"
                 + "        motor1.run((30)*255/100);}}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_accelerometer_sensor.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                a,
+                "/syntax/code_generator/java/makeblock/get_accelerometer_sensor.xml",
+                false);
     }
 
     @Test
@@ -186,7 +208,8 @@ public class CppVisitorTest {
                 + "        motor1.run((60)*255/100);}\n"
                 + "}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_flame_sensor.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/code_generator/java/makeblock/get_flame_sensor.xml", false);
     }
 
     @Test
@@ -204,7 +227,8 @@ public class CppVisitorTest {
                 + "if (myLight0.read()*100/1023 == 0 ) {"
                 + "        motor1.run((60)*255/100);}}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_light_sensor.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/code_generator/java/makeblock/get_light_sensor.xml", false);
     }
 
     @Test
@@ -223,7 +247,8 @@ public class CppVisitorTest {
                 + "if (mySound3.strength() > 0) {"
                 + "        delay(500);}}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_sound_sensor.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/code_generator/java/makeblock/get_sound_sensor.xml", false);
     }
 
     @Test
@@ -242,7 +267,12 @@ public class CppVisitorTest {
                 + "if (myTemp3.getTemperature() < 20) {"
                 + "        motor1.run((30)*255/100);}}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_temperature_sensor.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                a,
+                "/syntax/code_generator/java/makeblock/get_temperature_sensor.xml",
+                false);
     }
 
     @Test
@@ -262,7 +292,8 @@ public class CppVisitorTest {
                 + "       delay(500);}\n"
                 + "}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_timer.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/code_generator/java/makeblock/get_timer.xml", false);
     }
 
     @Test
@@ -277,7 +308,7 @@ public class CppVisitorTest {
                 + "buzzer.tone(8, 50, 500);"
                 + "delay(20);";
 
-        this.h.assertCodeIsOk(expectedResult, "/ast/actions/action_PlayTone.xml", true);
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/ast/actions/action_PlayTone.xml", false);
     }
 
     @Test
@@ -293,7 +324,7 @@ public class CppVisitorTest {
                 + "delay(20);"
                 + "\n";
 
-        this.h.assertCodeIsOk(expectedResult, "/ast/actions/action_PlayNote.xml", true);
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/ast/actions/action_PlayNote.xml", false);
     }
 
     @Test
@@ -313,7 +344,8 @@ public class CppVisitorTest {
                 + "rgbled_7.show();"
                 + "delay(1000);}";
 
-        this.h.assertCodeIsOk(expectedResult, "/syntax/code_generator/java/makeblock/led.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/syntax/code_generator/java/makeblock/led.xml", false);
     }
 
     @Test
@@ -329,7 +361,8 @@ public class CppVisitorTest {
                 + "myDrive.steer(50*255/100,80*255/100,1,2000);"
                 + "delay(5000);}";
 
-        this.h.assertCodeIsOk(expectedResult, "/syntax/code_generator/java/makeblock/steer.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/syntax/code_generator/java/makeblock/steer.xml", false);
     }
 
     @Test
@@ -345,7 +378,8 @@ public class CppVisitorTest {
                 + "myDrive.drive(60*255/100,1,2000);"
                 + "delay(2000);}";
 
-        this.h.assertCodeIsOk(expectedResult, "/syntax/code_generator/java/makeblock/drive.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/syntax/code_generator/java/makeblock/drive.xml", false);
     }
 
     @Test
@@ -362,7 +396,12 @@ public class CppVisitorTest {
                 + "{buzzer.tone(8,261.626,2000);"
                 + "delay(20);}}";
 
-        this.h.assertCodeIsOk(expectedResult, "/syntax/code_generator/java/makeblock/get_button.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                expectedResult,
+                "/syntax/code_generator/java/makeblock/get_button.xml",
+                false);
     }
 
     @Test
@@ -380,7 +419,12 @@ public class CppVisitorTest {
                 + "{buzzer.tone(8,261.626,2000);"
                 + "delay(20);}}";
 
-        this.h.assertCodeIsOk(expectedResult, "/syntax/code_generator/java/makeblock/potentiometer.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                expectedResult,
+                "/syntax/code_generator/java/makeblock/potentiometer.xml",
+                false);
     }
 
 }

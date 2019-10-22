@@ -40,7 +40,7 @@ public final class Stop<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((INaoVisitor<V>) visitor).visitStop(this);
     }
 

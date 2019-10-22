@@ -1,25 +1,23 @@
 package de.fhg.iais.roberta.syntax.action.nao;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.nao.HelperNaoForXmlTest;
+import de.fhg.iais.roberta.syntax.NaoAstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class ModeSitTest {
-    private final HelperNaoForXmlTest h = new HelperNaoForXmlTest();
+public class ModeSitTest extends NaoAstTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfSetModeClass() throws Exception {
         String expectedResult = "BlockAST [project=[[Location [x=88, y=63], " + "MainTask [], " + "Mode [REST]]]]";
 
-        String result = this.h.generateTransformerString("/action/setModeRest.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/action/setModeRest.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
 
-        this.h.assertTransformationIsOk("/action/setModeRest.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/action/setModeRest.xml");
     }
 }

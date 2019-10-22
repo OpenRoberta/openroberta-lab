@@ -46,7 +46,7 @@ public class PlotClearAction<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((IArduinoVisitor<V>) visitor).visitPlotClearAction(this);
     }
 

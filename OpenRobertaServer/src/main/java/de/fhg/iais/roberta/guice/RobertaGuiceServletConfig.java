@@ -19,9 +19,13 @@ public class RobertaGuiceServletConfig extends GuiceServletContextListener {
     private final ServerProperties serverProperties;
     private final Map<String, IRobotFactory> robotPluginMap;
     private final RobotCommunicator robotCommunicator;
-	private final IIpToCountry ipToCountry;
+    private final IIpToCountry ipToCountry;
 
-    public RobertaGuiceServletConfig(ServerProperties serverProperties, Map<String, IRobotFactory> robotPluginMap, RobotCommunicator robotCommunicator, IIpToCountry ipToCountry) {
+    public RobertaGuiceServletConfig(
+        ServerProperties serverProperties,
+        Map<String, IRobotFactory> robotPluginMap,
+        RobotCommunicator robotCommunicator,
+        IIpToCountry ipToCountry) {
         this.serverProperties = serverProperties;
         this.robotPluginMap = robotPluginMap;
         this.robotCommunicator = robotCommunicator;
@@ -38,7 +42,7 @@ public class RobertaGuiceServletConfig extends GuiceServletContextListener {
                     new RobertaGuiceModule(
                         RobertaGuiceServletConfig.this.serverProperties,
                         RobertaGuiceServletConfig.this.robotPluginMap,
-                        RobertaGuiceServletConfig.this.robotCommunicator, 
+                        RobertaGuiceServletConfig.this.robotCommunicator,
                         RobertaGuiceServletConfig.this.ipToCountry));
                 //TODO: we have doubled the properties
                 // look for guice modules from robot plugins

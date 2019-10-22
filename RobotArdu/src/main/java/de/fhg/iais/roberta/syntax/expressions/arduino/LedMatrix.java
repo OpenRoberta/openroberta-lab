@@ -81,7 +81,7 @@ public class LedMatrix<V> extends Expr<V> {
     }
 
     @Override
-    protected V accept(IVisitor<V> visitor) {
+    protected V acceptImpl(IVisitor<V> visitor) {
         return ((IMbotVisitor<V>) visitor).visitImage(this);
 
     }

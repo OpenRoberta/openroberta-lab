@@ -8,12 +8,10 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
 
 public class MotionParamTest {
     @Test
     public void make() throws Exception {
-        new HelperEv3ForXmlTest(); // needed; global variable set :-<
         NumConst<Void> numConst = NumConst.make("0", BlocklyBlockProperties.make("1", "1"), null);
         MotorDuration<Void> motorDuration = new MotorDuration<>(MotorMoveMode.DEGREE, numConst);
         MotionParam<Void> motionParam = new MotionParam.Builder<Void>().speed(numConst).duration(motorDuration).build();

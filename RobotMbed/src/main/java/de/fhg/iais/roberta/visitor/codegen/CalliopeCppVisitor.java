@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.apache.commons.text.WordUtils;
 
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
@@ -93,10 +95,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.collect.MbedUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
 
@@ -105,52 +105,23 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
  * StringBuilder. <b>This representation is correct C++ code for Calliope systems.</b> <br>
  */
 public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbedVisitor<Void> {
-    private final MbedUsedHardwareCollectorVisitor codePreprocess;
-    private final Configuration configuration;
-    ArrayList<VarDeclaration<Void>> usedVars;
 
-    /**
-     * initialize the C++ code generator visitor for tests. <b>Will be removed in the future, if tests with textual representations of Nepo (instead of
-     * blockly-based graphical representation have been finished.</b>
-     *
-     * @param programPhrases
-     */
-    public CalliopeCppVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases) {
-        super(programPhrases, 0);
-        this.codePreprocess = null;
-        this.configuration = null;
-    }
+    private final ConfigurationAst robotConfiguration;
 
     /**
      * initialize the C++ code generator visitor.
      *
-     * @param brickConfiguration hardware configuration of the brick
+     * @param robotConfiguration hardware configuration of the brick
      * @param programPhrases to generate the code from
-     * @param indentation to start with. Will be incr/decr depending on block structure
      */
-    private CalliopeCppVisitor(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
-        super(programPhrases, indentation);
-        this.configuration = brickConfiguration;
-        this.codePreprocess = new MbedUsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
+    public CalliopeCppVisitor(
+        UsedHardwareBean usedHardwareBean,
+        CodeGeneratorSetupBean codeGeneratorSetupBean,
+        ConfigurationAst robotConfiguration,
+        ArrayList<ArrayList<Phrase<Void>>> programPhrases) {
+        super(usedHardwareBean, codeGeneratorSetupBean, programPhrases);
+        this.robotConfiguration = robotConfiguration;
 
-        this.loopsLabels = this.codePreprocess.getloopsLabelContainer();
-        this.userDefinedMethods = this.codePreprocess.getUserDefinedMethods();
-        this.usedVars = this.codePreprocess.getVisitedVars();
-    }
-
-    /**
-     * factory method to generate C++ code from an AST.<br>
-     *
-     * @param brickConfiguration hardware configuration of the brick
-     * @param programPhrases to generate the code from
-     * @param indentation to start with. Will be incr/decr depending on block structure
-     */
-    public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
-        Assert.notNull(brickConfiguration);
-
-        final CalliopeCppVisitor astVisitor = new CalliopeCppVisitor(brickConfiguration, programPhrases, 0);
-        astVisitor.generateCode(withWrapping);
-        return astVisitor.sb.toString();
     }
 
     @Override
@@ -199,12 +170,12 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     }
 
     protected Void generateUsedVars() {
-        for ( final VarDeclaration<Void> var : this.usedVars ) {
+        for ( final VarDeclaration<Void> var : this.usedHardwareBean.getVisitedVars() ) {
             nlIndent();
             if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
                 this.sb.append("___" + var.getName());
                 this.sb.append(whitespace() + "=" + whitespace());
-                var.getValue().visit(this);
+                var.getValue().accept(this);
                 this.sb.append(";");
             }
         }
@@ -317,7 +288,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
                 break;
         }
         incrIndentation();
-        repeatStmt.getList().visit(this);
+        repeatStmt.getList().accept(this);
         if ( !isWaitStmt ) {
             addContinueLabelToLoop();
             nlIndent();
@@ -350,7 +321,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
         this.sb.append("_uBit.sleep(");
-        waitTimeStmt.getTime().visit(this);
+        waitTimeStmt.getTime().accept(this);
         this.sb.append(");");
         return null;
     }
@@ -364,7 +335,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         if ( !varType.equals("STRING") ) {
             ending = wrapInManageStringToDisplay(displayTextAction, ending);
         } else {
-            displayTextAction.getMsg().visit(this);
+            displayTextAction.getMsg().accept(this);
         }
 
         this.sb.append(ending + ";");
@@ -400,9 +371,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         this.sb.append("_uBit.soundmotor.soundOn(");
-        toneAction.getFrequency().visit(this);
+        toneAction.getFrequency().accept(this);
         this.sb.append("); ").append("_uBit.sleep(");
-        toneAction.getDuration().visit(this);
+        toneAction.getDuration().accept(this);
         this.sb.append("); ").append("_uBit.soundmotor.soundOff();");
         return null;
     }
@@ -424,26 +395,26 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             case "0":
             case "2":
                 this.sb.append("_cbSetMotor(_buf, &_i2c, ").append(port).append(", ");
-                motorOnAction.getParam().getSpeed().visit(this);
+                motorOnAction.getParam().getSpeed().accept(this);
                 this.sb.append(");");
                 break;
             case "3":
                 this.sb.append("_cbSetMotors(_buf, &_i2c, ");
-                motorOnAction.getParam().getSpeed().visit(this);
+                motorOnAction.getParam().getSpeed().accept(this);
                 this.sb.append(", ");
-                motorOnAction.getParam().getSpeed().visit(this);
+                motorOnAction.getParam().getSpeed().accept(this);
                 this.sb.append(");");
                 break;
             case "AB":
                 this.sb.append("_uBit.soundmotor.motorAOn(");
-                motorOnAction.getParam().getSpeed().visit(this);
+                motorOnAction.getParam().getSpeed().accept(this);
                 this.sb.append(");");
                 nlIndent();
                 port = "B";
             case "A":
             case "B":
                 this.sb.append("_uBit.soundmotor.motor").append(port).append("On(");
-                motorOnAction.getParam().getSpeed().visit(this);
+                motorOnAction.getParam().getSpeed().accept(this);
                 this.sb.append(");");
                 break;
             default:
@@ -455,7 +426,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitSingleMotorOnAction(SingleMotorOnAction<Void> singleMotorOnAction) {
         this.sb.append("_uBit.soundmotor.motorOn(");
-        singleMotorOnAction.getSpeed().visit(this);
+        singleMotorOnAction.getSpeed().accept(this);
         this.sb.append(");");
         return null;
     }
@@ -524,7 +495,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
         String userDefined = keysSensor.getPort();
-        String port = this.configuration.getConfigurationComponent(userDefined).getPortName();
+        String port = this.robotConfiguration.getConfigurationComponent(userDefined).getPortName();
         this.sb.append("_uBit.button").append(port).append(".isPressed()");
         return null;
     }
@@ -533,7 +504,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
         this.sb.append("(_uBit.accelerometer.getGesture() == MICROBIT_ACCELEROMETER_EVT_");
         String mode = gestureSensor.getMode();
-        if ( (mode.equals(SC.UP)) || (mode.equals(SC.DOWN)) || (mode.equals(SC.LEFT)) || (mode.equals(SC.RIGHT)) ) {
+        if ( mode.equals(SC.UP) || mode.equals(SC.DOWN) || mode.equals(SC.LEFT) || mode.equals(SC.RIGHT) ) {
             this.sb.append("TILT_");
         }
         this.sb.append(mode + ")");
@@ -588,7 +559,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         String userDefined = gyroSensor.getPort();
-        String port = this.configuration.getConfigurationComponent(userDefined).getPortName();
+        String port = this.robotConfiguration.getConfigurationComponent(userDefined).getPortName();
         this.sb.append("_uBit.accelerometer.get").append(port).append("()");
         return null;
     }
@@ -612,7 +583,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
         String userDefinedName = pinTouchSensor.getPort();
-        String port = this.configuration.getConfigurationComponent(userDefinedName).getPortName();
+        String port = this.robotConfiguration.getConfigurationComponent(userDefinedName).getPortName();
         this.sb.append("_uBit.io." + port + ".isTouched()");
         return null;
     }
@@ -620,7 +591,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
         String userDefinedName = pinValueSensor.getPort();
-        String port = this.configuration.getConfigurationComponent(userDefinedName).getPortName();
+        String port = this.robotConfiguration.getConfigurationComponent(userDefinedName).getPortName();
         String mode = pinValueSensor.getMode();
         this.sb.append("_uBit.io." + port);
         switch ( mode ) {
@@ -645,10 +616,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
         String userDefinedName = pinWriteValueSensor.getPort();
-        String port = this.configuration.getConfigurationComponent(userDefinedName).getPortName();
+        String port = this.robotConfiguration.getConfigurationComponent(userDefinedName).getPortName();
         String valueType = pinWriteValueSensor.getMode().equals(SC.DIGITAL) ? "DigitalValue(" : "AnalogValue(";
         this.sb.append("_uBit.io.").append(port).append(".set").append(valueType);
-        pinWriteValueSensor.getValue().visit(this);
+        pinWriteValueSensor.getValue().accept(this);
         this.sb.append(");");
         return null;
     }
@@ -656,7 +627,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPullAction) {
         String userDefinedName = pinSetPullAction.getPort();
-        String port = this.configuration.getConfigurationComponent(userDefinedName).getPortName();
+        String port = this.robotConfiguration.getConfigurationComponent(userDefinedName).getPortName();
         String mode = pinSetPullAction.getMode();
         this.sb.append("_uBit.io." + port + ".setPull(Pull").append(WordUtils.capitalizeFully(mode)).append(");");
         return null;
@@ -664,10 +635,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        if ( this.codePreprocess.isTimerSensorUsed() ) {
+        if ( this.usedHardwareBean.isTimerSensorUsed() ) {
             this.sb.append("int _initTime = _uBit.systemTime();");
         }
-        mainTask.getVariables().visit(this);
+        mainTask.getVariables().accept(this);
         nlIndent();
         nlIndent();
         this.sb.append("int main()");
@@ -677,20 +648,20 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         nlIndent();
         // Initialise the micro:bit runtime.
         this.sb.append("_uBit.init();");
-        if ( this.codePreprocess.isCalliBotUsed() ) {
+        if ( this.usedHardwareBean.isCalliBotUsed() ) {
             nlIndent();
             this.sb.append("_cbInit(_buf, &_i2c, &_uBit);");
         }
         generateUsedVars();
         nlIndent();
-        if ( this.codePreprocess.isGreyScale() ) {
+        if ( this.usedHardwareBean.isGreyScale() ) {
             this.sb.append("_uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);");
         }
-        if ( this.codePreprocess.isRadioUsed() ) {
+        if ( this.usedHardwareBean.isRadioUsed() ) {
             nlIndent();
             this.sb.append("_uBit.radio.enable();");
         }
-        if ( this.codePreprocess.isAccelerometerUsed() ) {
+        if ( this.usedHardwareBean.isAccelerometerUsed() ) {
             nlIndent();
             this.sb.append("_uBit.accelerometer.updateSample();");
         }
@@ -714,9 +685,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         }
         this.sb.append(methodName);
 
-        indexOfFunct.getParam().get(0).visit(this);
+        indexOfFunct.getParam().get(0).accept(this);
         this.sb.append(", ");
-        indexOfFunct.getParam().get(1).visit(this);
+        indexOfFunct.getParam().get(1).accept(this);
         this.sb.append(")");
         return null;
     }
@@ -728,11 +699,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             return null;
         }
         if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
-            lengthOfIsEmptyFunct.getParam().get(0).visit(this);
+            lengthOfIsEmptyFunct.getParam().get(0).accept(this);
             this.sb.append(".empty()");
         } else {
             this.sb.append("((int) ");
-            lengthOfIsEmptyFunct.getParam().get(0).visit(this);
+            lengthOfIsEmptyFunct.getParam().get(0).accept(this);
             this.sb.append(".size())");
         }
         return null;
@@ -741,11 +712,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
         this.sb.append("min(max(");
-        mathConstrainFunct.getParam().get(0).visit(this);
+        mathConstrainFunct.getParam().get(0).accept(this);
         this.sb.append(", ");
-        mathConstrainFunct.getParam().get(1).visit(this);
+        mathConstrainFunct.getParam().get(1).accept(this);
         this.sb.append("), ");
-        mathConstrainFunct.getParam().get(2).visit(this);
+        mathConstrainFunct.getParam().get(2).accept(this);
         this.sb.append(")");
         return null;
     }
@@ -755,37 +726,37 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         switch ( mathNumPropFunct.getFunctName() ) {
             case EVEN:
                 this.sb.append("(fmod(");
-                mathNumPropFunct.getParam().get(0).visit(this);
+                mathNumPropFunct.getParam().get(0).accept(this);
                 this.sb.append(", 2) == 0");
                 break;
             case ODD:
                 this.sb.append("(fmod(");
-                mathNumPropFunct.getParam().get(0).visit(this);
+                mathNumPropFunct.getParam().get(0).accept(this);
                 this.sb.append(", 2) != 0");
                 break;
             case PRIME:
                 this.sb.append("isPrimeD(");
-                mathNumPropFunct.getParam().get(0).visit(this);
+                mathNumPropFunct.getParam().get(0).accept(this);
                 break;
             case WHOLE:
                 this.sb.append("isWholeD(");
-                mathNumPropFunct.getParam().get(0).visit(this);
+                mathNumPropFunct.getParam().get(0).accept(this);
                 break;
             case POSITIVE:
                 this.sb.append("(");
-                mathNumPropFunct.getParam().get(0).visit(this);
+                mathNumPropFunct.getParam().get(0).accept(this);
                 this.sb.append(" > 0");
                 break;
             case NEGATIVE:
                 this.sb.append("(");
-                mathNumPropFunct.getParam().get(0).visit(this);
+                mathNumPropFunct.getParam().get(0).accept(this);
                 this.sb.append(" < 0");
                 break;
             case DIVISIBLE_BY:
                 this.sb.append("(fmod(");
-                mathNumPropFunct.getParam().get(0).visit(this);
+                mathNumPropFunct.getParam().get(0).accept(this);
                 this.sb.append(",");
-                mathNumPropFunct.getParam().get(1).visit(this);
+                mathNumPropFunct.getParam().get(1).accept(this);
                 this.sb.append(") == 0");
                 break;
             default:
@@ -804,12 +775,12 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
         this.sb.append("(_uBit.random(");
-        mathRandomIntFunct.getParam().get(1).visit(this);
+        mathRandomIntFunct.getParam().get(1).accept(this);
         this.sb.append(" - ");
-        mathRandomIntFunct.getParam().get(0).visit(this);
+        mathRandomIntFunct.getParam().get(0).accept(this);
         this.sb.append(" + 1)");
         this.sb.append(" + ");
-        mathRandomIntFunct.getParam().get(0).visit(this);
+        mathRandomIntFunct.getParam().get(0).accept(this);
         this.sb.append(")");
         return null;
     }
@@ -827,9 +798,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         final int numberOfParameters = parameters.size();
         for ( int i = 0; i < numberOfParameters; i++ ) {
             this.sb.append("ManagedString(");
-            parameters.get(i).visit(this);
+            parameters.get(i).accept(this);
             this.sb.append(")");
-            if ( i < (numberOfParameters - 1) ) {
+            if ( i < numberOfParameters - 1 ) {
                 this.sb.append(" + ");
             }
         }
@@ -850,12 +821,12 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
                 Expr<Void> values = displayImageAction.getValuesToDisplay();
                 int valuesSize = ((ListCreate<Void>) values).getValue().get().size();
                 this.sb.append("std::array<MicroBitImage, " + valuesSize + "> _animation = _convertToArray<MicroBitImage, " + valuesSize + ">(");
-                displayImageAction.getValuesToDisplay().visit(this);
+                displayImageAction.getValuesToDisplay().accept(this);
                 this.sb.append(");");
                 nlIndent();
             } catch ( Exception e ) {
                 this.sb.append("for (MicroBitImage& image : ");
-                displayImageAction.getValuesToDisplay().visit(this);
+                displayImageAction.getValuesToDisplay().accept(this);
                 this.sb.append(") {");
                 this.sb.append("_uBit.display.print(image, 0, 0, 255, 200);");
                 this.sb.append("_uBit.display.clear();");
@@ -870,23 +841,23 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         } else {
             this.sb.append("print(");
         }
-        displayImageAction.getValuesToDisplay().visit(this);
+        displayImageAction.getValuesToDisplay().accept(this);
         this.sb.append(end);
         return null;
     }
 
     @Override
     public Void visitImageShiftFunction(ImageShiftFunction<Void> imageShiftFunction) {
-        imageShiftFunction.getImage().visit(this);
+        imageShiftFunction.getImage().accept(this);
         this.sb.append(".shiftImage" + capitalizeFirstLetter(imageShiftFunction.getShiftDirection().toString()) + "(");
-        imageShiftFunction.getPositions().visit(this);
+        imageShiftFunction.getPositions().accept(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitImageInvertFunction(ImageInvertFunction<Void> imageInvertFunction) {
-        imageInvertFunction.getImage().visit(this);
+        imageInvertFunction.getImage().accept(this);
         this.sb.append(".invert()");
         return null;
     }
@@ -935,7 +906,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         switch ( port ) {
             case "0":
                 this.sb.append("_uBit.rgb.setColour(");
-                ledOnAction.getLedColor().visit(this);
+                ledOnAction.getLedColor().accept(this);
                 this.sb.append(");");
                 break;
             case "1":
@@ -944,7 +915,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             case "4":
             case "5":
                 this.sb.append("_cbSetRGBLed(_buf, &_i2c, ").append(port).append(", ");
-                ledOnAction.getLedColor().visit(this);
+                ledOnAction.getLedColor().accept(this);
                 this.sb.append(");");
                 break;
             default:
@@ -974,17 +945,17 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         switch ( radioSendAction.getType() ) {
             case NUMBER:
                 this.sb.append("_uBit.radio.datagram.send(ManagedString((int)(");
-                radioSendAction.getMsg().visit(this);
+                radioSendAction.getMsg().accept(this);
                 this.sb.append("))");
                 break;
             case BOOLEAN:
                 this.sb.append("_uBit.radio.datagram.send(ManagedString((int)(");
-                radioSendAction.getMsg().visit(this);
+                radioSendAction.getMsg().accept(this);
                 this.sb.append(")?true:false)");
                 break;
             case STRING:
                 this.sb.append("_uBit.radio.datagram.send(ManagedString((");
-                radioSendAction.getMsg().visit(this);
+                radioSendAction.getMsg().accept(this);
                 this.sb.append("))");
                 break;
 
@@ -1014,7 +985,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
         this.sb.append("_uBit.radio.setGroup(");
-        radioSetChannelAction.getChannel().visit(this);
+        radioSetChannelAction.getChannel().accept(this);
         this.sb.append(");");
         return null;
     }
@@ -1040,13 +1011,13 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
         this.sb.append("MicroBitColor(");
-        rgbColor.getR().visit(this);
+        rgbColor.getR().accept(this);
         this.sb.append(", ");
-        rgbColor.getG().visit(this);
+        rgbColor.getG().accept(this);
         this.sb.append(", ");
-        rgbColor.getB().visit(this);
+        rgbColor.getB().accept(this);
         this.sb.append(", ");
-        rgbColor.getA().visit(this);
+        rgbColor.getA().accept(this);
         this.sb.append(")");
         return null;
     }
@@ -1054,7 +1025,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Void> displaySetBrightnessAction) {
         this.sb.append("_uBit.display.setBrightness((");
-        displaySetBrightnessAction.getBrightness().visit(this);
+        displaySetBrightnessAction.getBrightness().accept(this);
         this.sb.append(") * _SET_BRIGHTNESS_MULTIPLIER);");
         return null;
     }
@@ -1068,11 +1039,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitDisplaySetPixelAction(DisplaySetPixelAction<Void> displaySetPixelAction) {
         this.sb.append("_uBit.display.image.setPixelValue(");
-        displaySetPixelAction.getX().visit(this);
+        displaySetPixelAction.getX().accept(this);
         this.sb.append(", ");
-        displaySetPixelAction.getY().visit(this);
+        displaySetPixelAction.getY().accept(this);
         this.sb.append(", (");
-        displaySetPixelAction.getBrightness().visit(this);
+        displaySetPixelAction.getBrightness().accept(this);
         this.sb.append(") * _SET_BRIGHTNESS_MULTIPLIER);");
         return null;
     }
@@ -1080,9 +1051,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitDisplayGetPixelAction(DisplayGetPixelAction<Void> displayGetPixelAction) {
         this.sb.append("round(_uBit.display.image.getPixelValue(");
-        displayGetPixelAction.getX().visit(this);
+        displayGetPixelAction.getX().accept(this);
         this.sb.append(", ");
-        displayGetPixelAction.getY().visit(this);
+        displayGetPixelAction.getY().accept(this);
         this.sb.append(") * _GET_BRIGHTNESS_MULTIPLIER)");
         return null;
     }
@@ -1090,11 +1061,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitFourDigitDisplayShowAction(FourDigitDisplayShowAction<Void> fourDigitDisplayShowAction) {
         this.sb.append("_fdd.show(");
-        fourDigitDisplayShowAction.getValue().visit(this);
+        fourDigitDisplayShowAction.getValue().accept(this);
         this.sb.append(", ");
-        fourDigitDisplayShowAction.getPosition().visit(this);
+        fourDigitDisplayShowAction.getPosition().accept(this);
         this.sb.append(", ");
-        fourDigitDisplayShowAction.getColon().visit(this);
+        fourDigitDisplayShowAction.getColon().accept(this);
         this.sb.append(");");
         return null;
     }
@@ -1108,9 +1079,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitLedBarSetAction(LedBarSetAction<Void> ledBarSetAction) {
         this.sb.append("_ledBar.setLed(");
-        ledBarSetAction.getX().visit(this);
+        ledBarSetAction.getX().accept(this);
         this.sb.append(", ");
-        ledBarSetAction.getBrightness().visit(this);
+        ledBarSetAction.getBrightness().accept(this);
         this.sb.append(");");
         return null;
     }
@@ -1127,7 +1098,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     protected void generateProgramSuffix(boolean withWrapping) {
         if ( withWrapping ) {
-            if ( this.codePreprocess.isCalliBotUsed() ) {
+            if ( this.usedHardwareBean.isCalliBotUsed() ) {
                 nlIndent();
                 this.sb.append("_cbStop(_buf, &_i2c);");
             }
@@ -1190,7 +1161,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     }
 
     private int map(int x, int in_min, int in_max, int out_min, int out_max) {
-        return (((x - in_min) * (out_max - out_min)) / (in_max - in_min)) + out_min;
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
 
     private void appendTextDisplayType(DisplayTextAction<Void> displayTextAction) {
@@ -1203,13 +1174,13 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     private String wrapInManageStringToDisplay(DisplayTextAction<Void> displayTextAction, String ending) {
         this.sb.append("ManagedString(");
-        displayTextAction.getMsg().visit(this);
+        displayTextAction.getMsg().accept(this);
         ending += ")";
         return ending;
     }
 
     private String capitalizeFirstLetter(String original) {
-        if ( (original == null) || (original.length() == 0) ) {
+        if ( original == null || original.length() == 0 ) {
             return original;
         }
         return original.substring(0, 1).toUpperCase() + original.substring(1).toLowerCase();
@@ -1220,29 +1191,29 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         this.sb.append("#include \"MicroBit.h\"\n");
         this.sb.append("#include \"NEPODefs.h\"\n");
 
-        if ( this.codePreprocess.isFourDigitDisplayUsed() ) {
+        if ( this.usedHardwareBean.isFourDigitDisplayUsed() ) {
             this.sb.append("#include \"FourDigitDisplay.h\"\n");
         }
-        if ( this.codePreprocess.isLedBarUsed() ) {
+        if ( this.usedHardwareBean.isLedBarUsed() ) {
             this.sb.append("#include \"Grove_LED_Bar.h\"\n");
         }
-        if ( this.codePreprocess.isHumidityUsed() ) {
+        if ( this.usedHardwareBean.isHumidityUsed() ) {
             this.sb.append("#include \"Sht31.h\"\n");
         }
         this.sb.append("#include <list>\n");
         this.sb.append("#include <array>\n");
         this.sb.append("#include <stdlib.h>\n");
         this.sb.append("MicroBit _uBit;\n");
-        if ( this.codePreprocess.isFourDigitDisplayUsed() ) {
+        if ( this.usedHardwareBean.isFourDigitDisplayUsed() ) {
             this.sb.append("FourDigitDisplay _fdd(MICROBIT_PIN_P2, MICROBIT_PIN_P8);\n"); // Only works on the right UART Grove connector
         }
-        if ( this.codePreprocess.isLedBarUsed() ) {
+        if ( this.usedHardwareBean.isLedBarUsed() ) {
             this.sb.append("Grove_LED_Bar _ledBar(MICROBIT_PIN_P8, MICROBIT_PIN_P2);\n"); // Only works on the right UART Grove connector; Clock/Data pins are swapped compared to 4DigitDisplay
         }
-        if ( this.codePreprocess.isHumidityUsed() ) {
+        if ( this.usedHardwareBean.isHumidityUsed() ) {
             this.sb.append("Sht31 _sht31 = Sht31(MICROBIT_PIN_P8, MICROBIT_PIN_P2);\n");
         }
-        if ( this.codePreprocess.isCalliBotUsed() ) {
+        if ( this.usedHardwareBean.isCalliBotUsed() ) {
             this.sb.append("MicroBitI2C _i2c(MICROBIT_PIN_P20, MICROBIT_PIN_P19);");
             nlIndent();
             this.sb.append("char _buf[5] = { 0, 0, 0, 0, 0 };");
@@ -1253,11 +1224,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     protected void generateSignaturesOfUserDefinedMethods() {
-        for ( final Method<Void> phrase : this.userDefinedMethods ) {
+        for ( final Method<Void> phrase : this.usedHardwareBean.getUserDefinedMethods() ) {
             nlIndent();
             this.sb.append(getLanguageVarTypeFromBlocklyType(phrase.getReturnType()));
             this.sb.append(" " + phrase.getMethodName() + "(");
-            phrase.getParameters().visit(this);
+            phrase.getParameters().accept(this);
             this.sb.append(");");
             nlIndent();
         }
@@ -1267,17 +1238,17 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public Void visitBothMotorsOnAction(BothMotorsOnAction<Void> bothMotorsOnAction) {
         if ( bothMotorsOnAction.getPortA().contentEquals(BlocklyConstants.A) ) {
             this.sb.append("_uBit.soundmotor.motorAOn(");
-            bothMotorsOnAction.getSpeedA().visit(this);
+            bothMotorsOnAction.getSpeedA().accept(this);
             this.sb.append(");");
             nlIndent();
             this.sb.append("_uBit.soundmotor.motorBOn(");
-            bothMotorsOnAction.getSpeedB().visit(this);
+            bothMotorsOnAction.getSpeedB().accept(this);
             this.sb.append(");");
         } else if ( bothMotorsOnAction.getPortA().equals("LEFT") ) {
             this.sb.append("_cbSetMotors(_buf, &_i2c, ");
-            bothMotorsOnAction.getSpeedA().visit(this);
+            bothMotorsOnAction.getSpeedA().accept(this);
             this.sb.append(", ");
-            bothMotorsOnAction.getSpeedB().visit(this);
+            bothMotorsOnAction.getSpeedB().accept(this);
             this.sb.append(");");
         }
         return null;
@@ -1322,23 +1293,23 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     private void writeToSerial(Expr<Void> valueToWrite) {
         if ( valueToWrite instanceof RgbColor<?>
             || valueToWrite instanceof ColorConst<?>
-            || (valueToWrite instanceof Var && ((Var<Void>) valueToWrite).getVarType().equals(BlocklyType.COLOR)) ) {
+            || valueToWrite instanceof Var && ((Var<Void>) valueToWrite).getVarType().equals(BlocklyType.COLOR) ) {
             this.sb.append("_uBit.serial.setTxBufferSize(ManagedString(_castColorToString(");
-            valueToWrite.visit(this);
+            valueToWrite.accept(this);
             this.sb.append(")).length() + 2);");
             nlIndent();
             this.sb.append("_uBit.serial.send(");
             this.sb.append("_castColorToString(");
-            valueToWrite.visit(this);
+            valueToWrite.accept(this);
             this.sb.append(")");
         } else {
             this.sb.append("_uBit.serial.setTxBufferSize(ManagedString((");
-            valueToWrite.visit(this);
+            valueToWrite.accept(this);
             this.sb.append(")).length() + 2);");
             nlIndent();
             this.sb.append("_uBit.serial.send(");
             this.sb.append("ManagedString(");
-            valueToWrite.visit(this);
+            valueToWrite.accept(this);
             this.sb.append(")");
         }
         this.sb.append(" + \"\\r\\n\", MicroBitSerialMode::ASYNC);");
@@ -1379,11 +1350,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public Void visitAssertStmt(AssertStmt<Void> assertStmt) {
         if ( ((Binary<Void>) assertStmt.getAssert()).getLeft().getVarType().equals(BlocklyType.COLOR) ) {
             this.sb.append("assertNepo((");
-            assertStmt.getAssert().visit(this);
+            assertStmt.getAssert().accept(this);
             this.sb.append("), \"").append(assertStmt.getMsg()).append("\", \"");
-            ((Binary<Void>) assertStmt.getAssert()).getLeft().visit(this);
+            ((Binary<Void>) assertStmt.getAssert()).getLeft().accept(this);
             this.sb.append("\", \"").append(((Binary<Void>) assertStmt.getAssert()).getOp().toString()).append("\", \"");
-            ((Binary<Void>) assertStmt.getAssert()).getRight().visit(this);
+            ((Binary<Void>) assertStmt.getAssert()).getRight().accept(this);
             this.sb.append("\");");
         } else {
             super.visitAssertStmt(assertStmt);

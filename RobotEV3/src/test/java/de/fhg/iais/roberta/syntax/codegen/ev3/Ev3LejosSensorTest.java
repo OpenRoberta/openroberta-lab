@@ -5,29 +5,34 @@ import java.util.Collections;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.Ev3LejosAstTest;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class Ev3LejosSensorTest {
-    private final HelperEv3ForXmlTest ev3lejosHelper = new HelperEv3ForXmlTest();
-    Configuration configuration = makeConfigurationWithHTSensors();
+public class Ev3LejosSensorTest extends Ev3LejosAstTest {
 
-    public static Configuration makeConfigurationWithHTSensors() {
+    ConfigurationAst configuration = makeConfigurationWithHTSensors();
+
+    public static ConfigurationAst makeConfigurationWithHTSensors() {
         ConfigurationComponent htCompasss = new ConfigurationComponent("COMPASS", false, "S1", "1", Collections.emptyMap());
 
         ConfigurationComponent htInfrared = new ConfigurationComponent("IRSEEKER", false, "S2", "2", Collections.emptyMap());
 
-        final Configuration.Builder builder = new Configuration.Builder();
+        final ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(18f).setWheelDiameter(5.6f).addComponents(Arrays.asList(htCompasss, htInfrared));
-        Configuration configuration = builder.build();
+        ConfigurationAst configuration = builder.build();
         configuration.setRobotName("ev3lejosV1");
         return configuration;
     }
 
     @Test
     public void ev3HtSensorTest() throws Exception {
-        this.ev3lejosHelper
-            .compareExistingAndGeneratedJavaSource("/ast/sensors/ev3_htsensors_test.java", "/ast/sensors/ev3_htsensors_test.xml", this.configuration);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXml(
+                testFactory,
+                "/ast/sensors/ev3_htsensors_test.java",
+                "/ast/sensors/ev3_htsensors_test.xml",
+                this.configuration);
     }
 }

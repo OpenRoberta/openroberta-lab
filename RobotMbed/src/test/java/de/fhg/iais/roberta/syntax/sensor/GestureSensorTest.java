@@ -1,13 +1,12 @@
 package de.fhg.iais.roberta.syntax.sensor;
 
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.mbed.HelperCalliopeForXmlTest;
+import de.fhg.iais.roberta.ast.AstTest;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-public class GestureSensorTest {
-    private final HelperCalliopeForXmlTest h = new HelperCalliopeForXmlTest();
+public class GestureSensorTest extends AstTest {
 
     @Ignore("Test is ignored until next commit")
     @Test
@@ -19,15 +18,14 @@ public class GestureSensorTest {
                 + "DisplayTextAction [TEXT, SensorExpr [GestureSensor [ LEFT ]]]"
                 + "]]]";
 
-        String result = this.h.generateTransformerString("/sensor/check_gesture.xml");
+        UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/check_gesture.xml");
 
-        Assert.assertEquals(expectedResult, result);
     }
 
     @Ignore("Test is ignored until next commit")
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        this.h.assertTransformationIsOk("/sensor/check_gesture.xml");
+        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/sensor/check_gesture.xml");
     }
 
 }
