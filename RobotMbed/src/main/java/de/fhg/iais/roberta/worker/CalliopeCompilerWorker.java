@@ -24,7 +24,6 @@ public class CalliopeCompilerWorker implements IWorker {
     public void execute(Project project) {
         String programName = project.getProgramName();
         String robot = project.getRobot();
-        Util1.storeGeneratedProgram(project.getSourceCode().toString(), project.getToken(), programName, "." + project.getFileExtension());
 
         // TODO: check how to do this sensibly, without having the UsedHardwareWorker beforehand
         UsedHardwareBean usedHardwareBean = (UsedHardwareBean) project.getWorkerResult("CollectedHardware");
@@ -54,7 +53,8 @@ public class CalliopeCompilerWorker implements IWorker {
         final String compilerBinDir = compilerWorkflowBean.getCompilerBinDir();
         final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         final String tempDir = compilerWorkflowBean.getTempDir();
-
+        Util1
+            .storeGeneratedProgram(tempDir, project.getSourceCode().toString(), project.getToken(), project.getProgramName(), "." + project.getFileExtension());
         String scriptName = compilerResourcesDir + "../compile." + (SystemUtils.IS_OS_WINDOWS ? "bat" : "sh");
         String bluetooth = radioUsed ? "" : "-b";
         Path pathToSrcFile = Paths.get(tempDir + project.getToken() + "/" + project.getProgramName());

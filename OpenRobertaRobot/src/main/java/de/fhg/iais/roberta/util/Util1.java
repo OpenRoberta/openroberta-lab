@@ -425,17 +425,17 @@ public class Util1 {
 
     /**
      * Save generated program to the temp filesystem
-     *
+     * 
+     * @param tempDirectory TODO
      * @param generatedSourceCode
      * @param token
      * @param programName
      * @param ext
      */
-    public static final void storeGeneratedProgram(String generatedSourceCode, String token, String programName, String ext) {
+    public static final void storeGeneratedProgram(String tempDirectory, String generatedSourceCode, String token, String programName, String ext) {
         try {
-            String tempDir = "/tmp/";
-            File sourceFile = new File(tempDir + token + "/" + programName + "/source/" + programName + ext);
-            Path path = Paths.get(tempDir + token + "/" + programName + "/target/");
+            File sourceFile = new File(tempDirectory + token + "/" + programName + "/source/" + programName + ext);
+            Path path = Paths.get(tempDirectory + token + "/" + programName + "/target/");
             try {
                 Files.createDirectories(path);
                 FileUtils.writeStringToFile(sourceFile, generatedSourceCode, StandardCharsets.UTF_8.displayName());

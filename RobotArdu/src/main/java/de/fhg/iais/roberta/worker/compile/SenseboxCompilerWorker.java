@@ -23,7 +23,6 @@ public class SenseboxCompilerWorker implements IWorker {
     public void execute(Project project) {
         String programName = project.getProgramName();
         String robot = project.getRobot();
-        Util1.storeGeneratedProgram(project.getSourceCode().toString(), project.getToken(), programName, "." + project.getFileExtension());
         Pair<Key, String> workflowResult = runBuild(project);
         project.setResult(workflowResult.getFirst());
         project.addResultParam("MESSAGE", workflowResult.getSecond());
@@ -44,7 +43,8 @@ public class SenseboxCompilerWorker implements IWorker {
         final String compilerBinDir = compilerWorkflowBean.getCompilerBinDir();
         final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         final String tempDir = compilerWorkflowBean.getTempDir();
-
+        Util1
+            .storeGeneratedProgram(tempDir, project.getSourceCode().toString(), project.getToken(), project.getProgramName(), "." + project.getFileExtension());
         String scriptName = "";
         String os = "";
         if ( SystemUtils.IS_OS_LINUX ) {
