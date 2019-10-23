@@ -43,12 +43,8 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSourceCode(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        JSONObject dataPart;
-        try {
-            dataPart = request.getJSONObject("data");
-        } catch ( JSONException e1 ) {
-            throw new DbcException("Invalid JSON object: data not found", e1);
-        }
+        Util.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = Util.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
             String configurationText = httpSessionState.getRobotFactory().getConfigurationDefault();
@@ -90,12 +86,8 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSimulationVMCode(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        JSONObject dataPart;
-        try {
-            dataPart = request.getJSONObject("data");
-        } catch ( JSONException e1 ) {
-            throw new DbcException("Invalid JSON object: data not found", e1);
-        }
+        Util.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = Util.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
             String configurationText = httpSessionState.getRobotFactory().getConfigurationDefault();
@@ -137,12 +129,8 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response runProgram(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        JSONObject dataPart;
-        try {
-            dataPart = request.getJSONObject("data");
-        } catch ( JSONException e1 ) {
-            throw new DbcException("Invalid JSON object: data not found", e1);
-        }
+        Util.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = Util.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
             String configurationText = httpSessionState.getRobotFactory().getConfigurationDefault();
@@ -196,12 +184,8 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response runNative(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        JSONObject dataPart;
-        try {
-            dataPart = request.getJSONObject("data");
-        } catch ( JSONException e1 ) {
-            throw new DbcException("Invalid JSON object: data not found", e1);
-        }
+        Util.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = Util.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
             Project project =
@@ -223,16 +207,14 @@ public class ProjectWorkflowRestController {
             response.put("compiledCode", project.getCompiledHex());
             response.put("message", project.getResult().getKey());
             response.put("cause", project.getResult().getKey());
-            // TODO as compileNative is now runNative it will fail if the robot is not connected
-            //  -> maybe add a compileNative again?
             response.put("rc", project.hasSucceeded() ? "ok" : "error");
-            // TODO: rename to ProgramRunNative?
-            Statistics.info("ProgramCompileNative", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", project.hasSucceeded());
+            Statistics.info("ProgramRunNative", "LoggedIn", httpSessionState.isUserLoggedIn(),
+                            "success", project.hasSucceeded());
             Util.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
             return Response.ok(response).build();
         } catch ( Exception e ) {
             LOG.info("runNative failed", e);
-            Statistics.info("ProgramCompileNative", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", false);
+            Statistics.info("ProgramRunNative", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", false);
             return createErrorResponse(response, httpSessionState);
         }
     }
@@ -242,15 +224,10 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response compileProgram(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        JSONObject dataPart;
-        try {
-            dataPart = request.getJSONObject("data");
-        } catch ( JSONException e1 ) {
-            throw new DbcException("Invalid JSON object: data not found", e1);
-        }
+        Util.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = Util.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
-            String configurationText = httpSessionState.getRobotFactory().getConfigurationDefault();
             Project project =
                 Util
                     .setupWithExportXML(httpSessionState.getRobotFactory(), dataPart.getString("programBlockSet"))
@@ -285,6 +262,45 @@ public class ProjectWorkflowRestController {
         } catch ( Exception e ) {
             LOG.info("compileProgram failed", e);
             Statistics.info("ProgramCompile", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", false);
+            return createErrorResponse(response, httpSessionState);
+        }
+    }
+
+    @POST
+    @Path("/compileNative")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response compileNative(@OraData HttpSessionState httpSessionState, JSONObject request) {
+        Util.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = Util.extractDataPart(request);
+        JSONObject response = new JSONObject();
+        try {
+            Project project =
+                    new Project.Builder()
+                            .setProgramName(dataPart.getString("programName"))
+                            .setProgramNativeSource(dataPart.getString("programText"))
+                            .setSSID(dataPart.optString("SSID", null))
+                            .setPassword(dataPart.optString("password", null))
+                            .setLanguage(Language.findByAbbr(dataPart.optString("language")))
+                            .setToken(httpSessionState.getToken())
+                            .setRobot(dataPart.optString("robot", httpSessionState.getRobotName()))
+                            .setFactory(httpSessionState.getRobotFactory())
+                            .setRobotCommunicator(this.brickCommunicator)
+                            .build();
+            ProjectService.executeWorkflow("compilenative", httpSessionState.getRobotFactory(), project);
+            response.put("cmd", "runNative");
+            response.put("errorCounter", project.getErrorCounter());
+            response.put("parameters", project.getResultParams());
+            response.put("compiledCode", project.getCompiledHex());
+            response.put("message", project.getResult().getKey());
+            response.put("cause", project.getResult().getKey());
+            response.put("rc", project.hasSucceeded() ? "ok" : "error");
+            Statistics.info("ProgramCompileNative", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", project.hasSucceeded());
+            Util.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
+            return Response.ok(response).build();
+        } catch ( Exception e ) {
+            LOG.info("compileNative failed", e);
+            Statistics.info("ProgramCompileNative", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", false);
             return createErrorResponse(response, httpSessionState);
         }
     }

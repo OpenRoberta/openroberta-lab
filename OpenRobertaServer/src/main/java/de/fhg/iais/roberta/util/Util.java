@@ -31,6 +31,7 @@ import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData.State;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class Util {
     private static final Logger LOG = LoggerFactory.getLogger(Util.class);
@@ -68,6 +69,16 @@ public class Util {
         new ClientLogger().log(loggerForRequest, fullRequest);
         String initToken = fullRequest.optString("initToken");
         httpSessionState.validateInitToken(initToken);
+    }
+
+    public static JSONObject extractDataPart(JSONObject request) {
+        JSONObject dataPart;
+        try {
+            dataPart = request.getJSONObject("data");
+        } catch ( JSONException e1 ) {
+            throw new DbcException("Invalid JSON object: data not found", e1);
+        }
+        return dataPart;
     }
 
     public static void addResultInfo(JSONObject response, Key key, boolean success, Map<String, String> params) throws JSONException {

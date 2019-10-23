@@ -196,13 +196,10 @@ public class CompilerWorkflowRobotSpecificIT {
                 org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'runPBack','programName':'prog','language':'de'}");
 
                 String xmlText = Util1.readResourceContent(fullResource);
-                String programText = null;
-                String configText = null;
                 Export jaxbImportExport = JaxbHelper.xml2Element(xmlText, Export.class);
-                programText = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
-                configText = JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet());
-                cmd.getJSONObject("data").put("programBlockSet", programText);
-                cmd.getJSONObject("data").put("configurationBlockSet", configText);
+                String programText =
+                        JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
+                cmd.getJSONObject("data").put("programBlockSet", xmlText);
 
                 Response response = this.restWorkflow.compileProgram(this.httpSessionState, cmd);
                 entity = checkEntityRc(response, expectResult, "ORA_PROGRAM_INVALID_STATEMETNS");
@@ -242,10 +239,10 @@ public class CompilerWorkflowRobotSpecificIT {
             logStart(robotName, fullResource);
             setRobotTo(robotName);
             if ( CROSSCOMPILER_CALL ) {
-                org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileN','name':'" + resource + "','language':'de'}");
+                org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileN','programName':'" + resource + "','language':'de'}");
                 String fileContent = Util1.readResourceContent(fullResource);
                 cmd.getJSONObject("data").put("programText", fileContent);
-                Response response = this.restWorkflow.runNative(this.httpSessionState, cmd);
+                Response response = this.restWorkflow.compileNative(this.httpSessionState, cmd);
                 result = checkEntityRc(response, expectResult) != null;
             } else {
                 result = true;

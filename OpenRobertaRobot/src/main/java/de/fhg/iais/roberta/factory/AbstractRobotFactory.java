@@ -182,7 +182,7 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
     }
 
     private void loadWorkers() {
-        LOG.debug("Loading workers...");
+        LOG.trace("Loading workers...");
         this.pluginProperties.getPluginProperties().forEach((k, v) -> {
             if ( k.toString().startsWith("robot.plugin.worker") ) {
                 String[] workersForType = k.toString().split("robot\\.plugin\\.worker\\.");
@@ -190,7 +190,7 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
                 List<String> workerClassNames = Stream.of(v.toString().trim().split("\\s*,\\s*")).collect(Collectors.toList());
                 workerClassNames.forEach(workerClassName -> {
                     workerClassName = workerClassName.trim();
-                    LOG.debug("Loading worker " + workerClassName);
+                    LOG.trace("Loading worker {}", workerClassName);
                     try {
                         IWorker newWorker = (IWorker) Class.forName(workerClassName).newInstance();
                         Assert.isNull(this.workers.put(workersType, newWorker));

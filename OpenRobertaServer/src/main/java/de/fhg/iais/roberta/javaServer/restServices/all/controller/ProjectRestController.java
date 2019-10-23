@@ -63,12 +63,8 @@ public class ProjectRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateProject(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        JSONObject dataPart;
-        try {
-            dataPart = request.getJSONObject("data");
-        } catch ( JSONException e ) {
-            throw new DbcException("Invalid JSON object: data not found", e);
-        }
+        Util.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = Util.extractDataPart(request);
         DbSession dbSession = this.sessionFactoryWrapper.getSession();
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
@@ -116,12 +112,8 @@ public class ProjectRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProgram(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        JSONObject dataPart;
-        try {
-            dataPart = request.getJSONObject("data");
-        } catch ( JSONException e ) {
-            throw new DbcException("Invalid JSON object: data not found", e);
-        }
+        Util.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = Util.extractDataPart(request);
         DbSession dbSession = this.sessionFactoryWrapper.getSession();
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
@@ -172,6 +164,7 @@ public class ProjectRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProgramNames(@OraData HttpSessionState httpSessionState, JSONObject request) {
+        Util.handleRequestInit(httpSessionState, LOG, request);
         DbSession dbSession = this.sessionFactoryWrapper.getSession();
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
@@ -208,6 +201,7 @@ public class ProjectRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProgramExampleNames(@OraData HttpSessionState httpSessionState, JSONObject request) {
+        Util.handleRequestInit(httpSessionState, LOG, request);
         DbSession dbSession = this.sessionFactoryWrapper.getSession();
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
@@ -244,12 +238,8 @@ public class ProjectRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProgramEntity(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        JSONObject dataPart;
-        try {
-            dataPart = request.getJSONObject("data");
-        } catch ( JSONException e ) {
-            throw new DbcException("Invalid JSON object: data not found", e);
-        }
+        Util.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = Util.extractDataPart(request);
         DbSession dbSession = this.sessionFactoryWrapper.getSession();
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         UserProcessor up = new UserProcessor(dbSession, httpSessionState);
@@ -294,6 +284,7 @@ public class ProjectRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getGallery(@OraData HttpSessionState httpSessionState, JSONObject request) {
+        Util.handleRequestInit(httpSessionState, LOG, request);
         DbSession dbSession = this.sessionFactoryWrapper.getSession();
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
@@ -325,12 +316,8 @@ public class ProjectRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response importProgram(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        JSONObject dataPart;
-        try {
-            dataPart = request.getJSONObject("data");
-        } catch ( JSONException e ) {
-            throw new DbcException("Invalid JSON object: data not found", e);
-        }
+        Util.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = Util.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
             String robot = getRobot(httpSessionState);
@@ -384,18 +371,12 @@ public class ProjectRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response shareProgram(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        JSONObject dataPart;
-        try {
-            dataPart = request.getJSONObject("data");
-        } catch ( JSONException e ) {
-            throw new DbcException("Invalid JSON object: data not found", e);
-        }
-
+        Util.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = Util.extractDataPart(request);
         DbSession dbSession = this.sessionFactoryWrapper.getSession();
         UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
         AccessRightProcessor accessRightProcessor = new AccessRightProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
-
         try {
             int userId = httpSessionState.getUserId();
             String robot = getRobot(httpSessionState);
@@ -437,12 +418,8 @@ public class ProjectRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteProject(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        JSONObject dataPart;
-        try {
-            dataPart = request.getJSONObject("data");
-        } catch ( JSONException e ) {
-            throw new DbcException("Invalid JSON object: data not found", e);
-        }
+        Util.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = Util.extractDataPart(request);
         DbSession dbSession = this.sessionFactoryWrapper.getSession();
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
@@ -484,12 +461,8 @@ public class ProjectRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response likeProject(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        JSONObject dataPart;
-        try {
-            dataPart = request.getJSONObject("data");
-        } catch ( JSONException e ) {
-            throw new DbcException("Invalid JSON object: data not found", e);
-        }
+        Util.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = Util.extractDataPart(request);
         DbSession dbSession = this.sessionFactoryWrapper.getSession();
         LikeProcessor lp = new LikeProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
@@ -545,12 +518,8 @@ public class ProjectRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteProjectShare(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        JSONObject dataPart;
-        try {
-            dataPart = request.getJSONObject("data");
-        } catch ( JSONException e ) {
-            throw new DbcException("Invalid JSON object: data not found", e);
-        }
+        Util.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = Util.extractDataPart(request);
         DbSession dbSession = this.sessionFactoryWrapper.getSession();
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         AccessRightProcessor accessRightProcessor = new AccessRightProcessor(dbSession, httpSessionState);
@@ -599,12 +568,8 @@ public class ProjectRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createProjectShare(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        JSONObject dataPart;
-        try {
-            dataPart = request.getJSONObject("data");
-        } catch ( JSONException e ) {
-            throw new DbcException("Invalid JSON object: data not found", e);
-        }
+        Util.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = Util.extractDataPart(request);
         DbSession dbSession = this.sessionFactoryWrapper.getSession();
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         AccessRightProcessor accessRightProcessor = new AccessRightProcessor(dbSession, httpSessionState);
@@ -686,12 +651,8 @@ public class ProjectRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProjectRelations(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        JSONObject dataPart;
-        try {
-            dataPart = request.getJSONObject("data");
-        } catch ( JSONException e ) {
-            throw new DbcException("Invalid JSON object: data not found", e);
-        }
+        Util.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = Util.extractDataPart(request);
         DbSession dbSession = this.sessionFactoryWrapper.getSession();
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();

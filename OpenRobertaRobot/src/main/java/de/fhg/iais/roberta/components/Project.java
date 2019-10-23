@@ -351,6 +351,7 @@ public final class Project {
                                 this.project.robotFactory.getTopBlockOfOldConfiguration(),
                                 this.project.robotFactory.getSensorPrefix());
                     }
+                    this.project.configuration.setRobotName(this.project.getRobot()); // TODO remove dependencies on robot name to remove this
                 } catch ( Exception e ) {
                     LOG.error("Generation of the configuration failed", e);
                     this.project.result = Key.COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED;
