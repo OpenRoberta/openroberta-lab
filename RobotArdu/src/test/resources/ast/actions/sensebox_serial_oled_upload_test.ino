@@ -37,6 +37,7 @@ Plot _plot_L(&_display_L);
 void setup()
 {
     Serial.begin(9600); 
+    delay(20);
     _bmp280_T.begin();
     _veml_V.begin();
     _tsl_V.begin();

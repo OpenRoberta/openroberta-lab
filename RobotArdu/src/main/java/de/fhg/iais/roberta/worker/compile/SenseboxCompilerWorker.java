@@ -93,7 +93,7 @@ public class SenseboxCompilerWorker implements IWorker {
         Pair<Boolean, String> result = AbstractCompilerWorkflow.runCrossCompiler(executableWithParameters);
         Key resultKey = result.getFirst() ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         if ( result.getFirst() ) {
-            project.setCompiledHex(AbstractCompilerWorkflow.getBase64EncodedBinary(path + "/target/" + project.getProgramName() + ".ino.hex"));
+            project.setCompiledHex(AbstractCompilerWorkflow.getBase64EncodedBinary(path + "/target/" + project.getProgramName() + ".ino.bin"));
             if ( project.getCompiledHex() != null ) {
                 resultKey = Key.COMPILERWORKFLOW_SUCCESS;
             } else {
