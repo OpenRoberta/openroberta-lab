@@ -37,7 +37,6 @@
         <appender-ref ref="STATISTICS_FILE" />
     </logger>
 
-    <logger name="de.fhg.iais.roberta.brick.CompilerWorkflow" level="DEBUG" />
     <logger name="org.hibernate" level="WARN" />
 
     <logger name="de.fhg.iais.roberta.main.Administration" level="INFO" />

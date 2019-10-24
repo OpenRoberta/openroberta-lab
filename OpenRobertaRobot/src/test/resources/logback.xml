@@ -1,8 +1,4 @@
 <configuration>
-
-    <property name="PATTERN_STATISTICS"
-        value='STATISTICS {"time":"%d", "sessionId":"%X{sessionId}", "robotName":"%X{robotName}", "logLevel":"%level", "message":%msg}%n' />
-
     <property name="PATTERN_LOG"
         value='%d [%thread] session-id=[%X{sessionId}] user-id=[%X{userId}] robot-name=[%X{robotName}] %-1level %logger{36} - %msg%n' />
 
@@ -12,18 +8,12 @@
         </encoder>
     </appender>
 
-    <appender name="STATISTICS" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>${PATTERN_STATISTICS}</pattern>
-        </encoder>
-    </appender>
-
-    <root level="${LOG_LEVEL}">
+    <root level="INFO">
         <appender-ref ref="LOG" />
     </root>
     
     <logger name="statistics" level="INFO" additivity="false">
-        <appender-ref ref="STATISTICS" />
+        <appender-ref ref="LOG" />
     </logger>
 
     <logger name="org.hibernate" level="WARN" />

@@ -16,8 +16,8 @@ ARG BRANCH=develop
 RUN git clone --depth=1 -b $BRANCH https://github.com/OpenRoberta/openroberta-lab.git
 WORKDIR /opt/openroberta-lab
 RUN ( mvn clean install -PrunIT || echo '!!!!!!!!!! runIT crashed. Should NOT happen !!!!!!!!!!' ) && \
-    cd /opt && \
-    rm -rf openroberta-lab 
+    cd /opt && rm -rf openroberta-lab && \
+    cd /tmp && rm -rf -- *
 
 # prepare the entry point
 WORKDIR /opt

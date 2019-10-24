@@ -217,7 +217,7 @@ public class CompilerWorkflowRobotCommonIT {
             template = generateFinalProgram(template, progName, prog);
             if ( CROSSCOMPILER_CALL ) {
                 setRobotTo(robotName);
-                org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileP','programName':'prog','language':'de'}");
+                org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
                 cmd.getJSONObject("data").put("programBlockSet", template);
                 Response response = this.restWorkflow.compileProgram(this.httpSessionState, cmd);
                 result = checkEntityRc(response, "ok", "PROGRAM_INVALID_STATEMETNS");

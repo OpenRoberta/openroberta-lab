@@ -193,12 +193,11 @@ public class CompilerWorkflowRobotSpecificIT {
             boolean result = false;
             org.codehaus.jettison.json.JSONObject entity = null;
             if ( CROSSCOMPILER_CALL ) {
-                org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'runPBack','programName':'prog','language':'de'}");
+                org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
 
                 String xmlText = Util1.readResourceContent(fullResource);
                 Export jaxbImportExport = JaxbHelper.xml2Element(xmlText, Export.class);
-                String programText =
-                        JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
+                String programText = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
                 cmd.getJSONObject("data").put("programBlockSet", xmlText);
 
                 Response response = this.restWorkflow.compileProgram(this.httpSessionState, cmd);
@@ -239,7 +238,7 @@ public class CompilerWorkflowRobotSpecificIT {
             logStart(robotName, fullResource);
             setRobotTo(robotName);
             if ( CROSSCOMPILER_CALL ) {
-                org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'cmd':'compileN','programName':'" + resource + "','language':'de'}");
+                org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'programName':'" + resource + "','language':'de'}");
                 String fileContent = Util1.readResourceContent(fullResource);
                 cmd.getJSONObject("data").put("programText", fileContent);
                 Response response = this.restWorkflow.compileNative(this.httpSessionState, cmd);
