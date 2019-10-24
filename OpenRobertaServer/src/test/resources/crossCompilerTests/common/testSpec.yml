@@ -29,6 +29,8 @@ robots:
        template: sensebox
     edison:
        template: edison
+    wedo:
+       template: wedo
 
 progs:
     advancedListOperations:

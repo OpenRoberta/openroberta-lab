@@ -44,3 +44,6 @@ robots:
     edison:
         dir: edison
         suffix: ".wav"
+    wedo:
+        dir: wedo
+        suffix: ".json"
