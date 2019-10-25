@@ -10,9 +10,20 @@ public interface IRobotFactory {
     BlocklyDropdownFactory getBlocklyDropdownFactory();
 
     /**
-     * Get the file extension of the specific language for this robot. This is used when we want to download locally the source code into a file.
+     * Get the file extension of the specific language for this robot. This is used 
+     * when we want to download locally the source code into a file.
+     *
+     * @return file extension
      */
-    String getFileExtension();
+    String getSourceCodeFileExtension();
+
+    /**
+     * Get the file extension of the specific executable binary for this robot. This 
+     * is used when the binary is send back to the client.
+     *
+     * @return file extension
+     */
+    String getBinaryFileExtension();
 
     String getProgramToolboxBeginner();
 

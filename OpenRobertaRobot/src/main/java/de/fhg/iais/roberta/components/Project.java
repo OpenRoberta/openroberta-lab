@@ -77,8 +77,12 @@ public final class Project {
         return this.programName;
     }
 
-    public String getFileExtension() {
-        return this.robotFactory.getFileExtension();
+    public String getSourceCodeFileExtension() {
+        return this.robotFactory.getSourceCodeFileExtension();
+    }
+    
+    public String getBinaryFileExtension() {
+        return this.robotFactory.getBinaryFileExtension();
     }
 
     public String getSSID() {

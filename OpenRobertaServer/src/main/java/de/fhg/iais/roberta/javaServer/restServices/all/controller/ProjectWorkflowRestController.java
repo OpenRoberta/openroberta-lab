@@ -25,7 +25,6 @@ import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 
 @Path("/projectWorkflow")
 public class ProjectWorkflowRestController {
@@ -64,7 +63,6 @@ public class ProjectWorkflowRestController {
             // To make this compatible with old frontend we will have to use the old names...
             response.put("cmd", "showSourceP");
             response.put("sourceCode", project.getSourceCode());
-            response.put("fileExtension", project.getFileExtension());
             response.put("data", project.getAnnotatedProgramAsXml());
             response.put("configuration", project.getAnnotatedConfigurationAsXml());
             response.put("rc", project.hasSucceeded() ? "ok" : "error");
@@ -107,7 +105,7 @@ public class ProjectWorkflowRestController {
             // To make this compatible with old frontend we will have to use the old names...
             response.put("cmd", "runPSim");
             response.put("javaScriptProgram", project.getSourceCode());
-            response.put("fileExtension", project.getFileExtension());
+            response.put("fileExtension", project.getSourceCodeFileExtension());
             response.put("data", project.getAnnotatedProgramAsXml());
             response.put("configuration", project.getAnnotatedConfigurationAsXml());
             response.put("rc", project.hasSucceeded() ? "ok" : "error");

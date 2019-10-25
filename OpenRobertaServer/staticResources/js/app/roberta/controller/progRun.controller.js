@@ -46,26 +46,26 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
 
         var connectionType = GUISTATE_C.getConnectionTypeEnum();
         if (GUISTATE_C.getConnection() == connectionType.AUTO || GUISTATE_C.getConnection() == connectionType.LOCAL) {
-            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(
+            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(
                     result) {
                 runForAutoConnection(result);
                 PROG_C.reloadProgram(result);
             });
         } else if (GUISTATE_C.getConnection() == connectionType.AGENT || GUISTATE_C.getConnection() == connectionType.AGENTORTOKEN && GUISTATE_C.getIsAgent()) {
-            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(
+            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(
                     result) {
                 runForAgentConnection(result);
                 PROG_C.reloadProgram(result);
             });
         } else if (GUISTATE_C.getConnection() == connectionType.WEBVIEW) {
-            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(
+            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(
                     result) {
                 runForWebviewConnection(result);
                 PROG_C.reloadProgram(result);
             });
         } else if (GUISTATE_C.getConnection() == connectionType.JSPLAY) {
             //For all robots that play their program file in the browser
-            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(
+            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(
                     result) {
                 runForJSPlayConnection(result);
                 PROG_C.reloadProgram(result);
@@ -82,18 +82,10 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
     function runForAutoConnection(result) {
         GUISTATE_C.setState(result);
         if (result.rc == "ok") {
-            var filename = GUISTATE_C.getProgramName();
-            if (GUISTATE_C.getRobot() === 'sensebox') {
-                filename += '.bin';
+            var filename = GUISTATE_C.getProgramName() + "." + GUISTATE_C.getBinaryFileExtension();
+            if (GUISTATE_C.getBinaryFileExtension() === "ino.bin" || GUISTATE_C.getBinaryFileExtension() === "uf2") {
                 result.compiledCode = UTIL.base64decode(result.compiledCode);
-            } else if (GUISTATE_C.getRobot() === 'ev3c4ev3') {
-                filename += '.uf2';
-                result.compiledCode = UTIL.base64decode(result.compiledCode);
-                // TODO: Update the popup message to tell the user to start the program (selecting it in the EV3 menu)
-            } else {
-                filename += '.hex';
             }
-
             if (GUISTATE_C.isProgramToDownload() || navigator.userAgent.toLowerCase().match(/iPad|iPhone|android/i) != null) {
                 // either the user doesn't want to see the modal anymore or he uses a smartphone / tablet, where you cannot choose the download folder.
                 UTIL.download(filename, result.compiledCode);
@@ -301,7 +293,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
         while (!interpreter.isTerminated() && !reset) {
             var maxRunTime = new Date().getTime() + 100;
             var waitTime = interpreter.run(maxRunTime);
- 
+
             if (waitTime > 0) {
                 timeout(runStepWedo, waitTime);
                 return;

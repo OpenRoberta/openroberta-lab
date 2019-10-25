@@ -266,7 +266,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         GUISTATE.gui.signature = result.signature;
         GUISTATE.gui.commandLine = result.commandLine;
         GUISTATE.gui.configurationUsed = result.configurationUsed;
-        GUISTATE.gui.fileExtension = result.fileExtension;
+        GUISTATE.gui.sourceCodeFileExtension = result.sourceCodeFileExtension;
+        GUISTATE.gui.binaryFileExtension = result.binaryFileExtension;
+        GUISTATE.gui.hasWlan = result.hasWlan;
         $('#blocklyDiv, #bricklyDiv').css('background', 'url(../../../../css/img/' + robotGroup + 'Background.jpg) repeat');
         $('#blocklyDiv, #bricklyDiv').css('background-size', '100%');
         $('#blocklyDiv, #bricklyDiv').css('background-position', 'initial');
@@ -385,11 +387,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             });
         }
 
-        if (getRobotHasWlan(robot)) {
-            GUISTATE.robot.hasWlan = true;
+        if (GUISTATE.gui.hasWlan) {
             $('#robotWlan').removeClass('hidden');
         } else {
-            GUISTATE.robot.hasWlan = false;
             $('#robotWlan').addClass('hidden');
         }
     }
@@ -512,19 +512,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
     }
     exports.getIsRobotBeta = getIsRobotBeta;
 
-    function getRobotHasWlan(robotName) {
-        for ( var robot in getRobots()) {
-            if (!getRobots().hasOwnProperty(robot)) {
-                continue;
-            }
-            if (getRobots()[robot].name == robotName && getRobots()[robot].hasWlan == true) {
-                return true;
-            }
-        }
-        return false;
-    }
-    exports.getRobotHasWlan = getRobotHasWlan;
-
     function getRobotInfo(robotName) {
         for ( var robot in getRobots()) {
             if (!getRobots().hasOwnProperty(robot)) {
@@ -542,9 +529,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         if (GUISTATE.robot.time > 0) {
             return true;
         }
-        if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AUTO
-            || GUISTATE.gui.connection === GUISTATE.gui.connectionType.LOCAL
-            || GUISTATE.gui.connectionType.JSPLAY) {
+        if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AUTO || GUISTATE.gui.connection === GUISTATE.gui.connectionType.LOCAL
+                || GUISTATE.gui.connectionType.JSPLAY) {
             return true;
         }
         if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AGENTORTOKEN) {
@@ -726,16 +712,16 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
     }
     exports.getProgramSource = getProgramSource;
 
-    function setProgramFileExtension(fileExtension) {
-        GUISTATE.gui.fileExtension = fileExtension;
+    function getSourceCodeFileExtension() {
+        return GUISTATE.gui.sourceCodeFileExtension;
     }
-    exports.setProgramFileExtension = setProgramFileExtension;
-
-    function getProgramFileExtension() {
-        return GUISTATE.gui.fileExtension;
+    exports.getSourceCodeFileExtension = getSourceCodeFileExtension;
+  
+    function getBinaryFileExtension() {
+        return GUISTATE.gui.binaryFileExtension;
     }
-    exports.getProgramFileExtension = getProgramFileExtension;
-
+    exports.getBinaryFileExtension = getBinaryFileExtension;
+    
     function isUserLoggedIn() {
         return GUISTATE.user.id >= 0;
     }

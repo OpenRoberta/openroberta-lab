@@ -157,7 +157,9 @@ public class ClientAdmin {
                         response.put("configurationUsed", robotFactory.hasConfiguration());
                         response.put("commandLine", robotFactory.getCommandline());
                         response.put("signature", robotFactory.getSignature());
-                        response.put("fileExtension", robotFactory.getFileExtension());
+                        response.put("sourceCodeFileExtension", robotFactory.getSourceCodeFileExtension());
+                        response.put("binaryFileExtension", robotFactory.getBinaryFileExtension());
+                        response.put("hasWlan", robotFactory.hasWlanCredentials());
                         LOG.info("set robot to {}", robot);
                         Statistics.info("ChangeRobot", "success", true);
                     } else {

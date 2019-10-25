@@ -4,9 +4,9 @@ import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.mode.action.ev3.ShowPicture;
 import de.fhg.iais.roberta.util.PluginProperties;
 
-public abstract class AbstractEV3Factory extends AbstractRobotFactory {
+public class EV3Factory extends RobotFactory {
 
-    public AbstractEV3Factory(PluginProperties pluginProperties) {
+    public EV3Factory(PluginProperties pluginProperties) {
         super(pluginProperties);
     }
 

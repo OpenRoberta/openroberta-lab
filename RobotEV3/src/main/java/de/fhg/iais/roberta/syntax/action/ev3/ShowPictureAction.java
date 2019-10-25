@@ -5,7 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.factory.AbstractEV3Factory;
+import de.fhg.iais.roberta.factory.EV3Factory;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -104,7 +104,7 @@ public class ShowPictureAction<V> extends Action<V> {
         Phrase<V> y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y, BlocklyType.NUMBER_INT));
         return ShowPictureAction
             .make(
-                ((AbstractEV3Factory) helper.getRobotFactory()).getShowPicture(pic),
+                ((EV3Factory) helper.getRobotFactory()).getShowPicture(pic),
                 helper.convertPhraseToExpr(x),
                 helper.convertPhraseToExpr(y),
                 helper.extractBlockProperties(block),

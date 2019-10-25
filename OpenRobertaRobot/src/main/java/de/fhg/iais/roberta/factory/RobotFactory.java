@@ -16,8 +16,8 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.worker.IWorker;
 
-public abstract class AbstractRobotFactory implements IRobotFactory {
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractRobotFactory.class);
+public class RobotFactory implements IRobotFactory {
+    private static final Logger LOG = LoggerFactory.getLogger(RobotFactory.class);
 
     protected final PluginProperties pluginProperties;
     protected final BlocklyDropdownFactory blocklyDropdown2EnumFactory;
@@ -29,7 +29,7 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
     protected Map<String, IWorker> workers = new HashMap<>(); //worker type to impllementing class(es) collect->de.fhg.iais.roberta.visitor.collect.Ev3UsedHardwareCollectorWorker
     protected Map<String, List<String>> workflows = new HashMap<>(); //workflow name to a list of types of applicable workers: showsource->collect,generate
 
-    public AbstractRobotFactory(PluginProperties pluginProperties) {
+    public RobotFactory(PluginProperties pluginProperties) {
         this.pluginProperties = pluginProperties;
         this.blocklyDropdown2EnumFactory = new BlocklyDropdownFactory(this.pluginProperties);
         this.beginnerToolbox = Util1.readResourceContent(this.pluginProperties.getStringProperty("robot.program.toolbox.beginner"));
@@ -48,6 +48,16 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
     @Override
     public BlocklyDropdownFactory getBlocklyDropdownFactory() {
         return this.blocklyDropdown2EnumFactory;
+    }
+    
+    @Override
+    public final String getSourceCodeFileExtension() {
+        return this.pluginProperties.getStringProperty("robot.plugin.fileExtension.source");
+    }
+    
+    @Override
+    public final String getBinaryFileExtension() {
+        return this.pluginProperties.getStringProperty("robot.plugin.fileExtension.binary");
     }
 
     @Override

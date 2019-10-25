@@ -9,7 +9,7 @@ import org.junit.BeforeClass;
 import de.fhg.iais.roberta.ast.AstTest;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.factory.NxtFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 
@@ -22,7 +22,7 @@ public class NxtAstTest extends AstTest {
 
     @BeforeClass
     public static void setup() {
-        testFactory = new NxtFactory(new PluginProperties("nxt", "", "", Util1.loadProperties("classpath:/nxt.properties")));
+        testFactory = new RobotFactory(new PluginProperties("nxt", "", "", Util1.loadProperties("classpath:/nxt.properties")));
 
         Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
         ConfigurationComponent motorA = new ConfigurationComponent("LARGE", true, "A", "A", motorAproperties);

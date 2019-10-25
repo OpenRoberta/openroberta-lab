@@ -8,7 +8,7 @@ import org.junit.BeforeClass;
 import de.fhg.iais.roberta.ast.AstTest;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.factory.BotnrollFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 
@@ -34,6 +34,6 @@ public class BotnrollAstTest extends AstTest {
 
     @BeforeClass
     public static void setup() {
-        testFactory = new BotnrollFactory(new PluginProperties("botnroll", "", "", Util1.loadProperties("classpath:/botnroll.properties")));
+        testFactory = new RobotFactory(new PluginProperties("botnroll", "", "", Util1.loadProperties("classpath:/botnroll.properties")));
     }
 }

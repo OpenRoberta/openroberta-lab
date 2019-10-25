@@ -251,20 +251,6 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
 
     exports.runOnBrick = runOnBrick;
 
-    function runOnBrickBack(programName, configName, xmlTextProgram, xmlTextConfig, SSID, password, language, successFn) {
-        COMM.json("/projectWorkflow/run", {
-            "programName" : programName,
-            "configurationName" : configName,
-            "programBlockSet" : xmlTextProgram,
-            "configurationBlockSet" : xmlTextConfig,
-            "SSID" : SSID,
-            "password" : password,
-            "language" : language
-        }, successFn, "run program '" + programName + "' with configuration '" + configName + "'");
-    }
-
-    exports.runOnBrickBack = runOnBrickBack;
-
     /**
      * Run program
      * 

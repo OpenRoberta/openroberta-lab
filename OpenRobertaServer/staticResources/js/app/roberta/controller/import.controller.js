@@ -85,7 +85,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
      */
     function importSourceCodeToCompile() {
         init(compileFromSource);
-        $('#fileSelector').attr("accept", "." + GUISTATE_C.getProgramFileExtension());
+        $('#fileSelector').attr("accept", "." + GUISTATE_C.getSourceCodeFileExtension());
         $('#fileSelector').trigger('click'); // opening dialog       
     }
     exports.importSourceCodeToCompile = importSourceCodeToCompile;

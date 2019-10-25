@@ -43,7 +43,12 @@ public class MbotCompilerWorker implements IWorker {
         final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         final String tempDir = compilerWorkflowBean.getTempDir();
         Util1
-            .storeGeneratedProgram(tempDir, project.getSourceCode().toString(), project.getToken(), project.getProgramName(), "." + project.getFileExtension());
+            .storeGeneratedProgram(
+                tempDir,
+                project.getSourceCode().toString(),
+                project.getToken(),
+                project.getProgramName(),
+                "." + project.getSourceCodeFileExtension());
         String scriptName = "";
         String os = "";
         if ( SystemUtils.IS_OS_LINUX ) {
@@ -75,13 +80,15 @@ public class MbotCompilerWorker implements IWorker {
                 fqbnArg,
                 "-prefs=compiler.path=" + compilerBinDir,
                 "-build-path=" + base.resolve(path).toAbsolutePath().normalize() + "/target/",
-                base.resolve(path).toAbsolutePath().normalize() + "/source/" + project.getProgramName() + "." + project.getFileExtension()
+                base.resolve(path).toAbsolutePath().normalize() + "/source/" + project.getProgramName() + "." + project.getSourceCodeFileExtension()
             };
 
         Pair<Boolean, String> result = AbstractCompilerWorkflow.runCrossCompiler(executableWithParameters);
         Key resultKey = result.getFirst() ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         if ( result.getFirst() ) {
-            project.setCompiledHex(AbstractCompilerWorkflow.getBase64EncodedHex(path + "/target/" + project.getProgramName() + ".ino.hex"));
+            project
+                .setCompiledHex(
+                    AbstractCompilerWorkflow.getBase64EncodedHex(path + "/target/" + project.getProgramName() + "." + project.getBinaryFileExtension()));
             if ( project.getCompiledHex() != null ) {
                 resultKey = Key.COMPILERWORKFLOW_SUCCESS;
             } else {

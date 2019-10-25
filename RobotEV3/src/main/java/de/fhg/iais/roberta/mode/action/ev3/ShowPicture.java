@@ -4,8 +4,8 @@ import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 
 public enum ShowPicture implements IShowPicture {
 
-    OLDGLASSES( "BRILLE", "Brille" ),
-    EYESOPEN( "AUGENOFFEN", "Augen Offen" ),
+    OLDGLASSES( "BRILLE", "BrilleAugen Offen" ),
+    EYESOPEN( "AUGENOFFEN", "" ),
     EYESCLOSED( "AUGENZU", "AUGEN ZU" ),
     FLOWERS( "BLUMEN", "Blumen" ),
     TACHO( "Tacho" );

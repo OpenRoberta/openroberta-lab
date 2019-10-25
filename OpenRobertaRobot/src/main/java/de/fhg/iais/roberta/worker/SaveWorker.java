@@ -11,7 +11,7 @@ public class SaveWorker implements IWorker {
         CompilerSetupBean compilerWorkflowBean = (CompilerSetupBean) project.getWorkerResult("CompilerSetup");
         final String tempDir = compilerWorkflowBean.getTempDir();
         Util1
-            .storeGeneratedProgram(tempDir, project.getSourceCode().toString(), project.getToken(), project.getProgramName(), "." + project.getFileExtension());
+            .storeGeneratedProgram(tempDir, project.getSourceCode().toString(), project.getToken(), project.getProgramName(), "." + project.getSourceCodeFileExtension());
         project.setResult(Key.COMPILERWORKFLOW_SUCCESS);
     }
 }

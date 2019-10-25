@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.factory.Ev3LejosV0Factory;
+import de.fhg.iais.roberta.factory.EV3Factory;
 import de.fhg.iais.roberta.mode.action.BrickLedColor;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.LightMode;
@@ -21,7 +21,7 @@ import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class RobotModeFactoryTest {
-    Ev3LejosV0Factory factory = new Ev3LejosV0Factory(new PluginProperties("ev3lejosv0", "", "", Util1.loadProperties("classpath:/ev3lejosv0.properties")));
+    EV3Factory factory = new EV3Factory(new PluginProperties("ev3lejosv0", "", "", Util1.loadProperties("classpath:/ev3lejosv0.properties")));
     BlocklyDropdownFactory dropdownFactory = this.factory.getBlocklyDropdownFactory();
 
     @Test

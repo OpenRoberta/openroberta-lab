@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.mode.sensor.DetectFaceSensorMode;
 import de.fhg.iais.roberta.mode.sensor.DetectMarkSensorMode;
 import de.fhg.iais.roberta.util.PluginProperties;
 
-public class NaoFactory extends AbstractRobotFactory {
+public class NaoFactory extends RobotFactory {
 
     public NaoFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
@@ -17,10 +17,5 @@ public class NaoFactory extends AbstractRobotFactory {
 
     public IMode getDetectFaceMode(String mode) {
         return BlocklyDropdownFactoryHelper.getModeValue(mode, DetectFaceSensorMode.class);
-    }
-
-    @Override
-    public String getFileExtension() {
-        return "py";
     }
 }

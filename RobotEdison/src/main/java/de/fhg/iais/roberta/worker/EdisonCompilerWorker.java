@@ -50,7 +50,7 @@ public class EdisonCompilerWorker implements IWorker {
         final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         final String tempDir = compilerWorkflowBean.getTempDir();
         Util1
-            .storeGeneratedProgram(tempDir, project.getSourceCode().toString(), project.getToken(), project.getProgramName(), "." + project.getFileExtension());
+            .storeGeneratedProgram(tempDir, project.getSourceCode().toString(), project.getToken(), project.getProgramName(), "." + project.getSourceCodeFileExtension());
         //get all directories
         String token = project.getToken();
         String pyFile = project.getProgramName();
@@ -72,7 +72,7 @@ public class EdisonCompilerWorker implements IWorker {
         Key resultKey = result.getFirst() ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         if ( result.getFirst() ) {
             try {
-                byte[] wavBytes = FileUtils.readFileToByteArray(new File(targetFilePath + pyFile + ".wav"));
+                byte[] wavBytes = FileUtils.readFileToByteArray(new File(targetFilePath + pyFile + "." + project.getBinaryFileExtension()));
                 project.setCompiledHex(Base64.getEncoder().encodeToString(wavBytes));
                 resultKey = Key.COMPILERWORKFLOW_SUCCESS;
             } catch ( IOException e ) {

@@ -20,7 +20,7 @@ public class VorwerkTransferWorker implements IWorker {
         final String tempDir = compilerWorkflowBean.getTempDir();
         try {
             String programLocation = tempDir + project.getToken() + File.separator + project.getProgramName() + File.separator + "source";
-            vorwerkCommunicator.uploadFile(programLocation, project.getProgramName() + "." + project.getFileExtension());
+            vorwerkCommunicator.uploadFile(programLocation, project.getProgramName() + "." + project.getSourceCodeFileExtension());
             project.setResult(Key.COMPILERWORKFLOW_SUCCESS);
         } catch ( Exception e ) {
             LOG.error("Uploading the generated program to {} failed", vorwerkCommunicator.getIp(), e);

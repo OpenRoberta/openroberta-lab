@@ -54,7 +54,7 @@ public class CalliopeCompilerWorker implements IWorker {
         final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         final String tempDir = compilerWorkflowBean.getTempDir();
         Util1
-            .storeGeneratedProgram(tempDir, project.getSourceCode().toString(), project.getToken(), project.getProgramName(), "." + project.getFileExtension());
+            .storeGeneratedProgram(tempDir, project.getSourceCode().toString(), project.getToken(), project.getProgramName(), "." + project.getSourceCodeFileExtension());
         String scriptName = compilerResourcesDir + "../compile." + (SystemUtils.IS_OS_WINDOWS ? "bat" : "sh");
         String bluetooth = radioUsed ? "" : "-b";
         Path pathToSrcFile = Paths.get(tempDir + project.getToken() + "/" + project.getProgramName());
@@ -72,7 +72,7 @@ public class CalliopeCompilerWorker implements IWorker {
         Pair<Boolean, String> result = AbstractCompilerWorkflow.runCrossCompiler(executableWithParameters);
         Key resultKey = result.getFirst() ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         if ( result.getFirst() ) {
-            project.setCompiledHex(AbstractCompilerWorkflow.getBase64EncodedHex(pathToSrcFile + "/target/" + project.getProgramName() + ".hex"));
+            project.setCompiledHex(AbstractCompilerWorkflow.getBase64EncodedHex(pathToSrcFile + "/target/" + project.getProgramName() + "." + project.getBinaryFileExtension()));
             if ( project.getCompiledHex() != null ) {
                 resultKey = Key.COMPILERWORKFLOW_SUCCESS;
             } else {

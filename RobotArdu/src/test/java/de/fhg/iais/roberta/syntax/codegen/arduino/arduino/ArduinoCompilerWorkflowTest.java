@@ -9,11 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.factory.Bob3Factory;
-import de.fhg.iais.roberta.factory.BotnrollFactory;
-import de.fhg.iais.roberta.factory.MbotFactory;
-import de.fhg.iais.roberta.factory.SenseboxFactory;
-import de.fhg.iais.roberta.factory.UnoFactory;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Util1;
@@ -23,12 +19,12 @@ import de.fhg.iais.roberta.worker.compile.ArduinoCompilerWorker;
 public class ArduinoCompilerWorkflowTest {
     private static final String ORA_CC_RSC_ENVVAR = ServerProperties.CROSSCOMPILER_RESOURCE_BASE.replace('.', '_');
     private static final Logger LOG = LoggerFactory.getLogger(ArduinoActorTest.class);
-    private UnoFactory unoFactory;
+    private RobotFactory unoFactory;
 
-    private Bob3Factory bob3Factory;
-    private BotnrollFactory botnrollFactory;
-    private MbotFactory mbotFactory;
-    private SenseboxFactory senseboxFactory;
+    private RobotFactory bob3Factory;
+    private RobotFactory botnrollFactory;
+    private RobotFactory mbotFactory;
+    private RobotFactory senseboxFactory;
 
     @Ignore
     @Before
@@ -38,15 +34,15 @@ public class ArduinoCompilerWorkflowTest {
             fail();
         }
         PluginProperties properties = new PluginProperties("uno", System.getenv(ORA_CC_RSC_ENVVAR), "/tmp/", Util1.loadProperties("classpath:/uno.properties"));
-        this.unoFactory = new UnoFactory(properties);
+        this.unoFactory = new RobotFactory(properties);
         properties = new PluginProperties("nano", System.getenv(ORA_CC_RSC_ENVVAR), "/tmp/", Util1.loadProperties("classpath:/nano.properties"));
         properties = new PluginProperties("mega", System.getenv(ORA_CC_RSC_ENVVAR), "/tmp/", Util1.loadProperties("classpath:/mega.properties"));
         properties = new PluginProperties("bob3", System.getenv(ORA_CC_RSC_ENVVAR), "/tmp/", Util1.loadProperties("classpath:/bob3.properties"));
-        this.bob3Factory = new Bob3Factory(properties);
+        this.bob3Factory = new RobotFactory(properties);
         properties = new PluginProperties("botnroll", System.getenv(ORA_CC_RSC_ENVVAR), "/tmp/", Util1.loadProperties("classpath:/botnroll.properties"));
-        this.botnrollFactory = new BotnrollFactory(properties);
+        this.botnrollFactory = new RobotFactory(properties);
         properties = new PluginProperties("mbot", System.getenv(ORA_CC_RSC_ENVVAR), "/tmp/", Util1.loadProperties("classpath:/mbot.properties"));
-        this.mbotFactory = new MbotFactory(properties);
+        this.mbotFactory = new RobotFactory(properties);
     }
 
     @Ignore

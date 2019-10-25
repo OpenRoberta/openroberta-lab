@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.AstTest;
-import de.fhg.iais.roberta.factory.Ev3LejosV0Factory;
+import de.fhg.iais.roberta.factory.EV3Factory;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.PluginProperties;
@@ -21,7 +21,7 @@ public class ActionTest extends AstTest {
 
     @Before
     public void setupTest() {
-        this.robotFactory = new Ev3LejosV0Factory(new PluginProperties("ev3lejosv1", "", "", Util1.loadProperties("classpath:/ev3lejosv1" + ".properties")));
+        this.robotFactory = new EV3Factory(new PluginProperties("ev3lejosv1", "", "", Util1.loadProperties("classpath:/ev3lejosv1" + ".properties")));
     }
 
     @Test

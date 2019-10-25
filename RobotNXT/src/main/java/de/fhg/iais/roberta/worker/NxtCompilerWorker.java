@@ -44,7 +44,12 @@ public class NxtCompilerWorker implements IWorker {
         final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         final String tempDir = compilerWorkflowBean.getTempDir();
         Util1
-            .storeGeneratedProgram(tempDir, project.getSourceCode().toString(), project.getToken(), project.getProgramName(), "." + project.getFileExtension());
+            .storeGeneratedProgram(
+                tempDir,
+                project.getSourceCode().toString(),
+                project.getToken(),
+                project.getProgramName(),
+                "." + project.getSourceCodeFileExtension());
 
         Path path = Paths.get(compilerResourcesDir);
         Path base = Paths.get("");
@@ -61,8 +66,8 @@ public class NxtCompilerWorker implements IWorker {
                 nbcCompilerFileName,
                 "-q",
                 "-sm-",
-                tempDir + token + "/" + mainFile + "/source/" + mainFile + "." + project.getFileExtension(),
-                "-O=" + tempDir + token + "/" + mainFile + "/target/" + mainFile + ".rxe",
+                tempDir + token + "/" + mainFile + "/source/" + mainFile + "." + project.getSourceCodeFileExtension(),
+                "-O=" + tempDir + token + "/" + mainFile + "/target/" + mainFile + "." + project.getBinaryFileExtension(),
                 "-I=" + base.resolve(path).toAbsolutePath().normalize()
             };
         Pair<Boolean, String> result = AbstractCompilerWorkflow.runCrossCompiler(executableWithParameters);

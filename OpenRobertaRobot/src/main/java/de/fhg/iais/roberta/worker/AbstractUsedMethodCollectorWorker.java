@@ -24,7 +24,7 @@ public abstract class AbstractUsedMethodCollectorWorker implements IWorker {
             }
         }
 
-        builder.setFileExtension(project.getFileExtension());
+        builder.setFileExtension(project.getSourceCodeFileExtension());
         builder.setHelperMethodFile(project.getRobotFactory().getPluginProperties().getStringProperty("robot.helperMethods"));
         CodeGeneratorSetupBean bean = builder.build();
         if ( project.getRobotFactory().getRealName().equals("Edison") ) { // TODO real solution
