@@ -7,11 +7,11 @@ class ContinueLoop(Exception): pass
 
 timer1 = microbit.running_time()
 
-item = 0
+___item = 0
 def run():
-    global timer1, item
+    global timer1, ___item
     microbit.display.set_pixel(0, 0, 5)
-    item = microbit.display.get_pixel(0, 0)
+    ___item = microbit.display.get_pixel(0, 0)
 
 def main():
     try:

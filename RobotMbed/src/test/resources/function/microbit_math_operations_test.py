@@ -7,20 +7,20 @@ class ContinueLoop(Exception): pass
 
 timer1 = microbit.running_time()
 
-item = 0
-item2 = True
+___item = 0
+___item2 = True
 def run():
-    global timer1, item, item2
-    item = min(max(item, 1), 100)
-    item2 = (item % 2) == 0
-    item2 = (item % 2) == 1
-    item2 = _isPrime(item)
-    item2 = (item % 1) == 0
-    item2 = item > 0
-    item2 = item < 0
-    item2 = (item % item) == 0
-    item = random.randint(1, 100)
-    item = random.random()
+    global timer1, ___item, ___item2
+    ___item = min(max(___item, 1), 100)
+    ___item2 = (___item % 2) == 0
+    ___item2 = (___item % 2) == 1
+    ___item2 = _isPrime(___item)
+    ___item2 = (___item % 1) == 0
+    ___item2 = ___item > 0
+    ___item2 = ___item < 0
+    ___item2 = (___item % ___item) == 0
+    ___item = random.randint(1, 100)
+    ___item = random.random()
 
 def main():
     try:

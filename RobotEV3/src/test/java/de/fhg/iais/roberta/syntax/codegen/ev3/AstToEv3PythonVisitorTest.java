@@ -157,7 +157,7 @@ public class AstToEv3PythonVisitorTest extends Ev3DevAstTest {
                 + IMPORTS
                 + GLOBALS
                 + "\ndef run():\n"
-                + "    for k0 in range(int(0), int(10), int(1)):\n"
+                + "    for ___k0 in range(int(0), int(10), int(1)):\n"
                 + "        hal.drawText(\"Hallo\", 0, 3)\n\n"
                 + MAIN_METHOD;
 
@@ -189,7 +189,7 @@ public class AstToEv3PythonVisitorTest extends Ev3DevAstTest {
                 + "            hal.turnOnRegulatedMotor('B', 30)\n"
                 + "    hal.playFile(1)\n"
                 + "    hal.setVolume(50)\n"
-                + "    for i in range(int(1), int(10), int(1)):\n"
+                + "    for ___i in range(int(1), int(10), int(1)):\n"
                 + "        hal.rotateRegulatedMotor('B', 30, 'rotations', 1)\n\n"
                 + MAIN_METHOD;
 
@@ -299,15 +299,15 @@ public class AstToEv3PythonVisitorTest extends Ev3DevAstTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "\nitem = 10\n"
-                + "item2 = \"TTTT\"\n"
-                + "item3 = True\n"
+                + "\n___item = 10\n"
+                + "___item2 = \"TTTT\"\n"
+                + "___item3 = True\n"
                 + "def run():\n"
-                + "    global item, item2, item3\n"
-                + "    hal.drawText(str(item), 0, 0)\n"
-                + "    hal.drawText(str(item2), 0, 0)\n"
-                + "    hal.drawText(str(item3), 0, 0)\n"
-                + "    item3 = False\n\n"
+                + "    global ___item, ___item2, ___item3\n"
+                + "    hal.drawText(str(___item), 0, 0)\n"
+                + "    hal.drawText(str(___item2), 0, 0)\n"
+                + "    hal.drawText(str(___item3), 0, 0)\n"
+                + "    ___item3 = False\n\n"
                 + MAIN_METHOD;
 
         UnitTestHelper
@@ -329,9 +329,9 @@ public class AstToEv3PythonVisitorTest extends Ev3DevAstTest {
                 + IMG_OLDGLASSES
                 + ",\n}\n"
                 + make_globals(CFG_MOTORS, "")
-                + "variablenName = 0\n"
+                + "___variablenName = 0\n"
                 + "def run():\n"
-                + "    global variablenName\n"
+                + "    global ___variablenName\n"
                 + "    hal.regulatedDrive('A', 'B', False, 'foreward', 50)\n"
                 + "    hal.drawPicture(predefinedImages['OLDGLASSES'], 0, 0)\n\n"
                 + MAIN_METHOD;
@@ -351,15 +351,15 @@ public class AstToEv3PythonVisitorTest extends Ev3DevAstTest {
             "" //
                 + IMPORTS
                 + make_globals("", CFG_COLOR_SENSOR)
-                + "color = 'white'\n"
-                + "light = 0\n"
-                + "rgb = [0, 0, 0]\n"
+                + "___color = 'white'\n"
+                + "___light = 0\n"
+                + "___rgb = [0, 0, 0]\n"
                 + "def run():\n"
-                + "    global color, light, rgb\n"
-                + "    color = hal.getColorSensorColour('3')\n"
-                + "    light = hal.getColorSensorRed('3')\n"
-                + "    light = hal.getColorSensorAmbient('3')\n"
-                + "    rgb = hal.getColorSensorRgb('3')\n\n"
+                + "    global ___color, ___light, ___rgb\n"
+                + "    ___color = hal.getColorSensorColour('3')\n"
+                + "    ___light = hal.getColorSensorRed('3')\n"
+                + "    ___light = hal.getColorSensorAmbient('3')\n"
+                + "    ___rgb = hal.getColorSensorRgb('3')\n\n"
                 + MAIN_METHOD;
 
         UnitTestHelper
@@ -378,15 +378,15 @@ public class AstToEv3PythonVisitorTest extends Ev3DevAstTest {
             "" //
                 + IMPORTS
                 + make_globals("", CFG_HT_COLOR_SENSOR_V2)
-                + "color = 'white'\n"
-                + "light = 0\n"
-                + "rgb = [0, 0, 0]\n"
+                + "___color = 'white'\n"
+                + "___light = 0\n"
+                + "___rgb = [0, 0, 0]\n"
                 + "def run():\n"
-                + "    global color, light, rgb\n"
-                + "    color = hal.getHiTecColorSensorV2Colour('3')\n"
-                + "    light = hal.getHiTecColorSensorV2Light('3')\n"
-                + "    light = hal.getHiTecColorSensorV2Ambient('3')\n"
-                + "    rgb = hal.getHiTecColorSensorV2Rgb('3')\n\n"
+                + "    global ___color, ___light, ___rgb\n"
+                + "    ___color = hal.getHiTecColorSensorV2Colour('3')\n"
+                + "    ___light = hal.getHiTecColorSensorV2Light('3')\n"
+                + "    ___light = hal.getHiTecColorSensorV2Ambient('3')\n"
+                + "    ___rgb = hal.getHiTecColorSensorV2Rgb('3')\n\n"
                 + MAIN_METHOD;
 
         UnitTestHelper
@@ -555,8 +555,8 @@ public class AstToEv3PythonVisitorTest extends Ev3DevAstTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "\ndef test(x):\n"
-                + "    if x: return None\n"
+                + "\ndef test(___x):\n"
+                + "    if ___x: return None\n"
                 + "    hal.ledOn('green', 'on')\n\n"
                 + "def run():\n"
                 + "    test(True)\n"
@@ -578,14 +578,14 @@ public class AstToEv3PythonVisitorTest extends Ev3DevAstTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "\nvariablenName = [\"a\", \"b\", \"c\"]\n"
+                + "\n___variablenName = [\"a\", \"b\", \"c\"]\n"
                 + "def test():\n"
-                + "    global variablenName\n"
+                + "    global ___variablenName\n"
                 + "    if True: return 'red'\n"
-                + "    hal.drawText(str(variablenName), 0, 0)\n"
+                + "    hal.drawText(str(___variablenName), 0, 0)\n"
                 + "    return 'none'\n\n"
                 + "def run():\n"
-                + "    global variablenName\n"
+                + "    global ___variablenName\n"
                 + "    hal.drawText(str(test()), 0, 0)\n"
                 + "\n"
                 + MAIN_METHOD;
@@ -605,14 +605,14 @@ public class AstToEv3PythonVisitorTest extends Ev3DevAstTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "\nvariablenName = [\"a\", \"b\", \"c\"]\n"
-                + "def test(x, x2):\n"
-                + "    global variablenName\n"
-                + "    hal.drawText(str(x2), x, 0)\n"
-                + "    return x\n\n"
+                + "\n___variablenName = [\"a\", \"b\", \"c\"]\n"
+                + "def test(___x, ___x2):\n"
+                + "    global ___variablenName\n"
+                + "    hal.drawText(str(___x2), ___x, 0)\n"
+                + "    return ___x\n\n"
                 + "def run():\n"
-                + "    global variablenName\n"
-                + "    hal.drawText(str(test(0, variablenName)), 0, 0)\n"
+                + "    global ___variablenName\n"
+                + "    hal.drawText(str(test(0, ___variablenName)), 0, 0)\n"
                 + "\n"
                 + MAIN_METHOD;
 
@@ -631,13 +631,13 @@ public class AstToEv3PythonVisitorTest extends Ev3DevAstTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "\nvariablenName = [\"a\", \"b\", \"c\"]\n"
+                + "\n___variablenName = [\"a\", \"b\", \"c\"]\n"
                 + "def test():\n"
-                + "    global variablenName\n"
-                + "    hal.drawText(str(variablenName), 0, 0)\n"
+                + "    global ___variablenName\n"
+                + "    hal.drawText(str(___variablenName), 0, 0)\n"
                 + "    return 'none'\n\n"
                 + "def run():\n"
-                + "    global variablenName\n"
+                + "    global ___variablenName\n"
                 + "    hal.drawText(str(test()), 0, 0)\n"
                 + "\n"
                 + MAIN_METHOD;
@@ -680,8 +680,8 @@ public class AstToEv3PythonVisitorTest extends Ev3DevAstTest {
                 + IMG_OLDGLASSES
                 + ",\n}\n"
                 + make_globals(CFG_MOTOR_B, "")
-                + "def macheEtwas(x, x2):\n"
-                + "    hal.drawPicture(predefinedImages['OLDGLASSES'], x, x2)\n\n"
+                + "def macheEtwas(___x, ___x2):\n"
+                + "    hal.drawPicture(predefinedImages['OLDGLASSES'], ___x, ___x2)\n\n"
                 + "def run():\n"
                 + "    hal.rotateRegulatedMotor('B', 30, 'rotations', 1)\n"
                 + "    macheEtwas(10, 10)\n"
@@ -724,17 +724,17 @@ public class AstToEv3PythonVisitorTest extends Ev3DevAstTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "\nvariablenName = 0\n"
-                + "variablenName2 = True\n"
-                + "def test1(x, x2):\n"
-                + "    global variablenName, variablenName2\n"
-                + "    hal.drawText(\"Hallo\", x, x2)\n\n"
+                + "\n___variablenName = 0\n"
+                + "___variablenName2 = True\n"
+                + "def test1(___x, ___x2):\n"
+                + "    global ___variablenName, ___variablenName2\n"
+                + "    hal.drawText(\"Hallo\", ___x, ___x2)\n\n"
                 + "def test2():\n"
-                + "    global variablenName, variablenName2\n"
-                + "    if variablenName2: return None\n"
+                + "    global ___variablenName, ___variablenName2\n"
+                + "    if ___variablenName2: return None\n"
                 + "    hal.ledOn('green', 'on')\n\n"
                 + "def run():\n"
-                + "    global variablenName, variablenName2\n"
+                + "    global ___variablenName, ___variablenName2\n"
                 + "    test1(0, 0)\n"
                 + "    test2()\n\n"
                 + MAIN_METHOD;
@@ -806,13 +806,13 @@ public class AstToEv3PythonVisitorTest extends Ev3DevAstTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "for k0 in range(int(0), int(10), int(1)):\n"
+                + "for ___k0 in range(int(0), int(10), int(1)):\n"
                 + "    pass\n"
-                + "for k1 in range(int(0), int(10), int(1)):\n"
+                + "for ___k1 in range(int(0), int(10), int(1)):\n"
                 + "    print(\"15\")\n"
                 + "    print(\"15\")\n"
-                + "for k2 in range(int(0), int(10), int(1)):\n"
-                + "    for k3 in range(int(0), int(10), int(1)):\n"
+                + "for ___k2 in range(int(0), int(10), int(1)):\n"
+                + "    for ___k3 in range(int(0), int(10), int(1)):\n"
                 + "        print(\"15\")\n"
                 + "        print(\"15\")\n\n"
                 + MAIN_METHOD;
@@ -832,9 +832,9 @@ public class AstToEv3PythonVisitorTest extends Ev3DevAstTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "for i in range(int(1), int(10), int(15)):\n"
+                + "for ___i in range(int(1), int(10), int(15)):\n"
                 + "    pass\n"
-                + "for i in range(int(1), int(10), int(15)):\n"
+                + "for ___i in range(int(1), int(10), int(15)):\n"
                 + "    print(\"\")\n\n"
                 + MAIN_METHOD;
 
@@ -853,11 +853,11 @@ public class AstToEv3PythonVisitorTest extends Ev3DevAstTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "\nvariablenName = ['none', 'red', 'blue']\n"
+                + "\n___variablenName = ['none', 'red', 'blue']\n"
                 + "def run():\n"
-                + "    global variablenName\n"
-                + "    for variablenName2 in variablenName:\n"
-                + "        hal.drawText(str(variablenName2), 0, 0)\n\n"
+                + "    global ___variablenName\n"
+                + "    for ___variablenName2 in ___variablenName:\n"
+                + "        hal.drawText(str(___variablenName2), 0, 0)\n\n"
                 + MAIN_METHOD;
 
         UnitTestHelper
@@ -883,22 +883,22 @@ public class AstToEv3PythonVisitorTest extends Ev3DevAstTest {
                 + "    if False:\n"
                 + "        pass\n"
                 + "if False:\n"
-                + "    item = 6 + 8\n"
-                + "    item = 6 + 8\n"
+                + "    ___item = 6 + 8\n"
+                + "    ___item = 6 + 8\n"
                 + "else:\n"
-                + "    item = 3 * 9\n"
+                + "    ___item = 3 * 9\n"
                 + "if True:\n"
-                + "    item = 6 + 8\n"
-                + "    item = 6 + 8\n"
+                + "    ___item = 6 + 8\n"
+                + "    ___item = 6 + 8\n"
                 + "if False:\n"
-                + "    item = 6 + 8\n"
-                + "    item = 6 + 8\n"
-                + "    item = 3 * 9\n"
+                + "    ___item = 6 + 8\n"
+                + "    ___item = 6 + 8\n"
+                + "    ___item = 3 * 9\n"
                 + "elif True:\n"
-                + "    item = 3 * 9\n"
-                + "    item = 3 * 9\n"
+                + "    ___item = 3 * 9\n"
+                + "    ___item = 3 * 9\n"
                 + "else:\n"
-                + "    item = 3 * 9\n\n"
+                + "    ___item = 3 * 9\n\n"
                 + MAIN_METHOD;
 
         UnitTestHelper
@@ -968,10 +968,10 @@ public class AstToEv3PythonVisitorTest extends Ev3DevAstTest {
                 + "    if False:\n"
                 + "        pass\n"
                 + "if False:\n"
-                + "    item = 6 + 8\n"
-                + "    item = 6 + 8\n"
+                + "    ___item = 6 + 8\n"
+                + "    ___item = 6 + 8\n"
                 + "else:\n"
-                + "    item = 3 * 9\n\n"
+                + "    ___item = 3 * 9\n\n"
                 + MAIN_METHOD;
 
         UnitTestHelper
@@ -989,10 +989,10 @@ public class AstToEv3PythonVisitorTest extends Ev3DevAstTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "\nmessage = \"exit\"\n"
+                + "\n___message = \"exit\"\n"
                 + "def run():\n"
-                + "    global message\n"
-                + "    if message == \"exit\":\n"
+                + "    global ___message\n"
+                + "    if ___message == \"exit\":\n"
                 + "        hal.drawText(\"done\", 0, 0)\n\n"
                 + MAIN_METHOD;
 
@@ -1062,14 +1062,14 @@ public class AstToEv3PythonVisitorTest extends Ev3DevAstTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "\nElement = 0\n"
-                + "Element2 = 0\n"
-                + "Element3 = 'none'\n"
-                + "def macheEtwas(x):\n"
-                + "    global Element, Element3, Element2\n"
-                + "    Element3 = 'none'\n\n"
+                + "\n___Element = 0\n"
+                + "___Element2 = 0\n"
+                + "___Element3 = 'none'\n"
+                + "def macheEtwas(___x):\n"
+                + "    global ___Element, ___Element2, ___Element3\n"
+                + "    ___Element3 = 'none'\n\n"
                 + "def run():\n"
-                + "    global Element, Element3, Element2\n"
+                + "    global ___Element, ___Element2, ___Element3\n"
                 + "\n"
                 + MAIN_METHOD;
 
@@ -1088,18 +1088,18 @@ public class AstToEv3PythonVisitorTest extends Ev3DevAstTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "\nElement = 0\n"
-                + "Element2 = 0\n"
-                + "Element3 = 'none'\n"
-                + "def macheEtwas(x):\n"
-                + "    global Element, Element3, Element2\n"
-                + "    Element3 = 'none'\n\n"
+                + "\n___Element = 0\n"
+                + "___Element2 = 0\n"
+                + "___Element3 = 'none'\n"
+                + "def macheEtwas(___x):\n"
+                + "    global ___Element, ___Element2, ___Element3\n"
+                + "    ___Element3 = 'none'\n\n"
                 + "def macheEtwas2():\n"
-                + "    global Element, Element3, Element2\n"
-                + "    Element = 0\n"
-                + "    return Element2\n\n"
+                + "    global ___Element, ___Element2, ___Element3\n"
+                + "    ___Element = 0\n"
+                + "    return ___Element2\n\n"
                 + "def run():\n"
-                + "    global Element, Element3, Element2\n"
+                + "    global ___Element, ___Element2, ___Element3\n"
                 + "\n"
                 + MAIN_METHOD;
 

@@ -19,32 +19,32 @@ _brickConfiguration = {
 }
 hal = Hal(_brickConfiguration)
 
-item = [0, 0, 0]
-item2 = [True, True, True]
-item3 = ["", "", ""]
-item4 = ['white', 'white', 'white']
-item5 = [None, None, None]
-item6 = 0
-item7 = True
+___item = [0, 0, 0]
+___item2 = [True, True, True]
+___item3 = ["", "", ""]
+___item4 = ['white', 'white', 'white']
+___item5 = [None, None, None]
+___item6 = 0
+___item7 = True
 def run():
-    global item, item2, item7, item4, item3, item6, item5
-    item6 = len(item)
-    item6 = len(item2)
-    item6 = len(item3)
-    item6 = len(item4)
-    item6 = len(item5)
-    item7 = not item
-    item7 = not item2
-    item7 = not item3
-    item7 = not item4
-    item7 = not item5
-    item6 = sum(item)
-    item6 = min(item)
-    item6 = max(item)
-    item6 = float(sum(item)) / len(item)
-    item6 = _median(item)
-    item6 = _standard_deviation(item)
-    item6 = item[0]
+    global ___item, ___item2, ___item3, ___item4, ___item5, ___item6, ___item7
+    ___item6 = len(___item)
+    ___item6 = len(___item2)
+    ___item6 = len(___item3)
+    ___item6 = len(___item4)
+    ___item6 = len(___item5)
+    ___item7 = not ___item
+    ___item7 = not ___item2
+    ___item7 = not ___item3
+    ___item7 = not ___item4
+    ___item7 = not ___item5
+    ___item6 = sum(___item)
+    ___item6 = min(___item)
+    ___item6 = max(___item)
+    ___item6 = float(sum(___item)) / len(___item)
+    ___item6 = _median(___item)
+    ___item6 = _standard_deviation(___item)
+    ___item6 = ___item[0]
 
 def main():
     try:

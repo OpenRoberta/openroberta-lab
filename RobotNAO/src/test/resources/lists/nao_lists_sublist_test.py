@@ -7,24 +7,24 @@ from roberta import Hal
 h = Hal()
 
 
-item = [0, 0, 0]
-item2 = []
-item3 = []
-item4 = []
-item5 = []
+___item = [0, 0, 0]
+___item2 = []
+___item3 = []
+___item4 = []
+___item5 = []
 
 def run():
     h.setAutonomousLife('OFF')
-    global item, item2, item3, item4, item5
-    item = item[0:0]
-    item = item[0:-1 -0]
-    item = item[0:]
-    item = item[-1 -0:0]
-    item = item[-1 -0:-1 -0]
-    item = item[-1 -0:]
-    item = item[0:0]
-    item = item[0:-1 -0]
-    item = item[0:]
+    global ___item, ___item2, ___item3, ___item4, ___item5
+    ___item = ___item[0:0]
+    ___item = ___item[0:-1 -0]
+    ___item = ___item[0:]
+    ___item = ___item[-1 -0:0]
+    ___item = ___item[-1 -0:-1 -0]
+    ___item = ___item[-1 -0:]
+    ___item = ___item[0:0]
+    ___item = ___item[0:-1 -0]
+    ___item = ___item[0:]
 
 def main():
     try:

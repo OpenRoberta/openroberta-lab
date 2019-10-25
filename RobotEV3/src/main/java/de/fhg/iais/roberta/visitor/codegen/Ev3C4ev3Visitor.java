@@ -182,26 +182,6 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
-    @Override
-    public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
-        this.sb.append("___" + var.getName());
-        if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-            this.sb.append(" = ");
-            if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
-                ExprList<Void> list = (ExprList<Void>) var.getValue();
-                if ( list.get().size() == 2 ) {
-                    list.get().get(1).accept(this);
-                } else {
-                    list.get().get(0).accept(this);
-                }
-            } else {
-                var.getValue().accept(this);
-            }
-        }
-        return null;
-    }
-
     private void generateSensorInitialization() {
         this.sb.append("NEPOSetAllSensors(").append(getSensorsInitializationArguments()).append(");");
         nlIndent();

@@ -9,7 +9,12 @@ public class ForCountStmtTest extends Ev3LejosAstTest {
 
     @Test
     public void forCountStmt() throws Exception {
-        String a = "\nfor ( float i = 1; i < 10; i += 15 ) {\n" + "}\n" + "for ( float i = 1; i < 10; i += 15 ) {\n" + "    System.out.println(\"\");\n" + "}}";
+        String a =
+            "\nfor ( float ___i = 1; ___i < 10; ___i += 15 ) {\n"
+                + "}\n"
+                + "for ( float ___i = 1; ___i < 10; ___i += 15 ) {\n"
+                + "    System.out.println(\"\");\n"
+                + "}}";
 
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/stmt/forCount_stmt.xml", false);
     }

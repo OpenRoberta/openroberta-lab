@@ -9,7 +9,7 @@ public class MathModuloTest extends Ev3LejosAstTest {
 
     @Test
     public void Test() throws Exception {
-        String a = "floatvariablenName=1%0;publicvoidrun()throwsException{}";
+        String a = "float___variablenName=1%0;publicvoidrun()throwsException{}";
 
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/math/math_modulo.xml", false);
     }

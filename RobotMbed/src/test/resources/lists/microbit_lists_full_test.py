@@ -7,50 +7,50 @@ class ContinueLoop(Exception): pass
 
 timer1 = microbit.running_time()
 
-item = [0, 0, 0]
-item2 = 0
-item3 = True
+___item = [0, 0, 0]
+___item2 = 0
+___item3 = True
 def run():
-    global timer1, item, item2, item3
-    item = item[0:0]
-    item2 = len( item)
-    item3 = not item
-    item = [0] * 5
-    item[0] = 0
-    item.insert(0, 0)
-    item[-1 -0] = 0
-    item.insert(-1 -0, 0)
-    item[0] = 0
-    item.insert(0, 0)
-    item[-1] = 0
-    item.insert(-1, 0)
-    item[0] = 0
-    item.insert(0, 0)
-    item2 = item[0]
-    item2 = item[-1 -0]
-    item2 = item[0]
-    item2 = item[-1]
-    item2 = item[0]
-    item2 = item.pop(0)
-    item2 = item.pop(-1 -0)
-    item2 = item.pop(0)
-    item2 = item.pop(-1)
-    item2 = item.pop(0)
-    item.pop(0)
-    item.pop(-1 -0)
-    item.pop(0)
-    item.pop(-1)
-    item.pop(0)
-    item2 = item.index(0)
-    item2 = (len(item) - 1) - item[::-1].index(0)
-    item = item[0:-1 -0]
-    item = item[0:]
-    item = item[-1 -0:0]
-    item = item[-1 -0:-1 -0]
-    item = item[-1 -0:]
-    item = item[0:0]
-    item = item[0:-1 -0]
-    item = item[0:]
+    global timer1, ___item, ___item2, ___item3
+    ___item = ___item[0:0]
+    ___item2 = len( ___item)
+    ___item3 = not ___item
+    ___item = [0] * 5
+    ___item[0] = 0
+    ___item.insert(0, 0)
+    ___item[-1 -0] = 0
+    ___item.insert(-1 -0, 0)
+    ___item[0] = 0
+    ___item.insert(0, 0)
+    ___item[-1] = 0
+    ___item.insert(-1, 0)
+    ___item[0] = 0
+    ___item.insert(0, 0)
+    ___item2 = ___item[0]
+    ___item2 = ___item[-1 -0]
+    ___item2 = ___item[0]
+    ___item2 = ___item[-1]
+    ___item2 = ___item[0]
+    ___item2 = ___item.pop(0)
+    ___item2 = ___item.pop(-1 -0)
+    ___item2 = ___item.pop(0)
+    ___item2 = ___item.pop(-1)
+    ___item2 = ___item.pop(0)
+    ___item.pop(0)
+    ___item.pop(-1 -0)
+    ___item.pop(0)
+    ___item.pop(-1)
+    ___item.pop(0)
+    ___item2 = ___item.index(0)
+    ___item2 = (len(___item) - 1) - ___item[::-1].index(0)
+    ___item = ___item[0:-1 -0]
+    ___item = ___item[0:]
+    ___item = ___item[-1 -0:0]
+    ___item = ___item[-1 -0:-1 -0]
+    ___item = ___item[-1 -0:]
+    ___item = ___item[0:0]
+    ___item = ___item[0:-1 -0]
+    ___item = ___item[0:]
 
 def main():
     try:

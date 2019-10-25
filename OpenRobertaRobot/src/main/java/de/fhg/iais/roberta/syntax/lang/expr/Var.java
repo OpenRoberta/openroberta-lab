@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 public class Var<V> extends Expr<V> {
     private final BlocklyType typeVar;
     private final String name;
+    private final static String CODE_SAFE_PREFIX = "___";
 
     private Var(BlocklyType typeVar, String value, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("VAR"), properties, comment);
@@ -43,7 +44,7 @@ public class Var<V> extends Expr<V> {
      * @return read only object of class {@link Var}
      */
     public static <V> Var<V> make(BlocklyType typeVar, String value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Var<V>(typeVar, value, properties, comment);
+        return new Var<>(typeVar, value, properties, comment);
     }
 
     /**
@@ -51,6 +52,10 @@ public class Var<V> extends Expr<V> {
      */
     public String getValue() {
         return this.name;
+    }
+
+    public String getCodeSafeName() {
+        return CODE_SAFE_PREFIX + this.name;
     }
 
     @Override

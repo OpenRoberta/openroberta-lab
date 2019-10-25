@@ -79,10 +79,10 @@ public class IfStmtTest extends Ev3LejosAstTest {
                 + "    }\n"
                 + "}\n"
                 + "if ( false ) {\n"
-                + "    item = 6 + 8;\n"
-                + "    item = 6 + 8;\n"
+                + "    ___item = 6 + 8;\n"
+                + "    ___item = 6 + 8;\n"
                 + "} else {\n"
-                + "    item = 3 * 9;\n"
+                + "    ___item = 3 * 9;\n"
                 + "}}";
 
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/stmt/if_stmt3.xml", false);

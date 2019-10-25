@@ -167,7 +167,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                 } else {
                     this.sb.append(", ");
                 }
-                this.sb.append(vd.getName());
+                this.sb.append(vd.getCodeSafeName());
             }
         }
         return null;

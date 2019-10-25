@@ -19,68 +19,68 @@ _brickConfiguration = {
 }
 hal = Hal(_brickConfiguration)
 
-item = [0, 0, 0]
-item2 = [True, True, True]
-item3 = ["1", "2", "3"]
-item4 = ['white', 'white', 'white']
-item5 = [None, None, None]
-item6 = 0
-item7 = True
-item8 = "123"
-item9 = 'white'
-item10 = None
+___item = [0, 0, 0]
+___item2 = [True, True, True]
+___item3 = ["1", "2", "3"]
+___item4 = ['white', 'white', 'white']
+___item5 = [None, None, None]
+___item6 = 0
+___item7 = True
+___item8 = "123"
+___item9 = 'white'
+___item10 = None
 def run():
-    global item, item2, item8, item7, item9, item4, item3, item10, item6, item5
-    item[0] = 0
-    item[-1 -0] = 0
-    item[0] = 0
-    item[-1] = 0
-    item[0] = 0
-    item.insert(0, 0)
-    item.insert(-1 -0, 0)
-    item.insert(0, 0)
-    item.insert(-1, 0)
-    item.insert(0, 0)
-    item2[0] = True
-    item2[-1 -0] = True
-    item2[0] = True
-    item2[-1] = True
-    item2[0] = True
-    item2.insert(0, True)
-    item2.insert(-1 -0, True)
-    item2.insert(0, True)
-    item2.insert(-1, True)
-    item2.insert(0, True)
-    item3[0] = "123"
-    item3[-1 -0] = "123"
-    item3[0] = "123"
-    item3[-1] = "123"
-    item3[0] = "123"
-    item3.insert(0, "123")
-    item3.insert(-1 -0, "123")
-    item3.insert(0, "123")
-    item3.insert(-1, "123")
-    item3.insert(0, "123")
-    item4[0] = 'black'
-    item4[-1 -0] = 'black'
-    item4[0] = 'black'
-    item4[-1] = 'black'
-    item4[0] = 'black'
-    item4.insert(0, 'black')
-    item4.insert(-1 -0, 'black')
-    item4.insert(0, 'black')
-    item4.insert(-1, 'black')
-    item4.insert(0, 'black')
-    item5[0] = hal.waitForConnection()
-    item5[-1 -0] = hal.waitForConnection()
-    item5[0] = hal.waitForConnection()
-    item5[-1] = hal.waitForConnection()
-    item5[0] = hal.waitForConnection()
-    item5.insert(0, hal.waitForConnection())
-    item5.insert(-1 -0, hal.waitForConnection())
-    item5.insert(0, hal.waitForConnection())
-    item5.insert(-1, hal.waitForConnection())
-    item5.insert(0, hal.waitForConnection())
+    global ___item, ___item2, ___item3, ___item4, ___item5, ___item6, ___item7, ___item8, ___item9, ___item10
+    ___item[0] = 0
+    ___item[-1 -0] = 0
+    ___item[0] = 0
+    ___item[-1] = 0
+    ___item[0] = 0
+    ___item.insert(0, 0)
+    ___item.insert(-1 -0, 0)
+    ___item.insert(0, 0)
+    ___item.insert(-1, 0)
+    ___item.insert(0, 0)
+    ___item2[0] = True
+    ___item2[-1 -0] = True
+    ___item2[0] = True
+    ___item2[-1] = True
+    ___item2[0] = True
+    ___item2.insert(0, True)
+    ___item2.insert(-1 -0, True)
+    ___item2.insert(0, True)
+    ___item2.insert(-1, True)
+    ___item2.insert(0, True)
+    ___item3[0] = "123"
+    ___item3[-1 -0] = "123"
+    ___item3[0] = "123"
+    ___item3[-1] = "123"
+    ___item3[0] = "123"
+    ___item3.insert(0, "123")
+    ___item3.insert(-1 -0, "123")
+    ___item3.insert(0, "123")
+    ___item3.insert(-1, "123")
+    ___item3.insert(0, "123")
+    ___item4[0] = 'black'
+    ___item4[-1 -0] = 'black'
+    ___item4[0] = 'black'
+    ___item4[-1] = 'black'
+    ___item4[0] = 'black'
+    ___item4.insert(0, 'black')
+    ___item4.insert(-1 -0, 'black')
+    ___item4.insert(0, 'black')
+    ___item4.insert(-1, 'black')
+    ___item4.insert(0, 'black')
+    ___item5[0] = hal.waitForConnection()
+    ___item5[-1 -0] = hal.waitForConnection()
+    ___item5[0] = hal.waitForConnection()
+    ___item5[-1] = hal.waitForConnection()
+    ___item5[0] = hal.waitForConnection()
+    ___item5.insert(0, hal.waitForConnection())
+    ___item5.insert(-1 -0, hal.waitForConnection())
+    ___item5.insert(0, hal.waitForConnection())
+    ___item5.insert(-1, hal.waitForConnection())
+    ___item5.insert(0, hal.waitForConnection())
 
 def main():
     try:

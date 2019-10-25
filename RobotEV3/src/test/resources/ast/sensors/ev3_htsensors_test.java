@@ -43,10 +43,10 @@ public class Test {
         }
     }
     
-    float item2 = hal.getHiTecIRSeekerModulated(SensorPort.S2);
-    float item = hal.getHiTecIRSeekerUnmodulated(SensorPort.S2);
-    float item3 = hal.getHiTecCompassAngle(SensorPort.S1);
-    float item4 = hal.getHiTecCompassCompass(SensorPort.S1);
+    float ___item2 = hal.getHiTecIRSeekerModulated(SensorPort.S2);
+    float ___item = hal.getHiTecIRSeekerUnmodulated(SensorPort.S2);
+    float ___item3 = hal.getHiTecCompassAngle(SensorPort.S1);
+    float ___item4 = hal.getHiTecCompassCompass(SensorPort.S1);
     
     public void run() throws Exception {
 

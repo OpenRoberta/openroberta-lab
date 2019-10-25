@@ -46,6 +46,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
      * Creates the code for the brick configuration.
      * Specify the used components in a 6 element list. First 2 are used for Actors, last 4 for Sensors.
      * If a component is left empty the line is not generated.
+     *
      * @param usedComponents a 6 element list with component types, empty component types are ignored.
      * @return the code of the brick configuration
      */
@@ -55,24 +56,22 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
         sb.append("    brickConfiguration = new EV3Configuration.Builder()\n");
         sb.append("    .setWheelDiameter(5.6)\n");
         sb.append("    .setTrackWidth(17.0)\n");
-        if (!usedComponents.get(0).isEmpty()) {
-            sb.append("    .addActor(ActorPort.A, new Actor(ActorType." + usedComponents.get(0) + ", true, " +
-                      "DriveDirection.FOREWARD, MotorSide.NONE))\n");
+        if ( !usedComponents.get(0).isEmpty() ) {
+            sb.append("    .addActor(ActorPort.A, new Actor(ActorType." + usedComponents.get(0) + ", true, " + "DriveDirection.FOREWARD, MotorSide.NONE))\n");
         }
-        if (!usedComponents.get(1).isEmpty()) {
-            sb.append("    .addActor(ActorPort.B, new Actor(ActorType." + usedComponents.get(1) + ", true, " +
-                      "DriveDirection.FOREWARD, MotorSide.RIGHT))\n");
+        if ( !usedComponents.get(1).isEmpty() ) {
+            sb.append("    .addActor(ActorPort.B, new Actor(ActorType." + usedComponents.get(1) + ", true, " + "DriveDirection.FOREWARD, MotorSide.RIGHT))\n");
         }
-        if (!usedComponents.get(2).isEmpty()) {
-            sb.append("    .addSensor(SensorPort.S1, new Sensor(SensorType." + usedComponents.get(2) +"))\n");
+        if ( !usedComponents.get(2).isEmpty() ) {
+            sb.append("    .addSensor(SensorPort.S1, new Sensor(SensorType." + usedComponents.get(2) + "))\n");
         }
-        if (!usedComponents.get(3).isEmpty()) {
-            sb.append("    .addSensor(SensorPort.S2, new Sensor(SensorType." + usedComponents.get(3) +"))\n");
+        if ( !usedComponents.get(3).isEmpty() ) {
+            sb.append("    .addSensor(SensorPort.S2, new Sensor(SensorType." + usedComponents.get(3) + "))\n");
         }
-        if (!usedComponents.get(4).isEmpty()) {
-            sb.append("    .addSensor(SensorPort.S3, new Sensor(SensorType." + usedComponents.get(4) +"))\n");
+        if ( !usedComponents.get(4).isEmpty() ) {
+            sb.append("    .addSensor(SensorPort.S3, new Sensor(SensorType." + usedComponents.get(4) + "))\n");
         }
-        if (!usedComponents.get(5).isEmpty()) {
+        if ( !usedComponents.get(5).isEmpty() ) {
             sb.append("    .addSensor(SensorPort.S4, new Sensor(SensorType." + usedComponents.get(5) + "))\n");
         }
         sb.append("    .build();\n\n");
@@ -164,7 +163,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + HAL
                 + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
                 + "    public void run() throwsException {\n"
-                + "        for ( float k0 = 0; k0 < 10; k0+=1 ) {\n"
+                + "        for ( float ___k0 = 0; ___k0 < 10; ___k0+=1 ) {\n"
                 + "            hal.drawText(\"Hallo\", 0, 3);\n"
                 + "        }\n"
                 + "    }\n"
@@ -201,7 +200,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "        }\n"
                 + "        hal.playFile(1);\n"
                 + "        hal.setVolume(50);\n"
-                + "        for ( float i = 1; i < 10; i += 1 ) {\n\n"
+                + "        for ( float ___i = 1; ___i < 10; ___i += 1 ) {\n\n"
                 + "           hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);"
                 + "        }\n"
                 + "    }\n"
@@ -277,8 +276,10 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + ", new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));\n"
                 + "private static Map<String, String> predefinedImages = new HashMap<String, String>();\n"
                 + HAL
-            // TODO reset Gyro on EV3 does not add gyro to the used sensors
-                + createMainMethod(Arrays.asList("MEDIUM", "LARGE", "TOUCH", "", "INFRARED", "ULTRASONIC"), "predefinedImages.put(\"OLDGLASSES\", \"" + IMG_OLDGLASSES + "\");\n")
+                // TODO reset Gyro on EV3 does not add gyro to the used sensors
+                + createMainMethod(
+                    Arrays.asList("MEDIUM", "LARGE", "TOUCH", "", "INFRARED", "ULTRASONIC"),
+                    "predefinedImages.put(\"OLDGLASSES\", \"" + IMG_OLDGLASSES + "\");\n")
                 + "    public void run() throwsException {\n"
                 + "        if ( 5 < hal.getRegulatedMotorSpeed(ActorPort.B) ) {\n\n\n"
                 + "            hal.turnOnRegulatedMotor(ActorPort.B,30);\n"
@@ -399,14 +400,14 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + USED_SENSORS_DECL
                 + HAL
                 + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
-                + "        float item = 10;\n"
-                + "        String item2 = \"TTTT\";\n"
-                + "        boolean item3 = true;\n"
+                + "        float ___item = 10;\n"
+                + "        String ___item2 = \"TTTT\";\n"
+                + "        boolean ___item3 = true;\n"
                 + "    public void run() throwsException {\n"
-                + "        hal.drawText(String.valueOf(item), 0, 0);\n"
-                + "        hal.drawText(String.valueOf(item2), 0, 0);\n"
-                + "        hal.drawText(String.valueOf(item3), 0, 0);\n"
-                + "        item3 = false;\n"
+                + "        hal.drawText(String.valueOf(___item), 0, 0);\n"
+                + "        hal.drawText(String.valueOf(___item2), 0, 0);\n"
+                + "        hal.drawText(String.valueOf(___item3), 0, 0);\n"
+                + "        ___item3 = false;\n"
                 + "    }\n"
                 + "}\n";
 
@@ -429,9 +430,9 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + USED_SENSORS_DECL
                 + "private static Map<String, String> predefinedImages = new HashMap<String, String>();\n"
                 + HAL
-            // TODO test actually cannot work as only one motor "right" is connected in the configuration, a "left" motor is missing
+                // TODO test actually cannot work as only one motor "right" is connected in the configuration, a "left" motor is missing
                 + createMainMethod(Arrays.asList("", "LARGE", "", "", "", ""), "predefinedImages.put(\"OLDGLASSES\", \"" + IMG_OLDGLASSES + "\");\n")
-                + "        float variablenName = 0;\n"
+                + "        float ___variablenName = 0;\n"
                 + "    public void run() throwsException {\n"
 
                 + "hal.regulatedDrive(DriveDirection.FOREWARD,50);"
@@ -458,16 +459,16 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + USED_SENSORS_DECL
                 + HAL
                 + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
-                + "        floatitem=0;"
-                + "        Stringitem2=\"ss\";"
-                + "        booleanitem3=true;"
-                + "        ArrayList<Float>item4=newArrayList<>(Arrays.asList((float) 1, (float) 2, (float) 3));"
-                + "        ArrayList<String>item5=newArrayList<>(Arrays.<String>asList(\"a\",\"b\"));"
-                + "        ArrayList<Boolean>item6=newArrayList<>(Arrays.<Boolean>asList(true,false));"
-                + "        ArrayList<PickColor>item7=newArrayList<>(Arrays.<PickColor>asList(PickColor.RED,PickColor.BLACK,PickColor.NONE));"
-                + "        PickColoritem8=PickColor.NONE;"
-                + "        NXTConnectionitem9=hal.waitForConnection();"
-                + "        ArrayList<NXTConnection>item10=newArrayList<>(Arrays.<NXTConnection>asList(hal.waitForConnection()));"
+                + "        float___item=0;"
+                + "        String___item2=\"ss\";"
+                + "        boolean___item3=true;"
+                + "        ArrayList<Float>___item4=newArrayList<>(Arrays.asList((float) 1, (float) 2, (float) 3));"
+                + "        ArrayList<String>___item5=newArrayList<>(Arrays.<String>asList(\"a\",\"b\"));"
+                + "        ArrayList<Boolean>___item6=newArrayList<>(Arrays.<Boolean>asList(true,false));"
+                + "        ArrayList<PickColor>___item7=newArrayList<>(Arrays.<PickColor>asList(PickColor.RED,PickColor.BLACK,PickColor.NONE));"
+                + "        PickColor___item8=PickColor.NONE;"
+                + "        NXTConnection___item9=hal.waitForConnection();"
+                + "        ArrayList<NXTConnection>___item10=newArrayList<>(Arrays.<NXTConnection>asList(hal.waitForConnection()));"
                 + "    public void run() throwsException {\n"
                 + "    }\n"
                 + "}\n";
@@ -485,8 +486,8 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + USED_SENSORS_DECL
                 + "private static Map<String, String> predefinedImages = new HashMap<String, String>();\n"
                 + HAL
-                + "    private void macheEtwas(float x, float x2) {\n"
-                + "        hal.drawPicture(predefinedImages.get(\"OLDGLASSES\"), x, x2);\n"
+                + "    private void macheEtwas(float ___x, float ___x2) {\n"
+                + "        hal.drawPicture(predefinedImages.get(\"OLDGLASSES\"), ___x, ___x2);\n"
                 + "    }"
                 + createMainMethod(Arrays.asList("", "LARGE", "", "", "", ""), "predefinedImages.put(\"OLDGLASSES\", \"" + IMG_OLDGLASSES + "\");\n")
                 + "    public void run() throwsException {\n"
@@ -530,8 +531,8 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + USED_SENSORS_DECL
                 + HAL
-                + "    private void test(boolean x) {\n"
-                + "        if (x) return;"
+                + "    private void test(boolean ___x) {\n"
+                + "        if (___x) return;"
                 + "        hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
                 + "    }"
                 + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
@@ -553,16 +554,16 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + USED_SENSORS_DECL
                 + HAL
-                + "    private void test1(float x, float x2) {\n"
-                + "        hal.drawText(\"Hallo\", x, x2);\n"
+                + "    private void test1(float ___x, float ___x2) {\n"
+                + "        hal.drawText(\"Hallo\", ___x, ___x2);\n"
                 + "    }\n\n"
                 + "    private void test2() {\n"
-                + "        if (variablenName2) return;"
+                + "        if (___variablenName2) return;"
                 + "        hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
                 + "    }"
                 + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
-                + "    float variablenName=0;\n"
-                + "    boolean variablenName2=true;\n"
+                + "    float ___variablenName=0;\n"
+                + "    boolean ___variablenName2=true;\n"
                 + "    public void run() throwsException {\n"
                 + "        test1(0, 0);"
                 + "        test2();"
@@ -582,14 +583,14 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + USED_SENSORS_DECL
                 + HAL
-                + "    private float test(float x, ArrayList<String> x2) {\n"
-                + "        hal.drawText(String.valueOf(x2), x, 0);\n"
-                + "        return x;\n"
+                + "    private float test(float ___x, ArrayList<String> ___x2) {\n"
+                + "        hal.drawText(String.valueOf(___x2), ___x, 0);\n"
+                + "        return ___x;\n"
                 + "    }"
                 + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
-                + "    ArrayList<String> variablenName=newArrayList<>(Arrays.<String>asList(\"a\", \"b\", \"c\"));\n"
+                + "    ArrayList<String> ___variablenName=newArrayList<>(Arrays.<String>asList(\"a\", \"b\", \"c\"));\n"
                 + "    public void run() throwsException {\n"
-                + "        hal.drawText(String.valueOf(test(0, variablenName)), 0, 0);"
+                + "        hal.drawText(String.valueOf(test(0, ___variablenName)), 0, 0);"
                 + "    }\n\n"
                 + "}\n";
 
@@ -607,11 +608,11 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + USED_SENSORS_DECL
                 + HAL
                 + "    private PickColor test() {\n"
-                + "        hal.drawText(String.valueOf(variablenName), 0, 0);\n"
+                + "        hal.drawText(String.valueOf(___variablenName), 0, 0);\n"
                 + "        return PickColor.NONE;\n"
                 + "    }"
                 + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
-                + "    ArrayList<String> variablenName=newArrayList<>(Arrays.<String>asList(\"a\", \"b\", \"c\"));\n"
+                + "    ArrayList<String> ___variablenName=newArrayList<>(Arrays.<String>asList(\"a\", \"b\", \"c\"));\n"
                 + "    public void run() throwsException {\n"
                 + "        hal.drawText(String.valueOf(test()), 0, 0);"
                 + "    }\n\n"
@@ -632,11 +633,11 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + HAL
                 + "    private PickColor test() {\n"
                 + "        if (true) return PickColor.RED;\n"
-                + "        hal.drawText(String.valueOf(variablenName), 0, 0);\n"
+                + "        hal.drawText(String.valueOf(___variablenName), 0, 0);\n"
                 + "        return PickColor.NONE;\n"
                 + "    }"
                 + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
-                + "    ArrayList<String> variablenName=newArrayList<>(Arrays.<String>asList(\"a\", \"b\", \"c\"));\n"
+                + "    ArrayList<String> ___variablenName=newArrayList<>(Arrays.<String>asList(\"a\", \"b\", \"c\"));\n"
                 + "    public void run() throwsException {\n"
                 + "        hal.drawText(String.valueOf(test()), 0, 0);"
                 + "    }\n\n"
@@ -657,9 +658,9 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + USED_SENSORS_DECL
                 + HAL
                 + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
-                + "    String message=\"exit\";\n"
+                + "    String ___message=\"exit\";\n"
                 + "    public void run() throwsException {\n"
-                + "        if (message.equals(\"exit\")) {\n"
+                + "        if (___message.equals(\"exit\")) {\n"
                 + "            hal.drawText(\"done\", 0, 0);"
                 + "        }\n"
                 + "    }\n\n"
@@ -678,8 +679,8 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + USED_SENSORS_DECL
                 + HAL
                 + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
-                + "    float item;\n"
-                + "    String item2=\"cc\";\n"
+                + "    float ___item;\n"
+                + "    String ___item2=\"cc\";\n"
                 + "    public void run() throwsException {\n"
                 + "    }\n\n"
                 + "}\n";
@@ -703,10 +704,10 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + USED_SENSORS_DECL
                 + HAL
                 + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
-                + "ArrayList<PickColor>variablenName=newArrayList<>(Arrays.<PickColor>asList(PickColor.NONE,PickColor.RED,PickColor.BLUE));\n"
+                + "ArrayList<PickColor>___variablenName=newArrayList<>(Arrays.<PickColor>asList(PickColor.NONE,PickColor.RED,PickColor.BLUE));\n"
                 + "    public void run() throwsException {\n"
-                + "        for (PickColorvariablenName2 : variablenName) {\n"
-                + "            hal.drawText(String.valueOf(variablenName2),0,0);\n"
+                + "        for (PickColor___variablenName2 : ___variablenName) {\n"
+                + "            hal.drawText(String.valueOf(___variablenName2),0,0);\n"
                 + "        }\n"
                 + "    }\n"
                 + "}\n";
@@ -810,7 +811,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "hal.waitFor(15);"
                 + "}"
                 + "}"
-                + "for (float i = 1; i<10; i+=1) {"
+                + "for (float ___i = 1; ___i<10; ___i+=1) {"
                 + "}}}"
                 + "hal.closeResources();"
                 + "}"
@@ -833,16 +834,16 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + BRICK_CONFIGURATION_DECL
                 + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
                 + HAL
-            // TODO test actually cannot work as only one motor "right" is connected in the configuration, a "left" motor is missing
+                // TODO test actually cannot work as only one motor "right" is connected in the configuration, a "left" motor is missing
                 + createMainMethod(Arrays.asList("", "LARGE", "TOUCH", "", "", ""), "")
-                + "ArrayList<Float>item2=newArrayList<>(Arrays.asList((float)0,(float)0,(float)0));"
+                + "ArrayList<Float>___item2=newArrayList<>(Arrays.asList((float)0,(float)0,(float)0));"
                 + "public void run() throwsException {\n"
                 + "hal.startLogging();"
                 + "if(true){"
                 + "while(true){"
                 + "if ( 30 == 20 ) {"
                 + "break;"
-                + "} else if(30==12){continue;}}}for(floati=1;i<10;i+=1){hal.driveDistance(DriveDirection.FOREWARD,30,20);if(30==20){continue;}elseif(30==12){break;}}for(floatitem:item2){hal.driveDistance(DriveDirection.FOREWARD,30,20);if(30==20){continue;}elseif(30==20){break;}}while(true){if(30==20){continue;}elseif(30==20){break;}}for(floatk0=0;k0<10;k0+=1){if(30==20){break;}elseif(30==20){continue;}}while(true){if(hal.isPressed(SensorPort.S1)==true){break;}if(hal.isPressed(SensorPort.S1)==true){break;}hal.waitFor(15);}hal.closeResources();}}";
+                + "} else if(30==12){continue;}}}for(float___i=1;___i<10;___i+=1){hal.driveDistance(DriveDirection.FOREWARD,30,20);if(30==20){continue;}elseif(30==12){break;}}for(float___item:___item2){hal.driveDistance(DriveDirection.FOREWARD,30,20);if(30==20){continue;}elseif(30==20){break;}}while(true){if(30==20){continue;}elseif(30==20){break;}}for(float___k0=0;___k0<10;___k0+=1){if(30==20){break;}elseif(30==20){continue;}}while(true){if(hal.isPressed(SensorPort.S1)==true){break;}if(hal.isPressed(SensorPort.S1)==true){break;}hal.waitFor(15);}hal.closeResources();}}";
 
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
@@ -924,8 +925,8 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "}"
                 + "}"
                 + "}"
-                + "for (float i = 1; i<10; i+=1) {"
-                + "if (i < 10) {"
+                + "for (float ___i = 1; ___i<10; ___i+=1) {"
+                + "if (___i < 10) {"
                 + "continue;"
                 + "}}"
                 + "hal.closeResources();"
@@ -967,8 +968,8 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "}"
                 + "hal.waitFor(15);"
                 + "}"
-                + "for (float i = 1; i<10; i+=1) {"
-                + "if (i < 10) {"
+                + "for (float ___i = 1; ___i<10; ___i+=1) {"
+                + "if (___i < 10) {"
                 + "continue;"
                 + "}}}}"
                 + "hal.closeResources();"
@@ -1000,16 +1001,16 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "while(true){"
                 + "while ( true ) {"
                 + "if ( hal.isPressed(SensorPort.S1) == true ) {"
-                + "for (float i = 1; i<10; i+=1) {"
-                + "if (i < 10) {"
+                + "for (float ___i = 1; ___i<10; ___i+=1) {"
+                + "if (___i < 10) {"
                 + "continue;"
                 + "}}"
                 + "if (true) break loop1;"
                 + "break;"
                 + "}"
                 + "if ( hal.isPressed(SensorPort.S1) == true ) {"
-                + "for (float j = 1; j<10; j+=1) {"
-                + "if (j < 10) {"
+                + "for (float ___j = 1; ___j<10; ___j+=1) {"
+                + "if (___j < 10) {"
                 + "continue;"
                 + "}}"
                 + "if (true) continue loop1;"
@@ -1047,8 +1048,8 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "while(true){"
                 + "while ( true ) {"
                 + "if ( hal.isPressed(SensorPort.S1) == true ) {"
-                + "for (float j = 1; j<10; j+=1) {"
-                + "if (j < 10) {"
+                + "for (float ___j = 1; ___j<10; ___j+=1) {"
+                + "if (___j < 10) {"
                 + "continue;"
                 + "}}"
                 + "if (true) continue loop1;"
@@ -1056,7 +1057,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "}"
                 + "if ( hal.isPressed(SensorPort.S1) == true ) {"
                 + "loop3:"
-                + "for (float i = 1; i<10; i+=1) {"
+                + "for (float ___i = 1; ___i<10; ___i+=1) {"
                 + "while (true) {"
                 + "if ( hal.isPressed(SensorPort.S1) == true ) {"
                 + "if (true) continue loop3;"
@@ -1103,8 +1104,8 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "while(true){"
                 + "while ( true ) {"
                 + "if ( hal.isPressed(SensorPort.S1) == true ) {"
-                + "for (float j = 1; j<10; j+=1) {"
-                + "if (j < 10) {"
+                + "for (float ___j = 1; ___j<10; ___j+=1) {"
+                + "if (___j < 10) {"
                 + "continue;"
                 + "}}"
                 + "if (true) continue loop1;"
@@ -1112,7 +1113,7 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "}"
                 + "if ( hal.isPressed(SensorPort.S1) == true ) {"
                 + "loop3:"
-                + "for (float i = 1; i<10; i+=1) {"
+                + "for (float ___i = 1; ___i<10; ___i+=1) {"
                 + "while (true) {"
                 + "if ( hal.isPressed(SensorPort.S1) == true ) {"
                 + "if (true) continue loop3;"
@@ -1174,14 +1175,14 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S3, SensorType.COLOR, ColorSensorMode.COLOUR), new UsedSensor(SensorPort.S3, SensorType.COLOR, ColorSensorMode.RED), new UsedSensor(SensorPort.S3, SensorType.COLOR, ColorSensorMode.AMBIENTLIGHT), new UsedSensor(SensorPort.S3, SensorType.COLOR, ColorSensorMode.RGB)));"
                 + HAL
                 + createMainMethod(Arrays.asList("", "", "", "", "COLOR", ""), "")
-                + "PickColor color = PickColor.WHITE;\n"
-                + "float light = 0;\n"
-                + "ArrayList<Float> rgb = new ArrayList<>(Arrays.asList((float) 0, (float) 0, (float) 0));"
+                + "PickColor ___color = PickColor.WHITE;\n"
+                + "float ___light = 0;\n"
+                + "ArrayList<Float> ___rgb = new ArrayList<>(Arrays.asList((float) 0, (float) 0, (float) 0));"
                 + "public void run() throwsException {\n"
-                + " color = hal.getColorSensorColour(SensorPort.S3);\n"
-                + " light = hal.getColorSensorRed(SensorPort.S3);\n"
-                + " light = hal.getColorSensorAmbient(SensorPort.S3);\n"
-                + " rgb = hal.getColorSensorRgb(SensorPort.S3);\n"
+                + " ___color = hal.getColorSensorColour(SensorPort.S3);\n"
+                + " ___light = hal.getColorSensorRed(SensorPort.S3);\n"
+                + " ___light = hal.getColorSensorAmbient(SensorPort.S3);\n"
+                + " ___rgb = hal.getColorSensorRgb(SensorPort.S3);\n"
                 + "}}\n";
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
@@ -1202,14 +1203,14 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
                 + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S3, SensorType.HT_COLOR, HiTecColorSensorV2Mode.COLOUR), new UsedSensor(SensorPort.S3, SensorType.HT_COLOR, HiTecColorSensorV2Mode.LIGHT), new UsedSensor(SensorPort.S3, SensorType.HT_COLOR, HiTecColorSensorV2Mode.AMBIENTLIGHT), new UsedSensor(SensorPort.S3, SensorType.HT_COLOR, HiTecColorSensorV2Mode.RGB)));"
                 + HAL
                 + createMainMethod(Arrays.asList("", "", "", "", "HT_COLOR", ""), "")
-                + "PickColor color = PickColor.WHITE;\n"
-                + "float light = 0;\n"
-                + "ArrayList<Float> rgb = new ArrayList<>(Arrays.asList((float) 0, (float) 0, (float) 0));"
+                + "PickColor ___color = PickColor.WHITE;\n"
+                + "float ___light = 0;\n"
+                + "ArrayList<Float> ___rgb = new ArrayList<>(Arrays.asList((float) 0, (float) 0, (float) 0));"
                 + "public void run() throwsException {\n"
-                + " color = hal.getHiTecColorSensorV2Colour(SensorPort.S3);\n"
-                + " light = hal.getHiTecColorSensorV2Light(SensorPort.S3);\n"
-                + " light = hal.getHiTecColorSensorV2Ambient(SensorPort.S3);\n"
-                + " rgb = hal.getHiTecColorSensorV2Rgb(SensorPort.S3);\n"
+                + " ___color = hal.getHiTecColorSensorV2Colour(SensorPort.S3);\n"
+                + " ___light = hal.getHiTecColorSensorV2Light(SensorPort.S3);\n"
+                + " ___light = hal.getHiTecColorSensorV2Ambient(SensorPort.S3);\n"
+                + " ___rgb = hal.getHiTecColorSensorV2Rgb(SensorPort.S3);\n"
                 + "}}\n";
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(

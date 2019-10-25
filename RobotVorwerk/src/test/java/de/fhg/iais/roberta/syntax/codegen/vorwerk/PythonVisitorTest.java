@@ -46,18 +46,18 @@ public class PythonVisitorTest extends VorwerkAstTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "\nitem = True\n"
+                + "\n___item = True\n"
                 + "def run():\n"
-                + "    global item\n"
-                + "    item = hal.sample_touch_sensor('left', 'front')\n"
-                + "    item = hal.sample_touch_sensor('left', 'side')\n"
-                + "    item = hal.sample_touch_sensor('right', 'front')\n"
-                + "    item = hal.sample_touch_sensor('right', 'side')\n"
+                + "    global ___item\n"
+                + "    ___item = hal.sample_touch_sensor('left', 'front')\n"
+                + "    ___item = hal.sample_touch_sensor('left', 'side')\n"
+                + "    ___item = hal.sample_touch_sensor('right', 'front')\n"
+                + "    ___item = hal.sample_touch_sensor('right', 'side')\n"
                 + "\n"
                 + MAIN_METHOD;
 
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensors/touch.xml", brickConfiguration, true);
-        ;
+
     }
 
     @Test
@@ -66,24 +66,24 @@ public class PythonVisitorTest extends VorwerkAstTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "\nitem = 0\n"
+                + "\n___item = 0\n"
                 + "def run():\n"
-                + "    global item\n"
-                + "    item = hal.sample_ultrasonic_sensor('left_ultrasonic', 'left')\n"
-                + "    item = hal.sample_ultrasonic_sensor('left_ultrasonic', 'center')\n"
-                + "    item = hal.sample_ultrasonic_sensor('left_ultrasonic', 'right')\n"
-                + "    item = hal.sample_ultrasonic_sensor('center_ultrasonic', 'left')\n"
-                + "    item = hal.sample_ultrasonic_sensor('center_ultrasonic', 'center')\n"
-                + "    item = hal.sample_ultrasonic_sensor('center_ultrasonic', 'right')\n"
-                + "    item = hal.sample_ultrasonic_sensor('right_ultrasonic', 'left')\n"
-                + "    item = hal.sample_ultrasonic_sensor('right_ultrasonic', 'center')\n"
-                + "    item = hal.sample_ultrasonic_sensor('right_ultrasonic', 'right')\n"
+                + "    global ___item\n"
+                + "    ___item = hal.sample_ultrasonic_sensor('left_ultrasonic', 'left')\n"
+                + "    ___item = hal.sample_ultrasonic_sensor('left_ultrasonic', 'center')\n"
+                + "    ___item = hal.sample_ultrasonic_sensor('left_ultrasonic', 'right')\n"
+                + "    ___item = hal.sample_ultrasonic_sensor('center_ultrasonic', 'left')\n"
+                + "    ___item = hal.sample_ultrasonic_sensor('center_ultrasonic', 'center')\n"
+                + "    ___item = hal.sample_ultrasonic_sensor('center_ultrasonic', 'right')\n"
+                + "    ___item = hal.sample_ultrasonic_sensor('right_ultrasonic', 'left')\n"
+                + "    ___item = hal.sample_ultrasonic_sensor('right_ultrasonic', 'center')\n"
+                + "    ___item = hal.sample_ultrasonic_sensor('right_ultrasonic', 'right')\n"
                 + "\n"
                 + MAIN_METHOD;
 
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensors/ultrasonic.xml", brickConfiguration, true);
-        ;
+
     }
 
     @Test
@@ -92,18 +92,18 @@ public class PythonVisitorTest extends VorwerkAstTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "\nitem = 0\n"
+                + "\n___item = 0\n"
                 + "def run():\n"
-                + "    global item\n"
-                + "    item = hal.sample_accelerometer_sensor('x')\n"
-                + "    item = hal.sample_accelerometer_sensor('y')\n"
-                + "    item = hal.sample_accelerometer_sensor('z')\n"
+                + "    global ___item\n"
+                + "    ___item = hal.sample_accelerometer_sensor('x')\n"
+                + "    ___item = hal.sample_accelerometer_sensor('y')\n"
+                + "    ___item = hal.sample_accelerometer_sensor('z')\n"
                 + "\n"
                 + MAIN_METHOD;
 
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensors/accelerometer.xml", brickConfiguration, true);
-        ;
+
     }
 
     @Test
@@ -112,17 +112,17 @@ public class PythonVisitorTest extends VorwerkAstTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "\nitem = 0\n"
+                + "\n___item = 0\n"
                 + "def run():\n"
-                + "    global item\n"
-                + "    item = hal.sample_dropoff_sensor('left')\n"
-                + "    item = hal.sample_dropoff_sensor('right')\n"
+                + "    global ___item\n"
+                + "    ___item = hal.sample_dropoff_sensor('left')\n"
+                + "    ___item = hal.sample_dropoff_sensor('right')\n"
                 + "\n"
                 + MAIN_METHOD;
 
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensors/drop_off.xml", brickConfiguration, true);
-        ;
+
     }
 
     @Test
@@ -131,15 +131,15 @@ public class PythonVisitorTest extends VorwerkAstTest {
             "" //
                 + IMPORTS
                 + GLOBALS
-                + "\nitem = 0\n"
+                + "\n___item = 0\n"
                 + "def run():\n"
-                + "    global item\n"
-                + "    item = hal.sample_wall_sensor()\n"
+                + "    global ___item\n"
+                + "    ___item = hal.sample_wall_sensor()\n"
                 + "\n"
                 + MAIN_METHOD;
 
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensors/wall.xml", brickConfiguration, true);
-        ;
+
     }
 
     @Test
@@ -155,7 +155,7 @@ public class PythonVisitorTest extends VorwerkAstTest {
                 + MAIN_METHOD;
 
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/actors/drive.xml", brickConfiguration, true);
-        ;
+
     }
 
     @Test
@@ -170,7 +170,7 @@ public class PythonVisitorTest extends VorwerkAstTest {
                 + MAIN_METHOD;
 
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/actors/stop.xml", brickConfiguration, true);
-        ;
+
     }
 
     @Test
@@ -189,7 +189,7 @@ public class PythonVisitorTest extends VorwerkAstTest {
 
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/actors/play_sound.xml", brickConfiguration, true);
-        ;
+
     }
 
     @Test
@@ -205,7 +205,7 @@ public class PythonVisitorTest extends VorwerkAstTest {
 
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/actors/brush_on.xml", brickConfiguration, true);
-        ;
+
     }
 
     @Test
@@ -221,7 +221,7 @@ public class PythonVisitorTest extends VorwerkAstTest {
 
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/actors/brush_off.xml", brickConfiguration, true);
-        ;
+
     }
 
     @Test
@@ -237,7 +237,7 @@ public class PythonVisitorTest extends VorwerkAstTest {
 
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/actors/vacuum_on.xml", brickConfiguration, true);
-        ;
+
     }
 
     @Test
@@ -253,7 +253,7 @@ public class PythonVisitorTest extends VorwerkAstTest {
 
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/actors/vacuum_off.xml", brickConfiguration, true);
-        ;
+
     }
 
     @Test
@@ -286,6 +286,6 @@ public class PythonVisitorTest extends VorwerkAstTest {
 
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/actors/motor_stop.xml", brickConfiguration, true);
-        ;
+
     }
 }

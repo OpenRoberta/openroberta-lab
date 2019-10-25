@@ -60,7 +60,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar()));
-        this.sb.append(whitespace() + "___" + var.getName());
+        this.sb.append(whitespace() + var.getCodeSafeName());
         return null;
     }
 

@@ -9,7 +9,7 @@ public class PythonVisitorTest extends EdisonAstTest {
 
     @Test
     public void visitSoundSensorTest() throws Exception {
-        String expectedResult = "item=Trueitem=Ed.ReadClapSensor()==Ed.CLAP_DETECTED";
+        String expectedResult = "___item=True___item=Ed.ReadClapSensor()==Ed.CLAP_DETECTED";
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/syntax/sensor/sound_sensor.xml", false);
     }
 
@@ -29,7 +29,7 @@ public class PythonVisitorTest extends EdisonAstTest {
 
     @Test
     public void visitMathOnListFunctTest() throws Exception {
-        String expectedResult = "item=Ed.List(3,[1,2,3])\n" + "item2=0\n" + "item2=sum(item)";
+        String expectedResult = "___item=Ed.List(3,[1,2,3])\n" + "___item2=0\n" + "___item2=sum(___item)";
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/syntax/math/math_on_list.xml", false);
     }
 
@@ -55,39 +55,39 @@ public class PythonVisitorTest extends EdisonAstTest {
     @Test
     public void visitMathNumPropFunctTest() throws Exception {
         //even
-        String expectedResult = "item=True\n\nitem=(42%2)==0";
+        String expectedResult = "___item=True\n\n___item=(42%2)==0";
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/syntax/math/num_prop_1.xml", false);
 
         //odd
-        expectedResult = "item=True\n\nitem=(42%2)==1";
+        expectedResult = "___item=True\n\n___item=(42%2)==1";
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/syntax/math/num_prop_2.xml", false);
 
         //prime
-        expectedResult = "item=True\n\nitem=_isPrime(42)";
+        expectedResult = "___item=True\n\n___item=_isPrime(42)";
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/syntax/math/num_prop_3.xml", false);
 
         //positive
-        expectedResult = "item=True\n\nitem=42>0";
+        expectedResult = "___item=True\n\n___item=42>0";
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/syntax/math/num_prop_4.xml", false);
 
         //negative
-        expectedResult = "item=True\n\nitem=42<0";
+        expectedResult = "___item=True\n\n___item=42<0";
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/syntax/math/num_prop_5.xml", false);
 
         //divisible by
-        expectedResult = "item=True\n\nitem=(42%13)==0";
+        expectedResult = "___item=True\n\n___item=(42%13)==0";
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/syntax/math/num_prop_6.xml", false);
     }
 
     @Test
     public void visitListCreateTest() throws Exception {
-        String expectedResult = "item=Ed.List(4,[5,3,0,4])";
+        String expectedResult = "___item=Ed.List(4,[5,3,0,4])";
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/syntax/lists/list_create.xml", false);
     }
 
     @Test
     public void visitKeysSensorTest() throws Exception {
-        String expectedResult = "item=True\n\nitem=Ed.ReadKeypad()==Ed.KEYPAD_ROUND\nitem=Ed.ReadKeypad()==Ed.KEYPAD_TRIANGLE";
+        String expectedResult = "___item=True\n\n___item=Ed.ReadKeypad()==Ed.KEYPAD_ROUND\n___item=Ed.ReadKeypad()==Ed.KEYPAD_TRIANGLE";
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/syntax/sensor/keys.xml", false);
     }
 
@@ -100,22 +100,22 @@ public class PythonVisitorTest extends EdisonAstTest {
     @Test
     public void visitInfraredSensorTest() throws Exception {
         String expectedResult =
-            "irvar=True"
-                + "irvar=_obstacleDetection(Ed.OBSTACLE_LEFT)"
-                + "irvar=_obstacleDetection(Ed.OBSTACLE_AHEAD)"
-                + "irvar=_obstacleDetection(Ed.OBSTACLE_RIGHT)";
+            "___irvar=True"
+                + "___irvar=_obstacleDetection(Ed.OBSTACLE_LEFT)"
+                + "___irvar=_obstacleDetection(Ed.OBSTACLE_AHEAD)"
+                + "___irvar=_obstacleDetection(Ed.OBSTACLE_RIGHT)";
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/syntax/sensor/infrared.xml", false);
     }
 
     @Test
     public void visitIRSeekerSensorTest() throws Exception {
-        String expectedResult = "item=0item=_irSeek(1)";
+        String expectedResult = "___item=0___item=_irSeek(1)";
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/syntax/sensor/irseeker.xml", false);
     }
 
     @Test
     public void visitLightSensorTest() throws Exception {
-        String expectedResult = "item=0" + "item=Ed.ReadLeftLightLevel()/10" + "item=Ed.ReadRightLightLevel()/10" + "item=Ed.ReadLineTracker()/10";
+        String expectedResult = "___item=0" + "___item=Ed.ReadLeftLightLevel()/10" + "___item=Ed.ReadRightLightLevel()/10" + "___item=Ed.ReadLineTracker()/10";
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/syntax/sensor/light.xml", false);
     }
 
@@ -170,7 +170,7 @@ public class PythonVisitorTest extends EdisonAstTest {
 
     @Test
     public void visitLengthOfIsEmptyFunctTest() throws Exception {
-        String expectedResult = "item=len(Ed.List(0,[]))";
+        String expectedResult = "___item=len(Ed.List(0,[]))";
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/syntax/lists/length_of_is_empty.xml", false);
     }
 
@@ -182,13 +182,13 @@ public class PythonVisitorTest extends EdisonAstTest {
 
     @Test
     public void visitListGetIndexTest() throws Exception {
-        String expectedResult = "item=Ed.List(1,[-30])item2=0item2=item[0]";
+        String expectedResult = "___item=Ed.List(1,[-30])___item2=0___item2=___item[0]";
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/syntax/lists/get_index.xml", false);
     }
 
     @Test
     public void visitListSetIndexTest() throws Exception {
-        String expectedResult = "item=Ed.List(2,[3,9])\n\nitem[1]=7";
+        String expectedResult = "___item=Ed.List(2,[3,9])\n\n___item[1]=7";
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/syntax/lists/set_index.xml", false);
     }
 

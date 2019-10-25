@@ -165,7 +165,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         if ( var.getTypeVar().isArray() && var.getValue().getKind().hasName("EMPTY_EXPR") ) {
             this.sb.append(" &");
         }
-        this.sb.append(whitespace() + "___" + var.getName());
+        this.sb.append(whitespace() + var.getCodeSafeName());
         return null;
     }
 

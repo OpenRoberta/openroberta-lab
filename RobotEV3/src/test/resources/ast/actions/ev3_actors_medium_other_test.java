@@ -43,8 +43,8 @@ public class Test {
         }
     }
     
-    float item = hal.getUnregulatedMotorSpeed(ActorPort.A);
-    float item2 = hal.getRegulatedMotorSpeed(ActorPort.B);
+    float ___item = hal.getUnregulatedMotorSpeed(ActorPort.A);
+    float ___item2 = hal.getRegulatedMotorSpeed(ActorPort.B);
     
     public void run() throws Exception {
 

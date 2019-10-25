@@ -8,12 +8,12 @@ import static de.fhg.iais.roberta.mode.general.ListElementOperations.SET;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import org.antlr.v4.runtime.misc.OrderedHashSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +74,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.AbstractLanguageVisitor;
 public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractPythonVisitor.class);
 
-    protected Set<String> usedGlobalVarInFunctions = new HashSet<>();
+    protected Set<String> usedGlobalVarInFunctions = new OrderedHashSet<>();
 
     /**
      * initialize the Python code generator visitor.
@@ -142,8 +142,8 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        this.usedGlobalVarInFunctions.add(var.getName());
-        this.sb.append(var.getName());
+        this.usedGlobalVarInFunctions.add(var.getCodeSafeName());
+        this.sb.append(var.getCodeSafeName());
         this.sb.append(" = ");
         if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
             if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
@@ -166,7 +166,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     public Void visitBinary(Binary<Void> binary) {
         try {
             VarDeclaration<Void> variablePart = (VarDeclaration<Void>) binary.getLeft();
-            this.sb.append(variablePart.getName());
+            this.sb.append(variablePart.getCodeSafeName());
         } catch ( ClassCastException e ) {
             generateSubExpr(this.sb, false, binary.getLeft(), binary);
         }
@@ -650,7 +650,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
         this.sb.append("def ").append(methodVoid.getMethodName()).append('(');
         List<String> paramList = new ArrayList<>();
         for ( Expr<Void> l : methodVoid.getParameters().get() ) {
-            paramList.add(((VarDeclaration<Void>) l).getName());
+            paramList.add(((VarDeclaration<Void>) l).getCodeSafeName());
         }
         this.sb.append(String.join(", ", paramList));
         this.sb.append("):");
@@ -676,7 +676,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
         this.sb.append("def ").append(methodReturn.getMethodName()).append('(');
         List<String> paramList = new ArrayList<>();
         for ( Expr<Void> l : methodReturn.getParameters().get() ) {
-            paramList.add(((VarDeclaration<Void>) l).getName());
+            paramList.add(((VarDeclaration<Void>) l).getCodeSafeName());
         }
         this.sb.append(String.join(", ", paramList));
         this.sb.append("):");

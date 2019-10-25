@@ -7,19 +7,19 @@ from roberta import Hal
 h = Hal()
 
 
-item = [0, 0, 0]
-item2 = 0
+___item = [0, 0, 0]
+___item2 = 0
 
 def run():
     h.setAutonomousLife('OFF')
-    global item, item2
-    item2 = sum(item)
-    item2 = min(item)
-    item2 = max(item)
-    item2 = float(sum(item)) / len(item)
-    item2 = _median(item)
-    item2 = _standard_deviation(item)
-    item2 = item[0]
+    global ___item, ___item2
+    ___item2 = sum(___item)
+    ___item2 = min(___item)
+    ___item2 = max(___item)
+    ___item2 = float(sum(___item)) / len(___item)
+    ___item2 = _median(___item)
+    ___item2 = _standard_deviation(___item)
+    ___item2 = ___item[0]
 
 def main():
     try:

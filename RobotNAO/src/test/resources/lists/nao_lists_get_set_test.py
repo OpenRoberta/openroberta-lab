@@ -7,37 +7,37 @@ from roberta import Hal
 h = Hal()
 
 
-item = [0, 0, 0]
-item2 = 0
+___item = [0, 0, 0]
+___item2 = 0
 
 def run():
     h.setAutonomousLife('OFF')
-    global item, item2
-    item2 = item[0]
-    item2 = item[-1 -0]
-    item2 = item[0]
-    item2 = item[-1]
-    item2 = item[0]
-    item2 = item.pop(0)
-    item2 = item.pop(-1 -0)
-    item2 = item.pop(0)
-    item2 = item.pop(-1)
-    item2 = item.pop(0)
-    item.pop(0)
-    item.pop(-1 -0)
-    item.pop(0)
-    item.pop(-1)
-    item.pop(0)
-    item[0] = 0
-    item[-1 -0] = 0
-    item[0] = 0
-    item[-1] = 0
-    item[0] = 0
-    item.insert(0, 0)
-    item.insert(-1 -0, 0)
-    item.insert(0, 0)
-    item.insert(-1, 0)
-    item.insert(0, 0)
+    global ___item, ___item2
+    ___item2 = ___item[0]
+    ___item2 = ___item[-1 -0]
+    ___item2 = ___item[0]
+    ___item2 = ___item[-1]
+    ___item2 = ___item[0]
+    ___item2 = ___item.pop(0)
+    ___item2 = ___item.pop(-1 -0)
+    ___item2 = ___item.pop(0)
+    ___item2 = ___item.pop(-1)
+    ___item2 = ___item.pop(0)
+    ___item.pop(0)
+    ___item.pop(-1 -0)
+    ___item.pop(0)
+    ___item.pop(-1)
+    ___item.pop(0)
+    ___item[0] = 0
+    ___item[-1 -0] = 0
+    ___item[0] = 0
+    ___item[-1] = 0
+    ___item[0] = 0
+    ___item.insert(0, 0)
+    ___item.insert(-1 -0, 0)
+    ___item.insert(0, 0)
+    ___item.insert(-1, 0)
+    ___item.insert(0, 0)
 
 def main():
     try:

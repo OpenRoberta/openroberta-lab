@@ -218,7 +218,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
-        this.sb.append("___" + var.getName());
+        this.sb.append(var.getCodeSafeName());
         if ( var.getTypeVar().isArray() ) {
             this.sb.append("[");
             if ( var.getValue().getKind().hasName("EMPTY_EXPR") ) {

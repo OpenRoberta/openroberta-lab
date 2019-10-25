@@ -10,7 +10,7 @@ public class PythonVisitorTest extends NaoAstTest {
     @Test
     public void rgbColorVisit_returnsCorrectPythonCodeConvertingRgb2Hex() throws Exception {
         String correct_code =
-            "item=int(\"{:02x}{:02x}{:02x}\".format(min(max(0,0),255),min(max(100,0),255),min(max(68,0),255),16))defrun():h.setAutonomousLife('ON')globalitem";
+            "___item=int(\"{:02x}{:02x}{:02x}\".format(min(max(0,0),255),min(max(100,0),255),min(max(68,0),255),16))defrun():h.setAutonomousLife('ON')global___item";
 
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, correct_code, "/expr/create_rgb_variable.xml", false);
     }

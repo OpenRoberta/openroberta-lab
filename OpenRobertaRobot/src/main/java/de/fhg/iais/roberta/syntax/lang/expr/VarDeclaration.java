@@ -32,6 +32,7 @@ public class VarDeclaration<V> extends Expr<V> {
     private final Phrase<V> value;
     private final boolean next;
     private final boolean global;
+    private final static String CODE_SAFE_PREFIX = "___";
 
     private VarDeclaration(
         BlocklyType typeVar,
@@ -69,7 +70,7 @@ public class VarDeclaration<V> extends Expr<V> {
         boolean global,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        return new VarDeclaration<V>(typeVar, name, value, next, global, properties, comment);
+        return new VarDeclaration<>(typeVar, name, value, next, global, properties, comment);
     }
 
     /**
@@ -84,6 +85,10 @@ public class VarDeclaration<V> extends Expr<V> {
      */
     public String getName() {
         return this.name;
+    }
+
+    public String getCodeSafeName() {
+        return CODE_SAFE_PREFIX + this.name;
     }
 
     /**

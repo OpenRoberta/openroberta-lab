@@ -7,24 +7,24 @@ class ContinueLoop(Exception): pass
 
 timer1 = microbit.running_time()
 
-item = [0, 0, 0]
-item2 = [True, True, True]
-item3 = ["", "", ""]
-item4 = [microbit.Image.HEART, microbit.Image.HEART, microbit.Image.HEART]
-item5 = []
-item6 = []
-item7 = []
-item8 = []
-item9 = 0
+___item = [0, 0, 0]
+___item2 = [True, True, True]
+___item3 = ["", "", ""]
+___item4 = [microbit.Image.HEART, microbit.Image.HEART, microbit.Image.HEART]
+___item5 = []
+___item6 = []
+___item7 = []
+___item8 = []
+___item9 = 0
 def run():
-    global timer1, item, item2, item8, item7, item9, item4, item3, item6, item5
-    item9 = sum(item)
-    item9 = min(item)
-    item9 = max(item)
-    item9 = float(sum(item))/len(item)
-    item9 = _median(item)
-    item9 = _standard_deviation(item)
-    item9 = item[0]
+    global timer1, ___item, ___item2, ___item3, ___item4, ___item5, ___item6, ___item7, ___item8, ___item9
+    ___item9 = sum(___item)
+    ___item9 = min(___item)
+    ___item9 = max(___item)
+    ___item9 = float(sum(___item))/len(___item)
+    ___item9 = _median(___item)
+    ___item9 = _standard_deviation(___item)
+    ___item9 = ___item[0]
 
 def main():
     try:

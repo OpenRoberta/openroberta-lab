@@ -23,7 +23,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
-import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
@@ -74,12 +73,6 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
         this.sb.append(", ");
         rgbColor.getB().accept(this);
         this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitVar(Var<Void> var) {
-        this.sb.append("___" + var.getValue());
         return null;
     }
 

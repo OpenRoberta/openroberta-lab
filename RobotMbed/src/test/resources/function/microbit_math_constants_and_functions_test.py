@@ -7,21 +7,21 @@ class ContinueLoop(Exception): pass
 
 timer1 = microbit.running_time()
 
-item = 0
+___item = 0
 def run():
-    global timer1, item
-    item = math.pi
-    item = math.e
-    item = (1 + 5 ** 0.5) / 2
-    item = math.sqrt(2)
-    item = math.sqrt(0.5)
-    item = math.sqrt(12)
-    item = math.fabs(12)
-    item = - (12)
-    item = math.log(12)
-    item = math.log10(12)
-    item = math.exp(12)
-    item = math.pow(10, 12)
+    global timer1, ___item
+    ___item = math.pi
+    ___item = math.e
+    ___item = (1 + 5 ** 0.5) / 2
+    ___item = math.sqrt(2)
+    ___item = math.sqrt(0.5)
+    ___item = math.sqrt(12)
+    ___item = math.fabs(12)
+    ___item = - (12)
+    ___item = math.log(12)
+    ___item = math.log10(12)
+    ___item = math.exp(12)
+    ___item = math.pow(10, 12)
 
 def main():
     try:
