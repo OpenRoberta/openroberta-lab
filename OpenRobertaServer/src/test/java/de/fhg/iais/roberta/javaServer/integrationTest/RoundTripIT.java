@@ -34,7 +34,7 @@ import com.google.common.io.Resources;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientUser;
-import de.fhg.iais.roberta.javaServer.restServices.all.controller.ProjectRestController;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientProgramController;
 import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
@@ -83,7 +83,7 @@ public class RoundTripIT {
     private static String connectionUrl;
 
     private static ClientUser restUser;
-    private static ProjectRestController restProject;
+    private static ClientProgramController restProject;
 
     private static Response response;
     private static HttpSessionState s1;
@@ -193,7 +193,7 @@ public class RoundTripIT {
         brickCommunicator = new RobotCommunicator();
 
         restUser = new ClientUser(brickCommunicator, serverProperties, null);
-        restProject = new ProjectRestController(sessionFactoryWrapper, serverProperties);
+        restProject = new ClientProgramController(sessionFactoryWrapper, serverProperties);
         Map<String, IRobotFactory> robotPlugins = new HashMap<>();
         loadPlugin(robotPlugins);
         s1 = HttpSessionState.initOnlyLegalForDebugging(robotPlugins, serverProperties, 1);

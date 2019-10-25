@@ -189,19 +189,9 @@ public class ServerStarter {
 
         // 3.1 REST API without prefix (deprecated, used by very old ev3 robots)
         defaultHandler.addEventListener(robertaGuiceServletConfig);
-        defaultHandler.addFilter(GuiceFilter.class, "/alive/*", null);
-        defaultHandler.addFilter(GuiceFilter.class, "/admin/*", null);
-        defaultHandler.addFilter(GuiceFilter.class, "/conf/*", null);
-        defaultHandler.addFilter(GuiceFilter.class, "/ping/*", null);
-        defaultHandler.addFilter(GuiceFilter.class, "/program/*", null);
-        defaultHandler.addFilter(GuiceFilter.class, "/toolbox/*", null);
-        defaultHandler.addFilter(GuiceFilter.class, "/user/*", null);
-        defaultHandler.addFilter(GuiceFilter.class, "/hello/*", null);
         defaultHandler.addFilter(GuiceFilter.class, "/pushcmd/*", null);
         defaultHandler.addFilter(GuiceFilter.class, "/download/*", null);
         defaultHandler.addFilter(GuiceFilter.class, "/update/*", null);
-
-        //defaultHandler.addFilter(GuiceFilter.class, "/project/*", null);
 
         // 3.2 static resources
         ServletHolder staticResourceServlet = defaultHandler.addServlet(DefaultServlet.class, "/*");

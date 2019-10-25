@@ -19,7 +19,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientConfiguration;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientUser;
-import de.fhg.iais.roberta.javaServer.restServices.all.controller.ProjectRestController;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientProgramController;
 import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
@@ -78,7 +78,7 @@ public class RestInterfaceTest {
 
     private ServerProperties serverProperties;
     private ClientUser restUser;
-    private ProjectRestController restProject;
+    private ClientProgramController restProject;
     private ClientConfiguration restConfiguration;
 
     @BeforeClass
@@ -99,7 +99,7 @@ public class RestInterfaceTest {
         Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
         this.memoryDbSetup = new DbSetup(nativeSession);
         this.memoryDbSetup.createEmptyDatabase();
-        this.restProject = new ProjectRestController(this.sessionFactoryWrapper, this.serverProperties);
+        this.restProject = new ClientProgramController(this.sessionFactoryWrapper, this.serverProperties);
         this.restConfiguration = new ClientConfiguration(this.sessionFactoryWrapper, this.robotCommunicator);
         Map<String, IRobotFactory> robotPlugins = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
         this.sPid = HttpSessionState.initOnlyLegalForDebugging(robotPlugins, serverProperties, 1);

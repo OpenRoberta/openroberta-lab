@@ -39,15 +39,15 @@ import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
-@Path("/project")
-public class ProjectRestController {
-    private static final Logger LOG = LoggerFactory.getLogger(ProjectRestController.class);
+@Path("/program")
+public class ClientProgramController {
+    private static final Logger LOG = LoggerFactory.getLogger(ClientProgramController.class);
 
     private final SessionFactoryWrapper sessionFactoryWrapper;
     private final boolean isPublicServer;
 
     @Inject
-    public ProjectRestController(SessionFactoryWrapper sessionFactoryWrapper, ServerProperties serverProperties) {
+    public ClientProgramController(SessionFactoryWrapper sessionFactoryWrapper, ServerProperties serverProperties) {
         this.sessionFactoryWrapper = sessionFactoryWrapper;
         this.isPublicServer = serverProperties.getBooleanProperty("server.public");
     }

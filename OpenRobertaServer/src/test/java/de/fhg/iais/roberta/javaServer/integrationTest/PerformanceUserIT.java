@@ -29,7 +29,7 @@ import com.google.common.io.Resources;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientUser;
-import de.fhg.iais.roberta.javaServer.restServices.all.controller.ProjectRestController;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientProgramController;
 import de.fhg.iais.roberta.javaServer.restServices.robot.RobotCommand;
 import de.fhg.iais.roberta.javaServer.restServices.robot.RobotDownloadProgram;
 import de.fhg.iais.roberta.main.ServerStarter;
@@ -68,7 +68,7 @@ public class PerformanceUserIT {
     private String connectionUrl;
 
     private ClientUser restUser;
-    private ProjectRestController restProject;
+    private ClientProgramController restProject;
     private ClientAdmin restBlocks;
     private RobotDownloadProgram downloadJar;
     private RobotCommand brickCommand;
@@ -89,7 +89,7 @@ public class PerformanceUserIT {
         this.robotCommunicator = new RobotCommunicator();
 
         this.restUser = new ClientUser(this.robotCommunicator, serverProperties, null);
-        this.restProject = new ProjectRestController(this.sessionFactoryWrapper, this.serverProperties);
+        this.restProject = new ClientProgramController(this.sessionFactoryWrapper, this.serverProperties);
         this.restBlocks = new ClientAdmin(this.robotCommunicator, serverProperties);
         this.downloadJar = new RobotDownloadProgram(this.robotCommunicator, serverProperties);
         this.brickCommand = new RobotCommand(this.robotCommunicator);
