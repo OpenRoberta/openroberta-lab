@@ -201,7 +201,7 @@ public class ServerStarter {
         defaultHandler.addFilter(GuiceFilter.class, "/download/*", null);
         defaultHandler.addFilter(GuiceFilter.class, "/update/*", null);
 
-        defaultHandler.addFilter(GuiceFilter.class, "/project/*", null);
+        //defaultHandler.addFilter(GuiceFilter.class, "/project/*", null);
 
         // 3.2 static resources
         ServletHolder staticResourceServlet = defaultHandler.addServlet(DefaultServlet.class, "/*");
