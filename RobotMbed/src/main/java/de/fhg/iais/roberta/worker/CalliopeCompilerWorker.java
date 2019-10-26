@@ -1,9 +1,13 @@
 package de.fhg.iais.roberta.worker;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.EnumSet;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +58,12 @@ public class CalliopeCompilerWorker implements IWorker {
         final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         final String tempDir = compilerWorkflowBean.getTempDir();
         Util1
-            .storeGeneratedProgram(tempDir, project.getSourceCode().toString(), project.getToken(), project.getProgramName(), "." + project.getSourceCodeFileExtension());
+            .storeGeneratedProgram(
+                tempDir,
+                project.getSourceCode().toString(),
+                project.getToken(),
+                project.getProgramName(),
+                "." + project.getSourceCodeFileExtension());
         String scriptName = compilerResourcesDir + "../compile." + (SystemUtils.IS_OS_WINDOWS ? "bat" : "sh");
         String bluetooth = radioUsed ? "" : "-b";
         Path pathToSrcFile = Paths.get(tempDir + project.getToken() + "/" + project.getProgramName());
@@ -72,10 +81,16 @@ public class CalliopeCompilerWorker implements IWorker {
         Pair<Boolean, String> result = AbstractCompilerWorkflow.runCrossCompiler(executableWithParameters);
         Key resultKey = result.getFirst() ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         if ( result.getFirst() ) {
-            project.setCompiledHex(AbstractCompilerWorkflow.getBase64EncodedHex(pathToSrcFile + "/target/" + project.getProgramName() + "." + project.getBinaryFileExtension()));
-            if ( project.getCompiledHex() != null ) {
+            try {
+                project
+                    .setCompiledHex(
+                        FileUtils
+                            .readFileToString(
+                                new File(pathToSrcFile + "/target/" + project.getProgramName() + "." + project.getBinaryFileExtension()),
+                                Charset.forName("utf-8")));
                 resultKey = Key.COMPILERWORKFLOW_SUCCESS;
-            } else {
+            } catch ( IOException e ) {
+                LOG.error("compilation of Calliope program successful, but reading the binary failed", e);
                 resultKey = Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
             }
         }
