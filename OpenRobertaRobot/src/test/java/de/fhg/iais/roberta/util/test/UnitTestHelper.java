@@ -12,11 +12,9 @@ import org.xml.sax.SAXException;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
-import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.worker.IWorker;
@@ -45,7 +43,6 @@ public class UnitTestHelper {
         for ( IWorker worker : workers ) {
             worker.execute(project);
         }
-
         String generatedProgramSource = project.getSourceCode().toString().replaceAll("\\s+", "");
         Assert.assertEquals(expectedSource.replaceAll("\\s+", ""), generatedProgramSource);
     }
@@ -165,16 +162,7 @@ public class UnitTestHelper {
 
     private static void checkGeneratedSourceEquality(IRobotFactory factory, String expectedSource, Project project) {
         executeWorkflow("showsource", factory, project);
-
         String generatedProgramSource = project.getSourceCode().toString().replaceAll("\\s+", "");
         Assert.assertEquals(expectedSource.replaceAll("\\s+", ""), generatedProgramSource);
-    }
-
-    public static class TestFactory extends RobotFactory {
-
-        public TestFactory() {
-            super(new PluginProperties("test", "", "", Util.loadProperties("classpath:/pluginProperties/test.properties")));
-        }
-
     }
 }
